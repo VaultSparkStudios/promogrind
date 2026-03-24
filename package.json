@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:pages": "vite build && node scripts/postbuild-pages.mjs",
+    "og": "node scripts/generate-og.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -18,6 +19,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "sharp": "^0.34.5",
     "vite": "^6.0.0"
   }
 }
