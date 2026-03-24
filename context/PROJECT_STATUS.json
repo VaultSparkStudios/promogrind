@@ -1,0 +1,21 @@
+{
+  "name": "PromoGrind",
+  "slug": "promogrind",
+  "medium": "web-app",
+  "status": "active",
+  "stage": "pre-launch",
+  "version": "3.0.0",
+  "priority": "high",
+  "health": "green",
+  "owner": "VaultSpark Studios",
+  "repo": "VaultSparkStudios/promogrind",
+  "public_url": "https://vaultsparkstudios.com/promogrind/",
+  "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "localStorage"],
+  "backend": false,
+  "last_updated": "2026-03-24",
+  "blockers": [
+    "Affiliate links not inserted",
+    "GitHub Pages source not configured"
+  ],
+  "next_milestone": "Live deploy with affiliate links active"
+}
