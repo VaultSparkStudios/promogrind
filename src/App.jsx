@@ -295,7 +295,7 @@ const Tracker = () => {
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
         <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit",""].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
         <tbody>{BOOKS.map(b=><tr key={b.name} style={{opacity:done[b.name]?0.4:1}}>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div onClick={()=>toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div role="checkbox" aria-checked={!!done[b.name]} aria-label={`Mark ${b.name} as completed`} tabIndex={0} onClick={()=>toggle(b.name)} onKeyDown={e=>(e.key===" "||e.key==="Enter")&&toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",outline:"none"}} onFocus={e=>e.currentTarget.style.boxShadow=`0 0 0 2px ${K.gn}55`} onBlur={e=>e.currentTarget.style.boxShadow="none"}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span></td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.detail}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600,whiteSpace:"nowrap"}}>{b.value}</td>
@@ -334,12 +334,14 @@ const Ledger = () => {
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
       <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-      <div style={S.col}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.n}>{b.n}</option>)}</select></div>
-      <div style={S.col}><label style={S.label}>Type</label><select style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
+      <div style={{...S.col,minWidth:140}}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
+      <div style={{...S.col,minWidth:160}}><label style={S.label}>Type</label><select style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
+    </div>
+    <div style={{...S.row,alignItems:"flex-end"}}>
       <In l="Bonus $" v={form.bonus} set={v=>setForm(f=>({...f,bonus:v}))} pre="$"/>
       <In l="Hedge $" v={form.hedge} set={v=>setForm(f=>({...f,hedge:v}))} pre="$"/>
       <In l="Net Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$"/>
-      <div style={{...S.col,minWidth:60}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     <Nt c={K.yl}>Keep records for taxes. All gambling winnings are taxable income. This ledger saves to your browser — export periodically.</Nt>
     {entries.length>0&&<div style={{overflowX:"auto",marginTop:12}}>
