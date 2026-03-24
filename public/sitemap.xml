@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://vaultsparkstudios.com/promogrind/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/#bonus-bet-converter</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/#profit-boost-calculator</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/#arbitrage-calculator</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/#knowledge-base</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/#what-is-vig</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/#how-to-convert-bonus-bets</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bet</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/profit-boost</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/first-bet</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/no-vig</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/ev</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/arb-2way</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/arb-3way</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-hedge</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/middle</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/odds-convert</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/rollover</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/sportsbooks</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/ledger</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/knowledge-base</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
 </urlset>

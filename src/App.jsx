@@ -1,4 +1,6 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { BOOKS } from "./books.js";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -46,17 +48,7 @@ const calcPH = (pp, hO, os) => { const hd=toD(hO); if(hd<=1||!pp||!os) return nu
 const calcMid = (o1, o2, l1, l2, s) => { const d1=toD(o1), d2=toD(o2); if(d1<=1||d2<=1||!s) return null; const s2=(s*d1)/d2, ts=s+s2, wc=Math.max(s*d1,s2*d2)-ts, mw=s*d1+s2*d2-ts, w=Math.abs(parseFloat(l1)-parseFloat(l2)); return {s2:f(s2),ts:f(ts),wc:f(wc),mw:f(mw),w:f(w,1)}; };
 const calcRO = (b, m, v) => { const bn=parseFloat(b),mn=parseFloat(m),vn=parseFloat(v)/100; if(!bn||!mn) return null; const tw=bn*mn, ec=tw*(vn||0.045), nv=bn-ec; return {tw:f(tw),ec:f(ec),nv:f(nv),nb:Math.ceil(tw/50),ok:nv>0}; };
 
-// ═══ SPORTSBOOK DATA ═══
-const BOOKS = [
-  { n: "DraftKings", t: "Bet & Get", d: "Bet $5 → $200 Bonus Bets + 20% Deposit Match up to $1,000", v: "$200-$1,200", b: 200, rec: "Daily odds boosts, SGP profit boosts, stepped up parlays" },
-  { n: "FanDuel", t: "Bet Reset", d: "Up to $300/day Bet Reset for 10 days", v: "$150-$3,000", b: 300, rec: "Daily boosts, profit boost tokens, same game parlay+" },
-  { n: "BetMGM", t: "Safety Net", d: "Up to $1,500 back in Bonus Bets", v: "$500-$1,500", b: 1500, rec: "Weekly deposit bonuses (25% up to $100), daily boosts" },
-  { n: "Caesars", t: "Profit Boosts", d: "Bet $1 → 10x 100% Profit Boost Tokens ($25 max each)", v: "$50-$250", b: 250, rec: "Rotating profit boosts, odds boosts, parlay insurance" },
-  { n: "bet365", t: "Choice", d: "Bet $10 → $365 Bonus Bets OR $1K Safety Net", v: "$200-$365", b: 365, rec: "Early payout offers, multi-sport parlay boosts" },
-  { n: "ESPN BET", t: "Bet & Get", d: "Bet $5 → $200 + Deposit Match", v: "$200-$500", b: 200, rec: "Weekly profit boosts, featured parlay boosts" },
-  { n: "Fanatics", t: "Bet & Get", d: "Bet $5 → $200 FanCash + Profit Boost Tokens", v: "$200-$300", b: 200, rec: "Daily FanCash bonuses, loyalty rewards" },
-  { n: "BetRivers", t: "Safety Net", d: "Up to $500 Second Chance Bet", v: "$100-$500", b: 500, rec: "iRush rewards, profit boosts, 2nd chance parlays" },
-];
+// BOOKS imported from ./books.js — edit affiliate links there
 
 // ═══ COLORS ═══
 const K = { bg:"#0a0e17", s1:"#0f1520", s2:"#161d2a", s3:"#1c2536", bd:"#1e293b", bd2:"#334155", ac:"#60a5fa", gn:"#4ade80", rd:"#f87171", yl:"#fbbf24", pp:"#c084fc", tx:"#e2e8f0", dm:"#94a3b8", mt:"#64748b", wh:"#ffffff" };
@@ -296,19 +288,22 @@ const Tracker = () => {
     <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap"}}>
       <div><div style={{fontSize:10,color:K.mt}}>EXTRACTED</div><div style={S.big(K.gn)}>${f(total)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>COMPLETED</div><div style={S.big(K.ac)}>{cnt}/{BOOKS.length}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>REMAINING</div><div style={S.big(K.yl)}>~${f(BOOKS.filter(b=>!done[b.n]).reduce((s,b)=>s+b.b*0.7,0),0)}</div></div>
+      <div><div style={{fontSize:10,color:K.mt}}>REMAINING</div><div style={S.big(K.yl)}>~${f(BOOKS.filter(b=>!done[b.name]).reduce((s,b)=>s+b.bonus*0.7,0),0)}</div></div>
     </div>
     <Nt c={K.ac}>Your tracker data saves to this browser automatically. Share the app link with friends — their data stays separate on their device.</Nt>
     <div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit"].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
-        <tbody>{BOOKS.map(b=><tr key={b.n} style={{opacity:done[b.n]?0.4:1}}>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div onClick={()=>toggle(b.n)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.n]?K.gn:K.bd2}`,background:done[b.n]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{done[b.n]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.n}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.t}</span></td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.d}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{b.v}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:180}}>{b.rec}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...S.input,width:80,padding:"5px 8px"}} placeholder="$0" value={profits[b.n]||""} onChange={e=>setP(b.n,e.target.value)}/></td>
+        <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit",""].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
+        <tbody>{BOOKS.map(b=><tr key={b.name} style={{opacity:done[b.name]?0.4:1}}>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div onClick={()=>toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span></td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.detail}</td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600,whiteSpace:"nowrap"}}>{b.value}</td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:180}}>{b.recurring}</td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...S.input,width:80,padding:"5px 8px"}} placeholder="$0" value={profits[b.name]||""} onChange={e=>setP(b.name,e.target.value)}/></td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
+            <a href={b.link} target="_blank" rel="noopener noreferrer sponsored" style={{display:"inline-block",padding:"5px 12px",background:K.gn,color:K.bg,borderRadius:5,fontSize:11,fontWeight:700,textDecoration:"none",opacity:done[b.name]?0.4:1}}>Sign Up →</a>
+          </td>
         </tr>)}</tbody>
       </table>
     </div>
@@ -324,10 +319,18 @@ const Ledger = () => {
   const add = () => { if(!form.profit) return; save([{...form,id:Date.now()},...entries]); setForm(f=>({...f,bonus:"",hedge:"",profit:"",notes:""})); };
   const del = id => save(entries.filter(e=>e.id!==id));
   const total = entries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  const exportCSV = () => {
+    const headers = ["Date","Book","Type","Bonus","Hedge","Profit","Notes"];
+    const rows = entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);
+    const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+    const a = Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),download:`promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`});
+    a.click(); URL.revokeObjectURL(a.href);
+  };
   return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="SAVES LOCALLY" bc={K.yl}/>
-    <div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap"}}>
+    <div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
       <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
+      {entries.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
       <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
@@ -429,41 +432,84 @@ const KB = () => (<div style={S.card}>
 // ═══ TAB SYSTEM ═══
 const TABS = [
   { group:"Convert", items:[
-    {n:"Bonus Bet",c:BonusBet},{n:"Profit Boost",c:ProfitBoost},{n:"First Bet",c:FirstBet}
+    {n:"Bonus Bet",slug:"bonus-bet",c:BonusBet},
+    {n:"Profit Boost",slug:"profit-boost",c:ProfitBoost},
+    {n:"First Bet",slug:"first-bet",c:FirstBet},
   ]},
   { group:"Calculate", items:[
-    {n:"No-Vig",c:NoVig},{n:"+EV",c:PlusEV},{n:"2-Way Arb",c:Arb2Way},{n:"3-Way Arb",c:Arb3Way},{n:"Parlay Hedge",c:ParlayHedge},{n:"Middle",c:MiddleBet},{n:"Odds Convert",c:OddsConvert},{n:"Rollover",c:RolloverCalc}
+    {n:"No-Vig",slug:"no-vig",c:NoVig},
+    {n:"+EV",slug:"ev",c:PlusEV},
+    {n:"2-Way Arb",slug:"arb-2way",c:Arb2Way},
+    {n:"3-Way Arb",slug:"arb-3way",c:Arb3Way},
+    {n:"Parlay Hedge",slug:"parlay-hedge",c:ParlayHedge},
+    {n:"Middle",slug:"middle",c:MiddleBet},
+    {n:"Odds Convert",slug:"odds-convert",c:OddsConvert},
+    {n:"Rollover",slug:"rollover",c:RolloverCalc},
   ]},
-  { group:"Track", items:[{n:"Sportsbooks",c:Tracker},{n:"P/L Ledger",c:Ledger}]},
-  { group:"Learn", items:[{n:"Knowledge Base",c:KB}]},
+  { group:"Track", items:[
+    {n:"Sportsbooks",slug:"sportsbooks",c:Tracker},
+    {n:"P/L Ledger",slug:"ledger",c:Ledger},
+  ]},
+  { group:"Learn", items:[
+    {n:"Knowledge Base",slug:"knowledge-base",c:KB},
+  ]},
 ];
+
+const DEFAULT_SLUG = "bonus-bet";
+const slugMap = {};
+TABS.forEach((g,gi)=>g.items.forEach((item,ti)=>{slugMap[item.slug]={gi,ti};}));
+
+// ═══ FOOTER ═══
+const Footer = () => (
+  <div style={{borderTop:`1px solid ${K.bd}`,padding:"28px 20px",marginTop:8}}>
+    <div style={{maxWidth:1100,margin:"0 auto"}}>
+      <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
+        <span style={{color:K.dm,fontWeight:600}}>Affiliate Disclosure:</span> Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.
+      </p>
+      <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
+        Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool — not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
+      </p>
+      <p style={{fontSize:10,color:K.bd2,marginTop:12}}>
+        © {new Date().getFullYear()} VaultSpark Studios · PromoGrind is a free educational calculator tool.
+      </p>
+    </div>
+  </div>
+);
 
 // ═══ MAIN APP ═══
 export default function App() {
-  const [gi,setGi]=useState(0),[ti,setTi]=useState(0);
-  const g=TABS[gi], Comp=g.items[ti]?.c||(()=>null);
-  const sg=(i)=>{setGi(i);setTi(0);};
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
+  const { gi=0, ti=0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];
+  const g = TABS[gi];
+  const Comp = g.items[ti]?.c || (() => null);
+
+  const goTo = (newGi, newTi) => navigate("/" + TABS[newGi].items[newTi].slug);
 
   return (
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
       <div style={{background:`linear-gradient(135deg,${K.s1},${K.s2})`,borderBottom:`1px solid ${K.bd}`,padding:"16px 20px"}}>
         <div style={{maxWidth:1100,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
-          <div><div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
-          <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div></div>
+          <div style={{cursor:"pointer"}} onClick={()=>navigate("/"+DEFAULT_SLUG)}>
+            <div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
+            <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div>
+          </div>
           <div style={{fontSize:10,color:K.mt,textAlign:"right",lineHeight:1.6}}>Free educational tool. Not gambling advice.<br/>21+ only. Gamble responsibly. 1-800-GAMBLER</div>
         </div>
       </div>
       <div style={{background:K.s1,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto"}}>
         <div style={{display:"flex",maxWidth:1100,width:"100%"}}>{TABS.map((t,i)=>(
-          <button key={t.group} onClick={()=>sg(i)} style={{padding:"11px 18px",fontSize:11,fontWeight:gi===i?700:400,color:gi===i?K.gn:K.mt,background:gi===i?`${K.gn}08`:"transparent",border:"none",borderBottom:gi===i?`2px solid ${K.gn}`:"2px solid transparent",cursor:"pointer",fontFamily:font,textTransform:"uppercase",letterSpacing:"1px"}}>{t.group}</button>
+          <button key={t.group} onClick={()=>goTo(i,0)} style={{padding:"11px 18px",fontSize:11,fontWeight:gi===i?700:400,color:gi===i?K.gn:K.mt,background:gi===i?`${K.gn}08`:"transparent",border:"none",borderBottom:gi===i?`2px solid ${K.gn}`:"2px solid transparent",cursor:"pointer",fontFamily:font,textTransform:"uppercase",letterSpacing:"1px"}}>{t.group}</button>
         ))}</div>
       </div>
       <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto"}}>
         <div style={{display:"flex",maxWidth:1100,width:"100%",gap:2}}>{g.items.map((t,i)=>(
-          <button key={t.n} onClick={()=>setTi(i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{t.n}</button>
+          <button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{t.n}</button>
         ))}</div>
       </div>
       <div style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}><Comp/></div>
+      <Footer/>
     </div>
   );
 }
