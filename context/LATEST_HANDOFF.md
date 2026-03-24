@@ -6,40 +6,49 @@ This is the authoritative active handoff file for the project.
 
 ## What was completed
 
-- v3 app built: 11 calculators, sportsbook tracker, P/L ledger, knowledge base, affiliate link slots, SEO meta tags
-- Repo created: `VaultSparkStudios/promogrind` (public)
-- Full studio-system scaffolded: context/, docs/, logs/, plans/, prompts/, specs/
-- All core context files written from scratch using project knowledge
-- Source code extracted from deploy zip and committed to repo
+- Full repo created and pushed: `VaultSparkStudios/promogrind` (public)
+- Complete studio-system scaffolded: context/, docs/, logs/, plans/, prompts/, specs/
+- GitHub Pages deploy workflow live — deploys on every push to main
+- CI workflow live — build validation on every push/PR
+- All domain/SEO issues fixed: canonical, sitemap (14 real slugs), robots.txt, OG image
+- Google Fonts (JetBrains Mono + Space Grotesk) loaded in index.html
+- OG image (1200×630) generated and committed to public/
+- Removed Vercel/Netlify config — GitHub Pages is sole deploy target
+- PromoGrind added to studio site under new `#vault-tools` section
+- Affiliate links wired: books.js → Tracker "Sign Up →" buttons (placeholder URLs, need real links)
+- Duplicate BOOKS array eliminated — books.js is single source of truth
+- URL routing added (react-router-dom) — 14 shareable calculator URLs
+- CSV export added to P/L Ledger
+- FTC affiliate disclosure + responsible gambling footer added
+- Ledger form split into two rows for mobile
+- Bug fixed: `b.n` → `b.name` in ledger book dropdown
+- Tracker checkbox: role, aria-checked, aria-label, tabIndex, keyboard support, focus ring
 
 ## What is mid-flight
 
-- Affiliate links: `src/books.js` has placeholder slots — real links needed before monetization is live
-- GitHub Pages: Source must be set to "GitHub Actions" in repo Settings before Pages deploys work
+- Nothing — session closed cleanly, build passing
 
 ## What to do next
 
-1. Insert affiliate/referral links into `src/books.js` (use personal "Refer a Friend" links for immediate revenue, apply to partner programs for higher CPAs)
-2. Enable GitHub Pages in repo Settings → Pages → Source: GitHub Actions
-3. Add `.github/workflows/deploy-pages.yml` if GitHub Pages is the deploy target (Vercel is simpler — see docs/DEPLOYMENT_GUIDE.md)
-4. Submit sitemap to Google Search Console once live
-5. Add responsible gambling footer and affiliate disclosure
+1. **Insert affiliate links into `src/books.js`** — replace placeholder `link:` values with real affiliate/referral URLs. This is the only thing blocking monetization.
+2. **Enable GitHub Pages** — `github.com/VaultSparkStudios/promogrind` → Settings → Pages → Source → GitHub Actions. Deploy triggers automatically.
+3. **Submit sitemap** to Google Search Console once live: `https://vaultsparkstudios.com/promogrind/sitemap.xml`
 
 ## Constraints
 
+- All sportsbook links must live in `src/books.js` only — never hardcoded in App.jsx
+- Calculator math in `src/math.js` must not be changed without verifying formulas
 - App is purely static — no backend, no API keys in client code
-- Calculator math in `src/math.js` must not be changed without formula verification
-- All sportsbook links must live in `src/books.js` only — never hardcoded elsewhere
-- Must be 21+ gating / responsible gambling language for compliance
+- `rel="sponsored"` is already on Sign Up links (correct for affiliate links per Google guidelines)
 
 ## Read these first next session
 
-1. `context/PROJECT_BRIEF.md`
-2. `context/CURRENT_STATE.md`
-3. `context/TASK_BOARD.md`
+1. `context/CURRENT_STATE.md`
+2. `context/TASK_BOARD.md`
+3. `src/books.js` (if working on affiliate links)
 
 ## Files to update next session if work continues
 
-- `context/CURRENT_STATE.md` — update blockers as affiliate links are resolved
-- `context/TASK_BOARD.md` — move items as they are completed
-- `logs/WORK_LOG.md` — append session summary
+- `context/CURRENT_STATE.md`
+- `context/TASK_BOARD.md`
+- `logs/WORK_LOG.md`
