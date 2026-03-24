@@ -17,7 +17,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
     spreadsheet or calculator app
   - ProfitDuel, OddsJam, DarkHorse Odds, and dozens of similar 
     tools operate legally as paid subscription services
-  - This tool is FREE and contains no affiliate links
+  - This tool is FREE. Affiliate links in src/books.js support development.
   
   GAMBLING DISCLAIMER:
   Must be 21+ (18+ in some states). Only bet in states where 

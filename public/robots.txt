@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://promogrind.com/sitemap.xml
+Sitemap: https://vaultsparkstudios.com/promogrind/sitemap.xml
