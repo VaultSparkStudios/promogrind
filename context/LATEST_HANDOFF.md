@@ -1,67 +1,98 @@
 # Latest Handoff
 
-Last updated: 2026-03-24
+Last updated: 2026-03-24 (session 3 closeout)
 
 This is the authoritative active handoff file for the project.
 
-## What was completed this session
+---
 
-- **Vault Member auth gate** — PromoGrind is now restricted to Vault Members only
-  - `src/auth.js` (new): Supabase client + `checkAuth()` + `signOut()` + cross-domain token handler
-  - `src/App.jsx`: auth gate at component startup; shows loading screen until session confirmed; all hooks called before conditional return (React rules compliant)
-  - `scripts/generate-invite-codes.js` (new): admin CLI — `node scripts/generate-invite-codes.js 5 "for friends"` — requires `.env.admin`
-  - `.env.example` (new): credential template
-  - `.env.admin` added to `.gitignore`
-  - `@supabase/supabase-js` installed as npm dependency
-  - `docs/RELEASE_PLAN.md` updated with Supabase setup steps in launch checklist
-  - `context/DECISIONS.md` updated with auth architecture decision
+## What was completed — session 3
 
-- **Studio site (VaultSparkStudios.github.io) changes** — see that repo's LATEST_HANDOFF.md
-  - `assets/supabase-client.js` (new): shared Supabase client + `VSGate` redirect helper + `VAULT_GATED_APPS` registry
-  - `vault-member/index.html`: localStorage auth replaced with Supabase; invite code field added to register form; cross-domain redirect handling added
-  - `supabase-schema.sql` (new): run once in Supabase SQL Editor
+### VaultSparked membership tier
+- `src/auth.js`: `isPro()` now accepts both `vault_sparked` AND `pro` plan — no breaking change
+- Studio repo `supabase/functions/create-checkout/index.ts`: supports `vault_sparked` plan via `PRICE_IDS` map + `SUCCESS_URLS` map
+- Studio repo `supabase/functions/stripe-webhook/index.ts`: reads `plan` from `session.metadata.plan ?? sub.metadata.plan`, writes to subscriptions table
+- VaultSparked animated badge + upgrade CTA panel built in `vault-member/index.html` (studio repo)
+- VaultSparked naming scored 27/30 vs competing names — unique verb-as-identity, ties to top rank
 
-## What is mid-flight
+### Supabase project — now live
+- URL: `fjnpzjjyhnpmunfoycrp.supabase.co`
+- Schema v1 + v2 both run ✅
+- `game_sessions` RLS insert policy added ✅
+- `invite_codes.notes` column added ✅
+- Launch invite codes generated ✅
+- `.env` in place with VITE_ prefixed vars ✅
 
-- Nothing — all code is written; awaiting Supabase project creation by Studio owner
+### GitHub Pages deploy — now live
+- vaultsparkstudios.com/promogrind/ is live ✅
+- Fixed blank page: added `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` as GitHub Actions repo secrets
+- Updated `.github/workflows/deploy-pages.yml` to pass secrets as env vars during build
 
-## What to do next
+### Auth flow — tested and working
+- Register → confirm email → login → redirect to PromoGrind ✅
+- Cross-domain session handoff working (localhost:5173 + localhost:5174 both added to VAULT_GATED_APPS)
 
-1. **Create Supabase project** at supabase.com (free tier)
-2. **Run the schema** — SQL Editor → paste contents of `VaultSparkStudios.github.io/supabase-schema.sql` → Run
-3. **Fill in credentials** — find in Supabase: Settings → API
-   - `VaultSparkStudios.github.io/assets/supabase-client.js` — replace `YOUR_SUPABASE_URL` and `YOUR_SUPABASE_ANON_KEY`
-   - `promogrind/.env` (copy from `.env.example`) — same two values as `VITE_` prefixed vars
-4. **Create `.env.admin`** in PromoGrind root with `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (service role key is in Supabase Settings → API — never expose in browser)
-5. **Generate invite codes**: `node scripts/generate-invite-codes.js 10 "launch batch"`
-6. **Test the full flow**: go to deployed PromoGrind → redirects to vault-member → register with invite code → confirm email → sign in → redirected back to PromoGrind
+---
+
+## What was completed — session 2 (backend feature set)
+
+- `src/auth.js` — Supabase auth gate, `isPro()`, `getSubscription()`, `startCheckout()`
+- `src/sync.js` — cloud sync (promogrind_data table), vault events (award_vault_points RPC)
+- `src/App.jsx` — LIVE tab group (arb-scanner, ev-scanner), proStatus state, daily login event, calc tracking, Pro badge in header
+- `LiveScanner` component — arb detection, +EV detection, 2-min auto-refresh, VaultSparked gate with Stripe upgrade CTA
+- `scripts/generate-invite-codes.js` — admin CLI
+- `.env.example` — credential template
+- Studio repo: `supabase-schema-v2.sql` — promogrind_data, vault_events, subscriptions, game_sessions tables + RPCs
+- Studio repo: Edge Functions — `odds/`, `stripe-webhook/`, `create-checkout/`
+
+---
+
+## What is mid-flight / pending external
+
+### Requires LLC formation first
+- Stripe live account activation (business verification + EIN + bank account)
+- Going live with real payments
+
+### Can do now (test mode)
+1. Create Stripe account + VaultSparked product ($24.99/month) in test mode
+2. `supabase secrets set STRIPE_VAULT_SPARKED_PRICE_ID=price_... STRIPE_SECRET_KEY=sk_test_... STRIPE_WEBHOOK_SECRET=whsec_... APP_URL=https://vaultsparkstudios.com`
+3. `supabase functions deploy create-checkout && supabase functions deploy stripe-webhook`
+4. Test checkout with `4242 4242 4242 4242` — VaultSparked badge should appear in dashboard
+
+### Other pending
+- OAuth providers (Google, Discord) — Supabase dashboard → Authentication → Providers
+- The Odds API key → `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`
+- Affiliate links in `src/books.js` — still placeholder
+- VaultSparked small badge on leaderboard rows in call-of-doodie (studio-wide cosmetic)
+
+---
 
 ## How the cross-domain auth works
 
-1. User visits PromoGrind (promogrind.com)
-2. `checkAuth()` finds no session → redirects to `vaultsparkstudios.com/vault-member/?next=https://promogrind.com`
+1. User visits PromoGrind (vaultsparkstudios.com/promogrind/)
+2. `checkAuth()` finds no session → redirects to `vaultsparkstudios.com/vault-member/?next=https://vaultsparkstudios.com/promogrind`
 3. User logs in on vault-member page
-4. vault-member detects `?next=` param → redirects to `https://promogrind.com/#access_token=...&refresh_token=...&type=vault_access`
-5. PromoGrind's `checkAuth()` detects tokens in URL hash → calls `supabase.auth.setSession()` → clears hash → renders app
+4. vault-member detects `?next=` param → redirects to PromoGrind with `#access_token=...&refresh_token=...&type=vault_access` in URL hash
+5. PromoGrind's `checkAuth()` detects tokens → calls `supabase.auth.setSession()` → clears hash → renders app
 6. Subsequent visits: session is in localStorage, no redirect needed
 
-## How to add a new gated tool
+---
 
-1. Add entry to `VAULT_GATED_APPS` in `VaultSparkStudios.github.io/assets/supabase-client.js`
-2. Copy `promogrind/src/auth.js` into the new tool's `src/`
-3. Add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` to the new tool's `.env`
-4. Call `checkAuth()` at app startup
+## Key files
+
+- `src/auth.js` — Supabase auth gate, isPro(), startCheckout()
+- `src/sync.js` — cloud sync, vault events
+- `src/App.jsx` — all UI, LIVE tab group, proStatus state
+- `src/books.js` — sportsbook data + affiliate links (edit here)
+- `.env` — Supabase credentials (live, gitignored)
+- `.env.admin` — service role key (live, gitignored)
+- `scripts/generate-invite-codes.js` — admin CLI
 
 ## Constraints
 
-- All sportsbook links must live in `src/books.js` only — never hardcoded in App.jsx
+- Never commit `.env` or `.env.admin` — both gitignored
+- `SUPABASE_SERVICE_ROLE_KEY` is for admin CLI only, never in browser code
 - Calculator math in `src/math.js` must not be changed without verifying formulas
-- Never expose `SUPABASE_SERVICE_ROLE_KEY` in browser code — admin CLI only
-- `SUPABASE_ANON_KEY` is safe to expose in browser (it's a read-only public key)
-- The `register_with_invite` Postgres RPC handles invite code validation + vault_members insert atomically — do not replicate this logic client-side
-
-## Files to update next session if work continues
-
-- `context/CURRENT_STATE.md`
-- `context/TASK_BOARD.md`
-- `context/LATEST_HANDOFF.md`
+- All sportsbook links must live in `src/books.js` only
+- Do not activate live Stripe until LLC + EIN obtained
+- `isPro()` must continue to accept both `pro` and `vault_sparked` — legacy `pro` plan users must not be broken

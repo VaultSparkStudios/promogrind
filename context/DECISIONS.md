@@ -59,3 +59,16 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: Private repo (to prevent competitor copying).
 - Why this was chosen: Studio pattern is public repos. Open source positioning builds trust and discoverability. Affiliate links are in `src/books.js` and easily swapped by anyone forking, so obscuring the source provides little protection.
 - Follow-up: If a proprietary paid tier is built, keep that code in a separate private repo.
+
+### 2026-03-24 - VaultSparked as studio-wide membership tier
+
+- Status: Decided + implemented
+- Context: Owner wanted a Pro tier for PromoGrind that could extend across all future studio tools and games without per-product upsell complexity.
+- Decision: VaultSparked — $24.99/month additive membership. Every new feature and tool included automatically. Plan identifier: `vault_sparked` in subscriptions table. `isPro()` in PromoGrind accepts both `vault_sparked` and legacy `pro` plan.
+- Alternatives considered:
+  - PromoGrind-only Pro plan — rejected as too narrow, creates fragmented subscription UX as studio grows
+  - Per-game/per-tool pricing — rejected as user-hostile and ops-heavy
+  - Lower price ($9.99) — rejected; additive model with full studio access justifies premium price
+- Why this was chosen: One subscription, one checkout flow, zero per-product billing. Future features fold in automatically — no "new plan" needed. VaultSparked name ties to top rank "The Sparked", unique and ownable commercially.
+- Follow-up: Do not activate live Stripe until LLC + EIN obtained. Test mode safe now.
+  Edge function secrets needed: `STRIPE_VAULT_SPARKED_PRICE_ID`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`.
