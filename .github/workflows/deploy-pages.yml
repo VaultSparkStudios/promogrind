@@ -34,6 +34,8 @@ jobs:
       VITE_APP_BASE_PATH: /promogrind/
       VITE_CANONICAL_URL: https://vaultsparkstudios.com/promogrind/
       VITE_DOMAIN: vaultsparkstudios.com
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
     steps:
       - uses: actions/checkout@v4
 
