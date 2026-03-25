@@ -2,57 +2,105 @@
 
 ## Now (external — no code needed)
 
-- **Stripe test mode setup** (can do now):
-  - Create Stripe account + VaultSparked product ($24.99/month) in test mode
-  - Set secrets: `supabase secrets set STRIPE_VAULT_SPARKED_PRICE_ID=price_... STRIPE_SECRET_KEY=sk_test_... STRIPE_WEBHOOK_SECRET=whsec_...`
-  - Deploy: `supabase functions deploy create-checkout && supabase functions deploy stripe-webhook`
-  - Test checkout with card `4242 4242 4242 4242`
-- Wire real affiliate/referral links into `src/books.js`
-- Enable OAuth providers (Google, Discord) in Supabase dashboard → Authentication → Providers
-- Set Odds API key: `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`
+### Must run in Supabase SQL Editor first:
+- [ ] Run `scripts/migration-community-board.sql` — PromoBoard table
+  - ⚠️ Run migration-leaderboard.sql ONLY after confirming `vault_events` table exists with a `points` column
+- [ ] Run `scripts/migration-leaderboard.sql` — Leaderboard view (depends on vault_events)
 
-## Next
+### Affiliate links (revenue blocker):
+- [ ] Apply to DraftKings Partners: draftkings.com/partners (CPA: $75+/user)
+- [ ] Apply to FanDuel Partners: partners.fanduel.com (CPA: $25-35 or 35% RevShare)
+- [ ] Apply to BetMGM Partners: betmgmpartners.com (CPA: $50+/user)
+- [ ] Apply to remaining books (Caesars, bet365, ESPN BET, Fanatics, BetRivers)
+- [ ] OR: apply via Income Access / Gambling.com Group (single network, multiple books)
+- [ ] Once tracking URLs received: wire into `src/books.js` (one field per book)
 
-- Test VaultSparked upgrade flow end-to-end (checkout → webhook → subscription row → badge shown)
-- Test LiveScanner with real Odds API key
-- Submit sitemap to Google Search Console once live
+### External platforms:
+- [ ] Set up Odds API: theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`
+  - Also change `120_000` → `300_000` ms refresh in LiveScanner
+- [ ] Set up Stripe test mode: create **two** products — Monthly ($24.99/mo) + Annual ($199/yr) → set `STRIPE_*` secrets → deploy checkout + webhook
+- [ ] Set up Resend newsletter: resend.com → verify vaultsparkstudios.com → `supabase secrets set RESEND_API_KEY=...` → deploy weekly-digest
+- [ ] Enable Google OAuth: console.cloud.google.com → OAuth 2.0 Client ID → Supabase Auth Providers
+- [ ] Enable Discord OAuth: discord.com/developers → New App → Supabase Auth Providers
+- [ ] Submit sitemap to Google Search Console
+- [ ] Uncomment Plausible script in `index.html` (after creating plausible.io account)
+
+## Next (code — after external setup)
+
+- [ ] Referral tracking: add `referrals` table to Supabase + RPC to count per user_id; wire into ReferralHub component (currently hardcoded 0)
+- [ ] Test VaultSparked upgrade flow end-to-end (monthly + annual checkout → webhook → subscription → badge)
+- [ ] Test LiveScanner with real Odds API key
+- [ ] Test weekly-digest Edge Function with real Resend key
+- [ ] Add shared odds cache in Supabase (serve all concurrent VaultSparked users from one cached API response — needed when 10+ paying users)
+- [ ] Wire annual Stripe price ID into PricingPage → startCheckout()
 
 ## Blocked
 
-- **Stripe live mode** — requires LLC formation + EIN + bank account
-- Going live with real payments
+- **Stripe live mode** — requires LLC + EIN + bank account
 
 ## Later
 
-- Custom domain (promogrind.com or similar)
-- Analytics integration (Plausible or Fathom)
-- Real-time leaderboard (vault points ranking)
-- Mobile app wrapper (Capacitor)
-- Monthly newsletter system (Resend + Edge Function cron)
+- Capacitor mobile build: `npm run cap:sync` (needs Xcode for iOS, Android Studio for Android)
+- Team accounts backend: `team_members` table + shared data context (UI + waitlist already live)
+- Plausible → deeper event tracking (which calculators are most used)
+- Props scanner cost optimization (cache prop results, fetch less frequently)
 
 ## Completed ✓
 
-- Created `VaultSparkStudios/promogrind` repo
-- Full React/Vite app v3 — 11 calculators, tracker, ledger, knowledge base
-- GitHub Pages deploy + CI workflows (live at vaultsparkstudios.com/promogrind/)
-- URL routing — all tools have shareable URLs
-- OG image, SEO, canonical, sitemap, robots.txt
-- FTC disclosure + responsible gambling footer
-- Affiliate links wired from books.js into Tracker
-- CSV export on Ledger
-- Mobile-friendly layout fixes
-- **2026-03-24 v3.1: Full backend feature set**
-  - `src/auth.js` — Supabase auth gate, `isPro()`, `startCheckout()` for Stripe
-  - `src/sync.js` — cloud sync (promogrind_data table), vault events (award_vault_points RPC)
-  - `src/App.jsx` — LIVE tab group (arb-scanner, ev-scanner), proStatus state, daily login event, calc tracking, Pro badge in header
-  - `LiveScanner` component — arb detection, +EV detection, 2-min auto-refresh, VaultSparked gate with upgrade CTA
-  - `scripts/generate-invite-codes.js` — admin CLI for invite code creation
-  - `.env.example` — credential template
-  - Supabase project live: `fjnpzjjyhnpmunfoycrp.supabase.co`, schema v1+v2 run, invite codes generated
-  - GitHub Pages blank-page bug fixed (VITE_ env vars added as GitHub Actions secrets)
-- **2026-03-24 VaultSparked membership tier**
-  - `isPro()` updated to accept `vault_sparked` OR `pro` plan
-  - create-checkout Edge Function (in studio repo) supports `vault_sparked` plan
-  - stripe-webhook Edge Function (in studio repo) reads plan from metadata
-  - VaultSparked badge + upgrade CTA built in vault-member/index.html (studio repo)
-  - Studio Stripe account structure documented
+### Session 6 — Engagement + value features (13 features)
+- AppDataCtx: shared data context, one Supabase call for all Track components
+- Sync status indicator (SYNCING… / ✓ SAVED)
+- Undo delete with 4s toast action in BetTracker + Ledger
+- Auth optimistic render (instant load from cached token)
+- Sub-tab scroll fade (mobile)
+- SW cache fix: network-first for JS/CSS, promogrind-v2
+- Vite vendor chunk split (React 49KB cached, app 104KB gzip)
+- Odds validation: auto-detects odds labels, inline "Invalid odds" error
+- Inline Ledger edit: ✎ per row, in-place inputs
+- Portfolio EV dashboard in BetTracker stats
+- Weekly performance card (📊 Share Week copy)
+- Push notifications in LiveScanner (🔔 threshold alerts)
+- Promo Calendar (16 recurring promos, 7 books, filterable)
+- Conversion rate history in Ledger stats
+- Book health tracker (Active/Limited/Gubbed/Pending/Closed)
+- Promo star ratings (1-5 per book)
+- Referral program UI (link copy + social templates)
+- Annual plan pricing page ($24.99/mo vs $199/yr)
+- CSV import modal (parse/preview/confirm DK/FanDuel format)
+- Team accounts waitlist UI
+- CLV alert toast on Ledger entry
+- Daily digest frequency preference in EmailCapture
+
+### Session 5 — Feature backlog
+- useCalcMemory applied to all calculators
+- Copy result as text button
+- Log to Ledger shortcut
+- Parlay leg EV breakdown
+- Odds sweet spot guide on Bonus Bet
+- BetTracker win rate stat
+- Session P/L (Today) in Ledger
+- Profit goal tracker
+- Tab memory restore
+- Keyboard quick-jump (?)
+- Compact mode
+- Swipe navigation
+- Empty state illustrations
+- Promo Finder wizard
+- Promo expiry tracker
+- Quick calc panel (mobile)
+- Social share formatted results
+- KB: book-specific guides, FAQ, video slots
+
+### Session 4 — Major expansion (761 → 2,100+ lines)
+- 22 calculators, BetTracker, Leaderboard, PromoBoard
+- Scanner upgrades, toast system, useCalcMemory, onboarding wizard
+- Tax estimator, CLV tracking, Ledger filters, SVG P/L chart
+- Monthly breakdown, Vault Points, Glossary, KB expansion
+- Dark/light mode, mobile nav, ErrorBoundary, PWA, Capacitor
+
+### Session 3 — VaultSparked + deploy
+- isPro() vault_sparked plan, Stripe checkout/webhook
+- GitHub Pages live, Supabase live
+
+### Sessions 1-2 — Foundation
+- Full React/Vite app, auth gate, cloud sync, 17 calculators

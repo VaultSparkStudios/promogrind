@@ -7,5 +7,14 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
-  }
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React vendor — cached separately so app deploys don't bust the React download
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+        },
+      },
+    },
+  },
 })

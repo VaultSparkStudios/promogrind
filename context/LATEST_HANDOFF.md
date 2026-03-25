@@ -1,98 +1,120 @@
 # Latest Handoff
 
-Last updated: 2026-03-24 (session 3 closeout)
+Last updated: 2026-03-25 (session 6 closeout)
 
 This is the authoritative active handoff file for the project.
 
 ---
 
-## What was completed — session 3
+## What was completed — session 6
 
-### VaultSparked membership tier
-- `src/auth.js`: `isPro()` now accepts both `vault_sparked` AND `pro` plan — no breaking change
-- Studio repo `supabase/functions/create-checkout/index.ts`: supports `vault_sparked` plan via `PRICE_IDS` map + `SUCCESS_URLS` map
-- Studio repo `supabase/functions/stripe-webhook/index.ts`: reads `plan` from `session.metadata.plan ?? sub.metadata.plan`, writes to subscriptions table
-- VaultSparked animated badge + upgrade CTA panel built in `vault-member/index.html` (studio repo)
-- VaultSparked naming scored 27/30 vs competing names — unique verb-as-identity, ties to top rank
+### Refinement + UX improvements (App.jsx + sw.js + vite.config.js)
 
-### Supabase project — now live
-- URL: `fjnpzjjyhnpmunfoycrp.supabase.co`
-- Schema v1 + v2 both run ✅
-- `game_sessions` RLS insert policy added ✅
-- `invite_codes.notes` column added ✅
-- Launch invite codes generated ✅
-- `.env` in place with VITE_ prefixed vars ✅
+**Architecture:**
+- `AppDataCtx` — shared React context for all Track components (BetTracker, Tracker, Ledger). Single `loadData()` call in App instead of 3 parallel calls. `syncAppData(d)` replaces `setData + saveData` everywhere.
+- `syncStatus` indicator — SYNCING… / ✓ SAVED shown in header next to COMPACT button.
+- Auth optimistic render — `authReady` initializes to `true` if Supabase token found in localStorage; app renders instantly instead of showing loading screen.
 
-### GitHub Pages deploy — now live
-- vaultsparkstudios.com/promogrind/ is live ✅
-- Fixed blank page: added `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` as GitHub Actions repo secrets
-- Updated `.github/workflows/deploy-pages.yml` to pass secrets as env vars during build
+**Feedback loop:**
+- Undo delete — BetTracker + Ledger `del()` shows red toast with 4s UNDO action button.
+- Inline Ledger edit — ✎ button per row; row becomes inline inputs for all fields; ✓ Save / ✕ Cancel.
+- Odds validation — `In` component auto-detects odds fields by label (`/odds/i`), shows "Invalid odds" inline.
+- CLV alert toast — fires when closing line is beaten (`+X%`) or moves against user (`-X%`) on Ledger entry.
 
-### Auth flow — tested and working
-- Register → confirm email → login → redirect to PromoGrind ✅
-- Cross-domain session handoff working (localhost:5173 + localhost:5174 both added to VAULT_GATED_APPS)
+**PWA / build:**
+- `public/sw.js` bumped to `promogrind-v2` — network-first for HTML/JS/CSS, cache-first for fonts/images.
+- Vite vendor chunk split — React/ReactDOM/react-router-dom in separate `vendor` chunk (49KB gzip, cached between deploys). App chunk: 104KB gzip.
+- `chunkSizeWarningLimit: 600` — suppresses build noise.
 
----
+**Mobile:**
+- Sub-tab scroll fade — right-edge gradient on sub-tab bar so mobile users see overflow affordance.
 
-## What was completed — session 2 (backend feature set)
+### 13 engagement + value features (session 6 feature batch)
 
-- `src/auth.js` — Supabase auth gate, `isPro()`, `getSubscription()`, `startCheckout()`
-- `src/sync.js` — cloud sync (promogrind_data table), vault events (award_vault_points RPC)
-- `src/App.jsx` — LIVE tab group (arb-scanner, ev-scanner), proStatus state, daily login event, calc tracking, Pro badge in header
-- `LiveScanner` component — arb detection, +EV detection, 2-min auto-refresh, VaultSparked gate with Stripe upgrade CTA
-- `scripts/generate-invite-codes.js` — admin CLI
-- `.env.example` — credential template
-- Studio repo: `supabase-schema-v2.sql` — promogrind_data, vault_events, subscriptions, game_sessions tables + RPCs
-- Studio repo: Edge Functions — `odds/`, `stripe-webhook/`, `create-checkout/`
-
----
-
-## What is mid-flight / pending external
-
-### Requires LLC formation first
-- Stripe live account activation (business verification + EIN + bank account)
-- Going live with real payments
-
-### Can do now (test mode)
-1. Create Stripe account + VaultSparked product ($24.99/month) in test mode
-2. `supabase secrets set STRIPE_VAULT_SPARKED_PRICE_ID=price_... STRIPE_SECRET_KEY=sk_test_... STRIPE_WEBHOOK_SECRET=whsec_... APP_URL=https://vaultsparkstudios.com`
-3. `supabase functions deploy create-checkout && supabase functions deploy stripe-webhook`
-4. Test checkout with `4242 4242 4242 4242` — VaultSparked badge should appear in dashboard
-
-### Other pending
-- OAuth providers (Google, Discord) — Supabase dashboard → Authentication → Providers
-- The Odds API key → `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`
-- Affiliate links in `src/books.js` — still placeholder
-- VaultSparked small badge on leaderboard rows in call-of-doodie (studio-wide cosmetic)
+1. **Portfolio EV Dashboard** (BetTracker) — book-implied EV across all open positions.
+2. **Weekly Performance Card** (Ledger) — 📊 Share Week copies formatted card to clipboard.
+3. **Push Notifications** (LiveScanner) — 🔔 ALERTS toggle + threshold input; fires browser Notification when arb > threshold.
+4. **Promo Calendar** (Learn tab) — 16 recurring promos across 7 books, filterable by book + day.
+5. **Conversion Rate History** (Ledger stats) — avg bonus bet conversion % (requires 3+ entries).
+6. **Book Health Tracker** (Tracker) — Active/Limited/Gubbed/Pending/Closed status per book with color coding.
+7. **Promo Ratings** (Tracker) — 1–5 star rating per sportsbook, stored in `data.bookRatings`.
+8. **Referral Program UI** (Learn → Refer & Earn) — copy referral link, social post templates for Twitter/Discord/Reddit.
+9. **Annual Plan Pricing Page** (Learn → Upgrade) — Monthly ($24.99/mo) vs Annual ($199/yr) cards with feature list.
+10. **CSV Import** (BetTracker) — modal with parse/preview/confirm flow; auto-maps DraftKings/FanDuel CSV column names.
+11. **Team Accounts** (Learn → Team Accounts) — waitlist UI with email capture; stores to localStorage.
+12. **CLV Alert** (Ledger `add()`) — delayed toast on beating / missing closing line.
+13. **Daily Digest Preference** (EmailCapture) — frequency selector: Daily / 3× per week / Weekly.
 
 ---
 
-## How the cross-domain auth works
+## What was completed — sessions 1–5
 
-1. User visits PromoGrind (vaultsparkstudios.com/promogrind/)
-2. `checkAuth()` finds no session → redirects to `vaultsparkstudios.com/vault-member/?next=https://vaultsparkstudios.com/promogrind`
-3. User logs in on vault-member page
-4. vault-member detects `?next=` param → redirects to PromoGrind with `#access_token=...&refresh_token=...&type=vault_access` in URL hash
-5. PromoGrind's `checkAuth()` detects tokens → calls `supabase.auth.setSession()` → clears hash → renders app
-6. Subsequent visits: session is in localStorage, no redirect needed
+See archived entries in prior handoffs. Summary:
+- Sessions 1-2: Foundation, auth, cloud sync, 17 calculators, live scanner
+- Session 3: VaultSparked/Stripe, GitHub Pages live
+- Session 4: 22 calculators, BetTracker, Leaderboard, PromoBoard, PWA, Capacitor, major UX
+- Session 5: Full feature backlog — useCalcMemory, social share, KB expansion, onboarding, ledger goals, compact mode, keyboard shortcuts, mobile nav, Promo Finder, PromoBoard, Glossary
 
 ---
 
-## Key files
+## Pending external setup (no code changes needed)
 
-- `src/auth.js` — Supabase auth gate, isPro(), startCheckout()
-- `src/sync.js` — cloud sync, vault events
-- `src/App.jsx` — all UI, LIVE tab group, proStatus state
-- `src/books.js` — sportsbook data + affiliate links (edit here)
-- `.env` — Supabase credentials (live, gitignored)
-- `.env.admin` — service role key (live, gitignored)
-- `scripts/generate-invite-codes.js` — admin CLI
+### Must run in Supabase SQL Editor first:
+1. `scripts/migration-community-board.sql` — creates `promo_submissions` table
+2. `scripts/migration-leaderboard.sql` — creates `vault_leaderboard` view
 
-## Constraints
+### External platforms:
+- **Affiliate links** → wire into `src/books.js` (all 8 books still placeholder URLs)
+- **Stripe** → create TWO products: Monthly ($24.99/mo) + Annual ($199/yr) → set `STRIPE_*` secrets → deploy checkout + webhook; wire annual price ID into `PricingPage → startCheckout()`
+- **Odds API** → theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → deploy odds function; change scanner refresh `120_000` → `300_000`
+- **Resend** → resend.com → verify domain → set secret → deploy weekly-digest
+- **Plausible** → plausible.io → uncomment one line in `index.html`
+- **OAuth** → Google + Discord in Supabase Auth Providers
+- **Google Search Console** → submit sitemap
+- **Referral tracking** → add `referrals` Supabase table + RPC; wire into `ReferralHub` (currently hardcoded 0)
+
+### Blocked on LLC:
+- Stripe live mode — requires LLC + EIN + bank account
+
+---
+
+## Architecture snapshot
+
+```
+src/
+  App.jsx          — all UI (~2,950 lines), 22 calculators, all features
+  auth.js          — Supabase auth gate, isPro(), startCheckout()
+  sync.js          — cloud sync, vault events, AppDataCtx feeds from here
+  books.js         — sportsbook data + affiliate links (edit here)
+  main.jsx         — entry, SW registration
+  sw-register.js   — service worker registration
+
+public/
+  sw.js            — service worker v2 (network-first JS/CSS, cache-first fonts/images)
+  manifest.json    — PWA manifest
+
+supabase/
+  functions/
+    weekly-digest/ — Resend newsletter Edge Function
+
+scripts/
+  migration-community-board.sql
+  migration-leaderboard.sql
+  generate-invite-codes.js
+
+vite.config.js     — vendor chunk split, chunkSizeWarningLimit 600
+capacitor.config.ts
+```
+
+---
+
+## Key constraints (never violate)
 
 - Never commit `.env` or `.env.admin` — both gitignored
 - `SUPABASE_SERVICE_ROLE_KEY` is for admin CLI only, never in browser code
-- Calculator math in `src/math.js` must not be changed without verifying formulas
+- Calculator math in App.jsx must not be changed without verifying formulas
 - All sportsbook links must live in `src/books.js` only
 - Do not activate live Stripe until LLC + EIN obtained
-- `isPro()` must continue to accept both `pro` and `vault_sparked` — legacy `pro` plan users must not be broken
+- `isPro()` must continue to accept both `pro` and `vault_sparked` — legacy plan users must not be broken
+- Odds API only called when `proStatus.status === "active"` — free users never trigger API requests
+- `syncAppData(d)` replaces `setData(d) + saveData(d)` everywhere — never use saveData directly in components

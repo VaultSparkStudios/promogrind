@@ -4,18 +4,45 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "3.0.0",
+  "version": "6.0.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
   "repo": "VaultSparkStudios/promogrind",
   "public_url": "https://vaultsparkstudios.com/promogrind/",
-  "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "localStorage"],
-  "backend": false,
-  "last_updated": "2026-03-24",
+  "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA"],
+  "backend": true,
+  "last_updated": "2026-03-25",
+  "app_lines": 2950,
+  "calculator_count": 22,
+  "tab_count": {
+    "Convert": 5,
+    "Calculate": 18,
+    "Track": 4,
+    "Live": 2,
+    "Learn": 8
+  },
   "blockers": [
-    "Affiliate links not inserted",
-    "GitHub Pages source not configured"
+    "Affiliate links not inserted (src/books.js)",
+    "Odds API key not set (scanner non-functional)",
+    "Stripe test mode not configured — need Monthly ($24.99/mo) + Annual ($199/yr) products",
+    "SQL migrations not yet run (community board + leaderboard)",
+    "Resend not configured (newsletter non-functional)",
+    "Referral tracking not wired to Supabase (ReferralHub shows hardcoded 0)"
   ],
-  "next_milestone": "Live deploy with affiliate links active"
+  "next_milestone": "Odds API activated + affiliate links wired = first revenue-capable deploy",
+  "domain": "vaultsparkstudios.com/promogrind/ (permanent, no separate domain)",
+  "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
+  "build": {
+    "vendor_chunk_gzip_kb": 49,
+    "app_chunk_gzip_kb": 110,
+    "total_gzip_kb": 159,
+    "sw_version": "promogrind-v2",
+    "strategy": "network-first JS/CSS, cache-first fonts/images"
+  },
+  "tiers": {
+    "free": { "price": 0, "features": "22 calculators, tracker, ledger, KB, promo calendar" },
+    "vaultsparked": { "price_monthly": 24.99, "price_annual": 199, "features": "live scanner, push alerts, all pro tools" },
+    "team": { "price": 49.99, "status": "waitlist", "features": "shared vault, split P/L, all Pro" }
+  }
 }

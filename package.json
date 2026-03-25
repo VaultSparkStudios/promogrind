@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "build:pages": "vite build && node scripts/postbuild-pages.mjs",
+    "build:cap": "VITE_APP_BASE_PATH=/ vite build --outDir dist-cap",
+    "cap:sync": "npm run build:cap && npx cap sync",
     "og": "node scripts/generate-og.mjs",
     "preview": "vite preview"
   },

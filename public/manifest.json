@@ -1,0 +1,20 @@
+{
+  "name": "PromoGrind",
+  "short_name": "PromoGrind",
+  "description": "Free sportsbook promo conversion tools — bonus bets, profit boosts, arb scanner, and more.",
+  "start_url": "/promogrind/",
+  "scope": "/promogrind/",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#4ade80",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/promogrind/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "utilities"]
+}
