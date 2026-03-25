@@ -17,10 +17,16 @@
 
 **Launch checklist:**
 - [ ] Insert affiliate/referral links into `src/books.js`
+- [ ] Create Supabase project → run `supabase-schema.sql` in SQL Editor
+- [ ] Fill in `SUPABASE_URL` + `SUPABASE_ANON_KEY` in `VaultSparkStudios.github.io/assets/supabase-client.js`
+- [ ] Copy `.env.example` → `.env` in PromoGrind, fill in same Supabase values
+- [ ] Create `.env.admin` with SERVICE_ROLE_KEY for invite code generator
+- [ ] Generate initial invite codes: `node scripts/generate-invite-codes.js 10 "launch batch"`
 - [ ] Enable GitHub Pages or connect Vercel
 - [ ] Set custom domain (promogrind.com if available)
 - [ ] Submit sitemap to Google Search Console
 - [ ] Add affiliate disclosure and 21+ notice to app footer
+- [ ] Test auth gate + invite code flow end-to-end
 - [ ] Test all calculators on mobile
 - [ ] Verify localStorage persistence
 

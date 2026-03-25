@@ -49,9 +49,11 @@ If the user says only `closeout`, follow `prompts/closeout.md`.
 
 - React 18 + Vite 6
 - Vanilla CSS (no framework)
-- localStorage for persistence
-- Zero backend — static hosting only
-- Deploy targets: Vercel (primary), Netlify, GitHub Pages
+- localStorage for calculator/ledger persistence (no change)
+- **Auth: Supabase** — `src/auth.js` gates the app; session check on load; cross-domain token redirect from vault-member page
+- Supabase shared project with `VaultSparkStudios.github.io` (same URL + anon key)
+- Env: `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` in `.env` (never committed)
+- Deploy target: GitHub Pages (auto-deploy via `.github/workflows/deploy-pages.yml`)
 
 ## Deployment standards
 

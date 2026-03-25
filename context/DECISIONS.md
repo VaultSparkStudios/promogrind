@@ -42,6 +42,15 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen: Smallest possible bundle, fastest load, no dependency churn, full control over every pixel.
 - Follow-up: None — locked unless a major redesign is warranted.
 
+### 2026-03-24 - Vault Member auth gate via Supabase
+
+- Status: Decided + implemented
+- Context: Owner wants PromoGrind restricted to Vault Members only, with invite-code-based friend access. App was previously zero-backend static.
+- Decision: Supabase handles auth (email+password), invite code validation, and vault_members records. PromoGrind adds a session gate in `src/auth.js` + `src/App.jsx`. Cross-domain sessions use URL hash token handoff (Supabase standard pattern). The gate is generic — any future tool copies `src/auth.js` + adds Supabase env vars to join the system.
+- Alternatives considered: VPS (IONOS/DigitalOcean) — rejected as over-engineered for current needs; full self-hosted auth — rejected as ops burden without benefit at this stage.
+- Why this was chosen: Supabase free tier covers the full use case (50K MAU, managed Postgres, built-in email auth). Near-zero ops. Invite code + account creation + welcome email all handled. VPS remains the right answer later when VaultFront needs a game backend.
+- Follow-up: When VaultFront backend launches, Supabase continues as the auth/DB layer alongside the VPS game server.
+
 ### 2026-03-24 - Public repo visibility
 
 - Status: Decided

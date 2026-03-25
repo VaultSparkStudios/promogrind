@@ -4,51 +4,64 @@ Last updated: 2026-03-24
 
 This is the authoritative active handoff file for the project.
 
-## What was completed
+## What was completed this session
 
-- Full repo created and pushed: `VaultSparkStudios/promogrind` (public)
-- Complete studio-system scaffolded: context/, docs/, logs/, plans/, prompts/, specs/
-- GitHub Pages deploy workflow live — deploys on every push to main
-- CI workflow live — build validation on every push/PR
-- All domain/SEO issues fixed: canonical, sitemap (14 real slugs), robots.txt, OG image
-- Google Fonts (JetBrains Mono + Space Grotesk) loaded in index.html
-- OG image (1200×630) generated and committed to public/
-- Removed Vercel/Netlify config — GitHub Pages is sole deploy target
-- PromoGrind added to studio site under new `#vault-tools` section
-- Affiliate links wired: books.js → Tracker "Sign Up →" buttons (placeholder URLs, need real links)
-- Duplicate BOOKS array eliminated — books.js is single source of truth
-- URL routing added (react-router-dom) — 14 shareable calculator URLs
-- CSV export added to P/L Ledger
-- FTC affiliate disclosure + responsible gambling footer added
-- Ledger form split into two rows for mobile
-- Bug fixed: `b.n` → `b.name` in ledger book dropdown
-- Tracker checkbox: role, aria-checked, aria-label, tabIndex, keyboard support, focus ring
+- **Vault Member auth gate** — PromoGrind is now restricted to Vault Members only
+  - `src/auth.js` (new): Supabase client + `checkAuth()` + `signOut()` + cross-domain token handler
+  - `src/App.jsx`: auth gate at component startup; shows loading screen until session confirmed; all hooks called before conditional return (React rules compliant)
+  - `scripts/generate-invite-codes.js` (new): admin CLI — `node scripts/generate-invite-codes.js 5 "for friends"` — requires `.env.admin`
+  - `.env.example` (new): credential template
+  - `.env.admin` added to `.gitignore`
+  - `@supabase/supabase-js` installed as npm dependency
+  - `docs/RELEASE_PLAN.md` updated with Supabase setup steps in launch checklist
+  - `context/DECISIONS.md` updated with auth architecture decision
+
+- **Studio site (VaultSparkStudios.github.io) changes** — see that repo's LATEST_HANDOFF.md
+  - `assets/supabase-client.js` (new): shared Supabase client + `VSGate` redirect helper + `VAULT_GATED_APPS` registry
+  - `vault-member/index.html`: localStorage auth replaced with Supabase; invite code field added to register form; cross-domain redirect handling added
+  - `supabase-schema.sql` (new): run once in Supabase SQL Editor
 
 ## What is mid-flight
 
-- Nothing — session closed cleanly, build passing
+- Nothing — all code is written; awaiting Supabase project creation by Studio owner
 
 ## What to do next
 
-1. **Insert affiliate links into `src/books.js`** — replace placeholder `link:` values with real affiliate/referral URLs. This is the only thing blocking monetization.
-2. **Enable GitHub Pages** — `github.com/VaultSparkStudios/promogrind` → Settings → Pages → Source → GitHub Actions. Deploy triggers automatically.
-3. **Submit sitemap** to Google Search Console once live: `https://vaultsparkstudios.com/promogrind/sitemap.xml`
+1. **Create Supabase project** at supabase.com (free tier)
+2. **Run the schema** — SQL Editor → paste contents of `VaultSparkStudios.github.io/supabase-schema.sql` → Run
+3. **Fill in credentials** — find in Supabase: Settings → API
+   - `VaultSparkStudios.github.io/assets/supabase-client.js` — replace `YOUR_SUPABASE_URL` and `YOUR_SUPABASE_ANON_KEY`
+   - `promogrind/.env` (copy from `.env.example`) — same two values as `VITE_` prefixed vars
+4. **Create `.env.admin`** in PromoGrind root with `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (service role key is in Supabase Settings → API — never expose in browser)
+5. **Generate invite codes**: `node scripts/generate-invite-codes.js 10 "launch batch"`
+6. **Test the full flow**: go to deployed PromoGrind → redirects to vault-member → register with invite code → confirm email → sign in → redirected back to PromoGrind
+
+## How the cross-domain auth works
+
+1. User visits PromoGrind (promogrind.com)
+2. `checkAuth()` finds no session → redirects to `vaultsparkstudios.com/vault-member/?next=https://promogrind.com`
+3. User logs in on vault-member page
+4. vault-member detects `?next=` param → redirects to `https://promogrind.com/#access_token=...&refresh_token=...&type=vault_access`
+5. PromoGrind's `checkAuth()` detects tokens in URL hash → calls `supabase.auth.setSession()` → clears hash → renders app
+6. Subsequent visits: session is in localStorage, no redirect needed
+
+## How to add a new gated tool
+
+1. Add entry to `VAULT_GATED_APPS` in `VaultSparkStudios.github.io/assets/supabase-client.js`
+2. Copy `promogrind/src/auth.js` into the new tool's `src/`
+3. Add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` to the new tool's `.env`
+4. Call `checkAuth()` at app startup
 
 ## Constraints
 
 - All sportsbook links must live in `src/books.js` only — never hardcoded in App.jsx
 - Calculator math in `src/math.js` must not be changed without verifying formulas
-- App is purely static — no backend, no API keys in client code
-- `rel="sponsored"` is already on Sign Up links (correct for affiliate links per Google guidelines)
-
-## Read these first next session
-
-1. `context/CURRENT_STATE.md`
-2. `context/TASK_BOARD.md`
-3. `src/books.js` (if working on affiliate links)
+- Never expose `SUPABASE_SERVICE_ROLE_KEY` in browser code — admin CLI only
+- `SUPABASE_ANON_KEY` is safe to expose in browser (it's a read-only public key)
+- The `register_with_invite` Postgres RPC handles invite code validation + vault_members insert atomically — do not replicate this logic client-side
 
 ## Files to update next session if work continues
 
 - `context/CURRENT_STATE.md`
 - `context/TASK_BOARD.md`
-- `logs/WORK_LOG.md`
+- `context/LATEST_HANDOFF.md`

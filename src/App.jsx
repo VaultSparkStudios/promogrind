@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS } from "./books.js";
+import { checkAuth } from "./auth.js";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -480,14 +481,30 @@ const Footer = () => (
 
 // ═══ MAIN APP ═══
 export default function App() {
+  const [authReady, setAuthReady] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    checkAuth().then(ok => { if (ok) setAuthReady(true); });
+  }, []);
+
   const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
   const { gi=0, ti=0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];
   const g = TABS[gi];
   const Comp = g.items[ti]?.c || (() => null);
 
   const goTo = (newGi, newTi) => navigate("/" + TABS[newGi].items[newTi].slug);
+
+  if (!authReady) {
+    return (
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
+        <div style={{textAlign:"center",color:K.mt}}>
+          <div style={{fontSize:10,letterSpacing:"2px",textTransform:"uppercase"}}>Checking Vault access...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
