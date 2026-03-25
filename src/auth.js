@@ -102,13 +102,14 @@ export async function getSubscription() {
 }
 
 /**
- * Returns true if the user has an active Pro subscription.
+ * Returns true if the user has an active Pro or VaultSparked subscription.
+ * VaultSparked (vault_sparked) is the studio-wide tier that includes all Pro features.
  */
 export async function isPro() {
   const sub = await getSubscription();
   if (!sub || sub.status !== 'active') return false;
   if (sub.current_period_end && new Date(sub.current_period_end) < new Date()) return false;
-  return true;
+  return sub.plan === 'pro' || sub.plan === 'vault_sparked';
 }
 
 /**
