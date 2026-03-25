@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS } from "./books.js";
-import { checkAuth } from "./auth.js";
+import { checkAuth, getSubscription, startCheckout, supabase } from "./auth.js";
+import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -54,10 +55,7 @@ const calcRO = (b, m, v) => { const bn=parseFloat(b),mn=parseFloat(m),vn=parseFl
 // ═══ COLORS ═══
 const K = { bg:"#0a0e17", s1:"#0f1520", s2:"#161d2a", s3:"#1c2536", bd:"#1e293b", bd2:"#334155", ac:"#60a5fa", gn:"#4ade80", rd:"#f87171", yl:"#fbbf24", pp:"#c084fc", tx:"#e2e8f0", dm:"#94a3b8", mt:"#64748b", wh:"#ffffff" };
 
-// ═══ STORAGE HELPERS ═══
-const STORE_KEY = "promo_engine_data";
-const loadData = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { return {}; } };
-const saveData = (d) => { try { localStorage.setItem(STORE_KEY, JSON.stringify(d)); } catch {} };
+// Storage helpers are now in src/sync.js (cloud-backed)
 
 // ═══ STYLES ═══
 const font = "'JetBrains Mono','SF Mono','Fira Code',monospace";
@@ -278,7 +276,8 @@ const RolloverCalc = () => {
 
 // ═══ TRACKER ═══
 const Tracker = () => {
-  const [data, setData] = useState(() => loadData());
+  const [data, setData] = useState(() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3'))||{}; } catch { return {}; } });
+  useEffect(() => { loadData().then(d => setData(d)); }, []);
   const done = data.done || {};
   const profits = data.profits || {};
   const toggle = n => { const d = {...data, done:{...done,[n]:!done[n]}}; setData(d); saveData(d); };
@@ -291,7 +290,7 @@ const Tracker = () => {
       <div><div style={{fontSize:10,color:K.mt}}>COMPLETED</div><div style={S.big(K.ac)}>{cnt}/{BOOKS.length}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>REMAINING</div><div style={S.big(K.yl)}>~${f(BOOKS.filter(b=>!done[b.name]).reduce((s,b)=>s+b.bonus*0.7,0),0)}</div></div>
     </div>
-    <Nt c={K.ac}>Your tracker data saves to this browser automatically. Share the app link with friends — their data stays separate on their device.</Nt>
+    <Nt c={K.ac}>Your tracker syncs across all your devices. Data also saves locally as a backup.</Nt>
     <div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
         <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit",""].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
@@ -313,11 +312,12 @@ const Tracker = () => {
 
 // ═══ LEDGER ═══
 const Ledger = () => {
-  const [data, setData] = useState(() => loadData());
+  const [data, setData] = useState(() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3'))||{}; } catch { return {}; } });
+  useEffect(() => { loadData().then(d => setData(d)); }, []);
   const entries = data.ledger || [];
   const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Bonus Conversion",bonus:"",hedge:"",profit:"",notes:""});
   const save = (newEntries) => { const d = {...data, ledger: newEntries}; setData(d); saveData(d); };
-  const add = () => { if(!form.profit) return; save([{...form,id:Date.now()},...entries]); setForm(f=>({...f,bonus:"",hedge:"",profit:"",notes:""})); };
+  const add = () => { if(!form.profit) return; save([{...form,id:Date.now()},...entries]); setForm(f=>({...f,bonus:"",hedge:"",profit:"",notes:""})); onLedgerEntry(); };
   const del = id => save(entries.filter(e=>e.id!==id));
   const total = entries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
   const exportCSV = () => {
@@ -327,7 +327,7 @@ const Ledger = () => {
     const a = Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),download:`promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`});
     a.click(); URL.revokeObjectURL(a.href);
   };
-  return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="SAVES LOCALLY" bc={K.yl}/>
+  return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="CLOUD SYNC" bc={K.gn}/>
     <div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
       <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
@@ -433,6 +433,204 @@ const KB = () => (<div style={S.card}>
 </div>);
 
 // ═══ TAB SYSTEM ═══
+// ═══ LIVE SCANNER (Pro) ═══
+const SPORTS_LIST = [
+  { key:"americanfootball_nfl",  label:"NFL"  },
+  { key:"basketball_nba",        label:"NBA"  },
+  { key:"baseball_mlb",          label:"MLB"  },
+  { key:"icehockey_nhl",         label:"NHL"  },
+  { key:"americanfootball_ncaaf",label:"NCAAF"},
+  { key:"soccer_usa_mls",        label:"MLS"  },
+];
+
+const detectArbs = (games) => {
+  const opps = [];
+  for (const game of games) {
+    const best = {};
+    for (const bm of (game.bookmakers||[])) {
+      for (const mkt of (bm.markets||[])) {
+        if (mkt.key!=="h2h") continue;
+        for (const o of mkt.outcomes) {
+          if (!best[o.name] || o.price > best[o.name].price) best[o.name] = { price:o.price, book:bm.title };
+        }
+      }
+    }
+    const entries = Object.entries(best);
+    if (entries.length!==2) continue;
+    const [[n1,l1],[n2,l2]] = entries;
+    const d1=toD(l1.price), d2=toD(l2.price);
+    if (d1<=1||d2<=1) continue;
+    const margin=1/d1+1/d2;
+    if (margin<1) {
+      const s1=f(100*(1/d1)/margin), s2=f(100*(1/d2)/margin);
+      opps.push({ game:`${game.home_team} vs ${game.away_team}`, sport:game.sport_title,
+        start:game.commence_time, n1, b1:l1.book, p1:l1.price, n2, b2:l2.book, p2:l2.price,
+        s1, s2, roi:f((1-margin)*100,2) });
+    }
+  }
+  return opps.sort((a,b)=>parseFloat(b.roi)-parseFloat(a.roi));
+};
+
+const detectEV = (games) => {
+  const opps = [], seen = new Set();
+  for (const game of games) {
+    for (const bm of (game.bookmakers||[])) {
+      for (const mkt of (bm.markets||[])) {
+        if (mkt.key!=="h2h") continue;
+        for (const outcome of mkt.outcomes) {
+          const allPrices = (game.bookmakers||[])
+            .map(b=>b.markets?.find(m=>m.key==="h2h")?.outcomes?.find(o=>o.name===outcome.name)?.price)
+            .filter(Boolean).map(toD).filter(d=>d>1);
+          if (allPrices.length<2) continue;
+          const avgProb = allPrices.reduce((s,d)=>s+1/d,0)/allPrices.length;
+          const bd=toD(outcome.price); if(bd<=1) continue;
+          const ev=(avgProb*(bd-1)-(1-avgProb))*100;
+          const key=`${game.id}-${outcome.name}-${bm.title}`;
+          if (ev>2&&!seen.has(key)) { seen.add(key);
+            opps.push({ game:`${game.home_team} vs ${game.away_team}`, sport:game.sport_title,
+              start:game.commence_time, outcome:outcome.name, book:bm.title, price:outcome.price,
+              fairPct:f(avgProb*100,1), bookPct:f(100/bd,1), ev:f(ev,1) });
+          }
+        }
+      }
+    }
+  }
+  return opps.sort((a,b)=>parseFloat(b.ev)-parseFloat(a.ev)).slice(0,30);
+};
+
+const LiveScanner = ({ proStatus, mode }) => {
+  const [sport, setSport] = useState("americanfootball_nfl");
+  const [activeTab, setActiveTab] = useState(mode==="ev-scanner"?"ev":"arb");
+  const [games, setGames] = useState([]);
+  const [arbs, setArbs] = useState([]);
+  const [evs, setEvs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [updated, setUpdated] = useState(null);
+  const [upgrading, setUpgrading] = useState(false);
+  const intervalRef = useRef(null);
+  const isActive = proStatus?.status==="active";
+
+  const fetchOdds = async () => {
+    if (loading) return;
+    setLoading(true); setError(null);
+    try {
+      const { data:{ session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not authenticated");
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/odds?sport=${sport}&markets=h2h`;
+      const resp = await fetch(url, { headers:{ Authorization:`Bearer ${session.access_token}` } });
+      if (!resp.ok) { const e=await resp.json(); throw new Error(e.error||`HTTP ${resp.status}`); }
+      const data = await resp.json();
+      setGames(data); setArbs(detectArbs(data)); setEvs(detectEV(data)); setUpdated(new Date());
+    } catch(e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
+  useEffect(()=>{
+    if(!isActive) return;
+    fetchOdds();
+    intervalRef.current=setInterval(fetchOdds,120_000);
+    return ()=>clearInterval(intervalRef.current);
+  },[sport,isActive]);
+
+  const handleUpgrade = async () => {
+    setUpgrading(true);
+    await startCheckout();
+    setUpgrading(false);
+  };
+
+  if (proStatus===null) return (
+    <div style={{...S.card,textAlign:"center",padding:40}}>
+      <div style={{color:K.mt,fontSize:11,letterSpacing:"2px",textTransform:"uppercase"}}>Loading...</div>
+    </div>
+  );
+
+  if (!isActive) return (
+    <div style={S.card}>
+      <div style={{textAlign:"center",padding:"32px 16px"}}>
+        <div style={{...S.tag(K.yl),fontSize:12,marginBottom:16,display:"inline-block"}}>PRO MEMBERS ONLY</div>
+        <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.tx,marginBottom:8}}>Live Odds Scanner</div>
+        <div style={{fontSize:13,color:K.dm,maxWidth:440,margin:"0 auto 24px",lineHeight:1.7}}>
+          Real-time arb and +EV opportunities across every major US sportsbook, updated every 2 minutes. Finds what competitors charge $99–$199/month to show you.
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:8,maxWidth:400,margin:"0 auto 28px",textAlign:"left"}}>
+          {[["Live Arb Scanner","Auto-detects 2-way arbs across all books"],["+ EV Scanner","Finds where books are mispriced vs fair value"],["Auto-Refresh","Updates every 2 min — never miss an opportunity"],["All Major Sports","NFL, NBA, MLB, NHL, NCAAF, MLS and more"]].map(([t,d])=>(
+            <div key={t} style={{padding:"10px 12px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
+              <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:2}}>{t}</div>
+              <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{d}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{marginBottom:8}}>
+          <button onClick={handleUpgrade} disabled={upgrading} style={{padding:"12px 28px",background:K.yl,border:"none",borderRadius:8,color:K.bg,fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:fontD,opacity:upgrading?0.7:1}}>
+            {upgrading?"Redirecting to checkout…":"Upgrade to Pro — $29/month"}
+          </button>
+        </div>
+        <div style={{fontSize:11,color:K.mt}}>Cancel anytime. Free calculators always free.</div>
+      </div>
+    </div>
+  );
+
+  const results = activeTab==="arb" ? arbs : evs;
+
+  return (
+    <div style={S.card}>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+        <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Live Scanner</div>
+        <span style={S.tag(K.yl)}>PRO</span>
+        <select style={{...S.input,width:100,padding:"5px 8px",fontSize:11}} value={sport} onChange={e=>setSport(e.target.value)}>
+          {SPORTS_LIST.map(s=><option key={s.key} value={s.key}>{s.label}</option>)}
+        </select>
+        <div style={{display:"flex",gap:0,marginLeft:"auto"}}>
+          {["arb","+ev"].map(t=>(
+            <button key={t} onClick={()=>setActiveTab(t==="arb"?"arb":"ev")} style={{padding:"5px 12px",fontSize:11,fontWeight:600,border:`1px solid ${K.bd2}`,background:activeTab===(t==="arb"?"arb":"ev")?K.ac:"transparent",color:activeTab===(t==="arb"?"arb":"ev")?K.bg:K.dm,cursor:"pointer",fontFamily:font,borderRadius:t==="arb"?"6px 0 0 6px":"0 6px 6px 0"}}>
+              {t==="arb"?"Arb":"+ EV"}
+            </button>
+          ))}
+        </div>
+        <button onClick={fetchOdds} disabled={loading} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font}}>
+          {loading?"…":"↻"}
+        </button>
+      </div>
+      {updated&&<div style={{fontSize:10,color:K.mt,marginBottom:8}}>Updated {updated.toLocaleTimeString()} · Auto-refreshes every 2 min</div>}
+      {error&&<div style={{...S.res(false),marginBottom:12,fontSize:12}}>{error}</div>}
+      {loading&&!results.length&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Scanning live odds…</div>}
+      {!loading&&!error&&results.length===0&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>No {activeTab==="arb"?"arb opportunities":"+ EV spots"} found right now — try another sport or check back in a few minutes.</div>}
+      {results.map((r,i)=>(
+        activeTab==="arb"
+          ? <div key={i} style={{...S.res(true),marginBottom:8}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                <div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>
+                <span style={{...S.tag(K.gn),fontSize:12}}>+{r.roi}% ROI</span>
+              </div>
+              <div style={{fontSize:11,color:K.mt,marginBottom:10}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+                {[[r.n1,r.b1,r.p1,r.s1],[r.n2,r.b2,r.p2,r.s2]].map(([name,book,price,stake])=>(
+                  <div key={name} style={{padding:"8px 10px",background:K.s3,borderRadius:6}}>
+                    <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:3}}>{name}</div>
+                    <div style={{fontSize:13,fontWeight:700,color:K.ac}}>{price>0?"+":""}{price}</div>
+                    <div style={{fontSize:11,color:K.dm}}>{book}</div>
+                    <div style={{fontSize:11,color:K.gn,fontWeight:600}}>Stake ${stake} of $100</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          : <div key={i} style={{...S.res(true),marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+              <div>
+                <div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>
+                <div style={{fontSize:11,color:K.dm,marginTop:2}}>{r.outcome} · {r.book} · {r.price>0?"+":""}{r.price}</div>
+                <div style={{fontSize:10,color:K.mt}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
+              </div>
+              <div style={{textAlign:"right"}}>
+                <div style={{...S.big(K.gn),fontSize:20}}>+{r.ev}% EV</div>
+                <div style={{fontSize:10,color:K.mt}}>Fair: {r.fairPct}% · Book: {r.bookPct}%</div>
+              </div>
+            </div>
+      ))}
+    </div>
+  );
+};
+
 const TABS = [
   { group:"Convert", items:[
     {n:"Bonus Bet",slug:"bonus-bet",c:BonusBet},
@@ -452,6 +650,10 @@ const TABS = [
   { group:"Track", items:[
     {n:"Sportsbooks",slug:"sportsbooks",c:Tracker},
     {n:"P/L Ledger",slug:"ledger",c:Ledger},
+  ]},
+  { group:"Live", items:[
+    {n:"Arb Scanner",slug:"arb-scanner",c:LiveScanner,pro:true},
+    {n:"+EV Scanner",slug:"ev-scanner",c:LiveScanner,pro:true},
   ]},
   { group:"Learn", items:[
     {n:"Knowledge Base",slug:"knowledge-base",c:KB},
@@ -482,17 +684,35 @@ const Footer = () => (
 // ═══ MAIN APP ═══
 export default function App() {
   const [authReady, setAuthReady] = useState(false);
+  const [proStatus, setProStatus] = useState(null);
+  const prevSlugRef = useRef(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  // Auth + subscription load
   useEffect(() => {
-    checkAuth().then(ok => { if (ok) setAuthReady(true); });
+    checkAuth().then(async ok => {
+      if (ok) {
+        setAuthReady(true);
+        onDailyLogin();
+        getSubscription().then(setProStatus);
+      }
+    });
   }, []);
 
   const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
   const { gi=0, ti=0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];
   const g = TABS[gi];
-  const Comp = g.items[ti]?.c || (() => null);
+  const item = g.items[ti];
+  const Comp = item?.c || (() => null);
+  const isLiveTool = !!item?.pro;
+
+  // Fire vault calc event on tab navigation (Convert + Calculate groups)
+  useEffect(() => {
+    if (!authReady || slug === prevSlugRef.current) return;
+    prevSlugRef.current = slug;
+    if (gi === 0 || gi === 1) onCalculation(slug);
+  }, [slug, authReady, gi]);
 
   const goTo = (newGi, newTi) => navigate("/" + TABS[newGi].items[newTi].slug);
 
@@ -514,7 +734,12 @@ export default function App() {
             <div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
             <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div>
           </div>
-          <div style={{fontSize:10,color:K.mt,textAlign:"right",lineHeight:1.6}}>Free educational tool. Not gambling advice.<br/>21+ only. Gamble responsibly. 1-800-GAMBLER</div>
+          <div style={{display:"flex",alignItems:"center",gap:16}}>
+            {proStatus?.status === "active" && (
+              <div style={{fontSize:10,fontWeight:700,color:K.pp,background:`${K.pp}15`,padding:"3px 10px",borderRadius:50,letterSpacing:"1px"}}>PRO</div>
+            )}
+            <div style={{fontSize:10,color:K.mt,textAlign:"right",lineHeight:1.6}}>Free educational tool. Not gambling advice.<br/>21+ only. Gamble responsibly. 1-800-GAMBLER</div>
+          </div>
         </div>
       </div>
       <div style={{background:K.s1,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto"}}>
@@ -527,7 +752,9 @@ export default function App() {
           <button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{t.n}</button>
         ))}</div>
       </div>
-      <div style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}><Comp/></div>
+      <div style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
+        {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+      </div>
       <Footer/>
     </div>
   );

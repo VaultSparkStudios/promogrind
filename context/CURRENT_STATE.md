@@ -3,55 +3,42 @@
 ## Snapshot
 
 - Date: 2026-03-24
-- Overall status: Pre-launch — Vault Member auth gate implemented, awaiting Supabase project creation + affiliate links
-- Current phase: Launch prep — auth + Supabase setup + affiliate links remaining
+- Overall status: Feature-complete (v3.1) — all 7 database-powered features implemented; awaiting Supabase project creation + Stripe + Odds API setup
+- Current phase: Backend activation — all code ready, credentials needed
 
 ## What exists
 
-- Systems: Full React/Vite app (v3) — 11 calculators, sportsbook tracker, P/L ledger, knowledge base
-- Routing: URL-based routing via react-router-dom — each calculator has its own shareable URL (e.g. `/promogrind/bonus-bet`)
+- Systems: Full React/Vite app (v3.1) — 11 calculators, sportsbook tracker, P/L ledger, knowledge base, live odds scanner (Pro)
+- Routing: URL-based routing via react-router-dom — each tool has its own shareable URL
 - Auth gate: `src/auth.js` — checks Supabase session on load; redirects unauthenticated users to `vaultsparkstudios.com/vault-member/?next=<origin>`
-- Auth gate in App.jsx: renders loading screen until session confirmed, then shows app
-- Cross-domain token flow: vault-member page sends access_token + refresh_token via URL hash; PromoGrind calls `supabase.auth.setSession()` on receipt
-- Affiliate links: wired into Tracker "Sign Up →" buttons — pull from `src/books.js` (still placeholder URLs, need real links)
-- Footer: FTC affiliate disclosure + 1-800-GAMBLER responsible gambling copy — live
-- OG image: `public/og-image.png` (1200×630) — live, social shares show preview
-- CI: `.github/workflows/ci.yml` — build validation on every push/PR
-- Deploy: `.github/workflows/deploy-pages.yml` — auto-deploys to GitHub Pages on push to main
-- SEO: canonical, sitemap, robots.txt all pointing to `vaultsparkstudios.com/promogrind/`; Google Fonts loaded
-- Studio site: PromoGrind listed in `#vault-tools` section on `vaultsparkstudios.com`
+- Cloud sync: `src/sync.js` — `loadData()`/`saveData()` replaces inline storage helpers; syncs to `promogrind_data` table; vault events via `award_vault_points` RPC
+- Subscription: `isPro()`, `getSubscription()`, `startCheckout()` in `src/auth.js`
+- Live scanner: `LiveScanner` component in App.jsx — arb detection + +EV detection; routes `arb-scanner` and `ev-scanner`; Pro-gated with Stripe upgrade CTA
+- Pro badge: shown in header when subscription status is active
+- Daily login event: fires once per calendar day (3 pts)
+- Calc tracking: fires vault event on every calculator tab visit (5 pts first, 1 pt subsequent)
+- Ledger tracking: fires vault event on every ledger entry (2 pts)
 
 - Important paths:
-  - Entry point: `src/main.jsx` (BrowserRouter wrapper)
-  - Auth gate: `src/auth.js` ← Supabase client + session check
-  - All calculator UI + KB: `src/App.jsx` (auth gate at top of App component)
-  - Math formulas: `src/math.js`
-  - Sportsbook + affiliate data: `src/books.js` ← **edit affiliate links here**
-  - Env template: `.env.example` ← copy to `.env` and fill in Supabase values
-  - Admin CLI: `scripts/generate-invite-codes.js` ← requires `.env.admin` with service role key
-  - Deploy workflow: `.github/workflows/deploy-pages.yml`
-  - OG image source: `scripts/og-image.svg` (run `npm run og` to regenerate PNG)
+  - Entry: `src/main.jsx`
+  - Auth + subscription: `src/auth.js`
+  - Cloud sync + vault events: `src/sync.js`
+  - All UI: `src/App.jsx`
+  - Sportsbook data: `src/books.js` ← **edit affiliate links here**
+  - Env template: `.env.example`
+  - Admin CLI: `scripts/generate-invite-codes.js` ← needs `.env.admin`
 
-## In progress
+## Blockers (all external — no code changes needed)
 
-- Nothing active — session closed cleanly
-
-## Blockers
-
-- Blocker: Supabase project not yet created — `src/auth.js` will throw until VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY are set in `.env`
-- Owner: Studio
-- Unblock path: Create project at supabase.com → run `VaultSparkStudios.github.io/supabase-schema.sql` in SQL Editor → fill in `.env`
-
-- Blocker: Affiliate links still placeholder in `src/books.js`
-- Owner: Studio
-- Unblock path: Use personal "Refer a Friend" links from each sportsbook app immediately (no application needed). Apply to partner programs for higher CPAs.
-
-- Blocker: GitHub Pages source not yet set to "GitHub Actions" in repo settings
-- Owner: Studio
-- Unblock path: `github.com/VaultSparkStudios/promogrind` → Settings → Pages → Source → GitHub Actions
+1. **Supabase project** — create at supabase.com; run `supabase-schema.sql` + `supabase-schema-v2.sql`; fill in `.env`
+2. **Stripe** — create account + product + price; set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` as Supabase Edge Function secrets
+3. **The Odds API** — register at theoddsapi.com; set `ODDS_API_KEY` as Supabase Edge Function secret
+4. **Edge Functions** — deploy: `supabase functions deploy odds`, `stripe-webhook`, `create-checkout`
+5. **Affiliate links** — still placeholder in `src/books.js`
+6. **GitHub Pages source** — set to "GitHub Actions" in repo Settings → Pages
 
 ## Next 3 moves
 
-1. Create Supabase project, run schema, fill in `.env` — this unblocks the auth gate
-2. Generate initial invite codes: `node scripts/generate-invite-codes.js 10 "launch batch"`
-3. Insert affiliate/referral links into `src/books.js`
+1. Create Supabase project → run both schema SQL files → fill in `.env`
+2. Deploy Edge Functions + set secrets
+3. Generate initial invite codes: `node scripts/generate-invite-codes.js 10 "launch batch"`

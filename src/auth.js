@@ -85,6 +85,52 @@ export async function getCurrentUser() {
   return session?.user ?? null;
 }
 
+/**
+ * Returns the user's subscription row, or null.
+ * { plan, status, current_period_end }
+ * status 'active' = Pro subscriber.
+ */
+export async function getSubscription() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return null;
+  const { data } = await supabase
+    .from('subscriptions')
+    .select('plan, status, current_period_end')
+    .eq('user_id', session.user.id)
+    .maybeSingle();
+  return data ?? null;
+}
+
+/**
+ * Returns true if the user has an active Pro subscription.
+ */
+export async function isPro() {
+  const sub = await getSubscription();
+  if (!sub || sub.status !== 'active') return false;
+  if (sub.current_period_end && new Date(sub.current_period_end) < new Date()) return false;
+  return true;
+}
+
+/**
+ * Kicks off a Stripe Checkout session for the Pro plan.
+ * Redirects the browser to Stripe's hosted payment page.
+ */
+export async function startCheckout() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { redirectToLogin(); return; }
+
+  const { data, error } = await supabase.functions.invoke('create-checkout', {
+    headers: { Authorization: `Bearer ${session.access_token}` },
+  });
+
+  if (error || !data?.url) {
+    console.error('[VaultGate] Checkout error:', error ?? data);
+    return;
+  }
+
+  window.location.href = data.url;
+}
+
 // ── Internal ───────────────────────────────────────────────────
 
 function redirectToLogin() {
