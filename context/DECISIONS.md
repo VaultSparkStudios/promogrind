@@ -96,6 +96,24 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen: Cost-conscious. Users who want prop scanning can enable it. Default behavior (h2h + spreads + totals) covers most opportunities without ballooning API costs.
 - Follow-up: Monitor API usage after launch. If prop market cost is negligible, make it default-on.
 
+### 2026-03-26 - Daily Dashboard as default landing
+
+- Status: Decided + implemented
+- Context: Previously the app opened directly on Bonus Bet Calculator. After audit, identified that users need daily context (what promos are available today, what bets are open) before knowing what to do first.
+- Decision: Add a "Home" tab group with a DailyDashboard component. Set DEFAULT_SLUG to "dashboard". Dashboard shows today's promo briefing, P/L stats, open bets, expiry alerts, quick action links.
+- Alternatives considered: Keep Bonus Bet as default; make a modal overlay.
+- Why this was chosen: Dashboard is the highest-retention feature — gives users a reason to open the app daily even when they're not actively converting a promo. Quick action links drive into the correct calculator anyway.
+- Follow-up: Add personalized promo recommendations based on user's state and completed books.
+
+### 2026-03-26 - startCheckout plan parameter wired through
+
+- Status: Decided + implemented
+- Context: PricingPage had Monthly/Annual buttons but both called `startCheckout()` with no plan parameter. auth.js didn't accept a parameter. The `create-checkout` Edge Function received no plan info.
+- Decision: auth.js `startCheckout(planId='monthly')` now passes `planId` in the Edge Function request body. PricingPage passes `plan.id` ("monthly"|"annual").
+- Alternatives considered: Separate checkout functions per plan.
+- Why this was chosen: Minimal change, correct architecture. Edge Function now just needs to read `body.planId` and select the appropriate Stripe price ID.
+- Follow-up: Update `create-checkout` Edge Function (in studio repo) to read `body.planId` and route to monthly vs annual Stripe price.
+
 ### 2026-03-25 - Leaderboard anonymization
 
 - Status: Decided + implemented

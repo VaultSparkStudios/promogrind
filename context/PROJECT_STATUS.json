@@ -4,7 +4,7 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
@@ -12,37 +12,58 @@
   "public_url": "https://vaultsparkstudios.com/promogrind/",
   "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA"],
   "backend": true,
-  "last_updated": "2026-03-25",
-  "app_lines": 2950,
+  "last_updated": "2026-03-26",
+  "app_lines": 3400,
   "calculator_count": 22,
   "tab_count": {
+    "Home": 1,
     "Convert": 5,
     "Calculate": 18,
     "Track": 4,
     "Live": 2,
-    "Learn": 8
+    "Learn": 9
+  },
+  "audit_score": 62,
+  "audit_date": "2026-03-26",
+  "audit_category_scores": {
+    "feature_completeness": 87,
+    "revenue_monetization": 40,
+    "code_quality": 68,
+    "performance_build": 78,
+    "seo_discoverability": 32,
+    "ux_design": 76,
+    "security_data": 67,
+    "growth_retention": 60,
+    "infrastructure": 70,
+    "business_strategy": 58
   },
   "blockers": [
-    "Affiliate links not inserted (src/books.js)",
-    "Odds API key not set (scanner non-functional)",
-    "Stripe test mode not configured — need Monthly ($24.99/mo) + Annual ($199/yr) products",
+    "Affiliate links not inserted (src/books.js) — zero revenue until done",
+    "Odds API key not set (scanner non-functional for paying users)",
+    "Stripe test mode not configured — need Monthly ($24.99/mo) + Annual ($199/yr) products; update create-checkout Edge Function to read body.planId",
     "SQL migrations not yet run (community board + leaderboard)",
-    "Resend not configured (newsletter non-functional)",
-    "Referral tracking not wired to Supabase (ReferralHub shows hardcoded 0)"
+    "Resend not configured (newsletter non-functional)"
   ],
-  "next_milestone": "Odds API activated + affiliate links wired = first revenue-capable deploy",
+  "next_milestone": "Affiliate links wired + Odds API activated = first revenue-capable deploy",
   "domain": "vaultsparkstudios.com/promogrind/ (permanent, no separate domain)",
   "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
   "build": {
-    "vendor_chunk_gzip_kb": 49,
-    "app_chunk_gzip_kb": 110,
-    "total_gzip_kb": 159,
     "sw_version": "promogrind-v2",
     "strategy": "network-first JS/CSS, cache-first fonts/images"
   },
   "tiers": {
-    "free": { "price": 0, "features": "22 calculators, tracker, ledger, KB, promo calendar" },
+    "free": { "price": 0, "features": "22 calculators, tracker, ledger, KB, promo calendar, dashboard" },
     "vaultsparked": { "price_monthly": 24.99, "price_annual": 199, "features": "live scanner, push alerts, all pro tools" },
     "team": { "price": 49.99, "status": "waitlist", "features": "shared vault, split P/L, all Pro" }
-  }
+  },
+  "future_projects": [
+    "SSG/pre-rendering for SEO (largest organic growth lever)",
+    "Browser extension (Chrome/Firefox, detects sportsbook pages)",
+    "Email drip sequence (5-email onboarding after signup)",
+    "7-day VaultSparked free trial",
+    "UK market module (5x TAM expansion)",
+    "Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)",
+    "Claude API bet slip parser",
+    "Scheduled push notifications (morning promo briefing)"
+  ]
 }

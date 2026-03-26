@@ -113,15 +113,17 @@ export async function isPro() {
 }
 
 /**
- * Kicks off a Stripe Checkout session for the Pro plan.
+ * Kicks off a Stripe Checkout session.
+ * @param {string} [planId] - "monthly" | "annual" (defaults to "monthly")
  * Redirects the browser to Stripe's hosted payment page.
  */
-export async function startCheckout() {
+export async function startCheckout(planId = 'monthly') {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) { redirectToLogin(); return; }
 
   const { data, error } = await supabase.functions.invoke('create-checkout', {
     headers: { Authorization: `Bearer ${session.access_token}` },
+    body: { planId },
   });
 
   if (error || !data?.url) {

@@ -2,65 +2,45 @@
 
 ## Snapshot
 
-- Date: 2026-03-25
-- Overall status: Feature-complete (v6.0) — 22 calculators, full backend, PWA, 13 new engagement/value features, push notifications, CSV import, referral program, annual plan UI, team accounts waitlist
-- Current phase: Pre-launch — external platform setup (affiliate links, Odds API, Stripe) is the remaining blocker
+- Date: 2026-03-26
+- Overall status: v7.0 — audit complete, 14 items implemented (5 bug fixes + 9 new features), external revenue setup remains the primary blocker
+- Current phase: Pre-launch — affiliate links, Odds API, Stripe are all that stand between this app and first revenue
 
 ## What exists
 
-- **App:** React/Vite (~2,950 lines) — 22 calculators, 4 track tools, live scanner, community promo board, leaderboard, knowledge base, 13 session-6 engagement features
-- **Tabs:**
+- **App:** React/Vite (~3,400+ lines) — 22 calculators, 4 track tools, live scanner, community promo board, leaderboard, knowledge base, daily dashboard, all session 6+7 features
+- **Tab groups:**
+  - Home: Dashboard (new default landing — today's promos, P/L, open bets, quick actions)
   - Convert: Bonus Bet, Profit Boost, First Bet, Deposit Match, Insurance
   - Calculate: No-Vig, 3-Way No-Vig, +EV, Kelly, 2-Way Arb, 3-Way Arb, Parlay Hedge, Middle, Odds Convert, Rollover, Teaser, Round Robin, Line Shop, Parlay Builder, SGP Estimator, Hold Calc, Bet Sizer, Income Estimator
   - Track: Sportsbooks, Bet Tracker, P/L Ledger, Leaderboard
   - Live: Arb Scanner (pro), +EV Scanner (pro)
-  - Learn: Knowledge Base, Promo Finder, Promo Calendar, Promo Board, Glossary, Refer & Earn, Upgrade, Team Accounts
-- **Session 6 features (all in App.jsx):**
-  - AppDataCtx — shared data context, one `loadData()` call for all Track components
-  - Sync status indicator — SYNCING… / ✓ SAVED in header
-  - Undo delete — BetTracker + Ledger with 4s UNDO toast
-  - Auth optimistic render — shows app immediately if cached token exists
-  - Sub-tab scroll fade — right-edge gradient on mobile
-  - SW cache fix — network-first for HTML/JS (promogrind-v2), deploys take effect immediately
-  - Vite vendor chunk split — React cached separately, app chunk 104KB gzip
-  - Odds validation — auto-detects odds fields by label, inline "Invalid odds" error
-  - Inline Ledger edit — ✎ per row, in-place inputs, Save/Cancel
-  - Portfolio EV dashboard — book-implied EV across all open BetTracker positions
-  - Weekly performance card — copy formatted card to clipboard (📊 Share Week)
-  - Push notifications (LiveScanner) — 🔔 ALERTS toggle, threshold input, browser Notification API
-  - Promo Calendar — 16 recurring promos across 7 books, filterable
-  - Conversion rate history — avg bonus bet conversion % in Ledger stats (3+ entries)
-  - Book health tracker — Active/Limited/Gubbed/Pending/Closed status per book
-  - Promo ratings — 1-5 star rating per sportsbook
-  - Referral program UI — copy referral link, social post templates
-  - Annual plan UI — Monthly ($24.99/mo) vs Annual ($199/yr) pricing page
-  - CSV import — parse/preview/import from DraftKings/FanDuel CSV exports
-  - Team accounts — waitlist UI with email capture
-  - CLV alert — toast when closing line is beaten or moved against on Ledger entry
-  - Daily digest preference — frequency selector (Daily/3×/Weekly) in EmailCapture
-- **Routing:** URL-based routing — every tool has its own shareable URL + ⎘ SHARE button
-- **Auth gate:** `src/auth.js` — Supabase session check on load; unauthenticated → `vault-member/?next=`
-- **Cloud sync:** `src/sync.js` — `loadData()`/`saveData()` via `AppDataCtx` in App component (single load)
-- **Subscription:** `isPro()` accepts `pro` and `vault_sparked` plans; VaultSparked gated tools use `proStatus.status === "active"`
-- **Live scanner:** h2h + spreads + totals + optional player props; Kelly bet sizing per +EV result; scan history; push alert notifications
-- **Vault points:** daily login (3 pts), calculator visit (5/1 pts), ledger entry (2 pts)
-- **PWA:** `public/sw.js` (v2, network-first for JS/CSS) + `public/manifest.json` + `src/sw-register.js`
-- **Supabase project:** `fjnpzjjyhnpmunfoycrp.supabase.co` — live, schema v1 + v2 run, invite codes active
-- **GitHub Pages:** live at vaultsparkstudios.com/promogrind/
-- **Capacitor:** `capacitor.config.ts` + `build:cap` script — ready for iOS/Android build when needed
-- **Newsletter:** `supabase/functions/weekly-digest/` — Deno Edge Function using Resend, ready to deploy
+  - Learn: Knowledge Base, Promo Finder, Promo Calendar, Promo Board, Glossary, Refer & Earn, Upgrade, Team Accounts, vs Competitors (new)
 
-## SQL migrations pending (run in Supabase SQL Editor)
+- **Session 7 features (all in App.jsx):**
+  - Bug fix: Push notification body corrected (was referencing undefined fields)
+  - Bug fix: LiveScanner gate price "$29/month" → "$24.99/mo"
+  - Bug fix: Newsletter freq preference now persisted to Supabase
+  - Bug fix: Team accounts email now saves to Supabase user metadata
+  - Bug fix: startCheckout(planId) — plan parameter now wired through to Edge Function
+  - Input-encoded shareable links — useCalcMemory reads URL params; Tl encodes inputs; BonusBet/ProfitBoost/FirstBet support encoded sharing
+  - BookCTA — affiliate link CTAs at profitable calc results (BonusBet, ProfitBoost, FirstBet)
+  - Promo grading — A/B/C grades on all 16 PromoCalendar entries with badge + filter
+  - State personalization — state selector in onboarding, US_BOOK_STATES map, availability note in Tracker
+  - Personal referral tracker — per-book ref code input in Tracker, links summary panel
+  - Competitor comparison page — PromoGrind vs OddsJam vs ProfitDuel feature table in Learn
+  - All-Time Report Card — in Ledger stats; shows best month, total profit, copy-to-clipboard card
+  - Show Example buttons — BonusBet, ProfitBoost, FirstBet with pre-filled realistic scenarios
+  - Daily Dashboard — new "Home" tab group, default landing page with full daily briefing
 
-- `scripts/migration-community-board.sql` — creates `promo_submissions` table for PromoBoard
-- `scripts/migration-leaderboard.sql` — creates `vault_leaderboard` view for Leaderboard
+- **auth.js:** `startCheckout(planId='monthly')` — passes `planId` to `create-checkout` Edge Function body
 
 ## Important paths
 
 - Entry: `src/main.jsx`
 - Auth + subscription: `src/auth.js`
 - Cloud sync + vault events: `src/sync.js`
-- All UI: `src/App.jsx` (~2,950 lines)
+- All UI: `src/App.jsx` (~3,400+ lines)
 - Sportsbook data: `src/books.js` ← **edit affiliate links here**
 - Env template: `.env.example`
 - Admin CLI: `scripts/generate-invite-codes.js` ← needs `.env.admin`
@@ -72,16 +52,15 @@
 
 1. **Affiliate links** — placeholder URLs in `src/books.js` — zero revenue until wired
 2. **Odds API** — register at theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`; change refresh 120s → 300s
-3. **Stripe test mode** — create Monthly ($24.99/mo) AND Annual ($199/yr) products → set `STRIPE_*` secrets → deploy checkout + webhook
+3. **Stripe test mode** — create Monthly ($24.99/mo) AND Annual ($199/yr) products → set `STRIPE_*` secrets → deploy checkout + webhook; **update `create-checkout` to read `body.planId`**
 4. **Stripe live mode** — blocked on LLC + EIN + bank account
 5. **Resend newsletter** — resend.com → verify domain → `supabase secrets set RESEND_API_KEY=...` → deploy weekly-digest
 6. **Plausible analytics** — create account → uncomment one line in `index.html`
 7. **OAuth** — Google + Discord in Supabase dashboard → Authentication → Providers
 8. **Google Search Console** — submit sitemap
-9. **Referral tracking** — referral count is hardcoded 0; needs a `referrals` table in Supabase + RPC to count
 
 ## Next 3 moves
 
-1. Run both SQL migrations in Supabase SQL Editor
-2. Wire affiliate links in `src/books.js`
-3. Set up Odds API key + deploy odds Edge Function (unlocks the only paid feature)
+1. Wire affiliate links in `src/books.js` (instant revenue, zero risk)
+2. Set up Odds API key + deploy odds Edge Function (unlocks the only paid feature)
+3. Create Stripe test mode products → test full checkout flow end-to-end
