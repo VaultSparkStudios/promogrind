@@ -3,9 +3,9 @@
 ## Now (external — no code needed)
 
 ### Must run in Supabase SQL Editor first:
-- [ ] Run `scripts/migration-community-board.sql` — PromoBoard table
-  - ⚠️ Run migration-leaderboard.sql ONLY after confirming `vault_events` table exists with a `points` column
-- [ ] Run `scripts/migration-leaderboard.sql` — Leaderboard view (depends on vault_events)
+- [x] Run `scripts/migration-community-board.sql` — PromoBoard table ✓
+- [x] Run `scripts/migration-leaderboard.sql` — Leaderboard view ✓
+- [x] Run referrals migration ✓
 
 ### Affiliate links (revenue blocker):
 - [ ] Apply to DraftKings Partners: draftkings.com/partners (CPA: $75+/user)

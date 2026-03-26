@@ -240,12 +240,26 @@ const BonusBet = () => {
   const r = useMemo(()=>calcBonus(parseFloat(sz),bo,ho),[sz,bo,ho]);
   const [nlText, setNlText] = useState("");
   const [nlPreview, setNlPreview] = useState(null);
+  const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
+  const [bbUpsellDismissed, setBbUpsellDismissed] = useState(() => { try { return !!localStorage.getItem('pg_upsell_bb_dismissed'); } catch { return true; } });
+  const [rCopied, setRCopied] = useState(false);
+  const bbCount = useMemo(()=>{ try{return parseInt(localStorage.getItem('pg_upsell_bb_count')||'0');}catch{return 0;} },[r]);
   const applyNL = () => {
     const p = parseNL(nlText);
     if(p.sz) setSz(p.sz);
     if(p.bo) setBo(p.bo);
     if(p.ho) setHo(p.ho);
     setNlPreview(p);
+  };
+  const applyDemo = () => { setSz("200"); setBo("+330"); setHo("-380"); setDemoMode(true); };
+  useMemo(()=>{
+    if(r&&parseFloat(r.g)>0){ try{ const c=parseInt(localStorage.getItem('pg_upsell_bb_count')||'0')+1; localStorage.setItem('pg_upsell_bb_count',String(c)); }catch{} }
+  },[r?.g]);
+  const copyResult = () => {
+    if(!r) return;
+    const text = `📊 Bonus Bet Converter — PromoGrind\nBonus Size: $${sz} | Bonus Odds: ${bo} | Hedge Odds: ${ho}\nHedge Stake: $${r.hs}\nGuaranteed Profit: $${r.g} (${r.r}% conversion)\npromogrind.vaultsparkstudios.com`;
+    try{navigator.clipboard.writeText(text);}catch(e){}
+    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
   };
   return (<div><div style={S.card}><Tl t="Bonus Bet Converter" badge="STAKE NOT RETURNED" bc={K.gn} shareable getParams={()=>({sz,bo,ho})}/>
     <div style={{marginBottom:12}}>
@@ -257,10 +271,19 @@ const BonusBet = () => {
       {nlPreview&&(nlPreview.sz||nlPreview.bo||nlPreview.ho)&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>Detected: {[nlPreview.sz&&`$${nlPreview.sz} bonus`,nlPreview.bo&&`${nlPreview.bo} odds`,nlPreview.ho&&`${nlPreview.ho} hedge`].filter(Boolean).join(", ")}</div>}
     </div>
     <div style={S.row}><In l="Bonus Bet Size" v={sz} set={setSz} pre="$" ph="200"/><In l="Bonus Bet Odds" v={bo} set={setBo} ph="+300"/><In l="Hedge Odds" v={ho} set={setHo} ph="-350"/></div>
-    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center"}}>
+    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
       <button onClick={()=>{setSz("200");setBo("+350");setHo("-400");}} style={{padding:"4px 10px",background:`${K.ac}10`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>★ Show Example</button>
+      <button onClick={()=>demoMode?setDemoMode(false):applyDemo()} style={{padding:"4px 10px",background:demoMode?`${K.gn}15`:`${K.gn}08`,border:`1px solid ${demoMode?K.gn:K.gn+'30'}`,borderRadius:4,color:K.gn,fontSize:10,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>▶ Demo</button>
       <span style={{fontSize:10,color:K.mt}}>$200 bonus bet at +350, hedge at -400 — DraftKings → FanDuel</span>
     </div>
+    {demoMode&&<div style={{...S.note(K.ac),marginBottom:12}}>
+      <div style={{fontWeight:700,marginBottom:4}}>Step-by-step demo</div>
+      <div>Step 1: You received a $200 bonus bet.</div>
+      <div>Step 2: We found Warriors +330 vs Lakers tonight.</div>
+      <div>Step 3: Hedge ${r?r.hs:'~'} at -380 on FanDuel.</div>
+      <div>Step 4: Collect ~${r?r.g:'~'} guaranteed.</div>
+      <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
+    </div>}
     {bo&&toD(bo)>1&&(()=>{
       const a=toD(bo)>1?Math.round((toD(bo)-1)*100):0;
       const zones=[{min:0,max:199,c:K.rd,l:"Too Low"},{min:200,max:249,c:K.yl,l:"OK"},{min:250,max:400,c:K.gn,l:"Sweet Spot"},{min:401,max:500,c:K.yl,l:"Harder to Hedge"},{min:501,max:9999,c:K.rd,l:"Too High"}];
@@ -282,10 +305,20 @@ const BonusBet = () => {
         <div style={{fontSize:10,color:zone.c,fontWeight:600,marginTop:4}}>{toA(toD(bo))} — {zone.l}</div>
       </div>);
     })()}
-    {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span></div>
+    {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn}/><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r)>=70?K.gn:K.yl} b/>
       {S.meter(parseFloat(r.r),parseFloat(r.r)>=70?K.gn:parseFloat(r.r)>=50?K.yl:K.rd)}
-      <BookCTA/></div>}
+      <BookCTA/>
+      {parseFloat(r.g)>0&&bbCount>=3&&!bbUpsellDismissed&&(
+        <div style={{marginTop:14,padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+          <div><div style={{fontSize:11,fontWeight:700,color:K.pp}}>⚡ Track this win + get live arb alerts</div><div style={{fontSize:10,color:K.mt}}>VaultSparked — $24.99/mo · First 7 days free</div></div>
+          <div style={{display:"flex",gap:6}}>
+            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
+            <button onClick={()=>{try{localStorage.setItem('pg_upsell_bb_dismissed','1');}catch{}setBbUpsellDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Dismiss</button>
+          </div>
+        </div>
+      )}
+    </div>}
   </div>
   <Help entries={[
     ["Bonus Bet","A free bet credit given by a sportsbook. If it wins, you only get the PROFIT — the original bonus amount is NOT returned. For example, a $200 bonus bet at +300 odds that wins pays you $600 in profit, but the $200 credit disappears."],
@@ -302,14 +335,32 @@ const ProfitBoost = () => {
   const {s,o,bp,mx,ho} = mem;
   const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setBp=v=>setMem('bp',v),setMx=v=>setMem('mx',v),setHo=v=>setMem('ho',v);
   const r = useMemo(()=>calcBoost(parseFloat(s),o,parseFloat(bp),mx,ho),[s,o,bp,mx,ho]);
+  const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
+  const [rCopied, setRCopied] = useState(false);
+  const applyDemo = () => { setS("50"); setO("-110"); setBp("25"); setMx("10"); setHo("-110"); setDemoMode(true); };
+  const copyResult = () => {
+    if(!r) return;
+    const text = `📊 Profit Boost Converter — PromoGrind\nStake: $${s} | Odds: ${o} | Boost: ${bp}% | Max: $${mx} | Hedge Odds: ${ho}\nEffective Boosted Odds: ${r.eo}\nHedge Amount: $${r.hs}\nGuaranteed Profit: $${r.g}\npromogrind.vaultsparkstudios.com`;
+    try{navigator.clipboard.writeText(text);}catch(e){}
+    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
+  };
   return (<div><div style={S.card}><Tl t="Profit Boost Converter" badge="DAILY RECURRING $$$" bc={K.yl} shareable getParams={()=>({s,o,bp,mx,ho})}/>
     <div style={S.row}><In l="Your Stake (cash)" v={s} set={setS} pre="$" ph="50"/><In l="Original Odds" v={o} set={setO} ph="+200"/><In l="Boost Percentage" v={bp} set={setBp} ph="50"/></div>
     <div style={S.row}><In l="Max Extra Winnings" v={mx} set={setMx} pre="$" ph="250"/><In l="Hedge Odds (other book)" v={ho} set={setHo} ph="-220"/></div>
-    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center"}}>
+    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
       <button onClick={()=>{setS("50");setO("+200");setBp("50");setMx("25");setHo("-220");}} style={{padding:"4px 10px",background:`${K.ac}10`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font}}>★ Show Example</button>
+      <button onClick={()=>demoMode?setDemoMode(false):applyDemo()} style={{padding:"4px 10px",background:demoMode?`${K.gn}15`:`${K.gn}08`,border:`1px solid ${demoMode?K.gn:K.gn+'30'}`,borderRadius:4,color:K.gn,fontSize:10,cursor:"pointer",fontFamily:font}}>▶ Demo</button>
       <span style={{fontSize:10,color:K.mt}}>$50 stake, 50% boost capped at $25, hedge at -220</span>
     </div>
-    {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span></div>
+    {demoMode&&<div style={{...S.note(K.ac),marginBottom:12}}>
+      <div style={{fontWeight:700,marginBottom:4}}>Step-by-step demo</div>
+      <div>Step 1: FanDuel gave you a 25% profit boost (max $10).</div>
+      <div>Step 2: Bet $50 on Chiefs -110.</div>
+      <div>Step 3: Hedge ${r?r.hs:'~'} on the other side.</div>
+      <div>Step 4: Lock in ~${r?r.g:'~'} profit.</div>
+      <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
+    </div>}
+    {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b/><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl}/><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`}/><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/>
       <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
       <BookCTA/></div>}
@@ -328,13 +379,31 @@ const FirstBet = () => {
   const {s,o,ho}=mem;
   const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setHo=v=>setMem('ho',v);
   const r = useMemo(()=>calcFirst(parseFloat(s),o,ho),[s,o,ho]);
+  const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
+  const [rCopied, setRCopied] = useState(false);
+  const applyDemo = () => { setS("200"); setO("-110"); setHo("-110"); setDemoMode(true); };
+  const copyResult = () => {
+    if(!r) return;
+    const text = `📊 First Bet Safety Net — PromoGrind\nFirst Bet Stake: $${s} | Your Odds: ${o} | Hedge Odds: ${ho}\nHedge Amount: $${r.hs}\nIf Original Wins: $${r.pOW} | If Hedge Wins: $${r.pHW}\npromogrind.vaultsparkstudios.com`;
+    try{navigator.clipboard.writeText(text);}catch(e){}
+    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
+  };
   return (<div><div style={S.card}><Tl t="First Bet Safety Net Hedge" badge="CASH BET" bc={K.ac} shareable getParams={()=>({s,o,ho})}/>
     <div style={S.row}><In l="First Bet Stake" v={s} set={setS} pre="$"/><In l="Your Odds" v={o} set={setO}/><In l="Hedge Odds" v={ho} set={setHo}/></div>
-    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center"}}>
+    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
       <button onClick={()=>{setS("1000");setO("+120");setHo("-140");}} style={{padding:"4px 10px",background:`${K.ac}10`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font}}>★ Show Example</button>
+      <button onClick={()=>demoMode?setDemoMode(false):applyDemo()} style={{padding:"4px 10px",background:demoMode?`${K.gn}15`:`${K.gn}08`,border:`1px solid ${demoMode?K.gn:K.gn+'30'}`,borderRadius:4,color:K.gn,fontSize:10,cursor:"pointer",fontFamily:font}}>▶ Demo</button>
       <span style={{fontSize:10,color:K.mt}}>$1,000 BetMGM safety net at +120, hedge at -140</span>
     </div>
-    {r&&<div style={S.res(true)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.ac)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>from hedge math</span></div>
+    {demoMode&&<div style={{...S.note(K.ac),marginBottom:12}}>
+      <div style={{fontWeight:700,marginBottom:4}}>Step-by-step demo</div>
+      <div>Step 1: BetMGM offers $200 first bet insurance.</div>
+      <div>Step 2: Bet $200 on a near-even moneyline.</div>
+      <div>Step 3: If it loses, you get $200 in bonus bets.</div>
+      <div>Step 4: Convert those for ~${f(parseFloat(s)*0.7,0)} guaranteed.</div>
+      <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
+    </div>}
+    {r&&<div style={S.res(true)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.ac)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>from hedge math</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b/><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW)>=0?K.gn:K.rd}/><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW)>=0?K.gn:K.rd}/>
       <Nt c={K.yl}>If your first bet LOSES → you get ${s} in bonus bets. Convert those at ~70% using the Bonus Bet tab = ~${f(parseFloat(s)*0.7,0)} more profit!</Nt>
       <BookCTA/></div>}
@@ -421,9 +490,16 @@ const Arb2Way = () => {
   const {o1,o2,t}=mem;
   const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v),setT=v=>setMem('t',v);
   const r = useMemo(()=>calcArb2(o1,o2,parseFloat(t)),[o1,o2,t]);
+  const [rCopied, setRCopied] = useState(false);
+  const copyResult = () => {
+    if(!r||!r.ok) return;
+    const text = `📊 2-Way Arbitrage — PromoGrind\nOutcome 1: ${o1} | Outcome 2: ${o2} | Total Stake: $${t}\nStake Side 1: $${r.s1} | Stake Side 2: $${r.s2}\nARB Profit: +$${r.pr} | ROI: ${r.roi}%\npromogrind.vaultsparkstudios.com`;
+    try{navigator.clipboard.writeText(text);}catch(e){}
+    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
+  };
   return (<div><div style={S.card}><Tl t="2-Way Arbitrage" badge="SUREBET" bc={K.pp} shareable/>
     <div style={S.row}><In l="Outcome 1 (Book A)" v={o1} set={setO1}/><In l="Outcome 2 (Book B)" v={o2} set={setO2}/><In l="Total Stake" v={t} set={setT} pre="$"/></div>
-    {r&&<div style={S.res(r.ok)}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?`ARB: +$${r.pr}`:"NO ARB"}</span>
+    {r&&<div style={S.res(r.ok)}><div style={{display:"flex",alignItems:"center",gap:8}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?`ARB: +$${r.pr}`:"NO ARB"}</span>{r.ok&&<button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button>}</div>
       {r.ok&&<><RR l="Stake Side 1" v={`$${r.s1}`} c={K.ac} b/><RR l="Stake Side 2" v={`$${r.s2}`} c={K.ac} b/><RR l="ROI" v={`${r.roi}%`} c={K.gn}/></>}
       {!r.ok&&<Nt c={K.rd}>No arb exists. Both sides need + odds at different books. Typical arb margins are 1-5%. Use OddsJam or BetBurger to scan automatically.</Nt>}</div>}
   </div>
@@ -551,10 +627,17 @@ const KellyCriterion = () => {
   const {wp,odds,br,frac}=mem;
   const setWp=v=>setMem('wp',v),setOdds=v=>setMem('odds',v),setBr=v=>setMem('br',v),setFrac=v=>setMem('frac',v);
   const r = useMemo(()=>calcKelly(wp,odds,parseFloat(br),parseFloat(frac)/100),[wp,odds,br,frac]);
+  const [rCopied, setRCopied] = useState(false);
+  const copyResult = () => {
+    if(!r) return;
+    const text = `📊 Kelly Criterion — PromoGrind\nWin Probability: ${wp}% | Odds: ${odds} | Bankroll: $${br} | Kelly Fraction: ${frac}%\nRecommended Bet: $${r.bet}\nFull Kelly: ${r.k}% | Fractional Kelly: ${r.ak}%\npromogrind.vaultsparkstudios.com`;
+    try{navigator.clipboard.writeText(text);}catch(e){}
+    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
+  };
   return (<div><div style={S.card}><Tl t="Kelly Criterion Bet Sizer" badge="+EV SIZING" bc={K.gn} shareable/>
     <div style={S.row}><In l="Win Probability %" v={wp} set={setWp} ph="55"/><In l="Odds" v={odds} set={setOdds} ph="+110"/><In l="Bankroll" v={br} set={setBr} pre="$" ph="1000"/><In l="Kelly Fraction %" v={frac} set={setFrac} ph="25"/></div>
     {r&&<div style={S.res(r.ok)}>
-      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>${r.bet}</span><span style={{fontSize:12,color:K.dm}}>recommended bet size</span></div>
+      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>${r.bet}</span><span style={{fontSize:12,color:K.dm}}>recommended bet size</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Full Kelly %" v={`${r.k}%`} c={K.dm}/><RR l={`${frac}% Fractional Kelly`} v={`${r.ak}%`} c={K.ac} b/><RR l="Bet Size" v={`$${r.bet}`} c={r.ok?K.gn:K.rd} b/><RR l="Expected Value" v={`${r.ok?"+":""}${r.ev}%`} c={r.ok?K.gn:K.rd}/>
       {!r.ok&&<Nt c={K.rd}>Kelly says skip this bet — your win probability does not support an edge at these odds.</Nt>}
       {r.ok&&<Nt c={K.yl}>Using {frac}% fractional Kelly. Full Kelly maximizes growth but has high variance. Most pros use 20–33% Kelly.</Nt>}
@@ -1099,7 +1182,7 @@ const Tracker = () => {
           const bookProfit=bookEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
           const bookWagered=bookEntries.reduce((s,e)=>s+(parseFloat(e.hedge)||0),0);
           const roi=calcROI(bookProfit,bookWagered);
-          return(<tr key={b.name} style={{opacity:done[b.name]?0.4:1}}>
+          return(<React.Fragment key={b.name}><tr style={{opacity:done[b.name]?0.4:1}}>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div role="checkbox" aria-checked={!!done[b.name]} aria-label={`Mark ${b.name} as completed`} tabIndex={0} onClick={()=>toggle(b.name)} onKeyDown={e=>(e.key===" "||e.key==="Enter")&&toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",outline:"none"}} onFocus={e=>e.currentTarget.style.boxShadow=`0 0 0 2px ${K.gn}55`} onBlur={e=>e.currentTarget.style.boxShadow="none"}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}{es==='soon'&&<span style={{...S.tag(K.yl),marginLeft:4}}>⚠</span>}{es==='expired'&&<span style={{...S.tag(K.rd),marginLeft:4}}>EXPIRED</span>}{bookStatus[b.name]==="limited"&&<span style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>LIMITED</span>}{bookStatus[b.name]==="gubbed"&&<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>GUBBED</span>}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span></td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.detail}</td>
@@ -1153,7 +1236,9 @@ const Tracker = () => {
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
             <a href={b.link} target="_blank" rel="noopener noreferrer sponsored" style={{display:"inline-block",padding:"5px 12px",background:K.gn,color:K.bg,borderRadius:5,fontSize:11,fontWeight:700,textDecoration:"none",opacity:done[b.name]?0.4:1}}>Sign Up →</a>
           </td>
-        </tr>);});})()}</tbody>
+        </tr>
+        {bookEntries.length>0&&<tr key={b.name+'-stats'} style={{opacity:done[b.name]?0.4:1}}><td colSpan={13} style={{padding:"4px 8px 8px 34px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}><div style={{display:"flex",gap:14,fontSize:10,color:K.mt}}><span>Bets: <span style={{color:K.tx,fontWeight:600}}>{bookEntries.length}</span></span><span>P/L: <span style={{color:bookProfit>=0?K.gn:K.rd,fontWeight:600}}>{bookProfit>=0?"+":""}<span>$</span>{f(bookProfit)}</span></span>{roi!==null&&<span>ROI: <span style={{color:roi>=0?K.gn:K.rd,fontWeight:600}}>{f(roi,1)}%</span></span>}</div></td></tr>}
+        </React.Fragment>);});})()}</tbody>
       </table>
     </div>}
     {(()=>{
@@ -1256,6 +1341,72 @@ const ReportCard = ({entries, total}) => {
   );
 };
 
+// ═══ BET HEATMAP ═══
+const BetHeatmap = ({ entries }) => {
+  const [show, setShow] = useState(false);
+  const dayMap = useMemo(()=>{
+    const m = {};
+    entries.forEach(e=>{ if(!e.date) return; const k=e.date; if(!m[k]) m[k]=0; m[k]+=(parseFloat(e.profit)||0); });
+    return m;
+  },[entries]);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const start = new Date(today); start.setDate(today.getDate()-90);
+  const cells = [];
+  const d = new Date(start);
+  const dow = d.getDay();
+  const mondayOffset = dow===0?-6:1-dow;
+  d.setDate(d.getDate()+mondayOffset);
+  for(let w=0;w<13;w++) {
+    const week = [];
+    for(let day=0;day<7;day++) {
+      const key = d.toISOString().split('T')[0];
+      const pl = dayMap[key];
+      let color = K.s3;
+      if(pl!==undefined){ if(pl>50) color=K.gn; else if(pl>0) color='#22c55e80'; else if(pl===0) color=K.bd2; else color=`${K.rd}99`; }
+      week.push({key,pl,color,isFuture:d>today});
+      d.setDate(d.getDate()+1);
+    }
+    cells.push(week);
+  }
+  const monthLabels = cells.map((week,wi)=>{ const mon=week[0].key; const prev=wi>0?cells[wi-1][0].key:null; if(!prev||mon.slice(0,7)!==prev.slice(0,7)){ const dt=new Date(mon+'T12:00:00'); return dt.toLocaleString('default',{month:'short'}); } return ''; });
+  return (
+    <div style={{marginBottom:12}}>
+      <button onClick={()=>setShow(s=>!s)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,marginBottom:show?8:0}}>
+        {show?"▲ Hide":"▼ Show"} P/L Heatmap
+      </button>
+      {show&&<div style={{overflowX:"auto",padding:"8px 0"}}>
+        <div style={{display:"flex",gap:4}}>
+          <div style={{display:"flex",flexDirection:"column",gap:2,marginTop:14}}>
+            {["M","T","W","T","F","S","S"].map((d,i)=><div key={i} style={{height:14,fontSize:8,color:K.mt,lineHeight:"14px"}}>{d}</div>)}
+          </div>
+          <div>
+            <div style={{display:"flex",gap:2,marginBottom:4}}>
+              {monthLabels.map((l,i)=><div key={i} style={{width:14,fontSize:8,color:K.mt,overflow:"hidden",whiteSpace:"nowrap"}}>{l}</div>)}
+            </div>
+            <div style={{display:"flex",gap:2}}>
+              {cells.map((week,wi)=>(
+                <div key={wi} style={{display:"flex",flexDirection:"column",gap:2}}>
+                  {week.map(cell=>(
+                    <div key={cell.key} title={cell.isFuture?'':cell.pl!==undefined?`${cell.key}: ${cell.pl>=0?'+':''}$${f(cell.pl)}`:cell.key+': no data'} style={{width:12,height:12,borderRadius:2,background:cell.isFuture?'transparent':cell.color,opacity:cell.isFuture?0:1}}/>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:12,marginTop:8,fontSize:9,color:K.mt,alignItems:"center"}}>
+          <span>Legend:</span>
+          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.s3,display:"inline-block"}}/> No data</span>
+          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.gn,display:"inline-block"}}/> Profit &gt;$50</span>
+          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:'#22c55e80',display:"inline-block"}}/> Profit</span>
+          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.bd2,display:"inline-block"}}/> Break-even</span>
+          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:`${K.rd}99`,display:"inline-block"}}/> Loss</span>
+        </div>
+      </div>}
+    </div>
+  );
+};
+
 // ═══ LEDGER ═══
 const Ledger = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -1298,6 +1449,16 @@ const Ledger = () => {
   const todayPL = entries.filter(e=>e.date===todayStr).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
   const thisMonth = new Date().toISOString().slice(0,7);
   const monthPL = entries.filter(e=>e.date&&e.date.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  const [upsellLedgerDismissed, setUpsellLedgerDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_upsell_ledger_dismissed');}catch{return false;} });
+  const streakData = useMemo(()=>{
+    const sorted=[...entries].sort((a,b)=>new Date(b.date)-new Date(a.date));
+    let cur=0,dir=null;
+    for(const e of sorted){ const w=parseFloat(e.profit)>0; if(dir===null) dir=w; if(dir===w) cur++; else break; }
+    let longest=0,run=0;
+    for(const e of [...sorted].reverse()){ if(parseFloat(e.profit)>0) run++; else run=0; if(run>longest) longest=run; }
+    const last10=sorted.slice(0,10).reverse().map(e=>parseFloat(e.profit)>0?'W':parseFloat(e.profit)<0?'L':'P');
+    return {cur,dir,longest,last10};
+  },[entries]);
   const exportCSV = () => {
     const headers = ["Date","Book","Type","Bonus","Hedge","Profit","Notes"];
     const rows = entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);
@@ -1305,6 +1466,15 @@ const Ledger = () => {
     downloadFile(csv, `promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
   };
   return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="CLOUD SYNC" bc={K.gn}/>
+    {entries.length>=5&&!upsellLedgerDismissed&&(
+      <div style={{...S.note(K.pp),display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,marginBottom:12}}>
+        <span>Get push arb alerts, live scanner + priority support — VaultSparked · $24.99/mo</span>
+        <div style={{display:"flex",gap:6}}>
+          <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Try 7 days free</button>
+          <button onClick={()=>{try{localStorage.setItem('pg_upsell_ledger_dismissed','1');}catch{}setUpsellLedgerDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
+        </div>
+      </div>
+    )}
     {(()=>{
       const clvEntries=entries.filter(e=>e.myOdds&&e.closingOdds);
       const avgClv=clvEntries.length?clvEntries.reduce((s,e)=>{const my=toD(e.myOdds),cl=toD(e.closingOdds);return s+(my>1&&cl>1?(my/cl-1)*100:0);},0)/clvEntries.length:null;
@@ -1312,6 +1482,8 @@ const Ledger = () => {
         <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
         <div><div style={{fontSize:10,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
         {avgClv!==null&&<div><div style={{fontSize:10,color:K.mt}}>AVG CLV</div><div style={S.big(avgClv>=0?K.gn:K.rd)}>{avgClv>=0?"+":""}{f(avgClv,2)}%</div></div>}
+        {entries.length>0&&<div><div style={{fontSize:10,color:K.mt}}>STREAK</div><div style={{fontSize:18,fontWeight:700,color:streakData.dir?K.gn:K.rd,fontFamily:fontD}}>{streakData.cur>0?(streakData.dir?`🔥 ${streakData.cur}W`:`❄ ${streakData.cur}L`):'—'}</div><div style={{fontSize:9,color:K.mt}}>Best: {streakData.longest}W</div></div>}
+        {streakData.last10.length>0&&<div><div style={{fontSize:10,color:K.mt,marginBottom:4}}>LAST 10</div><div style={{display:"flex",gap:3}}>{streakData.last10.map((r,i)=><span key={i} style={{width:10,height:10,borderRadius:"50%",background:r==='W'?K.gn:r==='L'?K.rd:K.yl,display:"inline-block"}}/>)}</div></div>}
         {(()=>{
           const bbEntries=entries.filter(e=>e.type==="Bonus Conversion"&&e.bonus&&e.profit);
           if(bbEntries.length<3) return null;
@@ -1410,6 +1582,7 @@ const Ledger = () => {
         </div>
       );
     })()}
+    <BetHeatmap entries={entries}/>
     <Nt c={K.yl}>All gambling winnings are taxable income. Keep records year-round. Export this ledger each tax season.</Nt>
     <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
       <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>View:</span>
@@ -2876,6 +3049,45 @@ const PromoAlertPrefs = () => {
     <Nt c={K.mt}>Email alerts coming soon — your preferences are saved and will activate when the feature launches.</Nt>
   </div>);
 };
+const PromoROITable = ({ promoValueHistory }) => {
+  const [open, setOpen] = useState(false);
+  const rows = useMemo(()=>{
+    const entries = Object.entries(promoValueHistory||{});
+    if(!entries.length) return [];
+    return entries.map(([key,hist])=>{
+      const vals = hist.map(h=>h.value);
+      const avg = vals.reduce((s,v)=>s+v,0)/vals.length;
+      const best = Math.max(...vals);
+      const last = vals[vals.length-1];
+      return {name:key,avg:f(avg),best:f(best),last:f(last),count:vals.length};
+    }).sort((a,b)=>parseFloat(b.avg)-parseFloat(a.avg));
+  },[promoValueHistory]);
+  return (
+    <div style={{...S.card,marginTop:12}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
+        Promo Performance Table <span style={{color:K.mt,fontSize:10}}>{open?"▲":"▼"}</span>
+      </button>
+      {open&&<div style={{marginTop:12}}>
+        {rows.length===0
+          ?<div style={{fontSize:11,color:K.mt}}>Track promo values using the "📈 Track Value" button above to build this table.</div>
+          :<table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+            <thead><tr>{["Rank","Promo","Avg Value","Reports","Best"].map(h=><th key={h} style={{textAlign:"left",padding:"5px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+            <tbody>{rows.map((r,i)=>(
+              <tr key={r.name}>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:i<3?K.yl:K.mt,fontWeight:700}}>#{i+1}</td>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600,color:K.tx,maxWidth:200}}>{r.name.replace(/-/g,' ')}</td>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:700}}>${r.avg}</td>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.ac}}>{r.count}</td>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.yl}}>${r.best}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        }
+      </div>}
+    </div>
+  );
+};
+
 const PromoCalendar = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const [filterBook, setFilterBook] = useState("All");
@@ -2883,6 +3095,17 @@ const PromoCalendar = () => {
   const [filterGrade, setFilterGrade] = useState("All");
   const [filterComplexity, setFilterComplexity] = useState("All");
   const [historyOpen, setHistoryOpen] = useState({});
+  const [alertPrefs, setAlertPrefs] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_alert_prefs')||'{}');}catch{return {};} });
+  const toggleAlert = async (p) => {
+    const key=`${p.book}-${p.promo}`;
+    const current=alertPrefs[key]?.alert||false;
+    if(!current&&typeof Notification!=='undefined'&&Notification.permission!=='granted') {
+      await Notification.requestPermission().catch(()=>{});
+    }
+    const next={...alertPrefs,[key]:{alert:!current,targetDate:p.expires||''}};
+    setAlertPrefs(next);
+    try{localStorage.setItem('pg_alert_prefs',JSON.stringify(next));}catch{}
+  };
   const filtered = useMemo(()=>PROMO_SCHED.filter(p=>(filterBook==="All"||p.book===filterBook)&&(filterDay==="All"||p.day===filterDay)&&(filterGrade==="All"||p.grade===filterGrade)&&(filterComplexity==="All"||p.complexity===filterComplexity)),[filterBook,filterDay,filterGrade,filterComplexity]);
   const typeColor={Recurring:K.gn,Weekly:K.ac,Weekend:K.pp};
   const complexityColor={Easy:K.gn,Medium:K.yl,Hard:K.rd};
@@ -2935,11 +3158,12 @@ const PromoCalendar = () => {
     </div>
     <div style={{overflowX:"auto"}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Track",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Track","🔔",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
         <tbody>{filtered.map((p,i)=>{
           const key=`${p.book}-${p.promo}`;
           const hist=(data.promoValueHistory||{})[key]||[];
           const showHist=historyOpen[key];
+          const alertOn=alertPrefs[key]?.alert||false;
           return (<React.Fragment key={i}>
             <tr>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{p.book}</td>
@@ -2957,10 +3181,13 @@ const PromoCalendar = () => {
                 <button onClick={()=>{const val=prompt(`Enter value realized for ${p.promo} (e.g. 12.50):`);if(val&&!isNaN(parseFloat(val)))trackValue(p,parseFloat(val));}} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.gn}`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Track Value</button>
               </td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
+                {typeof Notification!=='undefined'&&<button onClick={()=>toggleAlert(p)} style={{padding:"2px 6px",background:alertOn?`${K.yl}15`:"transparent",border:`1px solid ${alertOn?K.yl:K.bd2}`,borderRadius:4,color:alertOn?K.yl:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{alertOn?"🔔 On":"🔔 Off"}</button>}
+              </td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
                 {hist.length>0&&<button onClick={()=>setHistoryOpen(h=>({...h,[key]:!h[key]}))} style={{padding:"2px 6px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{showHist?"▲":"History"}</button>}
               </td>
             </tr>
-            {showHist&&hist.length>0&&<tr><td colSpan={9} style={{padding:"8px 12px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}>
+            {showHist&&hist.length>0&&<tr><td colSpan={10} style={{padding:"8px 12px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}>
               <div style={{display:"flex",gap:4,alignItems:"flex-end",marginBottom:4}}>
                 {hist.map((h,j)=>{
                   const maxV=Math.max(...hist.map(x=>x.value),1);
@@ -2979,6 +3206,7 @@ const PromoCalendar = () => {
     </div>
   </div>
   <PromoAlertPrefs/>
+  <PromoROITable promoValueHistory={data.promoValueHistory||{}}/>
   <Help entries={[
     ["Why track recurring promos","Welcome bonuses are one-time. Recurring promos are the engine of long-term profit. A serious matched bettor extracts $150-450/mo just from daily boosts across 5-6 books."],
     ["How to use this","Every morning, open each sportsbook app and check for available boosts. Cross-reference this calendar so you know what to look for. Use the Profit Boost converter to calculate each one."],
@@ -3174,6 +3402,8 @@ const DailyDashboard = ({ navigate: navigateProp }) => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
+  const [showWT, setShowWT] = useState(false);
+  const [upsellStreakDismissed, setUpsellStreakDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_upsell_streak_dismissed');}catch{return false;} });
   // Streak & Consistency tracking
   const [streakCount, setStreakCount] = useState(0);
   const [consistencyScore, setConsistencyScore] = useState(0);
@@ -3218,6 +3448,7 @@ const DailyDashboard = ({ navigate: navigateProp }) => {
 
   return (
     <div>
+      {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8,marginBottom:8}}>
         <div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:2}}>
@@ -3227,9 +3458,23 @@ const DailyDashboard = ({ navigate: navigateProp }) => {
             {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} · Here&apos;s your daily promo briefing
           </div>
         </div>
-        <DailyBriefingBtn openBets={openBets} todayPromos={todayPromos}/>
+        <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
+          <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>▶ Promo Walkthroughs</button>
+          <DailyBriefingBtn openBets={openBets} todayPromos={todayPromos}/>
+        </div>
       </div>
       <StateLegalAlert userState={data.userState}/>
+      {streakCount>=3&&!upsellStreakDismissed&&(
+        <div style={{...S.card,border:`1px solid ${K.pp}40`,background:`${K.pp}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+          <div>
+            <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:2}}>🔥 {streakCount}-day streak! Unlock live arb alerts &amp; daily briefings with VaultSparked</div>
+          </div>
+          <div style={{display:"flex",gap:6}}>
+            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
+            <button onClick={()=>{try{localStorage.setItem('pg_upsell_streak_dismissed','1');}catch{}setUpsellStreakDismissed(true);}} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Not now</button>
+          </div>
+        </div>
+      )}
       <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
           <div style={{fontSize:9,color:K.mt,marginBottom:4}}>THIS MONTH</div>
@@ -3291,6 +3536,8 @@ const DailyDashboard = ({ navigate: navigateProp }) => {
       )}
       <OpenExposurePanel bets={bets}/>
       <TopToolsPanel navigate={navigate}/>
+      <WeeklyGrindReport/>
+      <BankrollWizard/>
       <CopyMySetup appData={data} syncAppData={syncAppData}/>
       <div style={{...S.card}}>
         <div style={{fontSize:11,fontWeight:700,color:K.dm,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Quick Actions</div>
@@ -3710,11 +3957,22 @@ const OddsComparisonTable = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const rows = data.oddsCompare || [{event:"",odds:{}}];
   const COMPARE_BOOKS = ["DraftKings","FanDuel","BetMGM","Caesars","bet365","ESPN BET","Fanatics","BetRivers"];
+  const prevRowsRef = useRef({});
+  const [moveBadges, setMoveBadges] = useState({});
   const updateRow = (i, field, val) => {
     const next = rows.map((r,j)=>j===i?{...r,[field]:val}:r);
     syncAppData({...data, oddsCompare:next});
   };
   const updateOdds = (i, book, val) => {
+    const prev = rows[i]?.odds?.[book] || "";
+    const prevD = toD(prev), newD = toD(val);
+    if(prev && val && prevD>1 && newD>1 && Math.abs(newD-prevD)>0.01) {
+      const key = `${i}-${book}`;
+      const dir = newD > prevD ? "up" : "down";
+      prevRowsRef.current[key] = dir;
+      setMoveBadges(mb=>({...mb,[key]:dir}));
+      setTimeout(()=>setMoveBadges(mb=>{const n={...mb};delete n[key];return n;}), 3000);
+    }
     const next = rows.map((r,j)=>j===i?{...r,odds:{...r.odds,[book]:val}}:r);
     syncAppData({...data, oddsCompare:next});
   };
@@ -3742,9 +4000,12 @@ const OddsComparisonTable = () => {
               const isB = bestBook?.book===b && validEntries.length>1;
               const d=toD(row.odds[b]||"");
               const ip=d>1?f(1/d*100,1):null;
-              return (<td key={b} style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,background:isB?`${K.gn}10`:"transparent"}}>
+              const badgeKey=`${i}-${b}`;
+              const badge=moveBadges[badgeKey];
+              return (<td key={b} style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,background:isB?`${K.gn}10`:"transparent",position:"relative"}}>
                 <input style={{...S.input,padding:"3px 6px",fontSize:11,borderColor:isB?K.gn:undefined,width:76}} value={row.odds[b]||""} onChange={e=>updateOdds(i,b,e.target.value)} placeholder="-110"/>
                 {ip&&<div style={{fontSize:9,color:isB?K.gn:K.mt,marginTop:2,textAlign:"center"}}>{ip}%</div>}
+                {badge&&<span style={{position:"absolute",top:2,right:4,fontSize:9,fontWeight:700,color:badge==="up"?K.gn:K.rd,pointerEvents:"none",animation:"fadeIn 0.2s"}}>{badge==="up"?"▲":"▼"}</span>}
               </td>);
             })}
             <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:700,fontSize:12}}>
@@ -3759,7 +4020,7 @@ const OddsComparisonTable = () => {
       </table>
     </div>
     <button onClick={addRow} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.gn,fontSize:11,cursor:"pointer",fontFamily:font}}>+ Add Event</button>
-    <Nt c={K.ac}>Green cells = best odds in that row. Always bet where the odds are highest for your side. Even small differences compound into hundreds of dollars over time.</Nt>
+    <Nt c={K.ac}>Green cells = best odds in that row. ▲▼ badges show when a line moves. Always bet where the odds are highest for your side.</Nt>
   </div>);
 };
 
@@ -3851,6 +4112,194 @@ const StateLegalAlert = ({ userState }) => {
           </>}
         </div>
         <button onClick={dismiss} style={{background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:14,padding:"0 4px",flexShrink:0}}>✕</button>
+      </div>
+    </div>
+  );
+};
+
+// ═══ WEEKLY GRIND REPORT ═══
+const WeeklyGrindReport = () => {
+  const { appData: data } = React.useContext(AppDataCtx);
+  const [report, setReport] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const generate = () => {
+    const mon = new Date(); mon.setDate(mon.getDate() - (mon.getDay()||7) + 1); mon.setHours(0,0,0,0);
+    const ledger = data.ledger || [];
+    const week = ledger.filter(e => e.date && new Date(e.date) >= mon);
+    const wins = week.filter(e => parseFloat(e.profit) > 0);
+    const pl = week.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+    const winRate = week.length ? Math.round(wins.length/week.length*100) : 0;
+    const best = week.length ? week.reduce((b,e)=>parseFloat(e.profit)>parseFloat(b.profit)?e:b,week[0]) : null;
+    const sorted = [...(data.ledger||[])].sort((a,b)=>new Date(b.date)-new Date(a.date));
+    let streak = 0;
+    for(const e of sorted) { if(parseFloat(e.profit)>0) streak++; else break; }
+    const monStr = mon.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    setReport({ bets:week.length, pl:f(pl), winRate, best, streak, monStr });
+  };
+  const copyReport = () => {
+    if(!report) return;
+    const bestDay = report.best ? new Date(report.best.date).toLocaleDateString('en-US',{weekday:'short'}) : '—';
+    const text = `📊 PromoGrind Weekly Report — Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\nvaultsparkstudios.com/promogrind/`;
+    try{navigator.clipboard.writeText(text);}catch(e){}
+    setCopied(true); setTimeout(()=>setCopied(false),1500);
+  };
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Weekly Grind Report</div>
+      {!report&&<button onClick={generate} style={{padding:"7px 14px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>Generate Report</button>}
+      {report&&<>
+        <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:10}}>
+          <div><div style={{fontSize:9,color:K.mt}}>BETS</div><div style={{fontSize:20,fontWeight:700,color:K.tx,fontFamily:fontD}}>{report.bets}</div></div>
+          <div><div style={{fontSize:9,color:K.mt}}>WEEK P/L</div><div style={{fontSize:20,fontWeight:700,color:parseFloat(report.pl)>=0?K.gn:K.rd,fontFamily:fontD}}>{parseFloat(report.pl)>=0?'+':''}${report.pl}</div></div>
+          <div><div style={{fontSize:9,color:K.mt}}>WIN RATE</div><div style={{fontSize:20,fontWeight:700,color:report.winRate>=50?K.gn:K.rd,fontFamily:fontD}}>{report.winRate}%</div></div>
+          <div><div style={{fontSize:9,color:K.mt}}>STREAK</div><div style={{fontSize:20,fontWeight:700,color:report.streak>=3?K.gn:K.yl,fontFamily:fontD}}>{report.streak}W</div></div>
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={copyReport} style={{padding:"6px 14px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{copied?"✓ Copied!":"📋 Copy Report"}</button>
+          <button onClick={()=>setReport(null)} style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Regenerate</button>
+        </div>
+      </>}
+    </div>
+  );
+};
+
+// ═══ BANKROLL ALLOCATION WIZARD ═══
+const BankrollWizard = () => {
+  const { appData: data } = React.useContext(AppDataCtx);
+  const defaultBankroll = data.bankroll || (() => { try{return localStorage.getItem('pg_bankroll')||'';}catch{return '';} })();
+  const [bwBankroll, setBwBankroll] = useState(defaultBankroll);
+  const [bwBooks, setBwBooks] = useState(BOOKS.map(b=>b.name));
+  const [bwResults, setBwResults] = useState(null);
+  const TIER1 = ["DraftKings","FanDuel"];
+  const TIER2 = ["BetMGM","Caesars"];
+  const PROMO_CPA = {DraftKings:75,FanDuel:75,BetMGM:50,Caesars:50};
+  const recalc = () => {
+    const br = parseFloat(bwBankroll)||0;
+    if(!br||!bwBooks.length) return;
+    const selected = bwBooks;
+    const t1 = selected.filter(n=>TIER1.includes(n));
+    const t2 = selected.filter(n=>TIER2.includes(n));
+    const rest = selected.filter(n=>!TIER1.includes(n)&&!TIER2.includes(n));
+    let used = 0;
+    const t1pct = t1.length * 0.25;
+    const t2pct = t2.length * 0.20;
+    used = t1pct + t2pct;
+    const restPct = rest.length > 0 ? (1-used)/rest.length : 0;
+    const rows = selected.map(name=>{
+      const pct = TIER1.includes(name)?0.25:TIER2.includes(name)?0.20:restPct;
+      return { name, alloc: f(br*pct), pct:Math.round(pct*100), cpa:PROMO_CPA[name]||25 };
+    });
+    setBwResults(rows);
+  };
+  const toggleBook = (name) => setBwBooks(prev=>prev.includes(name)?prev.filter(n=>n!==name):[...prev,name]);
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Bankroll Allocation Wizard</div>
+      <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
+        <label style={{...S.label,marginBottom:0}}>Bankroll $</label>
+        <input style={{...S.input,width:120}} value={bwBankroll} onChange={e=>setBwBankroll(e.target.value)} placeholder="3000"/>
+        <button onClick={recalc} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Recalculate</button>
+      </div>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
+        {BOOKS.map(b=>(
+          <label key={b.name} style={{display:"flex",alignItems:"center",gap:4,cursor:"pointer",fontSize:11,color:bwBooks.includes(b.name)?K.tx:K.mt}}>
+            <input type="checkbox" checked={bwBooks.includes(b.name)} onChange={()=>toggleBook(b.name)} style={{accentColor:K.gn}}/>
+            {b.name}
+          </label>
+        ))}
+      </div>
+      {bwResults&&<div style={{overflowX:"auto"}}>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+          <thead><tr>{["Book","Allocation","% of BR","Est. Promo Value"].map(h=><th key={h} style={{textAlign:"left",padding:"5px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+          <tbody>{bwResults.map(r=>(
+            <tr key={r.name}>
+              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{r.name}</td>
+              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:700}}>${r.alloc}</td>
+              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.ac}}>{r.pct}%</td>
+              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.yl}}>~${r.cpa}</td>
+            </tr>
+          ))}</tbody>
+        </table>
+      </div>}
+    </div>
+  );
+};
+
+// ═══ PROMO WALKTHROUGHS ═══
+const WALKTHROUGHS = [
+  {
+    title:"DraftKings $200 Bonus Bet",
+    steps:[
+      {n:"Sign Up",body:"Create a new DraftKings account via a promo link. Deposit $5+."},
+      {n:"Place Qualifying Bet",body:"Bet $5+ on any market at -500 odds or better. Your $200 bonus bet arrives within 72 hours."},
+      {n:"Find Your Line",body:"Use the Bonus Bet Converter. Look for an underdog at +250 to +400. Sweet spot gives 65-72% conversion."},
+      {n:"Lock In Profit",body:"Place $200 bonus bet on underdog at Book A. Hedge with calculated cash amount on favorite at FanDuel or BetMGM. Collect ~$130-144 guaranteed."},
+    ],
+    calcSlug:"bonus-bet"
+  },
+  {
+    title:"FanDuel 25% Profit Boost",
+    steps:[
+      {n:"Claim the Boost",body:"Open FanDuel app, go to Promos tab. Claim the 25% profit boost token (max $10 boost, typically on a $40 bet)."},
+      {n:"Find a Sharp Line",body:"Use No-Vig calculator to find the sharpest market — typically NFL spreads or NBA moneylines. Aim for -110 or better."},
+      {n:"Calculate Your Edge",body:"Enter your bet size, odds, 25% boost, and $10 max into the Profit Boost Calculator. Note the effective boosted odds."},
+      {n:"Hedge for Guaranteed Profit",body:"Place boosted bet at FanDuel. Hedge the stake+boost payout at another book. Lock in $6-10 regardless of outcome."},
+    ],
+    calcSlug:"profit-boost"
+  },
+  {
+    title:"BetMGM First Bet Insurance",
+    steps:[
+      {n:"Sign Up & Deposit",body:"Create BetMGM account. Deposit up to $1,500 — this is your insurance amount. First bet must be $10+."},
+      {n:"Place First Bet Strategically",body:"Use the First Bet Hedge Calculator. Place a large first bet on a near-50/50 market (moneyline close to -110/-110)."},
+      {n:"If It Wins",body:"Great — you just won real money on your first bet. No bonus needed. Move on to regular promo hunting."},
+      {n:"If It Loses — Collect Bonus",body:"BetMGM returns your stake as bonus bets (up to $1,500). Use Bonus Bet Converter to extract 65-72% as cash."},
+    ],
+    calcSlug:"first-bet"
+  },
+];
+
+const PromoWalkthrough = ({ navigate, onClose }) => {
+  const [selectedWT, setSelectedWT] = useState(0);
+  const [wtStep, setWtStep] = useState(0);
+  const wt = WALKTHROUGHS[selectedWT];
+  const step = wt.steps[wtStep];
+  const isCalcStep = wtStep >= 2;
+  return (
+    <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.75)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,maxWidth:720,width:"100%",maxHeight:"90vh",overflow:"auto",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 20px",borderBottom:`1px solid ${K.bd}`}}>
+          <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Promo Walkthroughs</div>
+          <button onClick={onClose} style={{background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:18,padding:"0 4px"}}>✕</button>
+        </div>
+        <div style={{display:"flex",minHeight:360}}>
+          <div style={{width:200,borderRight:`1px solid ${K.bd}`,padding:12,flexShrink:0}}>
+            {WALKTHROUGHS.map((w,i)=>(
+              <button key={i} onClick={()=>{setSelectedWT(i);setWtStep(0);}} style={{width:"100%",textAlign:"left",padding:"10px 12px",background:selectedWT===i?`${K.ac}15`:"transparent",border:`1px solid ${selectedWT===i?K.ac:K.bd}`,borderRadius:6,color:selectedWT===i?K.ac:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,marginBottom:6,lineHeight:1.4}}>{w.title}</button>
+            ))}
+          </div>
+          <div style={{flex:1,padding:20}}>
+            <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:4,fontFamily:fontD}}>{wt.title}</div>
+            <div style={{fontSize:10,color:K.mt,marginBottom:16}}>Step {wtStep+1} of {wt.steps.length}</div>
+            <div style={{display:"flex",gap:4,marginBottom:20}}>
+              {wt.steps.map((_,i)=>(
+                <div key={i} style={{height:4,flex:1,borderRadius:2,background:i<=wtStep?K.ac:K.bd2,transition:"background 0.2s"}}/>
+              ))}
+            </div>
+            <div style={{display:"flex",alignItems:"flex-start",gap:14,marginBottom:20}}>
+              <div style={{width:32,height:32,borderRadius:"50%",background:K.ac,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:K.bg,fontSize:14,flexShrink:0}}>{wtStep+1}</div>
+              <div>
+                <div style={{fontSize:14,fontWeight:700,color:K.tx,marginBottom:6,fontFamily:fontD}}>{step.n}</div>
+                <div style={{fontSize:12,color:K.dm,lineHeight:1.7}}>{step.body}</div>
+              </div>
+            </div>
+            <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
+              {wtStep>0&&<button onClick={()=>setWtStep(s=>s-1)} style={{padding:"7px 16px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font}}>← Prev</button>}
+              {wtStep<wt.steps.length-1&&<button onClick={()=>setWtStep(s=>s+1)} style={{padding:"7px 16px",background:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Next →</button>}
+              {isCalcStep&&<button onClick={()=>{navigate('/'+wt.calcSlug);onClose();}} style={{padding:"7px 16px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Open Calculator →</button>}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -4410,6 +4859,42 @@ export default function App() {
     } catch(e) {}
   }, []);
 
+  const [weeklyActive, setWeeklyActive] = useState(null);
+  const [calcFavorites, setCalcFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem('pg_calc_favorites'))||[]; } catch { return []; } });
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareSlug, setCompareSlug] = useState('');
+
+  // Push notification check for promo alerts
+  useEffect(() => {
+    if (!authReady) return;
+    try {
+      if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+      const prefs = JSON.parse(localStorage.getItem('pg_alert_prefs')||'{}');
+      Object.entries(prefs).forEach(([name, pref]) => {
+        if (!pref.alert || !pref.targetDate || pref.notified) return;
+        const target = new Date(pref.targetDate);
+        const hoursUntil = (target - Date.now()) / 3600000;
+        if (hoursUntil > 0 && hoursUntil <= 24) {
+          new Notification(`PromoGrind: ${name} expires soon!`, {
+            body: `This promo expires in ${Math.round(hoursUntil)} hours. Open the calculator now.`,
+            icon: '/promogrind/favicon.svg',
+          });
+          pref.notified = true;
+          localStorage.setItem('pg_alert_prefs', JSON.stringify(prefs));
+        }
+      });
+    } catch(e) {}
+  }, [authReady]);
+
+  // Weekly active users count (social proof)
+  useEffect(() => {
+    if (!authReady) return;
+    supabase.from('vault_events').select('id', { count: 'exact', head: true })
+      .gte('created_at', new Date(Date.now()-7*24*60*60*1000).toISOString())
+      .then(({ count }) => { if (typeof count === 'number') setWeeklyActive(count); })
+      .catch(() => {});
+  }, [authReady]);
+
   // Auth + subscription load
   useEffect(() => {
     checkAuth().then(async ok => {
@@ -4523,6 +5008,10 @@ export default function App() {
                   <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>
                 </div>
               ))}
+              <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{weeklyActive ?? "…"}</span>
+                <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>grinders this week</span>
+              </div>
             </div>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
@@ -4555,7 +5044,22 @@ export default function App() {
       </div>
       <div style={{position:"relative"}}>
         <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto",flexDirection:"column"}}>
-          {gi===CALC_GI&&<div style={{maxWidth:1100,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"6px 8px 0"}}>
+          {gi===CALC_GI&&calcFavorites.length>0&&<div style={{maxWidth:1100,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"4px 8px 0",alignItems:"center"}}>
+            <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",whiteSpace:"nowrap",marginRight:2}}>Pinned:</span>
+            {calcFavorites.map(favSlug=>{
+              const favItem = g.items.find(it=>it.slug===favSlug) || TABS.flatMap(gr=>gr.items).find(it=>it.slug===favSlug);
+              if(!favItem) return null;
+              const favGiTi = slugMap[favSlug];
+              return (
+                <button key={favSlug} onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }}
+                  style={{padding:"2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:4}}>
+                  ★ {favItem.n}
+                  <span onClick={e=>{e.stopPropagation();const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",marginLeft:2}}>✕</span>
+                </button>
+              );
+            })}
+          </div>}
+          {gi===CALC_GI&&<div style={{maxWidth:1100,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"6px 8px 0",alignItems:"center"}}>
             {SUBCATS.map(sc=>(
               <button key={sc} onClick={()=>{
                 setCalcSubcat(sc);
@@ -4567,11 +5071,17 @@ export default function App() {
                 {sc}
               </button>
             ))}
+            <div style={{flex:1}}/>
+            <button onClick={()=>{setCompareMode(m=>!m);if(!compareMode)setCompareSlug('');}} style={{padding:"3px 10px",background:compareMode?`${K.ac}20`:"transparent",border:`1px solid ${compareMode?K.ac:K.bd2}`,borderRadius:50,color:compareMode?K.ac:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
+              {compareMode?"✕ Exit Compare":"⊞ Compare"}
+            </button>
           </div>}
           <div style={{display:"flex",maxWidth:1100,width:"100%",gap:2,margin:"0 auto"}}>{g.items.map((t,i)=>{
             const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
-            return (<button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative"}}>
+            const isFav = calcFavorites.includes(t.slug);
+            return (<button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
               {t.n}
+              {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</span>}
               {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
             </button>);
           })}</div>
@@ -4582,7 +5092,26 @@ export default function App() {
         <ErrorBoundary>
           {slug==='dashboard'
             ? <DailyDashboard navigate={navigate}/>
-            : isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+            : compareMode&&gi===CALC_GI
+              ? <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+                  <div>
+                    <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:8,fontFamily:font}}>Primary — {item?.n}</div>
+                    {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+                  </div>
+                  <div>
+                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",fontFamily:font}}>Compare —</span>
+                      <select value={compareSlug} onChange={e=>setCompareSlug(e.target.value)} style={{...S.input,width:"auto",padding:"3px 8px",fontSize:10}}>
+                        <option value="">Pick a calculator…</option>
+                        {g.items.filter(it=>it.slug!==slug).map(it=><option key={it.slug} value={it.slug}>{it.n}</option>)}
+                      </select>
+                    </div>
+                    {compareSlug
+                      ? (() => { const cItem=g.items.find(it=>it.slug===compareSlug); const CC=cItem?.c; return CC?<CC/>:<div style={{color:K.mt,fontSize:11}}>Not found.</div>; })()
+                      : <div style={{...S.card,color:K.mt,fontSize:11,textAlign:"center",padding:"32px 16px"}}>Select a calculator above to compare side by side.</div>}
+                  </div>
+                </div>
+              : isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
         </ErrorBoundary>
       </div>
       <EmailCapture/>
