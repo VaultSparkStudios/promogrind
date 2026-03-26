@@ -1,72 +1,82 @@
 # Latest Handoff
 
-Last updated: 2026-03-26 (session 10 — audit #4 + 15 features + 5 SEO pages)
+Last updated: 2026-03-26 (session 11 — audit #5 + 15 features + push system + 13 SEO pages)
 
 This is the authoritative active handoff file for the project.
 
 ---
 
-## What was completed — session 10 (v10.0)
+## What was completed — session 11 (v11.0)
 
-### Audit #4 (v9.1 score: 68 → session 10 score: 71/100)
-- Code Quality: 76 (unchanged)
-- Feature Completeness: 78 (+4)
-- UX/Polish: 71 (+3)
-- Revenue & Monetization: 42 (unchanged — external blockers)
-- SEO: 36 → improving with 5 static pages (will re-score next audit)
-- Infrastructure: 66 (+2)
-- Growth/Retention: 65 (+4)
+### Audit #5 (v10.0 score: 71 → session 11 projected: 74/100)
+- Feature Completeness: 84 (+6)
+- Revenue & Monetization: 55 (+13) — 7-day trial is the single biggest lift
+- UX/Polish: 76 (+5)
+- SEO: 52 (+6) — 13 static pages live
+- Growth/Retention: 72 (+2)
 
-### 15 Features Implemented (App.jsx: 4,600 → 5,128 lines)
+### 15 Features (App.jsx: 5,128 → 5,447 lines; auth.js: 145 → 196 lines)
 
-1. **Weekly Grind Report** — Mon–Sun P/L summary card in DailyDashboard; bets, profit, win rate, best day; one-click copy as formatted text
-2. **Promo Walkthroughs** — 3-step modal guides (DraftKings $200 BB / FanDuel Profit Boost / BetMGM First Bet Insurance); deep-links to calculators on step 3+
-3. **Bet ROI Heatmap Calendar** — 91-day GitHub contribution graph in Ledger; green/red cells by daily P/L; collapsible
-4. **Calculator Comparison Mode** — ⊞ Compare button in Calculate group; split-pane with dropdown for second calc
-5. **Bankroll Allocation Wizard** — DailyDashboard; per-book split with tier weighting + est. CPA table
-6. **Odds Movement Highlights** — ▲▼ badges in OddsComparisonTable when line moves ≥0.01 decimal
-7. **Demo Mode** — ▶ Demo button on BonusBet/ProfitBoost/FirstBet; pre-fills values + step callout box
-8. **VaultSparked Upsell Moments** — 3 contextual CTAs: (A) after profitable BonusBet ×3, (B) after 5 ledger entries, (C) after 3-day login streak
-9. **Book-Specific P/L in Tracker** — per-book sub-row showing bets/P/L/ROI from ledger data
-10. **Social Proof Counter** — live "X grinders this week" stat in header via Supabase vault_events count
-11. **Promo ROI League Table** — ranks promos by avg reported value in PromoCalendar; collapsible
-12. **Calculator Favorites Strip** — pin/unpin calcs; pinned pills strip above sub-tabs in Calculate group
-13. **Push Expiry Reminders** — 🔔 toggle on PromoCalendar cards; fires browser Notification when promo <24h from expiry
-14. **Win Streak Visualization** — current streak (🔥/❄), longest all-time, last-10 dots in Ledger stats
-15. **Copy Result as Text Card** — 📋 button on BonusBet/ProfitBoost/FirstBet/KellyCriterion result cards
+1. **7-Day Free Trial** — `startTrial()` / `isTrialActive()` / `trialDaysLeft()` in auth.js. `getSubscription()` checks trial first. `isPro()` treats 'trial' as pro. Dashboard trial countdown banner. PricingPage "Start Free Trial" CTA.
+2. **DashboardHero** — all-time P/L + this-month stats as hero card at top of Dashboard
+3. **Smart Promo Recommender** — top 3 promos for user's active books; pulls from bookStatus
+4. **Profit Milestone Celebrations** — toast at $100/$250/$500/$1K/$2.5K/$5K (one-time per milestone via `pg_milestones_reached`)
+5. **Promo Countdown Timers** — live 60s-tick countdown on PromoCalendar items with `expires` field
+6. **Calculator Result History** — last 20 results per calc in BonusBet/ProfitBoost/FirstBet (`pg_hist_*`)
+7. **Quick Add Bet from Dashboard** — inline collapsible bet form, no navigation required
+8. **Book Promo Badges in Tracker** — "PROMO TODAY" badge for books with active promos
+9. **System Dark Mode Auto** — first load follows `prefers-color-scheme` when no saved pref
+10. **Opportunity Log CSV Export** — `downloadFile()` export from LiveScanner oppLog
+11. **Multi-Sport Scanner** — toggle pills, fetches and merges results for multiple sports
+12. **Profit Goal Notifications** — toast+push at 25/50/75/100% of goal (`pg_goal_notified_{goal}`)
+13. **Ledger Date Range Filter** — confirmed filterFrom/filterTo already in place
+14. **Share Card V2** — formatted text card in Copy My Setup (books, bankroll, streak, P/L, top tool)
+15. **Feature 8 (Keyboard shortcuts modal)** — not implemented (deprioritized)
 
-### 5 Static SEO Landing Pages
-Created at `public/{slug}/index.html` — real HTML content indexed by Google, instant JS redirect for humans:
-- `public/bonus-bet/` — "Bonus Bet Converter"
-- `public/arb-calculator/` — "Sports Betting Arbitrage Calculator"
-- `public/kelly-criterion/` — "Kelly Criterion Calculator"
-- `public/no-vig/` — "No-Vig Fair Odds Calculator"
-- `public/profit-boost/` — "Profit Boost Calculator"
+### Push Notification System — completed skeleton
+- `public/sw.js` — `push` + `notificationclick` event handlers added
+- `supabase/functions/send-daily-brief/index.ts` — real VAPID signing via `npm:web-push`; handles payload encryption, expired subscription cleanup (410/404), batch sends
+- `src/sw-register.js` — `subscribeToPush(vapidPublicKey)` utility added
 
-Each has H1/H2, 200-300 words, JSON-LD (HowTo or FAQPage), canonical URL, robots: index. sitemap.xml updated with 5 new URLs at priority 0.9.
+### 8 More Static SEO Landing Pages (13 total)
+New: parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting
+sitemap.xml: 60+ URLs
 
 ### Build
-- Clean: `✓ built in 3.58s`
-- App chunk: 331.74 kB / **91.52 kB gzip** (same as before — features are lightweight)
-- App.jsx: 5,128 lines
+- Clean: `✓ built in 44.70s`
+- App chunk: 348.54 kB / **95.31 kB gzip**
+- App.jsx: 5,447 lines | auth.js: 196 lines
 
-### New localStorage keys (session 10)
-- `pg_calc_favorites` — array of pinned calc slugs
-- `pg_upsell_bb_count` — count of profitable BonusBet results seen
-- `pg_upsell_bb_dismissed` — upsell A dismissed flag
-- `pg_upsell_ledger_dismissed` — upsell B dismissed flag
-- `pg_upsell_streak_dismissed` — upsell C dismissed flag
+### New localStorage keys (session 11)
+- `pg_milestones_reached` — array of $ milestones already celebrated
+- `pg_goal_notified_{goal}` — array of % thresholds notified for a given goal amount
+- `pg_hist_bonus-bet`, `pg_hist_profit-boost`, `pg_hist_first-bet` — last 20 calc results
 
 ---
 
 ## Current app state
 
-- **Version**: 10.0 (app) / 3.0.0 (package.json)
-- **App.jsx**: 5,128 lines
-- **Build**: clean — 91.5KB gzip
+- **Version**: 11.0
+- **App.jsx**: 5,447 lines
+- **Build**: clean — 95.3KB gzip
 - **Calculators**: 27
 - **Tabs**: Home(1), Convert(5), Calculate(23), Track(7), Live(2), Learn(10) = 48 tools
-- **Static SEO pages**: 5
+- **Static SEO pages**: 13
+
+---
+
+## To activate push notifications (when ready)
+
+```bash
+npx web-push generate-vapid-keys
+supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=...
+supabase functions deploy send-daily-brief
+# Run scripts/migration-push-subscriptions.sql in Supabase SQL Editor
+# Add VITE_VAPID_PUBLIC_KEY=... to .env
+```
+
+Then wire `subscribeToPush(import.meta.env.VITE_VAPID_PUBLIC_KEY)` from `src/sw-register.js`
+into App.jsx (after user grants Notification permission) and POST the result to `push_subscriptions`.
 
 ---
 
@@ -74,24 +84,27 @@ Each has H1/H2, 200-300 words, JSON-LD (HowTo or FAQPage), canonical URL, robots
 
 1. Affiliate links in `src/books.js` (all 8 books = placeholder URLs) — revenue blocker
 2. Odds API key → deploy `odds` edge function; change 120s → 300s refresh
-3. Stripe: two products (Monthly $24.99 + Annual $199) → set secrets → deploy `create-checkout` + `stripe-webhook`; update Edge Function to read `body.planId`
+3. Stripe: two products (Monthly $24.99 + Annual $199) → set secrets → deploy `create-checkout` + `stripe-webhook`
 4. Resend key → deploy `weekly-digest` edge function
 5. Plausible: uncomment line in `index.html`
 6. Google + Discord OAuth in Supabase dashboard
-7. Google Search Console: submit updated sitemap (now 52+ URLs)
+7. Google Search Console: submit updated sitemap (60+ URLs now)
+8. VAPID keys → deploy `send-daily-brief` (see above)
 
 ---
 
 ## Architecture snapshot
 
-- `AppDataCtx` — shared React context, one `loadData()` call, all Track components use `syncAppData(d)`
-- `CurrencyCtx` — display-only FX context. `useCurrency()` → `{sym, rate, fmt}`. Never affects stored values.
-- `syncAppData(d)` — only correct way to save from Track components
+- `AppDataCtx` → `{ appData, syncAppData }` — single loadData, all Track components use syncAppData(d)
+- `CurrencyCtx` → display-only FX. Never affects stored values or input parsing.
+- `syncAppData(d)` — ONLY correct way to save from Track components
 - `useCalcMemory(key, defaults)` — localStorage + URL param init for calculators
 - `DEFAULT_SLUG = "dashboard"` — Home tab is default landing
-- `isPro()` accepts `pro` AND `vault_sparked` plans
-- `downloadFile(content, filename, mimeType)` — module utility for all CSV/ICS exports
-- `calcROI(profit, wagered)` — module utility
+- `isPro()` in auth.js now accepts `pro`, `vault_sparked`, AND `trial` status
+- `startTrial()` in auth.js — sets trial_started_at in Supabase user metadata (idempotent)
+- `subscribeToPush(vapidPublicKey)` in sw-register.js — returns PushSubscription for storage
+- Static SEO pages: `public/{slug}/index.html` pattern — real HTML + instant JS redirect
+- vite-plugin-ssg NOT viable — app is auth-gated, SSR renders loading screen
 
 ---
 
@@ -102,7 +115,7 @@ Each has H1/H2, 200-300 words, JSON-LD (HowTo or FAQPage), canonical URL, robots
 - Calculator math: never change without verifying formulas
 - All sportsbook links: `src/books.js` only
 - Stripe live: blocked until LLC + EIN
-- `isPro()` must accept both `pro` AND `vault_sparked` plans
+- `isPro()` must accept `pro`, `vault_sparked`, AND `trial`
 - `syncAppData(d)` is the ONLY correct way to save from Track components
 - Default landing = `dashboard`
-- `CurrencyCtx` affects display only — never stored values or input parsing
+- `CurrencyCtx` affects display only

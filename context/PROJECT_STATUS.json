@@ -4,7 +4,7 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "10.0.0",
+  "version": "11.0.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
@@ -13,7 +13,8 @@
   "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA"],
   "backend": true,
   "last_updated": "2026-03-26",
-  "app_lines": 5128,
+  "app_lines": 5447,
+  "auth_lines": 196,
   "calculator_count": 27,
   "tab_count": {
     "Home": 1,
@@ -24,37 +25,39 @@
     "Learn": 10
   },
   "total_tools": 48,
-  "static_seo_pages": 5,
-  "audit_score": 71,
+  "static_seo_pages": 13,
+  "audit_score": 74,
   "audit_date": "2026-03-26",
   "audit_category_scores": {
     "code_quality": 76,
-    "feature_completeness": 78,
-    "ux_polish": 71,
-    "revenue_monetization": 42,
-    "seo_discoverability": 36,
-    "infrastructure": 66,
-    "growth_retention": 65
+    "feature_completeness": 84,
+    "ux_polish": 76,
+    "revenue_monetization": 55,
+    "seo_discoverability": 52,
+    "infrastructure": 68,
+    "growth_retention": 72
   },
   "blockers": [
     "Affiliate links not inserted (src/books.js) — zero revenue until done",
     "Odds API key not set (scanner non-functional for paying users)",
     "Stripe test mode not configured — need Monthly ($24.99/mo) + Annual ($199/yr) products; update create-checkout Edge Function to read body.planId",
     "Resend not configured (weekly-digest function ready, key not set)",
-    "Stripe live mode blocked until LLC + EIN"
+    "Stripe live mode blocked until LLC + EIN",
+    "VAPID keys not generated — push notifications non-functional server-side"
   ],
   "next_milestone": "Affiliate links wired + Odds API activated = first revenue-capable deploy",
   "domain": "vaultsparkstudios.com/promogrind/ (permanent, no separate domain)",
   "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
   "build": {
-    "sw_version": "promogrind-v2",
+    "sw_version": "promogrind-v3",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "91.5KB",
+    "app_chunk_gzip": "95.3KB",
     "vendor_chunk_gzip": "49KB",
     "supabase_chunk_gzip": "51KB"
   },
   "tiers": {
     "free": { "price": 0, "features": "27+ calculators, tracker, ledger, KB, promo calendar, dashboard" },
+    "trial": { "duration_days": 7, "features": "Full VaultSparked access, no credit card", "implementation": "trial_started_at in user metadata, isPro() returns true during trial" },
     "vaultsparked": { "price_monthly": 24.99, "price_annual": 199, "features": "live scanner, push alerts, daily briefing, all pro tools" },
     "team": { "price": 49.99, "status": "waitlist", "features": "shared vault, split P/L, all Pro" }
   },
@@ -62,26 +65,34 @@
     "ledger_column": "promogrind_data.ledger (JSONB array)",
     "all_other_fields": "promogrind_data.tracker (JSONB object)"
   },
-  "new_localStorage_keys_session10": [
-    "pg_calc_favorites",
-    "pg_upsell_bb_count",
-    "pg_upsell_bb_dismissed",
-    "pg_upsell_ledger_dismissed",
-    "pg_upsell_streak_dismissed"
-  ],
-  "contexts": {
-    "CurrencyCtx": "display-only FX multiplier (USD/CAD/GBP), never affects stored values or input parsing"
+  "push_notifications": {
+    "status": "skeleton complete, not deployed",
+    "sw_handlers": "push + notificationclick in public/sw.js",
+    "edge_function": "supabase/functions/send-daily-brief/index.ts (npm:web-push)",
+    "subscribe_util": "subscribeToPush(vapidPublicKey) in src/sw-register.js",
+    "migration": "scripts/migration-push-subscriptions.sql (not yet run)",
+    "activate": "generate VAPID keys, set secrets, deploy function, run migration, add VITE_VAPID_PUBLIC_KEY to .env"
   },
+  "seo": {
+    "approach": "Static landing pages (auth-gated SPA cannot use SSG)",
+    "pages_live": 13,
+    "sitemap_urls": "60+"
+  },
+  "new_localStorage_keys_session11": [
+    "pg_milestones_reached",
+    "pg_goal_notified_{goal}",
+    "pg_hist_bonus-bet",
+    "pg_hist_profit-boost",
+    "pg_hist_first-bet"
+  ],
   "future_projects": [
-    "vite-plugin-ssg: full pre-render of all 47 routes (SEO 36→72+) — needs SSR guards on useCalcMemory/CurrencyCtx/auth",
     "Browser extension (Chrome/Firefox, detects sportsbook pages)",
     "Email drip sequence (5-email onboarding after signup)",
-    "7-day VaultSparked free trial",
     "UK market module (5x TAM expansion)",
     "Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)",
     "Claude API bet slip parser (OCR-level, beyond regex)",
-    "Scheduled push notifications (VAPID keys + Supabase cron — skeleton exists)",
     "Team accounts backend (team_members table)",
-    "Mobile app via Capacitor (iOS + Android builds)"
+    "Mobile app via Capacitor (iOS + Android builds)",
+    "More static SEO pages (20+ keyword targets remaining)"
   ]
 }
