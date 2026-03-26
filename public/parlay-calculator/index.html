@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parlay Calculator — Odds, Payout &amp; EV | PromoGrind</title>
+  <meta name="description" content="Calculate parlay odds, potential payout, and expected value for any number of legs. Find out if your parlay has positive EV before you bet.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vaultsparkstudios.com/promogrind/parlay-calculator/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <script>window.location.replace('https://vaultsparkstudios.com/promogrind/#/parlay-calculator');</script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
+    p { margin-bottom: 1rem; color: #cbd5e1; }
+    .cta { display: inline-block; margin: 1.5rem 0; padding: 0.75rem 1.5rem; background: #4ade80; color: #0a0e17; font-weight: 700; border-radius: 6px; text-decoration: none; }
+    .cta:hover { opacity: 0.9; }
+    .faq-item { margin-bottom: 1.5rem; }
+    .faq-item dt { font-weight: 700; color: #e2e8f0; margin-bottom: 0.25rem; }
+    .faq-item dd { color: #cbd5e1; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I calculate parlay odds?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To calculate parlay odds, convert each leg's American odds to decimal odds, then multiply all the decimal odds together. For example, two -110 legs each convert to 1.909 decimal. Multiplied together: 1.909 × 1.909 = 3.644, meaning a $100 parlay pays $364.40 total ($264.40 profit). PromoGrind's parlay calculator does this automatically for any number of legs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are parlays +EV?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard parlays at sportsbooks are almost always negative EV. The books pay out parlay winners at true odds but apply their vig to each individual leg, so the house edge compounds across every leg. A 2-leg parlay at a typical book has roughly 6% edge against you; a 4-leg parlay can have 12%+ negative EV. The exception is correlated same-game parlays where you have an informational edge, or promos like parlay insurance or odds boosts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a same-game parlay?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A same-game parlay (SGP) combines multiple legs from the same game — for example, a quarterback to throw 3+ touchdowns AND his team to win. Because the legs are correlated, sportsbooks price them at worse odds than independent legs would imply. However, when you have a strong read on a correlated outcome (like a star player returning from injury and his team's total), SGPs can offer the best risk-adjusted payout."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Parlay Calculator</h1>
+    <p>Calculate combined parlay odds, total payout, and expected value for any number of legs with the PromoGrind Parlay Calculator. Know your math before you place the bet.</p>
+
+    <a class="cta" href="https://vaultsparkstudios.com/promogrind/#/parlay-calculator">Use the calculator →</a>
+
+    <h2>What Is a Parlay?</h2>
+    <p>A parlay is a single bet that ties two or more individual wagers together. Every leg must win for the parlay to pay out. In exchange for this added risk, the sportsbook multiplies the odds together, producing a much larger potential payout than any single leg alone. A 4-team parlay at standard -110 odds pays roughly 10-to-1 — tempting on paper, but heavily skewed in the book's favor.</p>
+
+    <h2>How Parlay Odds Are Calculated</h2>
+    <p>The math is straightforward: convert every leg to decimal odds, then multiply them together. American odds of -110 equals 1.909 decimal; +150 equals 2.50 decimal. A 3-leg parlay of -110/-110/+150 gives 1.909 × 1.909 × 2.50 = 9.12 decimal, meaning a $100 bet returns $912 total. The problem is that each leg already has the vig baked in, so the compounded payout is always less than the true probability would justify.</p>
+
+    <h2>The EV Trap: Why Sportsbooks Love Parlays</h2>
+    <p>Sportsbooks earn a higher margin on parlays than on straight bets. A standard -110 two-leg parlay pays 2.6-to-1, but the true odds (removing vig) are closer to 3-to-1. That gap is pure profit for the book. With every additional leg you add, the house edge compounds. This is why recreational bettors tend to lose more on parlays than on singles, and why sharp bettors almost exclusively bet straight.</p>
+
+    <h2>When Parlays Make Sense</h2>
+    <p>There are limited situations where parlays have positive expected value. Correlated legs — where winning one leg makes the other more likely — can be mispriced by books that treat them as independent. A classic example: backing the favorite to win combined with the game going under (favorites often control tempo and shorten games). Parlay promos like "parlay insurance" or "SGP boosts" can also flip the math in your favor — run them through the EV calculator before you bet.</p>
+
+    <h2>Break-Even Probability</h2>
+    <p>Your parlay's break-even probability is simply 1 divided by the decimal payout. A parlay paying 10-to-1 (11.0 decimal) needs to win at least 9.1% of the time to be profitable. If you honestly believe your combined probability is above that threshold, the bet has positive EV. Most bettors overestimate their win rate by 5-10 percentage points — which is exactly why parlays are so costly long-term.</p>
+
+    <h2>Frequently Asked Questions</h2>
+    <dl>
+      <div class="faq-item">
+        <dt>How do I calculate parlay odds?</dt>
+        <dd>Convert each leg from American to decimal odds, then multiply all decimal values together. Subtract 1 and multiply by your stake to get the profit. PromoGrind's parlay calculator handles this instantly for up to 12 legs.</dd>
+      </div>
+      <div class="faq-item">
+        <dt>Are parlays +EV?</dt>
+        <dd>Almost never at standard sportsbooks — the vig compounds with every leg added. The exception is correlated legs, promotional boosts, or parlay insurance offers where the terms flip the math in your favor.</dd>
+      </div>
+      <div class="faq-item">
+        <dt>What is a same-game parlay?</dt>
+        <dd>A same-game parlay (SGP) links multiple bets within one game. Books adjust pricing for correlation, but correlated bets you identify independently can still offer edge. Always check the implied odds against your own probability estimate.</dd>
+      </div>
+    </dl>
+  </div>
+</body>
+</html>

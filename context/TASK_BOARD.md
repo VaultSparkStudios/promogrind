@@ -33,13 +33,13 @@
 - [ ] Test weekly-digest Edge Function with real Resend key
 - [ ] Add shared odds cache in Supabase (serve all concurrent VaultSparked users from one cached API response — needed when 10+ paying users)
 - [ ] Wire annual Stripe price ID into create-checkout Edge Function (frontend already passes `planId`)
-- [ ] SSG/pre-rendering: evaluate Vite SSG plugin or Astro migration for SEO on calculator + KB pages
+- [x] SSG/pre-rendering: static landing pages approach chosen ✓ — 13 pages live. vite-plugin-ssg NOT viable (app is auth-gated; SSR would render loading screen). Add more static pages for remaining keywords instead.
 - [ ] Browser extension: separate project — detects sportsbook pages, overlays relevant calculator
 - [ ] Email drip sequence: onboarding automation via Resend (after newsletter deployed)
 - [ ] Discord community + bot integration
 - [ ] Claude API bet slip parser (paste bet slip → auto-fill calculator/tracker)
 - [ ] Scheduled push notifications — skeleton ready at `supabase/functions/send-daily-brief/index.ts` + `scripts/migration-push-subscriptions.sql`. Needs: VAPID keys, web-push Deno module, service worker push event handler, Supabase cron schedule at 9am UTC.
-- [ ] 7-day VaultSparked free trial (after Stripe live)
+- [x] 7-day VaultSparked free trial — implemented in auth.js + App.jsx (session 11). Needs Stripe live to collect post-trial.
 - [ ] UK market module (UK books + GBP support) — major TAM expansion
 - [ ] Crowdsourced promo API endpoint (data moat play)
 
