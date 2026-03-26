@@ -4,7 +4,7 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "9.1.0",
+  "version": "10.0.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
@@ -13,7 +13,7 @@
   "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA"],
   "backend": true,
   "last_updated": "2026-03-26",
-  "app_lines": 4600,
+  "app_lines": 5128,
   "calculator_count": 27,
   "tab_count": {
     "Home": 1,
@@ -24,19 +24,17 @@
     "Learn": 10
   },
   "total_tools": 48,
-  "audit_score": 67,
+  "static_seo_pages": 5,
+  "audit_score": 71,
   "audit_date": "2026-03-26",
   "audit_category_scores": {
-    "feature_completeness": 93,
-    "revenue_monetization": 42,
     "code_quality": 76,
-    "performance_build": 75,
+    "feature_completeness": 78,
+    "ux_polish": 71,
+    "revenue_monetization": 42,
     "seo_discoverability": 36,
-    "ux_design": 84,
-    "security_data": 71,
-    "growth_retention": 72,
-    "infrastructure": 70,
-    "business_strategy": 66
+    "infrastructure": 66,
+    "growth_retention": 65
   },
   "blockers": [
     "Affiliate links not inserted (src/books.js) — zero revenue until done",
@@ -51,8 +49,9 @@
   "build": {
     "sw_version": "promogrind-v2",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "~135KB",
-    "vendor_chunk_gzip": "49KB"
+    "app_chunk_gzip": "91.5KB",
+    "vendor_chunk_gzip": "49KB",
+    "supabase_chunk_gzip": "51KB"
   },
   "tiers": {
     "free": { "price": 0, "features": "27+ calculators, tracker, ledger, KB, promo calendar, dashboard" },
@@ -63,29 +62,25 @@
     "ledger_column": "promogrind_data.ledger (JSONB array)",
     "all_other_fields": "promogrind_data.tracker (JSONB object)"
   },
-  "new_localStorage_keys_session9": [
-    "pg_bankroll",
-    "pg_daily_brief",
-    "pg_brief_shown_today",
-    "pg_usage_log",
-    "pg_currency",
-    "pg_state_alert_dismissed"
+  "new_localStorage_keys_session10": [
+    "pg_calc_favorites",
+    "pg_upsell_bb_count",
+    "pg_upsell_bb_dismissed",
+    "pg_upsell_ledger_dismissed",
+    "pg_upsell_streak_dismissed"
   ],
   "contexts": {
     "CurrencyCtx": "display-only FX multiplier (USD/CAD/GBP), never affects stored values or input parsing"
   },
   "future_projects": [
-    "SSG/pre-rendering for SEO (largest organic growth lever)",
+    "vite-plugin-ssg: full pre-render of all 47 routes (SEO 36→72+) — needs SSR guards on useCalcMemory/CurrencyCtx/auth",
     "Browser extension (Chrome/Firefox, detects sportsbook pages)",
     "Email drip sequence (5-email onboarding after signup)",
     "7-day VaultSparked free trial",
     "UK market module (5x TAM expansion)",
     "Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)",
     "Claude API bet slip parser (OCR-level, beyond regex)",
-    "Scheduled push notifications (VAPID keys + web-push service)",
-    "Natural Language Calculator Input for remaining calcs",
-    "Promo Alerts backend (Resend + cron trigger off pg_alert_prefs)",
-    "Tax Export PDF variant (jsPDF or print-to-PDF)",
+    "Scheduled push notifications (VAPID keys + Supabase cron — skeleton exists)",
     "Team accounts backend (team_members table)",
     "Mobile app via Capacitor (iOS + Android builds)"
   ]

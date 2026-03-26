@@ -1,133 +1,97 @@
 # Latest Handoff
 
-Last updated: 2026-03-26 (simplify session — post-v9.0 cleanup)
+Last updated: 2026-03-26 (session 10 — audit #4 + 15 features + 5 SEO pages)
 
 This is the authoritative active handoff file for the project.
 
 ---
 
-## What was completed — simplify session (v9.1)
+## What was completed — session 10 (v10.0)
 
-Code review + cleanup pass on all v8.0/v9.0 changes. No new features — fixes and quality improvements only.
+### Audit #4 (v9.1 score: 68 → session 10 score: 71/100)
+- Code Quality: 76 (unchanged)
+- Feature Completeness: 78 (+4)
+- UX/Polish: 71 (+3)
+- Revenue & Monetization: 42 (unchanged — external blockers)
+- SEO: 36 → improving with 5 static pages (will re-score next audit)
+- Infrastructure: 66 (+2)
+- Growth/Retention: 65 (+4)
 
-### React Rules of Hooks violations fixed (4)
-All were `useState` called inside IIFEs embedded in JSX — hooks called conditionally, which React forbids.
+### 15 Features Implemented (App.jsx: 4,600 → 5,128 lines)
 
-| IIFE location | Fix |
-|---|---|
-| Share This Week button in Ledger | Extracted → `ShareWeekBtn` component |
-| All-Time Report Card in Ledger | Extracted → `ReportCard` component |
-| Session Summary modal in App | Extracted → `SessionModal` component |
-| Promo Alert Subscription UI in PromoCalendar | Extracted → `PromoAlertPrefs` component |
+1. **Weekly Grind Report** — Mon–Sun P/L summary card in DailyDashboard; bets, profit, win rate, best day; one-click copy as formatted text
+2. **Promo Walkthroughs** — 3-step modal guides (DraftKings $200 BB / FanDuel Profit Boost / BetMGM First Bet Insurance); deep-links to calculators on step 3+
+3. **Bet ROI Heatmap Calendar** — 91-day GitHub contribution graph in Ledger; green/red cells by daily P/L; collapsible
+4. **Calculator Comparison Mode** — ⊞ Compare button in Calculate group; split-pane with dropdown for second calc
+5. **Bankroll Allocation Wizard** — DailyDashboard; per-book split with tier weighting + est. CPA table
+6. **Odds Movement Highlights** — ▲▼ badges in OddsComparisonTable when line moves ≥0.01 decimal
+7. **Demo Mode** — ▶ Demo button on BonusBet/ProfitBoost/FirstBet; pre-fills values + step callout box
+8. **VaultSparked Upsell Moments** — 3 contextual CTAs: (A) after profitable BonusBet ×3, (B) after 5 ledger entries, (C) after 3-day login streak
+9. **Book-Specific P/L in Tracker** — per-book sub-row showing bets/P/L/ROI from ledger data
+10. **Social Proof Counter** — live "X grinders this week" stat in header via Supabase vault_events count
+11. **Promo ROI League Table** — ranks promos by avg reported value in PromoCalendar; collapsible
+12. **Calculator Favorites Strip** — pin/unpin calcs; pinned pills strip above sub-tabs in Calculate group
+13. **Push Expiry Reminders** — 🔔 toggle on PromoCalendar cards; fires browser Notification when promo <24h from expiry
+14. **Win Streak Visualization** — current streak (🔥/❄), longest all-time, last-10 dots in Ledger stats
+15. **Copy Result as Text Card** — 📋 button on BonusBet/ProfitBoost/FirstBet/KellyCriterion result cards
 
-### New module-level utilities
-- `downloadFile(content, filename, mimeType)` — replaced 5 duplicate anchor-click-revoke patterns across `exportBets`, `exportCSV` (Ledger), Tax Export CSV, ICS export, Free Bet Arb export
-- `calcROI(profit, wagered)` — replaced 2 duplicate `profit/wagered*100` calculations (Tracker table, Ledger by-book view)
+### 5 Static SEO Landing Pages
+Created at `public/{slug}/index.html` — real HTML content indexed by Google, instant JS redirect for humans:
+- `public/bonus-bet/` — "Bonus Bet Converter"
+- `public/arb-calculator/` — "Sports Betting Arbitrage Calculator"
+- `public/kelly-criterion/` — "Kelly Criterion Calculator"
+- `public/no-vig/` — "No-Vig Fair Odds Calculator"
+- `public/profit-boost/` — "Profit Boost Calculator"
 
-### Code reuse
-- Moved `parseNL` to module scope (was being redefined on every `BonusBet` render)
-
-### Efficiency fixes
-- Hoisted `cutoff30 = new Date(Date.now()-30d)` and `bets` array outside `BOOKS.map()` in Tracker health score — was creating a new `Date` per book per render
-- Added `useMemo` to `filtered` in PromoCalendar (4 filter deps)
-- Added `useMemo` to `myAvgClv` in Leaderboard
-- Removed redundant `oppLog.slice(0,20)` on read (already capped at write)
-
-### Code quality
-- Removed all feature-tracking comments: `// Feature N — ...` inline, `FEATURE N —` prefixes in section headers
-- Inlined the Tax Export CSV IIFE (no state, just an unnecessary wrapper)
+Each has H1/H2, 200-300 words, JSON-LD (HowTo or FAQPage), canonical URL, robots: index. sitemap.xml updated with 5 new URLs at priority 0.9.
 
 ### Build
-- Clean: `✓ built in 3.22s` (298KB app chunk / 84KB gzip)
+- Clean: `✓ built in 3.58s`
+- App chunk: 331.74 kB / **91.52 kB gzip** (same as before — features are lightweight)
+- App.jsx: 5,128 lines
 
----
-
-## What was completed — session 9 (v9.0)
-
-### Third Full Audit (v8.0 score: 67/100)
-Reviewed all App.jsx code post-session-8.
-
-### 20 Features Implemented (v8.0 brainstorm → all built)
-All added to App.jsx (~4,150 → ~5,000 lines). Build: clean.
-
-1. **"Copy My Setup" Share Link** — DailyDashboard panel; encodes state/done books/bankroll into `?setup=<base64>` URL. Load modal on arrival.
-2. **Promo Stacking Calculator** (`PromoStacking`) — new Calculate tab tool.
-3. **Daily Grind Routine Generator** (`DailyRoutinePanel`) — DailyDashboard.
-4. **Profit Goal Milestone Tracker** — DailyDashboard section.
-5. **Promo Trade Journal** (`PromoJournal`) — new Track tab tool.
-6. **Odds Comparison Table** (`OddsComparisonTable`) — new Track tab tool.
-7. **Calculator Sub-Categories** — `subcat` field + filter pills.
-8. **Push Notification Daily Briefing** — DailyDashboard; 9am push for VaultSparked users.
-9. **Promo Value History Tracker** — PromoCalendar "Track Value" + sparkline.
-10. **Kelly Fractional Optimizer** — fraction slider 5–100% with ruin-risk bar.
-11. **Tax Bracket Timing Advisor** — Ledger collapsible tax section.
-12. **Bet Slip Text Parser** — BetTracker "Paste Slip" button.
-13. **Multi-Book Pending Exposure** — DailyDashboard "Open Exposure" table.
-14. **CLV Leaderboard Column** — own data + "My Stats" box.
-15. **"New State Legalized" Alert** — DailyDashboard dismissable banner.
-16. **Promo Arb Finder** (`PromoArbFinder`) — new Learn tab tool.
-17. **Leaderboard Privacy Control** — opt-in toggle → Supabase user metadata.
-18. **Multi-Currency Mode** — USD/CAD/GBP header selector, `CurrencyCtx`.
-19. **Sportsbook Account Health Score** — Tracker per-book 0–100 badge.
-20. **Calculator Usage Analytics** — `pg_usage_log` + Top Tools panel in Dashboard.
-
-### Header stat fix
-- `"22"` → `"26"` in Calculators stat.
-
-### New TABS items (session 9)
-- Calculate: Promo Stacking
-- Track: Trade Journal, Odds Compare
-- Learn: Promo Arb Finder
-
-### Non-App.jsx (session 9)
-- `public/sitemap.xml` — promo-stacking, trade-journal, odds-compare, team-accounts, promo-arb-finder
-- `public/manifest.json` — updated tool count, Promo Arb Finder shortcut
-- `index.html` — updated description, keywords, JSON-LD featureList
-
----
-
-## What was completed — session 8 (v8.0)
-
-20 features: Tax Export CSV, Embed Mode + iframe button, Deposit Optimizer, Hedge Validator, Weekly P&L Share Card, Promo Complexity filter, Ledger By-Book view, Free Bet Arb Tracker, Calendar Export .ics, Promo Guarantee Calculator, Book ROI% column, Streak + Consistency score, Promo Alert Subscription UI, Natural Language Input parser, EV Opportunity Log, Welcome Promo Progress Bars, Gut Check validator, Scanner Watchlist, Session Summary modal, Offline Mode indicator.
-
-Non-App.jsx: `src/sync.js` critical fix (all appData now synced), sitemap rebuild (14→40+ URLs), manifest PWA shortcuts, index.html JSON-LD, weekly-digest freq filtering.
+### New localStorage keys (session 10)
+- `pg_calc_favorites` — array of pinned calc slugs
+- `pg_upsell_bb_count` — count of profitable BonusBet results seen
+- `pg_upsell_bb_dismissed` — upsell A dismissed flag
+- `pg_upsell_ledger_dismissed` — upsell B dismissed flag
+- `pg_upsell_streak_dismissed` — upsell C dismissed flag
 
 ---
 
 ## Current app state
 
-- **Version**: 9.1 (app) / 3.0.0 (package.json)
-- **App.jsx**: ~4,600 lines
-- **Build**: clean
+- **Version**: 10.0 (app) / 3.0.0 (package.json)
+- **App.jsx**: 5,128 lines
+- **Build**: clean — 91.5KB gzip
 - **Calculators**: 27
 - **Tabs**: Home(1), Convert(5), Calculate(23), Track(7), Live(2), Learn(10) = 48 tools
+- **Static SEO pages**: 5
 
 ---
 
 ## Pending external setup (unchanged)
 
-1. Affiliate links in `src/books.js` (all 8 books = placeholder URLs)
+1. Affiliate links in `src/books.js` (all 8 books = placeholder URLs) — revenue blocker
 2. Odds API key → deploy `odds` edge function; change 120s → 300s refresh
 3. Stripe: two products (Monthly $24.99 + Annual $199) → set secrets → deploy `create-checkout` + `stripe-webhook`; update Edge Function to read `body.planId`
 4. Resend key → deploy `weekly-digest` edge function
 5. Plausible: uncomment line in `index.html`
 6. Google + Discord OAuth in Supabase dashboard
-7. Google Search Console: submit updated sitemap
+7. Google Search Console: submit updated sitemap (now 52+ URLs)
 
 ---
 
 ## Architecture snapshot
 
 - `AppDataCtx` — shared React context, one `loadData()` call, all Track components use `syncAppData(d)`
-- `CurrencyCtx` — display-only FX context. `useCurrency()` → `{sym, rate, fmt}`. Never affects stored values or input parsing.
+- `CurrencyCtx` — display-only FX context. `useCurrency()` → `{sym, rate, fmt}`. Never affects stored values.
 - `syncAppData(d)` — only correct way to save from Track components
 - `useCalcMemory(key, defaults)` — localStorage + URL param init for calculators
 - `DEFAULT_SLUG = "dashboard"` — Home tab is default landing
 - `isPro()` accepts `pro` AND `vault_sparked` plans
-- `src/sync.js` `tracker` JSONB column = all non-ledger appData fields
-- Calculate sub-categories: items have `subcat` field; filter pills in App component for Calculate group
 - `downloadFile(content, filename, mimeType)` — module utility for all CSV/ICS exports
-- `calcROI(profit, wagered)` — module utility for ROI calculation
+- `calcROI(profit, wagered)` — module utility
 
 ---
 
