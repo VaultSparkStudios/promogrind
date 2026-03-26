@@ -87,12 +87,23 @@ export async function getCurrentUser() {
 
 /**
  * Returns the user's subscription row, or null.
- * { plan, status, current_period_end }
- * status 'active' = Pro subscriber.
+ * For paid subscribers: { plan, status, current_period_end }
+ * For trial users: { plan: 'vault_sparked', status: 'trial', trial_days_left: N }
+ * status 'active' = Pro subscriber. status 'trial' = active trial.
  */
 export async function getSubscription() {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return null;
+
+  // Check trial first
+  if (isTrialActive(session.user)) {
+    return {
+      plan: 'vault_sparked',
+      status: 'trial',
+      trial_days_left: trialDaysLeft(session.user),
+    };
+  }
+
   const { data } = await supabase
     .from('subscriptions')
     .select('plan, status, current_period_end')
@@ -102,14 +113,55 @@ export async function getSubscription() {
 }
 
 /**
- * Returns true if the user has an active Pro or VaultSparked subscription.
+ * Returns true if the user has an active Pro or VaultSparked subscription,
+ * or an active trial.
  * VaultSparked (vault_sparked) is the studio-wide tier that includes all Pro features.
  */
 export async function isPro() {
   const sub = await getSubscription();
-  if (!sub || sub.status !== 'active') return false;
+  if (!sub) return false;
+  if (sub.status === 'trial') return true;
+  if (sub.status !== 'active') return false;
   if (sub.current_period_end && new Date(sub.current_period_end) < new Date()) return false;
   return sub.plan === 'pro' || sub.plan === 'vault_sparked';
+}
+
+/**
+ * Starts a 7-day Pro trial for the current user.
+ * Stores trial_start in Supabase user_metadata.
+ * Returns true on success, false on failure.
+ */
+export async function startTrial() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return false;
+  if (isTrialActive(session.user)) return true; // already on trial
+  const { error } = await supabase.auth.updateUser({
+    data: { trial_start: new Date().toISOString() },
+  });
+  return !error;
+}
+
+/**
+ * Returns true if the user's 7-day trial is currently active.
+ * @param {object} user - Supabase user object (session.user)
+ */
+export function isTrialActive(user) {
+  if (!user?.user_metadata?.trial_start) return false;
+  const start = new Date(user.user_metadata.trial_start);
+  const expires = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
+  return new Date() < expires;
+}
+
+/**
+ * Returns the number of days remaining in the user's trial, or 0 if expired/no trial.
+ * @param {object} user - Supabase user object (session.user)
+ */
+export function trialDaysLeft(user) {
+  if (!user?.user_metadata?.trial_start) return 0;
+  const start = new Date(user.user_metadata.trial_start);
+  const expires = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const ms = expires - new Date();
+  return Math.max(0, Math.ceil(ms / (24 * 60 * 60 * 1000)));
 }
 
 /**

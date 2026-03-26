@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef, Component } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS } from "./books.js";
-import { checkAuth, getSubscription, startCheckout, supabase } from "./auth.js";
+import { checkAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 
 /*
@@ -238,6 +238,17 @@ const BonusBet = () => {
   const {sz,bo,ho} = mem;
   const setSz = v => setMem('sz',v), setBo = v => setMem('bo',v), setHo = v => setMem('ho',v);
   const r = useMemo(()=>calcBonus(parseFloat(sz),bo,ho),[sz,bo,ho]);
+  const [showHist, setShowHist] = useState(false);
+  const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_bonus-bet')||'[]');}catch{return[];} });
+  useEffect(()=>{
+    if(!r||!parseFloat(r.g)) return;
+    const entry={ts:Date.now(),sz,bo,ho,profit:r.g,hs:r.hs,rate:r.r};
+    setHist(prev=>{
+      const next=[entry,...prev].slice(0,20);
+      try{localStorage.setItem('pg_hist_bonus-bet',JSON.stringify(next));}catch{}
+      return next;
+    });
+  },[r?.g,r?.hs]);
   const [nlText, setNlText] = useState("");
   const [nlPreview, setNlPreview] = useState(null);
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
@@ -305,6 +316,15 @@ const BonusBet = () => {
         <div style={{fontSize:10,color:zone.c,fontWeight:600,marginTop:4}}>{toA(toD(bo))} — {zone.l}</div>
       </div>);
     })()}
+    {hist.length>0&&<div style={{marginBottom:8,display:"flex",justifyContent:"flex-end"}}><button onClick={()=>setShowHist(h=>!h)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:9,cursor:"pointer",fontFamily:font}}>🕐 History ({hist.length})</button></div>}
+    {showHist&&hist.length>0&&<div style={{marginBottom:12,padding:10,background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,maxHeight:180,overflowY:"auto"}}>
+      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Last {hist.length} Calculations</div>
+      {hist.map((h,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.dm,padding:"3px 0",borderBottom:i<hist.length-1?`1px solid ${K.bd}`:"none"}}>
+        <span>${h.sz} @ {h.bo} → {h.ho}</span>
+        <span style={{color:K.gn,fontWeight:600}}>+${h.profit} ({h.rate}%)</span>
+        <span style={{color:K.mt}}>{new Date(h.ts).toLocaleDateString()}</span>
+      </div>)}
+    </div>}
     {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn}/><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r)>=70?K.gn:K.yl} b/>
       {S.meter(parseFloat(r.r),parseFloat(r.r)>=70?K.gn:parseFloat(r.r)>=50?K.yl:K.rd)}
@@ -335,6 +355,17 @@ const ProfitBoost = () => {
   const {s,o,bp,mx,ho} = mem;
   const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setBp=v=>setMem('bp',v),setMx=v=>setMem('mx',v),setHo=v=>setMem('ho',v);
   const r = useMemo(()=>calcBoost(parseFloat(s),o,parseFloat(bp),mx,ho),[s,o,bp,mx,ho]);
+  const [showHist, setShowHist] = useState(false);
+  const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_profit-boost')||'[]');}catch{return[];} });
+  useEffect(()=>{
+    if(!r||!parseFloat(r.g)) return;
+    const entry={ts:Date.now(),s,o,bp,mx,ho,profit:r.g,hs:r.hs};
+    setHist(prev=>{
+      const next=[entry,...prev].slice(0,20);
+      try{localStorage.setItem('pg_hist_profit-boost',JSON.stringify(next));}catch{}
+      return next;
+    });
+  },[r?.g,r?.hs]);
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
   const [rCopied, setRCopied] = useState(false);
   const applyDemo = () => { setS("50"); setO("-110"); setBp("25"); setMx("10"); setHo("-110"); setDemoMode(true); };
@@ -360,6 +391,15 @@ const ProfitBoost = () => {
       <div>Step 4: Lock in ~${r?r.g:'~'} profit.</div>
       <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
     </div>}
+    {hist.length>0&&<div style={{marginBottom:8,display:"flex",justifyContent:"flex-end"}}><button onClick={()=>setShowHist(h=>!h)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:9,cursor:"pointer",fontFamily:font}}>🕐 History ({hist.length})</button></div>}
+    {showHist&&hist.length>0&&<div style={{marginBottom:12,padding:10,background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,maxHeight:180,overflowY:"auto"}}>
+      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Last {hist.length} Calculations</div>
+      {hist.map((h,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.dm,padding:"3px 0",borderBottom:i<hist.length-1?`1px solid ${K.bd}`:"none"}}>
+        <span>${h.s} @ {h.o} +{h.bp}% boost</span>
+        <span style={{color:K.gn,fontWeight:600}}>+${h.profit}</span>
+        <span style={{color:K.mt}}>{new Date(h.ts).toLocaleDateString()}</span>
+      </div>)}
+    </div>}
     {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b/><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl}/><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`}/><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/>
       <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
@@ -379,6 +419,17 @@ const FirstBet = () => {
   const {s,o,ho}=mem;
   const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setHo=v=>setMem('ho',v);
   const r = useMemo(()=>calcFirst(parseFloat(s),o,ho),[s,o,ho]);
+  const [showHist, setShowHist] = useState(false);
+  const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_first-bet')||'[]');}catch{return[];} });
+  useEffect(()=>{
+    if(!r||!parseFloat(r.hs)) return;
+    const entry={ts:Date.now(),s,o,ho,hs:r.hs,pOW:r.pOW,pHW:r.pHW};
+    setHist(prev=>{
+      const next=[entry,...prev].slice(0,20);
+      try{localStorage.setItem('pg_hist_first-bet',JSON.stringify(next));}catch{}
+      return next;
+    });
+  },[r?.hs,r?.pOW]);
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
   const [rCopied, setRCopied] = useState(false);
   const applyDemo = () => { setS("200"); setO("-110"); setHo("-110"); setDemoMode(true); };
@@ -402,6 +453,15 @@ const FirstBet = () => {
       <div>Step 3: If it loses, you get $200 in bonus bets.</div>
       <div>Step 4: Convert those for ~${f(parseFloat(s)*0.7,0)} guaranteed.</div>
       <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
+    </div>}
+    {hist.length>0&&<div style={{marginBottom:8,display:"flex",justifyContent:"flex-end"}}><button onClick={()=>setShowHist(h=>!h)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:9,cursor:"pointer",fontFamily:font}}>🕐 History ({hist.length})</button></div>}
+    {showHist&&hist.length>0&&<div style={{marginBottom:12,padding:10,background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,maxHeight:180,overflowY:"auto"}}>
+      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Last {hist.length} Calculations</div>
+      {hist.map((h,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.dm,padding:"3px 0",borderBottom:i<hist.length-1?`1px solid ${K.bd}`:"none"}}>
+        <span>${h.s} @ {h.o}</span>
+        <span style={{color:K.ac,fontWeight:600}}>hedge ${h.hs}</span>
+        <span style={{color:K.mt}}>{new Date(h.ts).toLocaleDateString()}</span>
+      </div>)}
     </div>}
     {r&&<div style={S.res(true)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.ac)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>from hedge math</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b/><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW)>=0?K.gn:K.rd}/><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW)>=0?K.gn:K.rd}/>
@@ -1115,6 +1175,17 @@ const Tracker = () => {
   const setExpiry = (n, v) => syncAppData({...data, bookExpiry:{...expiry,[n]:v}});
   const todayStr = new Date().toISOString().split('T')[0];
   const in3Days = new Date(Date.now()+3*24*60*60*1000).toISOString().split('T')[0];
+  const booksWithActivePromos = useMemo(()=>{
+    const today=new Date();
+    const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const todayDay=dayNames[today.getDay()];
+    const isWeekend=today.getDay()===0||today.getDay()===6;
+    const set=new Set();
+    PROMO_SCHED.forEach(p=>{
+      if(p.day==="Daily"||p.day===todayDay||(p.day==="Weekend"&&isWeekend)) set.add(p.book);
+    });
+    return set;
+  },[]);
   const expiryStatus = (n) => {
     const exp = expiry[n];
     if(!exp||done[n]) return null;
@@ -1184,7 +1255,7 @@ const Tracker = () => {
           const roi=calcROI(bookProfit,bookWagered);
           return(<React.Fragment key={b.name}><tr style={{opacity:done[b.name]?0.4:1}}>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div role="checkbox" aria-checked={!!done[b.name]} aria-label={`Mark ${b.name} as completed`} tabIndex={0} onClick={()=>toggle(b.name)} onKeyDown={e=>(e.key===" "||e.key==="Enter")&&toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",outline:"none"}} onFocus={e=>e.currentTarget.style.boxShadow=`0 0 0 2px ${K.gn}55`} onBlur={e=>e.currentTarget.style.boxShadow="none"}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}{es==='soon'&&<span style={{...S.tag(K.yl),marginLeft:4}}>⚠</span>}{es==='expired'&&<span style={{...S.tag(K.rd),marginLeft:4}}>EXPIRED</span>}{bookStatus[b.name]==="limited"&&<span style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>LIMITED</span>}{bookStatus[b.name]==="gubbed"&&<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>GUBBED</span>}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span></td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}{es==='soon'&&<span style={{...S.tag(K.yl),marginLeft:4}}>⚠</span>}{es==='expired'&&<span style={{...S.tag(K.rd),marginLeft:4}}>EXPIRED</span>}{bookStatus[b.name]==="limited"&&<span style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>LIMITED</span>}{bookStatus[b.name]==="gubbed"&&<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>GUBBED</span>}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span>{booksWithActivePromos.has(b.name)&&<span title="Has active promos today" style={{...S.tag(K.gn),marginLeft:4,fontSize:8}}>PROMO TODAY</span>}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.detail}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600,whiteSpace:"nowrap"}}>{b.value}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:180}}>{b.recurring}</td>
@@ -2025,7 +2096,7 @@ const detectEV = (games) => {
 
 const LiveScanner = ({ proStatus, mode }) => {
   const toast = useToast();
-  const [sport, setSport] = useState("americanfootball_nfl");
+  const [sports, setSports] = useState(["americanfootball_nfl"]);
   const [activeTab, setActiveTab] = useState(mode==="ev-scanner"?"ev":"arb");
   const [games, setGames] = useState([]);
   const [arbs, setArbs] = useState([]);
@@ -2051,8 +2122,22 @@ const LiveScanner = ({ proStatus, mode }) => {
   };
   const toggleActed=(id)=>{setOppLog(log=>{const n=log.map(e=>e.id===id?{...e,acted:!e.acted}:e);try{localStorage.setItem('pg_opp_log',JSON.stringify(n));}catch{};return n;});};
   const clearOppLog=()=>{setOppLog([]);try{localStorage.removeItem('pg_opp_log');}catch{}};
+  const exportOppLog=()=>{
+    if(!oppLog.length) return;
+    const header="Date,Type,Game,Sport,Books,ROI/EV,Acted";
+    const rows=oppLog.map(e=>[
+      e.date||'',
+      e.type||'',
+      `"${(e.game||'').replace(/"/g,'""')}"`,
+      e.sport||'',
+      `"${(Array.isArray(e.books)?e.books.join(' / '):(e.book||'')).replace(/"/g,'""')}"`,
+      e.roi||e.ev||'',
+      e.acted?'Yes':'No',
+    ].join(','));
+    downloadFile([header,...rows].join('\n'),'promogrind-opp-log.csv','text/csv');
+  };
   const intervalRef = useRef(null);
-  const isActive = proStatus?.status==="active";
+  const isActive = proStatus?.status==="active" || proStatus?.status==="trial";
 
   const fetchOdds = async () => {
     if (loading) return;
@@ -2060,17 +2145,23 @@ const LiveScanner = ({ proStatus, mode }) => {
     try {
       const { data:{ session } } = await supabase.auth.getSession();
       if (!session) throw new Error("Not authenticated");
-      const propMkts = propsMode ? (PROP_MARKETS[sport]||[]).join(',') : '';
-      const markets = ['h2h','spreads','totals',...(propMkts?[propMkts]:[])].filter(Boolean).join(',');
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/odds?sport=${sport}&markets=${markets}`;
-      const resp = await fetch(url, { headers:{ Authorization:`Bearer ${session.access_token}` } });
-      if (!resp.ok) { const e=await resp.json(); throw new Error(e.error||`HTTP ${resp.status}`); }
-      const data = await resp.json();
-      const newArbs=detectArbs(data); const newEvs=detectEV(data);
-      setGames(data); setArbs(newArbs); setEvs(newEvs); setUpdated(new Date());
+      const activeSports = sports.length ? sports : ["americanfootball_nfl"];
+      const allGames = [];
+      for (const sp of activeSports) {
+        const propMkts = propsMode ? (PROP_MARKETS[sp]||[]).join(',') : '';
+        const markets = ['h2h','spreads','totals',...(propMkts?[propMkts]:[])].filter(Boolean).join(',');
+        const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/odds?sport=${sp}&markets=${markets}`;
+        const resp = await fetch(url, { headers:{ Authorization:`Bearer ${session.access_token}` } });
+        if (!resp.ok) { const e=await resp.json(); throw new Error(e.error||`HTTP ${resp.status}`); }
+        const data = await resp.json();
+        allGames.push(...data);
+      }
+      const newArbs=detectArbs(allGames); const newEvs=detectEV(allGames);
+      setGames(allGames); setArbs(newArbs); setEvs(newEvs); setUpdated(new Date());
       if(newArbs.length||newEvs.length) {
         const ts=new Date();
-        setHistory(h=>[{ts,arbCount:newArbs.length,evCount:newEvs.length,topArb:newArbs[0]||null,topEv:newEvs[0]||null,sport},...h].slice(0,20));
+        const sportLabel=activeSports.map(sp=>SPORTS_LIST.find(s=>s.key===sp)?.label||sp).join(', ');
+        setHistory(h=>[{ts,arbCount:newArbs.length,evCount:newEvs.length,topArb:newArbs[0]||null,topEv:newEvs[0]||null,sport:sportLabel},...h].slice(0,20));
       }
       if(alertsEnabled && newArbs.length) {
         const best=newArbs[0];
@@ -2087,7 +2178,7 @@ const LiveScanner = ({ proStatus, mode }) => {
     fetchOdds();
     intervalRef.current=setInterval(fetchOdds,120_000);
     return ()=>clearInterval(intervalRef.current);
-  },[sport,isActive]);
+  },[sports,isActive]);
 
   const handleUpgrade = async () => {
     setUpgrading(true);
@@ -2134,9 +2225,12 @@ const LiveScanner = ({ proStatus, mode }) => {
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
         <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Live Scanner</div>
         <span style={S.tag(K.yl)}>PRO</span>
-        <select style={{...S.input,width:100,padding:"5px 8px",fontSize:11}} value={sport} onChange={e=>setSport(e.target.value)}>
-          {SPORTS_LIST.map(s=><option key={s.key} value={s.key}>{s.label}</option>)}
-        </select>
+        <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+          {SPORTS_LIST.map(s=>{
+            const on=sports.includes(s.key);
+            return (<button key={s.key} onClick={()=>setSports(prev=>on?prev.filter(k=>k!==s.key).length?prev.filter(k=>k!==s.key):prev:[...prev,s.key])} style={{padding:"3px 9px",background:on?`${K.ac}20`:"transparent",border:`1px solid ${on?K.ac:K.bd2}`,borderRadius:50,color:on?K.ac:K.dm,fontSize:9,cursor:"pointer",fontFamily:font,fontWeight:on?700:400,whiteSpace:"nowrap"}}>{s.label}</button>);
+          })}
+        </div>
         <div style={{display:"flex",gap:0,marginLeft:"auto"}}>
           {["arb","+ev"].map(t=>(
             <button key={t} onClick={()=>setActiveTab(t==="arb"?"arb":"ev")} style={{padding:"5px 12px",fontSize:11,fontWeight:600,border:`1px solid ${K.bd2}`,background:activeTab===(t==="arb"?"arb":"ev")?K.ac:"transparent",color:activeTab===(t==="arb"?"arb":"ev")?K.bg:K.dm,cursor:"pointer",fontFamily:font,borderRadius:t==="arb"?"6px 0 0 6px":"0 6px 6px 0"}}>
@@ -2230,6 +2324,7 @@ const LiveScanner = ({ proStatus, mode }) => {
         {showOppLog&&<div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
             <div style={{fontSize:10,color:K.mt}}>{oppLog.filter(e=>e.acted).length} acted on · Missed: {oppLog.filter(e=>!e.acted).length}</div>
+            <button onClick={exportOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Export CSV</button>
             <button onClick={clearOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.rd}`,borderRadius:4,color:K.rd,fontSize:9,cursor:"pointer",fontFamily:font}}>Clear History</button>
           </div>
           {oppLog.map(e=>(
@@ -3094,6 +3189,11 @@ const PromoCalendar = () => {
   const [filterDay, setFilterDay] = useState("All");
   const [filterGrade, setFilterGrade] = useState("All");
   const [filterComplexity, setFilterComplexity] = useState("All");
+  const [now, setNow] = useState(()=>Date.now());
+  useEffect(()=>{
+    const id=setInterval(()=>setNow(Date.now()),60000);
+    return ()=>clearInterval(id);
+  },[]);
   const [historyOpen, setHistoryOpen] = useState({});
   const [alertPrefs, setAlertPrefs] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_alert_prefs')||'{}');}catch{return {};} });
   const toggleAlert = async (p) => {
@@ -3168,7 +3268,7 @@ const PromoCalendar = () => {
             <tr>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{p.book}</td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.ac}}>{p.day}</td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{p.promo}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{p.promo}{p.expires&&(()=>{const ms=new Date(p.expires)-now;if(ms<=0)return<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>EXPIRED</span>;const hrs=Math.floor(ms/3600000);const mins=Math.floor((ms%3600000)/60000);return<span title={`Expires: ${p.expires}`} style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>{hrs>0?`${hrs}h ${mins}m`:`${mins}m`} left</span>;})()}</td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{p.value}</td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(typeColor[p.type]||K.mt)}>{p.type}</span></td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
@@ -3263,14 +3363,36 @@ const ReferralHub = () => {
 // ═══ PRICING / UPGRADE ═══
 const PricingPage = () => {
   const [upgrading, setUpgrading] = useState(false);
+  const [trialStarting, setTrialStarting] = useState(false);
+  const [trialStarted, setTrialStarted] = useState(false);
   const toast = useToast();
   const handleUpgrade = async (plan) => {
     setUpgrading(true);
     try { await startCheckout(plan.id); }
     catch(e) { if(toast) toast('Checkout failed: '+e.message, K.rd); setUpgrading(false); }
   };
+  const handleTrial = async () => {
+    setTrialStarting(true);
+    const ok = await startTrial();
+    if(ok) { setTrialStarted(true); if(toast) toast('7-day Pro trial started! Enjoy full access.', K.gn); }
+    else { if(toast) toast('Could not start trial. Try again.', K.rd); }
+    setTrialStarting(false);
+  };
   return (<div><div style={S.card}><Tl t="VaultSparked Pro" badge="UPGRADE" bc={K.pp}/>
     <div style={{...S.note(K.pp),marginBottom:20}}>Unlock the live Arb Scanner and +EV Scanner. Real-time odds from 40+ books. Unlimited scans. Cancel anytime.</div>
+    {!trialStarted ? (
+      <div style={{padding:"16px 20px",background:`${K.gn}08`,border:`1px solid ${K.gn}40`,borderRadius:8,marginBottom:20,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
+        <div>
+          <div style={{fontSize:13,fontWeight:700,color:K.gn,marginBottom:3}}>Try Pro free for 7 days</div>
+          <div style={{fontSize:11,color:K.dm}}>Full access to Live Arb Scanner and +EV Scanner. No credit card required.</div>
+        </div>
+        <button onClick={handleTrial} disabled={trialStarting} style={{padding:"9px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",opacity:trialStarting?0.7:1}}>
+          {trialStarting?"Starting…":"Start Free Trial"}
+        </button>
+      </div>
+    ) : (
+      <div style={{...S.note(K.gn),marginBottom:20}}>✓ 7-day Pro trial is now active! Visit the Live Arb or +EV Scanner to try it out.</div>
+    )}
     <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:20}}>
       {[
         {id:"monthly",label:"Monthly",price:"$24.99",period:"/mo",savings:null,highlight:false},
@@ -3395,8 +3517,135 @@ const TeamAccounts = () => {
   </div></div>);
 };
 
+// ═══ SMART PROMO RECOMMENDER ═══
+const SmartPromoRecommender = ({ data }) => {
+  const today = new Date();
+  const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const todayDay = dayNames[today.getDay()];
+  const isWeekend = today.getDay()===0||today.getDay()===6;
+  const activeBooks = useMemo(()=>
+    Object.entries(data.bookStatus||{})
+      .filter(([,v])=>v==='active'||v==='Active')
+      .map(([k])=>k)
+  ,[data.bookStatus]);
+  const doneBooks = data.done||{};
+  const recs = useMemo(()=>{
+    return PROMO_SCHED
+      .filter(p=>{
+        const dayMatch=p.day==="Daily"||p.day===todayDay||(p.day==="Weekend"&&isWeekend);
+        if(!dayMatch) return false;
+        if(!activeBooks.length) return p.grade==="A";
+        return activeBooks.includes(p.book)&&!doneBooks[p.book];
+      })
+      .sort((a,b)=>{
+        const gradeScore={A:3,B:2,C:1};
+        return (gradeScore[b.grade]||0)-(gradeScore[a.grade]||0);
+      })
+      .slice(0,5);
+  },[activeBooks,doneBooks,todayDay,isWeekend]);
+  if(!recs.length) return null;
+  return (
+    <div style={{...S.card,border:`1px solid ${K.gn}30`,background:`${K.gn}05`,marginBottom:12}}>
+      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Smart Recommendations — Today</div>
+      <div style={{display:"flex",flexDirection:"column",gap:6}}>
+        {recs.map((p,i)=>(
+          <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
+            <div>
+              <span style={{fontSize:12,fontWeight:700,color:K.tx}}>{p.book}</span>
+              <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
+              {p.complexity&&<span style={{...S.tag(p.complexity==="Easy"?K.gn:p.complexity==="Medium"?K.yl:K.rd),marginLeft:6,fontSize:8}}>{p.complexity}</span>}
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{fontSize:11,fontWeight:700,color:K.gn}}>{p.value}</span>
+              <span style={S.tag(p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)}>{p.grade}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      {!activeBooks.length&&<div style={{fontSize:10,color:K.mt,marginTop:6}}>Set book statuses in the Sportsbooks tracker to get personalized recommendations.</div>}
+    </div>
+  );
+};
+
+// ═══ DASHBOARD HERO ═══
+const DashboardHero = ({ totalProfit, openBetsCount, booksComplete, navigate }) => {
+  const percent = Math.min(100, Math.round((booksComplete / BOOKS.length) * 100));
+  const stage = booksComplete === 0 ? "Get Started" : booksComplete < 5 ? "Beginner" : booksComplete < 12 ? "Intermediate" : booksComplete < 20 ? "Advanced" : "Pro Grinder";
+  return (
+    <div style={{...S.card,background:`linear-gradient(135deg,${K.s1},${K.s2})`,border:`1px solid ${K.bd2}`,marginBottom:12,padding:"16px 20px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
+        <div>
+          <div style={{fontFamily:fontD,fontSize:11,fontWeight:700,color:K.ac,textTransform:"uppercase",letterSpacing:"2px",marginBottom:4}}>Grinder Level: {stage}</div>
+          <div style={{fontFamily:fontD,fontSize:26,fontWeight:800,color:totalProfit>=0?K.gn:K.rd,marginBottom:4}}>
+            {totalProfit>=0?"+":"-"}${f(Math.abs(totalProfit))}
+          </div>
+          <div style={{fontSize:11,color:K.mt}}>Total profit extracted · {booksComplete}/{BOOKS.length} books done</div>
+          <div style={{height:4,background:K.s3,borderRadius:2,marginTop:8,width:220}}>
+            <div style={{height:4,borderRadius:2,background:K.gn,width:`${percent}%`,transition:"width 0.4s"}}/>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          {openBetsCount>0&&<div style={{padding:"10px 16px",background:`${K.yl}10`,border:`1px solid ${K.yl}30`,borderRadius:8,textAlign:"center"}}>
+            <div style={{fontFamily:fontD,fontSize:18,fontWeight:800,color:K.yl}}>{openBetsCount}</div>
+            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Open Bets</div>
+          </div>}
+          <button onClick={()=>navigate('/ledger')} style={{padding:"10px 16px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:8,color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
+            Log Profit →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══ QUICK ADD BET ═══
+const QuickAddBet = () => {
+  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const toast = useToast();
+  const [open, setOpen] = useState(false);
+  const [book, setBook] = useState(BOOKS[0]?.name||"");
+  const [stake, setStake] = useState("");
+  const [odds, setOdds] = useState("");
+  const [notes, setNotes] = useState("");
+  const addBet = () => {
+    if(!book||!stake||!odds) { if(toast) toast('Fill in Book, Stake, and Odds', K.rd); return; }
+    const bets = [...(data.bets||[])];
+    bets.push({ id:Date.now(), book, stake, odds, notes, status:'open', date:new Date().toISOString().split('T')[0] });
+    syncAppData({...data, bets});
+    if(toast) toast('Bet added', K.gn);
+    setStake(""); setOdds(""); setNotes(""); setOpen(false);
+  };
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div style={{fontSize:11,fontWeight:700,color:K.dm,textTransform:"uppercase",letterSpacing:"1.5px"}}>Quick Add Bet</div>
+        <button onClick={()=>setOpen(o=>!o)} style={{padding:"4px 10px",background:open?K.gn:"transparent",border:`1px solid ${open?K.gn:K.bd2}`,borderRadius:6,color:open?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font}}>
+          {open?"▲ Close":"+ Add Bet"}
+        </button>
+      </div>
+      {open&&<div style={{marginTop:12}}>
+        <div style={S.row}>
+          <div style={S.col}>
+            <label style={S.label}>Sportsbook</label>
+            <select style={S.input} value={book} onChange={e=>setBook(e.target.value)}>
+              {BOOKS.map(b=><option key={b.name} value={b.name}>{b.name}</option>)}
+            </select>
+          </div>
+          <div style={S.col}><label style={S.label}>Stake ($)</label><input style={S.input} value={stake} onChange={e=>setStake(e.target.value)} placeholder="100"/></div>
+          <div style={S.col}><label style={S.label}>Odds</label><input style={S.input} value={odds} onChange={e=>setOdds(e.target.value)} placeholder="-110"/></div>
+        </div>
+        <div style={{marginBottom:10}}>
+          <label style={S.label}>Notes (optional)</label>
+          <input style={S.input} value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Game, promo type, etc."/>
+        </div>
+        <button onClick={addBet} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Add to Bet Tracker</button>
+      </div>}
+    </div>
+  );
+};
+
 // ═══ DAILY DASHBOARD ═══
-const DailyDashboard = ({ navigate: navigateProp }) => {
+const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
   const navigate = navigateProp || navigateHook;
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -3449,6 +3698,8 @@ const DailyDashboard = ({ navigate: navigateProp }) => {
   return (
     <div>
       {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
+      <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
+      <SmartPromoRecommender data={data}/>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8,marginBottom:8}}>
         <div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:2}}>
@@ -3473,6 +3724,17 @@ const DailyDashboard = ({ navigate: navigateProp }) => {
             <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
             <button onClick={()=>{try{localStorage.setItem('pg_upsell_streak_dismissed','1');}catch{}setUpsellStreakDismissed(true);}} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Not now</button>
           </div>
+        </div>
+      )}
+      {proStatus?.status==='trial'&&(
+        <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+          <div>
+            <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:2}}>
+              🎉 VaultSparked Pro Trial — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
+            </div>
+            <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
+          </div>
+          <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
         </div>
       )}
       <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
@@ -3534,6 +3796,7 @@ const DailyDashboard = ({ navigate: navigateProp }) => {
           </div>
         </div>
       )}
+      <QuickAddBet/>
       <OpenExposurePanel bets={bets}/>
       <TopToolsPanel navigate={navigate}/>
       <WeeklyGrindReport/>
@@ -4494,6 +4757,7 @@ const TopToolsPanel = ({ navigate }) => {
 const CopyMySetup = ({ appData: data, syncAppData }) => {
   const [bankroll, setBankroll] = useState(()=>{ try{return localStorage.getItem('pg_bankroll')||'';}catch{return '';} });
   const [copied, setCopied] = useState(false);
+  const [cardCopied, setCardCopied] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
   useEffect(()=>{
@@ -4514,6 +4778,18 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
     try{navigator.clipboard.writeText(url);}catch(e){}
     setCopied(true); setTimeout(()=>setCopied(false),2000);
   };
+  const shareCard = () => {
+    const booksComplete=Object.values(data.done||{}).filter(Boolean).length;
+    const totalProfit=(data.ledger||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+    const card=[
+      "💰 PromoGrind Setup",
+      `State: ${data.userState||"Not set"} · Bankroll: ${bankroll?"$"+bankroll:"Not set"}`,
+      `Books done: ${booksComplete}/${BOOKS.length} · Total profit: $${f(totalProfit)}`,
+      "vaultsparkstudios.com/promogrind/",
+    ].join('\n');
+    try{navigator.clipboard.writeText(card);}catch(e){}
+    setCardCopied(true); setTimeout(()=>setCardCopied(false),2000);
+  };
   const loadSetup = () => {
     if(!modalData) return;
     try{localStorage.setItem('pg_bankroll', modalData.bankroll||'');}catch{}
@@ -4527,6 +4803,7 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
         <div style={{display:"flex",gap:8,marginBottom:8}}>
           <input style={{...S.input,flex:1}} value={bankroll} onChange={e=>{setBankroll(e.target.value);try{localStorage.setItem('pg_bankroll',e.target.value);}catch{}}} placeholder="Your bankroll $"/>
           <button onClick={copyLink} style={{padding:"7px 14px",background:copied?K.gn:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Setup Link"}</button>
+          <button onClick={shareCard} style={{padding:"7px 14px",background:cardCopied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{cardCopied?"✓ Copied!":"Share Card"}</button>
         </div>
         <div style={{fontSize:10,color:K.mt}}>Shares your state, completed books, and bankroll. Anyone with the link can load your setup.</div>
       </div>
@@ -4765,7 +5042,11 @@ export default function App() {
   });
   const [proStatus, setProStatus] = useState(null);
   const [darkMode, setDarkMode] = useState(() => {
-    try { return localStorage.getItem('pg_dark')!=='false'; } catch { return true; }
+    try {
+      const saved = localStorage.getItem('pg_dark');
+      if (saved !== null) return saved !== 'false';
+      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
+    } catch { return true; }
   });
   const [compactMode, setCompactMode] = useState(() => {
     try { return localStorage.getItem('pg_compact')==='true'; } catch { return false; }
@@ -4858,6 +5139,44 @@ export default function App() {
       if (ref) localStorage.setItem('pg_ref', ref);
     } catch(e) {}
   }, []);
+
+  // Feature 3: Milestone notifications
+  useEffect(()=>{
+    if(!appData.ledger) return;
+    const totalProfit=appData.ledger.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+    const milestones=[100,250,500,1000,2500,5000];
+    try {
+      const reached=JSON.parse(localStorage.getItem('pg_milestones_reached')||'[]');
+      let updated=false;
+      for(const m of milestones){
+        if(totalProfit>=m&&!reached.includes(m)){
+          reached.push(m);
+          updated=true;
+          try{if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(`PromoGrind: $${m} milestone reached! 🎉`,{body:`You've extracted $${m}+ in total profit. Keep grinding!`,icon:'/promogrind/favicon.svg'});}catch(e){}
+        }
+      }
+      if(updated) localStorage.setItem('pg_milestones_reached',JSON.stringify(reached));
+    } catch(e){}
+  },[appData.ledger]);
+
+  // Feature 13: Profit goal notifications
+  useEffect(()=>{
+    if(!authReady||!appData.profitGoal) return;
+    const goal=parseFloat(appData.profitGoal)||0;
+    if(!goal) return;
+    const totalProfit=(appData.ledger||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+    if(totalProfit>=goal){
+      try{
+        const key=`pg_goal_notified_${goal}`;
+        if(!localStorage.getItem(key)){
+          localStorage.setItem(key,'1');
+          if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+            new Notification('PromoGrind: Profit Goal Reached! 🎯',{body:`You hit your $${f(goal)} profit goal! Time to set a new one.`,icon:'/promogrind/favicon.svg'});
+          }
+        }
+      }catch(e){}
+    }
+  },[appData.ledger,appData.profitGoal,authReady]);
 
   const [weeklyActive, setWeeklyActive] = useState(null);
   const [calcFavorites, setCalcFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem('pg_calc_favorites'))||[]; } catch { return []; } });
@@ -5091,7 +5410,7 @@ export default function App() {
       <div style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
         <ErrorBoundary>
           {slug==='dashboard'
-            ? <DailyDashboard navigate={navigate}/>
+            ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>
             : compareMode&&gi===CALC_GI
               ? <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
                   <div>
