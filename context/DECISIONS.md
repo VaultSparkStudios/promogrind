@@ -114,6 +114,51 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen: Minimal change, correct architecture. Edge Function now just needs to read `body.planId` and select the appropriate Stripe price ID.
 - Follow-up: Update `create-checkout` Edge Function (in studio repo) to read `body.planId` and route to monthly vs annual Stripe price.
 
+### 2026-03-26 - Multi-Currency display mode only
+
+- Status: Decided + implemented (session 9)
+- Context: Some users operate in CAD or GBP and find USD-only display confusing.
+- Decision: Add CurrencyCtx with static exchange rates (USD=1, CAD=1.36, GBP=0.79). All displayed dollar amounts multiply by the selected rate. Stored values and input parsing always use USD internally.
+- Alternatives considered: Full multi-currency (store in selected currency); locale-aware formatting.
+- Why this was chosen: Zero data migration risk, zero sync complexity, zero math changes. If rates are slightly off, the user can mentally adjust — they just want a ballpark in their local currency.
+- Follow-up: Display a "Rates are approximate" notice when non-USD is selected. Consider pulling live FX rates via a free API in a future session.
+
+### 2026-03-26 - Calculator sub-category labels (not nav change)
+
+- Status: Decided + implemented (session 9)
+- Context: 23 calculators in the Calculate tab is overwhelming on first visit.
+- Decision: Add `subcat` field to TABS items and filter pills above the sub-tab row. Pills highlight/mark matching tools without hiding others — discoverability is preserved, category context is added.
+- Alternatives considered: Nested tabs (would hide tools); grouping into separate tab groups (too many top-nav tabs).
+- Why this was chosen: Least disruptive to existing navigation. Users who know what they want still click directly. New users get category guidance.
+- Follow-up: Track via `pg_usage_log` which sub-categories are clicked — if any filter is nearly never used, simplify.
+
+### 2026-03-26 - Leaderboard privacy as opt-out toggle
+
+- Status: Decided + implemented (session 9)
+- Context: Added leaderboard privacy control — users can hide themselves from public leaderboard.
+- Decision: Default is visible (opt-out model, not opt-in). Stores `leaderboard_visible: false` in Supabase user metadata. No schema change needed.
+- Alternatives considered: Opt-in (off by default) — would tank leaderboard engagement on launch.
+- Why this was chosen: Leaderboard is only useful if populated. Opt-out respects privacy without making the feature a ghost town.
+- Follow-up: If GDPR/CCPA compliance becomes a concern, switch to opt-in for EU users specifically.
+
+### 2026-03-26 - Module-level utilities for download and ROI
+
+- Status: Decided + implemented (simplify session)
+- Context: The anchor-click-download pattern appeared 5 times across exportBets, exportCSV, exportTax, exportICS, and Free Bet Arb export. ROI formula (profit/wagered*100) appeared twice.
+- Decision: Added `downloadFile(content, filename, mimeType)` and `calcROI(profit, wagered)` as module-level utilities near `f()` and `toD()`.
+- Alternatives considered: Per-component helper functions; keep duplicate code.
+- Why this was chosen: DRY without over-abstracting. Both helpers are trivial (1 line each) and match the existing pattern of small module-level math/utility functions in App.jsx.
+- Follow-up: Any future export feature should use `downloadFile`.
+
+### 2026-03-26 - React components over render IIFEs for stateful JSX
+
+- Status: Decided + implemented (simplify session)
+- Context: 4 IIFEs in JSX called `useState` (or `React.useState`) inside the immediately-invoked function — a Rules of Hooks violation. The IIFEs were used as inline "render helpers" to scope variables.
+- Decision: Extract any IIFE that calls hooks into a named component (`ShareWeekBtn`, `ReportCard`, `SessionModal`, `PromoAlertPrefs`). Stateless IIFEs are acceptable.
+- Alternatives considered: Lift state to parent component — would bloat Ledger/App with unrelated state.
+- Why this was chosen: Named component is the correct React pattern. Self-contained, reusable, testable. Parent component stays clean.
+- Follow-up: Do not add new IIFEs with hooks. If scoping is needed, extract a component.
+
 ### 2026-03-25 - Leaderboard anonymization
 
 - Status: Decided + implemented

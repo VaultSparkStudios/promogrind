@@ -13,6 +13,8 @@ export default defineConfig({
         manualChunks: {
           // React vendor — cached separately so app deploys don't bust the React download
           vendor: ['react', 'react-dom', 'react-router-dom'],
+          // Supabase — large but rarely changes; cache independently
+          supabase: ['@supabase/supabase-js'],
         },
       },
     },

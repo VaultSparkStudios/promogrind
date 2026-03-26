@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Pro-gated tools — no meaningful content for crawlers
+Disallow: /promogrind/arb-scanner
+Disallow: /promogrind/ev-scanner
+
 Sitemap: https://vaultsparkstudios.com/promogrind/sitemap.xml

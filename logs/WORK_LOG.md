@@ -74,3 +74,49 @@ Append sessions chronologically. Never delete entries.
 
 **Recommended next action:**
 - Insert affiliate links into `src/books.js`, enable GitHub Pages, submit sitemap
+
+---
+
+## 2026-03-26 — Session 9: Third Audit + 20-Feature Implementation (v9.0)
+
+**Session type:** Full audit → brainstorm → 20-feature implementation
+
+**Completed:**
+
+**App.jsx (background agent, worktree isolation):**
+- Fixed stale "22 Calculators" header stat → "26"
+- 20 new features: Copy My Setup share link, Promo Stacking Calculator, Daily Grind Routine Generator, Profit Goal Milestone, Promo Trade Journal, Odds Comparison Table, Calculator Sub-Categories filter pills, Push Notification Daily Briefing (VaultSparked), Promo Value History Tracker, Kelly Fractional Risk Optimizer, Tax Bracket Timing Advisor, Bet Slip Text Parser, Multi-Book Pending Exposure Dashboard, CLV Leaderboard Column + My Stats, New State Legalized Alert, Promo Arb Finder, Leaderboard Privacy Control, Multi-Currency Mode (USD/CAD/GBP), Sportsbook Account Health Score, Calculator Usage Analytics + Top Tools
+- New TABS entries: Promo Stacking (Calculate), Trade Journal (Track), Odds Compare (Track), Promo Arb Finder (Learn)
+- New context: CurrencyCtx (display-only FX, USD/CAD/GBP)
+
+**Non-App.jsx (main thread):**
+- `public/sitemap.xml`: Added promo-stacking, trade-journal, odds-compare, team-accounts, promo-arb-finder (→47 URLs)
+- `public/manifest.json`: Updated tool count description, added Promo Arb Finder shortcut
+- `public/sw.js`: Cache version bumped v2→v3
+- `public/robots.txt`: Added Disallow for arb-scanner, ev-scanner (pro-gated, no crawl value)
+- `index.html`: Updated meta description (27+ calcs), expanded keywords, JSON-LD featureList (→16 items)
+- `src/auth.js`: Fixed redirectToLogin to preserve full URL (was only origin, lost path/slug)
+- `vite.config.js`: Added Supabase as separate cached chunk
+- `.env.example`: Expanded with all edge function secrets and VAPID keys documented
+- `package.json`: Added deploy:functions and deploy:brief npm scripts
+- `supabase/functions/send-daily-brief/index.ts`: Push notification skeleton (for future VAPID upgrade)
+- `scripts/migration-push-subscriptions.sql`: DB migration for server-sent push (future)
+- `context/BRAIN.md`: Updated with file-size warning, new strategic beliefs
+- `context/DECISIONS.md`: Added 3 session 9 decisions (currency, sub-categories, leaderboard privacy)
+- `context/OPEN_QUESTIONS.md`: Resolved 2 stale questions; added 2 new active questions
+- `context/CURRENT_STATE.md`, `context/LATEST_HANDOFF.md`, `context/PROJECT_STATUS.json`: Updated to v9.0
+- `context/TASK_BOARD.md`: Session 9 completion block added
+- `prompts/start.md`: Added OPEN_QUESTIONS.md to read order; added sync.js note
+- `memory/project_promogrind.md`: Updated to v9.0
+
+**Build status:** ✓ Clean (verified by agent after implementation)
+
+**Files changed:** src/App.jsx, src/auth.js, vite.config.js, .env.example, package.json, public/*, context/*, prompts/start.md, logs/WORK_LOG.md, scripts/migration-push-subscriptions.sql, supabase/functions/send-daily-brief/index.ts, memory/project_promogrind.md
+
+**Open problems:**
+- All external setup items remain unactivated (affiliate links, Odds API, Stripe, Resend, OAuth, Plausible)
+- App.jsx approaching ~5,000 lines — plan component extraction or Astro migration for session 10+
+
+**Recommended next action:**
+- Activate affiliate links (`src/books.js`) — highest revenue-per-hour task
+- Then set Odds API key + deploy odds Edge Function

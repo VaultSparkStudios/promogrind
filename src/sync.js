@@ -46,10 +46,14 @@ export async function loadData() {
 
     if (remoteTs >= localTs) {
       // Remote is newer — pull down and cache locally
+      // tracker column stores all non-ledger appData fields as a JSONB object
+      const trackerData = (row.tracker && typeof row.tracker === 'object' && !Array.isArray(row.tracker))
+        ? row.tracker
+        : {};
       const merged = {
         ...local,
+        ...trackerData,
         ledger:   row.ledger  ?? [],
-        tracker:  row.tracker ?? [],
         _updated: remoteTs,
       };
       _saveLocal(merged);
@@ -151,10 +155,12 @@ function _saveLocal(data) {
 }
 
 async function _saveRemote(userId, data) {
+  // Store ledger in its own column; all other appData fields go into tracker as a JSONB object
+  const { ledger, _updated, ...rest } = data;
   await supabase.from('promogrind_data').upsert({
     user_id:    userId,
-    ledger:     data.ledger  ?? [],
-    tracker:    data.tracker ?? [],
+    ledger:     ledger   ?? [],
+    tracker:    rest,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'user_id' });
 }

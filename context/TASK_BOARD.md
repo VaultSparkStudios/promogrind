@@ -38,7 +38,7 @@
 - [ ] Email drip sequence: onboarding automation via Resend (after newsletter deployed)
 - [ ] Discord community + bot integration
 - [ ] Claude API bet slip parser (paste bet slip → auto-fill calculator/tracker)
-- [ ] Scheduled push notifications (VAPID keys + web-push service)
+- [ ] Scheduled push notifications — skeleton ready at `supabase/functions/send-daily-brief/index.ts` + `scripts/migration-push-subscriptions.sql`. Needs: VAPID keys, web-push Deno module, service worker push event handler, Supabase cron schedule at 9am UTC.
 - [ ] 7-day VaultSparked free trial (after Stripe live)
 - [ ] UK market module (UK books + GBP support) — major TAM expansion
 - [ ] Crowdsourced promo API endpoint (data moat play)
@@ -55,6 +55,46 @@
 - Props scanner cost optimization (cache prop results, fetch less frequently)
 
 ## Completed ✓
+
+### Simplify session — Code review + cleanup (v9.1)
+- Fixed 4 React Rules of Hooks violations (useState inside render IIFEs): extracted `ShareWeekBtn`, `ReportCard`, `SessionModal`, `PromoAlertPrefs` as proper components
+- Added `downloadFile` + `calcROI` module utilities; replaced 5 duplicate download patterns and 2 duplicate ROI calculations
+- Moved `parseNL` to module scope (was redefined on every BonusBet render)
+- Added `useMemo` to `filtered` (PromoCalendar) and `myAvgClv` (Leaderboard)
+- Fixed health score hot path: hoisted `cutoff30` + `bets` array outside BOOKS.map() loop
+- Removed all feature-tracking comments (10+ locations)
+- Removed redundant `oppLog.slice(0,20)` on read
+
+### Session 9 — Third audit + 20-feature brainstorm implementation (v9.0)
+
+**Header stat fix:**
+- `"22"` → `"26"` in Calculators stat (was stale since session 8 added 4 calculators)
+
+**20 features built:**
+- Copy My Setup Share Link (Dashboard), Promo Stacking Calculator (Calculate), Daily Grind Routine Generator (Dashboard), Profit Goal Milestone Tracker (Dashboard), Promo Trade Journal (Track), Odds Comparison Table (Track), Calculator Sub-Categories filter pills (Calculate group), Push Notification Daily Briefing (Dashboard, VaultSparked-gated), Promo Value History Tracker (PromoCalendar), Kelly Fractional Risk Optimizer slider (Kelly), Tax Bracket Timing Advisor (Ledger), Bet Slip Text Parser (BetTracker), Multi-Book Pending Exposure (Dashboard), CLV Leaderboard Column + My Stats (Leaderboard), New State Legalized Alert (Dashboard), Promo Arb Finder (Learn), Leaderboard Privacy Control opt-in (Leaderboard), Multi-Currency Mode USD/CAD/GBP (App header), Sportsbook Account Health Score (Tracker), Calculator Usage Analytics + Top Tools (Dashboard)
+
+**New contexts:**
+- `CurrencyCtx` — display-only FX multiplier (USD/CAD/GBP)
+
+**Non-App.jsx fixes:**
+- `public/sitemap.xml`: Added promo-stacking, trade-journal, odds-compare, team-accounts, promo-arb-finder (40+ → 47 URLs)
+- `public/manifest.json`: Updated description (27+ calcs), added Promo Arb Finder shortcut
+- `index.html`: Updated meta description + keywords, expanded JSON-LD featureList to 16 items
+
+### Session 8 — Second audit + 20-feature brainstorm implementation (v8.0)
+
+**Bug fixed:**
+- PricingPage checkout: `handleUpgrade(plan.id)` passed string, `startCheckout(plan.id)` returned undefined. Fixed: pass full `plan` object.
+
+**20 features built:**
+- Tax Export CSV (Ledger), Embed Mode + iframe button (Tl), Deposit Optimizer (Calculate), Hedge Validator (Calculate), Weekly P&L Share Card (Ledger), Promo Complexity tags + filter (PromoCalendar), Multi-Account Ledger By-Book view, Free Bet Arb Tracker (Track), Calendar Export .ics (PromoCalendar), Promo Guarantee Calculator (Calculate), Book ROI% column (Tracker), Streak + Consistency score (Dashboard), Promo Alert Subscription UI (PromoCalendar), Natural Language Input parser (BonusBet), EV Opportunity Log (LiveScanner), Welcome Promo Progress Bars (Tracker), Gut Check validator (Calculate), Scanner Watchlist (LiveScanner), Session Summary modal (App header), Offline Mode indicator + sync queue (App)
+
+**Non-App.jsx fixes:**
+- `src/sync.js`: Critical fix — was silently dropping all appData except ledger. Now all fields synced via tracker JSONB.
+- `public/sitemap.xml`: Rebuilt 14 → 40+ URLs
+- `public/manifest.json`: PWA shortcuts added
+- `index.html`: JSON-LD schema, Apple PWA metas
+- `supabase/functions/weekly-digest/index.ts`: freq filtering, batching, improved email
 
 ### Session 7 — Full audit + implementation (v7.0)
 

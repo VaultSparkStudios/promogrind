@@ -10,7 +10,9 @@
     "build:cap": "VITE_APP_BASE_PATH=/ vite build --outDir dist-cap",
     "cap:sync": "npm run build:cap && npx cap sync",
     "og": "node scripts/generate-og.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:functions": "supabase functions deploy odds && supabase functions deploy create-checkout && supabase functions deploy stripe-webhook && supabase functions deploy weekly-digest",
+    "deploy:brief": "supabase functions deploy send-daily-brief"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.100.0",

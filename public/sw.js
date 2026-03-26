@@ -1,4 +1,4 @@
-const CACHE = 'promogrind-v2';
+const CACHE = 'promogrind-v3';
 const BASE = self.location.pathname.replace('/sw.js','');
 
 const SHELL = [

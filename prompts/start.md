@@ -14,10 +14,11 @@ Read in this exact order. Do not skip or reorder.
 | 4 | `context/BRAIN.md` | Strategic mental model and heuristics |
 | 5 | `context/CURRENT_STATE.md` | Live snapshot of what exists |
 | 6 | `context/DECISIONS.md` | Key decisions with rationale |
-| 7 | `context/TASK_BOARD.md` | Now / Next / Blocked / Later tasks |
-| 8 | `context/LATEST_HANDOFF.md` | Authoritative handoff from last session |
-| 9 | `context/SELF_IMPROVEMENT_LOOP.md` | Last audit scores + open brainstorm items |
-| 10 | Task-specific files | Only after all above are read |
+| 7 | `context/OPEN_QUESTIONS.md` | Open questions and unknowns |
+| 8 | `context/TASK_BOARD.md` | Now / Next / Blocked / Later tasks |
+| 9 | `context/LATEST_HANDOFF.md` | Authoritative handoff from last session |
+| 10 | `context/SELF_IMPROVEMENT_LOOP.md` | Last audit scores + open brainstorm items |
+| 11 | Task-specific files | Only after all above are read |
 
 ---
 

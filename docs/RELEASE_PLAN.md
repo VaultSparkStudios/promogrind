@@ -1,53 +1,70 @@
 # Release Plan
 
-## v1 — Free Tool Launch (Current)
+## Current State: v9.0 (Feature-Complete, Pre-Revenue)
 
-**Target:** Ready now — pending affiliate links and deploy config
-
-**Scope:**
-- 11 promo conversion calculators (bonus bet, first-bet hedge, arb, +EV, profit boost, parlay, referral tracker, etc.)
-- Sportsbook tracker
-- P/L ledger
-- Knowledge base for beginners
-- Affiliate link integration in `src/books.js`
-- SEO meta tags + sitemap
-
-**Deploy targets:** Vercel (primary) or GitHub Pages
-**Distribution:** Direct link sharing, SEO organic traffic
-
-**Launch checklist:**
-- [ ] Insert affiliate/referral links into `src/books.js`
-- [ ] Create Supabase project → run `supabase-schema.sql` in SQL Editor
-- [ ] Fill in `SUPABASE_URL` + `SUPABASE_ANON_KEY` in `VaultSparkStudios.github.io/assets/supabase-client.js`
-- [ ] Copy `.env.example` → `.env` in PromoGrind, fill in same Supabase values
-- [ ] Create `.env.admin` with SERVICE_ROLE_KEY for invite code generator
-- [ ] Generate initial invite codes: `node scripts/generate-invite-codes.js 10 "launch batch"`
-- [ ] Enable GitHub Pages or connect Vercel
-- [ ] Set custom domain (promogrind.com if available)
-- [ ] Submit sitemap to Google Search Console
-- [ ] Add affiliate disclosure and 21+ notice to app footer
-- [ ] Test auth gate + invite code flow end-to-end
-- [ ] Test all calculators on mobile
-- [ ] Verify localStorage persistence
+The app is live at `https://vaultsparkstudios.com/promogrind/` and auto-deploys on push to main.
+All core features are built. Revenue activation is blocked only on external setup steps.
 
 ---
 
-## v2 — Live Odds Scanner (Paid Tier, Future)
+## Phase 1 — Revenue Activation (Next)
 
-**Status:** Planned — not started
+**Status:** All code ready. External accounts pending.
 
-**Scope:**
-- Live odds fetching via The Odds API (theodds-api.com)
-- Automatic arb detection across books
-- +EV opportunity scanner
-- Subscription paywall ($29–$79/month)
-- Free calculators remain free (traffic driver → paid conversion)
-- Backend proxy required for API key security
+**Checklist:**
+- [ ] Insert affiliate/referral links into `src/books.js` (DK, FD, BetMGM, Caesars, bet365, ESPN BET, Fanatics, BetRivers)
+- [ ] Apply to affiliate programs: DraftKings Partners, FanDuel Partners, BetMGM Partners (or use personal referral links as interim)
+- [ ] Set Odds API key: `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`
+  - Change scanner refresh from 120s → 300s in LiveScanner
+- [ ] Set up Stripe test products: Monthly ($24.99) + Annual ($199) → get price IDs
+  - Update `create-checkout` Edge Function to route by `body.planId`
+  - `supabase secrets set STRIPE_SECRET_KEY=... STRIPE_WEBHOOK_SECRET=... STRIPE_MONTHLY_PRICE_ID=... STRIPE_ANNUAL_PRICE_ID=...`
+  - `supabase functions deploy create-checkout && supabase functions deploy stripe-webhook`
+- [ ] Set up Resend: verify domain → `supabase secrets set RESEND_API_KEY=...` → `supabase functions deploy weekly-digest`
+- [ ] Enable Google OAuth + Discord OAuth in Supabase dashboard
+- [ ] Uncomment Plausible script in `index.html` (after creating plausible.io account)
+- [ ] Submit sitemap to Google Search Console (47 URLs)
 
-**Requires:**
-- Backend (Node.js / serverless function) for Odds API proxy
-- Auth layer (accounts)
-- Payment processor (Stripe)
-- Separate private repo for paid tier code
+**Revenue unlock sequence:** Affiliate links → Odds API → Stripe (test) → live Stripe (after LLC + EIN)
 
-**Timeline:** After v1 reaches sustained traffic (est. 3–6 months post-launch)
+---
+
+## Phase 2 — SEO / Organic Growth (High Priority)
+
+**Status:** Problem identified, solution not yet built.
+
+The entire app renders client-side. Google sees a blank div. This caps organic growth.
+
+**Options (pick one):**
+1. **Vite SSG plugin** (`vite-plugin-ssg`) — least disruptive. Pre-renders each slug to static HTML at build time. Preserves existing architecture.
+2. **Astro migration** — larger refactor but solves both SSG and the App.jsx file-size problem simultaneously. Calculator components become `.astro` pages.
+
+**Why it matters:** SEO is the lowest-cost acquisition channel. Knowledge base articles + calculator pages are rankable for long-tail queries ("bonus bet converter", "profit boost calculator free", etc.). Without SSG, all organic traffic is abandoned.
+
+**Recommendation:** Do Vite SSG first (1-2 sessions). Evaluate Astro migration when App.jsx exceeds 7,000 lines.
+
+---
+
+## Phase 3 — Growth & Retention Layer (After Revenue Active)
+
+- Email drip sequence (5 onboarding emails via Resend)
+- 7-day VaultSparked free trial (Stripe trial_period_days)
+- Server-sent push notifications — `supabase/functions/send-daily-brief/` skeleton ready; needs VAPID keys + `scripts/migration-push-subscriptions.sql`
+- Browser extension (Chrome/Firefox) — separate repo; detects sportsbook pages, overlays relevant calculator
+- Discord community + bot integration
+
+---
+
+## Phase 4 — Scale (When 50+ VaultSparked Subscribers)
+
+- Activate Team accounts backend (`team_members` table + shared data context)
+- Shared odds cache in Supabase (one API call serves all concurrent scanner users)
+- UK market module (GBP books + UK-specific promo types) — 5x TAM expansion
+- Mobile app via Capacitor (`npm run cap:sync` — config already present)
+
+---
+
+## Blocked Until LLC + EIN
+
+- Stripe live mode (all Stripe infrastructure ready; just needs business entity)
+- Formal affiliate agreements (personal referral links work in interim)

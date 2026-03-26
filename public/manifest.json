@@ -1,13 +1,14 @@
 {
-  "name": "PromoGrind",
+  "name": "PromoGrind — Free Sportsbook Promo Tools",
   "short_name": "PromoGrind",
-  "description": "Free sportsbook promo conversion tools — bonus bets, profit boosts, arb scanner, and more.",
+  "description": "Convert sportsbook bonus bets to cash, calculate profit boosts, find arbitrage, compare odds, and track your profits. 27+ free calculators — no subscription required.",
   "start_url": "/promogrind/",
   "scope": "/promogrind/",
   "display": "standalone",
   "background_color": "#0a0e17",
   "theme_color": "#4ade80",
   "orientation": "any",
+  "lang": "en-US",
   "icons": [
     {
       "src": "/promogrind/favicon.svg",
@@ -16,5 +17,43 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["finance", "utilities"]
+  "shortcuts": [
+    {
+      "name": "Bonus Bet Converter",
+      "short_name": "Bonus Bet",
+      "description": "Convert sportsbook bonus bets to guaranteed cash",
+      "url": "/promogrind/bonus-bet",
+      "icons": [{ "src": "/promogrind/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Profit Boost Calculator",
+      "short_name": "Profit Boost",
+      "description": "Calculate guaranteed profit from profit boost promos",
+      "url": "/promogrind/profit-boost",
+      "icons": [{ "src": "/promogrind/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Daily Dashboard",
+      "short_name": "Dashboard",
+      "description": "Today's promo briefing and P&L summary",
+      "url": "/promogrind/dashboard",
+      "icons": [{ "src": "/promogrind/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "P/L Ledger",
+      "short_name": "Ledger",
+      "description": "Track and export your promo profits",
+      "url": "/promogrind/ledger",
+      "icons": [{ "src": "/promogrind/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Promo Arb Finder",
+      "short_name": "Promo Arb",
+      "description": "Find cross-book promo stacking opportunities",
+      "url": "/promogrind/promo-arb-finder",
+      "icons": [{ "src": "/promogrind/favicon.svg", "sizes": "any" }]
+    }
+  ],
+  "categories": ["finance", "utilities", "sports"],
+  "screenshots": []
 }

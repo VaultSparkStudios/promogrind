@@ -38,6 +38,8 @@ const toP = (d) => d > 0 ? (1/d*100) : 0;
 const toF = (d) => { if (d <= 1) return "0/1"; const n = Math.round((d-1)*100), dn = 100, g = gcd(n, dn); return `${n/g}/${dn/g}`; };
 const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
 const f = (n, dp=2) => (typeof n === "number" ? n.toFixed(dp) : parseFloat(n||0).toFixed(dp));
+const calcROI = (profit, wagered) => wagered > 0 ? profit / wagered * 100 : null;
+const downloadFile = (content, filename, mimeType) => { const a = Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([content],{type:mimeType})),download:filename}); a.click(); URL.revokeObjectURL(a.href); };
 
 const calcBonus = (sz, bO, hO) => { const bd=toD(bO), hd=toD(hO); if (bd<=1||hd<=1||!sz) return null; const wp=sz*(bd-1), hs=wp/hd, pBW=wp-hs, pHW=hs*(hd-1), g=Math.min(pBW,pHW); return {hs:f(hs),pBW:f(pBW),pHW:f(pHW),g:f(g),r:f(g/sz*100,1)}; };
 const calcFirst = (s, o, hO) => { const d=toD(o), hd=toD(hO); if (d<=1||hd<=1||!s) return null; const p=s*d, hs=p/hd, pOW=p-s-hs, pHW=hs*hd-hs-s; return {hs:f(hs),pOW:f(pOW),pHW:f(pHW),g:f(Math.min(pOW,pHW))}; };
@@ -163,6 +165,7 @@ const In = ({l,v,set,ph,pre,err}) => {
 const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:12,color:K.dm}}>{l}</span><span style={{fontSize:13,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
 const Tl = ({t,badge,bc,shareable,getParams}) => {
   const [copied,setCopied]=useState(false);
+  const [embedCopied,setEmbedCopied]=useState(false);
   const copy=()=>{
     let url = window.location.href.split('?')[0];
     if (getParams) {
@@ -174,10 +177,17 @@ const Tl = ({t,badge,bc,shareable,getParams}) => {
     try{navigator.clipboard.writeText(url);}catch(e){}
     setCopied(true); setTimeout(()=>setCopied(false),1500);
   };
+  const copyEmbed=()=>{
+    const slug = window.location.pathname.replace(/^\/+/,'');
+    const iframe = `<iframe src="https://vaultsparkstudios.com/promogrind/?embed=1#/${slug}" width="480" height="600" frameborder="0"></iframe>`;
+    try{navigator.clipboard.writeText(iframe);}catch(e){}
+    setEmbedCopied(true); setTimeout(()=>setEmbedCopied(false),1500);
+  };
   return (<div style={{fontSize:16,fontWeight:600,color:K.tx,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontFamily:fontD,flexWrap:"wrap"}}>
     <span>{t}</span>
     {badge&&<span style={{...S.tag(bc||K.ac)}}>{badge}</span>}
     {shareable&&<button onClick={copy} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{copied?"✓ COPIED":"⎘ SHARE"}</button>}
+    {shareable&&<button onClick={copyEmbed} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:embedCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{embedCopied?"✓ Copied!":"<> Embed"}</button>}
   </div>);
 };
 const Nt = ({children,c}) => (<div style={S.note(c)}>{children}</div>);
@@ -212,12 +222,40 @@ const Help = ({entries}) => {
 // TOOL COMPONENTS
 // ═══════════════════════════════════════════
 
+const parseNL = (text) => {
+  const dollars = text.match(/\$(\d+(?:\.\d+)?)/);
+  const posOdds = text.match(/\+(\d+)/);
+  const negOdds = text.match(/-(\d+)/);
+  return {
+    sz: dollars ? dollars[1] : null,
+    bo: posOdds ? '+'+posOdds[1] : null,
+    ho: negOdds ? '-'+negOdds[1] : null,
+  };
+};
+
 const BonusBet = () => {
   const [mem, setMem] = useCalcMemory('bonus-bet', {sz:"200",bo:"+300",ho:"-350"});
   const {sz,bo,ho} = mem;
   const setSz = v => setMem('sz',v), setBo = v => setMem('bo',v), setHo = v => setMem('ho',v);
   const r = useMemo(()=>calcBonus(parseFloat(sz),bo,ho),[sz,bo,ho]);
+  const [nlText, setNlText] = useState("");
+  const [nlPreview, setNlPreview] = useState(null);
+  const applyNL = () => {
+    const p = parseNL(nlText);
+    if(p.sz) setSz(p.sz);
+    if(p.bo) setBo(p.bo);
+    if(p.ho) setHo(p.ho);
+    setNlPreview(p);
+  };
   return (<div><div style={S.card}><Tl t="Bonus Bet Converter" badge="STAKE NOT RETURNED" bc={K.gn} shareable getParams={()=>({sz,bo,ho})}/>
+    <div style={{marginBottom:12}}>
+      <label style={S.label}>Quick Input (natural language)</label>
+      <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+        <textarea value={nlText} onChange={e=>{setNlText(e.target.value);setNlPreview(parseNL(e.target.value));}} placeholder='Try: "I have a $200 bonus bet at +350, hedge at -400"' style={{...S.input,height:48,resize:"none",flex:1,lineHeight:1.5,fontSize:12}}/>
+        <button onClick={applyNL} style={{padding:"8px 14px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Parse</button>
+      </div>
+      {nlPreview&&(nlPreview.sz||nlPreview.bo||nlPreview.ho)&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>Detected: {[nlPreview.sz&&`$${nlPreview.sz} bonus`,nlPreview.bo&&`${nlPreview.bo} odds`,nlPreview.ho&&`${nlPreview.ho} hedge`].filter(Boolean).join(", ")}</div>}
+    </div>
     <div style={S.row}><In l="Bonus Bet Size" v={sz} set={setSz} pre="$" ph="200"/><In l="Bonus Bet Odds" v={bo} set={setBo} ph="+300"/><In l="Hedge Odds" v={ho} set={setHo} ph="-350"/></div>
     <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center"}}>
       <button onClick={()=>{setSz("200");setBo("+350");setHo("-400");}} style={{padding:"4px 10px",background:`${K.ac}10`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>★ Show Example</button>
@@ -520,6 +558,25 @@ const KellyCriterion = () => {
       <RR l="Full Kelly %" v={`${r.k}%`} c={K.dm}/><RR l={`${frac}% Fractional Kelly`} v={`${r.ak}%`} c={K.ac} b/><RR l="Bet Size" v={`$${r.bet}`} c={r.ok?K.gn:K.rd} b/><RR l="Expected Value" v={`${r.ok?"+":""}${r.ev}%`} c={r.ok?K.gn:K.rd}/>
       {!r.ok&&<Nt c={K.rd}>Kelly says skip this bet — your win probability does not support an edge at these odds.</Nt>}
       {r.ok&&<Nt c={K.yl}>Using {frac}% fractional Kelly. Full Kelly maximizes growth but has high variance. Most pros use 20–33% Kelly.</Nt>}
+      {r.ok&&(()=>{
+        const fracNum=parseFloat(frac);
+        const riskLabel=fracNum<25?"Conservative — lower growth, minimal ruin risk":fracNum<=50?"Balanced — recommended for most bettors":fracNum<=75?"Aggressive — higher variance, 10-20% ruin risk":"Dangerous — high ruin probability";
+        const riskColor=fracNum<25?K.gn:fracNum<=50?K.ac:fracNum<=75?K.yl:K.rd;
+        const markerPct=Math.min(100,(fracNum-5)/95*100);
+        const fracBet=f(parseFloat(br)*parseFloat(r.k)/100*fracNum/100);
+        return (
+          <div style={{marginTop:12,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
+            <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1px"}}>Fraction Risk Optimizer</div>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.mt,marginBottom:4}}><span>5%</span><span>100%</span></div>
+            <div style={{position:"relative",height:8,background:`linear-gradient(to right,${K.gn},${K.yl},${K.rd})`,borderRadius:4,marginBottom:8}}>
+              <div style={{position:"absolute",left:`calc(${markerPct}% - 4px)`,top:-2,width:12,height:12,borderRadius:"50%",background:"white",border:`2px solid ${riskColor}`}}/>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:K.mt,marginBottom:8}}><span style={{color:K.gn}}>Low Ruin Risk</span><span style={{color:K.rd}}>High Ruin Risk</span></div>
+            <div style={{fontSize:11,color:riskColor,fontWeight:600,marginBottom:4}}>{frac}% Kelly: {riskLabel}</div>
+            <div style={{fontSize:11,color:K.dm}}>Bet at this fraction: ${fracBet}</div>
+          </div>
+        );
+      })()}
     </div>}
   </div>
   <Help entries={[
@@ -855,6 +912,9 @@ const BetTracker = () => {
   const bets = data.bets || [];
   const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Moneyline",odds:"+110",stake:"",toWin:"",status:"open",notes:""});
   const [showImport, setShowImport] = useState(false);
+  const [showPasteSlip, setShowPasteSlip] = useState(false);
+  const [slipText, setSlipText] = useState("");
+  const [slipParsed, setSlipParsed] = useState(null);
   const calcToWin = (odds, stake) => { const d=toD(odds), s=parseFloat(stake); if(d<=1||!s) return ""; return f(s*(d-1)); };
   const save = (newBets) => syncAppData({...data, bets: newBets});
   const toast = useToast();
@@ -871,8 +931,7 @@ const BetTracker = () => {
     const headers = ["Date","Book","Type","Odds","Stake","To Win","Status","Notes"];
     const rows = bets.map(e=>[e.date,e.book,e.type,e.odds,e.stake,e.toWin||"",e.status,e.notes||""]);
     const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
-    const a = Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),download:`promogrind-bets-${new Date().toISOString().split("T")[0]}.csv`});
-    a.click(); URL.revokeObjectURL(a.href);
+    downloadFile(csv, `promogrind-bets-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
   };
   const betGrade = (bet) => {
     if(bet.status==="open"||bet.status==="void") return null;
@@ -902,8 +961,18 @@ const BetTracker = () => {
         },0);
         return <div><div style={{fontSize:10,color:K.mt}}>PORTFOLIO EV</div><div style={{...S.big(ev>=0?K.gn:K.rd),fontSize:22}}>{ev>=0?"+":""}${f(ev)}</div><div style={{fontSize:9,color:K.mt}}>book-implied</div></div>;
       })()}
-      <button onClick={()=>setShowImport(true)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↑ Import CSV</button>
+      <button onClick={()=>setShowPasteSlip(s=>!s)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>📋 Paste Slip</button>
+      <button onClick={()=>setShowImport(true)} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↑ Import CSV</button>
       {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
+      {showPasteSlip&&<div style={{width:"100%",marginTop:8,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
+        <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:8}}>Paste Bet Slip Text</div>
+        <textarea style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder="Paste bet slip text here…&#10;e.g. DraftKings · Chiefs Moneyline · +150 · $50"/>
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={()=>{const p=parseBetSlip(slipText);setSlipParsed(p);}} style={{padding:"6px 14px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Parse</button>
+          {slipParsed&&<button onClick={()=>{setForm(prev=>({...prev,...slipParsed,toWin:slipParsed.stake&&slipParsed.odds?f((parseFloat(slipParsed.stake||0))*(toD(slipParsed.odds||"+100")-1)):""}));setShowPasteSlip(false);setSlipParsed(null);setSlipText("");}} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Use Parsed Values</button>}
+        </div>
+        {slipParsed&&<div style={{fontSize:10,color:K.gn,marginTop:6}}>Parsed: {Object.entries(slipParsed).map(([k,v])=>`${k}=${v}`).join(", ")}</div>}
+      </div>}
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
       <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
@@ -972,11 +1041,19 @@ const Tracker = () => {
   };
   const total = Object.values(profits).reduce((s,v)=>s+(parseFloat(v)||0),0);
   const cnt = Object.values(done).filter(Boolean).length;
+  const [trackerView, setTrackerView] = useState('tracker');
   return (<div style={S.card}><Tl t="Sportsbook Promo Tracker"/>
-    <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap"}}>
+    <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
       <div><div style={{fontSize:10,color:K.mt}}>EXTRACTED</div><div style={S.big(K.gn)}>${f(total)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>COMPLETED</div><div style={S.big(K.ac)}>{cnt}/{BOOKS.length}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>REMAINING</div><div style={S.big(K.yl)}>~${f(BOOKS.filter(b=>!done[b.name]).reduce((s,b)=>s+b.bonus*0.7,0),0)}</div></div>
+      <div style={{marginLeft:"auto",display:"flex",gap:6}}>
+        {["tracker","progress"].map(v=>(
+          <button key={v} onClick={()=>setTrackerView(v)} style={{padding:"4px 12px",background:trackerView===v?K.ac:"transparent",border:`1px solid ${trackerView===v?K.ac:K.bd2}`,borderRadius:4,color:trackerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
+            {v==="tracker"?"Tracker":"Progress"}
+          </button>
+        ))}
+      </div>
     </div>
     <Nt c={K.ac}>Your tracker syncs across all your devices. Data also saves locally as a backup.</Nt>
     {(()=>{
@@ -989,21 +1066,75 @@ const Tracker = () => {
         return <Nt c={K.ac}>{unavailCount} book{unavailCount>1?"s are":" is"} not available in {st} and may show limited promos for your state.</Nt>;
       } catch { return null; }
     })()}
-    <div style={{overflowX:"auto",marginTop:12}}>
+    {trackerView==="progress"&&(()=>{
+      return (<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:12,marginTop:12}}>
+        {BOOKS.map(b=>{
+          const step1=done[b.name]||profits[b.name];
+          const step2=profits[b.name];
+          const step3=done[b.name];
+          const steps=[{label:"Account Created",done:!!step1},{label:"First Bet Placed",done:!!step2},{label:"Bonus Collected",done:!!step3}];
+          const stepsComplete=steps.filter(s=>s.done).length;
+          return (<div key={b.name} style={{padding:14,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
+            <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:10}}>{b.name}</div>
+            <div style={{display:"flex",alignItems:"center",gap:0,marginBottom:10}}>
+              {steps.map((s,i)=>(
+                <React.Fragment key={i}>
+                  <div style={{width:22,height:22,borderRadius:"50%",background:s.done?K.gn:K.bd2,border:`2px solid ${s.done?K.gn:K.bd2}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:s.done?K.bg:K.mt,fontWeight:700,flexShrink:0}}>{s.done?"✓":i+1}</div>
+                  {i<steps.length-1&&<div style={{flex:1,height:2,background:steps[i+1].done?K.gn:K.bd2}}/>}
+                </React.Fragment>
+              ))}
+            </div>
+            <div style={{fontSize:10,color:K.mt}}>{steps.map((s,i)=><div key={i} style={{color:s.done?K.gn:K.mt}}>{s.done?"✓":"○"} {s.label}</div>)}</div>
+            {done[b.name]&&profits[b.name]&&<div style={{fontSize:11,fontWeight:700,color:K.gn,marginTop:6}}>+${profits[b.name]}</div>}
+            {!done[b.name]&&<div style={{fontSize:10,color:K.yl,marginTop:6}}>~${f(b.bonus*0.7,0)} remaining</div>}
+          </div>);
+        })}
+      </div>);
+    })()}
+    {trackerView==="tracker"&&<div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit","Expiry","Health","★","Ref Code",""].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
-        <tbody>{BOOKS.map(b=>{const es=expiryStatus(b.name);return(<tr key={b.name} style={{opacity:done[b.name]?0.4:1}}>
+        <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit","ROI","Expiry","Status","Health","★","Ref Code",""].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
+        <tbody>{(()=>{ const cutoff30=new Date(Date.now()-30*24*60*60*1000); const ledger=data.ledger||[]; const bets=data.bets||[]; return BOOKS.map(b=>{const es=expiryStatus(b.name);
+          const bookEntries=ledger.filter(e=>e.book===b.name);
+          const bookProfit=bookEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+          const bookWagered=bookEntries.reduce((s,e)=>s+(parseFloat(e.hedge)||0),0);
+          const roi=calcROI(bookProfit,bookWagered);
+          return(<tr key={b.name} style={{opacity:done[b.name]?0.4:1}}>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div role="checkbox" aria-checked={!!done[b.name]} aria-label={`Mark ${b.name} as completed`} tabIndex={0} onClick={()=>toggle(b.name)} onKeyDown={e=>(e.key===" "||e.key==="Enter")&&toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",outline:"none"}} onFocus={e=>e.currentTarget.style.boxShadow=`0 0 0 2px ${K.gn}55`} onBlur={e=>e.currentTarget.style.boxShadow="none"}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}{es==='soon'&&<span style={{...S.tag(K.yl),marginLeft:4}}>⚠</span>}{es==='expired'&&<span style={{...S.tag(K.rd),marginLeft:4}}>EXPIRED</span>}{bookStatus[b.name]==="limited"&&<span style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>LIMITED</span>}{bookStatus[b.name]==="gubbed"&&<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>GUBBED</span>}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span></td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.detail}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600,whiteSpace:"nowrap"}}>{b.value}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:180}}>{b.recurring}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...S.input,width:80,padding:"5px 8px"}} placeholder="$0" value={profits[b.name]||""} onChange={e=>setP(b.name,e.target.value)}/></td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:roi===null?K.mt:roi>=0?K.gn:K.rd,fontWeight:roi!==null?600:400,fontSize:11}}>{roi===null?"—":`${roi>=0?"+":""}${f(roi,1)}%`}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><input type="date" style={{...S.input,width:120,padding:"4px 6px",fontSize:11,borderColor:es==='soon'?K.yl:es==='expired'?K.rd:undefined}} value={expiry[b.name]||""} onChange={e=>setExpiry(b.name,e.target.value)} title="Promo expiry date"/></td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
             <select value={bookStatus[b.name]||"active"} onChange={e=>setBookStatus(b.name,e.target.value)} style={{...S.input,width:90,padding:"3px 6px",fontSize:10,color:{active:K.gn,limited:K.yl,gubbed:K.rd,pending:K.mt,closed:K.rd}[bookStatus[b.name]||"active"]||K.gn}}>
               {["active","limited","gubbed","pending","closed"].map(s=><option key={s} value={s}>{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}
             </select>
+          </td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
+            {(()=>{
+              let score=100;
+              const st=bookStatus[b.name]||"active";
+              if(st==="gubbed") score-=30;
+              if(st==="limited") score-=15;
+              if(st==="closed") score-=10;
+              const bets30=bets.filter(bt=>bt.book===b.name&&bt.date&&new Date(bt.date)>cutoff30);
+              if(bets30.length===0) score-=20;
+              else {
+                const stakes=bets30.map(bt=>parseFloat(bt.stake)||0).filter(s=>s>0);
+                if(stakes.length>2&&new Set(stakes).size===1) score-=10;
+              }
+              const rating=bookRatings[b.name]||0;
+              if(rating>=4) score+=10; else if(rating>=3) score+=5;
+              score=Math.max(0,Math.min(100,score));
+              const scoreColor=score>=80?K.gn:score>=60?K.yl:score>=40?"#f97316":K.rd;
+              const scoreLabel=score>=80?"Healthy":score>=60?"Watch":score>=40?"At Risk":"Gubbed Risk";
+              return (<div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:2}}>
+                <span title="Health Score: factors in account status, recent activity, stake variance, and rating." style={{...S.tag(scoreColor),fontSize:9,cursor:"help"}}>{scoreLabel.toUpperCase()}: {score}</span>
+              </div>);
+            })()}
           </td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
             <div style={{display:"flex",gap:1}}>{[1,2,3,4,5].map(n=>(
@@ -1022,9 +1153,9 @@ const Tracker = () => {
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
             <a href={b.link} target="_blank" rel="noopener noreferrer sponsored" style={{display:"inline-block",padding:"5px 12px",background:K.gn,color:K.bg,borderRadius:5,fontSize:11,fontWeight:700,textDecoration:"none",opacity:done[b.name]?0.4:1}}>Sign Up →</a>
           </td>
-        </tr>);})}</tbody>
+        </tr>);});})()}</tbody>
       </table>
-    </div>
+    </div>}
     {(()=>{
       const codes = data.bookRefCodes || {};
       const filledBooks = BOOKS.filter(b=>codes[b.name]?.trim());
@@ -1068,6 +1199,63 @@ const Tracker = () => {
   </div>);
 };
 
+const ShareWeekBtn = ({entries}) => {
+  const [weekCopied,setWeekCopied]=useState(false);
+  const shareWeek=()=>{
+    const today2=new Date();
+    const dayOfWeek=today2.getDay();
+    const diffToMon=dayOfWeek===0?-6:1-dayOfWeek;
+    const monDate=new Date(today2);
+    monDate.setDate(today2.getDate()+diffToMon);
+    monDate.setHours(0,0,0,0);
+    const weekEntries=entries.filter(e=>{
+      if(!e.date) return false;
+      const d=new Date(e.date); d.setHours(0,0,0,0);
+      return d>=monDate && d<=today2;
+    });
+    const weekProfit=weekEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+    const best=weekEntries.length?weekEntries.reduce((b,e)=>parseFloat(e.profit)>parseFloat(b.profit)?e:b,weekEntries[0]):null;
+    const monStr=`${monDate.getMonth()+1}/${monDate.getDate()}`;
+    const todayStr2=`${today2.getMonth()+1}/${today2.getDate()}`;
+    const card=`📊 PromoGrind Weekly Update\nWeek of ${monStr} – ${todayStr2}\n━━━━━━━━━━━━━━━━━━\nProfit: ${weekProfit>=0?"+":""}$${f(weekProfit)}\n${best?`Best play: ${best.type} at ${best.book}`:"Best play: —"}\nEntries: ${weekEntries.length}\n━━━━━━━━━━━━━━━━━━\nTrack yours free: vaultsparkstudios.com/promogrind/`;
+    try{navigator.clipboard.writeText(card);}catch(e){}
+    setWeekCopied(true); setTimeout(()=>setWeekCopied(false),2000);
+  };
+  return (<button onClick={shareWeek} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:weekCopied?K.gn:K.ac,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+    {weekCopied?"✓ Copied!":"📅 Share This Week"}
+  </button>);
+};
+
+const ReportCard = ({entries, total}) => {
+  const [copiedReport,setCopiedReport]=useState(false);
+  const months={}; entries.forEach(e=>{const m=e.date?e.date.slice(0,7):"?"; if(!months[m])months[m]=0; months[m]+=(parseFloat(e.profit)||0);});
+  const monthVals=Object.values(months); const bestMonth=monthVals.length?Math.max(...monthVals):0; const bestMonthKey=Object.entries(months).sort((a,b)=>b[1]-a[1])[0]?.[0]||"—";
+  const conversionEntries=entries.filter(e=>e.type==="Bonus Bet"||e.type==="Profit Boost");
+  const avgConv=conversionEntries.length?conversionEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0)/conversionEntries.length:0;
+  const card=`PromoGrind Report Card 📊\n──────────────────\nTotal Profit: $${f(total)}\nBest Month: ${bestMonthKey} ($${f(bestMonth)})\nEntries: ${entries.length} logged\nAvg per Entry: $${f(avgConv)}\nEst. Tax @ 22%: -$${f(total*0.22)} | Keep: $${f(total*0.78)}\n──────────────────\nTrack yours free: vaultsparkstudios.com/promogrind/`;
+  const copyReport=()=>{try{navigator.clipboard.writeText(card);}catch(e){} setCopiedReport(true); setTimeout(()=>setCopiedReport(false),2000);};
+  return (
+    <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
+      <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>All-Time Report Card</div>
+      <div style={{display:"flex",gap:20,flexWrap:"wrap",marginBottom:10}}>
+        <div><div style={{fontSize:9,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
+        <div><div style={{fontSize:9,color:K.mt}}>BEST MONTH</div><div style={{...S.big(K.ac),fontSize:18}}>${f(bestMonth)}</div><div style={{fontSize:9,color:K.mt}}>{bestMonthKey}</div></div>
+        <div><div style={{fontSize:9,color:K.mt}}>ENTRIES</div><div style={{...S.big(K.tx),fontSize:18}}>{entries.length}</div></div>
+        <div><div style={{fontSize:9,color:K.mt}}>AVG PER ENTRY</div><div style={{...S.big(K.yl),fontSize:18}}>${f(avgConv)}</div></div>
+      </div>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        <button onClick={copyReport} style={{padding:"7px 16px",background:copiedReport?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+          {copiedReport?"✓ Copied!":"📋 Copy Report Card"}
+        </button>
+        <ShareWeekBtn entries={entries}/>
+        <button onClick={()=>{const year=new Date().getFullYear();const header=`"PromoGrind P&L Export - For Tax Purposes - Gambling winnings are taxable income"`;const colHeaders=["Date","Sportsbook","Type","Bonus Amount","Hedge Amount","Profit","Notes"];const rows=entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);const csv=[header,colHeaders,...rows].map((r,i)=>i<2?r:r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");downloadFile(csv,`promogrind-tax-export-${year}.csv`,"text/csv");}} style={{padding:"7px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+          Export Tax CSV ({entries.length} entries)
+        </button>
+      </div>
+    </div>
+  );
+};
+
 // ═══ LEDGER ═══
 const Ledger = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -1101,6 +1289,7 @@ const Ledger = () => {
   const [filterType, setFilterType] = useState('All');
   const [filterFrom, setFilterFrom] = useState('');
   const [filterTo, setFilterTo] = useState('');
+  const [ledgerView, setLedgerView] = useState('entries');
   const [showGoal, setShowGoal] = useState(false);
   const [goalInput, setGoalInput] = useState(() => { try { return localStorage.getItem('pg_profit_goal')||''; } catch { return ''; } });
   const saveGoal = v => { setGoalInput(v); try { localStorage.setItem('pg_profit_goal', v); } catch {} };
@@ -1113,8 +1302,7 @@ const Ledger = () => {
     const headers = ["Date","Book","Type","Bonus","Hedge","Profit","Notes"];
     const rows = entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);
     const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
-    const a = Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),download:`promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`});
-    a.click(); URL.revokeObjectURL(a.href);
+    downloadFile(csv, `promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
   };
   return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="CLOUD SYNC" bc={K.gn}/>
     {(()=>{
@@ -1223,6 +1411,45 @@ const Ledger = () => {
       );
     })()}
     <Nt c={K.yl}>All gambling winnings are taxable income. Keep records year-round. Export this ledger each tax season.</Nt>
+    <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
+      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>View:</span>
+      {["entries","by-book"].map(v=>(
+        <button key={v} onClick={()=>setLedgerView(v)} style={{padding:"4px 12px",background:ledgerView===v?K.ac:"transparent",border:`1px solid ${ledgerView===v?K.ac:K.bd2}`,borderRadius:4,color:ledgerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
+          {v==="entries"?"Entries":"By Book"}
+        </button>
+      ))}
+    </div>
+    {ledgerView==="by-book"&&(()=>{
+      const byBook={};
+      entries.forEach(e=>{
+        const b=e.book||"Unknown";
+        if(!byBook[b]) byBook[b]={count:0,bonus:0,wagered:0,profit:0};
+        byBook[b].count++;
+        byBook[b].bonus+=parseFloat(e.bonus)||0;
+        byBook[b].wagered+=parseFloat(e.hedge)||0;
+        byBook[b].profit+=parseFloat(e.profit)||0;
+      });
+      const rows=Object.entries(byBook).sort((a,b)=>b[1].profit-a[1].profit);
+      if(!rows.length) return <div style={{textAlign:"center",padding:24,color:K.mt,fontSize:12}}>No entries yet.</div>;
+      return (<div><div style={{overflowX:"auto",marginBottom:8}}>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+          <thead><tr>{["Book","Entries","Total Bonus","Total Wagered","Net Profit","ROI%"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+          <tbody>{rows.map(([book,d])=>{
+            const roi=calcROI(d.profit,d.wagered);
+            return (<tr key={book}>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{book}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{d.count}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{d.bonus?`$${f(d.bonus)}`:"—"}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{d.wagered?`$${f(d.wagered)}`:"—"}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:d.profit>=0?K.gn:K.rd,fontWeight:600}}>{d.profit>=0?"+":""}${f(d.profit)}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:roi===null?K.mt:roi>=0?K.gn:K.rd,fontWeight:roi!==null?600:400}}>{roi===null?"—":`${roi>=0?"+":""}${f(roi,1)}%`}</td>
+            </tr>);
+          })}</tbody>
+        </table>
+      </div>
+      <Nt c={K.ac}>Best performing book = highest ROI%. Worst = consider retiring that book.</Nt>
+      </div>);
+    })()}
     <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12,alignItems:"center"}}>
       <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Filter:</span>
       <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
@@ -1319,29 +1546,8 @@ const Ledger = () => {
       ))}
       <Nt c={K.yl}>Report all winnings even without a W-2G. You may deduct gambling losses up to your winnings if you itemize deductions. Keep Form W-2G records.</Nt>
     </div>}
-    {entries.length>=1&&(()=>{
-      const months={}; entries.forEach(e=>{const m=e.date?e.date.slice(0,7):"?"; if(!months[m])months[m]=0; months[m]+=(parseFloat(e.profit)||0);});
-      const monthVals=Object.values(months); const bestMonth=monthVals.length?Math.max(...monthVals):0; const bestMonthKey=Object.entries(months).sort((a,b)=>b[1]-a[1])[0]?.[0]||"—";
-      const conversionEntries=entries.filter(e=>e.type==="Bonus Bet"||e.type==="Profit Boost");
-      const avgConv=conversionEntries.length?conversionEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0)/conversionEntries.length:0;
-      const card=`PromoGrind Report Card 📊\n──────────────────\nTotal Profit: $${f(total)}\nBest Month: ${bestMonthKey} ($${f(bestMonth)})\nEntries: ${entries.length} logged\nAvg per Entry: $${f(avgConv)}\nEst. Tax @ 22%: -$${f(total*0.22)} | Keep: $${f(total*0.78)}\n──────────────────\nTrack yours free: vaultsparkstudios.com/promogrind/`;
-      const [copiedReport,setCopiedReport]=React.useState(false);
-      const copyReport=()=>{try{navigator.clipboard.writeText(card);}catch(e){} setCopiedReport(true); setTimeout(()=>setCopiedReport(false),2000);};
-      return (
-        <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>All-Time Report Card</div>
-          <div style={{display:"flex",gap:20,flexWrap:"wrap",marginBottom:10}}>
-            <div><div style={{fontSize:9,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
-            <div><div style={{fontSize:9,color:K.mt}}>BEST MONTH</div><div style={{...S.big(K.ac),fontSize:18}}>${f(bestMonth)}</div><div style={{fontSize:9,color:K.mt}}>{bestMonthKey}</div></div>
-            <div><div style={{fontSize:9,color:K.mt}}>ENTRIES</div><div style={{...S.big(K.tx),fontSize:18}}>{entries.length}</div></div>
-            <div><div style={{fontSize:9,color:K.mt}}>AVG PER ENTRY</div><div style={{...S.big(K.yl),fontSize:18}}>${f(avgConv)}</div></div>
-          </div>
-          <button onClick={copyReport} style={{padding:"7px 16px",background:copiedReport?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
-            {copiedReport?"✓ Copied!":"📋 Copy Report Card"}
-          </button>
-        </div>
-      );
-    })()}
+    <TaxTimingAdvisor entries={entries}/>
+    {entries.length>=1&&<ReportCard entries={entries} total={total}/>}
   </div>);
 };
 
@@ -1661,6 +1867,17 @@ const LiveScanner = ({ proStatus, mode }) => {
   const [propsMode, setPropsMode] = useState(false);
   const [alertsEnabled, setAlertsEnabled] = useState(false);
   const [alertThreshold, setAlertThreshold] = useState("0.5");
+  const [watchlist, setWatchlist] = useState(()=>{try{return JSON.parse(localStorage.getItem('pg_watchlist')||'[]');}catch{return [];}});
+  const toggleWatchlist=(game)=>{setWatchlist(wl=>{const n=wl.includes(game)?wl.filter(g=>g!==game):[...wl,game];try{localStorage.setItem('pg_watchlist',JSON.stringify(n));}catch{}; return n;});};
+  const [oppLog, setOppLog] = useState(()=>{try{return JSON.parse(localStorage.getItem('pg_opp_log')||'[]');}catch{return [];}});
+  const [showOppLog, setShowOppLog] = useState(false);
+  const logOpportunity=(r,type)=>{
+    const entry={id:Date.now(),ts:new Date().toISOString(),type,sport:r.sport,books:type==='arb'?[r.b1,r.b2]:[r.book],roi:type==='arb'?r.roi:r.ev,acted:false,date:new Date().toISOString().split('T')[0],game:r.game};
+    setOppLog(log=>{const n=[entry,...log].slice(0,20);try{localStorage.setItem('pg_opp_log',JSON.stringify(n));}catch{};return n;});
+    if(toast) toast('Opportunity logged',K.gn);
+  };
+  const toggleActed=(id)=>{setOppLog(log=>{const n=log.map(e=>e.id===id?{...e,acted:!e.acted}:e);try{localStorage.setItem('pg_opp_log',JSON.stringify(n));}catch{};return n;});};
+  const clearOppLog=()=>{setOppLog([]);try{localStorage.removeItem('pg_opp_log');}catch{}};
   const intervalRef = useRef(null);
   const isActive = proStatus?.status==="active";
 
@@ -1782,12 +1999,27 @@ const LiveScanner = ({ proStatus, mode }) => {
       {error&&<div style={{...S.res(false),marginBottom:12,fontSize:12}}>{error}</div>}
       {loading&&!results.length&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Scanning live odds…</div>}
       {!loading&&!error&&results.length===0&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>No {activeTab==="arb"?"arb opportunities":"+ EV spots"} found right now — try another sport or check back in a few minutes.</div>}
+      {watchlist.length>0&&<div style={{marginBottom:12}}>
+        <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Watching</div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          {watchlist.map(game=>(
+            <div key={game} style={{display:"flex",alignItems:"center",gap:4,padding:"3px 8px",background:`${K.yl}15`,border:`1px solid ${K.yl}40`,borderRadius:50,fontSize:10,color:K.yl}}>
+              <span>{game}</span>
+              <span onClick={()=>toggleWatchlist(game)} style={{cursor:"pointer",color:K.rd,fontWeight:700,marginLeft:2}}>✕</span>
+            </div>
+          ))}
+        </div>
+      </div>}
       {results.map((r,i)=>(
         activeTab==="arb"
-          ? <div key={i} style={{...S.res(true),marginBottom:8}}>
+          ? <div key={i} style={{...S.res(true),marginBottom:8,border:watchlist.includes(r.game)?`1px solid ${K.yl}`:`1px solid ${K.gn}25`}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
                 <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>{r.market&&r.market!=='Moneyline'&&<span style={S.tag(K.ac)}>{r.market}</span>}</div>
-                <span style={{...S.tag(K.gn),fontSize:12}}>+{r.roi}% ROI</span>
+                <div style={{display:"flex",alignItems:"center",gap:8}}>
+                  <span style={{...S.tag(K.gn),fontSize:12}}>+{r.roi}% ROI</span>
+                  <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
+                  <button onClick={()=>logOpportunity(r,'arb')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
+                </div>
               </div>
               <div style={{fontSize:11,color:K.mt,marginBottom:10}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
@@ -1801,19 +2033,50 @@ const LiveScanner = ({ proStatus, mode }) => {
                 ))}
               </div>
             </div>
-          : <div key={i} style={{...S.res(true),marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+          : <div key={i} style={{...S.res(true),marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,border:watchlist.includes(r.game)?`1px solid ${K.yl}`:`1px solid ${K.gn}25`}}>
               <div>
                 <div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>
                 <div style={{fontSize:11,color:K.dm,marginTop:2}}>{r.outcome} · {r.book} · {r.price>0?"+":""}{r.price}</div>
                 <div style={{fontSize:10,color:K.mt}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
                 {(()=>{const kb=calcKelly(parseFloat(r.fairPct),r.price,parseFloat(scannerBankroll)||1000,0.25);return kb?.ok?<div style={{fontSize:10,color:K.pp}}>Kelly 25%: ${kb.bet} of ${scannerBankroll}</div>:null;})()}
               </div>
-              <div style={{textAlign:"right"}}>
+              <div style={{textAlign:"right",display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6}}>
                 <div style={{...S.big(K.gn),fontSize:20}}>+{r.ev}% EV</div>
                 <div style={{fontSize:10,color:K.mt}}>Fair: {r.fairPct}% · Book: {r.bookPct}%</div>
+                <div style={{display:"flex",gap:6}}>
+                  <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
+                  <button onClick={()=>logOpportunity(r,'ev')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
+                </div>
               </div>
             </div>
       ))}
+      {oppLog.length>0&&<div style={{marginTop:12}}>
+        <button onClick={()=>setShowOppLog(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
+          {showOppLog?"▲ Hide":"▼ Show"} Opportunity History ({oppLog.length})
+        </button>
+        {showOppLog&&<div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+            <div style={{fontSize:10,color:K.mt}}>{oppLog.filter(e=>e.acted).length} acted on · Missed: {oppLog.filter(e=>!e.acted).length}</div>
+            <button onClick={clearOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.rd}`,borderRadius:4,color:K.rd,fontSize:9,cursor:"pointer",fontFamily:font}}>Clear History</button>
+          </div>
+          {oppLog.map(e=>(
+            <div key={e.id} style={{...S.res(true),marginBottom:6,padding:"8px 12px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:6}}>
+              <div>
+                <span style={S.tag(e.type==='arb'?K.gn:K.ac)}>{e.type.toUpperCase()}</span>
+                <span style={{fontSize:11,color:K.tx,marginLeft:6}}>{e.game}</span>
+                <span style={{fontSize:10,color:K.mt,marginLeft:6}}>{e.date}</span>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:12,fontWeight:600,color:K.gn}}>+{e.roi}% {e.type==='arb'?'ROI':'EV'}</span>
+                <label style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:e.acted?K.gn:K.mt,cursor:"pointer"}}>
+                  <input type="checkbox" checked={e.acted} onChange={()=>toggleActed(e.id)} style={{accentColor:K.gn}}/>
+                  Acted
+                </label>
+              </div>
+            </div>
+          ))}
+        </div>}
+      </div>}
       {history.length>0&&<div style={{marginTop:16}}>
         <button onClick={()=>setShowHistory(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
           {showHistory?"▲ Hide":"▼ Show"} Scan History ({history.length})
@@ -1840,40 +2103,56 @@ const LiveScanner = ({ proStatus, mode }) => {
 
 // ═══ LEADERBOARD ═══
 const Leaderboard = () => {
+  const { appData: data } = React.useContext(AppDataCtx);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [myRank, setMyRank] = useState(null);
+  const [myUserId, setMyUserId] = useState(null);
+  const [privacyOn, setPrivacyOn] = useState(true);
+  const [privacySaving, setPrivacySaving] = useState(false);
   useEffect(()=>{
     const load = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        // Try vault_leaderboard view first, fall back to vault_events aggregate
-        let data, error;
-        ({ data, error } = await supabase.from('vault_leaderboard').select('user_id,total_points,last_active').order('total_points',{ascending:false}).limit(20));
+        if(user) { setMyUserId(user.id); setPrivacyOn(user.user_metadata?.leaderboard_visible!==false); }
+        let lbData, error;
+        ({ data:lbData, error } = await supabase.from('vault_leaderboard').select('user_id,total_points,last_active').order('total_points',{ascending:false}).limit(20));
         if (error) {
-          // Fallback: raw vault_events (may be slow on large tables)
-          ({ data } = await supabase.from('vault_events').select('user_id,points').limit(5000));
-          if (data) {
+          ({ data:lbData } = await supabase.from('vault_events').select('user_id,points').limit(5000));
+          if (lbData) {
             const agg = {};
-            data.forEach(r=>{ agg[r.user_id]=(agg[r.user_id]||0)+(r.points||0); });
-            data = Object.entries(agg).map(([user_id,total_points])=>({user_id,total_points})).sort((a,b)=>b.total_points-a.total_points).slice(0,20);
+            lbData.forEach(r=>{ agg[r.user_id]=(agg[r.user_id]||0)+(r.points||0); });
+            lbData = Object.entries(agg).map(([user_id,total_points])=>({user_id,total_points})).sort((a,b)=>b.total_points-a.total_points).slice(0,20);
           }
         }
-        if (data) {
-          setRows(data);
-          if (user) {
-            const idx = data.findIndex(r=>r.user_id===user.id);
-            setMyRank(idx>=0?idx+1:null);
-          }
+        if (lbData) {
+          setRows(lbData);
+          if (user) { const idx=lbData.findIndex(r=>r.user_id===user.id); setMyRank(idx>=0?idx+1:null); }
         }
       } catch(e) {}
       setLoading(false);
     };
     load();
   },[]);
+  const togglePrivacy = async (val) => {
+    setPrivacyOn(val);
+    setPrivacySaving(true);
+    try { await supabase.auth.updateUser({data:{leaderboard_visible:val}}); } catch(e) {}
+    setPrivacySaving(false);
+  };
   const mask = (uid) => 'Grinder #'+uid.slice(-4).toUpperCase();
   const rankColor = i => i===0?K.yl:i===1?K.dm:i===2?'#cd7f32':K.mt;
+  const myLedger = data.ledger||[];
+  const myAvgClv = useMemo(()=>{ const clv=myLedger.filter(e=>e.myOdds&&e.closingOdds); return clv.length ? clv.reduce((s,e)=>{const my=toD(e.myOdds),cl=toD(e.closingOdds);return s+(my>1&&cl>1?(my/cl-1)*100:0);},0)/clv.length : null; },[myLedger]);
   return (<div style={S.card}><Tl t="Vault Points Leaderboard" badge="LIVE" bc={K.yl}/>
+    <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12,padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,flexWrap:"wrap"}}>
+      <span style={{fontSize:11,fontWeight:700,color:K.tx}}>Privacy Settings</span>
+      <label style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontSize:11,color:K.dm}}>
+        <input type="checkbox" checked={privacyOn} onChange={e=>togglePrivacy(e.target.checked)} style={{cursor:"pointer"}}/>
+        Show my account on the public leaderboard
+      </label>
+      {privacySaving&&<span style={{fontSize:10,color:K.yl}}>Saving…</span>}
+    </div>
     {myRank&&<Nt c={K.gn}>You are ranked #{myRank} on the leaderboard.</Nt>}
     <Nt c={K.ac}>Earn points by using calculators (1-5 pts), logging bets (2 pts), and daily logins (3 pts).</Nt>
     {loading&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Loading leaderboard…</div>}
@@ -1883,13 +2162,30 @@ const Leaderboard = () => {
       <div style={{fontSize:11,color:K.mt}}>Complete promos to earn Vault Points and claim your spot.</div>
     </div>}
     {!loading&&rows.length>0&&<div style={{marginTop:12}}>
-      {rows.map((r,i)=>(
-        <div key={r.user_id} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 12px",background:i<3?`${rankColor(i)}08`:K.s2,borderRadius:6,marginBottom:4,border:`1px solid ${i<3?rankColor(i)+'30':K.bd}`}}>
-          <div style={{fontSize:i<3?18:13,fontWeight:700,color:rankColor(i),width:24,textAlign:"center"}}>{i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
-          <div style={{flex:1,fontSize:12,color:K.tx,fontWeight:i<3?600:400}}>{mask(r.user_id)}</div>
-          <div style={{fontSize:13,fontWeight:700,color:K.yl}}>{(r.total_points||0).toLocaleString()} pts</div>
-        </div>
-      ))}
+      <div style={{display:"grid",gridTemplateColumns:"24px 1fr auto auto",gap:12,padding:"5px 12px",marginBottom:4}}>
+        <div/><div style={{fontSize:9,color:K.mt,textTransform:"uppercase"}}>Grinder</div>
+        <div style={{fontSize:9,color:K.mt,textTransform:"uppercase"}}>Pts</div>
+        <div style={{fontSize:9,color:K.mt,textTransform:"uppercase"}}>CLV</div>
+      </div>
+      {rows.map((r,i)=>{
+        const isMe=r.user_id===myUserId;
+        return (
+          <div key={r.user_id} style={{display:"grid",gridTemplateColumns:"24px 1fr auto auto",gap:12,alignItems:"center",padding:"10px 12px",background:isMe?`${K.gn}10`:i<3?`${rankColor(i)}08`:K.s2,borderRadius:6,marginBottom:4,border:`1px solid ${isMe?K.gn:i<3?rankColor(i)+'30':K.bd}`}}>
+            <div style={{fontSize:i<3?18:13,fontWeight:700,color:rankColor(i),textAlign:"center"}}>{i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+            <div style={{fontSize:12,color:K.tx,fontWeight:i<3?600:400}}>{mask(r.user_id)}{isMe&&<span style={{...S.tag(K.gn),marginLeft:6,fontSize:8}}>YOU</span>}</div>
+            <div style={{fontSize:13,fontWeight:700,color:K.yl}}>{(r.total_points||0).toLocaleString()}</div>
+            <div style={{fontSize:11,color:isMe&&myAvgClv!==null?(myAvgClv>=0?K.gn:K.rd):K.mt}}>
+              {isMe&&myAvgClv!==null?`${myAvgClv>=0?"+":""}${f(myAvgClv,2)}%`:"—"}
+            </div>
+          </div>
+        );
+      })}
+    </div>}
+    {myAvgClv!==null&&<div style={{marginTop:12,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
+      <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>My Stats</div>
+      <RR l="My Points" v={`${rows.find(r=>r.user_id===myUserId)?.total_points||0} pts`} c={K.yl}/>
+      <RR l="My Avg CLV" v={`${myAvgClv>=0?"+":""}${f(myAvgClv,2)}%`} c={myAvgClv>=0?K.gn:K.rd}/>
+      {myRank&&<RR l="My Rank" v={`#${myRank}`} c={K.pp}/>}
     </div>}
   </div>);
 };
@@ -2527,33 +2823,94 @@ const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DC","DE","FL","GA","HI","
 
 // ═══ PROMO CALENDAR ═══
 const PROMO_SCHED = [
-  {book:"DraftKings",day:"Daily",promo:"Profit Boosts (2-5/day)",value:"$5-15",type:"Recurring",grade:"A"},
-  {book:"DraftKings",day:"Tuesday",promo:"Stepped Up Parlay",value:"$10-25",type:"Weekly",grade:"A"},
-  {book:"DraftKings",day:"Thursday",promo:"Parlay Insurance",value:"$10-20",type:"Weekly",grade:"B"},
-  {book:"DraftKings",day:"Monday",promo:"Reload Bonus",value:"$25-100",type:"Weekly",grade:"B"},
-  {book:"FanDuel",day:"Daily",promo:"Profit Boosts (2-4/day)",value:"$5-20",type:"Recurring",grade:"A"},
-  {book:"FanDuel",day:"Tuesday",promo:"Odds Boosts",value:"$10-30",type:"Weekly",grade:"B"},
-  {book:"FanDuel",day:"Weekend",promo:"SGP Insurance",value:"$10-25",type:"Weekend",grade:"A"},
-  {book:"BetMGM",day:"Daily",promo:"Daily Odds Boosts",value:"$5-15",type:"Recurring",grade:"B"},
-  {book:"BetMGM",day:"Monday",promo:"Monday Night Reload",value:"$25-50",type:"Weekly",grade:"B"},
-  {book:"Caesars",day:"Daily",promo:"Profit Boosts",value:"$5-15",type:"Recurring",grade:"A"},
-  {book:"Caesars",day:"Wednesday",promo:"Bonus Bet Wednesday",value:"$10-25",type:"Weekly",grade:"B"},
-  {book:"bet365",day:"Daily",promo:"Early Payout Offers",value:"Variable",type:"Recurring",grade:"C"},
-  {book:"ESPN BET",day:"Daily",promo:"ESPN+ Profit Boosts",value:"$5-15",type:"Recurring",grade:"B"},
-  {book:"ESPN BET",day:"Thursday",promo:"MNF/TNF Specials",value:"$10-25",type:"Weekly",grade:"B"},
-  {book:"Fanatics",day:"Daily",promo:"FanCash Promos",value:"$5-20",type:"Recurring",grade:"B"},
-  {book:"BetRivers",day:"Weekly",promo:"iRush Reload",value:"$25-100",type:"Weekly",grade:"B"},
+  {book:"DraftKings",day:"Daily",promo:"Profit Boosts (2-5/day)",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy"},
+  {book:"DraftKings",day:"Tuesday",promo:"Stepped Up Parlay",value:"$10-25",type:"Weekly",grade:"A",complexity:"Hard"},
+  {book:"DraftKings",day:"Thursday",promo:"Parlay Insurance",value:"$10-20",type:"Weekly",grade:"B",complexity:"Medium"},
+  {book:"DraftKings",day:"Monday",promo:"Reload Bonus",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy"},
+  {book:"FanDuel",day:"Daily",promo:"Profit Boosts (2-4/day)",value:"$5-20",type:"Recurring",grade:"A",complexity:"Easy"},
+  {book:"FanDuel",day:"Tuesday",promo:"Odds Boosts",value:"$10-30",type:"Weekly",grade:"B",complexity:"Easy"},
+  {book:"FanDuel",day:"Weekend",promo:"SGP Insurance",value:"$10-25",type:"Weekend",grade:"A",complexity:"Medium"},
+  {book:"BetMGM",day:"Daily",promo:"Daily Odds Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy"},
+  {book:"BetMGM",day:"Monday",promo:"Monday Night Reload",value:"$25-50",type:"Weekly",grade:"B",complexity:"Easy"},
+  {book:"Caesars",day:"Daily",promo:"Profit Boosts",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy"},
+  {book:"Caesars",day:"Wednesday",promo:"Bonus Bet Wednesday",value:"$10-25",type:"Weekly",grade:"B",complexity:"Easy"},
+  {book:"bet365",day:"Daily",promo:"Early Payout Offers",value:"Variable",type:"Recurring",grade:"C",complexity:"Medium"},
+  {book:"ESPN BET",day:"Daily",promo:"ESPN+ Profit Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy"},
+  {book:"ESPN BET",day:"Thursday",promo:"MNF/TNF Specials",value:"$10-25",type:"Weekly",grade:"B",complexity:"Medium"},
+  {book:"Fanatics",day:"Daily",promo:"FanCash Promos",value:"$5-20",type:"Recurring",grade:"B",complexity:"Easy"},
+  {book:"BetRivers",day:"Weekly",promo:"iRush Reload",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy"},
 ];
 const DAYS_ORDER = ["Daily","Monday","Tuesday","Wednesday","Thursday","Friday","Weekend"];
+const PromoAlertPrefs = () => {
+  const [alertEmail,setAlertEmail]=useState("");
+  const [alertPrefs,setAlertPrefs]=useState(()=>{try{return JSON.parse(localStorage.getItem('pg_alert_prefs')||'null')||{aGradeOnly:false,allPromos:true,dailyDigest:true,books:{}};}catch{return {aGradeOnly:false,allPromos:true,dailyDigest:true,books:{}};}});
+  const [alertSaved,setAlertSaved]=useState(false);
+  const saveAlertPrefs=()=>{
+    try{localStorage.setItem('pg_alert_prefs',JSON.stringify({...alertPrefs,email:alertEmail}));}catch(e){}
+    setAlertSaved(true); setTimeout(()=>setAlertSaved(false),3000);
+  };
+  return (<div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:4}}>
+    <div style={{fontSize:12,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Get Promo Alerts</div>
+    <div style={{marginBottom:10}}><label style={S.label}>Email (optional)</label><input style={{...S.input,maxWidth:300}} type="email" value={alertEmail} onChange={e=>setAlertEmail(e.target.value)} placeholder="your@email.com"/></div>
+    <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:10}}>
+      {[["aGradeOnly","A-Grade promos only"],["allPromos","All promos"],["dailyDigest","Daily digest"]].map(([k,l])=>(
+        <label key={k} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:K.dm,cursor:"pointer"}}>
+          <input type="checkbox" checked={alertPrefs[k]||false} onChange={e=>setAlertPrefs(p=>({...p,[k]:e.target.checked}))} style={{accentColor:K.ac}}/>
+          {l}
+        </label>
+      ))}
+    </div>
+    <div style={{marginBottom:10}}>
+      <div style={S.label}>Books</div>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+        {[...new Set(PROMO_SCHED.map(p=>p.book))].map(b=>(
+          <label key={b} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:K.dm,cursor:"pointer"}}>
+            <input type="checkbox" checked={alertPrefs.books?.[b]||false} onChange={e=>setAlertPrefs(p=>({...p,books:{...p.books,[b]:e.target.checked}}))} style={{accentColor:K.ac}}/>
+            {b}
+          </label>
+        ))}
+      </div>
+    </div>
+    <button onClick={saveAlertPrefs} style={{padding:"7px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Save Alert Preferences</button>
+    {alertSaved&&<div style={{fontSize:11,color:K.gn,marginTop:8}}>✓ Alerts configured — you&apos;ll be notified when high-value promos are available</div>}
+    <Nt c={K.mt}>Email alerts coming soon — your preferences are saved and will activate when the feature launches.</Nt>
+  </div>);
+};
 const PromoCalendar = () => {
+  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const [filterBook, setFilterBook] = useState("All");
   const [filterDay, setFilterDay] = useState("All");
   const [filterGrade, setFilterGrade] = useState("All");
-  const filtered = PROMO_SCHED.filter(p=>(filterBook==="All"||p.book===filterBook)&&(filterDay==="All"||p.day===filterDay)&&(filterGrade==="All"||p.grade===filterGrade));
+  const [filterComplexity, setFilterComplexity] = useState("All");
+  const [historyOpen, setHistoryOpen] = useState({});
+  const filtered = useMemo(()=>PROMO_SCHED.filter(p=>(filterBook==="All"||p.book===filterBook)&&(filterDay==="All"||p.day===filterDay)&&(filterGrade==="All"||p.grade===filterGrade)&&(filterComplexity==="All"||p.complexity===filterComplexity)),[filterBook,filterDay,filterGrade,filterComplexity]);
   const typeColor={Recurring:K.gn,Weekly:K.ac,Weekend:K.pp};
+  const complexityColor={Easy:K.gn,Medium:K.yl,Hard:K.rd};
+  const trackValue = (promo, value) => {
+    const key = `${promo.book}-${promo.promo}`;
+    const history = data.promoValueHistory||{};
+    const prev = history[key]||[];
+    syncAppData({...data, promoValueHistory:{...history,[key]:[...prev,{date:new Date().toISOString().split('T')[0],value}].slice(-6)}});
+  };
+  const exportICS = () => {
+    const lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//PromoGrind//EN","CALSCALE:GREGORIAN"];
+    const today2=new Date();
+    const ymd=(d)=>`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    const dayMap={Monday:"MO",Tuesday:"TU",Wednesday:"WE",Thursday:"TH",Friday:"FR",Saturday:"SA",Sunday:"SU"};
+    filtered.forEach((p,i)=>{
+      const dtstart=`${ymd(today2)}T080000`;
+      const dtend=`${ymd(today2)}T090000`;
+      let rrule="RRULE:FREQ=DAILY";
+      if(p.day==="Weekend") rrule="RRULE:FREQ=WEEKLY;BYDAY=SA,SU";
+      else if(dayMap[p.day]) rrule=`RRULE:FREQ=WEEKLY;BYDAY=${dayMap[p.day]}`;
+      lines.push("BEGIN:VEVENT",`UID:promogrind-${i}-${Date.now()}@vaultsparkstudios.com`,`DTSTART;TZID=America/New_York:${dtstart}`,`DTEND;TZID=America/New_York:${dtend}`,`SUMMARY:${p.book} - ${p.promo}`,`DESCRIPTION:Est. Value: ${p.value} | Grade: ${p.grade}`,rrule,"END:VEVENT");
+    });
+    lines.push("END:VCALENDAR");
+    downloadFile(lines.join("\r\n"), "promogrind-calendar.ics", "text/calendar");
+  };
   return (<div><div style={S.card}><Tl t="Promo Calendar" badge="RECURRING $$$" bc={K.gn} shareable/>
     <div style={{...S.note(K.ac),marginBottom:12}}>These are the predictable recurring promos across all major books. Stack them daily for $150–450/mo in passive profit on top of welcome bonuses.</div>
-    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14}}>
+    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,alignItems:"center"}}>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
         <option value="All">All Books</option>
         {[...new Set(PROMO_SCHED.map(p=>p.book))].map(b=><option key={b}>{b}</option>)}
@@ -2568,25 +2925,60 @@ const PromoCalendar = () => {
         <option value="B">B — Good Value</option>
         <option value="C">C — Situational</option>
       </select>
+      <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterComplexity} onChange={e=>setFilterComplexity(e.target.value)}>
+        <option value="All">All Complexity</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+      <button onClick={exportICS} style={{padding:"5px 12px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",fontWeight:600}}>📅 Export to Calendar</button>
     </div>
     <div style={{overflowX:"auto"}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
-        <tbody>{filtered.map((p,i)=>(
-          <tr key={i}>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{p.book}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.ac}}>{p.day}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{p.promo}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{p.value}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(typeColor[p.type]||K.mt)}>{p.type}</span></td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-              <span style={S.tag(p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)}>{p.grade||"B"}</span>
-            </td>
-          </tr>
-        ))}</tbody>
+        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Track",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        <tbody>{filtered.map((p,i)=>{
+          const key=`${p.book}-${p.promo}`;
+          const hist=(data.promoValueHistory||{})[key]||[];
+          const showHist=historyOpen[key];
+          return (<React.Fragment key={i}>
+            <tr>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{p.book}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.ac}}>{p.day}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{p.promo}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{p.value}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(typeColor[p.type]||K.mt)}>{p.type}</span></td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
+                <span style={S.tag(p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)}>{p.grade||"B"}</span>
+              </td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
+                <span style={S.tag(complexityColor[p.complexity]||K.mt)}>{p.complexity||"Easy"}</span>
+              </td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
+                <button onClick={()=>{const val=prompt(`Enter value realized for ${p.promo} (e.g. 12.50):`);if(val&&!isNaN(parseFloat(val)))trackValue(p,parseFloat(val));}} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.gn}`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Track Value</button>
+              </td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
+                {hist.length>0&&<button onClick={()=>setHistoryOpen(h=>({...h,[key]:!h[key]}))} style={{padding:"2px 6px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{showHist?"▲":"History"}</button>}
+              </td>
+            </tr>
+            {showHist&&hist.length>0&&<tr><td colSpan={9} style={{padding:"8px 12px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}>
+              <div style={{display:"flex",gap:4,alignItems:"flex-end",marginBottom:4}}>
+                {hist.map((h,j)=>{
+                  const maxV=Math.max(...hist.map(x=>x.value),1);
+                  const pct=Math.round(h.value/maxV*32);
+                  return (<div key={j} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+                    <div style={{width:16,background:K.gn,height:pct,borderRadius:"2px 2px 0 0",minHeight:2}}/>
+                    <div style={{fontSize:8,color:K.mt}}>${h.value}</div>
+                  </div>);
+                })}
+              </div>
+              <div style={{fontSize:9,color:K.mt}}>Last {hist.length} tracked values · Latest: ${hist[hist.length-1].value} on {hist[hist.length-1].date}</div>
+            </td></tr>}
+          </React.Fragment>);
+        })}</tbody>
       </table>
     </div>
   </div>
+  <PromoAlertPrefs/>
   <Help entries={[
     ["Why track recurring promos","Welcome bonuses are one-time. Recurring promos are the engine of long-term profit. A serious matched bettor extracts $150-450/mo just from daily boosts across 5-6 books."],
     ["How to use this","Every morning, open each sportsbook app and check for available boosts. Cross-reference this calendar so you know what to look for. Use the Profit Boost converter to calculate each one."],
@@ -2664,7 +3056,7 @@ const PricingPage = () => {
             <span style={{fontSize:12,color:K.mt}}>{plan.period}</span>
           </div>
           {plan.savings&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginBottom:16}}>{plan.savings}</div>}
-          <button onClick={()=>handleUpgrade(plan.id)} disabled={upgrading} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12}}>
+          <button onClick={()=>handleUpgrade(plan)} disabled={upgrading} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12}}>
             {upgrading?"Processing…":"Upgrade Now"}
           </button>
         </div>
@@ -2776,89 +3168,131 @@ const TeamAccounts = () => {
 };
 
 // ═══ DAILY DASHBOARD ═══
-const DailyDashboard = () => {
-  const { appData: data } = React.useContext(AppDataCtx);
+const DailyDashboard = ({ navigate: navigateProp }) => {
+  const navigateHook = useNavigate();
+  const navigate = navigateProp || navigateHook;
+  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
+  // Streak & Consistency tracking
+  const [streakCount, setStreakCount] = useState(0);
+  const [consistencyScore, setConsistencyScore] = useState(0);
+  useEffect(()=>{
+    try {
+      const key='pg_login_dates';
+      const arr=JSON.parse(localStorage.getItem(key)||'[]');
+      if(!arr.includes(todayStr)){ arr.push(todayStr); localStorage.setItem(key,JSON.stringify(arr)); }
+      const sorted=[...new Set(arr)].sort();
+      let streak=0;
+      const d=new Date(todayStr);
+      for(let i=0;i<365;i++){
+        const ds=new Date(d); ds.setDate(d.getDate()-i);
+        const s=ds.toISOString().split('T')[0];
+        if(sorted.includes(s)) streak++;
+        else break;
+      }
+      setStreakCount(streak);
+      if(sorted.length>=1){
+        const first=new Date(sorted[0]);
+        const diffDays=Math.max(1,Math.round((new Date(todayStr)-first)/(1000*60*60*24))+1);
+        setConsistencyScore(Math.min(100,Math.round(sorted.length/diffDays*100)));
+      }
+    } catch(e){}
+  },[todayStr]);
   const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const todayDay = dayNames[today.getDay()];
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-  const todayPromos = PROMO_SCHED.filter(p => p.day === "Daily" || p.day === todayDay || p.day === "Weekend" && (today.getDay()===0||today.getDay()===6));
-  const openBets = (data.bets||[]).filter(b=>b.status==="open");
+  const bets = data.bets || [];
+  const ledger = data.ledger || [];
+  const done = data.done || {};
+  const expiry = data.bookExpiry || {};
+  const totalProfit = ledger.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  const openBets = bets.filter(b=>b.status==='open');
   const in3Days = new Date(Date.now()+3*24*60*60*1000).toISOString().split('T')[0];
-  const expiring = Object.entries(data.bookExpiry||{}).filter(([n,d])=>d&&d>=todayStr&&d<=in3Days&&!data.done?.[n]);
+  const expiring = BOOKS.filter(b=>expiry[b.name]&&!done[b.name]&&expiry[b.name]<=in3Days&&expiry[b.name]>=todayStr);
+  const todayPromos = PROMO_SCHED.filter(p => p.day === "Daily" || p.day === todayDay || (p.day === "Weekend" && (today.getDay()===0||today.getDay()===6)));
+  const booksComplete = Object.values(done).filter(Boolean).length;
+  const potentialLeft = BOOKS.filter(b=>!done[b.name]).reduce((s,b)=>s+b.bonus*0.7,0);
   const thisMonth = today.toISOString().slice(0,7);
-  const monthProfit = (data.ledger||[]).filter(e=>e.date?.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  const totalProfit = (data.ledger||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  const monthProfit = ledger.filter(e=>e.date?.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
 
   return (
     <div>
-      <div style={S.card}>
-        <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:4}}>
-          Good {today.getHours()<12?"morning":today.getHours()<17?"afternoon":"evening"}
-        </div>
-        <div style={{fontSize:11,color:K.mt,marginBottom:16}}>
-          {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} · Here&apos;s your daily promo briefing
-        </div>
-        <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:20}}>
-          <div style={{padding:"12px 16px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,flex:1,minWidth:120}}>
-            <div style={{fontSize:9,color:K.mt,marginBottom:4}}>THIS MONTH</div>
-            <div style={S.big(monthProfit>=0?K.gn:K.rd)}>${f(monthProfit)}</div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8,marginBottom:8}}>
+        <div>
+          <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:2}}>
+            Good {today.getHours()<12?"morning":today.getHours()<17?"afternoon":"evening"}
           </div>
-          <div style={{padding:"12px 16px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,flex:1,minWidth:120}}>
-            <div style={{fontSize:9,color:K.mt,marginBottom:4}}>ALL TIME</div>
-            <div style={S.big(totalProfit>=0?K.gn:K.rd)}>${f(totalProfit)}</div>
-          </div>
-          <div style={{padding:"12px 16px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,flex:1,minWidth:120}}>
-            <div style={{fontSize:9,color:K.mt,marginBottom:4}}>OPEN BETS</div>
-            <div style={S.big(K.yl)}>{openBets.length}</div>
-          </div>
-          <div style={{padding:"12px 16px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,flex:1,minWidth:120}}>
-            <div style={{fontSize:9,color:K.mt,marginBottom:4}}>TODAY&apos;S PROMOS</div>
-            <div style={S.big(K.ac)}>{todayPromos.length}</div>
+          <div style={{fontSize:11,color:K.mt}}>
+            {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} · Here&apos;s your daily promo briefing
           </div>
         </div>
-        {expiring.length>0&&(
-          <div style={{...S.note(K.yl),marginBottom:14}}>
-            ⚠ Expiring soon: {expiring.map(([n,d])=>`${n} (${d})`).join(", ")}
-          </div>
-        )}
-        {todayPromos.length>0&&(
-          <div style={{marginBottom:16}}>
-            <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today&apos;s Promos — {todayDay}</div>
-            <div style={{display:"flex",flexDirection:"column",gap:6}}>
-              {todayPromos.slice(0,6).map((p,i)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
-                  <div>
-                    <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{p.book}</span>
-                    <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
-                  </div>
-                  <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{fontSize:11,fontWeight:600,color:K.gn}}>{p.value}</span>
-                    <span style={S.tag((p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)||K.ac)}>{p.grade||"B"}</span>
-                  </div>
+        <DailyBriefingBtn openBets={openBets} todayPromos={todayPromos}/>
+      </div>
+      <StateLegalAlert userState={data.userState}/>
+      <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
+        <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>THIS MONTH</div>
+          <div style={S.big(monthProfit>=0?K.gn:K.rd)}>${f(monthProfit)}</div>
+        </div>
+        <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>ALL TIME</div>
+          <div style={S.big(totalProfit>=0?K.gn:K.rd)}>${f(totalProfit)}</div>
+        </div>
+        <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>OPEN BETS</div>
+          <div style={S.big(openBets.length>0?K.yl:K.dm)}>{openBets.length}</div>
+        </div>
+        <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>BOOKS DONE</div>
+          <div style={S.big(K.ac)}>{booksComplete}/{BOOKS.length}</div>
+        </div>
+        <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>STREAK</div>
+          <div style={S.big(streakCount>=7?K.gn:streakCount>=3?K.yl:K.dm)}>{streakCount}</div>
+          <div style={{fontSize:9,color:K.mt}}>days</div>
+        </div>
+        <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>CONSISTENCY</div>
+          <div style={S.big(consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm)}>{consistencyScore}%</div>
+          <div style={{height:3,background:K.s3,borderRadius:2,marginTop:4}}><div style={{height:3,borderRadius:2,background:consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm,width:`${consistencyScore}%`}}/></div>
+        </div>
+        <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>VALUE LEFT</div>
+          <div style={S.big(K.yl)}>~${f(potentialLeft,0)}</div>
+        </div>
+      </div>
+      <ProfitGoalTracker totalProfit={totalProfit}/>
+      <DailyRoutinePanel openBetsCount={openBets.length} expiringCount={expiring.length}/>
+      {expiring.length>0&&(
+        <div style={{...S.note(K.yl),marginBottom:12}}>
+          ⚠ Expiring soon: {expiring.map(b=>`${b.name} (${expiry[b.name]})`).join(", ")}
+        </div>
+      )}
+      {todayPromos.length>0&&(
+        <div style={{...S.card,marginBottom:12}}>
+          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today&apos;s Promos — {todayDay}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:6}}>
+            {todayPromos.slice(0,6).map((p,i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
+                <div>
+                  <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{p.book}</span>
+                  <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
                 </div>
-              ))}
-              {todayPromos.length>6&&<div style={{fontSize:11,color:K.mt,textAlign:"center"}}>+{todayPromos.length-6} more in Promo Calendar</div>}
-            </div>
-          </div>
-        )}
-        {openBets.length>0&&(
-          <div style={{marginBottom:12}}>
-            <div style={{fontSize:11,fontWeight:700,color:K.yl,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Open Bets</div>
-            <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-              {openBets.slice(0,3).map(b=>(
-                <div key={b.id} style={{padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd2}`,flex:1,minWidth:150}}>
-                  <div style={{fontSize:10,color:K.mt,marginBottom:2}}>{b.date} · {b.book}</div>
-                  <div style={{fontSize:12,fontWeight:600,color:K.pp}}>{b.odds}</div>
-                  <div style={{fontSize:11,color:K.dm}}>${b.stake} to win ${b.toWin||"?"}</div>
+                <div style={{display:"flex",alignItems:"center",gap:8}}>
+                  <span style={{fontSize:11,fontWeight:600,color:K.gn}}>{p.value}</span>
+                  <span style={S.tag((p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)||K.ac)}>{p.grade||"B"}</span>
                 </div>
-              ))}
-              {openBets.length>3&&<div style={{fontSize:11,color:K.mt,alignSelf:"center"}}>+{openBets.length-3} more</div>}
-            </div>
+              </div>
+            ))}
+            {todayPromos.length>6&&<div style={{fontSize:11,color:K.mt,textAlign:"center"}}>+{todayPromos.length-6} more in Promo Calendar</div>}
           </div>
-        )}
+        </div>
+      )}
+      <OpenExposurePanel bets={bets}/>
+      <TopToolsPanel navigate={navigate}/>
+      <CopyMySetup appData={data} syncAppData={syncAppData}/>
+      <div style={{...S.card}}>
         <div style={{fontSize:11,fontWeight:700,color:K.dm,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Quick Actions</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
           {[
@@ -2877,6 +3311,848 @@ const DailyDashboard = () => {
   );
 };
 
+// ═══ DEPOSIT OPTIMIZER ═══
+const DepositOptimizer = () => {
+  const [bankroll, setBankroll] = useState("3000");
+  const [userState, setUserState] = useState(() => { try { return localStorage.getItem('pg_user_state')||''; } catch { return ''; } });
+  const availBooks = useMemo(()=>{
+    if(!userState) return BOOKS;
+    return BOOKS.filter(b=>!US_BOOK_STATES[b.name]||US_BOOK_STATES[b.name].includes(userState));
+  },[userState]);
+  const ranked = useMemo(()=>{
+    return availBooks.map(b=>({...b,ev:b.bonus*0.70})).sort((a,b)=>b.ev-a.ev);
+  },[availBooks]);
+  const br = parseFloat(bankroll)||0;
+  let running=0;
+  const tiers = ranked.map(b=>{ running+=b.bonus||0; return {...b,cumFund:running}; });
+  const totalEV = ranked.reduce((s,b)=>s+b.ev,0);
+  return (<div><div style={S.card}><Tl t="Deposit Optimizer" badge="BANKROLL PLANNER" bc={K.gn} shareable/>
+    <div style={S.row}>
+      <div style={S.col}><label style={S.label}>Your Bankroll</label><input style={S.input} value={bankroll} onChange={e=>setBankroll(e.target.value)} placeholder="3000"/></div>
+      <div style={S.col}><label style={S.label}>Your State</label><select style={S.input} value={userState} onChange={e=>{setUserState(e.target.value);try{localStorage.setItem('pg_user_state',e.target.value);}catch{}}}>
+        <option value="">All States</option>
+        {US_STATES.map(s=><option key={s} value={s}>{s}</option>)}
+      </select></div>
+    </div>
+    <div style={{...S.res(true),marginBottom:12}}>
+      <div style={{display:"flex",gap:20,marginBottom:12,flexWrap:"wrap"}}>
+        <div><div style={{fontSize:9,color:K.mt}}>BOOKS AVAILABLE</div><div style={S.big(K.ac)}>{ranked.length}</div></div>
+        <div><div style={{fontSize:9,color:K.mt}}>TOTAL EXTRACTABLE</div><div style={S.big(K.gn)}>~${Math.round(totalEV).toLocaleString()}</div></div>
+      </div>
+    </div>
+    {ranked.map((b,i)=>{
+      const tier=i<3?"top":i<6?"mid":"low";
+      const tc=tier==="top"?K.gn:tier==="mid"?K.yl:K.mt;
+      const canFund=br>=(b.bonus||0);
+      return (<div key={b.name} style={{padding:"10px 14px",background:K.s2,borderRadius:6,marginBottom:6,border:`1px solid ${canFund?tc+'40':K.bd}`,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+        <div>
+          <span style={{fontSize:13,fontWeight:700,color:K.tx,marginRight:8}}>#{i+1}</span>
+          <span style={{fontSize:12,fontWeight:600,color:tc}}>{b.name}</span>
+          <span style={{fontSize:11,color:K.mt,marginLeft:8}}>Fund ${b.bonus}+ </span>
+        </div>
+        <div style={{textAlign:"right"}}>
+          <div style={{fontSize:12,fontWeight:700,color:tc}}>Expected: ~${Math.round(b.ev)}</div>
+          <div style={{fontSize:10,color:K.mt}}>70% of ${b.bonus} bonus</div>
+        </div>
+      </div>);
+    })}
+    <Nt c={K.ac}>Rankings based on estimated 70% bonus conversion rate. Available books filtered by your state.</Nt>
+  </div>
+  <Help entries={[
+    ["How to use","Rank these books by expected value. Fund the highest-EV books first with your available bankroll. Each book needs roughly the bonus amount as a float."],
+    ["70% conversion rate","A conservative estimate for how much of a bonus bet you'll extract as real cash. Better lines = higher conversion."],
+  ]}/></div>);
+};
+
+// ═══ HEDGE VALIDATOR ═══
+const HedgeValidator = () => {
+  const [mem,setMem]=useCalcMemory('hedge-validator',{o1:"+300",s1:"100",o2:"-350",s2:""});
+  const {o1,s1,o2,s2}=mem;
+  const setO1=v=>setMem('o1',v),setS1=v=>setMem('s1',v),setO2=v=>setMem('o2',v),setS2=v=>setMem('s2',v);
+  const d1=toD(o1), d2=toD(o2);
+  const ip1=d1>1?1/d1:0, ip2=d2>1?1/d2:0;
+  const ipSum=(ip1+ip2)*100;
+  const s1n=parseFloat(s1)||0;
+  const s2n = s2 ? (parseFloat(s2)||0) : (d2>1&&d1>1&&s1n ? s1n*(d1-1)/d2 : 0);
+  const bothPos = d1>1&&d1<2&&d2>1&&d2<2;
+  const bothNeg = d1>=2&&d2>=2;
+  const pBW = s1n>0&&d1>1 ? s1n*(d1-1)-s2n : null;
+  const pHW = s2n>0&&d2>1 ? s2n*(d2-1)-s1n : null;
+  const gProfit = pBW!==null&&pHW!==null ? Math.min(pBW,pHW) : null;
+  const isValidHedge = gProfit!==null&&gProfit>-1;
+  return (<div><div style={S.card}><Tl t="Hedge Sanity Validator" badge="VALIDATE" bc={K.ac} shareable/>
+    <div style={S.row}><In l="Side A Odds" v={o1} set={setO1} ph="+300"/><In l="Side A Stake" v={s1} set={setS1} pre="$" ph="100"/></div>
+    <div style={S.row}><In l="Side B Odds" v={o2} set={setO2} ph="-350"/><In l="Side B Stake (blank=auto)" v={s2} set={setS2} pre="$" ph="auto"/></div>
+    {d1>1&&d2>1&&<div style={{marginTop:12}}>
+      {!s2&&s2n>0&&<div style={{...S.note(K.ac),marginBottom:8}}>Auto-computed Side B stake: ${f(s2n)} (to guarantee equal profit on both outcomes)</div>}
+      {bothPos&&<div style={{...S.note(K.rd),marginBottom:8}}>Both sides are favorites — this may not be a valid hedge. Verify you are betting opposite outcomes.</div>}
+      {bothNeg&&<div style={{...S.note(K.yl),marginBottom:8}}>Both sides are dogs — verify you are betting opposite outcomes.</div>}
+      <div style={{...S.res(isValidHedge),marginBottom:8}}>
+        <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Odds Relationship</div>
+        <div style={{fontSize:12,fontWeight:600,color:ipSum>100&&ipSum<110?K.gn:ipSum>=110&&ipSum<=120?K.yl:ipSum<100?K.gn:K.rd}}>
+          {ipSum<100?"Possible arb opportunity!":ipSum<110?"Plausible market":ipSum<120?"High vig market":"Unusual — double check these lines"}
+          {" "}({f(ipSum,1)}% combined implied)
+        </div>
+        {gProfit!==null&&<div style={{marginTop:8}}>
+          <span style={S.big(gProfit>=0?K.gn:K.rd)}>{gProfit>=0?"+":""}${f(gProfit)}</span>
+          <span style={{fontSize:12,color:K.dm,marginLeft:8}}>{gProfit>=0?"guaranteed profit":"loss if either outcome"}</span>
+        </div>}
+        {pBW!==null&&<RR l="If Side A wins" v={`${pBW>=0?"+":""}$${f(pBW)}`} c={pBW>=0?K.gn:K.rd}/>}
+        {pHW!==null&&<RR l="If Side B wins" v={`${pHW>=0?"+":""}$${f(pHW)}`} c={pHW>=0?K.gn:K.rd}/>}
+        {gProfit!==null&&gProfit<-0.5&&<Nt c={K.rd}>INVALID HEDGE — you will lose ${f(Math.abs(gProfit))} on the worse outcome. Adjust your stakes.</Nt>}
+        {gProfit!==null&&gProfit>=0&&<Nt c={K.gn}>Valid hedge. Profit guaranteed regardless of outcome.</Nt>}
+      </div>
+    </div>}
+  </div>
+  <Help entries={[
+    ["What is a hedge","A bet on the opposite outcome at a different sportsbook to guarantee profit regardless of who wins."],
+    ["Common mistake 1","Hedging at the SAME sportsbook — books may void both bets if they detect same-game hedging."],
+    ["Common mistake 2","Both sides at positive odds does NOT always mean it is a valid hedge — it depends on whether they cover opposite outcomes."],
+    ["Common mistake 3","Wrong stake amounts — use Side B blank auto-compute to get the exactly correct hedge stake."],
+  ]}/></div>);
+};
+
+// ═══ PROMO GUARANTEE ═══
+const PromoGuarantee = () => {
+  const [promoType, setPromoType] = useState("bonus-bet");
+  const [promoSize, setPromoSize] = useState("200");
+  const [userState2, setUserState2] = useState(() => { try { return localStorage.getItem('pg_user_state')||''; } catch { return ''; } });
+  const promoTypes = [
+    {id:"bonus-bet",label:"Bonus Bet",rate:[0.70,0.75],conf:"HIGH",steps:3,calc:"bonus-bet"},
+    {id:"first-bet-insurance",label:"First Bet Insurance",rate:[0.65,0.70],conf:"HIGH",steps:4,calc:"first-bet"},
+    {id:"profit-boost-50pct",label:"Profit Boost (50%)",rate:[0.40,0.55],conf:"MEDIUM",steps:2,calc:"profit-boost"},
+    {id:"reload-match-20pct",label:"Reload Match (20%)",rate:[0.55,0.65],confKey:true,steps:2,calc:"rollover"},
+    {id:"deposit-match-100pct",label:"Deposit Match (100%)",rate:[0.50,0.60],conf:"MEDIUM",steps:3,calc:"deposit-match"},
+  ];
+  const pt = promoTypes.find(p=>p.id===promoType)||promoTypes[0];
+  const sz=parseFloat(promoSize)||0;
+  const loEst = promoType==="reload-match-20pct" ? sz*0.20*0.60 : sz*pt.rate[0];
+  const hiEst = promoType==="reload-match-20pct" ? sz*0.20*0.65 : sz*pt.rate[1];
+  const relatedPromos = PROMO_SCHED.filter(p=>{
+    if(!userState2||US_BOOK_STATES[p.book]?.includes(userState2)||!US_BOOK_STATES[p.book]) return true;
+    return false;
+  }).filter(p=>{
+    if(promoType==="bonus-bet"&&(p.promo.toLowerCase().includes("bonus")&&p.promo.toLowerCase().includes("bet"))) return true;
+    if(promoType==="profit-boost-50pct"&&p.promo.toLowerCase().includes("boost")) return true;
+    if(promoType==="reload-match-20pct"&&p.promo.toLowerCase().includes("reload")) return true;
+    return false;
+  }).slice(0,4);
+  const confColor={HIGH:K.gn,MEDIUM:K.yl,LOW:K.rd};
+  return (<div><div style={S.card}><Tl t="Promo Profit Guarantee" badge="CONVERSION EST." bc={K.gn} shareable/>
+    <div style={S.row}>
+      <div style={S.col}><label style={S.label}>Promo Type</label><select style={S.input} value={promoType} onChange={e=>setPromoType(e.target.value)}>
+        {promoTypes.map(p=><option key={p.id} value={p.id}>{p.label}</option>)}
+      </select></div>
+      <div style={S.col}><label style={S.label}>Promo Size</label><input style={S.input} value={promoSize} onChange={e=>setPromoSize(e.target.value)} placeholder="200"/></div>
+      <div style={S.col}><label style={S.label}>Your State</label><select style={S.input} value={userState2} onChange={e=>{setUserState2(e.target.value);try{localStorage.setItem('pg_user_state',e.target.value);}catch{}}}>
+        <option value="">All States</option>
+        {US_STATES.map(s=><option key={s} value={s}>{s}</option>)}
+      </select></div>
+    </div>
+    {sz>0&&<div style={S.res(true)}>
+      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}>
+        <span style={S.big(K.gn)}>${f(loEst)} – ${f(hiEst)}</span>
+      </div>
+      <div style={{fontSize:11,color:K.dm,marginBottom:8}}>Estimated guaranteed profit range</div>
+      <RR l="Conversion rate range" v={`${Math.round(pt.rate[0]*100)}% – ${Math.round(pt.rate[1]*100)}%`} c={K.yl}/>
+      <RR l="Confidence" v={pt.conf||"MEDIUM"} c={confColor[pt.conf||"MEDIUM"]} b/>
+      <RR l="Steps to convert" v={`${pt.steps} steps`} c={K.ac}/>
+      <Nt c={K.ac}>→ Use the {pt.label} calculator to run the exact math for your odds.</Nt>
+      {relatedPromos.length>0&&<div style={{marginTop:8}}>
+        <div style={{fontSize:10,color:K.mt,marginBottom:4}}>Books with this promo type:</div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{relatedPromos.map(p=><span key={p.book+p.promo} style={S.tag(K.ac)}>{p.book}</span>)}</div>
+      </div>}
+    </div>}
+  </div>
+  <Help entries={[
+    ["Bonus Bet","A free bet credit — only the profit is returned. 70-75% conversion rate at ideal odds (+250 to +400)."],
+    ["First Bet Insurance","Your first real-cash bet is refunded as bonus bets if it loses. Convert those at 70%."],
+    ["Profit Boost","Percentage increase to your winnings. 40-55% of the boost value is extractable as guaranteed profit."],
+    ["Reload Match","Book matches 20% of your deposit as bonus funds. Factor in rollover requirements (~4.5% vig cost)."],
+  ]}/></div>);
+};
+
+// ═══ GUT CHECK ═══
+const GutCheck = () => {
+  const [mem,setMem]=useCalcMemory('gut-check',{o1:"+200",o2:"-220"});
+  const {o1,o2}=mem;
+  const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v);
+  const d1=toD(o1), d2=toD(o2);
+  const ip1=d1>1?1/d1:0, ip2=d2>1?1/d2:0;
+  const ipSum=(ip1+ip2)*100;
+  const isPlausible = d1>1&&d2>1;
+  const onePlus = (o1.startsWith('+')||toD(o1)>2)&&(o2.startsWith('-')||toD(o2)<2&&!o2.startsWith('+'));
+  const bothPlus = (o1.startsWith('+')||toD(o1)>2)&&(o2.startsWith('+')||toD(o2)>2);
+  const oppositeSides = !!(d1>1&&d2>1&&(onePlus||(!o1.startsWith('-')&&o2.startsWith('-'))));
+  const arb = isPlausible ? calcArb2(o1,o2,100) : null;
+  return (<div><div style={S.card}><Tl t="Gut Check Validator" badge="QUICK CHECK" bc={K.ac} shareable/>
+    <div style={S.row}><In l="Line 1 Odds" v={o1} set={setO1} ph="+200"/><In l="Line 2 Odds" v={o2} set={setO2} ph="-220"/></div>
+    {isPlausible&&<div style={S.res(ipSum<110)}>
+      <div style={{marginBottom:8}}>
+        <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Odds Relationship: </span>
+        <span style={{fontSize:12,fontWeight:700,color:oppositeSides?K.gn:bothPlus?K.yl:K.mt}}>
+          {oppositeSides?"VALID — opposite sides":bothPlus?"MAYBE — both sides show value":"Check manually"}
+        </span>
+      </div>
+      <RR l="Combined implied probability" v={`${f(ipSum,1)}%`} c={ipSum<100?K.gn:ipSum<110?K.gn:ipSum<120?K.yl:K.rd}/>
+      <div style={{marginBottom:8,fontSize:12,fontWeight:600,color:ipSum<100?K.gn:ipSum<110?K.gn:ipSum<120?K.yl:K.rd}}>
+        {ipSum<100?"Possible arb opportunity!":ipSum<110?"Plausible market":ipSum<120?"High vig market":"Unusual — double check these lines"}
+      </div>
+      {arb&&<>
+        <RR l="Hedge math check ($100 total)" v={arb.ok?`ARB: +$${arb.pr}`:"No arb"} c={arb.ok?K.gn:K.rd} b/>
+        {arb.ok&&<Nt c={K.gn}>These lines contain an arb! ROI: {arb.roi}%. Use the 2-Way Arb calculator for exact stakes.</Nt>}
+        {!arb.ok&&<Nt c={K.yl}>No arb. Best side to exploit: {toD(o1)>toD(o2)?"Line 1 ("+o1+")":"Line 2 ("+o2+")"}.</Nt>}
+      </>}
+    </div>}
+  </div>
+  <Help entries={[
+    ["Use this for","Quickly sanity-check any two lines before running full calculations. Catches same-side bets and obvious errors."],
+    ["What to look for","One + and one - usually means opposite sides. Two + odds can still be opposite sides if from different markets."],
+    ["Implied probability sum","Under 100% = arb. 100-110% = normal market. Over 120% = unusual, verify your lines."],
+  ]}/></div>);
+};
+
+// ═══ FREE BET ARB TRACKER ═══
+const FreeBetArbTracker = () => {
+  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const arbs = data.freeBetArbs || [];
+  const save = (a) => syncAppData({...data, freeBetArbs: a});
+  const toast = useToast();
+  const [form, setForm] = useState({date:new Date().toISOString().split('T')[0],bookA:'',bookB:'',promoType:'Bonus Bet',amount:'',hedgeAmt:'',profit:'',status:'open',notes:''});
+  const add = () => {
+    if(!form.amount) return;
+    save([{...form,id:Date.now()},...arbs]);
+    setForm(f=>({...f,amount:'',hedgeAmt:'',profit:'',notes:''}));
+    if(toast) toast('✓ Arb logged',K.gn);
+  };
+  const del = id => { const snap=[...arbs]; save(arbs.filter(a=>a.id!==id)); if(toast) toast('Deleted',K.rd,{label:'UNDO',fn:()=>save(snap)}); };
+  const totalProfit = arbs.reduce((s,a)=>s+(parseFloat(a.profit)||0),0);
+  const avgProfit = arbs.length ? totalProfit/arbs.length : 0;
+  const exportCSV = () => {
+    const headers=["Date","Book A","Book B","Promo Type","Amount","Hedge Amount","Profit","Status","Notes"];
+    const rows=arbs.map(a=>[a.date,a.bookA,a.bookB,a.promoType,a.amount,a.hedgeAmt,a.profit,a.status,a.notes||""]);
+    const csv=[headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+    downloadFile(csv, `promogrind-freebetarbs-${new Date().toISOString().split('T')[0]}.csv`, "text/csv");
+  };
+  return (<div style={S.card}><Tl t="Free Bet Arb Tracker" badge="TRACK" bc={K.pp}/>
+    <div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
+      <div><div style={{fontSize:10,color:K.mt}}>TOTAL ARBS</div><div style={S.big(K.ac)}>{arbs.length}</div></div>
+      <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(K.gn)}>${f(totalProfit)}</div></div>
+      <div><div style={{fontSize:10,color:K.mt}}>AVG PROFIT</div><div style={S.big(K.yl)}>${f(avgProfit)}</div></div>
+      {arbs.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600}}>↓ Export CSV</button>}
+    </div>
+    <div style={S.row}>
+      <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+      <div style={S.col}><label style={S.label}>Book A</label><input style={S.input} value={form.bookA} onChange={e=>setForm(f=>({...f,bookA:e.target.value}))} placeholder="DraftKings"/></div>
+      <div style={S.col}><label style={S.label}>Book B</label><input style={S.input} value={form.bookB} onChange={e=>setForm(f=>({...f,bookB:e.target.value}))} placeholder="FanDuel"/></div>
+    </div>
+    <div style={S.row}>
+      <div style={S.col}><label style={S.label}>Promo Type</label><select style={S.input} value={form.promoType} onChange={e=>setForm(f=>({...f,promoType:e.target.value}))}>
+        {["Bonus Bet","Same-Game Arb","Insurance","Boost"].map(t=><option key={t}>{t}</option>)}
+      </select></div>
+      <In l="Amount" v={form.amount} set={v=>setForm(f=>({...f,amount:v}))} pre="$"/>
+      <In l="Hedge Amt" v={form.hedgeAmt} set={v=>setForm(f=>({...f,hedgeAmt:v}))} pre="$"/>
+      <In l="Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$"/>
+    </div>
+    <div style={{...S.row,alignItems:"flex-end"}}>
+      <div style={S.col}><label style={S.label}>Status</label><select style={S.input} value={form.status} onChange={e=>setForm(f=>({...f,status:e.target.value}))}>
+        {["open","won","lost"].map(s=><option key={s}>{s}</option>)}
+      </select></div>
+      <div style={{flex:2,minWidth:120}}><label style={S.label}>Notes</label><input style={S.input} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="optional notes"/></div>
+      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+    </div>
+    {arbs.length>0&&<div style={{overflowX:"auto",marginTop:12}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+        <thead><tr>{["Date","Book A","Book B","Type","Amount","Hedge","Profit","Status",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        <tbody>{arbs.map(a=>(
+          <tr key={a.id}>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.date}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{a.bookA}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{a.bookB}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(K.pp)}>{a.promoType}</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.amount?`$${a.amount}`:"—"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.hedgeAmt?`$${a.hedgeAmt}`:"—"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(a.profit)>=0?K.gn:K.rd,fontWeight:600}}>{a.profit?`${parseFloat(a.profit)>=0?"+":""}$${a.profit}`:"—"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(a.status==="won"?K.gn:a.status==="lost"?K.rd:K.yl)}>{a.status}</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(a.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>✕</span></td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>}
+    {arbs.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
+      <div style={{fontSize:32,marginBottom:8}}>🎯</div>
+      <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No arb plays tracked yet</div>
+      <div style={{fontSize:11,color:K.mt}}>Log your free bet arb plays above to track performance.</div>
+    </div>}
+    <Help entries={[
+      ["Free Bet Arb","Using a free bet or bonus bet on one side of a market, and a real cash bet on the other side at a different book to guarantee profit."],
+      ["Same-Game Arb","Two bets within the same game at different books where combined implied probability is under 100%."],
+    ]}/>
+  </div>);
+};
+
+// ═══ v9.0 NEW COMPONENTS ═══
+
+// ═══ PROMO STACKING CALCULATOR ═══
+const PromoStacking = () => {
+  const [mem, setMem] = useCalcMemory('promo-stacking', {stake:"100",odds:"+200",boost:"50",boostMax:"250",insPct:"100",insMax:"100",conv:"70"});
+  const {stake,odds,boost,boostMax,insPct,insMax,conv} = mem;
+  const set = k => v => setMem(k,v);
+  const r = useMemo(()=>{
+    const s=parseFloat(stake), d=toD(odds), bp=parseFloat(boost)/100, bm=parseFloat(boostMax)||Infinity;
+    const ip=parseFloat(insPct)/100, im=parseFloat(insMax)||Infinity, cv=(parseFloat(conv)||70)/100;
+    if(!s||d<=1) return null;
+    const normalProfit=s*(d-1);
+    const bonusAdd=Math.min(normalProfit*bp, bm);
+    const boostedPayout=s+normalProfit+bonusAdd;
+    const netWin=boostedPayout-s;
+    const insAmt=Math.min(s*ip, im);
+    const insVal=insAmt*cv;
+    const netLoss=s-insVal;
+    const ev=((1/d)*netWin)-((1-1/d)*netLoss);
+    return {netWin:f(netWin), netLoss:f(netLoss), bonusAdd:f(bonusAdd), ev:f(ev), ok:ev>0};
+  },[stake,odds,boost,boostMax,insPct,insMax,conv]);
+  return (<div><div style={S.card}><Tl t="Promo Stacking Calculator" badge="BOOST + INSURANCE" bc={K.pp} shareable/>
+    <div style={S.row}><In l="Stake" v={stake} set={set('stake')} pre="$" ph="100"/><In l="Bet Odds" v={odds} set={set('odds')} ph="+200"/></div>
+    <div style={S.row}><In l="Boost %" v={boost} set={set('boost')} ph="50"/><In l="Boost Max $" v={boostMax} set={set('boostMax')} pre="$" ph="250"/></div>
+    <div style={S.row}><In l="Insurance %" v={insPct} set={set('insPct')} ph="100"/><In l="Insurance Max $" v={insMax} set={set('insMax')} pre="$" ph="100"/><In l="Conv Rate %" v={conv} set={set('conv')} ph="70"/></div>
+    {r&&<div style={S.res(r.ok)}>
+      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?"+":""}${r.ev}</span><span style={{fontSize:12,color:K.dm}}>expected value</span></div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
+        <div style={{padding:"10px 12px",background:`${K.gn}10`,borderRadius:6,border:`1px solid ${K.gn}30`}}>
+          <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",marginBottom:4}}>If Win</div>
+          <div style={{fontSize:18,fontWeight:700,color:K.gn}}>+${r.netWin}</div>
+          <div style={{fontSize:10,color:K.mt}}>incl. +${r.bonusAdd} boost</div>
+        </div>
+        <div style={{padding:"10px 12px",background:`${K.rd}10`,borderRadius:6,border:`1px solid ${K.rd}30`}}>
+          <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",marginBottom:4}}>If Lose</div>
+          <div style={{fontSize:18,fontWeight:700,color:K.rd}}>-${r.netLoss}</div>
+          <div style={{fontSize:10,color:K.mt}}>after insurance value</div>
+        </div>
+      </div>
+      <Nt c={r.ok?K.gn:K.yl}>{r.ok?"Positive EV after stacking boost and insurance.":"Check boost/insurance terms — may not be stackable at all books."}</Nt>
+    </div>}
+  </div>
+  <Help entries={[
+    ["Promo Stacking","Combining a profit boost with an insurance/refund on the same bet for maximum value extraction."],
+    ["Boost Value","The extra profit added to your winnings above normal. Capped by Boost Max."],
+    ["Insurance","If your bet loses, you get a portion back as bonus bets. Value = Insurance Amount × Conversion Rate."],
+    ["EV","Expected value weighs the if-win and if-lose scenarios by their probabilities."],
+  ]}/></div>);
+};
+
+// ═══ PROMO TRADE JOURNAL ═══
+const PromoJournal = () => {
+  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const journal = data.journal || [];
+  const [form, setForm] = useState({date:new Date().toISOString().split('T')[0],book:"DraftKings",type:"Bonus Bet",notes:"",profit:"",tags:""});
+  const [filterBook, setFilterBook] = useState("All");
+  const [filterType, setFilterType] = useState("All");
+  const toast = useToast();
+  const save = (j) => syncAppData({...data, journal:j});
+  const add = () => {
+    if(!form.profit) return;
+    const entry={...form,id:Date.now(),tags:form.tags.split(',').map(t=>t.trim()).filter(Boolean)};
+    save([entry,...journal]);
+    setForm(f=>({...f,notes:"",profit:"",tags:""}));
+    if(toast) toast('✓ Journal entry added',K.gn);
+  };
+  const del = id => { const snap=[...journal]; save(journal.filter(e=>e.id!==id)); if(toast) toast('Deleted',K.rd,{label:'UNDO',fn:()=>save(snap)}); };
+  const TYPES = ["Bonus Bet","Profit Boost","First Bet","Arb","EV Bet","Other"];
+  const filtered = journal.filter(e=>(filterBook==="All"||e.book===filterBook)&&(filterType==="All"||e.type===filterType));
+  const sorted = [...filtered].sort((a,b)=>b.date.localeCompare(a.date));
+  return (<div style={S.card}><Tl t="Promo Trade Journal" badge="TRACK" bc={K.ac}/>
+    <div style={S.row}>
+      <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+      <div style={{...S.col,minWidth:140}}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
+      <div style={{...S.col,minWidth:140}}><label style={S.label}>Type</label><select style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
+    </div>
+    <div style={S.row}>
+      <In l="Net Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$" ph="50"/>
+      <In l="Tags (comma-sep)" v={form.tags} set={v=>setForm(f=>({...f,tags:v}))} ph="arb,boost"/>
+    </div>
+    <div style={{marginBottom:12}}><label style={S.label}>Notes</label><textarea style={{...S.input,height:64,resize:"vertical"}} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What promo, outcome, lessons learned…"/></div>
+    <button onClick={add} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,marginBottom:16}}>+ Add Entry</button>
+    <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
+      <span style={{fontSize:10,color:K.mt}}>Filter:</span>
+      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
+        <option value="All">All Books</option>
+        {[...new Set(journal.map(e=>e.book))].sort().map(b=><option key={b}>{b}</option>)}
+      </select>
+      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterType} onChange={e=>setFilterType(e.target.value)}>
+        <option value="All">All Types</option>
+        {TYPES.map(t=><option key={t}>{t}</option>)}
+      </select>
+    </div>
+    {sorted.length===0&&<div style={{textAlign:"center",padding:"24px",color:K.mt,fontSize:12}}>No journal entries yet. Log your first promo above.</div>}
+    {sorted.map(e=>(
+      <div key={e.id} style={{...S.card,background:K.s2,marginBottom:8,padding:"12px 14px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
+          <div style={{flex:1}}>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4,flexWrap:"wrap"}}>
+              <span style={{fontSize:12,fontWeight:700,color:K.tx}}>{e.book}</span>
+              <span style={S.tag(K.ac)}>{e.type}</span>
+              <span style={{fontSize:11,color:K.mt}}>{e.date}</span>
+            </div>
+            <div style={{fontSize:13,fontWeight:700,color:parseFloat(e.profit)>=0?K.gn:K.rd,marginBottom:4}}>{parseFloat(e.profit)>=0?"+":""}${e.profit}</div>
+            {e.notes&&<div style={{fontSize:11,color:K.dm,marginBottom:4,maxWidth:400,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{e.notes}</div>}
+            {e.tags&&e.tags.length>0&&<div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{e.tags.map((t,i)=><span key={i} style={S.tag(K.pp)}>{t}</span>)}</div>}
+          </div>
+          <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:11,flexShrink:0}}>✕</span>
+        </div>
+      </div>
+    ))}
+  </div>);
+};
+
+// ═══ ODDS COMPARISON TABLE ═══
+const OddsComparisonTable = () => {
+  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const rows = data.oddsCompare || [{event:"",odds:{}}];
+  const COMPARE_BOOKS = ["DraftKings","FanDuel","BetMGM","Caesars","bet365","ESPN BET","Fanatics","BetRivers"];
+  const updateRow = (i, field, val) => {
+    const next = rows.map((r,j)=>j===i?{...r,[field]:val}:r);
+    syncAppData({...data, oddsCompare:next});
+  };
+  const updateOdds = (i, book, val) => {
+    const next = rows.map((r,j)=>j===i?{...r,odds:{...r.odds,[book]:val}}:r);
+    syncAppData({...data, oddsCompare:next});
+  };
+  const addRow = () => syncAppData({...data, oddsCompare:[...rows,{event:"",odds:{}}]});
+  const removeRow = i => syncAppData({...data, oddsCompare:rows.filter((_,j)=>j!==i)});
+  return (<div style={S.card}><Tl t="Odds Comparison Table" badge="LINE SHOPPING" bc={K.gn}/>
+    <div style={{overflowX:"auto",marginBottom:12}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:700}}>
+        <thead><tr>
+          <th style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,textAlign:"left",fontSize:10,textTransform:"uppercase",minWidth:140}}>Event</th>
+          {COMPARE_BOOKS.map(b=><th key={b} style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",minWidth:90}}>{b}</th>)}
+          <th style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>Best</th>
+          <th style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10}}></th>
+        </tr></thead>
+        <tbody>{rows.map((row,i)=>{
+          const validEntries = COMPARE_BOOKS.map(b=>({book:b,val:row.odds[b]||""})).filter(e=>e.val&&toD(e.val)>1);
+          const bestBook = validEntries.length ? validEntries.reduce((best,e)=>toD(e.val)>toD(best.val)?e:best) : null;
+          const worstD = validEntries.length ? Math.min(...validEntries.map(e=>toD(e.val))) : 0;
+          const spread = bestBook && worstD>1 ? f((toD(bestBook.val)-worstD)*100/(worstD),1) : null;
+          return (<tr key={i}>
+            <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`}}>
+              <input style={{...S.input,padding:"4px 6px",fontSize:11}} value={row.event} onChange={e=>updateRow(i,'event',e.target.value)} placeholder="e.g. Chiefs ML"/>
+            </td>
+            {COMPARE_BOOKS.map(b=>{
+              const isB = bestBook?.book===b && validEntries.length>1;
+              const d=toD(row.odds[b]||"");
+              const ip=d>1?f(1/d*100,1):null;
+              return (<td key={b} style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,background:isB?`${K.gn}10`:"transparent"}}>
+                <input style={{...S.input,padding:"3px 6px",fontSize:11,borderColor:isB?K.gn:undefined,width:76}} value={row.odds[b]||""} onChange={e=>updateOdds(i,b,e.target.value)} placeholder="-110"/>
+                {ip&&<div style={{fontSize:9,color:isB?K.gn:K.mt,marginTop:2,textAlign:"center"}}>{ip}%</div>}
+              </td>);
+            })}
+            <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:700,fontSize:12}}>
+              {bestBook&&<div>{bestBook.val}<div style={{fontSize:9,color:K.mt}}>{bestBook.book}</div></div>}
+              {spread&&<div style={{fontSize:9,color:K.yl}}>+{spread}¢ vs worst</div>}
+            </td>
+            <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`}}>
+              {rows.length>1&&<span onClick={()=>removeRow(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>✕</span>}
+            </td>
+          </tr>);
+        })}</tbody>
+      </table>
+    </div>
+    <button onClick={addRow} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.gn,fontSize:11,cursor:"pointer",fontFamily:font}}>+ Add Event</button>
+    <Nt c={K.ac}>Green cells = best odds in that row. Always bet where the odds are highest for your side. Even small differences compound into hundreds of dollars over time.</Nt>
+  </div>);
+};
+
+// ═══ PROMO ARB FINDER ═══
+const KNOWN_STACKABLE = [
+  {book1:"DraftKings",book2:"FanDuel",desc:"DK Stepped-Up Parlay + FD SGP Insurance on same slate",value:"Stack same-slate SGP for double coverage"},
+  {book1:"Caesars",book2:"BetMGM",desc:"Caesars 100% Profit Boost + BetMGM Safety Net on same game",value:"Hedge both outcomes with bonus protection"},
+  {book1:"DraftKings",book2:"BetRivers",desc:"DK Profit Boost + BetRivers 2nd Chance Parlay",value:"Boost + refund on same event"},
+  {book1:"FanDuel",book2:"ESPN BET",desc:"FD No Sweat SGP + ESPN BET Profit Boost on same game",value:"Insurance + boosted payout combo"},
+];
+
+const PromoArbFinder = () => {
+  const [bookAOdds, setBookAOdds] = useState("+200");
+  const [boostPct, setBoostPct] = useState("50");
+  const [bookBOdds, setBookBOdds] = useState("-220");
+  const [stake, setStake] = useState("100");
+  const r = useMemo(()=>{
+    const s=parseFloat(stake), da=toD(bookAOdds), db=toD(bookBOdds), bp=parseFloat(boostPct)/100;
+    if(!s||da<=1||db<=1) return null;
+    const normalProfit=s*(da-1);
+    const bonusAdd=normalProfit*bp;
+    const boostedPayout=s+normalProfit+bonusAdd;
+    const hedgeStake=boostedPayout/db;
+    const netWin=boostedPayout-s-hedgeStake;
+    const netLoseSide2=hedgeStake*(db-1)-s;
+    const bothProfit=Math.min(netWin, netLoseSide2);
+    return {hedgeStake:f(hedgeStake), netWin:f(netWin), netLoseSide2:f(netLoseSide2), bothProfit:f(bothProfit), ok:bothProfit>0};
+  },[bookAOdds,boostPct,bookBOdds,stake]);
+  return (<div style={S.card}><Tl t="Promo Arb Finder" badge="CROSS-BOOK" bc={K.pp}/>
+    <div style={{fontSize:12,color:K.dm,marginBottom:16,lineHeight:1.6}}>Stack a profit boost from Book A with a hedge at Book B on the same event to lock in profit regardless of outcome.</div>
+    <div style={S.row}>
+      <In l="Book A Odds (boosted bet)" v={bookAOdds} set={setBookAOdds} ph="+200"/>
+      <In l="Book A Boost %" v={boostPct} set={setBoostPct} ph="50"/>
+      <In l="Book B Hedge Odds" v={bookBOdds} set={setBookBOdds} ph="-220"/>
+      <In l="Stake at Book A" v={stake} set={setStake} pre="$" ph="100"/>
+    </div>
+    {r&&<div style={S.res(r.ok)}>
+      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?"+":""}${r.bothProfit}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span></div>
+      <RR l="Hedge stake at Book B" v={`$${r.hedgeStake}`} c={K.ac} b/>
+      <RR l="Net if Book A wins (boosted)" v={`+$${r.netWin}`} c={K.gn}/>
+      <RR l="Net if Book B wins (hedge)" v={`${parseFloat(r.netLoseSide2)>=0?"+":""}$${r.netLoseSide2}`} c={parseFloat(r.netLoseSide2)>=0?K.gn:K.rd}/>
+      {!r.ok&&<Nt c={K.yl}>No arb at these odds. Try higher boost % or better hedge odds.</Nt>}
+    </div>}
+    <div style={{marginTop:20}}>
+      <div style={{fontSize:12,fontWeight:700,color:K.ac,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Known Stackable Combos</div>
+      {KNOWN_STACKABLE.map((c,i)=>(
+        <div key={i} style={{...S.card,background:K.s2,padding:"12px 14px",marginBottom:8}}>
+          <div style={{display:"flex",gap:6,alignItems:"center",marginBottom:4,flexWrap:"wrap"}}>
+            <span style={{fontSize:12,fontWeight:700,color:K.tx}}>{c.book1}</span>
+            <span style={{fontSize:10,color:K.mt}}>+</span>
+            <span style={{fontSize:12,fontWeight:700,color:K.tx}}>{c.book2}</span>
+          </div>
+          <div style={{fontSize:11,color:K.dm,marginBottom:2}}>{c.desc}</div>
+          <div style={{fontSize:10,color:K.pp}}>{c.value}</div>
+        </div>
+      ))}
+    </div>
+  </div>);
+};
+
+// ═══ STATE LEGAL ALERT ═══
+const RECENTLY_LEGALIZED = [
+  {state:"North Carolina",abbr:"NC",date:"2024-03-11",note:"Mobile betting went live March 11, 2024"},
+  {state:"Vermont",abbr:"VT",date:"2024-01-11",note:"Mobile betting live January 11, 2024"},
+  {state:"Kentucky",abbr:"KY",date:"2023-09-28",note:"Mobile betting live September 2023"},
+  {state:"Maine",abbr:"ME",date:"2023-11-03",note:"Mobile betting live November 2023"},
+];
+const COMING_SOON_STATES = ["MO","GA","TX","FL","AL","OK"];
+
+const StateLegalAlert = ({ userState }) => {
+  const [dismissed, setDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_state_alert_dismissed');}catch{return false;} });
+  if(dismissed||!userState) return null;
+  const recent = RECENTLY_LEGALIZED.find(s=>s.abbr===userState||s.state===userState);
+  const comingSoon = COMING_SOON_STATES.includes(userState);
+  if(!recent&&!comingSoon) return null;
+  const dismiss = () => { try{localStorage.setItem('pg_state_alert_dismissed','1');}catch{} setDismissed(true); };
+  return (
+    <div style={{...S.card,background:recent?`${K.gn}08`:`${K.yl}08`,border:`1px solid ${recent?K.gn:K.yl}30`,marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
+        <div style={{flex:1}}>
+          {recent&&<>
+            <div style={{fontSize:13,fontWeight:700,color:K.gn,marginBottom:4}}>🎉 Your state [{userState}] recently launched sports betting!</div>
+            <div style={{fontSize:12,color:K.dm,marginBottom:4}}>{recent.note}</div>
+            <div style={{fontSize:11,color:K.dm}}>DraftKings, FanDuel, BetMGM, and Caesars are all available. Check the Sportsbooks tab to start tracking.</div>
+          </>}
+          {comingSoon&&!recent&&<>
+            <div style={{fontSize:13,fontWeight:700,color:K.yl,marginBottom:4}}>⏳ Sports betting is not yet available in your state ({userState})</div>
+            <div style={{fontSize:11,color:K.dm}}>We'll keep the tools ready for when it launches. Set your state in the Sportsbooks tab to get updates.</div>
+          </>}
+        </div>
+        <button onClick={dismiss} style={{background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:14,padding:"0 4px",flexShrink:0}}>✕</button>
+      </div>
+    </div>
+  );
+};
+
+// ═══ CURRENCY CONTEXT ═══
+const FX = { USD:{sym:'$',rate:1}, CAD:{sym:'C$',rate:1.36}, GBP:{sym:'£',rate:0.79} };
+const CurrencyCtx = React.createContext({sym:'$',rate:1,fmt:(n)=>'$'+f(n)});
+const useCurrency = () => React.useContext(CurrencyCtx);
+
+// ═══ DAILY ROUTINE PANEL ═══
+const DailyRoutinePanel = ({ openBetsCount, expiringCount }) => {
+  const hour = new Date().getHours();
+  const [checks, setChecks] = useState({});
+  let tasks = [];
+  if(hour < 12) {
+    tasks = ["Check DK/FD daily profit boosts","Run No-Vig on today's best line","Log yesterday's settled bets"];
+  } else if(hour < 17) {
+    tasks = ["Check live scanner for +EV","Review open parlay exposure","Update book health statuses"];
+  } else {
+    tasks = ["Settle today's open bets","Log profits to ledger","Check tomorrow's promos"];
+  }
+  const alerts = [];
+  if(openBetsCount>3) alerts.push(`⚠ ${openBetsCount} open bets need attention`);
+  if(expiringCount>0) alerts.push(`🔥 ${expiringCount} promos expiring soon`);
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:10,fontFamily:fontD}}>Today's Grind</div>
+      {alerts.map((a,i)=><div key={i} style={{fontSize:11,color:K.yl,fontWeight:600,marginBottom:6}}>{a}</div>)}
+      {tasks.map((task,i)=>(
+        <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:`1px solid ${K.bd}`}}>
+          <div role="checkbox" aria-checked={!!checks[i]} onClick={()=>setChecks(c=>({...c,[i]:!c[i]}))} style={{width:16,height:16,borderRadius:3,border:`2px solid ${checks[i]?K.gn:K.bd2}`,background:checks[i]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+            {checks[i]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}
+          </div>
+          <span style={{fontSize:12,color:checks[i]?K.mt:K.tx,textDecoration:checks[i]?"line-through":"none"}}>{i+1}. {task}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ═══ PROFIT GOAL MILESTONE ═══
+const ProfitGoalTracker = ({ totalProfit }) => {
+  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const [showInput, setShowInput] = useState(false);
+  const [inputVal, setInputVal] = useState("");
+  const goal = parseFloat(data.profitGoal)||0;
+  const pct = goal>0 ? Math.min(100, totalProfit/goal*100) : 0;
+  const remaining = goal>0 ? Math.max(0, goal-totalProfit) : 0;
+  const barColor = pct>=100?K.gn:pct>=60?K.yl:K.ac;
+  const setGoal = () => {
+    const g = parseFloat(inputVal);
+    if(!isNaN(g)&&g>0) { syncAppData({...data,profitGoal:g}); setShowInput(false); setInputVal(""); }
+  };
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+        <div style={{fontSize:12,fontWeight:700,color:K.tx,fontFamily:fontD}}>Profit Goal</div>
+        <button onClick={()=>setShowInput(s=>!s)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>{showInput?"Cancel":"Set Goal"}</button>
+      </div>
+      {showInput&&<div style={{display:"flex",gap:8,marginBottom:8}}>
+        <input style={{...S.input,flex:1}} value={inputVal} onChange={e=>setInputVal(e.target.value)} placeholder="Enter goal $"/>
+        <button onClick={setGoal} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Save</button>
+      </div>}
+      {goal>0&&<>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:K.mt,marginBottom:6}}>
+          <span>Progress: {f(pct,1)}% of ${f(goal,0)} goal</span>
+          {pct<100&&<span>Remaining: ${f(remaining)}</span>}
+        </div>
+        <div style={{height:8,background:K.s3,borderRadius:4,overflow:"hidden",marginBottom:8}}>
+          <div style={{height:8,borderRadius:4,background:barColor,width:`${pct}%`,transition:"width 0.5s"}}/>
+        </div>
+        {pct>=100&&<div style={{textAlign:"center",padding:"10px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,fontSize:14,fontWeight:700,color:K.gn,animation:"pulse 1s infinite alternate"}}>
+          🎉🎉🎉 GOAL REACHED! 🎉🎉🎉
+          <style>{`@keyframes pulse{from{opacity:0.7}to{opacity:1}}`}</style>
+        </div>}
+      </>}
+      {!goal&&!showInput&&<div style={{fontSize:11,color:K.mt}}>Set a profit goal to track your progress.</div>}
+    </div>
+  );
+};
+
+// ═══ DAILY BRIEFING ═══
+const useDailyBriefing = (openBets, todayPromos) => {
+  useEffect(()=>{
+    try {
+      const enabled = localStorage.getItem('pg_daily_brief')==='true';
+      if(!enabled) return;
+      const now = new Date();
+      const hour = now.getHours(), min = now.getMinutes();
+      if(hour!==9||(min>15)) return;
+      const todayStr = now.toISOString().split('T')[0];
+      if(localStorage.getItem('pg_brief_shown_today')===todayStr) return;
+      if(typeof Notification!=='undefined'&&Notification.permission==='granted') {
+        const openCount = openBets?.length||0;
+        const body = `${openCount} open bet${openCount!==1?"s":""} pending. ${todayPromos?.length||0} promos available today.`;
+        new Notification('PromoGrind Daily Briefing',{body, icon:'/promogrind/favicon.ico'});
+        localStorage.setItem('pg_brief_shown_today', todayStr);
+      }
+    } catch(e) {}
+  },[]);
+};
+
+const DailyBriefingBtn = ({ openBets, todayPromos }) => {
+  useDailyBriefing(openBets, todayPromos);
+  const [enabled, setEnabled] = useState(()=>{ try{return localStorage.getItem('pg_daily_brief')==='true';}catch{return false;} });
+  const isPro = ()=>{ try{return ['vault_sparked','pro'].includes(localStorage.getItem('pg_pro_status')||'');}catch{return false;} };
+  if(!isPro()&&!enabled) return null;
+  const toggle = async () => {
+    if(!enabled) {
+      if(typeof Notification==='undefined') return;
+      const perm = await Notification.requestPermission();
+      if(perm==='granted') { try{localStorage.setItem('pg_daily_brief','true');}catch{} setEnabled(true); }
+    } else {
+      try{localStorage.setItem('pg_daily_brief','false');}catch{}
+      setEnabled(false);
+    }
+  };
+  return (
+    <button onClick={toggle} style={{padding:"5px 12px",background:enabled?`${K.gn}15`:"transparent",border:`1px solid ${enabled?K.gn:K.bd2}`,borderRadius:6,color:enabled?K.gn:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
+      {enabled?"🔔 9am Briefing ON":"🔕 Enable 9am Briefing"}
+    </button>
+  );
+};
+
+// ═══ MULTI-BOOK EXPOSURE DASHBOARD ═══
+const OpenExposurePanel = ({ bets }) => {
+  const openBets = (bets||[]).filter(b=>b.status==='open');
+  if(!openBets.length) return null;
+  const byBook = {};
+  openBets.forEach(b=>{
+    if(!byBook[b.book]) byBook[b.book]={bets:0,atRisk:0,potWin:0};
+    byBook[b.book].bets++;
+    byBook[b.book].atRisk+=parseFloat(b.stake)||0;
+    byBook[b.book].potWin+=parseFloat(b.toWin)||0;
+  });
+  const books = Object.entries(byBook);
+  const totRisk = books.reduce((s,[,v])=>s+v.atRisk,0);
+  const totWin = books.reduce((s,[,v])=>s+v.potWin,0);
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:10,fontFamily:fontD}}>Open Exposure</div>
+      <div style={{overflowX:"auto"}}>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+          <thead><tr>{["Book","Bets","At Risk","Potential Win"].map(h=><th key={h} style={{textAlign:"left",padding:"5px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+          <tbody>
+            {books.map(([book,v])=>(
+              <tr key={book}>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600,color:K.tx}}>{book}</td>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.ac}}>{v.bets}</td>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.rd,fontWeight:600}}>${f(v.atRisk)}</td>
+                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>${f(v.potWin)}</td>
+              </tr>
+            ))}
+            <tr style={{background:K.s3}}>
+              <td style={{padding:"6px 8px",fontWeight:700,color:K.tx}}>TOTAL</td>
+              <td style={{padding:"6px 8px",color:K.ac,fontWeight:700}}>{openBets.length}</td>
+              <td style={{padding:"6px 8px",color:K.rd,fontWeight:700}}>${f(totRisk)}</td>
+              <td style={{padding:"6px 8px",color:K.gn,fontWeight:700}}>${f(totWin)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// ═══ TOP TOOLS PANEL ═══
+let TABS_REF = [];
+const TopToolsPanel = ({ navigate }) => {
+  const usage = useMemo(()=>{ try{return JSON.parse(localStorage.getItem('pg_usage_log')||'{}');}catch{return {};} },[]);
+  const top5 = Object.entries(usage).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(!top5.length) return null;
+  const nameMap = {};
+  TABS_REF.forEach(g=>g.items.forEach(item=>{ nameMap[item.slug]=item.n; }));
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Your Top Tools</div>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+        {top5.map(([slug,count])=>(
+          <button key={slug} onClick={()=>navigate('/'+slug)} style={{padding:"5px 12px",background:K.s2,border:`1px solid ${K.bd2}`,borderRadius:50,color:K.ac,fontSize:11,cursor:"pointer",fontFamily:font,display:"flex",alignItems:"center",gap:6}}>
+            <span>{nameMap[slug]||slug}</span>
+            <span style={{fontSize:9,color:K.mt,background:K.s3,padding:"1px 5px",borderRadius:10}}>{count}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ═══ COPY MY SETUP ═══
+const CopyMySetup = ({ appData: data, syncAppData }) => {
+  const [bankroll, setBankroll] = useState(()=>{ try{return localStorage.getItem('pg_bankroll')||'';}catch{return '';} });
+  const [copied, setCopied] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  useEffect(()=>{
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const setup = params.get('setup');
+      if(setup) {
+        const decoded = JSON.parse(atob(setup));
+        setModalData(decoded);
+        setShowModal(true);
+      }
+    } catch(e) {}
+  },[]);
+  const copyLink = () => {
+    const payload = { userState: data.userState, done: data.done, bankroll };
+    const encoded = btoa(JSON.stringify(payload));
+    const url = `${window.location.origin}${window.location.pathname}?setup=${encoded}`;
+    try{navigator.clipboard.writeText(url);}catch(e){}
+    setCopied(true); setTimeout(()=>setCopied(false),2000);
+  };
+  const loadSetup = () => {
+    if(!modalData) return;
+    try{localStorage.setItem('pg_bankroll', modalData.bankroll||'');}catch{}
+    syncAppData({...data, userState:modalData.userState, done:modalData.done||{}});
+    setShowModal(false);
+  };
+  return (
+    <>
+      <div style={{...S.card,marginBottom:12}}>
+        <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Share My Setup</div>
+        <div style={{display:"flex",gap:8,marginBottom:8}}>
+          <input style={{...S.input,flex:1}} value={bankroll} onChange={e=>{setBankroll(e.target.value);try{localStorage.setItem('pg_bankroll',e.target.value);}catch{}}} placeholder="Your bankroll $"/>
+          <button onClick={copyLink} style={{padding:"7px 14px",background:copied?K.gn:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Setup Link"}</button>
+        </div>
+        <div style={{fontSize:10,color:K.mt}}>Shares your state, completed books, and bankroll. Anyone with the link can load your setup.</div>
+      </div>
+      {showModal&&modalData&&(
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.7)",zIndex:2000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+          <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,padding:24,maxWidth:400,width:"100%"}}>
+            <div style={{fontSize:16,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Load this setup?</div>
+            <div style={{fontSize:12,color:K.dm,marginBottom:16,lineHeight:1.6}}>
+              State: <strong style={{color:K.tx}}>{modalData.userState||"Not set"}</strong><br/>
+              Books done: <strong style={{color:K.tx}}>{Object.values(modalData.done||{}).filter(Boolean).length}</strong><br/>
+              Bankroll: <strong style={{color:K.tx}}>{modalData.bankroll?"$"+modalData.bankroll:"Not set"}</strong>
+            </div>
+            <div style={{display:"flex",gap:8}}>
+              <button onClick={loadSetup} style={{flex:1,padding:"9px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font}}>Load Setup</button>
+              <button onClick={()=>setShowModal(false)} style={{flex:1,padding:"9px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,cursor:"pointer",fontFamily:font}}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+// ═══ TAX TIMING ADVISOR ═══
+const TaxTimingAdvisor = ({ entries }) => {
+  const [open, setOpen] = useState(false);
+  const total = (entries||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  if(total<=0) return null;
+  const now = new Date();
+  const month = now.getMonth();
+  const quarter = month<3?1:month<6?2:month<9?3:4;
+  const bracket = total>578125?0.37:total>231250?0.35:total>182050?0.32:total>95375?0.24:total>44725?0.22:total>10275?0.12:0.10;
+  const taxOwed = total*bracket;
+  const annualized = total/(now.getMonth()+1)*12;
+  let advice = "";
+  if(quarter===4) advice = "Consider settling losing hedges before Dec 31 to offset gains.";
+  else if(quarter===1) advice = "New tax year — ideal time for highest-variance plays.";
+  else advice = `On track for ~$${Math.round(annualized).toLocaleString()} annualized — consider quarterly estimated taxes.`;
+  return (
+    <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
+        Tax Timing Advisor
+        <span style={{color:K.mt,fontSize:10}}>{open?"▲":"▼"}</span>
+      </button>
+      {open&&<div style={{marginTop:12}}>
+        <RR l="Current year profit" v={`$${f(total)}`} c={K.gn}/>
+        <RR l="Estimated federal bracket" v={`${Math.round(bracket*100)}%`} c={K.yl}/>
+        <RR l="Estimated federal tax owed" v={`~$${f(taxOwed)}`} c={K.rd}/>
+        <RR l="Annualized pace" v={`~$${Math.round(annualized).toLocaleString()}`} c={K.ac}/>
+        <Nt c={K.yl}>{advice}</Nt>
+        <div style={{fontSize:10,color:K.mt,marginTop:8}}>Estimate only. Consult a tax professional. Report all gambling income.</div>
+      </div>}
+    </div>
+  );
+};
+
+// ═══ BET SLIP TEXT PARSER ═══
+const parseBetSlip = (text) => {
+  const result = {};
+  const dollarMatch = text.match(/\$?([\d,]+(?:\.\d{1,2})?)/);
+  if(dollarMatch) result.stake = dollarMatch[1].replace(',','');
+  const americanOdds = text.match(/([+-]\d{3,4})/);
+  const decimalOdds = text.match(/\b([1-9]\d?\.\d{2})\b/);
+  const fractOdds = text.match(/\b(\d+\/\d+)\b/);
+  if(americanOdds) result.odds = americanOdds[1];
+  else if(decimalOdds) result.odds = decimalOdds[1];
+  else if(fractOdds) result.odds = fractOdds[1];
+  const bookNames = ["DraftKings","FanDuel","BetMGM","Caesars","bet365","ESPN BET","Fanatics","BetRivers","Draftkings","Fanduel","Betmgm"];
+  for(const b of bookNames) { if(text.toLowerCase().includes(b.toLowerCase())) { result.book = BOOKS.find(bk=>bk.name.toLowerCase()===b.toLowerCase())?.name||b; break; } }
+  if(/parlay/i.test(text)) result.type = "Parlay";
+  const descMatch = text.match(/([A-Z][a-z]+ (?:vs?\.?|@) [A-Z][a-z]+)/);
+  if(descMatch) result.notes = descMatch[1];
+  return result;
+};
+
 const TABS = [
   { group:"Home", items:[
     {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
@@ -2889,30 +4165,38 @@ const TABS = [
     {n:"Insurance",slug:"insurance",c:InsurancePromo},
   ]},
   { group:"Calculate", items:[
-    {n:"No-Vig",slug:"no-vig",c:NoVig},
-    {n:"3-Way No-Vig",slug:"no-vig-3way",c:NoVig3Way},
-    {n:"+EV",slug:"ev",c:PlusEV},
-    {n:"Kelly",slug:"kelly",c:KellyCriterion},
-    {n:"2-Way Arb",slug:"arb-2way",c:Arb2Way},
-    {n:"3-Way Arb",slug:"arb-3way",c:Arb3Way},
-    {n:"Parlay Hedge",slug:"parlay-hedge",c:ParlayHedge},
-    {n:"Middle",slug:"middle",c:MiddleBet},
-    {n:"Odds Convert",slug:"odds-convert",c:OddsConvert},
-    {n:"Line Shop",slug:"line-shop",c:LineShop},
-    {n:"Rollover",slug:"rollover",c:RolloverCalc},
-    {n:"Teaser",slug:"teaser",c:TeaserCalc},
-    {n:"Round Robin",slug:"round-robin",c:RoundRobinCalc},
-    {n:"Parlay Builder",slug:"parlay-builder",c:ParlayBuilder},
-    {n:"SGP Estimator",slug:"sgp-estimator",c:SGPEstimator},
-    {n:"Hold Calc",slug:"hold-calc",c:HoldCalc},
-    {n:"Bet Sizer",slug:"bet-sizer",c:BetSizingAdvisor},
-    {n:"Income Est.",slug:"income-estimator",c:IncomeEstimator},
+    {n:"No-Vig",slug:"no-vig",c:NoVig,subcat:"Value & EV"},
+    {n:"3-Way No-Vig",slug:"no-vig-3way",c:NoVig3Way,subcat:"Value & EV"},
+    {n:"+EV",slug:"ev",c:PlusEV,subcat:"Value & EV"},
+    {n:"Kelly",slug:"kelly",c:KellyCriterion,subcat:"Value & EV"},
+    {n:"2-Way Arb",slug:"arb-2way",c:Arb2Way,subcat:"Arbitrage"},
+    {n:"3-Way Arb",slug:"arb-3way",c:Arb3Way,subcat:"Arbitrage"},
+    {n:"Parlay Hedge",slug:"parlay-hedge",c:ParlayHedge,subcat:"Arbitrage"},
+    {n:"Middle",slug:"middle",c:MiddleBet,subcat:"Arbitrage"},
+    {n:"Odds Convert",slug:"odds-convert",c:OddsConvert,subcat:"Advanced"},
+    {n:"Line Shop",slug:"line-shop",c:LineShop,subcat:"Value & EV"},
+    {n:"Rollover",slug:"rollover",c:RolloverCalc,subcat:"Advanced"},
+    {n:"Teaser",slug:"teaser",c:TeaserCalc,subcat:"Value & EV"},
+    {n:"Round Robin",slug:"round-robin",c:RoundRobinCalc,subcat:"Arbitrage"},
+    {n:"Parlay Builder",slug:"parlay-builder",c:ParlayBuilder,subcat:"Value & EV"},
+    {n:"SGP Estimator",slug:"sgp-estimator",c:SGPEstimator,subcat:"Value & EV"},
+    {n:"Hold Calc",slug:"hold-calc",c:HoldCalc,subcat:"Value & EV"},
+    {n:"Bet Sizer",slug:"bet-sizer",c:BetSizingAdvisor,subcat:"Value & EV"},
+    {n:"Income Est.",slug:"income-estimator",c:IncomeEstimator,subcat:"Advanced"},
+    {n:"Deposit Optimizer",slug:"deposit-optimizer",c:DepositOptimizer,subcat:"Promo"},
+    {n:"Hedge Validator",slug:"hedge-validator",c:HedgeValidator,subcat:"Promo"},
+    {n:"Promo Guarantee",slug:"promo-guarantee",c:PromoGuarantee,subcat:"Promo"},
+    {n:"Gut Check",slug:"gut-check",c:GutCheck,subcat:"Promo"},
+    {n:"Promo Stacking",slug:"promo-stacking",c:PromoStacking,subcat:"Promo"},
   ]},
   { group:"Track", items:[
     {n:"Sportsbooks",slug:"sportsbooks",c:Tracker},
     {n:"Bet Tracker",slug:"bet-tracker",c:BetTracker},
     {n:"P/L Ledger",slug:"ledger",c:Ledger},
     {n:"Leaderboard",slug:"leaderboard",c:Leaderboard},
+    {n:"Free Bet Arb",slug:"free-bet-arb",c:FreeBetArbTracker},
+    {n:"Trade Journal",slug:"trade-journal",c:PromoJournal},
+    {n:"Odds Compare",slug:"odds-compare",c:OddsComparisonTable},
   ]},
   { group:"Live", items:[
     {n:"Arb Scanner",slug:"arb-scanner",c:LiveScanner,pro:true},
@@ -2928,12 +4212,43 @@ const TABS = [
     {n:"Upgrade",slug:"upgrade",c:PricingPage},
     {n:"Team Accounts",slug:"team-accounts",c:TeamAccounts},
     {n:"vs Competitors",slug:"vs-competitors",c:CompetitorComparison},
+    {n:"Promo Arb Finder",slug:"promo-arb-finder",c:PromoArbFinder},
   ]},
 ];
+TABS_REF = TABS;
 
 const DEFAULT_SLUG = "dashboard";
 const slugMap = {};
 TABS.forEach((g,gi)=>g.items.forEach((item,ti)=>{slugMap[item.slug]={gi,ti};}));
+
+const SessionModal = ({appData, visitedSlugsRef, onClose}) => {
+  const [ssCopied,setSsCopied]=useState(false);
+  const startTs=parseInt(sessionStorage.getItem('pg_session_start')||'0');
+  const mins=startTs?Math.round((Date.now()-startTs)/60000):0;
+  const startCount=parseInt(sessionStorage.getItem('pg_session_ledger_count')||'0');
+  const currentCount=(appData.ledger||[]).length;
+  const newEntries=Math.max(0,currentCount-startCount);
+  const visited=[...visitedSlugsRef.current];
+  const getTabName=(s)=>{const item=TABS.flatMap(g=>g.items).find(i=>i.slug===s);return item?item.n:s;};
+  const sessionCard=`PromoGrind Session Summary\nActive: ${mins} min\nTools used: ${visited.length}\nNew ledger entries: ${newEntries}\nVisited: ${visited.map(getTabName).join(', ')}\nvaultsparkstudios.com/promogrind/`;
+  return (<div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",zIndex:2000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+    <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,padding:24,maxWidth:420,width:"100%",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
+      <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:4}}>Session Summary</div>
+      <div style={{fontSize:11,color:K.mt,marginBottom:16}}>Here&apos;s what you did this session</div>
+      <RR l="Active for" v={`${mins} minute${mins!==1?"s":""}`} c={K.ac}/>
+      <RR l="Tools visited" v={`${visited.length}`} c={K.pp}/>
+      <RR l="New ledger entries" v={`${newEntries}`} c={K.gn}/>
+      {visited.length>0&&<div style={{marginTop:8,marginBottom:12}}>
+        <div style={S.label}>Tools used</div>
+        <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{visited.map(s=><span key={s} style={S.tag(K.ac)}>{getTabName(s)}</span>)}</div>
+      </div>}
+      <div style={{display:"flex",gap:8,marginTop:12}}>
+        <button onClick={()=>{try{navigator.clipboard.writeText(sessionCard);}catch(e){} setSsCopied(true);setTimeout(()=>setSsCopied(false),2000);}} style={{flex:1,padding:"8px",background:ssCopied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{ssCopied?"✓ Copied!":"Share Session"}</button>
+        <button onClick={onClose} style={{padding:"8px 16px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,cursor:"pointer",fontFamily:font,fontSize:11}}>Close</button>
+      </div>
+    </div>
+  </div>);
+};
 
 // ═══ EMAIL CAPTURE ═══
 const EmailCapture = () => {
@@ -3011,7 +4326,39 @@ export default function App() {
   const [appData, setAppData] = useState(() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3'))||{}; } catch { return {}; } });
   const [syncStatus, setSyncStatus] = useState(null);
   const syncTimer = useRef(null);
+  const [calcSubcat, setCalcSubcat] = useState("All");
+  const [currency, setCurrency] = useState(()=>{ try{return localStorage.getItem('pg_currency')||'USD';}catch{return 'USD';} });
+  const currencyCtxVal = useMemo(()=>{ const fx=FX[currency]||FX.USD; return {...fx,fmt:(n)=>fx.sym+f(n*(fx.rate||1))}; },[currency]);
+  const [isOnline, setIsOnline] = useState(() => { try { return navigator.onLine; } catch { return true; } });
+  useEffect(() => {
+    const onOnline = () => {
+      setIsOnline(true);
+      try {
+        if(localStorage.getItem('pg_sync_pending')) {
+          saveData(appData).then(()=>localStorage.removeItem('pg_sync_pending')).catch(()=>{});
+        }
+      } catch(e) {}
+    };
+    const onOffline = () => setIsOnline(false);
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', onOffline);
+    return () => { window.removeEventListener('online', onOnline); window.removeEventListener('offline', onOffline); };
+  }, []);
   useEffect(() => { loadData().then(d => { if(d) setAppData(d); }); }, []);
+  useEffect(() => {
+    try {
+      if(!sessionStorage.getItem('pg_session_start')) {
+        sessionStorage.setItem('pg_session_start', String(Date.now()));
+      }
+    } catch(e) {}
+  }, []);
+  useEffect(() => {
+    try {
+      if(!sessionStorage.getItem('pg_session_ledger_count')) {
+        sessionStorage.setItem('pg_session_ledger_count', String((appData.ledger||[]).length));
+      }
+    } catch(e) {}
+  }, [appData]);
   const syncAppData = (d) => {
     setAppData(d);
     setSyncStatus('syncing');
@@ -3019,7 +4366,10 @@ export default function App() {
       setSyncStatus('saved');
       clearTimeout(syncTimer.current);
       syncTimer.current = setTimeout(() => setSyncStatus(null), 2000);
-    }).catch(() => setSyncStatus(null));
+    }).catch(() => {
+      setSyncStatus(null);
+      try { localStorage.setItem('pg_sync_pending', 'true'); } catch(e) {}
+    });
   };
   const [showCalcSearch, setShowCalcSearch] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(() => {
@@ -3034,6 +4384,11 @@ export default function App() {
   const tabMemory = useRef({});
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const embedMode = useMemo(() => {
+    try { return new URLSearchParams(window.location.search).has('embed'); } catch { return false; }
+  }, []);
+  const visitedSlugsRef = useRef(new Set());
+  const [showSessionModal, setShowSessionModal] = useState(false);
 
   // Keyboard ? shortcut for calc search
   useEffect(()=>{
@@ -3091,7 +4446,13 @@ export default function App() {
   useEffect(() => {
     if (!authReady || slug === prevSlugRef.current) return;
     prevSlugRef.current = slug;
+    visitedSlugsRef.current.add(slug);
     if (gi === 1 || gi === 2) onCalculation(slug);
+    try {
+      const log = JSON.parse(localStorage.getItem('pg_usage_log')||'{}');
+      log[slug] = (log[slug]||0)+1;
+      localStorage.setItem('pg_usage_log', JSON.stringify(log));
+    } catch(e) {}
   }, [slug, authReady, gi]);
 
   const goTo = (newGi, newTi) => {
@@ -3105,6 +4466,8 @@ export default function App() {
 
   const allCalcs = TABS.flatMap(g=>g.items.map(item=>({...item,group:g.group})));
   const handleCalcNavigate = (slug) => navigate('/'+slug);
+  const CALC_GI = TABS.findIndex(t=>t.group==="Calculate");
+  const SUBCATS = ["All","Promo","Arbitrage","Value & EV","Advanced"];
 
   if (!authReady) {
     return (
@@ -3116,11 +4479,36 @@ export default function App() {
     );
   }
 
+  if (embedMode) {
+    return (
+      <ToastProvider>
+      <AppDataCtx.Provider value={{ appData, syncAppData }}>
+      <CompactCtx.Provider value={compactMode}>
+      <CurrencyCtx.Provider value={currencyCtxVal}>
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
+        <ErrorBoundary>
+          {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+        </ErrorBoundary>
+      </div>
+      </CurrencyCtx.Provider>
+      </CompactCtx.Provider>
+      </AppDataCtx.Provider>
+      </ToastProvider>
+    );
+  }
+
   return (
     <ToastProvider>
     <AppDataCtx.Provider value={{ appData, syncAppData }}>
     <CompactCtx.Provider value={compactMode}>
+    <CurrencyCtx.Provider value={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",filter:darkMode?'none':'invert(0.95) hue-rotate(180deg)'}}>
+      {!isOnline && (
+        <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
+          OFFLINE MODE — Changes will sync when connection is restored
+        </div>
+      )}
+      {showSessionModal&&<SessionModal appData={appData} visitedSlugsRef={visitedSlugsRef} onClose={()=>setShowSessionModal(false)}/>}
       {showOnboarding && <OnboardingWizard onDone={dismissOnboarding}/>}
       {showCalcSearch && <CalcSearch allCalcs={allCalcs} onNavigate={handleCalcNavigate} onClose={()=>setShowCalcSearch(false)}/>}
       <div style={{background:`linear-gradient(135deg,${K.s1},${K.s2})`,borderBottom:`1px solid ${K.bd}`,padding:"16px 20px"}}>
@@ -3129,7 +4517,7 @@ export default function App() {
             <div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
             <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div>
             <div style={{display:"flex",gap:12,marginTop:6,flexWrap:"wrap"}}>
-              {[["22","Calculators"],["Free","Forever"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
+              {[["26","Calculators"],["Free","Forever"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
                 <div key={label} style={{display:"flex",alignItems:"baseline",gap:4}}>
                   <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
                   <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>
@@ -3143,6 +4531,13 @@ export default function App() {
               <div style={{fontSize:10,fontWeight:700,color:K.pp,background:`${K.pp}15`,padding:"3px 10px",borderRadius:50,letterSpacing:"1px"}}>PRO</div>
             )}
             {syncStatus && <span style={{fontSize:9,color:syncStatus==='syncing'?K.yl:K.gn,fontFamily:font,letterSpacing:"0.5px",transition:"opacity 0.3s"}}>{syncStatus==='syncing'?'SYNCING…':'✓ SAVED'}</span>}
+            <select value={currency} onChange={e=>{setCurrency(e.target.value);try{localStorage.setItem('pg_currency',e.target.value);}catch{}}} style={{...S.input,width:"auto",padding:"4px 8px",fontSize:10}}>
+              {Object.entries(FX).map(([code,{sym}])=><option key={code} value={code}>{code} ({sym})</option>)}
+            </select>
+            {currency!=='USD'&&<span style={{fontSize:9,color:K.yl,letterSpacing:"0.5px"}}>Showing {currency} estimates. Rates approximate.</span>}
+            <button onClick={()=>setShowSessionModal(true)} title="Session summary" style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>
+              Session
+            </button>
             <button onClick={toggleCompact} title={compactMode?"Show help sections":"Hide help sections"} style={{padding:"4px 10px",background:compactMode?`${K.ac}15`:"transparent",border:`1px solid ${compactMode?K.ac:K.bd2}`,borderRadius:6,color:compactMode?K.ac:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>
               {compactMode?"FULL":"COMPACT"}
             </button>
@@ -3159,16 +4554,35 @@ export default function App() {
         ))}</div>
       </div>
       <div style={{position:"relative"}}>
-        <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto"}}>
-          <div style={{display:"flex",maxWidth:1100,width:"100%",gap:2}}>{g.items.map((t,i)=>(
-            <button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{t.n}</button>
-          ))}</div>
+        <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto",flexDirection:"column"}}>
+          {gi===CALC_GI&&<div style={{maxWidth:1100,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"6px 8px 0"}}>
+            {SUBCATS.map(sc=>(
+              <button key={sc} onClick={()=>{
+                setCalcSubcat(sc);
+                if(sc!=="All") {
+                  const firstMatch = g.items.findIndex(it=>it.subcat===sc);
+                  if(firstMatch>=0) goTo(gi,firstMatch);
+                }
+              }} style={{padding:"3px 10px",background:calcSubcat===sc?K.pp:"transparent",border:`1px solid ${calcSubcat===sc?K.pp:K.bd2}`,borderRadius:50,color:calcSubcat===sc?K.bg:K.dm,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
+                {sc}
+              </button>
+            ))}
+          </div>}
+          <div style={{display:"flex",maxWidth:1100,width:"100%",gap:2,margin:"0 auto"}}>{g.items.map((t,i)=>{
+            const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
+            return (<button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative"}}>
+              {t.n}
+              {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
+            </button>);
+          })}</div>
         </div>
         <div style={{position:"absolute",right:0,top:0,bottom:0,width:48,background:`linear-gradient(to left,${K.s2},transparent)`,pointerEvents:"none",zIndex:1}}/>
       </div>
       <div style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
         <ErrorBoundary>
-          {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+          {slug==='dashboard'
+            ? <DailyDashboard navigate={navigate}/>
+            : isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
         </ErrorBoundary>
       </div>
       <EmailCapture/>
@@ -3177,6 +4591,7 @@ export default function App() {
       <MobileBottomNav gi={gi} goTo={goTo}/>
       <QuickCalcPanel goTo={goTo}/>
     </div>
+    </CurrencyCtx.Provider>
     </CompactCtx.Provider>
     </AppDataCtx.Provider>
     </ToastProvider>

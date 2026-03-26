@@ -1,66 +1,72 @@
 # Current State
 
-## Snapshot
+Last updated: 2026-03-26 (v9.1 — simplify session)
 
-- Date: 2026-03-26
-- Overall status: v7.0 — audit complete, 14 items implemented (5 bug fixes + 9 new features), external revenue setup remains the primary blocker
-- Current phase: Pre-launch — affiliate links, Odds API, Stripe are all that stand between this app and first revenue
+## Version
+v9.1 (app) / 3.0.0 (package.json — not critical)
 
-## What exists
+## App.jsx
+~4,600 lines. Single-file React SPA.
 
-- **App:** React/Vite (~3,400+ lines) — 22 calculators, 4 track tools, live scanner, community promo board, leaderboard, knowledge base, daily dashboard, all session 6+7 features
-- **Tab groups:**
-  - Home: Dashboard (new default landing — today's promos, P/L, open bets, quick actions)
-  - Convert: Bonus Bet, Profit Boost, First Bet, Deposit Match, Insurance
-  - Calculate: No-Vig, 3-Way No-Vig, +EV, Kelly, 2-Way Arb, 3-Way Arb, Parlay Hedge, Middle, Odds Convert, Rollover, Teaser, Round Robin, Line Shop, Parlay Builder, SGP Estimator, Hold Calc, Bet Sizer, Income Estimator
-  - Track: Sportsbooks, Bet Tracker, P/L Ledger, Leaderboard
-  - Live: Arb Scanner (pro), +EV Scanner (pro)
-  - Learn: Knowledge Base, Promo Finder, Promo Calendar, Promo Board, Glossary, Refer & Earn, Upgrade, Team Accounts, vs Competitors (new)
+## Tabs / Tools
+| Group | Count | Tools |
+|---|---|---|
+| Home | 1 | Dashboard |
+| Convert | 5 | Bonus Bet, Profit Boost, First Bet, Deposit Match, Insurance |
+| Calculate | 23 | No-Vig, 3-Way No-Vig, +EV, Kelly, 2-Way Arb, 3-Way Arb, Parlay Hedge, Middle, Odds Convert, Line Shop, Rollover, Teaser, Round Robin, Parlay Builder, SGP Estimator, Hold Calc, Bet Sizer, Income Est., Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, Promo Stacking |
+| Track | 7 | Sportsbooks, Bet Tracker, P/L Ledger, Leaderboard, Free Bet Arb, Trade Journal, Odds Compare |
+| Live | 2 | Arb Scanner, +EV Scanner (VaultSparked-gated) |
+| Learn | 10 | Knowledge Base, Promo Finder, Promo Calendar, Promo Board, Glossary, Refer & Earn, Upgrade, Team Accounts, vs Competitors, Promo Arb Finder |
 
-- **Session 7 features (all in App.jsx):**
-  - Bug fix: Push notification body corrected (was referencing undefined fields)
-  - Bug fix: LiveScanner gate price "$29/month" → "$24.99/mo"
-  - Bug fix: Newsletter freq preference now persisted to Supabase
-  - Bug fix: Team accounts email now saves to Supabase user metadata
-  - Bug fix: startCheckout(planId) — plan parameter now wired through to Edge Function
-  - Input-encoded shareable links — useCalcMemory reads URL params; Tl encodes inputs; BonusBet/ProfitBoost/FirstBet support encoded sharing
-  - BookCTA — affiliate link CTAs at profitable calc results (BonusBet, ProfitBoost, FirstBet)
-  - Promo grading — A/B/C grades on all 16 PromoCalendar entries with badge + filter
-  - State personalization — state selector in onboarding, US_BOOK_STATES map, availability note in Tracker
-  - Personal referral tracker — per-book ref code input in Tracker, links summary panel
-  - Competitor comparison page — PromoGrind vs OddsJam vs ProfitDuel feature table in Learn
-  - All-Time Report Card — in Ledger stats; shows best month, total profit, copy-to-clipboard card
-  - Show Example buttons — BonusBet, ProfitBoost, FirstBet with pre-filled realistic scenarios
-  - Daily Dashboard — new "Home" tab group, default landing page with full daily briefing
+**Total: 48 tools**
 
-- **auth.js:** `startCheckout(planId='monthly')` — passes `planId` to `create-checkout` Edge Function body
+## Build
+- App chunk: ~298KB raw / ~84KB gzip
+- Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
+- Supabase chunk: 194KB raw / 51KB gzip
+- Strategy: network-first JS/CSS, cache-first fonts/images
 
-## Important paths
+## Key Data Stores
+| Store | Location | Synced? |
+|---|---|---|
+| Ledger entries | `appData.ledger` | Supabase `promogrind_data.ledger` ✓ |
+| All other appData | `appData.*` | Supabase `promogrind_data.tracker` (JSONB) ✓ |
+| Profit goal | `appData.profitGoal` | ✓ via tracker |
+| Trade journal | `appData.journal` | ✓ via tracker |
+| Odds compare rows | `appData.oddsCompare` | ✓ via tracker |
+| Promo value history | `appData.promoValueHistory` | ✓ via tracker |
+| Calculator state | `localStorage(key)` | No — device-local |
+| Login streak dates | `localStorage('pg_login_dates')` | No |
+| Alert preferences | `localStorage('pg_alert_prefs')` | No |
+| Opportunity log | `localStorage('pg_opp_log')` | No |
+| Scanner watchlist | `localStorage('pg_watchlist')` | No |
+| Bankroll (setup share) | `localStorage('pg_bankroll')` | No |
+| Daily brief enabled | `localStorage('pg_daily_brief')` | No |
+| Currency selection | `localStorage('pg_currency')` | No |
+| Usage analytics | `localStorage('pg_usage_log')` | No |
+| Session tracking | `sessionStorage('pg_session_start')` | No |
 
-- Entry: `src/main.jsx`
-- Auth + subscription: `src/auth.js`
-- Cloud sync + vault events: `src/sync.js`
-- All UI: `src/App.jsx` (~3,400+ lines)
-- Sportsbook data: `src/books.js` ← **edit affiliate links here**
-- Env template: `.env.example`
-- Admin CLI: `scripts/generate-invite-codes.js` ← needs `.env.admin`
-- PWA service worker: `public/sw.js` (v2)
-- Newsletter function: `supabase/functions/weekly-digest/index.ts`
-- SQL migrations: `scripts/migration-*.sql`
+## Blockers (unchanged)
+1. Affiliate links — placeholder URLs in `src/books.js`, zero revenue
+2. Odds API — key not set, scanner non-functional for paying users
+3. Stripe — needs LLC + EIN before live mode; test mode setup pending
+4. Resend — weekly-digest deployed but key not set
+5. Plausible — script in index.html (commented out)
 
-## Blockers (all external)
+## What's working end-to-end
+- Auth (Supabase email/password)
+- Cloud sync (loadData / saveData — all fields synced via tracker JSONB)
+- Vault points (award_vault_points RPC)
+- Referrals (referrals table + get_my_referral_count RPC)
+- Leaderboard (leaderboard SQL view)
+- PromoBoard (community_board table)
+- PWA install (manifest + service worker v2)
+- GitHub Pages deploy (auto on push to main)
 
-1. **Affiliate links** — placeholder URLs in `src/books.js` — zero revenue until wired
-2. **Odds API** — register at theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`; change refresh 120s → 300s
-3. **Stripe test mode** — create Monthly ($24.99/mo) AND Annual ($199/yr) products → set `STRIPE_*` secrets → deploy checkout + webhook; **update `create-checkout` to read `body.planId`**
-4. **Stripe live mode** — blocked on LLC + EIN + bank account
-5. **Resend newsletter** — resend.com → verify domain → `supabase secrets set RESEND_API_KEY=...` → deploy weekly-digest
-6. **Plausible analytics** — create account → uncomment one line in `index.html`
-7. **OAuth** — Google + Discord in Supabase dashboard → Authentication → Providers
-8. **Google Search Console** — submit sitemap
-
-## Next 3 moves
-
-1. Wire affiliate links in `src/books.js` (instant revenue, zero risk)
-2. Set up Odds API key + deploy odds Edge Function (unlocks the only paid feature)
-3. Create Stripe test mode products → test full checkout flow end-to-end
+## Module utilities (as of v9.1)
+- `f(n, dp=2)` — number formatter
+- `toD(v)` — American/decimal/fractional odds → decimal
+- `calcROI(profit, wagered)` — `profit/wagered*100`, null if wagered=0
+- `downloadFile(content, filename, mimeType)` — anchor-click-revoke download helper
+- `parseNL(text)` — natural language bet input parser (module scope)
+- `parseBetSlip(text)` — bet slip text parser (module scope)

@@ -137,6 +137,8 @@ export async function startCheckout(planId = 'monthly') {
 // ── Internal ───────────────────────────────────────────────────
 
 function redirectToLogin() {
-  const next = encodeURIComponent(window.location.origin);
+  // Preserve the full URL (including path and query) so the user returns to the
+  // exact page they were trying to reach after logging in.
+  const next = encodeURIComponent(window.location.href);
   window.location.href = `${VAULT_MEMBER_LOGIN}?next=${next}`;
 }

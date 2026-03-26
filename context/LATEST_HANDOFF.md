@@ -1,149 +1,144 @@
 # Latest Handoff
 
-Last updated: 2026-03-26 (session 7 closeout)
+Last updated: 2026-03-26 (simplify session — post-v9.0 cleanup)
 
 This is the authoritative active handoff file for the project.
 
 ---
 
-## What was completed — session 7
+## What was completed — simplify session (v9.1)
 
-### Full Project Audit (score: 62/100) + Implementation of all actionable items
+Code review + cleanup pass on all v8.0/v9.0 changes. No new features — fixes and quality improvements only.
 
-**Audit category scores:**
-- Feature Completeness: 87/100
-- Revenue & Monetization: 40/100 (zero activated — primary gap)
-- Code Quality: 68/100
-- Performance & Build: 78/100
-- SEO & Discoverability: 32/100 (second major gap — SPA invisible to Google)
-- UX & Design: 76/100
-- Security & Data: 67/100
-- Growth & Retention: 60/100
-- Infrastructure: 70/100
-- Business Strategy: 58/100
+### React Rules of Hooks violations fixed (4)
+All were `useState` called inside IIFEs embedded in JSX — hooks called conditionally, which React forbids.
 
-### Bug fixes (auth.js + App.jsx)
+| IIFE location | Fix |
+|---|---|
+| Share This Week button in Ledger | Extracted → `ShareWeekBtn` component |
+| All-Time Report Card in Ledger | Extracted → `ReportCard` component |
+| Session Summary modal in App | Extracted → `SessionModal` component |
+| Promo Alert Subscription UI in PromoCalendar | Extracted → `PromoAlertPrefs` component |
 
-1. **Push notification body bug** — `best.t1`/`best.t2` → `best.game`, `best.b1`/`best.b2`; icon fixed to `favicon.svg`
-2. **Price copy mismatch** — LiveScanner gate showed "$29/month" → fixed to "$24.99/mo"
-3. **freq not persisted** — EmailCapture now saves `newsletter_freq` to Supabase user metadata on subscribe
-4. **Team accounts email lost** — `join()` is now async; also saves to Supabase user metadata (`team_waitlist`, `team_waitlist_email`)
-5. **startCheckout plan param** — auth.js `startCheckout(planId='monthly')` now accepts and passes `planId` in request body to `create-checkout` Edge Function; PricingPage passes `plan.id`
+### New module-level utilities
+- `downloadFile(content, filename, mimeType)` — replaced 5 duplicate anchor-click-revoke patterns across `exportBets`, `exportCSV` (Ledger), Tax Export CSV, ICS export, Free Bet Arb export
+- `calcROI(profit, wagered)` — replaced 2 duplicate `profit/wagered*100` calculations (Tracker table, Ledger by-book view)
 
-### Features added (App.jsx)
+### Code reuse
+- Moved `parseNL` to module scope (was being redefined on every `BonusBet` render)
 
-6. **Input-encoded shareable links** — `useCalcMemory` reads URL query params on init; `Tl` component now accepts `getParams` callback to encode inputs into the share URL. BonusBet, ProfitBoost, FirstBet pass their current values. Shared link auto-fills the calculator.
+### Efficiency fixes
+- Hoisted `cutoff30 = new Date(Date.now()-30d)` and `bets` array outside `BOOKS.map()` in Tracker health score — was creating a new `Date` per book per render
+- Added `useMemo` to `filtered` in PromoCalendar (4 filter deps)
+- Added `useMemo` to `myAvgClv` in Leaderboard
+- Removed redundant `oppLog.slice(0,20)` on read (already capped at write)
 
-7. **Affiliate CTAs at results** — `BookCTA` component shows 4 book affiliate links at the bottom of profitable BonusBet, ProfitBoost, FirstBet results. Drives clicks at peak conversion intent.
+### Code quality
+- Removed all feature-tracking comments: `// Feature N — ...` inline, `FEATURE N —` prefixes in section headers
+- Inlined the Tax Export CSV IIFE (no state, just an unnecessary wrapper)
 
-8. **Promo grading** — All 16 `PROMO_SCHED` entries have `grade: "A"|"B"|"C"`. PromoCalendar shows grade badges + grade filter dropdown. A = daily/high-value, B = weekly/good, C = situational.
-
-9. **State personalization** — `US_BOOK_STATES` map for all 8 books × 15-23 states. New OnboardingWizard step 3 asks for state, stores to `localStorage('pg_user_state')`. Tracker shows an availability note when some books don't operate in user's state.
-
-10. **Personal referral tracker** — Tracker table has a "Ref Code" column per book (saves to `data.bookRefCodes` via syncAppData). Referral links panel shows all filled codes in a summary view.
-
-11. **Competitor comparison page** — `CompetitorComparison` component in Learn tab ("vs Competitors" sub-tab). Feature-by-feature table: PromoGrind vs OddsJam vs ProfitDuel vs Spreadsheet.
-
-12. **All-Time Report Card** — Added to Ledger stats section. Shows total profit, best month, entries, avg per entry, and a "📋 Copy Report Card" button that generates a shareable text card.
-
-13. **Show Example buttons** — BonusBet, ProfitBoost, FirstBet each have a "★ Show Example" button that fills in realistic values with a label describing the scenario.
-
-14. **Daily Dashboard** — New `DailyDashboard` component. New "Home" tab group added as the first tab group. Default landing is now `/dashboard`. Shows: greeting with time-of-day, this month's P/L, all-time P/L, open bets count, today's promo count, expiry alerts, today's graded promos list, open bets summary, quick action links.
+### Build
+- Clean: `✓ built in 3.22s` (298KB app chunk / 84KB gzip)
 
 ---
 
-## What was completed — sessions 1–6
+## What was completed — session 9 (v9.0)
 
-See archived entries below.
+### Third Full Audit (v8.0 score: 67/100)
+Reviewed all App.jsx code post-session-8.
 
-### Session 6 — 13 engagement + value features
-- AppDataCtx, sync status, undo delete, optimistic auth render, sub-tab scroll fade
-- SW v2, Vite vendor chunk split, odds validation, inline Ledger edit
-- Portfolio EV dashboard, weekly perf card, push notifications, Promo Calendar
-- Conversion rate history, book health tracker, star ratings, referral program UI
-- Annual pricing page, CSV import, team accounts waitlist, CLV alert, digest preference
+### 20 Features Implemented (v8.0 brainstorm → all built)
+All added to App.jsx (~4,150 → ~5,000 lines). Build: clean.
 
-### Sessions 1–5 — Foundation through major expansion
-- Sessions 1-2: Foundation, auth, cloud sync, 17 calculators
-- Session 3: VaultSparked/Stripe, GitHub Pages live
-- Session 4: 22 calculators, BetTracker, Leaderboard, PromoBoard, PWA, Capacitor, major UX
-- Session 5: Full feature backlog — useCalcMemory, social share, KB expansion, onboarding, ledger goals, compact mode, keyboard shortcuts, mobile nav, Promo Finder, Glossary
+1. **"Copy My Setup" Share Link** — DailyDashboard panel; encodes state/done books/bankroll into `?setup=<base64>` URL. Load modal on arrival.
+2. **Promo Stacking Calculator** (`PromoStacking`) — new Calculate tab tool.
+3. **Daily Grind Routine Generator** (`DailyRoutinePanel`) — DailyDashboard.
+4. **Profit Goal Milestone Tracker** — DailyDashboard section.
+5. **Promo Trade Journal** (`PromoJournal`) — new Track tab tool.
+6. **Odds Comparison Table** (`OddsComparisonTable`) — new Track tab tool.
+7. **Calculator Sub-Categories** — `subcat` field + filter pills.
+8. **Push Notification Daily Briefing** — DailyDashboard; 9am push for VaultSparked users.
+9. **Promo Value History Tracker** — PromoCalendar "Track Value" + sparkline.
+10. **Kelly Fractional Optimizer** — fraction slider 5–100% with ruin-risk bar.
+11. **Tax Bracket Timing Advisor** — Ledger collapsible tax section.
+12. **Bet Slip Text Parser** — BetTracker "Paste Slip" button.
+13. **Multi-Book Pending Exposure** — DailyDashboard "Open Exposure" table.
+14. **CLV Leaderboard Column** — own data + "My Stats" box.
+15. **"New State Legalized" Alert** — DailyDashboard dismissable banner.
+16. **Promo Arb Finder** (`PromoArbFinder`) — new Learn tab tool.
+17. **Leaderboard Privacy Control** — opt-in toggle → Supabase user metadata.
+18. **Multi-Currency Mode** — USD/CAD/GBP header selector, `CurrencyCtx`.
+19. **Sportsbook Account Health Score** — Tracker per-book 0–100 badge.
+20. **Calculator Usage Analytics** — `pg_usage_log` + Top Tools panel in Dashboard.
+
+### Header stat fix
+- `"22"` → `"26"` in Calculators stat.
+
+### New TABS items (session 9)
+- Calculate: Promo Stacking
+- Track: Trade Journal, Odds Compare
+- Learn: Promo Arb Finder
+
+### Non-App.jsx (session 9)
+- `public/sitemap.xml` — promo-stacking, trade-journal, odds-compare, team-accounts, promo-arb-finder
+- `public/manifest.json` — updated tool count, Promo Arb Finder shortcut
+- `index.html` — updated description, keywords, JSON-LD featureList
 
 ---
 
-## Pending external setup (no code changes needed)
+## What was completed — session 8 (v8.0)
 
-### Must run in Supabase SQL Editor first:
-1. `scripts/migration-community-board.sql` — creates `promo_submissions` table
-2. `scripts/migration-leaderboard.sql` — creates `vault_leaderboard` view
+20 features: Tax Export CSV, Embed Mode + iframe button, Deposit Optimizer, Hedge Validator, Weekly P&L Share Card, Promo Complexity filter, Ledger By-Book view, Free Bet Arb Tracker, Calendar Export .ics, Promo Guarantee Calculator, Book ROI% column, Streak + Consistency score, Promo Alert Subscription UI, Natural Language Input parser, EV Opportunity Log, Welcome Promo Progress Bars, Gut Check validator, Scanner Watchlist, Session Summary modal, Offline Mode indicator.
 
-### External platforms:
-- **Affiliate links** → wire into `src/books.js` (all 8 books still placeholder URLs)
-- **Stripe** → create TWO products: Monthly ($24.99/mo) + Annual ($199/yr) → set `STRIPE_*` secrets → deploy checkout + webhook; **update `create-checkout` Edge Function to receive `body.planId` and select correct price ID** (frontend now sends planId)
-- **Odds API** → theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → deploy odds function; change scanner refresh `120_000` → `300_000`
-- **Resend** → resend.com → verify domain → set secret → deploy weekly-digest
-- **Plausible** → plausible.io → uncomment one line in `index.html`
-- **OAuth** → Google + Discord in Supabase Auth Providers
-- **Google Search Console** → submit sitemap
-
-### Blocked on LLC:
-- Stripe live mode — requires LLC + EIN + bank account
+Non-App.jsx: `src/sync.js` critical fix (all appData now synced), sitemap rebuild (14→40+ URLs), manifest PWA shortcuts, index.html JSON-LD, weekly-digest freq filtering.
 
 ---
 
-## Future high-value projects (from audit)
+## Current app state
 
-1. **SSG/SEO** — Pre-render calculator pages + KB to static HTML. Largest organic growth lever. Evaluate `vite-plugin-ssg` or Astro migration.
-2. **Browser Extension** — Chrome/Firefox extension that detects sportsbook pages, overlays relevant calculator.
-3. **Email Drip Sequence** — 5-email onboarding after signup (Day 0/2/5/10/14). Requires Resend deployed first.
-4. **7-Day Free Trial** — VaultSparked trial in Stripe checkout. Requires Stripe configured.
-5. **UK Market Module** — UK books (Betfair, Ladbrokes, etc.) + GBP. 5x TAM.
-6. **Shared Odds Cache** — Supabase odds cache table for 10+ concurrent VaultSparked users.
-7. **Claude API Bet Slip Parser** — Paste slip text → auto-fills tracker/calculator.
-8. **Scheduled Push Notifications** — Morning promo briefing via VAPID/web-push.
+- **Version**: 9.1 (app) / 3.0.0 (package.json)
+- **App.jsx**: ~4,600 lines
+- **Build**: clean
+- **Calculators**: 27
+- **Tabs**: Home(1), Convert(5), Calculate(23), Track(7), Live(2), Learn(10) = 48 tools
+
+---
+
+## Pending external setup (unchanged)
+
+1. Affiliate links in `src/books.js` (all 8 books = placeholder URLs)
+2. Odds API key → deploy `odds` edge function; change 120s → 300s refresh
+3. Stripe: two products (Monthly $24.99 + Annual $199) → set secrets → deploy `create-checkout` + `stripe-webhook`; update Edge Function to read `body.planId`
+4. Resend key → deploy `weekly-digest` edge function
+5. Plausible: uncomment line in `index.html`
+6. Google + Discord OAuth in Supabase dashboard
+7. Google Search Console: submit updated sitemap
 
 ---
 
 ## Architecture snapshot
 
-```
-src/
-  App.jsx          — all UI (~3,400+ lines after session 7), 22 calculators, all features
-  auth.js          — Supabase auth gate, isPro(), startCheckout(planId)
-  sync.js          — cloud sync, vault events, AppDataCtx feeds from here
-  books.js         — sportsbook data + affiliate links (edit here)
-  main.jsx         — entry, SW registration
-  sw-register.js   — service worker registration
-
-public/
-  sw.js            — service worker v2 (network-first JS/CSS, cache-first fonts/images)
-  manifest.json    — PWA manifest
-
-supabase/
-  functions/
-    weekly-digest/ — Resend newsletter Edge Function (needs deploy)
-    create-checkout/ — needs update: read body.planId to select Stripe price ID
-
-scripts/
-  migration-community-board.sql
-  migration-leaderboard.sql
-  migration-referrals.sql
-  generate-invite-codes.js
-
-vite.config.js     — vendor chunk split, chunkSizeWarningLimit 600
-capacitor.config.ts
-```
+- `AppDataCtx` — shared React context, one `loadData()` call, all Track components use `syncAppData(d)`
+- `CurrencyCtx` — display-only FX context. `useCurrency()` → `{sym, rate, fmt}`. Never affects stored values or input parsing.
+- `syncAppData(d)` — only correct way to save from Track components
+- `useCalcMemory(key, defaults)` — localStorage + URL param init for calculators
+- `DEFAULT_SLUG = "dashboard"` — Home tab is default landing
+- `isPro()` accepts `pro` AND `vault_sparked` plans
+- `src/sync.js` `tracker` JSONB column = all non-ledger appData fields
+- Calculate sub-categories: items have `subcat` field; filter pills in App component for Calculate group
+- `downloadFile(content, filename, mimeType)` — module utility for all CSV/ICS exports
+- `calcROI(profit, wagered)` — module utility for ROI calculation
 
 ---
 
-## Key constraints (never violate)
+## Critical constraints (unchanged)
 
-- Never commit `.env` or `.env.admin` — both gitignored
-- `SUPABASE_SERVICE_ROLE_KEY` is for admin CLI only, never in browser code
-- Calculator math in App.jsx must not be changed without verifying formulas
-- All sportsbook links must live in `src/books.js` only
-- Do not activate live Stripe until LLC + EIN obtained
-- `isPro()` must continue to accept both `pro` and `vault_sparked` — legacy plan users must not be broken
-- Odds API only called when `proStatus.status === "active"` — free users never trigger API requests
-- `syncAppData(d)` replaces `setData(d) + saveData(d)` everywhere — never use saveData directly in components
-- Default landing is now `/dashboard` (DailyDashboard) — was `/bonus-bet`
+- Never commit `.env` or `.env.admin`
+- `SUPABASE_SERVICE_ROLE_KEY` — admin CLI only, never browser
+- Calculator math: never change without verifying formulas
+- All sportsbook links: `src/books.js` only
+- Stripe live: blocked until LLC + EIN
+- `isPro()` must accept both `pro` AND `vault_sparked` plans
+- `syncAppData(d)` is the ONLY correct way to save from Track components
+- Default landing = `dashboard`
+- `CurrencyCtx` affects display only — never stored values or input parsing

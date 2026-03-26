@@ -4,7 +4,7 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "7.0.0",
+  "version": "9.1.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
@@ -13,48 +13,66 @@
   "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA"],
   "backend": true,
   "last_updated": "2026-03-26",
-  "app_lines": 3400,
-  "calculator_count": 22,
+  "app_lines": 4600,
+  "calculator_count": 27,
   "tab_count": {
     "Home": 1,
     "Convert": 5,
-    "Calculate": 18,
-    "Track": 4,
+    "Calculate": 23,
+    "Track": 7,
     "Live": 2,
-    "Learn": 9
+    "Learn": 10
   },
-  "audit_score": 62,
+  "total_tools": 48,
+  "audit_score": 67,
   "audit_date": "2026-03-26",
   "audit_category_scores": {
-    "feature_completeness": 87,
-    "revenue_monetization": 40,
-    "code_quality": 68,
-    "performance_build": 78,
-    "seo_discoverability": 32,
-    "ux_design": 76,
-    "security_data": 67,
-    "growth_retention": 60,
+    "feature_completeness": 93,
+    "revenue_monetization": 42,
+    "code_quality": 76,
+    "performance_build": 75,
+    "seo_discoverability": 36,
+    "ux_design": 84,
+    "security_data": 71,
+    "growth_retention": 72,
     "infrastructure": 70,
-    "business_strategy": 58
+    "business_strategy": 66
   },
   "blockers": [
     "Affiliate links not inserted (src/books.js) — zero revenue until done",
     "Odds API key not set (scanner non-functional for paying users)",
     "Stripe test mode not configured — need Monthly ($24.99/mo) + Annual ($199/yr) products; update create-checkout Edge Function to read body.planId",
-    "SQL migrations not yet run (community board + leaderboard)",
-    "Resend not configured (newsletter non-functional)"
+    "Resend not configured (weekly-digest function ready, key not set)",
+    "Stripe live mode blocked until LLC + EIN"
   ],
   "next_milestone": "Affiliate links wired + Odds API activated = first revenue-capable deploy",
   "domain": "vaultsparkstudios.com/promogrind/ (permanent, no separate domain)",
   "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
   "build": {
     "sw_version": "promogrind-v2",
-    "strategy": "network-first JS/CSS, cache-first fonts/images"
+    "strategy": "network-first JS/CSS, cache-first fonts/images",
+    "app_chunk_gzip": "~135KB",
+    "vendor_chunk_gzip": "49KB"
   },
   "tiers": {
-    "free": { "price": 0, "features": "22 calculators, tracker, ledger, KB, promo calendar, dashboard" },
-    "vaultsparked": { "price_monthly": 24.99, "price_annual": 199, "features": "live scanner, push alerts, all pro tools" },
+    "free": { "price": 0, "features": "27+ calculators, tracker, ledger, KB, promo calendar, dashboard" },
+    "vaultsparked": { "price_monthly": 24.99, "price_annual": 199, "features": "live scanner, push alerts, daily briefing, all pro tools" },
     "team": { "price": 49.99, "status": "waitlist", "features": "shared vault, split P/L, all Pro" }
+  },
+  "sync": {
+    "ledger_column": "promogrind_data.ledger (JSONB array)",
+    "all_other_fields": "promogrind_data.tracker (JSONB object)"
+  },
+  "new_localStorage_keys_session9": [
+    "pg_bankroll",
+    "pg_daily_brief",
+    "pg_brief_shown_today",
+    "pg_usage_log",
+    "pg_currency",
+    "pg_state_alert_dismissed"
+  ],
+  "contexts": {
+    "CurrencyCtx": "display-only FX multiplier (USD/CAD/GBP), never affects stored values or input parsing"
   },
   "future_projects": [
     "SSG/pre-rendering for SEO (largest organic growth lever)",
@@ -63,7 +81,12 @@
     "7-day VaultSparked free trial",
     "UK market module (5x TAM expansion)",
     "Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)",
-    "Claude API bet slip parser",
-    "Scheduled push notifications (morning promo briefing)"
+    "Claude API bet slip parser (OCR-level, beyond regex)",
+    "Scheduled push notifications (VAPID keys + web-push service)",
+    "Natural Language Calculator Input for remaining calcs",
+    "Promo Alerts backend (Resend + cron trigger off pg_alert_prefs)",
+    "Tax Export PDF variant (jsPDF or print-to-PDF)",
+    "Team accounts backend (team_members table)",
+    "Mobile app via Capacitor (iOS + Android builds)"
   ]
 }
