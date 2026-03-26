@@ -20,6 +20,35 @@ self.addEventListener('activate', e => {
   );
 });
 
+// ── Push notification handler (server-sent via Edge Function) ──────────────
+self.addEventListener('push', e => {
+  let data = {};
+  try { data = e.data.json(); } catch { data = { title: 'PromoGrind', body: e.data?.text() || 'New alert' }; }
+  e.waitUntil(
+    self.registration.showNotification(data.title || 'PromoGrind', {
+      body: data.body || "Check today's promos and open bets.",
+      icon: data.icon || (BASE + '/favicon.svg'),
+      badge: data.badge || (BASE + '/favicon.svg'),
+      tag: data.tag || 'promogrind',
+      renotify: !!data.renotify,
+      data: { url: data.url || (BASE + '/') },
+    })
+  );
+});
+
+// ── Notification click — focus existing tab or open new one ──────────────
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = e.notification.data?.url || (BASE + '/');
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(wins => {
+      const match = wins.find(w => w.url.includes('promogrind'));
+      if (match) return match.focus();
+      return clients.openWindow(url);
+    })
+  );
+});
+
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   // Always network for Supabase, Google Fonts, external APIs
