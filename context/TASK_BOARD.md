@@ -24,6 +24,7 @@
 - [x] `scripts/migration-team-accounts.sql` ✓
 - [x] `scripts/migration-community-promos.sql` ✓
 - [x] `scripts/migration-influencer-codes.sql` ✓
+- [ ] `scripts/migration-gift-tokens.sql` — run before deploying gift-trial edge function
 
 ### Affiliate programs (revenue blocker #1)
 - [ ] Apply to DraftKings Partners: draftkings.com/partners (CPA: $75+/user)
@@ -70,6 +71,17 @@
 
 ---
 
+## [SIL] Items (from Self-Improvement Loop brainstorm)
+
+- [ ] **[SIL] Wire affiliate links** — replace placeholder `referralLink` URLs in `src/books.js` with real affiliate-approved tracking links once approved; zero-code revenue unlocker
+- [ ] **[SIL] Add Supabase per-tool usage event** — one row per calculation run to `vault_events` or new `calc_events` table; enables Engagement scoring in SIL
+- [x] **[SIL] Spanish-language top 10 SEO pages** ✓ — shipped session 17
+- [x] **[SIL] "Beat the House" drip** ✓ — extended onboarding-drip to 14 days (days 10 + 14 added), shipped session 17
+- [ ] **[SIL] hreflang tags on English+ES page pairs** — add `<link rel="alternate" hreflang="es">` to 10 English pages and `hreflang="en"` to 10 ES pages; 15-min Google i18n signal
+- [ ] **[SIL] Weekly Promo Report Card email** — Monday Resend email: user's P/L last 7 days + top book + one action item; highest-retention email type; needs RESEND_API_KEY first
+
+---
+
 ## Next (code — after polish + external setup)
 
 - [ ] Test VaultSparked upgrade flow end-to-end (monthly + annual checkout → webhook → subscription → badge)
@@ -101,7 +113,55 @@
 
 ---
 
+---
+
+## Backlog — Session 16 Brainstorm (all 20 items, scored)
+
+> Full innovation brainstorm from v16.0 audit session. Score = impact on overall project score (1–10).
+
+| # | Item | Score | Status |
+|---|------|-------|--------|
+| 1 | Email capture interstitial on SEO pages (`pg-capture.js`) | 9 | ✅ Done |
+| 2 | Gift 14 Days Free — referral gifting (`gift-trial` edge fn + `GiftTrialBox`) | 8 | ✅ Done |
+| 3 | Live Activity Feed social proof on PricingPage | 7 | ✅ Done |
+| 4 | AI Action Plan tab (`ai-action-plan` edge fn + `AIActionPlan` component) | 9 | ✅ Done |
+| 5 | Starter Pack Modal — bankroll/goal presets on first launch | 7 | ✅ Done |
+| 6 | Chrome Extension bet slip auto-fill (`detectBetSlip` + URL params) | 8 | ✅ Done |
+| 7 | PromoGrind Verified badge program (`promogrind-verified/` landing page) | 6 | ✅ Done |
+| 8 | Public Calculator REST API (`calc-api` edge function, 6 endpoints) | 7 | ✅ Done |
+| 9 | EV Scanner teaser for free users (live count tease in LiveScanner gate) | 6 | ✅ Done |
+| 10 | Account Health Alert Panel in Tracker (gubbed/limited/inactive book alerts) | 7 | ✅ Done |
+| 11 | Promo expiry 24h alert digest (`promo-expiry-digest` edge fn) | 7 | 🔲 Deploy gated (needs RESEND_API_KEY) |
+| 12 | Crowdsourced odds database (community-submitted sharp lines) | 5 | 🔲 Parked |
+| 13 | "Bet of the Day" curator (manual weekly pick + email blast) | 5 | 🔲 Parked |
+| 14 | Sportsbook API directory page (links to books' official APIs) | 4 | 🔲 Parked |
+| 15 | Promo conversion rate benchmarks (anonymized aggregate stats) | 6 | 🔲 Parked |
+| 16 | Automated promo calendar scraping (Playwright/cron) | 6 | 🔲 Parked (Playwright not viable in Deno) |
+| 17 | App Store presence (Capacitor iOS/Android) | 8 | 🔲 MANUAL (needs Mac for iOS) |
+| 18 | Discord community server (#opportunities bot) | 5 | 🔲 MANUAL (code exists in discord-bot/) |
+| 19 | Affiliate link auto-rotation (A/B test CPA vs RevShare tracking links) | 6 | 🔲 Parked (needs affiliate programs first) |
+| 20 | Pro referral double-credit (2x reward if referral upgrades within 7 days) | 6 | 🔲 Parked |
+
+---
+
 ## Completed ✓
+
+### Session 16 — v16.0 (audit + 10 features)
+
+- [x] Full project audit (score: 75/100 — gaps: monetization, SEO authority, distribution)
+- [x] Email capture interstitial — `public/js/pg-capture.js` injected on 5 SEO pages; captures to `newsletter_subscribers` Supabase table
+- [x] Gift 14 Days Free — `GiftTrialBox` component + `supabase/functions/gift-trial/index.ts`; rate-limited (5/30d), awards sender 7 bonus days
+- [x] Live Activity Feed — rotating anonymized social proof events on PricingPage
+- [x] AI Action Plan — `AIActionPlan` component + `supabase/functions/ai-action-plan/index.ts`; Claude Haiku, tiered by bankroll; added as "Action Plan" tab in Live group
+- [x] Starter Pack Modal — bankroll/goal presets shown on first launch before onboarding checklist
+- [x] Chrome Extension bet slip auto-fill — `detectBetSlip()` polls DOM every 2s; appends `?sz=&bo=` to calculator URLs; `⚡ Auto-fill ready` indicator in panel
+- [x] PromoGrind Verified badge — `public/promogrind-verified/index.html` + `badge.svg`; partner badge program landing page; added to sitemap
+- [x] Public Calculator REST API — `supabase/functions/calc-api/index.ts`; 6 endpoints (bonus-bet, arb, ev, profit-boost, no-vig, kelly); no auth required
+- [x] EV Scanner teaser — free users see live-counting opportunity tease above upgrade gate in LiveScanner
+- [x] Account Health Alert Panel — gubbed/limited/inactive book detection in Tracker with colored alerts + advice
+- [x] `scripts/migration-gift-tokens.sql` — gift_tokens table + redeem_gift_token RPC + newsletter_subscribers table
+- [x] sitemap.xml — added promogrind-verified/
+- [x] Build: ✓ clean (109.61 kB gzip)
 
 ### Session 15 — v15.0
 

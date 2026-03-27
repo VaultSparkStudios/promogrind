@@ -44,3 +44,23 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: All human creative direction must be recorded in this file, additive only
 - Why it matters: IP protection, agent continuity, creative alignment across sessions
 - Supersedes prior entry: —
+
+### 2026-03-27 — Session 17 feature assignment
+
+- Category: Assignment
+- Human input: "Complete next code session options" (referring to: Spanish SEO pages, Beat the House 7-email drip, polish sprint, another audit-style sprint)
+- Area affected: public/ (10 new ES pages), supabase/functions/onboarding-drip/ (extended), src/App.jsx (3 polish edits)
+- Previous state: v16.0 — no Spanish pages, 7-day drip, bare empty states, mobile nav overlap
+- New required direction: All four "next code session options" from session 16 closeout implemented in one sprint
+- Why it matters: Spanish expansion is a new TAM; drip extension improves 7-14 day retention; polish reduces friction
+- Supersedes prior entry: —
+
+### 2026-03-27 — Session 16 feature assignment
+
+- Category: Assignment
+- Human input: "Audit project in its entirety and provide score/rating, areas of improvement, category scores, analysis/recommendations and another innovative solutions brainstorm list with every single item having a short synopsis and score/rating attached, and how it would improve/impact the project's overall score. Out of this list, recommend items by 'Highest leverage right now (low effort, real impact)' and 'Highest ceiling (high effort, transformative)'. Then: Update memory and task board with all item ideas and Implement all items that are 'Highest leverage right now (low effort, real impact)' and 'Highest ceiling (high effort, transformative)'."
+- Area affected: Entire codebase — 12 features across App.jsx, 3 edge functions, Chrome extension, static pages, SQL migrations
+- Previous state: v15.0 — 50 tools, no email capture, no gift trial, no AI action plan
+- New required direction: Full audit → brainstorm 20 items → implement all 12 priority items in same session
+- Why it matters: Establishes the audit-then-implement sprint as the primary session format; all 12 items shipped
+- Supersedes prior entry: —

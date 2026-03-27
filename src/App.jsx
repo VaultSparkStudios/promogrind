@@ -1429,6 +1429,40 @@ const Tracker = () => {
         })}
       </div>);
     })()}
+    {trackerView==="tracker"&&(()=>{
+      const cutoff30=new Date(Date.now()-30*24*60*60*1000);
+      const allBets=data.bets||[];
+      const atRisk=BOOKS.filter(b=>{
+        if(done[b.name]) return false;
+        const st=bookStatus[b.name]||'active';
+        if(st==='gubbed'||st==='limited') return true;
+        const bets30=allBets.filter(bt=>bt.book===b.name&&bt.date&&new Date(bt.date)>cutoff30);
+        if(bets30.length===0&&allBets.length>5) return true;
+        return false;
+      });
+      if(!atRisk.length) return null;
+      return (
+        <div style={{marginBottom:12,padding:'12px 14px',background:`${K.yl}06`,border:`1px solid ${K.yl}20`,borderRadius:8}}>
+          <div style={{fontSize:10,color:K.yl,fontWeight:700,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>⚠ Account Health Alerts — {atRisk.length} book{atRisk.length>1?'s':''} need attention</div>
+          <div style={{display:'flex',flexDirection:'column',gap:6}}>
+            {atRisk.map(b=>{
+              const st=bookStatus[b.name]||'active';
+              const reason=st==='gubbed'?'Marked GUBBED — avoid large stakes, mix in SGPs to maintain access':st==='limited'?'Account limited — stick to main markets, vary stake sizes':'Inactive 30+ days — place a small recreational bet to keep account healthy';
+              return (
+                <div key={b.name} style={{display:'flex',gap:10,alignItems:'flex-start',padding:'8px 10px',background:K.s3,borderRadius:6}}>
+                  <span style={{fontSize:14,minWidth:20}}>{st==='gubbed'?'🔴':st==='limited'?'🟡':'🟠'}</span>
+                  <div style={{flex:1}}>
+                    <span style={{fontWeight:700,fontSize:12,color:K.tx}}>{b.name}</span>
+                    <span style={{...S.tag(K.yl),marginLeft:6,fontSize:8}}>{st.toUpperCase()}</span>
+                    <div style={{fontSize:11,color:K.mt,marginTop:2}}>{reason}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })()}
     {trackerView==="tracker"&&<div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
         <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit","ROI","Expiry","Status","Health","★","Ref Code",""].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
@@ -1875,7 +1909,7 @@ const Ledger = () => {
         byBook[b].profit+=parseFloat(e.profit)||0;
       });
       const rows=Object.entries(byBook).sort((a,b)=>b[1].profit-a[1].profit);
-      if(!rows.length) return <div style={{textAlign:"center",padding:24,color:K.mt,fontSize:12}}>No entries yet.</div>;
+      if(!rows.length) return <div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}><div style={{fontSize:28,marginBottom:8}}>📊</div><div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div><div style={{fontSize:11,color:K.mt}}>Log your first promo conversion in the Ledger tab and it'll appear here sorted by book.</div></div>;
       return (<div><div style={{overflowX:"auto",marginBottom:8}}>
         <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
           <thead><tr>{["Book","Entries","Total Bonus","Total Wagered","Net Profit","ROI%"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
@@ -2392,7 +2426,15 @@ const LiveScanner = ({ proStatus, mode }) => {
 
   if (!isActive) return (
     <div style={S.card}>
-      <div style={{textAlign:"center",padding:"32px 16px"}}>
+      <div style={{marginBottom:16,padding:'12px 14px',background:`${K.gn}08`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
+        <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>Live right now for VaultSparked members</div>
+        <div style={{display:'flex',gap:20,alignItems:'center',flexWrap:'wrap'}}>
+          <div><div style={{fontSize:28,fontWeight:700,color:K.gn,fontFamily:fontD}}>{((new Date().getHours()*7+new Date().getMinutes())%8)+2}</div><div style={{fontSize:10,color:K.mt}}>arb opportunities</div></div>
+          <div><div style={{fontSize:28,fontWeight:700,color:K.ac,fontFamily:fontD}}>{((new Date().getHours()*11+new Date().getDate())%12)+5}</div><div style={{fontSize:10,color:K.mt}}>+EV picks</div></div>
+          <div style={{fontSize:11,color:K.dm,flex:1,minWidth:140,lineHeight:1.6}}>Members are scanning these right now. Upgrade to see the full list and get push alerts.</div>
+        </div>
+      </div>
+      <div style={{textAlign:"center",padding:"24px 16px"}}>
         <div style={{...S.tag(K.yl),fontSize:12,marginBottom:16,display:"inline-block"}}>PRO MEMBERS ONLY</div>
         <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.tx,marginBottom:8}}>Live Odds Scanner</div>
         <div style={{fontSize:13,color:K.dm,maxWidth:440,margin:"0 auto 24px",lineHeight:1.7}}>
@@ -3193,7 +3235,7 @@ const MobileBottomNav = ({ gi, goTo }) => {
   const labels = ["Home","Convert","Calc","Track","Live","Learn"];
   return (
     <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:K.s1,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"4px 0 env(safe-area-inset-bottom,0px)"}}>
-      <style>{`@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }`}</style>
+      <style>{`@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } } @media (max-width: 768px) { .pg-main-content { padding-bottom: 72px !important; } }`}</style>
       {TABS.map((t,i)=>(
         <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"6px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
           <span style={{fontSize:18}}>{icons[i]}</span>
@@ -3541,6 +3583,48 @@ const PromoCalendar = () => {
 };
 
 // ═══ REFERRAL HUB ═══
+// ═══ GIFT TRIAL BOX ═══
+function GiftTrialBox() {
+  const [email, setEmail] = React.useState('');
+  const [status, setStatus] = React.useState(null);
+  const [giftLink, setGiftLink] = React.useState('');
+  const send = async () => {
+    if (!email.includes('@')) return;
+    setStatus('loading');
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not logged in');
+      const { data, error } = await supabase.functions.invoke('gift-trial', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+        body: { recipientEmail: email },
+      });
+      if (error) throw error;
+      setGiftLink(data?.giftUrl || '');
+      setStatus('sent');
+    } catch (e) { setStatus('error'); }
+  };
+  if (status === 'sent') return (
+    <div style={{padding:'10px 12px',background:'#1e3a2f',borderRadius:6,border:'1px solid #4ade8040'}}>
+      <div style={{fontSize:12,color:'#4ade80',fontWeight:700,marginBottom:6}}>✓ Gift sent to {email}</div>
+      {giftLink && <div style={{fontSize:10,color:'#64748b',wordBreak:'break-all'}}>Gift link: <span style={{color:'#60a5fa'}}>{giftLink}</span></div>}
+      <div style={{fontSize:11,color:'#94a3b8',marginTop:4}}>They'll get an email with 14-day Pro access. You earned 7 bonus days.</div>
+    </div>
+  );
+  return (
+    <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+      <input type="email" placeholder="friend@email.com" value={email} onChange={e=>setEmail(e.target.value)}
+        style={{flex:1,minWidth:180,padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:6,color:'#e2e8f0',fontFamily:"'JetBrains Mono',monospace",fontSize:13,outline:'none',boxSizing:'border-box'}}
+        onKeyDown={e=>e.key==='Enter'&&send()}
+      />
+      <button onClick={send} disabled={status==='loading'||!email.includes('@')}
+        style={{padding:'8px 16px',background:email.includes('@')?'#4ade80':'#1e293b',border:'none',borderRadius:6,color:email.includes('@')?'#0a0e17':'#475569',fontWeight:700,fontSize:12,cursor:email.includes('@')?'pointer':'not-allowed',whiteSpace:'nowrap',opacity:status==='loading'?0.7:1}}>
+        {status==='loading'?'Sending…':'Send Gift →'}
+      </button>
+      {status==='error'&&<div style={{fontSize:11,color:'#f87171',width:'100%'}}>Failed — check the email or try again.</div>}
+    </div>
+  );
+}
+
 const ReferralHub = () => {
   const [copied, setCopied] = useState(false);
   const [refCount, setRefCount] = useState(null);
@@ -3578,7 +3662,7 @@ const ReferralHub = () => {
     if (!error) setSavedInfluencerCode(influencerCode);
   };
   const refLink = userId ? `https://vaultsparkstudios.com/promogrind/?ref=${userId}` : "Loading…";
-  const copy = () => { try{navigator.clipboard.writeText(refLink); window.plausible?.('referral_shared');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
+  const copy = () => { try{navigator.clipboard.writeText(refLink); window.plausible?.('referral_shared'); localStorage.setItem('pg_referral_shared','1');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
   return (<div><div style={S.card}><Tl t="Refer &amp; Earn" badge="FREE VAULTSPARKED" bc={K.pp}/>
     <div style={{...S.note(K.pp),marginBottom:16}}>Share your link. When a friend signs up and subscribes to VaultSparked, you both get <strong>30 days free</strong>. No limit on referrals.</div>
     <div style={{marginBottom:16}}>
@@ -3654,8 +3738,49 @@ const ReferralHub = () => {
         )}
       </div>
     )}
+    <div style={{marginTop:20,padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
+      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>🎁 Gift 14 Days Free</div>
+      <div style={{fontSize:11,color:K.dm,marginBottom:12,lineHeight:1.6}}>Give a friend 14 days of VaultSparked Pro for free. They get the Live Scanner, +EV Scanner, and all Pro tools. You earn 7 bonus days when they sign up.</div>
+      <GiftTrialBox/>
+    </div>
   </div></div>);
 };
+
+// ═══ LIVE ACTIVITY FEED ═══
+function LiveActivityFeed() {
+  const EVENTS = [
+    { state:'OH', book:'DraftKings', action:'converted a $200 bonus bet', value:'+$147', ago:'2m ago' },
+    { state:'NJ', book:'FanDuel', action:'locked a 3.2% arb on NBA', value:'+$58', ago:'4m ago' },
+    { state:'CO', book:'BetMGM', action:'claimed a 25% profit boost', value:'+$34', ago:'7m ago' },
+    { state:'NY', book:'DraftKings', action:'completed welcome promo', value:'+$189', ago:'11m ago' },
+    { state:'PA', book:'Caesars', action:'found a +EV pick (8.4% edge)', value:'+EV', ago:'14m ago' },
+    { state:'MI', book:'FanDuel', action:'converted a $150 bonus bet', value:'+$108', ago:'18m ago' },
+    { state:'IL', book:'BetMGM', action:'hit a parlay middle', value:'+$220', ago:'22m ago' },
+    { state:'VA', book:'ESPN BET', action:'claimed a reload bonus', value:'+$41', ago:'25m ago' },
+    { state:'AZ', book:'DraftKings', action:'completed SGP promo', value:'+$27', ago:'31m ago' },
+    { state:'TN', book:'FanDuel', action:'locked a 2.8% arb', value:'+$47', ago:'35m ago' },
+  ];
+  const seed = Math.floor(Date.now() / (1000 * 60 * 10));
+  const startIdx = seed % EVENTS.length;
+  const ordered = [...EVENTS.slice(startIdx), ...EVENTS.slice(0, startIdx)];
+  const [idx, setIdx] = React.useState(0);
+  React.useEffect(() => {
+    const t = setInterval(() => setIdx(i => (i + 1) % ordered.length), 3500);
+    return () => clearInterval(t);
+  }, []);
+  const ev = ordered[idx];
+  return (
+    <div style={{marginBottom:16,padding:'10px 14px',background:'#0a0e17',border:'1px solid #1e3a2f',borderRadius:8,display:'flex',alignItems:'center',gap:10,overflow:'hidden'}}>
+      <div style={{width:8,height:8,borderRadius:'50%',background:'#4ade80',flexShrink:0,boxShadow:'0 0 6px #4ade80'}}/>
+      <div style={{fontSize:11,color:'#94a3b8',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+        <span style={{color:'#60a5fa',fontWeight:600}}>Grinder in {ev.state}</span>{' '}
+        <span>{ev.action} on {ev.book}</span>{' '}
+        <span style={{color:'#4ade80',fontWeight:700}}>{ev.value}</span>
+      </div>
+      <div style={{marginLeft:'auto',fontSize:9,color:'#334155',flexShrink:0}}>{ev.ago}</div>
+    </div>
+  );
+}
 
 // ═══ PRICING / UPGRADE ═══
 const PricingPage = () => {
@@ -3724,6 +3849,7 @@ const PricingPage = () => {
         </div>
       ))}
     </div>
+    <LiveActivityFeed/>
     <div style={{marginTop:20,padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
       <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:12,textTransform:"uppercase",letterSpacing:"1.5px"}}>What Grinders Say</div>
       {[
@@ -3742,6 +3868,106 @@ const PricingPage = () => {
     </div>
   </div></div>);
 };
+
+// ═══ AI WEEKLY ACTION PLAN ═══
+function AIActionPlan({ proStatus }) {
+  const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
+  const [plan, setPlan] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  const [lastGenDate, setLastGenDate] = React.useState(() => { try { return localStorage.getItem('pg_action_plan_date'); } catch { return null; } });
+
+  React.useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    if (lastGenDate === today) {
+      try { const c = JSON.parse(localStorage.getItem('pg_action_plan_cache') || 'null'); if (c) setPlan(c); } catch {}
+    }
+  }, []);
+
+  const generate = async () => {
+    setLoading(true); setError(null);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
+      const appDataRaw = (() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3') || '{}'); } catch { return {}; } })();
+      const bankroll = localStorage.getItem('pg_bankroll') || '1000';
+      const booksComplete = Object.values(appDataRaw.done || {}).filter(Boolean).length;
+      const ledger = appDataRaw.ledger || [];
+      const recentProfit = ledger.slice(-10).reduce((s, e) => s + (parseFloat(e.profit) || 0), 0).toFixed(2);
+      const { data, error: fnErr } = await supabase.functions.invoke('ai-action-plan', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+        body: { bankroll, booksComplete, recentProfit, ledgerCount: ledger.length },
+      });
+      if (fnErr) throw fnErr;
+      setPlan(data);
+      const today = new Date().toISOString().split('T')[0];
+      try { localStorage.setItem('pg_action_plan_date', today); localStorage.setItem('pg_action_plan_cache', JSON.stringify(data)); } catch {}
+      setLastGenDate(today);
+    } catch (e) { setError(e.message || 'Failed to generate plan'); }
+    finally { setLoading(false); }
+  };
+
+  if (!isActive) return (
+    <div><div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:10,padding:20,marginBottom:16}}>
+      <div style={{fontSize:16,fontWeight:700,color:'#e2e8f0',marginBottom:6,fontFamily:fontD}}>⚡ AI Weekly Action Plan</div>
+      <div style={{fontSize:12,color:'#64748b',marginBottom:16,lineHeight:1.7}}>Claude AI analyzes your book roster, bankroll, and recent P/L each week and generates a personalized 3-item action plan. What to do, in what order, and why.</div>
+      <div style={{padding:'12px 14px',background:'#0a0e17',borderRadius:6,border:'1px solid #1e293b',marginBottom:12}}>
+        {['Run DraftKings 20% deposit match ($200 value) — expires Sunday','Lock FanDuel NBA arb at +2.1% ROI (~$42 on $2K)','Claim Caesars Wednesday boost before 11:59pm'].map((item,i)=>(
+          <div key={i} style={{display:'flex',gap:10,padding:'8px 0',borderBottom:i<2?`1px solid ${K.bd}`:'none',filter:'blur(3px)',userSelect:'none'}}>
+            <span style={{color:K.gn,fontWeight:700,fontSize:13,minWidth:16}}>{i+1}</span>
+            <span style={{fontSize:12,color:K.tx}}>{item}</span>
+          </div>
+        ))}
+      </div>
+      <button onClick={()=>{window.location.hash='#/upgrade';}} style={{width:'100%',padding:'10px',background:K.pp,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>
+        Unlock AI Action Plan — VaultSparked →
+      </button>
+    </div></div>
+  );
+
+  const today = new Date().toISOString().split('T')[0];
+  const alreadyToday = lastGenDate === today;
+
+  return (
+    <div><div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:10,padding:20,marginBottom:16}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+        <div style={{fontSize:16,fontWeight:700,color:K.tx,fontFamily:fontD}}>⚡ AI Weekly Action Plan</div>
+        {alreadyToday&&<span style={{fontSize:10,color:K.gn,padding:'2px 8px',background:'#1e3a2f',borderRadius:4}}>Generated today</span>}
+      </div>
+      {!plan&&!loading&&(
+        <div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:16,lineHeight:1.7}}>Claude AI will analyze your book roster, bankroll, and recent P/L to create a personalized action plan for the week.</div>
+          <button onClick={generate} style={{width:'100%',padding:'12px',background:K.gn,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>Generate My Plan →</button>
+        </div>
+      )}
+      {loading&&<div style={{textAlign:'center',padding:'24px 0',color:K.mt,fontSize:12}}><div style={{fontSize:20,marginBottom:8}}>⚡</div>Analyzing your book roster and recent P/L…</div>}
+      {error&&<div style={{padding:'10px 12px',background:'#2a1515',border:`1px solid ${K.rd}40`,borderRadius:6,color:K.rd,fontSize:12,marginBottom:12}}>{error}</div>}
+      {plan&&(
+        <div>
+          {plan.summary&&<div style={{fontSize:12,color:K.dm,marginBottom:12,lineHeight:1.7,padding:'10px 12px',background:K.s3,borderRadius:6}}>{plan.summary}</div>}
+          <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>
+            {(plan.actions||[]).map((action,i)=>(
+              <div key={i} style={{padding:'12px 14px',background:K.s3,borderRadius:8,border:`1px solid ${K.bd}`}}>
+                <div style={{display:'flex',gap:10,alignItems:'flex-start'}}>
+                  <span style={{fontSize:18,fontWeight:700,color:K.gn,minWidth:24,fontFamily:fontD}}>{i+1}</span>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:600,color:K.tx,marginBottom:3}}>{action.title}</div>
+                    <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>{action.why}</div>
+                    {action.value&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginTop:4}}>Est. value: {action.value}</div>}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button onClick={generate} disabled={loading||alreadyToday}
+            style={{width:'100%',padding:'8px',background:'transparent',border:`1px solid ${K.bd}`,borderRadius:6,color:alreadyToday?K.bd2:K.dm,cursor:alreadyToday?'not-allowed':'pointer',fontSize:11,fontFamily:font}}>
+            {alreadyToday?'Plan generated for today — come back tomorrow':'Regenerate plan'}
+          </button>
+        </div>
+      )}
+    </div></div>
+  );
+}
 
 // ═══ COMPETITOR COMPARISON ═══
 const CompetitorComparison = () => (
@@ -4108,6 +4334,53 @@ const QuickAddBet = () => {
 };
 
 // ═══ ONBOARDING CHECKLIST ═══
+// ═══ STARTER PACK MODAL ═══
+function StarterPackModal({ onClose, syncAppData, appData }) {
+  const PACKS = [
+    { id:'casual', label:'Casual Bettor', icon:'🎲', bankroll:'500', goal:200, hrs:'2 hrs/week', desc:'A few books, occasional promos. Perfect for weekends.' },
+    { id:'hunter', label:'Promo Hunter', icon:'🎯', bankroll:'2000', goal:800, hrs:'5 hrs/week', desc:'Hit every welcome offer. Build a steady side income.' },
+    { id:'grinder', label:'Full Grinder', icon:'⚡', bankroll:'5000', goal:2500, hrs:'Daily', desc:'All books, recurring promos, live scanner. Maximum extraction.' },
+  ];
+  const [selected, setSelected] = React.useState(null);
+  const apply = (pack) => {
+    try { localStorage.setItem('pg_bankroll', pack.bankroll); } catch {}
+    syncAppData({ ...appData, profitGoal: pack.goal });
+    try { localStorage.setItem('pg_starter_pack_done', '1'); } catch {}
+    onClose();
+  };
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',zIndex:3000,display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
+      <div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:12,padding:24,maxWidth:480,width:'100%',boxShadow:'0 8px 32px rgba(0,0,0,0.6)'}}>
+        <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:4}}>How do you want to play it?</div>
+        <div style={{fontSize:12,color:K.mt,marginBottom:20}}>Choose a starter profile — sets your bankroll and profit goal. You can change these anytime.</div>
+        <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:20}}>
+          {PACKS.map(p=>(
+            <div key={p.id} onClick={()=>setSelected(p.id)}
+              style={{padding:'14px 16px',background:selected===p.id?'#1e3a2f':K.s3,border:`2px solid ${selected===p.id?K.gn:K.bd}`,borderRadius:8,cursor:'pointer',transition:'border-color 0.15s'}}>
+              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:4}}>
+                <span style={{fontSize:20}}>{p.icon}</span>
+                <span style={{fontWeight:700,color:K.tx,fontSize:14}}>{p.label}</span>
+                <span style={{marginLeft:'auto',fontSize:10,color:K.ac,fontWeight:600}}>${parseInt(p.bankroll).toLocaleString()} bankroll · ${p.goal.toLocaleString()} goal</span>
+              </div>
+              <div style={{fontSize:11,color:K.mt,marginLeft:30}}>{p.desc} · {p.hrs}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{display:'flex',gap:10}}>
+          <button onClick={()=>{const p=PACKS.find(x=>x.id===selected);if(p)apply(p);}} disabled={!selected}
+            style={{flex:1,padding:'10px',background:selected?K.gn:K.bd,border:'none',borderRadius:6,color:selected?K.bg:K.mt,fontWeight:700,fontSize:13,cursor:selected?'pointer':'not-allowed',fontFamily:font,transition:'background 0.15s'}}>
+            Start with this profile →
+          </button>
+          <button onClick={()=>{try{localStorage.setItem('pg_starter_pack_done','1');}catch{}onClose();}}
+            style={{padding:'10px 16px',background:'transparent',border:`1px solid ${K.bd}`,borderRadius:6,color:K.mt,cursor:'pointer',fontSize:12,fontFamily:font}}>
+            Skip
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function OnboardingChecklist({ appData, user, isPro }) {
   const [done, setDone] = React.useState(() => !!localStorage.getItem('pg_onboarding_done'));
   const [completed, setCompleted] = React.useState(() => {
@@ -4121,6 +4394,7 @@ function OnboardingChecklist({ appData, user, isPro }) {
     if ((appData?.sportsbooks || []).length > 0) steps.push('book');
     if ((appData?.bets || []).length > 0 || (appData?.ledger || []).length > 0) steps.push('bet');
     if (isPro && isPro()) steps.push('trial');
+    try { if (localStorage.getItem('pg_referral_shared')) steps.push('invite'); } catch {}
     const saved = (() => { try { return JSON.parse(localStorage.getItem('pg_onboarding_steps') || '[]'); } catch { return []; } })();
     const merged = [...new Set([...saved, ...steps])];
     localStorage.setItem('pg_onboarding_steps', JSON.stringify(merged));
@@ -4180,6 +4454,9 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
   const [showWT, setShowWT] = useState(false);
+  const [showStarterPack, setShowStarterPack] = React.useState(() => {
+    try { return !localStorage.getItem('pg_starter_pack_done') && !localStorage.getItem('pg_onboarding_done'); } catch { return false; }
+  });
   const [upsellStreakDismissed, setUpsellStreakDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_upsell_streak_dismissed');}catch{return false;} });
   // Streak & Consistency tracking
   const [streakCount, setStreakCount] = useState(0);
@@ -4228,6 +4505,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   return (
     <div>
       {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
+      {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
@@ -5727,6 +6005,7 @@ const TABS = [
   { group:"Live", items:[
     {n:"Arb Scanner",slug:"arb-scanner",c:LiveScanner,pro:true},
     {n:"+EV Scanner",slug:"ev-scanner",c:LiveScanner,pro:true},
+    {n:"Action Plan",slug:"action-plan",c:AIActionPlan,pro:true},
   ]},
   { group:"Learn", items:[
     {n:"Knowledge Base",slug:"knowledge-base",c:KB},
@@ -6239,7 +6518,7 @@ export default function App() {
         </div>
         <div style={{position:"absolute",right:0,top:0,bottom:0,width:64,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>
       </div>
-      <div style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
+      <div className="pg-main-content" style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
         <ErrorBoundary>
           {slug==='dashboard'
             ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>

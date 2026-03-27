@@ -82,6 +82,7 @@
   <url><loc>https://vaultsparkstudios.com/promogrind/promo-arb-finder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
   <!-- Marketing & legal pages -->
+  <url><loc>https://vaultsparkstudios.com/promogrind/promogrind-verified/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/landing/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/privacy/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/terms/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
@@ -113,6 +114,18 @@
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-glasgow/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-edinburgh/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-liverpool/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Spanish (ES) market pages — US Hispanic audience -->
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bet-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/arb-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/no-vig-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/profit-boost-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/kelly-criterion-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/ev-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/hedge-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/matched-betting-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/sportsbook-promo-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Blog -->
   <url><loc>https://vaultsparkstudios.com/promogrind/blog/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>

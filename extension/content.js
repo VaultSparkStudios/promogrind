@@ -33,8 +33,60 @@
     { id: 'arb-2way',     label: '⚖️ Arbitrage',              slug: 'arb-2way',     desc: 'Lock in guaranteed profit' },
   ];
 
+  // Auto-fill state: detected stake/odds from active bet slip
+  var autoFill = { stake: null, odds: null };
+
+  function detectBetSlip() {
+    var stakeEl = (
+      document.querySelector('[data-testid="bet-slip-wager-input"]') ||
+      document.querySelector('[aria-label*="Bet Amount" i]') ||
+      document.querySelector('input[placeholder*="Wager" i]') ||
+      document.querySelector('input[placeholder*="amount" i][type="number"]') ||
+      document.querySelector('.betslip-stake input') ||
+      document.querySelector('[class*="betslip" i] input[type="number"]')
+    );
+    var oddsEl = (
+      document.querySelector('[data-testid="outcome-odds"]') ||
+      document.querySelector('[class*="odds-value" i]') ||
+      document.querySelector('[class*="outcomeOdds" i]') ||
+      document.querySelector('[aria-label*="odds" i]')
+    );
+
+    var stake = stakeEl ? stakeEl.value || stakeEl.textContent || null : null;
+    var oddsText = oddsEl ? (oddsEl.value || oddsEl.textContent || '').trim() : '';
+    // Validate odds format: +150, -110, etc.
+    var oddsMatch = oddsText.match(/[+-]\d{3,4}/);
+    var odds = oddsMatch ? oddsMatch[0] : null;
+
+    var changed = stake !== autoFill.stake || odds !== autoFill.odds;
+    autoFill.stake = stake || null;
+    autoFill.odds = odds || null;
+
+    if (changed && panel) {
+      var indicator = panel.querySelector('#__pg_autofill');
+      if (autoFill.stake || autoFill.odds) {
+        if (!indicator) {
+          var hdr = panel.querySelector('#__pg_close');
+          if (hdr) {
+            indicator = document.createElement('span');
+            indicator.id = '__pg_autofill';
+            indicator.style.cssText = 'font-size:9px;color:#4ade80;font-weight:700;padding:2px 6px;background:#1e3a2f;border-radius:4px;';
+            indicator.textContent = '⚡ Auto-fill ready';
+            hdr.parentNode.insertBefore(indicator, hdr);
+          }
+        }
+      } else if (indicator) {
+        indicator.remove();
+      }
+    }
+  }
+
   function openCalc(slug) {
-    window.open(APP_BASE + '#/' + slug, '_blank', 'noopener');
+    var params = [];
+    if (autoFill.stake) params.push('sz=' + encodeURIComponent(autoFill.stake));
+    if (autoFill.odds) params.push('bo=' + encodeURIComponent(autoFill.odds));
+    var query = params.length ? '?' + params.join('&') : '';
+    window.open(APP_BASE + query + '#/' + slug, '_blank', 'noopener');
   }
 
   function buildPanel(book) {
@@ -178,6 +230,9 @@
     document.body.appendChild(trigger);
 
     trigger.onclick = showPanel;
+
+    // Poll for bet slip data every 2s
+    setInterval(detectBetSlip, 2000);
 
     // Close on outside click
     document.addEventListener('click', (e) => {

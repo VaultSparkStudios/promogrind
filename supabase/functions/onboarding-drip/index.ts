@@ -71,6 +71,22 @@ const DRIP_SEQUENCE: DripEmail[] = [
     cta: "View Refer & Earn →",
     ctaUrl: "https://vaultsparkstudios.com/promogrind/#/refer-earn",
   },
+  {
+    day: 10,
+    subject: "The promo stack: how to earn $400 in a single weekend",
+    headline: "Stack 3 promos at once — here's how",
+    body: "Advanced grinders don't work promos one at a time. They stack: a profit boost on top of a reload bonus, used on a game where they also have an arb opportunity. The Promo Stacking Calculator shows you the combined EV of running multiple promotions simultaneously on the same event.",
+    cta: "Open Promo Stacking Calculator →",
+    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/promo-stacking",
+  },
+  {
+    day: 14,
+    subject: "Two weeks in — are you leaving money on the table?",
+    headline: "Your 14-day PromoGrind check-in",
+    body: "After two weeks, most grinders have completed 2–3 sportsbook signups ($300–600 in profit) and are starting recurring promos. Check your P/L Ledger — if your total is below $200, you have promos still unclaimed. The Sportsbooks tab shows every book you haven't signed up for yet, with estimated value.",
+    cta: "Check your Sportsbooks →",
+    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/sportsbooks",
+  },
 ];
 
 serve(async (req) => {

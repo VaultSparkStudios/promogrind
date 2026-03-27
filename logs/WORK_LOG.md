@@ -4,6 +4,76 @@ Append sessions chronologically. Never delete entries.
 
 ---
 
+## 2026-03-27 — Session 17 | v17.0 | Spanish SEO + Drip Extension + Polish
+
+**Session type:** Next code session options — SIL brainstorm execution + polish sprint
+
+**Intent outcome:** Achieved — all "next code session options" completed
+
+**Completed:**
+
+**10 Spanish SEO pages (new files):**
+- public/bonus-bet-es/, arb-calculator-es/, no-vig-es/, profit-boost-es/, kelly-criterion-es/
+- public/ev-calculator-es/, parlay-calculator-es/, hedge-calculator-es/, matched-betting-es/, sportsbook-promo-es/
+- Each: dark-theme HTML, JSON-LD schema, Spanish FAQs, pg-capture.js email capture, UTM redirect to app
+
+**supabase/functions/onboarding-drip/index.ts:**
+- Extended from 7 to 14-day sequence (days 10 + 14 added)
+- Day 10: Promo stacking strategy → #/promo-stacking
+- Day 14: 2-week check-in + Sportsbooks progress nudge → #/sportsbooks
+
+**src/App.jsx (3 targeted edits, build ✓ 109.74 kB):**
+- Line 1912: Ledger by-book empty state → icon + heading + hint (was bare "No entries yet.")
+- Line 4397: OnboardingChecklist invite step auto-detects pg_referral_shared localStorage key
+- Line 3665: ReferralHub copy() sets pg_referral_shared on clipboard write
+- Line 6521: pg-main-content class on main content div + mobile CSS padding-bottom fix
+
+**public/sitemap.xml:** 10 ES pages added (149+ URLs)
+
+**Context files updated:** CURRENT_STATE, LATEST_HANDOFF, TASK_BOARD, SELF_IMPROVEMENT_LOOP, PROJECT_STATUS.json, audits/2026-03-27-2.json, CREATIVE_DIRECTION_RECORD, WORK_LOG, project memory
+
+**SIL:** Total 40/50 | Velocity 13 | Debt →
+
+---
+
+## 2026-03-27 — Session 16 | v16.0 | Audit + 12-Feature Sprint
+
+**Session type:** Full project audit + implement all Highest Leverage + Highest Ceiling brainstorm items
+
+**Intent outcome:** Achieved — all 12 items shipped
+
+**Completed:**
+
+**App.jsx edits (10 targeted edits, build ✓ 109.61 kB gzip):**
+- StarterPackModal (3 bankroll profiles, pre-fills bankroll + profit goal on first launch)
+- LiveActivityFeed (rotating social proof ticker on PricingPage)
+- AIActionPlan component (VaultSparked-gated, Claude Haiku, daily cache, bankroll-tiered)
+- GiftTrialBox in ReferralHub ("Give 14 days free" → gift-trial edge fn)
+- EV Scanner free teaser (opportunity count tease above upgrade gate)
+- Account Health Alert Panel in Tracker (gubbed/limited/inactive book alerts)
+- "Action Plan" tab added to Live group in TABS array
+
+**New Supabase Edge Functions (3):**
+- `supabase/functions/ai-action-plan/index.ts` — Claude Haiku, VaultSparked-gated, tiered prompt
+- `supabase/functions/calc-api/index.ts` — public REST API, 6 calculator endpoints, no auth
+- `supabase/functions/gift-trial/index.ts` — token generation, rate limiting, Resend email, sender bonus days
+
+**New static / supporting files:**
+- `public/js/pg-capture.js` — email capture interstitial (5s countdown, Supabase insert)
+- `public/promogrind-verified/index.html` + `public/promogrind-verified/badge.svg`
+- `scripts/migration-gift-tokens.sql` (gift_tokens + newsletter_subscribers + redeem RPC)
+- 5 SEO pages updated to use pg-capture.js instead of bare redirect
+- `public/sitemap.xml` — added promogrind-verified/ (139+ URLs)
+
+**Chrome Extension:**
+- `extension/content.js` — detectBetSlip() + setInterval(detectBetSlip, 2000) wired in init()
+
+**Context files updated:** CURRENT_STATE, LATEST_HANDOFF, TASK_BOARD, SELF_IMPROVEMENT_LOOP, PROJECT_STATUS.json, audits/2026-03-27.json, CREATIVE_DIRECTION_RECORD, WORK_LOG, project memory
+
+**SIL:** Total 39/50 | Velocity 12 | Debt →
+
+---
+
 ## 2026-03-24 — Full Build Session
 
 **Session type:** Bootstrap + infrastructure + app improvements

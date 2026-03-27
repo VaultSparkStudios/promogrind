@@ -1,5 +1,70 @@
 # Latest Handoff
 
+## Where We Left Off (Session 17)
+- Shipped: 13 improvements across 3 groups — spanish_seo (10 pages), drip (extended to 14 days), polish (3 App.jsx fixes)
+- Tests: N/A — no automated test suite
+- Deploy: pending — build ✓ at 109.74 kB gzip; commit + push needed
+
+### What was built — session 17 (v17.0)
+
+**10 Spanish SEO pages** (`public/{slug}-es/index.html`):
+- bonus-bet-es, arb-calculator-es, no-vig-es, profit-boost-es, kelly-criterion-es
+- ev-calculator-es, parlay-calculator-es, hedge-calculator-es, matched-betting-es, sportsbook-promo-es
+- Each: dark-theme HTML, JSON-LD schema, FAQ section, pg-capture.js email capture, UTM redirect
+- sitemap.xml: 149+ URLs (+10 ES pages)
+
+**onboarding-drip extended to 14 days:**
+- Added day 10: Promo stacking strategy → links to `#/promo-stacking`
+- Added day 14: 2-week check-in + Sportsbooks progress nudge → links to `#/sportsbooks`
+- Full sequence now: days 1, 2, 3, 4, 5, 6, 7, 10, 14
+
+**App.jsx polish (3 edits, build ✓):**
+- Ledger by-book empty state: was "No entries yet." → now icon + heading + hint copy (matching Ledger pattern)
+- OnboardingChecklist invite step: auto-completes when `pg_referral_shared` is set (wired to ReferralHub copy button)
+- Mobile nav content overlap: added `pg-main-content` class + CSS rule `padding-bottom: 72px` on mobile
+
+---
+
+## Where We Left Off (Session 16)
+- Shipped: 12 improvements across 7 groups — email_growth, social_proof, ai, onboarding, extension, infrastructure, seo_distribution
+- Tests: N/A — no automated test suite
+- Deploy: pending — build ✓ at 109.61 kB gzip; commit + push needed
+
+### What was built — session 16 (v16.0)
+
+**App.jsx (+~420 lines, build ✓ 109.61 kB gzip):**
+- **StarterPackModal** — 3 onboarding profiles on first Dashboard visit (Casual/Hunter/Grinder); pre-fills `pg_bankroll` + `appData.profitGoal`
+- **LiveActivityFeed** — rotating 10-event social proof ticker on PricingPage; seeds pseudo-randomly per 10-min window
+- **AIActionPlan component** — VaultSparked-gated; calls `ai-action-plan` edge fn; tiered by bankroll; caches daily result in localStorage; added as "Action Plan" tab in Live group
+- **GiftTrialBox in ReferralHub** — "Give 14 days free" email input → calls `gift-trial` edge fn
+- **EV Scanner free teaser** — non-subscribers see live opportunity count tease above upgrade gate
+- **Account Health Alert Panel** — Tracker shows gubbed/limited/inactive book alerts with specific advice
+
+**New Edge Functions:**
+- `supabase/functions/ai-action-plan/index.ts` — Claude Haiku, tiered prompt by bankroll; deploy + `ANTHROPIC_API_KEY` needed
+- `supabase/functions/calc-api/index.ts` — public REST API, 6 endpoints, no auth; deploy only
+- `supabase/functions/gift-trial/index.ts` — rate-limited (5/30d), token generation, sender bonus days; deploy + `RESEND_API_KEY` optional
+
+**New static files:**
+- `public/js/pg-capture.js` — email capture interstitial; injected on bonus-bet, arb-calculator, no-vig, profit-boost, kelly-criterion SEO pages
+- `public/promogrind-verified/index.html` + `badge.svg` — partner badge program landing page
+- `scripts/migration-gift-tokens.sql` — gift_tokens + newsletter_subscribers tables + redeem_gift_token RPC
+- `sitemap.xml` — added promogrind-verified/ (139+ URLs)
+
+**Chrome Extension:**
+- `extension/content.js` — added `detectBetSlip()` + `setInterval(detectBetSlip, 2000)` in `init()`; auto-appends `?sz=&bo=` to calculator URLs; `⚡ Auto-fill ready` panel indicator
+
+### Deploy needed (human action)
+| Item | Command | Notes |
+|---|---|---|
+| `migration-gift-tokens.sql` | Run in Supabase SQL Editor | Must run before gift-trial is called |
+| `calc-api` | `supabase functions deploy calc-api` | Public, no secrets needed |
+| `ai-action-plan` | `supabase functions deploy ai-action-plan` + `supabase secrets set ANTHROPIC_API_KEY=...` | VaultSparked-gated |
+| `gift-trial` | `supabase functions deploy gift-trial` + `supabase secrets set RESEND_API_KEY=...` | Resend optional (email send) |
+| Git commit + push | `git add -A && git commit -m "v16.0"` | Triggers GitHub Pages deploy |
+
+---
+
 ## Where We Left Off (Session 15)
 - Full project audit (76/100) + implemented all "Highest Leverage Now" and "Highest Ceiling" items
 - Build: clean ✓ — 105.87 kB gzip (app chunk, up from 101.55 kB)

@@ -1,12 +1,12 @@
 # Current State
 
-Last updated: 2026-03-26 (v15.0 — audit + onboarding checklist + book tracker + triggers + Plausible events + share cards + taxes calc + competitor pages + UTM + Discord bot)
+Last updated: 2026-03-27 (v17.0 — 10 Spanish SEO pages + 14-day drip + polish: empty states, mobile padding, invite auto-detect)
 
 ## Version
-v15.0 (app) / 3.0.0 (package.json — not critical)
+v17.0 (app) / 3.0.0 (package.json — not critical)
 
 ## App.jsx
-~6,279 lines. Single-file React SPA.
+~6,700 lines. Single-file React SPA.
 
 ## Tabs / Tools
 | Group | Count | Tools |
@@ -15,27 +15,49 @@ v15.0 (app) / 3.0.0 (package.json — not critical)
 | Convert | 5 | Bonus Bet, Profit Boost, First Bet, Deposit Match, Insurance |
 | Calculate | 24 | No-Vig, 3-Way No-Vig, +EV, Kelly, 2-Way Arb, 3-Way Arb, Parlay Hedge, Middle, Odds Convert, Line Shop, Rollover, Teaser, Round Robin, Parlay Builder, SGP Estimator, Hold Calc, Bet Sizer, Income Est., Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, Promo Stacking, **Taxes Estimator** |
 | Track | 7 | Sportsbooks, Bet Tracker, P/L Ledger, Leaderboard, Free Bet Arb, Trade Journal, Odds Compare |
-| Live | 2 | Arb Scanner, +EV Scanner (VaultSparked-gated) |
+| Live | 3 | Arb Scanner, +EV Scanner, **Action Plan** (VaultSparked-gated) |
 | Learn | 11 | Knowledge Base, Promo Finder, Promo Calendar, Promo Board, Glossary, Refer & Earn, Upgrade, Team Accounts, vs Competitors, Promo Arb Finder, Community Promos |
 
-**Total: 50 tools**
+**Total: 51 tools**
 
-## Static SEO Pages: 50
+## Static SEO Pages: 62
 - 17 keyword pages (bonus-bet, arb-calculator, kelly-criterion, no-vig, profit-boost, parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting, free-bet-calculator, deposit-match-calculator, rollover-calculator, same-game-parlay)
 - 10 US state pages (NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN)
 - 8 UK pages (matched-betting-uk, bonus-bets-uk, London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
+- 10 Spanish (ES) pages (bonus-bet-es, arb-calculator-es, no-vig-es, profit-boost-es, kelly-criterion-es, ev-calculator-es, parlay-calculator-es, hedge-calculator-es, matched-betting-es, sportsbook-promo-es)
 - 3 competitor comparison pages (vs-profitduel, vs-oddsjam, vs-betterbet)
 - 5 blog posts + blog index
 - 2 tool pages (income-estimator, embed)
 - 3 support pages (landing, privacy, terms)
-- sitemap.xml: 138+ URLs — all 35 redirect pages have UTM params
+- 1 partner page (promogrind-verified)
+- sitemap.xml: 149+ URLs
 
 ## Build
-- App chunk: ~390KB raw / **105.87 kB gzip**
+- App chunk: ~420KB raw / **109.74 kB gzip**
 - Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
 - Supabase chunk: 194KB raw / 51KB gzip
 - Strategy: network-first JS/CSS, cache-first fonts/images
 - SW version: promogrind-v3
+
+## v17.0 New Features
+- **10 Spanish SEO pages** — `public/{slug}-es/index.html` for all top calculator keywords; US Hispanic market; full content + schema + FAQ + pg-capture.js email capture + UTM redirect
+- **Onboarding drip extended to 14 days** — added day 10 (promo stacking) + day 14 (2-week check-in); full sequence: 1, 2, 3, 4, 5, 6, 7, 10, 14
+- **Ledger by-book empty state** — upgraded from bare "No entries yet." to icon + heading + contextual hint
+- **OnboardingChecklist invite auto-detect** — auto-marks invite step done when `pg_referral_shared` is set (wired to ReferralHub copy button)
+- **Mobile nav content padding** — `pg-main-content` class + CSS `padding-bottom: 72px` prevents bottom nav from overlapping tab content on mobile
+
+## v16.0 New Features
+- **Email Capture Interstitial** — `public/js/pg-capture.js` injected on 5 SEO pages; 5s countdown + skip; saves to `newsletter_subscribers` Supabase table
+- **Gift 14 Days Free** — `GiftTrialBox` in ReferralHub + `supabase/functions/gift-trial/index.ts`; rate-limited (5/30d), awards sender 7 bonus days, Resend email optional
+- **Live Activity Feed** — rotating 10-event social proof ticker on PricingPage; rotates every 3.5s, seeded pseudo-randomly per 10-min window
+- **AI Action Plan** — `AIActionPlan` component + `supabase/functions/ai-action-plan/index.ts`; Claude Haiku, tiered by bankroll, cached daily in localStorage; added as "Action Plan" tab in Live group
+- **Starter Pack Modal** — 3 onboarding profiles (Casual $500/Hunter $2K/Grinder $5K) pre-fill bankroll + profit goal on first Dashboard visit
+- **Chrome Extension Bet Slip Auto-Fill** — `detectBetSlip()` polls DOM every 2s; auto-fills `?sz=&bo=` on calculator opens; `⚡ Auto-fill ready` indicator
+- **PromoGrind Verified Badge** — `public/promogrind-verified/index.html` + `badge.svg`; partner badge outreach landing page; added to sitemap
+- **Public Calculator REST API** — `supabase/functions/calc-api/index.ts`; 6 endpoints (bonus-bet, arb, ev, profit-boost, no-vig, kelly); no auth required; attribution header
+- **EV Scanner Teaser** — free users see live-counting opportunity numbers above upgrade gate in LiveScanner
+- **Account Health Alert Panel** — gubbed/limited/inactive book detection in Tracker; colored alert rows with specific advice
+- **SQL migrations** — `scripts/migration-gift-tokens.sql` (gift_tokens + redeem_gift_token RPC + newsletter_subscribers)
 
 ## v15.0 New Features
 - **Onboarding Checklist** — 5-step card on Dashboard; auto-detects calc/book/bet/trial/invite completion; dismissible
@@ -93,18 +115,22 @@ v15.0 (app) / 3.0.0 (package.json — not critical)
 | `team_accounts` | Team tier | ✓ live (v14) |
 | `team_members` | Team membership | ✓ live (v14) |
 | `influencer_codes` | Creator vanity codes | ✓ live (v14) |
+| `gift_tokens` | Gift trial tokens | ⏳ migration not yet run |
+| `newsletter_subscribers` | Email capture | ⏳ migration not yet run |
 
 ## Blockers (external — parked)
 1. **Affiliate links** — placeholder URLs in `src/books.js`; zero affiliate revenue
-2. **ANTHROPIC_API_KEY** — parse-bet-slip edge function ready, not deployed
+2. **ANTHROPIC_API_KEY** — parse-bet-slip + ai-action-plan edge functions ready, not deployed
 3. **Odds API** — key not set; Live Scanner non-functional for VaultSparked users
 4. **Stripe** — LLC + EIN needed; products not created; checkout + webhook ready
-5. **Resend** — onboarding-drip + weekly-digest functions ready; key not set
+5. **Resend** — onboarding-drip + weekly-digest + gift-trial functions ready; key not set
 6. **VAPID keys** — push notifications skeleton ready; not deployed
-7. **Google Search Console** — sitemap (138+ URLs) not yet submitted
+7. **Google Search Console** — sitemap (139+ URLs) not yet submitted
 8. **promogrind.com** — CNAME file ready; domain not purchased
 9. **Chrome Web Store** — extension ready; screenshots + $5 fee needed
 10. **Discord bot** — code ready; needs Discord dev account + env vars
+11. **migration-gift-tokens.sql** — must run in Supabase SQL Editor before gift-trial goes live
+12. **calc-api** — deploy: `supabase functions deploy calc-api` (no secrets needed)
 
 ## What's working end-to-end
 - Auth (Supabase email/password + 7-day trial)
