@@ -2851,23 +2851,13 @@ const DailyStreak = () => {
         try {
           const milestonesKey='pg_streak_milestones';
           const milestones=JSON.parse(localStorage.getItem(milestonesKey)||'[]');
-          let changed=false;
-          if(s>=7&&!milestones.includes('7')){
-            await supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:50,p_event_type:'streak_milestone_7'});
-            milestones.push('7'); changed=true;
-            if(toast) toast('🔥 7-day streak! +50 Vault Points earned!',K.yl);
+          const MILESTONES=[[7,50,'🔥 7-day streak! +50 Vault Points earned!'],[30,200,'🔥 30-day streak! +200 Vault Points earned!'],[100,500,'🔥 100-day streak! +500 Vault Points earned!']];
+          const eligible=MILESTONES.filter(([days])=>s>=days&&!milestones.includes(String(days)));
+          if(eligible.length){
+            await Promise.all(eligible.map(([days,points])=>supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:points,p_event_type:`streak_milestone_${days}`})));
+            for(const [days,,msg] of eligible){ milestones.push(String(days)); if(toast) toast(msg,K.yl); }
+            localStorage.setItem(milestonesKey,JSON.stringify(milestones));
           }
-          if(s>=30&&!milestones.includes('30')){
-            await supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:200,p_event_type:'streak_milestone_30'});
-            milestones.push('30'); changed=true;
-            if(toast) toast('🔥 30-day streak! +200 Vault Points earned!',K.yl);
-          }
-          if(s>=100&&!milestones.includes('100')){
-            await supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:500,p_event_type:'streak_milestone_100'});
-            milestones.push('100'); changed=true;
-            if(toast) toast('🔥 100-day streak! +500 Vault Points earned!',K.yl);
-          }
-          if(changed) localStorage.setItem(milestonesKey,JSON.stringify(milestones));
         } catch {}
       } catch(e){}
     })();
@@ -3817,14 +3807,17 @@ function LiveActivityFeed() {
 // ═══ PROMO ADVISOR PANEL ═══
 const PromoAdvisorPanel = ({ proStatus, onClose }) => {
   const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
-  const today = new Date().toISOString().slice(0, 10);
-  const usesKey = `pg_advisor_uses_${today}`;
   const DAILY_LIMIT = isPro ? 9999 : 3;
   const [promoText, setPromoText] = useState('');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [uses, setUses] = useState(() => { try { return parseInt(localStorage.getItem(usesKey) || '0'); } catch { return 0; } });
+  const [uses, setUses] = useState(() => {
+    try {
+      const todayKey = `pg_advisor_uses_${new Date().toISOString().slice(0,10)}`;
+      return parseInt(localStorage.getItem(todayKey) || '0');
+    } catch { return 0; }
+  });
   const toast = useToast();
 
   const analyze = async () => {
@@ -3837,7 +3830,8 @@ const PromoAdvisorPanel = ({ proStatus, onClose }) => {
       if (fnErr) throw fnErr;
       const newUses = uses + 1;
       setUses(newUses);
-      try { localStorage.setItem(usesKey, String(newUses)); } catch {}
+      // Write to today's key at call time (handles midnight rollover correctly)
+      try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
       setResult(data);
     } catch(e) {
       setError('Analysis failed. Please try again.');
@@ -3846,7 +3840,8 @@ const PromoAdvisorPanel = ({ proStatus, onClose }) => {
     }
   };
 
-  const ratingColor = result?.rating === 'excellent' ? K.gn : result?.rating === 'good' ? K.ac : K.yl;
+  const isLimited = uses >= DAILY_LIMIT && !isPro;
+  const ratingColor = result?.rating === 'excellent' ? K.gn : result?.rating === 'good' ? K.ac : result?.rating === 'poor' ? K.rd : K.yl;
 
   return (
     <div style={{position:'fixed',right:0,top:0,bottom:0,width:360,background:K.s1,borderLeft:`1px solid ${K.bd}`,zIndex:1100,display:'flex',flexDirection:'column',boxShadow:'-4px 0 32px rgba(0,0,0,0.6)'}}>
@@ -3867,15 +3862,15 @@ const PromoAdvisorPanel = ({ proStatus, onClose }) => {
         {!isPro && (
           <div style={{fontSize:11,color:K.mt,textAlign:'right'}}>{uses}/{DAILY_LIMIT} free analyses today</div>
         )}
-        {uses >= DAILY_LIMIT && !isPro && (
+        {isLimited && (
           <div style={{background:`${K.pp}15`,border:`1px solid ${K.pp}30`,borderRadius:8,padding:10,fontSize:12,color:K.pp,textAlign:'center'}}>
             Daily limit reached. Upgrade to VaultSparked for unlimited analyses.
           </div>
         )}
         <button
           onClick={analyze}
-          disabled={loading || !promoText.trim() || (uses >= DAILY_LIMIT && !isPro)}
-          style={{padding:'9px',background:uses>=DAILY_LIMIT&&!isPro?K.s2:'#7c3aed',border:`1px solid ${uses>=DAILY_LIMIT&&!isPro?K.bd:'#7c3aed'}`,borderRadius:8,color:uses>=DAILY_LIMIT&&!isPro?K.mt:'#fff',fontWeight:700,fontSize:12,cursor:loading||(uses>=DAILY_LIMIT&&!isPro)?'default':'pointer',fontFamily:font,opacity:loading?0.7:1}}
+          disabled={loading || !promoText.trim() || isLimited}
+          style={{padding:'9px',background:isLimited?K.s2:'#7c3aed',border:`1px solid ${isLimited?K.bd:'#7c3aed'}`,borderRadius:8,color:isLimited?K.mt:'#fff',fontWeight:700,fontSize:12,cursor:loading||isLimited?'default':'pointer',fontFamily:font,opacity:loading?0.7:1}}
         >
           {loading ? '⏳ Analyzing...' : '🔍 Analyze This Promo'}
         </button>

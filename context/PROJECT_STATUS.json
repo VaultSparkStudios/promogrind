@@ -4,7 +4,7 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "17.0.0",
+  "version": "18.0.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
@@ -14,7 +14,7 @@
   "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA", "Chrome Extension"],
   "backend": true,
   "last_updated": "2026-03-27",
-  "app_lines": 6700,
+  "app_lines": 6752,
   "auth_lines": 196,
   "calculator_count": 27,
   "tab_count": {
@@ -26,20 +26,32 @@
     "Learn": 11
   },
   "total_tools": 51,
-  "static_seo_pages": 62,
+  "static_seo_pages": 82,
   "blog_posts": 5,
-  "audit_score": 75,
-  "audit_score_note": "v16 audit — email capture + AI plan + gift viral loop added; revenue still $0 but growth infrastructure much stronger",
+  "audit_score": 77,
+  "audit_score_note": "v18 audit — promo advisor + trial urgency + streak milestones + 20 state SEO pages + concierge tier added; revenue still $0 but 84+ projected after manual items",
   "audit_date": "2026-03-27",
   "audit_category_scores": {
-    "code_quality": 62,
+    "code_quality": 63,
     "feature_completeness": 93,
-    "ux_polish": 80,
-    "revenue_monetization": 28,
-    "seo_discoverability": 68,
-    "infrastructure": 73,
-    "growth_retention": 72
+    "ux_polish": 81,
+    "revenue_monetization": 30,
+    "seo_discoverability": 69,
+    "infrastructure": 74,
+    "growth_retention": 73
   },
+  "session_18_additions": [
+    "PromoAdvisorPanel — floating 💡 header button + slide-out panel; Claude Haiku promo explainer; 3/day free / unlimited pro; calls promo-advisor edge fn",
+    "promo-advisor edge function — supabase/functions/promo-advisor/index.ts; Claude Haiku; POST {promoText} → {verdict, rating, explanation, ev, action, hedge}",
+    "DailyStreak milestone awards — 7/30/100-day streaks award 50/200/500 Vault Points via award_vault_points RPC; parallel RPCs; toast confirmation",
+    "Trial urgency banner 3-variant — green (>3 days), amber (>1), red (≤1)",
+    "onboarding-drip trial expiry emails — day 4 (3 days left) + day 6 (last chance); guarded by trial_emails_sent in user_metadata",
+    "weekly-digest personalized stats — getUserWeekStats: weekly P/L + top book + login streak + action item per user",
+    "PricingPage 3-tier — Concierge $9.99/mo waitlist card; isConcierge() in auth.js",
+    "20 new US state SEO pages — IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT (30 state pages total)",
+    "sitemap.xml — 169+ URLs",
+    "Simplify review — milestone loop, ratingColor fix, isLimited extracted, usesKey midnight fix, weekly-digest getUserWeekStats parallelized"
+  ],
   "session_16_additions": [
     "Email capture interstitial — public/js/pg-capture.js injected on 5 SEO pages; saves to newsletter_subscribers Supabase table",
     "Gift 14 Days Free — GiftTrialBox in ReferralHub + gift-trial edge function (rate-limited, token-based, Resend optional)",
@@ -94,7 +106,7 @@
   "build": {
     "sw_version": "promogrind-v3",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "109.61KB",
+    "app_chunk_gzip": "111.57KB",
     "vendor_chunk_gzip": "49.33KB",
     "supabase_chunk_gzip": "50.93KB"
   },
@@ -135,13 +147,14 @@
   },
   "seo": {
     "approach": "Static landing pages (auth-gated SPA cannot use SSG)",
-    "pages_live": 45,
+    "pages_live": 82,
     "keyword_pages": 17,
-    "us_state_pages": 10,
+    "us_state_pages": 30,
+    "es_pages": 10,
     "uk_pages": 8,
     "blog_posts": 5,
     "support_pages": 5,
-    "sitemap_urls": "131+"
+    "sitemap_urls": "169+"
   },
   "blog": {
     "path": "public/blog/",
@@ -178,7 +191,7 @@
   "silVelocity": 13,
   "silDebt": "→",
   "silLastSession": "2026-03-27",
-  "lastDeployStatus": "deployed — sessions 16+17 committed and pushed",
+  "lastDeployStatus": "deployed — sessions 16+17+18 committed and pushed",
   "future_projects": [
     "Email drip sequence (5-email onboarding after signup) — Resend infra ready",
     "Taxes calculator tool (in-app, reads from Ledger)",

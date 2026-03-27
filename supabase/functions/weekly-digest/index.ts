@@ -76,14 +76,18 @@ async function getUserWeekStats(
 ): Promise<WeekStats> {
   const result: WeekStats = { weeklyPnl: null, topBook: null, entryCount: 0, loginCount: 0 };
   try {
-    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const sevenDaysAgoMs = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const sevenDaysAgo = new Date(sevenDaysAgoMs).toISOString().slice(0, 10);
 
-    // Fetch ledger from promogrind_data
-    const { data: pgData } = await supabase
-      .from('promogrind_data')
-      .select('ledger')
-      .eq('user_id', userId)
-      .maybeSingle();
+    // Fetch ledger and login count in parallel (independent queries)
+    const [{ data: pgData }, { count }] = await Promise.all([
+      supabase.from('promogrind_data').select('ledger').eq('user_id', userId).maybeSingle(),
+      supabase.from('vault_events').select('id', { count: 'exact', head: true })
+        .eq('user_id', userId).eq('event_type', 'daily_login')
+        .gte('created_at', new Date(sevenDaysAgoMs).toISOString()),
+    ]);
+
+    result.loginCount = count ?? 0;
 
     if (pgData?.ledger && Array.isArray(pgData.ledger)) {
       const recentEntries = pgData.ledger.filter((e: Record<string, unknown>) =>
@@ -103,16 +107,9 @@ async function getUserWeekStats(
         result.topBook = Object.entries(bookMap).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
       }
     }
-
-    // Login count from vault_events
-    const { count } = await supabase
-      .from('vault_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('event_type', 'daily_login')
-      .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
-    result.loginCount = count ?? 0;
-  } catch { /* best-effort */ }
+  } catch (e) {
+    console.error(`[weekly-digest] getUserWeekStats failed for ${userId}:`, e);
+  }
   return result;
 }
 

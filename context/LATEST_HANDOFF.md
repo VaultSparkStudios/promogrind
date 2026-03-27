@@ -1,5 +1,42 @@
 # Latest Handoff
 
+## Where We Left Off (Session 18)
+- Shipped: Full project audit (77/100) + 7 code features + 20 US state SEO pages + Simplify code review
+- Build: clean ✓ — 111.57 kB gzip (3.13s)
+- Git: commit + push pending (closeout)
+
+### What was built — session 18 (v18.0)
+
+**App.jsx (+194 lines → ~6,752 lines, build ✓):**
+- **PromoAdvisorPanel** — floating 💡 button in header; slide-out 360px panel; Claude Haiku promo explainer; 3/day free, unlimited VaultSparked/trial; calls `promo-advisor` edge fn; color-coded result (excellent=green, good=cyan, fair=yellow, poor=red)
+- **DailyStreak milestone awards** — streak milestones at 7/30/100 days award 50/200/500 Vault Points via `award_vault_points` RPC; parallel RPCs for multiple milestones; toast celebration
+- **Trial urgency banner 3-variant** — green (>3 days, 🎉), amber/K.yl (>1 ≤3, ⏳), red/K.rd (≤1, 🚨)
+- **PricingPage Concierge tier** — $9.99/mo waitlist card (cyan accent) above VaultSparked; toast-based waitlist capture in localStorage
+- **isConcierge()** — added to `src/auth.js` for future Concierge-gated features
+
+**New Edge Function:**
+- `supabase/functions/promo-advisor/index.ts` — Claude Haiku; POST `{promoText}` → `{verdict, rating, explanation, ev, action, hedge}`; requires `ANTHROPIC_API_KEY`
+
+**Updated Edge Functions:**
+- `supabase/functions/onboarding-drip/index.ts` — added `processTrialExpiryEmails()`: sends day-4 (3 days left) + day-6 (last chance) trial urgency emails; guarded by `trial_emails_sent` in user metadata
+- `supabase/functions/weekly-digest/index.ts` — added `getUserWeekStats()`: personalized P/L + streak + top book per user; `buildWeekStatsHtml()`: "📊 Your Week" section in every digest email
+
+**20 new US state SEO pages** (`public/bonus-bets-{state}/index.html`):
+- Full mobile markets: Indiana, Iowa, West Virginia, Kansas, Maryland, Massachusetts, Louisiana, Kentucky, North Carolina, Connecticut
+- Restricted/special: Nevada (in-person reg), Oregon (DK-only lottery), New Hampshire (DK monopoly), Vermont (2-operator)
+- Limited/retail: Mississippi (retail only), Missouri (just approved), Wyoming (small pop, competitive)
+- No mobile yet: North Dakota (tribal only), South Dakota (limited), Montana (lottery monopoly)
+- 30 US state pages total
+
+**sitemap.xml** — 169+ URLs (+20 state pages)
+
+**Simplify code review (session 18 closeout):**
+- DailyStreak milestones: replaced 3x copy-paste blocks with `MILESTONES` config array + `Promise.all` for parallel RPC calls
+- PromoAdvisorPanel: fixed `ratingColor` to handle 'poor' → K.rd; extracted `isLimited` boolean (removes 5x repeated ternary); fixed stale `usesKey` at midnight (compute `today` at call time, not render)
+- weekly-digest `getUserWeekStats`: extracted single `sevenDaysAgoMs` constant; parallel `Promise.all` for ledger + vault_events queries; added `console.error` in catch for operational visibility
+
+---
+
 ## Where We Left Off (Session 17)
 - Shipped: 13 improvements across 3 groups — spanish_seo (10 pages), drip (extended to 14 days), polish (3 App.jsx fixes)
 - Tests: N/A — no automated test suite
@@ -223,7 +260,7 @@
 
 ---
 
-Last updated: 2026-03-27 (session 17 — Spanish SEO + drip extension + polish + closeout)
+Last updated: 2026-03-27 (session 18 — full audit + 7 features + 20 state SEO pages + Simplify review)
 
 This is the authoritative active handoff file for the project.
 

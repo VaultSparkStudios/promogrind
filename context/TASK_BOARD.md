@@ -41,7 +41,7 @@
 ### P0 — Zero cost, unblocks features now (< 15 min each)
 - [ ] **`supabase functions deploy calc-api`** — public calculator REST API; no secrets; 1 command
 - [ ] **Run `scripts/migration-gift-tokens.sql`** in Supabase SQL Editor — creates gift_tokens + newsletter_subscribers tables; required before gift-trial function is usable
-- [ ] **Submit sitemap to Google Search Console** — add property → verify → submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` (149+ URLs); 5 minutes, zero cost
+- [ ] **Submit sitemap to Google Search Console** — add property → verify → submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` (169+ URLs); 5 minutes, zero cost
 - [ ] **`supabase functions deploy promo-advisor`** — Promo Advisor panel goes live; set `ANTHROPIC_API_KEY` first (same as ai-action-plan)
 
 ### P1 — API keys (Resend unlocks 4 functions at once)
@@ -222,7 +222,7 @@
 
 ## Completed ✓
 
-### Session 18 — v18.0 (audit + 7 code features + 20 SEO pages)
+### Session 18 — v18.0 (audit + 7 code features + 20 SEO pages + Simplify review)
 
 - [x] Full project audit (score: 77/100 — projected 84+ with all session 18 items)
 - [x] PromoAdvisorPanel — floating 💡 button in header; slide-out panel; Claude Haiku promo explainer; 3/day free, unlimited VaultSparked; calls promo-advisor edge fn
@@ -234,7 +234,8 @@
 - [x] PricingPage 3-tier — Concierge $9.99/mo waitlist card added between Free + VaultSparked; isConcierge() in auth.js
 - [x] 20 new US state SEO pages — IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT (30 total state pages)
 - [x] sitemap.xml — 169+ URLs
-- [x] Build: ✓ clean
+- [x] Build: ✓ clean (111.57 kB gzip)
+- [x] Simplify code review — milestone loop refactored, ratingColor fixed (poor→K.rd), isLimited extracted, usesKey midnight fix, weekly-digest getUserWeekStats parallelized + console.error added
 
 ### Session 16 — v16.0 (audit + 10 features)
 
