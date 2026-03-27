@@ -2,9 +2,16 @@
 
 ---
 
-## 🚧 Manual / External — PARKED (do after polish)
+## 🚧 Manual / External — PARKED (requires credentials, accounts, or purchases)
 
-> These require browser logins, third-party accounts, or credentials. Touch last.
+> These require browser logins, third-party accounts, or credentials. Touch last. Flagged from session 13.
+
+### Deploy gates (need secrets first)
+- [ ] **parse-bet-slip Edge Function** — `supabase functions deploy parse-bet-slip` + `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` → AI Scan button in BonusBet goes live
+- [ ] **Push notifications** — `npx web-push generate-vapid-keys` → `supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=...` → deploy `send-daily-brief` → run `scripts/migration-push-subscriptions.sql` → add `VITE_VAPID_PUBLIC_KEY` to `.env`
+- [ ] **Odds API** — theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → deploy `odds` function; change refresh 120s → 300s in LiveScanner
+- [ ] **Resend newsletter** — resend.com → verify vaultsparkstudios.com → `supabase secrets set RESEND_API_KEY=...` → deploy `weekly-digest`
+- [ ] **Stripe** — create Monthly ($24.99/mo) + Annual ($199/yr) products → set `STRIPE_*` secrets → deploy `create-checkout` + `stripe-webhook`. **Blocked by LLC + EIN.**
 
 ### SQL (run in Supabase SQL Editor)
 - [x] `scripts/migration-community-board.sql` ✓
@@ -20,14 +27,24 @@
 - [ ] OR: apply via Income Access / Gambling.com Group (single network, multiple books)
 - [ ] Once tracking URLs received: replace placeholder URLs in `src/books.js` `referralLink` fields
 
-### External platform setup
-- [ ] **Odds API** — theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → deploy `odds` function; change refresh 120s → 300s in LiveScanner
-- [ ] **Stripe** — create Monthly ($24.99/mo) + Annual ($199/yr) products → set `STRIPE_*` secrets → deploy `create-checkout` + `stripe-webhook`. Note: frontend already passes `planId`. Blocked by LLC + EIN.
-- [ ] **Resend** — resend.com → verify vaultsparkstudios.com → `supabase secrets set RESEND_API_KEY=...` → deploy `weekly-digest`
-- [ ] **Push notifications** — `npx web-push generate-vapid-keys` → set `VAPID_*` secrets → deploy `send-daily-brief` → run push migration → add `VITE_VAPID_PUBLIC_KEY` to `.env`
+### Chrome Extension — Web Store submission
+- [ ] Capture 1280x800 screenshots of extension popup + sidebar panel
+- [ ] Write Chrome Web Store listing copy (description, categories)
+- [ ] Submit at chrome.google.com/webstore/devconsole (one-time $5 dev fee)
+- [ ] Add privacy policy URL (already live at `/promogrind/privacy/`)
+
+### Domain migration — promogrind.com
+- [ ] Purchase promogrind.com (GoDaddy / Namecheap / Cloudflare)
+- [ ] Add CNAME DNS record: `promogrind.com` → `vaultsparkstudios.github.io`
+- [ ] After DNS propagates: update all 45 SEO page `window.location.href` redirects from `vaultsparkstudios.com/promogrind/#/` → `promogrind.com/#/`
+- [ ] Update all 45 SEO page `<link rel="canonical">` from `vaultsparkstudios.com/promogrind/...` → `promogrind.com/...`
+- [ ] Update `sitemap.xml` base URL
+- [ ] Update `context/PROJECT_STATUS.json` `public_url` field
+
+### OAuth & Analytics
 - [ ] **Google OAuth** — console.cloud.google.com → OAuth 2.0 Client ID → Supabase Auth Providers
 - [ ] **Discord OAuth** — discord.com/developers → New App → Supabase Auth Providers
-- [ ] **Google Search Console** — add property → verify ownership → submit sitemap: `https://vaultsparkstudios.com/promogrind/sitemap.xml`
+- [ ] **Google Search Console** — add property → verify ownership → submit sitemap: `https://vaultsparkstudios.com/promogrind/sitemap.xml` (131+ URLs)
 
 ---
 
@@ -49,13 +66,14 @@
 - [ ] Test LiveScanner with real Odds API key
 - [ ] Test weekly-digest Edge Function with real Resend key
 - [ ] Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)
-- [x] SSG/pre-rendering — 30 static pages live. vite-plugin-ssg NOT viable (auth-gated app).
-- [ ] Browser extension — separate project, detects sportsbook pages
 - [ ] Email drip sequence — onboarding automation via Resend (after newsletter deployed)
 - [ ] Discord community + bot integration
-- [ ] Claude API bet slip parser
-- [x] UK market foundation — 5 UK books in PromoCalendar (session 12)
+- [ ] Social share cards from calculator results (viral loop)
+- [ ] Firefox extension (port from Chrome MV3)
+- [ ] More state SEO pages (20 more US states still unserved)
+- [ ] More UK city pages (Leeds, Bristol, Newcastle, Cardiff, Belfast)
 - [ ] Crowdsourced promo API endpoint
+- [ ] Taxes calculator tool (in-app, reads from Ledger)
 
 ## Blocked
 
@@ -67,11 +85,21 @@
 - Team accounts backend: `team_members` table
 - Plausible → deeper event tracking
 - Props scanner cost optimization
-- More state SEO pages (20 more states still unserved)
 
 ---
 
 ## Completed ✓
+
+### Session 13 — 4 high-ceiling items + domain prep (v13.0)
+
+- [x] Chrome Extension (MV3) — `extension/` directory: manifest, content.js, popup, background.js; floating ⚡ trigger + slide-out panel on 12 sportsbooks
+- [x] AI bet slip parser — `supabase/functions/parse-bet-slip/index.ts` using Claude claude-haiku vision; 📷 Scan button in BonusBet auto-fills stake/odds/hedgeOdds
+- [x] UK market module — `matched-betting-uk/` + `bonus-bets-uk/` + 6 city pages (London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
+- [x] PromoCalendar market toggle — 🌎/🇺🇸/🇬🇧 filter; book select respects active market
+- [x] Content blog — `public/blog/` index + 5 posts (matched betting, promos 2026, DK vs FD, taxes, arb)
+- [x] CNAME file — `public/CNAME = promogrind.com` (passive, DNS not yet configured)
+- [x] sitemap.xml — 131+ URLs (+8 UK + blog index + 5 posts)
+- [x] Build: ✓ 98.41 kB gzip
 
 ### Session 12 — Full audit + implementation sprint (v12.0)
 
@@ -94,13 +122,6 @@
 - 10 state SEO pages: NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN
 
 **Build:** ✓ built in 3.30s — 97.02 kB gzip
-
-### Simplify session — Code review + cleanup (v9.1)
-- Fixed 4 React Rules of Hooks violations
-- Added `downloadFile` + `calcROI` module utilities
-- Moved `parseNL` to module scope
-- Added `useMemo` to filtered (PromoCalendar) and myAvgClv (Leaderboard)
-- Fixed health score hot path
 
 ### Session 11 — Audit #5 + 15 features + push system + 13 SEO pages (v11.0)
 - 7-Day Free Trial system (auth.js + App.jsx)
@@ -134,6 +155,13 @@
 - Promo grading A/B/C, State-based personalization
 - Personal book referral tracker, Competitor comparison page
 - All-Time Report Card, Show Example buttons, Daily Dashboard (default landing)
+
+### Simplify session — Code review + cleanup (v9.1)
+- Fixed 4 React Rules of Hooks violations
+- Added `downloadFile` + `calcROI` module utilities
+- Moved `parseNL` to module scope
+- Added `useMemo` to filtered (PromoCalendar) and myAvgClv (Leaderboard)
+- Fixed health score hot path
 
 ### Sessions 1–6 — Foundation through engagement features
 - Full app, auth, cloud sync, 27 calculators, all Track/Learn tabs, PWA, Supabase live

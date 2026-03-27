@@ -1,12 +1,12 @@
 # Current State
 
-Last updated: 2026-03-26 (v9.1 — simplify session)
+Last updated: 2026-03-26 (v13.0 — Chrome extension + AI parser + UK market + blog)
 
 ## Version
-v9.1 (app) / 3.0.0 (package.json — not critical)
+v13.0 (app) / 3.0.0 (package.json — not critical)
 
 ## App.jsx
-~4,600 lines. Single-file React SPA.
+~5,870 lines. Single-file React SPA.
 
 ## Tabs / Tools
 | Group | Count | Tools |
@@ -20,11 +20,20 @@ v9.1 (app) / 3.0.0 (package.json — not critical)
 
 **Total: 48 tools**
 
+## Static SEO Pages: 45
+- 17 keyword pages (bonus-bet, arb-calculator, kelly-criterion, no-vig, profit-boost, parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting, free-bet-calculator, deposit-match-calculator, rollover-calculator, same-game-parlay)
+- 10 state pages (NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN)
+- 8 UK pages (matched-betting-uk, bonus-bets-uk, London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
+- 5 blog posts + blog index
+- 3 support pages (landing, privacy, terms)
+- sitemap.xml: 131+ URLs
+
 ## Build
-- App chunk: ~298KB raw / ~84KB gzip
+- App chunk: ~355KB raw / **98.41 kB gzip**
 - Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
 - Supabase chunk: 194KB raw / 51KB gzip
 - Strategy: network-first JS/CSS, cache-first fonts/images
+- SW version: promogrind-v3
 
 ## Key Data Stores
 | Store | Location | Synced? |
@@ -46,22 +55,37 @@ v9.1 (app) / 3.0.0 (package.json — not critical)
 | Usage analytics | `localStorage('pg_usage_log')` | No |
 | Session tracking | `sessionStorage('pg_session_start')` | No |
 
-## Blockers (unchanged)
-1. Affiliate links — placeholder URLs in `src/books.js`, zero revenue
-2. Odds API — key not set, scanner non-functional for paying users
-3. Stripe — needs LLC + EIN before live mode; test mode setup pending
-4. Resend — weekly-digest deployed but key not set
-5. Plausible — script in index.html (commented out)
+## Blockers (external — parked)
+1. **Affiliate links** — placeholder URLs in `src/books.js`, zero affiliate revenue
+2. **ANTHROPIC_API_KEY** — parse-bet-slip deployed but inactive; set secret + deploy function
+3. **Odds API** — key not set, Live Scanner non-functional for VaultSparked users
+4. **Stripe** — needs LLC + EIN before live mode; Monthly $24.99 + Annual $199 products not yet created
+5. **Resend** — weekly-digest function ready, key not set
+6. **VAPID keys** — push notifications inactive; generate keys → deploy → run migration
+7. **Plausible** — ✅ activated in `index.html` (session 12)
 
 ## What's working end-to-end
 - Auth (Supabase email/password)
-- Cloud sync (loadData / saveData — all fields synced via tracker JSONB)
+- Cloud sync (loadData / syncAppData — all fields synced via tracker JSONB)
 - Vault points (award_vault_points RPC)
 - Referrals (referrals table + get_my_referral_count RPC)
 - Leaderboard (leaderboard SQL view)
 - PromoBoard (community_board table)
-- PWA install (manifest + service worker v2)
+- PWA install (manifest + service worker v3)
 - GitHub Pages deploy (auto on push to main)
+- 7-Day free trial (trial_started_at metadata, isPro() accepts trial status)
+- Plausible analytics (activated)
+- 45 static SEO pages live
+
+## Chrome Extension (session 13)
+- `extension/` — MV3, 5 files, matches 12 sportsbooks
+- **Status:** ready to load unpacked (`chrome://extensions → Load unpacked → extension/`)
+- Web Store submission parked — needs screenshots + listing copy
+
+## AI Bet Slip Parser (session 13)
+- `supabase/functions/parse-bet-slip/index.ts` — claude-haiku vision
+- **Status:** code complete, not deployed — needs `ANTHROPIC_API_KEY` secret
+- UI: 📷 Scan button in BonusBet calculator (already in App.jsx)
 
 ## Module utilities (as of v9.1)
 - `f(n, dp=2)` — number formatter
