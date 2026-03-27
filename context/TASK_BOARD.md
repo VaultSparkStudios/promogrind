@@ -2,6 +2,45 @@
 
 ---
 
+## Session 22 Brainstorm — All 30 Items (v22.0 Audit — 70/100)
+
+> Full innovation brainstorm from session 22 (complete project audit, 2026-03-27). Score Δ = points added to weighted 70/100 overall. Effort: S=<2hr / M=2-8hr / L=8hr+.
+
+| # | Tier | Item | Synopsis | Impact | Score Δ | Effort | Status |
+|---|------|------|----------|--------|---------|--------|--------|
+| 1 | Activation | Deploy ANTHROPIC_API_KEY + 4 AI functions | PromoChat, Advisor, Action Plan, Bet Slip Parser — app's biggest differentiators. One secret unlocks all. | 10/10 | +8 | S | 🔲 MANUAL |
+| 2 | Activation | Buy promogrind.com + submit sitemap to GSC | 84+ SEO pages invisible without domain. $15 + 5 min = indexing clock starts. | 9/10 | +7 | S | 🔲 MANUAL |
+| 3 | Activation | Wire live affiliate links (DK/FD/BetMGM) | Every calculator click currently dead revenue. Paste 3 URLs into books.js after approval. $75+ CPA. | 10/10 | +6 | S | 🔲 MANUAL |
+| 4 | Activation | Set RESEND_API_KEY + deploy email functions | Onboarding drip (9 emails), weekly digest, trial expiry all coded. Email is #1 retention lever. | 9/10 | +5 | S | 🔲 MANUAL |
+| 5 | Activation | Submit Chrome extension to Web Store | Built locally, tested. $5 one-time fee. 200-1K passive installs/mo in niche. | 8/10 | +4 | S | 🔲 MANUAL ($5) |
+| 6 | Activation | Deploy calc-api function (public REST API) | No secrets needed. Enables affiliate partnerships + developer ecosystem. | 7/10 | +3 | S | 🔲 MANUAL |
+| 7 | Growth | Reddit r/sportsbook + r/matchedbetting outreach | 800K+ targeted audience. Genuine calc walkthrough = 5K-20K impressions per post. | 7/10 | +4 | S | 🔲 MANUAL |
+| 8 | Growth | YouTube calculator walkthroughs (5 videos) | Screen record + Loom. Targets 2K-20K search/mo keywords. Zero production cost. | 7/10 | +6 | M | 🔲 MANUAL |
+| 9 | Growth | Discord bot activation (daily promo digest) | Code exists in discord-bot/. Deploy to Railway free tier. | 5/10 | +3 | S | 🔲 MANUAL |
+| 10 | Retention | Weekly "Grind Report" personalized P/L email | "You made $X last week" is #1 retention hook. Converts trials at 15-25%. | 8/10 | +5 | S | 🔲 MANUAL (RESEND) |
+| 11 | Retention | Profit Certificate — shareable win card | Ledger-backed "I made $847 this month" card. One-tap share → testimonial + viral loop. | 7/10 | +5 | M | 🔲 v22 |
+| 12 | Retention | "Grind Buddy" accountability pairing | Opt-in mutual P/L challenge. Doubles retention. | 6/10 | +4 | M | 🔲 Future |
+| 13 | Retention | Push notification "Best opportunity right now" | VaultSparked-exclusive. Daily 9am push + calculator deeplink (VAPID keys needed). | 7/10 | +4 | S | 🔲 MANUAL (VAPID) |
+| 14 | Retention | "Beat Last Week" personalized push challenge | Monday push with self-reinforcing performance loop. | 6/10 | +3 | M | 🔲 Future |
+| 15 | Monetization | Concierge tier — "Done For You" promo service | $99/mo, Claude does 90%, human validates. 20 clients = $2K MRR. | 8/10 | +5 | M | 🔲 Future |
+| 16 | Monetization | Creator affiliate program activation | Landing page built v20. 5 creators × 10 converts/mo = 50 new subs/mo. | 8/10 | +5 | M | ✅ Done v20 (page) |
+| 17 | Monetization | Embed syndication deal (3 affiliate sites) | White-label embed live. Approach betting blogs. | 6/10 | +4 | M | 🔲 MANUAL |
+| 18 | Monetization | Public calculator API docs page | calc-api built. $49/mo above free tier. Devs + affiliates = backlinks. | 6/10 | +4 | M | 🔲 Future |
+| 19 | Monetization | Annual report PDF email capture | Report page built. Email gate → journalist outreach → backlinks. | 5/10 | +3 | S | 🔲 Future |
+| 20 | Platform | Component extraction (App.jsx → modules) | Extract Tracker/Ledger/LiveScanner. Unlocks lazy loading, tests, parallel dev. | 7/10 | +8 | L | 🔲 Next session |
+| 21 | Platform | Mobile app iOS/Android (Capacitor) | Config ready. App Store = permanent home screen. -40% churn. | 8/10 | +5 | L | 🔲 MANUAL (build env) |
+| 22 | Platform | Expanded test coverage (components + integration) | 32→60+ tests. UI component tests. Safe refactoring foundation. | 6/10 | +6 | M | 🔲 v22 |
+| 23 | SEO | State legalization alert signup | Email capture for non-legal states. 30%+ conversion when state legalizes. | 5/10 | +3 | S | 🔲 Future |
+| 24 | SEO | 50-state completion (add remaining 10) | TX, FL, GA, WI, IL + 5 more. Template-driven. | 5/10 | +2 | S | 🔲 Future |
+| 25 | SEO | Competitor comparison page updates | 3 pages built. Monthly refreshes = recurring SEO. | 5/10 | +3 | M | 🔲 Future |
+| 26 | SEO | Backlink outreach (HARO + betting forums) | 10 expert answers/week. Targets 20+ high-authority links in 3 months. | 6/10 | +4 | S | 🔲 MANUAL |
+| 27 | Platform | Light mode settings toggle | Dark/light toggle, localStorage persistence, body.light sync, blocking script. | 3/10 | +1 | S | ✅ Done v22 |
+| 28 | International | PT-BR market completion (3 pages) | ev-calculator-pt, parlay-calculator-pt, matched-betting-pt. First mover in 200M pop market. | 5/10 | +2 | S | 🔲 v22 |
+| 29 | Distribution | Promo expiry countdown embeddable widget | 2-line script embed. Every embed = backlink + brand + distribution. | 7/10 | +5 | M | 🔲 Future |
+| 30 | Infrastructure | Move to promogrind.com (domain migration) | DNS + CNAME. Reduces lost traffic to subdomain. | 6/10 | +4 | S | 🔲 MANUAL |
+
+---
+
 ## Session 20 Brainstorm — All 30 Items (v20.0 Audit — Fresh 68/100)
 
 > Full innovation brainstorm from session 20 (complete project audit, 2026-03-27). Score Δ = points added to weighted 68/100 overall. Effort: S=<2hr / M=2-8hr / L=8hr+.

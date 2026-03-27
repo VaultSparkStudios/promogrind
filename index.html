@@ -71,8 +71,14 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { background: #0a0e17; color: #e2e8f0; }
+      body.light { background: #f8fafc; color: #1e293b; }
       #root { min-height: 100vh; }
+      input:focus, select:focus, textarea:focus { outline: 2px solid #60a5fa; outline-offset: -1px; }
+      body.light input:focus, body.light select:focus, body.light textarea:focus { outline-color: #3b82f6; }
+      ::selection { background: #60a5fa40; }
+      body.light ::selection { background: #3b82f640; }
     </style>
+    <script>try{if(localStorage.getItem('pg_theme')==='light'){document.body.classList.add('light');document.body.style.background='#f8fafc';document.body.style.color='#1e293b';}}catch(e){}</script>
     <!-- Plausible Analytics — activated March 2026 -->
     <script defer data-domain="vaultsparkstudios.com" src="https://plausible.io/js/script.js"></script>
   </head>

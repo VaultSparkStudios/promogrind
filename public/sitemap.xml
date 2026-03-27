@@ -162,6 +162,9 @@
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bet-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/arb-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/kelly-criterion-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/ev-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/matched-betting-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Growth & distribution pages (v20) -->
   <url><loc>https://vaultsparkstudios.com/promogrind/the-grind/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>

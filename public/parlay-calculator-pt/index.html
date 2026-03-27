@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Calculadora de Parlay (Apostas Combinadas) | PromoGrind</title>
+  <meta name="description" content="Calcule o retorno de parlays e apostas combinadas. Ferramenta gratuita para apostadores brasileiros — simule combinacoes e descubra o lucro potencial."/>
+  <meta name="keywords" content="calculadora parlay, apostas combinadas, parlay apostas, aposta multipla, calculadora apostas combinadas"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://promogrind.com/parlay-calculator-pt/"/>
+  <link rel="alternate" hreflang="en" href="https://promogrind.com/parlay-calculator/"/>
+  <link rel="alternate" hreflang="es" href="https://promogrind.com/parlay-calculator-es/"/>
+  <link rel="alternate" hreflang="pt-BR" href="https://promogrind.com/parlay-calculator-pt/"/>
+  <meta property="og:title" content="Calculadora de Parlay (Apostas Combinadas) — PromoGrind Brasil"/>
+  <meta property="og:description" content="Simule parlays e apostas combinadas. Descubra o retorno potencial antes de apostar."/>
+  <meta property="og:type" content="website"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Calculadora de Parlay — PromoGrind",
+    "description": "Ferramenta gratuita para calcular retornos de parlays e apostas combinadas no Brasil. Simule combinacoes e maximize seus lucros.",
+    "url": "https://promogrind.com/parlay-calculator-pt/",
+    "applicationCategory": "FinancialApplication",
+    "operatingSystem": "Web",
+    "isAccessibleForFree": true,
+    "inLanguage": "pt-BR",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+    "featureList": ["Calculo de parlay", "Apostas combinadas", "Retorno potencial", "Sem cadastro necessario"],
+    "publisher": { "@type": "Organization", "name": "PromoGrind", "url": "https://promogrind.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "O que e um parlay (aposta combinada)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Um parlay (ou aposta combinada) e uma aposta que combina duas ou mais selecoes em uma unica aposta. Todas as selecoes devem acertar para o parlay vencer. As odds sao multiplicadas, resultando em pagamentos maiores — mas com maior risco."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Como calcular o retorno de um parlay?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "O retorno de um parlay e calculado multiplicando as odds decimais de cada selecao e depois multiplicando pelo valor apostado. A calculadora do PromoGrind faz isso automaticamente para qualquer numero de pernas."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Parlays sao uma boa estrategia de apostas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Parlays tem pagamentos atraentes mas estatisticamente a vantagem da casa aumenta com cada perna adicionada. Apostadores profissionais geralmente evitam parlays longos, preferindo apostas individuais com +EV. Parlays de 2-3 pernas com selecoes +EV podem ter valor."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'JetBrains Mono','SF Mono',monospace;background:#0a0e17;color:#e2e8f0;min-height:100vh}
+    .hero{padding:60px 20px 40px;text-align:center;background:linear-gradient(135deg,#0f1520,#0a0e17);border-bottom:1px solid #1e293b}
+    .badge{display:inline-block;padding:4px 14px;background:#4ade8015;border:1px solid #4ade8030;border-radius:50px;font-size:10px;color:#4ade80;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;color:#fff;margin-bottom:12px}
+    h1 span{color:#4ade80}
+    .sub{font-size:14px;color:#94a3b8;max-width:520px;margin:0 auto 32px;line-height:1.7}
+    .cta-btn{display:inline-block;padding:16px 32px;background:#4ade80;color:#0a0e17;font-family:inherit;font-size:15px;font-weight:700;border-radius:8px;text-decoration:none;transition:opacity 0.15s}
+    .cta-btn:hover{opacity:0.9}
+    .cta-note{font-size:11px;color:#475569;margin-top:10px}
+    .content{max-width:720px;margin:0 auto;padding:60px 20px}
+    .section{margin-bottom:48px}
+    h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#4ade80;margin-bottom:16px}
+    h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#e2e8f0;margin:20px 0 8px}
+    p{color:#94a3b8;font-size:13px;line-height:1.8;margin-bottom:12px}
+    .box{background:#0f1520;border:1px solid #1e293b;border-radius:10px;padding:24px;margin:20px 0}
+    .box-title{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+    .step{display:flex;gap:16px;margin-bottom:16px;align-items:flex-start}
+    .step-n{width:28px;height:28px;background:#4ade8020;border:1px solid #4ade8040;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#4ade80;flex-shrink:0}
+    .step-text{font-size:13px;color:#94a3b8;line-height:1.6}
+    .step-text strong{color:#e2e8f0}
+    .example{background:#0f2a1e;border:1px solid #4ade8025;border-radius:8px;padding:20px;margin:20px 0}
+    .example-title{font-size:10px;color:#4ade80;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+    .calc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:12px}
+    .calc-row:last-child{border-bottom:none}
+    .calc-label{color:#64748b}
+    .calc-val{color:#4ade80;font-weight:700}
+    .faq{margin-bottom:20px}
+    .faq-q{font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:6px}
+    .faq-a{font-size:13px;color:#94a3b8;line-height:1.7}
+    .books-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
+    .book-card{background:#161d2a;border:1px solid #1e293b;border-radius:8px;padding:14px;text-align:center}
+    .book-name{font-size:12px;font-weight:700;color:#60a5fa;margin-bottom:4px}
+    .book-promo{font-size:10px;color:#64748b;line-height:1.4}
+    footer{padding:40px 20px;text-align:center;border-top:1px solid #1e293b}
+    footer a{color:#60a5fa;text-decoration:none;font-size:13px}
+    footer p{color:#475569;font-size:11px;margin-top:8px}
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Ferramenta Gratuita — Brasil 🇧🇷</div>
+  <h1>Calculadora de <span>Parlay</span></h1>
+  <p class="sub">Calcule o retorno potencial de apostas combinadas (parlays). Simule diferentes combinacoes e descubra o pagamento exato — sem cadastro, sem assinatura.</p>
+  <a href="https://vaultsparkstudios.com/promogrind/#/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt" class="cta-btn">Montar Parlay Gratis →</a>
+  <p class="cta-note">100% gratuito · 51 ferramentas · Sem assinatura</p>
+</div>
+
+<div class="content">
+
+  <div class="section">
+    <h2>O que e um Parlay (Aposta Combinada)?</h2>
+    <p>Um <strong>parlay</strong> (tambem chamado de <strong>aposta combinada</strong> ou <strong>aposta multipla</strong>) combina duas ou mais selecoes em uma unica aposta. Todas as pernas devem acertar para o parlay vencer.</p>
+    <p>A vantagem: as odds sao multiplicadas, resultando em pagamentos muito maiores do que apostas individuais. Um parlay de 3 pernas com odds de 2.00 cada pagaria 8x o valor apostado.</p>
+    <p>O risco: se qualquer perna perder, todo o parlay perde. Por isso e essencial usar uma calculadora para entender o risco real antes de apostar.</p>
+  </div>
+
+  <div class="section">
+    <h2>Como Funciona a Calculadora de Parlay</h2>
+    <div class="box">
+      <div class="box-title">Passo a Passo</div>
+      <div class="step"><div class="step-n">1</div><div class="step-text"><strong>Adicione suas selecoes</strong> com as odds de cada perna</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-text"><strong>Insira o valor da aposta</strong> em reais (R$)</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-text"><strong>Veja o retorno potencial</strong> calculado automaticamente</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-text"><strong>Compare probabilidades</strong> — entenda o risco real do parlay</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-text"><strong>Ajuste as pernas</strong> ate encontrar a combinacao ideal</div></div>
+    </div>
+
+    <div class="example">
+      <div class="example-title">Exemplo Real — Parlay Brasileirao 3 Pernas</div>
+      <div class="calc-row"><span class="calc-label">Perna 1</span><span class="calc-val">Flamengo ML @ 1.80</span></div>
+      <div class="calc-row"><span class="calc-label">Perna 2</span><span class="calc-val">Palmeiras ML @ 1.65</span></div>
+      <div class="calc-row"><span class="calc-label">Perna 3</span><span class="calc-val">Corinthians +0.5 @ 1.50</span></div>
+      <div class="calc-row"><span class="calc-label">Odds combinadas</span><span class="calc-val">4.46x</span></div>
+      <div class="calc-row"><span class="calc-label">Aposta</span><span class="calc-val">R$ 50</span></div>
+      <div class="calc-row"><span class="calc-label">Retorno potencial</span><span class="calc-val">R$ 222.75</span></div>
+      <div class="calc-row"><span class="calc-label">Lucro potencial</span><span class="calc-val">+R$ 172.75</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Casas de Apostas com Parlays no Brasil</h2>
+    <p>O mercado de apostas esportivas no Brasil foi regulamentado pela Lei 14.790/2023. Principais casas que oferecem parlays:</p>
+    <div class="books-grid">
+      <div class="book-card"><div class="book-name">Betano</div><div class="book-promo">Parlay boost ate 50% no Brasileirao</div></div>
+      <div class="book-card"><div class="book-name">bet365</div><div class="book-promo">Bet Builder para parlays personalizados</div></div>
+      <div class="book-card"><div class="book-name">Sportingbet</div><div class="book-promo">Combo boost semanal</div></div>
+      <div class="book-card"><div class="book-name">Betfair</div><div class="book-promo">Same Game Multi disponivel</div></div>
+      <div class="book-card"><div class="book-name">Brazino777</div><div class="book-promo">Bonus em parlays de 4+ pernas</div></div>
+      <div class="book-card"><div class="book-name">1xBet</div><div class="book-promo">Acumulador do dia com boost</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Perguntas Frequentes</h2>
+    <div class="faq">
+      <div class="faq-q">O que e um parlay (aposta combinada)?</div>
+      <div class="faq-a">Um parlay (ou aposta combinada) e uma aposta que combina duas ou mais selecoes em uma unica aposta. Todas as selecoes devem acertar para o parlay vencer. As odds sao multiplicadas, resultando em pagamentos maiores — mas com maior risco.</div>
+    </div>
+    <div class="faq">
+      <div class="faq-q">Como calcular o retorno de um parlay?</div>
+      <div class="faq-a">O retorno de um parlay e calculado multiplicando as odds decimais de cada selecao e depois multiplicando pelo valor apostado. A calculadora do PromoGrind faz isso automaticamente para qualquer numero de pernas.</div>
+    </div>
+    <div class="faq">
+      <div class="faq-q">Parlays sao uma boa estrategia de apostas?</div>
+      <div class="faq-a">Parlays tem pagamentos atraentes mas estatisticamente a vantagem da casa aumenta com cada perna adicionada. Apostadores profissionais geralmente evitam parlays longos, preferindo apostas individuais com +EV. Parlays de 2-3 pernas com selecoes +EV podem ter valor.</div>
+    </div>
+    <div class="faq">
+      <div class="faq-q">Quantas pernas posso colocar em um parlay?</div>
+      <div class="faq-a">A maioria das casas de apostas brasileiras permite parlays de ate 10-20 pernas. Porem, a probabilidade de acertar diminui drasticamente com cada perna adicionada. Recomendamos parlays de 2-4 pernas para equilibrar risco e retorno.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:40px 0">
+    <a href="https://vaultsparkstudios.com/promogrind/#/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt" class="cta-btn">Abrir Calculadora de Parlay Gratuita →</a>
+    <p class="cta-note" style="margin-top:10px">51 ferramentas gratuitas · Sem cadastro</p>
+  </div>
+
+</div>
+
+<footer>
+  <a href="https://vaultsparkstudios.com/promogrind/">← PromoGrind — Ferramentas Gratuitas para Apostas</a>
+  <p>PromoGrind · Ferramenta educacional · Nao e conselho de apostas · 18+ · Jogue com responsabilidade</p>
+</footer>
+
+<script>
+  setTimeout(() => {
+    window.location.href = 'https://vaultsparkstudios.com/promogrind/#/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt';
+  }, 8000);
+</script>
+</body>
+</html>
