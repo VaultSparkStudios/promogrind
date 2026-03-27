@@ -66,7 +66,9 @@ const calcHold = (o1, o2) => { const d1=toD(o1),d2=toD(o2); if(d1<=1||d2<=1) ret
 // BOOKS imported from ./books.js — edit affiliate links there
 
 // ═══ COLORS ═══
-const K = { bg:"#0a0e17", s1:"#0f1520", s2:"#161d2a", s3:"#1c2536", bd:"#1e293b", bd2:"#334155", ac:"#60a5fa", gn:"#4ade80", rd:"#f87171", yl:"#fbbf24", pp:"#c084fc", tx:"#e2e8f0", dm:"#94a3b8", mt:"#64748b", wh:"#ffffff" };
+const KD = { bg:"#0a0e17", s1:"#0f1520", s2:"#161d2a", s3:"#1c2536", bd:"#1e293b", bd2:"#334155", ac:"#60a5fa", gn:"#4ade80", rd:"#f87171", yl:"#fbbf24", pp:"#c084fc", tx:"#e2e8f0", dm:"#94a3b8", mt:"#64748b", wh:"#ffffff" };
+const KL = { bg:"#f8fafc", s1:"#ffffff", s2:"#f1f5f9", s3:"#e2e8f0", bd:"#cbd5e1", bd2:"#94a3b8", ac:"#3b82f6", gn:"#22c55e", rd:"#ef4444", yl:"#f59e0b", pp:"#a855f7", tx:"#1e293b", dm:"#475569", mt:"#94a3b8", wh:"#000000" };
+const K = { ...KD };
 
 // Storage helpers are now in src/sync.js (cloud-backed)
 
@@ -74,19 +76,19 @@ const K = { bg:"#0a0e17", s1:"#0f1520", s2:"#161d2a", s3:"#1c2536", bd:"#1e293b"
 const font = "'JetBrains Mono','SF Mono','Fira Code',monospace";
 const fontD = "'Space Grotesk','SF Pro Display',sans-serif";
 const S = {
-  card: { background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 10, padding: 20, marginBottom: 16 },
-  label: { display:"block", fontSize:10, color:K.mt, marginBottom:4, textTransform:"uppercase", letterSpacing:"1.5px", fontWeight:600 },
-  input: { width:"100%", padding:"8px 10px", background:K.s2, border:`1px solid ${K.bd2}`, borderRadius:6, color:K.tx, fontFamily:font, fontSize:13, outline:"none", boxSizing:"border-box" },
+  get card() { return { background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 10, padding: 20, marginBottom: 16 }; },
+  get label() { return { display:"block", fontSize:10, color:K.mt, marginBottom:4, textTransform:"uppercase", letterSpacing:"1.5px", fontWeight:600 }; },
+  get input() { return { width:"100%", padding:"8px 10px", background:K.s2, border:`1px solid ${K.bd2}`, borderRadius:6, color:K.tx, fontFamily:font, fontSize:13, outline:"none", boxSizing:"border-box" }; },
   row: { display:"flex", gap:12, flexWrap:"wrap", marginBottom:12 },
   col: { flex:1, minWidth:120 },
   res: (ok) => ({ background: ok ? `${K.gn}08` : `${K.rd}08`, border:`1px solid ${ok?K.gn:K.rd}25`, borderRadius:8, padding:16, marginTop:12 }),
   big: (c) => ({ fontSize:28, fontWeight:700, color:c||K.gn, fontFamily:fontD, lineHeight:1 }),
   tag: (c) => ({ display:"inline-block", padding:"2px 8px", borderRadius:50, fontSize:10, fontWeight:600, background:`${c}15`, color:c }),
-  rr: { display:"flex", justifyContent:"space-between", padding:"6px 0", borderBottom:`1px solid ${K.bd}` },
+  get rr() { return { display:"flex", justifyContent:"space-between", padding:"6px 0", borderBottom:`1px solid ${K.bd}` }; },
   note: (c) => ({ marginTop:10, padding:10, background:`${c||K.yl}0d`, borderRadius:6, fontSize:12, color:c||K.yl, lineHeight:1.6 }),
-  help: { fontSize:12, lineHeight:1.7, color:K.dm, marginTop:12 },
-  helpH: { fontSize:14, fontWeight:600, color:K.tx, margin:"16px 0 6px", fontFamily:fontD },
-  helpTerm: { color:K.ac, fontWeight:600 },
+  get help() { return { fontSize:12, lineHeight:1.7, color:K.dm, marginTop:12 }; },
+  get helpH() { return { fontSize:14, fontWeight:600, color:K.tx, margin:"16px 0 6px", fontFamily:fontD }; },
+  get helpTerm() { return { color:K.ac, fontWeight:600 }; },
   meter: (pct, c) => (<div style={{marginTop:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:10,color:K.mt}}>QUALITY</span><span style={{fontSize:10,color:c,fontWeight:600}}>{pct>=70?"EXCELLENT":pct>=60?"GOOD":pct>=50?"FAIR":"POOR"} ({pct}%)</span></div><div style={{height:4,borderRadius:2,background:K.s3}}><div style={{height:4,borderRadius:2,background:c,width:`${Math.min(100,pct)}%`,transition:"width 0.4s"}}/></div></div>),
 };
 
@@ -6692,17 +6694,10 @@ export default function App() {
   });
   const [proStatus, setProStatus] = useState(null);
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    try {
-      const saved = localStorage.getItem('pg_dark');
-      if (saved !== null) return saved !== 'false';
-      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
-    } catch { return true; }
-  });
+  const darkMode = true; // light mode disabled — KL palette ready for future settings page
   const [compactMode, setCompactMode] = useState(() => {
     try { return localStorage.getItem('pg_compact')==='true'; } catch { return false; }
   });
-  const toggleDark = () => setDarkMode(d => { const n=!d; try{localStorage.setItem('pg_dark',String(n));}catch{}; return n; });
   const toggleCompact = () => setCompactMode(c => { const n=!c; try{localStorage.setItem('pg_compact',String(n));}catch{}; return n; });
   const [appData, setAppData] = useState(() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3'))||{}; } catch { return {}; } });
   const [syncStatus, setSyncStatus] = useState(null);
@@ -6760,12 +6755,6 @@ export default function App() {
     try { localStorage.setItem(ONBOARDING_KEY, '1'); } catch {}
     setShowOnboarding(false);
   };
-  useEffect(()=>{
-    document.body.style.background = darkMode ? '#0a0e17' : '#f0f4f8';
-    document.body.style.color = darkMode ? '#e2e8f0' : '#1e293b';
-    if(darkMode) document.documentElement.removeAttribute('data-theme');
-    else document.documentElement.setAttribute('data-theme','light');
-  },[darkMode]);
   const prevSlugRef = useRef(null);
   const tabMemory = useRef({});
   const navigate = useNavigate();
@@ -6937,7 +6926,7 @@ export default function App() {
 
   if (!authReady) {
     return (
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",filter:darkMode?'none':'invert(1) hue-rotate(180deg)'}}>
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
         <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:24}}>Free Sportsbook Promo Conversion Tools</div>
@@ -6990,7 +6979,7 @@ export default function App() {
     <AppDataCtx.Provider value={{ appData, syncAppData }}>
     <CompactCtx.Provider value={compactMode}>
     <CurrencyCtx.Provider value={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",filter:darkMode?'none':'invert(1) hue-rotate(180deg)'}}>
+    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
       {!isOnline && (
         <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
           OFFLINE MODE — Changes will sync when connection is restored
@@ -7039,9 +7028,6 @@ export default function App() {
             </button>
             <button onClick={toggleCompact} title={compactMode?"Show help sections":"Hide help sections"} style={{padding:"4px 10px",background:compactMode?`${K.ac}15`:"transparent",border:`1px solid ${compactMode?K.ac:K.bd2}`,borderRadius:6,color:compactMode?K.ac:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>
               {compactMode?"FULL":"COMPACT"}
-            </button>
-            <button onClick={toggleDark} title={darkMode?"Light mode":"Dark mode"} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:12,cursor:"pointer",fontFamily:font}}>
-              {darkMode?"☀":"🌙"}
             </button>
             <div style={{fontSize:10,color:K.mt,textAlign:"right",lineHeight:1.6}}>Free educational tool. Not gambling advice.<br/>21+ only. Gamble responsibly. 1-800-GAMBLER</div>
           </div>

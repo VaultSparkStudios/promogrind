@@ -68,20 +68,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
-    <script>
-      // Blocking theme script — prevents flash of wrong theme on load
-      (function(){try{
-        var s=localStorage.getItem('pg_dark');
-        var dark=s!==null?s!=='false':(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
-        if(dark===false){
-          document.documentElement.setAttribute('data-theme','light');
-        }
-      }catch(e){}})();
-    </script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { background: #0a0e17; color: #e2e8f0; }
-      html[data-theme="light"] body { background: #f0f4f8; color: #1e293b; }
       #root { min-height: 100vh; }
     </style>
     <!-- Plausible Analytics — activated March 2026 -->

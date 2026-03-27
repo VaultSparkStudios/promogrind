@@ -258,12 +258,19 @@ export const calcHold = (o1, o2) => {
 
 // ─── Color Palette ────────────────────────────────────────────────────────────
 
-export const K = {
+export const KD = {
   bg: "#0a0e17", s1: "#0f1520", s2: "#161d2a", s3: "#1c2536",
   bd: "#1e293b", bd2: "#334155",
   ac: "#60a5fa", gn: "#4ade80", rd: "#f87171", yl: "#fbbf24",
   pp: "#c084fc", tx: "#e2e8f0", dm: "#94a3b8", mt: "#64748b", wh: "#ffffff",
 };
+export const KL = {
+  bg: "#f8fafc", s1: "#ffffff", s2: "#f1f5f9", s3: "#e2e8f0",
+  bd: "#cbd5e1", bd2: "#94a3b8",
+  ac: "#3b82f6", gn: "#22c55e", rd: "#ef4444", yl: "#f59e0b",
+  pp: "#a855f7", tx: "#1e293b", dm: "#475569", mt: "#94a3b8", wh: "#000000",
+};
+export const K = { ...KD };
 
 // ─── Typography ───────────────────────────────────────────────────────────────
 
@@ -273,18 +280,18 @@ export const fontD = "'Space Grotesk','SF Pro Display',sans-serif";
 // ─── Style Primitives ─────────────────────────────────────────────────────────
 
 export const S = {
-  card: { background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 10, padding: 20, marginBottom: 16 },
-  label: { display: "block", fontSize: 10, color: K.mt, marginBottom: 4, textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600 },
-  input: { width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontFamily: font, fontSize: 13, outline: "none", boxSizing: "border-box" },
+  get card() { return { background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 10, padding: 20, marginBottom: 16 }; },
+  get label() { return { display: "block", fontSize: 10, color: K.mt, marginBottom: 4, textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600 }; },
+  get input() { return { width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontFamily: font, fontSize: 13, outline: "none", boxSizing: "border-box" }; },
   row: { display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12 },
   col: { flex: 1, minWidth: 120 },
   res: (ok) => ({ background: ok ? `${K.gn}08` : `${K.rd}08`, border: `1px solid ${ok ? K.gn : K.rd}25`, borderRadius: 8, padding: 16, marginTop: 12 }),
   big: (c) => ({ fontSize: 28, fontWeight: 700, color: c || K.gn, fontFamily: fontD, lineHeight: 1 }),
   tag: (c) => ({ display: "inline-block", padding: "2px 8px", borderRadius: 50, fontSize: 10, fontWeight: 600, background: `${c}15`, color: c }),
-  rr: { display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${K.bd}` },
+  get rr() { return { display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${K.bd}` }; },
   note: (c) => ({ marginTop: 10, padding: 10, background: `${c || K.yl}0d`, borderRadius: 6, fontSize: 12, color: c || K.yl, lineHeight: 1.6 }),
-  help: { fontSize: 12, lineHeight: 1.7, color: K.dm, marginTop: 12 },
-  helpH: { fontSize: 14, fontWeight: 600, color: K.tx, margin: "16px 0 6px", fontFamily: fontD },
-  helpTerm: { color: K.ac, fontWeight: 600 },
+  get help() { return { fontSize: 12, lineHeight: 1.7, color: K.dm, marginTop: 12 }; },
+  get helpH() { return { fontSize: 14, fontWeight: 600, color: K.tx, margin: "16px 0 6px", fontFamily: fontD }; },
+  get helpTerm() { return { color: K.ac, fontWeight: 600 }; },
   // S.meter renders JSX — use the meterEl() helper below (or keep in App.jsx)
 };
