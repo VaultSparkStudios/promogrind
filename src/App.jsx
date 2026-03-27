@@ -6760,7 +6760,12 @@ export default function App() {
     try { localStorage.setItem(ONBOARDING_KEY, '1'); } catch {}
     setShowOnboarding(false);
   };
-  useEffect(()=>{ document.body.style.background = darkMode ? '#0a0e17' : '#f0f4f8'; },[darkMode]);
+  useEffect(()=>{
+    document.body.style.background = darkMode ? '#0a0e17' : '#f0f4f8';
+    document.body.style.color = darkMode ? '#e2e8f0' : '#1e293b';
+    if(darkMode) document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme','light');
+  },[darkMode]);
   const prevSlugRef = useRef(null);
   const tabMemory = useRef({});
   const navigate = useNavigate();
@@ -6932,7 +6937,7 @@ export default function App() {
 
   if (!authReady) {
     return (
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",filter:darkMode?'none':'invert(0.95) hue-rotate(180deg)'}}>
         <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:24}}>Free Sportsbook Promo Conversion Tools</div>
