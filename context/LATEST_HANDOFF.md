@@ -1,5 +1,71 @@
 # Latest Handoff
 
+## Where We Left Off (Session 13)
+- Shipped: 4 high-ceiling items — Chrome Extension, AI Bet Slip Parser, UK market module (8 pages), Content Blog (5 posts + index)
+- Also shipped: domain migration prep (CNAME), sitemap updated to 131+ URLs
+- Tests: clean build ✓ — 98.41 kB gzip (app chunk)
+- Deploy: ready — `git push` to trigger GitHub Pages deploy
+
+---
+
+## What was completed — session 13 (v13.0)
+
+### Chrome Extension (`extension/`)
+- `manifest.json` — Manifest V3, matches 12 sportsbooks (DK, FD, MGM, Caesars, bet365, ESPN, Fanatics, BetRivers + 4 UK books)
+- `content.js` — injects floating ⚡ PG button at bottom-right of sportsbook pages; click opens slide-out panel with 6 calc links
+- `popup.html` + `popup.js` — extension popup detects active tab's book, shows contextual suggested calculators
+- `background.js` — service worker handles `OPEN_CALC`, `DETECT_BOOK`, `OPEN_APP` messages
+- Load unpacked in Chrome at `chrome://extensions` → Load unpacked → select `extension/` folder
+- Submit to Chrome Web Store when ready (needs screenshots + privacy policy)
+
+### AI Bet Slip Parser
+- `supabase/functions/parse-bet-slip/index.ts` — Claude claude-haiku (vision model)
+- Accepts: `{ imageBase64, mimeType }` POST body
+- Returns: `{ betType, stake, odds, hedgeOdds, boostPct, maxExtra, book, promoName, confidence, rawText }`
+- UI: "📷 Scan" button in BonusBet next to "Parse" button; shows extracted fields after scan
+- Deploy: `supabase functions deploy parse-bet-slip` + `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...`
+
+### UK Market Module (8 new pages)
+- `public/matched-betting-uk/` — full guide: legal, step-by-step, 6 UK books, recurring offers
+- `public/bonus-bets-uk/` — offer comparison table (Sky Bet, bet365, William Hill, Betway, Paddy Power)
+- City pages: London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool
+- PromoCalendar in App.jsx: added 🌎/🇺🇸/🇬🇧 market toggle → filters to US or UK books only
+
+### Content Blog (6 new files)
+- `public/blog/index.html` — blog index with 5 post cards + CTA
+- `how-matched-betting-works/` — 8-min beginner guide, conversion table, worked example
+- `best-sportsbook-promos-2026/` — ranked sign-up offers + recurring monthly estimates
+- `draftkings-vs-fanduel-promos/` — side-by-side comparison with annual value estimates
+- `sports-betting-taxes-guide/` — IRS W-2G, deductions, after-tax yield calc, record-keeping
+- `arbitrage-betting-explained/` — arb formula, stake sizing, account sustainability tips
+
+### Domain Prep
+- `public/CNAME` created with `promogrind.com`
+- `sitemap.xml` updated: 131+ URLs (added 8 UK pages + 6 blog posts)
+
+---
+
+## Current app state
+
+- **Version**: 13.0
+- **App.jsx**: ~5,870 lines
+- **Build**: clean — 98.41 kB gzip
+- **Calculators**: 27
+- **Static SEO pages**: 45 (30 original + 8 UK + blog index + 5 blog posts + landing/privacy/terms)
+- **Blog posts**: 5 live
+- **Chrome Extension**: ready to load unpacked
+- **Parse Bet Slip Edge Function**: needs `ANTHROPIC_API_KEY` secret + deploy
+
+---
+
+## Session 12 Handoff (preserved below)
+## Where We Left Off (Session 12)
+- Shipped: 10 features + 17 SEO pages + supporting files across 4 groups — features (10: EV%, splash, UK market, PushEnableBtn, testimonials, etc.), seo (17 new static pages → 30 total), monetization (affiliate referralLink field, Plausible activated), legal (privacy/terms/landing pages)
+- Tests: N/A — no automated test suite
+- Deploy: deployed — live at vaultsparkstudios.com/promogrind/ · App.jsx ~5,780 lines · 82/100 audit score
+
+---
+
 Last updated: 2026-03-26 (session 12 — full audit + implementation sprint)
 
 This is the authoritative active handoff file for the project.

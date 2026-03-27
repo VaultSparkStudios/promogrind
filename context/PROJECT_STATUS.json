@@ -100,6 +100,14 @@
     "sitemap.xml: 30 static pages + all SPA routes"
   ],
   "new_localStorage_keys_session12": [],
+  "silScore": 5,
+  "silAvg3": null,
+  "silVelocity": 0,
+  "silDebt": "→",
+  "silLastSession": "2026-03-26",
+  "ignisScore": null,
+  "testsTotal": null,
+  "lastDeployStatus": "deployed",
   "future_projects": [
     "Browser extension (Chrome/Firefox, detects sportsbook pages)",
     "Email drip sequence (5-email onboarding after signup)",
