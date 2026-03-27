@@ -63,9 +63,10 @@
 - [ ] **YouTube**: record 5 short screen walkthroughs (Loom or OBS, no production needed)
 - [ ] **Discord bot**: create Discord dev account → create server → `node discord-bot/bot.js` or deploy to Railway
 
-### [SIL] From Session 20 Brainstorm
+### [SIL] From Session 20/21 Brainstorm
 - [ ] **[SIL] App.jsx inline math → src/lib/shared.js imports** — now that shared.js is tested, a surgical ~200-line refactor makes all App.jsx math covered by the test suite; dedicated session, no scope creep
 - [ ] **[SIL] PT-BR market completion** — add ev-calculator-pt, parlay-calculator-pt, matched-betting-pt; same template; 30 min each; closes the 3 highest-traffic PT-BR keywords not yet covered
+- [ ] **[SIL] Light mode settings option** — KD/KL palettes + getter-based S already in place; wire `Object.assign(K, darkMode ? KD : KL)` at top of App render + add toggle in a new Settings page; all infrastructure done in session 21
 
 ### P3 — Multi-week (external blockers)
 - [ ] LLC → EIN → bank account → Stripe live keys → create products → `supabase secrets set STRIPE_SECRET_KEY=...` → deploy `create-checkout` + `stripe-webhook` in live mode

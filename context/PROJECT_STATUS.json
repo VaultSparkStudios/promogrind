@@ -4,7 +4,7 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "20.0.0",
+  "version": "20.1.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
@@ -21,7 +21,7 @@
   ],
   "backend": true,
   "last_updated": "2026-03-27",
-  "app_lines": 6900,
+  "app_lines": 7126,
   "auth_lines": 198,
   "calculator_count": 27,
   "tab_count": {
@@ -37,21 +37,29 @@
   "blog_posts": 5,
   "test_count": 32,
   "test_status": "32/32 passing",
-  "audit_score": 68,
-  "audit_score_note": "v20 audit \u2014 weighted 10-category score; test suite added (+code_quality), PT-BR pages (+seo); revenue still $0; 89+ projected after Tier 1 complete",
+  "audit_score": 69,
+  "audit_score_note": "v20.1 audit \u2014 +1 from v20; fixed broken light mode (ux+2, infra+2, code+2); revenue still $0; 86+ projected after P1 complete",
   "audit_date": "2026-03-27",
   "audit_category_scores": {
     "feature_completeness": 93,
-    "ux_polish": 80,
+    "ux_polish": 82,
     "competitive_position": 85,
-    "content_authority": 78,
+    "content_authority": 72,
     "infrastructure": 76,
     "growth_retention": 72,
-    "seo_discoverability": 70,
-    "code_quality": 68,
-    "distribution_reach": 46,
-    "revenue_monetization": 28
+    "seo_discoverability": 68,
+    "code_quality": 60,
+    "distribution_reach": 44,
+    "revenue_monetization": 18
   },
+  "session_21_additions": [
+    "Disabled broken light mode \u2014 removed CSS invert(1) hue-rotate(180deg) filter hack",
+    "Locked darkMode = true (constant); removed theme toggle button from header",
+    "Added KD (dark) + KL (light) dual color palettes in App.jsx + shared.js",
+    "Converted S static style properties to getters (card, label, input, rr, help, helpH, helpTerm)",
+    "Removed blocking theme script + light mode CSS from index.html",
+    "Build: 115.24 KB gzip (was 115.56 KB)"
+  ],
   "session_20_additions": [
     "Test suite \u2014 src/__tests__/math.test.js (32 tests, all passing); vitest.config.js; vitest devDependencies in package.json",
     "src/lib/shared.js \u2014 canonical pure-JS math/constants module; testable in Node; non-breaking (App.jsx still inline)",
@@ -130,7 +138,7 @@
   "build": {
     "sw_version": "promogrind-v3",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "111.57KB",
+    "app_chunk_gzip": "115.24KB",
     "vendor_chunk_gzip": "49.33KB",
     "supabase_chunk_gzip": "50.93KB"
   },
@@ -271,7 +279,7 @@
   "silVelocity": 11,
   "silDebt": "\u2192",
   "silLastSession": "2026-03-27",
-  "lastDeployStatus": "session 20 commit pending \u2014 push triggers GitHub Pages auto-deploy",
+  "lastDeployStatus": "session 21 \u2014 committed + pushed (688fcfc) \u2014 live via GitHub Pages",
   "future_projects": [
     "Email drip sequence (5-email onboarding after signup) \u2014 Resend infra ready",
     "Taxes calculator tool (in-app, reads from Ledger)",

@@ -167,3 +167,12 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: Show email (too invasive); let users set display names (extra DB column + UI).
 - Why this was chosen: Immediate implementation with zero schema changes. Engaging enough for gamification. Can upgrade to user-chosen display names later.
 - Follow-up: Add optional display_name field to profiles table if users request it.
+
+### 2026-03-27 - Disable light mode, lock to dark theme
+
+- Status: Decided
+- Context: CSS `invert(1) hue-rotate(180deg)` filter approach to light mode produced completely washed-out, barely visible UI. Attempted fixes (invert(0.95) → invert(1), blocking theme script, body color sync) all failed to produce acceptable results.
+- Decision: Disable light mode entirely. Lock `darkMode = true` as a constant. Remove the toggle button. Add KD (dark) + KL (light) dual palettes and getter-based S style primitives as infrastructure for re-enabling light mode via a proper settings page later.
+- Alternatives considered: (1) Fix the invert filter (tried twice, fundamentally broken for semi-transparent hex alpha colors); (2) Full CSS custom properties migration (too big for 7K-line file); (3) Immediate dual-palette render (requires Object.assign on every render, premature without settings UI).
+- Why this was chosen: Eliminates the broken UX immediately. The KD/KL palette + getter-based S is clean infrastructure that makes future light mode a simple settings toggle without another architectural change.
+- Follow-up: Add light mode as an option in a future settings/preferences page. KL palette may need tweaking once tested visually.

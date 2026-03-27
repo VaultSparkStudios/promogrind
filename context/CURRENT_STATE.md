@@ -1,12 +1,12 @@
 # Current State
 
-Last updated: 2026-03-27 (v20.0 — full audit + test suite + shared.js + StackBuilder + PT-BR SEO + newsletter/creator pages)
+Last updated: 2026-03-27 (v20.1 — disabled broken light mode, KD/KL dual palettes, getter-based S)
 
 ## Version
-v20.0 (app) / 3.0.0 (package.json — not critical)
+v20.1 (app) / 3.0.0 (package.json — not critical)
 
 ## App.jsx
-~6,900 lines. Single-file React SPA.
+~7,126 lines. Single-file React SPA. Dark mode only (light mode disabled, KD/KL palette ready for future settings).
 
 ## Tabs / Tools
 | Group | Count | Tools |

@@ -1,11 +1,48 @@
 # Latest Handoff
 
-## Where We Left Off (Session 20)
-- Shipped: Full project audit (68/100 weighted) + test suite + shared.js + Stack Builder + ShareCard + 5 PT-BR/landing pages
-- Build: clean ✓ (75 modules, 7.75s) | Tests: 32/32 passing
-- Git: commit + push pending (closeout)
+## Where We Left Off (Session 21)
+- Shipped: Light mode fix (disabled broken invert filter, locked dark mode, added KD/KL dual palettes for future settings)
+- Full audit: 69/100 weighted (+1 from v20)
+- Build: clean ✓ (75 modules, 3.42s) | Tests: 32/32 passing | 115.24 KB gzip
+- Git: committed + pushed (688fcfc) — live at vaultsparkstudios.com/promogrind/
 
-### What was built — session 20 (v20.0)
+### What was built — session 21 (v20.1)
+
+**Light mode fix (`src/App.jsx` + `src/lib/shared.js` + `index.html`):**
+- Removed broken CSS `invert(1) hue-rotate(180deg)` filter that caused washed-out light mode
+- Locked `darkMode = true` (constant, no longer useState)
+- Removed theme toggle button (sun/moon) from header
+- Removed blocking theme script from index.html
+- Removed body color sync useEffect
+- Added `KD` (dark) + `KL` (light) dual color palettes — ready for future settings page
+- Converted S static properties to getters (card, label, input, rr, help, helpH, helpTerm) — reactive to K palette swaps
+- App chunk smaller: 115.24 KB gzip (was 115.56 KB)
+
+**Full audit (session 21):**
+- Scored 69/100 weighted (was 68 in v20)
+- Improvements: ux_polish +2, infrastructure +2, code_quality +2
+- All manual blockers unchanged — P0 items remain highest leverage
+
+## Human Action Required
+
+> Same as session 20 — no new manual items this session.
+
+- [ ] `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` then deploy: `supabase functions deploy promo-chat promo-advisor ai-action-plan parse-bet-slip stack-builder`
+- [ ] `supabase functions deploy calc-api` (no secrets needed)
+- [ ] Run `supabase/migrations/migration-gift-tokens.sql` in Supabase SQL Editor
+- [ ] Submit sitemap to Google Search Console
+- [ ] Buy promogrind.com (~$15) + CNAME DNS
+- [ ] Affiliate program applications (DK/FD/BetMGM)
+
+### Next session priorities
+1. App.jsx inline math → shared.js imports (refactor, ~200 lines)
+2. Component extraction (Tracker/Ledger/LiveScanner → `src/components/`)
+3. Light mode as settings option (KD/KL palette infrastructure is ready)
+4. PT-BR market completion (3 more pages)
+
+---
+
+## Where We Left Off (Session 20)
 
 **Auth dev bypass (`src/auth.js`):**
 - `VITE_DEV_BYPASS_AUTH=true` env variable skips the VaultSparked auth redirect in local dev
