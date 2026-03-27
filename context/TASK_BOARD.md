@@ -8,8 +8,11 @@
 
 ### Deploy gates (need secrets first)
 - [ ] **parse-bet-slip Edge Function** — `supabase functions deploy parse-bet-slip` + `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` → AI Scan button in BonusBet goes live
+- [ ] **Onboarding drip** — `supabase functions deploy onboarding-drip` then schedule as daily cron in Supabase dashboard (Cron → every day at 9am UTC). Needs `RESEND_API_KEY` set first.
 - [ ] **Push notifications** — `npx web-push generate-vapid-keys` → `supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=...` → deploy `send-daily-brief` → run `scripts/migration-push-subscriptions.sql` → add `VITE_VAPID_PUBLIC_KEY` to `.env`
 - [ ] **Odds API** — theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → deploy `odds` function; change refresh 120s → 300s in LiveScanner
+- [ ] **Weekly digest** — `supabase functions deploy weekly-digest` + set `RESEND_API_KEY` + schedule weekly cron in Supabase dashboard (every Monday 9am UTC)
+- [ ] **Discord bot** — `discord-bot/` directory contains bot code; needs: Discord developer account → create bot → get token → add to server → `npm install` in `discord-bot/` → set `DISCORD_TOKEN`, `DISCORD_CHANNEL_ID`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` env vars → `node bot.js` or deploy to Railway/Heroku
 - [ ] **Resend newsletter** — resend.com → verify vaultsparkstudios.com → `supabase secrets set RESEND_API_KEY=...` → deploy `weekly-digest`
 - [ ] **Stripe** — create Monthly ($24.99/mo) + Annual ($199/yr) products → set `STRIPE_*` secrets → deploy `create-checkout` + `stripe-webhook`. **Blocked by LLC + EIN.**
 
@@ -18,6 +21,9 @@
 - [x] `scripts/migration-leaderboard.sql` ✓
 - [x] `scripts/migration-referrals.sql` ✓
 - [ ] `scripts/migration-push-subscriptions.sql` — run when activating push notifications
+- [x] `scripts/migration-team-accounts.sql` ✓
+- [x] `scripts/migration-community-promos.sql` ✓
+- [x] `scripts/migration-influencer-codes.sql` ✓
 
 ### Affiliate programs (revenue blocker #1)
 - [ ] Apply to DraftKings Partners: draftkings.com/partners (CPA: $75+/user)
@@ -41,10 +47,14 @@
 - [ ] Update `sitemap.xml` base URL
 - [ ] Update `context/PROJECT_STATUS.json` `public_url` field
 
+### SEO & Growth (high-leverage, 5-15 min each)
+- [ ] **promogrind.com domain** — $15/yr at Namecheap/Cloudflare. CNAME file ready. Removes subdirectory SEO penalty immediately.
+- [ ] **Google Search Console** — add property → verify → submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` (133+ URLs). 5 minutes.
+- [ ] **Mobile App (Capacitor)** — `npm run cap:sync` then iOS/Android builds + App Store/Play Store submissions. Needs Mac for iOS signing.
+
 ### OAuth & Analytics
 - [ ] **Google OAuth** — console.cloud.google.com → OAuth 2.0 Client ID → Supabase Auth Providers
 - [ ] **Discord OAuth** — discord.com/developers → New App → Supabase Auth Providers
-- [ ] **Google Search Console** — add property → verify ownership → submit sitemap: `https://vaultsparkstudios.com/promogrind/sitemap.xml` (131+ URLs)
 
 ---
 
@@ -65,15 +75,19 @@
 - [ ] Test VaultSparked upgrade flow end-to-end (monthly + annual checkout → webhook → subscription → badge)
 - [ ] Test LiveScanner with real Odds API key
 - [ ] Test weekly-digest Edge Function with real Resend key
+- [x] **Social share cards from calculator results** — canvas/HTML share card after profitable calc result; one-tap to Twitter/X + Reddit (viral loop)
+- [ ] **Annual profit summary PDF export** — styled print view pulling from Ledger; tax record + shareable milestone card
+- [ ] **Promo Alert Discord Bot** — Discord server + bot posting top daily promos to a #opportunities channel
+- [ ] **Taxes Calculator (in-app)** — reads from Ledger; calculates W-2G threshold exposure, quarterly estimated payments, net after-tax profit, best timing for loss deductions
+- [ ] **Competitor SEO comparison pages (10)** — `promogrind-vs-profitduel`, `promogrind-vs-oddsjam`, `promogrind-vs-betterbet` etc. High-intent branded search traffic.
+- [ ] **Behavioral upgrade triggers** — context-aware upsells: after 10 Arb Calc uses → "Live Scanner catches these in real time"; after 5 ledger entries → "never miss a promo again"
+- [ ] **Real-time shared odds cache** — Supabase Realtime broadcast: 1 Odds API poll → broadcast to all active VaultSparked users. Required at 10+ concurrent users.
 - [ ] Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)
-- [ ] Email drip sequence — onboarding automation via Resend (after newsletter deployed)
 - [ ] Discord community + bot integration
-- [ ] Social share cards from calculator results (viral loop)
 - [ ] Firefox extension (port from Chrome MV3)
-- [ ] More state SEO pages (20 more US states still unserved)
+- [ ] More state SEO pages (20 more US states still unserved: IN, IA, WV, KS, MD, MA, LA, KY, NC, VT + 10 more)
 - [ ] More UK city pages (Leeds, Bristol, Newcastle, Cardiff, Belfast)
-- [ ] Crowdsourced promo API endpoint
-- [ ] Taxes calculator tool (in-app, reads from Ledger)
+- [ ] Crowdsourced promo API endpoint (public REST API for approved community promos)
 
 ## Blocked
 
@@ -81,14 +95,39 @@
 
 ## Later
 
-- Capacitor mobile build: `npm run cap:sync`
-- Team accounts backend: `team_members` table
-- Plausible → deeper event tracking
+- Capacitor mobile build: `npm run cap:sync` (see PARKED — mobile app)
 - Props scanner cost optimization
+- **PromoGrind Influencer Affiliate Program** — tiered commission structure for content creators (YouTube/TikTok); vanity code dashboard already built (v14); add commission tracking + payout reporting
 
 ---
 
 ## Completed ✓
+
+### Session 15 — v15.0
+
+- [x] Onboarding checklist on Dashboard (5-step: first calc, first book, first bet, start trial, invite friend)
+- [x] Book signup progress tracker on Sportsbooks tab — unsigned books + estimated value + affiliate CTAs
+- [x] Behavioral upgrade triggers — contextual upsells after arb/ledger/BonusBet usage thresholds
+- [x] Plausible funnel events — trial_start, first_calc_run, upgrade_click, referral_shared, first_ledger_entry
+- [x] Calculator share cards — profitable BonusBet/ProfitBoost/FirstBet results → copy/share card
+- [x] Taxes Calculator — new Calculate tool, W-2G tracker, federal bracket estimate, PDF print export
+- [x] UTM params on all SEO page redirects — Plausible now attributes organic traffic by source page
+- [x] 3 competitor SEO pages: promogrind-vs-profitduel/, promogrind-vs-oddsjam/, promogrind-vs-betterbet/
+- [x] Discord bot code: discord-bot/ (needs manual Discord setup to activate)
+
+### Session 14 — Full audit + 5 features + infrastructure (v14.0)
+
+- [x] Full project audit (74/100 honest score — revenue gap identified as #1 priority)
+- [x] **"How Much Can I Make?" income estimator** — `public/income-estimator/index.html` with interactive state/bankroll/time inputs + real income estimates; added to sitemap
+- [x] **Bet Slip → Auto-Track** — "➕ Add to Tracker" button after AI scan result in BonusBet; creates bet entry via `syncAppData`
+- [x] **White-Label Embed Mode** — `?embed=1` URL param hides nav, shows only calculator + "Powered by PromoGrind" watermark; `public/embed/index.html` with copy-paste iframe codes
+- [x] **Crowdsourced Promo Database** — new "Community Promos" Learn tab; browse/upvote community promos; VaultSparked users can submit; backed by `community_promos` Supabase table
+- [x] **Team Accounts UI** — full create/invite/manage UI (replaces waitlist); backed by `team_accounts` + `team_members` tables
+- [x] **Influencer Affiliate Dashboard** — "⚡ Creator Mode" in ReferralHub (VaultSparked-gated); custom vanity code, click/signup stats, estimated commission; backed by `influencer_codes` table
+- [x] **SQL migrations** — `migration-team-accounts.sql`, `migration-community-promos.sql`, `migration-influencer-codes.sql` created (run in Supabase SQL Editor)
+- [x] sitemap.xml — added `income-estimator/` + `embed/` entries (133+ URLs)
+- [x] Task board + memory updated with all 20 brainstorm items
+- [x] Build: ✓ clean
 
 ### Session 13 — 4 high-ceiling items + domain prep (v13.0)
 

@@ -131,6 +131,16 @@ const CompactCtx = React.createContext(false);
 // ═══ APP DATA CONTEXT (shared across Track components — one loadData call) ═══
 const AppDataCtx = React.createContext(null);
 
+// ═══ UPGRADE TRIGGER HELPERS ═══
+function shouldShowTrigger(triggerKey) {
+  if (localStorage.getItem(`pg_trigger_dismissed_${triggerKey}`)) return false;
+  return true;
+}
+function dismissTrigger(triggerKey, setter) {
+  localStorage.setItem(`pg_trigger_dismissed_${triggerKey}`, '1');
+  setter(false);
+}
+
 // ═══ CALC MEMORY HOOK ═══
 const useCalcMemory = (slug, defaults) => {
   const key = `pg_calc_${slug}`;
@@ -234,7 +244,48 @@ const parseNL = (text) => {
   };
 };
 
+// ═══ SHARE CARD ═══
+function ShareCard({ title, profit, onClose }) {
+  const text = `🎉 Just found ${profit} in guaranteed profit using ${title} — PromoGrind (free)\nhttps://vaultsparkstudios.com/promogrind/`;
+  const [copyLabel, setCopyLabel] = React.useState('Copy');
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopyLabel('Copied!');
+      setTimeout(() => setCopyLabel('Copy'), 2000);
+    });
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({ title: `I made ${profit} with PromoGrind`, text, url: 'https://vaultsparkstudios.com/promogrind/' }).catch(() => {});
+    } else {
+      const tweet = encodeURIComponent(text);
+      window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
+    }
+  };
+
+  return (
+    <div style={{marginTop:12,padding:16,background:'linear-gradient(135deg,#0f2a1e,#0a0e17)',border:'2px solid #4ade80',borderRadius:10,position:'relative'}}>
+      <button onClick={onClose} style={{position:'absolute',top:8,right:10,background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18}}>×</button>
+      <div style={{fontSize:11,color:'#64748b',letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>Your win 🎉</div>
+      <div style={{fontSize:28,fontWeight:800,color:'#4ade80',marginBottom:4}}>{profit}</div>
+      <div style={{fontSize:13,color:'#94a3b8',marginBottom:14}}>guaranteed profit from {title}</div>
+      <div style={{display:'flex',gap:8}}>
+        <button onClick={handleCopy} style={{flex:1,padding:'8px 0',background:'#1e293b',border:'1px solid #334155',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:13,fontWeight:600}}>
+          {copyLabel}
+        </button>
+        <button onClick={handleShare} style={{flex:1,padding:'8px 0',background:'#4ade80',border:'none',color:'#0a0e17',borderRadius:6,cursor:'pointer',fontSize:13,fontWeight:700}}>
+          Share ↗
+        </button>
+      </div>
+      <div style={{fontSize:10,color:'#334155',marginTop:10,textAlign:'center'}}>promogrind.com — free sportsbook promo tools</div>
+    </div>
+  );
+}
+
 const BonusBet = () => {
+  const { appData: bbAppData, syncAppData: bbSyncAppData } = React.useContext(AppDataCtx) || {};
   const [mem, setMem] = useCalcMemory('bonus-bet', {sz:"200",bo:"+300",ho:"-350"});
   const {sz,bo,ho} = mem;
   const setSz = v => setMem('sz',v), setBo = v => setMem('bo',v), setHo = v => setMem('ho',v);
@@ -255,6 +306,7 @@ const BonusBet = () => {
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
   const [bbUpsellDismissed, setBbUpsellDismissed] = useState(() => { try { return !!localStorage.getItem('pg_upsell_bb_dismissed'); } catch { return true; } });
   const [rCopied, setRCopied] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
   const fileInputRef = useRef(null);
   const [scanLoading, setScanLoading] = useState(false);
   const [scanResult, setScanResult] = useState(null);
@@ -306,6 +358,29 @@ const BonusBet = () => {
         <button onClick={()=>fileInputRef.current?.click()} disabled={scanLoading} title="Upload a bet slip screenshot — Claude AI will auto-fill the fields" style={{padding:"8px 12px",background:scanLoading?`${K.mt}15`:`${K.pp}15`,border:`1px solid ${scanLoading?K.mt:K.pp}30`,borderRadius:4,color:scanLoading?K.mt:K.pp,fontSize:10,cursor:scanLoading?"not-allowed":"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{scanLoading?"Scanning…":"📷 Scan"}</button>
       </div>
       {scanResult&&!scanResult.error&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>✓ Scanned: {[scanResult.book,scanResult.betType?.replace(/_/g,' '),scanResult.odds&&`${scanResult.odds} odds`,scanResult.stake&&`$${scanResult.stake} stake`].filter(Boolean).join(' · ')}</div>}
+      {scanResult&&!scanResult.error&&bbSyncAppData&&<button
+        onClick={()=>{
+          const newBet={
+            id:Date.now(),
+            date:new Date().toISOString().split('T')[0],
+            book:scanResult.book||'',
+            sport:'',
+            description:scanResult.promoName||scanResult.betType||'Scanned bet',
+            betType:scanResult.betType||'straight',
+            stake:parseFloat(scanResult.stake)||0,
+            odds:scanResult.odds||'',
+            result:'pending',
+            payout:0,
+            profit:0,
+            notes:'Added via AI scan',
+            tags:['scanned'],
+          };
+          const updatedBets=[...(bbAppData?.bets||[]),newBet];
+          bbSyncAppData({...bbAppData,bets:updatedBets});
+          alert('Bet added to Tracker!');
+        }}
+        style={{marginTop:8,padding:'6px 14px',background:'#1e3a2f',border:'1px solid #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:13}}
+      >➕ Add to Tracker</button>}
       {scanResult?.error&&<div style={{fontSize:10,color:K.rd,marginTop:4}}>⚠ Scan failed — try entering manually or use a clearer screenshot</div>}
       {nlPreview&&(nlPreview.sz||nlPreview.bo||nlPreview.ho)&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>Detected: {[nlPreview.sz&&`$${nlPreview.sz} bonus`,nlPreview.bo&&`${nlPreview.bo} odds`,nlPreview.ho&&`${nlPreview.ho} hedge`].filter(Boolean).join(", ")}</div>}
     </div>
@@ -366,6 +441,18 @@ const BonusBet = () => {
           </div>
         </div>
       )}
+      {parseFloat(r.g)>0&&!showShareCard&&(
+        <button onClick={()=>setShowShareCard(true)} style={{marginTop:8,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:12}}>
+          🎉 Share your win
+        </button>
+      )}
+      {showShareCard&&parseFloat(r.g)>0&&(
+        <ShareCard
+          title="Bonus Bet Converter"
+          profit={`$${r.g}`}
+          onClose={()=>setShowShareCard(false)}
+        />
+      )}
     </div>}
   </div>
   <Help entries={[
@@ -396,6 +483,7 @@ const ProfitBoost = () => {
   },[r?.g,r?.hs]);
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
   const [rCopied, setRCopied] = useState(false);
+  const [showShareCardPB, setShowShareCardPB] = useState(false);
   const applyDemo = () => { setS("50"); setO("-110"); setBp("25"); setMx("10"); setHo("-110"); setDemoMode(true); };
   const copyResult = () => {
     if(!r) return;
@@ -431,7 +519,20 @@ const ProfitBoost = () => {
     {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b/><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl}/><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`}/><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/>
       <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
-      <BookCTA/></div>}
+      <BookCTA/>
+      {parseFloat(r.g)>0&&!showShareCardPB&&(
+        <button onClick={()=>setShowShareCardPB(true)} style={{marginTop:8,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:12}}>
+          🎉 Share your win
+        </button>
+      )}
+      {showShareCardPB&&parseFloat(r.g)>0&&(
+        <ShareCard
+          title="Profit Boost Calculator"
+          profit={`$${r.g}`}
+          onClose={()=>setShowShareCardPB(false)}
+        />
+      )}
+    </div>}
   </div>
   <Help entries={[
     ["Profit Boost","A sportsbook promo that adds a percentage to your winnings IF your bet wins. A 50% profit boost on a bet that would win $100 now wins $150 instead. Unlike bonus bets, you're using your OWN money — the boost just sweetens the payout."],
@@ -579,6 +680,14 @@ const Arb2Way = () => {
   const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v),setT=v=>setMem('t',v);
   const r = useMemo(()=>calcArb2(o1,o2,parseFloat(t)),[o1,o2,t]);
   const [rCopied, setRCopied] = useState(false);
+  const arbIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
+  const [showArbTrigger, setShowArbTrigger] = useState(() => {
+    try {
+      const log = JSON.parse(localStorage.getItem('pg_usage_log') || '{}');
+      const arbCount = (log['arb-2way'] || 0) + (log['arb-3way'] || 0);
+      return arbCount >= 5 && shouldShowTrigger('arb_upsell') && !arbIsPro();
+    } catch { return false; }
+  });
   const copyResult = () => {
     if(!r||!r.ok) return;
     const text = `📊 2-Way Arbitrage — PromoGrind\nOutcome 1: ${o1} | Outcome 2: ${o2} | Total Stake: $${t}\nStake Side 1: $${r.s1} | Stake Side 2: $${r.s2}\nARB Profit: +$${r.pr} | ROI: ${r.roi}%\npromogrind.vaultsparkstudios.com`;
@@ -586,6 +695,15 @@ const Arb2Way = () => {
     setRCopied(true); setTimeout(()=>setRCopied(false),1500);
   };
   return (<div><div style={S.card}><Tl t="2-Way Arbitrage" badge="SUREBET" bc={K.pp} shareable/>
+    {showArbTrigger && (
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'linear-gradient(90deg,#1e3a2f,#0f1724)',border:'1px solid #4ade80',borderRadius:8,marginBottom:12,flexWrap:'wrap',gap:8}}>
+        <div style={{fontSize:13,color:'#cbd5e1'}}>⚡ <strong style={{color:'#4ade80'}}>The Live Scanner</strong> finds these arb opportunities automatically in real time.</div>
+        <div style={{display:'flex',gap:8,alignItems:'center'}}>
+          <a href="#/upgrade" style={{padding:'5px 12px',background:'#4ade80',color:'#0a0e17',borderRadius:5,fontSize:12,fontWeight:700,textDecoration:'none'}}>Try Free →</a>
+          <button onClick={() => dismissTrigger('arb_upsell', setShowArbTrigger)} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:16}}>×</button>
+        </div>
+      </div>
+    )}
     <div style={S.row}><In l="Outcome 1 (Book A)" v={o1} set={setO1}/><In l="Outcome 2 (Book B)" v={o2} set={setO2}/><In l="Total Stake" v={t} set={setT} pre="$"/></div>
     {r&&<div style={S.res(r.ok)}><div style={{display:"flex",alignItems:"center",gap:8}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?`ARB: +$${r.pr}`:"NO ARB"}</span>{r.ok&&<button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button>}</div>
       {r.ok&&<><RR l="Stake Side 1" v={`$${r.s1}`} c={K.ac} b/><RR l="Stake Side 2" v={`$${r.s2}`} c={K.ac} b/><RR l="ROI" v={`${r.roi}%`} c={K.gn}/></>}
@@ -1225,6 +1343,44 @@ const Tracker = () => {
   const cnt = Object.values(done).filter(Boolean).length;
   const [trackerView, setTrackerView] = useState('tracker');
   return (<div style={S.card}><Tl t="Sportsbook Promo Tracker"/>
+    {(()=>{
+      const completedNames = Object.entries(done).filter(([,v])=>v).map(([k])=>k.toLowerCase());
+      const BOOK_LIST = [
+        { name: 'DraftKings', value: 350, link: '' },
+        { name: 'FanDuel', value: 300, link: '' },
+        { name: 'BetMGM', value: 250, link: '' },
+        { name: 'Caesars', value: 300, link: '' },
+        { name: 'bet365', value: 200, link: '' },
+        { name: 'ESPN BET', value: 250, link: '' },
+        { name: 'Fanatics', value: 200, link: '' },
+        { name: 'BetRivers', value: 150, link: '' },
+      ];
+      const unsigned = BOOK_LIST.filter(b => !completedNames.includes(b.name.toLowerCase()));
+      if (unsigned.length === 0) return null;
+      const totalLeft = unsigned.reduce((s, b) => s + b.value, 0);
+      return (
+        <div style={{background:'linear-gradient(135deg,#0f2a1e,#0f1724)',border:'1px solid #4ade80',borderRadius:10,padding:16,marginBottom:16}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:12}}>
+            <div>
+              <div style={{fontWeight:700,color:'#4ade80',fontSize:14}}>💰 Unclaimed Promo Value</div>
+              <div style={{color:'#94a3b8',fontSize:12,marginTop:2}}>You're leaving <strong style={{color:'#4ade80'}}>${totalLeft.toLocaleString()}</strong> on the table from {unsigned.length} unsigned book{unsigned.length !== 1 ? 's' : ''}</div>
+            </div>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:8}}>
+            {unsigned.map(b => (
+              <div key={b.name} style={{padding:10,background:'#0a0e17',borderRadius:8,border:'1px solid #1e293b'}}>
+                <div style={{fontWeight:600,color:'#e2e8f0',fontSize:13,marginBottom:4}}>{b.name}</div>
+                <div style={{color:'#4ade80',fontSize:12,marginBottom:8}}>~${b.value} signup value</div>
+                <a href={b.link || `https://vaultsparkstudios.com/promogrind/#/promo-finder`} target="_blank" rel="noopener noreferrer"
+                   style={{display:'block',textAlign:'center',padding:'5px 0',background:'#1e3a2f',border:'1px solid #4ade80',color:'#4ade80',borderRadius:5,fontSize:11,fontWeight:700,textDecoration:'none'}}>
+                  Claim →
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    })()}
     <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
       <div><div style={{fontSize:10,color:K.mt}}>EXTRACTED</div><div style={S.big(K.gn)}>${f(total)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>COMPLETED</div><div style={S.big(K.ac)}>{cnt}/{BOOKS.length}</div></div>
@@ -1515,6 +1671,7 @@ const Ledger = () => {
   const toast = useToast();
   const add = () => {
     if(!form.profit) return;
+    if(entries.length === 0) window.plausible?.('first_ledger_entry');
     save([{...form,id:Date.now()},...entries]);
     setForm(f=>({...f,bonus:"",hedge:"",profit:"",ev:"",notes:""}));
     onLedgerEntry();
@@ -1549,6 +1706,11 @@ const Ledger = () => {
   const thisMonth = new Date().toISOString().slice(0,7);
   const monthPL = entries.filter(e=>e.date&&e.date.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
   const [upsellLedgerDismissed, setUpsellLedgerDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_upsell_ledger_dismissed');}catch{return false;} });
+  const ledgerIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
+  const [showLedgerTrigger, setShowLedgerTrigger] = useState(() => {
+    const ents = data?.ledger || [];
+    return ents.length >= 3 && shouldShowTrigger('ledger_upsell') && !ledgerIsPro();
+  });
   const streakData = useMemo(()=>{
     const sorted=[...entries].sort((a,b)=>new Date(b.date)-new Date(a.date));
     let cur=0,dir=null;
@@ -1565,6 +1727,15 @@ const Ledger = () => {
     downloadFile(csv, `promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
   };
   return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="CLOUD SYNC" bc={K.gn}/>
+    {showLedgerTrigger && (
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'linear-gradient(90deg,#1e3a2f,#0f1724)',border:'1px solid #4ade80',borderRadius:8,marginBottom:12,flexWrap:'wrap',gap:8}}>
+        <div style={{fontSize:13,color:'#cbd5e1'}}>☁️ <strong style={{color:'#4ade80'}}>VaultSparked</strong> syncs your ledger across all devices + unlocks the Live Scanner.</div>
+        <div style={{display:'flex',gap:8,alignItems:'center'}}>
+          <a href="#/upgrade" style={{padding:'5px 12px',background:'#4ade80',color:'#0a0e17',borderRadius:5,fontSize:12,fontWeight:700,textDecoration:'none'}}>Start Free Trial →</a>
+          <button onClick={() => dismissTrigger('ledger_upsell', setShowLedgerTrigger)} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:16}}>×</button>
+        </div>
+      </div>
+    )}
     {entries.length>=5&&!upsellLedgerDismissed&&(
       <div style={{...S.note(K.pp),display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,marginBottom:12}}>
         <span>Get live arb scanner, push alerts + priority support — first 7 days free, then $24.99/mo</span>
@@ -3374,19 +3545,40 @@ const ReferralHub = () => {
   const [copied, setCopied] = useState(false);
   const [refCount, setRefCount] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [rhUser, setRhUser] = useState(null);
+  const [influencerCode, setInfluencerCode] = React.useState('');
+  const [savedInfluencerCode, setSavedInfluencerCode] = React.useState('');
+  const [influencerStats, setInfluencerStats] = React.useState({ clicks: 0, signups: 0 });
+  const rhIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
   useEffect(()=>{
     supabase.auth.getSession().then(async ({data:{session}})=>{
       if(session) {
         setUserId(session.user.id);
+        setRhUser(session.user);
         try {
           const { data } = await supabase.rpc('get_my_referral_count');
           setRefCount(typeof data === 'number' ? data : 0);
         } catch(e) { setRefCount(0); }
+        if(rhIsPro()) {
+          supabase.from('influencer_codes').select('code, clicks, signups').eq('user_id', session.user.id).single()
+            .then(({ data }) => {
+              if (data) {
+                setSavedInfluencerCode(data.code);
+                setInfluencerCode(data.code);
+                setInfluencerStats({ clicks: data.clicks || 0, signups: data.signups || 0 });
+              }
+            });
+        }
       }
     });
   },[]);
+  const saveInfluencerCode = async () => {
+    if (!influencerCode.trim() || influencerCode.length < 3 || !rhUser) return;
+    const { error } = await supabase.from('influencer_codes').upsert({ user_id: rhUser.id, code: influencerCode }, { onConflict: 'user_id' });
+    if (!error) setSavedInfluencerCode(influencerCode);
+  };
   const refLink = userId ? `https://vaultsparkstudios.com/promogrind/?ref=${userId}` : "Loading…";
-  const copy = () => { try{navigator.clipboard.writeText(refLink);}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
+  const copy = () => { try{navigator.clipboard.writeText(refLink); window.plausible?.('referral_shared');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
   return (<div><div style={S.card}><Tl t="Refer &amp; Earn" badge="FREE VAULTSPARKED" bc={K.pp}/>
     <div style={{...S.note(K.pp),marginBottom:16}}>Share your link. When a friend signs up and subscribes to VaultSparked, you both get <strong>30 days free</strong>. No limit on referrals.</div>
     <div style={{marginBottom:16}}>
@@ -3412,6 +3604,56 @@ const ReferralHub = () => {
         ))}
       </div>
     </div>
+    {rhIsPro() && (
+      <div style={{marginTop:24,padding:16,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8}}>
+        <div style={{fontWeight:700,color:'#4ade80',marginBottom:12}}>⚡ Creator Mode</div>
+        <p style={{color:'#94a3b8',fontSize:13,marginBottom:16}}>
+          Create a custom vanity link to share with your audience. Track clicks and signups in real time.
+        </p>
+        <div style={{display:'flex',gap:8,marginBottom:16}}>
+          <input
+            type="text"
+            placeholder="your-brand (letters/numbers/hyphens)"
+            value={influencerCode}
+            onChange={e => setInfluencerCode(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,30))}
+            style={{flex:1,padding:'8px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}
+          />
+          <button
+            onClick={saveInfluencerCode}
+            style={{padding:'8px 16px',background:'#4ade80',color:'#0a0e17',border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13}}
+          >Save Code</button>
+        </div>
+        {savedInfluencerCode && (
+          <>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:16}}>
+              <div style={{padding:12,background:'#0a0e17',borderRadius:6,textAlign:'center'}}>
+                <div style={{fontSize:22,fontWeight:700,color:'#4ade80'}}>{influencerStats.clicks}</div>
+                <div style={{fontSize:11,color:'#64748b'}}>CLICKS</div>
+              </div>
+              <div style={{padding:12,background:'#0a0e17',borderRadius:6,textAlign:'center'}}>
+                <div style={{fontSize:22,fontWeight:700,color:'#4ade80'}}>{influencerStats.signups}</div>
+                <div style={{fontSize:11,color:'#64748b'}}>SIGNUPS</div>
+              </div>
+              <div style={{padding:12,background:'#0a0e17',borderRadius:6,textAlign:'center'}}>
+                <div style={{fontSize:22,fontWeight:700,color:'#4ade80'}}>${(influencerStats.signups * 8).toFixed(0)}</div>
+                <div style={{fontSize:11,color:'#64748b'}}>EST. VALUE</div>
+              </div>
+            </div>
+            <div style={{display:'flex',gap:8,alignItems:'center'}}>
+              <input
+                readOnly
+                value={`https://vaultsparkstudios.com/promogrind/?ref=${savedInfluencerCode}`}
+                style={{flex:1,padding:'8px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#94a3b8',borderRadius:6,fontSize:12}}
+              />
+              <button
+                onClick={() => { navigator.clipboard.writeText(`https://vaultsparkstudios.com/promogrind/?ref=${savedInfluencerCode}`); }}
+                style={{padding:'8px 12px',background:'#1e293b',border:'none',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:13}}
+              >Copy</button>
+            </div>
+          </>
+        )}
+      </div>
+    )}
   </div></div>);
 };
 
@@ -3429,7 +3671,7 @@ const PricingPage = () => {
   const handleTrial = async () => {
     setTrialStarting(true);
     const ok = await startTrial();
-    if(ok) { setTrialStarted(true); if(toast) toast('7-day Pro trial started! Enjoy full access.', K.gn); }
+    if(ok) { setTrialStarted(true); window.plausible?.('trial_start'); if(toast) toast('7-day Pro trial started! Enjoy full access.', K.gn); }
     else { if(toast) toast('Could not start trial. Try again.', K.rd); }
     setTrialStarting(false);
   };
@@ -3461,7 +3703,7 @@ const PricingPage = () => {
             <span style={{fontSize:12,color:K.mt}}>{plan.period}</span>
           </div>
           {plan.savings&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginBottom:16}}>{plan.savings}</div>}
-          <button onClick={()=>handleUpgrade(plan)} disabled={upgrading} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12}}>
+          <button onClick={()=>{ window.plausible?.('upgrade_click'); handleUpgrade(plan); }} disabled={upgrading} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12}}>
             {upgrading?"Processing…":"Upgrade Now"}
           </button>
         </div>
@@ -3553,38 +3795,113 @@ const CompetitorComparison = () => (
 
 // ═══ TEAM ACCOUNTS (COMING SOON) ═══
 const TeamAccounts = () => {
-  const [email, setEmail] = useState('');
-  const [joined, setJoined] = useState(false);
-  const toast = useToast();
-  const join = async () => {
-    if(!email||!email.includes('@')) return;
-    try{localStorage.setItem('pg_team_waitlist',email);}catch(e){}
-    try {
-      const { data:{ session } } = await supabase.auth.getSession();
-      if (session) {
-        await supabase.auth.updateUser({ data:{ team_waitlist:true, team_waitlist_email:email } });
+  const [taUser, setTaUser] = useState(null);
+  const [team, setTeam] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [teamName, setTeamName] = useState('');
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [loadingTeam, setLoadingTeam] = useState(true);
+  useEffect(() => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!session) { setLoadingTeam(false); return; }
+      const u = session.user;
+      setTaUser(u);
+      const { data } = await supabase.from('team_accounts').select('*').eq('owner_id', u.id).single();
+      if (data) {
+        setTeam(data);
+        supabase.from('team_members').select('*').eq('team_id', data.id)
+          .then(({ data: m }) => setMembers(m || []));
       }
-    } catch(e) {}
-    setJoined(true);
-    if(toast) toast('✓ On the waitlist!',K.pp);
+      setLoadingTeam(false);
+    });
+  }, []);
+  const createTeam = async () => {
+    if (!teamName.trim() || !taUser) return;
+    const { data } = await supabase.from('team_accounts').insert({ owner_id: taUser.id, name: teamName }).select().single();
+    if (data) {
+      setTeam(data);
+      await supabase.from('team_members').insert({ team_id: data.id, user_id: taUser.id, role: 'owner', status: 'active', invited_email: taUser.email });
+      setMembers([{ id: Date.now(), team_id: data.id, user_id: taUser.id, role: 'owner', status: 'active', invited_email: taUser.email }]);
+    }
   };
-  return (<div><div style={S.card}><Tl t="Team Accounts" badge="COMING SOON" bc={K.pp}/>
-    <div style={{...S.note(K.pp),marginBottom:20}}>Shared vault for 2–5 person matched betting groups. One tracker, shared ledger, split profit reporting. Perfect for betting syndicates.</div>
-    <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:20}}>
-      {[["2–5 Members","Shared sportsbook tracker and P/L ledger"],["Split Reporting","Per-member profit breakdown and tax summaries"],["$49.99/mo","Per team. All members get VaultSparked Pro included"],["Shared Scanner","One scan, results visible to all team members in real-time"]].map(([title,desc])=>(
-        <div key={title} style={{flex:1,minWidth:180,padding:14,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-          <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:4}}>{title}</div>
-          <div style={{fontSize:11,color:K.dm}}>{desc}</div>
+  const inviteMember = async () => {
+    if (!inviteEmail.trim() || !team) return;
+    await supabase.from('team_members').insert({ team_id: team.id, invited_email: inviteEmail, role: 'member', status: 'pending' });
+    setInviteEmail('');
+    const { data: m } = await supabase.from('team_members').select('*').eq('team_id', team.id);
+    setMembers(m || []);
+  };
+  return (<div><div style={S.card}><Tl t="Team Accounts" badge="BETA" bc={K.pp}/>
+    {loadingTeam ? (
+      <div style={{color:K.mt,textAlign:'center',padding:32}}>Loading…</div>
+    ) : !team ? (
+      <div>
+        <div style={{fontWeight:700,color:K.tx,fontSize:18,marginBottom:8}}>Create Your Team Vault</div>
+        <div style={{color:K.dm,fontSize:13,marginBottom:20}}>
+          Team accounts let you share a vault, split P&amp;L, and coordinate promo hunting with a group. $49.99/mo for the whole team.
         </div>
-      ))}
-    </div>
-    {!joined?(<div>
-      <div style={S.label}>Join the waitlist — first teams get 3 months free</div>
-      <div style={{display:"flex",gap:8}}>
-        <input style={{...S.input,flex:1}} type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com"/>
-        <button onClick={join} style={{padding:"8px 20px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font}}>Join Waitlist</button>
+        <div style={{display:'flex',gap:8,marginBottom:16}}>
+          <input
+            placeholder="Team name (e.g. Promo Squad)"
+            value={teamName}
+            onChange={e => setTeamName(e.target.value)}
+            style={{...S.input,flex:1,padding:'10px 14px',fontSize:14}}
+          />
+          <button onClick={createTeam} style={{padding:'10px 20px',background:K.pp,color:K.bg,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontFamily:font}}>
+            Create Team
+          </button>
+        </div>
+        <div style={{padding:16,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
+          <div style={{fontWeight:600,color:K.gn,marginBottom:8}}>Included with Team ($49.99/mo)</div>
+          <ul style={{color:K.dm,fontSize:13,paddingLeft:20,lineHeight:2}}>
+            <li>Shared P/L Ledger — see combined profits across all members</li>
+            <li>Team leaderboard — who&apos;s grinding hardest</li>
+            <li>All VaultSparked features for every member</li>
+            <li>Up to 5 team members</li>
+          </ul>
+        </div>
       </div>
-    </div>):(<div style={{...S.note(K.gn)}}>✓ You&apos;re on the waitlist. We&apos;ll email you when team accounts launch.</div>)}
+    ) : (
+      <div>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
+          <div>
+            <div style={{fontSize:20,fontWeight:700,color:K.tx}}>{team.name}</div>
+            <div style={{fontSize:12,color:K.mt}}>Team Vault · {members.length} member{members.length !== 1 ? 's' : ''}</div>
+          </div>
+          <span style={{padding:'4px 12px',background:`${K.gn}15`,border:`1px solid ${K.gn}`,borderRadius:999,fontSize:12,color:K.gn}}>TEAM</span>
+        </div>
+        <div style={{marginBottom:20}}>
+          <div style={{fontWeight:600,color:K.tx,marginBottom:8,fontSize:14}}>Invite Members</div>
+          <div style={{display:'flex',gap:8}}>
+            <input
+              type="email"
+              placeholder="teammate@email.com"
+              value={inviteEmail}
+              onChange={e => setInviteEmail(e.target.value)}
+              style={{...S.input,flex:1}}
+            />
+            <button onClick={inviteMember} style={{padding:'8px 16px',background:K.pp,color:K.bg,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13,fontFamily:font}}>
+              Invite
+            </button>
+          </div>
+        </div>
+        <div style={{fontWeight:600,color:K.tx,marginBottom:8,fontSize:14}}>Team Members</div>
+        {members.map(m => (
+          <div key={m.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,marginBottom:6}}>
+            <div>
+              <div style={{color:K.tx,fontSize:13}}>{m.invited_email || m.user_id}</div>
+              <div style={{color:K.mt,fontSize:11}}>{m.role} · {m.status}</div>
+            </div>
+            <span style={{padding:'2px 10px',background:m.status==='active'?`${K.gn}15`:`${K.s3}`,border:`1px solid ${m.status==='active'?K.gn:K.bd2}`,borderRadius:999,fontSize:11,color:m.status==='active'?K.gn:K.mt}}>
+              {m.status}
+            </span>
+          </div>
+        ))}
+        {members.length === 0 && (
+          <div style={{color:K.mt,fontSize:13,textAlign:'center',padding:16}}>No members yet — invite your first teammate above</div>
+        )}
+      </div>
+    )}
   </div></div>);
 };
 
@@ -3790,6 +4107,71 @@ const QuickAddBet = () => {
   );
 };
 
+// ═══ ONBOARDING CHECKLIST ═══
+function OnboardingChecklist({ appData, user, isPro }) {
+  const [done, setDone] = React.useState(() => !!localStorage.getItem('pg_onboarding_done'));
+  const [completed, setCompleted] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem('pg_onboarding_steps') || '[]'); } catch { return []; }
+  });
+
+  React.useEffect(() => {
+    const steps = [];
+    const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
+    if (Object.keys(usageLog).length > 0) steps.push('calc');
+    if ((appData?.sportsbooks || []).length > 0) steps.push('book');
+    if ((appData?.bets || []).length > 0 || (appData?.ledger || []).length > 0) steps.push('bet');
+    if (isPro && isPro()) steps.push('trial');
+    const saved = (() => { try { return JSON.parse(localStorage.getItem('pg_onboarding_steps') || '[]'); } catch { return []; } })();
+    const merged = [...new Set([...saved, ...steps])];
+    localStorage.setItem('pg_onboarding_steps', JSON.stringify(merged));
+    setCompleted(merged);
+  }, [appData]);
+
+  if (done || !user) return null;
+
+  const STEPS = [
+    { id: 'calc', label: 'Run your first calculator', icon: '🧮' },
+    { id: 'book', label: 'Add a sportsbook to your vault', icon: '📚' },
+    { id: 'bet', label: 'Log your first bet or promo', icon: '📝' },
+    { id: 'trial', label: 'Start your 7-day free trial', icon: '⚡' },
+    { id: 'invite', label: 'Invite a friend', icon: '👥' },
+  ];
+
+  const doneCount = STEPS.filter(s => completed.includes(s.id)).length;
+  const pct = Math.round(doneCount / STEPS.length * 100);
+
+  if (doneCount === STEPS.length) {
+    localStorage.setItem('pg_onboarding_done', '1');
+    return null;
+  }
+
+  return (
+    <div style={{background:'#0f1724',border:'1px solid #1e3a2f',borderRadius:10,padding:16,marginBottom:16}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+        <div>
+          <span style={{fontWeight:700,color:'#e2e8f0',fontSize:14}}>Getting Started</span>
+          <span style={{marginLeft:8,color:'#64748b',fontSize:12}}>{doneCount}/{STEPS.length} complete</span>
+        </div>
+        <button onClick={() => { localStorage.setItem('pg_onboarding_done','1'); setDone(true); }} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18,lineHeight:1}}>×</button>
+      </div>
+      <div style={{height:4,background:'#1e293b',borderRadius:2,marginBottom:12}}>
+        <div style={{height:4,background:'#4ade80',borderRadius:2,width:`${pct}%`,transition:'width .3s'}} />
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}}>
+        {STEPS.map(s => {
+          const isDone = completed.includes(s.id);
+          return (
+            <div key={s.id} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 10px',background:'#0a0e17',borderRadius:6,opacity: isDone ? 0.5 : 1}}>
+              <span style={{fontSize:16}}>{isDone ? '✅' : s.icon}</span>
+              <span style={{fontSize:12,color: isDone ? '#64748b' : '#cbd5e1',textDecoration: isDone ? 'line-through' : 'none'}}>{s.label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ═══ DAILY DASHBOARD ═══
 const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
@@ -3841,10 +4223,13 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const thisMonth = today.toISOString().slice(0,7);
   const monthProfit = ledger.filter(e=>e.date?.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
 
+  const dashIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
+
   return (
     <div>
       {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
+      <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
           <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
@@ -5050,6 +5435,249 @@ const parseBetSlip = (text) => {
   return result;
 };
 
+// ═══ COMMUNITY PROMOS ═══
+function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
+  const [promos, setPromos] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [filterBook, setFilterBook] = React.useState('');
+  const [filterType, setFilterType] = React.useState('');
+  const [showSubmit, setShowSubmit] = React.useState(false);
+  const [form, setForm] = React.useState({ book:'', promo_name:'', promo_type:'bonus_bet', value:'', state:'', expires_at:'' });
+  const [cpUser, setCpUser] = React.useState(user || null);
+  React.useEffect(() => {
+    if (!cpUser) supabase.auth.getSession().then(({data:{session}}) => { if(session) setCpUser(session.user); });
+  }, []);
+  const cpIsPro = isProFn || (() => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } });
+  const CP_PROMO_TYPES = ['bonus_bet','profit_boost','parlay_insurance','reload','deposit_match','other'];
+  const CP_BOOKS = ['DraftKings','FanDuel','BetMGM','Caesars','bet365','ESPN BET','Fanatics','BetRivers','William Hill','Paddy Power'];
+  const loadPromos = React.useCallback(async () => {
+    setLoading(true);
+    let q = supabase.from('community_promos').select('*').eq('is_approved', true).order('upvotes', { ascending: false }).limit(50);
+    if (filterBook) q = q.eq('book', filterBook);
+    if (filterType) q = q.eq('promo_type', filterType);
+    const { data } = await q;
+    setPromos(data || []);
+    setLoading(false);
+  }, [filterBook, filterType]);
+  React.useEffect(() => { loadPromos(); }, [loadPromos]);
+  const upvote = async (id) => {
+    await supabase.rpc('upvote_community_promo', { promo_id: id });
+    setPromos(p => p.map(x => x.id === id ? { ...x, upvotes: (x.upvotes||0) + 1 } : x));
+  };
+  const submit = async () => {
+    if (!form.book || !form.promo_name || !form.value || !cpUser) return;
+    await supabase.from('community_promos').insert({ ...form, user_id: cpUser.id });
+    setShowSubmit(false);
+    setForm({ book:'', promo_name:'', promo_type:'bonus_bet', value:'', state:'', expires_at:'' });
+    loadPromos();
+  };
+  return (
+    <div style={{padding:16,maxWidth:720,margin:'0 auto'}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
+        <div>
+          <div style={{fontSize:18,fontWeight:700,color:'#e2e8f0'}}>Community Promos</div>
+          <div style={{fontSize:12,color:'#64748b'}}>User-submitted sportsbook offers — upvote the best ones</div>
+        </div>
+        {cpIsPro() ? (
+          <button onClick={() => setShowSubmit(s => !s)} style={{padding:'8px 16px',background:'#4ade80',color:'#0a0e17',border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13}}>+ Submit Promo</button>
+        ) : (
+          <div style={{fontSize:12,color:'#64748b'}}>VaultSparked to submit</div>
+        )}
+      </div>
+      <div style={{display:'flex',gap:8,marginBottom:16,flexWrap:'wrap'}}>
+        <select value={filterBook} onChange={e => setFilterBook(e.target.value)} style={{padding:'6px 10px',background:'#0f1724',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}>
+          <option value=''>All Books</option>
+          {CP_BOOKS.map(b => <option key={b} value={b}>{b}</option>)}
+        </select>
+        <select value={filterType} onChange={e => setFilterType(e.target.value)} style={{padding:'6px 10px',background:'#0f1724',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}>
+          <option value=''>All Types</option>
+          {CP_PROMO_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g,' ')}</option>)}
+        </select>
+      </div>
+      {showSubmit && (
+        <div style={{padding:16,background:'#0f1724',border:'1px solid #4ade80',borderRadius:8,marginBottom:16}}>
+          <div style={{fontWeight:600,color:'#4ade80',marginBottom:12}}>Submit a Promo</div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:8}}>
+            <select value={form.book} onChange={e => setForm(f=>({...f,book:e.target.value}))} style={{padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}>
+              <option value=''>Select Book</option>
+              {CP_BOOKS.map(b => <option key={b} value={b}>{b}</option>)}
+            </select>
+            <select value={form.promo_type} onChange={e => setForm(f=>({...f,promo_type:e.target.value}))} style={{padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}>
+              {CP_PROMO_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g,' ')}</option>)}
+            </select>
+          </div>
+          <input placeholder="Promo name (e.g. 200% Profit Boost on NBA)" value={form.promo_name} onChange={e => setForm(f=>({...f,promo_name:e.target.value}))} style={{width:'100%',padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13,marginBottom:8,boxSizing:'border-box'}} />
+          <input placeholder="Value (e.g. $200 bonus bet)" value={form.value} onChange={e => setForm(f=>({...f,value:e.target.value}))} style={{width:'100%',padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13,marginBottom:8,boxSizing:'border-box'}} />
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:12}}>
+            <input placeholder="State (NY, NJ, UK, or blank=all)" value={form.state} onChange={e => setForm(f=>({...f,state:e.target.value}))} style={{padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}} />
+            <input type="date" value={form.expires_at} onChange={e => setForm(f=>({...f,expires_at:e.target.value}))} style={{padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}} />
+          </div>
+          <div style={{display:'flex',gap:8}}>
+            <button onClick={submit} style={{padding:'8px 20px',background:'#4ade80',color:'#0a0e17',border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13}}>Submit</button>
+            <button onClick={() => setShowSubmit(false)} style={{padding:'8px 16px',background:'transparent',border:'1px solid #1e293b',color:'#94a3b8',borderRadius:6,cursor:'pointer',fontSize:13}}>Cancel</button>
+          </div>
+        </div>
+      )}
+      {loading ? (
+        <div style={{color:'#64748b',textAlign:'center',padding:32}}>Loading community promos…</div>
+      ) : promos.length === 0 ? (
+        <div style={{color:'#64748b',textAlign:'center',padding:32}}>
+          <div style={{fontSize:32,marginBottom:8}}>📋</div>
+          <div>No promos yet — be the first to submit one!</div>
+        </div>
+      ) : promos.map(p => (
+        <div key={p.id} style={{padding:14,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8,marginBottom:8,display:'flex',gap:12,alignItems:'flex-start'}}>
+          <button onClick={() => upvote(p.id)} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:6,cursor:'pointer',minWidth:44}}>
+            <span style={{color:'#4ade80',fontSize:14}}>▲</span>
+            <span style={{color:'#e2e8f0',fontSize:14,fontWeight:700}}>{p.upvotes||0}</span>
+          </button>
+          <div style={{flex:1}}>
+            <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:4}}>
+              <span style={{padding:'2px 8px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:4,fontSize:11,color:'#94a3b8'}}>{p.book}</span>
+              <span style={{padding:'2px 8px',background:'#1e3a2f',border:'1px solid #4ade80',borderRadius:4,fontSize:11,color:'#4ade80'}}>{(p.promo_type||'').replace(/_/g,' ')}</span>
+              {p.state && <span style={{padding:'2px 8px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:4,fontSize:11,color:'#94a3b8'}}>{p.state}</span>}
+            </div>
+            <div style={{fontWeight:600,color:'#e2e8f0',marginBottom:2}}>{p.promo_name}</div>
+            <div style={{color:'#4ade80',fontSize:13}}>{p.value}</div>
+            {p.expires_at && <div style={{color:'#64748b',fontSize:11,marginTop:4}}>Expires {new Date(p.expires_at).toLocaleDateString()}</div>}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ═══ TAXES ESTIMATOR ═══
+function TaxesEstimatorWrapper() {
+  const { appData } = React.useContext(AppDataCtx) || {};
+  return <TaxesEstimator appData={appData} />;
+}
+
+function TaxesEstimator({ appData }) {
+  const ledger = appData?.ledger || [];
+
+  const grossProfit = React.useMemo(() =>
+    ledger.reduce((s, e) => s + (parseFloat(e.profit) || 0), 0), [ledger]);
+  const w2gEvents = React.useMemo(() =>
+    ledger.filter(e => (parseFloat(e.payout) || 0) >= 600), [ledger]);
+
+  const [manualProfit, setManualProfit] = React.useState('');
+  const [filingStatus, setFilingStatus] = React.useState('single');
+  const [stateRate, setStateRate] = React.useState('5');
+
+  const income = parseFloat(manualProfit) || grossProfit;
+
+  const fedTax = React.useMemo(() => {
+    if (!income || income <= 0) return 0;
+    const brackets = filingStatus === 'single'
+      ? [[11925,0.10],[48475,0.12],[103350,0.22],[197300,0.24],[250525,0.32],[626350,0.35],[Infinity,0.37]]
+      : [[23850,0.10],[96950,0.12],[206700,0.22],[394600,0.24],[501050,0.32],[751600,0.35],[Infinity,0.37]];
+    let tax = 0, prev = 0;
+    for (const [cap, rate] of brackets) {
+      if (income <= prev) break;
+      tax += (Math.min(income, cap) - prev) * rate;
+      prev = cap;
+    }
+    return tax;
+  }, [income, filingStatus]);
+
+  const stateTax = income * (parseFloat(stateRate) / 100);
+  const totalTax = fedTax + stateTax;
+  const netProfit = income - totalTax;
+  const effectiveRate = income > 0 ? (totalTax / income * 100) : 0;
+  const quarterlyPayment = totalTax / 4;
+
+  const fv = (n) => isNaN(n) ? '$0' : '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2});
+
+  return (
+    <div style={{maxWidth:600,margin:'0 auto',padding:16}}>
+      <div style={{fontWeight:700,color:'#e2e8f0',fontSize:18,marginBottom:4}}>Taxes Estimator</div>
+      <div style={{color:'#64748b',fontSize:12,marginBottom:20}}>Estimate your tax liability on sports betting profits. Not tax advice — consult a CPA for filings.</div>
+
+      {ledger.length > 0 && (
+        <div style={{padding:10,background:'#0f1724',border:'1px solid #1e3a2f',borderRadius:8,marginBottom:16,fontSize:13}}>
+          <span style={{color:'#94a3b8'}}>Auto-loaded from your Ledger: </span>
+          <strong style={{color:'#4ade80'}}>{fv(grossProfit)} gross profit</strong>
+          <span style={{color:'#64748b'}}> across {ledger.length} entries</span>
+        </div>
+      )}
+
+      <div style={{display:'grid',gap:12,marginBottom:20}}>
+        <div>
+          <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Gross Betting Profit ($)</label>
+          <input type="number" value={manualProfit} onChange={e => setManualProfit(e.target.value)}
+            placeholder={grossProfit ? grossProfit.toFixed(2) : '0.00'}
+            style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:14,boxSizing:'border-box'}} />
+          {ledger.length > 0 && !manualProfit && <div style={{fontSize:11,color:'#475569',marginTop:3}}>Using ledger total. Enter a value to override.</div>}
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+          <div>
+            <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Filing Status</label>
+            <select value={filingStatus} onChange={e => setFilingStatus(e.target.value)}
+              style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}>
+              <option value="single">Single</option>
+              <option value="married">Married Filing Jointly</option>
+            </select>
+          </div>
+          <div>
+            <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>State Tax Rate (%)</label>
+            <input type="number" value={stateRate} onChange={e => setStateRate(e.target.value)} min="0" max="15" step="0.1"
+              style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:14,boxSizing:'border-box'}} />
+          </div>
+        </div>
+      </div>
+
+      {income > 0 && (
+        <>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
+            {[
+              ['Federal Tax (est.)', fv(fedTax), '#ef4444'],
+              ['State Tax (est.)', fv(stateTax), '#ef4444'],
+              ['Total Tax Liability', fv(totalTax), '#ef4444'],
+              ['Net After-Tax Profit', fv(netProfit), '#4ade80'],
+              ['Effective Tax Rate', effectiveRate.toFixed(1) + '%', '#f59e0b'],
+              ['Quarterly Payment', fv(quarterlyPayment), '#94a3b8'],
+            ].map(([label, val, color]) => (
+              <div key={label} style={{padding:12,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8}}>
+                <div style={{fontSize:11,color:'#64748b',marginBottom:4}}>{label}</div>
+                <div style={{fontSize:20,fontWeight:700,color}}>{val}</div>
+              </div>
+            ))}
+          </div>
+
+          {w2gEvents.length > 0 && (
+            <div style={{padding:12,background:'#1a0f0f',border:'1px solid #ef4444',borderRadius:8,marginBottom:16}}>
+              <div style={{fontWeight:600,color:'#ef4444',fontSize:13,marginBottom:4}}>⚠️ W-2G Events ({w2gEvents.length})</div>
+              <div style={{color:'#94a3b8',fontSize:12}}>You have {w2gEvents.length} ledger entries with payouts ≥$600. These may require W-2G forms from your sportsbooks. Keep records.</div>
+            </div>
+          )}
+
+          <div style={{padding:12,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8,marginBottom:16}}>
+            <div style={{fontWeight:600,color:'#e2e8f0',fontSize:13,marginBottom:8}}>Quarterly Payment Schedule (Est.)</div>
+            {['Q1 (Apr 15)', 'Q2 (Jun 15)', 'Q3 (Sep 15)', 'Q4 (Jan 15)'].map((q, i) => (
+              <div key={q} style={{display:'flex',justifyContent:'space-between',padding:'6px 0',borderBottom: i < 3 ? '1px solid #0a0e17' : 'none'}}>
+                <span style={{color:'#94a3b8',fontSize:13}}>{q}</span>
+                <span style={{color:'#e2e8f0',fontSize:13,fontWeight:600}}>{fv(quarterlyPayment)}</span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => window.print()}
+            style={{width:'100%',padding:'11px 0',background:'#1e293b',border:'1px solid #334155',color:'#e2e8f0',borderRadius:8,cursor:'pointer',fontSize:14,fontWeight:600}}
+          >
+            🖨️ Print / Save as PDF
+          </button>
+        </>
+      )}
+
+      <div style={{marginTop:16,padding:12,background:'#0a0e17',border:'1px solid #1e293b',borderRadius:8,fontSize:11,color:'#475569',lineHeight:1.6}}>
+        Estimates only. Tax rates simplified — does not account for deductions, itemized losses, AGI phase-outs, or alternative minimum tax. Consult a licensed CPA or tax professional for actual filings. Sports betting losses may be deductible if you itemize.
+      </div>
+    </div>
+  );
+}
+
 const TABS = [
   { group:"Home", items:[
     {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
@@ -5085,6 +5713,7 @@ const TABS = [
     {n:"Promo Guarantee",slug:"promo-guarantee",c:PromoGuarantee,subcat:"Promo"},
     {n:"Gut Check",slug:"gut-check",c:GutCheck,subcat:"Promo"},
     {n:"Promo Stacking",slug:"promo-stacking",c:PromoStacking,subcat:"Promo"},
+    {n:"Taxes Estimator",slug:"taxes-estimator",c:TaxesEstimatorWrapper,subcat:"Advanced",icon:"🧾"},
   ]},
   { group:"Track", items:[
     {n:"Sportsbooks",slug:"sportsbooks",c:Tracker},
@@ -5106,6 +5735,7 @@ const TABS = [
     {n:"Promo Board",slug:"promo-board",c:PromoBoard},
     {n:"Glossary",slug:"glossary",c:Glossary},
     {n:"Refer & Earn",slug:"refer-earn",c:ReferralHub},
+    {n:"Community Promos",slug:"community-promos",c:CommunityPromos},
     {n:"Upgrade",slug:"upgrade",c:PricingPage},
     {n:"Team Accounts",slug:"team-accounts",c:TeamAccounts},
     {n:"vs Competitors",slug:"vs-competitors",c:CompetitorComparison},
@@ -5289,8 +5919,12 @@ export default function App() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const embedMode = useMemo(() => {
-    try { return new URLSearchParams(window.location.search).has('embed'); } catch { return false; }
+    try {
+      const p = new URLSearchParams(window.location.search);
+      return p.get('embed') === '1' || p.has('embed');
+    } catch { return false; }
   }, []);
+  const isEmbed = embedMode;
   const visitedSlugsRef = useRef(new Set());
   const [showSessionModal, setShowSessionModal] = useState(false);
 
@@ -5428,8 +6062,10 @@ export default function App() {
     if (gi === 1 || gi === 2) onCalculation(slug);
     try {
       const log = JSON.parse(localStorage.getItem('pg_usage_log')||'{}');
+      const wasEmpty = Object.keys(log).length === 0;
       log[slug] = (log[slug]||0)+1;
       localStorage.setItem('pg_usage_log', JSON.stringify(log));
+      if(wasEmpty) window.plausible?.('first_calc_run');
     } catch(e) {}
   }, [slug, authReady, gi]);
 
@@ -5484,6 +6120,11 @@ export default function App() {
         <ErrorBoundary>
           {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
         </ErrorBoundary>
+        {isEmbed && (
+          <div style={{position:'fixed',bottom:8,right:12,fontSize:11,color:'#475569',opacity:0.7,zIndex:9999}}>
+            Powered by <a href="https://vaultsparkstudios.com/promogrind/" target="_blank" rel="noopener" style={{color:'#4ade80',textDecoration:'none'}}>PromoGrind</a>
+          </div>
+        )}
       </div>
       </CurrencyCtx.Provider>
       </CompactCtx.Provider>

@@ -1,5 +1,84 @@
 # Latest Handoff
 
+## Where We Left Off (Session 15)
+- Full project audit (76/100) + implemented all "Highest Leverage Now" and "Highest Ceiling" items
+- Build: clean ✓ — 105.87 kB gzip (app chunk, up from 101.55 kB)
+- Git: not yet committed
+
+### What was built — session 15 (v15.0)
+
+**App.jsx (+349 lines, build ✓):**
+- **Onboarding Checklist** — 5-step getting-started card on Dashboard; auto-detects completion from appData/localStorage; dismissible
+- **Book Signup Progress Tracker** — "Unclaimed Promo Value" section in Sportsbooks tab; shows unsigned books + estimated value + Claim CTAs
+- **Behavioral Upgrade Triggers** — contextual upsell banners: arb calc (5+ uses) → Live Scanner; ledger (3+ entries) → cloud sync; dismissible, reads `pg_usage_log`
+- **Plausible Funnel Events** — 5 events wired: `trial_start`, `upgrade_click`, `referral_shared`, `first_ledger_entry`, `first_calc_run`
+- **Calculator Share Cards** — `ShareCard` component on BonusBet + ProfitBoost profitable results; copy text + native share / Twitter fallback
+- **Taxes Estimator** — new Calculate tool; reads from Ledger auto; 2025 federal brackets, state rate, W-2G warning, quarterly schedule, print PDF
+
+**New static files:**
+- `public/promogrind-vs-profitduel/index.html` — 13-row competitor comparison, UTM-tracked
+- `public/promogrind-vs-oddsjam/index.html` — 12-row competitor comparison, UTM-tracked
+- `public/promogrind-vs-betterbet/index.html` — 10-row competitor comparison, UTM-tracked
+- `discord-bot/bot.js` + `discord-bot/package.json` — Discord.js v14 bot; `/promos` + `/calc` slash commands + daily 9am digest from `community_promos` table
+- `sitemap.xml` — competitor pages added (138+ URLs now)
+
+**UTM attribution:**
+- 35 SEO page redirects updated with `?utm_source=seo&utm_medium=organic&utm_content={slug}` — Plausible now attributes SPA visits to source pages
+
+### Parked (manual only — no code blocks next session)
+| Item | What's needed |
+|---|---|
+| Onboarding drip | RESEND_API_KEY → `supabase functions deploy onboarding-drip` → schedule daily cron |
+| Weekly digest | RESEND_API_KEY → `supabase functions deploy weekly-digest` → schedule weekly cron |
+| Discord bot | Discord dev account → bot token → set env vars → `npm install` in `discord-bot/` → run |
+| parse-bet-slip | ANTHROPIC_API_KEY → deploy |
+| Push notifications | VAPID keys → deploy → run migration-push-subscriptions.sql |
+| Affiliate links | Apply to partner programs → replace `referralLink` in `src/books.js` |
+| Stripe | LLC + EIN → products → secrets → deploy |
+| Google Search Console | Submit sitemap (138+ URLs) |
+| promogrind.com domain | Purchase → CNAME DNS |
+
+---
+
+## Where We Left Off (Session 14)
+- Full project audit (74/100 honest score — revenue identified as #1 blocker)
+- Shipped: 5 App.jsx features + 2 static pages + 3 SQL migrations + task board + memory all updated
+- Build: clean ✓ — 101.55 kB gzip (app chunk)
+- Git: not yet committed
+
+### What was built — session 14 (v14.0)
+
+**App.jsx (all 5 features — build ✓):**
+- **White-Label Embed Mode** — `?embed=1` hides nav/header, shows only calculator + "Powered by PromoGrind" watermark
+- **Bet Slip → Auto-Track** — after AI scan in BonusBet, "➕ Add to Tracker" creates bet entry via `syncAppData`
+- **Influencer Affiliate Dashboard** — "⚡ Creator Mode" section in ReferralHub (VaultSparked-gated); custom vanity code + click/signup stats + estimated commission
+- **Crowdsourced Promo Database** — new "Community Promos" Learn tab; browse/upvote; VaultSparked can submit; backed by `community_promos` Supabase table
+- **Team Accounts UI** — full create/invite/manage replaces waitlist; backed by `team_accounts` + `team_members` tables
+
+**New files:**
+- `public/income-estimator/index.html` — interactive "How Much Can I Make?" estimator (state/bankroll/time inputs → personalized annual income breakdown)
+- `public/embed/index.html` — embed docs page with copy-paste iframe codes for 5 calculators
+- `scripts/migration-team-accounts.sql` — team_accounts + team_members tables with RLS
+- `scripts/migration-community-promos.sql` — community_promos table + `upvote_community_promo` RPC
+- `scripts/migration-influencer-codes.sql` — influencer_codes table + 3 RPCs (get_influencer_code, track_influencer_click, track_influencer_signup)
+- `sitemap.xml` — added income-estimator + embed (135+ URLs)
+
+### Manual items flagged and parked
+| Item | What's needed | Where |
+|---|---|---|
+| Run 3 new SQL migrations | SQL Editor | Supabase dashboard |
+| Deploy onboarding-drip | `supabase functions deploy onboarding-drip` + Resend key + cron schedule | Supabase |
+| parse-bet-slip deploy | `ANTHROPIC_API_KEY` + deploy | Supabase |
+| Push notifications | VAPID keys + deploy + SQL migration | See TASK_BOARD |
+| Live Scanner | Odds API key | theoddsapi.com |
+| Paid upgrade flow | Stripe products + LLC + EIN | Stripe dashboard |
+| Affiliate revenue | Apply to each book's partner program | See TASK_BOARD |
+| Chrome Web Store | Screenshots + listing copy + $5 dev fee | chrome.google.com |
+| Domain promogrind.com | Purchase + CNAME DNS | GoDaddy/Namecheap |
+| Google Search Console | Submit sitemap | search.google.com/search-console |
+
+---
+
 ## Where We Left Off (Session 13)
 - Shipped: 4 high-ceiling items — Chrome Extension, AI Bet Slip Parser, UK market module (8 pages), Content Blog (5 posts + index)
 - Also shipped: domain migration prep (CNAME), sitemap updated to 131+ URLs
