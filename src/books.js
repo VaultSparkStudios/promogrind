@@ -49,10 +49,16 @@ export const BOOKS = [
     value: "$200-$1,200",
     bonus: 200,
     recurring: "Daily odds boosts, SGP profit boosts, stepped up parlays",
-    // Replace with your affiliate link:
+    // Homepage (used for general nav / display)
     link: "https://www.draftkings.com",
+    // Direct new-user registration page — better for click-through
+    signupLink: "https://www.draftkings.com/gateway?s=0",
+    // ↓ Replace with your affiliate URL after approval at draftkings.com/partners
+    affiliateLink: null,
     referral: "Up to $100 bonus bet per friend referred",
     referralLink: "https://www.draftkings.com/refer-a-friend",
+    affiliateProgram: "https://www.draftkings.com/partners",
+    cpa: "$75+ per depositing user",
     color: "#53d769",
   },
   {
@@ -63,8 +69,13 @@ export const BOOKS = [
     bonus: 300,
     recurring: "Daily boosts, profit boost tokens, same game parlay+",
     link: "https://www.fanduel.com",
+    signupLink: "https://www.fanduel.com/join",
+    // ↓ Replace with your affiliate URL after approval at partners.fanduel.com
+    affiliateLink: null,
     referral: "Up to $75 bonus bet per friend",
     referralLink: "https://www.fanduel.com/referral",
+    affiliateProgram: "https://partners.fanduel.com",
+    cpa: "$25–35 CPA or 35% RevShare for 730 days",
     color: "#1493ff",
   },
   {
@@ -75,8 +86,13 @@ export const BOOKS = [
     bonus: 1500,
     recurring: "Weekly deposit bonuses (25% up to $100), daily boosts",
     link: "https://www.betmgm.com",
+    signupLink: "https://sports.betmgm.com/en/sports",
+    // ↓ Replace with your affiliate URL after approval at betmgmpartners.com
+    affiliateLink: null,
     referral: "$100 per friend, up to 20/month",
     referralLink: "https://sports.betmgm.com/en/sports/refer-a-friend",
+    affiliateProgram: "https://www.betmgmpartners.com",
+    cpa: "$50+ per depositing user",
     color: "#c4a44a",
   },
   {
@@ -87,8 +103,13 @@ export const BOOKS = [
     bonus: 250,
     recurring: "Rotating profit boosts, odds boosts, parlay insurance",
     link: "https://www.caesars.com/sportsbook-and-casino",
+    signupLink: "https://www.caesars.com/sportsbook-and-casino/register",
+    // ↓ Replace with your affiliate URL after approval at caesarsaffiliates.com
+    affiliateLink: null,
     referral: "5,000 Reward Credits (~$50) per friend",
     referralLink: "https://www.caesars.com/sportsbook-and-casino/refer-a-friend",
+    affiliateProgram: "https://www.caesarsaffiliates.com",
+    cpa: "Revenue share model",
     color: "#1a472a",
   },
   {
@@ -99,8 +120,13 @@ export const BOOKS = [
     bonus: 365,
     recurring: "Early payout offers, multi-sport parlay boosts",
     link: "https://www.bet365.com",
+    signupLink: "https://www.bet365.com/#/AC/B1/C1/D1002/E3/F163/",
+    // ↓ Replace with your affiliate URL after approval at bet365partners.com
+    affiliateLink: null,
     referral: "Varies by state",
     referralLink: "https://www.bet365.com/referral",
+    affiliateProgram: "https://www.bet365partners.com",
+    cpa: "30% of net profit RevShare",
     color: "#027b5b",
   },
   {
@@ -111,8 +137,13 @@ export const BOOKS = [
     bonus: 200,
     recurring: "Weekly profit boosts, featured parlay boosts",
     link: "https://www.espnbet.com",
+    signupLink: "https://www.espnbet.com/registration",
+    // ↓ Replace with your affiliate URL after approval via Penn Interactive
+    affiliateLink: null,
     referral: "Varies",
     referralLink: "https://www.espnbet.com/refer-a-friend",
+    affiliateProgram: "https://www.penninteractive.com/affiliates",
+    cpa: "CPA varies by state",
     color: "#d00",
   },
   {
@@ -123,8 +154,13 @@ export const BOOKS = [
     bonus: 200,
     recurring: "Daily FanCash bonuses, loyalty rewards",
     link: "https://www.fanatics.com/sportsbook",
+    signupLink: "https://www.fanaticssportsbook.com/registration",
+    // ↓ Replace with your affiliate URL after approval via Fanatics Partners
+    affiliateLink: null,
     referral: "Varies by state",
     referralLink: "https://www.fanaticssportsbook.com/refer-a-friend",
+    affiliateProgram: "https://www.fanaticssportsbook.com/partners",
+    cpa: "CPA model — apply for rates",
     color: "#e44d26",
   },
   {
@@ -135,8 +171,22 @@ export const BOOKS = [
     bonus: 500,
     recurring: "iRush rewards, profit boosts, 2nd chance parlays",
     link: "https://www.betrivers.com",
+    signupLink: "https://www.betrivers.com/registration",
+    // ↓ Replace with your affiliate URL after approval via Rush Street Interactive Partners
+    affiliateLink: null,
     referral: "$100 per friend ($50 deposit req.)",
     referralLink: "https://www.betrivers.com/refer-a-friend",
+    affiliateProgram: "https://www.betrivers.com/affiliates",
+    cpa: "$50–100 per depositing user",
     color: "#0066cc",
   },
 ];
+
+/**
+ * Returns the best click-through URL for a book in priority order:
+ *  1. affiliateLink (tracked, earns commission) — use when approved
+ *  2. signupLink (direct registration, better UX than homepage)
+ *  3. link (homepage fallback)
+ */
+export const getBookUrl = (book) =>
+  book.affiliateLink || book.signupLink || book.link;

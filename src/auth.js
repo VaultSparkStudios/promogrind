@@ -39,6 +39,8 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  * Returns false (and redirects to vault-member) if not.
  */
 export async function checkAuth() {
+  if (import.meta.env.VITE_DEV_BYPASS_AUTH === 'true') return true;
+
   // ── Case A: Incoming token redirect ──────────────────────────
   const hash = window.location.hash;
   if (hash.includes('access_token=')) {
@@ -170,6 +172,12 @@ export async function isConcierge() {
   return sub.plan === 'concierge' && sub.status === 'active';
 }
 
+export async function isAgency() {
+  const sub = await getSubscription();
+  if (!sub) return false;
+  return sub.plan === 'agency' && sub.status === 'active';
+}
+
 /**
  * Kicks off a Stripe Checkout session.
  * @param {string} [planId] - "monthly" | "annual" (defaults to "monthly")
@@ -181,15 +189,26 @@ export async function startCheckout(planId = 'monthly') {
 
   const { data, error } = await supabase.functions.invoke('create-checkout', {
     headers: { Authorization: `Bearer ${session.access_token}` },
-    body: { planId },
+    body: { plan: planId },
   });
 
-  if (error || !data?.url) {
-    console.error('[VaultGate] Checkout error:', error ?? data);
+  if (error) {
+    console.error('[PromoGrind] Checkout error:', error);
     return;
   }
 
-  window.location.href = data.url;
+  // Test mode — Stripe not yet configured (pre-LLC)
+  if (data?.test_mode) {
+    console.log('[PromoGrind] Stripe test mode — checkout simulated:', data.session);
+    alert('Stripe checkout is in test mode.\n\nTo go live: set STRIPE_SECRET_KEY (sk_live_...) and STRIPE_TEST_MODE=false in Supabase secrets.\n\nSimulated session: ' + (data.session?.id ?? 'n/a'));
+    return;
+  }
+
+  if (data?.checkout_url) {
+    window.location.href = data.checkout_url;
+  } else {
+    console.error('[PromoGrind] No checkout URL returned:', data);
+  }
 }
 
 // ── Internal ───────────────────────────────────────────────────

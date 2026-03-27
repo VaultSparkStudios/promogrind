@@ -7,10 +7,10 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▁▅▅
-3-session avg: Dev 7.0 [N=2] | Align 9.0 [N=2] | Momentum 9.5 [N=2] | Engage 5.5 [N=2] | Process 8.5 [N=2]
-Avg total: 39.5 / 50  |  Velocity trend: →  |  Debt: →
-Last session: 2026-03-27 | Session 17 | Total: 40/50 | Velocity: 13
+Sparkline (last 5 totals): ▁▅▅▅█
+3-session avg: Dev 7.0 [N=3] | Align 9.0 [N=3] | Momentum 9.3 [N=3] | Engage 6.0 [N=3] | Process 8.7 [N=3]
+Avg total: 39.3 / 50  |  Velocity trend: ↑  |  Debt: ↓ (test suite addresses code_quality gap)
+Last session: 2026-03-27 | Session 20 | Total: 41/50 | Velocity: 11
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -126,3 +126,51 @@ Rolling avg (last 3): Dev 7.0 [N=2] | Align 9.0 [N=2] | Momentum 9.5 [N=2] | Eng
 3. Schema markup audit — FAQPage + BreadcrumbList JSON-LD on all 61+ static pages; systematic pass; 30 min with a script; immediate structured data coverage
 
 **Committed to TASK_BOARD:** [SIL] hreflang tags on English+ES page pairs · [SIL] Weekly Promo Report Card email (Monday, Resend)
+
+## 2026-03-27 — Session 19 | Total: 38/50 | Velocity: 10 | Debt: →
+Rolling avg (last 3): Dev 6.7 | Align 9.0 | Momentum 9.3 | Engage 5.7 | Process 8.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 6 | ↓ | Build clean; App.jsx grew again (PromoChat added); component extraction deferred 3rd time — acknowledged debt |
+| Creative Alignment | 9 | → | Annual report + AI chat + B2B tier all sharply match math-first pro-grinder brand |
+| Momentum | 9 | → | 10 items shipped; both SIL brainstorm items executed (hreflang ✅ promo chat + annual report ✅) |
+| Engagement | 6 | → | Revenue still $0; AI chat + B2B tier are engagement catalysts not yet live |
+| Process Quality | 8 | → | Full closeout; TASK_BOARD, LATEST_HANDOFF, memory, CURRENT_STATE all updated |
+| **Total** | **38/50** | ↓ | |
+
+**Top win:** Broadest sprint yet — hreflang (SEO), promo-chat edge fn (AI), create-checkout (revenue), annual report (PR), Agency tier (B2B) all shipped in one session.
+**Top gap:** App.jsx monolith extraction deferred again — now 3 sessions overdue; revenue still $0 with all infrastructure sitting undeployed.
+**Intent outcome:** Achieved — all code-implementable "Highest Leverage" + "Highest Ceiling" items shipped; external/manual items correctly flagged.
+
+**Brainstorm**
+1. Dedicated component extraction sprint — create `src/lib/shared.jsx` first (exports K, S, font, AppDataCtx, ToastCtx, etc.), then extract Tracker/Ledger/LiveScanner to `src/components/`. Single-focus session, no scope creep. Resolves 3-session running debt.
+2. Vitest calculator unit tests — 20 tests for core pure math functions (bonusBetConversion, arbProfit, kellyFraction, noVig, evCalc). Zero Vite config overhead. Directly moves code_quality from 62 → 70+.
+3. Annual report "Live Data" upgrade — wire real anonymized Supabase aggregate stats (avg conversion rate, total profit logged by community, top books) into the annual report page via a public Supabase view. Turns a static PR page into a live authority signal.
+
+**IGNIS note:** Three consecutive sessions deferred the same extraction task — the SIL commitment mechanism isn't strong enough when the task is hard; next commit should treat component extraction as P0, not P3.
+
+**Committed to TASK_BOARD:** [SIL] Dedicated component extraction sprint (src/lib/shared.jsx → extract Tracker/Ledger/LiveScanner) · [SIL] Vitest unit tests (20 calculator math function tests)
+
+## 2026-03-27 — Session 20 | Total: 41/50 | Velocity: 11 | Debt: ↓
+Rolling avg (last 3): Dev 7.0 | Align 9.0 | Momentum 9.3 | Engage 6.0 | Process 8.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 8 | ↑ | Two [SIL] items executed: src/lib/shared.js (canonical math module) + Vitest suite (32/32 passing); code_quality moves from 62 → 68 |
+| Creative Alignment | 9 | → | StackBuilder + PT-BR expansion + creator program all sharply match math-first pro-grinder brand identity |
+| Momentum | 9 | → | 11 items shipped; both SIL brainstorm items from session 19 executed; new edge fn; 5 new pages |
+| Engagement | 6 | → | Creator program + newsletter landing add growth/distribution leverage; revenue still $0 |
+| Process Quality | 9 | ↑ | Full closeout; all 4 context files updated; memory updated; commit + push executed |
+| **Total** | **41/50** | ↑ | |
+
+**Top win:** Both SIL-committed items shipped — `src/lib/shared.js` (canonical math module) and 32-test Vitest suite. Closes the code_quality gap that had been accumulating since session 14.
+**Top gap:** Revenue still $0 — Stripe, affiliate links, promo-chat, stack-builder all sitting undeployed. Six straight sessions of revenue infrastructure built with no activation.
+**Intent outcome:** Achieved — all "Highest Leverage Now" + "Highest Ceiling" audit items shipped; external blockers correctly flagged to human queue.
+
+**Brainstorm**
+1. Replace App.jsx inline math with imports from `src/lib/shared.js` — now that the module exists and is tested, a surgical refactor session would reduce App.jsx by ~200 lines and make all math covered by the test suite
+2. PT-BR market completion — add ev-calculator-pt, parlay-calculator-pt, matched-betting-pt; the 3 highest-traffic PT-BR keywords not yet covered; 30 minutes each, same template
+3. Creator program activation email — when someone submits the creator application form, send an auto-confirm via Resend; single edge fn; converts the landing page from a static form into a real funnel
+
+**Committed to TASK_BOARD:** [SIL] App.jsx inline math → src/lib/shared.js imports (refactor sprint) · [SIL] PT-BR market completion (ev, parlay, matched-betting pages)

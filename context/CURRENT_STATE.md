@@ -1,12 +1,12 @@
 # Current State
 
-Last updated: 2026-03-27 (v17.0 — 10 Spanish SEO pages + 14-day drip + polish: empty states, mobile padding, invite auto-detect)
+Last updated: 2026-03-27 (v20.0 — full audit + test suite + shared.js + StackBuilder + PT-BR SEO + newsletter/creator pages)
 
 ## Version
-v17.0 (app) / 3.0.0 (package.json — not critical)
+v20.0 (app) / 3.0.0 (package.json — not critical)
 
 ## App.jsx
-~6,700 lines. Single-file React SPA.
+~6,900 lines. Single-file React SPA.
 
 ## Tabs / Tools
 | Group | Count | Tools |
@@ -15,25 +15,48 @@ v17.0 (app) / 3.0.0 (package.json — not critical)
 | Convert | 5 | Bonus Bet, Profit Boost, First Bet, Deposit Match, Insurance |
 | Calculate | 24 | No-Vig, 3-Way No-Vig, +EV, Kelly, 2-Way Arb, 3-Way Arb, Parlay Hedge, Middle, Odds Convert, Line Shop, Rollover, Teaser, Round Robin, Parlay Builder, SGP Estimator, Hold Calc, Bet Sizer, Income Est., Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, Promo Stacking, **Taxes Estimator** |
 | Track | 7 | Sportsbooks, Bet Tracker, P/L Ledger, Leaderboard, Free Bet Arb, Trade Journal, Odds Compare |
-| Live | 3 | Arb Scanner, +EV Scanner, **Action Plan** (VaultSparked-gated) |
+| Live | 4 | Arb Scanner, +EV Scanner, Action Plan (VaultSparked), **Stack Builder** (VaultSparked) |
 | Learn | 11 | Knowledge Base, Promo Finder, Promo Calendar, Promo Board, Glossary, Refer & Earn, Upgrade, Team Accounts, vs Competitors, Promo Arb Finder, Community Promos |
 
-**Total: 51 tools**
+**Total: 52 tools**
 
-## Static SEO Pages: 62
+## Static SEO Pages: 88
 - 17 keyword pages (bonus-bet, arb-calculator, kelly-criterion, no-vig, profit-boost, parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting, free-bet-calculator, deposit-match-calculator, rollover-calculator, same-game-parlay)
 - 10 US state pages (NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN)
 - 8 UK pages (matched-betting-uk, bonus-bets-uk, London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
 - 10 Spanish (ES) pages (bonus-bet-es, arb-calculator-es, no-vig-es, profit-boost-es, kelly-criterion-es, ev-calculator-es, parlay-calculator-es, hedge-calculator-es, matched-betting-es, sportsbook-promo-es)
+- 3 Portuguese (PT-BR) pages: bonus-bet-pt, arb-calculator-pt, kelly-criterion-pt (Brazil market)
 - 3 competitor comparison pages (vs-profitduel, vs-oddsjam, vs-betterbet)
 - 5 blog posts + blog index
 - 2 tool pages (income-estimator, embed)
 - 3 support pages (landing, privacy, terms)
 - 1 partner page (promogrind-verified)
-- sitemap.xml: 149+ URLs
+- 1 PR/data report page (annual-report)
+- 2 growth/distribution pages (the-grind newsletter, creator-program affiliate)
+- sitemap.xml: 175+ URLs
+
+## v20.0 New Features
+- **Test suite** — `src/__tests__/math.test.js` (32 tests, all passing); `vitest.config.js`; vitest + @vitest/ui devDependencies in package.json; `npm test` runs all
+- **`src/lib/shared.js`** — canonical pure-JS module: all calc math, K palette, S styles, converters; testable in Node; non-breaking (App.jsx still has inline copies — future refactor)
+- **StackBuilder component** — VaultSparked-gated Live tab; bankroll + book multi-select; calls `stack-builder` edge fn; AI-generated 3-step promo plan with estimated total; added as 4th item in Live group
+- **stack-builder edge fn** — `supabase/functions/stack-builder/index.ts`; POST `{bankroll, booksAvailable}` → Claude Haiku → 3-step plan; deploy + `ANTHROPIC_API_KEY` needed
+- **ShareCard enhanced** — Reddit + X/Twitter buttons; improved share copy; Arb2Way gets share button
+- **Dev auth bypass** — `VITE_DEV_BYPASS_AUTH=true` in `.env` skips VaultSparked redirect in local dev
+- **PT-BR SEO pages** — bonus-bet-pt, arb-calculator-pt, kelly-criterion-pt; full Portuguese content; hreflang en/es/pt-BR; Brazil market expansion
+- **Newsletter landing** — `public/the-grind/index.html`; email → newsletter_subscribers; $487/wk avg promo digest preview
+- **Creator program landing** — `public/creator-program/index.html`; 30% rev share; earnings calculator; application form → newsletter_subscribers
+
+## v19.0 New Features
+- **PromoChat AI widget** — floating 💬 button (bottom-right); slide-out panel; Claude Haiku conversational AI; 10/day free (localStorage); unlimited VaultSparked; calculator suggestion chips; calls promo-chat edge fn
+- **B2B Agency pricing tier** — 4th card in PricingPage ($199/mo, purple accent); 6 feature bullets; "Contact Sales" mailto CTA
+- **create-checkout edge fn** — Stripe test/live dual mode; test mode default until LLC+EIN; plans: monthly ($24.99), annual ($199), agency ($199)
+- **promo-chat edge fn** — Claude Haiku; 10/day free via vault_events; keyword-based calc suggestions; unlimited VaultSparked/trial
+- **isAgency() + startCheckout() test mode** — auth.js additions for Agency tier + Stripe test mode alert
+- **20 hreflang edits** — all 10 EN + 10 ES calculator pages updated with reciprocal hreflang alternate links
+- **public/annual-report/index.html** — "State of Sports Betting Promos 2026" PR backlink magnet; Schema.org Report JSON-LD
 
 ## Build
-- App chunk: ~420KB raw / **109.74 kB gzip**
+- App chunk: ~420KB raw / **~110 kB gzip** (8.74s build)
 - Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
 - Supabase chunk: 194KB raw / 51KB gzip
 - Strategy: network-first JS/CSS, cache-first fonts/images

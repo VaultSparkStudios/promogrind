@@ -246,40 +246,48 @@ const parseNL = (text) => {
 
 // ═══ SHARE CARD ═══
 function ShareCard({ title, profit, onClose }) {
-  const text = `🎉 Just found ${profit} in guaranteed profit using ${title} — PromoGrind (free)\nhttps://vaultsparkstudios.com/promogrind/`;
-  const [copyLabel, setCopyLabel] = React.useState('Copy');
+  const appUrl = 'https://promogrind.com';
+  const text = `🎉 Just locked in ${profit} in guaranteed profit using ${title} on PromoGrind — completely free.\n\nNo subscription needed. 51 free sportsbook promo calculators:\n${appUrl}`;
+  const tweetText = `🎉 Just locked in ${profit} guaranteed profit from a sportsbook promo using @PromoGrind — free calculator, no BS\n${appUrl}`;
+  const [copyLabel, setCopyLabel] = React.useState('📋 Copy text');
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopyLabel('Copied!');
-      setTimeout(() => setCopyLabel('Copy'), 2000);
-    });
+    navigator.clipboard.writeText(text).catch(() => {});
+    setCopyLabel('✓ Copied!');
+    setTimeout(() => setCopyLabel('📋 Copy text'), 2200);
   };
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({ title: `I made ${profit} with PromoGrind`, text, url: 'https://vaultsparkstudios.com/promogrind/' }).catch(() => {});
+      navigator.share({ title: `I made ${profit} with PromoGrind`, text, url: appUrl }).catch(() => {});
     } else {
-      const tweet = encodeURIComponent(text);
-      window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`, '_blank');
     }
+  };
+
+  const handleReddit = () => {
+    const body = encodeURIComponent(`Used the free PromoGrind calculator and locked in ${profit} in guaranteed profit from ${title}. No subscription, no BS — it's completely free.\n\n${appUrl}`);
+    window.open(`https://www.reddit.com/submit?title=${encodeURIComponent(`Locked in ${profit} guaranteed profit using PromoGrind`)}&text=${body}`, '_blank');
   };
 
   return (
     <div style={{marginTop:12,padding:16,background:'linear-gradient(135deg,#0f2a1e,#0a0e17)',border:'2px solid #4ade80',borderRadius:10,position:'relative'}}>
-      <button onClick={onClose} style={{position:'absolute',top:8,right:10,background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18}}>×</button>
-      <div style={{fontSize:11,color:'#64748b',letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>Your win 🎉</div>
-      <div style={{fontSize:28,fontWeight:800,color:'#4ade80',marginBottom:4}}>{profit}</div>
-      <div style={{fontSize:13,color:'#94a3b8',marginBottom:14}}>guaranteed profit from {title}</div>
-      <div style={{display:'flex',gap:8}}>
-        <button onClick={handleCopy} style={{flex:1,padding:'8px 0',background:'#1e293b',border:'1px solid #334155',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:13,fontWeight:600}}>
+      <button onClick={onClose} style={{position:'absolute',top:8,right:10,background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18,lineHeight:1}}>×</button>
+      <div style={{fontSize:9,color:'#64748b',letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:6}}>Guaranteed Profit Locked In</div>
+      <div style={{fontSize:32,fontWeight:800,color:'#4ade80',marginBottom:2,fontFamily:"'Space Grotesk',sans-serif"}}>{profit}</div>
+      <div style={{fontSize:12,color:'#94a3b8',marginBottom:14}}>from {title} · PromoGrind</div>
+      <div style={{display:'flex',gap:8,marginBottom:8}}>
+        <button onClick={handleCopy} style={{flex:1,padding:'8px 0',background:'#1e293b',border:'1px solid #334155',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:12,fontWeight:600,fontFamily:"'JetBrains Mono',monospace"}}>
           {copyLabel}
         </button>
-        <button onClick={handleShare} style={{flex:1,padding:'8px 0',background:'#4ade80',border:'none',color:'#0a0e17',borderRadius:6,cursor:'pointer',fontSize:13,fontWeight:700}}>
-          Share ↗
+        <button onClick={handleShare} style={{flex:1,padding:'8px 0',background:'#4ade80',border:'none',color:'#0a0e17',borderRadius:6,cursor:'pointer',fontSize:12,fontWeight:700}}>
+          𝕏 Tweet ↗
+        </button>
+        <button onClick={handleReddit} style={{flex:1,padding:'8px 0',background:'#ff4500',border:'none',color:'#fff',borderRadius:6,cursor:'pointer',fontSize:12,fontWeight:700}}>
+          Reddit ↗
         </button>
       </div>
-      <div style={{fontSize:10,color:'#334155',marginTop:10,textAlign:'center'}}>promogrind.com — free sportsbook promo tools</div>
+      <div style={{fontSize:9,color:'#1e293b',textAlign:'center',letterSpacing:'0.5px'}}>promogrind.com — 51 free sportsbook promo tools</div>
     </div>
   );
 }
@@ -680,6 +688,7 @@ const Arb2Way = () => {
   const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v),setT=v=>setMem('t',v);
   const r = useMemo(()=>calcArb2(o1,o2,parseFloat(t)),[o1,o2,t]);
   const [rCopied, setRCopied] = useState(false);
+  const [showShareCardArb, setShowShareCardArb] = useState(false);
   const arbIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
   const [showArbTrigger, setShowArbTrigger] = useState(() => {
     try {
@@ -707,7 +716,10 @@ const Arb2Way = () => {
     <div style={S.row}><In l="Outcome 1 (Book A)" v={o1} set={setO1}/><In l="Outcome 2 (Book B)" v={o2} set={setO2}/><In l="Total Stake" v={t} set={setT} pre="$"/></div>
     {r&&<div style={S.res(r.ok)}><div style={{display:"flex",alignItems:"center",gap:8}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?`ARB: +$${r.pr}`:"NO ARB"}</span>{r.ok&&<button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button>}</div>
       {r.ok&&<><RR l="Stake Side 1" v={`$${r.s1}`} c={K.ac} b/><RR l="Stake Side 2" v={`$${r.s2}`} c={K.ac} b/><RR l="ROI" v={`${r.roi}%`} c={K.gn}/></>}
-      {!r.ok&&<Nt c={K.rd}>No arb exists. Both sides need + odds at different books. Typical arb margins are 1-5%. Use OddsJam or BetBurger to scan automatically.</Nt>}</div>}
+      {!r.ok&&<Nt c={K.rd}>No arb exists. Both sides need + odds at different books. Typical arb margins are 1-5%. Use OddsJam or BetBurger to scan automatically.</Nt>}
+      {r.ok&&!showShareCardArb&&<button onClick={()=>setShowShareCardArb(true)} style={{marginTop:10,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #c084fc',color:'#c084fc',borderRadius:6,cursor:'pointer',fontSize:12}}>🎉 Share this arb</button>}
+      {r.ok&&showShareCardArb&&<ShareCard title="2-Way Arbitrage" profit={`+$${r.pr} (${r.roi}% ROI)`} onClose={()=>setShowShareCardArb(false)}/>}
+    </div>}
   </div>
   <Help entries={[
     ["Arbitrage","Betting both sides of the same event at different sportsbooks where the combined odds guarantee a profit. It works because different books set different odds. When the gap is big enough, you can bet both sides and win no matter what."],
@@ -4010,10 +4022,176 @@ const PricingPage = () => {
         </div>
       ))}
     </div>
-  </div></div>);
+  </div>
+  {/* Agency / B2B tier */}
+  <div style={{...S.card,border:`1px solid #a855f740`}}>
+    <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>
+      <span style={{fontSize:16,fontWeight:700,color:'#a855f7',fontFamily:fontD}}>Agency / White-Label</span>
+      <span style={{padding:'2px 10px',borderRadius:50,fontSize:9,fontWeight:700,background:'#a855f720',color:'#a855f7',letterSpacing:'1.5px'}}>B2B</span>
+    </div>
+    <div style={{...S.note('#a855f7'),marginBottom:20}}>Embed the full PromoGrind calculator suite on your betting blog or platform with your own branding.</div>
+    <div style={{display:'flex',alignItems:'baseline',gap:4,marginBottom:20}}>
+      <span style={{fontSize:28,fontWeight:700,color:'#a855f7',fontFamily:fontD}}>$199</span>
+      <span style={{fontSize:12,color:K.mt}}>/mo</span>
+    </div>
+    <div style={{padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,marginBottom:20}}>
+      {[
+        "Full calculator suite white-label",
+        "Remove PromoGrind branding",
+        "Embed on your betting blog",
+        "API access (calc-api)",
+        "Priority support",
+        "Custom domain support",
+      ].map(feat=>(
+        <div key={feat} style={{display:'flex',gap:10,marginBottom:8}}>
+          <span style={{color:'#a855f7',fontWeight:700,marginTop:1}}>✓</span>
+          <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{feat}</span>
+        </div>
+      ))}
+    </div>
+    <a
+      href="mailto:hello@vaultsparkstudios.com?subject=PromoGrind Agency Inquiry"
+      style={{display:'block',width:'100%',padding:'10px',background:'#a855f7',border:'none',borderRadius:6,color:'#fff',fontWeight:700,cursor:'pointer',fontFamily:font,fontSize:12,textAlign:'center',textDecoration:'none',boxSizing:'border-box'}}
+    >
+      Contact Sales →
+    </a>
+  </div>
+  </div>);
 };
 
 // ═══ AI WEEKLY ACTION PLAN ═══
+// ═══ STACK BUILDER ═══
+function StackBuilder({ proStatus }) {
+  const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
+  const [plan, setPlan] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [bankroll, setBankroll] = useState(() => { try { return localStorage.getItem('pg_bankroll') || '1000'; } catch { return '1000'; } });
+  const [booksAvailable, setBooksAvailable] = useState([]);
+  const [copied, setCopied] = useState(false);
+  const toast = useToast();
+
+  const allBooks = BOOKS.map(b => b.name);
+
+  const toggleBook = (book) => {
+    setBooksAvailable(prev =>
+      prev.includes(book) ? prev.filter(b => b !== book) : [...prev, book]
+    );
+  };
+
+  const generate = async () => {
+    if (!isActive) { toast('Stack Builder is VaultSparked only — start your free 7-day trial', K.pp); return; }
+    if (!bankroll || parseFloat(bankroll) < 100) { toast('Minimum $100 bankroll required', K.rd); return; }
+    setLoading(true); setError(null); setPlan(null);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
+      const { data, error: fnErr } = await supabase.functions.invoke('stack-builder', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+        body: { bankroll: parseFloat(bankroll), booksAvailable },
+      });
+      if (fnErr) throw fnErr;
+      setPlan(data);
+    } catch (e) {
+      setError(e.message || 'Failed to generate stack');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyPlan = () => {
+    if (!plan?.plan) return;
+    navigator.clipboard.writeText(`PromoGrind Stack Builder — $${bankroll} bankroll\n\n${plan.plan}`).catch(() => {});
+    setCopied(true); setTimeout(() => setCopied(false), 1800);
+  };
+
+  return (
+    <div>
+      <div style={S.card}>
+        <Tl t="Stack Builder" badge="AI · VAULTSPARKED" bc={K.pp}/>
+        <p style={{fontSize:12,color:K.dm,marginBottom:16,lineHeight:1.6}}>
+          Enter your bankroll and available books. Claude analyzes current promos and returns your optimal 3-book extraction sequence with guaranteed profit amounts.
+        </p>
+
+        {!isActive && (
+          <div style={{padding:14,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:8,marginBottom:16,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:8}}>
+            <div>
+              <div style={{fontSize:12,fontWeight:700,color:K.pp}}>⚡ VaultSparked Feature</div>
+              <div style={{fontSize:11,color:K.mt}}>Start your free 7-day trial — no credit card required</div>
+            </div>
+            <button onClick={()=>startTrial && startTrial()} style={{padding:'6px 14px',background:K.pp,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:'pointer',fontFamily:font}}>Try Free →</button>
+          </div>
+        )}
+
+        <div style={S.row}>
+          <div style={S.col}><In l="Your Bankroll" v={bankroll} set={v=>{setBankroll(v); try{localStorage.setItem('pg_bankroll',v);}catch{}}} pre="$" ph="1000"/></div>
+        </div>
+
+        <div style={{marginBottom:16}}>
+          <label style={S.label}>Books you have available (optional — leave blank for all)</label>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6,marginTop:6}}>
+            {allBooks.map(book => {
+              const sel = booksAvailable.includes(book);
+              return (
+                <button key={book} onClick={() => toggleBook(book)}
+                  style={{padding:'4px 10px',background:sel?`${K.gn}15`:'transparent',border:`1px solid ${sel?K.gn:K.bd2}`,borderRadius:50,color:sel?K.gn:K.dm,fontSize:10,cursor:'pointer',fontFamily:font}}>
+                  {sel ? '✓ ' : ''}{book}
+                </button>
+              );
+            })}
+          </div>
+          {booksAvailable.length > 0 && (
+            <button onClick={() => setBooksAvailable([])} style={{marginTop:6,background:'none',border:'none',color:K.mt,fontSize:10,cursor:'pointer',textDecoration:'underline',padding:0}}>Clear all</button>
+          )}
+        </div>
+
+        <button
+          onClick={generate}
+          disabled={loading}
+          style={{width:'100%',padding:'12px 0',background:isActive?(loading?`${K.pp}40`:K.pp):`${K.pp}20`,border:`1px solid ${K.pp}${isActive?'':40}`,borderRadius:8,color:isActive?K.bg:K.pp,fontFamily:font,fontWeight:700,fontSize:13,cursor:loading?'wait':'pointer',letterSpacing:'0.5px'}}>
+          {loading ? '⚡ Building your optimal stack…' : '⚡ Build My Stack'}
+        </button>
+
+        {error && <div style={{...S.note(K.rd),marginTop:12}}>{error}</div>}
+
+        {plan && (
+          <div style={{marginTop:16,padding:16,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:10}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+              <div style={{fontSize:10,color:K.pp,textTransform:'uppercase',letterSpacing:'1.5px',fontWeight:700}}>Your Optimal Stack</div>
+              <div style={{display:'flex',gap:6,alignItems:'center'}}>
+                {plan.estimatedTotal && (
+                  <span style={{fontSize:11,color:K.gn,fontWeight:700}}>Est. ${plan.estimatedTotal} guaranteed</span>
+                )}
+                <button onClick={copyPlan} style={{padding:'3px 10px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:'pointer',fontFamily:font}}>
+                  📋 {copied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+            </div>
+            <div style={{fontSize:12,color:K.tx,lineHeight:1.8,whiteSpace:'pre-wrap'}}>
+              {plan.plan}
+            </div>
+            {plan.booksUsed?.length > 0 && (
+              <div style={{marginTop:12,display:'flex',flexWrap:'wrap',gap:6}}>
+                {plan.booksUsed.map(b => (
+                  <span key={b} style={{...S.tag(K.ac)}}>{b}</span>
+                ))}
+              </div>
+            )}
+            <div style={{marginTop:10,fontSize:10,color:K.mt}}>
+              Generated {plan.generatedAt ? new Date(plan.generatedAt).toLocaleTimeString() : 'just now'} · {plan.promoCount} promos analyzed
+            </div>
+          </div>
+        )}
+      </div>
+      <Help entries={[
+        ["What is a promo stack?","A sequence of sportsbook promos executed in the optimal order to maximize guaranteed profit extraction. Order matters — welcome bonuses must come before recurring promos, and bankroll must cover hedge amounts at each step."],
+        ["How does Claude generate the stack?","Claude analyzes your bankroll against available promo types, calculates expected guaranteed extraction for each (after hedge), and sequences them for maximum yield without over-committing capital."],
+        ["Do I need all these books?","No — the more books you have, the more opportunities. But even 2-3 books generate meaningful stacks. Select only the books where you have accounts open."],
+      ]}/>
+    </div>
+  );
+}
+
 function AIActionPlan({ proStatus }) {
   const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const [plan, setPlan] = React.useState(null);
@@ -6170,6 +6348,7 @@ const TABS = [
     {n:"Arb Scanner",slug:"arb-scanner",c:LiveScanner,pro:true},
     {n:"+EV Scanner",slug:"ev-scanner",c:LiveScanner,pro:true},
     {n:"Action Plan",slug:"action-plan",c:AIActionPlan,pro:true},
+    {n:"Stack Builder",slug:"stack-builder",c:StackBuilder,pro:true},
   ]},
   { group:"Learn", items:[
     {n:"Knowledge Base",slug:"knowledge-base",c:KB},
@@ -6280,6 +6459,230 @@ const Footer = () => (
     </div>
   </div>
 );
+
+// ═══ PROMO CHAT ═══
+const PromoChat = ({ navigate }) => {
+  const { appData } = React.useContext(AppDataCtx) || {};
+  const [chatOpen, setChatOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatRemaining, setChatRemaining] = useState(null);
+  const [session, setSession] = useState(null);
+  const messagesEndRef = useRef(null);
+  const DAILY_LIMIT = 10;
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
+  }, []);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, chatLoading]);
+
+  const isPro = false; // PromoChat is available to all; rate-limited for non-Pro
+  const todayKey = `pg_chat_uses_${new Date().toISOString().slice(0, 10)}`;
+  const getUsesToday = () => { try { return parseInt(localStorage.getItem(todayKey) || '0'); } catch { return 0; } };
+  const incUsesToday = () => { try { localStorage.setItem(todayKey, String(getUsesToday() + 1)); } catch {} };
+
+  const sendMessage = async () => {
+    if (!chatInput.trim() || chatLoading) return;
+    const usesToday = getUsesToday();
+    if (usesToday >= DAILY_LIMIT) {
+      setChatRemaining(0);
+      return;
+    }
+    const userMsg = { role: 'user', content: chatInput.trim() };
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
+    setChatInput('');
+    setChatLoading(true);
+    try {
+      const history = newMessages.slice(-10).map(m => ({ role: m.role, content: m.content }));
+      const { data, error: fnErr } = await supabase.functions.invoke('promo-chat', {
+        headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
+        body: {
+          message: userMsg.content,
+          history: history.slice(0, -1),
+          userContext: {
+            bankroll: appData?.bankroll,
+            books: appData?.tracker?.map(b => b.name),
+          },
+        },
+      });
+      if (fnErr) throw fnErr;
+      incUsesToday();
+      const remaining = DAILY_LIMIT - getUsesToday();
+      setChatRemaining(remaining);
+      const assistantMsg = {
+        role: 'assistant',
+        content: data?.message || data?.reply || 'Sorry, I could not generate a response.',
+        suggestions: data?.suggestions || [],
+      };
+      setMessages(prev => [...prev, assistantMsg]);
+    } catch (e) {
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Something went wrong. Please try again.', suggestions: [] }]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  const usesToday = getUsesToday();
+  const isLimited = usesToday >= DAILY_LIMIT;
+
+  return (
+    <>
+      {/* Floating chat button */}
+      <button
+        onClick={() => setChatOpen(v => !v)}
+        title="PromoGrind AI — ask about any promo or calculator"
+        style={{
+          position: 'fixed', bottom: 80, right: 20, zIndex: 1050,
+          width: 48, height: 48, borderRadius: '50%',
+          background: K.gr || K.gn, border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+          transition: 'transform 0.15s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        💬
+        <span style={{
+          position: 'absolute', top: 6, right: 6,
+          width: 8, height: 8, borderRadius: '50%',
+          background: K.gn, border: '2px solid #0a0e17',
+          animation: 'pulse 2s infinite',
+        }}/>
+      </button>
+
+      {/* Slide-out chat panel */}
+      {chatOpen && (
+        <div style={{
+          position: 'fixed', right: 0, top: 0, bottom: 0,
+          width: 360, background: '#0f1520',
+          borderLeft: `1px solid #1e293b`,
+          zIndex: 1100, display: 'flex', flexDirection: 'column',
+          boxShadow: '-4px 0 32px rgba(0,0,0,0.6)',
+          transform: 'translateX(0)',
+          transition: 'transform 0.25s ease',
+        }}>
+          {/* Header */}
+          <div style={{
+            padding: '14px 16px', borderBottom: `1px solid ${K.bd}`,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            background: K.s2,
+          }}>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>💬 PromoGrind AI</div>
+              <div style={{ fontSize: 11, color: K.mt, marginTop: 2 }}>Ask about promos, calculators, or strategy</div>
+            </div>
+            <button onClick={() => setChatOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: K.mt, fontSize: 18, padding: 4 }}>×</button>
+          </div>
+
+          {/* Rate limit bar */}
+          {chatRemaining !== null && (
+            <div style={{ padding: '6px 16px', background: K.s1, borderBottom: `1px solid ${K.bd}`, fontSize: 11, color: K.mt, textAlign: 'right' }}>
+              {chatRemaining} of {DAILY_LIMIT} messages left today
+            </div>
+          )}
+
+          {/* Messages */}
+          <div style={{ flex: 1, overflow: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {messages.length === 0 && (
+              <div style={{ color: K.mt, fontSize: 12, textAlign: 'center', marginTop: 32, lineHeight: 1.7 }}>
+                <div style={{ fontSize: 24, marginBottom: 8 }}>💬</div>
+                Ask me anything about sportsbook promos, calculators, or betting strategy.
+              </div>
+            )}
+            {messages.map((msg, i) => (
+              <div key={i} style={{
+                alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                maxWidth: '85%',
+              }}>
+                <div style={{
+                  padding: '10px 12px', borderRadius: 8,
+                  background: msg.role === 'user' ? `${K.gn}20` : K.s2,
+                  border: `1px solid ${msg.role === 'user' ? K.gn + '40' : K.bd}`,
+                  fontSize: 12, color: K.tx, lineHeight: 1.6,
+                }}>
+                  {msg.content}
+                </div>
+                {/* Calculator suggestions */}
+                {msg.suggestions && msg.suggestions.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+                    {msg.suggestions.map(slug => (
+                      <button
+                        key={slug}
+                        onClick={() => { setChatOpen(false); navigate('/' + slug); }}
+                        style={{
+                          padding: '3px 10px', background: `${K.ac}15`,
+                          border: `1px solid ${K.ac}40`, borderRadius: 50,
+                          color: K.ac, fontSize: 10, cursor: 'pointer',
+                          fontFamily: font,
+                        }}
+                      >
+                        → {slug}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            {chatLoading && (
+              <div style={{ alignSelf: 'flex-start', padding: '10px 12px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, fontSize: 12, color: K.mt }}>
+                ⏳ Thinking…
+              </div>
+            )}
+            {isLimited && !chatLoading && (
+              <div style={{ padding: '12px 14px', background: `${K.pp}15`, border: `1px solid ${K.pp}30`, borderRadius: 8, fontSize: 12, color: K.pp, textAlign: 'center' }}>
+                Daily limit reached. Upgrade to VaultSparked for more messages.
+                <br/>
+                <button
+                  onClick={() => { setChatOpen(false); navigate('/upgrade'); }}
+                  style={{ marginTop: 8, padding: '6px 16px', background: K.pp, border: 'none', borderRadius: 6, color: '#fff', fontWeight: 700, fontSize: 11, cursor: 'pointer', fontFamily: font }}
+                >
+                  Go VaultSparked →
+                </button>
+              </div>
+            )}
+            <div ref={messagesEndRef}/>
+          </div>
+
+          {/* Input */}
+          <div style={{ padding: '12px 16px', borderTop: `1px solid ${K.bd}`, background: K.s2, display: 'flex', gap: 8 }}>
+            <input
+              value={chatInput}
+              onChange={e => setChatInput(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+              placeholder={isLimited ? 'Daily limit reached…' : 'Ask about a promo or calculator…'}
+              disabled={isLimited || chatLoading}
+              style={{
+                flex: 1, padding: '8px 10px', background: K.s1,
+                border: `1px solid ${K.bd2}`, borderRadius: 6,
+                color: K.tx, fontFamily: font, fontSize: 12, outline: 'none',
+              }}
+            />
+            <button
+              onClick={sendMessage}
+              disabled={!chatInput.trim() || chatLoading || isLimited}
+              style={{
+                padding: '8px 14px', background: K.gn, border: 'none',
+                borderRadius: 6, color: K.bg, fontWeight: 700,
+                fontSize: 12, cursor: 'pointer', fontFamily: font,
+                opacity: (!chatInput.trim() || chatLoading || isLimited) ? 0.5 : 1,
+              }}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 // ═══ MAIN APP ═══
 export default function App() {
@@ -6721,6 +7124,7 @@ export default function App() {
       <div style={{height:56}}/>
       <MobileBottomNav gi={gi} goTo={goTo}/>
       {showPromoAdvisor && <PromoAdvisorPanel proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
+      <PromoChat navigate={navigate}/>
       <QuickCalcPanel goTo={goTo}/>
     </div>
     </CurrencyCtx.Provider>

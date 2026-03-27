@@ -64,3 +64,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: Full audit → brainstorm 20 items → implement all 12 priority items in same session
 - Why it matters: Establishes the audit-then-implement sprint as the primary session format; all 12 items shipped
 - Supersedes prior entry: —
+
+### 2026-03-27 — Session 19 feature assignment
+
+- Category: Assignment
+- Human input: "Audit project in its entirety and provide score/rating, areas of improvement, category scores, analysis/recommendations (short) and another innovative solutions brainstorm list with every single item having a short synopsis and score/rating attached, and how it would improve/impact the project's overall score, potential, momentum. Out of this list, recommend items by 'Highest leverage right now (low effort, real impact)' and 'Highest ceiling (high effort, transformative)'. Then: Update memory and task board with all 30 brainstorm items and Implement all items that are 'Highest leverage right now' and 'Highest ceiling'."
+- Area affected: supabase/functions/ (2 new edge fns), src/auth.js, src/App.jsx (2 components), public/ (annual-report + 20 hreflang edits), context/ (TASK_BOARD, LATEST_HANDOFF, CURRENT_STATE), memory/
+- Previous state: v18.0 — PromoAdvisorPanel + trial urgency + streak milestones + 20 state SEO pages; no AI chat widget, no B2B tier, no checkout fn
+- New required direction: Full audit (76/100) → 30-item brainstorm → implement all Highest Leverage + Highest Ceiling code items; flag manual/external items in TASK_BOARD
+- Why it matters: Continues the audit-then-implement sprint format; adds AI chat (engagement), Agency tier + checkout (revenue), annual report (SEO authority), hreflang (SEO signals)
+- Supersedes prior entry: —

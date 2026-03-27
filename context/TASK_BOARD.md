@@ -2,9 +2,116 @@
 
 ---
 
-## Session 18 Brainstorm — All 23 Items (v17.0 Audit)
+## Session 20 Brainstorm — All 30 Items (v20.0 Audit — Fresh 68/100)
 
-> Full innovation brainstorm from session 18 (v18.0 audit). Score = impact on overall project score.
+> Full innovation brainstorm from session 20 (complete project audit, 2026-03-27). Score Δ = points added to weighted 68/100 overall. Effort: S=<2hr / M=2-8hr / L=8hr+.
+
+| # | Tier | Item | Synopsis | Impact | Score Δ | Effort | Status |
+|---|------|------|----------|--------|---------|--------|--------|
+| 1 | Activation | Set ANTHROPIC_API_KEY + deploy 4 AI fns | One secret unlocks PromoChat, Advisor, Action Plan, Bet Slip Parser — the app's biggest differentiators | 10/10 | +8 | S | 🔲 MANUAL |
+| 2 | Activation | Wire affiliate links in books.js | Every calculator click to a book is dead revenue. DK/FD/BetMGM pay $50-200 CPA | 10/10 | +6 | S | ✅ Done (structure) |
+| 3 | Activation | Set RESEND_API_KEY + deploy onboarding drip | 9-email nurture sequence fully written, zero new code. Converts trials at 15-25% | 9/10 | +5 | S | 🔲 MANUAL |
+| 4 | Activation | Submit sitemap + buy promogrind.com | 84 SEO pages invisible to Google. $15 domain + 5 min = indexing clock starts | 9/10 | +7 | S | 🔲 MANUAL |
+| 5 | Activation | Submit Chrome extension to Web Store | Built, tested locally. $5 + screenshots. 200-1K passive installs/mo in niche | 8/10 | +4 | S | 🔲 MANUAL ($5) |
+| 6 | Activation | Reddit r/sportsbook + r/matchedbetting posts | 800K+ targeted audience. Genuine calc walkthrough = 5K-20K impressions per post | 7/10 | +4 | S | 🔲 MANUAL |
+| 7 | Retention | "Guaranteed Profit" summary card on calculators | Makes the math visceral. One-tap share drives organic word-of-mouth | 8/10 | +5 | S | ✅ Done v20 |
+| 8 | Retention | "Grind Report" weekly personalized P/L email | Weekly digest function built. "You made $X last week" is the #1 retention hook | 8/10 | +5 | S | 🔲 MANUAL (RESEND) |
+| 9 | Retention | Push notification "Best opportunity right now" | VaultSparked-exclusive. Daily 9am push + calculator deeplink. #1 reason to stay subscribed | 7/10 | +4 | S | 🔲 MANUAL (VAPID) |
+| 10 | Retention | "Profit Certificate" shareable win card | "I made $847 this month." Ledger-backed, one-tap share → testimonial + ad + backlink | 7/10 | +5 | M | 🔲 Future |
+| 11 | Retention | "Grind Buddy" accountability pairing | Opt-in mutual P/L challenge. Doubles retention — churn means hurting a friend's streak | 6/10 | +4 | M | 🔲 Future |
+| 12 | Retention | "Beat Last Week" personalized push challenge | Monday: "Last week $312. Target: $350. Here's how." Self-reinforcing performance loop | 6/10 | +3 | M | 🔲 Future |
+| 13 | Distribution | "The Grind" weekly newsletter | Owned distribution channel (not rented like SEO/social). 10K subs = bulletproof growth engine | 9/10 | +6 | M | ✅ Done v20 |
+| 14 | Distribution | Promo Expiry Countdown embeddable widget | 2-line script embed for affiliate sites. Every embed = backlink + brand + distribution | 7/10 | +5 | M | 🔲 Future |
+| 15 | Distribution | YouTube calculator walkthroughs (5 videos) | Screen record + Loom. Targets 2K-20K search/mo keywords. Zero production cost | 7/10 | +6 | M | 🔲 MANUAL |
+| 16 | Distribution | State legalization alert signup | Email capture for non-legal states. When a state legalizes, email converts at 30%+ | 5/10 | +3 | S | 🔲 Future |
+| 17 | AI | Persistent PromoChat history | Chat history → appData sync. "Last time you said bankroll was $2K" = relationship | 7/10 | +4 | M | 🔲 Future |
+| 18 | AI | Stack Builder — optimal 3-book promo sequence | "Your guaranteed $487 this week" from bankroll input. No competitor has this | 9/10 | +5 | M | ✅ Done v20 |
+| 19 | AI | Bet Slip OCR → auto-fill all calculators | Parser built but only wired to BonusBet. Wire to every calc. 10x mobile UX | 7/10 | +4 | M | 🔲 MANUAL (key) |
+| 20 | AI | Promo T&C URL scraper | Paste promo URL → Claude auto-fetches + analyzes. Eliminates copy-paste friction entirely | 7/10 | +4 | M | 🔲 Future |
+| 21 | Monetization | Concierge tier — "Done For You" promo service | $99/mo, Claude does 90%, human validates. 20 clients = $2K MRR, 2 hrs/week | 8/10 | +5 | M | 🔲 Future |
+| 22 | Monetization | Public calculator API docs page | calc-api built, 1 deploy command. $49/mo above free tier. Devs + affiliates = backlinks | 6/10 | +4 | M | 🔲 Future |
+| 23 | Monetization | Creator affiliate program activation | DB infra live. Landing page built v20. 5 creators × 10 converts/mo = 50 new subs/mo | 8/10 | +5 | M | ✅ Done v20 (page) |
+| 24 | Monetization | Embed syndication deal (3 affiliate sites) | White-label embed live. Approach betting blogs: "add our calcs, we handle math" | 6/10 | +4 | M | 🔲 MANUAL |
+| 25 | Monetization | Annual report PDF email capture | Report page built. Productize: email capture for PDF download → journalist PR outreach | 5/10 | +3 | S | 🔲 Future |
+| 26 | Platform | Mobile app iOS/Android (Capacitor) | Capacitor config ready. App Store = permanent home screen. Reduces churn 40%+ | 8/10 | +5 | L | 🔲 MANUAL (build env) |
+| 27 | Platform | Component extraction (App.jsx → modules) | 503KB monolith. Extract Tracker/Ledger/LiveScanner. Unlocks lazy loading, tests, parallel dev | 7/10 | +8 | L | 🔲 Next session |
+| 28 | Platform | Vitest unit test suite | 20 tests for core math. Zero regression risk. Foundation for safe refactoring | 6/10 | +6 | M | ✅ Done v20 |
+| 29 | Platform | International: Brazil PT-BR pages | Brazil legalized 2024. 200M pop, thin competition in PT-BR niche. First mover | 6/10 | +4 | M | ✅ Done v20 |
+| 30 | Platform | Discord bot activation | Code in discord-bot/. Daily promo digest → links to calculator. Each post = touchpoint | 5/10 | +3 | S | 🔲 MANUAL |
+
+---
+
+## 🔴 Human Action Required — Priority Queue
+
+> All items require manual browser logins, credentials, purchases, or CLI commands. Sorted by impact-per-minute.
+
+### P0 — Zero cost, <15 min each (DO THESE FIRST)
+- [ ] `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` then deploy: `supabase functions deploy promo-chat promo-advisor ai-action-plan parse-bet-slip stack-builder`
+- [ ] `supabase functions deploy calc-api` (no secrets needed — public REST API)
+- [ ] Run `supabase/migrations/migration-gift-tokens.sql` in Supabase SQL Editor
+- [ ] Submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` to Google Search Console
+
+### P1 — Small cost or short setup (<1 hr each)
+- [ ] Buy **promogrind.com** (~$15/yr) — `public/CNAME` already set. Add DNS CNAME → `vaultsparkstudios.github.io`
+- [ ] `supabase secrets set RESEND_API_KEY=...` → deploy: `onboarding-drip weekly-digest gift-trial`
+- [ ] Generate VAPID: `npx web-push generate-vapid-keys` → `supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=...` → `supabase functions deploy send-daily-brief` → run `migration-push-subscriptions.sql`
+- [ ] Apply to affiliate programs: [DraftKings](https://www.draftkings.com/partners) / [FanDuel](https://partners.fanduel.com) / [BetMGM](https://www.betmgmpartners.com) → update `affiliateLink` in `src/books.js`
+
+### P2 — Costs $5 + some setup time
+- [ ] **Chrome Web Store**: take 1280×800 screenshots of extension popup + sidebar → submit at chrome.google.com/webstore/devconsole ($5 one-time dev fee)
+- [ ] **Reddit**: post genuine calc walkthrough in r/sportsbook + r/matchedbetting (no promotion, real math)
+- [ ] **YouTube**: record 5 short screen walkthroughs (Loom or OBS, no production needed)
+- [ ] **Discord bot**: create Discord dev account → create server → `node discord-bot/bot.js` or deploy to Railway
+
+### [SIL] From Session 20 Brainstorm
+- [ ] **[SIL] App.jsx inline math → src/lib/shared.js imports** — now that shared.js is tested, a surgical ~200-line refactor makes all App.jsx math covered by the test suite; dedicated session, no scope creep
+- [ ] **[SIL] PT-BR market completion** — add ev-calculator-pt, parlay-calculator-pt, matched-betting-pt; same template; 30 min each; closes the 3 highest-traffic PT-BR keywords not yet covered
+
+### P3 — Multi-week (external blockers)
+- [ ] LLC → EIN → bank account → Stripe live keys → create products → `supabase secrets set STRIPE_SECRET_KEY=...` → deploy `create-checkout` + `stripe-webhook` in live mode
+- [ ] **Android app**: `npm run build:cap` → Android Studio → Play Store (Windows build OK, iOS needs Mac)
+- [ ] **Creator outreach**: email 10 betting YouTube/TikTok creators with vanity code offer (30% rev share, stats dashboard ready)
+
+---
+
+## Session 19 Brainstorm — All 30 Items (v19.0 Audit)
+
+| # | Tier | Item | Impact | Score Δ | Status |
+|---|------|------|--------|---------|--------|
+| 1 | Revenue | Affiliate Program Applications (DK/FD/BetMGM) | 10/10 | +18 | 🔲 MANUAL |
+| 2 | Revenue | Stripe Test Mode Checkout Validation | 8/10 | +4 | ✅ Done |
+| 3 | Revenue | Annual Plan Discount In-App Banner | 7/10 | +2 | 🔲 Parked |
+| 4 | Revenue | "Beat Your Books" Weekly Free Tier Email | 7/10 | +3 | 🔲 Parked (needs RESEND) |
+| 5 | Distribution | promogrind.com Domain Migration | 9/10 | +5 | 🔲 MANUAL |
+| 6 | Distribution | Google Search Console Sitemap Submit | 8/10 | +3 | 🔲 MANUAL |
+| 7 | Distribution | Chrome Web Store Submission | 8/10 | +4 | 🔲 MANUAL ($5) |
+| 8 | Distribution | hreflang Tags on EN/ES Page Pairs | 6/10 | +2 | ✅ Done |
+| 9 | Distribution | Backlink Seeding via Reddit + Betting Forums | 7/10 | +4 | 🔲 MANUAL |
+| 10 | Distribution | Public API Documentation Page | 6/10 | +3 | 🔲 Parked |
+| 11 | AI | AI Bet Slip Scanner Activation | 8/10 | +2 | 🔲 MANUAL (ANTHROPIC key) |
+| 12 | AI | AI Action Plan Activation | 7/10 | +2 | 🔲 MANUAL (ANTHROPIC key) |
+| 13 | AI | Promo Advisor Activation | 8/10 | +3 | 🔲 MANUAL (ANTHROPIC key) |
+| 14 | AI | Enhanced AI Chat Widget (Conversational) | 9/10 | +5 | ✅ Done |
+| 15 | AI | Promo Opportunity Push Notifications | 7/10 | +3 | 🔲 MANUAL (VAPID keys) |
+| 16 | Retention | Discord Community Launch | 7/10 | +3 | 🔲 MANUAL |
+| 17 | Retention | Social Proof "Wins Wall" | 7/10 | +3 | 🔲 Parked |
+| 18 | Retention | Gamified Monthly Referral Contest | 6/10 | +2 | 🔲 Parked |
+| 19 | Retention | "7-Day Promo Mastery" Email Course | 7/10 | +3 | 🔲 Parked |
+| 20 | Retention | State Legalization Push Alert | 6/10 | +2 | 🔲 Parked |
+| 21 | SEO | 50-State SEO Completion (30→50) | 6/10 | +2 | 🔲 Future |
+| 22 | SEO | "State of Sports Betting Promos" Annual Report | 8/10 | +5 | ✅ Done |
+| 23 | SEO | YouTube SEO Video Content (5 explainers) | 7/10 | +3 | 🔲 MANUAL |
+| 24 | SEO | Embed Mode Syndication Outreach | 6/10 | +3 | 🔲 Parked |
+| 25 | Platform | Android App (Capacitor) | 8/10 | +4 | 🔲 MANUAL (build env) |
+| 26 | Platform | App.jsx Component Extraction (Refactor) | 5/10 | +5 (code quality) | 🔲 Next session (needs tests first) |
+| 27 | Platform | Automated Test Suite (Vitest) | 5/10 | +4 | ✅ Done v20 |
+| 28 | Platform | Influencer Creator Program Activation | 8/10 | +4 | ✅ Done v20 (page) |
+| 29 | Platform | Google Ads Campaign (Competitor Keywords) | 7/10 | +3 | 🔲 Parked (needs revenue first) |
+| 30 | Monetization | White-Label B2B Agency Tier ($199/mo) | 8/10 | +5 | ✅ Done (UI) |
+
+---
+
+## Session 18 Brainstorm — All 23 Items (v17.0 Audit)
 
 | # | Tier | Item | Impact | Score Δ | Status |
 |---|------|------|--------|---------|--------|
@@ -15,11 +122,11 @@
 | 5 | Revenue | Affiliate Programs DK/FD/BetMGM | 10/10 | +15 | 🔲 MANUAL |
 | 6 | Revenue | Trial Expiry Email Sequence (day 4+6) | 8/10 | +3 | ✅ Done |
 | 7 | Revenue | Annual Plan Discount Banner | 7/10 | +2 | 🔲 Parked |
-| 8 | Revenue | Stripe Test Mode Checkout | 8/10 | +4 | 🔲 MANUAL |
+| 8 | Revenue | Stripe Test Mode Checkout | 8/10 | +4 | ✅ Done |
 | 9 | AI | Promo Advisor (Claude Haiku explainer) | 9/10 | +4 | ✅ Done |
 | 10 | AI | Personalized Weekly Report Card Email | 8/10 | +3 | ✅ Done |
 | 11 | AI | AI Bet Slip Scanner Deploy | 8/10 | +2 | 🔲 MANUAL (ANTHROPIC key) |
-| 12 | AI | Enhanced AI Chat Widget (full conv.) | 8/10 | +4 | 🔲 Future |
+| 12 | AI | Enhanced AI Chat Widget (full conv.) | 8/10 | +4 | ✅ Done v19 |
 | 13 | Retention | Daily Streak Vault Points Milestones | 7/10 | +2 | ✅ Done |
 | 14 | Retention | Copy My Setup Share Cards | 7/10 | +2 | 🔲 Parked |
 | 15 | Retention | Push Notification Daily Brief Activate | 7/10 | +2 | 🔲 MANUAL (VAPID keys) |
@@ -34,324 +141,24 @@
 
 ---
 
-## 🔴 Human Action Required — Priority Queue
+## Persistent Parking Lot (valid ideas, not time-critical)
 
-> All items require manual browser logins, credentials, purchases, or CLI commands. Park until you have 30–60 min for setup work. Sorted by impact-per-minute.
-
-### P0 — Zero cost, unblocks features now (< 15 min each)
-- [ ] **`supabase functions deploy calc-api`** — public calculator REST API; no secrets; 1 command
-- [ ] **Run `scripts/migration-gift-tokens.sql`** in Supabase SQL Editor — creates gift_tokens + newsletter_subscribers tables; required before gift-trial function is usable
-- [ ] **Submit sitemap to Google Search Console** — add property → verify → submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` (169+ URLs); 5 minutes, zero cost
-- [ ] **`supabase functions deploy promo-advisor`** — Promo Advisor panel goes live; set `ANTHROPIC_API_KEY` first (same as ai-action-plan)
-
-### P1 — API keys (Resend unlocks 4 functions at once)
-- [ ] **Resend key** — resend.com → verify vaultsparkstudios.com → get key → `supabase secrets set RESEND_API_KEY=...` → then deploy:
-  - `supabase functions deploy onboarding-drip` → schedule daily cron (Supabase dashboard → Schedules → every day 9am UTC)
-  - `supabase functions deploy weekly-digest` → schedule weekly cron (Monday 9am UTC)
-  - `supabase functions deploy gift-trial`
-- [ ] **Anthropic key** → `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` → then deploy:
-  - `supabase functions deploy ai-action-plan` — AI Action Plan tab goes live (VaultSparked-gated)
-  - `supabase functions deploy parse-bet-slip` — 📷 Scan button in BonusBet goes live
-
-### P2 — Affiliate programs (revenue blocker #1)
-- [ ] Apply to DraftKings Partners (CPA: $75+/user): draftkings.com/partners
-- [ ] Apply to FanDuel Partners (CPA: $25–35 or 35% RevShare): partners.fanduel.com
-- [ ] Apply to BetMGM Partners (CPA: $50+/user): betmgmpartners.com
-- [ ] Apply to remaining books: Caesars, bet365, ESPN BET, Fanatics, BetRivers — or via Income Access / Gambling.com Group network
-- [ ] Once approved: replace placeholder `referralLink` URLs in `src/books.js`
-
-### P3 — Stripe (blocked: needs LLC + EIN first)
-- [ ] Form LLC → get EIN → open business bank account
-- [ ] Create Monthly ($24.99/mo) + Annual ($199/yr) Stripe products → set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` → deploy `create-checkout` + `stripe-webhook`
-
-### P4 — Distribution & growth
-- [ ] **Buy promogrind.com** (~$15/yr at Namecheap/Cloudflare) — CNAME file already in place; removes subdirectory SEO penalty immediately
-- [ ] **Chrome Web Store** — extension/manifest.json is MV3-complete; capture 1280x800 screenshots of popup + sidebar → submit at chrome.google.com/webstore/devconsole ($5 one-time dev fee); highest-ROI distribution action available right now
-- [ ] **Google OAuth** — console.cloud.google.com → OAuth 2.0 Client ID → Supabase Auth Providers
-- [ ] **Discord OAuth** — discord.com/developers → New App → Supabase Auth Providers
-
-### P5 — Infrastructure (requires cost or special tooling)
-- [ ] **Push notifications** — `npx web-push generate-vapid-keys` → `supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=...` → `supabase functions deploy send-daily-brief` → run `scripts/migration-push-subscriptions.sql` → add `VITE_VAPID_PUBLIC_KEY` to `.env`
-- [ ] **Odds API** — theoddsapi.com → subscribe → `supabase secrets set ODDS_API_KEY=...` → deploy `odds` function; change LiveScanner refresh 120s → 300s
-- [ ] **Discord bot** — Discord developer account → create bot → get token → `DISCORD_TOKEN` + `DISCORD_CHANNEL_ID` + `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` → `npm install` in `discord-bot/` → `node bot.js` or deploy to Railway
-- [ ] **Mobile app (Capacitor)** — requires Mac for iOS signing; `npm run cap:sync` → iOS/Android builds + App Store/Play Store submissions
-
----
-
-## 🚧 Manual / External — PARKED (requires credentials, accounts, or purchases)
-
-> These require browser logins, third-party accounts, or credentials. Touch last. Flagged from session 13.
-
-### Deploy gates (need secrets first)
-- [ ] **parse-bet-slip Edge Function** — `supabase functions deploy parse-bet-slip` + `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` → AI Scan button in BonusBet goes live
-- [ ] **Onboarding drip** — `supabase functions deploy onboarding-drip` then schedule as daily cron in Supabase dashboard (Cron → every day at 9am UTC). Needs `RESEND_API_KEY` set first.
-- [ ] **Push notifications** — `npx web-push generate-vapid-keys` → `supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=...` → deploy `send-daily-brief` → run `scripts/migration-push-subscriptions.sql` → add `VITE_VAPID_PUBLIC_KEY` to `.env`
-- [ ] **Odds API** — theoddsapi.com → `supabase secrets set ODDS_API_KEY=...` → deploy `odds` function; change refresh 120s → 300s in LiveScanner
-- [ ] **Weekly digest** — `supabase functions deploy weekly-digest` + set `RESEND_API_KEY` + schedule weekly cron in Supabase dashboard (every Monday 9am UTC)
-- [ ] **Discord bot** — `discord-bot/` directory contains bot code; needs: Discord developer account → create bot → get token → add to server → `npm install` in `discord-bot/` → set `DISCORD_TOKEN`, `DISCORD_CHANNEL_ID`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` env vars → `node bot.js` or deploy to Railway/Heroku
-- [ ] **Resend newsletter** — resend.com → verify vaultsparkstudios.com → `supabase secrets set RESEND_API_KEY=...` → deploy `weekly-digest`
-- [ ] **Stripe** — create Monthly ($24.99/mo) + Annual ($199/yr) products → set `STRIPE_*` secrets → deploy `create-checkout` + `stripe-webhook`. **Blocked by LLC + EIN.**
-
-### SQL (run in Supabase SQL Editor)
-- [x] `scripts/migration-community-board.sql` ✓
-- [x] `scripts/migration-leaderboard.sql` ✓
-- [x] `scripts/migration-referrals.sql` ✓
-- [ ] `scripts/migration-push-subscriptions.sql` — run when activating push notifications
-- [x] `scripts/migration-team-accounts.sql` ✓
-- [x] `scripts/migration-community-promos.sql` ✓
-- [x] `scripts/migration-influencer-codes.sql` ✓
-- [ ] `scripts/migration-gift-tokens.sql` — run before deploying gift-trial edge function
-
-### Affiliate programs (revenue blocker #1)
-- [ ] Apply to DraftKings Partners: draftkings.com/partners (CPA: $75+/user)
-- [ ] Apply to FanDuel Partners: partners.fanduel.com (CPA: $25-35 or 35% RevShare)
-- [ ] Apply to BetMGM Partners: betmgmpartners.com (CPA: $50+/user)
-- [ ] Apply to remaining books (Caesars, bet365, ESPN BET, Fanatics, BetRivers)
-- [ ] OR: apply via Income Access / Gambling.com Group (single network, multiple books)
-- [ ] Once tracking URLs received: replace placeholder URLs in `src/books.js` `referralLink` fields
-
-### Chrome Extension — Web Store submission
-- [ ] Capture 1280x800 screenshots of extension popup + sidebar panel
-- [ ] Write Chrome Web Store listing copy (description, categories)
-- [ ] Submit at chrome.google.com/webstore/devconsole (one-time $5 dev fee)
-- [ ] Add privacy policy URL (already live at `/promogrind/privacy/`)
-
-### Domain migration — promogrind.com
-- [ ] Purchase promogrind.com (GoDaddy / Namecheap / Cloudflare)
-- [ ] Add CNAME DNS record: `promogrind.com` → `vaultsparkstudios.github.io`
-- [ ] After DNS propagates: update all 45 SEO page `window.location.href` redirects from `vaultsparkstudios.com/promogrind/#/` → `promogrind.com/#/`
-- [ ] Update all 45 SEO page `<link rel="canonical">` from `vaultsparkstudios.com/promogrind/...` → `promogrind.com/...`
-- [ ] Update `sitemap.xml` base URL
-- [ ] Update `context/PROJECT_STATUS.json` `public_url` field
-
-### SEO & Growth (high-leverage, 5-15 min each)
-- [ ] **promogrind.com domain** — $15/yr at Namecheap/Cloudflare. CNAME file ready. Removes subdirectory SEO penalty immediately.
-- [ ] **Google Search Console** — add property → verify → submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` (133+ URLs). 5 minutes.
-- [ ] **Mobile App (Capacitor)** — `npm run cap:sync` then iOS/Android builds + App Store/Play Store submissions. Needs Mac for iOS signing.
-
-### OAuth & Analytics
-- [ ] **Google OAuth** — console.cloud.google.com → OAuth 2.0 Client ID → Supabase Auth Providers
-- [ ] **Discord OAuth** — discord.com/developers → New App → Supabase Auth Providers
-
----
-
-## 🎯 Now — Polish & tighten (current focus)
-
-- [ ] UX audit pass — identify rough edges, inconsistent states, weak copy
-- [ ] Mobile layout audit — check all tabs on narrow viewport
-- [ ] Empty state quality check — every tab with no data should feel intentional
-- [ ] Onboarding flow tightening — wizard copy, step clarity, first-run experience
-- [ ] Landing page (`/landing/`) copywriting review — conversion-focused
-- [ ] PricingPage final review — ensure trial CTA, testimonials, and value props are tight
-- [ ] Error/edge state handling — expired session, failed sync, bad inputs
-
----
-
-## [SIL] Items (from Self-Improvement Loop brainstorm)
-
-- [ ] **[SIL] Wire affiliate links** — replace placeholder `referralLink` URLs in `src/books.js` with real affiliate-approved tracking links once approved; zero-code revenue unlocker
-- [ ] **[SIL] Add Supabase per-tool usage event** — one row per calculation run to `vault_events` or new `calc_events` table; enables Engagement scoring in SIL
-- [x] **[SIL] Spanish-language top 10 SEO pages** ✓ — shipped session 17
-- [x] **[SIL] "Beat the House" drip** ✓ — extended onboarding-drip to 14 days (days 10 + 14 added), shipped session 17
-- [ ] **[SIL] hreflang tags on English+ES page pairs** — add `<link rel="alternate" hreflang="es">` to 10 English pages and `hreflang="en"` to 10 ES pages; 15-min Google i18n signal
-- [x] **[SIL] Weekly Promo Report Card email** ✓ — personalized weekly digest enhanced with P/L + streak + top book + action item, shipped session 18
-
----
-
-## Next (code — after polish + external setup)
-
-- [ ] Test VaultSparked upgrade flow end-to-end (monthly + annual checkout → webhook → subscription → badge)
-- [ ] Test LiveScanner with real Odds API key
-- [ ] Test weekly-digest Edge Function with real Resend key
-- [x] **Social share cards from calculator results** — canvas/HTML share card after profitable calc result; one-tap to Twitter/X + Reddit (viral loop)
-- [ ] **Annual profit summary PDF export** — styled print view pulling from Ledger; tax record + shareable milestone card
-- [ ] **Promo Alert Discord Bot** — Discord server + bot posting top daily promos to a #opportunities channel
-- [ ] **Taxes Calculator (in-app)** — reads from Ledger; calculates W-2G threshold exposure, quarterly estimated payments, net after-tax profit, best timing for loss deductions
-- [ ] **Competitor SEO comparison pages (10)** — `promogrind-vs-profitduel`, `promogrind-vs-oddsjam`, `promogrind-vs-betterbet` etc. High-intent branded search traffic.
-- [ ] **Behavioral upgrade triggers** — context-aware upsells: after 10 Arb Calc uses → "Live Scanner catches these in real time"; after 5 ledger entries → "never miss a promo again"
-- [ ] **Real-time shared odds cache** — Supabase Realtime broadcast: 1 Odds API poll → broadcast to all active VaultSparked users. Required at 10+ concurrent users.
-- [ ] Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)
-- [ ] Discord community + bot integration
-- [ ] Firefox extension (port from Chrome MV3)
-- [x] More state SEO pages ✓ — 20 new state pages shipped session 18 (IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT); 30 total
-- [ ] More UK city pages (Leeds, Bristol, Newcastle, Cardiff, Belfast)
-- [ ] Crowdsourced promo API endpoint (public REST API for approved community promos)
-
-## Blocked
-
-- **Stripe live mode** — requires LLC + EIN + bank account
-
-## Later
-
-- Capacitor mobile build: `npm run cap:sync` (see PARKED — mobile app)
-- Props scanner cost optimization
-- **PromoGrind Influencer Affiliate Program** — tiered commission structure for content creators (YouTube/TikTok); vanity code dashboard already built (v14); add commission tracking + payout reporting
-
----
-
----
-
-## Backlog — Session 16 Brainstorm (all 20 items, scored)
-
-> Full innovation brainstorm from v16.0 audit session. Score = impact on overall project score (1–10).
-
-| # | Item | Score | Status |
-|---|------|-------|--------|
-| 1 | Email capture interstitial on SEO pages (`pg-capture.js`) | 9 | ✅ Done |
-| 2 | Gift 14 Days Free — referral gifting (`gift-trial` edge fn + `GiftTrialBox`) | 8 | ✅ Done |
-| 3 | Live Activity Feed social proof on PricingPage | 7 | ✅ Done |
-| 4 | AI Action Plan tab (`ai-action-plan` edge fn + `AIActionPlan` component) | 9 | ✅ Done |
-| 5 | Starter Pack Modal — bankroll/goal presets on first launch | 7 | ✅ Done |
-| 6 | Chrome Extension bet slip auto-fill (`detectBetSlip` + URL params) | 8 | ✅ Done |
-| 7 | PromoGrind Verified badge program (`promogrind-verified/` landing page) | 6 | ✅ Done |
-| 8 | Public Calculator REST API (`calc-api` edge function, 6 endpoints) | 7 | ✅ Done |
-| 9 | EV Scanner teaser for free users (live count tease in LiveScanner gate) | 6 | ✅ Done |
-| 10 | Account Health Alert Panel in Tracker (gubbed/limited/inactive book alerts) | 7 | ✅ Done |
-| 11 | Promo expiry 24h alert digest (`promo-expiry-digest` edge fn) | 7 | 🔲 Deploy gated (needs RESEND_API_KEY) |
-| 12 | Crowdsourced odds database (community-submitted sharp lines) | 5 | 🔲 Parked |
-| 13 | "Bet of the Day" curator (manual weekly pick + email blast) | 5 | 🔲 Parked |
-| 14 | Sportsbook API directory page (links to books' official APIs) | 4 | 🔲 Parked |
-| 15 | Promo conversion rate benchmarks (anonymized aggregate stats) | 6 | 🔲 Parked |
-| 16 | Automated promo calendar scraping (Playwright/cron) | 6 | 🔲 Parked (Playwright not viable in Deno) |
-| 17 | App Store presence (Capacitor iOS/Android) | 8 | 🔲 MANUAL (needs Mac for iOS) |
-| 18 | Discord community server (#opportunities bot) | 5 | 🔲 MANUAL (code exists in discord-bot/) |
-| 19 | Affiliate link auto-rotation (A/B test CPA vs RevShare tracking links) | 6 | 🔲 Parked (needs affiliate programs first) |
-| 20 | Pro referral double-credit (2x reward if referral upgrades within 7 days) | 6 | 🔲 Parked |
-
----
-
-## Completed ✓
-
-### Session 18 — v18.0 (audit + 7 code features + 20 SEO pages + Simplify review)
-
-- [x] Full project audit (score: 77/100 — projected 84+ with all session 18 items)
-- [x] PromoAdvisorPanel — floating 💡 button in header; slide-out panel; Claude Haiku promo explainer; 3/day free, unlimited VaultSparked; calls promo-advisor edge fn
-- [x] promo-advisor edge function — `supabase/functions/promo-advisor/index.ts`; Claude Haiku; POST {promoText} → {verdict, rating, explanation, ev, action, hedge}
-- [x] DailyStreak milestone awards — 7/30/100-day streaks award 50/200/500 Vault Points via award_vault_points RPC + toast celebration
-- [x] Trial urgency banner — amber styling when trial_days_left ≤ 3; red when ≤ 1; green kept for > 3 days
-- [x] onboarding-drip — trial expiry warning emails: day 4 of trial (3 days left) + day 6 (1 day left of trial)
-- [x] weekly-digest — personalized "Your Week" section: weekly P/L + streak + top book + action item
-- [x] PricingPage 3-tier — Concierge $9.99/mo waitlist card added between Free + VaultSparked; isConcierge() in auth.js
-- [x] 20 new US state SEO pages — IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT (30 total state pages)
-- [x] sitemap.xml — 169+ URLs
-- [x] Build: ✓ clean (111.57 kB gzip)
-- [x] Simplify code review — milestone loop refactored, ratingColor fixed (poor→K.rd), isLimited extracted, usesKey midnight fix, weekly-digest getUserWeekStats parallelized + console.error added
-
-### Session 16 — v16.0 (audit + 10 features)
-
-- [x] Full project audit (score: 75/100 — gaps: monetization, SEO authority, distribution)
-- [x] Email capture interstitial — `public/js/pg-capture.js` injected on 5 SEO pages; captures to `newsletter_subscribers` Supabase table
-- [x] Gift 14 Days Free — `GiftTrialBox` component + `supabase/functions/gift-trial/index.ts`; rate-limited (5/30d), awards sender 7 bonus days
-- [x] Live Activity Feed — rotating anonymized social proof events on PricingPage
-- [x] AI Action Plan — `AIActionPlan` component + `supabase/functions/ai-action-plan/index.ts`; Claude Haiku, tiered by bankroll; added as "Action Plan" tab in Live group
-- [x] Starter Pack Modal — bankroll/goal presets shown on first launch before onboarding checklist
-- [x] Chrome Extension bet slip auto-fill — `detectBetSlip()` polls DOM every 2s; appends `?sz=&bo=` to calculator URLs; `⚡ Auto-fill ready` indicator in panel
-- [x] PromoGrind Verified badge — `public/promogrind-verified/index.html` + `badge.svg`; partner badge program landing page; added to sitemap
-- [x] Public Calculator REST API — `supabase/functions/calc-api/index.ts`; 6 endpoints (bonus-bet, arb, ev, profit-boost, no-vig, kelly); no auth required
-- [x] EV Scanner teaser — free users see live-counting opportunity tease above upgrade gate in LiveScanner
-- [x] Account Health Alert Panel — gubbed/limited/inactive book detection in Tracker with colored alerts + advice
-- [x] `scripts/migration-gift-tokens.sql` — gift_tokens table + redeem_gift_token RPC + newsletter_subscribers table
-- [x] sitemap.xml — added promogrind-verified/
-- [x] Build: ✓ clean (109.61 kB gzip)
-
-### Session 15 — v15.0
-
-- [x] Onboarding checklist on Dashboard (5-step: first calc, first book, first bet, start trial, invite friend)
-- [x] Book signup progress tracker on Sportsbooks tab — unsigned books + estimated value + affiliate CTAs
-- [x] Behavioral upgrade triggers — contextual upsells after arb/ledger/BonusBet usage thresholds
-- [x] Plausible funnel events — trial_start, first_calc_run, upgrade_click, referral_shared, first_ledger_entry
-- [x] Calculator share cards — profitable BonusBet/ProfitBoost/FirstBet results → copy/share card
-- [x] Taxes Calculator — new Calculate tool, W-2G tracker, federal bracket estimate, PDF print export
-- [x] UTM params on all SEO page redirects — Plausible now attributes organic traffic by source page
-- [x] 3 competitor SEO pages: promogrind-vs-profitduel/, promogrind-vs-oddsjam/, promogrind-vs-betterbet/
-- [x] Discord bot code: discord-bot/ (needs manual Discord setup to activate)
-
-### Session 14 — Full audit + 5 features + infrastructure (v14.0)
-
-- [x] Full project audit (74/100 honest score — revenue gap identified as #1 priority)
-- [x] **"How Much Can I Make?" income estimator** — `public/income-estimator/index.html` with interactive state/bankroll/time inputs + real income estimates; added to sitemap
-- [x] **Bet Slip → Auto-Track** — "➕ Add to Tracker" button after AI scan result in BonusBet; creates bet entry via `syncAppData`
-- [x] **White-Label Embed Mode** — `?embed=1` URL param hides nav, shows only calculator + "Powered by PromoGrind" watermark; `public/embed/index.html` with copy-paste iframe codes
-- [x] **Crowdsourced Promo Database** — new "Community Promos" Learn tab; browse/upvote community promos; VaultSparked users can submit; backed by `community_promos` Supabase table
-- [x] **Team Accounts UI** — full create/invite/manage UI (replaces waitlist); backed by `team_accounts` + `team_members` tables
-- [x] **Influencer Affiliate Dashboard** — "⚡ Creator Mode" in ReferralHub (VaultSparked-gated); custom vanity code, click/signup stats, estimated commission; backed by `influencer_codes` table
-- [x] **SQL migrations** — `migration-team-accounts.sql`, `migration-community-promos.sql`, `migration-influencer-codes.sql` created (run in Supabase SQL Editor)
-- [x] sitemap.xml — added `income-estimator/` + `embed/` entries (133+ URLs)
-- [x] Task board + memory updated with all 20 brainstorm items
-- [x] Build: ✓ clean
-
-### Session 13 — 4 high-ceiling items + domain prep (v13.0)
-
-- [x] Chrome Extension (MV3) — `extension/` directory: manifest, content.js, popup, background.js; floating ⚡ trigger + slide-out panel on 12 sportsbooks
-- [x] AI bet slip parser — `supabase/functions/parse-bet-slip/index.ts` using Claude claude-haiku vision; 📷 Scan button in BonusBet auto-fills stake/odds/hedgeOdds
-- [x] UK market module — `matched-betting-uk/` + `bonus-bets-uk/` + 6 city pages (London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
-- [x] PromoCalendar market toggle — 🌎/🇺🇸/🇬🇧 filter; book select respects active market
-- [x] Content blog — `public/blog/` index + 5 posts (matched betting, promos 2026, DK vs FD, taxes, arb)
-- [x] CNAME file — `public/CNAME = promogrind.com` (passive, DNS not yet configured)
-- [x] sitemap.xml — 131+ URLs (+8 UK + blog index + 5 posts)
-- [x] Build: ✓ 98.41 kB gzip
-
-### Session 12 — Full audit + implementation sprint (v12.0)
-
-**App.jsx changes (~5,447 → ~5,780 lines):**
-- Header + CompetitorComparison: 27 calculators stat corrected
-- Loading splash screen (marketing cards replace spinner)
-- Ledger EV% field: input + stats AVG EV% + CSV export column
-- PROMO_SCHED: timeMin on all entries + 5 UK books added
-- PromoCalendar: Time column
-- SmartPromoRecommender → "Today's Action Plan": urgency badges, limitedBooks detection, openBets warning, time display
-- PushEnableBtn component added to DailyDashboard (VaultSparked-gated)
-- Testimonials section in PricingPage
-- Footer legal links (Privacy / Terms / About)
-
-**Supporting files:**
-- `src/books.js`: referralLink on all 8 books
-- `index.html`: Plausible analytics activated
-- `public/privacy/index.html`, `public/terms/index.html`, `public/landing/index.html` — created
-- `public/free-bet-calculator/`, `deposit-match-calculator/`, `rollover-calculator/`, `same-game-parlay/` — created
-- 10 state SEO pages: NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN
-
-**Build:** ✓ built in 3.30s — 97.02 kB gzip
-
-### Session 11 — Audit #5 + 15 features + push system + 13 SEO pages (v11.0)
-- 7-Day Free Trial system (auth.js + App.jsx)
-- DashboardHero, Smart Promo Recommender, Profit Milestone Celebrations
-- Promo Countdown Timers, Calculator Result History, Quick Add Bet from Dashboard
-- Book Promo Badges, System Dark Mode Auto, Opportunity Log CSV Export
-- Multi-Sport Scanner, Profit Goal Notifications, Share Card V2
-- Push notification skeleton: sw.js handlers, send-daily-brief edge function, sw-register.js
-- 8 more static SEO pages (13 total)
-
-### Session 9 — Third audit + 20 features (v9.0)
-- Promo Stacking Calculator, Copy My Setup, Daily Grind Routine Generator
-- Profit Goal Milestone Tracker, Promo Trade Journal, Odds Comparison Table
-- Calculator Sub-Categories, Push Notification Daily Briefing, Promo Value History
-- Kelly Fractional Risk, Tax Bracket Timing, Bet Slip Text Parser
-- Multi-Book Pending Exposure, CLV Leaderboard, New State Alert
-- Promo Arb Finder, Leaderboard Privacy, Multi-Currency Mode
-- Sportsbook Health Score, Calculator Usage Analytics
-
-### Session 8 — Second audit + 20 features (v8.0)
-- Tax Export CSV, Embed Mode, Deposit Optimizer, Hedge Validator
-- Weekly P&L Share Card, Promo Complexity tags, Multi-Account Ledger
-- Free Bet Arb Tracker, Calendar Export .ics, Promo Guarantee Calculator
-- Book ROI%, Streak + Consistency, Promo Alert UI, Natural Language Input
-- EV Opportunity Log, Welcome Promo Progress Bars, Gut Check validator
-- Scanner Watchlist, Session Summary modal, Offline Mode indicator
-- Critical sync.js fix (was dropping all non-ledger appData)
-
-### Session 7 — Full audit + features (v7.0)
-- Input-encoded shareable links, Affiliate deep-link CTAs
-- Promo grading A/B/C, State-based personalization
-- Personal book referral tracker, Competitor comparison page
-- All-Time Report Card, Show Example buttons, Daily Dashboard (default landing)
-
-### Simplify session — Code review + cleanup (v9.1)
-- Fixed 4 React Rules of Hooks violations
-- Added `downloadFile` + `calcROI` module utilities
-- Moved `parseNL` to module scope
-- Added `useMemo` to filtered (PromoCalendar) and myAvgClv (Leaderboard)
-- Fixed health score hot path
-
-### Sessions 1–6 — Foundation through engagement features
-- Full app, auth, cloud sync, 27 calculators, all Track/Learn tabs, PWA, Supabase live
+- Annual Plan Discount in-app banner — push monthly→annual ($199, 2 months free)
+- "Wins Wall" social proof — opt-in anonymized user wins on landing page
+- Monthly referral contest — top referrer wins 1 month free (referral infra live)
+- Copy My Setup deep link share cards
+- Promo Stacking multi-step guided tool
+- Affiliate link A/B rotation (after live links are active)
+- Google Ads campaign (after first $500/mo revenue)
+- Grind Report annual paid PDF ($4.99)
+- State legalization alert email capture
+- Promo T&C URL scraper (Claude fetches URL instead of paste)
+- "Profit Certificate" shareable ledger-backed win card
+- "Grind Buddy" accountability pairing feature
+- "Beat Last Week" personalized push challenge
+- Promo Expiry Countdown embeddable widget
+- Concierge tier ($99/mo done-for-you) — activate at 50 VaultSparked subs
+- Public API docs page (after calc-api deployed)
+- Embed syndication outreach (after domain live)
+- 50-state SEO completion (WI, TX, GA, FL + 16 more)
+- Discord community launch (code exists in discord-bot/)
