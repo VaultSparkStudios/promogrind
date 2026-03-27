@@ -2,6 +2,49 @@
 
 ---
 
+## 🔴 Human Action Required — Priority Queue
+
+> All items require manual browser logins, credentials, purchases, or CLI commands. Park until you have 30–60 min for setup work. Sorted by impact-per-minute.
+
+### P0 — Zero cost, unblocks features now (< 15 min each)
+- [ ] **`supabase functions deploy calc-api`** — public calculator REST API; no secrets; 1 command
+- [ ] **Run `scripts/migration-gift-tokens.sql`** in Supabase SQL Editor — creates gift_tokens + newsletter_subscribers tables; required before gift-trial function is usable
+- [ ] **Submit sitemap to Google Search Console** — add property → verify → submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` (149+ URLs); 5 minutes, zero cost
+
+### P1 — API keys (Resend unlocks 4 functions at once)
+- [ ] **Resend key** — resend.com → verify vaultsparkstudios.com → get key → `supabase secrets set RESEND_API_KEY=...` → then deploy:
+  - `supabase functions deploy onboarding-drip` → schedule daily cron (Supabase dashboard → Schedules → every day 9am UTC)
+  - `supabase functions deploy weekly-digest` → schedule weekly cron (Monday 9am UTC)
+  - `supabase functions deploy gift-trial`
+- [ ] **Anthropic key** → `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` → then deploy:
+  - `supabase functions deploy ai-action-plan` — AI Action Plan tab goes live (VaultSparked-gated)
+  - `supabase functions deploy parse-bet-slip` — 📷 Scan button in BonusBet goes live
+
+### P2 — Affiliate programs (revenue blocker #1)
+- [ ] Apply to DraftKings Partners (CPA: $75+/user): draftkings.com/partners
+- [ ] Apply to FanDuel Partners (CPA: $25–35 or 35% RevShare): partners.fanduel.com
+- [ ] Apply to BetMGM Partners (CPA: $50+/user): betmgmpartners.com
+- [ ] Apply to remaining books: Caesars, bet365, ESPN BET, Fanatics, BetRivers — or via Income Access / Gambling.com Group network
+- [ ] Once approved: replace placeholder `referralLink` URLs in `src/books.js`
+
+### P3 — Stripe (blocked: needs LLC + EIN first)
+- [ ] Form LLC → get EIN → open business bank account
+- [ ] Create Monthly ($24.99/mo) + Annual ($199/yr) Stripe products → set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` → deploy `create-checkout` + `stripe-webhook`
+
+### P4 — Distribution & growth
+- [ ] **Buy promogrind.com** (~$15/yr at Namecheap/Cloudflare) — CNAME file already in place; removes subdirectory SEO penalty immediately
+- [ ] **Chrome Web Store** — screenshots (1280×800) + listing copy + $5 one-time dev fee at chrome.google.com/webstore/devconsole; privacy policy already live at `/promogrind/privacy/`
+- [ ] **Google OAuth** — console.cloud.google.com → OAuth 2.0 Client ID → Supabase Auth Providers
+- [ ] **Discord OAuth** — discord.com/developers → New App → Supabase Auth Providers
+
+### P5 — Infrastructure (requires cost or special tooling)
+- [ ] **Push notifications** — `npx web-push generate-vapid-keys` → `supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=...` → `supabase functions deploy send-daily-brief` → run `scripts/migration-push-subscriptions.sql` → add `VITE_VAPID_PUBLIC_KEY` to `.env`
+- [ ] **Odds API** — theoddsapi.com → subscribe → `supabase secrets set ODDS_API_KEY=...` → deploy `odds` function; change LiveScanner refresh 120s → 300s
+- [ ] **Discord bot** — Discord developer account → create bot → get token → `DISCORD_TOKEN` + `DISCORD_CHANNEL_ID` + `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` → `npm install` in `discord-bot/` → `node bot.js` or deploy to Railway
+- [ ] **Mobile app (Capacitor)** — requires Mac for iOS signing; `npm run cap:sync` → iOS/Android builds + App Store/Play Store submissions
+
+---
+
 ## 🚧 Manual / External — PARKED (requires credentials, accounts, or purchases)
 
 > These require browser logins, third-party accounts, or credentials. Touch last. Flagged from session 13.

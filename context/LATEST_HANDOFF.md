@@ -3,7 +3,7 @@
 ## Where We Left Off (Session 17)
 - Shipped: 13 improvements across 3 groups — spanish_seo (10 pages), drip (extended to 14 days), polish (3 App.jsx fixes)
 - Tests: N/A — no automated test suite
-- Deploy: pending — build ✓ at 109.74 kB gzip; commit + push needed
+- Deploy: deployed — commit 08e7046, live at vaultsparkstudios.com/promogrind/
 
 ### What was built — session 17 (v17.0)
 
@@ -28,7 +28,7 @@
 ## Where We Left Off (Session 16)
 - Shipped: 12 improvements across 7 groups — email_growth, social_proof, ai, onboarding, extension, infrastructure, seo_distribution
 - Tests: N/A — no automated test suite
-- Deploy: pending — build ✓ at 109.61 kB gzip; commit + push needed
+- Deploy: deployed — commit 08e7046 (combined with session 17), live at vaultsparkstudios.com/promogrind/
 
 ### What was built — session 16 (v16.0)
 
@@ -223,7 +223,7 @@
 
 ---
 
-Last updated: 2026-03-26 (session 13 — Chrome extension + AI parser + UK market + blog + closeout)
+Last updated: 2026-03-27 (session 17 — Spanish SEO + drip extension + polish + closeout)
 
 This is the authoritative active handoff file for the project.
 
