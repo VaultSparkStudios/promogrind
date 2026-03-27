@@ -89,6 +89,87 @@ const DRIP_SEQUENCE: DripEmail[] = [
   },
 ];
 
+const TRIAL_EXPIRY_EMAILS: Record<string, { subject: string; headline: string; body: string; cta: string; ctaUrl: string }> = {
+  day4: {
+    subject: "⏳ 3 days left on your VaultSparked trial",
+    headline: "Your Pro access expires in 3 days",
+    body: "Your 7-day VaultSparked Pro trial ends in 3 days. You've had full access to the Live Arb Scanner, +EV Scanner, and AI Action Plan. Keep the momentum going — upgrade for $24.99/mo or save $101 with the annual plan.",
+    cta: "Upgrade Now — Keep Pro Access →",
+    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/upgrade",
+  },
+  day6: {
+    subject: "🚨 Last chance — PromoGrind Pro trial expires tomorrow",
+    headline: "Don't lose your Pro access",
+    body: "Your VaultSparked Pro trial expires tomorrow. After that, the Live Arb Scanner, +EV Scanner, and AI Action Plan will be locked. Upgrade now for $24.99/mo and keep everything — or go annual to save $101.",
+    cta: "Upgrade Before It Expires →",
+    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/upgrade",
+  },
+};
+
+async function processTrialExpiryEmails(
+  supabase: ReturnType<typeof createClient>,
+  from: string
+): Promise<number> {
+  let sent = 0;
+  try {
+    const { data: users } = await supabase.auth.admin.listUsers();
+    const now = new Date();
+
+    for (const user of users?.users ?? []) {
+      if (!user.email) continue;
+      const trialStart = user.user_metadata?.trial_start;
+      if (!trialStart) continue;
+
+      const daysSinceTrial = Math.floor(
+        (now.getTime() - new Date(trialStart).getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      const trialEmailsSent: string[] = user.user_metadata?.trial_emails_sent ?? [];
+      let emailKey: string | null = null;
+      if (daysSinceTrial === 4) emailKey = "day4";
+      else if (daysSinceTrial === 6) emailKey = "day6";
+
+      if (!emailKey || trialEmailsSent.includes(emailKey)) continue;
+
+      const tmpl = TRIAL_EXPIRY_EMAILS[emailKey];
+      const html = `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#0a0e17;color:#e2e8f0;padding:32px;border-radius:8px;">
+          <div style="color:#f59e0b;font-size:12px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">VaultSparked Trial — PromoGrind</div>
+          <h1 style="color:#fbbf24;font-size:22px;margin-bottom:16px;">${tmpl.headline}</h1>
+          <p style="color:#cbd5e1;line-height:1.8;margin-bottom:24px;">${tmpl.body}</p>
+          <a href="${tmpl.ctaUrl}"
+             style="display:inline-block;padding:12px 24px;background:#7c3aed;color:#fff;font-weight:700;border-radius:6px;text-decoration:none;">
+            ${tmpl.cta}
+          </a>
+          <p style="color:#475569;font-size:12px;margin-top:32px;">
+            PromoGrind · Free sportsbook promo conversion tools<br/>
+            Must be 21+. Gamble responsibly. 1-800-GAMBLER
+          </p>
+        </div>
+      `;
+
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ from, to: [user.email], subject: tmpl.subject, html }),
+      }).catch(() => null);
+
+      if (res?.ok) {
+        await supabase.auth.admin.updateUserById(user.id, {
+          user_metadata: { trial_emails_sent: [...trialEmailsSent, emailKey] },
+        }).catch(() => {});
+        sent++;
+      }
+    }
+  } catch (e) {
+    console.error("processTrialExpiryEmails error:", e);
+  }
+  return sent;
+}
+
 serve(async (req) => {
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.includes("Bearer ")) {
@@ -96,6 +177,7 @@ serve(async (req) => {
   }
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  const from = "PromoGrind <hello@vaultsparkstudios.com>";
   const now = new Date();
   let sent = 0;
 
@@ -136,12 +218,7 @@ serve(async (req) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from: "PromoGrind <hello@vaultsparkstudios.com>",
-        to: [user.email],
-        subject: drip.subject,
-        html,
-      }),
+      body: JSON.stringify({ from, to: [user.email], subject: drip.subject, html }),
     }).catch(() => null);
 
     if (res?.ok) {
@@ -153,7 +230,10 @@ serve(async (req) => {
     }
   }
 
-  return new Response(JSON.stringify({ sent }), {
+  // Process trial expiry warning emails (separate from drip sequence)
+  const trialSent = await processTrialExpiryEmails(supabase, from);
+
+  return new Response(JSON.stringify({ sent, trialSent }), {
     headers: { "Content-Type": "application/json" },
   });
 });

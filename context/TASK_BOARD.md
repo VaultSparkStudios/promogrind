@@ -2,6 +2,38 @@
 
 ---
 
+## Session 18 Brainstorm — All 23 Items (v17.0 Audit)
+
+> Full innovation brainstorm from session 18 (v18.0 audit). Score = impact on overall project score.
+
+| # | Tier | Item | Impact | Score Δ | Status |
+|---|------|------|--------|---------|--------|
+| 1 | Distribution | promogrind.com Domain Migration | 9/10 | +4 | 🔲 MANUAL |
+| 2 | Distribution | Google Search Console Sitemap Submit | 8/10 | +3 | 🔲 MANUAL |
+| 3 | Distribution | Programmatic State SEO (10→30 states) | 7/10 | +3 | ✅ Done |
+| 4 | Distribution | Backlink Seeding HARO/Reddit | 7/10 | +3 | 🔲 MANUAL |
+| 5 | Revenue | Affiliate Programs DK/FD/BetMGM | 10/10 | +15 | 🔲 MANUAL |
+| 6 | Revenue | Trial Expiry Email Sequence (day 4+6) | 8/10 | +3 | ✅ Done |
+| 7 | Revenue | Annual Plan Discount Banner | 7/10 | +2 | 🔲 Parked |
+| 8 | Revenue | Stripe Test Mode Checkout | 8/10 | +4 | 🔲 MANUAL |
+| 9 | AI | Promo Advisor (Claude Haiku explainer) | 9/10 | +4 | ✅ Done |
+| 10 | AI | Personalized Weekly Report Card Email | 8/10 | +3 | ✅ Done |
+| 11 | AI | AI Bet Slip Scanner Deploy | 8/10 | +2 | 🔲 MANUAL (ANTHROPIC key) |
+| 12 | AI | Enhanced AI Chat Widget (full conv.) | 8/10 | +4 | 🔲 Future |
+| 13 | Retention | Daily Streak Vault Points Milestones | 7/10 | +2 | ✅ Done |
+| 14 | Retention | Copy My Setup Share Cards | 7/10 | +2 | 🔲 Parked |
+| 15 | Retention | Push Notification Daily Brief Activate | 7/10 | +2 | 🔲 MANUAL (VAPID keys) |
+| 16 | Retention | Promo Stacking Enhanced Calculator | 7/10 | +3 | 🔲 Future |
+| 17 | Retention | Trial Urgency Banner (≤3 days) | 7/10 | +2 | ✅ Done |
+| 18 | Platform | Chrome Extension Web Store | 8/10 | +3 | 🔲 MANUAL ($5) |
+| 19 | Platform | Capacitor Mobile Android | 8/10 | +3 | 🔲 MANUAL (Mac for iOS) |
+| 20 | Platform | Embed Mode Partner Syndication | 6/10 | +2 | 🔲 Parked |
+| 21 | Monetization | Promo Concierge $9.99/mo Tier | 7/10 | +3 | ✅ Done (waitlist) |
+| 22 | Monetization | Affiliate Link A/B Rotation | 6/10 | +2 | 🔲 Parked (needs live links first) |
+| 23 | Monetization | Grind Report Annual PDF ($4.99) | 5/10 | +1 | 🔲 Parked |
+
+---
+
 ## 🔴 Human Action Required — Priority Queue
 
 > All items require manual browser logins, credentials, purchases, or CLI commands. Park until you have 30–60 min for setup work. Sorted by impact-per-minute.
@@ -10,6 +42,7 @@
 - [ ] **`supabase functions deploy calc-api`** — public calculator REST API; no secrets; 1 command
 - [ ] **Run `scripts/migration-gift-tokens.sql`** in Supabase SQL Editor — creates gift_tokens + newsletter_subscribers tables; required before gift-trial function is usable
 - [ ] **Submit sitemap to Google Search Console** — add property → verify → submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` (149+ URLs); 5 minutes, zero cost
+- [ ] **`supabase functions deploy promo-advisor`** — Promo Advisor panel goes live; set `ANTHROPIC_API_KEY` first (same as ai-action-plan)
 
 ### P1 — API keys (Resend unlocks 4 functions at once)
 - [ ] **Resend key** — resend.com → verify vaultsparkstudios.com → get key → `supabase secrets set RESEND_API_KEY=...` → then deploy:
@@ -33,7 +66,7 @@
 
 ### P4 — Distribution & growth
 - [ ] **Buy promogrind.com** (~$15/yr at Namecheap/Cloudflare) — CNAME file already in place; removes subdirectory SEO penalty immediately
-- [ ] **Chrome Web Store** — screenshots (1280×800) + listing copy + $5 one-time dev fee at chrome.google.com/webstore/devconsole; privacy policy already live at `/promogrind/privacy/`
+- [ ] **Chrome Web Store** — extension/manifest.json is MV3-complete; capture 1280x800 screenshots of popup + sidebar → submit at chrome.google.com/webstore/devconsole ($5 one-time dev fee); highest-ROI distribution action available right now
 - [ ] **Google OAuth** — console.cloud.google.com → OAuth 2.0 Client ID → Supabase Auth Providers
 - [ ] **Discord OAuth** — discord.com/developers → New App → Supabase Auth Providers
 
@@ -121,7 +154,7 @@
 - [x] **[SIL] Spanish-language top 10 SEO pages** ✓ — shipped session 17
 - [x] **[SIL] "Beat the House" drip** ✓ — extended onboarding-drip to 14 days (days 10 + 14 added), shipped session 17
 - [ ] **[SIL] hreflang tags on English+ES page pairs** — add `<link rel="alternate" hreflang="es">` to 10 English pages and `hreflang="en"` to 10 ES pages; 15-min Google i18n signal
-- [ ] **[SIL] Weekly Promo Report Card email** — Monday Resend email: user's P/L last 7 days + top book + one action item; highest-retention email type; needs RESEND_API_KEY first
+- [x] **[SIL] Weekly Promo Report Card email** ✓ — personalized weekly digest enhanced with P/L + streak + top book + action item, shipped session 18
 
 ---
 
@@ -140,7 +173,7 @@
 - [ ] Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)
 - [ ] Discord community + bot integration
 - [ ] Firefox extension (port from Chrome MV3)
-- [ ] More state SEO pages (20 more US states still unserved: IN, IA, WV, KS, MD, MA, LA, KY, NC, VT + 10 more)
+- [x] More state SEO pages ✓ — 20 new state pages shipped session 18 (IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT); 30 total
 - [ ] More UK city pages (Leeds, Bristol, Newcastle, Cardiff, Belfast)
 - [ ] Crowdsourced promo API endpoint (public REST API for approved community promos)
 
@@ -188,6 +221,20 @@
 ---
 
 ## Completed ✓
+
+### Session 18 — v18.0 (audit + 7 code features + 20 SEO pages)
+
+- [x] Full project audit (score: 77/100 — projected 84+ with all session 18 items)
+- [x] PromoAdvisorPanel — floating 💡 button in header; slide-out panel; Claude Haiku promo explainer; 3/day free, unlimited VaultSparked; calls promo-advisor edge fn
+- [x] promo-advisor edge function — `supabase/functions/promo-advisor/index.ts`; Claude Haiku; POST {promoText} → {verdict, rating, explanation, ev, action, hedge}
+- [x] DailyStreak milestone awards — 7/30/100-day streaks award 50/200/500 Vault Points via award_vault_points RPC + toast celebration
+- [x] Trial urgency banner — amber styling when trial_days_left ≤ 3; red when ≤ 1; green kept for > 3 days
+- [x] onboarding-drip — trial expiry warning emails: day 4 of trial (3 days left) + day 6 (1 day left of trial)
+- [x] weekly-digest — personalized "Your Week" section: weekly P/L + streak + top book + action item
+- [x] PricingPage 3-tier — Concierge $9.99/mo waitlist card added between Free + VaultSparked; isConcierge() in auth.js
+- [x] 20 new US state SEO pages — IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT (30 total state pages)
+- [x] sitemap.xml — 169+ URLs
+- [x] Build: ✓ clean
 
 ### Session 16 — v16.0 (audit + 10 features)
 

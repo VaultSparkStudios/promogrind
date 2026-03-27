@@ -2820,11 +2820,21 @@ class ErrorBoundary extends Component {
 // ═══ DAILY STREAK ═══
 const DailyStreak = () => {
   const [streak, setStreak] = useState(null);
+  const toast = useToast();
   useEffect(()=>{
     (async()=>{
       try {
         const {data:{user}}=await supabase.auth.getUser();
         if(!user) return;
+        // Record today's daily_login if not already done
+        const todayStr=new Date().toISOString().slice(0,10);
+        const loginKey='pg_streak_today';
+        try {
+          if(localStorage.getItem(loginKey)!==todayStr){
+            await supabase.from('vault_events').insert({user_id:user.id,event_type:'daily_login'});
+            localStorage.setItem(loginKey,todayStr);
+          }
+        } catch {}
         const {data}=await supabase.from('vault_events').select('created_at').eq('user_id',user.id).eq('event_type','daily_login').order('created_at',{ascending:false}).limit(60);
         if(!data?.length){setStreak(0);return;}
         let s=0;
@@ -2837,6 +2847,28 @@ const DailyStreak = () => {
           else break;
         }
         setStreak(s);
+        // Award vault points at milestones
+        try {
+          const milestonesKey='pg_streak_milestones';
+          const milestones=JSON.parse(localStorage.getItem(milestonesKey)||'[]');
+          let changed=false;
+          if(s>=7&&!milestones.includes('7')){
+            await supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:50,p_event_type:'streak_milestone_7'});
+            milestones.push('7'); changed=true;
+            if(toast) toast('🔥 7-day streak! +50 Vault Points earned!',K.yl);
+          }
+          if(s>=30&&!milestones.includes('30')){
+            await supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:200,p_event_type:'streak_milestone_30'});
+            milestones.push('30'); changed=true;
+            if(toast) toast('🔥 30-day streak! +200 Vault Points earned!',K.yl);
+          }
+          if(s>=100&&!milestones.includes('100')){
+            await supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:500,p_event_type:'streak_milestone_100'});
+            milestones.push('100'); changed=true;
+            if(toast) toast('🔥 100-day streak! +500 Vault Points earned!',K.yl);
+          }
+          if(changed) localStorage.setItem(milestonesKey,JSON.stringify(milestones));
+        } catch {}
       } catch(e){}
     })();
   },[]);
@@ -3782,11 +3814,97 @@ function LiveActivityFeed() {
   );
 }
 
+// ═══ PROMO ADVISOR PANEL ═══
+const PromoAdvisorPanel = ({ proStatus, onClose }) => {
+  const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
+  const today = new Date().toISOString().slice(0, 10);
+  const usesKey = `pg_advisor_uses_${today}`;
+  const DAILY_LIMIT = isPro ? 9999 : 3;
+  const [promoText, setPromoText] = useState('');
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [uses, setUses] = useState(() => { try { return parseInt(localStorage.getItem(usesKey) || '0'); } catch { return 0; } });
+  const toast = useToast();
+
+  const analyze = async () => {
+    if (!promoText.trim() || uses >= DAILY_LIMIT || loading) return;
+    setLoading(true); setError(''); setResult(null);
+    try {
+      const { data, error: fnErr } = await supabase.functions.invoke('promo-advisor', {
+        body: { promoText: promoText.trim() }
+      });
+      if (fnErr) throw fnErr;
+      const newUses = uses + 1;
+      setUses(newUses);
+      try { localStorage.setItem(usesKey, String(newUses)); } catch {}
+      setResult(data);
+    } catch(e) {
+      setError('Analysis failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const ratingColor = result?.rating === 'excellent' ? K.gn : result?.rating === 'good' ? K.ac : K.yl;
+
+  return (
+    <div style={{position:'fixed',right:0,top:0,bottom:0,width:360,background:K.s1,borderLeft:`1px solid ${K.bd}`,zIndex:1100,display:'flex',flexDirection:'column',boxShadow:'-4px 0 32px rgba(0,0,0,0.6)'}}>
+      <div style={{padding:'14px 16px',borderBottom:`1px solid ${K.bd}`,display:'flex',justifyContent:'space-between',alignItems:'center',background:K.s2}}>
+        <div>
+          <div style={{fontSize:14,fontWeight:700,color:K.tx}}>💡 Promo Advisor</div>
+          <div style={{fontSize:11,color:K.mt,marginTop:2}}>Paste any promo — get an instant plain-English verdict</div>
+        </div>
+        <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',color:K.mt,fontSize:18,padding:4}}>×</button>
+      </div>
+      <div style={{flex:1,overflow:'auto',padding:16,display:'flex',flexDirection:'column',gap:12}}>
+        <textarea
+          value={promoText}
+          onChange={e => setPromoText(e.target.value)}
+          placeholder={'Example: "Get a $200 Bonus Bet if your first $5 bet loses. Bonus bet expires in 7 days."\n\nOr paste the full promo T&C text.'}
+          style={{width:'100%',minHeight:130,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,padding:10,color:K.tx,fontSize:12,resize:'vertical',fontFamily:font,boxSizing:'border-box',lineHeight:1.5}}
+        />
+        {!isPro && (
+          <div style={{fontSize:11,color:K.mt,textAlign:'right'}}>{uses}/{DAILY_LIMIT} free analyses today</div>
+        )}
+        {uses >= DAILY_LIMIT && !isPro && (
+          <div style={{background:`${K.pp}15`,border:`1px solid ${K.pp}30`,borderRadius:8,padding:10,fontSize:12,color:K.pp,textAlign:'center'}}>
+            Daily limit reached. Upgrade to VaultSparked for unlimited analyses.
+          </div>
+        )}
+        <button
+          onClick={analyze}
+          disabled={loading || !promoText.trim() || (uses >= DAILY_LIMIT && !isPro)}
+          style={{padding:'9px',background:uses>=DAILY_LIMIT&&!isPro?K.s2:'#7c3aed',border:`1px solid ${uses>=DAILY_LIMIT&&!isPro?K.bd:'#7c3aed'}`,borderRadius:8,color:uses>=DAILY_LIMIT&&!isPro?K.mt:'#fff',fontWeight:700,fontSize:12,cursor:loading||(uses>=DAILY_LIMIT&&!isPro)?'default':'pointer',fontFamily:font,opacity:loading?0.7:1}}
+        >
+          {loading ? '⏳ Analyzing...' : '🔍 Analyze This Promo'}
+        </button>
+        {error && <div style={{color:K.rd,fontSize:12}}>{error}</div>}
+        {result && (
+          <div style={{background:`${ratingColor}10`,border:`1px solid ${ratingColor}40`,borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
+            <div style={{fontSize:15,fontWeight:800,color:ratingColor}}>{result.verdict || 'Analysis Complete'}</div>
+            {result.explanation && <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{result.explanation}</div>}
+            {result.ev && <div style={{fontSize:12}}><span style={{color:K.mt}}>Expected Value: </span><span style={{color:K.gn,fontWeight:700}}>{result.ev}</span></div>}
+            {result.action && <div style={{fontSize:12}}><span style={{color:K.mt}}>Best Action: </span><span style={{color:K.ac,fontWeight:700}}>{result.action}</span></div>}
+            {result.hedge && <div style={{fontSize:12}}><span style={{color:K.mt}}>Hedge Strategy: </span><span style={{color:K.pp,fontWeight:700}}>{result.hedge}</span></div>}
+          </div>
+        )}
+        {!isPro && (
+          <div style={{marginTop:'auto',padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}20`,borderRadius:8,fontSize:11,color:K.mt,textAlign:'center'}}>
+            VaultSparked members get unlimited Promo Advisor + Live Arb Scanner + AI Action Plan
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // ═══ PRICING / UPGRADE ═══
 const PricingPage = () => {
   const [upgrading, setUpgrading] = useState(false);
   const [trialStarting, setTrialStarting] = useState(false);
   const [trialStarted, setTrialStarted] = useState(false);
+  const [conciergeWL, setConciergeWL] = useState(() => { try { return !!localStorage.getItem('pg_concierge_waitlist'); } catch { return false; } });
   const toast = useToast();
   const handleUpgrade = async (plan) => {
     setUpgrading(true);
@@ -3800,7 +3918,38 @@ const PricingPage = () => {
     else { if(toast) toast('Could not start trial. Try again.', K.rd); }
     setTrialStarting(false);
   };
-  return (<div><div style={S.card}><Tl t="VaultSparked Pro" badge="UPGRADE" bc={K.pp}/>
+  return (<div style={{display:'flex',flexDirection:'column',gap:16}}><div style={{...S.card,border:`1px solid ${K.ac}40`}}><Tl t="Concierge" badge="NEW" bc={K.ac}/>
+    <div style={{...S.note(K.ac),marginBottom:20}}>The step up from free — personalized insights for serious grinders.</div>
+    <div style={{display:"flex",alignItems:"baseline",gap:4,marginBottom:20}}>
+      <span style={{fontSize:28,fontWeight:700,color:K.ac,fontFamily:fontD}}>$9.99</span>
+      <span style={{fontSize:12,color:K.mt}}>/mo</span>
+    </div>
+    <div style={{padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,marginBottom:20}}>
+      {[
+        ["Weekly Report Card email","P/L, streak, top book every Monday"],
+        ["Promo Advisor","10 AI analyses per day (vs 3 free)"],
+        ["Promo expiry alerts","Push + email when your active promos expire"],
+        ["Priority support",""],
+      ].map(([title,desc])=>(
+        <div key={title} style={{display:"flex",gap:10,marginBottom:8}}>
+          <span style={{color:K.ac,fontWeight:700,marginTop:1}}>✓</span>
+          <div><span style={{fontSize:12,fontWeight:600,color:K.tx}}>{title}</span>{desc&&<span style={{fontSize:11,color:K.dm}}> — {desc}</span>}</div>
+        </div>
+      ))}
+    </div>
+    <button
+      onClick={()=>{
+        if(!conciergeWL){
+          try{localStorage.setItem('pg_concierge_waitlist','true');}catch{}
+          setConciergeWL(true);
+          if(toast) toast("You're on the waitlist! We'll email you when Concierge launches.",K.ac);
+        }
+      }}
+      style={{width:"100%",padding:"10px",background:conciergeWL?K.s2:K.ac,border:`1px solid ${conciergeWL?K.bd:K.ac}`,borderRadius:6,color:conciergeWL?K.mt:'#fff',fontWeight:700,cursor:conciergeWL?"default":"pointer",fontFamily:font,fontSize:12}}
+    >
+      {conciergeWL?"✓ On Waitlist":"Join Waitlist"}
+    </button>
+  </div><div style={S.card}><Tl t="VaultSparked Pro" badge="UPGRADE" bc={K.pp}/>
     <div style={{...S.note(K.pp),marginBottom:20}}>Unlock the live Arb Scanner and +EV Scanner. Real-time odds from 40+ books. Unlimited scans. Cancel anytime.</div>
     {!trialStarted ? (
       <div style={{padding:"16px 20px",background:`${K.gn}08`,border:`1px solid ${K.gn}40`,borderRadius:8,marginBottom:20,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
@@ -4557,15 +4706,35 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
         </div>
       )}
       {proStatus?.status==='trial'&&(
-        <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
-          <div>
-            <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:2}}>
-              🎉 VaultSparked Pro Trial — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
+        proStatus.trial_days_left>3?(
+          <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+            <div>
+              <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:2}}>
+                🎉 VaultSparked Pro Trial — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
+              </div>
+              <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
             </div>
-            <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
+            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
-          <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
-        </div>
+        ):proStatus.trial_days_left>1?(
+          <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+            <div>
+              <div style={{fontSize:12,fontWeight:700,color:K.yl,marginBottom:2}}>
+                ⏳ Trial ending soon — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
+              </div>
+            </div>
+            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+          </div>
+        ):(
+          <div style={{...S.card,border:`1px solid ${K.rd}40`,background:`${K.rd}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+            <div>
+              <div style={{fontSize:12,fontWeight:700,color:K.rd,marginBottom:2}}>
+                🚨 Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
+              </div>
+            </div>
+            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+          </div>
+        )
       )}
       <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
@@ -6124,6 +6293,7 @@ export default function App() {
     try { return Object.keys(localStorage).some(k => k.startsWith('sb-') && k.includes('-auth-token')); } catch { return false; }
   });
   const [proStatus, setProStatus] = useState(null);
+  const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     try {
       const saved = localStorage.getItem('pg_dark');
@@ -6446,6 +6616,13 @@ export default function App() {
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
             <DailyStreak/>
+            <button
+              onClick={() => setShowPromoAdvisor(v => !v)}
+              title="Promo Advisor — analyze any sportsbook promo instantly"
+              style={{padding:"4px 10px",background:showPromoAdvisor?`${K.pp}20`:"transparent",border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`,borderRadius:6,color:showPromoAdvisor?K.pp:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}
+            >
+              💡 Advisor
+            </button>
             {proStatus?.status === "active" && (
               <div style={{fontSize:10,fontWeight:700,color:K.pp,background:`${K.pp}15`,padding:"3px 10px",borderRadius:50,letterSpacing:"1px"}}>PRO</div>
             )}
@@ -6548,6 +6725,7 @@ export default function App() {
       <Footer/>
       <div style={{height:56}}/>
       <MobileBottomNav gi={gi} goTo={goTo}/>
+      {showPromoAdvisor && <PromoAdvisorPanel proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
       <QuickCalcPanel goTo={goTo}/>
     </div>
     </CurrencyCtx.Provider>

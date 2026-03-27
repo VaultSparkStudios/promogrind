@@ -164,6 +164,12 @@ export function trialDaysLeft(user) {
   return Math.max(0, Math.ceil(ms / (24 * 60 * 60 * 1000)));
 }
 
+export async function isConcierge() {
+  const sub = await getSubscription();
+  if (!sub) return false;
+  return sub.plan === 'concierge' && sub.status === 'active';
+}
+
 /**
  * Kicks off a Stripe Checkout session.
  * @param {string} [planId] - "monthly" | "annual" (defaults to "monthly")
