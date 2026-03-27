@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromoGrind — Free Sportsbook Promo Calculator & Profit Tools</title>
+  <meta name="description" content="27 free sportsbook calculators. Convert bonus bets, find arbitrage, track profits. Better than OddsJam and ProfitDuel — completely free.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vaultsparkstudios.com/promogrind/landing/">
+  <meta property="og:title" content="PromoGrind — Free Sportsbook Promo Tools">
+  <meta property="og:description" content="27 free calculators: bonus bets, arbitrage, EV, Kelly, parlay. Track your profits. Live scanner for Pro.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vaultsparkstudios.com/promogrind/landing/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.25rem; }
+    /* Nav */
+    nav { padding: 1.25rem 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: #4ade80; text-decoration: none; letter-spacing: -0.5px; }
+    .nav-links { display: flex; gap: 1rem; align-items: center; }
+    .nav-links a { color: #94a3b8; text-decoration: none; font-size: 0.875rem; }
+    .btn { display: inline-block; padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 700; text-decoration: none; font-size: 0.875rem; cursor: pointer; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.88; }
+    .btn-primary { background: #4ade80; color: #0a0e17; }
+    .btn-outline { border: 1px solid #334155; color: #94a3b8; }
+    /* Hero */
+    .hero { padding: 4rem 0 3rem; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700; line-height: 1.15; margin-bottom: 1rem; letter-spacing: -1px; }
+    .hero h1 span { color: #4ade80; }
+    .hero p { font-size: 1.125rem; color: #94a3b8; max-width: 600px; margin: 0 auto 2rem; }
+    .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .hero-ctas .btn { padding: 0.85rem 2rem; font-size: 1rem; }
+    /* Stats bar */
+    .stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding: 1.75rem; background: #0f1520; border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b; margin-bottom: 3.5rem; }
+    .stat { text-align: center; }
+    .stat-val { font-size: 1.75rem; font-weight: 700; color: #4ade80; display: block; }
+    .stat-lbl { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+    /* Features */
+    .section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .section-sub { color: #64748b; margin-bottom: 2rem; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 4rem; }
+    .feature-card { background: #0f1520; border: 1px solid #1e293b; border-radius: 10px; padding: 1.5rem; }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: #e2e8f0; }
+    .feature-card p { font-size: 0.875rem; color: #64748b; }
+    /* Calculator grid */
+    .calcs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 4rem; }
+    .calc-tag { background: #161d2a; border: 1px solid #1e293b; border-radius: 50px; padding: 0.3rem 0.85rem; font-size: 0.8rem; color: #94a3b8; }
+    /* Testimonials */
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 4rem; }
+    .testimonial { background: #0f1520; border: 1px solid #1e293b; border-radius: 10px; padding: 1.25rem 1.5rem; }
+    .testimonial q { font-size: 0.9375rem; color: #e2e8f0; line-height: 1.65; display: block; margin-bottom: 0.75rem; }
+    .testimonial-meta { display: flex; justify-content: space-between; align-items: center; }
+    .testimonial-name { font-size: 0.8125rem; color: #64748b; }
+    .testimonial-stat { background: #4ade8018; border: 1px solid #4ade8030; color: #4ade80; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; }
+    /* Pricing */
+    .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 4rem; }
+    .pricing-card { background: #0f1520; border: 2px solid #1e293b; border-radius: 10px; padding: 1.75rem; position: relative; }
+    .pricing-card.highlight { border-color: #c084fc; }
+    .price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #c084fc; color: #0a0e17; font-size: 0.7rem; font-weight: 700; padding: 2px 14px; border-radius: 50px; letter-spacing: 1px; white-space: nowrap; }
+    .pricing-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .pricing-price { font-size: 2.25rem; font-weight: 700; margin: 0.5rem 0; }
+    .pricing-price span { font-size: 1rem; font-weight: 400; color: #64748b; }
+    .pricing-savings { color: #4ade80; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; }
+    .pricing-features { list-style: none; margin-bottom: 1.5rem; }
+    .pricing-features li { font-size: 0.875rem; color: #94a3b8; padding: 0.3rem 0; display: flex; gap: 0.5rem; }
+    .pricing-features li::before { content: "✓"; color: #4ade80; font-weight: 700; }
+    /* Footer */
+    footer { border-top: 1px solid #1e293b; padding: 2rem 0; }
+    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .footer-links a { color: #475569; text-decoration: none; font-size: 0.8125rem; }
+    .footer-links a:hover { color: #94a3b8; }
+    .footer-legal { font-size: 0.75rem; color: #334155; line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a class="logo" href="https://vaultsparkstudios.com/promogrind/">PROMOGRIND</a>
+      <div class="nav-links">
+        <a href="https://vaultsparkstudios.com/promogrind/#/knowledge-base">Learn</a>
+        <a href="https://vaultsparkstudios.com/promogrind/#/upgrade">Pricing</a>
+        <a class="btn btn-primary" href="https://vaultsparkstudios.com/promogrind/">Open App →</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Turn Sportsbook Promos Into<br><span>Guaranteed Cash</span></h1>
+      <p>27 free calculators. Convert bonus bets, find arbitrage, track every dollar. No subscription needed — while competitors charge $99–$199/mo for less.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="https://vaultsparkstudios.com/promogrind/">Open the App — it's free →</a>
+        <a class="btn btn-outline" href="https://vaultsparkstudios.com/promogrind/#/upgrade">Start Free Trial</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="stat-val">27</span><span class="stat-lbl">Free Calculators</span></div>
+    <div class="stat"><span class="stat-val">$0</span><span class="stat-lbl">Cost to Start</span></div>
+    <div class="stat"><span class="stat-val">8</span><span class="stat-lbl">Major Sportsbooks</span></div>
+    <div class="stat"><span class="stat-val">65–75%</span><span class="stat-lbl">Avg Conversion Rate</span></div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Everything You Need to Grind Promos</h2>
+    <p class="section-sub">From signup bonuses to daily recurring promos — every tool in one place, free forever.</p>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>27 Free Calculators</h3>
+        <p>Bonus bet converter, profit boost, arb, Kelly criterion, EV calculator, parlay builder, hedge validator, and 20 more. All free, no login required to try.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>P/L Ledger & Cloud Sync</h3>
+        <p>Track every promo conversion, hedge, and arb bet. See your running P/L, by-book breakdown, CLV tracking, and tax export. Syncs across all your devices.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Live Arb + EV Scanner</h3>
+        <p>Real-time arbitrage and +EV opportunities across 40+ sportsbooks. Alerts when margins exceed your threshold. VaultSparked Pro — try free for 7 days.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Promo Calendar</h3>
+        <p>Every recurring weekly promo across DraftKings, FanDuel, BetMGM, Caesars, and more. Graded A/B/C. Time estimates per promo so you can plan your sessions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h3>Knowledge Base</h3>
+        <p>Complete guides to matched betting, bonus conversion, arbitrage, EV betting, and account management. From beginner to advanced.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Leaderboard & Community</h3>
+        <p>See how your profit compares to other grinders. Share results anonymously. Refer friends to earn bonus Vault points.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">27 Calculators</h2>
+    <p class="section-sub" style="margin-bottom:1rem;">Everything you need across every promo type.</p>
+    <div class="calcs">
+      <span class="calc-tag">Bonus Bet Converter</span><span class="calc-tag">Profit Boost</span><span class="calc-tag">First Bet Hedge</span><span class="calc-tag">Deposit Match</span><span class="calc-tag">Insurance Promo</span><span class="calc-tag">2-Way Arbitrage</span><span class="calc-tag">3-Way Arbitrage</span><span class="calc-tag">Parlay Hedge</span><span class="calc-tag">Middle Bet</span><span class="calc-tag">No-Vig</span><span class="calc-tag">3-Way No-Vig</span><span class="calc-tag">+EV Calculator</span><span class="calc-tag">Kelly Criterion</span><span class="calc-tag">Parlay Builder</span><span class="calc-tag">SGP Estimator</span><span class="calc-tag">Hold Calculator</span><span class="calc-tag">Bet Sizer</span><span class="calc-tag">Line Shop</span><span class="calc-tag">Rollover Calculator</span><span class="calc-tag">Teaser Calculator</span><span class="calc-tag">Round Robin</span><span class="calc-tag">Deposit Optimizer</span><span class="calc-tag">Hedge Validator</span><span class="calc-tag">Promo Guarantee</span><span class="calc-tag">Gut Check</span><span class="calc-tag">Promo Stacking</span><span class="calc-tag">Income Estimator</span>
+    </div>
+
+    <h2 class="section-title">What Grinders Say</h2>
+    <p class="section-sub">Real results from real users.</p>
+    <div class="testimonials">
+      <div class="testimonial">
+        <q>Made back the subscription cost in 20 minutes with the first arb alert. The scanner is insane.</q>
+        <div class="testimonial-meta">
+          <span class="testimonial-name">— Tyler M.</span>
+          <span class="testimonial-stat">$340 first week</span>
+        </div>
+      </div>
+      <div class="testimonial">
+        <q>I was using a spreadsheet before this. Never going back. The bonus bet converter alone saves me an hour per session.</q>
+        <div class="testimonial-meta">
+          <span class="testimonial-name">— Jess R.</span>
+          <span class="testimonial-stat">$1,200/mo average</span>
+        </div>
+      </div>
+      <div class="testimonial">
+        <q>The free calculator suite is better than what OddsJam charges $150/mo for. The Pro upgrade is a no-brainer.</q>
+        <div class="testimonial-meta">
+          <span class="testimonial-name">— Marcus D.</span>
+          <span class="testimonial-stat">8 books completed</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Simple, Honest Pricing</h2>
+    <p class="section-sub">27 calculators free forever. Pro unlocks the live scanner.</p>
+    <div class="pricing">
+      <div class="pricing-card">
+        <div class="pricing-name">Free</div>
+        <div class="pricing-price">$0<span>/forever</span></div>
+        <ul class="pricing-features">
+          <li>All 27 calculators</li>
+          <li>P/L Ledger & cloud sync</li>
+          <li>Promo Calendar</li>
+          <li>Knowledge Base</li>
+          <li>Bet Tracker & Leaderboard</li>
+          <li>CSV export</li>
+        </ul>
+        <a class="btn btn-outline" style="width:100%;text-align:center;display:block;" href="https://vaultsparkstudios.com/promogrind/">Get Started Free</a>
+      </div>
+      <div class="pricing-card highlight">
+        <div class="price-badge">BEST VALUE</div>
+        <div class="pricing-name">VaultSparked Pro</div>
+        <div class="pricing-price">$24.99<span>/mo</span></div>
+        <div class="pricing-savings">Or $199/yr — save $101 (2 months free)</div>
+        <ul class="pricing-features">
+          <li>Everything in Free</li>
+          <li>Live Arb Scanner (40+ books)</li>
+          <li>Live +EV Scanner</li>
+          <li>Real-time push alerts</li>
+          <li>Scan history & analytics</li>
+          <li>Player props scanning</li>
+        </ul>
+        <a class="btn btn-primary" style="width:100%;text-align:center;display:block;" href="https://vaultsparkstudios.com/promogrind/#/upgrade">Start 7-Day Free Trial</a>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-links">
+        <a href="https://vaultsparkstudios.com/promogrind/">Open App</a>
+        <a href="https://vaultsparkstudios.com/promogrind/#/knowledge-base">Knowledge Base</a>
+        <a href="https://vaultsparkstudios.com/promogrind/#/upgrade">Pricing</a>
+        <a href="/promogrind/privacy/">Privacy Policy</a>
+        <a href="/promogrind/terms/">Terms of Service</a>
+      </div>
+      <p class="footer-legal">
+        <strong>Affiliate Disclosure:</strong> Some links are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you.<br>
+        Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational tool — not gambling advice. 1-800-GAMBLER.<br>
+        © 2026 VaultSpark Studios
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "project": "promogrind",
   "date": "2026-03-26",
   "session": 0,
@@ -26,5 +26,13 @@
   },
   "topWin": "Studio OS applied to a live product with rich PROJECT_STATUS.json (audit scores, blockers, tiers, tech stack)",
   "topGap": "Revenue blockers fully identified but not actioned — affiliate links + Odds API = first dollar",
-  "intentOutcome": "Bootstrap initiation — Layer 1 SIL format applied; project ready for Foundation session"
+  "intentOutcome": "Bootstrap initiation — Layer 1 SIL format applied; project ready for Foundation session",
+  "improvementsShipped": null,
+  "improvementGroups": {},
+  "testsTotal": null,
+  "testsByType": {},
+  "testsDelta": null,
+  "deployStatus": "deployed",
+  "ignisFlags": [],
+  "ignisNote": null
 }

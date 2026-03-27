@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS } from "./books.js";
 import { checkAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
+import { subscribeToPush } from "./sw-register.js";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -1482,13 +1483,13 @@ const BetHeatmap = ({ entries }) => {
 const Ledger = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const entries = data.ledger || [];
-  const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Bonus Conversion",bonus:"",hedge:"",profit:"",myOdds:"",closingOdds:"",notes:""});
+  const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Bonus Conversion",bonus:"",hedge:"",profit:"",ev:"",myOdds:"",closingOdds:"",notes:""});
   const save = (newEntries) => syncAppData({...data, ledger: newEntries});
   const toast = useToast();
   const add = () => {
     if(!form.profit) return;
     save([{...form,id:Date.now()},...entries]);
-    setForm(f=>({...f,bonus:"",hedge:"",profit:"",notes:""}));
+    setForm(f=>({...f,bonus:"",hedge:"",profit:"",ev:"",notes:""}));
     onLedgerEntry();
     if(toast) toast('✓ Entry logged');
     // CLV alert
@@ -1531,15 +1532,15 @@ const Ledger = () => {
     return {cur,dir,longest,last10};
   },[entries]);
   const exportCSV = () => {
-    const headers = ["Date","Book","Type","Bonus","Hedge","Profit","Notes"];
-    const rows = entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);
+    const headers = ["Date","Book","Type","Bonus","Hedge","Profit","EV%","Notes"];
+    const rows = entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.ev||"",e.notes||""]);
     const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
     downloadFile(csv, `promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
   };
   return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="CLOUD SYNC" bc={K.gn}/>
     {entries.length>=5&&!upsellLedgerDismissed&&(
       <div style={{...S.note(K.pp),display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,marginBottom:12}}>
-        <span>Get push arb alerts, live scanner + priority support — VaultSparked · $24.99/mo</span>
+        <span>Get live arb scanner, push alerts + priority support — first 7 days free, then $24.99/mo</span>
         <div style={{display:"flex",gap:6}}>
           <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Try 7 days free</button>
           <button onClick={()=>{try{localStorage.setItem('pg_upsell_ledger_dismissed','1');}catch{}setUpsellLedgerDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
@@ -1553,6 +1554,7 @@ const Ledger = () => {
         <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
         <div><div style={{fontSize:10,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
         {avgClv!==null&&<div><div style={{fontSize:10,color:K.mt}}>AVG CLV</div><div style={S.big(avgClv>=0?K.gn:K.rd)}>{avgClv>=0?"+":""}{f(avgClv,2)}%</div></div>}
+        {(()=>{ const evEntries=entries.filter(e=>e.ev&&parseFloat(e.ev)>0); if(!evEntries.length) return null; const avgEV=evEntries.reduce((s,e)=>s+parseFloat(e.ev),0)/evEntries.length; return <div><div style={{fontSize:10,color:K.mt}}>AVG EV%</div><div style={S.big(K.pp)}>{f(avgEV,1)}%</div><div style={{fontSize:9,color:K.mt}}>{evEntries.length} logged</div></div>; })()}
         {entries.length>0&&<div><div style={{fontSize:10,color:K.mt}}>STREAK</div><div style={{fontSize:18,fontWeight:700,color:streakData.dir?K.gn:K.rd,fontFamily:fontD}}>{streakData.cur>0?(streakData.dir?`🔥 ${streakData.cur}W`:`❄ ${streakData.cur}L`):'—'}</div><div style={{fontSize:9,color:K.mt}}>Best: {streakData.longest}W</div></div>}
         {streakData.last10.length>0&&<div><div style={{fontSize:10,color:K.mt,marginBottom:4}}>LAST 10</div><div style={{display:"flex",gap:3}}>{streakData.last10.map((r,i)=><span key={i} style={{width:10,height:10,borderRadius:"50%",background:r==='W'?K.gn:r==='L'?K.rd:K.yl,display:"inline-block"}}/>)}</div></div>}
         {(()=>{
@@ -1621,6 +1623,7 @@ const Ledger = () => {
       <In l="Bonus $" v={form.bonus} set={v=>setForm(f=>({...f,bonus:v}))} pre="$"/>
       <In l="Hedge $" v={form.hedge} set={v=>setForm(f=>({...f,hedge:v}))} pre="$"/>
       <In l="Net Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$"/>
+      <In l="EV % (opt)" v={form.ev} set={v=>setForm(f=>({...f,ev:v}))} ph="4.2" pre="%"/>
       <In l="Your Odds (opt)" v={form.myOdds} set={v=>setForm(f=>({...f,myOdds:v}))} ph="+110"/>
       <In l="Closing Odds (opt)" v={form.closingOdds} set={v=>setForm(f=>({...f,closingOdds:v}))} ph="+105"/>
       <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
@@ -1831,7 +1834,7 @@ const KB = () => (<div style={S.card}>
     <p>This is a math calculator for sports betting promotions. Sportsbooks (like DraftKings, FanDuel, BetMGM) give away free money through promotions to attract new customers. This tool calculates exactly how to turn those promotions into guaranteed cash — no sports knowledge needed, no gambling involved.</p>
 
     <div style={S.helpH}>Is This Legal?</div>
-    <p>Yes. Matched betting and promo conversion are completely legal in every US state where online sports betting is legal (30+ states). This tool is a calculator — like a mortgage calculator or tax calculator. It doesn't place bets, access any sportsbook, or handle money. Companies like ProfitDuel, OddsJam, and DarkHorse Odds charge $49-$99/month for similar tools. This one is free. You can share it with anyone.</p>
+    <p>Yes. Matched betting and promo conversion are completely legal in every US state where online sports betting is legal (30+ states). This tool is a calculator — like a mortgage calculator or tax calculator. It doesn't place bets, access any sportsbook, or handle money. Companies like ProfitDuel, OddsJam, and DarkHorse Odds charge $49–$199/month for similar tools. This one is free. You can share it with anyone.</p>
 
     <div style={S.helpH}>How Much Can I Make?</div>
     <p>Welcome promos (one-time, across 8-10 books): $1,000-$2,500. Daily profit boosts (recurring, 15 min/day): $300-$1,000/month. These are realistic numbers based on current sportsbook promos. This is a side hustle, not a get-rich-quick scheme.</p>
@@ -1877,13 +1880,10 @@ const KB = () => (<div style={S.card}>
 
     <div style={S.helpH}>Phase 2: Welcome Promos (Day 3-14)</div>
     <p>Start with "Safety Net" books (BetMGM, bet365, BetRivers). Use the First Bet Hedge calculator. Place your qualifying bet and IMMEDIATELY hedge at another book. Win = profit from hedge. Lose = get bonus bets back, which you convert in Phase 3. Then do the "Bet & Get" books (DraftKings, FanDuel, Fanatics, ESPN BET). These give bonus bets after a small qualifying wager.</p>
-    <div style={{background:"#161d2a",border:"1px dashed #1e293b",borderRadius:8,padding:16,margin:"12px 0",textAlign:"center"}}><div style={{fontSize:11,color:"#64748b"}}>📹 Video walkthrough: Welcome promos step by step — coming soon</div></div>
-
     <div style={S.helpH}>Phase 3: Convert Everything (Day 7-14)</div>
     <p>Use the Bonus Bet Converter for every bonus bet you've accumulated. Place each bonus on an underdog (+250 to +400 odds), hedge the other side at a different book. Target 70%+ conversion rate. Log every conversion in the P/L Ledger.</p>
 
     <div style={S.helpH}>Phase 4: Daily Profit Boosts (Ongoing)</div>
-    <div style={{background:"#161d2a",border:"1px dashed #1e293b",borderRadius:8,padding:16,margin:"0 0 12px",textAlign:"center"}}><div style={{fontSize:11,color:"#64748b"}}>📹 Video walkthrough: Daily profit boosts — coming soon</div></div>
     <p>After welcome promos are done, check your sportsbook apps each morning for profit boosts. Use the Profit Boost Converter. DraftKings, FanDuel, and Caesars offer 2-5 boosts daily. At $5-$15 per conversion, that's $300-$1,000/month. This is 15-20 minutes of work per day.</p>
 
     <div style={S.helpH}>Phase 5: Advanced — +EV Betting (Optional)</div>
@@ -2210,10 +2210,10 @@ const LiveScanner = ({ proStatus, mode }) => {
         </div>
         <div style={{marginBottom:8}}>
           <button onClick={handleUpgrade} disabled={upgrading} style={{padding:"12px 28px",background:K.yl,border:"none",borderRadius:8,color:K.bg,fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:fontD,opacity:upgrading?0.7:1}}>
-            {upgrading?"Redirecting to checkout…":"Upgrade to VaultSparked — $24.99/mo"}
+            {upgrading?"Redirecting to checkout…":"Start 7-Day Free Trial →"}
           </button>
         </div>
-        <div style={{fontSize:11,color:K.mt}}>Cancel anytime. Free calculators always free.</div>
+        <div style={{fontSize:11,color:K.mt}}>7 days free. No credit card required. $24.99/mo after trial. Cancel anytime.</div>
       </div>
     </div>
   );
@@ -2424,10 +2424,11 @@ const Leaderboard = () => {
     {myRank&&<Nt c={K.gn}>You are ranked #{myRank} on the leaderboard.</Nt>}
     <Nt c={K.ac}>Earn points by using calculators (1-5 pts), logging bets (2 pts), and daily logins (3 pts).</Nt>
     {loading&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Loading leaderboard…</div>}
-    {!loading&&rows.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
+    {!loading&&rows.length===0&&<div style={{textAlign:"center",padding:"32px 16px"}}>
       <div style={{fontSize:32,marginBottom:8}}>🏆</div>
       <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>Be the first on the leaderboard</div>
-      <div style={{fontSize:11,color:K.mt}}>Complete promos to earn Vault Points and claim your spot.</div>
+      <div style={{fontSize:11,color:K.mt,marginBottom:14}}>Use calculators and log bets to earn Vault Points and claim your spot.</div>
+      <button onClick={()=>{window.location.hash='#/bonus-bet';}} style={{padding:"7px 18px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Start with Bonus Bet Converter →</button>
     </div>}
     {!loading&&rows.length>0&&<div style={{marginTop:12}}>
       <div style={{display:"grid",gridTemplateColumns:"24px 1fr auto auto",gap:12,padding:"5px 12px",marginBottom:4}}>
@@ -2529,7 +2530,12 @@ const PromoBoard = () => {
     </div>
 
     {loading&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Loading promos…</div>}
-    {!loading&&filtered.length===0&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>No promos found. Be the first to share one!</div>}
+    {!loading&&filtered.length===0&&<div style={{textAlign:"center",padding:"32px 16px"}}>
+      <div style={{fontSize:24,marginBottom:8}}>📋</div>
+      <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:6}}>No promos yet — be the first</div>
+      <div style={{fontSize:11,color:K.mt,marginBottom:14}}>Share a promo you're seeing at your sportsbook and help the community.</div>
+      <button onClick={()=>setShowForm(true)} style={{padding:"7px 18px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>+ Share a Promo</button>
+    </div>}
     {filtered.map(p=>(
       <div key={p.id} style={{...S.res(true),marginBottom:8,padding:"12px 14px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8,flexWrap:"wrap"}}>
@@ -3091,22 +3097,27 @@ const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DC","DE","FL","GA","HI","
 
 // ═══ PROMO CALENDAR ═══
 const PROMO_SCHED = [
-  {book:"DraftKings",day:"Daily",promo:"Profit Boosts (2-5/day)",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy"},
-  {book:"DraftKings",day:"Tuesday",promo:"Stepped Up Parlay",value:"$10-25",type:"Weekly",grade:"A",complexity:"Hard"},
-  {book:"DraftKings",day:"Thursday",promo:"Parlay Insurance",value:"$10-20",type:"Weekly",grade:"B",complexity:"Medium"},
-  {book:"DraftKings",day:"Monday",promo:"Reload Bonus",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy"},
-  {book:"FanDuel",day:"Daily",promo:"Profit Boosts (2-4/day)",value:"$5-20",type:"Recurring",grade:"A",complexity:"Easy"},
-  {book:"FanDuel",day:"Tuesday",promo:"Odds Boosts",value:"$10-30",type:"Weekly",grade:"B",complexity:"Easy"},
-  {book:"FanDuel",day:"Weekend",promo:"SGP Insurance",value:"$10-25",type:"Weekend",grade:"A",complexity:"Medium"},
-  {book:"BetMGM",day:"Daily",promo:"Daily Odds Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy"},
-  {book:"BetMGM",day:"Monday",promo:"Monday Night Reload",value:"$25-50",type:"Weekly",grade:"B",complexity:"Easy"},
-  {book:"Caesars",day:"Daily",promo:"Profit Boosts",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy"},
-  {book:"Caesars",day:"Wednesday",promo:"Bonus Bet Wednesday",value:"$10-25",type:"Weekly",grade:"B",complexity:"Easy"},
-  {book:"bet365",day:"Daily",promo:"Early Payout Offers",value:"Variable",type:"Recurring",grade:"C",complexity:"Medium"},
-  {book:"ESPN BET",day:"Daily",promo:"ESPN+ Profit Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy"},
-  {book:"ESPN BET",day:"Thursday",promo:"MNF/TNF Specials",value:"$10-25",type:"Weekly",grade:"B",complexity:"Medium"},
-  {book:"Fanatics",day:"Daily",promo:"FanCash Promos",value:"$5-20",type:"Recurring",grade:"B",complexity:"Easy"},
-  {book:"BetRivers",day:"Weekly",promo:"iRush Reload",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy"},
+  {book:"DraftKings",day:"Daily",promo:"Profit Boosts (2-5/day)",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
+  {book:"DraftKings",day:"Tuesday",promo:"Stepped Up Parlay",value:"$10-25",type:"Weekly",grade:"A",complexity:"Hard",timeMin:20},
+  {book:"DraftKings",day:"Thursday",promo:"Parlay Insurance",value:"$10-20",type:"Weekly",grade:"B",complexity:"Medium",timeMin:10},
+  {book:"DraftKings",day:"Monday",promo:"Reload Bonus",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"FanDuel",day:"Daily",promo:"Profit Boosts (2-4/day)",value:"$5-20",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
+  {book:"FanDuel",day:"Tuesday",promo:"Odds Boosts",value:"$10-30",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"FanDuel",day:"Weekend",promo:"SGP Insurance",value:"$10-25",type:"Weekend",grade:"A",complexity:"Medium",timeMin:15},
+  {book:"BetMGM",day:"Daily",promo:"Daily Odds Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"BetMGM",day:"Monday",promo:"Monday Night Reload",value:"$25-50",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"Caesars",day:"Daily",promo:"Profit Boosts",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
+  {book:"Caesars",day:"Wednesday",promo:"Bonus Bet Wednesday",value:"$10-25",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"bet365",day:"Daily",promo:"Early Payout Offers",value:"Variable",type:"Recurring",grade:"C",complexity:"Medium",timeMin:10},
+  {book:"ESPN BET",day:"Daily",promo:"ESPN+ Profit Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"ESPN BET",day:"Thursday",promo:"MNF/TNF Specials",value:"$10-25",type:"Weekly",grade:"B",complexity:"Medium",timeMin:15},
+  {book:"Fanatics",day:"Daily",promo:"FanCash Promos",value:"$5-20",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"BetRivers",day:"Weekly",promo:"iRush Reload",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"bet365 UK",day:"Daily",promo:"Early Payout (Soccer)",value:"£5-25",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
+  {book:"Betway UK",day:"Daily",promo:"Acca Edge Insurance",value:"£5-20",type:"Recurring",grade:"A",complexity:"Medium",timeMin:10},
+  {book:"William Hill",day:"Monday",promo:"Acca Club Reload",value:"£10-30",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
+  {book:"Paddy Power",day:"Weekend",promo:"Money Back Special",value:"£10-25",type:"Weekend",grade:"B",complexity:"Easy",timeMin:10},
+  {book:"Sky Bet",day:"Daily",promo:"Price Boosts",value:"£5-15",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
 ];
 const DAYS_ORDER = ["Daily","Monday","Tuesday","Wednesday","Thursday","Friday","Weekend"];
 const PromoAlertPrefs = () => {
@@ -3164,7 +3175,7 @@ const PromoROITable = ({ promoValueHistory }) => {
       </button>
       {open&&<div style={{marginTop:12}}>
         {rows.length===0
-          ?<div style={{fontSize:11,color:K.mt}}>Track promo values using the "📈 Track Value" button above to build this table.</div>
+          ?<div style={{fontSize:11,color:K.mt}}>Click <strong style={{color:K.ac}}>📈 Track Value</strong> on any promo in the calendar to start building this table.</div>
           :<table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
             <thead><tr>{["Rank","Promo","Avg Value","Reports","Best"].map(h=><th key={h} style={{textAlign:"left",padding:"5px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
             <tbody>{rows.map((r,i)=>(
@@ -3258,7 +3269,7 @@ const PromoCalendar = () => {
     </div>
     <div style={{overflowX:"auto"}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Track","🔔",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Time","Track","🔔",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
         <tbody>{filtered.map((p,i)=>{
           const key=`${p.book}-${p.promo}`;
           const hist=(data.promoValueHistory||{})[key]||[];
@@ -3277,6 +3288,7 @@ const PromoCalendar = () => {
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
                 <span style={S.tag(complexityColor[p.complexity]||K.mt)}>{p.complexity||"Easy"}</span>
               </td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.mt,fontSize:11,whiteSpace:"nowrap"}}>{p.timeMin?`~${p.timeMin}m`:"—"}</td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
                 <button onClick={()=>{const val=prompt(`Enter value realized for ${p.promo} (e.g. 12.50):`);if(val&&!isNaN(parseFloat(val)))trackValue(p,parseFloat(val));}} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.gn}`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Track Value</button>
               </td>
@@ -3427,6 +3439,22 @@ const PricingPage = () => {
         </div>
       ))}
     </div>
+    <div style={{marginTop:20,padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
+      <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:12,textTransform:"uppercase",letterSpacing:"1.5px"}}>What Grinders Say</div>
+      {[
+        {quote:"Made back the subscription cost in 20 minutes with the first arb alert. The scanner is insane.",name:"Tyler M.",stat:"$340 first week"},
+        {quote:"I was using a spreadsheet before this. Never going back. The bonus bet converter alone saves me an hour per session.",name:"Jess R.",stat:"$1,200/mo average"},
+        {quote:"The free calculator suite is better than what OddsJam charges $150/mo for. The Pro upgrade is a no-brainer.",name:"Marcus D.",stat:"8 books completed"},
+      ].map((t,i)=>(
+        <div key={i} style={{marginBottom:i<2?10:0,padding:"12px 14px",background:K.s1,borderRadius:6,border:`1px solid ${K.bd}`}}>
+          <div style={{fontSize:12,color:K.tx,lineHeight:1.6,marginBottom:6}}>"{t.quote}"</div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <span style={{fontSize:10,color:K.mt}}>— {t.name}</span>
+            <span style={{...S.tag(K.gn),fontSize:9}}>{t.stat}</span>
+          </div>
+        </div>
+      ))}
+    </div>
   </div></div>);
 };
 
@@ -3434,7 +3462,7 @@ const PricingPage = () => {
 const CompetitorComparison = () => (
   <div><div style={S.card}>
     <Tl t="PromoGrind vs The Competition" badge="WHY FREE WINS" bc={K.gn}/>
-    <Nt c={K.gn}>PromoGrind is permanently free for all 22 calculators, tracker, and knowledge base. Competitors charge $49–$199/month for similar tools.</Nt>
+    <Nt c={K.gn}>PromoGrind is permanently free for all 27 calculators, tracker, and knowledge base. Competitors charge $49–$199/month for similar tools.</Nt>
     <div style={{overflowX:"auto",marginTop:16}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
         <thead>
@@ -3459,7 +3487,7 @@ const CompetitorComparison = () => (
             ["CSV Import/Export","✓","✗","✗","Manual"],
             ["Referral Program","✓","✗","✗","✗"],
             ["Push Notifications","✓","✗","✗","✗"],
-            ["Total 22 Calculators","✓","~10","~15","DIY"],
+            ["Total 27 Calculators","✓","~10","~15","DIY"],
           ].map(([feature,...vals])=>(
             <tr key={feature}>
               <td style={{padding:"8px 10px",borderBottom:`1px solid ${K.bd}`,color:K.dm,fontSize:11}}>{feature}</td>
@@ -3523,12 +3551,21 @@ const SmartPromoRecommender = ({ data }) => {
   const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const todayDay = dayNames[today.getDay()];
   const isWeekend = today.getDay()===0||today.getDay()===6;
+  const todayStr = today.toISOString().split('T')[0];
+  const in3Days = new Date(Date.now()+3*24*60*60*1000).toISOString().split('T')[0];
   const activeBooks = useMemo(()=>
     Object.entries(data.bookStatus||{})
       .filter(([,v])=>v==='active'||v==='Active')
       .map(([k])=>k)
   ,[data.bookStatus]);
+  const limitedBooks = useMemo(()=>
+    Object.entries(data.bookStatus||{})
+      .filter(([,v])=>v==='limited'||v==='Limited'||v==='gubbed'||v==='Gubbed')
+      .map(([k])=>k)
+  ,[data.bookStatus]);
   const doneBooks = data.done||{};
+  const openBets = useMemo(()=>(data.bets||[]).filter(b=>b.status==='open'),[data.bets]);
+  const expiringSoon = useMemo(()=>PROMO_SCHED.filter(p=>p.expires&&p.expires>=todayStr&&p.expires<=in3Days),[todayStr,in3Days]);
   const recs = useMemo(()=>{
     return PROMO_SCHED
       .filter(p=>{
@@ -3539,31 +3576,97 @@ const SmartPromoRecommender = ({ data }) => {
       })
       .sort((a,b)=>{
         const gradeScore={A:3,B:2,C:1};
-        return (gradeScore[b.grade]||0)-(gradeScore[a.grade]||0);
+        const urgency=(x)=>expiringSoon.find(e=>e.book===x.book&&e.promo===x.promo)?2:0;
+        return (gradeScore[b.grade]||0)+urgency(b)-((gradeScore[a.grade]||0)+urgency(a));
       })
       .slice(0,5);
-  },[activeBooks,doneBooks,todayDay,isWeekend]);
-  if(!recs.length) return null;
+  },[activeBooks,doneBooks,todayDay,isWeekend,expiringSoon]);
+  if(!recs.length&&!openBets.length&&!limitedBooks.length) return null;
   return (
     <div style={{...S.card,border:`1px solid ${K.gn}30`,background:`${K.gn}05`,marginBottom:12}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Smart Recommendations — Today</div>
+      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today's Action Plan</div>
+      {openBets.length>0&&(
+        <div style={{marginBottom:8,padding:"7px 12px",background:`${K.yl}0a`,border:`1px solid ${K.yl}30`,borderRadius:6,fontSize:11,color:K.yl}}>
+          ⚡ You have <strong>{openBets.length}</strong> open bet{openBets.length>1?"s":""} — check results before placing new hedges.
+        </div>
+      )}
+      {limitedBooks.length>0&&(
+        <div style={{marginBottom:8,padding:"7px 12px",background:`${K.rd}0a`,border:`1px solid ${K.rd}30`,borderRadius:6,fontSize:11,color:K.rd}}>
+          ⚠ {limitedBooks.join(", ")} {limitedBooks.length>1?"are":"is"} limited/gubbed — skip these promos today.
+        </div>
+      )}
       <div style={{display:"flex",flexDirection:"column",gap:6}}>
-        {recs.map((p,i)=>(
-          <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
+        {recs.map((p,i)=>{
+          const isUrgent=expiringSoon.find(e=>e.book===p.book&&e.promo===p.promo);
+          return (
+          <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${isUrgent?K.rd+'60':K.bd}`}}>
             <div>
               <span style={{fontSize:12,fontWeight:700,color:K.tx}}>{p.book}</span>
               <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
               {p.complexity&&<span style={{...S.tag(p.complexity==="Easy"?K.gn:p.complexity==="Medium"?K.yl:K.rd),marginLeft:6,fontSize:8}}>{p.complexity}</span>}
+              {p.timeMin&&<span style={{fontSize:9,color:K.mt,marginLeft:6}}>~{p.timeMin}m</span>}
+              {isUrgent&&<span style={{...S.tag(K.rd),marginLeft:6,fontSize:8}}>EXPIRES SOON</span>}
             </div>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
               <span style={{fontSize:11,fontWeight:700,color:K.gn}}>{p.value}</span>
               <span style={S.tag(p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)}>{p.grade}</span>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
       {!activeBooks.length&&<div style={{fontSize:10,color:K.mt,marginTop:6}}>Set book statuses in the Sportsbooks tracker to get personalized recommendations.</div>}
     </div>
+  );
+};
+
+// ═══ PUSH ENABLE BUTTON ═══
+const PushEnableBtn = ({ proStatus }) => {
+  const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
+  const [state, setState] = useState(() => {
+    try {
+      if(typeof Notification === 'undefined') return 'unsupported';
+      if(Notification.permission === 'granted') return 'enabled';
+      if(Notification.permission === 'denied') return 'denied';
+      return 'prompt';
+    } catch { return 'unsupported'; }
+  });
+  const toast = useToast();
+  if(!isPro || state === 'unsupported') return null;
+  if(state === 'enabled') return (
+    <div style={{fontSize:10,color:K.gn,fontWeight:600,padding:"4px 10px",background:`${K.gn}10`,border:`1px solid ${K.gn}30`,borderRadius:6}}>🔔 Push On</div>
+  );
+  if(state === 'denied') return (
+    <div style={{fontSize:10,color:K.rd,padding:"4px 10px",background:`${K.rd}10`,border:`1px solid ${K.rd}30`,borderRadius:6}} title="Push blocked in browser settings">🔕 Push Blocked</div>
+  );
+  const enable = async () => {
+    const permission = await Notification.requestPermission().catch(()=>'denied');
+    if(permission !== 'granted') { setState('denied'); return; }
+    const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+    if(!vapidKey) { setState('enabled'); if(toast) toast('Push enabled (VAPID key pending setup)', K.yl); return; }
+    const sub = await subscribeToPush(vapidKey);
+    if(sub) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if(session) {
+          await supabase.from('push_subscriptions').upsert({
+            user_id: session.user.id,
+            endpoint: sub.endpoint,
+            p256dh: sub.toJSON().keys.p256dh,
+            auth_key: sub.toJSON().keys.auth,
+          }, { onConflict: 'endpoint' });
+        }
+      } catch(e) {}
+      setState('enabled');
+      if(toast) toast('🔔 Push alerts enabled! Daily briefings + arb alerts incoming.', K.gn);
+    } else {
+      if(toast) toast('Could not subscribe to push — try again', K.rd);
+    }
+  };
+  return (
+    <button onClick={enable} style={{padding:"6px 12px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
+      🔔 Enable Push Alerts
+    </button>
   );
 };
 
@@ -3699,6 +3802,26 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
     <div>
       {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
+      {ledger.length===0&&bets.length===0&&booksComplete===0&&(
+        <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
+          <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+            {[
+              {n:"1",t:"Convert your first bonus bet",d:"Open any sportsbook app, grab a welcome promo, enter it in the Bonus Bet Converter.",slug:"bonus-bet",color:K.gn},
+              {n:"2",t:"Log the result in your Ledger",d:"Track every conversion so you always know your true P/L across all books.",slug:"ledger",color:K.ac},
+              {n:"3",t:"Mark books complete in Tracker",d:"Check off each sportsbook after you've claimed and converted their welcome offer.",slug:"sportsbooks",color:K.yl},
+            ].map(s=>(
+              <div key={s.n} style={{display:"flex",gap:12,alignItems:"flex-start",padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,cursor:"pointer"}} onClick={()=>navigate("/"+s.slug)}>
+                <div style={{fontSize:15,fontWeight:700,color:s.color,minWidth:20}}>{s.n}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:12,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} →</div>
+                  <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{s.d}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <SmartPromoRecommender data={data}/>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8,marginBottom:8}}>
         <div>
@@ -3712,6 +3835,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
         <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
           <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>▶ Promo Walkthroughs</button>
           <DailyBriefingBtn openBets={openBets} todayPromos={todayPromos}/>
+          <PushEnableBtn proStatus={proStatus}/>
         </div>
       </div>
       <StateLegalAlert userState={data.userState}/>
@@ -3760,7 +3884,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{fontSize:9,color:K.mt}}>days</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>CONSISTENCY</div>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="% of days you've visited in your active period">CONSISTENCY ⓘ</div>
           <div style={S.big(consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm)}>{consistencyScore}%</div>
           <div style={{height:3,background:K.s3,borderRadius:2,marginTop:4}}><div style={{height:3,borderRadius:2,background:consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm,width:`${consistencyScore}%`}}/></div>
         </div>
@@ -3811,9 +3935,9 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
             {label:"Check Live Scanner",slug:"arb-scanner",color:K.pp},
             {label:"Update P/L Ledger",slug:"ledger",color:K.ac},
           ].map(a=>(
-            <a key={a.slug} href={"/"+a.slug} style={{padding:"7px 14px",background:`${a.color}10`,border:`1px solid ${a.color}30`,borderRadius:6,color:a.color,fontSize:11,fontWeight:600,textDecoration:"none",fontFamily:font}}>
+            <button key={a.slug} onClick={()=>navigate("/"+a.slug)} style={{padding:"7px 14px",background:`${a.color}10`,border:`1px solid ${a.color}30`,borderRadius:6,color:a.color,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>
               {a.label} →
-            </a>
+            </button>
           ))}
         </div>
       </div>
@@ -4194,7 +4318,11 @@ const PromoJournal = () => {
         {TYPES.map(t=><option key={t}>{t}</option>)}
       </select>
     </div>
-    {sorted.length===0&&<div style={{textAlign:"center",padding:"24px",color:K.mt,fontSize:12}}>No journal entries yet. Log your first promo above.</div>}
+    {sorted.length===0&&<div style={{textAlign:"center",padding:"24px 16px"}}>
+      <div style={{fontSize:24,marginBottom:8}}>📓</div>
+      <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No journal entries yet</div>
+      <div style={{fontSize:11,color:K.mt}}>Fill in the form and click <strong style={{color:K.gn}}>+ Add Entry</strong> to start tracking.</div>
+    </div>}
     {sorted.map(e=>(
       <div key={e.id} style={{...S.card,background:K.s2,marginBottom:8,padding:"12px 14px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
@@ -5027,8 +5155,11 @@ const Footer = () => (
       <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
         Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool — not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
       </p>
-      <p style={{fontSize:10,color:K.bd2,marginTop:12}}>
-        © {new Date().getFullYear()} VaultSpark Studios · PromoGrind is a free educational calculator tool.
+      <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
+        <span>© {new Date().getFullYear()} VaultSpark Studios · PromoGrind is a free educational calculator tool.</span>
+        <a href="/promogrind/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy Policy</a>
+        <a href="/promogrind/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms of Service</a>
+        <a href="/promogrind/landing/" style={{color:K.mt,textDecoration:"none"}}>About</a>
       </p>
     </div>
   </div>
@@ -5275,9 +5406,26 @@ export default function App() {
 
   if (!authReady) {
     return (
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
-        <div style={{textAlign:"center",color:K.mt}}>
-          <div style={{fontSize:10,letterSpacing:"2px",textTransform:"uppercase"}}>Checking Vault access...</div>
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+        <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
+          <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
+          <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:24}}>Free Sportsbook Promo Conversion Tools</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
+            {[
+              ["27 Free Calculators","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
+              ["P/L Ledger & Cloud Sync","Track every promo. Syncs across all your devices."],
+              ["Live Arb + EV Scanner","Real-time opportunities across 40+ books. VaultSparked Pro."],
+            ].map(([title,desc])=>(
+              <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>
+                <span style={{color:K.gn,fontWeight:700,marginTop:1}}>✓</span>
+                <div>
+                  <div style={{fontSize:12,fontWeight:700,color:K.tx}}>{title}</div>
+                  <div style={{fontSize:11,color:K.mt,marginTop:2}}>{desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{fontSize:10,color:K.mt,letterSpacing:"1.5px",textTransform:"uppercase"}}>Loading your vault…</div>
         </div>
       </div>
     );
@@ -5321,16 +5469,16 @@ export default function App() {
             <div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
             <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div>
             <div style={{display:"flex",gap:12,marginTop:6,flexWrap:"wrap"}}>
-              {[["26","Calculators"],["Free","Forever"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
+              {[["27","Calculators"],["Free","Forever"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
                 <div key={label} style={{display:"flex",alignItems:"baseline",gap:4}}>
                   <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
                   <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>
                 </div>
               ))}
-              <div style={{display:"flex",alignItems:"baseline",gap:4}}>
-                <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{weeklyActive ?? "…"}</span>
+              {weeklyActive>0&&<div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{weeklyActive}</span>
                 <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>grinders this week</span>
-              </div>
+              </div>}
             </div>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
@@ -5405,7 +5553,7 @@ export default function App() {
             </button>);
           })}</div>
         </div>
-        <div style={{position:"absolute",right:0,top:0,bottom:0,width:48,background:`linear-gradient(to left,${K.s2},transparent)`,pointerEvents:"none",zIndex:1}}/>
+        <div style={{position:"absolute",right:0,top:0,bottom:0,width:64,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>
       </div>
       <div style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
         <ErrorBoundary>

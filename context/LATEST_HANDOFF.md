@@ -1,67 +1,67 @@
 # Latest Handoff
 
-Last updated: 2026-03-26 (session 11 — audit #5 + 15 features + push system + 13 SEO pages)
+Last updated: 2026-03-26 (session 12 — full audit + implementation sprint)
 
 This is the authoritative active handoff file for the project.
 
 ---
 
-## What was completed — session 11 (v11.0)
+## What was completed — session 12 (v12.0)
 
-### Audit #5 (v10.0 score: 71 → session 11 projected: 74/100)
-- Feature Completeness: 84 (+6)
-- Revenue & Monetization: 55 (+13) — 7-day trial is the single biggest lift
-- UX/Polish: 76 (+5)
-- SEO: 52 (+6) — 13 static pages live
-- Growth/Retention: 72 (+2)
+### Audit #6 (v11.0 score: 74 → session 12 projected: ~82/100)
+- Feature Completeness: 87 (+3)
+- Revenue & Monetization: 58 (+3) — affiliate link field added
+- UX/Polish: 80 (+4) — loading splash, testimonials, urgency signals
+- SEO: 70 (+18) — 30 static pages live (was 13), Plausible activated
+- Growth/Retention: 78 (+6) — push enable button, UK market
 
-### 15 Features (App.jsx: 5,128 → 5,447 lines; auth.js: 145 → 196 lines)
+### App.jsx Changes (5,447 → ~5,780 lines)
 
-1. **7-Day Free Trial** — `startTrial()` / `isTrialActive()` / `trialDaysLeft()` in auth.js. `getSubscription()` checks trial first. `isPro()` treats 'trial' as pro. Dashboard trial countdown banner. PricingPage "Start Free Trial" CTA.
-2. **DashboardHero** — all-time P/L + this-month stats as hero card at top of Dashboard
-3. **Smart Promo Recommender** — top 3 promos for user's active books; pulls from bookStatus
-4. **Profit Milestone Celebrations** — toast at $100/$250/$500/$1K/$2.5K/$5K (one-time per milestone via `pg_milestones_reached`)
-5. **Promo Countdown Timers** — live 60s-tick countdown on PromoCalendar items with `expires` field
-6. **Calculator Result History** — last 20 results per calc in BonusBet/ProfitBoost/FirstBet (`pg_hist_*`)
-7. **Quick Add Bet from Dashboard** — inline collapsible bet form, no navigation required
-8. **Book Promo Badges in Tracker** — "PROMO TODAY" badge for books with active promos
-9. **System Dark Mode Auto** — first load follows `prefers-color-scheme` when no saved pref
-10. **Opportunity Log CSV Export** — `downloadFile()` export from LiveScanner oppLog
-11. **Multi-Sport Scanner** — toggle pills, fetches and merges results for multiple sports
-12. **Profit Goal Notifications** — toast+push at 25/50/75/100% of goal (`pg_goal_notified_{goal}`)
-13. **Ledger Date Range Filter** — confirmed filterFrom/filterTo already in place
-14. **Share Card V2** — formatted text card in Copy My Setup (books, bankroll, streak, P/L, top tool)
-15. **Feature 8 (Keyboard shortcuts modal)** — not implemented (deprioritized)
+1. **Header stat fixed** — "26 Calculators" → "27 Calculators"
+2. **CompetitorComparison fixed** — "Total 22 Calculators" → "Total 27 Calculators"
+3. **Loading splash screen** — replaces spinner with 3 feature cards + "Checking Vault access…" footer
+4. **Ledger EV% field** — input, stats bar AVG EV% display, CSV export column
+5. **PROMO_SCHED enhanced** — timeMin on all 16 US entries + 5 new UK entries (bet365, Betway, William Hill, Paddy Power, Sky Bet)
+6. **PromoCalendar "Time" column** — displays `~{p.timeMin}m` per promo
+7. **SmartPromoRecommender → "Today's Action Plan"** — urgency badges (3-day expiry), limitedBooks detection, openBets warning, time per promo
+8. **PushEnableBtn** — VaultSparked-gated push opt-in button in DailyDashboard; upserts to push_subscriptions
+9. **Testimonials in PricingPage** — 3 quotes after features list
+10. **Footer legal links** — Privacy Policy / Terms of Service / About
 
-### Push Notification System — completed skeleton
-- `public/sw.js` — `push` + `notificationclick` event handlers added
-- `supabase/functions/send-daily-brief/index.ts` — real VAPID signing via `npm:web-push`; handles payload encryption, expired subscription cleanup (410/404), batch sends
-- `src/sw-register.js` — `subscribeToPush(vapidPublicKey)` utility added
+### Supporting Files
 
-### 8 More Static SEO Landing Pages (13 total)
-New: parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting
-sitemap.xml: 60+ URLs
+- `src/books.js` — `referralLink` field on all 8 books (placeholder URLs pending affiliate approval)
+- `index.html` — Plausible analytics script activated
+- `public/privacy/index.html` — full Privacy Policy page
+- `public/terms/index.html` — full Terms of Service page
+- `public/landing/index.html` — standalone marketing landing page
+
+### Static SEO Pages (30 total, was 13)
+
+**3 New keyword pages:**
+- `public/free-bet-calculator/` → redirects to `#/bonus-bet`
+- `public/deposit-match-calculator/` → redirects to `#/deposit-match`
+- `public/rollover-calculator/` → redirects to `#/rollover`
+- `public/same-game-parlay/` → redirects to `#/sgp-estimator`
+
+**10 State pages (all redirect to `#/bonus-bet`):**
+- bonus-bets-new-york, new-jersey, illinois, michigan, ohio, colorado, pennsylvania, virginia, arizona, tennessee
 
 ### Build
-- Clean: `✓ built in 44.70s`
-- App chunk: 348.54 kB / **95.31 kB gzip**
-- App.jsx: 5,447 lines | auth.js: 196 lines
-
-### New localStorage keys (session 11)
-- `pg_milestones_reached` — array of $ milestones already celebrated
-- `pg_goal_notified_{goal}` — array of % thresholds notified for a given goal amount
-- `pg_hist_bonus-bet`, `pg_hist_profit-boost`, `pg_hist_first-bet` — last 20 calc results
+- Clean: `✓ built in 3.30s`
+- App chunk: 355.72 kB / **97.02 kB gzip**
+- App.jsx: ~5,780 lines | auth.js: 196 lines
 
 ---
 
 ## Current app state
 
-- **Version**: 11.0
-- **App.jsx**: 5,447 lines
-- **Build**: clean — 95.3KB gzip
+- **Version**: 12.0
+- **App.jsx**: ~5,780 lines
+- **Build**: clean — 97.02KB gzip
 - **Calculators**: 27
 - **Tabs**: Home(1), Convert(5), Calculate(23), Track(7), Live(2), Learn(10) = 48 tools
-- **Static SEO pages**: 13
+- **Static SEO pages**: 30
 
 ---
 
@@ -75,20 +75,19 @@ supabase functions deploy send-daily-brief
 # Add VITE_VAPID_PUBLIC_KEY=... to .env
 ```
 
-Then wire `subscribeToPush(import.meta.env.VITE_VAPID_PUBLIC_KEY)` from `src/sw-register.js`
-into App.jsx (after user grants Notification permission) and POST the result to `push_subscriptions`.
+PushEnableBtn in DailyDashboard will handle the browser permission request + subscription upsert automatically once VITE_VAPID_PUBLIC_KEY is set.
 
 ---
 
-## Pending external setup (unchanged)
+## Pending external setup
 
-1. Affiliate links in `src/books.js` (all 8 books = placeholder URLs) — revenue blocker
+1. **Affiliate tracking URLs** — `src/books.js` has `referralLink` field on all 8 books; replace placeholder URLs with real affiliate-approved tracking links once approved by each program
 2. Odds API key → deploy `odds` edge function; change 120s → 300s refresh
 3. Stripe: two products (Monthly $24.99 + Annual $199) → set secrets → deploy `create-checkout` + `stripe-webhook`
 4. Resend key → deploy `weekly-digest` edge function
-5. Plausible: uncomment line in `index.html`
+5. ✅ Plausible: activated in `index.html`
 6. Google + Discord OAuth in Supabase dashboard
-7. Google Search Console: submit updated sitemap (60+ URLs now)
+7. Google Search Console: submit updated sitemap (99+ URLs)
 8. VAPID keys → deploy `send-daily-brief` (see above)
 
 ---
@@ -100,7 +99,7 @@ into App.jsx (after user grants Notification permission) and POST the result to 
 - `syncAppData(d)` — ONLY correct way to save from Track components
 - `useCalcMemory(key, defaults)` — localStorage + URL param init for calculators
 - `DEFAULT_SLUG = "dashboard"` — Home tab is default landing
-- `isPro()` in auth.js now accepts `pro`, `vault_sparked`, AND `trial` status
+- `isPro()` in auth.js accepts `pro`, `vault_sparked`, AND `trial` status
 - `startTrial()` in auth.js — sets trial_started_at in Supabase user metadata (idempotent)
 - `subscribeToPush(vapidPublicKey)` in sw-register.js — returns PushSubscription for storage
 - Static SEO pages: `public/{slug}/index.html` pattern — real HTML + instant JS redirect

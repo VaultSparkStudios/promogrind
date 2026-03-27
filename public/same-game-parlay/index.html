@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Same Game Parlay Calculator — SGP Odds & EV Estimator | PromoGrind</title>
+  <meta name="description" content="Same game parlay calculator: estimate true SGP odds, detect vig, and identify when same game parlay boosts from DraftKings, FanDuel, or BetMGM offer positive expected value.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vaultsparkstudios.com/promogrind/same-game-parlay/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <script>window.location.replace('https://vaultsparkstudios.com/promogrind/#/sgp-estimator');</script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
+    p { margin-bottom: 1rem; color: #cbd5e1; }
+    .cta { display: inline-block; margin: 1.5rem 0; padding: 0.75rem 1.5rem; background: #4ade80; color: #0a0e17; font-weight: 700; border-radius: 6px; text-decoration: none; }
+    .faq-item { margin-bottom: 1.5rem; }
+    .faq-item dt { font-weight: 700; color: #e2e8f0; margin-bottom: 0.25rem; }
+    .faq-item dd { color: #cbd5e1; }
+  </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Same Game Parlay Calculator","url":"https://vaultsparkstudios.com/promogrind/#/sgp-estimator","description":"Estimate true SGP odds and EV for same game parlay bets and profit boosts.","applicationCategory":"FinanceApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+  <div class="container">
+    <h1>Same Game Parlay Calculator</h1>
+    <p>The PromoGrind SGP Estimator calculates the fair odds of a same game parlay and compares them to the sportsbook's posted price — revealing the true vig and whether an SGP boost puts you in positive EV territory.</p>
+    <a class="cta" href="https://vaultsparkstudios.com/promogrind/#/sgp-estimator">Use the SGP Calculator →</a>
+
+    <h2>How Are SGP Odds Calculated?</h2>
+    <p>A same game parlay combines correlated legs from the same event (e.g., a QB to throw 300+ yards and his team to win). Standard parlay math multiplies independent probabilities, but SGPs involve correlation adjustments — the book's proprietary correlation model is unknown. The estimator uses a conservative independence assumption to give you a baseline fair-odds floor.</p>
+
+    <h2>When Are SGP Boosts +EV?</h2>
+    <p>SGP profit boosts (e.g., "25% profit boost on any 3-leg SGP") can push the boosted odds above fair value. Enter the fair odds, your stake, and the boost percentage — the calculator shows whether the boosted payout exceeds the expected cost of the bet. Most SGP boosts have max win caps that also affect EV; those are factored in.</p>
+
+    <h2>SGP vs. Regular Parlay: Key Differences</h2>
+    <p>Regular parlays use published straight-bet odds with a fixed parlay payout table. SGPs use the book's internal correlation model — which typically results in shorter odds than a regular parlay would give you on the same legs. That's why comparing the SGP price to the regular parlay price is a useful vig check.</p>
+
+    <h2>Frequently Asked Questions</h2>
+    <dl>
+      <div class="faq-item"><dt>Which sportsbooks offer same game parlays?</dt><dd>DraftKings, FanDuel, BetMGM, Caesars, bet365, and ESPN BET all offer SGPs. Each book uses a different correlation model, so the same leg combination may be priced differently across books — always shop the line.</dd></div>
+      <div class="faq-item"><dt>Can I hedge an SGP?</dt><dd>Hedging an SGP after it goes live (with legs hitting) is a classic strategy. Use the PromoGrind Parlay Hedge Calculator to determine the exact hedge stake needed to guarantee profit or minimize loss on a live SGP.</dd></div>
+      <div class="faq-item"><dt>Are SGPs good for matched betting?</dt><dd>Generally no — the correlation penalty makes SGPs worse than straight bets for matched betting purposes. However, SGP boosts can create +EV opportunities when the promotion exceeds the correlation discount.</dd></div>
+    </dl>
+  </div>
+</body>
+</html>

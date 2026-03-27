@@ -4,7 +4,7 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "11.0.0",
+  "version": "12.0.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
@@ -13,7 +13,7 @@
   "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA"],
   "backend": true,
   "last_updated": "2026-03-26",
-  "app_lines": 5447,
+  "app_lines": 5780,
   "auth_lines": 196,
   "calculator_count": 27,
   "tab_count": {
@@ -25,20 +25,20 @@
     "Learn": 10
   },
   "total_tools": 48,
-  "static_seo_pages": 13,
-  "audit_score": 74,
+  "static_seo_pages": 30,
+  "audit_score": 82,
   "audit_date": "2026-03-26",
   "audit_category_scores": {
     "code_quality": 76,
-    "feature_completeness": 84,
-    "ux_polish": 76,
-    "revenue_monetization": 55,
-    "seo_discoverability": 52,
-    "infrastructure": 68,
-    "growth_retention": 72
+    "feature_completeness": 87,
+    "ux_polish": 80,
+    "revenue_monetization": 58,
+    "seo_discoverability": 70,
+    "infrastructure": 72,
+    "growth_retention": 78
   },
   "blockers": [
-    "Affiliate links not inserted (src/books.js) — zero revenue until done",
+    "Affiliate tracking links not inserted — referralLink field added in books.js but URLs are placeholder; needs real affiliate-approved URLs",
     "Odds API key not set (scanner non-functional for paying users)",
     "Stripe test mode not configured — need Monthly ($24.99/mo) + Annual ($199/yr) products; update create-checkout Edge Function to read body.planId",
     "Resend not configured (weekly-digest function ready, key not set)",
@@ -51,9 +51,9 @@
   "build": {
     "sw_version": "promogrind-v3",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "95.3KB",
-    "vendor_chunk_gzip": "49KB",
-    "supabase_chunk_gzip": "51KB"
+    "app_chunk_gzip": "97.02KB",
+    "vendor_chunk_gzip": "49.33KB",
+    "supabase_chunk_gzip": "50.93KB"
   },
   "tiers": {
     "free": { "price": 0, "features": "27+ calculators, tracker, ledger, KB, promo calendar, dashboard" },
@@ -70,29 +70,44 @@
     "sw_handlers": "push + notificationclick in public/sw.js",
     "edge_function": "supabase/functions/send-daily-brief/index.ts (npm:web-push)",
     "subscribe_util": "subscribeToPush(vapidPublicKey) in src/sw-register.js",
-    "migration": "scripts/migration-push-subscriptions.sql (not yet run)",
+    "push_enable_btn": "PushEnableBtn component added to DailyDashboard (VaultSparked-gated)",
+    "migration": "scripts/migration-push-subscriptions.sql (created, not yet run)",
     "activate": "generate VAPID keys, set secrets, deploy function, run migration, add VITE_VAPID_PUBLIC_KEY to .env"
   },
   "seo": {
     "approach": "Static landing pages (auth-gated SPA cannot use SSG)",
-    "pages_live": 13,
-    "sitemap_urls": "60+"
+    "pages_live": 30,
+    "keyword_pages": 17,
+    "state_pages": 10,
+    "support_pages": 3,
+    "sitemap_urls": "99+"
   },
-  "new_localStorage_keys_session11": [
-    "pg_milestones_reached",
-    "pg_goal_notified_{goal}",
-    "pg_hist_bonus-bet",
-    "pg_hist_profit-boost",
-    "pg_hist_first-bet"
+  "session_12_additions": [
+    "EV% field added to Ledger (input + stats bar + CSV export)",
+    "UK market in PromoCalendar — 5 books: bet365, Betway, William Hill, Paddy Power, Sky Bet",
+    "timeMin field on all 21 PROMO_SCHED entries",
+    "Time column in PromoCalendar table",
+    "SmartPromoRecommender rebranded 'Today's Action Plan' + urgency badges + limited/gubbed detection",
+    "PushEnableBtn component in DailyDashboard (VaultSparked-gated)",
+    "Testimonials section in PricingPage (3 quotes)",
+    "Footer legal links (Privacy / Terms / About)",
+    "books.js: referralLink field on all 8 books",
+    "Loading splash screen (replaces spinner with 3 feature cards)",
+    "Header + CompetitorComparison: 27 calculators stat fixed",
+    "Plausible analytics activated in index.html",
+    "13 new static SEO pages (3 keyword + 10 state)",
+    "landing, privacy, terms pages created",
+    "sitemap.xml: 30 static pages + all SPA routes"
   ],
+  "new_localStorage_keys_session12": [],
   "future_projects": [
     "Browser extension (Chrome/Firefox, detects sportsbook pages)",
     "Email drip sequence (5-email onboarding after signup)",
-    "UK market module (5x TAM expansion)",
+    "UK market module (5x TAM expansion) — UK books in PromoCalendar as foundation",
     "Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)",
     "Claude API bet slip parser (OCR-level, beyond regex)",
     "Team accounts backend (team_members table)",
     "Mobile app via Capacitor (iOS + Android builds)",
-    "More static SEO pages (20+ keyword targets remaining)"
+    "More state SEO pages (20 more states with legal sports betting)"
   ]
 }

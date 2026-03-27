@@ -74,4 +74,27 @@
   <url><loc>https://vaultsparkstudios.com/promogrind/vs-competitors</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/promo-arb-finder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
+  <!-- Marketing & legal pages -->
+  <url><loc>https://vaultsparkstudios.com/promogrind/landing/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/privacy/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/terms/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
+  <!-- Additional keyword SEO pages -->
+  <url><loc>https://vaultsparkstudios.com/promogrind/free-bet-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/deposit-match-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/rollover-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/same-game-parlay/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- State-specific landing pages -->
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-new-york/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-new-jersey/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-illinois/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-michigan/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-ohio/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-colorado/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-pennsylvania/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-virginia/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-arizona/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-tennessee/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
 </urlset>

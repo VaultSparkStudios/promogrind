@@ -2,41 +2,41 @@
   ═══════════════════════════════════════════════════════════
   AFFILIATE LINK SETUP INSTRUCTIONS
   ═══════════════════════════════════════════════════════════
-  
-  To monetize this tool, replace the `link` values below with 
+
+  To monetize this tool, replace the `link` values below with
   your affiliate tracking URLs. Here's how to get them:
-  
+
   1. DraftKings Partners: https://www.draftkings.com/partners
      - Apply for their affiliate program
      - CPA: $75+ per depositing user
      - They'll give you a unique tracking URL
-  
+
   2. FanDuel Partners: https://www.fanduel.com/partners
      - Apply at partners.fanduel.com
      - CPA: $25-$35 or 35% RevShare for 730 days
      - Get your tracking link from the dashboard
-  
+
   3. BetMGM Partners: https://www.betmgmpartners.com
      - Apply for their program
      - CPA: $50+ per depositing user
      - Dashboard provides tracking URLs
-  
+
   4. Caesars Affiliates: Apply through their partner page
      - Revenue share model available
-  
+
   5. bet365 Partners: https://www.bet365partners.com
      - 30% of net profit RevShare
-  
+
   ALTERNATIVE: Join an affiliate network like:
   - Income Access (manages multiple book programs)
   - Gambling.com Group
   - Better Collective
   These handle compliance/licensing and give you links for multiple books.
-  
+
   SIMPLER OPTION: Use your personal referral codes instead.
   Each sportsbook has a "Refer a Friend" feature in the app.
-  This doesn't require affiliate licensing — you just share 
-  your personal referral link and both you and your friend 
+  This doesn't require affiliate licensing — you just share
+  your personal referral link and both you and your friend
   get bonus bets ($25-$100 per referral per book).
   ═══════════════════════════════════════════════════════════
 */
@@ -52,6 +52,7 @@ export const BOOKS = [
     // Replace with your affiliate link:
     link: "https://www.draftkings.com",
     referral: "Up to $100 bonus bet per friend referred",
+    referralLink: "https://www.draftkings.com/refer-a-friend",
     color: "#53d769",
   },
   {
@@ -63,6 +64,7 @@ export const BOOKS = [
     recurring: "Daily boosts, profit boost tokens, same game parlay+",
     link: "https://www.fanduel.com",
     referral: "Up to $75 bonus bet per friend",
+    referralLink: "https://www.fanduel.com/referral",
     color: "#1493ff",
   },
   {
@@ -74,6 +76,7 @@ export const BOOKS = [
     recurring: "Weekly deposit bonuses (25% up to $100), daily boosts",
     link: "https://www.betmgm.com",
     referral: "$100 per friend, up to 20/month",
+    referralLink: "https://sports.betmgm.com/en/sports/refer-a-friend",
     color: "#c4a44a",
   },
   {
@@ -85,6 +88,7 @@ export const BOOKS = [
     recurring: "Rotating profit boosts, odds boosts, parlay insurance",
     link: "https://www.caesars.com/sportsbook-and-casino",
     referral: "5,000 Reward Credits (~$50) per friend",
+    referralLink: "https://www.caesars.com/sportsbook-and-casino/refer-a-friend",
     color: "#1a472a",
   },
   {
@@ -96,6 +100,7 @@ export const BOOKS = [
     recurring: "Early payout offers, multi-sport parlay boosts",
     link: "https://www.bet365.com",
     referral: "Varies by state",
+    referralLink: "https://www.bet365.com/referral",
     color: "#027b5b",
   },
   {
@@ -107,6 +112,7 @@ export const BOOKS = [
     recurring: "Weekly profit boosts, featured parlay boosts",
     link: "https://www.espnbet.com",
     referral: "Varies",
+    referralLink: "https://www.espnbet.com/refer-a-friend",
     color: "#d00",
   },
   {
@@ -118,6 +124,7 @@ export const BOOKS = [
     recurring: "Daily FanCash bonuses, loyalty rewards",
     link: "https://www.fanatics.com/sportsbook",
     referral: "Varies by state",
+    referralLink: "https://www.fanaticssportsbook.com/refer-a-friend",
     color: "#e44d26",
   },
   {
@@ -129,6 +136,7 @@ export const BOOKS = [
     recurring: "iRush rewards, profit boosts, 2nd chance parlays",
     link: "https://www.betrivers.com",
     referral: "$100 per friend ($50 deposit req.)",
+    referralLink: "https://www.betrivers.com/refer-a-friend",
     color: "#0066cc",
   },
 ];
