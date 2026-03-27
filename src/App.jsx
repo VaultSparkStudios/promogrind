@@ -255,6 +255,9 @@ const BonusBet = () => {
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
   const [bbUpsellDismissed, setBbUpsellDismissed] = useState(() => { try { return !!localStorage.getItem('pg_upsell_bb_dismissed'); } catch { return true; } });
   const [rCopied, setRCopied] = useState(false);
+  const fileInputRef = useRef(null);
+  const [scanLoading, setScanLoading] = useState(false);
+  const [scanResult, setScanResult] = useState(null);
   const bbCount = useMemo(()=>{ try{return parseInt(localStorage.getItem('pg_upsell_bb_count')||'0');}catch{return 0;} },[r]);
   const applyNL = () => {
     const p = parseNL(nlText);
@@ -267,6 +270,26 @@ const BonusBet = () => {
   useMemo(()=>{
     if(r&&parseFloat(r.g)>0){ try{ const c=parseInt(localStorage.getItem('pg_upsell_bb_count')||'0')+1; localStorage.setItem('pg_upsell_bb_count',String(c)); }catch{} }
   },[r?.g]);
+  const scanBetSlip = async (file) => {
+    setScanLoading(true); setScanResult(null);
+    try {
+      const toBase64 = f => new Promise((res,rej)=>{ const rd=new FileReader(); rd.onload=()=>res(rd.result.split(',')[1]); rd.onerror=rej; rd.readAsDataURL(f); });
+      const base64 = await toBase64(file);
+      const { data: { session } } = await supabase.auth.getSession();
+      const { data: parsed, error } = await supabase.functions.invoke('parse-bet-slip', {
+        headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
+        body: { imageBase64: base64, mimeType: file.type },
+      });
+      if (error) throw error;
+      if (parsed) {
+        if (parsed.stake) setSz(String(parsed.stake));
+        if (parsed.odds) setBo(String(parsed.odds));
+        if (parsed.hedgeOdds) setHo(String(parsed.hedgeOdds));
+        setScanResult(parsed);
+      }
+    } catch(e) { console.error('[BetSlipScan]', e); setScanResult({ error: true }); }
+    finally { setScanLoading(false); }
+  };
   const copyResult = () => {
     if(!r) return;
     const text = `📊 Bonus Bet Converter — PromoGrind\nBonus Size: $${sz} | Bonus Odds: ${bo} | Hedge Odds: ${ho}\nHedge Stake: $${r.hs}\nGuaranteed Profit: $${r.g} (${r.r}% conversion)\npromogrind.vaultsparkstudios.com`;
@@ -279,7 +302,11 @@ const BonusBet = () => {
       <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
         <textarea value={nlText} onChange={e=>{setNlText(e.target.value);setNlPreview(parseNL(e.target.value));}} placeholder='Try: "I have a $200 bonus bet at +350, hedge at -400"' style={{...S.input,height:48,resize:"none",flex:1,lineHeight:1.5,fontSize:12}}/>
         <button onClick={applyNL} style={{padding:"8px 14px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Parse</button>
+        <input ref={fileInputRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>{if(e.target.files?.[0])scanBetSlip(e.target.files[0]);e.target.value='';}}/>
+        <button onClick={()=>fileInputRef.current?.click()} disabled={scanLoading} title="Upload a bet slip screenshot — Claude AI will auto-fill the fields" style={{padding:"8px 12px",background:scanLoading?`${K.mt}15`:`${K.pp}15`,border:`1px solid ${scanLoading?K.mt:K.pp}30`,borderRadius:4,color:scanLoading?K.mt:K.pp,fontSize:10,cursor:scanLoading?"not-allowed":"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{scanLoading?"Scanning…":"📷 Scan"}</button>
       </div>
+      {scanResult&&!scanResult.error&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>✓ Scanned: {[scanResult.book,scanResult.betType?.replace(/_/g,' '),scanResult.odds&&`${scanResult.odds} odds`,scanResult.stake&&`$${scanResult.stake} stake`].filter(Boolean).join(' · ')}</div>}
+      {scanResult?.error&&<div style={{fontSize:10,color:K.rd,marginTop:4}}>⚠ Scan failed — try entering manually or use a clearer screenshot</div>}
       {nlPreview&&(nlPreview.sz||nlPreview.bo||nlPreview.ho)&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>Detected: {[nlPreview.sz&&`$${nlPreview.sz} bonus`,nlPreview.bo&&`${nlPreview.bo} odds`,nlPreview.ho&&`${nlPreview.ho} hedge`].filter(Boolean).join(", ")}</div>}
     </div>
     <div style={S.row}><In l="Bonus Bet Size" v={sz} set={setSz} pre="$" ph="200"/><In l="Bonus Bet Odds" v={bo} set={setBo} ph="+300"/><In l="Hedge Odds" v={ho} set={setHo} ph="-350"/></div>
@@ -3200,6 +3227,7 @@ const PromoCalendar = () => {
   const [filterDay, setFilterDay] = useState("All");
   const [filterGrade, setFilterGrade] = useState("All");
   const [filterComplexity, setFilterComplexity] = useState("All");
+  const [marketFilter, setMarketFilter] = useState("All");
   const [now, setNow] = useState(()=>Date.now());
   useEffect(()=>{
     const id=setInterval(()=>setNow(Date.now()),60000);
@@ -3217,7 +3245,12 @@ const PromoCalendar = () => {
     setAlertPrefs(next);
     try{localStorage.setItem('pg_alert_prefs',JSON.stringify(next));}catch{}
   };
-  const filtered = useMemo(()=>PROMO_SCHED.filter(p=>(filterBook==="All"||p.book===filterBook)&&(filterDay==="All"||p.day===filterDay)&&(filterGrade==="All"||p.grade===filterGrade)&&(filterComplexity==="All"||p.complexity===filterComplexity)),[filterBook,filterDay,filterGrade,filterComplexity]);
+  const UK_BOOKS_SET = new Set(["bet365 UK","Betway UK","William Hill","Paddy Power","Sky Bet"]);
+  const filtered = useMemo(()=>PROMO_SCHED.filter(p=>{
+    if(marketFilter==="US"&&UK_BOOKS_SET.has(p.book)) return false;
+    if(marketFilter==="UK"&&!UK_BOOKS_SET.has(p.book)) return false;
+    return (filterBook==="All"||p.book===filterBook)&&(filterDay==="All"||p.day===filterDay)&&(filterGrade==="All"||p.grade===filterGrade)&&(filterComplexity==="All"||p.complexity===filterComplexity);
+  }),[marketFilter,filterBook,filterDay,filterGrade,filterComplexity]);
   const typeColor={Recurring:K.gn,Weekly:K.ac,Weekend:K.pp};
   const complexityColor={Easy:K.gn,Medium:K.yl,Hard:K.rd};
   const trackValue = (promo, value) => {
@@ -3244,10 +3277,20 @@ const PromoCalendar = () => {
   };
   return (<div><div style={S.card}><Tl t="Promo Calendar" badge="RECURRING $$$" bc={K.gn} shareable/>
     <div style={{...S.note(K.ac),marginBottom:12}}>These are the predictable recurring promos across all major books. Stack them daily for $150–450/mo in passive profit on top of welcome bonuses.</div>
+    <div style={{display:"flex",gap:6,marginBottom:10,alignItems:"center",flexWrap:"wrap"}}>
+      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",whiteSpace:"nowrap"}}>Market:</span>
+      {["All","US","UK"].map(m=>(
+        <button key={m} onClick={()=>{setMarketFilter(m);setFilterBook("All");}} style={{padding:"4px 12px",background:marketFilter===m?K.ac:"transparent",border:`1px solid ${marketFilter===m?K.ac:K.bd2}`,borderRadius:50,color:marketFilter===m?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600,whiteSpace:"nowrap"}}>
+          {m==="UK"?"🇬🇧 UK":m==="US"?"🇺🇸 US":"🌎 All"}
+        </button>
+      ))}
+      {marketFilter==="UK"&&<span style={{fontSize:9,color:K.pp,marginLeft:4}}>bet365 · Betway · William Hill · Paddy Power · Sky Bet</span>}
+      {marketFilter==="US"&&<span style={{fontSize:9,color:K.ac,marginLeft:4}}>DraftKings · FanDuel · BetMGM · Caesars · ESPN BET · Fanatics · BetRivers</span>}
+    </div>
     <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,alignItems:"center"}}>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
         <option value="All">All Books</option>
-        {[...new Set(PROMO_SCHED.map(p=>p.book))].map(b=><option key={b}>{b}</option>)}
+        {[...new Set(PROMO_SCHED.filter(p=>marketFilter==="All"||(marketFilter==="UK"?UK_BOOKS_SET.has(p.book):!UK_BOOKS_SET.has(p.book))).map(p=>p.book))].map(b=><option key={b}>{b}</option>)}
       </select>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterDay} onChange={e=>setFilterDay(e.target.value)}>
         <option value="All">All Days</option>

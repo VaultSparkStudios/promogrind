@@ -85,7 +85,7 @@
   <url><loc>https://vaultsparkstudios.com/promogrind/rollover-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/same-game-parlay/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-  <!-- State-specific landing pages -->
+  <!-- State-specific landing pages (US) -->
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-new-york/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-new-jersey/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-illinois/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -96,5 +96,23 @@
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-virginia/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-arizona/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-tennessee/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- UK market pages -->
+  <url><loc>https://vaultsparkstudios.com/promogrind/matched-betting-uk/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-uk/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-london/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-manchester/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-birmingham/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-glasgow/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-edinburgh/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-liverpool/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Blog -->
+  <url><loc>https://vaultsparkstudios.com/promogrind/blog/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/blog/how-matched-betting-works/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/blog/best-sportsbook-promos-2026/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/blog/draftkings-vs-fanduel-promos/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/blog/sports-betting-taxes-guide/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vaultsparkstudios.com/promogrind/blog/arbitrage-betting-explained/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
 </urlset>

@@ -4,16 +4,17 @@
   "medium": "web-app",
   "status": "active",
   "stage": "pre-launch",
-  "version": "12.0.0",
+  "version": "13.0.0",
   "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
   "repo": "VaultSparkStudios/promogrind",
   "public_url": "https://vaultsparkstudios.com/promogrind/",
-  "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA"],
+  "future_url": "https://promogrind.com/ (CNAME ready, DNS not yet configured)",
+  "tech_stack": ["React 18", "Vite 6", "Vanilla CSS", "Supabase", "PWA", "Chrome Extension"],
   "backend": true,
   "last_updated": "2026-03-26",
-  "app_lines": 5780,
+  "app_lines": 5870,
   "auth_lines": 196,
   "calculator_count": 27,
   "tab_count": {
@@ -25,40 +26,44 @@
     "Learn": 10
   },
   "total_tools": 48,
-  "static_seo_pages": 30,
-  "audit_score": 82,
+  "static_seo_pages": 45,
+  "blog_posts": 5,
+  "audit_score": 90,
   "audit_date": "2026-03-26",
   "audit_category_scores": {
-    "code_quality": 76,
-    "feature_completeness": 87,
-    "ux_polish": 80,
+    "code_quality": 74,
+    "feature_completeness": 92,
+    "ux_polish": 82,
     "revenue_monetization": 58,
-    "seo_discoverability": 70,
+    "seo_discoverability": 80,
     "infrastructure": 72,
-    "growth_retention": 78
+    "growth_retention": 82
   },
   "blockers": [
-    "Affiliate tracking links not inserted — referralLink field added in books.js but URLs are placeholder; needs real affiliate-approved URLs",
-    "Odds API key not set (scanner non-functional for paying users)",
-    "Stripe test mode not configured — need Monthly ($24.99/mo) + Annual ($199/yr) products; update create-checkout Edge Function to read body.planId",
-    "Resend not configured (weekly-digest function ready, key not set)",
+    "Affiliate tracking links not inserted — referralLink field in books.js has placeholder URLs; needs real affiliate-approved links",
+    "Odds API key not set (Live Scanner non-functional for VaultSparked users)",
+    "Stripe not configured — Monthly ($24.99) + Annual ($199) products needed; create-checkout Edge Function ready",
+    "Resend not configured — weekly-digest function ready, key not set",
     "Stripe live mode blocked until LLC + EIN",
-    "VAPID keys not generated — push notifications non-functional server-side"
+    "VAPID keys not generated — push notifications non-functional",
+    "ANTHROPIC_API_KEY not set — parse-bet-slip Edge Function deployed but inactive",
+    "parse-bet-slip not deployed — needs `supabase functions deploy parse-bet-slip`",
+    "Chrome extension not submitted to Web Store — load unpacked locally to test"
   ],
-  "next_milestone": "Affiliate links wired + Odds API activated = first revenue-capable deploy",
-  "domain": "vaultsparkstudios.com/promogrind/ (permanent, no separate domain)",
+  "next_milestone": "Affiliate links + Odds API + Stripe = first revenue-capable deploy",
+  "domain": "vaultsparkstudios.com/promogrind/ (current) — CNAME file ready for promogrind.com migration",
   "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
   "build": {
     "sw_version": "promogrind-v3",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "97.02KB",
+    "app_chunk_gzip": "98.41KB",
     "vendor_chunk_gzip": "49.33KB",
     "supabase_chunk_gzip": "50.93KB"
   },
   "tiers": {
     "free": { "price": 0, "features": "27+ calculators, tracker, ledger, KB, promo calendar, dashboard" },
     "trial": { "duration_days": 7, "features": "Full VaultSparked access, no credit card", "implementation": "trial_started_at in user metadata, isPro() returns true during trial" },
-    "vaultsparked": { "price_monthly": 24.99, "price_annual": 199, "features": "live scanner, push alerts, daily briefing, all pro tools" },
+    "vaultsparked": { "price_monthly": 24.99, "price_annual": 199, "features": "live scanner, push alerts, daily briefing, AI bet slip scanner, all pro tools" },
     "team": { "price": 49.99, "status": "waitlist", "features": "shared vault, split P/L, all Pro" }
   },
   "sync": {
@@ -70,52 +75,82 @@
     "sw_handlers": "push + notificationclick in public/sw.js",
     "edge_function": "supabase/functions/send-daily-brief/index.ts (npm:web-push)",
     "subscribe_util": "subscribeToPush(vapidPublicKey) in src/sw-register.js",
-    "push_enable_btn": "PushEnableBtn component added to DailyDashboard (VaultSparked-gated)",
+    "push_enable_btn": "PushEnableBtn component in DailyDashboard (VaultSparked-gated)",
     "migration": "scripts/migration-push-subscriptions.sql (created, not yet run)",
-    "activate": "generate VAPID keys, set secrets, deploy function, run migration, add VITE_VAPID_PUBLIC_KEY to .env"
+    "activate": "generate VAPID keys → set secrets → deploy function → run migration → add VITE_VAPID_PUBLIC_KEY to .env"
+  },
+  "chrome_extension": {
+    "status": "ready to load unpacked",
+    "path": "extension/",
+    "manifest_version": 3,
+    "supported_books": ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "ESPN BET", "Fanatics", "BetRivers", "William Hill", "Paddy Power", "Sky Bet", "Betway"],
+    "features": ["floating sidebar trigger on sportsbook pages", "book detection", "contextual calculator suggestions in popup"],
+    "activate": "Chrome → chrome://extensions → Load unpacked → select extension/ folder"
+  },
+  "ai_bet_slip_parser": {
+    "status": "built, not deployed",
+    "edge_function": "supabase/functions/parse-bet-slip/index.ts",
+    "model": "claude-haiku-4-5-20251001 (vision)",
+    "returns": "betType, stake, odds, hedgeOdds, boostPct, maxExtra, book, confidence",
+    "ui": "📷 Scan button in BonusBet calculator beside Parse button",
+    "activate": "supabase functions deploy parse-bet-slip + supabase secrets set ANTHROPIC_API_KEY=sk-ant-..."
   },
   "seo": {
     "approach": "Static landing pages (auth-gated SPA cannot use SSG)",
-    "pages_live": 30,
+    "pages_live": 45,
     "keyword_pages": 17,
-    "state_pages": 10,
-    "support_pages": 3,
-    "sitemap_urls": "99+"
+    "us_state_pages": 10,
+    "uk_pages": 8,
+    "blog_posts": 5,
+    "support_pages": 5,
+    "sitemap_urls": "131+"
   },
-  "session_12_additions": [
-    "EV% field added to Ledger (input + stats bar + CSV export)",
-    "UK market in PromoCalendar — 5 books: bet365, Betway, William Hill, Paddy Power, Sky Bet",
-    "timeMin field on all 21 PROMO_SCHED entries",
-    "Time column in PromoCalendar table",
-    "SmartPromoRecommender rebranded 'Today's Action Plan' + urgency badges + limited/gubbed detection",
-    "PushEnableBtn component in DailyDashboard (VaultSparked-gated)",
-    "Testimonials section in PricingPage (3 quotes)",
-    "Footer legal links (Privacy / Terms / About)",
-    "books.js: referralLink field on all 8 books",
-    "Loading splash screen (replaces spinner with 3 feature cards)",
-    "Header + CompetitorComparison: 27 calculators stat fixed",
-    "Plausible analytics activated in index.html",
-    "13 new static SEO pages (3 keyword + 10 state)",
-    "landing, privacy, terms pages created",
-    "sitemap.xml: 30 static pages + all SPA routes"
+  "blog": {
+    "path": "public/blog/",
+    "posts": [
+      "how-matched-betting-works",
+      "best-sportsbook-promos-2026",
+      "draftkings-vs-fanduel-promos",
+      "sports-betting-taxes-guide",
+      "arbitrage-betting-explained"
+    ]
+  },
+  "uk_market": {
+    "seo_pages": ["matched-betting-uk", "bonus-bets-uk", "bonus-bets-london", "bonus-bets-manchester", "bonus-bets-birmingham", "bonus-bets-glasgow", "bonus-bets-edinburgh", "bonus-bets-liverpool"],
+    "promo_calendar": "UK market toggle (🌎/🇺🇸/🇬🇧) added to PromoCalendar — filters PROMO_SCHED to US or UK books",
+    "uk_books_in_app": ["bet365 UK", "Betway UK", "William Hill", "Paddy Power", "Sky Bet"]
+  },
+  "domain_migration": {
+    "cname_file": "public/CNAME = promogrind.com",
+    "status": "prepared — DNS not yet configured",
+    "steps": ["1. Buy promogrind.com", "2. Add CNAME DNS record pointing to vaultsparkstudios.github.io", "3. GitHub Pages auto-serves at promogrind.com", "4. Update all SEO page redirect scripts + canonical URLs from /promogrind/ to /", "5. Update sitemap base URL", "6. 301 redirect from old URLs (GitHub Pages handles this automatically)"]
+  },
+  "session_13_additions": [
+    "Chrome extension (MV3) — extension/ directory, 5 files",
+    "AI bet slip parser — supabase/functions/parse-bet-slip/ using Claude claude-haiku vision",
+    "📷 Scan button in BonusBet calculator — auto-fills fields from screenshot",
+    "PromoCalendar market toggle — 🌎/🇺🇸/🇬🇧 filter for US vs UK promos",
+    "UK SEO pages: matched-betting-uk, bonus-bets-uk, 6 city pages (London/Manchester/Birmingham/Glasgow/Edinburgh/Liverpool)",
+    "Content blog: public/blog/ with index + 5 full posts",
+    "CNAME file for promogrind.com domain migration prep",
+    "sitemap.xml: 131+ URLs (added 8 UK + 6 blog + blog index)"
   ],
-  "new_localStorage_keys_session12": [],
-  "silScore": 5,
+  "silScore": 6,
   "silAvg3": null,
-  "silVelocity": 0,
-  "silDebt": "→",
+  "silVelocity": 1,
+  "silDebt": "↑",
   "silLastSession": "2026-03-26",
-  "ignisScore": null,
-  "testsTotal": null,
-  "lastDeployStatus": "deployed",
+  "lastDeployStatus": "ready to deploy",
   "future_projects": [
-    "Browser extension (Chrome/Firefox, detects sportsbook pages)",
-    "Email drip sequence (5-email onboarding after signup)",
-    "UK market module (5x TAM expansion) — UK books in PromoCalendar as foundation",
+    "Email drip sequence (5-email onboarding after signup) — Resend infra ready",
+    "Taxes calculator tool (in-app, reads from Ledger)",
     "Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)",
-    "Claude API bet slip parser (OCR-level, beyond regex)",
     "Team accounts backend (team_members table)",
     "Mobile app via Capacitor (iOS + Android builds)",
-    "More state SEO pages (20 more states with legal sports betting)"
+    "More state SEO pages (20 more US states with legal sports betting)",
+    "More UK city pages (Leeds, Bristol, Newcastle, Cardiff, Belfast)",
+    "Firefox extension (port from Chrome MV3)",
+    "Chrome Web Store submission for extension",
+    "Social share cards from calculator results (viral loop)"
   ]
 }

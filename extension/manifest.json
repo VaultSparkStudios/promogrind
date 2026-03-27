@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "PromoGrind — Sportsbook Calculator",
+  "short_name": "PromoGrind",
+  "description": "Instant bonus bet, profit boost, and arbitrage calculators while you're on any sportsbook. Lock in guaranteed profit without switching tabs.",
+  "version": "1.0.0",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": [
+    "*://*.draftkings.com/*",
+    "*://*.fanduel.com/*",
+    "*://*.betmgm.com/*",
+    "*://sports.betmgm.com/*",
+    "*://*.caesars.com/*",
+    "*://*.bet365.com/*",
+    "*://*.espnbet.com/*",
+    "*://*.fanaticssportsbook.com/*",
+    "*://*.betrivers.com/*",
+    "*://*.williamhill.com/*",
+    "*://*.paddypower.com/*",
+    "*://*.skybet.com/*",
+    "*://*.betway.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.draftkings.com/*",
+        "*://*.fanduel.com/*",
+        "*://sports.betmgm.com/*",
+        "*://*.betmgm.com/*",
+        "*://*.caesars.com/sportsbook-and-casino/*",
+        "*://*.bet365.com/*",
+        "*://*.espnbet.com/*",
+        "*://*.fanaticssportsbook.com/*",
+        "*://*.betrivers.com/*",
+        "*://*.williamhill.com/*",
+        "*://*.paddypower.com/*",
+        "*://*.skybet.com/*",
+        "*://*.betway.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PromoGrind Calculator"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
