@@ -168,9 +168,27 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen: Immediate implementation with zero schema changes. Engaging enough for gamification. Can upgrade to user-chosen display names later.
 - Follow-up: Add optional display_name field to profiles table if users request it.
 
+### 2026-03-27 - Re-enable light mode as settings toggle (v22)
+
+- Status: Decided + implemented (session 22)
+- Context: KD/KL dual palettes + getter-based S were infrastructure from session 21. Light mode was disabled due to broken CSS invert approach.
+- Decision: `darkMode` becomes React state backed by `localStorage('pg_theme')`. `Object.assign(K, darkMode ? KD : KL)` swaps palette on every render. Blocking script in index.html prevents flash. Toggle button in header.
+- Alternatives considered: CSS custom properties (too big a migration for 7K-line file); React context for theme (unnecessary — K is a mutable object, S uses getters).
+- Why this was chosen: Minimal code change (~10 lines), leverages all existing infrastructure, no flash, works with the existing getter-based S system.
+- Follow-up: Audit remaining hardcoded dark colors throughout App.jsx. KL palette may need visual tweaking.
+
+### 2026-03-27 - Inline math → shared.js imports (v22)
+
+- Status: Decided + implemented (session 22)
+- Context: App.jsx had 28 inline math functions (~200 lines) duplicated from src/lib/shared.js. shared.js was tested (32 tests), App.jsx copies were not.
+- Decision: Replace all inline math/color/style definitions with a single import from shared.js. S imported as `_S`, extended with JSX `meter` method in App.jsx (shared.js stays pure JS).
+- Alternatives considered: Keep inline copies for safety; move meter to a separate JSX file.
+- Why this was chosen: Eliminates duplication. All calculator math is now tested (71 tests). Smaller cognitive load when editing App.jsx. Vite tree-shakes unused exports.
+- Follow-up: Component extraction (Tracker/Ledger/LiveScanner) can now import directly from shared.js.
+
 ### 2026-03-27 - Disable light mode, lock to dark theme
 
-- Status: Decided
+- Status: Superseded by v22 re-enable (session 22)
 - Context: CSS `invert(1) hue-rotate(180deg)` filter approach to light mode produced completely washed-out, barely visible UI. Attempted fixes (invert(0.95) → invert(1), blocking theme script, body color sync) all failed to produce acceptable results.
 - Decision: Disable light mode entirely. Lock `darkMode = true` as a constant. Remove the toggle button. Add KD (dark) + KL (light) dual palettes and getter-based S style primitives as infrastructure for re-enabling light mode via a proper settings page later.
 - Alternatives considered: (1) Fix the invert filter (tried twice, fundamentally broken for semi-transparent hex alpha colors); (2) Full CSS custom properties migration (too big for 7K-line file); (3) Immediate dual-palette render (requires Object.assign on every render, premature without settings UI).

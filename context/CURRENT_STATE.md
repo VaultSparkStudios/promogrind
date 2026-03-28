@@ -1,12 +1,12 @@
 # Current State
 
-Last updated: 2026-03-27 (v20.1 — disabled broken light mode, KD/KL dual palettes, getter-based S)
+Last updated: 2026-03-27 (v22.0 — light mode toggle, math refactor, Profit Certificate, 71 tests, PT-BR completion)
 
 ## Version
-v20.1 (app) / 3.0.0 (package.json — not critical)
+v22.0 (app) / 3.0.0 (package.json — not critical)
 
 ## App.jsx
-~7,126 lines. Single-file React SPA. Dark mode only (light mode disabled, KD/KL palette ready for future settings).
+~7,165 lines. Single-file React SPA. Dark/light mode toggle (KD/KL palette swap via Object.assign). Math imported from shared.js (28 functions deduplicated).
 
 ## Tabs / Tools
 | Group | Count | Tools |
@@ -14,18 +14,18 @@ v20.1 (app) / 3.0.0 (package.json — not critical)
 | Home | 1 | Dashboard |
 | Convert | 5 | Bonus Bet, Profit Boost, First Bet, Deposit Match, Insurance |
 | Calculate | 24 | No-Vig, 3-Way No-Vig, +EV, Kelly, 2-Way Arb, 3-Way Arb, Parlay Hedge, Middle, Odds Convert, Line Shop, Rollover, Teaser, Round Robin, Parlay Builder, SGP Estimator, Hold Calc, Bet Sizer, Income Est., Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, Promo Stacking, **Taxes Estimator** |
-| Track | 7 | Sportsbooks, Bet Tracker, P/L Ledger, Leaderboard, Free Bet Arb, Trade Journal, Odds Compare |
+| Track | 8 | Sportsbooks, Bet Tracker, P/L Ledger, Leaderboard, Free Bet Arb, Trade Journal, Odds Compare, **Profit Cert** |
 | Live | 4 | Arb Scanner, +EV Scanner, Action Plan (VaultSparked), **Stack Builder** (VaultSparked) |
 | Learn | 11 | Knowledge Base, Promo Finder, Promo Calendar, Promo Board, Glossary, Refer & Earn, Upgrade, Team Accounts, vs Competitors, Promo Arb Finder, Community Promos |
 
-**Total: 52 tools**
+**Total: 53 tools**
 
 ## Static SEO Pages: 88
 - 17 keyword pages (bonus-bet, arb-calculator, kelly-criterion, no-vig, profit-boost, parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting, free-bet-calculator, deposit-match-calculator, rollover-calculator, same-game-parlay)
 - 10 US state pages (NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN)
 - 8 UK pages (matched-betting-uk, bonus-bets-uk, London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
 - 10 Spanish (ES) pages (bonus-bet-es, arb-calculator-es, no-vig-es, profit-boost-es, kelly-criterion-es, ev-calculator-es, parlay-calculator-es, hedge-calculator-es, matched-betting-es, sportsbook-promo-es)
-- 3 Portuguese (PT-BR) pages: bonus-bet-pt, arb-calculator-pt, kelly-criterion-pt (Brazil market)
+- 6 Portuguese (PT-BR) pages: bonus-bet-pt, arb-calculator-pt, kelly-criterion-pt, ev-calculator-pt, parlay-calculator-pt, matched-betting-pt (Brazil market)
 - 3 competitor comparison pages (vs-profitduel, vs-oddsjam, vs-betterbet)
 - 5 blog posts + blog index
 - 2 tool pages (income-estimator, embed)
@@ -33,11 +33,19 @@ v20.1 (app) / 3.0.0 (package.json — not critical)
 - 1 partner page (promogrind-verified)
 - 1 PR/data report page (annual-report)
 - 2 growth/distribution pages (the-grind newsletter, creator-program affiliate)
-- sitemap.xml: 175+ URLs
+- sitemap.xml: 178+ URLs
+
+## v22.0 New Features
+- **Light mode toggle** — `darkMode` React state + localStorage(`pg_theme`) + `Object.assign(K, darkMode ? KD : KL)` + blocking script + body.light CSS + toggle button
+- **Math refactor** — Removed 28 inline math functions from App.jsx; single import from `./lib/shared.js`; S extended with JSX meter locally
+- **Profit Certificate** — New Track tool; shareable ledger-backed win card; period filter (week/month/year); copy + native share
+- **UX polish** — Ctrl+K calc search, scroll-to-top on nav, input focus rings, text selection highlighting (all theme-aware)
+- **Test suite expanded** — 32 → 71 tests (39 new); 13 previously untested functions now covered
+- **PT-BR completion** — 3 new pages: ev-calculator-pt, parlay-calculator-pt, matched-betting-pt; sitemap 178+ URLs
 
 ## v20.0 New Features
-- **Test suite** — `src/__tests__/math.test.js` (32 tests, all passing); `vitest.config.js`; vitest + @vitest/ui devDependencies in package.json; `npm test` runs all
-- **`src/lib/shared.js`** — canonical pure-JS module: all calc math, K palette, S styles, converters; testable in Node; non-breaking (App.jsx still has inline copies — future refactor)
+- **Test suite** — `src/__tests__/math.test.js` (71 tests, all passing); `vitest.config.js`; vitest + @vitest/ui devDependencies in package.json; `npm test` runs all
+- **`src/lib/shared.js`** — canonical pure-JS module: all calc math, K palette, S styles, converters; testable in Node; App.jsx now imports from shared.js (v22 refactor complete)
 - **StackBuilder component** — VaultSparked-gated Live tab; bankroll + book multi-select; calls `stack-builder` edge fn; AI-generated 3-step promo plan with estimated total; added as 4th item in Live group
 - **stack-builder edge fn** — `supabase/functions/stack-builder/index.ts`; POST `{bankroll, booksAvailable}` → Claude Haiku → 3-step plan; deploy + `ANTHROPIC_API_KEY` needed
 - **ShareCard enhanced** — Reddit + X/Twitter buttons; improved share copy; Arb2Way gets share button
@@ -56,7 +64,7 @@ v20.1 (app) / 3.0.0 (package.json — not critical)
 - **public/annual-report/index.html** — "State of Sports Betting Promos 2026" PR backlink magnet; Schema.org Report JSON-LD
 
 ## Build
-- App chunk: ~420KB raw / **~110 kB gzip** (8.74s build)
+- App chunk: ~434KB raw / **~116.60 kB gzip** (3.60s build)
 - Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
 - Supabase chunk: 194KB raw / 51KB gzip
 - Strategy: network-first JS/CSS, cache-first fonts/images

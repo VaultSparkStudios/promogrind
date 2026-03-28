@@ -1,31 +1,54 @@
 # Latest Handoff
 
-## Where We Left Off (Session 21)
-- Shipped: Light mode fix (disabled broken invert filter, locked dark mode, added KD/KL dual palettes for future settings)
-- Full audit: 69/100 weighted (+1 from v20)
-- Build: clean ✓ (75 modules, 3.42s) | Tests: 32/32 passing | 115.24 KB gzip
-- Git: committed + pushed (688fcfc) — live at vaultsparkstudios.com/promogrind/
+## Where We Left Off (Session 22)
+- Shipped: Light mode toggle + math refactor + Profit Certificate + 71 tests + 3 PT-BR SEO pages
+- Audit: ~74/100 weighted (+4 from v20.1)
+- Build: clean ✓ (76 modules, 3.60s) | Tests: 71/71 passing | 116.60 KB gzip
+- Git: committed + pushed (ef26e75) — live at vaultsparkstudios.com/promogrind/
 
-### What was built — session 21 (v20.1)
+### What was built — session 22 (v22.0)
 
-**Light mode fix (`src/App.jsx` + `src/lib/shared.js` + `index.html`):**
-- Removed broken CSS `invert(1) hue-rotate(180deg)` filter that caused washed-out light mode
-- Locked `darkMode = true` (constant, no longer useState)
-- Removed theme toggle button (sun/moon) from header
-- Removed blocking theme script from index.html
-- Removed body color sync useEffect
-- Added `KD` (dark) + `KL` (light) dual color palettes — ready for future settings page
-- Converted S static properties to getters (card, label, input, rr, help, helpH, helpTerm) — reactive to K palette swaps
-- App chunk smaller: 115.24 KB gzip (was 115.56 KB)
+**Light mode settings toggle (`src/App.jsx` + `index.html`):**
+- `darkMode` is now React state backed by `localStorage('pg_theme')`
+- `Object.assign(K, darkMode ? KD : KL)` swaps entire palette reactively
+- Blocking script in `index.html` reads theme before paint — no flash
+- `body.light` CSS class for dark/light input focus + selection colors
+- Toggle button in header: "☀ LIGHT" / "🌙 DARK"
+- Toast system uses `K.s1` instead of hardcoded `#0f1520`
 
-**Full audit (session 21):**
-- Scored 69/100 weighted (was 68 in v20)
-- Improvements: ux_polish +2, infrastructure +2, code_quality +2
-- All manual blockers unchanged — P0 items remain highest leverage
+**Code quality — inline math → shared.js imports:**
+- Removed 28 duplicated math functions + KD/KL/K/font/fontD/S from App.jsx
+- Single import line from `./lib/shared.js` replaces all inline copies
+- S extended with JSX `meter` method locally (shared.js stays pure JS)
+- All calculator math now covered by 71 tests via shared.js
+
+**Profit Certificate (new Track tool):**
+- Shareable ledger-backed win card with period filter (week/month/year)
+- Shows total profit, conversion count, books used, best day
+- Copy + native share (Twitter fallback) — gradient header, verified badge
+- Added as "Profit Cert" in Track tab group (tool #53)
+
+**UX polish:**
+- Ctrl+K keyboard shortcut opens calc search (standard, discoverable)
+- Scroll-to-top on tab/calculator navigation
+- Global input focus rings (accent-color outline, theme-aware)
+- Text selection highlighting (accent color, theme-aware)
+
+**Test suite expansion (32 → 71 tests):**
+- 39 new tests for 13 previously untested functions
+- calcFirst, calcBoost, calcPH, calcMid, calcRO, calcTeaser, calcRR, calcParlay, calcSGP, toP, toF, bestOdds, calcInsurance
+
+**PT-BR market completion (3 new pages):**
+- `public/ev-calculator-pt/index.html` — EV calculator for Brazil
+- `public/parlay-calculator-pt/index.html` — Parlay calculator PT-BR
+- `public/matched-betting-pt/index.html` — Matched betting guide for Brazil
+- Sitemap: 178+ URLs (was 175)
+
+**TASK_BOARD:** Session 22 brainstorm (30 items) added at top
 
 ## Human Action Required
 
-> Same as session 20 — no new manual items this session.
+> Same as session 21 — no new manual items this session. All P0 items remain highest leverage.
 
 - [ ] `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` then deploy: `supabase functions deploy promo-chat promo-advisor ai-action-plan parse-bet-slip stack-builder`
 - [ ] `supabase functions deploy calc-api` (no secrets needed)
@@ -35,10 +58,10 @@
 - [ ] Affiliate program applications (DK/FD/BetMGM)
 
 ### Next session priorities
-1. App.jsx inline math → shared.js imports (refactor, ~200 lines)
-2. Component extraction (Tracker/Ledger/LiveScanner → `src/components/`)
-3. Light mode as settings option (KD/KL palette infrastructure is ready)
-4. PT-BR market completion (3 more pages)
+1. Component extraction (Tracker/Ledger/LiveScanner → `src/components/`)
+2. Replace remaining hardcoded dark colors throughout App.jsx for full light mode polish
+3. State legalization alert signup (email capture for non-legal states)
+4. Profit Certificate visual polish + Reddit share button
 
 ---
 
