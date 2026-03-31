@@ -7,10 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▁▅▅▅█
-3-session avg: Dev 7.0 [N=3] | Align 9.0 [N=3] | Momentum 9.3 [N=3] | Engage 6.0 [N=3] | Process 8.7 [N=3]
-Avg total: 39.3 / 50  |  Velocity trend: ↑  |  Debt: ↓ (test suite addresses code_quality gap)
-Last session: 2026-03-27 | Session 20 | Total: 41/50 | Velocity: 11
+Sparkline (last 5 totals): ▆▅▆▄▆
+Avgs — 3: 38.7 | 5: 38.8 | 10: 34.0 | 25: 34.0 | all: 34.0
+  └ 3-session: Dev 7.7 | Align 8.7 | Momentum 8.0 | Engage 5.3 | Process 9.0
+Velocity trend: ↑  |  Protocol velocity: →  |  Debt: →
+Momentum runway: ~0.9 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-03-31 | Session 24 | Total: 41/50 | Velocity: 3 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -174,3 +176,53 @@ Rolling avg (last 3): Dev 7.0 | Align 9.0 | Momentum 9.3 | Engage 6.0 | Process 
 3. Creator program activation email — when someone submits the creator application form, send an auto-confirm via Resend; single edge fn; converts the landing page from a static form into a real funnel
 
 **Committed to TASK_BOARD:** [SIL] App.jsx inline math → src/lib/shared.js imports (refactor sprint) · [SIL] PT-BR market completion (ev, parlay, matched-betting pages)
+
+## 2026-03-31 — Session 23 | Total: 34/50 | Velocity: 0 | Debt: →
+Avgs — 3: 37.7 | 5: 38.4 | 10: 32.8 | 25: 32.8 | all: 32.8
+  └ 3-session: Dev 7.0 | Align 8.7 | Momentum 8.0 | Engage 5.3 | Process 8.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 7 | ↓ | Build and tests are solid, but free-launch architecture still has a global auth bottleneck and some stale public truth |
+| Creative Alignment | 8 | ↓ | Audit corrected drift, but the current access model still conflicts with the "free core product" promise |
+| Momentum | 6 | ↓ | Strong reprioritization value, but no shipped product improvement this session |
+| Engagement | 4 | ↓ | No live user signal improvements; auth gate still suppresses true free-product reach |
+| Process Quality | 9 | → | Full Studio OS closeout executed; truth surfaces and handoff refreshed cleanly |
+| **Total** | **34/50** | | |
+
+**Top win:** The audit found the actual launch blocker: product-truth drift around the global auth gate, not lack of features.
+**Top gap:** PromoGrind still cannot honestly be called a public free product while unauthenticated visitors are redirected away from the app.
+**Intent outcome:** Achieved — full-project audit completed, scored, prioritized for free launch, and written back into project memory.
+
+**Brainstorm**
+1. Guest mode core shell — let calculators/learn content load without auth, then progressively gate sync/community/pro tools after first meaningful value; first step is splitting `checkAuth()` into global vs feature-level gating; Execution probability: High
+2. Launch-state feature flags — centralized "configured/live/beta" flags for AI, Stripe, Odds API, push, and email so dead surfaces never render as live; first step is a small config map and conditional UI badges; Execution probability: High
+3. Trust strip on every money page — add a compact 21+ / legal-state / responsible-gambling / math-not-advice strip to the top calculators and high-intent SEO pages; first step is one reusable component + one static HTML snippet pattern; Execution probability: Medium
+4. Guest analytics funnel — measure anonymous calculator start/completion/share before login exists so free launch decisions use real activation data; first step is a minimal event schema for guest tool runs and completions; Execution probability: Medium
+
+**Committed to TASK_BOARD:** [SIL] Guest-mode boot + top free calculator smoke tests · [SIL] Public free-launch landing/copy pass
+
+## 2026-03-31 — Session 24 | Total: 41/50 | Velocity: 3 | Debt: →
+Avgs — 3: 38.7 | 5: 38.8 | 10: 34.0 | 25: 34.0 | all: 34.0
+  └ 3-session: Dev 7.7 | Align 8.7 | Momentum 8.0 | Engage 5.3 | Process 9.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 8 | ↑ | New launch-state module, cleaner readiness gating, and 75/75 passing tests |
+| Creative Alignment | 9 | ↑ | Product truth now matches the clarified free Vault membership model instead of implying guest access |
+| Momentum | 9 | ↑ | Core audit recommendations were implemented in one session with real shipped code |
+| Engagement | 6 | ↑ | Better trust framing and beta honesty reduce friction; analytics hooks for login + beta-surface impressions now exist |
+| Process Quality | 9 | → | Full Studio OS write-back completed, including truth audit and decision log |
+| **Total** | **41/50** | | |
+
+**Top win:** Launch-state honesty is now encoded in the product itself instead of living only in audit notes.
+**Top gap:** External activations still determine when AI/live/push/billing can graduate from beta-gated surfaces to live features.
+**Intent outcome:** Achieved — implemented the repo-local recommendations while keeping free Vault membership as the global access model.
+
+**Brainstorm**
+1. Post-login member onboarding card — on first successful Vault login, explain free membership vs VaultSparked Pro vs beta features in one screen; first step is a dismissible dashboard card keyed off first session; Execution probability: High
+2. Feature-flag admin matrix doc — one table mapping each `VITE_PG_FEATURE_*` flag to its required backend/service activation; first step is a short ops doc in `docs/`; Execution probability: High
+3. SEO trust-strip partial automation — add a reusable snippet/process so all high-intent static calculator pages get the same responsible-gambling and free-membership framing; first step is applying it to the top 10 pages by intent; Execution probability: Medium
+4. Activated-feature analytics — fire dedicated events when a beta-gated feature is later enabled and first used, so rollout impact is measurable; first step is event names + a small helper in `sync.js`; Execution probability: Medium
+
+**Committed to TASK_BOARD:** [SIL] Post-login member onboarding card · [SIL] Feature-flag activation matrix doc

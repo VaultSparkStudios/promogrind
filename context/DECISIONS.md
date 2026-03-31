@@ -194,3 +194,12 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: (1) Fix the invert filter (tried twice, fundamentally broken for semi-transparent hex alpha colors); (2) Full CSS custom properties migration (too big for 7K-line file); (3) Immediate dual-palette render (requires Object.assign on every render, premature without settings UI).
 - Why this was chosen: Eliminates the broken UX immediately. The KD/KL palette + getter-based S is clean infrastructure that makes future light mode a simple settings toggle without another architectural change.
 - Follow-up: Add light mode as an option in a future settings/preferences page. KL palette may need tweaking once tested visually.
+
+### 2026-03-31 - Free Vault membership stays global; backend-dependent surfaces use launch-state flags
+
+- Status: Decided + implemented
+- Context: Audit identified a mismatch between "free product" positioning and the globally auth-gated app. Human clarified that Vault membership is intentionally the free account layer for all Studio projects, and a website agent is fixing the shared membership system.
+- Decision: Keep global Vault membership auth intact. Align PromoGrind messaging around "free Vault membership" instead of guest access, and add centralized frontend `VITE_PG_FEATURE_*` flags so AI, live scanner, push, and billing surfaces can stay beta-gated until their services are actually live.
+- Alternatives considered: Remove global auth from the free path; leave all premium/AI/live surfaces visible and rely on runtime failures/test-mode behavior.
+- Why this was chosen: Preserves studio-wide identity integration while fixing truth/launch honesty inside PromoGrind. Feature flags are the cleanest way to avoid over-promising unactivated systems.
+- Follow-up: Re-check copy/UX after the website agent lands the shared auth changes. Turn flags on only as each backend activation is confirmed.

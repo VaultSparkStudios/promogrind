@@ -1,10 +1,35 @@
 # Latest Handoff
 
-## Where We Left Off (Session 22)
-- Shipped: Light mode toggle + math refactor + Profit Certificate + 71 tests + 3 PT-BR SEO pages
-- Audit: ~74/100 weighted (+4 from v20.1)
-- Build: clean ✓ (76 modules, 3.60s) | Tests: 71/71 passing | 116.60 KB gzip
-- Git: committed + pushed (ef26e75) — live at vaultsparkstudios.com/promogrind/
+## Where We Left Off (Session 24)
+- Shipped: 8 improvements across 4 groups — launch-state, trust/copy, analytics/readiness, tests
+- Tests: 75 passing (75 core / 0 server / 0 client) · delta: +4 this session
+- Deploy: deployed to GitHub Pages · auto-deploy active
+
+Session Intent: Implement the audit recommendations and ideas while keeping the free Vault membership model intact and aligned with the website agent’s shared-auth rollout.
+
+### What changed this session
+
+**Shipped:**
+- New `src/launchState.js` with centralized `VITE_PG_FEATURE_*` flags for AI scan, Promo Advisor, PromoChat, Live Scanner, Stack Builder, AI Action Plan, push alerts, and paid checkout
+- AI/live/push/billing surfaces now beta-gate cleanly instead of presenting undeployed backends as live
+- App shell, loading screen, footer, landing page, and README now explicitly explain the free Vault membership model
+- Legacy share/export/referral strings normalized to the canonical `vaultsparkstudios.com/promogrind/` URL
+- Added launch-state tests (`src/__tests__/launchState.test.js`) — suite expanded 71 → 75
+
+**Validation:**
+- `npm test` → **75/75 passing**
+- `npm run build` → **passing** (`index` 118.62 kB gzip, `vendor` 49.33 kB gzip, `supabase` 50.93 kB gzip)
+
+**Priority reset for next session:**
+1. Re-check PromoGrind once the website agent lands the shared Vault membership/auth updates
+2. Turn on the `VITE_PG_FEATURE_*` flags as backend services actually go live
+3. Extend the trust/compliance copy pass to the highest-intent static SEO pages
+4. Decide whether `calc-api` should be publicly surfaced now or stay quietly deployable until docs exist
+
+**Truth audit:**
+- Refreshed `TRUTH_AUDIT.md` again to reflect the free Vault membership model
+- Synced `PROJECT_STATUS.json` to the shipped launch-state gating and updated test/build counts
+- Removed the earlier repo-local contradiction around "free product" vs auth gate; access is now framed as free membership, not guest access
 
 ### What was built — session 22 (v22.0)
 
@@ -48,14 +73,14 @@
 
 ## Human Action Required
 
-> Same as session 21 — no new manual items this session. All P0 items remain highest leverage.
-
-- [ ] `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` then deploy: `supabase functions deploy promo-chat promo-advisor ai-action-plan parse-bet-slip stack-builder`
-- [ ] `supabase functions deploy calc-api` (no secrets needed)
-- [ ] Run `supabase/migrations/migration-gift-tokens.sql` in Supabase SQL Editor
-- [ ] Submit sitemap to Google Search Console
-- [ ] Buy promogrind.com (~$15) + CNAME DNS
-- [ ] Affiliate program applications (DK/FD/BetMGM)
+- [ ] **Coordinate with the website agent once the shared Vault membership system is fixed** — confirm PromoGrind loading/auth copy still matches the final global flow
+- [ ] **Submit sitemap to Google Search Console** — highest-value manual action for discovery once the shared-auth flow is stable
+- [ ] **Run `migration-gift-tokens.sql` in Supabase SQL Editor** — required before gift-trial/newsletter capture paths can be considered live
+- [ ] **Set `ANTHROPIC_API_KEY` and deploy AI functions** — required before turning on AI-related `VITE_PG_FEATURE_*` flags
+- [ ] **Set `RESEND_API_KEY` and deploy email functions** — required before email/gift-trial flows should be considered live
+- [ ] **Generate VAPID keys and deploy push** — required before turning on the push alerts launch-state flag
+- [ ] **Configure live billing and deploy Stripe webhooks** — required before turning on the paid checkout launch-state flag
+- [ ] **Apply for sportsbook affiliate programs and replace `affiliateLink` values** — monetization activation, not a blocker for free public launch
 
 ### Next session priorities
 1. Component extraction (Tracker/Ledger/LiveScanner → `src/components/`)

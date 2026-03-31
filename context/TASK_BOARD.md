@@ -2,6 +2,42 @@
 
 ---
 
+## Now
+
+- [ ] Re-check auth/loading copy once the website agent ships the shared Vault membership fix; verify PromoGrind’s free-account messaging still matches the final global flow
+- [ ] Flip `VITE_PG_FEATURE_*` flags on as each backend/service actually goes live (AI, live scanner, push, billing)
+- [ ] Extend the trust/compliance copy pass from the app shell + landing page to the highest-intent static SEO pages
+- [ ] Deploy `calc-api` and decide whether to surface it publicly or keep it partner-facing until docs exist
+
+## Next
+
+- [ ] Add post-login member onboarding that explicitly explains free Vault membership vs VaultSparked Pro
+- [ ] Add launch analytics for beta-surface impressions and conversion into activated features after flags turn on
+- [ ] Continue component extraction from `src/App.jsx` once the launch-state pass has settled
+- [ ] **[SIL] Post-login member onboarding card** — explain free Vault membership, Pro, and beta-gated features after first successful login
+- [ ] **[SIL] Feature-flag activation matrix doc** — document every `VITE_PG_FEATURE_*` flag and the backend/service required before enabling it
+
+## Completed This Session (2026-03-31)
+
+- [x] Added centralized frontend launch-state flags in `src/launchState.js`
+- [x] Beta-gated AI / live / push / billing surfaces instead of presenting them as fully live
+- [x] Updated app shell, footer, landing page, and README to explain the free Vault membership model
+- [x] Normalized stale share/referral/export URLs to the canonical `vaultsparkstudios.com/promogrind/` path
+- [x] Added launch-state utility tests (71 → 75 passing)
+
+## Session 23 Audit — Free Launch Readiness (2026-03-31)
+
+> Launch lens for this audit: "ready to deploy as a free product." Overall app quality is strong; free-launch readiness is held back by access-model drift and truth/compliance gaps, not by calculator depth.
+
+| Rank | Item | Why it matters | Impact | Effort | Status |
+|---|---|---|---|---|---|
+| 1 | Ungate core free product from Vault auth | Biggest contradiction in the repo: free product promise vs global login redirect | 10/10 | M | 🔲 Next session |
+| 2 | Free-launch hardening for dead integrations | Prevents users from hitting non-functional live scanners, billing, or AI paths | 9/10 | S | 🔲 Next session |
+| 3 | Trust/compliance copy pass | Raises public credibility and lowers launch risk in gambling-adjacent category | 8/10 | S | 🔲 Next session |
+| 4 | Search Console submission | Highest-value manual action for discovery once public guest access exists | 8/10 | S | 🔲 MANUAL |
+| 5 | Guest-mode smoke tests | Protects the new free path before refactors or public traffic | 7/10 | S | 🔲 [SIL] |
+| 6 | Legacy URL normalization | Removes trust erosion from stale share/export links | 6/10 | S | 🔲 Future |
+
 ## Session 22 Brainstorm — All 30 Items (v22.0 Audit — 70/100)
 
 > Full innovation brainstorm from session 22 (complete project audit, 2026-03-27). Score Δ = points added to weighted 70/100 overall. Effort: S=<2hr / M=2-8hr / L=8hr+.
@@ -106,6 +142,8 @@
 - [ ] **[SIL] App.jsx inline math → src/lib/shared.js imports** — now that shared.js is tested, a surgical ~200-line refactor makes all App.jsx math covered by the test suite; dedicated session, no scope creep
 - [ ] **[SIL] PT-BR market completion** — add ev-calculator-pt, parlay-calculator-pt, matched-betting-pt; same template; 30 min each; closes the 3 highest-traffic PT-BR keywords not yet covered
 - [ ] **[SIL] Light mode settings option** — KD/KL palettes + getter-based S already in place; wire `Object.assign(K, darkMode ? KD : KL)` at top of App render + add toggle in a new Settings page; all infrastructure done in session 21
+- [ ] **[SIL] Guest-mode boot + top free calculator smoke tests** — cover unauthenticated app load and top calculators before/after auth-gate decoupling
+- [ ] **[SIL] Public free-launch landing/copy pass** — make "no account required" explicit and reserve login only for sync/community/pro flows
 
 ### P3 — Multi-week (external blockers)
 - [ ] LLC → EIN → bank account → Stripe live keys → create products → `supabase secrets set STRIPE_SECRET_KEY=...` → deploy `create-checkout` + `stripe-webhook` in live mode

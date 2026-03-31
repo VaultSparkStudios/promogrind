@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.0 -->
 # Truth Audit
 
-Last reviewed: YYYY-MM-DD
+Last reviewed: 2026-03-31
 Overall status: yellow
-Next action: Fix the highest-severity contradiction first.
+Next action: Re-check the shared Vault membership UX after the website agent finishes the global auth rollout, then flip feature flags only for truly live services.
 
 ---
 
@@ -20,12 +20,12 @@ Next action: Fix the highest-severity contradiction first.
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 0 | |
-| Prompt/template alignment | 0 | |
-| Derived-view freshness | 0 | |
-| Handoff continuity | 0 | |
-| Contradiction density | 0 | |
-| **Total** | **0 / 25** | |
+| Schema alignment | 5 | `PROJECT_STATUS.json` now reflects the free Vault membership model and launch-state gating |
+| Prompt/template alignment | 5 | Prompts are current and Studio OS write-back executed |
+| Derived-view freshness | 4 | Handoff, task board, status, and SIL refreshed; some historical sections still describe older launch assumptions |
+| Handoff continuity | 5 | Session 23 audit and next-move priorities now captured clearly |
+| Contradiction density | 4 | Main repo-local contradiction resolved; remaining risk is external auth-rollout drift and historical stale copy |
+| **Total** | **23 / 25** | Strong protocol compliance; remaining drift is mostly external coordination and historical residue |
 
 ---
 
@@ -33,30 +33,31 @@ Next action: Fix the highest-severity contradiction first.
 
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
-| Project identity | `context/PROJECT_STATUS.json` | `context/PORTFOLIO_CARD.md` | yellow | YYYY-MM-DD | |
-| Session continuity | `context/LATEST_HANDOFF.md` | startup brief | yellow | YYYY-MM-DD | |
-| Live state | `context/CURRENT_STATE.md` | founder summaries | yellow | YYYY-MM-DD | |
-| Protocol assets | `prompts/` | `docs/templates/project-system/` | yellow | YYYY-MM-DD | |
+| Product access model | `src/auth.js`, user clarification, shared Vault membership canon | app shell, landing page, status docs | yellow | 2026-03-31 | Re-check after website-agent rollout lands; repo-local copy now aligned |
+| Domain strategy | `context/DECISIONS.md` | old TASK_BOARD / status references to `promogrind.com` as blocker | green | 2026-03-31 | Current surfaces now treat custom domain as optional |
+| Audit freshness | `context/PROJECT_STATUS.json` | prior truth placeholders, stale dates | green | 2026-03-31 | Refreshed this session |
+| Launch-state honesty | `src/launchState.js` | app tool surfaces, pricing claims | yellow | 2026-03-31 | Keep flags off until backends are actually live |
 
 ---
 
 ## Contradictions
 
-- None recorded.
+1. **Yellow:** Shared Vault membership rollout is being fixed in another repo, so PromoGrind’s updated copy should be re-validated once that global auth UX settles.
+2. **Yellow:** Historical Markdown still contains older assumptions about guest access and `promogrind.com` urgency, even though active truth surfaces are now corrected.
 
 ---
 
 ## Freshness
 
-- `context/PROJECT_STATUS.json`: YYYY-MM-DD
-- `context/LATEST_HANDOFF.md`: YYYY-MM-DD
-- `context/CURRENT_STATE.md`: YYYY-MM-DD
-- Derived founder-facing views: YYYY-MM-DD
+- `context/PROJECT_STATUS.json`: 2026-03-31
+- `context/LATEST_HANDOFF.md`: 2026-03-31
+- `context/CURRENT_STATE.md`: 2026-03-31
+- Derived founder-facing views: 2026-03-31 review completed locally; upstream registry not changed in this repo
 
 ---
 
 ## Recommended Actions
 
-1. Resolve any red contradictions before feature work.
-2. Refresh stale derived views from canonical JSON.
-3. Sync prompts and templates if protocol changed.
+1. Re-verify PromoGrind against the final shared Vault membership UX once the website agent ships it.
+2. Turn on `VITE_PG_FEATURE_*` flags only when the corresponding backend/service is actually live.
+3. Keep extending the trust/compliance copy pass from the main app + landing page to high-intent SEO pages.

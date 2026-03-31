@@ -74,3 +74,23 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: Full audit (76/100) → 30-item brainstorm → implement all Highest Leverage + Highest Ceiling code items; flag manual/external items in TASK_BOARD
 - Why it matters: Continues the audit-then-implement sprint format; adds AI chat (engagement), Agency tier + checkout (revenue), annual report (SEO authority), hreflang (SEO signals)
 - Supersedes prior entry: —
+
+### 2026-03-31 — Session 23 launch-direction audit
+
+- Category: Direction
+- Human input: "Audit project in its entirety... minimal token waste... I want this to be ready to deploy as a free product."
+- Area affected: product positioning, launch readiness priorities, task ordering, truth surfaces
+- Previous state: Project context emphasized monetization activation and growth, while app access remained globally auth-gated
+- New required direction: Evaluate and prioritize the repo specifically through a free-product launch lens, with concise scoring, high-impact recommendations, and innovative brainstorm items
+- Why it matters: Reframes the immediate goal from "more features / monetization activation" to "make the core experience honestly public-free and launchable"
+- Supersedes prior entry: —
+
+### 2026-03-31 — Session 24 implementation direction
+
+- Category: Direction
+- Human input: "Complete all recommendations and implement all ideas. Keep in mind I am having the website agent fix the global vault membership system. It is still free, they just need to create a free vault membership account which needs to be integrated into all studio projects"
+- Area affected: auth framing, launch readiness, feature gating, trust copy, rollout coordination
+- Previous state: Prior audit assumed the global auth gate was itself the product mismatch
+- New required direction: Treat free Vault membership as canon, keep global auth integration, and implement all feasible launch/readiness recommendations around that model instead of ungating the app
+- Why it matters: Changes the highest-leverage execution path from guest access work to launch-state honesty, trust/compliance, and coordination with the shared website-auth rollout
+- Supersedes prior entry: Session 23 audit assumption that guest access should replace global auth

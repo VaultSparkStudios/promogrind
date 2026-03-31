@@ -4,6 +4,80 @@ Append sessions chronologically. Never delete entries.
 
 ---
 
+## 2026-03-31 — Session 24 | v23.0 | Launch-State Gating + Free Vault Membership Alignment
+
+**Session type:** Implementation sprint from audit recommendations
+
+**Intent outcome:** Achieved — implemented the major repo-local launch/readiness recommendations while keeping free Vault membership as the access model
+
+**Completed:**
+
+**App / launch-state work:**
+- Added `src/launchState.js` with centralized `VITE_PG_FEATURE_*` flags and feature metadata
+- Beta-gated undeployed AI/live/push/billing surfaces instead of presenting them as fully live
+- Updated app loading state, shell, trust strip, and footer to explain free Vault membership access
+- Normalized canonical share/export/referral URLs away from stale domains
+- Updated Bonus Bet scan UI, Promo Advisor, PromoChat, Live Scanner, Stack Builder, AI Action Plan, push alerts, and pricing/checkout behavior to reflect launch-state truth
+
+**Public-facing copy / docs:**
+- `public/landing/index.html` updated for free Vault membership framing + beta/live honesty
+- `README.md` updated with shared Vault membership framing + launch-state flag guidance
+- `.env.example` expanded with public feature-flag docs
+
+**Validation:**
+- `npm test` → 75/75 passing
+- `npm run build` → passing (`index` 118.62 kB gzip)
+
+**Context updates:**
+- Updated CURRENT_STATE, TASK_BOARD, LATEST_HANDOFF, PROJECT_STATUS.json, DECISIONS, TRUTH_AUDIT, SELF_IMPROVEMENT_LOOP, and CREATIVE_DIRECTION_RECORD
+
+**Open problems:**
+- Website agent still needs to finish the shared Vault membership rollout
+- Flags must stay off until backend services are actually live
+- Trust/compliance copy pass still needs extension to more static SEO pages
+
+**Recommended next action:**
+- Re-check PromoGrind against the final website-agent auth flow, then begin flipping `VITE_PG_FEATURE_*` flags on only for live services
+
+---
+
+## 2026-03-31 — Session 23 | Audit | Free Launch Readiness + Truth Sync
+
+**Session type:** Full-project audit with Studio OS write-back
+
+**Intent outcome:** Achieved — audited the entire repo for free-product launch readiness, validated build/tests, reprioritized blockers, and updated project memory
+
+**Completed:**
+
+**Validation:**
+- `npm test` → 71/71 passing
+- `npm run build` → passing (`index` 116.60 kB gzip, `vendor` 49.33 kB gzip, `supabase` 50.93 kB gzip)
+
+**Audit findings captured:**
+- Overall project quality assessed at **76/100**
+- Free public launch readiness assessed at **63/100**
+- Top blocker identified: global auth gate in `src/auth.js` redirects unauthenticated users away from the app, conflicting with the "free core product" promise
+- Secondary blocker cluster identified: dead/unconfigured live surfaces, trust/compliance polish gaps, stale truth surfaces
+
+**Context / truth updates:**
+- `context/CURRENT_STATE.md` — audit snapshot + blocker reprioritization
+- `context/TASK_BOARD.md` — added `Now` / `Next`, Session 23 audit block, 2 new `[SIL]` commitments
+- `context/LATEST_HANDOFF.md` — new Session 23 Where We Left Off block + human-action reframing
+- `context/PROJECT_STATUS.json` — synced health, focus, blockers, SIL fields, audit score, truth audit metadata
+- `context/TRUTH_AUDIT.md` — replaced template placeholders with real contradiction/freshness audit
+- `context/SELF_IMPROVEMENT_LOOP.md` — rolling header refreshed, Session 23 entry appended
+- `docs/CREATIVE_DIRECTION_RECORD.md` — added session direction entry for free-product launch goal
+
+**Open problems:**
+- Core free path still blocked by Vault auth redirect
+- Public surfaces still overstate readiness of AI / Live / billing features that depend on undeployed secrets or manual setup
+- Free launch trust/compliance pass not yet executed
+
+**Recommended next action:**
+- Next code session should decouple free calculators and read-only learning surfaces from the global auth gate, then add guest-mode smoke coverage
+
+---
+
 ## 2026-03-27 — Session 17 | v17.0 | Spanish SEO + Drip Extension + Polish
 
 **Session type:** Next code session options — SIL brainstorm execution + polish sprint

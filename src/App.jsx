@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useEffect, useRef, Component } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BOOKS } from "./books.js";
+import { BOOKS, getBookUrl } from "./books.js";
 import { checkAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 import { subscribeToPush } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD, S as _S } from "./lib/shared.js";
+import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, FEATURE_FLAGS, getFeatureState } from "./launchState.js";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -137,7 +138,7 @@ const Tl = ({t,badge,bc,shareable,getParams}) => {
   };
   const copyEmbed=()=>{
     const slug = window.location.pathname.replace(/^\/+/,'');
-    const iframe = `<iframe src="https://vaultsparkstudios.com/promogrind/?embed=1#/${slug}" width="480" height="600" frameborder="0"></iframe>`;
+    const iframe = `<iframe src="${CANONICAL_APP_URL}?embed=1#/${slug}" width="480" height="600" frameborder="0"></iframe>`;
     try{navigator.clipboard.writeText(iframe);}catch(e){}
     setEmbedCopied(true); setTimeout(()=>setEmbedCopied(false),1500);
   };
@@ -156,12 +157,12 @@ const BookCTA = () => (
     <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Don't have these books yet? Open accounts to use this promo:</div>
     <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
       {BOOKS.slice(0,4).map(b=>(
-        <a key={b.name} href={b.link} target="_blank" rel="noopener noreferrer"
+        <a key={b.name} href={getBookUrl(b)} target="_blank" rel="noopener noreferrer sponsored"
           style={{padding:"4px 10px",background:`${b.color}15`,border:`1px solid ${b.color}30`,borderRadius:4,color:b.color,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
           {b.name} →
         </a>
       ))}
-      <a href={BOOKS[4]?.link||"#"} target="_blank" rel="noopener noreferrer"
+      <a href={getBookUrl(BOOKS[4]||{})||"#"} target="_blank" rel="noopener noreferrer sponsored"
         style={{padding:"4px 10px",background:`${K.bd}`,border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
         +{BOOKS.length-4} more →
       </a>
@@ -174,6 +175,42 @@ const Help = ({entries}) => {
   const compact = React.useContext(CompactCtx);
   if(compact) return null;
   return (<div style={{...S.card,background:K.s2,borderColor:K.bd,marginTop:12}}><div style={{fontSize:12,fontWeight:600,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>How This Works</div><div style={S.help}>{entries.map((e,i)=><div key={i} style={{marginBottom:10}}><span style={S.helpTerm}>{e[0]}:</span> {e[1]}</div>)}</div></div>);
+};
+
+const TrustStrip = () => (
+  <div style={{background:`${K.gn}08`,borderBottom:`1px solid ${K.bd}`,padding:"8px 20px"}}>
+    <div style={{maxWidth:1100,margin:"0 auto",display:"flex",gap:14,flexWrap:"wrap",fontSize:10,color:K.dm,letterSpacing:"0.4px"}}>
+      <span><strong style={{color:K.gn}}>Free Vault membership</strong> unlocks access and sync across Studio tools.</span>
+      <span>Educational math only.</span>
+      <span>21+ where legal.</span>
+      <span>Not betting or financial advice.</span>
+      <span>Gamble responsibly: 1-800-GAMBLER.</span>
+    </div>
+  </div>
+);
+
+const MembershipBanner = () => (
+  <div style={{...S.note(K.ac),marginBottom:12}}>
+    PromoGrind is free to use with a free Vault membership account. That account also powers sync, referrals, and shared access across VaultSpark Studio projects.
+  </div>
+);
+
+const FeatureUnavailableCard = ({ featureKey, title, body }) => {
+  const feature = getFeatureState(featureKey);
+  useEffect(() => {
+    try { window.plausible?.('launch_feature_beta_seen', { props: { feature: feature.key } }); } catch {}
+  }, [feature.key]);
+  return (
+    <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`}}>
+      <Tl t={title || feature.label} badge="BETA / SETUP PENDING" bc={K.yl}/>
+      <div style={{fontSize:12,color:K.dm,lineHeight:1.7,marginBottom:10}}>
+        {body || feature.shortReason}
+      </div>
+      <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>
+        {feature.setup}
+      </div>
+    </div>
+  );
 };
 
 // ═══════════════════════════════════════════
@@ -193,9 +230,9 @@ const parseNL = (text) => {
 
 // ═══ SHARE CARD ═══
 function ShareCard({ title, profit, onClose }) {
-  const appUrl = 'https://promogrind.com';
-  const text = `🎉 Just locked in ${profit} in guaranteed profit using ${title} on PromoGrind — completely free.\n\nNo subscription needed. 51 free sportsbook promo calculators:\n${appUrl}`;
-  const tweetText = `🎉 Just locked in ${profit} guaranteed profit from a sportsbook promo using @PromoGrind — free calculator, no BS\n${appUrl}`;
+  const appUrl = CANONICAL_APP_URL;
+  const text = `🎉 Just locked in ${profit} in guaranteed profit using ${title} on PromoGrind.\n\nFree Vault membership account, free core calculator suite:\n${appUrl}`;
+  const tweetText = `🎉 Just locked in ${profit} guaranteed profit from a sportsbook promo using @PromoGrind — free Vault membership, free calculator suite\n${appUrl}`;
   const [copyLabel, setCopyLabel] = React.useState('📋 Copy text');
 
   const handleCopy = () => {
@@ -234,7 +271,7 @@ function ShareCard({ title, profit, onClose }) {
           Reddit ↗
         </button>
       </div>
-      <div style={{fontSize:9,color:'#1e293b',textAlign:'center',letterSpacing:'0.5px'}}>promogrind.com — 51 free sportsbook promo tools</div>
+      <div style={{fontSize:9,color:'#1e293b',textAlign:'center',letterSpacing:'0.5px'}}>{appUrl.replace(/^https?:\/\//,'')} — free sportsbook promo tools</div>
     </div>
   );
 }
@@ -299,7 +336,7 @@ const BonusBet = () => {
   };
   const copyResult = () => {
     if(!r) return;
-    const text = `📊 Bonus Bet Converter — PromoGrind\nBonus Size: $${sz} | Bonus Odds: ${bo} | Hedge Odds: ${ho}\nHedge Stake: $${r.hs}\nGuaranteed Profit: $${r.g} (${r.r}% conversion)\npromogrind.vaultsparkstudios.com`;
+    const text = `📊 Bonus Bet Converter — PromoGrind\nBonus Size: $${sz} | Bonus Odds: ${bo} | Hedge Odds: ${ho}\nHedge Stake: $${r.hs}\nGuaranteed Profit: $${r.g} (${r.r}% conversion)\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setRCopied(true); setTimeout(()=>setRCopied(false),1500);
   };
@@ -309,9 +346,18 @@ const BonusBet = () => {
       <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
         <textarea value={nlText} onChange={e=>{setNlText(e.target.value);setNlPreview(parseNL(e.target.value));}} placeholder='Try: "I have a $200 bonus bet at +350, hedge at -400"' style={{...S.input,height:48,resize:"none",flex:1,lineHeight:1.5,fontSize:12}}/>
         <button onClick={applyNL} style={{padding:"8px 14px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Parse</button>
-        <input ref={fileInputRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>{if(e.target.files?.[0])scanBetSlip(e.target.files[0]);e.target.value='';}}/>
-        <button onClick={()=>fileInputRef.current?.click()} disabled={scanLoading} title="Upload a bet slip screenshot — Claude AI will auto-fill the fields" style={{padding:"8px 12px",background:scanLoading?`${K.mt}15`:`${K.pp}15`,border:`1px solid ${scanLoading?K.mt:K.pp}30`,borderRadius:4,color:scanLoading?K.mt:K.pp,fontSize:10,cursor:scanLoading?"not-allowed":"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{scanLoading?"Scanning…":"📷 Scan"}</button>
+        {FEATURE_FLAGS.aiScan ? (
+          <>
+            <input ref={fileInputRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>{if(e.target.files?.[0])scanBetSlip(e.target.files[0]);e.target.value='';}}/>
+            <button onClick={()=>fileInputRef.current?.click()} disabled={scanLoading} title="Upload a bet slip screenshot — Claude AI will auto-fill the fields" style={{padding:"8px 12px",background:scanLoading?`${K.mt}15`:`${K.pp}15`,border:`1px solid ${scanLoading?K.mt:K.pp}30`,borderRadius:4,color:scanLoading?K.mt:K.pp,fontSize:10,cursor:scanLoading?"not-allowed":"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{scanLoading?"Scanning…":"📷 Scan"}</button>
+          </>
+        ) : (
+          <div style={{padding:"8px 12px",background:`${K.yl}10`,border:`1px solid ${K.yl}30`,borderRadius:4,color:K.yl,fontSize:10,fontFamily:font,whiteSpace:"nowrap"}}>
+            📷 Scan in beta
+          </div>
+        )}
       </div>
+      {!FEATURE_FLAGS.aiScan && <div style={{fontSize:10,color:K.mt,marginTop:4}}>Bet slip scan will appear here once the AI backend is activated.</div>}
       {scanResult&&!scanResult.error&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>✓ Scanned: {[scanResult.book,scanResult.betType?.replace(/_/g,' '),scanResult.odds&&`${scanResult.odds} odds`,scanResult.stake&&`$${scanResult.stake} stake`].filter(Boolean).join(' · ')}</div>}
       {scanResult&&!scanResult.error&&bbSyncAppData&&<button
         onClick={()=>{
@@ -442,7 +488,7 @@ const ProfitBoost = () => {
   const applyDemo = () => { setS("50"); setO("-110"); setBp("25"); setMx("10"); setHo("-110"); setDemoMode(true); };
   const copyResult = () => {
     if(!r) return;
-    const text = `📊 Profit Boost Converter — PromoGrind\nStake: $${s} | Odds: ${o} | Boost: ${bp}% | Max: $${mx} | Hedge Odds: ${ho}\nEffective Boosted Odds: ${r.eo}\nHedge Amount: $${r.hs}\nGuaranteed Profit: $${r.g}\npromogrind.vaultsparkstudios.com`;
+    const text = `📊 Profit Boost Converter — PromoGrind\nStake: $${s} | Odds: ${o} | Boost: ${bp}% | Max: $${mx} | Hedge Odds: ${ho}\nEffective Boosted Odds: ${r.eo}\nHedge Amount: $${r.hs}\nGuaranteed Profit: $${r.g}\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setRCopied(true); setTimeout(()=>setRCopied(false),1500);
   };
@@ -519,7 +565,7 @@ const FirstBet = () => {
   const applyDemo = () => { setS("200"); setO("-110"); setHo("-110"); setDemoMode(true); };
   const copyResult = () => {
     if(!r) return;
-    const text = `📊 First Bet Safety Net — PromoGrind\nFirst Bet Stake: $${s} | Your Odds: ${o} | Hedge Odds: ${ho}\nHedge Amount: $${r.hs}\nIf Original Wins: $${r.pOW} | If Hedge Wins: $${r.pHW}\npromogrind.vaultsparkstudios.com`;
+    const text = `📊 First Bet Safety Net — PromoGrind\nFirst Bet Stake: $${s} | Your Odds: ${o} | Hedge Odds: ${ho}\nHedge Amount: $${r.hs}\nIf Original Wins: $${r.pOW} | If Hedge Wins: $${r.pHW}\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setRCopied(true); setTimeout(()=>setRCopied(false),1500);
   };
@@ -646,7 +692,7 @@ const Arb2Way = () => {
   });
   const copyResult = () => {
     if(!r||!r.ok) return;
-    const text = `📊 2-Way Arbitrage — PromoGrind\nOutcome 1: ${o1} | Outcome 2: ${o2} | Total Stake: $${t}\nStake Side 1: $${r.s1} | Stake Side 2: $${r.s2}\nARB Profit: +$${r.pr} | ROI: ${r.roi}%\npromogrind.vaultsparkstudios.com`;
+    const text = `📊 2-Way Arbitrage — PromoGrind\nOutcome 1: ${o1} | Outcome 2: ${o2} | Total Stake: $${t}\nStake Side 1: $${r.s1} | Stake Side 2: $${r.s2}\nARB Profit: +$${r.pr} | ROI: ${r.roi}%\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setRCopied(true); setTimeout(()=>setRCopied(false),1500);
   };
@@ -795,7 +841,7 @@ const KellyCriterion = () => {
   const [rCopied, setRCopied] = useState(false);
   const copyResult = () => {
     if(!r) return;
-    const text = `📊 Kelly Criterion — PromoGrind\nWin Probability: ${wp}% | Odds: ${odds} | Bankroll: $${br} | Kelly Fraction: ${frac}%\nRecommended Bet: $${r.bet}\nFull Kelly: ${r.k}% | Fractional Kelly: ${r.ak}%\npromogrind.vaultsparkstudios.com`;
+    const text = `📊 Kelly Criterion — PromoGrind\nWin Probability: ${wp}% | Odds: ${odds} | Bankroll: $${br} | Kelly Fraction: ${frac}%\nRecommended Bet: $${r.bet}\nFull Kelly: ${r.k}% | Fractional Kelly: ${r.ak}%\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setRCopied(true); setTimeout(()=>setRCopied(false),1500);
   };
@@ -1330,7 +1376,7 @@ const Tracker = () => {
               <div key={b.name} style={{padding:10,background:'#0a0e17',borderRadius:8,border:'1px solid #1e293b'}}>
                 <div style={{fontWeight:600,color:'#e2e8f0',fontSize:13,marginBottom:4}}>{b.name}</div>
                 <div style={{color:'#4ade80',fontSize:12,marginBottom:8}}>~${b.value} signup value</div>
-                <a href={b.link || `https://vaultsparkstudios.com/promogrind/#/promo-finder`} target="_blank" rel="noopener noreferrer"
+                <a href={getBookUrl(b) || `${CANONICAL_APP_URL}#/promo-finder`} target="_blank" rel="noopener noreferrer sponsored"
                    style={{display:'block',textAlign:'center',padding:'5px 0',background:'#1e3a2f',border:'1px solid #4ade80',color:'#4ade80',borderRadius:5,fontSize:11,fontWeight:700,textDecoration:'none'}}>
                   Claim →
                 </a>
@@ -1550,7 +1596,7 @@ const ShareWeekBtn = ({entries}) => {
     const best=weekEntries.length?weekEntries.reduce((b,e)=>parseFloat(e.profit)>parseFloat(b.profit)?e:b,weekEntries[0]):null;
     const monStr=`${monDate.getMonth()+1}/${monDate.getDate()}`;
     const todayStr2=`${today2.getMonth()+1}/${today2.getDate()}`;
-    const card=`📊 PromoGrind Weekly Update\nWeek of ${monStr} – ${todayStr2}\n━━━━━━━━━━━━━━━━━━\nProfit: ${weekProfit>=0?"+":""}$${f(weekProfit)}\n${best?`Best play: ${best.type} at ${best.book}`:"Best play: —"}\nEntries: ${weekEntries.length}\n━━━━━━━━━━━━━━━━━━\nTrack yours free: vaultsparkstudios.com/promogrind/`;
+    const card=`📊 PromoGrind Weekly Update\nWeek of ${monStr} – ${todayStr2}\n━━━━━━━━━━━━━━━━━━\nProfit: ${weekProfit>=0?"+":""}$${f(weekProfit)}\n${best?`Best play: ${best.type} at ${best.book}`:"Best play: —"}\nEntries: ${weekEntries.length}\n━━━━━━━━━━━━━━━━━━\nTrack yours free: ${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(card);}catch(e){}
     setWeekCopied(true); setTimeout(()=>setWeekCopied(false),2000);
   };
@@ -1565,7 +1611,7 @@ const ReportCard = ({entries, total}) => {
   const monthVals=Object.values(months); const bestMonth=monthVals.length?Math.max(...monthVals):0; const bestMonthKey=Object.entries(months).sort((a,b)=>b[1]-a[1])[0]?.[0]||"—";
   const conversionEntries=entries.filter(e=>e.type==="Bonus Bet"||e.type==="Profit Boost");
   const avgConv=conversionEntries.length?conversionEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0)/conversionEntries.length:0;
-  const card=`PromoGrind Report Card 📊\n──────────────────\nTotal Profit: $${f(total)}\nBest Month: ${bestMonthKey} ($${f(bestMonth)})\nEntries: ${entries.length} logged\nAvg per Entry: $${f(avgConv)}\nEst. Tax @ 22%: -$${f(total*0.22)} | Keep: $${f(total*0.78)}\n──────────────────\nTrack yours free: vaultsparkstudios.com/promogrind/`;
+  const card=`PromoGrind Report Card 📊\n──────────────────\nTotal Profit: $${f(total)}\nBest Month: ${bestMonthKey} ($${f(bestMonth)})\nEntries: ${entries.length} logged\nAvg per Entry: $${f(avgConv)}\nEst. Tax @ 22%: -$${f(total*0.22)} | Keep: $${f(total*0.78)}\n──────────────────\nTrack yours free: ${CANONICAL_APP_URL}`;
   const copyReport=()=>{try{navigator.clipboard.writeText(card);}catch(e){} setCopiedReport(true); setTimeout(()=>setCopiedReport(false),2000);};
   return (
     <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
@@ -1773,7 +1819,7 @@ const Ledger = () => {
           const wClv=week.filter(e=>e.myOdds&&e.closingOdds);
           const avgClv=wClv.length?wClv.reduce((s,e)=>{const my=toD(e.myOdds),cl=toD(e.closingOdds);return s+(my>1&&cl>1?(my/cl-1)*100:0);},0)/wClv.length:null;
           const card=`📊 PromoGrind Week\nPromos: ${week.length}  |  Profit: ${wPL>=0?"+":""}$${f(wPL)}${avgClv!==null?`\nCLV: ${avgClv>=0?"+":""}${f(avgClv,2)}%`:""}
-\nFree tools at vaultsparkstudios.com/promogrind/`;
+\nFree tools at ${CANONICAL_APP_URL}`;
           try{navigator.clipboard.writeText(card);}catch(e){}
           if(toast) toast('📋 Week card copied!',K.pp);
         }} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>📊 Share Week</button>
@@ -2205,7 +2251,7 @@ const ProfitCertificate = () => {
       bestDay.d ? `Best day: ${bestDay.d} (+$${f(bestDay.p)})` : '',
       '',
       'Tracked with PromoGrind — free sportsbook promo tools',
-      'https://vaultsparkstudios.com/promogrind/',
+      CANONICAL_APP_URL,
     ].filter(Boolean).join('\n');
     return lines;
   };
@@ -2368,6 +2414,15 @@ const detectEV = (games) => {
 };
 
 const LiveScanner = ({ proStatus, mode }) => {
+  if (!FEATURE_FLAGS.liveScanner) {
+    return (
+      <FeatureUnavailableCard
+        featureKey="liveScanner"
+        title="Live Scanner"
+        body="Real-time arb and +EV scanning stays in beta until the live odds backend is activated. The core free calculators, tracker, and learning tools remain available now."
+      />
+    );
+  }
   const toast = useToast();
   const [sports, setSports] = useState(["americanfootball_nfl"]);
   const [activeTab, setActiveTab] = useState(mode==="ev-scanner"?"ev":"arb");
@@ -3724,7 +3779,7 @@ const ReferralHub = () => {
     const { error } = await supabase.from('influencer_codes').upsert({ user_id: rhUser.id, code: influencerCode }, { onConflict: 'user_id' });
     if (!error) setSavedInfluencerCode(influencerCode);
   };
-  const refLink = userId ? `https://vaultsparkstudios.com/promogrind/?ref=${userId}` : "Loading…";
+  const refLink = userId ? `${CANONICAL_APP_URL}?ref=${userId}` : "Loading…";
   const copy = () => { try{navigator.clipboard.writeText(refLink); window.plausible?.('referral_shared'); localStorage.setItem('pg_referral_shared','1');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
   return (<div><div style={S.card}><Tl t="Refer &amp; Earn" badge="FREE VAULTSPARKED" bc={K.pp}/>
     <div style={{...S.note(K.pp),marginBottom:16}}>Share your link. When a friend signs up and subscribes to VaultSparked, you both get <strong>30 days free</strong>. No limit on referrals.</div>
@@ -3789,11 +3844,11 @@ const ReferralHub = () => {
             <div style={{display:'flex',gap:8,alignItems:'center'}}>
               <input
                 readOnly
-                value={`https://vaultsparkstudios.com/promogrind/?ref=${savedInfluencerCode}`}
+                value={`${CANONICAL_APP_URL}?ref=${savedInfluencerCode}`}
                 style={{flex:1,padding:'8px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#94a3b8',borderRadius:6,fontSize:12}}
               />
               <button
-                onClick={() => { navigator.clipboard.writeText(`https://vaultsparkstudios.com/promogrind/?ref=${savedInfluencerCode}`); }}
+                onClick={() => { navigator.clipboard.writeText(`${CANONICAL_APP_URL}?ref=${savedInfluencerCode}`); }}
                 style={{padding:'8px 12px',background:'#1e293b',border:'none',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:13}}
               >Copy</button>
             </div>
@@ -3847,6 +3902,13 @@ function LiveActivityFeed() {
 
 // ═══ PROMO ADVISOR PANEL ═══
 const PromoAdvisorPanel = ({ proStatus, onClose }) => {
+  if (!FEATURE_FLAGS.promoAdvisor) {
+    return (
+      <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
+        <FeatureUnavailableCard featureKey="promoAdvisor" title="Promo Advisor" body="Promo Advisor will appear here once the AI explainer backend is activated." />
+      </div>
+    );
+  }
   const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const DAILY_LIMIT = isPro ? 9999 : 3;
   const [promoText, setPromoText] = useState('');
@@ -4013,12 +4075,13 @@ const PricingPage = () => {
             <span style={{fontSize:12,color:K.mt}}>{plan.period}</span>
           </div>
           {plan.savings&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginBottom:16}}>{plan.savings}</div>}
-          <button onClick={()=>{ window.plausible?.('upgrade_click'); handleUpgrade(plan); }} disabled={upgrading} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12}}>
-            {upgrading?"Processing…":"Upgrade Now"}
+          <button onClick={()=>{ if(FEATURE_FLAGS.paidCheckout){ window.plausible?.('upgrade_click'); handleUpgrade(plan); } }} disabled={upgrading || !FEATURE_FLAGS.paidCheckout} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:(upgrading || !FEATURE_FLAGS.paidCheckout)?"not-allowed":"pointer",fontFamily:font,fontSize:12,opacity:FEATURE_FLAGS.paidCheckout?1:0.55}}>
+            {!FEATURE_FLAGS.paidCheckout ? "Billing activation pending" : upgrading?"Processing…":"Upgrade Now"}
           </button>
         </div>
       ))}
     </div>
+    {!FEATURE_FLAGS.paidCheckout && <div style={{...S.note(K.yl),marginTop:-6,marginBottom:16}}>Paid checkout is not live yet. Free Vault membership and the 7-day Pro trial are active; billing will switch on after the shared Studio checkout rollout is completed.</div>}
     <div style={{padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
       <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>What you get</div>
       {[
@@ -4091,6 +4154,9 @@ const PricingPage = () => {
 // ═══ AI WEEKLY ACTION PLAN ═══
 // ═══ STACK BUILDER ═══
 function StackBuilder({ proStatus }) {
+  if (!FEATURE_FLAGS.stackBuilder) {
+    return <FeatureUnavailableCard featureKey="stackBuilder" title="Stack Builder" body="Stack Builder will unlock here once the AI planning backend is activated." />;
+  }
   const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -4222,6 +4288,9 @@ function StackBuilder({ proStatus }) {
 }
 
 function AIActionPlan({ proStatus }) {
+  if (!FEATURE_FLAGS.aiActionPlan) {
+    return <FeatureUnavailableCard featureKey="aiActionPlan" title="AI Weekly Action Plan" body="AI weekly plans stay in beta until the planning backend is activated." />;
+  }
   const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const [plan, setPlan] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -4559,7 +4628,6 @@ const SmartPromoRecommender = ({ data }) => {
 
 // ═══ PUSH ENABLE BUTTON ═══
 const PushEnableBtn = ({ proStatus }) => {
-  const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const [state, setState] = useState(() => {
     try {
       if(typeof Notification === 'undefined') return 'unsupported';
@@ -4568,8 +4636,17 @@ const PushEnableBtn = ({ proStatus }) => {
       return 'prompt';
     } catch { return 'unsupported'; }
   });
+  const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
+  if(!isPro) return null;
+  if(!FEATURE_FLAGS.pushAlerts) {
+    return (
+      <div style={{fontSize:10,color:K.yl,fontWeight:600,padding:"4px 10px",background:`${K.yl}10`,border:`1px solid ${K.yl}30`,borderRadius:6}}>
+        🔔 Push beta
+      </div>
+    );
+  }
   const toast = useToast();
-  if(!isPro || state === 'unsupported') return null;
+  if(state === 'unsupported') return null;
   if(state === 'enabled') return (
     <div style={{fontSize:10,color:K.gn,fontWeight:600,padding:"4px 10px",background:`${K.gn}10`,border:`1px solid ${K.gn}30`,borderRadius:6}}>🔔 Push On</div>
   );
@@ -5009,7 +5086,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           {[
             {label:"Convert Bonus Bet",slug:"bonus-bet",color:K.gn},
             {label:"Log a Profit Boost",slug:"profit-boost",color:K.yl},
-            {label:"Check Live Scanner",slug:"arb-scanner",color:K.pp},
+            {label:FEATURE_FLAGS.liveScanner?"Check Live Scanner":"View Live Scanner Beta",slug:"arb-scanner",color:K.pp},
             {label:"Update P/L Ledger",slug:"ledger",color:K.ac},
           ].map(a=>(
             <button key={a.slug} onClick={()=>navigate("/"+a.slug)} style={{padding:"7px 14px",background:`${a.color}10`,border:`1px solid ${a.color}30`,borderRadius:6,color:a.color,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>
@@ -5607,7 +5684,7 @@ const WeeklyGrindReport = () => {
   const copyReport = () => {
     if(!report) return;
     const bestDay = report.best ? new Date(report.best.date).toLocaleDateString('en-US',{weekday:'short'}) : '—';
-    const text = `📊 PromoGrind Weekly Report — Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\nvaultsparkstudios.com/promogrind/`;
+    const text = `📊 PromoGrind Weekly Report — Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setCopied(true); setTimeout(()=>setCopied(false),1500);
   };
@@ -5990,7 +6067,7 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
       "💰 PromoGrind Setup",
       `State: ${data.userState||"Not set"} · Bankroll: ${bankroll?"$"+bankroll:"Not set"}`,
       `Books done: ${booksComplete}/${BOOKS.length} · Total profit: $${f(totalProfit)}`,
-      "vaultsparkstudios.com/promogrind/",
+      CANONICAL_APP_URL.replace(/^https?:\/\//,''),
     ].join('\n');
     try{navigator.clipboard.writeText(card);}catch(e){}
     setCardCopied(true); setTimeout(()=>setCardCopied(false),2000);
@@ -6409,7 +6486,7 @@ const SessionModal = ({appData, visitedSlugsRef, onClose}) => {
   const newEntries=Math.max(0,currentCount-startCount);
   const visited=[...visitedSlugsRef.current];
   const getTabName=(s)=>{const item=TABS.flatMap(g=>g.items).find(i=>i.slug===s);return item?item.n:s;};
-  const sessionCard=`PromoGrind Session Summary\nActive: ${mins} min\nTools used: ${visited.length}\nNew ledger entries: ${newEntries}\nVisited: ${visited.map(getTabName).join(', ')}\nvaultsparkstudios.com/promogrind/`;
+  const sessionCard=`PromoGrind Session Summary\nActive: ${mins} min\nTools used: ${visited.length}\nNew ledger entries: ${newEntries}\nVisited: ${visited.map(getTabName).join(', ')}\n${CANONICAL_APP_URL}`;
   return (<div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",zIndex:2000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
     <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,padding:24,maxWidth:420,width:"100%",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
       <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:4}}>Session Summary</div>
@@ -6478,6 +6555,9 @@ const Footer = () => (
         <span style={{color:K.dm,fontWeight:600}}>Affiliate Disclosure:</span> Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.
       </p>
       <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
+        <span style={{color:K.dm,fontWeight:600}}>Access:</span> PromoGrind uses free Vault membership accounts for login and sync across VaultSpark Studio products.
+      </p>
+      <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
         Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool — not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
       </p>
       <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
@@ -6492,6 +6572,7 @@ const Footer = () => (
 
 // ═══ PROMO CHAT ═══
 const PromoChat = ({ navigate }) => {
+  if (!FEATURE_FLAGS.promoChat) return null;
   const { appData } = React.useContext(AppDataCtx) || {};
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -6903,6 +6984,7 @@ export default function App() {
     checkAuth().then(async ok => {
       if (ok) {
         setAuthReady(true);
+        try { window.plausible?.('vault_member_login'); } catch {}
         onDailyLogin();
         getSubscription().then(setProStatus);
         // Record referral if this user arrived via a referral link
@@ -6965,11 +7047,14 @@ export default function App() {
       <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
         <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
-          <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:24}}>Free Sportsbook Promo Conversion Tools</div>
+          <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
+            PromoGrind uses the shared Vault identity system. Creating a free Vault membership gives you access to the app plus sync across all Studio tools.
+          </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
               ["27 Free Calculators","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
-              ["P/L Ledger & Cloud Sync","Track every promo. Syncs across all your devices."],
+              ["Free Vault Membership","One free account unlocks PromoGrind and cross-project sync."],
               ["Live Arb + EV Scanner","Real-time opportunities across 40+ books. VaultSparked Pro."],
             ].map(([title,desc])=>(
               <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>
@@ -6981,7 +7066,11 @@ export default function App() {
               </div>
             ))}
           </div>
-          <div style={{fontSize:10,color:K.mt,letterSpacing:"1.5px",textTransform:"uppercase"}}>Loading your vault…</div>
+          <div style={{display:"flex",justifyContent:"center",gap:12,flexWrap:"wrap",marginBottom:14}}>
+            <a href={FREE_VAULT_MEMBERSHIP_URL} style={{padding:"8px 14px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:11,fontWeight:700,textDecoration:"none"}}>Create Free Vault Membership</a>
+            <a href={CANONICAL_APP_URL} style={{padding:"8px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,textDecoration:"none"}}>Reload App</a>
+          </div>
+          <div style={{fontSize:10,color:K.mt,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your vault…</div>
         </div>
       </div>
     );
@@ -6999,7 +7088,7 @@ export default function App() {
         </ErrorBoundary>
         {isEmbed && (
           <div style={{position:'fixed',bottom:8,right:12,fontSize:11,color:'#475569',opacity:0.7,zIndex:9999}}>
-            Powered by <a href="https://vaultsparkstudios.com/promogrind/" target="_blank" rel="noopener" style={{color:'#4ade80',textDecoration:'none'}}>PromoGrind</a>
+            Powered by <a href={CANONICAL_APP_URL} target="_blank" rel="noopener" style={{color:'#4ade80',textDecoration:'none'}}>PromoGrind</a>
           </div>
         )}
       </div>
@@ -7016,6 +7105,7 @@ export default function App() {
     <CompactCtx.Provider value={compactMode}>
     <CurrencyCtx.Provider value={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+      <TrustStrip/>
       {!isOnline && (
         <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
           OFFLINE MODE — Changes will sync when connection is restored
@@ -7030,7 +7120,7 @@ export default function App() {
             <div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
             <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div>
             <div style={{display:"flex",gap:12,marginTop:6,flexWrap:"wrap"}}>
-              {[["27","Calculators"],["Free","Forever"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
+              {[["27","Calculators"],["Free","Vault Membership"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
                 <div key={label} style={{display:"flex",alignItems:"baseline",gap:4}}>
                   <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
                   <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>
@@ -7044,13 +7134,13 @@ export default function App() {
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
             <DailyStreak/>
-            <button
+            {FEATURE_FLAGS.promoAdvisor && <button
               onClick={() => setShowPromoAdvisor(v => !v)}
               title="Promo Advisor — analyze any sportsbook promo instantly"
               style={{padding:"4px 10px",background:showPromoAdvisor?`${K.pp}20`:"transparent",border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`,borderRadius:6,color:showPromoAdvisor?K.pp:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}
             >
               💡 Advisor
-            </button>
+            </button>}
             {proStatus?.status === "active" && (
               <div style={{fontSize:10,fontWeight:700,color:K.pp,background:`${K.pp}15`,padding:"3px 10px",borderRadius:50,letterSpacing:"1px"}}>PRO</div>
             )}
@@ -7124,6 +7214,7 @@ export default function App() {
         <div style={{position:"absolute",right:0,top:0,bottom:0,width:64,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>
       </div>
       <div className="pg-main-content" style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
+        <MembershipBanner/>
         <ErrorBoundary>
           {slug==='dashboard'
             ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>

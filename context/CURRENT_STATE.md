@@ -1,9 +1,14 @@
 # Current State
 
-Last updated: 2026-03-27 (v22.0 — light mode toggle, math refactor, Profit Certificate, 71 tests, PT-BR completion)
+Last updated: 2026-03-31 (v23.0 — launch-state gating, free Vault membership messaging, trust pass, URL normalization, 75 tests)
 
 ## Version
-v22.0 (app) / 3.0.0 (package.json — not critical)
+v23.0 (app) / 3.0.0 (package.json — not critical)
+
+## Audit Snapshot
+- Free Vault membership is now the explicit access model across app and landing surfaces; this resolves the prior repo-level confusion between "free product" and "requires account."
+- Premium / AI / live surfaces now use centralized frontend launch-state flags so undeployed backends can stay beta-labeled instead of pretending to be live.
+- Build passes and tests expanded from 71 → 75.
 
 ## App.jsx
 ~7,165 lines. Single-file React SPA. Dark/light mode toggle (KD/KL palette swap via Object.assign). Math imported from shared.js (28 functions deduplicated).
@@ -43,6 +48,14 @@ v22.0 (app) / 3.0.0 (package.json — not critical)
 - **Test suite expanded** — 32 → 71 tests (39 new); 13 previously untested functions now covered
 - **PT-BR completion** — 3 new pages: ev-calculator-pt, parlay-calculator-pt, matched-betting-pt; sitemap 178+ URLs
 
+## v23.0 New Features
+- **Launch-state config** — new `src/launchState.js`; public `VITE_PG_FEATURE_*` flags for AI scan, Promo Advisor, PromoChat, Live Scanner, Stack Builder, AI Action Plan, push alerts, and paid checkout
+- **Beta gating** — disabled backend-dependent surfaces now show explicit beta/setup messaging instead of over-promising readiness
+- **Free Vault membership messaging** — loading state, app shell, footer, and landing page now explain the free shared-account model across studio projects
+- **Trust pass** — new trust strip in app shell + stronger access/disclaimer copy in app and landing page
+- **Legacy URL normalization** — share/export/referral strings now point to canonical `vaultsparkstudios.com/promogrind/` instead of stale domains
+- **Tests expanded** — 75 passing tests; added launch-state utility coverage
+
 ## v20.0 New Features
 - **Test suite** — `src/__tests__/math.test.js` (71 tests, all passing); `vitest.config.js`; vitest + @vitest/ui devDependencies in package.json; `npm test` runs all
 - **`src/lib/shared.js`** — canonical pure-JS module: all calc math, K palette, S styles, converters; testable in Node; App.jsx now imports from shared.js (v22 refactor complete)
@@ -64,7 +77,7 @@ v22.0 (app) / 3.0.0 (package.json — not critical)
 - **public/annual-report/index.html** — "State of Sports Betting Promos 2026" PR backlink magnet; Schema.org Report JSON-LD
 
 ## Build
-- App chunk: ~434KB raw / **~116.60 kB gzip** (3.60s build)
+- App chunk: ~440KB raw / **~118.62 kB gzip** (6.99s build)
 - Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
 - Supabase chunk: 194KB raw / 51KB gzip
 - Strategy: network-first JS/CSS, cache-first fonts/images
@@ -150,17 +163,17 @@ v22.0 (app) / 3.0.0 (package.json — not critical)
 | `newsletter_subscribers` | Email capture | ⏳ migration not yet run |
 
 ## Blockers (external — parked)
-1. **Affiliate links** — placeholder URLs in `src/books.js`; zero affiliate revenue
-2. **ANTHROPIC_API_KEY** — parse-bet-slip + ai-action-plan edge functions ready, not deployed
-3. **Odds API** — key not set; Live Scanner non-functional for VaultSparked users
-4. **Stripe** — LLC + EIN needed; products not created; checkout + webhook ready
-5. **Resend** — onboarding-drip + weekly-digest + gift-trial functions ready; key not set
-6. **VAPID keys** — push notifications skeleton ready; not deployed
-7. **Google Search Console** — sitemap (139+ URLs) not yet submitted
-8. **promogrind.com** — CNAME file ready; domain not purchased
+1. **Shared Vault membership rollout** — website agent is still finalizing the global auth system; PromoGrind copy is aligned, but final UX should be rechecked once that rollout lands
+2. **Affiliate links** — placeholder URLs in `src/books.js`; zero affiliate revenue
+3. **ANTHROPIC_API_KEY** — AI scan/chat/advisor/planning functions remain beta-gated until activated
+4. **Odds API** — key not set; Live Scanner remains beta-gated
+5. **Stripe** — LLC + EIN needed; paid checkout remains disabled via launch-state flag
+6. **Resend** — onboarding-drip + weekly-digest + gift-trial functions ready; key not set
+7. **VAPID keys** — push notifications skeleton ready; UI stays beta-gated
+8. **Google Search Console** — sitemap (178+ URLs) not yet submitted
 9. **Chrome Web Store** — extension ready; screenshots + $5 fee needed
 10. **Discord bot** — code ready; needs Discord dev account + env vars
-11. **migration-gift-tokens.sql** — must run in Supabase SQL Editor before gift-trial goes live
+11. **migration-gift-tokens.sql** — must run in Supabase SQL Editor before gift-trial/newsletter flows are truly live
 12. **calc-api** — deploy: `supabase functions deploy calc-api` (no secrets needed)
 
 ## What's working end-to-end
