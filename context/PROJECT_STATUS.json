@@ -11,8 +11,8 @@
   "localPath": "C:\\Users\\p4cka\\documents\\development\\PromoGrind",
   "github": "https://github.com/VaultSparkStudios/promogrind",
   "liveUrl": "https://vaultsparkstudios.com/promogrind/",
-  "currentFocus": "Shared Vault membership rollout alignment plus launch-state activation for AI/live/push/billing as services come online.",
-  "nextMilestone": "Stable free Vault membership launch with backend-dependent premium surfaces activated via feature flags.",
+  "currentFocus": "Soft-launch hardening: website-agent auth alignment, launch smoke validation, and staged feature-flag activation as services come online.",
+  "nextMilestone": "Stable free Vault membership soft launch with smoke validation and backend-dependent premium surfaces still truthfully beta-gated.",
   "blockers": [
     "Website agent is still finalizing the shared Vault membership system — PromoGrind should be rechecked against the final global auth UX once it lands",
     "AI / live / push / billing surfaces are intentionally feature-flagged off until their backend services are actually live",
@@ -27,9 +27,9 @@
     "Chrome extension not submitted to Web Store — distribution channel not activated"
   ],
   "lastUpdated": "2026-03-31",
-  "silScore": 41,
-  "silAvg3": 38.7,
-  "silVelocity": 3,
+  "silScore": 42,
+  "silAvg3": 39.0,
+  "silVelocity": 1,
   "silDebt": "→",
   "silLastSession": "2026-03-31",
   "silSparkline": [],
@@ -87,6 +87,14 @@
     "distribution_reach": 42,
     "revenue_monetization": 16
   },
+  "session_25_additions": [
+    "docs/LAUNCH_CHECKLIST.md — repo-native soft-launch vs full-launch readiness checklist",
+    "docs/FEATURE_FLAG_ACTIVATION_MATRIX.md — exact activation requirements for every VITE_PG_FEATURE_* flag",
+    "src/App.jsx — dashboard MemberWelcomeCard explaining free Vault membership, Pro, and beta-gated features",
+    "Top-intent static SEO and comparison pages updated with trust/access/beta-rollout copy",
+    "scripts/validate-launch-smoke.mjs + npm run smoke:launch — launch-critical copy and doc validation command",
+    "Validation rerun — smoke command passing, tests 75/75, build passing at 119.32 KB gzip"
+  ],
   "session_24_additions": [
     "src/launchState.js — centralized frontend launch-state flags + metadata for AI, live scanner, push, and billing surfaces",
     "App shell trust strip + free Vault membership messaging in loading state, footer, and main shell",
@@ -175,13 +183,13 @@
     "migration-team-accounts.sql, migration-community-promos.sql, migration-influencer-codes.sql",
     "sitemap.xml: 135+ URLs (added income-estimator + embed)"
   ],
-  "next_milestone": "Shared free-membership launch with backend-dependent premium features switched on via flags as services become live",
+  "next_milestone": "Shared free-membership soft launch with smoke validation and staged backend-dependent feature activation",
   "domain": "vaultsparkstudios.com/promogrind/ (current) — CNAME file ready for promogrind.com migration",
   "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
   "build": {
     "sw_version": "promogrind-v3",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "118.62KB",
+    "app_chunk_gzip": "119.32KB",
     "vendor_chunk_gzip": "49.33KB",
     "supabase_chunk_gzip": "50.93KB"
   },

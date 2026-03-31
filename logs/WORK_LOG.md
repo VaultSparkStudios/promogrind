@@ -4,6 +4,39 @@ Append sessions chronologically. Never delete entries.
 
 ---
 
+## 2026-03-31 — Session 25 | v24.0 | Soft-Launch Hardening + Smoke Command
+
+**Session type:** Launch-readiness hardening sprint
+
+**Intent outcome:** Achieved — turned launch assessment into repo-native docs and validation, added the post-login membership explainer, and extended public trust copy to the highest-intent pages
+
+**Completed:**
+
+**Launch docs / validation:**
+- Added `docs/LAUNCH_CHECKLIST.md` to separate soft-launch readiness from full activation readiness
+- Added `docs/FEATURE_FLAG_ACTIVATION_MATRIX.md` to map each `VITE_PG_FEATURE_*` flag to its required backend/service
+- Added `scripts/validate-launch-smoke.mjs` and wired `npm run smoke:launch`
+
+**App / onboarding:**
+- Added `MemberWelcomeCard` on the dashboard so members immediately understand free Vault membership vs VaultSparked Pro vs beta-gated features
+
+**Public trust pass:**
+- Extended free-membership, 21+, educational-tool, and beta-rollout copy to top-intent calculator and comparison pages
+- Removed stale comparison-page copy that implied backend-dependent Pro surfaces were already fully live
+
+**Validation:**
+- `npm run smoke:launch` → passing
+- `npm test` → 75/75 passing
+- `npm run build` → passing (`index` 119.32 kB gzip)
+
+**Open problems:**
+- Shared Vault membership UX still depends on the website-agent rollout
+- Backend-dependent features remain correctly off until services are truly live
+- Browser-level smoke coverage still does not exist in-repo
+
+**Recommended next action:**
+- Recheck the website-agent auth rollout, then extend the trust-strip pattern to the remaining high-intent SEO pages
+
 ## 2026-03-31 — Session 24 | v23.0 | Launch-State Gating + Free Vault Membership Alignment
 
 **Session type:** Implementation sprint from audit recommendations

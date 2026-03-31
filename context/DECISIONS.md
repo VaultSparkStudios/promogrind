@@ -203,3 +203,12 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: Remove global auth from the free path; leave all premium/AI/live surfaces visible and rely on runtime failures/test-mode behavior.
 - Why this was chosen: Preserves studio-wide identity integration while fixing truth/launch honesty inside PromoGrind. Feature flags are the cleanest way to avoid over-promising unactivated systems.
 - Follow-up: Re-check copy/UX after the website agent lands the shared auth changes. Turn flags on only as each backend activation is confirmed.
+
+### 2026-03-31 - Soft-launch readiness uses repo-native docs and smoke validation
+
+- Status: Decided + implemented
+- Context: Launch status was being reasoned about in chat and handoffs, but there was no repeatable repo-native way to validate whether public copy and launch-state truth still matched the intended soft-launch posture.
+- Decision: Add a lightweight `npm run smoke:launch` validation command plus dedicated launch docs (`docs/LAUNCH_CHECKLIST.md`, `docs/FEATURE_FLAG_ACTIVATION_MATRIX.md`) and pair them with a dedicated dashboard `MemberWelcomeCard` rather than overloading the older onboarding checklist.
+- Alternatives considered: Add a full browser automation harness immediately; keep launch validation informal in handoffs; merge the membership explanation into the task checklist.
+- Why this was chosen: It creates an immediate, low-friction release gate using the repo as source of truth, while keeping the membership explanation visible and understandable for users without tangling it with one-time onboarding tasks.
+- Follow-up: Upgrade the smoke flow to browser-level coverage when a UI runner is added, and keep the launch docs in sync with future feature activations.

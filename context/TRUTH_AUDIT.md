@@ -3,7 +3,7 @@
 
 Last reviewed: 2026-03-31
 Overall status: yellow
-Next action: Re-check the shared Vault membership UX after the website agent finishes the global auth rollout, then flip feature flags only for truly live services.
+Next action: Re-check the shared Vault membership UX after the website agent finishes the global auth rollout, then run `npm run smoke:launch` before flipping any public-facing launch claims or feature flags.
 
 ---
 
@@ -22,10 +22,10 @@ Next action: Re-check the shared Vault membership UX after the website agent fin
 |---|---|---|
 | Schema alignment | 5 | `PROJECT_STATUS.json` now reflects the free Vault membership model and launch-state gating |
 | Prompt/template alignment | 5 | Prompts are current and Studio OS write-back executed |
-| Derived-view freshness | 4 | Handoff, task board, status, and SIL refreshed; some historical sections still describe older launch assumptions |
+| Derived-view freshness | 5 | Handoff, task board, status, SIL, launch docs, and smoke validation guidance refreshed this session |
 | Handoff continuity | 5 | Session 23 audit and next-move priorities now captured clearly |
 | Contradiction density | 4 | Main repo-local contradiction resolved; remaining risk is external auth-rollout drift and historical stale copy |
-| **Total** | **23 / 25** | Strong protocol compliance; remaining drift is mostly external coordination and historical residue |
+| **Total** | **24 / 25** | Strong protocol compliance; remaining drift is mostly external coordination and historical residue |
 
 ---
 
@@ -36,7 +36,7 @@ Next action: Re-check the shared Vault membership UX after the website agent fin
 | Product access model | `src/auth.js`, user clarification, shared Vault membership canon | app shell, landing page, status docs | yellow | 2026-03-31 | Re-check after website-agent rollout lands; repo-local copy now aligned |
 | Domain strategy | `context/DECISIONS.md` | old TASK_BOARD / status references to `promogrind.com` as blocker | green | 2026-03-31 | Current surfaces now treat custom domain as optional |
 | Audit freshness | `context/PROJECT_STATUS.json` | prior truth placeholders, stale dates | green | 2026-03-31 | Refreshed this session |
-| Launch-state honesty | `src/launchState.js` | app tool surfaces, pricing claims | yellow | 2026-03-31 | Keep flags off until backends are actually live |
+| Launch-state honesty | `src/launchState.js` | app tool surfaces, pricing claims, launch docs, smoke command | yellow | 2026-03-31 | Keep flags off until backends are actually live; use `npm run smoke:launch` before release work |
 
 ---
 
@@ -59,5 +59,6 @@ Next action: Re-check the shared Vault membership UX after the website agent fin
 ## Recommended Actions
 
 1. Re-verify PromoGrind against the final shared Vault membership UX once the website agent ships it.
-2. Turn on `VITE_PG_FEATURE_*` flags only when the corresponding backend/service is actually live.
-3. Keep extending the trust/compliance copy pass from the main app + landing page to high-intent SEO pages.
+2. Run `npm run smoke:launch` before soft-launch pushes or any public truth/copy changes.
+3. Turn on `VITE_PG_FEATURE_*` flags only when the corresponding backend/service is actually live.
+4. Keep extending the trust/compliance copy pass from the main app + landing page to high-intent SEO pages.

@@ -6,19 +6,23 @@
 
 - [ ] Re-check auth/loading copy once the website agent ships the shared Vault membership fix; verify PromoGrind’s free-account messaging still matches the final global flow
 - [ ] Flip `VITE_PG_FEATURE_*` flags on as each backend/service actually goes live (AI, live scanner, push, billing)
-- [ ] Extend the trust/compliance copy pass from the app shell + landing page to the highest-intent static SEO pages
 - [ ] Deploy `calc-api` and decide whether to surface it publicly or keep it partner-facing until docs exist
 
 ## Next
 
-- [ ] Add post-login member onboarding that explicitly explains free Vault membership vs VaultSparked Pro
+- [ ] Extend the trust/compliance copy pass from the current top-intent pages to the remaining high-intent static SEO pages
 - [ ] Add launch analytics for beta-surface impressions and conversion into activated features after flags turn on
 - [ ] Continue component extraction from `src/App.jsx` once the launch-state pass has settled
-- [ ] **[SIL] Post-login member onboarding card** — explain free Vault membership, Pro, and beta-gated features after first successful login
-- [ ] **[SIL] Feature-flag activation matrix doc** — document every `VITE_PG_FEATURE_*` flag and the backend/service required before enabling it
+- [ ] **[SIL] Browser-level launch smoke harness** — add a real UI-run path for auth redirect, landing, and top calculator checks instead of relying only on repo-text validation
+- [ ] **[SIL] Reusable SEO trust-strip template** — centralize the free-membership / responsible-gambling snippet so future high-intent pages inherit the same launch-safe copy
 
 ## Completed This Session (2026-03-31)
 
+- [x] Added `docs/LAUNCH_CHECKLIST.md` for soft-launch vs full-launch readiness
+- [x] Added `docs/FEATURE_FLAG_ACTIVATION_MATRIX.md` mapping every `VITE_PG_FEATURE_*` flag to its activation requirements
+- [x] Added dashboard `MemberWelcomeCard` explaining free Vault membership, VaultSparked Pro, and beta-gated features
+- [x] Extended the trust/compliance pass to top-intent calculator and comparison pages
+- [x] Added `npm run smoke:launch` (`scripts/validate-launch-smoke.mjs`) to validate launch-critical docs and copy
 - [x] Added centralized frontend launch-state flags in `src/launchState.js`
 - [x] Beta-gated AI / live / push / billing surfaces instead of presenting them as fully live
 - [x] Updated app shell, footer, landing page, and README to explain the free Vault membership model

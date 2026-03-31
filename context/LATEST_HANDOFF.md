@@ -1,79 +1,41 @@
 # Latest Handoff
 
-## Where We Left Off (Session 24)
-- Shipped: 8 improvements across 4 groups — launch-state, trust/copy, analytics/readiness, tests
-- Tests: 75 passing (75 core / 0 server / 0 client) · delta: +4 this session
+## Where We Left Off (Session 25)
+- Shipped: 7 improvements across 4 groups — launch docs, onboarding, trust/copy, validation
+- Tests: 75 passing (75 core / 0 server / 0 client) · delta: +0 this session
 - Deploy: deployed to GitHub Pages · auto-deploy active
 
-Session Intent: Implement the audit recommendations and ideas while keeping the free Vault membership model intact and aligned with the website agent’s shared-auth rollout.
+Session Intent: Harden soft-launch readiness by turning the launch assessment into repo-native docs, adding a member onboarding explainer, and creating a repeatable smoke command.
 
 ### What changed this session
 
 **Shipped:**
-- New `src/launchState.js` with centralized `VITE_PG_FEATURE_*` flags for AI scan, Promo Advisor, PromoChat, Live Scanner, Stack Builder, AI Action Plan, push alerts, and paid checkout
-- AI/live/push/billing surfaces now beta-gate cleanly instead of presenting undeployed backends as live
-- App shell, loading screen, footer, landing page, and README now explicitly explain the free Vault membership model
-- Legacy share/export/referral strings normalized to the canonical `vaultsparkstudios.com/promogrind/` URL
-- Added launch-state tests (`src/__tests__/launchState.test.js`) — suite expanded 71 → 75
+- Added `docs/LAUNCH_CHECKLIST.md` with repo-native soft-launch, core-product, and full-launch readiness gates
+- Added `docs/FEATURE_FLAG_ACTIVATION_MATRIX.md` so `VITE_PG_FEATURE_*` rollout decisions no longer depend on memory
+- Added dashboard `MemberWelcomeCard` to explain free Vault membership, VaultSparked Pro, and beta-gated features after login
+- Extended trust/compliance copy to the highest-intent calculator and comparison SEO pages
+- Added `scripts/validate-launch-smoke.mjs` + `npm run smoke:launch` to validate launch-critical docs, onboarding presence, and public-copy truth
+- Re-ran launch validation, tests, and build with all checks passing
 
 **Validation:**
+- `npm run smoke:launch` → **passing**
 - `npm test` → **75/75 passing**
-- `npm run build` → **passing** (`index` 118.62 kB gzip, `vendor` 49.33 kB gzip, `supabase` 50.93 kB gzip)
+- `npm run build` → **passing** (`index` 119.32 kB gzip, `vendor` 49.33 kB gzip, `supabase` 50.93 kB gzip)
 
 **Priority reset for next session:**
 1. Re-check PromoGrind once the website agent lands the shared Vault membership/auth updates
 2. Turn on the `VITE_PG_FEATURE_*` flags as backend services actually go live
-3. Extend the trust/compliance copy pass to the highest-intent static SEO pages
+3. Extend the trust/compliance copy pass from the current top-intent pages to the remaining high-intent static SEO pages
 4. Decide whether `calc-api` should be publicly surfaced now or stay quietly deployable until docs exist
+5. Upgrade the new repo-native smoke command into a browser-level launch harness when a UI runner is introduced
 
 **Truth audit:**
-- Refreshed `TRUTH_AUDIT.md` again to reflect the free Vault membership model
-- Synced `PROJECT_STATUS.json` to the shipped launch-state gating and updated test/build counts
-- Removed the earlier repo-local contradiction around "free product" vs auth gate; access is now framed as free membership, not guest access
-
-### What was built — session 22 (v22.0)
-
-**Light mode settings toggle (`src/App.jsx` + `index.html`):**
-- `darkMode` is now React state backed by `localStorage('pg_theme')`
-- `Object.assign(K, darkMode ? KD : KL)` swaps entire palette reactively
-- Blocking script in `index.html` reads theme before paint — no flash
-- `body.light` CSS class for dark/light input focus + selection colors
-- Toggle button in header: "☀ LIGHT" / "🌙 DARK"
-- Toast system uses `K.s1` instead of hardcoded `#0f1520`
-
-**Code quality — inline math → shared.js imports:**
-- Removed 28 duplicated math functions + KD/KL/K/font/fontD/S from App.jsx
-- Single import line from `./lib/shared.js` replaces all inline copies
-- S extended with JSX `meter` method locally (shared.js stays pure JS)
-- All calculator math now covered by 71 tests via shared.js
-
-**Profit Certificate (new Track tool):**
-- Shareable ledger-backed win card with period filter (week/month/year)
-- Shows total profit, conversion count, books used, best day
-- Copy + native share (Twitter fallback) — gradient header, verified badge
-- Added as "Profit Cert" in Track tab group (tool #53)
-
-**UX polish:**
-- Ctrl+K keyboard shortcut opens calc search (standard, discoverable)
-- Scroll-to-top on tab/calculator navigation
-- Global input focus rings (accent-color outline, theme-aware)
-- Text selection highlighting (accent color, theme-aware)
-
-**Test suite expansion (32 → 71 tests):**
-- 39 new tests for 13 previously untested functions
-- calcFirst, calcBoost, calcPH, calcMid, calcRO, calcTeaser, calcRR, calcParlay, calcSGP, toP, toF, bestOdds, calcInsurance
-
-**PT-BR market completion (3 new pages):**
-- `public/ev-calculator-pt/index.html` — EV calculator for Brazil
-- `public/parlay-calculator-pt/index.html` — Parlay calculator PT-BR
-- `public/matched-betting-pt/index.html` — Matched betting guide for Brazil
-- Sitemap: 178+ URLs (was 175)
-
-**TASK_BOARD:** Session 22 brainstorm (30 items) added at top
+- Refreshed `TRUTH_AUDIT.md` and `PROJECT_STATUS.json` so launch readiness is now reflected in active truth surfaces, not just chat
+- Added launch docs and smoke validation as explicit repo truth for future soft-launch checks
 
 ## Human Action Required
 
-- [ ] **Coordinate with the website agent once the shared Vault membership system is fixed** — confirm PromoGrind loading/auth copy still matches the final global flow
+- [ ] **Coordinate with the website agent once the shared Vault membership system is fixed** — confirm PromoGrind loading/auth copy and the new member onboarding card still match the final global flow
 - [ ] **Submit sitemap to Google Search Console** — highest-value manual action for discovery once the shared-auth flow is stable
 - [ ] **Run `migration-gift-tokens.sql` in Supabase SQL Editor** — required before gift-trial/newsletter capture paths can be considered live
 - [ ] **Set `ANTHROPIC_API_KEY` and deploy AI functions** — required before turning on AI-related `VITE_PG_FEATURE_*` flags
@@ -83,10 +45,10 @@ Session Intent: Implement the audit recommendations and ideas while keeping the 
 - [ ] **Apply for sportsbook affiliate programs and replace `affiliateLink` values** — monetization activation, not a blocker for free public launch
 
 ### Next session priorities
-1. Component extraction (Tracker/Ledger/LiveScanner → `src/components/`)
-2. Replace remaining hardcoded dark colors throughout App.jsx for full light mode polish
-3. State legalization alert signup (email capture for non-legal states)
-4. Profit Certificate visual polish + Reddit share button
+1. Re-check the global Vault membership rollout once the website agent ships it
+2. Extend the trust/compliance pass to more static SEO pages using a reusable snippet/template
+3. Decide whether `calc-api` should remain quiet infrastructure or get a public docs page
+4. Add a browser-level smoke harness once a UI runner is introduced
 
 ---
 

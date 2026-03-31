@@ -4874,6 +4874,62 @@ function OnboardingChecklist({ appData, user, isPro }) {
   );
 }
 
+function MemberWelcomeCard({ navigate, proStatus }) {
+  const dismissKey = 'pg_member_welcome_v1_dismissed';
+  const [dismissed, setDismissed] = React.useState(() => {
+    try { return !!localStorage.getItem(dismissKey); } catch { return false; }
+  });
+
+  if (dismissed) return null;
+
+  const dismiss = () => {
+    try { localStorage.setItem(dismissKey, '1'); } catch {}
+    setDismissed(true);
+  };
+
+  const proLabel = proStatus?.status === 'trial'
+    ? `VaultSparked Pro trial active — ${proStatus.trial_days_left} day${proStatus.trial_days_left !== 1 ? 's' : ''} left`
+    : proStatus?.status === 'active'
+      ? 'VaultSparked Pro active'
+      : 'VaultSparked Pro is optional';
+
+  return (
+    <div style={{...S.card,border:`1px solid ${K.ac}40`,background:`linear-gradient(135deg, ${K.ac}10, ${K.s1})`,marginBottom:12}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12,marginBottom:10}}>
+        <div>
+          <div style={{fontSize:11,color:K.ac,fontWeight:700,letterSpacing:'1.4px',textTransform:'uppercase',marginBottom:6}}>Member Welcome</div>
+          <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:6}}>How access works in PromoGrind</div>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:760}}>
+            Free Vault membership is the account layer for PromoGrind and other Studio tools. The free core product is live now; Pro and backend-dependent surfaces unlock in stages as services come online.
+          </div>
+        </div>
+        <button onClick={dismiss} style={{background:'none',border:'none',color:K.mt,cursor:'pointer',fontSize:18,lineHeight:1,padding:0}}>×</button>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))',gap:10,marginBottom:12}}>
+        <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
+          <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:4}}>Free Vault Membership</div>
+          <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>Login, sync, calculators, tracker, ledger, and learning tools.</div>
+        </div>
+        <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
+          <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:4}}>VaultSparked Pro</div>
+          <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>{proLabel}. Paid checkout stays off until the Studio billing rollout is fully live.</div>
+        </div>
+        <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
+          <div style={{fontSize:11,fontWeight:700,color:K.yl,marginBottom:4}}>Beta-Gated Features</div>
+          <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>Live scanner, AI helpers, and push alerts remain beta until their backends are activated.</div>
+        </div>
+      </div>
+
+      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+        <button onClick={() => navigate('/bonus-bet')} style={{padding:'7px 12px',background:K.gn,border:'none',borderRadius:6,color:K.bg,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>Start with free tools →</button>
+        <button onClick={() => navigate('/upgrade')} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>See Pro status</button>
+        <button onClick={dismiss} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:'pointer',fontFamily:font}}>Dismiss</button>
+      </div>
+    </div>
+  );
+}
+
 // ═══ DAILY DASHBOARD ═══
 const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
@@ -4935,6 +4991,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
+      <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>

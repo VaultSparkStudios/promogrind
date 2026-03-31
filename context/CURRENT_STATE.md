@@ -1,17 +1,18 @@
 # Current State
 
-Last updated: 2026-03-31 (v23.0 — launch-state gating, free Vault membership messaging, trust pass, URL normalization, 75 tests)
+Last updated: 2026-03-31 (v24.0 — launch docs, member onboarding card, trust pass extension, launch smoke command, 75 tests)
 
 ## Version
-v23.0 (app) / 3.0.0 (package.json — not critical)
+v24.0 (app) / 3.0.0 (package.json — not critical)
 
 ## Audit Snapshot
 - Free Vault membership is now the explicit access model across app and landing surfaces; this resolves the prior repo-level confusion between "free product" and "requires account."
 - Premium / AI / live surfaces now use centralized frontend launch-state flags so undeployed backends can stay beta-labeled instead of pretending to be live.
-- Build passes and tests expanded from 71 → 75.
+- Launch readiness is now encoded in repo-native docs and validation, not only in handoff notes.
+- Build passes and tests remain green at 75/75.
 
 ## App.jsx
-~7,165 lines. Single-file React SPA. Dark/light mode toggle (KD/KL palette swap via Object.assign). Math imported from shared.js (28 functions deduplicated).
+~7,042 lines. Single-file React SPA. Dark/light mode toggle (KD/KL palette swap via Object.assign). Math imported from shared.js (28 functions deduplicated).
 
 ## Tabs / Tools
 | Group | Count | Tools |
@@ -25,7 +26,7 @@ v23.0 (app) / 3.0.0 (package.json — not critical)
 
 **Total: 53 tools**
 
-## Static SEO Pages: 88
+## Static SEO Pages: 91
 - 17 keyword pages (bonus-bet, arb-calculator, kelly-criterion, no-vig, profit-boost, parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting, free-bet-calculator, deposit-match-calculator, rollover-calculator, same-game-parlay)
 - 10 US state pages (NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN)
 - 8 UK pages (matched-betting-uk, bonus-bets-uk, London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
@@ -56,6 +57,13 @@ v23.0 (app) / 3.0.0 (package.json — not critical)
 - **Legacy URL normalization** — share/export/referral strings now point to canonical `vaultsparkstudios.com/promogrind/` instead of stale domains
 - **Tests expanded** — 75 passing tests; added launch-state utility coverage
 
+## v24.0 New Features
+- **Launch checklist** — `docs/LAUNCH_CHECKLIST.md` now distinguishes soft public launch, core-product readiness, and full monetized/live-feature launch
+- **Feature-flag activation matrix** — `docs/FEATURE_FLAG_ACTIVATION_MATRIX.md` maps every `VITE_PG_FEATURE_*` flag to the exact backend/service required before enabling it
+- **Post-login member onboarding card** — new dashboard `MemberWelcomeCard` explains free Vault membership, VaultSparked Pro, and beta-gated features without relying on the older task checklist
+- **Trust pass extension** — high-intent calculator and comparison pages now explain free Vault membership access, 21+/legal-state limits, educational-tool framing, and beta-gated premium surfaces
+- **Launch smoke command** — `npm run smoke:launch` validates launch-critical docs, onboarding presence, trust-copy surfaces, and stale overclaim copy before release work
+
 ## v20.0 New Features
 - **Test suite** — `src/__tests__/math.test.js` (71 tests, all passing); `vitest.config.js`; vitest + @vitest/ui devDependencies in package.json; `npm test` runs all
 - **`src/lib/shared.js`** — canonical pure-JS module: all calc math, K palette, S styles, converters; testable in Node; App.jsx now imports from shared.js (v22 refactor complete)
@@ -77,7 +85,7 @@ v23.0 (app) / 3.0.0 (package.json — not critical)
 - **public/annual-report/index.html** — "State of Sports Betting Promos 2026" PR backlink magnet; Schema.org Report JSON-LD
 
 ## Build
-- App chunk: ~440KB raw / **~118.62 kB gzip** (6.99s build)
+- App chunk: ~443.55KB raw / **~119.32 kB gzip**
 - Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
 - Supabase chunk: 194KB raw / 51KB gzip
 - Strategy: network-first JS/CSS, cache-first fonts/images

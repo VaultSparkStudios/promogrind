@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▅▆▄▆
-Avgs — 3: 38.7 | 5: 38.8 | 10: 34.0 | 25: 34.0 | all: 34.0
-  └ 3-session: Dev 7.7 | Align 8.7 | Momentum 8.0 | Engage 5.3 | Process 9.0
-Velocity trend: ↑  |  Protocol velocity: →  |  Debt: →
-Momentum runway: ~0.9 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-03-31 | Session 24 | Total: 41/50 | Velocity: 3 | protocolVelocity: 0
+Sparkline (last 5 totals): ▅▆▄▆▆
+Avgs — 3: 39.0 | 5: 39.2 | 10: 35.3 | 25: 35.3 | all: 35.3
+  └ 3-session: Dev 7.7 | Align 8.7 | Momentum 8.0 | Engage 5.3 | Process 9.3
+Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: →
+Momentum runway: ~2.3 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-03-31 | Session 25 | Total: 42/50 | Velocity: 1 | protocolVelocity: 2
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -226,3 +226,30 @@ Avgs — 3: 38.7 | 5: 38.8 | 10: 34.0 | 25: 34.0 | all: 34.0
 4. Activated-feature analytics — fire dedicated events when a beta-gated feature is later enabled and first used, so rollout impact is measurable; first step is event names + a small helper in `sync.js`; Execution probability: Medium
 
 **Committed to TASK_BOARD:** [SIL] Post-login member onboarding card · [SIL] Feature-flag activation matrix doc
+
+## 2026-03-31 — Session 25 | Total: 42/50 | Velocity: 1 | Debt: →
+Avgs — 3: 39.0 | 5: 39.2 | 10: 35.3 | 25: 35.3 | all: 35.3
+  └ 3-session: Dev 7.7 | Align 8.7 | Momentum 8.0 | Engage 5.3 | Process 9.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 8 | → | Smoke command added, build/test still green, and launch docs now reduce release-time ambiguity without adding framework churn |
+| Creative Alignment | 9 | → | Free Vault membership, beta honesty, and trust framing are now carried through both app and top-intent public pages |
+| Momentum | 8 | ↓ | Fewer net Now tasks closed than session 24, but the session still shipped durable launch-readiness infrastructure |
+| Engagement | 6 | → | Member onboarding clarifies value after login; no new external user signal yet |
+| Process Quality | 10 | ↑ | Startup, runway preload, write-back, launch docs, and repeatable validation all tightened the project protocol |
+| **Total** | **42/50** | ↑ | |
+
+**IGNIS note:** Launch readiness improves fastest when truth, onboarding, and validation are shipped together instead of as separate cleanup sessions.
+
+**Top win:** Soft-launch readiness is now encoded in repo-native docs and a repeatable smoke command rather than relying on memory or handoff prose.
+**Top gap:** The final launch decision still depends on the website-agent auth rollout and other external activations outside this repo.
+**Intent outcome:** Achieved — the session delivered the launch checklist, member onboarding explainer, trust-pass extension, and smoke command the user requested.
+
+**Brainstorm**
+1. Browser-level launch smoke harness — check landing, auth redirect, dashboard load, and top calculator navigation in one real UI run; Execution probability: High
+2. Reusable SEO trust-strip snippet — extract the trust/access block into a repeatable template or generation step for future high-intent pages; Execution probability: High
+3. Launch dashboard panel — show current flag states, pending external blockers, and last smoke/build/test result inside one internal screen; Execution probability: Medium
+4. Flag activation audit event helper — log when a feature moves from beta to enabled and when it gets its first real use; Execution probability: Medium
+
+**Committed to TASK_BOARD:** [SIL] Browser-level launch smoke harness · [SIL] Reusable SEO trust-strip template

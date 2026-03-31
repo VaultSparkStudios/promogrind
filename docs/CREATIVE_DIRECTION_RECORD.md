@@ -94,3 +94,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: Treat free Vault membership as canon, keep global auth integration, and implement all feasible launch/readiness recommendations around that model instead of ungating the app
 - Why it matters: Changes the highest-leverage execution path from guest access work to launch-state honesty, trust/compliance, and coordination with the shared website-auth rollout
 - Supersedes prior entry: Session 23 audit assumption that guest access should replace global auth
+
+### 2026-03-31 — Session 25 launch hardening direction
+
+- Category: Direction
+- Human input: "yes" (to turn launch-readiness into a concrete checklist), then "do 1 & 2", then "add smoke script", then "complete full closeout and push/commit"
+- Area affected: launch protocol, dashboard onboarding, public trust copy, validation workflow, release process
+- Previous state: Launch readiness existed as analysis plus selective copy fixes, but not as a single repo-native checklist or repeatable smoke command
+- New required direction: Convert launch status into an actionable checklist, implement the repo-side launch blockers first, add the post-login onboarding explainer, add a smoke command, then complete full closeout and ship the changes
+- Why it matters: Moves PromoGrind from subjective launch discussion to a concrete release workflow that can be repeated before future pushes
+- Supersedes prior entry: —
