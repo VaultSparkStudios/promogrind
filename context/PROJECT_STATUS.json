@@ -1,13 +1,46 @@
 {
-  "name": "PromoGrind",
+  "schemaVersion": "1.3",
   "slug": "promogrind",
-  "medium": "web-app",
+  "name": "PromoGrind",
+  "type": "tool",
+  "lifecycle": "deployed",
+  "audience": "public-unlaunched",
   "status": "active",
-  "stage": "pre-launch",
-  "version": "22.0.0",
-  "priority": "high",
   "health": "green",
   "owner": "VaultSpark Studios",
+  "localPath": "C:\\Users\\p4cka\\documents\\development\\PromoGrind",
+  "github": "https://github.com/VaultSparkStudios/promogrind",
+  "liveUrl": "https://vaultsparkstudios.com/promogrind/",
+  "currentFocus": "Affiliate approval pending. VAPID + Stripe setup pending.",
+  "nextMilestone": "Affiliate links + push notifications live.",
+  "blockers": [
+    "Affiliate tracking links not inserted — referralLink field in books.js has placeholder URLs; needs real affiliate-approved links",
+    "Odds API key not set (Live Scanner non-functional for VaultSparked users)",
+    "Stripe not configured — Monthly ($24.99) + Annual ($199) products needed; create-checkout Edge Function ready",
+    "Resend not configured — weekly-digest function ready, key not set",
+    "Stripe live mode blocked until LLC + EIN",
+    "VAPID keys not generated — push notifications non-functional",
+    "ANTHROPIC_API_KEY not set — parse-bet-slip Edge Function deployed but inactive",
+    "parse-bet-slip not deployed — needs `supabase functions deploy parse-bet-slip`",
+    "Chrome extension not submitted to Web Store — load unpacked locally to test"
+  ],
+  "lastUpdated": "2026-03-31",
+  "silScore": 41,
+  "silAvg3": 39.3,
+  "silVelocity": 11,
+  "silDebt": "→",
+  "silLastSession": "2026-03-27",
+  "silSparkline": [],
+  "ignisScore": 39091,
+  "ignisGrade": "FORGE",
+  "ignisLastComputed": "2026-03-28",
+  "testsTotal": null,
+  "lastDeployStatus": "session 21 — committed + pushed (688fcfc) — live via GitHub Pages",
+  "truthAuditStatus": "yellow",
+  "truthAuditLastRun": "YYYY-MM-DD",
+  "medium": "web-app",
+  "version": "22.0.0",
+  "priority": "high",
   "repo": "VaultSparkStudios/promogrind",
   "public_url": "https://vaultsparkstudios.com/promogrind/",
   "future_url": "https://promogrind.com/ (CNAME ready, DNS not yet configured)",
@@ -64,7 +97,7 @@
     "Build: 116.60 KB gzip | Tests: 71/71"
   ],
   "session_21_additions": [
-    "Disabled broken light mode \u2014 removed CSS invert(1) hue-rotate(180deg) filter hack",
+    "Disabled broken light mode — removed CSS invert(1) hue-rotate(180deg) filter hack",
     "Locked darkMode = true (constant); removed theme toggle button from header",
     "Added KD (dark) + KL (light) dual color palettes in App.jsx + shared.js",
     "Converted S static style properties to getters (card, label, input, rr, help, helpH, helpTerm)",
@@ -72,58 +105,58 @@
     "Build: 115.24 KB gzip (was 115.56 KB)"
   ],
   "session_20_additions": [
-    "Test suite \u2014 src/__tests__/math.test.js (32 tests, all passing); vitest.config.js; vitest devDependencies in package.json",
-    "src/lib/shared.js \u2014 canonical pure-JS math/constants module; testable in Node; non-breaking (App.jsx still inline)",
-    "StackBuilder component \u2014 VaultSparked-gated; bankroll + book multi-select; calls stack-builder edge fn; AI 3-step promo plan",
-    "stack-builder edge fn \u2014 supabase/functions/stack-builder/index.ts; Claude Haiku; needs deploy + ANTHROPIC_API_KEY",
-    "ShareCard enhanced \u2014 Reddit + X/Twitter buttons; Arb2Way gets share button",
-    "Dev auth bypass \u2014 VITE_DEV_BYPASS_AUTH=true env var skips VaultSparked redirect in local dev",
-    "PT-BR SEO pages \u2014 bonus-bet-pt, arb-calculator-pt, kelly-criterion-pt; hreflang en/es/pt-BR",
-    "Newsletter landing \u2014 public/the-grind/index.html; email capture to newsletter_subscribers",
-    "Creator program landing \u2014 public/creator-program/index.html; 30% rev share; application form",
-    "sitemap.xml \u2014 175+ URLs (+5 new pages)"
+    "Test suite — src/__tests__/math.test.js (32 tests, all passing); vitest.config.js; vitest devDependencies in package.json",
+    "src/lib/shared.js — canonical pure-JS math/constants module; testable in Node; non-breaking (App.jsx still inline)",
+    "StackBuilder component — VaultSparked-gated; bankroll + book multi-select; calls stack-builder edge fn; AI 3-step promo plan",
+    "stack-builder edge fn — supabase/functions/stack-builder/index.ts; Claude Haiku; needs deploy + ANTHROPIC_API_KEY",
+    "ShareCard enhanced — Reddit + X/Twitter buttons; Arb2Way gets share button",
+    "Dev auth bypass — VITE_DEV_BYPASS_AUTH=true env var skips VaultSparked redirect in local dev",
+    "PT-BR SEO pages — bonus-bet-pt, arb-calculator-pt, kelly-criterion-pt; hreflang en/es/pt-BR",
+    "Newsletter landing — public/the-grind/index.html; email capture to newsletter_subscribers",
+    "Creator program landing — public/creator-program/index.html; 30% rev share; application form",
+    "sitemap.xml — 175+ URLs (+5 new pages)"
   ],
   "session_18_additions": [
-    "PromoAdvisorPanel \u2014 floating \ud83d\udca1 header button + slide-out panel; Claude Haiku promo explainer; 3/day free / unlimited pro; calls promo-advisor edge fn",
-    "promo-advisor edge function \u2014 supabase/functions/promo-advisor/index.ts; Claude Haiku; POST {promoText} \u2192 {verdict, rating, explanation, ev, action, hedge}",
-    "DailyStreak milestone awards \u2014 7/30/100-day streaks award 50/200/500 Vault Points via award_vault_points RPC; parallel RPCs; toast confirmation",
-    "Trial urgency banner 3-variant \u2014 green (>3 days), amber (>1), red (\u22641)",
-    "onboarding-drip trial expiry emails \u2014 day 4 (3 days left) + day 6 (last chance); guarded by trial_emails_sent in user_metadata",
-    "weekly-digest personalized stats \u2014 getUserWeekStats: weekly P/L + top book + login streak + action item per user",
-    "PricingPage 3-tier \u2014 Concierge $9.99/mo waitlist card; isConcierge() in auth.js",
-    "20 new US state SEO pages \u2014 IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT (30 state pages total)",
-    "sitemap.xml \u2014 169+ URLs",
-    "Simplify review \u2014 milestone loop, ratingColor fix, isLimited extracted, usesKey midnight fix, weekly-digest getUserWeekStats parallelized"
+    "PromoAdvisorPanel — floating 💡 header button + slide-out panel; Claude Haiku promo explainer; 3/day free / unlimited pro; calls promo-advisor edge fn",
+    "promo-advisor edge function — supabase/functions/promo-advisor/index.ts; Claude Haiku; POST {promoText} → {verdict, rating, explanation, ev, action, hedge}",
+    "DailyStreak milestone awards — 7/30/100-day streaks award 50/200/500 Vault Points via award_vault_points RPC; parallel RPCs; toast confirmation",
+    "Trial urgency banner 3-variant — green (>3 days), amber (>1), red (≤1)",
+    "onboarding-drip trial expiry emails — day 4 (3 days left) + day 6 (last chance); guarded by trial_emails_sent in user_metadata",
+    "weekly-digest personalized stats — getUserWeekStats: weekly P/L + top book + login streak + action item per user",
+    "PricingPage 3-tier — Concierge $9.99/mo waitlist card; isConcierge() in auth.js",
+    "20 new US state SEO pages — IN, IA, WV, KS, MD, MA, LA, KY, NC, CT, NV, OR, MS, MO, VT, NH, WY, ND, SD, MT (30 state pages total)",
+    "sitemap.xml — 169+ URLs",
+    "Simplify review — milestone loop, ratingColor fix, isLimited extracted, usesKey midnight fix, weekly-digest getUserWeekStats parallelized"
   ],
   "session_16_additions": [
-    "Email capture interstitial \u2014 public/js/pg-capture.js injected on 5 SEO pages; saves to newsletter_subscribers Supabase table",
-    "Gift 14 Days Free \u2014 GiftTrialBox in ReferralHub + gift-trial edge function (rate-limited, token-based, Resend optional)",
-    "Live Activity Feed \u2014 rotating social proof on PricingPage (10 events, 3.5s interval)",
-    "AI Action Plan \u2014 AIActionPlan component + ai-action-plan edge fn (Claude Haiku, bankroll-tiered, daily cache); new Action Plan tab in Live group",
-    "Starter Pack Modal \u2014 3 onboarding profiles (Casual/Hunter/Grinder) on first Dashboard visit",
-    "Chrome Extension bet slip auto-fill \u2014 detectBetSlip() polls DOM every 2s, appends ?sz=&bo= to calculator opens",
-    "PromoGrind Verified badge \u2014 public/promogrind-verified/ landing page + badge.svg; partner outreach program",
-    "Public Calculator REST API \u2014 calc-api edge function, 6 endpoints (bonus-bet, arb, ev, profit-boost, no-vig, kelly), no auth",
-    "EV Scanner free teaser \u2014 opportunity count tease above upgrade gate for non-subscribers",
-    "Account Health Alert Panel \u2014 gubbed/limited/inactive book detection in Tracker with specific advice",
-    "migration-gift-tokens.sql \u2014 gift_tokens + newsletter_subscribers tables + redeem_gift_token RPC",
-    "sitemap.xml \u2014 added promogrind-verified/ (139+ URLs)"
+    "Email capture interstitial — public/js/pg-capture.js injected on 5 SEO pages; saves to newsletter_subscribers Supabase table",
+    "Gift 14 Days Free — GiftTrialBox in ReferralHub + gift-trial edge function (rate-limited, token-based, Resend optional)",
+    "Live Activity Feed — rotating social proof on PricingPage (10 events, 3.5s interval)",
+    "AI Action Plan — AIActionPlan component + ai-action-plan edge fn (Claude Haiku, bankroll-tiered, daily cache); new Action Plan tab in Live group",
+    "Starter Pack Modal — 3 onboarding profiles (Casual/Hunter/Grinder) on first Dashboard visit",
+    "Chrome Extension bet slip auto-fill — detectBetSlip() polls DOM every 2s, appends ?sz=&bo= to calculator opens",
+    "PromoGrind Verified badge — public/promogrind-verified/ landing page + badge.svg; partner outreach program",
+    "Public Calculator REST API — calc-api edge function, 6 endpoints (bonus-bet, arb, ev, profit-boost, no-vig, kelly), no auth",
+    "EV Scanner free teaser — opportunity count tease above upgrade gate for non-subscribers",
+    "Account Health Alert Panel — gubbed/limited/inactive book detection in Tracker with specific advice",
+    "migration-gift-tokens.sql — gift_tokens + newsletter_subscribers tables + redeem_gift_token RPC",
+    "sitemap.xml — added promogrind-verified/ (139+ URLs)"
   ],
   "session_15_additions": [
-    "Onboarding checklist on Dashboard \u2014 5-step getting-started card, auto-detects completion",
-    "Book signup progress tracker \u2014 Sportsbooks tab shows unsigned books + estimated promo value",
-    "Behavioral upgrade triggers \u2014 arb (5+ uses) and ledger (3+ entries) contextual upsell banners",
-    "Plausible funnel events \u2014 trial_start, upgrade_click, referral_shared, first_ledger_entry, first_calc_run",
-    "Calculator share cards \u2014 profitable BonusBet/ProfitBoost results get copy/share card",
-    "Taxes Estimator \u2014 new Calculate tool, 2025 brackets, W-2G tracker, quarterly schedule, PDF print",
-    "3 competitor SEO pages \u2014 vs ProfitDuel, vs OddsJam, vs BetterBet (high-intent comparison traffic)",
-    "Discord bot \u2014 discord-bot/bot.js with /promos + /calc commands + daily 9am community promo digest",
-    "UTM params on 35 SEO page redirects \u2014 Plausible now attributes SPA traffic to source pages",
-    "sitemap.xml \u2014 138+ URLs"
+    "Onboarding checklist on Dashboard — 5-step getting-started card, auto-detects completion",
+    "Book signup progress tracker — Sportsbooks tab shows unsigned books + estimated promo value",
+    "Behavioral upgrade triggers — arb (5+ uses) and ledger (3+ entries) contextual upsell banners",
+    "Plausible funnel events — trial_start, upgrade_click, referral_shared, first_ledger_entry, first_calc_run",
+    "Calculator share cards — profitable BonusBet/ProfitBoost results get copy/share card",
+    "Taxes Estimator — new Calculate tool, 2025 brackets, W-2G tracker, quarterly schedule, PDF print",
+    "3 competitor SEO pages — vs ProfitDuel, vs OddsJam, vs BetterBet (high-intent comparison traffic)",
+    "Discord bot — discord-bot/bot.js with /promos + /calc commands + daily 9am community promo digest",
+    "UTM params on 35 SEO page redirects — Plausible now attributes SPA traffic to source pages",
+    "sitemap.xml — 138+ URLs"
   ],
   "session_14_additions": [
     "White-label embed mode (?embed=1 hides nav + shows watermark)",
-    "Bet Slip \u2192 Auto-Track: AI scan result \u2192 one-tap add to Bet Tracker",
+    "Bet Slip → Auto-Track: AI scan result → one-tap add to Bet Tracker",
     "Influencer Affiliate Dashboard in ReferralHub (VaultSparked-gated): vanity code + click/signup stats",
     "Community Promos tab in Learn group: browse/upvote/submit community promos",
     "Team Accounts UI: full create/invite/manage replaces waitlist",
@@ -132,19 +165,8 @@
     "migration-team-accounts.sql, migration-community-promos.sql, migration-influencer-codes.sql",
     "sitemap.xml: 135+ URLs (added income-estimator + embed)"
   ],
-  "blockers": [
-    "Affiliate tracking links not inserted \u2014 referralLink field in books.js has placeholder URLs; needs real affiliate-approved links",
-    "Odds API key not set (Live Scanner non-functional for VaultSparked users)",
-    "Stripe not configured \u2014 Monthly ($24.99) + Annual ($199) products needed; create-checkout Edge Function ready",
-    "Resend not configured \u2014 weekly-digest function ready, key not set",
-    "Stripe live mode blocked until LLC + EIN",
-    "VAPID keys not generated \u2014 push notifications non-functional",
-    "ANTHROPIC_API_KEY not set \u2014 parse-bet-slip Edge Function deployed but inactive",
-    "parse-bet-slip not deployed \u2014 needs `supabase functions deploy parse-bet-slip`",
-    "Chrome extension not submitted to Web Store \u2014 load unpacked locally to test"
-  ],
   "next_milestone": "Affiliate links + Odds API + Stripe = first revenue-capable deploy",
-  "domain": "vaultsparkstudios.com/promogrind/ (current) \u2014 CNAME file ready for promogrind.com migration",
+  "domain": "vaultsparkstudios.com/promogrind/ (current) — CNAME file ready for promogrind.com migration",
   "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
   "build": {
     "sw_version": "promogrind-v3",
@@ -185,7 +207,7 @@
     "subscribe_util": "subscribeToPush(vapidPublicKey) in src/sw-register.js",
     "push_enable_btn": "PushEnableBtn component in DailyDashboard (VaultSparked-gated)",
     "migration": "scripts/migration-push-subscriptions.sql (created, not yet run)",
-    "activate": "generate VAPID keys \u2192 set secrets \u2192 deploy function \u2192 run migration \u2192 add VITE_VAPID_PUBLIC_KEY to .env"
+    "activate": "generate VAPID keys → set secrets → deploy function → run migration → add VITE_VAPID_PUBLIC_KEY to .env"
   },
   "chrome_extension": {
     "status": "ready to load unpacked",
@@ -210,14 +232,14 @@
       "book detection",
       "contextual calculator suggestions in popup"
     ],
-    "activate": "Chrome \u2192 chrome://extensions \u2192 Load unpacked \u2192 select extension/ folder"
+    "activate": "Chrome → chrome://extensions → Load unpacked → select extension/ folder"
   },
   "ai_bet_slip_parser": {
     "status": "built, not deployed",
     "edge_function": "supabase/functions/parse-bet-slip/index.ts",
     "model": "claude-haiku-4-5-20251001 (vision)",
     "returns": "betType, stake, odds, hedgeOdds, boostPct, maxExtra, book, confidence",
-    "ui": "\ud83d\udcf7 Scan button in BonusBet calculator beside Parse button",
+    "ui": "📷 Scan button in BonusBet calculator beside Parse button",
     "activate": "supabase functions deploy parse-bet-slip + supabase secrets set ANTHROPIC_API_KEY=sk-ant-..."
   },
   "seo": {
@@ -254,7 +276,7 @@
       "bonus-bets-edinburgh",
       "bonus-bets-liverpool"
     ],
-    "promo_calendar": "UK market toggle (\ud83c\udf0e/\ud83c\uddfa\ud83c\uddf8/\ud83c\uddec\ud83c\udde7) added to PromoCalendar \u2014 filters PROMO_SCHED to US or UK books",
+    "promo_calendar": "UK market toggle (🌎/🇺🇸/🇬🇧) added to PromoCalendar — filters PROMO_SCHED to US or UK books",
     "uk_books_in_app": [
       "bet365 UK",
       "Betway UK",
@@ -265,7 +287,7 @@
   },
   "domain_migration": {
     "cname_file": "public/CNAME = promogrind.com",
-    "status": "prepared \u2014 DNS not yet configured",
+    "status": "prepared — DNS not yet configured",
     "steps": [
       "1. Buy promogrind.com",
       "2. Add CNAME DNS record pointing to vaultsparkstudios.github.io",
@@ -276,23 +298,17 @@
     ]
   },
   "session_13_additions": [
-    "Chrome extension (MV3) \u2014 extension/ directory, 5 files",
-    "AI bet slip parser \u2014 supabase/functions/parse-bet-slip/ using Claude claude-haiku vision",
-    "\ud83d\udcf7 Scan button in BonusBet calculator \u2014 auto-fills fields from screenshot",
-    "PromoCalendar market toggle \u2014 \ud83c\udf0e/\ud83c\uddfa\ud83c\uddf8/\ud83c\uddec\ud83c\udde7 filter for US vs UK promos",
+    "Chrome extension (MV3) — extension/ directory, 5 files",
+    "AI bet slip parser — supabase/functions/parse-bet-slip/ using Claude claude-haiku vision",
+    "📷 Scan button in BonusBet calculator — auto-fills fields from screenshot",
+    "PromoCalendar market toggle — 🌎/🇺🇸/🇬🇧 filter for US vs UK promos",
     "UK SEO pages: matched-betting-uk, bonus-bets-uk, 6 city pages (London/Manchester/Birmingham/Glasgow/Edinburgh/Liverpool)",
     "Content blog: public/blog/ with index + 5 full posts",
     "CNAME file for promogrind.com domain migration prep",
     "sitemap.xml: 131+ URLs (added 8 UK + 6 blog + blog index)"
   ],
-  "silScore": 41,
-  "silAvg3": 39.3,
-  "silVelocity": 11,
-  "silDebt": "\u2192",
-  "silLastSession": "2026-03-27",
-  "lastDeployStatus": "session 21 \u2014 committed + pushed (688fcfc) \u2014 live via GitHub Pages",
   "future_projects": [
-    "Email drip sequence (5-email onboarding after signup) \u2014 Resend infra ready",
+    "Email drip sequence (5-email onboarding after signup) — Resend infra ready",
     "Taxes calculator tool (in-app, reads from Ledger)",
     "Shared odds cache in Supabase (needed at 10+ concurrent VaultSparked users)",
     "Team accounts backend (team_members table)",
@@ -302,8 +318,5 @@
     "Firefox extension (port from Chrome MV3)",
     "Chrome Web Store submission for extension",
     "Social share cards from calculator results (viral loop)"
-  ],
-  "ignisScore": 25,
-  "ignisGrade": "DARK-ZONE",
-  "ignisLastComputed": "2026-03-27"
+  ]
 }
