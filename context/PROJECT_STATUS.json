@@ -26,9 +26,9 @@
     "parse-bet-slip not deployed — needs `supabase functions deploy parse-bet-slip` if kept visible",
     "Chrome extension not submitted to Web Store — distribution channel not activated"
   ],
-  "lastUpdated": "2026-03-31",
+  "lastUpdated": "2026-04-01",
   "silScore": 42,
-  "silAvg3": 39.0,
+  "silAvg3": 39,
   "silVelocity": 1,
   "silDebt": "→",
   "silLastSession": "2026-03-31",
