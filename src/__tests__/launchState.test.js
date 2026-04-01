@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ensureTrailingSlash, parseLaunchFlag, getFeatureState } from "../launchState.js";
+import { FEATURE_KEYS, ensureTrailingSlash, parseLaunchFlag, getFeatureState, getLaunchSummary } from "../launchState.js";
 
 describe("launchState helpers", () => {
   it("parses truthy launch flags", () => {
@@ -26,5 +26,11 @@ describe("launchState helpers", () => {
     expect(feature.label).toBe("Live Scanner");
     expect(typeof feature.enabled).toBe("boolean");
     expect(feature.setup).toMatch(/ODDS_API_KEY/);
+  });
+
+  it("returns a coherent launch summary", () => {
+    const summary = getLaunchSummary();
+    expect(summary.totalCount).toBe(FEATURE_KEYS.length);
+    expect(summary.enabledCount + summary.disabledCount).toBe(FEATURE_KEYS.length);
   });
 });

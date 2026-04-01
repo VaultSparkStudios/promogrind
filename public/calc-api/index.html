@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromoGrind Calc API — Partner and Developer Docs</title>
+  <meta name="description" content="REST endpoints for PromoGrind calculator math. Bonus bet, arbitrage, EV, no-vig, Kelly, and profit-boost calculations for partner and developer integrations." />
+  <link rel="canonical" href="https://vaultsparkstudios.com/promogrind/calc-api/" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: #0a0e17; color: #e2e8f0; line-height: 1.7; padding: 24px 16px 72px; }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .eyebrow { color: #4ade80; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+    h1 { font-size: clamp(30px, 5vw, 44px); margin-bottom: 10px; }
+    p { color: #cbd5e1; margin-bottom: 14px; }
+    .card { background: #0f1724; border: 1px solid #1e293b; border-radius: 14px; padding: 18px; margin-top: 16px; }
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
+    .trust strong { color: #4ade80; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+    pre { background: #060a10; border: 1px solid #1e293b; border-radius: 10px; padding: 14px; overflow-x: auto; color: #86efac; margin-top: 10px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+    .endpoint { padding: 14px; background: #0a0f19; border: 1px solid #1e293b; border-radius: 10px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; margin-bottom: 8px; background: #1e3a2f; color: #4ade80; }
+    a { color: #4ade80; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Developer Surface</div>
+    <h1>PromoGrind Calc API</h1>
+    <p>PromoGrind exposes calculator math through a lightweight REST surface for partner tools, content embeds, and internal integrations.</p>
+    <div class="trust"><strong>Current posture:</strong> the calc API is implementation-ready in the repo, but production deployment and public promotion should stay aligned with launch-state truth. Core public calculators are live now with free Vault membership. Partner or developer usage should be staged deliberately.</div>
+
+    <div class="card">
+      <p><strong>Status:</strong> API function exists in <code>supabase/functions/calc-api</code>. Deployment is still a manual activation step.</p>
+      <p><strong>Deploy command:</strong> <code>supabase functions deploy calc-api</code></p>
+      <p><strong>Auth:</strong> None required for the current calculator endpoints.</p>
+    </div>
+
+    <div class="grid">
+      <div class="endpoint"><div class="badge">POST</div><div><strong>/bonus-bet</strong></div><p>Convert bonus bets into guaranteed-cash outputs.</p></div>
+      <div class="endpoint"><div class="badge">POST</div><div><strong>/arb</strong></div><p>Return arbitrage stake sizing and locked profit math.</p></div>
+      <div class="endpoint"><div class="badge">POST</div><div><strong>/ev</strong></div><p>Expected-value calculation against a supplied fair probability.</p></div>
+      <div class="endpoint"><div class="badge">POST</div><div><strong>/profit-boost</strong></div><p>Boosted-odds value and optimal hedge sizing.</p></div>
+      <div class="endpoint"><div class="badge">POST</div><div><strong>/no-vig</strong></div><p>Fair-odds and implied probability output.</p></div>
+      <div class="endpoint"><div class="badge">POST</div><div><strong>/kelly</strong></div><p>Kelly fraction and bankroll sizing guidance.</p></div>
+    </div>
+
+    <div class="card">
+      <strong>Example request</strong>
+      <pre>{
+  "odds": "+300",
+  "hedgeOdds": "-320",
+  "stake": 100
+}</pre>
+    </div>
+
+    <div class="card">
+      <p><strong>Recommended use cases</strong></p>
+      <p>Partner embeds, internal Studio surfaces, creator tools, and future public developer docs once deployment, support expectations, and rate posture are finalized.</p>
+      <p><a href="https://vaultsparkstudios.com/promogrind/embed/">Need embed-ready surfaces instead?</a> Use the public iframe docs for the fastest path.</p>
+    </div>
+  </div>
+</body>
+</html>

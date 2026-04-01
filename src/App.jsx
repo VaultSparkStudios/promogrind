@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef, Component } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BOOKS, getBookUrl } from "./books.js";
+import { BOOKS, getBookUrl, getConfiguredAffiliateCount, hasConfiguredAffiliateLinks } from "./books.js";
 import { checkAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 import { subscribeToPush } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD, S as _S } from "./lib/shared.js";
-import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, FEATURE_FLAGS, getFeatureState } from "./launchState.js";
+import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary } from "./launchState.js";
+import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -198,7 +199,7 @@ const MembershipBanner = () => (
 const FeatureUnavailableCard = ({ featureKey, title, body }) => {
   const feature = getFeatureState(featureKey);
   useEffect(() => {
-    try { window.plausible?.('launch_feature_beta_seen', { props: { feature: feature.key } }); } catch {}
+    trackFeatureGateSeen(feature.key);
   }, [feature.key]);
   return (
     <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`}}>
@@ -208,6 +209,119 @@ const FeatureUnavailableCard = ({ featureKey, title, body }) => {
       </div>
       <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>
         {feature.setup}
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap",alignItems:"center"}}>
+        <a
+          href={FREE_VAULT_MEMBERSHIP_URL}
+          onClick={() => trackFeatureGateClick(feature.key, "free-membership")}
+          style={{padding:"7px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,textDecoration:"none",fontFamily:font}}
+        >
+          Free Vault membership
+        </a>
+        <span style={{fontSize:10,color:K.mt}}>Setup progress appears in the dashboard launch panel.</span>
+      </div>
+    </div>
+  );
+};
+
+const LaunchReadinessPanel = () => {
+  const summary = getLaunchSummary();
+  const configuredAffiliates = getConfiguredAffiliateCount();
+  const affiliateReady = hasConfiguredAffiliateLinks();
+
+  return (
+    <div style={{...S.card,border:`1px solid ${K.ac}35`,marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,flexWrap:"wrap",marginBottom:12}}>
+        <div>
+          <div style={{fontSize:11,color:K.ac,fontWeight:700,letterSpacing:"1.4px",textTransform:"uppercase",marginBottom:6}}>Launch Readiness</div>
+          <div style={{fontFamily:fontD,fontSize:17,fontWeight:700,color:K.tx,marginBottom:6}}>Current launch posture</div>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:760}}>
+            PromoGrind's core calculators are live. Upside is mostly bottlenecked by activation, discovery, and measurement rather than missing product scope.
+          </div>
+        </div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <div style={{padding:"8px 10px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,minWidth:108}}>
+            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>Flags Live</div>
+            <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.gn}}>{summary.enabledCount}/{summary.totalCount}</div>
+          </div>
+          <div style={{padding:"8px 10px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,minWidth:108}}>
+            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>Affiliates</div>
+            <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:configuredAffiliates ? K.gn : K.yl}}>{configuredAffiliates}/{BOOKS.length}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(240px, 1fr))",gap:10,marginBottom:12}}>
+        <div style={{padding:"12px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
+          <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Validation</div>
+          {Object.values(LAUNCH_VALIDATION).map((check) => (
+            <div key={check.label} style={{display:"flex",justifyContent:"space-between",gap:10,fontSize:11,color:K.dm,marginBottom:6}}>
+              <span>{check.label}</span>
+              <span style={{color:/pass|75\/75|new/i.test(check.lastKnown) ? K.gn : K.yl,fontWeight:700}}>{check.lastKnown}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{padding:"12px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
+          <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Manual blockers</div>
+          <div style={{fontSize:10,color:affiliateReady ? K.gn : K.yl,marginBottom:8}}>
+            Affiliate readiness: {affiliateReady ? "partially configured" : "not configured yet"}
+          </div>
+          {LAUNCH_BLOCKERS.slice(0, 4).map((blocker) => (
+            <div key={blocker.key} style={{marginBottom:8}}>
+              <div style={{fontSize:11,color:blocker.status === "manual" ? K.yl : K.ac,fontWeight:700}}>{blocker.label}</div>
+              <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{blocker.detail}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Feature rollout</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(170px, 1fr))",gap:8}}>
+          {FEATURE_KEYS.map((key) => {
+            const feature = getFeatureState(key);
+            return (
+              <div key={key} style={{padding:"10px 12px",background:K.s2,border:`1px solid ${feature.enabled ? K.gn : K.bd}`,borderRadius:8}}>
+                <div style={{fontSize:11,fontWeight:700,color:feature.enabled ? K.gn : K.tx,marginBottom:4}}>{feature.label}</div>
+                <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{feature.enabled ? "Enabled" : feature.shortReason}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CommunityWinsWall = () => {
+  const [entries, setEntries] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('pg_wins_wall') || '[]'); } catch { return []; }
+  });
+
+  if (!entries.length) return null;
+
+  return (
+    <div style={{...S.card,marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:10,flexWrap:"wrap"}}>
+        <div>
+          <div style={{fontSize:11,color:K.pp,fontWeight:700,letterSpacing:"1.4px",textTransform:"uppercase",marginBottom:4}}>Wins Wall</div>
+          <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Recent certificate opt-ins</div>
+        </div>
+        <button
+          onClick={() => { try { localStorage.removeItem('pg_wins_wall'); } catch {} setEntries([]); }}
+          style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}
+        >
+          Clear local wall
+        </button>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(170px, 1fr))",gap:8}}>
+        {entries.slice(0, 6).map((entry) => (
+          <div key={entry.id} style={{padding:"12px",background:`${K.gn}08`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
+            <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:6}}>{entry.periodLabel}</div>
+            <div style={{fontFamily:fontD,fontSize:24,fontWeight:800,color:K.gn,marginBottom:4}}>+${entry.total}</div>
+            <div style={{fontSize:10,color:K.dm,lineHeight:1.5}}>{entry.count} conversions across {entry.books} books</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -2272,6 +2386,24 @@ const ProfitCertificate = () => {
     }
   };
 
+  const addToWinsWall = () => {
+    const entry = {
+      id: `${period}-${Date.now()}`,
+      period,
+      periodLabel,
+      total: f(total),
+      count,
+      books: books.length,
+    };
+    try {
+      const prev = JSON.parse(localStorage.getItem('pg_wins_wall') || '[]');
+      const next = [entry, ...prev.filter((item) => item.period !== period)].slice(0, 12);
+      localStorage.setItem('pg_wins_wall', JSON.stringify(next));
+    } catch {}
+    trackLaunchEvent('wins_wall_opt_in', { period, total: f(total) });
+    if (toast) toast('Added to Wins Wall', K.pp);
+  };
+
   if (entries.length === 0) return (
     <div style={S.card}>
       <div style={{fontSize:14,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:8}}>Profit Certificate</div>
@@ -2302,6 +2434,7 @@ const ProfitCertificate = () => {
         <div style={{display:'flex',gap:8,justifyContent:'center',marginTop:16}}>
           <button onClick={copy} style={{padding:'6px 14px',background:copied?K.gn:K.ac,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:'pointer',fontFamily:font}}>{copied?'Copied!':'Copy'}</button>
           <button onClick={shareNative} style={{padding:'6px 14px',background:K.pp,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:'pointer',fontFamily:font}}>Share</button>
+          <button onClick={addToWinsWall} style={{padding:'6px 14px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontWeight:700,fontSize:10,cursor:'pointer',fontFamily:font}}>Add to Wins Wall</button>
         </div>
       </div>
     </div>
@@ -2423,6 +2556,9 @@ const LiveScanner = ({ proStatus, mode }) => {
       />
     );
   }
+  useEffect(() => {
+    trackFeatureEnabledUse('liveScanner', mode || 'live');
+  }, [mode]);
   const toast = useToast();
   const [sports, setSports] = useState(["americanfootball_nfl"]);
   const [activeTab, setActiveTab] = useState(mode==="ev-scanner"?"ev":"arb");
@@ -4075,7 +4211,15 @@ const PricingPage = () => {
             <span style={{fontSize:12,color:K.mt}}>{plan.period}</span>
           </div>
           {plan.savings&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginBottom:16}}>{plan.savings}</div>}
-          <button onClick={()=>{ if(FEATURE_FLAGS.paidCheckout){ window.plausible?.('upgrade_click'); handleUpgrade(plan); } }} disabled={upgrading || !FEATURE_FLAGS.paidCheckout} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:(upgrading || !FEATURE_FLAGS.paidCheckout)?"not-allowed":"pointer",fontFamily:font,fontSize:12,opacity:FEATURE_FLAGS.paidCheckout?1:0.55}}>
+          <button onClick={()=>{
+            if(FEATURE_FLAGS.paidCheckout){
+              window.plausible?.('upgrade_click');
+              trackFeatureEnabledUse('paidCheckout', plan.id);
+              handleUpgrade(plan);
+            } else {
+              trackFeatureGateClick('paidCheckout', plan.id);
+            }
+          }} disabled={upgrading || !FEATURE_FLAGS.paidCheckout} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:(upgrading || !FEATURE_FLAGS.paidCheckout)?"not-allowed":"pointer",fontFamily:font,fontSize:12,opacity:FEATURE_FLAGS.paidCheckout?1:0.55}}>
             {!FEATURE_FLAGS.paidCheckout ? "Billing activation pending" : upgrading?"Processing…":"Upgrade Now"}
           </button>
         </div>
@@ -4992,6 +5136,8 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
+      <LaunchReadinessPanel />
+      <CommunityWinsWall />
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>

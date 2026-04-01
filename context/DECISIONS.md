@@ -212,3 +212,21 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: Add a full browser automation harness immediately; keep launch validation informal in handoffs; merge the membership explanation into the task checklist.
 - Why this was chosen: It creates an immediate, low-friction release gate using the repo as source of truth, while keeping the membership explanation visible and understandable for users without tangling it with one-time onboarding tasks.
 - Follow-up: Upgrade the smoke flow to browser-level coverage when a UI runner is added, and keep the launch docs in sync with future feature activations.
+
+### 2026-03-31 - Browser smoke uses build + Vite preview instead of adding a new test framework
+
+- Status: Decided + implemented
+- Context: The next launch-hardening step was browser-level verification, but the repo did not already include a dedicated browser E2E framework and the task needed to stay repo-local and low-friction.
+- Decision: Add `npm run smoke:browser`, which builds the app, serves it through Vite preview, and verifies key browser-facing routes and trust/copy surfaces over HTTP.
+- Alternatives considered: Add Playwright immediately; stay with text-only smoke validation; wait for a larger UI-runner adoption session.
+- Why this was chosen: It raises verification quality beyond repo-text checks without introducing another framework or requiring a large harness migration right now.
+- Follow-up: If a full browser runner is adopted later, migrate these checks into that suite rather than keeping two separate smoke systems long-term.
+
+### 2026-03-31 - Launch operations become a first-class in-product surface
+
+- Status: Decided + implemented
+- Context: Launch readiness, blockers, and staged feature rollout status were accurate in docs and handoffs but still too easy to lose track of during implementation sessions.
+- Decision: Add a dashboard `LaunchReadinessPanel` plus centralized launch telemetry helpers so rollout state, blockers, and beta-surface signals are visible in-product and measurable.
+- Alternatives considered: Keep all launch operations in Markdown only; defer telemetry until after launch; add a separate internal admin app.
+- Why this was chosen: It keeps the launch truth close to the product, reduces note-chasing, and gives the staged rollout work measurable instrumentation with minimal new infrastructure.
+- Follow-up: Expand the panel once backend-driven rollout metrics or a server-backed wins wall are introduced.

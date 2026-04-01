@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▅▆▄▆▆
-Avgs — 3: 39.0 | 5: 39.2 | 10: 35.3 | 25: 35.3 | all: 35.3
-  └ 3-session: Dev 7.7 | Align 8.7 | Momentum 8.0 | Engage 5.3 | Process 9.3
-Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: →
-Momentum runway: ~2.3 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-03-31 | Session 25 | Total: 42/50 | Velocity: 1 | protocolVelocity: 2
+Sparkline (last 5 totals): ▄▆▇▆█
+Avgs — 3: 41.7 | 5: 40.0 | 10: 36.3 | 25: 36.3 | all: 36.3
+  └ 3-session: Dev 8.0 | Align 9.0 | Momentum 8.0 | Engage 6.3 | Process 10.0
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
+Momentum runway: ~2.6 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-03-31 | Session 27 | Total: 43/50 | Velocity: 6 | protocolVelocity: 2
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -253,3 +253,53 @@ Avgs — 3: 39.0 | 5: 39.2 | 10: 35.3 | 25: 35.3 | all: 35.3
 4. Flag activation audit event helper — log when a feature moves from beta to enabled and when it gets its first real use; Execution probability: Medium
 
 **Committed to TASK_BOARD:** [SIL] Browser-level launch smoke harness · [SIL] Reusable SEO trust-strip template
+
+## 2026-03-31 — Session 26 | Total: 40/50 | Velocity: 0 | Debt: →
+Avgs — 3: 41.0 | 5: 39.6 | 10: 35.6 | 25: 35.6 | all: 35.6
+  └ 3-session: Dev 8.0 | Align 9.0 | Momentum 8.0 | Engage 6.0 | Process 9.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 8 | → | Product remains stable and well-scoped, but browser-level validation and continued extraction are still pending |
+| Creative Alignment | 9 | → | The product still cleanly matches the math-first, trust-first, non-hype positioning |
+| Momentum | 7 | ↓ | Useful audit and reprioritization session, but no shipped product increment |
+| Engagement | 6 | → | Good retention and trust surfaces exist, but live user/distribution signals remain thin |
+| Process Quality | 10 | → | Full Studio OS read/write loop executed cleanly and the audit was written back into active truth surfaces |
+| **Total** | **40/50** | ↓ | |
+
+**Top win:** The project no longer lacks clarity on what matters most; the leverage points are activation, distribution, and measurement, not more feature sprawl.
+**Top gap:** Revenue and discovery still trail product maturity because the highest-upside manual activations are not yet live.
+**Intent outcome:** Achieved — compact audit completed, scored, prioritized, and stored in project memory.
+
+**Brainstorm**
+1. Launch readiness dashboard panel — one internal screen for flags, blockers, and latest smoke/build/test results; improves decision speed and process confidence
+2. Beta-surface analytics helper — impression/click/first-use events for gated features; improves rollout quality and engagement measurement
+3. Public calc-api docs page — converts quiet infrastructure into partnership, SEO, and developer-distribution leverage
+4. Shareable wins wall fed by Profit Certificate opt-ins — converts real user outcomes into trust and referral fuel
+
+**Committed to TASK_BOARD:** [SIL] Launch readiness dashboard panel · [SIL] Beta-surface analytics helper
+
+## 2026-03-31 — Session 27 | Total: 43/50 | Velocity: 6 | Debt: →
+Avgs — 3: 41.7 | 5: 40.0 | 10: 36.3 | 25: 36.3 | all: 36.3
+  └ 3-session: Dev 8.0 | Align 9.0 | Momentum 8.0 | Engage 6.3 | Process 10.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 8 | → | Build, tests, text smoke, and browser smoke are all green; monolith debt still exists but verification quality improved materially |
+| Creative Alignment | 9 | → | Launch-readiness work stayed aligned with the trust-first, math-first positioning |
+| Momentum | 9 | ↑ | Multiple high-impact repo-local recommendations and brainstorm items shipped in one session |
+| Engagement | 7 | ↑ | Wins-wall scaffolding and rollout telemetry now create better feedback loops and proof surfaces |
+| Process Quality | 10 | → | Full Studio OS write-back executed with current truth, validation, and additive creative direction logging |
+| **Total** | **43/50** | ↑ | |
+
+**Top win:** The project now has operating surfaces, telemetry scaffolding, and browser-facing validation instead of relying only on notes and static docs.
+**Top gap:** The highest-ceiling activations are still manual and external: affiliate links, Search Console, and AI deployment.
+**Intent outcome:** Achieved — implemented the top repo-local items first, then completed the remaining feasible recommendations and ideas.
+
+**Brainstorm**
+1. Server-backed wins wall opt-ins — turn local proof-of-profit cards into an approved shared trust surface with moderation and opt-in storage
+2. Calc-api launch playbook — decide deployment posture, rate handling, attribution language, and whether the docs stay partner-facing or go public
+3. Trust-strip propagation script — auto-apply the approved snippet to every high-intent SEO page so future copy drift drops
+4. Widget variants pack — ship sportsbook-specific countdown themes and compact embed sizes for publisher adoption
+
+**Committed to TASK_BOARD:** [SIL] Server-backed wins wall opt-ins · [SIL] Calc-api launch playbook

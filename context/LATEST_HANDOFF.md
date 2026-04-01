@@ -1,5 +1,79 @@
 # Latest Handoff
 
+## Where We Left Off (Session 27)
+- Shipped: browser-facing smoke coverage, launch dashboard, telemetry scaffolding, wins-wall loop, trust-template expansion, calc-api docs, promo widget
+- Tests: 78 passing (78 core / 0 server / 0 client) · delta: +3 tests
+- Deploy: unchanged locally; build passes
+
+Session Intent: Implement the highest-impact repo-local audit items first, then complete the remaining feasible recommendations and brainstorm ideas inside the repo.
+
+### What changed this session
+
+**Shipped:**
+- Added `scripts/validate-browser-launch-smoke.mjs` + `npm run smoke:browser` to build the app, serve it locally, and verify browser-facing routes/copy over HTTP
+- Added dashboard `LaunchReadinessPanel` so launch status, blockers, and validation commands are visible in-product
+- Added `src/launchTelemetry.js` and wired beta-surface / rollout event helpers for impression, click, enabled-use, and wins-wall tracking
+- Added local `CommunityWinsWall` scaffolding driven by `ProfitCertificate` opt-ins
+- Added `docs/SEO_TRUST_STRIP_TEMPLATE.md` and expanded trust/access copy to more high-intent SEO pages
+- Added `public/calc-api/index.html` so the existing REST surface now has partner/developer docs
+- Added `public/promo-expiry-widget/index.html` and corresponding embed docs example
+
+**Validation:**
+- `npm test` → **78/78 passing**
+- `npm run smoke:launch` → **passing**
+- `npm run smoke:browser` → **passing**
+- `npm run build` → **passing** (`index` 121.06 kB gzip, `vendor` 49.33 kB gzip, `supabase` 50.93 kB gzip)
+
+**Priority reset for next session:**
+1. Apply real affiliate-approved links in `src/books.js`
+2. Submit the sitemap to Google Search Console
+3. Set `ANTHROPIC_API_KEY`, deploy AI functions, and activate the matching feature flags only when the services are live
+4. Extend the new trust-strip template to the remaining high-intent SEO surfaces
+5. Decide whether the new calc-api docs stay partner-facing or become a public launch surface after deployment
+
+## Human Action Required
+
+- [ ] **Apply sportsbook affiliate links once approved** — biggest immediate revenue unlock
+- [ ] **Submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` to Google Search Console** — highest immediate discovery unlock
+- [ ] **Set `ANTHROPIC_API_KEY` and deploy AI functions** — unlocks the product's clearest differentiators
+- [ ] **Keep `VITE_PG_FEATURE_*` flags off until their backends are actually live** — preserve launch truth
+
+---
+
+## Where We Left Off (Session 26)
+- Shipped: no product code changes; audit + prioritization + Studio OS write-back completed
+- Tests: not re-run this session; last recorded state remains 75 passing
+- Deploy: unchanged
+
+Session Intent: Audit current project quality, launch posture, and upside potential; convert the result into a compact scorecard and prioritized recommendations.
+
+### What changed this session
+
+**Audit outcome:**
+- Product/launch potential assessed at **79/100**
+- Operating/SIL score assessed at **40/50**
+- Strongest areas: feature completeness, UX polish, process hygiene, launch-truth discipline
+- Weakest areas: monetization activation, distribution reach, real engagement instrumentation
+
+**Priority reset for next session:**
+1. Wire real affiliate links once approvals exist
+2. Submit sitemap / discovery surfaces and keep launch-safe trust copy expanding across SEO pages
+3. Add browser-level smoke coverage to complement `npm run smoke:launch`
+4. Add a lightweight launch-readiness panel and beta-surface analytics so rollout decisions are measurable
+
+**Committed SIL follow-through:**
+- Added `[SIL] Launch readiness dashboard panel`
+- Added `[SIL] Beta-surface analytics helper`
+
+## Human Action Required
+
+- [ ] **Apply sportsbook affiliate links once approved** — biggest immediate revenue unlock
+- [ ] **Submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` to Google Search Console** — highest immediate discovery unlock
+- [ ] **Set `ANTHROPIC_API_KEY` and deploy AI functions** — unlocks the product's clearest differentiators
+- [ ] **Keep `VITE_PG_FEATURE_*` flags off until their backends are actually live** — preserve launch truth
+
+---
+
 ## Where We Left Off (Session 25)
 - Shipped: 7 improvements across 4 groups — launch docs, onboarding, trust/copy, validation
 - Tests: 75 passing (75 core / 0 server / 0 client) · delta: +0 this session

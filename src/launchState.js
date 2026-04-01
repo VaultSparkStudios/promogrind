@@ -15,6 +15,16 @@ export const CANONICAL_APP_URL = ensureTrailingSlash(
 );
 
 export const FREE_VAULT_MEMBERSHIP_URL = "https://vaultsparkstudios.com/vault-member/";
+export const FEATURE_KEYS = [
+  "aiScan",
+  "promoAdvisor",
+  "promoChat",
+  "liveScanner",
+  "stackBuilder",
+  "aiActionPlan",
+  "pushAlerts",
+  "paidCheckout",
+];
 
 export const FEATURE_FLAGS = {
   aiScan: parseLaunchFlag(env.VITE_PG_FEATURE_AI_SCAN, false),
@@ -26,6 +36,56 @@ export const FEATURE_FLAGS = {
   pushAlerts: parseLaunchFlag(env.VITE_PG_FEATURE_PUSH_ALERTS, false),
   paidCheckout: parseLaunchFlag(env.VITE_PG_FEATURE_PAID_CHECKOUT, false),
 };
+
+export const LAUNCH_VALIDATION = {
+  smokeCommand: {
+    label: "Repo launch smoke",
+    command: "npm run smoke:launch",
+    lastKnown: "passing",
+  },
+  browserSmoke: {
+    label: "Browser smoke",
+    command: "npm run smoke:browser",
+    lastKnown: "new",
+  },
+  tests: {
+    label: "Vitest",
+    command: "npm test",
+    lastKnown: "75/75 passing",
+  },
+  build: {
+    label: "Build",
+    command: "npm run build",
+    lastKnown: "passing",
+  },
+};
+
+export const LAUNCH_BLOCKERS = [
+  {
+    key: "affiliateLinks",
+    label: "Affiliate links",
+    status: "manual",
+    detail: "Real affiliate-approved links still need to replace placeholders in src/books.js.",
+  },
+  {
+    key: "searchConsole",
+    label: "Search Console",
+    status: "manual",
+    detail: "Sitemap submission is still pending for discovery activation.",
+  },
+  {
+    key: "anthropic",
+    label: "ANTHROPIC activation",
+    status: "manual",
+    detail: "AI surfaces stay beta-gated until the secret is set and functions are deployed.",
+  },
+  {
+    key: "browserSmoke",
+    label: "Browser smoke coverage",
+    status: "repo",
+    detail: "A browser-facing smoke script now exists and should be run alongside build/test before launch work.",
+  },
+];
 
 export const FEATURE_INFO = {
   aiScan: {
@@ -75,5 +135,14 @@ export function getFeatureState(key) {
     key,
     enabled: !!FEATURE_FLAGS[key],
     ...(FEATURE_INFO[key] || { label: key, shortReason: "Feature is not enabled.", setup: "" }),
+  };
+}
+
+export function getLaunchSummary() {
+  const enabledCount = FEATURE_KEYS.filter((key) => FEATURE_FLAGS[key]).length;
+  return {
+    enabledCount,
+    disabledCount: FEATURE_KEYS.length - enabledCount,
+    totalCount: FEATURE_KEYS.length,
   };
 }

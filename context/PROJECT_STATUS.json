@@ -11,8 +11,8 @@
   "localPath": "C:\\Users\\p4cka\\documents\\development\\PromoGrind",
   "github": "https://github.com/VaultSparkStudios/promogrind",
   "liveUrl": "https://vaultsparkstudios.com/promogrind/",
-  "currentFocus": "Soft-launch hardening: website-agent auth alignment, launch smoke validation, and staged feature-flag activation as services come online.",
-  "nextMilestone": "Stable free Vault membership soft launch with smoke validation and backend-dependent premium surfaces still truthfully beta-gated.",
+  "currentFocus": "Soft-launch hardening: browser smoke coverage, launch dashboard visibility, and staged feature-flag activation as services come online.",
+  "nextMilestone": "Stable free Vault membership soft launch with browser-facing smoke validation and backend-dependent premium surfaces still truthfully beta-gated.",
   "blockers": [
     "Website agent is still finalizing the shared Vault membership system — PromoGrind should be rechecked against the final global auth UX once it lands",
     "AI / live / push / billing surfaces are intentionally feature-flagged off until their backend services are actually live",
@@ -26,22 +26,22 @@
     "parse-bet-slip not deployed — needs `supabase functions deploy parse-bet-slip` if kept visible",
     "Chrome extension not submitted to Web Store — distribution channel not activated"
   ],
-  "lastUpdated": "2026-04-01",
-  "silScore": 42,
-  "silAvg3": 39,
-  "silVelocity": 1,
+  "lastUpdated": "2026-03-31",
+  "silScore": 43,
+  "silAvg3": 41.7,
+  "silVelocity": 6,
   "silDebt": "→",
   "silLastSession": "2026-03-31",
   "silSparkline": [],
   "ignisScore": 39091,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-03-28",
-  "testsTotal": 75,
-  "lastDeployStatus": "session 24 code ready locally; GitHub Pages deploy will reflect launch-state gating once pushed",
+  "testsTotal": 78,
+  "lastDeployStatus": "session 27 code ready locally; launch dashboard, browser smoke, calc-api docs, and promo widget are ready to deploy on next push",
   "truthAuditStatus": "yellow",
   "truthAuditLastRun": "2026-03-31",
   "medium": "web-app",
-  "version": "23.0.0",
+  "version": "25.0.0",
   "priority": "high",
   "repo": "VaultSparkStudios/promogrind",
   "public_url": "https://vaultsparkstudios.com/promogrind/",
@@ -56,7 +56,7 @@
   ],
   "backend": true,
   "last_updated": "2026-03-31",
-  "app_lines": 7165,
+  "app_lines": 7180,
   "auth_lines": 198,
   "calculator_count": 27,
   "tab_count": {
@@ -68,12 +68,12 @@
     "Learn": 11
   },
   "total_tools": 53,
-  "static_seo_pages": 91,
+  "static_seo_pages": 93,
   "blog_posts": 5,
-  "test_count": 75,
-  "test_status": "75/75 passing",
-  "audit_score": 79,
-  "audit_score_note": "2026-03-31 implementation pass: launch-state flags, beta gating, free Vault membership messaging, URL normalization, and trust/compliance upgrades shipped. Build and tests are healthy (75/75). Main remaining gaps are external activations and website-agent auth rollout alignment.",
+  "test_count": 78,
+  "test_status": "78/78 passing",
+  "audit_score": 82,
+  "audit_score_note": "2026-03-31 implementation pass: browser smoke coverage, launch dashboard visibility, beta analytics scaffolding, trust-strip templating, calc-api docs, and promo widget shipped. Build and tests are healthy (78/78). Main remaining gaps are external activations and website-agent auth rollout alignment.",
   "audit_date": "2026-03-31",
   "audit_category_scores": {
     "feature_completeness": 92,
@@ -87,6 +87,16 @@
     "distribution_reach": 42,
     "revenue_monetization": 16
   },
+  "session_27_additions": [
+    "scripts/validate-browser-launch-smoke.mjs + npm run smoke:browser — build + preview + HTTP verification of browser-facing launch surfaces",
+    "src/App.jsx — LaunchReadinessPanel with feature flags, blockers, validation status, and affiliate-readiness visibility",
+    "src/launchTelemetry.js — Plausible helpers for beta-surface impressions, clicks, enabled-use tracking, and wins-wall opt-ins",
+    "src/App.jsx — local CommunityWinsWall scaffolding driven by Profit Certificate opt-ins",
+    "docs/SEO_TRUST_STRIP_TEMPLATE.md + trust-strip expansion to hedge-calculator, ev-calculator, and sports-betting-tools",
+    "public/calc-api/index.html — partner/developer-facing calc API docs page",
+    "public/promo-expiry-widget/index.html + embed docs update — configurable countdown widget",
+    "Validation rerun — smoke:launch passing, smoke:browser passing, tests 78/78, build passing at 121.06 KB gzip"
+  ],
   "session_25_additions": [
     "docs/LAUNCH_CHECKLIST.md — repo-native soft-launch vs full-launch readiness checklist",
     "docs/FEATURE_FLAG_ACTIVATION_MATRIX.md — exact activation requirements for every VITE_PG_FEATURE_* flag",
@@ -183,13 +193,13 @@
     "migration-team-accounts.sql, migration-community-promos.sql, migration-influencer-codes.sql",
     "sitemap.xml: 135+ URLs (added income-estimator + embed)"
   ],
-  "next_milestone": "Shared free-membership soft launch with smoke validation and staged backend-dependent feature activation",
+  "next_milestone": "Shared free-membership soft launch with browser smoke validation and staged backend-dependent feature activation",
   "domain": "vaultsparkstudios.com/promogrind/ (current) — CNAME file ready for promogrind.com migration",
   "supabase_project": "fjnpzjjyhnpmunfoycrp.supabase.co",
   "build": {
     "sw_version": "promogrind-v3",
     "strategy": "network-first JS/CSS, cache-first fonts/images",
-    "app_chunk_gzip": "119.32KB",
+    "app_chunk_gzip": "121.06KB",
     "vendor_chunk_gzip": "49.33KB",
     "supabase_chunk_gzip": "50.93KB"
   },
@@ -262,7 +272,7 @@
   },
   "seo": {
     "approach": "Static landing pages (auth-gated SPA cannot use SSG)",
-    "pages_live": 91,
+    "pages_live": 93,
     "keyword_pages": 17,
     "us_state_pages": 30,
     "es_pages": 10,
@@ -271,7 +281,7 @@
     "blog_posts": 5,
     "support_pages": 5,
     "growth_pages": 2,
-    "sitemap_urls": "178+"
+    "sitemap_urls": "180+"
   },
   "blog": {
     "path": "public/blog/",

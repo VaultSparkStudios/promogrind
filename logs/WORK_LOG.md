@@ -4,6 +4,71 @@ Append sessions chronologically. Never delete entries.
 
 ---
 
+## 2026-03-31 — Session 27 | v25.0 | Launch Ops Surface + Browser Smoke + Distribution Scaffolding
+
+**Session type:** Audit-follow-through implementation sprint
+
+**Intent outcome:** Achieved — implemented the top repo-local recommendations first, then shipped the remaining feasible recommendation/brainstorm items that did not require external credentials or approvals
+
+**Completed:**
+
+**Launch operations / validation:**
+- Added `scripts/validate-browser-launch-smoke.mjs` and `npm run smoke:browser`
+- Added dashboard `LaunchReadinessPanel` with feature flag state, blockers, validation status, and affiliate-readiness visibility
+- Added centralized `src/launchTelemetry.js` helpers for beta-gate impressions, gate clicks, enabled-use tracking, and wins-wall opt-ins
+
+**Engagement / proof loops:**
+- Added local `CommunityWinsWall` scaffolding and wired `ProfitCertificate` opt-ins into it
+
+**Public surfaces / docs:**
+- Added `docs/SEO_TRUST_STRIP_TEMPLATE.md`
+- Extended trust/access copy to `public/hedge-calculator/index.html`, `public/ev-calculator/index.html`, and `public/sports-betting-tools/index.html`
+- Added `public/calc-api/index.html`
+- Added `public/promo-expiry-widget/index.html`
+- Updated `public/embed/index.html` and `public/sitemap.xml`
+
+**Validation:**
+- `npm test` → 78/78 passing
+- `npm run smoke:launch` → passing
+- `npm run smoke:browser` → passing
+- `npm run build` → passing (`index` 121.06 kB gzip)
+
+**Open problems:**
+- Affiliate links, Search Console, and AI activation still require manual external work
+- Wins wall is intentionally local-only scaffolding until moderation/storage rules are defined
+- Calc API docs now exist, but deployment and public posture still need a deliberate decision
+
+## 2026-03-31 — Session 26 | Audit | Project Scorecard + Priority Reset
+
+**Session type:** Compact project audit + Studio OS write-back
+
+**Intent outcome:** Achieved — scored the project, identified the main leverage points, and converted the audit into explicit next priorities and SIL commitments
+
+**Completed:**
+
+**Audit / scoring:**
+- Assessed PromoGrind at **79/100** for current product + launch potential
+- Assessed Studio OS / operating quality at **40/50**
+- Confirmed strongest areas remain feature depth, UX polish, and process hygiene
+- Confirmed weakest areas remain monetization activation, distribution reach, and post-launch measurement
+
+**Priority reset:**
+- Reaffirmed affiliate links as the highest immediate revenue unlock
+- Reaffirmed Google Search Console submission as the highest immediate discovery unlock
+- Reaffirmed ANTHROPIC-backed AI activation as the highest differentiator unlock
+- Added two new `[SIL]` commitments: launch readiness dashboard panel, beta-surface analytics helper
+
+**Context updates:**
+- Updated `context/TASK_BOARD.md`
+- Updated `context/LATEST_HANDOFF.md`
+- Updated `context/SELF_IMPROVEMENT_LOOP.md`
+- Updated `logs/WORK_LOG.md`
+
+**Open problems:**
+- Core upside is still bottlenecked by manual activation work, not missing product scope
+- Browser-level smoke coverage still does not exist
+- Monetization remains mostly latent until affiliate links and backend activations are live
+
 ## 2026-03-31 — Session 25 | v24.0 | Soft-Launch Hardening + Smoke Command
 
 **Session type:** Launch-readiness hardening sprint

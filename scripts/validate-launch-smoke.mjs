@@ -31,11 +31,15 @@ const requiredFiles = [
   "public/landing/index.html",
   "public/bonus-bet/index.html",
   "public/arb-calculator/index.html",
+  "public/hedge-calculator/index.html",
+  "public/ev-calculator/index.html",
   "public/profit-boost/index.html",
+  "public/sports-betting-tools/index.html",
   "public/sportsbook-promo/index.html",
   "public/promogrind-vs-profitduel/index.html",
   "public/promogrind-vs-oddsjam/index.html",
   "public/promogrind-vs-betterbet/index.html",
+  "docs/SEO_TRUST_STRIP_TEMPLATE.md",
 ];
 
 for (const relPath of requiredFiles) {
@@ -57,7 +61,10 @@ if (errors.length === 0) {
   const trustPages = [
     "public/bonus-bet/index.html",
     "public/arb-calculator/index.html",
+    "public/hedge-calculator/index.html",
+    "public/ev-calculator/index.html",
     "public/profit-boost/index.html",
+    "public/sports-betting-tools/index.html",
     "public/sportsbook-promo/index.html",
   ];
 
@@ -81,6 +88,7 @@ if (errors.length === 0) {
 
   assertIncludes("public/landing/index.html", "beta rollout", "landing beta rollout messaging", errors);
   assertIncludes("public/landing/index.html", "free Vault membership", "landing access model copy", errors);
+  assertIncludes("docs/SEO_TRUST_STRIP_TEMPLATE.md", "Free Vault membership", "trust strip template copy", errors);
 }
 
 if (errors.length) {

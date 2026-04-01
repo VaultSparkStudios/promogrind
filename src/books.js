@@ -190,3 +190,9 @@ export const BOOKS = [
  */
 export const getBookUrl = (book) =>
   book.affiliateLink || book.signupLink || book.link;
+
+export const getConfiguredAffiliateCount = () =>
+  BOOKS.filter((book) => typeof book.affiliateLink === "string" && book.affiliateLink.trim()).length;
+
+export const hasConfiguredAffiliateLinks = () =>
+  getConfiguredAffiliateCount() > 0;

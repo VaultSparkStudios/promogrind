@@ -4,19 +4,30 @@
 
 ## Now
 
+- [ ] Wire real affiliate-approved links into `src/books.js` once approvals land
+- [ ] Submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` to Google Search Console
+- [ ] Set `ANTHROPIC_API_KEY` and deploy AI functions, then turn on the matching `VITE_PG_FEATURE_*` flags
 - [ ] Re-check auth/loading copy once the website agent ships the shared Vault membership fix; verify PromoGrind’s free-account messaging still matches the final global flow
-- [ ] Flip `VITE_PG_FEATURE_*` flags on as each backend/service actually goes live (AI, live scanner, push, billing)
-- [ ] Deploy `calc-api` and decide whether to surface it publicly or keep it partner-facing until docs exist
 
 ## Next
 
-- [ ] Extend the trust/compliance copy pass from the current top-intent pages to the remaining high-intent static SEO pages
-- [ ] Add launch analytics for beta-surface impressions and conversion into activated features after flags turn on
+- [ ] Extend the trust/compliance copy pass from the current top-intent pages to the remaining high-intent static SEO pages using the new template
 - [ ] Continue component extraction from `src/App.jsx` once the launch-state pass has settled
-- [ ] **[SIL] Browser-level launch smoke harness** — add a real UI-run path for auth redirect, landing, and top calculator checks instead of relying only on repo-text validation
-- [ ] **[SIL] Reusable SEO trust-strip template** — centralize the free-membership / responsible-gambling snippet so future high-intent pages inherit the same launch-safe copy
+- [ ] **[SIL] Server-backed wins wall opt-ins** — move certificate shares from localStorage scaffolding to an opt-in backend feed once moderation/storage rules are defined
+- [ ] **[SIL] Calc-api launch playbook** — define deployment, rate posture, attribution language, and public-vs-partner positioning now that docs exist
 
-## Completed This Session (2026-03-31)
+## Completed This Session (2026-03-31 — Session 27)
+
+- [x] Added `npm run smoke:browser` (`scripts/validate-browser-launch-smoke.mjs`) for build + preview + HTTP smoke coverage
+- [x] Added dashboard `LaunchReadinessPanel` with flag state, blockers, and validation status
+- [x] Added centralized launch telemetry helpers in `src/launchTelemetry.js`
+- [x] Added local `CommunityWinsWall` scaffolding powered by Profit Certificate opt-ins
+- [x] Added `docs/SEO_TRUST_STRIP_TEMPLATE.md` and applied the trust strip to more high-intent SEO pages
+- [x] Added `public/calc-api/index.html` for partner/developer-facing calc API docs
+- [x] Added `public/promo-expiry-widget/index.html` and widget embed docs
+- [x] Expanded tests to 78 passing and verified `npm test`, `npm run smoke:launch`, and `npm run smoke:browser`
+
+## Completed This Session (2026-03-31 — Session 25)
 
 - [x] Added `docs/LAUNCH_CHECKLIST.md` for soft-launch vs full-launch readiness
 - [x] Added `docs/FEATURE_FLAG_ACTIVATION_MATRIX.md` mapping every `VITE_PG_FEATURE_*` flag to its activation requirements
@@ -41,6 +52,19 @@
 | 4 | Search Console submission | Highest-value manual action for discovery once public guest access exists | 8/10 | S | 🔲 MANUAL |
 | 5 | Guest-mode smoke tests | Protects the new free path before refactors or public traffic | 7/10 | S | 🔲 [SIL] |
 | 6 | Legacy URL normalization | Removes trust erosion from stale share/export links | 6/10 | S | 🔲 Future |
+
+## Session 26 Audit — Product + Launch Potential (2026-03-31)
+
+> Short audit lens: product is strong enough to launch, but upside is bottlenecked by activation, distribution, and measurement rather than feature scope.
+
+| Rank | Item | Why it matters | Impact | Effort | Status |
+|---|---|---|---|---|---|
+| 1 | Wire real affiliate links | Highest immediate revenue unlock on an already-usable product | 10/10 | S | 🔲 MANUAL |
+| 2 | Submit sitemap + start discovery loop | Best discovery unlock for the 93-page SEO surface | 9/10 | S | 🔲 MANUAL |
+| 3 | Activate ANTHROPIC-backed AI surfaces | Unlocks the product's clearest differentiators | 9/10 | S | 🔲 MANUAL |
+| 4 | Browser-level launch smoke harness | Makes future launch/refactor work safer than doc-only validation | 8/10 | M | ✅ Implemented |
+| 5 | Launch readiness dashboard panel | Turns blocker tracking into a live operating surface instead of note-chasing | 7/10 | M | ✅ Implemented |
+| 6 | Beta-surface analytics helper | Measures whether gated surfaces are actually worth turning on and promoting | 7/10 | S | ✅ Implemented |
 
 ## Session 22 Brainstorm — All 30 Items (v22.0 Audit — 70/100)
 

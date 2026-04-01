@@ -1,18 +1,19 @@
 # Current State
 
-Last updated: 2026-03-31 (v24.0 — launch docs, member onboarding card, trust pass extension, launch smoke command, 75 tests)
+Last updated: 2026-03-31 (v25.0 — browser smoke harness, launch dashboard, beta analytics scaffolding, calc-api docs, promo widget, 78 tests)
 
 ## Version
-v24.0 (app) / 3.0.0 (package.json — not critical)
+v25.0 (app) / 3.0.0 (package.json — not critical)
 
 ## Audit Snapshot
 - Free Vault membership is now the explicit access model across app and landing surfaces; this resolves the prior repo-level confusion between "free product" and "requires account."
 - Premium / AI / live surfaces now use centralized frontend launch-state flags so undeployed backends can stay beta-labeled instead of pretending to be live.
-- Launch readiness is now encoded in repo-native docs and validation, not only in handoff notes.
-- Build passes and tests remain green at 75/75.
+- Launch readiness now exists in three layers: repo-native docs, text smoke validation, and a browser-facing smoke path.
+- Launch/rollout telemetry and operator visibility are now partially productized inside the dashboard instead of living only in handoff notes.
+- Build passes and tests remain green at 78/78.
 
 ## App.jsx
-~7,042 lines. Single-file React SPA. Dark/light mode toggle (KD/KL palette swap via Object.assign). Math imported from shared.js (28 functions deduplicated).
+~7,180 lines. Single-file React SPA. Dark/light mode toggle (KD/KL palette swap via Object.assign). Math imported from shared.js (28 functions deduplicated).
 
 ## Tabs / Tools
 | Group | Count | Tools |
@@ -26,7 +27,7 @@ v24.0 (app) / 3.0.0 (package.json — not critical)
 
 **Total: 53 tools**
 
-## Static SEO Pages: 91
+## Static SEO Pages: 93
 - 17 keyword pages (bonus-bet, arb-calculator, kelly-criterion, no-vig, profit-boost, parlay-calculator, hedge-calculator, ev-calculator, matched-betting, promo-converter, sportsbook-promo, sports-betting-tools, arbitrage-betting, free-bet-calculator, deposit-match-calculator, rollover-calculator, same-game-parlay)
 - 10 US state pages (NY, NJ, IL, MI, OH, CO, PA, VA, AZ, TN)
 - 8 UK pages (matched-betting-uk, bonus-bets-uk, London, Manchester, Birmingham, Glasgow, Edinburgh, Liverpool)
@@ -34,12 +35,22 @@ v24.0 (app) / 3.0.0 (package.json — not critical)
 - 6 Portuguese (PT-BR) pages: bonus-bet-pt, arb-calculator-pt, kelly-criterion-pt, ev-calculator-pt, parlay-calculator-pt, matched-betting-pt (Brazil market)
 - 3 competitor comparison pages (vs-profitduel, vs-oddsjam, vs-betterbet)
 - 5 blog posts + blog index
-- 2 tool pages (income-estimator, embed)
+- 4 tool/developer pages (income-estimator, embed, calc-api, promo-expiry-widget)
 - 3 support pages (landing, privacy, terms)
 - 1 partner page (promogrind-verified)
 - 1 PR/data report page (annual-report)
 - 2 growth/distribution pages (the-grind newsletter, creator-program affiliate)
-- sitemap.xml: 178+ URLs
+- sitemap.xml: 180+ URLs
+
+## v25.0 New Features
+- **Browser-facing launch smoke** — new `npm run smoke:browser` builds the app, serves it through Vite preview, and verifies the browser-facing root, landing page, trust pages, and comparison pages over HTTP
+- **Launch readiness dashboard panel** — new dashboard `LaunchReadinessPanel` shows feature-flag state, validation status, affiliate readiness, and manual blockers in-product
+- **Beta-surface analytics helper** — new `src/launchTelemetry.js` centralizes Plausible launch events for beta-surface impressions, gate clicks, enabled-use tracking, and wins-wall opt-ins
+- **Wins Wall scaffolding** — `ProfitCertificate` can now opt a result into a local `CommunityWinsWall` on the dashboard as the first productized proof/testimonial loop
+- **SEO trust-strip template** — new `docs/SEO_TRUST_STRIP_TEMPLATE.md`; trust/access copy expanded to `hedge-calculator`, `ev-calculator`, and `sports-betting-tools`
+- **Calc API docs page** — new `public/calc-api/index.html` gives partner/developer-facing docs for the existing `calc-api` function without pretending the deployment is already live
+- **Promo expiry embeddable widget** — new `public/promo-expiry-widget/index.html`; embed docs now include a configurable urgency/countdown widget example
+- **Tests expanded** — 78 passing tests; launch-state tests expanded and affiliate helper tests added
 
 ## v22.0 New Features
 - **Light mode toggle** — `darkMode` React state + localStorage(`pg_theme`) + `Object.assign(K, darkMode ? KD : KL)` + blocking script + body.light CSS + toggle button
@@ -85,7 +96,7 @@ v24.0 (app) / 3.0.0 (package.json — not critical)
 - **public/annual-report/index.html** — "State of Sports Betting Promos 2026" PR backlink magnet; Schema.org Report JSON-LD
 
 ## Build
-- App chunk: ~443.55KB raw / **~119.32 kB gzip**
+- App chunk: ~451.47KB raw / **~121.06 kB gzip**
 - Vendor chunk: 152KB raw / 49KB gzip (cached across deploys)
 - Supabase chunk: 194KB raw / 51KB gzip
 - Strategy: network-first JS/CSS, cache-first fonts/images

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promo Expiry Countdown Widget | PromoGrind</title>
+  <meta name="description" content="Embeddable promo expiry countdown widget for sportsbook content, blogs, and affiliate sites." />
+  <link rel="canonical" href="https://vaultsparkstudios.com/promogrind/promo-expiry-widget/" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: transparent; color: #e2e8f0; }
+    .widget { width: min(100%, 360px); min-height: 220px; margin: 0 auto; padding: 18px; border-radius: 18px; background: linear-gradient(180deg, #0f1724, #09101a); border: 1px solid #1e293b; box-shadow: 0 8px 30px rgba(0,0,0,0.35); }
+    .eyebrow { color: #4ade80; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 14px; }
+    .timer { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .cell { padding: 12px 8px; border-radius: 12px; background: #0a0f19; border: 1px solid #1e293b; text-align: center; }
+    .num { font-size: 24px; font-weight: 800; color: #4ade80; }
+    .lbl { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1.2px; }
+    a { display: inline-block; padding: 10px 14px; border-radius: 999px; background: #4ade80; color: #0a0e17; text-decoration: none; font-weight: 800; font-size: 12px; }
+    .foot { margin-top: 12px; font-size: 10px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <div class="eyebrow">Promo Countdown</div>
+    <h1 id="title">Offer expires soon</h1>
+    <p id="subtitle">Use this widget on promo roundup pages, state pages, or sportsbook review content.</p>
+    <div class="timer">
+      <div class="cell"><div class="num" id="days">00</div><div class="lbl">Days</div></div>
+      <div class="cell"><div class="num" id="hours">00</div><div class="lbl">Hours</div></div>
+      <div class="cell"><div class="num" id="mins">00</div><div class="lbl">Min</div></div>
+      <div class="cell"><div class="num" id="secs">00</div><div class="lbl">Sec</div></div>
+    </div>
+    <a id="cta" href="https://vaultsparkstudios.com/promogrind/#/promo-calendar">Open Promo Calendar</a>
+    <div class="foot">Powered by PromoGrind. Default expiry is midnight Eastern unless <code>?expires=ISO_DATE</code> is supplied.</div>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const title = params.get('title');
+    const subtitle = params.get('subtitle');
+    const cta = params.get('cta');
+    const expiresParam = params.get('expires');
+    if (title) document.getElementById('title').textContent = title;
+    if (subtitle) document.getElementById('subtitle').textContent = subtitle;
+    if (cta) document.getElementById('cta').href = cta;
+
+    function getMidnightET() {
+      const now = new Date();
+      const eastern = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      eastern.setHours(24, 0, 0, 0);
+      return eastern;
+    }
+
+    const target = expiresParam ? new Date(expiresParam) : getMidnightET();
+    function tick() {
+      const diff = Math.max(0, target.getTime() - Date.now());
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor(diff / 3600000) % 24;
+      const mins = Math.floor(diff / 60000) % 60;
+      const secs = Math.floor(diff / 1000) % 60;
+      document.getElementById('days').textContent = String(days).padStart(2, '0');
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('mins').textContent = String(mins).padStart(2, '0');
+      document.getElementById('secs').textContent = String(secs).padStart(2, '0');
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>

@@ -104,3 +104,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: Convert launch status into an actionable checklist, implement the repo-side launch blockers first, add the post-login onboarding explainer, add a smoke command, then complete full closeout and ship the changes
 - Why it matters: Moves PromoGrind from subjective launch discussion to a concrete release workflow that can be repeated before future pushes
 - Supersedes prior entry: —
+
+### 2026-03-31 — Session 27 implementation direction
+
+- Category: Assignment
+- Human input: "Implement top items first, then implement all recommendations and ideas"
+- Area affected: launch operations, dashboard surfaces, validation workflow, trust-copy propagation, distribution scaffolding, developer surfaces
+- Previous state: Audit priorities existed in docs and handoff, but several high-impact repo-local items were still only recommendations
+- New required direction: Execute the highest-impact repo-local items first, then continue through the remaining feasible recommendation and brainstorm list without waiting for another planning pass
+- Why it matters: Converts the audit from analysis into shipped operational leverage, while keeping manual activation blockers clearly separated from repo-local implementation work
+- Supersedes prior entry: —
