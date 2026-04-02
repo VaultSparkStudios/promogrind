@@ -11,10 +11,19 @@
 
 ## Next
 
-- [ ] Extend the trust/compliance copy pass from the current top-intent pages to the remaining high-intent static SEO pages using the new template
-- [ ] Continue component extraction from `src/App.jsx` once the launch-state pass has settled
-- [ ] **[SIL] Server-backed wins wall opt-ins** — move certificate shares from localStorage scaffolding to an opt-in backend feed once moderation/storage rules are defined
+- [ ] Continue component extraction from `src/App.jsx` — ~5,785 lines remain, candidates include PromoCalendar, DailyDashboard, SmartRecommender, PromoGuarantee
 - [ ] **[SIL] Calc-api launch playbook** — define deployment, rate posture, attribution language, and public-vs-partner positioning now that docs exist
+- [ ] **[SIL] Extraction health dashboard** — add a dev-only panel showing component sizes, import graph, and monolith reduction progress
+
+## Human Action Required
+
+- [ ] Run `scripts/migration-wins-wall.sql` in Supabase SQL Editor
+
+## Completed This Session (2026-04-02 — Session 28)
+
+- [x] P1: Extracted 5 components (Tracker, Ledger, LiveScanner, TaxesEstimator, PromoChat) + shared infrastructure (contexts.jsx, ui.jsx, promoSchedule.js) — App.jsx 7,459→5,785 lines
+- [x] P2: Trust strip + footer note propagated to 84 SEO pages in public/ using template pattern
+- [x] P3: Server-backed wins wall — migration SQL, Supabase fetch/insert in CommunityWinsWall + ProfitCertificate, local fallback preserved
 
 ## Completed This Session (2026-03-31 — Session 27)
 

@@ -362,3 +362,30 @@ Append sessions chronologically. Never delete entries.
 **Recommended next action:**
 - Activate affiliate links (`src/books.js`) — highest revenue-per-hour task
 - Then set Odds API key + deploy odds Edge Function
+
+---
+
+### 2026-04-02 — Session 28 (Builder Mode)
+
+**Intent:** Full project audit → implement P1-P3 (component extraction, trust strip propagation, server-backed wins wall).
+**Outcome:** Achieved — all three priorities completed and verified.
+
+**What shipped:**
+- P1: Extracted 5 components from App.jsx (Tracker, Ledger, LiveScanner, TaxesEstimator, PromoChat) to src/components/. Created shared infrastructure (contexts.jsx, ui.jsx, data/promoSchedule.js). App.jsx reduced 7,459→5,785 lines (-22%).
+- P2: Trust strip + footer note propagated to 84 static SEO pages in public/ following docs/SEO_TRUST_STRIP_TEMPLATE.md pattern.
+- P3: Server-backed wins wall scaffolding — migration SQL (scripts/migration-wins-wall.sql), Supabase fetch/insert in CommunityWinsWall + ProfitCertificate, local fallback preserved.
+
+**Validation:** 78/78 tests, build passing at 121.46 KB gzip.
+
+**SIL:** 43/50 (Dev 9↑, Align 9→, Momentum 9→, Engage 7→, Process 9↓). Velocity: 3. Debt: →.
+
+**Files changed:** src/App.jsx, src/contexts.jsx (new), src/ui.jsx (new), src/data/promoSchedule.js (new), src/components/Tracker.jsx (new), src/components/Ledger.jsx (new), src/components/LiveScanner.jsx (new), src/components/TaxesEstimator.jsx (new), src/components/PromoChat.jsx (new), scripts/migration-wins-wall.sql (new), public/**/*.html (84 modified), context/*, logs/WORK_LOG.md
+
+**Open problems:**
+- Migration SQL for wins_wall table not yet run in Supabase
+- Low momentum runway (~1.3 sessions) — Now bucket needs items
+
+**Recommended next action:**
+- Run wins_wall migration in Supabase SQL Editor
+- Continue component extraction (PromoCalendar, DailyDashboard next candidates)
+- Wire affiliate links once approvals land

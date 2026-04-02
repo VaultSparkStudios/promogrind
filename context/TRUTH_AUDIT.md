@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.0 -->
 # Truth Audit
 
-Last reviewed: 2026-03-31
+Last reviewed: 2026-04-02
 Overall status: yellow
-Next action: Re-check the shared Vault membership UX after the website agent finishes the global auth rollout, then run `npm run smoke:launch` before flipping any public-facing launch claims or feature flags.
+Next action: Re-check shared Vault membership UX after website agent rollout, run wins_wall migration in Supabase, then run `npm run smoke:launch` before flipping any public-facing launch claims or feature flags.
 
 ---
 
@@ -20,12 +20,12 @@ Next action: Re-check the shared Vault membership UX after the website agent fin
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | `PROJECT_STATUS.json` now reflects the free Vault membership model and launch-state gating |
+| Schema alignment | 5 | `PROJECT_STATUS.json` updated with session 28 data, v26.0, app_lines 5785 |
 | Prompt/template alignment | 5 | Prompts are current and Studio OS write-back executed |
-| Derived-view freshness | 5 | Handoff, task board, status, SIL, launch docs, and smoke validation guidance refreshed this session |
-| Handoff continuity | 5 | Session 23 audit and next-move priorities now captured clearly |
-| Contradiction density | 4 | Main repo-local contradiction resolved; remaining risk is external auth-rollout drift and historical stale copy |
-| **Total** | **24 / 25** | Strong protocol compliance; remaining drift is mostly external coordination and historical residue |
+| Derived-view freshness | 5 | Handoff, task board, status, SIL, audit JSON all refreshed session 28 |
+| Handoff continuity | 5 | Session 28 component extraction + trust strip + wins wall handoff captured |
+| Contradiction density | 4 | Main repo-local contradiction resolved; remaining risk is external auth-rollout drift and wins_wall migration pending |
+| **Total** | **24 / 25** | Strong protocol compliance; remaining drift is mostly external coordination |
 
 ---
 
@@ -33,10 +33,11 @@ Next action: Re-check the shared Vault membership UX after the website agent fin
 
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
-| Product access model | `src/auth.js`, user clarification, shared Vault membership canon | app shell, landing page, status docs | yellow | 2026-03-31 | Re-check after website-agent rollout lands; repo-local copy now aligned |
-| Domain strategy | `context/DECISIONS.md` | old TASK_BOARD / status references to `promogrind.com` as blocker | green | 2026-03-31 | Current surfaces now treat custom domain as optional |
-| Audit freshness | `context/PROJECT_STATUS.json` | prior truth placeholders, stale dates | green | 2026-03-31 | Refreshed this session |
-| Launch-state honesty | `src/launchState.js` | app tool surfaces, pricing claims, launch docs, smoke command | yellow | 2026-03-31 | Keep flags off until backends are actually live; use `npm run smoke:launch` before release work |
+| Product access model | `src/auth.js`, user clarification, shared Vault membership canon | app shell, landing page, status docs | yellow | 2026-04-02 | Re-check after website-agent rollout lands; repo-local copy now aligned |
+| Domain strategy | `context/DECISIONS.md` | old TASK_BOARD / status references to `promogrind.com` as blocker | green | 2026-04-02 | Current surfaces now treat custom domain as optional |
+| Audit freshness | `context/PROJECT_STATUS.json` | prior truth placeholders, stale dates | green | 2026-04-02 | Refreshed session 28 |
+| Launch-state honesty | `src/launchState.js` | app tool surfaces, pricing claims, launch docs, smoke command | yellow | 2026-04-02 | Keep flags off until backends are actually live; use `npm run smoke:launch` before release work |
+| Wins wall backend | `scripts/migration-wins-wall.sql` | `CommunityWinsWall` Supabase fetch | yellow | 2026-04-02 | Migration SQL written but not yet run in Supabase — server fetch will fall back to localStorage until then |
 
 ---
 
@@ -49,16 +50,17 @@ Next action: Re-check the shared Vault membership UX after the website agent fin
 
 ## Freshness
 
-- `context/PROJECT_STATUS.json`: 2026-03-31
-- `context/LATEST_HANDOFF.md`: 2026-03-31
-- `context/CURRENT_STATE.md`: 2026-03-31
-- Derived founder-facing views: 2026-03-31 review completed locally; upstream registry not changed in this repo
+- `context/PROJECT_STATUS.json`: 2026-04-02
+- `context/LATEST_HANDOFF.md`: 2026-04-02
+- `context/CURRENT_STATE.md`: 2026-04-02
+- Derived founder-facing views: 2026-04-02 review completed locally; upstream registry not changed in this repo
 
 ---
 
 ## Recommended Actions
 
 1. Re-verify PromoGrind against the final shared Vault membership UX once the website agent ships it.
-2. Run `npm run smoke:launch` before soft-launch pushes or any public truth/copy changes.
-3. Turn on `VITE_PG_FEATURE_*` flags only when the corresponding backend/service is actually live.
-4. Keep extending the trust/compliance copy pass from the main app + landing page to high-intent SEO pages.
+2. Run `scripts/migration-wins-wall.sql` in Supabase SQL Editor to activate server-backed wins wall.
+3. Run `npm run smoke:launch` before soft-launch pushes or any public truth/copy changes.
+4. Turn on `VITE_PG_FEATURE_*` flags only when the corresponding backend/service is actually live.
+5. Continue component extraction — App.jsx still has ~5,785 extractable lines.

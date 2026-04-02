@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▄▆▇▆█
-Avgs — 3: 41.7 | 5: 40.0 | 10: 36.3 | 25: 36.3 | all: 36.3
-  └ 3-session: Dev 8.0 | Align 9.0 | Momentum 8.0 | Engage 6.3 | Process 10.0
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
-Momentum runway: ~2.6 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-03-31 | Session 27 | Total: 43/50 | Velocity: 6 | protocolVelocity: 2
+Sparkline (last 5 totals): ▆▆▆▆▆
+Avgs — 3: 42.0 | 5: 41.8 | 10: 40.1 | 25: — | all: 36.9  (— = insufficient data)
+  └ 3-session: Dev 8.3 | Align 9.0 | Momentum 8.3 | Engage 6.7 | Process 9.7
+Velocity trend: ↓  |  Protocol velocity: →  |  Debt: →
+Momentum runway: ~1.3 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-02 | Session 28 | Total: 43/50 | Velocity: 3 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -303,3 +303,30 @@ Avgs — 3: 41.7 | 5: 40.0 | 10: 36.3 | 25: 36.3 | all: 36.3
 4. Widget variants pack — ship sportsbook-specific countdown themes and compact embed sizes for publisher adoption
 
 **Committed to TASK_BOARD:** [SIL] Server-backed wins wall opt-ins · [SIL] Calc-api launch playbook
+
+## 2026-04-02 — Session 28 | Total: 43/50 | Velocity: 3 | Debt: →
+Avgs — 3: 42.0 | 5: 41.8 | 10: 40.1 | 25: — | all: 36.9
+  └ 3-session: Dev 8.3 | Align 9.0 | Momentum 8.3 | Engage 6.7 | Process 9.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | ↑ | 5 components extracted, shared infrastructure created, monolith reduced 22%, build clean |
+| Creative Alignment | 9 | → | Trust strip propagation aligns with trust-first positioning; wins wall serves community proof |
+| Momentum | 9 | → | All 3 audit priorities (P1-P3) shipped in one session |
+| Engagement | 7 | → | Server-backed wins wall + 84-page trust strip create stronger public trust surface |
+| Process Quality | 9 | ↓ | Full closeout executed; session resumed from compaction so some context was reconstructed |
+| **Total** | **43/50** | → | |
+
+**Top win:** The monolith extraction pattern is now proven end-to-end — shared infra, 5 components, clean build — making future extraction incremental.
+**Top gap:** Low momentum runway (~1.3 sessions); Now bucket needs replenishment before next implementation sprint.
+**Intent outcome:** Achieved — all three repo-local priorities from the audit were completed and verified.
+
+**IGNIS note:** Component extraction at scale works best when shared infrastructure (contexts, atoms, data) is extracted first, then components can be moved independently and in parallel.
+
+**Brainstorm**
+1. Extraction health dashboard — dev-only panel showing component sizes, import graph, and monolith reduction progress over time (High)
+2. PromoCalendar + DailyDashboard extraction — next two largest candidates after this sprint, together ~600 lines (High)
+3. Auto-generate SEO trust strip during build — postbuild script that injects trust strip into any page missing it, preventing future drift (Medium)
+4. Component-level code splitting with React.lazy — extracted components are now separate files, perfect for lazy loading to cut initial bundle (Medium)
+
+**Committed to TASK_BOARD:** [SIL] Extraction health dashboard
