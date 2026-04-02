@@ -4,9 +4,17 @@ import { BOOKS, getBookUrl, getConfiguredAffiliateCount, hasConfiguredAffiliateL
 import { checkAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 import { subscribeToPush } from "./sw-register.js";
-import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD, S as _S } from "./lib/shared.js";
+import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD } from "./lib/shared.js";
 import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
+import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
+import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger } from "./ui.jsx";
+import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
+import Tracker from "./components/Tracker.jsx";
+import Ledger from "./components/Ledger.jsx";
+import LiveScanner from "./components/LiveScanner.jsx";
+import TaxesEstimatorWrapper from "./components/TaxesEstimator.jsx";
+import PromoChat from "./components/PromoChat.jsx";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -35,122 +43,9 @@ import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, tr
 ═══════════════════════════════════════════════════════════════
 */
 
-// Math, colors, styles imported from ./lib/shared.js — S extended with JSX meter below
-_S.meter = (pct, c) => (<div style={{marginTop:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:10,color:K.mt}}>QUALITY</span><span style={{fontSize:10,color:c,fontWeight:600}}>{pct>=70?"EXCELLENT":pct>=60?"GOOD":pct>=50?"FAIR":"POOR"} ({pct}%)</span></div><div style={{height:4,borderRadius:2,background:K.s3}}><div style={{height:4,borderRadius:2,background:c,width:`${Math.min(100,pct)}%`,transition:"width 0.4s"}}/></div></div>);
-const S = _S;
+// Math, colors, styles from ./lib/shared.js — S (with JSX meter) from ./ui.jsx
 
-// ═══ TOAST SYSTEM ═══
-const ToastCtx = React.createContext(null);
-const useToast = () => React.useContext(ToastCtx);
-
-const ToastProvider = ({ children }) => {
-  const [toasts, setToasts] = useState([]);
-  const timers = useRef({});
-  const dismiss = (id) => {
-    clearTimeout(timers.current[id]);
-    setToasts(t => t.filter(x => x.id !== id));
-  };
-  // show(msg, color?, action?)  action = { label, fn }
-  const show = (msg, color, action) => {
-    const id = Date.now();
-    const duration = action ? 4000 : 2200;
-    setToasts(t => [...t, { id, msg, color: color || '#4ade80', action }]);
-    timers.current[id] = setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), duration);
-    return id;
-  };
-  return (
-    <ToastCtx.Provider value={show}>
-      {children}
-      <div style={{ position: 'fixed', bottom: 80, right: 16, zIndex: 9999, display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {toasts.map(t => (
-          <div key={t.id} style={{ padding: '10px 16px', background: K.s1, border: `1px solid ${t.color}40`, borderRadius: 8, color: t.color, fontSize: 12, fontWeight: 600, fontFamily: "'JetBrains Mono','SF Mono',monospace", boxShadow: '0 4px 16px rgba(0,0,0,0.4)', animation: 'fadeIn 0.15s ease', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span>{t.msg}</span>
-            {t.action && <button onClick={() => { t.action.fn(); dismiss(t.id); }} style={{ padding: '2px 8px', background: `${t.color}25`, border: `1px solid ${t.color}60`, borderRadius: 4, color: t.color, fontSize: 10, cursor: 'pointer', fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, letterSpacing: '0.5px' }}>{t.action.label}</button>}
-          </div>
-        ))}
-      </div>
-      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
-    </ToastCtx.Provider>
-  );
-};
-
-// ═══ COMPACT MODE CONTEXT ═══
-const CompactCtx = React.createContext(false);
-
-// ═══ APP DATA CONTEXT (shared across Track components — one loadData call) ═══
-const AppDataCtx = React.createContext(null);
-
-// ═══ UPGRADE TRIGGER HELPERS ═══
-function shouldShowTrigger(triggerKey) {
-  if (localStorage.getItem(`pg_trigger_dismissed_${triggerKey}`)) return false;
-  return true;
-}
-function dismissTrigger(triggerKey, setter) {
-  localStorage.setItem(`pg_trigger_dismissed_${triggerKey}`, '1');
-  setter(false);
-}
-
-// ═══ CALC MEMORY HOOK ═══
-const useCalcMemory = (slug, defaults) => {
-  const key = `pg_calc_${slug}`;
-  const stored = (() => { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch { return {}; } })();
-  // Read URL params that match default keys (for shared links)
-  const urlParams = (() => {
-    try {
-      const p = new URLSearchParams(window.location.search);
-      const out = {};
-      Object.keys(defaults).forEach(k => { if (p.has(k)) out[k] = p.get(k); });
-      return out;
-    } catch { return {}; }
-  })();
-  const merged = { ...defaults, ...stored, ...urlParams };
-  const [vals, setVals] = useState(merged);
-  const set = (k, v) => {
-    setVals(prev => {
-      const next = { ...prev, [k]: v };
-      try { localStorage.setItem(key, JSON.stringify(next)); } catch {}
-      return next;
-    });
-  };
-  return [vals, set];
-};
-
-// ═══ UI ATOMS ═══
-const In = ({l,v,set,ph,pre,err}) => {
-  const isOdds = l && /odds/i.test(l);
-  const oddsErr = isOdds && v && v.trim() && toD(v) <= 1 ? 'Invalid odds' : null;
-  const displayErr = err || oddsErr;
-  return (<div style={S.col}><label style={S.label}>{l}</label><div style={{position:"relative"}}>{pre&&<span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:12}}>{pre}</span>}<input style={{...S.input,...(pre?{paddingLeft:22}:{}),...(displayErr?{borderColor:K.rd}:{})}} value={v} onChange={e=>set(e.target.value)} placeholder={ph}/>{displayErr&&<div style={{fontSize:10,color:K.rd,marginTop:2}}>{displayErr}</div>}</div></div>);
-};
-const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:12,color:K.dm}}>{l}</span><span style={{fontSize:13,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
-const Tl = ({t,badge,bc,shareable,getParams}) => {
-  const [copied,setCopied]=useState(false);
-  const [embedCopied,setEmbedCopied]=useState(false);
-  const copy=()=>{
-    let url = window.location.href.split('?')[0];
-    if (getParams) {
-      try {
-        const p = new URLSearchParams(getParams());
-        url = url + '?' + p.toString();
-      } catch(e) {}
-    }
-    try{navigator.clipboard.writeText(url);}catch(e){}
-    setCopied(true); setTimeout(()=>setCopied(false),1500);
-  };
-  const copyEmbed=()=>{
-    const slug = window.location.pathname.replace(/^\/+/,'');
-    const iframe = `<iframe src="${CANONICAL_APP_URL}?embed=1#/${slug}" width="480" height="600" frameborder="0"></iframe>`;
-    try{navigator.clipboard.writeText(iframe);}catch(e){}
-    setEmbedCopied(true); setTimeout(()=>setEmbedCopied(false),1500);
-  };
-  return (<div style={{fontSize:16,fontWeight:600,color:K.tx,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontFamily:fontD,flexWrap:"wrap"}}>
-    <span>{t}</span>
-    {badge&&<span style={{...S.tag(bc||K.ac)}}>{badge}</span>}
-    {shareable&&<button onClick={copy} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{copied?"✓ COPIED":"⎘ SHARE"}</button>}
-    {shareable&&<button onClick={copyEmbed} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:embedCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{embedCopied?"✓ Copied!":"<> Embed"}</button>}
-  </div>);
-};
-const Nt = ({children,c}) => (<div style={S.note(c)}>{children}</div>);
+// Toast, contexts, UI atoms, useCalcMemory, FeatureUnavailableCard → ./contexts.jsx + ./ui.jsx
 
 // ═══ BOOK CTA (shown at profitable calc results) ═══
 const BookCTA = () => (
@@ -196,33 +91,7 @@ const MembershipBanner = () => (
   </div>
 );
 
-const FeatureUnavailableCard = ({ featureKey, title, body }) => {
-  const feature = getFeatureState(featureKey);
-  useEffect(() => {
-    trackFeatureGateSeen(feature.key);
-  }, [feature.key]);
-  return (
-    <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`}}>
-      <Tl t={title || feature.label} badge="BETA / SETUP PENDING" bc={K.yl}/>
-      <div style={{fontSize:12,color:K.dm,lineHeight:1.7,marginBottom:10}}>
-        {body || feature.shortReason}
-      </div>
-      <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>
-        {feature.setup}
-      </div>
-      <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap",alignItems:"center"}}>
-        <a
-          href={FREE_VAULT_MEMBERSHIP_URL}
-          onClick={() => trackFeatureGateClick(feature.key, "free-membership")}
-          style={{padding:"7px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,textDecoration:"none",fontFamily:font}}
-        >
-          Free Vault membership
-        </a>
-        <span style={{fontSize:10,color:K.mt}}>Setup progress appears in the dashboard launch panel.</span>
-      </div>
-    </div>
-  );
-};
+// FeatureUnavailableCard → ./ui.jsx
 
 const LaunchReadinessPanel = () => {
   const summary = getLaunchSummary();
@@ -294,32 +163,64 @@ const LaunchReadinessPanel = () => {
 };
 
 const CommunityWinsWall = () => {
-  const [entries, setEntries] = useState(() => {
+  const [localEntries] = useState(() => {
     try { return JSON.parse(localStorage.getItem('pg_wins_wall') || '[]'); } catch { return []; }
   });
+  const [serverEntries, setServerEntries] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  if (!entries.length) return null;
+  useEffect(() => {
+    let cancelled = false;
+    const fetchWall = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('wins_wall')
+          .select('id, period_label, total, entry_count, book_count, display_name, created_at')
+          .order('created_at', { ascending: false })
+          .limit(12);
+        if (!error && data && !cancelled) setServerEntries(data);
+      } catch {}
+      if (!cancelled) setLoading(false);
+    };
+    fetchWall();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Merge: server entries first, then local-only entries (deduplicated by period)
+  const serverPeriods = new Set(serverEntries.map(e => e.period_label));
+  const merged = [
+    ...serverEntries.map(e => ({
+      id: e.id, periodLabel: e.period_label, total: e.total,
+      count: e.entry_count, books: e.book_count,
+      displayName: e.display_name, source: 'server',
+    })),
+    ...localEntries.filter(e => !serverPeriods.has(e.periodLabel)).map(e => ({ ...e, source: 'local' })),
+  ].slice(0, 12);
+
+  if (!merged.length && !loading) return null;
 
   return (
     <div style={{...S.card,marginBottom:12}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:10,flexWrap:"wrap"}}>
         <div>
           <div style={{fontSize:11,color:K.pp,fontWeight:700,letterSpacing:"1.4px",textTransform:"uppercase",marginBottom:4}}>Wins Wall</div>
-          <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Recent certificate opt-ins</div>
+          <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Community profit opt-ins</div>
         </div>
-        <button
-          onClick={() => { try { localStorage.removeItem('pg_wins_wall'); } catch {} setEntries([]); }}
-          style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}
-        >
-          Clear local wall
-        </button>
       </div>
+      {loading && !merged.length && <div style={{fontSize:11,color:K.mt,padding:12}}>Loading wins wall…</div>}
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(170px, 1fr))",gap:8}}>
-        {entries.slice(0, 6).map((entry) => (
+        {merged.slice(0, 6).map((entry) => (
           <div key={entry.id} style={{padding:"12px",background:`${K.gn}08`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-            <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:6}}>{entry.periodLabel}</div>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+              <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>{entry.periodLabel}</span>
+              {entry.source==='server'&&<span style={{fontSize:8,color:K.ac,textTransform:"uppercase",letterSpacing:"1px"}}>verified</span>}
+            </div>
             <div style={{fontFamily:fontD,fontSize:24,fontWeight:800,color:K.gn,marginBottom:4}}>+${entry.total}</div>
-            <div style={{fontSize:10,color:K.dm,lineHeight:1.5}}>{entry.count} conversions across {entry.books} books</div>
+            <div style={{fontSize:10,color:K.dm,lineHeight:1.5}}>
+              {entry.count} conversions across {entry.books} books
+              {entry.displayName && <span style={{display:"block",fontSize:9,color:K.mt,marginTop:2}}>— {entry.displayName}</span>}
+            </div>
           </div>
         ))}
       </div>
@@ -1424,731 +1325,8 @@ const BetTracker = () => {
   </div>);
 };
 
-// ═══ TRACKER ═══
-const Tracker = () => {
-  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
-  const done = data.done || {};
-  const profits = data.profits || {};
-  const expiry = data.bookExpiry || {};
-  const bookStatus = data.bookStatus || {};
-  const bookRatings = data.bookRatings || {};
-  const setBookStatus = (n, v) => syncAppData({...data, bookStatus:{...bookStatus,[n]:v}});
-  const setBookRating = (n, v) => syncAppData({...data, bookRatings:{...bookRatings,[n]:v}});
-  const toast = useToast();
-  const toggle = n => { const newDone=!done[n]; const d = {...data, done:{...done,[n]:newDone}}; syncAppData(d); if(toast&&newDone) toast('✓ Book marked complete'); };
-  const setP = (n, v) => syncAppData({...data, profits:{...profits,[n]:v}});
-  const setExpiry = (n, v) => syncAppData({...data, bookExpiry:{...expiry,[n]:v}});
-  const todayStr = new Date().toISOString().split('T')[0];
-  const in3Days = new Date(Date.now()+3*24*60*60*1000).toISOString().split('T')[0];
-  const booksWithActivePromos = useMemo(()=>{
-    const today=new Date();
-    const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const todayDay=dayNames[today.getDay()];
-    const isWeekend=today.getDay()===0||today.getDay()===6;
-    const set=new Set();
-    PROMO_SCHED.forEach(p=>{
-      if(p.day==="Daily"||p.day===todayDay||(p.day==="Weekend"&&isWeekend)) set.add(p.book);
-    });
-    return set;
-  },[]);
-  const expiryStatus = (n) => {
-    const exp = expiry[n];
-    if(!exp||done[n]) return null;
-    if(exp<todayStr) return 'expired';
-    if(exp<=in3Days) return 'soon';
-    return null;
-  };
-  const total = Object.values(profits).reduce((s,v)=>s+(parseFloat(v)||0),0);
-  const cnt = Object.values(done).filter(Boolean).length;
-  const [trackerView, setTrackerView] = useState('tracker');
-  return (<div style={S.card}><Tl t="Sportsbook Promo Tracker"/>
-    {(()=>{
-      const completedNames = Object.entries(done).filter(([,v])=>v).map(([k])=>k.toLowerCase());
-      const BOOK_LIST = [
-        { name: 'DraftKings', value: 350, link: '' },
-        { name: 'FanDuel', value: 300, link: '' },
-        { name: 'BetMGM', value: 250, link: '' },
-        { name: 'Caesars', value: 300, link: '' },
-        { name: 'bet365', value: 200, link: '' },
-        { name: 'ESPN BET', value: 250, link: '' },
-        { name: 'Fanatics', value: 200, link: '' },
-        { name: 'BetRivers', value: 150, link: '' },
-      ];
-      const unsigned = BOOK_LIST.filter(b => !completedNames.includes(b.name.toLowerCase()));
-      if (unsigned.length === 0) return null;
-      const totalLeft = unsigned.reduce((s, b) => s + b.value, 0);
-      return (
-        <div style={{background:'linear-gradient(135deg,#0f2a1e,#0f1724)',border:'1px solid #4ade80',borderRadius:10,padding:16,marginBottom:16}}>
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:12}}>
-            <div>
-              <div style={{fontWeight:700,color:'#4ade80',fontSize:14}}>💰 Unclaimed Promo Value</div>
-              <div style={{color:'#94a3b8',fontSize:12,marginTop:2}}>You're leaving <strong style={{color:'#4ade80'}}>${totalLeft.toLocaleString()}</strong> on the table from {unsigned.length} unsigned book{unsigned.length !== 1 ? 's' : ''}</div>
-            </div>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:8}}>
-            {unsigned.map(b => (
-              <div key={b.name} style={{padding:10,background:'#0a0e17',borderRadius:8,border:'1px solid #1e293b'}}>
-                <div style={{fontWeight:600,color:'#e2e8f0',fontSize:13,marginBottom:4}}>{b.name}</div>
-                <div style={{color:'#4ade80',fontSize:12,marginBottom:8}}>~${b.value} signup value</div>
-                <a href={getBookUrl(b) || `${CANONICAL_APP_URL}#/promo-finder`} target="_blank" rel="noopener noreferrer sponsored"
-                   style={{display:'block',textAlign:'center',padding:'5px 0',background:'#1e3a2f',border:'1px solid #4ade80',color:'#4ade80',borderRadius:5,fontSize:11,fontWeight:700,textDecoration:'none'}}>
-                  Claim →
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    })()}
-    <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
-      <div><div style={{fontSize:10,color:K.mt}}>EXTRACTED</div><div style={S.big(K.gn)}>${f(total)}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>COMPLETED</div><div style={S.big(K.ac)}>{cnt}/{BOOKS.length}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>REMAINING</div><div style={S.big(K.yl)}>~${f(BOOKS.filter(b=>!done[b.name]).reduce((s,b)=>s+b.bonus*0.7,0),0)}</div></div>
-      <div style={{marginLeft:"auto",display:"flex",gap:6}}>
-        {["tracker","progress"].map(v=>(
-          <button key={v} onClick={()=>setTrackerView(v)} style={{padding:"4px 12px",background:trackerView===v?K.ac:"transparent",border:`1px solid ${trackerView===v?K.ac:K.bd2}`,borderRadius:4,color:trackerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
-            {v==="tracker"?"Tracker":"Progress"}
-          </button>
-        ))}
-      </div>
-    </div>
-    <Nt c={K.ac}>Your tracker syncs across all your devices. Data also saves locally as a backup.</Nt>
-    {(()=>{
-      try {
-        const st = localStorage.getItem('pg_user_state');
-        if (!st) return null;
-        const availBooks = BOOKS.filter(b=>!US_BOOK_STATES[b.name]||US_BOOK_STATES[b.name].includes(st));
-        const unavailCount = BOOKS.length - availBooks.length;
-        if (unavailCount === 0) return null;
-        return <Nt c={K.ac}>{unavailCount} book{unavailCount>1?"s are":" is"} not available in {st} and may show limited promos for your state.</Nt>;
-      } catch { return null; }
-    })()}
-    {trackerView==="progress"&&(()=>{
-      return (<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:12,marginTop:12}}>
-        {BOOKS.map(b=>{
-          const step1=done[b.name]||profits[b.name];
-          const step2=profits[b.name];
-          const step3=done[b.name];
-          const steps=[{label:"Account Created",done:!!step1},{label:"First Bet Placed",done:!!step2},{label:"Bonus Collected",done:!!step3}];
-          const stepsComplete=steps.filter(s=>s.done).length;
-          return (<div key={b.name} style={{padding:14,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-            <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:10}}>{b.name}</div>
-            <div style={{display:"flex",alignItems:"center",gap:0,marginBottom:10}}>
-              {steps.map((s,i)=>(
-                <React.Fragment key={i}>
-                  <div style={{width:22,height:22,borderRadius:"50%",background:s.done?K.gn:K.bd2,border:`2px solid ${s.done?K.gn:K.bd2}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:s.done?K.bg:K.mt,fontWeight:700,flexShrink:0}}>{s.done?"✓":i+1}</div>
-                  {i<steps.length-1&&<div style={{flex:1,height:2,background:steps[i+1].done?K.gn:K.bd2}}/>}
-                </React.Fragment>
-              ))}
-            </div>
-            <div style={{fontSize:10,color:K.mt}}>{steps.map((s,i)=><div key={i} style={{color:s.done?K.gn:K.mt}}>{s.done?"✓":"○"} {s.label}</div>)}</div>
-            {done[b.name]&&profits[b.name]&&<div style={{fontSize:11,fontWeight:700,color:K.gn,marginTop:6}}>+${profits[b.name]}</div>}
-            {!done[b.name]&&<div style={{fontSize:10,color:K.yl,marginTop:6}}>~${f(b.bonus*0.7,0)} remaining</div>}
-          </div>);
-        })}
-      </div>);
-    })()}
-    {trackerView==="tracker"&&(()=>{
-      const cutoff30=new Date(Date.now()-30*24*60*60*1000);
-      const allBets=data.bets||[];
-      const atRisk=BOOKS.filter(b=>{
-        if(done[b.name]) return false;
-        const st=bookStatus[b.name]||'active';
-        if(st==='gubbed'||st==='limited') return true;
-        const bets30=allBets.filter(bt=>bt.book===b.name&&bt.date&&new Date(bt.date)>cutoff30);
-        if(bets30.length===0&&allBets.length>5) return true;
-        return false;
-      });
-      if(!atRisk.length) return null;
-      return (
-        <div style={{marginBottom:12,padding:'12px 14px',background:`${K.yl}06`,border:`1px solid ${K.yl}20`,borderRadius:8}}>
-          <div style={{fontSize:10,color:K.yl,fontWeight:700,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>⚠ Account Health Alerts — {atRisk.length} book{atRisk.length>1?'s':''} need attention</div>
-          <div style={{display:'flex',flexDirection:'column',gap:6}}>
-            {atRisk.map(b=>{
-              const st=bookStatus[b.name]||'active';
-              const reason=st==='gubbed'?'Marked GUBBED — avoid large stakes, mix in SGPs to maintain access':st==='limited'?'Account limited — stick to main markets, vary stake sizes':'Inactive 30+ days — place a small recreational bet to keep account healthy';
-              return (
-                <div key={b.name} style={{display:'flex',gap:10,alignItems:'flex-start',padding:'8px 10px',background:K.s3,borderRadius:6}}>
-                  <span style={{fontSize:14,minWidth:20}}>{st==='gubbed'?'🔴':st==='limited'?'🟡':'🟠'}</span>
-                  <div style={{flex:1}}>
-                    <span style={{fontWeight:700,fontSize:12,color:K.tx}}>{b.name}</span>
-                    <span style={{...S.tag(K.yl),marginLeft:6,fontSize:8}}>{st.toUpperCase()}</span>
-                    <div style={{fontSize:11,color:K.mt,marginTop:2}}>{reason}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })()}
-    {trackerView==="tracker"&&<div style={{overflowX:"auto",marginTop:12}}>
-      <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["","Book","Promo","Value","Daily Promos","Profit","ROI","Expiry","Status","Health","★","Ref Code",""].map(h=><th key={h} style={{textAlign:"left",padding:"8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>)}</tr></thead>
-        <tbody>{(()=>{ const cutoff30=new Date(Date.now()-30*24*60*60*1000); const ledger=data.ledger||[]; const bets=data.bets||[]; return BOOKS.map(b=>{const es=expiryStatus(b.name);
-          const bookEntries=ledger.filter(e=>e.book===b.name);
-          const bookProfit=bookEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-          const bookWagered=bookEntries.reduce((s,e)=>s+(parseFloat(e.hedge)||0),0);
-          const roi=calcROI(bookProfit,bookWagered);
-          return(<React.Fragment key={b.name}><tr style={{opacity:done[b.name]?0.4:1}}>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div role="checkbox" aria-checked={!!done[b.name]} aria-label={`Mark ${b.name} as completed`} tabIndex={0} onClick={()=>toggle(b.name)} onKeyDown={e=>(e.key===" "||e.key==="Enter")&&toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",outline:"none"}} onFocus={e=>e.currentTarget.style.boxShadow=`0 0 0 2px ${K.gn}55`} onBlur={e=>e.currentTarget.style.boxShadow="none"}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}{es==='soon'&&<span style={{...S.tag(K.yl),marginLeft:4}}>⚠</span>}{es==='expired'&&<span style={{...S.tag(K.rd),marginLeft:4}}>EXPIRED</span>}{bookStatus[b.name]==="limited"&&<span style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>LIMITED</span>}{bookStatus[b.name]==="gubbed"&&<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>GUBBED</span>}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span>{booksWithActivePromos.has(b.name)&&<span title="Has active promos today" style={{...S.tag(K.gn),marginLeft:4,fontSize:8}}>PROMO TODAY</span>}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.detail}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600,whiteSpace:"nowrap"}}>{b.value}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:180}}>{b.recurring}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...S.input,width:80,padding:"5px 8px"}} placeholder="$0" value={profits[b.name]||""} onChange={e=>setP(b.name,e.target.value)}/></td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:roi===null?K.mt:roi>=0?K.gn:K.rd,fontWeight:roi!==null?600:400,fontSize:11}}>{roi===null?"—":`${roi>=0?"+":""}${f(roi,1)}%`}</td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><input type="date" style={{...S.input,width:120,padding:"4px 6px",fontSize:11,borderColor:es==='soon'?K.yl:es==='expired'?K.rd:undefined}} value={expiry[b.name]||""} onChange={e=>setExpiry(b.name,e.target.value)} title="Promo expiry date"/></td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-            <select value={bookStatus[b.name]||"active"} onChange={e=>setBookStatus(b.name,e.target.value)} style={{...S.input,width:90,padding:"3px 6px",fontSize:10,color:{active:K.gn,limited:K.yl,gubbed:K.rd,pending:K.mt,closed:K.rd}[bookStatus[b.name]||"active"]||K.gn}}>
-              {["active","limited","gubbed","pending","closed"].map(s=><option key={s} value={s}>{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}
-            </select>
-          </td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-            {(()=>{
-              let score=100;
-              const st=bookStatus[b.name]||"active";
-              if(st==="gubbed") score-=30;
-              if(st==="limited") score-=15;
-              if(st==="closed") score-=10;
-              const bets30=bets.filter(bt=>bt.book===b.name&&bt.date&&new Date(bt.date)>cutoff30);
-              if(bets30.length===0) score-=20;
-              else {
-                const stakes=bets30.map(bt=>parseFloat(bt.stake)||0).filter(s=>s>0);
-                if(stakes.length>2&&new Set(stakes).size===1) score-=10;
-              }
-              const rating=bookRatings[b.name]||0;
-              if(rating>=4) score+=10; else if(rating>=3) score+=5;
-              score=Math.max(0,Math.min(100,score));
-              const scoreColor=score>=80?K.gn:score>=60?K.yl:score>=40?"#f97316":K.rd;
-              const scoreLabel=score>=80?"Healthy":score>=60?"Watch":score>=40?"At Risk":"Gubbed Risk";
-              return (<div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:2}}>
-                <span title="Health Score: factors in account status, recent activity, stake variance, and rating." style={{...S.tag(scoreColor),fontSize:9,cursor:"help"}}>{scoreLabel.toUpperCase()}: {score}</span>
-              </div>);
-            })()}
-          </td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-            <div style={{display:"flex",gap:1}}>{[1,2,3,4,5].map(n=>(
-              <span key={n} onClick={()=>setBookRating(b.name,n===bookRatings[b.name]?0:n)} style={{cursor:"pointer",color:n<=(bookRatings[b.name]||0)?K.yl:K.bd2,fontSize:14}}>★</span>
-            ))}</div>
-          </td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-            <input
-              style={{...S.input,width:90,padding:"4px 6px",fontSize:10}}
-              placeholder="code/link"
-              value={(data.bookRefCodes||{})[b.name]||""}
-              onChange={e=>syncAppData({...data,bookRefCodes:{...(data.bookRefCodes||{}),[b.name]:e.target.value}})}
-              title={`Your personal ${b.name} referral code`}
-            />
-          </td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
-            <a href={b.link} target="_blank" rel="noopener noreferrer sponsored" style={{display:"inline-block",padding:"5px 12px",background:K.gn,color:K.bg,borderRadius:5,fontSize:11,fontWeight:700,textDecoration:"none",opacity:done[b.name]?0.4:1}}>Sign Up →</a>
-          </td>
-        </tr>
-        {bookEntries.length>0&&<tr key={b.name+'-stats'} style={{opacity:done[b.name]?0.4:1}}><td colSpan={13} style={{padding:"4px 8px 8px 34px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}><div style={{display:"flex",gap:14,fontSize:10,color:K.mt}}><span>Bets: <span style={{color:K.tx,fontWeight:600}}>{bookEntries.length}</span></span><span>P/L: <span style={{color:bookProfit>=0?K.gn:K.rd,fontWeight:600}}>{bookProfit>=0?"+":""}<span>$</span>{f(bookProfit)}</span></span>{roi!==null&&<span>ROI: <span style={{color:roi>=0?K.gn:K.rd,fontWeight:600}}>{f(roi,1)}%</span></span>}</div></td></tr>}
-        </React.Fragment>);});})()}</tbody>
-      </table>
-    </div>}
-    {(()=>{
-      const codes = data.bookRefCodes || {};
-      const filledBooks = BOOKS.filter(b=>codes[b.name]?.trim());
-      if (!filledBooks.length) return null;
-      return (
-        <div style={{...S.card,background:K.s2,marginTop:12}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Your Referral Links</div>
-          <div style={{fontSize:11,color:K.dm,marginBottom:10}}>Share these with friends. Each book pays ${25}–$100 per sign-up via your personal link.</div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
-            {filledBooks.map(b=>(
-              <div key={b.name} style={{padding:"8px 12px",background:K.s3,borderRadius:6,border:`1px solid ${K.bd}`}}>
-                <div style={{fontSize:10,fontWeight:700,color:b.color||K.ac,marginBottom:2}}>{b.name}</div>
-                <div style={{fontSize:10,color:K.dm,fontFamily:font,wordBreak:"break-all"}}>{codes[b.name]}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    })()}
-    {(()=>{
-      const ledger = data.ledger||[];
-      if(!ledger.length) return null;
-      const byBook={};
-      ledger.forEach(e=>{
-        if(!byBook[e.book]) byBook[e.book]={profit:0,count:0};
-        byBook[e.book].profit+=parseFloat(e.profit)||0;
-        byBook[e.book].count++;
-      });
-      const bookStats=Object.entries(byBook).sort((a,b)=>b[1].profit-a[1].profit);
-      return (<div style={{marginTop:16}}>
-        <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Per-Book P/L (from Ledger)</div>
-        {bookStats.map(([book,d])=>(
-          <div key={book} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 10px",background:K.s2,borderRadius:6,marginBottom:4,border:`1px solid ${K.bd}`}}>
-            <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{book}</span>
-            <span style={{fontSize:11,color:K.mt}}>{d.count} entries</span>
-            <span style={{fontSize:13,fontWeight:700,color:d.profit>=0?K.gn:K.rd}}>{d.profit>=0?"+":""}${f(d.profit)}</span>
-          </div>
-        ))}
-      </div>);
-    })()}
-  </div>);
-};
-
-const ShareWeekBtn = ({entries}) => {
-  const [weekCopied,setWeekCopied]=useState(false);
-  const shareWeek=()=>{
-    const today2=new Date();
-    const dayOfWeek=today2.getDay();
-    const diffToMon=dayOfWeek===0?-6:1-dayOfWeek;
-    const monDate=new Date(today2);
-    monDate.setDate(today2.getDate()+diffToMon);
-    monDate.setHours(0,0,0,0);
-    const weekEntries=entries.filter(e=>{
-      if(!e.date) return false;
-      const d=new Date(e.date); d.setHours(0,0,0,0);
-      return d>=monDate && d<=today2;
-    });
-    const weekProfit=weekEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-    const best=weekEntries.length?weekEntries.reduce((b,e)=>parseFloat(e.profit)>parseFloat(b.profit)?e:b,weekEntries[0]):null;
-    const monStr=`${monDate.getMonth()+1}/${monDate.getDate()}`;
-    const todayStr2=`${today2.getMonth()+1}/${today2.getDate()}`;
-    const card=`📊 PromoGrind Weekly Update\nWeek of ${monStr} – ${todayStr2}\n━━━━━━━━━━━━━━━━━━\nProfit: ${weekProfit>=0?"+":""}$${f(weekProfit)}\n${best?`Best play: ${best.type} at ${best.book}`:"Best play: —"}\nEntries: ${weekEntries.length}\n━━━━━━━━━━━━━━━━━━\nTrack yours free: ${CANONICAL_APP_URL}`;
-    try{navigator.clipboard.writeText(card);}catch(e){}
-    setWeekCopied(true); setTimeout(()=>setWeekCopied(false),2000);
-  };
-  return (<button onClick={shareWeek} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:weekCopied?K.gn:K.ac,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
-    {weekCopied?"✓ Copied!":"📅 Share This Week"}
-  </button>);
-};
-
-const ReportCard = ({entries, total}) => {
-  const [copiedReport,setCopiedReport]=useState(false);
-  const months={}; entries.forEach(e=>{const m=e.date?e.date.slice(0,7):"?"; if(!months[m])months[m]=0; months[m]+=(parseFloat(e.profit)||0);});
-  const monthVals=Object.values(months); const bestMonth=monthVals.length?Math.max(...monthVals):0; const bestMonthKey=Object.entries(months).sort((a,b)=>b[1]-a[1])[0]?.[0]||"—";
-  const conversionEntries=entries.filter(e=>e.type==="Bonus Bet"||e.type==="Profit Boost");
-  const avgConv=conversionEntries.length?conversionEntries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0)/conversionEntries.length:0;
-  const card=`PromoGrind Report Card 📊\n──────────────────\nTotal Profit: $${f(total)}\nBest Month: ${bestMonthKey} ($${f(bestMonth)})\nEntries: ${entries.length} logged\nAvg per Entry: $${f(avgConv)}\nEst. Tax @ 22%: -$${f(total*0.22)} | Keep: $${f(total*0.78)}\n──────────────────\nTrack yours free: ${CANONICAL_APP_URL}`;
-  const copyReport=()=>{try{navigator.clipboard.writeText(card);}catch(e){} setCopiedReport(true); setTimeout(()=>setCopiedReport(false),2000);};
-  return (
-    <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>All-Time Report Card</div>
-      <div style={{display:"flex",gap:20,flexWrap:"wrap",marginBottom:10}}>
-        <div><div style={{fontSize:9,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
-        <div><div style={{fontSize:9,color:K.mt}}>BEST MONTH</div><div style={{...S.big(K.ac),fontSize:18}}>${f(bestMonth)}</div><div style={{fontSize:9,color:K.mt}}>{bestMonthKey}</div></div>
-        <div><div style={{fontSize:9,color:K.mt}}>ENTRIES</div><div style={{...S.big(K.tx),fontSize:18}}>{entries.length}</div></div>
-        <div><div style={{fontSize:9,color:K.mt}}>AVG PER ENTRY</div><div style={{...S.big(K.yl),fontSize:18}}>${f(avgConv)}</div></div>
-      </div>
-      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-        <button onClick={copyReport} style={{padding:"7px 16px",background:copiedReport?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
-          {copiedReport?"✓ Copied!":"📋 Copy Report Card"}
-        </button>
-        <ShareWeekBtn entries={entries}/>
-        <button onClick={()=>{const year=new Date().getFullYear();const header=`"PromoGrind P&L Export - For Tax Purposes - Gambling winnings are taxable income"`;const colHeaders=["Date","Sportsbook","Type","Bonus Amount","Hedge Amount","Profit","Notes"];const rows=entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);const csv=[header,colHeaders,...rows].map((r,i)=>i<2?r:r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");downloadFile(csv,`promogrind-tax-export-${year}.csv`,"text/csv");}} style={{padding:"7px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
-          Export Tax CSV ({entries.length} entries)
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// ═══ BET HEATMAP ═══
-const BetHeatmap = ({ entries }) => {
-  const [show, setShow] = useState(false);
-  const dayMap = useMemo(()=>{
-    const m = {};
-    entries.forEach(e=>{ if(!e.date) return; const k=e.date; if(!m[k]) m[k]=0; m[k]+=(parseFloat(e.profit)||0); });
-    return m;
-  },[entries]);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const start = new Date(today); start.setDate(today.getDate()-90);
-  const cells = [];
-  const d = new Date(start);
-  const dow = d.getDay();
-  const mondayOffset = dow===0?-6:1-dow;
-  d.setDate(d.getDate()+mondayOffset);
-  for(let w=0;w<13;w++) {
-    const week = [];
-    for(let day=0;day<7;day++) {
-      const key = d.toISOString().split('T')[0];
-      const pl = dayMap[key];
-      let color = K.s3;
-      if(pl!==undefined){ if(pl>50) color=K.gn; else if(pl>0) color='#22c55e80'; else if(pl===0) color=K.bd2; else color=`${K.rd}99`; }
-      week.push({key,pl,color,isFuture:d>today});
-      d.setDate(d.getDate()+1);
-    }
-    cells.push(week);
-  }
-  const monthLabels = cells.map((week,wi)=>{ const mon=week[0].key; const prev=wi>0?cells[wi-1][0].key:null; if(!prev||mon.slice(0,7)!==prev.slice(0,7)){ const dt=new Date(mon+'T12:00:00'); return dt.toLocaleString('default',{month:'short'}); } return ''; });
-  return (
-    <div style={{marginBottom:12}}>
-      <button onClick={()=>setShow(s=>!s)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,marginBottom:show?8:0}}>
-        {show?"▲ Hide":"▼ Show"} P/L Heatmap
-      </button>
-      {show&&<div style={{overflowX:"auto",padding:"8px 0"}}>
-        <div style={{display:"flex",gap:4}}>
-          <div style={{display:"flex",flexDirection:"column",gap:2,marginTop:14}}>
-            {["M","T","W","T","F","S","S"].map((d,i)=><div key={i} style={{height:14,fontSize:8,color:K.mt,lineHeight:"14px"}}>{d}</div>)}
-          </div>
-          <div>
-            <div style={{display:"flex",gap:2,marginBottom:4}}>
-              {monthLabels.map((l,i)=><div key={i} style={{width:14,fontSize:8,color:K.mt,overflow:"hidden",whiteSpace:"nowrap"}}>{l}</div>)}
-            </div>
-            <div style={{display:"flex",gap:2}}>
-              {cells.map((week,wi)=>(
-                <div key={wi} style={{display:"flex",flexDirection:"column",gap:2}}>
-                  {week.map(cell=>(
-                    <div key={cell.key} title={cell.isFuture?'':cell.pl!==undefined?`${cell.key}: ${cell.pl>=0?'+':''}$${f(cell.pl)}`:cell.key+': no data'} style={{width:12,height:12,borderRadius:2,background:cell.isFuture?'transparent':cell.color,opacity:cell.isFuture?0:1}}/>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div style={{display:"flex",gap:12,marginTop:8,fontSize:9,color:K.mt,alignItems:"center"}}>
-          <span>Legend:</span>
-          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.s3,display:"inline-block"}}/> No data</span>
-          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.gn,display:"inline-block"}}/> Profit &gt;$50</span>
-          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:'#22c55e80',display:"inline-block"}}/> Profit</span>
-          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.bd2,display:"inline-block"}}/> Break-even</span>
-          <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:`${K.rd}99`,display:"inline-block"}}/> Loss</span>
-        </div>
-      </div>}
-    </div>
-  );
-};
-
-// ═══ LEDGER ═══
-const Ledger = () => {
-  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
-  const entries = data.ledger || [];
-  const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Bonus Conversion",bonus:"",hedge:"",profit:"",ev:"",myOdds:"",closingOdds:"",notes:""});
-  const save = (newEntries) => syncAppData({...data, ledger: newEntries});
-  const toast = useToast();
-  const add = () => {
-    if(!form.profit) return;
-    if(entries.length === 0) window.plausible?.('first_ledger_entry');
-    save([{...form,id:Date.now()},...entries]);
-    setForm(f=>({...f,bonus:"",hedge:"",profit:"",ev:"",notes:""}));
-    onLedgerEntry();
-    if(toast) toast('✓ Entry logged');
-    // CLV alert
-    if(form.myOdds&&form.closingOdds&&toast) {
-      const my=toD(form.myOdds),cl=toD(form.closingOdds);
-      if(my>1&&cl>1) {
-        const clv=(my/cl-1)*100;
-        if(clv>0) setTimeout(()=>toast(`🎯 Beat closing line by +${f(clv,2)}% — strong CLV signal`,K.gn),300);
-        else if(clv<-1) setTimeout(()=>toast(`⚠ Closing line moved against you (${f(clv,2)}%)`,K.yl),300);
-      }
-    }
-  };
-  const del = id => { const snapshot=[...entries]; save(entries.filter(e=>e.id!==id)); if(toast) toast('Entry deleted',K.rd,{label:'UNDO',fn:()=>save(snapshot)}); };
-  const [editId, setEditId] = useState(null);
-  const [editForm, setEditForm] = useState({});
-  const startEdit = (e) => { setEditId(e.id); setEditForm({...e}); };
-  const cancelEdit = () => { setEditId(null); setEditForm({}); };
-  const commitEdit = () => { save(entries.map(e=>e.id===editId?{...editForm}:e)); setEditId(null); setEditForm({}); if(toast) toast('✓ Entry updated'); };
-  const [filterBook, setFilterBook] = useState('All');
-  const [filterType, setFilterType] = useState('All');
-  const [filterFrom, setFilterFrom] = useState('');
-  const [filterTo, setFilterTo] = useState('');
-  const [ledgerView, setLedgerView] = useState('entries');
-  const [showGoal, setShowGoal] = useState(false);
-  const [goalInput, setGoalInput] = useState(() => { try { return localStorage.getItem('pg_profit_goal')||''; } catch { return ''; } });
-  const saveGoal = v => { setGoalInput(v); try { localStorage.setItem('pg_profit_goal', v); } catch {} };
-  const total = entries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  const todayStr = new Date().toISOString().split('T')[0];
-  const todayPL = entries.filter(e=>e.date===todayStr).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  const thisMonth = new Date().toISOString().slice(0,7);
-  const monthPL = entries.filter(e=>e.date&&e.date.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  const [upsellLedgerDismissed, setUpsellLedgerDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_upsell_ledger_dismissed');}catch{return false;} });
-  const ledgerIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
-  const [showLedgerTrigger, setShowLedgerTrigger] = useState(() => {
-    const ents = data?.ledger || [];
-    return ents.length >= 3 && shouldShowTrigger('ledger_upsell') && !ledgerIsPro();
-  });
-  const streakData = useMemo(()=>{
-    const sorted=[...entries].sort((a,b)=>new Date(b.date)-new Date(a.date));
-    let cur=0,dir=null;
-    for(const e of sorted){ const w=parseFloat(e.profit)>0; if(dir===null) dir=w; if(dir===w) cur++; else break; }
-    let longest=0,run=0;
-    for(const e of [...sorted].reverse()){ if(parseFloat(e.profit)>0) run++; else run=0; if(run>longest) longest=run; }
-    const last10=sorted.slice(0,10).reverse().map(e=>parseFloat(e.profit)>0?'W':parseFloat(e.profit)<0?'L':'P');
-    return {cur,dir,longest,last10};
-  },[entries]);
-  const exportCSV = () => {
-    const headers = ["Date","Book","Type","Bonus","Hedge","Profit","EV%","Notes"];
-    const rows = entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.ev||"",e.notes||""]);
-    const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
-    downloadFile(csv, `promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
-  };
-  return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="CLOUD SYNC" bc={K.gn}/>
-    {showLedgerTrigger && (
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'linear-gradient(90deg,#1e3a2f,#0f1724)',border:'1px solid #4ade80',borderRadius:8,marginBottom:12,flexWrap:'wrap',gap:8}}>
-        <div style={{fontSize:13,color:'#cbd5e1'}}>☁️ <strong style={{color:'#4ade80'}}>VaultSparked</strong> syncs your ledger across all devices + unlocks the Live Scanner.</div>
-        <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          <a href="#/upgrade" style={{padding:'5px 12px',background:'#4ade80',color:'#0a0e17',borderRadius:5,fontSize:12,fontWeight:700,textDecoration:'none'}}>Start Free Trial →</a>
-          <button onClick={() => dismissTrigger('ledger_upsell', setShowLedgerTrigger)} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:16}}>×</button>
-        </div>
-      </div>
-    )}
-    {entries.length>=5&&!upsellLedgerDismissed&&(
-      <div style={{...S.note(K.pp),display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,marginBottom:12}}>
-        <span>Get live arb scanner, push alerts + priority support — first 7 days free, then $24.99/mo</span>
-        <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Try 7 days free</button>
-          <button onClick={()=>{try{localStorage.setItem('pg_upsell_ledger_dismissed','1');}catch{}setUpsellLedgerDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
-        </div>
-      </div>
-    )}
-    {(()=>{
-      const clvEntries=entries.filter(e=>e.myOdds&&e.closingOdds);
-      const avgClv=clvEntries.length?clvEntries.reduce((s,e)=>{const my=toD(e.myOdds),cl=toD(e.closingOdds);return s+(my>1&&cl>1?(my/cl-1)*100:0);},0)/clvEntries.length:null;
-      return (<div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
-        <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
-        <div><div style={{fontSize:10,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
-        {avgClv!==null&&<div><div style={{fontSize:10,color:K.mt}}>AVG CLV</div><div style={S.big(avgClv>=0?K.gn:K.rd)}>{avgClv>=0?"+":""}{f(avgClv,2)}%</div></div>}
-        {(()=>{ const evEntries=entries.filter(e=>e.ev&&parseFloat(e.ev)>0); if(!evEntries.length) return null; const avgEV=evEntries.reduce((s,e)=>s+parseFloat(e.ev),0)/evEntries.length; return <div><div style={{fontSize:10,color:K.mt}}>AVG EV%</div><div style={S.big(K.pp)}>{f(avgEV,1)}%</div><div style={{fontSize:9,color:K.mt}}>{evEntries.length} logged</div></div>; })()}
-        {entries.length>0&&<div><div style={{fontSize:10,color:K.mt}}>STREAK</div><div style={{fontSize:18,fontWeight:700,color:streakData.dir?K.gn:K.rd,fontFamily:fontD}}>{streakData.cur>0?(streakData.dir?`🔥 ${streakData.cur}W`:`❄ ${streakData.cur}L`):'—'}</div><div style={{fontSize:9,color:K.mt}}>Best: {streakData.longest}W</div></div>}
-        {streakData.last10.length>0&&<div><div style={{fontSize:10,color:K.mt,marginBottom:4}}>LAST 10</div><div style={{display:"flex",gap:3}}>{streakData.last10.map((r,i)=><span key={i} style={{width:10,height:10,borderRadius:"50%",background:r==='W'?K.gn:r==='L'?K.rd:K.yl,display:"inline-block"}}/>)}</div></div>}
-        {(()=>{
-          const bbEntries=entries.filter(e=>e.type==="Bonus Conversion"&&e.bonus&&e.profit);
-          if(bbEntries.length<3) return null;
-          const avgConv=bbEntries.reduce((s,e)=>{
-            const b=parseFloat(e.bonus)||0; const p=parseFloat(e.profit)||0;
-            return b>0?s+(p/b*100):s;
-          },0)/bbEntries.length;
-          return <div><div style={{fontSize:10,color:K.mt}}>CONV RATE</div><div style={{...S.big(avgConv>=70?K.gn:avgConv>=55?K.yl:K.rd),fontSize:20}}>{f(avgConv,1)}%</div><div style={{fontSize:9,color:K.mt}}>{bbEntries.length} conv.</div></div>;
-        })()}
-        {entries.filter(e=>e.date===todayStr).length>0&&<div><div style={{fontSize:10,color:K.mt}}>TODAY</div><div style={{...S.big(todayPL>=0?K.gn:K.rd),fontSize:22}}>{todayPL>=0?"+":""}${f(todayPL)}</div></div>}
-        {(()=>{
-          const cutoff=new Date(Date.now()-7*24*60*60*1000);
-          const recent=entries.filter(e=>e.date&&new Date(e.date)>=cutoff);
-          const recentPL=recent.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-          if(!recent.length) return null;
-          return <div><div style={{fontSize:10,color:K.mt}}>LAST 7 DAYS</div><div style={S.big(recentPL>=0?K.gn:K.rd,{fontSize:20})}>{recentPL>=0?"+":""}${f(recentPL)}</div><div style={{fontSize:9,color:K.mt}}>{recent.length} bets</div></div>;
-        })()}
-        {entries.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
-        <button onClick={()=>{
-          const cutoff=new Date(Date.now()-7*24*60*60*1000);
-          const week=entries.filter(e=>e.date&&new Date(e.date)>=cutoff);
-          const wPL=week.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-          const wClv=week.filter(e=>e.myOdds&&e.closingOdds);
-          const avgClv=wClv.length?wClv.reduce((s,e)=>{const my=toD(e.myOdds),cl=toD(e.closingOdds);return s+(my>1&&cl>1?(my/cl-1)*100:0);},0)/wClv.length:null;
-          const card=`📊 PromoGrind Week\nPromos: ${week.length}  |  Profit: ${wPL>=0?"+":""}$${f(wPL)}${avgClv!==null?`\nCLV: ${avgClv>=0?"+":""}${f(avgClv,2)}%`:""}
-\nFree tools at ${CANONICAL_APP_URL}`;
-          try{navigator.clipboard.writeText(card);}catch(e){}
-          if(toast) toast('📋 Week card copied!',K.pp);
-        }} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>📊 Share Week</button>
-      </div>);
-    })()}
-    {(()=>{
-      const goal = parseFloat(goalInput);
-      const goalPct = goal>0 ? Math.min(100,monthPL/goal*100) : 0;
-      const barColor = goalPct>=80?K.gn:goalPct>=40?K.yl:K.rd;
-      return (<div style={{marginBottom:12}}>
-        <button onClick={()=>setShowGoal(g=>!g)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,marginBottom:showGoal||goal>0?8:0}}>
-          {showGoal?"▲ Hide Goal":"▼ Monthly Goal"}
-        </button>
-        {(showGoal||goal>0)&&<div style={{padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
-          <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:8}}>
-            <span style={{fontSize:11,color:K.dm}}>Monthly profit goal: $</span>
-            <input style={{...S.input,width:80,padding:"4px 8px"}} value={goalInput} onChange={e=>saveGoal(e.target.value)} placeholder="1000"/>
-          </div>
-          {goal>0&&(<>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.mt,marginBottom:4}}>
-              <span>This month: {monthPL>=0?"+":""}${f(monthPL)}</span>
-              <span style={{color:barColor,fontWeight:600}}>{f(goalPct,0)}% of ${f(goal,0)} goal</span>
-            </div>
-            <div style={{height:6,background:K.s3,borderRadius:3}}>
-              <div style={{height:6,borderRadius:3,background:barColor,width:`${goalPct}%`,transition:"width 0.4s"}}/>
-            </div>
-            {goalPct>=100&&<div style={{fontSize:11,color:K.gn,marginTop:6,fontWeight:600}}>Goal reached!</div>}
-          </>)}
-        </div>}
-      </div>);
-    })()}
-    <div style={{...S.row,alignItems:"flex-end"}}>
-      <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-      <div style={{...S.col,minWidth:140}}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
-      <div style={{...S.col,minWidth:160}}><label style={S.label}>Type</label><select style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
-    </div>
-    <div style={{...S.row,alignItems:"flex-end"}}>
-      <In l="Bonus $" v={form.bonus} set={v=>setForm(f=>({...f,bonus:v}))} pre="$"/>
-      <In l="Hedge $" v={form.hedge} set={v=>setForm(f=>({...f,hedge:v}))} pre="$"/>
-      <In l="Net Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$"/>
-      <In l="EV % (opt)" v={form.ev} set={v=>setForm(f=>({...f,ev:v}))} ph="4.2" pre="%"/>
-      <In l="Your Odds (opt)" v={form.myOdds} set={v=>setForm(f=>({...f,myOdds:v}))} ph="+110"/>
-      <In l="Closing Odds (opt)" v={form.closingOdds} set={v=>setForm(f=>({...f,closingOdds:v}))} ph="+105"/>
-      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
-    </div>
-    {entries.length>=2&&(()=>{
-      const sorted=[...entries].sort((a,b)=>new Date(a.date)-new Date(b.date));
-      const cumulative=sorted.reduce((acc,e,i)=>{const prev=i>0?acc[i-1].cum:0;acc.push({date:e.date,cum:prev+(parseFloat(e.profit)||0)});return acc;},[]);
-      const minV=Math.min(0,...cumulative.map(p=>p.cum));
-      const maxV=Math.max(0,...cumulative.map(p=>p.cum));
-      const range=maxV-minV||1;
-      const W=340,H=80,PAD=8;
-      const sx=i=>(i/(cumulative.length-1||1))*(W-PAD*2)+PAD;
-      const sy=v=>H-PAD-(v-minV)/range*(H-PAD*2);
-      const pts=cumulative.map((p,i)=>`${sx(i)},${sy(p.cum)}`).join(' ');
-      const areaClose=`${sx(cumulative.length-1)},${sy(0)} ${sx(0)},${sy(0)}`;
-      const isPos=cumulative[cumulative.length-1].cum>=0;
-      const color=isPos?K.gn:K.rd;
-      return (
-        <div style={{...S.card,background:K.s2,padding:"12px 16px",marginBottom:12}}>
-          <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Cumulative P/L</div>
-          <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{display:"block",overflow:"visible"}}>
-            <line x1={PAD} y1={sy(0)} x2={W-PAD} y2={sy(0)} stroke={K.bd2} strokeWidth="1" strokeDasharray="3,3"/>
-            <polyline fill={`${color}15`} stroke="none" points={`${pts} ${areaClose}`}/>
-            <polyline fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" points={pts}/>
-            {cumulative.map((p,i)=>i===cumulative.length-1?<circle key={i} cx={sx(i)} cy={sy(p.cum)} r="3" fill={color}/>:null)}
-          </svg>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:K.mt,marginTop:4}}>
-            <span>{cumulative[0]?.date}</span><span style={{color,fontWeight:700}}>{isPos?"+":""}${f(cumulative[cumulative.length-1]?.cum||0)}</span><span>{cumulative[cumulative.length-1]?.date}</span>
-          </div>
-        </div>
-      );
-    })()}
-    <BetHeatmap entries={entries}/>
-    <Nt c={K.yl}>All gambling winnings are taxable income. Keep records year-round. Export this ledger each tax season.</Nt>
-    <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
-      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>View:</span>
-      {["entries","by-book"].map(v=>(
-        <button key={v} onClick={()=>setLedgerView(v)} style={{padding:"4px 12px",background:ledgerView===v?K.ac:"transparent",border:`1px solid ${ledgerView===v?K.ac:K.bd2}`,borderRadius:4,color:ledgerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
-          {v==="entries"?"Entries":"By Book"}
-        </button>
-      ))}
-    </div>
-    {ledgerView==="by-book"&&(()=>{
-      const byBook={};
-      entries.forEach(e=>{
-        const b=e.book||"Unknown";
-        if(!byBook[b]) byBook[b]={count:0,bonus:0,wagered:0,profit:0};
-        byBook[b].count++;
-        byBook[b].bonus+=parseFloat(e.bonus)||0;
-        byBook[b].wagered+=parseFloat(e.hedge)||0;
-        byBook[b].profit+=parseFloat(e.profit)||0;
-      });
-      const rows=Object.entries(byBook).sort((a,b)=>b[1].profit-a[1].profit);
-      if(!rows.length) return <div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}><div style={{fontSize:28,marginBottom:8}}>📊</div><div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div><div style={{fontSize:11,color:K.mt}}>Log your first promo conversion in the Ledger tab and it'll appear here sorted by book.</div></div>;
-      return (<div><div style={{overflowX:"auto",marginBottom:8}}>
-        <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-          <thead><tr>{["Book","Entries","Total Bonus","Total Wagered","Net Profit","ROI%"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
-          <tbody>{rows.map(([book,d])=>{
-            const roi=calcROI(d.profit,d.wagered);
-            return (<tr key={book}>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{book}</td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{d.count}</td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{d.bonus?`$${f(d.bonus)}`:"—"}</td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{d.wagered?`$${f(d.wagered)}`:"—"}</td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:d.profit>=0?K.gn:K.rd,fontWeight:600}}>{d.profit>=0?"+":""}${f(d.profit)}</td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:roi===null?K.mt:roi>=0?K.gn:K.rd,fontWeight:roi!==null?600:400}}>{roi===null?"—":`${roi>=0?"+":""}${f(roi,1)}%`}</td>
-            </tr>);
-          })}</tbody>
-        </table>
-      </div>
-      <Nt c={K.ac}>Best performing book = highest ROI%. Worst = consider retiring that book.</Nt>
-      </div>);
-    })()}
-    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12,alignItems:"center"}}>
-      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Filter:</span>
-      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
-        <option value="All">All Books</option>
-        {[...new Set(entries.map(e=>e.book))].sort().map(b=><option key={b}>{b}</option>)}
-      </select>
-      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterType} onChange={e=>setFilterType(e.target.value)}>
-        <option value="All">All Types</option>
-        {["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}
-      </select>
-      <input type="date" style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterFrom} onChange={e=>setFilterFrom(e.target.value)} title="From date"/>
-      <input type="date" style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterTo} onChange={e=>setFilterTo(e.target.value)} title="To date"/>
-      {(filterBook!=='All'||filterType!=='All'||filterFrom||filterTo)&&
-        <button onClick={()=>{setFilterBook('All');setFilterType('All');setFilterFrom('');setFilterTo('');}} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕ Clear</button>}
-    </div>
-    {(()=>{
-      const filteredEntries = entries.filter(e => {
-        if(filterBook!=='All' && e.book!==filterBook) return false;
-        if(filterType!=='All' && e.type!==filterType) return false;
-        if(filterFrom && e.date && e.date < filterFrom) return false;
-        if(filterTo && e.date && e.date > filterTo) return false;
-        return true;
-      });
-      if(!filteredEntries.length) return entries.length>0
-        ?<div style={{textAlign:"center",padding:24,color:K.mt,fontSize:12}}>No entries match your filters.</div>
-        :<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
-            <div style={{fontSize:32,marginBottom:8}}>📒</div>
-            <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div>
-            <div style={{fontSize:11,color:K.mt}}>Every promo you convert goes here. Start with the Bonus Bet Converter.</div>
-          </div>;
-      return (<div style={{overflowX:"auto",marginTop:12}}>
-      <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Date","Book","Type","Bonus","Hedge","Profit","CLV",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
-        <tbody>{filteredEntries.map(e=>{
-          const editing = editId === e.id;
-          const iStyle = {...S.input, padding:"3px 6px", fontSize:11};
-          if(editing) return (
-            <tr key={e.id} style={{background:`${K.ac}08`}}>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:110}} type="date" value={editForm.date||''} onChange={ev=>setEditForm(f=>({...f,date:ev.target.value}))}/></td>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><select style={{...iStyle,width:110}} value={editForm.book||''} onChange={ev=>setEditForm(f=>({...f,book:ev.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></td>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><select style={{...iStyle,width:130}} value={editForm.type||''} onChange={ev=>setEditForm(f=>({...f,type:ev.target.value}))}>{["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></td>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.bonus||''} onChange={ev=>setEditForm(f=>({...f,bonus:ev.target.value}))} placeholder="$"/></td>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.hedge||''} onChange={ev=>setEditForm(f=>({...f,hedge:ev.target.value}))} placeholder="$"/></td>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.profit||''} onChange={ev=>setEditForm(f=>({...f,profit:ev.target.value}))} placeholder="$"/></td>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.myOdds||''} onChange={ev=>setEditForm(f=>({...f,myOdds:ev.target.value}))} placeholder="my"/></td>
-              <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap",display:"flex",gap:4,alignItems:"center"}}>
-                <button onClick={commitEdit} style={{padding:"3px 8px",background:K.gn,border:"none",borderRadius:4,color:K.bg,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:font}}>✓</button>
-                <button onClick={cancelEdit} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
-              </td>
-            </tr>
-          );
-          return (<tr key={e.id}>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{e.date}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{e.book}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(K.ac)}>{e.type}</span></td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{e.bonus?`$${e.bonus}`:"—"}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{e.hedge?`$${e.hedge}`:"—"}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(e.profit)>=0?K.gn:K.rd,fontWeight:600}}>{parseFloat(e.profit)>=0?"+":""}${e.profit}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{(()=>{if(!e.myOdds||!e.closingOdds)return<span style={{color:K.mt}}>—</span>;const my=toD(e.myOdds),cl=toD(e.closingOdds);if(my<=1||cl<=1)return<span style={{color:K.mt}}>—</span>;const clv=(my/cl-1)*100;return<span style={{color:clv>=0?K.gn:K.rd,fontWeight:600}}>{clv>=0?"+":""}{f(clv,2)}%</span>;})()}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
-              <span onClick={()=>startEdit(e)} style={{cursor:"pointer",color:K.ac,fontSize:11,marginRight:8}} title="Edit">✎</span>
-              <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}} title="Delete">✕</span>
-            </td>
-          </tr>);
-        })}</tbody>
-      </table>
-    </div>);
-    })()}
-    {entries.length>=3&&(()=>{
-      const byMonth={};
-      entries.forEach(e=>{
-        const m=e.date?e.date.slice(0,7):"Unknown";
-        if(!byMonth[m]) byMonth[m]={profit:0,count:0};
-        byMonth[m].profit+=parseFloat(e.profit)||0;
-        byMonth[m].count++;
-      });
-      const months=Object.entries(byMonth).sort((a,b)=>b[0].localeCompare(a[0]));
-      return (<div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-        <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Monthly Breakdown</div>
-        {months.map(([month,d])=>(
-          <div key={month} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderBottom:`1px solid ${K.bd}`}}>
-            <span style={{fontSize:12,color:K.dm}}>{month}</span>
-            <span style={{fontSize:12,color:K.mt}}>{d.count} entries</span>
-            <span style={{fontSize:13,fontWeight:600,color:d.profit>=0?K.gn:K.rd}}>{d.profit>=0?"+":""}${f(d.profit)}</span>
-          </div>
-        ))}
-      </div>);
-    })()}
-    {total>0&&<div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Federal Tax Estimate</div>
-      <div style={{fontSize:10,color:K.mt,marginBottom:10}}>Gambling winnings are ordinary income. Estimate only — consult a tax professional.</div>
-      {[[0.22,"22% bracket"],[0.24,"24% bracket"],[0.32,"32% bracket"]].map(([rate,label])=>(
-        <RR key={rate} l={label} v={`Owe ~$${f(total*rate)} · Keep $${f(total*(1-rate))}`} c={K.yl}/>
-      ))}
-      <Nt c={K.yl}>Report all winnings even without a W-2G. You may deduct gambling losses up to your winnings if you itemize deductions. Keep Form W-2G records.</Nt>
-    </div>}
-    <TaxTimingAdvisor entries={entries}/>
-    {entries.length>=1&&<ReportCard entries={entries} total={total}/>}
-  </div>);
-};
-
+// Tracker → ./components/Tracker.jsx
+// Ledger (+ ShareWeekBtn, ReportCard, BetHeatmap) → ./components/Ledger.jsx
 // ═══ FAQ ACCORDION ═══
 const FaqAccordion = () => {
   const [open, setOpen] = useState(null);
@@ -2386,7 +1564,7 @@ const ProfitCertificate = () => {
     }
   };
 
-  const addToWinsWall = () => {
+  const addToWinsWall = async () => {
     const entry = {
       id: `${period}-${Date.now()}`,
       period,
@@ -2395,10 +1573,25 @@ const ProfitCertificate = () => {
       count,
       books: books.length,
     };
+    // Local fallback
     try {
       const prev = JSON.parse(localStorage.getItem('pg_wins_wall') || '[]');
       const next = [entry, ...prev.filter((item) => item.period !== period)].slice(0, 12);
       localStorage.setItem('pg_wins_wall', JSON.stringify(next));
+    } catch {}
+    // Server opt-in (if authenticated)
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await supabase.from('wins_wall').insert({
+          user_id: session.user.id,
+          period,
+          period_label: periodLabel,
+          total: parseFloat(f(total)) || 0,
+          entry_count: count,
+          book_count: books.length,
+        });
+      }
     } catch {}
     trackLaunchEvent('wins_wall_opt_in', { period, total: f(total) });
     if (toast) toast('Added to Wins Wall', K.pp);
@@ -2442,405 +1635,7 @@ const ProfitCertificate = () => {
 };
 
 // ═══ TAB SYSTEM ═══
-// ═══ LIVE SCANNER (Pro) ═══
-const SPORTS_LIST = [
-  { key:"americanfootball_nfl",  label:"NFL"  },
-  { key:"basketball_nba",        label:"NBA"  },
-  { key:"baseball_mlb",          label:"MLB"  },
-  { key:"icehockey_nhl",         label:"NHL"  },
-  { key:"americanfootball_ncaaf",label:"NCAAF"},
-  { key:"soccer_usa_mls",        label:"MLS"  },
-];
-
-const PROP_MARKETS = {
-  americanfootball_nfl: ['player_pass_yds','player_rush_yds','player_receptions','player_reception_yds','player_pass_tds'],
-  basketball_nba: ['player_points','player_rebounds','player_assists','player_threes'],
-  baseball_mlb: ['batter_home_runs','pitcher_strikeouts','batter_hits'],
-  icehockey_nhl: ['player_points','player_shots_on_goal'],
-};
-
-const detectArbs = (games) => {
-  const opps = [];
-  for (const game of games) {
-    const mktKeys = [...new Set((game.bookmakers||[]).flatMap(bm=>(bm.markets||[]).map(m=>m.key)))];
-    for (const mktKey of mktKeys) {
-      const best = {};
-      for (const bm of (game.bookmakers||[])) {
-        const mkt = (bm.markets||[]).find(m=>m.key===mktKey);
-        if (!mkt) continue;
-        for (const o of mkt.outcomes) {
-          const key = mktKey==='h2h' ? o.name : `${o.name}__${o.point}`;
-          if (!best[key] || o.price > best[key].price)
-            best[key] = { price:o.price, book:bm.title, name:o.name, point:o.point };
-        }
-      }
-      const entries = Object.entries(best);
-      if (mktKey==='h2h' && entries.length===2) {
-        const [[,l1],[,l2]] = entries;
-        const d1=toD(l1.price), d2=toD(l2.price);
-        if (d1<=1||d2<=1) continue;
-        const margin=1/d1+1/d2;
-        if (margin<1) {
-          const s1=f(100*(1/d1)/margin), s2=f(100*(1/d2)/margin);
-          opps.push({ game:`${game.home_team} vs ${game.away_team}`, market:'Moneyline', sport:game.sport_title, start:game.commence_time, n1:l1.name, b1:l1.book, p1:l1.price, n2:l2.name, b2:l2.book, p2:l2.price, s1, s2, roi:f((1-margin)*100,2) });
-        }
-      } else if (mktKey==='totals'||mktKey.startsWith('player')||mktKey.startsWith('batter')||mktKey.startsWith('pitcher')) {
-        const byPt = {};
-        for (const [,v] of entries) { if (!byPt[v.point]) byPt[v.point]={}; byPt[v.point][v.name]=v; }
-        for (const sides of Object.values(byPt)) {
-          if (!sides['Over']||!sides['Under']) continue;
-          const d1=toD(sides['Over'].price), d2=toD(sides['Under'].price);
-          if (d1<=1||d2<=1) continue;
-          const margin=1/d1+1/d2;
-          if (margin<1) {
-            const s1=f(100*(1/d1)/margin), s2=f(100*(1/d2)/margin);
-            const mktLabel = mktKey==='totals' ? `Total ${sides['Over'].point}` : `${mktKey.replace(/_/g,' ')} ${sides['Over'].point}`;
-            opps.push({ game:`${game.home_team} vs ${game.away_team}`, market:mktLabel, sport:game.sport_title, start:game.commence_time, n1:`Over ${sides['Over'].point}`, b1:sides['Over'].book, p1:sides['Over'].price, n2:`Under ${sides['Under'].point}`, b2:sides['Under'].book, p2:sides['Under'].price, s1, s2, roi:f((1-margin)*100,2) });
-          }
-        }
-      } else if (mktKey==='spreads') {
-        for (let i=0;i<entries.length;i++) for (let j=i+1;j<entries.length;j++) {
-          const [,l1]=entries[i], [,l2]=entries[j];
-          if (Math.abs((l1.point||0)+(l2.point||0))>0.1) continue;
-          const d1=toD(l1.price), d2=toD(l2.price);
-          if (d1<=1||d2<=1) continue;
-          const margin=1/d1+1/d2;
-          if (margin<1) {
-            const s1=f(100*(1/d1)/margin), s2=f(100*(1/d2)/margin);
-            const pt1=(l1.point>0?'+':'')+l1.point, pt2=(l2.point>0?'+':'')+l2.point;
-            opps.push({ game:`${game.home_team} vs ${game.away_team}`, market:`Spread`, sport:game.sport_title, start:game.commence_time, n1:`${l1.name} ${pt1}`, b1:l1.book, p1:l1.price, n2:`${l2.name} ${pt2}`, b2:l2.book, p2:l2.price, s1, s2, roi:f((1-margin)*100,2) });
-          }
-        }
-      }
-    }
-  }
-  return opps.sort((a,b)=>parseFloat(b.roi)-parseFloat(a.roi));
-};
-
-const detectEV = (games) => {
-  const opps = [], seen = new Set();
-  for (const game of games) {
-    const evMktKeys = [...new Set((game.bookmakers||[]).flatMap(bm=>(bm.markets||[]).map(m=>m.key)))];
-    for (const mktKey of evMktKeys) {
-      for (const bm of (game.bookmakers||[])) {
-        const mkt = (bm.markets||[]).find(m=>m.key===mktKey);
-        if (!mkt) continue;
-        for (const outcome of mkt.outcomes) {
-          const ptKey = outcome.point!=null ? `_${outcome.point}` : '';
-          const allPrices = (game.bookmakers||[])
-            .map(b=>b.markets?.find(m=>m.key===mktKey)?.outcomes?.find(o=>o.name===outcome.name&&o.point===outcome.point)?.price)
-            .filter(Boolean).map(toD).filter(d=>d>1);
-          if (allPrices.length<2) continue;
-          const avgProb = allPrices.reduce((s,d)=>s+1/d,0)/allPrices.length;
-          const bd=toD(outcome.price); if(bd<=1) continue;
-          const ev=(avgProb*(bd-1)-(1-avgProb))*100;
-          const key=`${game.id}-${mktKey}-${outcome.name}${ptKey}-${bm.title}`;
-          const mktLabel = mktKey==='h2h'?'ML':mktKey==='totals'?`O/U ${outcome.point}`:`${outcome.point>0?'+':''}${outcome.point}`;
-          if (ev>2&&!seen.has(key)) { seen.add(key);
-            opps.push({ game:`${game.home_team} vs ${game.away_team}`, sport:game.sport_title, start:game.commence_time, outcome:`${outcome.name} (${mktLabel})`, book:bm.title, price:outcome.price, fairPct:f(avgProb*100,1), bookPct:f(100/bd,1), ev:f(ev,1) });
-          }
-        }
-      }
-    }
-  }
-  return opps.sort((a,b)=>parseFloat(b.ev)-parseFloat(a.ev)).slice(0,50);
-};
-
-const LiveScanner = ({ proStatus, mode }) => {
-  if (!FEATURE_FLAGS.liveScanner) {
-    return (
-      <FeatureUnavailableCard
-        featureKey="liveScanner"
-        title="Live Scanner"
-        body="Real-time arb and +EV scanning stays in beta until the live odds backend is activated. The core free calculators, tracker, and learning tools remain available now."
-      />
-    );
-  }
-  useEffect(() => {
-    trackFeatureEnabledUse('liveScanner', mode || 'live');
-  }, [mode]);
-  const toast = useToast();
-  const [sports, setSports] = useState(["americanfootball_nfl"]);
-  const [activeTab, setActiveTab] = useState(mode==="ev-scanner"?"ev":"arb");
-  const [games, setGames] = useState([]);
-  const [arbs, setArbs] = useState([]);
-  const [evs, setEvs] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [updated, setUpdated] = useState(null);
-  const [upgrading, setUpgrading] = useState(false);
-  const [history, setHistory] = useState([]);
-  const [showHistory, setShowHistory] = useState(false);
-  const [scannerBankroll, setScannerBankroll] = useState("1000");
-  const [propsMode, setPropsMode] = useState(false);
-  const [alertsEnabled, setAlertsEnabled] = useState(false);
-  const [alertThreshold, setAlertThreshold] = useState("0.5");
-  const [watchlist, setWatchlist] = useState(()=>{try{return JSON.parse(localStorage.getItem('pg_watchlist')||'[]');}catch{return [];}});
-  const toggleWatchlist=(game)=>{setWatchlist(wl=>{const n=wl.includes(game)?wl.filter(g=>g!==game):[...wl,game];try{localStorage.setItem('pg_watchlist',JSON.stringify(n));}catch{}; return n;});};
-  const [oppLog, setOppLog] = useState(()=>{try{return JSON.parse(localStorage.getItem('pg_opp_log')||'[]');}catch{return [];}});
-  const [showOppLog, setShowOppLog] = useState(false);
-  const logOpportunity=(r,type)=>{
-    const entry={id:Date.now(),ts:new Date().toISOString(),type,sport:r.sport,books:type==='arb'?[r.b1,r.b2]:[r.book],roi:type==='arb'?r.roi:r.ev,acted:false,date:new Date().toISOString().split('T')[0],game:r.game};
-    setOppLog(log=>{const n=[entry,...log].slice(0,20);try{localStorage.setItem('pg_opp_log',JSON.stringify(n));}catch{};return n;});
-    if(toast) toast('Opportunity logged',K.gn);
-  };
-  const toggleActed=(id)=>{setOppLog(log=>{const n=log.map(e=>e.id===id?{...e,acted:!e.acted}:e);try{localStorage.setItem('pg_opp_log',JSON.stringify(n));}catch{};return n;});};
-  const clearOppLog=()=>{setOppLog([]);try{localStorage.removeItem('pg_opp_log');}catch{}};
-  const exportOppLog=()=>{
-    if(!oppLog.length) return;
-    const header="Date,Type,Game,Sport,Books,ROI/EV,Acted";
-    const rows=oppLog.map(e=>[
-      e.date||'',
-      e.type||'',
-      `"${(e.game||'').replace(/"/g,'""')}"`,
-      e.sport||'',
-      `"${(Array.isArray(e.books)?e.books.join(' / '):(e.book||'')).replace(/"/g,'""')}"`,
-      e.roi||e.ev||'',
-      e.acted?'Yes':'No',
-    ].join(','));
-    downloadFile([header,...rows].join('\n'),'promogrind-opp-log.csv','text/csv');
-  };
-  const intervalRef = useRef(null);
-  const isActive = proStatus?.status==="active" || proStatus?.status==="trial";
-
-  const fetchOdds = async () => {
-    if (loading) return;
-    setLoading(true); setError(null);
-    try {
-      const { data:{ session } } = await supabase.auth.getSession();
-      if (!session) throw new Error("Not authenticated");
-      const activeSports = sports.length ? sports : ["americanfootball_nfl"];
-      const allGames = [];
-      for (const sp of activeSports) {
-        const propMkts = propsMode ? (PROP_MARKETS[sp]||[]).join(',') : '';
-        const markets = ['h2h','spreads','totals',...(propMkts?[propMkts]:[])].filter(Boolean).join(',');
-        const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/odds?sport=${sp}&markets=${markets}`;
-        const resp = await fetch(url, { headers:{ Authorization:`Bearer ${session.access_token}` } });
-        if (!resp.ok) { const e=await resp.json(); throw new Error(e.error||`HTTP ${resp.status}`); }
-        const data = await resp.json();
-        allGames.push(...data);
-      }
-      const newArbs=detectArbs(allGames); const newEvs=detectEV(allGames);
-      setGames(allGames); setArbs(newArbs); setEvs(newEvs); setUpdated(new Date());
-      if(newArbs.length||newEvs.length) {
-        const ts=new Date();
-        const sportLabel=activeSports.map(sp=>SPORTS_LIST.find(s=>s.key===sp)?.label||sp).join(', ');
-        setHistory(h=>[{ts,arbCount:newArbs.length,evCount:newEvs.length,topArb:newArbs[0]||null,topEv:newEvs[0]||null,sport:sportLabel},...h].slice(0,20));
-      }
-      if(alertsEnabled && newArbs.length) {
-        const best=newArbs[0];
-        if(parseFloat(best.roi)>=parseFloat(alertThreshold)) {
-          try{new Notification('PromoGrind Arb Found 🎯',{body:`${best.game}: +${best.roi}% ROI on ${best.b1}/${best.b2}`,icon:'/promogrind/favicon.svg'});}catch(e){}
-        }
-      }
-    } catch(e) { setError(e.message); }
-    finally { setLoading(false); }
-  };
-
-  useEffect(()=>{
-    if(!isActive) return;
-    fetchOdds();
-    intervalRef.current=setInterval(fetchOdds,120_000);
-    return ()=>clearInterval(intervalRef.current);
-  },[sports,isActive]);
-
-  const handleUpgrade = async () => {
-    setUpgrading(true);
-    await startCheckout();
-    setUpgrading(false);
-  };
-
-  if (proStatus===null) return (
-    <div style={{...S.card,textAlign:"center",padding:40}}>
-      <div style={{color:K.mt,fontSize:11,letterSpacing:"2px",textTransform:"uppercase"}}>Loading...</div>
-    </div>
-  );
-
-  if (!isActive) return (
-    <div style={S.card}>
-      <div style={{marginBottom:16,padding:'12px 14px',background:`${K.gn}08`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-        <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>Live right now for VaultSparked members</div>
-        <div style={{display:'flex',gap:20,alignItems:'center',flexWrap:'wrap'}}>
-          <div><div style={{fontSize:28,fontWeight:700,color:K.gn,fontFamily:fontD}}>{((new Date().getHours()*7+new Date().getMinutes())%8)+2}</div><div style={{fontSize:10,color:K.mt}}>arb opportunities</div></div>
-          <div><div style={{fontSize:28,fontWeight:700,color:K.ac,fontFamily:fontD}}>{((new Date().getHours()*11+new Date().getDate())%12)+5}</div><div style={{fontSize:10,color:K.mt}}>+EV picks</div></div>
-          <div style={{fontSize:11,color:K.dm,flex:1,minWidth:140,lineHeight:1.6}}>Members are scanning these right now. Upgrade to see the full list and get push alerts.</div>
-        </div>
-      </div>
-      <div style={{textAlign:"center",padding:"24px 16px"}}>
-        <div style={{...S.tag(K.yl),fontSize:12,marginBottom:16,display:"inline-block"}}>PRO MEMBERS ONLY</div>
-        <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.tx,marginBottom:8}}>Live Odds Scanner</div>
-        <div style={{fontSize:13,color:K.dm,maxWidth:440,margin:"0 auto 24px",lineHeight:1.7}}>
-          Real-time arb and +EV opportunities across every major US sportsbook, updated every 2 minutes. Finds what competitors charge $99–$199/month to show you.
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:8,maxWidth:400,margin:"0 auto 28px",textAlign:"left"}}>
-          {[["Live Arb Scanner","Auto-detects 2-way arbs across all books"],["+ EV Scanner","Finds where books are mispriced vs fair value"],["Auto-Refresh","Updates every 2 min — never miss an opportunity"],["All Major Sports","NFL, NBA, MLB, NHL, NCAAF, MLS and more"]].map(([t,d])=>(
-            <div key={t} style={{padding:"10px 12px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-              <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:2}}>{t}</div>
-              <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{d}</div>
-            </div>
-          ))}
-        </div>
-        <div style={{marginBottom:8}}>
-          <button onClick={handleUpgrade} disabled={upgrading} style={{padding:"12px 28px",background:K.yl,border:"none",borderRadius:8,color:K.bg,fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:fontD,opacity:upgrading?0.7:1}}>
-            {upgrading?"Redirecting to checkout…":"Start 7-Day Free Trial →"}
-          </button>
-        </div>
-        <div style={{fontSize:11,color:K.mt}}>7 days free. No credit card required. $24.99/mo after trial. Cancel anytime.</div>
-      </div>
-    </div>
-  );
-
-  const results = activeTab==="arb" ? arbs : evs;
-
-  return (
-    <div style={S.card}>
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
-        <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Live Scanner</div>
-        <span style={S.tag(K.yl)}>PRO</span>
-        <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
-          {SPORTS_LIST.map(s=>{
-            const on=sports.includes(s.key);
-            return (<button key={s.key} onClick={()=>setSports(prev=>on?prev.filter(k=>k!==s.key).length?prev.filter(k=>k!==s.key):prev:[...prev,s.key])} style={{padding:"3px 9px",background:on?`${K.ac}20`:"transparent",border:`1px solid ${on?K.ac:K.bd2}`,borderRadius:50,color:on?K.ac:K.dm,fontSize:9,cursor:"pointer",fontFamily:font,fontWeight:on?700:400,whiteSpace:"nowrap"}}>{s.label}</button>);
-          })}
-        </div>
-        <div style={{display:"flex",gap:0,marginLeft:"auto"}}>
-          {["arb","+ev"].map(t=>(
-            <button key={t} onClick={()=>setActiveTab(t==="arb"?"arb":"ev")} style={{padding:"5px 12px",fontSize:11,fontWeight:600,border:`1px solid ${K.bd2}`,background:activeTab===(t==="arb"?"arb":"ev")?K.ac:"transparent",color:activeTab===(t==="arb"?"arb":"ev")?K.bg:K.dm,cursor:"pointer",fontFamily:font,borderRadius:t==="arb"?"6px 0 0 6px":"0 6px 6px 0"}}>
-              {t==="arb"?"Arb":"+ EV"}
-            </button>
-          ))}
-        </div>
-        <button onClick={fetchOdds} disabled={loading} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font}}>
-          {loading?"…":"↻"}
-        </button>
-        <button onClick={()=>setPropsMode(p=>!p)} style={{padding:"5px 10px",background:propsMode?`${K.pp}20`:"transparent",border:`1px solid ${propsMode?K.pp:K.bd2}`,borderRadius:6,color:propsMode?K.pp:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>
-          {propsMode?"PROPS ON":"PROPS"}
-        </button>
-        <div style={{display:"flex",alignItems:"center",gap:6}}>
-          <button onClick={()=>{
-            if(!alertsEnabled){
-              Notification.requestPermission().then(p=>{
-                if(p==='granted'){setAlertsEnabled(true);if(toast)toast('🔔 Arb alerts on',K.gn);}
-                else if(toast)toast('Notifications blocked in browser settings',K.rd);
-              });
-            } else {setAlertsEnabled(false);if(toast)toast('🔕 Alerts off',K.mt);}
-          }} style={{padding:"6px 12px",background:alertsEnabled?`${K.gn}15`:"transparent",border:`1px solid ${alertsEnabled?K.gn:K.bd2}`,borderRadius:6,color:alertsEnabled?K.gn:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
-            {alertsEnabled?"🔔 ALERTS ON":"🔕 ALERTS"}
-          </button>
-          {alertsEnabled&&<input style={{...S.input,width:60,padding:"5px 8px"}} value={alertThreshold} onChange={e=>setAlertThreshold(e.target.value)} placeholder="0.5" title="Min ROI % to alert"/>}
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:4}}>
-          <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Bankroll</span>
-          <input style={{...S.input,width:80,padding:"4px 8px",fontSize:11}} value={scannerBankroll} onChange={e=>setScannerBankroll(e.target.value)} placeholder="1000"/>
-        </div>
-      </div>
-      {updated&&<div style={{fontSize:10,color:K.mt,marginBottom:8}}>Updated {updated.toLocaleTimeString()} · Auto-refreshes every 2 min</div>}
-      {error&&<div style={{...S.res(false),marginBottom:12,fontSize:12}}>{error}</div>}
-      {loading&&!results.length&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Scanning live odds…</div>}
-      {!loading&&!error&&results.length===0&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>No {activeTab==="arb"?"arb opportunities":"+ EV spots"} found right now — try another sport or check back in a few minutes.</div>}
-      {watchlist.length>0&&<div style={{marginBottom:12}}>
-        <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Watching</div>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-          {watchlist.map(game=>(
-            <div key={game} style={{display:"flex",alignItems:"center",gap:4,padding:"3px 8px",background:`${K.yl}15`,border:`1px solid ${K.yl}40`,borderRadius:50,fontSize:10,color:K.yl}}>
-              <span>{game}</span>
-              <span onClick={()=>toggleWatchlist(game)} style={{cursor:"pointer",color:K.rd,fontWeight:700,marginLeft:2}}>✕</span>
-            </div>
-          ))}
-        </div>
-      </div>}
-      {results.map((r,i)=>(
-        activeTab==="arb"
-          ? <div key={i} style={{...S.res(true),marginBottom:8,border:watchlist.includes(r.game)?`1px solid ${K.yl}`:`1px solid ${K.gn}25`}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>{r.market&&r.market!=='Moneyline'&&<span style={S.tag(K.ac)}>{r.market}</span>}</div>
-                <div style={{display:"flex",alignItems:"center",gap:8}}>
-                  <span style={{...S.tag(K.gn),fontSize:12}}>+{r.roi}% ROI</span>
-                  <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
-                  <button onClick={()=>logOpportunity(r,'arb')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
-                </div>
-              </div>
-              <div style={{fontSize:11,color:K.mt,marginBottom:10}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-                {[[r.n1,r.b1,r.p1,r.s1],[r.n2,r.b2,r.p2,r.s2]].map(([name,book,price,stake])=>(
-                  <div key={name} style={{padding:"8px 10px",background:K.s3,borderRadius:6}}>
-                    <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:3}}>{name}</div>
-                    <div style={{fontSize:13,fontWeight:700,color:K.ac}}>{price>0?"+":""}{price}</div>
-                    <div style={{fontSize:11,color:K.dm}}>{book}</div>
-                    <div style={{fontSize:11,color:K.gn,fontWeight:600}}>Stake ${stake} of $100</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          : <div key={i} style={{...S.res(true),marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,border:watchlist.includes(r.game)?`1px solid ${K.yl}`:`1px solid ${K.gn}25`}}>
-              <div>
-                <div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>
-                <div style={{fontSize:11,color:K.dm,marginTop:2}}>{r.outcome} · {r.book} · {r.price>0?"+":""}{r.price}</div>
-                <div style={{fontSize:10,color:K.mt}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
-                {(()=>{const kb=calcKelly(parseFloat(r.fairPct),r.price,parseFloat(scannerBankroll)||1000,0.25);return kb?.ok?<div style={{fontSize:10,color:K.pp}}>Kelly 25%: ${kb.bet} of ${scannerBankroll}</div>:null;})()}
-              </div>
-              <div style={{textAlign:"right",display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6}}>
-                <div style={{...S.big(K.gn),fontSize:20}}>+{r.ev}% EV</div>
-                <div style={{fontSize:10,color:K.mt}}>Fair: {r.fairPct}% · Book: {r.bookPct}%</div>
-                <div style={{display:"flex",gap:6}}>
-                  <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
-                  <button onClick={()=>logOpportunity(r,'ev')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
-                </div>
-              </div>
-            </div>
-      ))}
-      {oppLog.length>0&&<div style={{marginTop:12}}>
-        <button onClick={()=>setShowOppLog(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
-          {showOppLog?"▲ Hide":"▼ Show"} Opportunity History ({oppLog.length})
-        </button>
-        {showOppLog&&<div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-            <div style={{fontSize:10,color:K.mt}}>{oppLog.filter(e=>e.acted).length} acted on · Missed: {oppLog.filter(e=>!e.acted).length}</div>
-            <button onClick={exportOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Export CSV</button>
-            <button onClick={clearOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.rd}`,borderRadius:4,color:K.rd,fontSize:9,cursor:"pointer",fontFamily:font}}>Clear History</button>
-          </div>
-          {oppLog.map(e=>(
-            <div key={e.id} style={{...S.res(true),marginBottom:6,padding:"8px 12px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:6}}>
-              <div>
-                <span style={S.tag(e.type==='arb'?K.gn:K.ac)}>{e.type.toUpperCase()}</span>
-                <span style={{fontSize:11,color:K.tx,marginLeft:6}}>{e.game}</span>
-                <span style={{fontSize:10,color:K.mt,marginLeft:6}}>{e.date}</span>
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span style={{fontSize:12,fontWeight:600,color:K.gn}}>+{e.roi}% {e.type==='arb'?'ROI':'EV'}</span>
-                <label style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:e.acted?K.gn:K.mt,cursor:"pointer"}}>
-                  <input type="checkbox" checked={e.acted} onChange={()=>toggleActed(e.id)} style={{accentColor:K.gn}}/>
-                  Acted
-                </label>
-              </div>
-            </div>
-          ))}
-        </div>}
-      </div>}
-      {history.length>0&&<div style={{marginTop:16}}>
-        <button onClick={()=>setShowHistory(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
-          {showHistory?"▲ Hide":"▼ Show"} Scan History ({history.length})
-        </button>
-        {showHistory&&<div style={{maxHeight:280,overflowY:"auto"}}>
-          {history.map((h,i)=>(
-            <div key={i} style={{...S.res(true),marginBottom:6,padding:"10px 14px"}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:6}}>
-                <div style={{fontSize:11,color:K.dm}}>{h.ts.toLocaleTimeString()} · {SPORTS_LIST.find(s=>s.key===h.sport)?.label||h.sport}</div>
-                <div style={{display:"flex",gap:8}}>
-                  {h.arbCount>0&&<span style={S.tag(K.gn)}>{h.arbCount} arb{h.arbCount>1?"s":""}</span>}
-                  {h.evCount>0&&<span style={S.tag(K.ac)}>{h.evCount} +EV</span>}
-                </div>
-              </div>
-              {h.topArb&&<div style={{fontSize:10,color:K.mt,marginTop:4}}>Best arb: {h.topArb.game} · +{h.topArb.roi}% ROI</div>}
-              {h.topEv&&<div style={{fontSize:10,color:K.mt,marginTop:2}}>Best +EV: {h.topEv.game} · +{h.topEv.ev}% EV</div>}
-            </div>
-          ))}
-        </div>}
-      </div>}
-    </div>
-  );
-};
-
+// LiveScanner (+ SPORTS_LIST, PROP_MARKETS, detectArbs, detectEV) → ./components/LiveScanner.jsx
 // ═══ LEADERBOARD ═══
 const Leaderboard = () => {
   const { appData: data } = React.useContext(AppDataCtx);
@@ -3576,44 +2371,10 @@ const CSVImportModal = ({ onImport, onClose }) => {
   );
 };
 
-// ═══ STATE AVAILABILITY DATA ═══
-const US_BOOK_STATES = {
-  "DraftKings": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","NC","VT","WY","DC","NV"],
-  "FanDuel": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","NC","VT","DC","NV"],
-  "BetMGM": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","MS","KY","LA","MD","MA","DC","NV"],
-  "Caesars": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","DC","NV"],
-  "bet365": ["NJ","CO","IA","OH","VA","KY","NC","LA","IL"],
-  "ESPN BET": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","NC"],
-  "Fanatics": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KY","LA","MD","MA","NC","DC"],
-  "BetRivers": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","IL","IA","LA","MD","NC","WV"],
-};
+// US_BOOK_STATES → ./components/Tracker.jsx
 const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DC","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
 
-// ═══ PROMO CALENDAR ═══
-const PROMO_SCHED = [
-  {book:"DraftKings",day:"Daily",promo:"Profit Boosts (2-5/day)",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
-  {book:"DraftKings",day:"Tuesday",promo:"Stepped Up Parlay",value:"$10-25",type:"Weekly",grade:"A",complexity:"Hard",timeMin:20},
-  {book:"DraftKings",day:"Thursday",promo:"Parlay Insurance",value:"$10-20",type:"Weekly",grade:"B",complexity:"Medium",timeMin:10},
-  {book:"DraftKings",day:"Monday",promo:"Reload Bonus",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"FanDuel",day:"Daily",promo:"Profit Boosts (2-4/day)",value:"$5-20",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
-  {book:"FanDuel",day:"Tuesday",promo:"Odds Boosts",value:"$10-30",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"FanDuel",day:"Weekend",promo:"SGP Insurance",value:"$10-25",type:"Weekend",grade:"A",complexity:"Medium",timeMin:15},
-  {book:"BetMGM",day:"Daily",promo:"Daily Odds Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"BetMGM",day:"Monday",promo:"Monday Night Reload",value:"$25-50",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"Caesars",day:"Daily",promo:"Profit Boosts",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
-  {book:"Caesars",day:"Wednesday",promo:"Bonus Bet Wednesday",value:"$10-25",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"bet365",day:"Daily",promo:"Early Payout Offers",value:"Variable",type:"Recurring",grade:"C",complexity:"Medium",timeMin:10},
-  {book:"ESPN BET",day:"Daily",promo:"ESPN+ Profit Boosts",value:"$5-15",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"ESPN BET",day:"Thursday",promo:"MNF/TNF Specials",value:"$10-25",type:"Weekly",grade:"B",complexity:"Medium",timeMin:15},
-  {book:"Fanatics",day:"Daily",promo:"FanCash Promos",value:"$5-20",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"BetRivers",day:"Weekly",promo:"iRush Reload",value:"$25-100",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"bet365 UK",day:"Daily",promo:"Early Payout (Soccer)",value:"£5-25",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
-  {book:"Betway UK",day:"Daily",promo:"Acca Edge Insurance",value:"£5-20",type:"Recurring",grade:"A",complexity:"Medium",timeMin:10},
-  {book:"William Hill",day:"Monday",promo:"Acca Club Reload",value:"£10-30",type:"Weekly",grade:"B",complexity:"Easy",timeMin:5},
-  {book:"Paddy Power",day:"Weekend",promo:"Money Back Special",value:"£10-25",type:"Weekend",grade:"B",complexity:"Easy",timeMin:10},
-  {book:"Sky Bet",day:"Daily",promo:"Price Boosts",value:"£5-15",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
-];
-const DAYS_ORDER = ["Daily","Monday","Tuesday","Wednesday","Thursday","Friday","Weekend"];
+// PROMO_SCHED + DAYS_ORDER → ./data/promoSchedule.js
 const PromoAlertPrefs = () => {
   const [alertEmail,setAlertEmail]=useState("");
   const [alertPrefs,setAlertPrefs]=useState(()=>{try{return JSON.parse(localStorage.getItem('pg_alert_prefs')||'null')||{aGradeOnly:false,allPromos:true,dailyDigest:true,books:{}};}catch{return {aGradeOnly:false,allPromos:true,dailyDigest:true,books:{}};}});
@@ -6053,9 +4814,7 @@ const PromoWalkthrough = ({ navigate, onClose }) => {
   );
 };
 
-// ═══ CURRENCY CONTEXT ═══
-const FX = { USD:{sym:'$',rate:1}, CAD:{sym:'C$',rate:1.36}, GBP:{sym:'£',rate:0.79} };
-const CurrencyCtx = React.createContext({sym:'$',rate:1,fmt:(n)=>'$'+f(n)});
+// FX, CurrencyCtx → ./contexts.jsx
 const useCurrency = () => React.useContext(CurrencyCtx);
 
 // ═══ DAILY ROUTINE PANEL ═══
@@ -6312,39 +5071,7 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
   );
 };
 
-// ═══ TAX TIMING ADVISOR ═══
-const TaxTimingAdvisor = ({ entries }) => {
-  const [open, setOpen] = useState(false);
-  const total = (entries||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  if(total<=0) return null;
-  const now = new Date();
-  const month = now.getMonth();
-  const quarter = month<3?1:month<6?2:month<9?3:4;
-  const bracket = total>578125?0.37:total>231250?0.35:total>182050?0.32:total>95375?0.24:total>44725?0.22:total>10275?0.12:0.10;
-  const taxOwed = total*bracket;
-  const annualized = total/(now.getMonth()+1)*12;
-  let advice = "";
-  if(quarter===4) advice = "Consider settling losing hedges before Dec 31 to offset gains.";
-  else if(quarter===1) advice = "New tax year — ideal time for highest-variance plays.";
-  else advice = `On track for ~$${Math.round(annualized).toLocaleString()} annualized — consider quarterly estimated taxes.`;
-  return (
-    <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
-        Tax Timing Advisor
-        <span style={{color:K.mt,fontSize:10}}>{open?"▲":"▼"}</span>
-      </button>
-      {open&&<div style={{marginTop:12}}>
-        <RR l="Current year profit" v={`$${f(total)}`} c={K.gn}/>
-        <RR l="Estimated federal bracket" v={`${Math.round(bracket*100)}%`} c={K.yl}/>
-        <RR l="Estimated federal tax owed" v={`~$${f(taxOwed)}`} c={K.rd}/>
-        <RR l="Annualized pace" v={`~$${Math.round(annualized).toLocaleString()}`} c={K.ac}/>
-        <Nt c={K.yl}>{advice}</Nt>
-        <div style={{fontSize:10,color:K.mt,marginTop:8}}>Estimate only. Consult a tax professional. Report all gambling income.</div>
-      </div>}
-    </div>
-  );
-};
-
+// TaxTimingAdvisor → ./components/Ledger.jsx
 // ═══ BET SLIP TEXT PARSER ═══
 const parseBetSlip = (text) => {
   const result = {};
@@ -6476,137 +5203,7 @@ function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
   );
 }
 
-// ═══ TAXES ESTIMATOR ═══
-function TaxesEstimatorWrapper() {
-  const { appData } = React.useContext(AppDataCtx) || {};
-  return <TaxesEstimator appData={appData} />;
-}
-
-function TaxesEstimator({ appData }) {
-  const ledger = appData?.ledger || [];
-
-  const grossProfit = React.useMemo(() =>
-    ledger.reduce((s, e) => s + (parseFloat(e.profit) || 0), 0), [ledger]);
-  const w2gEvents = React.useMemo(() =>
-    ledger.filter(e => (parseFloat(e.payout) || 0) >= 600), [ledger]);
-
-  const [manualProfit, setManualProfit] = React.useState('');
-  const [filingStatus, setFilingStatus] = React.useState('single');
-  const [stateRate, setStateRate] = React.useState('5');
-
-  const income = parseFloat(manualProfit) || grossProfit;
-
-  const fedTax = React.useMemo(() => {
-    if (!income || income <= 0) return 0;
-    const brackets = filingStatus === 'single'
-      ? [[11925,0.10],[48475,0.12],[103350,0.22],[197300,0.24],[250525,0.32],[626350,0.35],[Infinity,0.37]]
-      : [[23850,0.10],[96950,0.12],[206700,0.22],[394600,0.24],[501050,0.32],[751600,0.35],[Infinity,0.37]];
-    let tax = 0, prev = 0;
-    for (const [cap, rate] of brackets) {
-      if (income <= prev) break;
-      tax += (Math.min(income, cap) - prev) * rate;
-      prev = cap;
-    }
-    return tax;
-  }, [income, filingStatus]);
-
-  const stateTax = income * (parseFloat(stateRate) / 100);
-  const totalTax = fedTax + stateTax;
-  const netProfit = income - totalTax;
-  const effectiveRate = income > 0 ? (totalTax / income * 100) : 0;
-  const quarterlyPayment = totalTax / 4;
-
-  const fv = (n) => isNaN(n) ? '$0' : '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2});
-
-  return (
-    <div style={{maxWidth:600,margin:'0 auto',padding:16}}>
-      <div style={{fontWeight:700,color:'#e2e8f0',fontSize:18,marginBottom:4}}>Taxes Estimator</div>
-      <div style={{color:'#64748b',fontSize:12,marginBottom:20}}>Estimate your tax liability on sports betting profits. Not tax advice — consult a CPA for filings.</div>
-
-      {ledger.length > 0 && (
-        <div style={{padding:10,background:'#0f1724',border:'1px solid #1e3a2f',borderRadius:8,marginBottom:16,fontSize:13}}>
-          <span style={{color:'#94a3b8'}}>Auto-loaded from your Ledger: </span>
-          <strong style={{color:'#4ade80'}}>{fv(grossProfit)} gross profit</strong>
-          <span style={{color:'#64748b'}}> across {ledger.length} entries</span>
-        </div>
-      )}
-
-      <div style={{display:'grid',gap:12,marginBottom:20}}>
-        <div>
-          <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Gross Betting Profit ($)</label>
-          <input type="number" value={manualProfit} onChange={e => setManualProfit(e.target.value)}
-            placeholder={grossProfit ? grossProfit.toFixed(2) : '0.00'}
-            style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:14,boxSizing:'border-box'}} />
-          {ledger.length > 0 && !manualProfit && <div style={{fontSize:11,color:'#475569',marginTop:3}}>Using ledger total. Enter a value to override.</div>}
-        </div>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
-          <div>
-            <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Filing Status</label>
-            <select value={filingStatus} onChange={e => setFilingStatus(e.target.value)}
-              style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}>
-              <option value="single">Single</option>
-              <option value="married">Married Filing Jointly</option>
-            </select>
-          </div>
-          <div>
-            <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>State Tax Rate (%)</label>
-            <input type="number" value={stateRate} onChange={e => setStateRate(e.target.value)} min="0" max="15" step="0.1"
-              style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:14,boxSizing:'border-box'}} />
-          </div>
-        </div>
-      </div>
-
-      {income > 0 && (
-        <>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
-            {[
-              ['Federal Tax (est.)', fv(fedTax), '#ef4444'],
-              ['State Tax (est.)', fv(stateTax), '#ef4444'],
-              ['Total Tax Liability', fv(totalTax), '#ef4444'],
-              ['Net After-Tax Profit', fv(netProfit), '#4ade80'],
-              ['Effective Tax Rate', effectiveRate.toFixed(1) + '%', '#f59e0b'],
-              ['Quarterly Payment', fv(quarterlyPayment), '#94a3b8'],
-            ].map(([label, val, color]) => (
-              <div key={label} style={{padding:12,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8}}>
-                <div style={{fontSize:11,color:'#64748b',marginBottom:4}}>{label}</div>
-                <div style={{fontSize:20,fontWeight:700,color}}>{val}</div>
-              </div>
-            ))}
-          </div>
-
-          {w2gEvents.length > 0 && (
-            <div style={{padding:12,background:'#1a0f0f',border:'1px solid #ef4444',borderRadius:8,marginBottom:16}}>
-              <div style={{fontWeight:600,color:'#ef4444',fontSize:13,marginBottom:4}}>⚠️ W-2G Events ({w2gEvents.length})</div>
-              <div style={{color:'#94a3b8',fontSize:12}}>You have {w2gEvents.length} ledger entries with payouts ≥$600. These may require W-2G forms from your sportsbooks. Keep records.</div>
-            </div>
-          )}
-
-          <div style={{padding:12,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8,marginBottom:16}}>
-            <div style={{fontWeight:600,color:'#e2e8f0',fontSize:13,marginBottom:8}}>Quarterly Payment Schedule (Est.)</div>
-            {['Q1 (Apr 15)', 'Q2 (Jun 15)', 'Q3 (Sep 15)', 'Q4 (Jan 15)'].map((q, i) => (
-              <div key={q} style={{display:'flex',justifyContent:'space-between',padding:'6px 0',borderBottom: i < 3 ? '1px solid #0a0e17' : 'none'}}>
-                <span style={{color:'#94a3b8',fontSize:13}}>{q}</span>
-                <span style={{color:'#e2e8f0',fontSize:13,fontWeight:600}}>{fv(quarterlyPayment)}</span>
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={() => window.print()}
-            style={{width:'100%',padding:'11px 0',background:'#1e293b',border:'1px solid #334155',color:'#e2e8f0',borderRadius:8,cursor:'pointer',fontSize:14,fontWeight:600}}
-          >
-            🖨️ Print / Save as PDF
-          </button>
-        </>
-      )}
-
-      <div style={{marginTop:16,padding:12,background:'#0a0e17',border:'1px solid #1e293b',borderRadius:8,fontSize:11,color:'#475569',lineHeight:1.6}}>
-        Estimates only. Tax rates simplified — does not account for deductions, itemized losses, AGI phase-outs, or alternative minimum tax. Consult a licensed CPA or tax professional for actual filings. Sports betting losses may be deductible if you itemize.
-      </div>
-    </div>
-  );
-}
-
+// TaxesEstimator → ./components/TaxesEstimator.jsx
 const TABS = [
   { group:"Home", items:[
     {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
@@ -6773,231 +5370,7 @@ const Footer = () => (
   </div>
 );
 
-// ═══ PROMO CHAT ═══
-const PromoChat = ({ navigate }) => {
-  if (!FEATURE_FLAGS.promoChat) return null;
-  const { appData } = React.useContext(AppDataCtx) || {};
-  const [chatOpen, setChatOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [chatInput, setChatInput] = useState('');
-  const [chatLoading, setChatLoading] = useState(false);
-  const [chatRemaining, setChatRemaining] = useState(null);
-  const [session, setSession] = useState(null);
-  const messagesEndRef = useRef(null);
-  const DAILY_LIMIT = 10;
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
-  }, []);
-
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, chatLoading]);
-
-  const isPro = false; // PromoChat is available to all; rate-limited for non-Pro
-  const todayKey = `pg_chat_uses_${new Date().toISOString().slice(0, 10)}`;
-  const getUsesToday = () => { try { return parseInt(localStorage.getItem(todayKey) || '0'); } catch { return 0; } };
-  const incUsesToday = () => { try { localStorage.setItem(todayKey, String(getUsesToday() + 1)); } catch {} };
-
-  const sendMessage = async () => {
-    if (!chatInput.trim() || chatLoading) return;
-    const usesToday = getUsesToday();
-    if (usesToday >= DAILY_LIMIT) {
-      setChatRemaining(0);
-      return;
-    }
-    const userMsg = { role: 'user', content: chatInput.trim() };
-    const newMessages = [...messages, userMsg];
-    setMessages(newMessages);
-    setChatInput('');
-    setChatLoading(true);
-    try {
-      const history = newMessages.slice(-10).map(m => ({ role: m.role, content: m.content }));
-      const { data, error: fnErr } = await supabase.functions.invoke('promo-chat', {
-        headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
-        body: {
-          message: userMsg.content,
-          history: history.slice(0, -1),
-          userContext: {
-            bankroll: appData?.bankroll,
-            books: appData?.tracker?.map(b => b.name),
-          },
-        },
-      });
-      if (fnErr) throw fnErr;
-      incUsesToday();
-      const remaining = DAILY_LIMIT - getUsesToday();
-      setChatRemaining(remaining);
-      const assistantMsg = {
-        role: 'assistant',
-        content: data?.message || data?.reply || 'Sorry, I could not generate a response.',
-        suggestions: data?.suggestions || [],
-      };
-      setMessages(prev => [...prev, assistantMsg]);
-    } catch (e) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Something went wrong. Please try again.', suggestions: [] }]);
-    } finally {
-      setChatLoading(false);
-    }
-  };
-
-  const usesToday = getUsesToday();
-  const isLimited = usesToday >= DAILY_LIMIT;
-
-  return (
-    <>
-      {/* Floating chat button */}
-      <button
-        onClick={() => setChatOpen(v => !v)}
-        title="PromoGrind AI — ask about any promo or calculator"
-        style={{
-          position: 'fixed', bottom: 80, right: 20, zIndex: 1050,
-          width: 48, height: 48, borderRadius: '50%',
-          background: K.gr || K.gn, border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
-          transition: 'transform 0.15s',
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-      >
-        💬
-        <span style={{
-          position: 'absolute', top: 6, right: 6,
-          width: 8, height: 8, borderRadius: '50%',
-          background: K.gn, border: '2px solid #0a0e17',
-          animation: 'pulse 2s infinite',
-        }}/>
-      </button>
-
-      {/* Slide-out chat panel */}
-      {chatOpen && (
-        <div style={{
-          position: 'fixed', right: 0, top: 0, bottom: 0,
-          width: 360, background: '#0f1520',
-          borderLeft: `1px solid #1e293b`,
-          zIndex: 1100, display: 'flex', flexDirection: 'column',
-          boxShadow: '-4px 0 32px rgba(0,0,0,0.6)',
-          transform: 'translateX(0)',
-          transition: 'transform 0.25s ease',
-        }}>
-          {/* Header */}
-          <div style={{
-            padding: '14px 16px', borderBottom: `1px solid ${K.bd}`,
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            background: K.s2,
-          }}>
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>💬 PromoGrind AI</div>
-              <div style={{ fontSize: 11, color: K.mt, marginTop: 2 }}>Ask about promos, calculators, or strategy</div>
-            </div>
-            <button onClick={() => setChatOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: K.mt, fontSize: 18, padding: 4 }}>×</button>
-          </div>
-
-          {/* Rate limit bar */}
-          {chatRemaining !== null && (
-            <div style={{ padding: '6px 16px', background: K.s1, borderBottom: `1px solid ${K.bd}`, fontSize: 11, color: K.mt, textAlign: 'right' }}>
-              {chatRemaining} of {DAILY_LIMIT} messages left today
-            </div>
-          )}
-
-          {/* Messages */}
-          <div style={{ flex: 1, overflow: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {messages.length === 0 && (
-              <div style={{ color: K.mt, fontSize: 12, textAlign: 'center', marginTop: 32, lineHeight: 1.7 }}>
-                <div style={{ fontSize: 24, marginBottom: 8 }}>💬</div>
-                Ask me anything about sportsbook promos, calculators, or betting strategy.
-              </div>
-            )}
-            {messages.map((msg, i) => (
-              <div key={i} style={{
-                alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                maxWidth: '85%',
-              }}>
-                <div style={{
-                  padding: '10px 12px', borderRadius: 8,
-                  background: msg.role === 'user' ? `${K.gn}20` : K.s2,
-                  border: `1px solid ${msg.role === 'user' ? K.gn + '40' : K.bd}`,
-                  fontSize: 12, color: K.tx, lineHeight: 1.6,
-                }}>
-                  {msg.content}
-                </div>
-                {/* Calculator suggestions */}
-                {msg.suggestions && msg.suggestions.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
-                    {msg.suggestions.map(slug => (
-                      <button
-                        key={slug}
-                        onClick={() => { setChatOpen(false); navigate('/' + slug); }}
-                        style={{
-                          padding: '3px 10px', background: `${K.ac}15`,
-                          border: `1px solid ${K.ac}40`, borderRadius: 50,
-                          color: K.ac, fontSize: 10, cursor: 'pointer',
-                          fontFamily: font,
-                        }}
-                      >
-                        → {slug}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            {chatLoading && (
-              <div style={{ alignSelf: 'flex-start', padding: '10px 12px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, fontSize: 12, color: K.mt }}>
-                ⏳ Thinking…
-              </div>
-            )}
-            {isLimited && !chatLoading && (
-              <div style={{ padding: '12px 14px', background: `${K.pp}15`, border: `1px solid ${K.pp}30`, borderRadius: 8, fontSize: 12, color: K.pp, textAlign: 'center' }}>
-                Daily limit reached. Upgrade to VaultSparked for more messages.
-                <br/>
-                <button
-                  onClick={() => { setChatOpen(false); navigate('/upgrade'); }}
-                  style={{ marginTop: 8, padding: '6px 16px', background: K.pp, border: 'none', borderRadius: 6, color: '#fff', fontWeight: 700, fontSize: 11, cursor: 'pointer', fontFamily: font }}
-                >
-                  Go VaultSparked →
-                </button>
-              </div>
-            )}
-            <div ref={messagesEndRef}/>
-          </div>
-
-          {/* Input */}
-          <div style={{ padding: '12px 16px', borderTop: `1px solid ${K.bd}`, background: K.s2, display: 'flex', gap: 8 }}>
-            <input
-              value={chatInput}
-              onChange={e => setChatInput(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-              placeholder={isLimited ? 'Daily limit reached…' : 'Ask about a promo or calculator…'}
-              disabled={isLimited || chatLoading}
-              style={{
-                flex: 1, padding: '8px 10px', background: K.s1,
-                border: `1px solid ${K.bd2}`, borderRadius: 6,
-                color: K.tx, fontFamily: font, fontSize: 12, outline: 'none',
-              }}
-            />
-            <button
-              onClick={sendMessage}
-              disabled={!chatInput.trim() || chatLoading || isLimited}
-              style={{
-                padding: '8px 14px', background: K.gn, border: 'none',
-                borderRadius: 6, color: K.bg, fontWeight: 700,
-                fontSize: 12, cursor: 'pointer', fontFamily: font,
-                opacity: (!chatInput.trim() || chatLoading || isLimited) ? 0.5 : 1,
-              }}
-            >
-              Send
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-};
-
+// PromoChat → ./components/PromoChat.jsx
 // ═══ MAIN APP ═══
 export default function App() {
   const [authReady, setAuthReady] = useState(() => {
