@@ -1,6 +1,6 @@
 # Latest Handoff
 
-Session Intent: Full project audit then complete P1-P3 (component extraction, trust strip propagation, server-backed wins wall).
+Session Intent (29): Free-launch audit — test full app for correctness and launch readiness; add Privacy Policy, Data Agreement, IP/Trademark, and all industry-required legal pages for a gambling-adjacent math tool.
 
 ## Where We Left Off (Session 28)
 - Shipped: 3 improvements across 3 groups — architecture (5 components extracted), SEO (84 pages trust-stripped), backend (wins wall Supabase scaffolding)
