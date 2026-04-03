@@ -8,11 +8,11 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): ▆▆▆▆▆
-Avgs — 3: 42.0 | 5: 41.8 | 10: 40.1 | 25: — | all: 36.9  (— = insufficient data)
-  └ 3-session: Dev 8.3 | Align 9.0 | Momentum 8.3 | Engage 6.7 | Process 9.7
-Velocity trend: ↓  |  Protocol velocity: →  |  Debt: →
-Momentum runway: ~1.3 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-02 | Session 28 | Total: 43/50 | Velocity: 3 | protocolVelocity: 0
+Avgs — 3: 43.0 | 5: 42.2 | 10: 40.6 | 25: — | all: 37.3  (— = insufficient data)
+  └ 3-session: Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 7.0 | Process 9.3
+Velocity trend: →  |  Protocol velocity: →  |  Debt: →
+Momentum runway: ~1.0 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-03 | Session 29 | Total: 43/50 | Velocity: 3 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -330,3 +330,29 @@ Avgs — 3: 42.0 | 5: 41.8 | 10: 40.1 | 25: — | all: 36.9
 4. Component-level code splitting with React.lazy — extracted components are now separate files, perfect for lazy loading to cut initial bundle (Medium)
 
 **Committed to TASK_BOARD:** [SIL] Extraction health dashboard
+
+## 2026-04-03 — Session 29 | Total: 43/50 | Velocity: 3 | Debt: →
+Avgs — 3: 43.0 | 5: 42.2 | 10: 40.6 | 25: — | all: 37.3
+  └ 3-session: Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 7.0 | Process 9.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | → | 78/78 tests passing, build 121.62 KB gzip clean, AI Edge Functions deployed to Supabase without errors |
+| Creative Alignment | 9 | → | Legal pages match PromoGrind brand aesthetic; responsible gambling framing consistent with math-first, non-hype SOUL; AI chat aligns with "unfair advantage that's legal" identity |
+| Momentum | 9 | ↑ | Full session intent achieved: audit + 7 legal pages + AI activation all shipped in one session; 3 velocity |
+| Engagement | 7 | ↑ | User highly engaged — acted immediately on each suggestion (Supabase CLI → GitHub secrets → push); 1 day since last session |
+| Process Quality | 9 | → | All context files updated, handoff current, truth audit refreshed, session lock cleared |
+| **Total** | **43/50** | → | |
+
+**Top win:** AI features activated end-to-end in a single session — ANTHROPIC_API_KEY deployed, all 5 Edge Functions live, GitHub secrets set, workflow wired, production build pushed. Biggest activation unlock of the project.
+**Top gap:** Momentum runway at ~1.0 sessions with 3 Now items all requiring external approvals (affiliate links, GSC, auth UX) — no code path available to close them.
+**Intent outcome:** Achieved — app audited (healthy), full legal compliance stack shipped, AI features live in production.
+
+**IGNIS note:** The activation gap is closing through direct credential management (Supabase CLI, gh CLI) rather than waiting — same-session key-set-to-live is the fastest path and should be the default pattern for future external activations.
+
+**Brainstorm**
+1. **Affiliate link placeholder UTM tracking** — add UTM-tagged stubs to books.js placeholders so click-through is measured while awaiting affiliate program approvals; first step: add `?utm_source=promogrind&utm_medium=calculator` to placeholder hrefs; Execution probability: High
+2. **Reddit launch post draft** — draft r/matchedbetting PromoChat walkthrough post now so it's ready to publish the moment affiliate links land; first step: write the post copy and save it in `docs/LAUNCH_POSTS.md`; Execution probability: High
+3. **Component-level lazy loading** — extracted components (Tracker, Ledger, LiveScanner, etc.) are now separate files, perfect for React.lazy() to cut initial bundle and improve TTI; first step: wrap the 5 extracted components with React.lazy + Suspense; Execution probability: Medium
+
+**Committed to TASK_BOARD:** [SIL] Affiliate link placeholder UTM tracking · [SIL] Reddit launch post draft (r/matchedbetting PromoChat demo)

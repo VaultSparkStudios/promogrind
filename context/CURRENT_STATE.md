@@ -1,9 +1,9 @@
 # Current State
 
-Last updated: 2026-04-02 (v26.0 — component extraction sprint, trust strip propagation, server-backed wins wall, 78 tests)
+Last updated: 2026-04-03 (v27.0 — full legal compliance stack, AI features activated end-to-end, app audit confirmed healthy, 78 tests)
 
 ## Version
-v26.0 (app) / 3.0.0 (package.json — not critical)
+v27.0 (app) / 3.0.0 (package.json — not critical)
 
 ## Audit Snapshot
 - App.jsx reduced from ~7,459 to ~5,785 lines (-22%) via component extraction to src/components/.
@@ -38,9 +38,28 @@ Shared modules:
 
 **Total: 53 tools**
 
+## Legal Pages: 7
+Full compliance stack live in public/:
+- `/privacy/` — updated (CCPA, UGC, April 2026)
+- `/terms/` — updated (UGC license, Delaware law, DMCA reference)
+- `/responsible-gambling/` — NEW (1-800-GAMBLER, NCPG, GA, self-exclusion)
+- `/affiliate-disclosure/` — NEW (FTC-compliant standalone)
+- `/disclaimer/` — NEW (not gambling/financial advice)
+- `/dmca/` — NEW (PromoGrind™ trademark, DMCA agent, takedown procedure)
+- `/data-policy/` — NEW (CCPA/GDPR, data tables, retention schedule)
+
+All 8 legal pages cross-linked from the in-app Footer and from each other's footers. Sitemap updated with 5 new URLs.
+
+## AI Features: Live
+All 5 AI Edge Functions deployed to Supabase (fjnpzjjyhnpmunfoycrp):
+- promo-chat, promo-advisor, ai-action-plan, parse-bet-slip, stack-builder
+- ANTHROPIC_API_KEY set in Supabase secrets (not in repo)
+- VITE_PG_FEATURE_* flags set as GitHub Actions secrets
+- deploy-pages.yml updated to pass flags through to Vite build
+
 ## Static SEO Pages: 93
 All pages now have trust strip + footer note via docs/SEO_TRUST_STRIP_TEMPLATE.md pattern.
 
 ## Build
-- `npm run build` → 121.46 KB gzip (index), 49.33 KB (vendor), 50.93 KB (supabase)
+- `npm run build` → 121.62 KB gzip (index), 49.33 KB (vendor), 50.93 KB (supabase)
 - `npm test` → 78/78 passing

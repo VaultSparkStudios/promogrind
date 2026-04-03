@@ -114,3 +114,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: Execute the highest-impact repo-local items first, then continue through the remaining feasible recommendation and brainstorm list without waiting for another planning pass
 - Why it matters: Converts the audit from analysis into shipped operational leverage, while keeping manual activation blockers clearly separated from repo-local implementation work
 - Supersedes prior entry: —
+
+### 2026-04-03 — Session 29 free-launch audit + legal direction
+
+- Category: Assignment + Direction
+- Human input: "after finishing start prompt, tell me what is next to launch this product as a free version. Audit/test whole app/tool and let me know if everything is working correctly. Add privacy policy, data agreement, IP/Trademark info, and any other pages we will need related to the type of industry/tool this is in and the data we utilize."
+- Area affected: public/privacy/, public/terms/, public/responsible-gambling/, public/affiliate-disclosure/, public/disclaimer/, public/dmca/, public/data-policy/, src/App.jsx Footer, public/sitemap.xml
+- Previous state: v26.0 — only Privacy Policy and Terms existed (thin, March 2026); no standalone responsible gambling, affiliate disclosure, disclaimer, DMCA, or data policy pages
+- New required direction: Ship a complete legal compliance stack appropriate for a gambling-adjacent affiliate math tool; cover FTC affiliate disclosure, CCPA, GDPR, responsible gambling (1-800-GAMBLER), trademark (PromoGrind™), DMCA, and data use agreement
+- Why it matters: Legal pages are required by affiliate programs (DK/FD/BetMGM), the FTC, and CCPA before any revenue-generating links can be considered active; these are launch-blocking legal requirements, not nice-to-haves
+- Supersedes prior entry: —

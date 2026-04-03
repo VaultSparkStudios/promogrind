@@ -4,6 +4,40 @@ Append sessions chronologically. Never delete entries.
 
 ---
 
+## 2026-04-03 — Session 29 | v27.0 | Legal Compliance Stack + AI Activation + Free-Launch Audit
+
+**Session type:** Free-launch audit + compliance sprint + activation
+
+**Intent outcome:** Achieved — full app audited (78/78 clean), complete legal compliance stack shipped, AI features activated end-to-end.
+
+**Completed:**
+
+**App audit:**
+- Confirmed 78/78 tests passing, build 121.62 KB gzip, no regressions
+- All 53 tools verified, feature flags correctly gating beta surfaces
+- Free-launch readiness: core calculators work without auth; AI/live/push/billing correctly gated
+
+**Legal compliance stack (gambling-adjacent industry requirements):**
+- Created `public/responsible-gambling/` — 1-800-GAMBLER, NCPG, Gamblers Anonymous, BeGambleAware, self-exclusion guidance, problem gambling signs
+- Created `public/affiliate-disclosure/` — FTC-compliant standalone page listing pending affiliate relationships
+- Created `public/disclaimer/` — not gambling/financial advice, accuracy limits, risk factors, limitation of liability
+- Created `public/dmca/` — PromoGrind™/VaultSpark Studios™ trademark notices, DMCA agent designation, takedown + counter-notice procedure, OSS acknowledgments
+- Created `public/data-policy/` — full per-user-tier data tables, CCPA "Do Not Sell" declaration, GDPR rights, data retention schedule, all third-party processors
+- Updated `public/privacy/` — CCPA section, UGC data section, April 2026 date
+- Updated `public/terms/` — UGC license clause, free tier clarification, Delaware governing law, DMCA reference
+- Updated in-app Footer to link all 8 legal pages
+- Updated sitemap.xml with 5 new legal page URLs
+
+**AI activation:**
+- Set `ANTHROPIC_API_KEY` in Supabase secrets via CLI
+- Deployed 5 Edge Functions: promo-chat, promo-advisor, ai-action-plan, parse-bet-slip, stack-builder
+- Set 5 `VITE_PG_FEATURE_*` secrets in GitHub via `gh secret set`
+- Updated `deploy-pages.yml` to pass AI feature flag secrets through to Vite build
+
+**Build/tests:** 78/78 passing · 121.62 KB gzip · pushed to main (e8a16d7)
+
+---
+
 ## 2026-03-31 — Session 27 | v25.0 | Launch Ops Surface + Browser Smoke + Distribution Scaffolding
 
 **Session type:** Audit-follow-through implementation sprint

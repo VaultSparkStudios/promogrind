@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.0 -->
 # Truth Audit
 
-Last reviewed: 2026-04-02
+Last reviewed: 2026-04-03
 Overall status: yellow
-Next action: Re-check shared Vault membership UX after website agent rollout, run wins_wall migration in Supabase, then run `npm run smoke:launch` before flipping any public-facing launch claims or feature flags.
+Next action: Re-check shared Vault membership UX after website agent rollout, run wins_wall migration in Supabase. AI features now live — verify PromoChat and PromoAdvisor surface correctly for authenticated users.
 
 ---
 

@@ -6,7 +6,7 @@
 
 - [ ] Wire real affiliate-approved links into `src/books.js` once approvals land
 - [ ] Submit `https://vaultsparkstudios.com/promogrind/sitemap.xml` to Google Search Console
-- [ ] Set `ANTHROPIC_API_KEY` and deploy AI functions, then turn on the matching `VITE_PG_FEATURE_*` flags
+- [x] ~~Set `ANTHROPIC_API_KEY` and deploy AI functions~~ — DONE S29: key set in Supabase, 5 functions deployed, GitHub secrets + workflow wired
 - [ ] Re-check auth/loading copy once the website agent ships the shared Vault membership fix; verify PromoGrind’s free-account messaging still matches the final global flow
 
 ## Next
@@ -14,10 +14,18 @@
 - [ ] Continue component extraction from `src/App.jsx` — ~5,785 lines remain, candidates include PromoCalendar, DailyDashboard, SmartRecommender, PromoGuarantee
 - [ ] **[SIL] Calc-api launch playbook** — define deployment, rate posture, attribution language, and public-vs-partner positioning now that docs exist
 - [ ] **[SIL] Extraction health dashboard** — add a dev-only panel showing component sizes, import graph, and monolith reduction progress
+- [ ] **[SIL] Affiliate link placeholder UTM tracking** — add UTM-tagged stubs to books.js placeholders so click-through is measured while awaiting affiliate approvals
+- [ ] **[SIL] Reddit launch post draft** — draft r/matchedbetting post with PromoChat demo copy, ready to publish when affiliate links land
 
 ## Human Action Required
 
 - [ ] Run `scripts/migration-wins-wall.sql` in Supabase SQL Editor
+
+## Completed This Session (2026-04-03 — Session 29)
+
+- [x] P1: Full app audit — 78/78 tests confirmed, build clean (121.62 KB gzip), AI flags/surfaces reviewed
+- [x] P2: Legal compliance stack — 5 new pages (responsible-gambling, affiliate-disclosure, disclaimer, dmca, data-policy) + updated privacy + terms; footer linked; sitemap updated
+- [x] P3: AI features activated — ANTHROPIC_API_KEY set in Supabase, 5 functions deployed, VITE_PG_FEATURE_* secrets added to GitHub, deploy-pages.yml wired
 
 ## Completed This Session (2026-04-02 — Session 28)
 
