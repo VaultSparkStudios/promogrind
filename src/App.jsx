@@ -5361,7 +5361,7 @@ const Footer = () => (
         Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool — not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
       </p>
       <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
-        <span>© {new Date().getFullYear()} VaultSpark Studios · PromoGrind is a free educational calculator tool.</span>
+        <span>© {new Date().getFullYear()} · Powered by <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{color:"inherit",textDecoration:"none"}}>VaultSpark Studios</a> · PromoGrind is a free educational calculator tool.</span>
         <a href="/promogrind/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy Policy</a>
         <a href="/promogrind/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms of Service</a>
         <a href="/promogrind/landing/" style={{color:K.mt,textDecoration:"none"}}>About</a>
