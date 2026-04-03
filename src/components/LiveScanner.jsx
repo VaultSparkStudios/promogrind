@@ -256,7 +256,7 @@ const LiveScanner = ({ proStatus, mode }) => {
   const results = activeTab==="arb" ? arbs : evs;
 
   return (
-    <div style={S.card}>
+    <div style={S.card} data-vault-requires="vault_sparked" data-vault-gate-action="blur">
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
         <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Live Scanner</div>
         <span style={S.tag(K.yl)}>PRO</span>

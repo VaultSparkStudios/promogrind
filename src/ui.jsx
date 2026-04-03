@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toD, K, font, fontD, S as _S } from "./lib/shared.js";
 import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, getFeatureState } from "./launchState.js";
 import { trackFeatureGateSeen, trackFeatureGateClick } from "./launchTelemetry.js";
+import { CompactCtx } from "./contexts.jsx";
 
 // Extend S with JSX meter (shared.js stays pure JS)
 _S.meter = (pct, c) => (<div style={{marginTop:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:10,color:K.mt}}>QUALITY</span><span style={{fontSize:10,color:c,fontWeight:600}}>{pct>=70?"EXCELLENT":pct>=60?"GOOD":pct>=50?"FAIR":"POOR"} ({pct}%)</span></div><div style={{height:4,borderRadius:2,background:K.s3}}><div style={{height:4,borderRadius:2,background:c,width:`${Math.min(100,pct)}%`,transition:"width 0.4s"}}/></div></div>);
@@ -114,3 +115,10 @@ export function dismissTrigger(triggerKey, setter) {
   localStorage.setItem(`pg_trigger_dismissed_${triggerKey}`, '1');
   setter(false);
 }
+
+// ═══ HELP ACCORDION ═══
+export const Help = ({entries}) => {
+  const compact = React.useContext(CompactCtx);
+  if(compact) return null;
+  return (<div style={{...S.card,background:K.s2,borderColor:K.bd,marginTop:12}}><div style={{fontSize:12,fontWeight:600,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>How This Works</div><div style={S.help}>{entries.map((e,i)=><div key={i} style={{marginBottom:10}}><span style={S.helpTerm}>{e[0]}:</span> {e[1]}</div>)}</div></div>);
+};

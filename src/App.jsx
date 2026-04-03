@@ -8,13 +8,17 @@ import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calc
 import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
-import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger } from "./ui.jsx";
+import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
 import Tracker from "./components/Tracker.jsx";
 import Ledger from "./components/Ledger.jsx";
 import LiveScanner from "./components/LiveScanner.jsx";
 import TaxesEstimatorWrapper from "./components/TaxesEstimator.jsx";
 import PromoChat from "./components/PromoChat.jsx";
+import { AIActionPlan } from "./components/AIActionPlan.jsx";
+import { PromoAdvisorPanel } from "./components/PromoAdvisorPanel.jsx";
+import { StackBuilder } from "./components/StackBuilder.jsx";
+import { PricingPage } from "./components/PricingPage.jsx";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -66,12 +70,6 @@ const BookCTA = () => (
   </div>
 );
 
-// ═══ INLINE HELP COMPONENT ═══
-const Help = ({entries}) => {
-  const compact = React.useContext(CompactCtx);
-  if(compact) return null;
-  return (<div style={{...S.card,background:K.s2,borderColor:K.bd,marginTop:12}}><div style={{fontSize:12,fontWeight:600,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>How This Works</div><div style={S.help}>{entries.map((e,i)=><div key={i} style={{marginBottom:10}}><span style={S.helpTerm}>{e[0]}:</span> {e[1]}</div>)}</div></div>);
-};
 
 const TrustStrip = () => (
   <div style={{background:`${K.gn}08`,borderBottom:`1px solid ${K.bd}`,padding:"8px 20px"}}>
@@ -2761,539 +2759,6 @@ const ReferralHub = () => {
   </div></div>);
 };
 
-// ═══ LIVE ACTIVITY FEED ═══
-function LiveActivityFeed() {
-  const EVENTS = [
-    { state:'OH', book:'DraftKings', action:'converted a $200 bonus bet', value:'+$147', ago:'2m ago' },
-    { state:'NJ', book:'FanDuel', action:'locked a 3.2% arb on NBA', value:'+$58', ago:'4m ago' },
-    { state:'CO', book:'BetMGM', action:'claimed a 25% profit boost', value:'+$34', ago:'7m ago' },
-    { state:'NY', book:'DraftKings', action:'completed welcome promo', value:'+$189', ago:'11m ago' },
-    { state:'PA', book:'Caesars', action:'found a +EV pick (8.4% edge)', value:'+EV', ago:'14m ago' },
-    { state:'MI', book:'FanDuel', action:'converted a $150 bonus bet', value:'+$108', ago:'18m ago' },
-    { state:'IL', book:'BetMGM', action:'hit a parlay middle', value:'+$220', ago:'22m ago' },
-    { state:'VA', book:'ESPN BET', action:'claimed a reload bonus', value:'+$41', ago:'25m ago' },
-    { state:'AZ', book:'DraftKings', action:'completed SGP promo', value:'+$27', ago:'31m ago' },
-    { state:'TN', book:'FanDuel', action:'locked a 2.8% arb', value:'+$47', ago:'35m ago' },
-  ];
-  const seed = Math.floor(Date.now() / (1000 * 60 * 10));
-  const startIdx = seed % EVENTS.length;
-  const ordered = [...EVENTS.slice(startIdx), ...EVENTS.slice(0, startIdx)];
-  const [idx, setIdx] = React.useState(0);
-  React.useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % ordered.length), 3500);
-    return () => clearInterval(t);
-  }, []);
-  const ev = ordered[idx];
-  return (
-    <div style={{marginBottom:16,padding:'10px 14px',background:'#0a0e17',border:'1px solid #1e3a2f',borderRadius:8,display:'flex',alignItems:'center',gap:10,overflow:'hidden'}}>
-      <div style={{width:8,height:8,borderRadius:'50%',background:'#4ade80',flexShrink:0,boxShadow:'0 0 6px #4ade80'}}/>
-      <div style={{fontSize:11,color:'#94a3b8',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
-        <span style={{color:'#60a5fa',fontWeight:600}}>Grinder in {ev.state}</span>{' '}
-        <span>{ev.action} on {ev.book}</span>{' '}
-        <span style={{color:'#4ade80',fontWeight:700}}>{ev.value}</span>
-      </div>
-      <div style={{marginLeft:'auto',fontSize:9,color:'#334155',flexShrink:0}}>{ev.ago}</div>
-    </div>
-  );
-}
-
-// ═══ PROMO ADVISOR PANEL ═══
-const PromoAdvisorPanel = ({ proStatus, onClose }) => {
-  if (!FEATURE_FLAGS.promoAdvisor) {
-    return (
-      <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
-        <FeatureUnavailableCard featureKey="promoAdvisor" title="Promo Advisor" body="Promo Advisor will appear here once the AI explainer backend is activated." />
-      </div>
-    );
-  }
-  const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
-  const DAILY_LIMIT = isPro ? 9999 : 3;
-  const [promoText, setPromoText] = useState('');
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [uses, setUses] = useState(() => {
-    try {
-      const todayKey = `pg_advisor_uses_${new Date().toISOString().slice(0,10)}`;
-      return parseInt(localStorage.getItem(todayKey) || '0');
-    } catch { return 0; }
-  });
-  const toast = useToast();
-
-  const analyze = async () => {
-    if (!promoText.trim() || uses >= DAILY_LIMIT || loading) return;
-    setLoading(true); setError(''); setResult(null);
-    try {
-      const { data, error: fnErr } = await supabase.functions.invoke('promo-advisor', {
-        body: { promoText: promoText.trim() }
-      });
-      if (fnErr) throw fnErr;
-      const newUses = uses + 1;
-      setUses(newUses);
-      // Write to today's key at call time (handles midnight rollover correctly)
-      try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
-      setResult(data);
-    } catch(e) {
-      setError('Analysis failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const isLimited = uses >= DAILY_LIMIT && !isPro;
-  const ratingColor = result?.rating === 'excellent' ? K.gn : result?.rating === 'good' ? K.ac : result?.rating === 'poor' ? K.rd : K.yl;
-
-  return (
-    <div style={{position:'fixed',right:0,top:0,bottom:0,width:360,background:K.s1,borderLeft:`1px solid ${K.bd}`,zIndex:1100,display:'flex',flexDirection:'column',boxShadow:'-4px 0 32px rgba(0,0,0,0.6)'}}>
-      <div style={{padding:'14px 16px',borderBottom:`1px solid ${K.bd}`,display:'flex',justifyContent:'space-between',alignItems:'center',background:K.s2}}>
-        <div>
-          <div style={{fontSize:14,fontWeight:700,color:K.tx}}>💡 Promo Advisor</div>
-          <div style={{fontSize:11,color:K.mt,marginTop:2}}>Paste any promo — get an instant plain-English verdict</div>
-        </div>
-        <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',color:K.mt,fontSize:18,padding:4}}>×</button>
-      </div>
-      <div style={{flex:1,overflow:'auto',padding:16,display:'flex',flexDirection:'column',gap:12}}>
-        <textarea
-          value={promoText}
-          onChange={e => setPromoText(e.target.value)}
-          placeholder={'Example: "Get a $200 Bonus Bet if your first $5 bet loses. Bonus bet expires in 7 days."\n\nOr paste the full promo T&C text.'}
-          style={{width:'100%',minHeight:130,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,padding:10,color:K.tx,fontSize:12,resize:'vertical',fontFamily:font,boxSizing:'border-box',lineHeight:1.5}}
-        />
-        {!isPro && (
-          <div style={{fontSize:11,color:K.mt,textAlign:'right'}}>{uses}/{DAILY_LIMIT} free analyses today</div>
-        )}
-        {isLimited && (
-          <div style={{background:`${K.pp}15`,border:`1px solid ${K.pp}30`,borderRadius:8,padding:10,fontSize:12,color:K.pp,textAlign:'center'}}>
-            Daily limit reached. Upgrade to VaultSparked for unlimited analyses.
-          </div>
-        )}
-        <button
-          onClick={analyze}
-          disabled={loading || !promoText.trim() || isLimited}
-          style={{padding:'9px',background:isLimited?K.s2:'#7c3aed',border:`1px solid ${isLimited?K.bd:'#7c3aed'}`,borderRadius:8,color:isLimited?K.mt:'#fff',fontWeight:700,fontSize:12,cursor:loading||isLimited?'default':'pointer',fontFamily:font,opacity:loading?0.7:1}}
-        >
-          {loading ? '⏳ Analyzing...' : '🔍 Analyze This Promo'}
-        </button>
-        {error && <div style={{color:K.rd,fontSize:12}}>{error}</div>}
-        {result && (
-          <div style={{background:`${ratingColor}10`,border:`1px solid ${ratingColor}40`,borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
-            <div style={{fontSize:15,fontWeight:800,color:ratingColor}}>{result.verdict || 'Analysis Complete'}</div>
-            {result.explanation && <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{result.explanation}</div>}
-            {result.ev && <div style={{fontSize:12}}><span style={{color:K.mt}}>Expected Value: </span><span style={{color:K.gn,fontWeight:700}}>{result.ev}</span></div>}
-            {result.action && <div style={{fontSize:12}}><span style={{color:K.mt}}>Best Action: </span><span style={{color:K.ac,fontWeight:700}}>{result.action}</span></div>}
-            {result.hedge && <div style={{fontSize:12}}><span style={{color:K.mt}}>Hedge Strategy: </span><span style={{color:K.pp,fontWeight:700}}>{result.hedge}</span></div>}
-          </div>
-        )}
-        {!isPro && (
-          <div style={{marginTop:'auto',padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}20`,borderRadius:8,fontSize:11,color:K.mt,textAlign:'center'}}>
-            VaultSparked members get unlimited Promo Advisor + Live Arb Scanner + AI Action Plan
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// ═══ PRICING / UPGRADE ═══
-const PricingPage = () => {
-  const [upgrading, setUpgrading] = useState(false);
-  const [trialStarting, setTrialStarting] = useState(false);
-  const [trialStarted, setTrialStarted] = useState(false);
-  const [conciergeWL, setConciergeWL] = useState(() => { try { return !!localStorage.getItem('pg_concierge_waitlist'); } catch { return false; } });
-  const toast = useToast();
-  const handleUpgrade = async (plan) => {
-    setUpgrading(true);
-    try { await startCheckout(plan.id); }
-    catch(e) { if(toast) toast('Checkout failed: '+e.message, K.rd); setUpgrading(false); }
-  };
-  const handleTrial = async () => {
-    setTrialStarting(true);
-    const ok = await startTrial();
-    if(ok) { setTrialStarted(true); window.plausible?.('trial_start'); if(toast) toast('7-day Pro trial started! Enjoy full access.', K.gn); }
-    else { if(toast) toast('Could not start trial. Try again.', K.rd); }
-    setTrialStarting(false);
-  };
-  return (<div style={{display:'flex',flexDirection:'column',gap:16}}><div style={{...S.card,border:`1px solid ${K.ac}40`}}><Tl t="Concierge" badge="NEW" bc={K.ac}/>
-    <div style={{...S.note(K.ac),marginBottom:20}}>The step up from free — personalized insights for serious grinders.</div>
-    <div style={{display:"flex",alignItems:"baseline",gap:4,marginBottom:20}}>
-      <span style={{fontSize:28,fontWeight:700,color:K.ac,fontFamily:fontD}}>$9.99</span>
-      <span style={{fontSize:12,color:K.mt}}>/mo</span>
-    </div>
-    <div style={{padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,marginBottom:20}}>
-      {[
-        ["Weekly Report Card email","P/L, streak, top book every Monday"],
-        ["Promo Advisor","10 AI analyses per day (vs 3 free)"],
-        ["Promo expiry alerts","Push + email when your active promos expire"],
-        ["Priority support",""],
-      ].map(([title,desc])=>(
-        <div key={title} style={{display:"flex",gap:10,marginBottom:8}}>
-          <span style={{color:K.ac,fontWeight:700,marginTop:1}}>✓</span>
-          <div><span style={{fontSize:12,fontWeight:600,color:K.tx}}>{title}</span>{desc&&<span style={{fontSize:11,color:K.dm}}> — {desc}</span>}</div>
-        </div>
-      ))}
-    </div>
-    <button
-      onClick={()=>{
-        if(!conciergeWL){
-          try{localStorage.setItem('pg_concierge_waitlist','true');}catch{}
-          setConciergeWL(true);
-          if(toast) toast("You're on the waitlist! We'll email you when Concierge launches.",K.ac);
-        }
-      }}
-      style={{width:"100%",padding:"10px",background:conciergeWL?K.s2:K.ac,border:`1px solid ${conciergeWL?K.bd:K.ac}`,borderRadius:6,color:conciergeWL?K.mt:'#fff',fontWeight:700,cursor:conciergeWL?"default":"pointer",fontFamily:font,fontSize:12}}
-    >
-      {conciergeWL?"✓ On Waitlist":"Join Waitlist"}
-    </button>
-  </div><div style={S.card}><Tl t="VaultSparked Pro" badge="UPGRADE" bc={K.pp}/>
-    <div style={{...S.note(K.pp),marginBottom:20}}>Unlock the live Arb Scanner and +EV Scanner. Real-time odds from 40+ books. Unlimited scans. Cancel anytime.</div>
-    {!trialStarted ? (
-      <div style={{padding:"16px 20px",background:`${K.gn}08`,border:`1px solid ${K.gn}40`,borderRadius:8,marginBottom:20,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
-        <div>
-          <div style={{fontSize:13,fontWeight:700,color:K.gn,marginBottom:3}}>Try Pro free for 7 days</div>
-          <div style={{fontSize:11,color:K.dm}}>Full access to Live Arb Scanner and +EV Scanner. No credit card required.</div>
-        </div>
-        <button onClick={handleTrial} disabled={trialStarting} style={{padding:"9px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",opacity:trialStarting?0.7:1}}>
-          {trialStarting?"Starting…":"Start Free Trial"}
-        </button>
-      </div>
-    ) : (
-      <div style={{...S.note(K.gn),marginBottom:20}}>✓ 7-day Pro trial is now active! Visit the Live Arb or +EV Scanner to try it out.</div>
-    )}
-    <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:20}}>
-      {[
-        {id:"monthly",label:"Monthly",price:"$24.99",period:"/mo",savings:null,highlight:false},
-        {id:"annual",label:"Annual",price:"$199",period:"/yr",savings:"Save $101 · 2 months free",highlight:true},
-      ].map(plan=>(
-        <div key={plan.id} style={{flex:1,minWidth:200,padding:20,background:plan.highlight?`${K.pp}08`:K.s2,border:`2px solid ${plan.highlight?K.pp:K.bd}`,borderRadius:10,position:"relative"}}>
-          {plan.highlight&&<div style={{position:"absolute",top:-10,left:"50%",transform:"translateX(-50%)",background:K.pp,color:K.bg,fontSize:9,fontWeight:700,padding:"2px 12px",borderRadius:50,letterSpacing:"1px"}}>BEST VALUE</div>}
-          <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:4}}>{plan.label}</div>
-          <div style={{display:"flex",alignItems:"baseline",gap:4,marginBottom:plan.savings?4:16}}>
-            <span style={{fontSize:28,fontWeight:700,color:plan.highlight?K.pp:K.tx,fontFamily:fontD}}>{plan.price}</span>
-            <span style={{fontSize:12,color:K.mt}}>{plan.period}</span>
-          </div>
-          {plan.savings&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginBottom:16}}>{plan.savings}</div>}
-          <button onClick={()=>{
-            if(FEATURE_FLAGS.paidCheckout){
-              window.plausible?.('upgrade_click');
-              trackFeatureEnabledUse('paidCheckout', plan.id);
-              handleUpgrade(plan);
-            } else {
-              trackFeatureGateClick('paidCheckout', plan.id);
-            }
-          }} disabled={upgrading || !FEATURE_FLAGS.paidCheckout} style={{width:"100%",padding:"10px",background:plan.highlight?K.pp:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:(upgrading || !FEATURE_FLAGS.paidCheckout)?"not-allowed":"pointer",fontFamily:font,fontSize:12,opacity:FEATURE_FLAGS.paidCheckout?1:0.55}}>
-            {!FEATURE_FLAGS.paidCheckout ? "Billing activation pending" : upgrading?"Processing…":"Upgrade Now"}
-          </button>
-        </div>
-      ))}
-    </div>
-    {!FEATURE_FLAGS.paidCheckout && <div style={{...S.note(K.yl),marginTop:-6,marginBottom:16}}>Paid checkout is not live yet. Free Vault membership and the 7-day Pro trial are active; billing will switch on after the shared Studio checkout rollout is completed.</div>}
-    <div style={{padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>What you get</div>
-      {[
-        ["Live Arb Scanner","Real-time arbitrage across 40+ books. Alerts when ROI > your threshold."],
-        ["Live +EV Scanner","Positive expected value bets. Kelly bet sizing per opportunity."],
-        ["Scan History","Last 20 scans saved. Track how often arbs appear in your sport."],
-        ["Player Props","Optional props market scanning. Find mispriced player lines."],
-        ["Priority Support","Discord channel + email support from the PromoGrind team."],
-      ].map(([title,desc])=>(
-        <div key={title} style={{display:"flex",gap:10,marginBottom:8}}>
-          <span style={{color:K.gn,fontWeight:700,marginTop:1}}>✓</span>
-          <div><span style={{fontSize:12,fontWeight:600,color:K.tx}}>{title}</span><span style={{fontSize:11,color:K.dm}}> — {desc}</span></div>
-        </div>
-      ))}
-    </div>
-    <LiveActivityFeed/>
-    <div style={{marginTop:20,padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:12,textTransform:"uppercase",letterSpacing:"1.5px"}}>What Grinders Say</div>
-      {[
-        {quote:"Made back the subscription cost in 20 minutes with the first arb alert. The scanner is insane.",name:"Tyler M.",stat:"$340 first week"},
-        {quote:"I was using a spreadsheet before this. Never going back. The bonus bet converter alone saves me an hour per session.",name:"Jess R.",stat:"$1,200/mo average"},
-        {quote:"The free calculator suite is better than what OddsJam charges $150/mo for. The Pro upgrade is a no-brainer.",name:"Marcus D.",stat:"8 books completed"},
-      ].map((t,i)=>(
-        <div key={i} style={{marginBottom:i<2?10:0,padding:"12px 14px",background:K.s1,borderRadius:6,border:`1px solid ${K.bd}`}}>
-          <div style={{fontSize:12,color:K.tx,lineHeight:1.6,marginBottom:6}}>"{t.quote}"</div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <span style={{fontSize:10,color:K.mt}}>— {t.name}</span>
-            <span style={{...S.tag(K.gn),fontSize:9}}>{t.stat}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-  {/* Agency / B2B tier */}
-  <div style={{...S.card,border:`1px solid #a855f740`}}>
-    <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>
-      <span style={{fontSize:16,fontWeight:700,color:'#a855f7',fontFamily:fontD}}>Agency / White-Label</span>
-      <span style={{padding:'2px 10px',borderRadius:50,fontSize:9,fontWeight:700,background:'#a855f720',color:'#a855f7',letterSpacing:'1.5px'}}>B2B</span>
-    </div>
-    <div style={{...S.note('#a855f7'),marginBottom:20}}>Embed the full PromoGrind calculator suite on your betting blog or platform with your own branding.</div>
-    <div style={{display:'flex',alignItems:'baseline',gap:4,marginBottom:20}}>
-      <span style={{fontSize:28,fontWeight:700,color:'#a855f7',fontFamily:fontD}}>$199</span>
-      <span style={{fontSize:12,color:K.mt}}>/mo</span>
-    </div>
-    <div style={{padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`,marginBottom:20}}>
-      {[
-        "Full calculator suite white-label",
-        "Remove PromoGrind branding",
-        "Embed on your betting blog",
-        "API access (calc-api)",
-        "Priority support",
-        "Custom domain support",
-      ].map(feat=>(
-        <div key={feat} style={{display:'flex',gap:10,marginBottom:8}}>
-          <span style={{color:'#a855f7',fontWeight:700,marginTop:1}}>✓</span>
-          <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{feat}</span>
-        </div>
-      ))}
-    </div>
-    <a
-      href="mailto:hello@vaultsparkstudios.com?subject=PromoGrind Agency Inquiry"
-      style={{display:'block',width:'100%',padding:'10px',background:'#a855f7',border:'none',borderRadius:6,color:'#fff',fontWeight:700,cursor:'pointer',fontFamily:font,fontSize:12,textAlign:'center',textDecoration:'none',boxSizing:'border-box'}}
-    >
-      Contact Sales →
-    </a>
-  </div>
-  </div>);
-};
-
-// ═══ AI WEEKLY ACTION PLAN ═══
-// ═══ STACK BUILDER ═══
-function StackBuilder({ proStatus }) {
-  if (!FEATURE_FLAGS.stackBuilder) {
-    return <FeatureUnavailableCard featureKey="stackBuilder" title="Stack Builder" body="Stack Builder will unlock here once the AI planning backend is activated." />;
-  }
-  const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
-  const [plan, setPlan] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [bankroll, setBankroll] = useState(() => { try { return localStorage.getItem('pg_bankroll') || '1000'; } catch { return '1000'; } });
-  const [booksAvailable, setBooksAvailable] = useState([]);
-  const [copied, setCopied] = useState(false);
-  const toast = useToast();
-
-  const allBooks = BOOKS.map(b => b.name);
-
-  const toggleBook = (book) => {
-    setBooksAvailable(prev =>
-      prev.includes(book) ? prev.filter(b => b !== book) : [...prev, book]
-    );
-  };
-
-  const generate = async () => {
-    if (!isActive) { toast('Stack Builder is VaultSparked only — start your free 7-day trial', K.pp); return; }
-    if (!bankroll || parseFloat(bankroll) < 100) { toast('Minimum $100 bankroll required', K.rd); return; }
-    setLoading(true); setError(null); setPlan(null);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Not authenticated');
-      const { data, error: fnErr } = await supabase.functions.invoke('stack-builder', {
-        headers: { Authorization: `Bearer ${session.access_token}` },
-        body: { bankroll: parseFloat(bankroll), booksAvailable },
-      });
-      if (fnErr) throw fnErr;
-      setPlan(data);
-    } catch (e) {
-      setError(e.message || 'Failed to generate stack');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const copyPlan = () => {
-    if (!plan?.plan) return;
-    navigator.clipboard.writeText(`PromoGrind Stack Builder — $${bankroll} bankroll\n\n${plan.plan}`).catch(() => {});
-    setCopied(true); setTimeout(() => setCopied(false), 1800);
-  };
-
-  return (
-    <div>
-      <div style={S.card}>
-        <Tl t="Stack Builder" badge="AI · VAULTSPARKED" bc={K.pp}/>
-        <p style={{fontSize:12,color:K.dm,marginBottom:16,lineHeight:1.6}}>
-          Enter your bankroll and available books. Claude analyzes current promos and returns your optimal 3-book extraction sequence with guaranteed profit amounts.
-        </p>
-
-        {!isActive && (
-          <div style={{padding:14,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:8,marginBottom:16,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:8}}>
-            <div>
-              <div style={{fontSize:12,fontWeight:700,color:K.pp}}>⚡ VaultSparked Feature</div>
-              <div style={{fontSize:11,color:K.mt}}>Start your free 7-day trial — no credit card required</div>
-            </div>
-            <button onClick={()=>startTrial && startTrial()} style={{padding:'6px 14px',background:K.pp,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:'pointer',fontFamily:font}}>Try Free →</button>
-          </div>
-        )}
-
-        <div style={S.row}>
-          <div style={S.col}><In l="Your Bankroll" v={bankroll} set={v=>{setBankroll(v); try{localStorage.setItem('pg_bankroll',v);}catch{}}} pre="$" ph="1000"/></div>
-        </div>
-
-        <div style={{marginBottom:16}}>
-          <label style={S.label}>Books you have available (optional — leave blank for all)</label>
-          <div style={{display:'flex',flexWrap:'wrap',gap:6,marginTop:6}}>
-            {allBooks.map(book => {
-              const sel = booksAvailable.includes(book);
-              return (
-                <button key={book} onClick={() => toggleBook(book)}
-                  style={{padding:'4px 10px',background:sel?`${K.gn}15`:'transparent',border:`1px solid ${sel?K.gn:K.bd2}`,borderRadius:50,color:sel?K.gn:K.dm,fontSize:10,cursor:'pointer',fontFamily:font}}>
-                  {sel ? '✓ ' : ''}{book}
-                </button>
-              );
-            })}
-          </div>
-          {booksAvailable.length > 0 && (
-            <button onClick={() => setBooksAvailable([])} style={{marginTop:6,background:'none',border:'none',color:K.mt,fontSize:10,cursor:'pointer',textDecoration:'underline',padding:0}}>Clear all</button>
-          )}
-        </div>
-
-        <button
-          onClick={generate}
-          disabled={loading}
-          style={{width:'100%',padding:'12px 0',background:isActive?(loading?`${K.pp}40`:K.pp):`${K.pp}20`,border:`1px solid ${K.pp}${isActive?'':40}`,borderRadius:8,color:isActive?K.bg:K.pp,fontFamily:font,fontWeight:700,fontSize:13,cursor:loading?'wait':'pointer',letterSpacing:'0.5px'}}>
-          {loading ? '⚡ Building your optimal stack…' : '⚡ Build My Stack'}
-        </button>
-
-        {error && <div style={{...S.note(K.rd),marginTop:12}}>{error}</div>}
-
-        {plan && (
-          <div style={{marginTop:16,padding:16,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:10}}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
-              <div style={{fontSize:10,color:K.pp,textTransform:'uppercase',letterSpacing:'1.5px',fontWeight:700}}>Your Optimal Stack</div>
-              <div style={{display:'flex',gap:6,alignItems:'center'}}>
-                {plan.estimatedTotal && (
-                  <span style={{fontSize:11,color:K.gn,fontWeight:700}}>Est. ${plan.estimatedTotal} guaranteed</span>
-                )}
-                <button onClick={copyPlan} style={{padding:'3px 10px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:'pointer',fontFamily:font}}>
-                  📋 {copied ? 'Copied!' : 'Copy'}
-                </button>
-              </div>
-            </div>
-            <div style={{fontSize:12,color:K.tx,lineHeight:1.8,whiteSpace:'pre-wrap'}}>
-              {plan.plan}
-            </div>
-            {plan.booksUsed?.length > 0 && (
-              <div style={{marginTop:12,display:'flex',flexWrap:'wrap',gap:6}}>
-                {plan.booksUsed.map(b => (
-                  <span key={b} style={{...S.tag(K.ac)}}>{b}</span>
-                ))}
-              </div>
-            )}
-            <div style={{marginTop:10,fontSize:10,color:K.mt}}>
-              Generated {plan.generatedAt ? new Date(plan.generatedAt).toLocaleTimeString() : 'just now'} · {plan.promoCount} promos analyzed
-            </div>
-          </div>
-        )}
-      </div>
-      <Help entries={[
-        ["What is a promo stack?","A sequence of sportsbook promos executed in the optimal order to maximize guaranteed profit extraction. Order matters — welcome bonuses must come before recurring promos, and bankroll must cover hedge amounts at each step."],
-        ["How does Claude generate the stack?","Claude analyzes your bankroll against available promo types, calculates expected guaranteed extraction for each (after hedge), and sequences them for maximum yield without over-committing capital."],
-        ["Do I need all these books?","No — the more books you have, the more opportunities. But even 2-3 books generate meaningful stacks. Select only the books where you have accounts open."],
-      ]}/>
-    </div>
-  );
-}
-
-function AIActionPlan({ proStatus }) {
-  if (!FEATURE_FLAGS.aiActionPlan) {
-    return <FeatureUnavailableCard featureKey="aiActionPlan" title="AI Weekly Action Plan" body="AI weekly plans stay in beta until the planning backend is activated." />;
-  }
-  const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
-  const [plan, setPlan] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [lastGenDate, setLastGenDate] = React.useState(() => { try { return localStorage.getItem('pg_action_plan_date'); } catch { return null; } });
-
-  React.useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    if (lastGenDate === today) {
-      try { const c = JSON.parse(localStorage.getItem('pg_action_plan_cache') || 'null'); if (c) setPlan(c); } catch {}
-    }
-  }, []);
-
-  const generate = async () => {
-    setLoading(true); setError(null);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Not authenticated');
-      const appDataRaw = (() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3') || '{}'); } catch { return {}; } })();
-      const bankroll = localStorage.getItem('pg_bankroll') || '1000';
-      const booksComplete = Object.values(appDataRaw.done || {}).filter(Boolean).length;
-      const ledger = appDataRaw.ledger || [];
-      const recentProfit = ledger.slice(-10).reduce((s, e) => s + (parseFloat(e.profit) || 0), 0).toFixed(2);
-      const { data, error: fnErr } = await supabase.functions.invoke('ai-action-plan', {
-        headers: { Authorization: `Bearer ${session.access_token}` },
-        body: { bankroll, booksComplete, recentProfit, ledgerCount: ledger.length },
-      });
-      if (fnErr) throw fnErr;
-      setPlan(data);
-      const today = new Date().toISOString().split('T')[0];
-      try { localStorage.setItem('pg_action_plan_date', today); localStorage.setItem('pg_action_plan_cache', JSON.stringify(data)); } catch {}
-      setLastGenDate(today);
-    } catch (e) { setError(e.message || 'Failed to generate plan'); }
-    finally { setLoading(false); }
-  };
-
-  if (!isActive) return (
-    <div><div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:10,padding:20,marginBottom:16}}>
-      <div style={{fontSize:16,fontWeight:700,color:'#e2e8f0',marginBottom:6,fontFamily:fontD}}>⚡ AI Weekly Action Plan</div>
-      <div style={{fontSize:12,color:'#64748b',marginBottom:16,lineHeight:1.7}}>Claude AI analyzes your book roster, bankroll, and recent P/L each week and generates a personalized 3-item action plan. What to do, in what order, and why.</div>
-      <div style={{padding:'12px 14px',background:'#0a0e17',borderRadius:6,border:'1px solid #1e293b',marginBottom:12}}>
-        {['Run DraftKings 20% deposit match ($200 value) — expires Sunday','Lock FanDuel NBA arb at +2.1% ROI (~$42 on $2K)','Claim Caesars Wednesday boost before 11:59pm'].map((item,i)=>(
-          <div key={i} style={{display:'flex',gap:10,padding:'8px 0',borderBottom:i<2?`1px solid ${K.bd}`:'none',filter:'blur(3px)',userSelect:'none'}}>
-            <span style={{color:K.gn,fontWeight:700,fontSize:13,minWidth:16}}>{i+1}</span>
-            <span style={{fontSize:12,color:K.tx}}>{item}</span>
-          </div>
-        ))}
-      </div>
-      <button onClick={()=>{window.location.hash='#/upgrade';}} style={{width:'100%',padding:'10px',background:K.pp,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>
-        Unlock AI Action Plan — VaultSparked →
-      </button>
-    </div></div>
-  );
-
-  const today = new Date().toISOString().split('T')[0];
-  const alreadyToday = lastGenDate === today;
-
-  return (
-    <div><div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:10,padding:20,marginBottom:16}}>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
-        <div style={{fontSize:16,fontWeight:700,color:K.tx,fontFamily:fontD}}>⚡ AI Weekly Action Plan</div>
-        {alreadyToday&&<span style={{fontSize:10,color:K.gn,padding:'2px 8px',background:'#1e3a2f',borderRadius:4}}>Generated today</span>}
-      </div>
-      {!plan&&!loading&&(
-        <div>
-          <div style={{fontSize:12,color:K.mt,marginBottom:16,lineHeight:1.7}}>Claude AI will analyze your book roster, bankroll, and recent P/L to create a personalized action plan for the week.</div>
-          <button onClick={generate} style={{width:'100%',padding:'12px',background:K.gn,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>Generate My Plan →</button>
-        </div>
-      )}
-      {loading&&<div style={{textAlign:'center',padding:'24px 0',color:K.mt,fontSize:12}}><div style={{fontSize:20,marginBottom:8}}>⚡</div>Analyzing your book roster and recent P/L…</div>}
-      {error&&<div style={{padding:'10px 12px',background:'#2a1515',border:`1px solid ${K.rd}40`,borderRadius:6,color:K.rd,fontSize:12,marginBottom:12}}>{error}</div>}
-      {plan&&(
-        <div>
-          {plan.summary&&<div style={{fontSize:12,color:K.dm,marginBottom:12,lineHeight:1.7,padding:'10px 12px',background:K.s3,borderRadius:6}}>{plan.summary}</div>}
-          <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>
-            {(plan.actions||[]).map((action,i)=>(
-              <div key={i} style={{padding:'12px 14px',background:K.s3,borderRadius:8,border:`1px solid ${K.bd}`}}>
-                <div style={{display:'flex',gap:10,alignItems:'flex-start'}}>
-                  <span style={{fontSize:18,fontWeight:700,color:K.gn,minWidth:24,fontFamily:fontD}}>{i+1}</span>
-                  <div style={{flex:1}}>
-                    <div style={{fontSize:13,fontWeight:600,color:K.tx,marginBottom:3}}>{action.title}</div>
-                    <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>{action.why}</div>
-                    {action.value&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginTop:4}}>Est. value: {action.value}</div>}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button onClick={generate} disabled={loading||alreadyToday}
-            style={{width:'100%',padding:'8px',background:'transparent',border:`1px solid ${K.bd}`,borderRadius:6,color:alreadyToday?K.bd2:K.dm,cursor:alreadyToday?'not-allowed':'pointer',fontSize:11,fontFamily:font}}>
-            {alreadyToday?'Plan generated for today — come back tomorrow':'Regenerate plan'}
-          </button>
-        </div>
-      )}
-    </div></div>
-  );
-}
-
 // ═══ COMPETITOR COMPARISON ═══
 const CompetitorComparison = () => (
   <div><div style={S.card}>
@@ -5567,7 +5032,22 @@ export default function App() {
         setAuthReady(true);
         try { window.plausible?.('vault_member_login'); } catch {}
         onDailyLogin();
-        getSubscription().then(setProStatus);
+        // Expose supabase client for VaultSDK session reuse, then init SDK
+        window.VSSupabase = supabase;
+        window.VaultSDK?.init('promogrind', {
+          onReady: () => window.VaultSDK?.applyGates(),
+        });
+        getSubscription().then(sub => {
+          setProStatus(sub);
+          // Write pg_pro_status for synchronous checks throughout the app
+          try {
+            const planKey = sub?.status === 'trial' ? 'trial'
+              : sub?.plan === 'vault_sparked' ? 'vault_sparked'
+              : sub?.plan === 'pro' ? 'pro'
+              : 'free';
+            localStorage.setItem('pg_pro_status', planKey);
+          } catch {}
+        });
         // Record referral if this user arrived via a referral link
         try {
           const refCode = localStorage.getItem('pg_ref');
@@ -5592,6 +5072,9 @@ export default function App() {
   const item = g.items[ti];
   const Comp = item?.c || (() => null);
   const isLiveTool = !!item?.pro;
+
+  // Re-apply VaultSDK DOM gates whenever the active tool or pro status changes
+  useEffect(() => { window.VaultSDK?.applyGates(); }, [slug, proStatus]);
 
   // Fire vault calc event on tab navigation (Convert + Calculate groups)
   useEffect(() => {
