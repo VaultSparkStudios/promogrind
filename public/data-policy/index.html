@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Use Policy — PromoGrind</title>
+  <meta name="description" content="How PromoGrind collects, stores, and uses your data. CCPA and GDPR rights, third-party processors, retention schedules, and how to request your data.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vaultsparkstudios.com/promogrind/data-policy/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.8; padding: 2rem 1rem; }
+    .container { max-width: 760px; margin: 0 auto; }
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid #1e293b; }
+    .logo { font-size: 1.25rem; font-weight: 700; color: #4ade80; text-decoration: none; }
+    .back { color: #60a5fa; text-decoration: none; font-size: 0.875rem; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .updated { color: #64748b; font-size: 0.875rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.125rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
+    h3 { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 0.5rem; color: #94a3b8; }
+    p { margin-bottom: 1rem; color: #cbd5e1; }
+    ul, ol { margin: 0.5rem 0 1rem 1.5rem; color: #cbd5e1; }
+    li { margin-bottom: 0.4rem; }
+    a { color: #60a5fa; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.875rem; }
+    th { background: #101826; color: #4ade80; font-weight: 700; padding: 8px 12px; text-align: left; border: 1px solid #1e293b; }
+    td { padding: 8px 12px; border: 1px solid #1e293b; color: #cbd5e1; vertical-align: top; }
+    tr:nth-child(even) td { background: #0d1420; }
+    .callout { margin: 1.25rem 0 1.75rem; padding: 1rem 1.25rem; border: 1px solid #4ade80; border-radius: 10px; background: #0a1a0a; color: #cbd5e1; }
+    .callout strong { color: #4ade80; }
+    .opt-out { margin: 1.25rem 0; padding: 1rem 1.25rem; border: 1px solid #f59e0b; border-radius: 10px; background: #1a1200; }
+    .opt-out strong { color: #fbbf24; }
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1e293b; font-size: 0.75rem; color: #475569; }
+    .footer a { color: #64748b; text-decoration: none; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .footer-links a { color: #64748b; }
+    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
+    .trust strong { color: #4ade80; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a class="logo" href="https://vaultsparkstudios.com/promogrind/">PROMOGRIND</a>
+      <a class="back" href="https://vaultsparkstudios.com/promogrind/">← Back to App</a>
+    </nav>
+
+    <h1>Data Use Policy</h1>
+    <p class="updated">Last updated: April 3, 2026</p>
+
+    <div class="callout">
+      <strong>Plain-language summary:</strong> We collect only what we need to run PromoGrind. Your bet data stays yours — you can export or delete it anytime. We use privacy-friendly analytics (no ad tracking). We never sell your personal data.
+    </div>
+
+    <h2>1. Who We Are</h2>
+    <p>PromoGrind is operated by VaultSpark Studios ("we", "us", "our"). This Data Use Policy describes how we collect, store, process, and protect personal data in connection with your use of PromoGrind at <a href="https://vaultsparkstudios.com/promogrind/">vaultsparkstudios.com/promogrind/</a>.</p>
+    <p>For our full Privacy Policy, see <a href="/promogrind/privacy/">Privacy Policy</a>.</p>
+
+    <h2>2. Data We Collect</h2>
+
+    <h3>If You Use Without an Account (Guest/Free Mode)</h3>
+    <table>
+      <tr><th>Data Type</th><th>What It Is</th><th>Where Stored</th><th>Why</th></tr>
+      <tr><td>Calculator inputs</td><td>Numbers you type into calculators</td><td>Your browser only (never sent)</td><td>To compute results locally</td></tr>
+      <tr><td>App preferences</td><td>Dark mode, compact mode settings</td><td>Browser localStorage</td><td>To remember your preferences</td></tr>
+      <tr><td>Page visit analytics</td><td>Page URL, referrer, approximate country, device type</td><td>Plausible (no personal ID)</td><td>To understand which features are used</td></tr>
+    </table>
+
+    <h3>If You Create a Free Vault Account</h3>
+    <table>
+      <tr><th>Data Type</th><th>What It Is</th><th>Where Stored</th><th>Why</th></tr>
+      <tr><td>Email address</td><td>Your email</td><td>Supabase (auth table)</td><td>Account creation, login</td></tr>
+      <tr><td>Password hash</td><td>Encrypted password (never plain-text)</td><td>Supabase (auth table)</td><td>Authentication</td></tr>
+      <tr><td>Bet tracker data</td><td>Sportsbook accounts you track</td><td>Supabase (promogrind_data.tracker JSONB)</td><td>Cross-device sync</td></tr>
+      <tr><td>P/L ledger data</td><td>Bet entries, outcomes, dates</td><td>Supabase (promogrind_data.ledger JSONB)</td><td>Cross-device sync, reporting</td></tr>
+      <tr><td>Vault Points balance</td><td>Earned points and streak data</td><td>Supabase (user_metadata)</td><td>Loyalty features</td></tr>
+      <tr><td>Leaderboard data</td><td>Your anonymized P/L (opt-in only)</td><td>Supabase (leaderboard view)</td><td>Community feature</td></tr>
+      <tr><td>Community promos</td><td>Promos you submit publicly</td><td>Supabase (community_promos)</td><td>Community feature</td></tr>
+      <tr><td>Wins wall entries</td><td>Win cards you share publicly</td><td>Supabase (wins_wall)</td><td>Social proof / community</td></tr>
+    </table>
+
+    <h3>If You Subscribe to VaultSparked Pro</h3>
+    <table>
+      <tr><th>Data Type</th><th>What It Is</th><th>Where Stored</th><th>Why</th></tr>
+      <tr><td>Subscription status</td><td>Active/inactive, tier, dates</td><td>Supabase (user_metadata via Stripe webhook)</td><td>Feature gating</td></tr>
+      <tr><td>Payment info</td><td>Card number, billing address</td><td>Stripe only (we never see or store this)</td><td>Payment processing</td></tr>
+      <tr><td>Stripe customer ID</td><td>Stripe's internal reference ID</td><td>Supabase (user_metadata)</td><td>Subscription management</td></tr>
+    </table>
+
+    <h2>3. Third-Party Data Processors</h2>
+    <table>
+      <tr><th>Service</th><th>Purpose</th><th>Data Shared</th><th>Their Privacy Policy</th></tr>
+      <tr><td>Supabase</td><td>Database, auth, edge functions</td><td>Account data, app data</td><td><a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a></td></tr>
+      <tr><td>Stripe</td><td>Payment processing</td><td>Email, payment details</td><td><a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a></td></tr>
+      <tr><td>Resend</td><td>Transactional + newsletter email</td><td>Email address</td><td><a href="https://resend.com/privacy" target="_blank" rel="noopener">resend.com/privacy</a></td></tr>
+      <tr><td>Plausible Analytics</td><td>Privacy-friendly web analytics</td><td>Page URL, referrer, approximate location, device type (no cookies, no personal ID)</td><td><a href="https://plausible.io/privacy" target="_blank" rel="noopener">plausible.io/privacy</a></td></tr>
+      <tr><td>Google Fonts</td><td>Typography (Space Grotesk)</td><td>Your IP address (Google's CDN)</td><td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></td></tr>
+      <tr><td>Anthropic (Claude)</td><td>AI features (PromoChat, Advisor)</td><td>Text inputs you provide to AI features</td><td><a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">anthropic.com/privacy</a></td></tr>
+    </table>
+
+    <h2>4. Cookies and Local Storage</h2>
+    <p>PromoGrind does not use advertising cookies or tracking cookies.</p>
+    <ul>
+      <li><strong>Browser localStorage:</strong> We use localStorage to save your calculator preferences, app settings, and offline cache of your ledger/tracker data. This stays on your device.</li>
+      <li><strong>Supabase auth token:</strong> When you log in, Supabase stores an auth session token in localStorage (key prefix: <code>sb-</code>). This is how your session persists between visits.</li>
+      <li><strong>Plausible Analytics:</strong> Plausible does not use cookies and does not collect personal data. It uses aggregate anonymized data.</li>
+    </ul>
+
+    <h2>5. Data Retention</h2>
+    <table>
+      <tr><th>Data Type</th><th>Retention Period</th></tr>
+      <tr><td>Account and app data (tracker, ledger)</td><td>For as long as your account is active + 30 days after deletion request</td></tr>
+      <tr><td>Auth session tokens</td><td>Until you log out or token expires (~1 week)</td></tr>
+      <tr><td>Browser localStorage data</td><td>Until you clear your browser data</td></tr>
+      <tr><td>Payment records (Stripe)</td><td>As required by Stripe's financial record obligations</td></tr>
+      <tr><td>Newsletter subscriptions</td><td>Until you unsubscribe</td></tr>
+      <tr><td>Community content (public wins, promos)</td><td>Until you request removal</td></tr>
+      <tr><td>Analytics data (Plausible)</td><td>Aggregate, anonymized — retained indefinitely</td></tr>
+    </table>
+
+    <h2>6. Your Rights</h2>
+
+    <h3>All Users</h3>
+    <ul>
+      <li><strong>Data access:</strong> Export your ledger and tracker data as CSV from within the app</li>
+      <li><strong>Account deletion:</strong> Email <a href="mailto:support@vaultsparkstudios.com">support@vaultsparkstudios.com</a> to delete your account and all associated data within 30 days</li>
+      <li><strong>Newsletter opt-out:</strong> Use the unsubscribe link in any email, or update preferences in the app</li>
+    </ul>
+
+    <h3>California Residents (CCPA)</h3>
+    <p>Under the California Consumer Privacy Act (CCPA), California residents have additional rights:</p>
+    <ul>
+      <li><strong>Right to Know:</strong> Request disclosure of the personal information we collect, use, disclose, and sell</li>
+      <li><strong>Right to Delete:</strong> Request deletion of personal information we have collected (subject to certain exceptions)</li>
+      <li><strong>Right to Opt-Out of Sale:</strong> We do not sell personal information. There is nothing to opt out of.</li>
+      <li><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising your CCPA rights</li>
+    </ul>
+
+    <div class="opt-out">
+      <strong>Do Not Sell My Personal Information</strong>
+      <p style="margin-top:8px;">VaultSpark Studios does not sell, rent, or trade your personal information to third parties for their commercial purposes. We never have and we don't intend to.</p>
+    </div>
+
+    <p>To exercise any CCPA rights, email <a href="mailto:privacy@vaultsparkstudios.com">privacy@vaultsparkstudios.com</a> with the subject "CCPA Request". We will respond within 45 days.</p>
+
+    <h3>EU/UK Residents (GDPR / UK GDPR)</h3>
+    <p>If you are located in the European Union or United Kingdom, you have rights under GDPR/UK GDPR including:</p>
+    <ul>
+      <li>Right of access to your personal data</li>
+      <li>Right to rectification of inaccurate data</li>
+      <li>Right to erasure ("right to be forgotten")</li>
+      <li>Right to data portability</li>
+      <li>Right to object to processing</li>
+      <li>Right to lodge a complaint with a supervisory authority</li>
+    </ul>
+    <p>Note: PromoGrind is primarily a US market product. If you are located in the EU/UK, you use it at your own discretion. Email <a href="mailto:privacy@vaultsparkstudios.com">privacy@vaultsparkstudios.com</a> for GDPR requests.</p>
+
+    <h2>7. Data Security</h2>
+    <p>We take reasonable measures to protect your data:</p>
+    <ul>
+      <li>All data in transit is encrypted via HTTPS/TLS</li>
+      <li>Supabase uses row-level security (RLS) so your data is only accessible to you</li>
+      <li>Passwords are hashed by Supabase's auth system — we never see plain-text passwords</li>
+      <li>Community content (wins wall, community promos) is moderated before public display</li>
+    </ul>
+    <p>In the event of a data breach affecting your personal information, we will notify affected users as required by applicable law.</p>
+
+    <h2>8. User-Generated Content</h2>
+    <p>If you submit content to community features (Community Promos, Wins Wall, Leaderboard), note that:</p>
+    <ul>
+      <li>Community Promos are public and visible to all users</li>
+      <li>Leaderboard participation is opt-in and can be toggled off in your privacy settings</li>
+      <li>Wins Wall entries you mark as public are visible to all users</li>
+      <li>By submitting public content, you grant VaultSpark Studios a non-exclusive license to display and distribute that content as part of the PromoGrind service</li>
+      <li>To remove your public content, contact <a href="mailto:support@vaultsparkstudios.com">support@vaultsparkstudios.com</a></li>
+    </ul>
+
+    <h2>9. Children's Privacy</h2>
+    <p>PromoGrind is not intended for users under 18 years of age (21+ in most US states). We do not knowingly collect personal data from minors. If you believe a minor has registered an account, contact us immediately at <a href="mailto:support@vaultsparkstudios.com">support@vaultsparkstudios.com</a>.</p>
+
+    <h2>10. Changes to This Policy</h2>
+    <p>We may update this policy to reflect changes in our data practices or legal requirements. The "last updated" date at the top of this page will reflect when changes were made. Material changes will be communicated via email to registered users where feasible.</p>
+
+    <h2>11. Contact</h2>
+    <p>Data and privacy inquiries: <a href="mailto:privacy@vaultsparkstudios.com">privacy@vaultsparkstudios.com</a><br>
+    General support: <a href="mailto:support@vaultsparkstudios.com">support@vaultsparkstudios.com</a></p>
+
+    <div class="footer">
+      <p>© 2026 VaultSpark Studios · All rights reserved.</p>
+      <p style="margin-top:8px;">Must be 21+. Sports betting where legal only. Gamble responsibly. 1-800-GAMBLER.</p>
+      <div class="footer-links">
+        <a href="/promogrind/">App</a> ·
+        <a href="/promogrind/privacy/">Privacy Policy</a> ·
+        <a href="/promogrind/terms/">Terms of Service</a> ·
+        <a href="/promogrind/responsible-gambling/">Responsible Gambling</a> ·
+        <a href="/promogrind/affiliate-disclosure/">Affiliate Disclosure</a> ·
+        <a href="/promogrind/disclaimer/">Disclaimer</a> ·
+        <a href="/promogrind/dmca/">DMCA / IP</a> ·
+        <a href="/promogrind/data-policy/">Data Policy</a>
+      </div>
+    </div>
+    <p class="footer-note">Core calculators are available now with a free Vault membership. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+  </div>
+</body>
+</html>
