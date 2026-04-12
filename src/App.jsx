@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef, Component } from "react";
+import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS, getBookUrl, getConfiguredAffiliateCount, hasConfiguredAffiliateLinks } from "./books.js";
 import { checkAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
@@ -10,15 +10,17 @@ import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, tr
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
-import Tracker from "./components/Tracker.jsx";
-import Ledger from "./components/Ledger.jsx";
-import LiveScanner from "./components/LiveScanner.jsx";
-import TaxesEstimatorWrapper from "./components/TaxesEstimator.jsx";
+// Heavy tab components — lazy loaded so they don't block initial render
+const Tracker = lazy(() => import("./components/Tracker.jsx"));
+const Ledger = lazy(() => import("./components/Ledger.jsx"));
+const LiveScanner = lazy(() => import("./components/LiveScanner.jsx"));
+const TaxesEstimatorWrapper = lazy(() => import("./components/TaxesEstimator.jsx"));
+const AIActionPlan = lazy(() => import("./components/AIActionPlan.jsx").then(m => ({ default: m.AIActionPlan })));
+const StackBuilder = lazy(() => import("./components/StackBuilder.jsx").then(m => ({ default: m.StackBuilder })));
+const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => ({ default: m.PricingPage })));
+// PromoChat + PromoAdvisorPanel are always mounted (floating UI), load eagerly
 import PromoChat from "./components/PromoChat.jsx";
-import { AIActionPlan } from "./components/AIActionPlan.jsx";
 import { PromoAdvisorPanel } from "./components/PromoAdvisorPanel.jsx";
-import { StackBuilder } from "./components/StackBuilder.jsx";
-import { PricingPage } from "./components/PricingPage.jsx";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -52,24 +54,52 @@ import { PricingPage } from "./components/PricingPage.jsx";
 // Toast, contexts, UI atoms, useCalcMemory, FeatureUnavailableCard → ./contexts.jsx + ./ui.jsx
 
 // ═══ BOOK CTA (shown at profitable calc results) ═══
-const BookCTA = () => (
-  <div style={{marginTop:14,padding:12,background:`${K.gn}06`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-    <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Don't have these books yet? Open accounts to use this promo:</div>
-    <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-      {BOOKS.slice(0,4).map(b=>(
-        <a key={b.name} href={getBookUrl(b)} target="_blank" rel="noopener noreferrer sponsored"
-          style={{padding:"4px 10px",background:`${b.color}15`,border:`1px solid ${b.color}30`,borderRadius:4,color:b.color,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
-          {b.name} →
+// promoType: "bonus"|"boost"|"safety"|"arb"|null — sorts most relevant books first
+const BookCTA = ({ promoType }) => {
+  const sorted = useMemo(() => {
+    if (!promoType) return BOOKS;
+    const priority = {
+      bonus: ["Bet & Get","Bet Reset"],
+      boost: ["Profit Boosts","Bet & Get"],
+      safety: ["Safety Net","Choice","Bet Reset"],
+      arb: null, // sort by bonus value desc
+    }[promoType] || null;
+    if (!priority) return [...BOOKS].sort((a,b) => b.bonus - a.bonus);
+    return [
+      ...BOOKS.filter(b => priority.includes(b.type)),
+      ...BOOKS.filter(b => !priority.includes(b.type)),
+    ];
+  }, [promoType]);
+  return (
+    <div style={{marginTop:14,padding:12,background:`${K.gn}06`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
+      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Don't have these books yet? Open accounts to use this promo:</div>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+        {sorted.slice(0,4).map(b=>(
+          <a key={b.name} href={getBookUrl(b)} target="_blank" rel="noopener noreferrer sponsored"
+            style={{padding:"4px 10px",background:`${b.color}15`,border:`1px solid ${b.color}30`,borderRadius:4,color:b.color,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
+            {b.name} →
+          </a>
+        ))}
+        <a href={getBookUrl(sorted[4]||{})||"#"} target="_blank" rel="noopener noreferrer sponsored"
+          style={{padding:"4px 10px",background:`${K.bd}`,border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
+          +{BOOKS.length-4} more →
         </a>
-      ))}
-      <a href={getBookUrl(BOOKS[4]||{})||"#"} target="_blank" rel="noopener noreferrer sponsored"
-        style={{padding:"4px 10px",background:`${K.bd}`,border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
-        +{BOOKS.length-4} more →
-      </a>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
+
+// Listens for checkout-unavailable events fired by auth.js when Stripe is in test mode
+const CheckoutListener = () => {
+  const toast = useToast();
+  useEffect(()=>{
+    const handler = () => toast && toast('Paid upgrades launching soon — stay tuned!');
+    window.addEventListener('pg:checkout-unavailable', handler);
+    return () => window.removeEventListener('pg:checkout-unavailable', handler);
+  }, []);
+  return null;
+};
 
 const TrustStrip = () => (
   <div style={{background:`${K.gn}08`,borderBottom:`1px solid ${K.bd}`,padding:"8px 20px"}}>
@@ -445,7 +475,7 @@ const BonusBet = () => {
     {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn}/><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r)>=70?K.gn:K.yl} b/>
       {S.meter(parseFloat(r.r),parseFloat(r.r)>=70?K.gn:parseFloat(r.r)>=50?K.yl:K.rd)}
-      <BookCTA/>
+      <BookCTA promoType="bonus"/>
       {parseFloat(r.g)>0&&bbCount>=3&&!bbUpsellDismissed&&(
         <div style={{marginTop:14,padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
           <div><div style={{fontSize:11,fontWeight:700,color:K.pp}}>⚡ Track this win + get live arb alerts</div><div style={{fontSize:10,color:K.mt}}>VaultSparked — $24.99/mo · First 7 days free</div></div>
@@ -533,7 +563,7 @@ const ProfitBoost = () => {
     {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b/><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl}/><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`}/><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/>
       <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
-      <BookCTA/>
+      <BookCTA promoType="boost"/>
       {parseFloat(r.g)>0&&!showShareCardPB&&(
         <button onClick={()=>setShowShareCardPB(true)} style={{marginTop:8,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:12}}>
           🎉 Share your win
@@ -609,7 +639,7 @@ const FirstBet = () => {
     {r&&<div style={S.res(true)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.ac)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>from hedge math</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b/><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW)>=0?K.gn:K.rd}/><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW)>=0?K.gn:K.rd}/>
       <Nt c={K.yl}>If your first bet LOSES → you get ${s} in bonus bets. Convert those at ~70% using the Bonus Bet tab = ~${f(parseFloat(s)*0.7,0)} more profit!</Nt>
-      <BookCTA/></div>}
+      <BookCTA promoType="safety"/></div>}
   </div>
   <Help entries={[
     ["Safety Net Promo","Books like BetMGM ($1,500), bet365 ($1,000), and BetRivers ($500) refund your first bet as bonus bets if it loses. This is different from a bonus bet — you're wagering your own real cash."],
@@ -1830,10 +1860,12 @@ class ErrorBoundary extends Component {
   static getDerivedStateFromError(e) { return {error:e}; }
   render() {
     if(this.state.error) return (
-      <div style={{fontFamily:"'JetBrains Mono','SF Mono','Fira Code',monospace",background:"#0a0e17",minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div style={{fontFamily:"'JetBrains Mono','SF Mono','Fira Code',monospace",padding:32,display:"flex",alignItems:"center",justifyContent:"center",minHeight:240}}>
         <div style={{background:"#0f1520",border:"1px solid #1e293b",borderRadius:10,padding:32,maxWidth:440,textAlign:"center"}}>
-          <div style={{fontSize:16,fontWeight:700,color:"#f87171",marginBottom:8}}>Something went wrong</div>
-          <div style={{fontSize:12,color:"#94a3b8",marginBottom:16}}>{this.state.error.message}</div>
+          <div style={{fontSize:28,marginBottom:8}}>⚠</div>
+          <div style={{fontSize:14,fontWeight:700,color:"#f87171",marginBottom:8}}>This calculator hit an error</div>
+          <div style={{fontSize:12,color:"#94a3b8",marginBottom:16}}>Try refreshing, or use the navigation above to switch calculators.</div>
+          {import.meta.env.DEV && <div style={{fontSize:10,color:"#64748b",marginBottom:12,textAlign:"left",padding:"8px",background:"#0a0e17",borderRadius:4,wordBreak:"break-all"}}>{this.state.error.message}</div>}
           <button onClick={()=>this.setState({error:null})} style={{padding:"8px 20px",background:"#60a5fa",border:"none",borderRadius:6,color:"#0a0e17",fontWeight:700,cursor:"pointer"}}>Try Again</button>
         </div>
       </div>
@@ -4827,14 +4859,14 @@ const Footer = () => (
       </p>
       <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
         <span>© {new Date().getFullYear()} · Powered by <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{color:"inherit",textDecoration:"none"}}>VaultSpark Studios</a> · PromoGrind is a free educational calculator tool.</span>
-        <a href="/promogrind/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
-        <a href="/promogrind/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
-        <a href="/promogrind/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
-        <a href="/promogrind/affiliate-disclosure/" style={{color:K.mt,textDecoration:"none"}}>Affiliate Disclosure</a>
-        <a href="/promogrind/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
-        <a href="/promogrind/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
-        <a href="/promogrind/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
-        <a href="/promogrind/landing/" style={{color:K.mt,textDecoration:"none"}}>About</a>
+        <a href="/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
+        <a href="/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
+        <a href="/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
+        <a href="/affiliate-disclosure/" style={{color:K.mt,textDecoration:"none"}}>Affiliate Disclosure</a>
+        <a href="/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
+        <a href="/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
+        <a href="/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
+        <a href="/landing/" style={{color:K.mt,textDecoration:"none"}}>About</a>
       </p>
     </div>
   </div>
@@ -5113,7 +5145,7 @@ export default function App() {
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
-            PromoGrind uses the shared Vault identity system. Creating a free Vault membership gives you access to the app plus sync across all Studio tools.
+            Sign in with your free Vault account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds — no credit card required.
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
@@ -5148,7 +5180,9 @@ export default function App() {
       <CurrencyCtx.Provider value={currencyCtxVal}>
       <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
         <ErrorBoundary>
-          {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+          <Suspense fallback={<div style={{padding:32,textAlign:"center",color:K.mt,fontSize:12}}>Loading…</div>}>
+            {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+          </Suspense>
         </ErrorBoundary>
         {isEmbed && (
           <div style={{position:'fixed',bottom:8,right:12,fontSize:11,color:'#475569',opacity:0.7,zIndex:9999}}>
@@ -5169,6 +5203,7 @@ export default function App() {
     <CompactCtx.Provider value={compactMode}>
     <CurrencyCtx.Provider value={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+      <CheckoutListener/>
       <TrustStrip/>
       {!isOnline && (
         <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
@@ -5184,7 +5219,7 @@ export default function App() {
             <div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
             <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div>
             <div style={{display:"flex",gap:12,marginTop:6,flexWrap:"wrap"}}>
-              {[["27","Calculators"],["Free","Vault Membership"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
+              {[[String(TABS.filter(g=>g.group==="Convert"||g.group==="Calculate").reduce((n,g)=>n+g.items.length,0)),"Calculators"],["Free","Vault Membership"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
                 <div key={label} style={{display:"flex",alignItems:"baseline",gap:4}}>
                   <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
                   <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>
@@ -5278,30 +5313,32 @@ export default function App() {
         <div style={{position:"absolute",right:0,top:0,bottom:0,width:64,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>
       </div>
       <div className="pg-main-content" style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
-        <MembershipBanner/>
+        {!proStatus && <MembershipBanner/>}
         <ErrorBoundary>
-          {slug==='dashboard'
-            ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>
-            : compareMode&&gi===CALC_GI
-              ? <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
-                  <div>
-                    <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:8,fontFamily:font}}>Primary — {item?.n}</div>
-                    {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
-                  </div>
-                  <div>
-                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",fontFamily:font}}>Compare —</span>
-                      <select value={compareSlug} onChange={e=>setCompareSlug(e.target.value)} style={{...S.input,width:"auto",padding:"3px 8px",fontSize:10}}>
-                        <option value="">Pick a calculator…</option>
-                        {g.items.filter(it=>it.slug!==slug).map(it=><option key={it.slug} value={it.slug}>{it.n}</option>)}
-                      </select>
+          <Suspense fallback={<div style={{padding:32,textAlign:"center",color:K.mt,fontSize:12}}>Loading…</div>}>
+            {slug==='dashboard'
+              ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>
+              : compareMode&&gi===CALC_GI
+                ? <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+                    <div>
+                      <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:8,fontFamily:font}}>Primary — {item?.n}</div>
+                      {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
                     </div>
-                    {compareSlug
-                      ? (() => { const cItem=g.items.find(it=>it.slug===compareSlug); const CC=cItem?.c; return CC?<CC/>:<div style={{color:K.mt,fontSize:11}}>Not found.</div>; })()
-                      : <div style={{...S.card,color:K.mt,fontSize:11,textAlign:"center",padding:"32px 16px"}}>Select a calculator above to compare side by side.</div>}
+                    <div>
+                      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                        <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",fontFamily:font}}>Compare —</span>
+                        <select value={compareSlug} onChange={e=>setCompareSlug(e.target.value)} style={{...S.input,width:"auto",padding:"3px 8px",fontSize:10}}>
+                          <option value="">Pick a calculator…</option>
+                          {g.items.filter(it=>it.slug!==slug).map(it=><option key={it.slug} value={it.slug}>{it.n}</option>)}
+                        </select>
+                      </div>
+                      {compareSlug
+                        ? (() => { const cItem=g.items.find(it=>it.slug===compareSlug); const CC=cItem?.c; return CC?<Suspense fallback={null}><CC/></Suspense>:<div style={{color:K.mt,fontSize:11}}>Not found.</div>; })()
+                        : <div style={{...S.card,color:K.mt,fontSize:11,textAlign:"center",padding:"32px 16px"}}>Select a calculator above to compare side by side.</div>}
+                    </div>
                   </div>
-                </div>
-              : isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+                : isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
+          </Suspense>
         </ErrorBoundary>
       </div>
       <EmailCapture/>

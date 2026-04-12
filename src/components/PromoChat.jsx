@@ -11,7 +11,7 @@ const PromoChat = ({ navigate }) => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
-  const [chatRemaining, setChatRemaining] = useState(null);
+  const [chatRemaining, setChatRemaining] = useState(() => DAILY_LIMIT - (() => { try { return parseInt(localStorage.getItem(`pg_chat_uses_${new Date().toISOString().slice(0, 10)}`) || '0'); } catch { return 0; } })());
   const [session, setSession] = useState(null);
   const messagesEndRef = useRef(null);
   const DAILY_LIMIT = 10;

@@ -424,7 +424,13 @@ const Ledger = () => {
         :<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
             <div style={{fontSize:32,marginBottom:8}}>📒</div>
             <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div>
-            <div style={{fontSize:11,color:K.mt}}>Every promo you convert goes here. Start with the Bonus Bet Converter.</div>
+            <div style={{fontSize:11,color:K.mt,marginBottom:12}}>Every promo you convert goes here. Start with the Bonus Bet Converter — it auto-logs results.</div>
+            <button onClick={()=>{
+              const demo={id:Date.now(),date:new Date().toISOString().slice(0,10),book:"DraftKings",type:"Bonus Conversion",bonus:"200",hedge:"126",profit:"138.60",notes:"Demo entry — replace with your actual result"};
+              syncAppData({...data,ledger:[demo,...(data.ledger||[])]});
+            }} style={{padding:"7px 18px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>
+              + Add demo entry
+            </button>
           </div>;
       return (<div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>

@@ -1,5 +1,5 @@
-<!-- template-version: 2.5 -->
-<!-- synced-from: studio-ops/prompts/closeout.md @ Session 58 (2026-04-12) -->
+<!-- template-version: 2.6 -->
+<!-- synced-from: studio-ops/prompts/closeout.md @ Session 60 (2026-04-12) -->
 # CLOSEOUT
 
 Executed when the user says only `closeout`.
@@ -345,6 +345,61 @@ After running:
 - If score changed by ≥500 IQ points, note it in the closeout output and in the SIL entry brainstorm.
 
 **Skip this step if:** IGNIS repo unavailable (CI/remote), or velocity = 0 AND no protocol edits AND SIL total unchanged vs prior session. Do NOT skip when SIL total changed ≥10 pts — IGNIS reads the SIL score. Note "IGNIS score not refreshed — [reason]" in closeout output when skipped.
+
+---
+
+### Step 8.6 · Render Startup Brief  *(run every closeout)*
+
+Pre-render the next session's startup brief so the next agent can fast-boot.
+
+```bash
+node scripts/render-startup-brief.mjs
+# or: node scripts/ops.mjs startup-brief
+```
+
+Writes `docs/STARTUP_BRIEF.md` — formatted startup brief for the next session.
+Fast-boot is valid if the file is < 24h old at next session start.
+If stale or if the session is > 24h later, start.md §3 (full file read) takes precedence.
+
+---
+
+### Step 8.7 · State Vector  *(run every closeout)*
+
+Regenerate the dense state snapshot for sub-10-second cold starts.
+
+```bash
+node scripts/ops.mjs state-vector
+```
+
+Writes `context/STATE_VECTOR.json` — single-file project state with source hash.
+
+---
+
+### Step 8.8 · Entropy + Genome  *(run every closeout)*
+
+Update protocol entropy score and append genome snapshot.
+
+```bash
+node scripts/ops.mjs entropy --update
+node scripts/ops.mjs genome-snapshot
+```
+
+- `entropy --update` writes `entropyScore` + `entropyLastComputed` to `context/PROJECT_STATUS.json`.
+- `genome-snapshot` appends current truth-audit genome scores to `context/GENOME_HISTORY.json`.
+
+Also run `node scripts/ops.mjs genome-history` if the genome score changed.
+
+---
+
+### Step 8.9 · Session Plan  *(run every closeout)*
+
+Generate the predictive plan for the next session.
+
+```bash
+node scripts/ops.mjs session-plan
+```
+
+Writes `docs/SESSION_PLAN.md` — predicted SIL range, stake-sorted agenda, risk flags, scope cap.
 
 ---
 

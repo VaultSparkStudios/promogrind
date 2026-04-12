@@ -11,9 +11,10 @@ export const S = _S;
 // ═══ UI ATOMS ═══
 export const In = ({l,v,set,ph,pre,err}) => {
   const isOdds = l && /odds/i.test(l);
+  const isNumeric = l && /amount|size|stake|bet|bankroll|balance|fee|payout|odds|%|boost/i.test(l);
   const oddsErr = isOdds && v && v.trim() && toD(v) <= 1 ? 'Invalid odds' : null;
   const displayErr = err || oddsErr;
-  return (<div style={S.col}><label style={S.label}>{l}</label><div style={{position:"relative"}}>{pre&&<span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:12}}>{pre}</span>}<input style={{...S.input,...(pre?{paddingLeft:22}:{}),...(displayErr?{borderColor:K.rd}:{})}} value={v} onChange={e=>set(e.target.value)} placeholder={ph}/>{displayErr&&<div style={{fontSize:10,color:K.rd,marginTop:2}}>{displayErr}</div>}</div></div>);
+  return (<div style={S.col}><label style={S.label}>{l}</label><div style={{position:"relative"}}>{pre&&<span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:12}}>{pre}</span>}<input inputMode={isNumeric?"decimal":undefined} style={{...S.input,...(pre?{paddingLeft:22}:{}),...(displayErr?{borderColor:K.rd}:{})}} value={v} onChange={e=>set(e.target.value)} placeholder={ph}/>{displayErr&&<div style={{fontSize:10,color:K.rd,marginTop:2}}>{displayErr}</div>}</div></div>);
 };
 export const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:12,color:K.dm}}>{l}</span><span style={{fontSize:13,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
 export const Tl = ({t,badge,bc,shareable,getParams}) => {

@@ -197,10 +197,11 @@ export async function startCheckout(planId = 'monthly') {
     return;
   }
 
-  // Test mode — Stripe not yet configured (pre-LLC)
+  // Test mode — Stripe not yet configured (pending live keys)
   if (data?.test_mode) {
-    console.log('[PromoGrind] Stripe test mode — checkout simulated:', data.session);
-    alert('Stripe checkout is in test mode.\n\nTo go live: set STRIPE_SECRET_KEY (sk_live_...) and STRIPE_TEST_MODE=false in Supabase secrets.\n\nSimulated session: ' + (data.session?.id ?? 'n/a'));
+    console.warn('[PromoGrind] Stripe test mode — checkout not yet live. Set STRIPE_SECRET_KEY (sk_live_...) and STRIPE_TEST_MODE=false in Supabase secrets.');
+    // Dispatch a custom event so the UI can show a friendly message without alert()
+    window.dispatchEvent(new CustomEvent('pg:checkout-unavailable', { detail: { reason: 'test_mode' } }));
     return;
   }
 

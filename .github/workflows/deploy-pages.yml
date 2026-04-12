@@ -31,11 +31,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     env:
-      VITE_APP_BASE_PATH: /promogrind/
-      VITE_CANONICAL_URL: https://vaultsparkstudios.com/promogrind/
-      VITE_DOMAIN: vaultsparkstudios.com
+      VITE_APP_BASE_PATH: /
+      VITE_CANONICAL_URL: https://promogrind.com/
+      VITE_DOMAIN: promogrind.com
       VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
       VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      # AI features — enable once ANTHROPIC_API_KEY is set in Supabase secrets
       VITE_PG_FEATURE_PROMO_CHAT: ${{ secrets.VITE_PG_FEATURE_PROMO_CHAT }}
       VITE_PG_FEATURE_PROMO_ADVISOR: ${{ secrets.VITE_PG_FEATURE_PROMO_ADVISOR }}
       VITE_PG_FEATURE_AI_ACTION_PLAN: ${{ secrets.VITE_PG_FEATURE_AI_ACTION_PLAN }}

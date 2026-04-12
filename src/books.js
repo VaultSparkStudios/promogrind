@@ -184,12 +184,19 @@ export const BOOKS = [
 
 /**
  * Returns the best click-through URL for a book in priority order:
- *  1. affiliateLink (tracked, earns commission) — use when approved
- *  2. signupLink (direct registration, better UX than homepage)
- *  3. link (homepage fallback)
+ *  1. affiliateLink (tracked affiliate — earns CPA commission, requires approval)
+ *  2. referralLink (personal referral — earns bonus bets, no approval needed)
+ *  3. signupLink (direct registration page — better UX than homepage)
+ *  4. link (homepage fallback)
+ *
+ * To monetize immediately without affiliate approval:
+ *   Set referralLink to your personal referral URL from each sportsbook app.
+ *   DK: "Refer a Friend" in the DraftKings app → copy your referral link
+ *   FanDuel: "Refer a Friend" in the FanDuel app → copy your referral link
+ *   Each referral earns $25–$100 in bonus bets per new depositing user.
  */
 export const getBookUrl = (book) =>
-  book.affiliateLink || book.signupLink || book.link;
+  book.affiliateLink || book.referralLink || book.signupLink || book.link;
 
 export const getConfiguredAffiliateCount = () =>
   BOOKS.filter((book) => typeof book.affiliateLink === "string" && book.affiliateLink.trim()).length;

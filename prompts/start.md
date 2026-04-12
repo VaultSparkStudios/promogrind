@@ -1,4 +1,4 @@
-<!-- template-version: 2.5 -->
+<!-- template-version: 2.6 -->
 <!-- synced-from: studio-ops/prompts/start.md @ Session 58 (2026-04-12) -->
 # START
 
@@ -68,7 +68,8 @@ Check `context/SELF_IMPROVEMENT_LOOP.md`:
 | 8 | `context/LATEST_HANDOFF.md` | Authoritative handoff from last session |
 | 9 | `context/SELF_IMPROVEMENT_LOOP.md` — **header only** | Rolling Status: sparkline, avgs, last scores |
 | 10 | `context/TRUTH_AUDIT.md` *(if present and relevant)* | Source-of-truth hierarchy, contradiction status |
-| 11 | Task-specific files | Only after all above are read |
+| 11 | `docs/SESSION_PLAN.md` *(if < 48h old)* | Predicted SIL range, scope cap, risk flags — surface in DASHBOARD |
+| 12 | Task-specific files | Only after all above are read |
 
 *Founder Mode: read `portfolio/STUDIO_BRAIN.md` between steps 9 and 10.*
 
@@ -110,6 +111,7 @@ From the Rolling Status header (no extra reads):
   STATE        {current phase and overall health}
   PRIORITIES   Now: {task} · Next: {task}
   CONSTRAINTS  {key constraints or limits}
+  PREDICTION   {predicted SIL range} · {trend} · cap {N}  *(SESSION_PLAN.md — omit if > 48h old)*
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   WHERE WE LEFT OFF  (Session {N-1})
@@ -161,6 +163,7 @@ From the Rolling Status header (no extra reads):
 | Compliance count | `context/CURRENT_STATE.md` |
 | Context age (Ctx) | `Last updated:` date in `context/CURRENT_STATE.md` vs today |
 | CDR Gap | Last entry date in `docs/CREATIVE_DIRECTION_RECORD.md` vs `Last updated:` in `context/LATEST_HANDOFF.md` |
+| Prediction row | `docs/SESSION_PLAN.md` → `generated-at` comment; if < 48h: show predicted SIL range + trend + scope cap. Rendered automatically by `render-startup-brief.mjs`. |
 
 **SIL bar:** 20 chars · █ per 25 pts · ░ remainder
 
