@@ -23,6 +23,7 @@ const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => 
 import PromoChat from "./components/PromoChat.jsx";
 import { PromoAdvisorPanel } from "./components/PromoAdvisorPanel.jsx";
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
+import ProfilePanel from "./components/ProfilePanel.jsx";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -4884,6 +4885,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [proStatus, setProStatus] = useState(null);
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [darkMode, setDarkMode] = useState(() => { try { return localStorage.getItem('pg_theme') !== 'light'; } catch { return true; } });
   Object.assign(K, darkMode ? KD : KL);
   useEffect(() => { try { localStorage.setItem('pg_theme', darkMode ? 'dark' : 'light'); } catch {} document.body.style.background = K.bg; document.body.style.color = K.tx; if (darkMode) { document.body.classList.remove('light'); } else { document.body.classList.add('light'); } }, [darkMode]);
@@ -5169,11 +5171,15 @@ export default function App() {
               </div>
             ))}
           </div>
-          <div style={{display:"flex",justifyContent:"center",gap:12,flexWrap:"wrap",marginBottom:14}}>
-            <a href={FREE_VAULT_MEMBERSHIP_URL} style={{padding:"8px 14px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:11,fontWeight:700,textDecoration:"none"}}>Create Free Vault Membership</a>
-            <a href={CANONICAL_APP_URL} style={{padding:"8px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,textDecoration:"none"}}>Reload App</a>
+          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
+            <a href={FREE_VAULT_MEMBERSHIP_URL} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color:"#0a0e17",fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
+              Create Free Account →
+            </a>
+            <a href={FREE_VAULT_MEMBERSHIP_URL} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,textDecoration:"none"}}>
+              Already have an account? Sign in →
+            </a>
           </div>
-          <div style={{fontSize:10,color:K.mt,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your vault…</div>
+          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your vault…</div>
         </div>
       </div>
     );
@@ -5221,6 +5227,7 @@ export default function App() {
       {showSessionModal&&<SessionModal appData={appData} visitedSlugsRef={visitedSlugsRef} onClose={()=>setShowSessionModal(false)}/>}
       {showOnboarding && <OnboardingWizard onDone={dismissOnboarding}/>}
       {showCalcSearch && <CalcSearch allCalcs={allCalcs} onNavigate={handleCalcNavigate} onClose={()=>setShowCalcSearch(false)}/>}
+      {showProfile && <ProfilePanel user={user} proStatus={proStatus} darkMode={darkMode} toggleTheme={toggleTheme} compactMode={compactMode} toggleCompact={toggleCompact} currency={currency} setCurrency={setCurrency} onClose={()=>setShowProfile(false)}/>}
       <div style={{background:`linear-gradient(135deg,${K.s1},${K.s2})`,borderBottom:`1px solid ${K.bd}`,padding:"16px 20px"}}>
         <div style={{maxWidth:1100,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
           <div style={{cursor:"pointer"}} onClick={()=>navigate("/"+DEFAULT_SLUG)}>
@@ -5262,10 +5269,20 @@ export default function App() {
             <button onClick={toggleCompact} title={compactMode?"Show help sections":"Hide help sections"} style={{padding:"4px 10px",background:compactMode?`${K.ac}15`:"transparent",border:`1px solid ${compactMode?K.ac:K.bd2}`,borderRadius:6,color:compactMode?K.ac:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>
               {compactMode?"FULL":"COMPACT"}
             </button>
-            <button onClick={toggleTheme} title={darkMode?"Switch to light mode":"Switch to dark mode"} style={{padding:"4px 10px",background:darkMode?"transparent":`${K.yl}15`,border:`1px solid ${darkMode?K.bd2:K.yl}`,borderRadius:6,color:darkMode?K.mt:K.yl,fontSize:10,cursor:"pointer",fontFamily:font}}>
+            <button onClick={toggleTheme} title={darkMode?"Switch to light mode":"Switch to dark mode"} style={{padding:"4px 10px",background:darkMode?"transparent":`${K.yl}15`,border:`1px solid ${darkMode?K.bd2:K.yl}`,borderRadius:6,color:darkMode?K.dm:K.yl,fontSize:10,cursor:"pointer",fontFamily:font}}>
               {darkMode?"☀ LIGHT":"🌙 DARK"}
             </button>
-            <div style={{fontSize:10,color:K.mt,textAlign:"right",lineHeight:1.6}}>Free educational tool. Not gambling advice.<br/>21+ only. Gamble responsibly. 1-800-GAMBLER</div>
+            <button
+              onClick={()=>setShowProfile(v=>!v)}
+              title={user ? user.email : 'Sign in / Create account'}
+              style={{display:"flex",alignItems:"center",gap:6,padding:"4px 10px 4px 6px",background:showProfile?`${K.gn}15`:"transparent",border:`1px solid ${showProfile?K.gn:K.bd2}`,borderRadius:20,color:showProfile?K.gn:K.tx,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}
+            >
+              <span style={{width:22,height:22,borderRadius:"50%",background:showProfile?`${K.gn}25`:`${K.ac}20`,border:`1px solid ${showProfile?K.gn:K.ac}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:showProfile?K.gn:K.ac,flexShrink:0}}>
+                {user ? user.email.slice(0,2).toUpperCase() : '?'}
+              </span>
+              {user ? 'Account' : 'Sign In'}
+            </button>
+            <div style={{fontSize:10,color:K.dm,textAlign:"right",lineHeight:1.6}}>Free educational tool. Not gambling advice.<br/>21+ only. Gamble responsibly. 1-800-GAMBLER</div>
           </div>
         </div>
       </div>

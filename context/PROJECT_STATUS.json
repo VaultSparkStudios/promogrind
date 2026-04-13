@@ -3,12 +3,12 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Domain live pending Namecheap → Cloudflare nameserver update. All backend services now fully deployed.",
-  "nextMilestone": "Namecheap nameservers → promogrind.bet live → PostHog + Sentry activate in production.",
+  "currentFocus": "Domain live pending Namecheap → Cloudflare nameserver update. All backend services deployed. UX accessibility + account UI complete.",
+  "nextMilestone": "Namecheap nameservers → promogrind.bet live → Reddit launch posts.",
   "blockers": [
     "Namecheap nameservers not yet pointed to Cloudflare (journey.ns.cloudflare.com + piers.ns.cloudflare.com) — promogrind.bet not resolving yet",
     "Affiliate/referral links not configured in src/books.js",
-    "Sentry project created — VITE_SENTRY_DSN GitHub Secret set — activates on next deploy"
+    "Stripe Customer Portal not wired — 'Manage billing' in ProfilePanel links to VaultSpark for now"
   ],
   "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
@@ -16,10 +16,11 @@
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
   "version": "23.5.0",
-  "lastSession": "S35",
+  "lastSession": "S36",
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
   "testStatus": "127/127",
+  "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "pricingTiers": [
     "Free Agent",
     "Scout",
@@ -49,6 +50,9 @@
       "VITE_POSTHOG_KEY",
       "VITE_SENTRY_DSN"
     ]
+  },
+  "uiComponents": {
+    "ProfilePanel": "src/components/ProfilePanel.jsx — account/settings slide-in, launched from header Account pill"
   },
   "ignisScore": 41036,
   "ignisGrade": "FORGE",
