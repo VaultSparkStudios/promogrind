@@ -4704,9 +4704,88 @@ function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
 }
 
 // TaxesEstimator → ./components/TaxesEstimator.jsx
+
+// ── About Page ────────────────────────────────────────────────────────────────
+const AboutPage = () => {
+  const stat = (num, label) => (
+    <div style={{textAlign:'center',minWidth:80}}>
+      <div style={{fontSize:26,fontWeight:700,color:K.gn,lineHeight:1}}>{num}</div>
+      <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:1,marginTop:3}}>{label}</div>
+    </div>
+  );
+  const fc = (icon, title, desc) => (
+    <div style={{padding:'14px 16px',border:`1px solid ${K.bd}`,borderRadius:10,background:K.s1}}>
+      <div style={{fontSize:20,marginBottom:6}}>{icon}</div>
+      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:4}}>{title}</div>
+      <div style={{fontSize:11,color:K.mt}}>{desc}</div>
+    </div>
+  );
+  const badge = (txt) => (
+    <span style={{padding:'4px 10px',borderRadius:5,fontSize:10,fontWeight:600,border:`1px solid ${K.gn}30`,color:K.gn,background:K.gn+'08'}}>✓ {txt}</span>
+  );
+  return (
+    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
+      {/* Hero */}
+      <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'24px 22px',marginBottom:24}}>
+        <div style={{fontSize:28,fontWeight:700,color:K.gn,fontFamily:fontD,letterSpacing:-0.5,marginBottom:4}}>PROMOGRIND</div>
+        <div style={{fontSize:13,fontWeight:600,color:K.gn,marginBottom:10}}>Free Sportsbook Promo Conversion Tools</div>
+        <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:18}}>The free alternative to $99–199/month promo hunting subscriptions. 53+ calculators for matched betting, arbitrage, EV, promo conversion, and bankroll management — built for serious sports bettors who do the math.</div>
+        <div style={{display:'flex',flexWrap:'wrap',gap:24}}>{stat('53+','Calculators')}{stat('Free','Core tools')}{stat('21+','Age required')}{stat('Live','On promogrind.bet')}</div>
+      </div>
+
+      {/* What it does */}
+      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:10}}>What PromoGrind Does</div>
+      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:16}}>PromoGrind is a math calculator for sportsbook promotional offers — like a mortgage calculator for bonus bets. You enter numbers, it outputs conversion values, EV, hedge amounts, and profit projections. It does not place bets, access sportsbook accounts, or handle money of any kind.</div>
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:10,marginBottom:24}}>
+        {fc('🎯','Bonus Bet Converter','Calculate exact cash value of any bonus bet offer')}
+        {fc('⚡','Profit Boost Calculator','Find optimal profit boost usage and hedge amounts')}
+        {fc('🔄','Arbitrage Calculator','2-way and 3-way arb detection and stake sizing')}
+        {fc('📊','Kelly Criterion','Bankroll-optimal bet sizing for +EV opportunities')}
+        {fc('🔍','Expected Value','+EV calculation with devigged fair odds')}
+        {fc('📋','P/L Ledger','Track every bet and promo result over time')}
+      </div>
+
+      {/* Built by */}
+      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:8}}>Built by VaultSpark Studios</div>
+      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:8}}>PromoGrind is a product of <span style={{color:K.tx,fontWeight:600}}>VaultSpark Studios LLC</span>, an independent software studio building tools for sports bettors, traders, and analysts. We build PromoGrind because the best promo hunting tools cost $99–199/month. The math isn't complicated — it just takes good software. We built it and made it free.</div>
+      <div style={{display:'flex',flexWrap:'wrap',gap:8,marginBottom:24}}>
+        {badge('Educational calculator tool')}{badge('Not a sportsbook operator')}{badge('FTC affiliate disclosure compliant')}{badge('Privacy first — no data sold')}
+      </div>
+
+      {/* How it's free */}
+      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:8}}>How It's Free</div>
+      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:24}}>PromoGrind is supported by affiliate partnerships with the sportsbooks listed in the app. If you sign up at a listed sportsbook through our links, we may earn a commission. This never influences our calculator math — the numbers are the numbers. See our <a href="/affiliate-disclosure/" style={{color:K.ac}}>Affiliate Disclosure</a> for full details.</div>
+
+      {/* Compliance */}
+      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:8}}>Compliance &amp; Legal Status</div>
+      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:8}}>PromoGrind is not a licensed gambling operator. We are a third-party educational software tool. Matched betting and promo hunting are legal in all US states where sports betting is authorized. See our <a href="/compliance/" style={{color:K.ac}}>Compliance &amp; Regulatory Status</a> page for full details.</div>
+      <div style={{fontSize:12,color:K.rd,fontWeight:600,marginBottom:24}}>Must be 21+ (18+ in some states). Gamble responsibly. 1-800-GAMBLER.</div>
+
+      {/* Contact */}
+      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:10}}>Contact &amp; Support</div>
+      <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:10,padding:'16px 18px',marginBottom:24}}>
+        <div style={{fontSize:12,color:K.mt,lineHeight:2}}>
+          <div><span style={{color:K.tx,fontWeight:600}}>Support:</span> <a href="mailto:support@vaultsparkstudios.com" style={{color:K.ac}}>support@vaultsparkstudios.com</a></div>
+          <div><span style={{color:K.tx,fontWeight:600}}>Privacy:</span> <a href="mailto:privacy@vaultsparkstudios.com" style={{color:K.ac}}>privacy@vaultsparkstudios.com</a></div>
+          <div><span style={{color:K.tx,fontWeight:600}}>Affiliate &amp; partnerships:</span> <a href="mailto:support@vaultsparkstudios.com" style={{color:K.ac}}>support@vaultsparkstudios.com</a></div>
+        </div>
+      </div>
+
+      {/* Legal links */}
+      <div style={{display:'flex',flexWrap:'wrap',gap:10,fontSize:11,color:K.mt}}>
+        {[['Compliance','/compliance/'],['Privacy','/privacy/'],['Terms','/terms/'],['Affiliate Disclosure','/affiliate-disclosure/'],['Responsible Gambling','/responsible-gambling/'],['Disclaimer','/disclaimer/']].map(([l,h])=>(
+          <a key={h} href={h} style={{color:K.mt,textDecoration:'none'}} onMouseEnter={e=>e.currentTarget.style.color=K.ac} onMouseLeave={e=>e.currentTarget.style.color=K.mt}>{l}</a>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const TABS = [
   { group:"Home", items:[
     {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
+    {n:"About",slug:"about",c:AboutPage},
   ]},
   { group:"Convert", items:[
     {n:"Bonus Bet",slug:"bonus-bet",c:BonusBet},
@@ -4862,15 +4941,15 @@ const Footer = () => (
       </p>
       <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
         <span>© {new Date().getFullYear()} · Powered by <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{color:"inherit",textDecoration:"none"}}>VaultSpark Studios</a> · PromoGrind is a free educational calculator tool.</span>
-        <a href="/promogrind/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
-        <a href="/promogrind/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
-        <a href="/promogrind/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
-        <a href="/promogrind/affiliate-disclosure/" style={{color:K.mt,textDecoration:"none"}}>Affiliate Disclosure</a>
-        <a href="/promogrind/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
-        <a href="/promogrind/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
-        <a href="/promogrind/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
-        <a href="/promogrind/about/" style={{color:K.mt,textDecoration:"none"}}>About</a>
-        <a href="/promogrind/compliance/" style={{color:K.mt,textDecoration:"none"}}>Compliance</a>
+        <a href="/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
+        <a href="/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
+        <a href="/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
+        <a href="/affiliate-disclosure/" style={{color:K.mt,textDecoration:"none"}}>Affiliate Disclosure</a>
+        <a href="/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
+        <a href="/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
+        <a href="/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
+        <a href="/about/" style={{color:K.mt,textDecoration:"none"}}>About</a>
+        <a href="/compliance/" style={{color:K.mt,textDecoration:"none"}}>Compliance</a>
       </p>
     </div>
   </div>

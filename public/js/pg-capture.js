@@ -6,7 +6,7 @@
 
   const SUPABASE_URL = 'https://fjnpzjjyhnpmunfoycrp.supabase.co';
   const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqbnB6amppaG5wbXVuZm95Y3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk5MDk5MDAsImV4cCI6MjA1NTQ4NTkwMH0.placeholder';
-  const REDIRECT_URL = window.PG_REDIRECT_URL || 'https://vaultsparkstudios.com/promogrind/';
+  const REDIRECT_URL = window.PG_REDIRECT_URL || 'https://promogrind.bet/';
 
   // Skip on return visits
   try {

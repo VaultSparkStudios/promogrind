@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Pro-gated tools — no meaningful content for crawlers
-Disallow: /promogrind/arb-scanner
-Disallow: /promogrind/ev-scanner
+Disallow: /arb-scanner
+Disallow: /ev-scanner
 
-Sitemap: https://vaultsparkstudios.com/promogrind/sitemap.xml
+Sitemap: https://promogrind.bet/sitemap.xml
