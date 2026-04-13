@@ -1,5 +1,5 @@
-<!-- template-version: 2.6 -->
-<!-- synced-from: studio-ops/prompts/start.md @ Session 58 (2026-04-12) -->
+<!-- template-version: 2.8 -->
+<!-- synced-from: studio-ops/prompts/start.md @ Session 64 (2026-04-13) -->
 # START
 
 Executed when the user says only `start`.
@@ -133,6 +133,9 @@ From the Rolling Status header (no extra reads):
   {✓|⚠|⛔} CI            {status}
   {✓|⚠|⛔} Velocity      {status}
   {✓|⚠|⛔} Runway        {status}
+  {✓|⚠|⛔} IGNIS         {score · Nd old · run rescore if ≥7d}
+  {✓|⚠}   Genome dims   {all stable / drop: dim X→Y}
+  {✓|⚠|⛔} Entropy       {score (healthy/elevated/high)}
   {✓|⚠}   CDR Gap       {status}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
