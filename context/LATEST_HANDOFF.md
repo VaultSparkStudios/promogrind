@@ -2,13 +2,13 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
-## Where We Left Off (Session 33 — continued)
-- Shipped: pricing/tiers, payments, AI gating, UX, **domain migration**
+## Where We Left Off (Session 34)
+- Shipped: Cloudflare Web Analytics setup (API-provisioned) · context files updated to reflect S33 domain migration · Plausible removed (no account)
 - Tests: 127/127 passing · delta: 0
-- Deploy: deployed to promogrind.bet via GitHub Pages · Supabase functions live
+- Deploy: deployed — all commits pushed to GitHub Pages
 
 ## Session Intent
-Full pricing + tier strategy implementation + Stripe live + domain promogrind.bet — all completed.
+Continuation closeout of S33 — analytics wired, context synced, all files current.
 
 ## Human Action Required
 - [ ] **Namecheap nameservers** — point both domains to Cloudflare: `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com` (Namecheap → Domain List → each domain → Nameservers → Custom DNS). Once active, promogrind.bet goes live.

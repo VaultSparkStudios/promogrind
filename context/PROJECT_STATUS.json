@@ -15,8 +15,9 @@
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
-  "version": "23.3.0",
-  "lastSession": "S33",
+  "version": "23.4.0",
+  "lastSession": "S34",
+  "analyticsStatus": "cloudflare-web-analytics",
   "buildStatus": "passing",
   "testStatus": "127/127",
   "pricingTiers": [
