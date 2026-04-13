@@ -3,15 +3,17 @@
 Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Human Action Required
+- [ ] **Namecheap nameservers** — point promogrind.bet + promogrind.app to `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com` (Namecheap → Domain List → Nameservers → Custom DNS). Unlocks the live domain.
 - [ ] **Anthropic API key** — `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` then `supabase functions deploy promo-chat promo-advisor ai-action-plan` (console.anthropic.com)
+- [ ] **GitHub Secrets** — set VITE_PG_FEATURE_PROMO_CHAT=true + VITE_PG_FEATURE_PROMO_ADVISOR=true after Anthropic key is live (repo Settings → Secrets → Actions)
 - [ ] **Affiliate/referral links** — paste personal referral URLs into `referralLink` fields in `src/books.js` for each sportsbook (Refer a Friend in each app)
-- [ ] **Custom domain** — check promogrind.io / .co / .app / getpromogrind.com → purchase → domain migration commit
-- [ ] **Stripe webhook smoke test** — make a test purchase (use card 4242 4242 4242 4242) and verify `subscriptions` table row is created
+- [ ] **Stripe webhook smoke test** — test purchase with card 4242 4242 4242 4242, verify `subscriptions` table row is created
 
 ## Now
+- [x] Domain migration — promogrind.bet purchased, Cloudflare zones + CNAME + redirect configured, GitHub Pages custom domain set, full codebase migrated in single commit (105 files)
+- [ ] Google Search Console — add promogrind.bet property, verify via DNS TXT record, submit sitemap.xml
+- [ ] Plausible — update `data-domain` attribute in index.html from old domain to `promogrind.bet`
 - [ ] Deploy AI edge functions once Anthropic key is set
-- [ ] Configure GitHub Secrets: VITE_PG_FEATURE_PROMO_CHAT=true, VITE_PG_FEATURE_PROMO_ADVISOR=true
-- [ ] Add GitHub feature flag secrets once AI backend is live
 
 ## Next
 - [ ] RESEND_API_KEY → deploy onboarding-drip, weekly-digest edge functions

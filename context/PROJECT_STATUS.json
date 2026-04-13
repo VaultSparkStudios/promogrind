@@ -3,10 +3,10 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Payments live — Anthropic key + affiliate links + custom domain are the remaining P0 items.",
-  "nextMilestone": "Anthropic key deployed (AI features live) + custom domain purchased.",
+  "currentFocus": "Domain live pending Namecheap → Cloudflare nameserver update. Anthropic key + affiliate links are the remaining P0 items.",
+  "nextMilestone": "Namecheap nameservers updated → promogrind.bet live → Anthropic key deployed (AI features live).",
   "blockers": [
-    "Custom domain not yet selected (promogrind.com unavailable — alternatives: promogrind.io/.co/.app)",
+    "Namecheap nameservers not yet pointed to Cloudflare (journey.ns.cloudflare.com + piers.ns.cloudflare.com) — promogrind.bet not resolving yet",
     "Affiliate/referral links not configured in src/books.js",
     "ANTHROPIC_API_KEY not set in Supabase — PromoChat, PromoAdvisor, AI Action Plan offline"
   ],
