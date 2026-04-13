@@ -3,13 +3,12 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Domain live on Cloudflare. Auth UX complete — UserMenu with avatar/dropdown, guest gates, branding softened. Search Console submission unblocked.",
-  "nextMilestone": "Google Search Console verification → Stripe Customer Portal edge function → Reddit launch.",
+  "currentFocus": "Domain live, Search Console verified and sitemap submitted. Auth UX complete — UserMenu, guest gates, branding softened.",
+  "nextMilestone": "Stripe Customer Portal edge function → affiliate links → Reddit launch.",
   "blockers": [
     "Affiliate/referral links not configured in src/books.js",
     "Stripe Customer Portal not wired — Manage billing links to VaultSpark for now",
-    "wins_wall Supabase table does not exist — needed for community wins wall server data",
-    "Google Search Console not yet verified (unblocked — add TXT record in Cloudflare)"
+    "wins_wall Supabase table does not exist — needed for community wins wall server data"
   ],
   "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",

@@ -27,7 +27,7 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 - Build: ✓ passing · Tests: 127/127
 
 ## Human Action Required
-- [ ] **Google Search Console** — UNBLOCKED: add promogrind.bet, verify via Cloudflare DNS TXT record, submit sitemap.xml at https://promogrind.bet/sitemap.xml
+- [x] **Google Search Console** — verified promogrind.bet via Cloudflare DNS TXT, sitemap submitted
 - [ ] **Affiliate/referral links** — paste personal referral URLs into `referralLink` fields in `src/books.js`
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row created
 - [ ] **wins_wall Supabase table** — create the table (component handles 404 silently but table needs to exist for community wins wall feature)

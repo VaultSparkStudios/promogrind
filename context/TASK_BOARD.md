@@ -3,7 +3,7 @@
 Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Human Action Required
-- [ ] **Google Search Console** — UNBLOCKED: add promogrind.bet property, verify via Cloudflare DNS TXT record, submit sitemap at https://promogrind.bet/sitemap.xml
+- [x] **Google Search Console** — verified promogrind.bet via Cloudflare DNS TXT, sitemap submitted at https://promogrind.bet/sitemap.xml
 - [ ] **Affiliate/referral links** — paste personal referral URLs into `referralLink` fields in `src/books.js` (Refer a Friend in each sportsbook app)
 - [ ] **Stripe webhook smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row created
 - [ ] **wins_wall Supabase table** — create table so community wins wall can load from server (component already gracefully degrades to localStorage without it)
