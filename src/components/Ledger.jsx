@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { toD, f, calcROI, downloadFile, K, font, fontD, S } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
 import { onLedgerEntry } from "../sync.js";
-import { CANONICAL_APP_URL } from "../launchState.js";
+import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL } from "../launchState.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
 import { In, RR, Tl, Nt, shouldShowTrigger, dismissTrigger } from "../ui.jsx";
 
@@ -166,7 +166,7 @@ const TaxTimingAdvisor = ({ entries }) => {
 
 // ═══ LEDGER ═══
 const Ledger = () => {
-  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const { appData: data, syncAppData, user } = React.useContext(AppDataCtx);
   const entries = data.ledger || [];
   const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Bonus Conversion",bonus:"",hedge:"",profit:"",ev:"",myOdds:"",closingOdds:"",notes:""});
   const save = (newEntries) => syncAppData({...data, ledger: newEntries});
@@ -227,7 +227,14 @@ const Ledger = () => {
     const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
     downloadFile(csv, `promogrind-ledger-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
   };
-  return (<div style={S.card}><Tl t="Profit & Loss Ledger" badge="CLOUD SYNC" bc={K.gn}/>
+  return (<div style={S.card}>
+    <Tl t="Profit & Loss Ledger" badge={user ? "CLOUD SYNC" : "LOCAL"} bc={user ? K.gn : K.mt}/>
+    {!user && (
+      <div style={{...S.note(K.gn), marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8}}>
+        <span>Saving to this device only.</span>
+        <a href={FREE_VAULT_MEMBERSHIP_URL} style={{color: K.gn, textDecoration: 'none', fontWeight: 700, fontSize: 11, whiteSpace: 'nowrap'}}>Sign in free to sync →</a>
+      </div>
+    )}
     {showLedgerTrigger && (
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'linear-gradient(90deg,#1e3a2f,#0f1724)',border:'1px solid #4ade80',borderRadius:8,marginBottom:12,flexWrap:'wrap',gap:8}}>
         <div style={{fontSize:13,color:'#cbd5e1'}}>☁️ <strong style={{color:'#4ade80'}}>VaultSparked</strong> syncs your ledger across all devices + unlocks the Live Scanner.</div>

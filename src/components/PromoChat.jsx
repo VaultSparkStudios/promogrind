@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { K, font } from "../lib/shared.js";
-import { FEATURE_FLAGS } from "../launchState.js";
+import { FEATURE_FLAGS, FREE_VAULT_MEMBERSHIP_URL } from "../launchState.js";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 
@@ -11,13 +11,24 @@ const PromoChat = ({ navigate }) => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
-  const [chatRemaining, setChatRemaining] = useState(() => DAILY_LIMIT - (() => { try { return parseInt(localStorage.getItem(`pg_chat_uses_${new Date().toISOString().slice(0, 10)}`) || '0'); } catch { return 0; } })());
   const [session, setSession] = useState(null);
   const messagesEndRef = useRef(null);
-  const DAILY_LIMIT = 10;
+  // Guests: 5 messages/day. Signed-in users: 10 messages/day.
+  const DAILY_LIMIT = session ? 10 : 5;
+  const [chatRemaining, setChatRemaining] = useState(() => {
+    const used = (() => { try { return parseInt(localStorage.getItem(`pg_chat_uses_${new Date().toISOString().slice(0, 10)}`) || '0'); } catch { return 0; } })();
+    return Math.max(0, 5 - used); // initialise at guest limit; upgraded after session resolves
+  });
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
+    supabase.auth.getSession().then(({ data: { session: s } }) => {
+      setSession(s);
+      if (s) {
+        // Upgrade remaining count to the signed-in limit
+        const used = (() => { try { return parseInt(localStorage.getItem(`pg_chat_uses_${new Date().toISOString().slice(0, 10)}`) || '0'); } catch { return 0; } })();
+        setChatRemaining(Math.max(0, 10 - used));
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -130,6 +141,7 @@ const PromoChat = ({ navigate }) => {
           {chatRemaining !== null && (
             <div style={{ padding: '6px 16px', background: K.s1, borderBottom: `1px solid ${K.bd}`, fontSize: 11, color: K.mt, textAlign: 'right' }}>
               {chatRemaining} of {DAILY_LIMIT} messages left today
+              {!session && <span style={{ color: K.bd2 }}> · <a href={FREE_VAULT_MEMBERSHIP_URL} style={{ color: K.gn, textDecoration: 'none' }}>Sign in</a> for 10/day</span>}
             </div>
           )}
 
@@ -182,14 +194,26 @@ const PromoChat = ({ navigate }) => {
             )}
             {isLimited && !chatLoading && (
               <div style={{ padding: '12px 14px', background: `${K.pp}15`, border: `1px solid ${K.pp}30`, borderRadius: 8, fontSize: 12, color: K.pp, textAlign: 'center' }}>
-                Daily limit reached. Upgrade to VaultSparked for more messages.
-                <br/>
-                <button
-                  onClick={() => { setChatOpen(false); navigate('/upgrade'); }}
-                  style={{ marginTop: 8, padding: '6px 16px', background: K.pp, border: 'none', borderRadius: 6, color: '#fff', fontWeight: 700, fontSize: 11, cursor: 'pointer', fontFamily: font }}
-                >
-                  Go VaultSparked →
-                </button>
+                {!session ? (
+                  <>
+                    You&apos;ve used your 5 free daily messages.{' '}
+                    <a href={FREE_VAULT_MEMBERSHIP_URL} style={{ color: K.gn, textDecoration: 'none', fontWeight: 700 }}>
+                      Sign in free
+                    </a>
+                    {' '}for 10 messages/day.
+                  </>
+                ) : (
+                  <>
+                    Daily limit reached. Upgrade to VaultSparked for unlimited messages.
+                    <br/>
+                    <button
+                      onClick={() => { setChatOpen(false); navigate('/upgrade'); }}
+                      style={{ marginTop: 8, padding: '6px 16px', background: K.pp, border: 'none', borderRadius: 6, color: '#fff', fontWeight: 700, fontSize: 11, cursor: 'pointer', fontFamily: font }}
+                    >
+                      Go VaultSparked →
+                    </button>
+                  </>
+                )}
               </div>
             )}
             <div ref={messagesEndRef}/>

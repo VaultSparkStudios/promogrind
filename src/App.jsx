@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS, getBookUrl, getConfiguredAffiliateCount, hasConfiguredAffiliateLinks } from "./books.js";
-import { checkAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
+import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 import { subscribeToPush } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD } from "./lib/shared.js";
@@ -4875,10 +4875,9 @@ const Footer = () => (
 // PromoChat → ./components/PromoChat.jsx
 // ═══ MAIN APP ═══
 export default function App() {
-  const [authReady, setAuthReady] = useState(() => {
-    // Optimistic: show app immediately if Supabase has a cached token
-    try { return Object.keys(localStorage).some(k => k.startsWith('sb-') && k.includes('-auth-token')); } catch { return false; }
-  });
+  // Calculators are public — always load immediately. Auth resolves silently in background.
+  const [authReady] = useState(true);
+  const [user, setUser] = useState(null);
   const [proStatus, setProStatus] = useState(null);
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
   const [darkMode, setDarkMode] = useState(() => { try { return localStorage.getItem('pg_theme') !== 'light'; } catch { return true; } });
@@ -5057,11 +5056,11 @@ export default function App() {
       .catch(() => {});
   }, [authReady]);
 
-  // Auth + subscription load
+  // Auth + subscription load — app always shows; this just enriches the experience for
+  // signed-in users (sync, points, pro features). Guests continue in calculator-only mode.
   useEffect(() => {
-    checkAuth().then(async ok => {
+    tryAuth().then(async ok => {
       if (ok) {
-        setAuthReady(true);
         try { window.plausible?.('vault_member_login'); } catch {}
         onDailyLogin();
         // Expose supabase client for VaultSDK session reuse, then init SDK
@@ -5069,6 +5068,9 @@ export default function App() {
         window.VaultSDK?.init('promogrind', {
           onReady: () => window.VaultSDK?.applyGates(),
         });
+        // Capture authenticated user for sync prompts and feature gating
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
         getSubscription().then(sub => {
           setProStatus(sub);
           // Write pg_pro_status for synchronous checks throughout the app
@@ -5083,18 +5085,16 @@ export default function App() {
         // Record referral if this user arrived via a referral link
         try {
           const refCode = localStorage.getItem('pg_ref');
-          if (refCode) {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session && refCode !== session.user.id) {
-              await supabase.from('referrals').insert({
-                referrer_id: refCode,
-                referred_user_id: session.user.id,
-              });
-              localStorage.removeItem('pg_ref');
-            }
+          if (refCode && session && refCode !== session.user.id) {
+            await supabase.from('referrals').insert({
+              referrer_id: refCode,
+              referred_user_id: session.user.id,
+            });
+            localStorage.removeItem('pg_ref');
           }
         } catch(e) { /* non-critical — duplicate insert hits UNIQUE constraint silently */ }
       }
+      // !ok → guest mode: calculators, ledger, tracker all work locally without login
     });
   }, []);
 
@@ -5175,7 +5175,7 @@ export default function App() {
   if (embedMode) {
     return (
       <ToastProvider>
-      <AppDataCtx.Provider value={{ appData, syncAppData }}>
+      <AppDataCtx.Provider value={{ appData, syncAppData, user }}>
       <CompactCtx.Provider value={compactMode}>
       <CurrencyCtx.Provider value={currencyCtxVal}>
       <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
@@ -5199,7 +5199,7 @@ export default function App() {
 
   return (
     <ToastProvider>
-    <AppDataCtx.Provider value={{ appData, syncAppData }}>
+    <AppDataCtx.Provider value={{ appData, syncAppData, user }}>
     <CompactCtx.Provider value={compactMode}>
     <CurrencyCtx.Provider value={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
@@ -5313,7 +5313,7 @@ export default function App() {
         <div style={{position:"absolute",right:0,top:0,bottom:0,width:64,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>
       </div>
       <div className="pg-main-content" style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
-        {!proStatus && <MembershipBanner/>}
+        {!user && <MembershipBanner/>}
         <ErrorBoundary>
           <Suspense fallback={<div style={{padding:32,textAlign:"center",color:K.mt,fontSize:12}}>Loading…</div>}>
             {slug==='dashboard'

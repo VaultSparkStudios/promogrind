@@ -212,6 +212,37 @@ export async function startCheckout(planId = 'monthly') {
   }
 }
 
+/**
+ * Like checkAuth() but never redirects.
+ * Returns true if a valid session exists, false if the visitor is a guest.
+ * Use this when the app should be accessible without login (calculators, etc.).
+ */
+export async function tryAuth() {
+  if (import.meta.env.VITE_DEV_BYPASS_AUTH === 'true') return true;
+
+  // ── Case A: Incoming token redirect ──────────────────────────
+  const hash = window.location.hash;
+  if (hash.includes('access_token=')) {
+    const params = new URLSearchParams(hash.slice(1));
+    const access_token  = params.get('access_token');
+    const refresh_token = params.get('refresh_token');
+    const type          = params.get('type');
+
+    if (access_token && refresh_token && type === 'vault_access') {
+      const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      if (error) {
+        console.error('[VaultGate] setSession error:', error.message);
+        return false;
+      }
+    }
+  }
+
+  // ── Case B: Check existing session ───────────────────────────
+  const { data: { session } } = await supabase.auth.getSession();
+  return !!session;
+}
+
 // ── Internal ───────────────────────────────────────────────────
 
 function redirectToLogin() {
