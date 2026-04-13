@@ -10,12 +10,12 @@
     "Affiliate links not configured in src/books.js",
     "ANTHROPIC_API_KEY not set in Supabase — AI features (PromoChat, Advisor, Stack Builder) offline"
   ],
-  "lastUpdated": "2026-04-13",
+  "lastUpdated": "2026-04-12",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-12",
-  "version": "23.1.0",
+  "version": "23.2.0",
   "lastSession": "S32",
   "buildStatus": "passing",
   "testStatus": "127/127"
