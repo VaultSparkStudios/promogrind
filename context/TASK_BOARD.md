@@ -12,7 +12,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 ## Now
 - [x] Domain migration — promogrind.bet purchased, Cloudflare zones + CNAME + redirect configured, GitHub Pages custom domain set, full codebase migrated in single commit (105 files)
 - [ ] Google Search Console — add promogrind.bet property, verify via DNS TXT record, submit sitemap.xml
-- [ ] Plausible — update `data-domain` attribute in index.html from old domain to `promogrind.bet`
+- [ ] Plausible — create account at plausible.io → add promogrind.bet site → uncomment script in index.html
 - [ ] Deploy AI edge functions once Anthropic key is set
 
 ## Next
