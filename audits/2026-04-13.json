@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "date": "2026-04-13",
+  "session": 33,
+  "sessionType": "implementation",
+  "label": "pricing-overhaul + payments-live",
+  "calibration": false,
+  "scores": {
+    "devHealth": 92,
+    "creativeAlignment": 88,
+    "momentum": 93,
+    "engagement": 80,
+    "processQuality": 83
+  },
+  "total": 436,
+  "maxScore": 500,
+  "velocity": 7,
+  "protocolVelocity": null,
+  "durationMinutes": 120,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": null,
+    "creativeAlignment": null,
+    "momentum": null,
+    "engagement": null,
+    "processQuality": null,
+    "total": null
+  },
+  "rollingAvgTotals": { "3": null, "5": null, "10": null, "25": null, "all": null },
+  "topWin": "End-to-end Stripe payment flow live in one session — product created, 7 price IDs, webhook deployed, secrets set, all gating wired.",
+  "topGap": "AI features (PromoChat, PromoAdvisor) still offline — blocked on Anthropic key; most compelling tier differentiators are invisible until key is set.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 7,
+  "improvementGroups": {
+    "pricing": ["Full 5-tier PricingPage rewrite (Free Agent → Scout → Runner → Closer → The House)", "Annual/monthly toggle, competitor comparison table, value proof bar, testimonials, FAQ"],
+    "payments": ["Stripe live mode active", "7 price IDs created (scout/runner/closer/house monthly+annual)", "stripe-webhook edge function — handles subscription lifecycle", "STRIPE_WEBHOOK_SECRET set, webhook endpoint registered"],
+    "auth": ["isScoutPlus(), isRunnerPlus(), isCloserPlus(), getTierName() added to auth.js", "create-checkout updated for all new plan IDs with backwards compat"],
+    "ai-gating": ["PromoChat gated to Scout+ (removed free account access)", "Tier-aware daily limits: Scout=20, Runner=50, Closer=unlimited", "PromoAdvisorPanel: input sanitization, EV pill, confidence badge, retry button, empty state, Runner upsell copy"]
+  },
+  "testsTotal": 127,
+  "testsByType": {
+    "math": 71,
+    "books": 25,
+    "auth": 19,
+    "sync": 13,
+    "launchState": 5
+  },
+  "testsDelta": 0,
+  "deployStatus": "deployed",
+  "ignisFlags": ["high-velocity", "intent-achieved", "blocker-cleared"],
+  "ignisNote": "Session cleared the largest pre-revenue blocker in one run — Stripe product, pricing, checkout, and webhook all live by end of session. The Anthropic key is the only remaining gate before the product is meaningfully differentiated vs. free-tier-only competitors."
+}

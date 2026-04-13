@@ -125,7 +125,7 @@ export async function isPro() {
   if (sub.status === 'trial') return true;
   if (sub.status !== 'active') return false;
   if (sub.current_period_end && new Date(sub.current_period_end) < new Date()) return false;
-  return sub.plan === 'pro' || sub.plan === 'vault_sparked';
+  return ['pro','vault_sparked','sharp','house'].includes(sub.plan);
 }
 
 /**
@@ -179,8 +179,67 @@ export async function isAgency() {
 }
 
 /**
+ * Scout+ — cloud sync, PromoChat, export, push notifications.
+ * Includes: scout, runner, closer, house, and legacy plans.
+ */
+export async function isScoutPlus() {
+  const sub = await getSubscription();
+  if (!sub) return false;
+  if (sub.status === 'trial') return true;
+  if (sub.status !== 'active') return false;
+  if (sub.current_period_end && new Date(sub.current_period_end) < new Date()) return false;
+  return ['scout','runner','closer','house','pro','vault_sparked','grinder','sharp'].includes(sub.plan);
+}
+
+/**
+ * Runner+ — unlimited PromoChat, unlimited PromoAdvisor, AI Action Plan.
+ * Includes: runner, closer, house, and legacy pro/vault_sparked plans.
+ */
+export async function isRunnerPlus() {
+  const sub = await getSubscription();
+  if (!sub) return false;
+  if (sub.status === 'trial') return true;
+  if (sub.status !== 'active') return false;
+  if (sub.current_period_end && new Date(sub.current_period_end) < new Date()) return false;
+  return ['runner','closer','house','pro','vault_sparked','sharp'].includes(sub.plan);
+}
+
+/**
+ * Closer+ — Live Scanner, Stack Builder.
+ * Includes: closer, house, vault_sparked.
+ */
+export async function isCloserPlus() {
+  const sub = await getSubscription();
+  if (!sub) return false;
+  if (sub.status === 'trial') return true;
+  if (sub.status !== 'active') return false;
+  if (sub.current_period_end && new Date(sub.current_period_end) < new Date()) return false;
+  return ['closer','house','vault_sparked'].includes(sub.plan);
+}
+
+/**
+ * Returns the display tier name for a plan string.
+ * @param {string} plan - raw plan value from subscriptions table
+ */
+export function getTierName(plan) {
+  const names = {
+    scout:         'Scout',
+    runner:        'Runner',
+    closer:        'Closer',
+    house:         'The House',
+    grinder:       'Scout',
+    sharp:         'Runner',
+    pro:           'Runner',
+    vault_sparked: 'Closer',
+    concierge:     'Scout',
+    agency:        'The House',
+  };
+  return names[plan] ?? 'Free Agent';
+}
+
+/**
  * Kicks off a Stripe Checkout session.
- * @param {string} [planId] - "monthly" | "annual" (defaults to "monthly")
+ * @param {string} [planId] - "scout_monthly"|"scout_annual"|"runner_monthly"|"runner_annual"|"closer_monthly"|"closer_annual"|"house" (defaults to "runner_monthly")
  * Redirects the browser to Stripe's hosted payment page.
  */
 export async function startCheckout(planId = 'monthly') {

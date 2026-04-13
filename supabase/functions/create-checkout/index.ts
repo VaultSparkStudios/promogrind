@@ -6,26 +6,71 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Test mode active until STRIPE_TEST_MODE=false is explicitly set
+// Live mode requires STRIPE_TEST_MODE=false AND a sk_live_ key
 const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
 const LIVE_MODE = Deno.env.get("STRIPE_TEST_MODE") === "false" && STRIPE_SECRET.startsWith("sk_live_");
 
-// Price IDs — configure via Stripe dashboard then set as env vars
+// ── Price IDs ──────────────────────────────────────────────────────────────────
+// Configure via Stripe dashboard, then set as Supabase secrets:
+//   supabase secrets set STRIPE_LIVE_PRICE_SCOUT_MONTHLY=price_...
 const PRICES: Record<string, Record<string, string>> = {
   test: {
-    monthly:  Deno.env.get("STRIPE_TEST_PRICE_MONTHLY")  ?? "price_test_monthly_placeholder",
-    annual:   Deno.env.get("STRIPE_TEST_PRICE_ANNUAL")   ?? "price_test_annual_placeholder",
-    agency:   Deno.env.get("STRIPE_TEST_PRICE_AGENCY")   ?? "price_test_agency_placeholder",
+    scout_monthly:   Deno.env.get("STRIPE_TEST_PRICE_SCOUT_MONTHLY")   ?? "price_test_scout_monthly",
+    scout_annual:    Deno.env.get("STRIPE_TEST_PRICE_SCOUT_ANNUAL")    ?? "price_test_scout_annual",
+    runner_monthly:  Deno.env.get("STRIPE_TEST_PRICE_RUNNER_MONTHLY")  ?? "price_test_runner_monthly",
+    runner_annual:   Deno.env.get("STRIPE_TEST_PRICE_RUNNER_ANNUAL")   ?? "price_test_runner_annual",
+    closer_monthly:  Deno.env.get("STRIPE_TEST_PRICE_CLOSER_MONTHLY")  ?? "price_test_closer_monthly",
+    closer_annual:   Deno.env.get("STRIPE_TEST_PRICE_CLOSER_ANNUAL")   ?? "price_test_closer_annual",
+    house:           Deno.env.get("STRIPE_TEST_PRICE_HOUSE")           ?? "price_test_house",
+    // legacy — keep for backwards compat
+    monthly:         Deno.env.get("STRIPE_TEST_PRICE_MONTHLY")         ?? "price_test_monthly_placeholder",
+    annual:          Deno.env.get("STRIPE_TEST_PRICE_ANNUAL")          ?? "price_test_annual_placeholder",
+    agency:          Deno.env.get("STRIPE_TEST_PRICE_AGENCY")          ?? "price_test_agency_placeholder",
   },
   live: {
-    monthly:  Deno.env.get("STRIPE_LIVE_PRICE_MONTHLY")  ?? "",
-    annual:   Deno.env.get("STRIPE_LIVE_PRICE_ANNUAL")   ?? "",
-    agency:   Deno.env.get("STRIPE_LIVE_PRICE_AGENCY")   ?? "",
+    scout_monthly:   Deno.env.get("STRIPE_LIVE_PRICE_SCOUT_MONTHLY")   ?? "",
+    scout_annual:    Deno.env.get("STRIPE_LIVE_PRICE_SCOUT_ANNUAL")    ?? "",
+    runner_monthly:  Deno.env.get("STRIPE_LIVE_PRICE_RUNNER_MONTHLY")  ?? "",
+    runner_annual:   Deno.env.get("STRIPE_LIVE_PRICE_RUNNER_ANNUAL")   ?? "",
+    closer_monthly:  Deno.env.get("STRIPE_LIVE_PRICE_CLOSER_MONTHLY")  ?? "",
+    closer_annual:   Deno.env.get("STRIPE_LIVE_PRICE_CLOSER_ANNUAL")   ?? "",
+    house:           Deno.env.get("STRIPE_LIVE_PRICE_HOUSE")           ?? "",
+    monthly:         Deno.env.get("STRIPE_LIVE_PRICE_MONTHLY")         ?? "",
+    annual:          Deno.env.get("STRIPE_LIVE_PRICE_ANNUAL")          ?? "",
+    agency:          Deno.env.get("STRIPE_LIVE_PRICE_AGENCY")          ?? "",
   },
 };
 
-const PLAN_AMOUNTS: Record<string, number> = { monthly: 2499, annual: 19900, agency: 19900 };
-const VALID_PLANS = ["monthly", "annual", "agency"];
+// Amounts in cents (for test-mode simulation display)
+const PLAN_AMOUNTS: Record<string, number> = {
+  scout_monthly:  999,    // $9.99/mo
+  scout_annual:   7900,   // $79/yr
+  runner_monthly: 1999,   // $19.99/mo
+  runner_annual:  14900,  // $149/yr
+  closer_monthly: 3499,   // $34.99/mo
+  closer_annual:  24900,  // $249/yr
+  house:          14900,  // $149/mo
+  // legacy
+  monthly:        2499,
+  annual:         19900,
+  agency:         19900,
+};
+
+// Maps billing plan IDs → subscription plan name stored in metadata
+const PLAN_NAME_MAP: Record<string, string> = {
+  scout_monthly:  'scout',
+  scout_annual:   'scout',
+  runner_monthly: 'runner',
+  runner_annual:  'runner',
+  closer_monthly: 'closer',
+  closer_annual:  'closer',
+  house:          'house',
+  monthly:        'pro',
+  annual:         'pro',
+  agency:         'agency',
+};
+
+const VALID_PLANS = Object.keys(PLAN_AMOUNTS);
 
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -55,10 +100,12 @@ serve(async (req: Request) => {
 
     if (!VALID_PLANS.includes(plan)) {
       return new Response(
-        JSON.stringify({ error: `Invalid plan. Must be: ${VALID_PLANS.join(", ")}` }),
+        JSON.stringify({ error: `Invalid plan. Must be one of: ${VALID_PLANS.join(", ")}` }),
         { status: 400, headers: corsHeaders },
       );
     }
+
+    const planName = PLAN_NAME_MAP[plan] ?? plan;
 
     // Test mode — simulate checkout without calling Stripe
     if (!LIVE_MODE) {
@@ -66,6 +113,7 @@ serve(async (req: Request) => {
         test_mode: true,
         message: "Stripe test mode active. Set STRIPE_SECRET_KEY (sk_live_...) and STRIPE_TEST_MODE=false to go live.",
         plan,
+        plan_name: planName,
         checkout_url: null,
         session: {
           id: `cs_test_${plan}_${Date.now()}`,
@@ -82,7 +130,7 @@ serve(async (req: Request) => {
     const priceId = PRICES.live[plan];
     if (!priceId) {
       return new Response(
-        JSON.stringify({ error: "Price ID not configured for plan: " + plan }),
+        JSON.stringify({ error: `Price ID not configured for plan: ${plan}. Set STRIPE_LIVE_PRICE_${plan.toUpperCase()} in Supabase secrets.` }),
         { status: 500, headers: corsHeaders },
       );
     }
@@ -103,7 +151,8 @@ serve(async (req: Request) => {
         "success_url": success_url ?? "https://vaultsparkstudios.com/promogrind/#/dashboard?checkout=success",
         "cancel_url": cancel_url ?? "https://vaultsparkstudios.com/promogrind/#/pricing?checkout=cancelled",
         "subscription_data[metadata][user_id]": user.id,
-        "subscription_data[metadata][plan]": plan,
+        "subscription_data[metadata][plan]": planName,
+        "subscription_data[metadata][billing_plan]": plan,
       }),
     });
 

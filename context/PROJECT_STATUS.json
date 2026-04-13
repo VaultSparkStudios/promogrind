@@ -3,20 +3,23 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Pre-launch hardening — domain selection, affiliate links, AI backend activation.",
-  "nextMilestone": "Custom domain live + affiliate links configured + Anthropic key deployed.",
+  "currentFocus": "Payments live — Anthropic key + affiliate links + custom domain are the remaining P0 items.",
+  "nextMilestone": "Anthropic key deployed (AI features live) + custom domain purchased.",
   "blockers": [
-    "Custom domain not yet selected (promogrind.com unavailable — alternatives needed)",
-    "Affiliate links not configured in src/books.js",
-    "ANTHROPIC_API_KEY not set in Supabase — AI features (PromoChat, Advisor, Stack Builder) offline"
+    "Custom domain not yet selected (promogrind.com unavailable — alternatives: promogrind.io/.co/.app)",
+    "Affiliate/referral links not configured in src/books.js",
+    "ANTHROPIC_API_KEY not set in Supabase — PromoChat, PromoAdvisor, AI Action Plan offline"
   ],
-  "lastUpdated": "2026-04-12",
+  "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-04-12",
-  "version": "23.2.0",
-  "lastSession": "S32",
+  "truthAuditLastRun": "2026-04-13",
+  "version": "23.3.0",
+  "lastSession": "S33",
   "buildStatus": "passing",
-  "testStatus": "127/127"
+  "testStatus": "127/127",
+  "pricingTiers": ["Free Agent", "Scout", "Runner", "Closer", "The House"],
+  "stripeStatus": "live",
+  "webhookStatus": "live"
 }
