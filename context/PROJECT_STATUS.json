@@ -3,21 +3,21 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Domain live pending Namecheap → Cloudflare nameserver update. Anthropic key + affiliate links are the remaining P0 items.",
-  "nextMilestone": "Namecheap nameservers updated → promogrind.bet live → Anthropic key deployed (AI features live).",
+  "currentFocus": "Domain live pending Namecheap → Cloudflare nameserver update. All backend services now fully deployed.",
+  "nextMilestone": "Namecheap nameservers → promogrind.bet live → PostHog + Sentry activate in production.",
   "blockers": [
     "Namecheap nameservers not yet pointed to Cloudflare (journey.ns.cloudflare.com + piers.ns.cloudflare.com) — promogrind.bet not resolving yet",
     "Affiliate/referral links not configured in src/books.js",
-    "ANTHROPIC_API_KEY not set in Supabase — PromoChat, PromoAdvisor, AI Action Plan offline"
+    "Sentry project created — VITE_SENTRY_DSN GitHub Secret set — activates on next deploy"
   ],
   "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
-  "version": "23.4.0",
-  "lastSession": "S34",
-  "analyticsStatus": "cloudflare-web-analytics",
+  "version": "23.5.0",
+  "lastSession": "S35",
+  "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
   "testStatus": "127/127",
   "pricingTiers": [
@@ -29,6 +29,17 @@
   ],
   "stripeStatus": "live",
   "webhookStatus": "live",
+  "edgeFunctions": {
+    "promo-chat": "deployed",
+    "promo-advisor": "deployed",
+    "ai-action-plan": "deployed",
+    "create-checkout": "deployed",
+    "stripe-webhook": "deployed"
+  },
+  "githubSecrets": {
+    "total": 9,
+    "set": ["VITE_SUPABASE_URL", "VITE_SUPABASE_ANON_KEY", "VITE_PG_FEATURE_PROMO_CHAT", "VITE_PG_FEATURE_PROMO_ADVISOR", "VITE_PG_FEATURE_AI_ACTION_PLAN", "VITE_PG_FEATURE_AI_SCAN", "VITE_PG_FEATURE_STACK_BUILDER", "VITE_POSTHOG_KEY", "VITE_SENTRY_DSN"]
+  },
   "ignisScore": 41036,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-04-13"

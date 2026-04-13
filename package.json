@@ -20,7 +20,9 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@sentry/react": "^10.48.0",
     "@supabase/supabase-js": "^2.100.0",
+    "posthog-js": "^1.367.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0"

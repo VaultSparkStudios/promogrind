@@ -7,6 +7,7 @@ import { subscribeToPush } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD } from "./lib/shared.js";
 import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
+import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
@@ -2707,7 +2708,7 @@ const ReferralHub = () => {
     if (!error) setSavedInfluencerCode(influencerCode);
   };
   const refLink = userId ? `${CANONICAL_APP_URL}?ref=${userId}` : "Loading…";
-  const copy = () => { try{navigator.clipboard.writeText(refLink); window.plausible?.('referral_shared'); localStorage.setItem('pg_referral_shared','1');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
+  const copy = () => { try{navigator.clipboard.writeText(refLink); trackEvent('referral_shared'); localStorage.setItem('pg_referral_shared','1');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
   return (<div><div style={S.card}><Tl t="Refer &amp; Earn" badge="FREE VAULTSPARKED" bc={K.pp}/>
     <div style={{...S.note(K.pp),marginBottom:16}}>Share your link. When a friend signs up and subscribes to VaultSparked, you both get <strong>30 days free</strong>. No limit on referrals.</div>
     <div style={{marginBottom:16}}>
@@ -5061,7 +5062,7 @@ export default function App() {
   useEffect(() => {
     tryAuth().then(async ok => {
       if (ok) {
-        try { window.plausible?.('vault_member_login'); } catch {}
+        trackEvent('vault_member_login');
         onDailyLogin();
         // Expose supabase client for VaultSDK session reuse, then init SDK
         window.VSSupabase = supabase;
@@ -5073,6 +5074,7 @@ export default function App() {
         setUser(session?.user ?? null);
         getSubscription().then(sub => {
           setProStatus(sub);
+          identifyUser(session?.user, sub);
           // Write pg_pro_status for synchronous checks throughout the app
           try {
             const planKey = sub?.status === 'trial' ? 'trial'
@@ -5114,13 +5116,15 @@ export default function App() {
     prevSlugRef.current = slug;
     visitedSlugsRef.current.add(slug);
     if (gi === 1 || gi === 2) onCalculation(slug);
+    trackPage(slug);
     try {
       const log = JSON.parse(localStorage.getItem('pg_usage_log')||'{}');
       const wasEmpty = Object.keys(log).length === 0;
       log[slug] = (log[slug]||0)+1;
       localStorage.setItem('pg_usage_log', JSON.stringify(log));
-      if(wasEmpty) window.plausible?.('first_calc_run');
+      if(wasEmpty) trackEvent('first_calc_run');
     } catch(e) {}
+    trackEvent('calculator_viewed', { slug, name: item?.n ?? slug });
   }, [slug, authReady, gi]);
 
   const goTo = (newGi, newTi) => {

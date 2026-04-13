@@ -41,6 +41,8 @@ jobs:
       VITE_PG_FEATURE_AI_ACTION_PLAN: ${{ secrets.VITE_PG_FEATURE_AI_ACTION_PLAN }}
       VITE_PG_FEATURE_AI_SCAN: ${{ secrets.VITE_PG_FEATURE_AI_SCAN }}
       VITE_PG_FEATURE_STACK_BUILDER: ${{ secrets.VITE_PG_FEATURE_STACK_BUILDER }}
+      VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
+      VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
     steps:
       - uses: actions/checkout@v4
 

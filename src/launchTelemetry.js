@@ -1,3 +1,5 @@
+import { trackEvent } from './analytics.js';
+
 const IMPRESSION_KEY = "pg_launch_impressions";
 
 function getSeenSet() {
@@ -15,9 +17,7 @@ function setSeenSet(set) {
 }
 
 export function trackLaunchEvent(eventName, props = {}) {
-  try {
-    window.plausible?.(eventName, { props });
-  } catch {}
+  trackEvent(eventName, props);
 }
 
 export function trackFeatureGateSeen(featureKey, context = "gate") {
