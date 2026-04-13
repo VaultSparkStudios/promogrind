@@ -2,13 +2,13 @@
 
 Public-safe summary:
 - this repo remains deployable — build passing, 127/127 tests green
-- version: 23.7.0 · last session: S38 (2026-04-13)
+- version: 23.7.0 · last session: S39 (2026-04-13)
 - domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
-- **Stripe Customer Portal**: `supabase/functions/customer-portal/` deployed — auth JWT → subscriptions lookup → Stripe portal session → returns portal_url; `manageBilling()` in auth.js calls it; UserMenu "Manage billing →" button wired
-- **RESEND URL migration**: onboarding-drip (11 URLs), weekly-digest, create-checkout all updated from old vaultsparkstudios.com/promogrind/#/ format to promogrind.bet/ path-based routes
-- **RESEND_API_KEY**: NOT YET SET in Supabase secrets — set it to activate onboarding-drip + weekly-digest
-- **Stripe Customer Portal config**: must be enabled in Stripe Dashboard before "Manage billing →" button works end-to-end
-- UserMenu: auth widget — 12 sports/betting emoji avatar picker, editable display name, tier badge, animated dropdown; Manage billing calls customer-portal edge function
+- **Beta invite code system**: `beta_codes` Supabase table + `redeem-beta-code` edge function deployed; 10 PGBETA-XXXX codes seeded (Runner tier, 30d, single-use); UserMenu "Have a beta invite code?" section added for Free Agent tier users
+- **RESEND_API_KEY**: CONFIRMED SET in Supabase secrets — onboarding-drip + weekly-digest are active
+- **Stripe Customer Portal**: config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in customer-portal edge function; cancel + payment method update enabled; return_url: promogrind.bet/
+- **All Supabase secrets confirmed set**: ANTHROPIC_API_KEY, RESEND_API_KEY, STRIPE_SECRET_KEY, STRIPE_TEST_MODE=false, all 7 price IDs, STRIPE_WEBHOOK_SECRET, VAPID keys (public/private/subject), DIGEST secrets, NEWSLETTER_SECRET, SUPABASE keys
+- UserMenu: auth widget — 12 sports/betting emoji avatar picker, editable display name, tier badge, animated dropdown; Manage billing calls customer-portal edge function; beta code entry for Free Agent tier
 - header: sticky + backdrop-blur, responsive, auth always visible top-right; mobile strip layout
 - tab bar: sticky, 44px touch targets, iOS momentum scroll, tap-delay suppression
 - Promo Advisor: guest sign-in gate active, auth headers explicit on edge function calls

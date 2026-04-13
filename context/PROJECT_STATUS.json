@@ -3,13 +3,11 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Stripe Customer Portal live — subscribers can manage billing from UserMenu. RESEND onboarding-drip deployed with promogrind.bet URLs. Weekly-digest live.",
-  "nextMilestone": "RESEND_API_KEY secret set in Supabase → onboarding-drip + weekly-digest fully active → affiliate links → Reddit launch.",
+  "currentFocus": "Beta invite codes live — friends can test Runner tier free for 30 days. All secrets confirmed set. Last code blocker before launch: affiliate links in src/books.js.",
+  "nextMilestone": "Affiliate links in src/books.js → Stripe smoke test → Reddit launch post.",
   "blockers": [
-    "Affiliate/referral links not configured in src/books.js",
-    "RESEND_API_KEY not yet set in Supabase secrets (required for onboarding-drip + weekly-digest to send emails)",
-    "wins_wall Supabase table does not exist — needed for community wins wall server data",
-    "Stripe Customer Portal configuration needed in Stripe Dashboard (portal settings must be enabled)"
+    "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
+    "wins_wall Supabase table does not exist — needed for community wins wall server data"
   ],
   "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
@@ -17,9 +15,11 @@
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
   "version": "23.7.0",
-  "lastSession": "S38",
+  "lastSession": "S39",
   "commits": [
-    "TBD — feat(s38): Stripe Customer Portal edge function, manageBilling(), RESEND URL migration"
+    "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI",
+    "9b2328b — fix(s38): customer-portal — pin portal configuration ID",
+    "f0ee7ab — feat(s38): Stripe Customer Portal + RESEND URL migration"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
@@ -43,9 +43,10 @@
     "ai-action-plan": "deployed",
     "create-checkout": "deployed — success/cancel URLs updated to promogrind.bet",
     "stripe-webhook": "deployed",
-    "customer-portal": "deployed — creates Stripe billing portal session, returns portal_url",
+    "customer-portal": "deployed — config bpc_1TLsRNGMN60PfJYsM0S0ByAh pinned; cancel + payment method update enabled",
     "onboarding-drip": "deployed — 9-email drip + trial expiry; all URLs updated to promogrind.bet",
-    "weekly-digest": "deployed — batched RESEND send, per-user P/L stats"
+    "weekly-digest": "deployed — batched RESEND send, per-user P/L stats",
+    "redeem-beta-code": "deployed — validates beta invite code, upserts subscription row (Runner 30d), marks code used"
   },
   "githubSecrets": {
     "total": 9,
@@ -61,18 +62,29 @@
       "VITE_SENTRY_DSN"
     ]
   },
-  "supabaseSecretsMissing": [
-    "RESEND_API_KEY — required for onboarding-drip and weekly-digest email sending"
-  ],
+  "supabaseSecrets": "all confirmed set — ANTHROPIC_API_KEY, RESEND_API_KEY, STRIPE_SECRET_KEY, STRIPE_TEST_MODE=false, 7 price IDs, STRIPE_WEBHOOK_SECRET, VAPID (public/private/subject), DIGEST_FROM_EMAIL, DIGEST_SECRET, NEWSLETTER_SECRET, SUPABASE_ANON_KEY, SUPABASE_DB_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL",
+  "supabaseSecretsMissing": [],
+  "betaInviteCodes": {
+    "table": "beta_codes",
+    "edgeFunction": "redeem-beta-code",
+    "codesSeeded": 10,
+    "tier": "runner",
+    "durationDays": 30,
+    "localRef": ".beta-codes (gitignored)"
+  },
+  "stripeCoupons": {
+    "VAULTFRIEND": "100% off, once — for paid checkout flow",
+    "FOUNDER50": "50% off, 3 months",
+    "BETAPASS": "30% off, forever"
+  },
   "uiComponents": {
-    "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown — Manage billing calls customer-portal edge function",
+    "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown; Manage billing → customer-portal edge fn; beta invite code entry for Free Agent tier",
     "AgeGate": "src/components/AgeGate.jsx — full-screen blocking modal, 30-day localStorage flag",
     "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers"
   },
   "knownIssues": {
     "wins_wall_404": "Supabase table does not exist — component silently degrades to localStorage, no UX impact",
-    "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code",
-    "resend_no_key": "RESEND_API_KEY not set in Supabase secrets — onboarding-drip and weekly-digest will fail silently until set"
+    "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
