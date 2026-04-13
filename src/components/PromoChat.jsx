@@ -4,6 +4,8 @@ import { FEATURE_FLAGS, FREE_VAULT_MEMBERSHIP_URL } from "../launchState.js";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 
+const DAILY_LIMIT = 10; // per signed-in user per calendar day
+
 const PromoChat = ({ navigate }) => {
   if (!FEATURE_FLAGS.promoChat) return null;
   const { appData } = React.useContext(AppDataCtx) || {};
@@ -12,21 +14,20 @@ const PromoChat = ({ navigate }) => {
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [session, setSession] = useState(null);
+  const [sessionLoading, setSessionLoading] = useState(true);
   const messagesEndRef = useRef(null);
-  // Guests: 5 messages/day. Signed-in users: 10 messages/day.
-  const DAILY_LIMIT = session ? 10 : 5;
   const [chatRemaining, setChatRemaining] = useState(() => {
     const used = (() => { try { return parseInt(localStorage.getItem(`pg_chat_uses_${new Date().toISOString().slice(0, 10)}`) || '0'); } catch { return 0; } })();
-    return Math.max(0, 5 - used); // initialise at guest limit; upgraded after session resolves
+    return Math.max(0, DAILY_LIMIT - used);
   });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
+      setSessionLoading(false);
       if (s) {
-        // Upgrade remaining count to the signed-in limit
         const used = (() => { try { return parseInt(localStorage.getItem(`pg_chat_uses_${new Date().toISOString().slice(0, 10)}`) || '0'); } catch { return 0; } })();
-        setChatRemaining(Math.max(0, 10 - used));
+        setChatRemaining(Math.max(0, DAILY_LIMIT - used));
       }
     });
   }, []);
@@ -37,13 +38,12 @@ const PromoChat = ({ navigate }) => {
     }
   }, [messages, chatLoading]);
 
-  const isPro = false; // PromoChat is available to all; rate-limited for non-Pro
   const todayKey = `pg_chat_uses_${new Date().toISOString().slice(0, 10)}`;
   const getUsesToday = () => { try { return parseInt(localStorage.getItem(todayKey) || '0'); } catch { return 0; } };
   const incUsesToday = () => { try { localStorage.setItem(todayKey, String(getUsesToday() + 1)); } catch {} };
 
   const sendMessage = async () => {
-    if (!chatInput.trim() || chatLoading) return;
+    if (!chatInput.trim() || chatLoading || !session) return;
     const usesToday = getUsesToday();
     if (usesToday >= DAILY_LIMIT) {
       setChatRemaining(0);
@@ -57,7 +57,7 @@ const PromoChat = ({ navigate }) => {
     try {
       const history = newMessages.slice(-10).map(m => ({ role: m.role, content: m.content }));
       const { data, error: fnErr } = await supabase.functions.invoke('promo-chat', {
-        headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
+        headers: { Authorization: `Bearer ${session.access_token}` },
         body: {
           message: userMsg.content,
           history: history.slice(0, -1),
@@ -69,14 +69,12 @@ const PromoChat = ({ navigate }) => {
       });
       if (fnErr) throw fnErr;
       incUsesToday();
-      const remaining = DAILY_LIMIT - getUsesToday();
-      setChatRemaining(remaining);
-      const assistantMsg = {
+      setChatRemaining(Math.max(0, DAILY_LIMIT - getUsesToday()));
+      setMessages(prev => [...prev, {
         role: 'assistant',
         content: data?.message || data?.reply || 'Sorry, I could not generate a response.',
         suggestions: data?.suggestions || [],
-      };
-      setMessages(prev => [...prev, assistantMsg]);
+      }]);
     } catch (e) {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Something went wrong. Please try again.', suggestions: [] }]);
     } finally {
@@ -84,12 +82,11 @@ const PromoChat = ({ navigate }) => {
     }
   };
 
-  const usesToday = getUsesToday();
-  const isLimited = usesToday >= DAILY_LIMIT;
+  const isLimited = session && getUsesToday() >= DAILY_LIMIT;
 
   return (
     <>
-      {/* Floating chat button */}
+      {/* Floating chat button — visible to all, encourages sign-in */}
       <button
         onClick={() => setChatOpen(v => !v)}
         title="PromoGrind AI — ask about any promo or calculator"
@@ -121,8 +118,6 @@ const PromoChat = ({ navigate }) => {
           borderLeft: `1px solid #1e293b`,
           zIndex: 1100, display: 'flex', flexDirection: 'column',
           boxShadow: '-4px 0 32px rgba(0,0,0,0.6)',
-          transform: 'translateX(0)',
-          transition: 'transform 0.25s ease',
         }}>
           {/* Header */}
           <div style={{
@@ -137,73 +132,82 @@ const PromoChat = ({ navigate }) => {
             <button onClick={() => setChatOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: K.mt, fontSize: 18, padding: 4 }}>×</button>
           </div>
 
-          {/* Rate limit bar */}
-          {chatRemaining !== null && (
-            <div style={{ padding: '6px 16px', background: K.s1, borderBottom: `1px solid ${K.bd}`, fontSize: 11, color: K.mt, textAlign: 'right' }}>
-              {chatRemaining} of {DAILY_LIMIT} messages left today
-              {!session && <span style={{ color: K.bd2 }}> · <a href={FREE_VAULT_MEMBERSHIP_URL} style={{ color: K.gn, textDecoration: 'none' }}>Sign in</a> for 10/day</span>}
-            </div>
-          )}
-
-          {/* Messages */}
-          <div style={{ flex: 1, overflow: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {messages.length === 0 && (
-              <div style={{ color: K.mt, fontSize: 12, textAlign: 'center', marginTop: 32, lineHeight: 1.7 }}>
-                <div style={{ fontSize: 24, marginBottom: 8 }}>💬</div>
-                Ask me anything about sportsbook promos, calculators, or betting strategy.
+          {/* Guest gate — requires a free account (not Pro, just signed in) */}
+          {!sessionLoading && !session ? (
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 28, textAlign: 'center', gap: 16 }}>
+              <div style={{ fontSize: 32 }}>💬</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: K.tx }}>PromoGrind AI</div>
+              <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.7, maxWidth: 280 }}>
+                Ask anything about sportsbook promos, calculators, or matched betting strategy.
+                Free with your Vault account.
               </div>
-            )}
-            {messages.map((msg, i) => (
-              <div key={i} style={{
-                alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                maxWidth: '85%',
-              }}>
-                <div style={{
-                  padding: '10px 12px', borderRadius: 8,
-                  background: msg.role === 'user' ? `${K.gn}20` : K.s2,
-                  border: `1px solid ${msg.role === 'user' ? K.gn + '40' : K.bd}`,
-                  fontSize: 12, color: K.tx, lineHeight: 1.6,
-                }}>
-                  {msg.content}
+              <a
+                href={FREE_VAULT_MEMBERSHIP_URL}
+                style={{
+                  padding: '10px 24px', background: K.gn, borderRadius: 6,
+                  color: '#0a0e17', fontWeight: 700, fontSize: 13,
+                  textDecoration: 'none', fontFamily: font,
+                }}
+              >
+                Sign in free to chat →
+              </a>
+              <div style={{ fontSize: 10, color: K.mt }}>
+                Free Vault account · No credit card · 30 seconds
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Rate limit bar (signed-in users only) */}
+              {session && (
+                <div style={{ padding: '6px 16px', background: K.s1, borderBottom: `1px solid ${K.bd}`, fontSize: 11, color: K.mt, textAlign: 'right' }}>
+                  {chatRemaining} of {DAILY_LIMIT} messages left today
                 </div>
-                {/* Calculator suggestions */}
-                {msg.suggestions && msg.suggestions.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
-                    {msg.suggestions.map(slug => (
-                      <button
-                        key={slug}
-                        onClick={() => { setChatOpen(false); navigate('/' + slug); }}
-                        style={{
-                          padding: '3px 10px', background: `${K.ac}15`,
-                          border: `1px solid ${K.ac}40`, borderRadius: 50,
-                          color: K.ac, fontSize: 10, cursor: 'pointer',
-                          fontFamily: font,
-                        }}
-                      >
-                        → {slug}
-                      </button>
-                    ))}
+              )}
+
+              {/* Messages */}
+              <div style={{ flex: 1, overflow: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {messages.length === 0 && (
+                  <div style={{ color: K.mt, fontSize: 12, textAlign: 'center', marginTop: 32, lineHeight: 1.7 }}>
+                    <div style={{ fontSize: 24, marginBottom: 8 }}>💬</div>
+                    Ask me anything about sportsbook promos, calculators, or betting strategy.
                   </div>
                 )}
-              </div>
-            ))}
-            {chatLoading && (
-              <div style={{ alignSelf: 'flex-start', padding: '10px 12px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, fontSize: 12, color: K.mt }}>
-                ⏳ Thinking…
-              </div>
-            )}
-            {isLimited && !chatLoading && (
-              <div style={{ padding: '12px 14px', background: `${K.pp}15`, border: `1px solid ${K.pp}30`, borderRadius: 8, fontSize: 12, color: K.pp, textAlign: 'center' }}>
-                {!session ? (
-                  <>
-                    You&apos;ve used your 5 free daily messages.{' '}
-                    <a href={FREE_VAULT_MEMBERSHIP_URL} style={{ color: K.gn, textDecoration: 'none', fontWeight: 700 }}>
-                      Sign in free
-                    </a>
-                    {' '}for 10 messages/day.
-                  </>
-                ) : (
-                  <>
+                {messages.map((msg, i) => (
+                  <div key={i} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
+                    <div style={{
+                      padding: '10px 12px', borderRadius: 8,
+                      background: msg.role === 'user' ? `${K.gn}20` : K.s2,
+                      border: `1px solid ${msg.role === 'user' ? K.gn + '40' : K.bd}`,
+                      fontSize: 12, color: K.tx, lineHeight: 1.6,
+                    }}>
+                      {msg.content}
+                    </div>
+                    {msg.suggestions && msg.suggestions.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+                        {msg.suggestions.map(slug => (
+                          <button
+                            key={slug}
+                            onClick={() => { setChatOpen(false); navigate('/' + slug); }}
+                            style={{
+                              padding: '3px 10px', background: `${K.ac}15`,
+                              border: `1px solid ${K.ac}40`, borderRadius: 50,
+                              color: K.ac, fontSize: 10, cursor: 'pointer', fontFamily: font,
+                            }}
+                          >
+                            → {slug}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {chatLoading && (
+                  <div style={{ alignSelf: 'flex-start', padding: '10px 12px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, fontSize: 12, color: K.mt }}>
+                    ⏳ Thinking…
+                  </div>
+                )}
+                {isLimited && !chatLoading && (
+                  <div style={{ padding: '12px 14px', background: `${K.pp}15`, border: `1px solid ${K.pp}30`, borderRadius: 8, fontSize: 12, color: K.pp, textAlign: 'center' }}>
                     Daily limit reached. Upgrade to VaultSparked for unlimited messages.
                     <br/>
                     <button
@@ -212,40 +216,40 @@ const PromoChat = ({ navigate }) => {
                     >
                       Go VaultSparked →
                     </button>
-                  </>
+                  </div>
                 )}
+                <div ref={messagesEndRef}/>
               </div>
-            )}
-            <div ref={messagesEndRef}/>
-          </div>
 
-          {/* Input */}
-          <div style={{ padding: '12px 16px', borderTop: `1px solid ${K.bd}`, background: K.s2, display: 'flex', gap: 8 }}>
-            <input
-              value={chatInput}
-              onChange={e => setChatInput(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-              placeholder={isLimited ? 'Daily limit reached…' : 'Ask about a promo or calculator…'}
-              disabled={isLimited || chatLoading}
-              style={{
-                flex: 1, padding: '8px 10px', background: K.s1,
-                border: `1px solid ${K.bd2}`, borderRadius: 6,
-                color: K.tx, fontFamily: font, fontSize: 12, outline: 'none',
-              }}
-            />
-            <button
-              onClick={sendMessage}
-              disabled={!chatInput.trim() || chatLoading || isLimited}
-              style={{
-                padding: '8px 14px', background: K.gn, border: 'none',
-                borderRadius: 6, color: K.bg, fontWeight: 700,
-                fontSize: 12, cursor: 'pointer', fontFamily: font,
-                opacity: (!chatInput.trim() || chatLoading || isLimited) ? 0.5 : 1,
-              }}
-            >
-              Send
-            </button>
-          </div>
+              {/* Input */}
+              <div style={{ padding: '12px 16px', borderTop: `1px solid ${K.bd}`, background: K.s2, display: 'flex', gap: 8 }}>
+                <input
+                  value={chatInput}
+                  onChange={e => setChatInput(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+                  placeholder={isLimited ? 'Daily limit reached…' : 'Ask about a promo or calculator…'}
+                  disabled={isLimited || chatLoading}
+                  style={{
+                    flex: 1, padding: '8px 10px', background: K.s1,
+                    border: `1px solid ${K.bd2}`, borderRadius: 6,
+                    color: K.tx, fontFamily: font, fontSize: 12, outline: 'none',
+                  }}
+                />
+                <button
+                  onClick={sendMessage}
+                  disabled={!chatInput.trim() || chatLoading || isLimited}
+                  style={{
+                    padding: '8px 14px', background: K.gn, border: 'none',
+                    borderRadius: 6, color: K.bg, fontWeight: 700,
+                    fontSize: 12, cursor: 'pointer', fontFamily: font,
+                    opacity: (!chatInput.trim() || chatLoading || isLimited) ? 0.5 : 1,
+                  }}
+                >
+                  Send
+                </button>
+              </div>
+            </>
+          )}
         </div>
       )}
     </>
