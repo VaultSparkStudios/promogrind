@@ -298,6 +298,29 @@ export async function manageBilling() {
 }
 
 /**
+ * Redeems a beta invite code for the current user.
+ * On success: grants Runner tier for 30 days (or whatever the code specifies).
+ * Returns { success, tier, expires_at, duration_days, message } on success.
+ * Returns { error } string on failure.
+ */
+export async function redeemBetaCode(code) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { redirectToLogin(); return { error: 'Not signed in' }; }
+
+  const { data, error } = await supabase.functions.invoke('redeem-beta-code', {
+    headers: { Authorization: `Bearer ${session.access_token}` },
+    body: { code },
+  });
+
+  if (error) {
+    console.error('[PromoGrind] Beta code error:', error);
+    return { error: error.message ?? 'Failed to redeem code' };
+  }
+
+  return data;
+}
+
+/**
  * Like checkAuth() but never redirects.
  * Returns true if a valid session exists, false if the visitor is a guest.
  * Use this when the app should be accessible without login (calculators, etc.).

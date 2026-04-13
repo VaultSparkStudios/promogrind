@@ -4,8 +4,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Human Action Required
 - [x] **Google Search Console** — verified promogrind.bet via Cloudflare DNS TXT, sitemap submitted at https://promogrind.bet/sitemap.xml
-- [ ] **Set RESEND_API_KEY** — `supabase secrets set RESEND_API_KEY=re_...` (from resend.com dashboard) — activates onboarding-drip + weekly-digest
-- [ ] **Enable Stripe Customer Portal** — Stripe Dashboard → Billing → Customer Portal → Activate (set cancellation + plan switch permissions)
+- [x] **RESEND_API_KEY** — confirmed set in Supabase secrets (S39 audit)
+- [x] **Stripe Customer Portal** — config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in edge function (S38/S39)
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
 - [ ] **Affiliate/referral links** — paste personal referral URLs into `referralLink` fields in `src/books.js` (Refer a Friend in each sportsbook app)
 - [ ] **wins_wall Supabase table** — create table so community wins wall can load from server (component already gracefully degrades to localStorage without it)
@@ -34,10 +34,12 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] UserMenu "Manage billing →" wired to manageBilling() — no longer links to VaultSpark (S38)
 - [x] RESEND URL migration — onboarding-drip (11 URLs) + weekly-digest + create-checkout updated to promogrind.bet (S38)
 - [x] onboarding-drip + create-checkout re-deployed (S38)
+- [x] Beta invite code system — `beta_codes` table + `redeem-beta-code` edge function deployed (S39)
+- [x] UserMenu — "Have a beta invite code?" section for Free Agent tier (S39)
 
 ## Next
-- [ ] Set RESEND_API_KEY in Supabase secrets → onboarding-drip + weekly-digest go live
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
+- [ ] Stripe smoke test — card 4242, verify subscriptions table row + customer portal redirect
 - [ ] VAPID keys → deploy send-daily-brief push notification function
 - [ ] [SIL] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 

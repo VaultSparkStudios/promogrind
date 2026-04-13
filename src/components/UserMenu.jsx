@@ -10,7 +10,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { signOut, startCheckout, manageBilling, getTierName } from '../auth.js';
+import { signOut, startCheckout, manageBilling, getTierName, redeemBetaCode } from '../auth.js';
 import { K, font, fontD } from '../lib/shared.js';
 import { FX } from '../contexts.jsx';
 import { FREE_VAULT_MEMBERSHIP_URL } from '../launchState.js';
@@ -85,8 +85,12 @@ export default function UserMenu({
   const [displayName, setDisplayName] = useState(() => {
     try { return localStorage.getItem('pg_display_name') || ''; } catch { return ''; }
   });
-  const [editingName, setEditingName] = useState(false);
-  const [nameInput,   setNameInput]   = useState('');
+  const [editingName,   setEditingName]   = useState(false);
+  const [nameInput,     setNameInput]     = useState('');
+  const [betaCodeOpen,  setBetaCodeOpen]  = useState(false);
+  const [betaCodeInput, setBetaCodeInput] = useState('');
+  const [betaCodeState, setBetaCodeState] = useState(null); // null | 'loading' | 'success' | 'error'
+  const [betaCodeMsg,   setBetaCodeMsg]   = useState('');
 
   const triggerRef = useRef(null);
   const dropRef    = useRef(null);
@@ -161,6 +165,23 @@ export default function UserMenu({
     setDisplayName(name);
     try { localStorage.setItem('pg_display_name', name); } catch {}
     setEditingName(false);
+  };
+
+  const submitBetaCode = async () => {
+    const code = betaCodeInput.trim().toUpperCase();
+    if (!code) return;
+    setBetaCodeState('loading');
+    const result = await redeemBetaCode(code);
+    if (result?.success) {
+      setBetaCodeState('success');
+      setBetaCodeMsg(result.message ?? 'Beta access activated!');
+      setBetaCodeInput('');
+      // Reload page after brief delay so proStatus refreshes
+      setTimeout(() => window.location.reload(), 1800);
+    } else {
+      setBetaCodeState('error');
+      setBetaCodeMsg(result?.error ?? 'Invalid code');
+    }
   };
 
   // ── Derived values ─────────────────────────────────────────────────────────
@@ -492,6 +513,63 @@ export default function UserMenu({
               </button>
             ) : (
               <div style={{ fontSize: 11, color: K.gn }}>✓ Top tier — all features unlocked</div>
+            )}
+
+            {/* Beta invite code — only shown to Free Agent */}
+            {tierName === 'Free Agent' && (
+              <div style={{ marginTop: 10 }}>
+                <button
+                  onClick={() => { setBetaCodeOpen(v => !v); setBetaCodeState(null); setBetaCodeMsg(''); }}
+                  style={{
+                    background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                    fontSize: 10, color: K.dm, fontFamily: font,
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.color = K.tx}
+                  onMouseLeave={e => e.currentTarget.style.color = K.dm}
+                >
+                  Have a beta invite code? {betaCodeOpen ? '▲' : '▼'}
+                </button>
+                {betaCodeOpen && (
+                  <div style={{ marginTop: 8 }}>
+                    {betaCodeState === 'success' ? (
+                      <div style={{ fontSize: 11, color: K.gn, fontWeight: 600 }}>✓ {betaCodeMsg}</div>
+                    ) : (
+                      <>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <input
+                            value={betaCodeInput}
+                            onChange={e => { setBetaCodeInput(e.target.value.toUpperCase()); setBetaCodeState(null); }}
+                            onKeyDown={e => { if (e.key === 'Enter') submitBetaCode(); }}
+                            placeholder="PGBETA-XXXX"
+                            maxLength={16}
+                            style={{
+                              flex: 1, padding: '6px 10px', borderRadius: 7, fontSize: 11,
+                              fontFamily: font, background: K.bg2 ?? K.bg,
+                              border: `1px solid ${betaCodeState === 'error' ? '#ef4444' : K.bd}`,
+                              color: K.tx, outline: 'none',
+                            }}
+                          />
+                          <button
+                            onClick={submitBetaCode}
+                            disabled={betaCodeState === 'loading' || !betaCodeInput.trim()}
+                            style={{
+                              padding: '6px 12px', borderRadius: 7, cursor: 'pointer',
+                              fontFamily: font, fontSize: 11, fontWeight: 700,
+                              background: K.gn + '20', border: `1px solid ${K.gn}50`,
+                              color: K.gn, opacity: betaCodeState === 'loading' ? 0.6 : 1,
+                            }}
+                          >
+                            {betaCodeState === 'loading' ? '...' : 'Apply'}
+                          </button>
+                        </div>
+                        {betaCodeState === 'error' && (
+                          <div style={{ fontSize: 10, color: '#ef4444', marginTop: 5 }}>{betaCodeMsg}</div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             )}
 
             <button
