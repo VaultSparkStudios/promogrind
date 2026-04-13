@@ -186,7 +186,7 @@ async function sendEmail(to: string, meta: Record<string, unknown>, supabase: Re
 
       ${weekStatsHtml}
 
-      <a href="https://vaultsparkstudios.com/promogrind/"
+      <a href="https://promogrind.bet/"
          style="display:inline-block;background:#4ade80;color:#0a0e17;padding:13px 28px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:28px;">
         Open PromoGrind →
       </a>

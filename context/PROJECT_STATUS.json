@@ -3,23 +3,23 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Domain live, Search Console verified and sitemap submitted. Auth UX complete — UserMenu, guest gates, branding softened.",
-  "nextMilestone": "Stripe Customer Portal edge function → affiliate links → Reddit launch.",
+  "currentFocus": "Stripe Customer Portal live — subscribers can manage billing from UserMenu. RESEND onboarding-drip deployed with promogrind.bet URLs. Weekly-digest live.",
+  "nextMilestone": "RESEND_API_KEY secret set in Supabase → onboarding-drip + weekly-digest fully active → affiliate links → Reddit launch.",
   "blockers": [
     "Affiliate/referral links not configured in src/books.js",
-    "Stripe Customer Portal not wired — Manage billing links to VaultSpark for now",
-    "wins_wall Supabase table does not exist — needed for community wins wall server data"
+    "RESEND_API_KEY not yet set in Supabase secrets (required for onboarding-drip + weekly-digest to send emails)",
+    "wins_wall Supabase table does not exist — needed for community wins wall server data",
+    "Stripe Customer Portal configuration needed in Stripe Dashboard (portal settings must be enabled)"
   ],
   "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
-  "version": "23.6.0",
-  "lastSession": "S37",
+  "version": "23.7.0",
+  "lastSession": "S38",
   "commits": [
-    "9b42d1b — feat(s37): UserMenu, auth header, responsive overhaul",
-    "e844044 — fix(s37): console errors, Promo Advisor auth gate, branding softening"
+    "TBD — feat(s38): Stripe Customer Portal edge function, manageBilling(), RESEND URL migration"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
@@ -41,8 +41,11 @@
     "promo-chat": "deployed",
     "promo-advisor": "deployed — guest gate active, explicit auth headers",
     "ai-action-plan": "deployed",
-    "create-checkout": "deployed",
-    "stripe-webhook": "deployed"
+    "create-checkout": "deployed — success/cancel URLs updated to promogrind.bet",
+    "stripe-webhook": "deployed",
+    "customer-portal": "deployed — creates Stripe billing portal session, returns portal_url",
+    "onboarding-drip": "deployed — 9-email drip + trial expiry; all URLs updated to promogrind.bet",
+    "weekly-digest": "deployed — batched RESEND send, per-user P/L stats"
   },
   "githubSecrets": {
     "total": 9,
@@ -58,14 +61,18 @@
       "VITE_SENTRY_DSN"
     ]
   },
+  "supabaseSecretsMissing": [
+    "RESEND_API_KEY — required for onboarding-drip and weekly-digest email sending"
+  ],
   "uiComponents": {
-    "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown — replaces ProfilePanel",
+    "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown — Manage billing calls customer-portal edge function",
     "AgeGate": "src/components/AgeGate.jsx — full-screen blocking modal, 30-day localStorage flag",
     "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers"
   },
   "knownIssues": {
     "wins_wall_404": "Supabase table does not exist — component silently degrades to localStorage, no UX impact",
-    "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code"
+    "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code",
+    "resend_no_key": "RESEND_API_KEY not set in Supabase secrets — onboarding-drip and weekly-digest will fail silently until set"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",

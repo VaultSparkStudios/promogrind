@@ -21,7 +21,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Start with the Bonus Bet Converter",
     body: "The fastest way to your first guaranteed profit: open a DraftKings or FanDuel account, get their signup bonus bet ($200+), and use the Bonus Bet Converter to lock in ~$130–150 in cash. Takes about 20 minutes.",
     cta: "Open Bonus Bet Converter →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/bonus-bet",
+    ctaUrl: "https://promogrind.bet/bonus-bet",
   },
   {
     day: 2,
@@ -29,7 +29,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Log your first promo results",
     body: "The P/L Ledger tracks every conversion with cloud sync across devices. Log your bonus bet result and you'll have running totals, CLV tracking, and a tax export ready automatically.",
     cta: "Open P/L Ledger →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/ledger",
+    ctaUrl: "https://promogrind.bet/ledger",
   },
   {
     day: 3,
@@ -37,7 +37,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Beyond signup bonuses — recurring promos",
     body: "After you complete the welcome bonuses, DraftKings, FanDuel, Caesars, and BetMGM all offer recurring weekly promos worth $150–450/month when stacked properly. The Promo Calendar shows them all with complexity ratings.",
     cta: "Open Promo Calendar →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/promo-calendar",
+    ctaUrl: "https://promogrind.bet/promo-calendar",
   },
   {
     day: 4,
@@ -45,7 +45,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "The Arb Calculator finds free money",
     body: "Arbitrage betting uses odds discrepancies between books to guarantee profit regardless of outcome. Our 2-Way and 3-Way Arb calculators tell you the exact stakes for each side. Margins of 1–3% are common.",
     cta: "Open Arb Calculator →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/arb-2way",
+    ctaUrl: "https://promogrind.bet/arb-2way",
   },
   {
     day: 5,
@@ -53,7 +53,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Start your 7-day VaultSparked trial",
     body: "The Live Arb and +EV Scanner monitors 40+ books in real time and alerts you when a profitable opportunity appears. VaultSparked Pro is $24.99/mo vs $99–199/mo at OddsJam and ProfitDuel. Try it free for 7 days — no credit card.",
     cta: "Start Free Trial →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/upgrade",
+    ctaUrl: "https://promogrind.bet/upgrade",
   },
   {
     day: 6,
@@ -61,7 +61,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Stop flat-betting. Use Kelly sizing.",
     body: "The Kelly Criterion tells you exactly what fraction of your bankroll to risk based on your edge and the odds. Our Kelly calculator also has a fractional slider (quarter-Kelly, half-Kelly) so you can dial in your risk tolerance.",
     cta: "Open Kelly Calculator →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/kelly",
+    ctaUrl: "https://promogrind.bet/kelly",
   },
   {
     day: 7,
@@ -69,7 +69,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Your PromoGrind roadmap",
     body: "Most grinders complete 3–4 sportsbook signups in their first week ($400–800 in guaranteed profit). With recurring promos and a live scanner, $500–1,500/month is achievable. Refer a friend through the Refer & Earn page to unlock bonus content.",
     cta: "View Refer & Earn →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/refer-earn",
+    ctaUrl: "https://promogrind.bet/refer-earn",
   },
   {
     day: 10,
@@ -77,7 +77,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Stack 3 promos at once — here's how",
     body: "Advanced grinders don't work promos one at a time. They stack: a profit boost on top of a reload bonus, used on a game where they also have an arb opportunity. The Promo Stacking Calculator shows you the combined EV of running multiple promotions simultaneously on the same event.",
     cta: "Open Promo Stacking Calculator →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/promo-stacking",
+    ctaUrl: "https://promogrind.bet/promo-stacking",
   },
   {
     day: 14,
@@ -85,7 +85,7 @@ const DRIP_SEQUENCE: DripEmail[] = [
     headline: "Your 14-day PromoGrind check-in",
     body: "After two weeks, most grinders have completed 2–3 sportsbook signups ($300–600 in profit) and are starting recurring promos. Check your P/L Ledger — if your total is below $200, you have promos still unclaimed. The Sportsbooks tab shows every book you haven't signed up for yet, with estimated value.",
     cta: "Check your Sportsbooks →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/sportsbooks",
+    ctaUrl: "https://promogrind.bet/sportsbooks",
   },
 ];
 
@@ -95,14 +95,14 @@ const TRIAL_EXPIRY_EMAILS: Record<string, { subject: string; headline: string; b
     headline: "Your Pro access expires in 3 days",
     body: "Your 7-day VaultSparked Pro trial ends in 3 days. You've had full access to the Live Arb Scanner, +EV Scanner, and AI Action Plan. Keep the momentum going — upgrade for $24.99/mo or save $101 with the annual plan.",
     cta: "Upgrade Now — Keep Pro Access →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/upgrade",
+    ctaUrl: "https://promogrind.bet/upgrade",
   },
   day6: {
     subject: "🚨 Last chance — PromoGrind Pro trial expires tomorrow",
     headline: "Don't lose your Pro access",
     body: "Your VaultSparked Pro trial expires tomorrow. After that, the Live Arb Scanner, +EV Scanner, and AI Action Plan will be locked. Upgrade now for $24.99/mo and keep everything — or go annual to save $101.",
     cta: "Upgrade Before It Expires →",
-    ctaUrl: "https://vaultsparkstudios.com/promogrind/#/upgrade",
+    ctaUrl: "https://promogrind.bet/upgrade",
   },
 };
 

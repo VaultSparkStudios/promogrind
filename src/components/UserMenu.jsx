@@ -10,7 +10,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { signOut, startCheckout, getTierName } from '../auth.js';
+import { signOut, startCheckout, manageBilling, getTierName } from '../auth.js';
 import { K, font, fontD } from '../lib/shared.js';
 import { FX } from '../contexts.jsx';
 import { FREE_VAULT_MEMBERSHIP_URL } from '../launchState.js';
@@ -494,16 +494,18 @@ export default function UserMenu({
               <div style={{ fontSize: 11, color: K.gn }}>✓ Top tier — all features unlocked</div>
             )}
 
-            <a
-              href="https://vaultsparkstudios.com/vault-member/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: 'block', marginTop: 9, fontSize: 10, color: K.ac, textDecoration: 'none' }}
+            <button
+              onClick={() => { setOpen(false); manageBilling(); }}
+              style={{
+                display: 'block', marginTop: 9, fontSize: 10, color: K.ac,
+                background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                fontFamily: font, textAlign: 'left',
+              }}
               onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
               onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
             >
-              Manage billing on VaultSpark →
-            </a>
+              Manage billing →
+            </button>
           </div>
 
           {/* ── Preferences ──────────────────────────────────────────── */}

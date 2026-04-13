@@ -4,8 +4,10 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Human Action Required
 - [x] **Google Search Console** — verified promogrind.bet via Cloudflare DNS TXT, sitemap submitted at https://promogrind.bet/sitemap.xml
+- [ ] **Set RESEND_API_KEY** — `supabase secrets set RESEND_API_KEY=re_...` (from resend.com dashboard) — activates onboarding-drip + weekly-digest
+- [ ] **Enable Stripe Customer Portal** — Stripe Dashboard → Billing → Customer Portal → Activate (set cancellation + plan switch permissions)
+- [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
 - [ ] **Affiliate/referral links** — paste personal referral URLs into `referralLink` fields in `src/books.js` (Refer a Friend in each sportsbook app)
-- [ ] **Stripe webhook smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row created
 - [ ] **wins_wall Supabase table** — create table so community wins wall can load from server (component already gracefully degrades to localStorage without it)
 
 ## Now
@@ -27,10 +29,15 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] manifest.json path fixed — /promogrind/manifest.json → /manifest.json (S37)
 - [x] Promo Advisor — guest sign-in gate, explicit auth headers on edge function (S37)
 - [x] Branding softened — "Free Vault Membership" → "Free PromoGrind Account" everywhere (S37)
+- [x] Stripe Customer Portal edge function — `supabase/functions/customer-portal/index.ts` deployed (S38)
+- [x] manageBilling() in auth.js — calls customer-portal, dispatches pg:billing-unavailable if no sub (S38)
+- [x] UserMenu "Manage billing →" wired to manageBilling() — no longer links to VaultSpark (S38)
+- [x] RESEND URL migration — onboarding-drip (11 URLs) + weekly-digest + create-checkout updated to promogrind.bet (S38)
+- [x] onboarding-drip + create-checkout re-deployed (S38)
 
 ## Next
-- [ ] Stripe Customer Portal edge function → wire "Manage billing" link in UserMenu (currently links to VaultSpark)
-- [ ] RESEND_API_KEY → deploy onboarding-drip, weekly-digest edge functions
+- [ ] Set RESEND_API_KEY in Supabase secrets → onboarding-drip + weekly-digest go live
+- [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
 - [ ] VAPID keys → deploy send-daily-brief push notification function
 - [ ] [SIL] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 

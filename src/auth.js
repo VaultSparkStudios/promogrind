@@ -272,6 +272,32 @@ export async function startCheckout(planId = 'monthly') {
 }
 
 /**
+ * Opens the Stripe Customer Portal for billing management.
+ * Looks up the user's stripe_customer_id from the subscriptions table via
+ * the customer-portal edge function, then redirects to Stripe's hosted portal.
+ *
+ * If no billing record exists (free-tier user), dispatches pg:billing-unavailable
+ * so the UI can show a friendly message without alert().
+ */
+export async function manageBilling() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { redirectToLogin(); return; }
+
+  const { data, error } = await supabase.functions.invoke('customer-portal', {
+    headers: { Authorization: `Bearer ${session.access_token}` },
+  });
+
+  if (error || !data?.portal_url) {
+    const reason = data?.error ?? error?.message ?? 'unknown';
+    console.error('[PromoGrind] Billing portal error:', reason);
+    window.dispatchEvent(new CustomEvent('pg:billing-unavailable', { detail: { reason } }));
+    return;
+  }
+
+  window.location.href = data.portal_url;
+}
+
+/**
  * Like checkAuth() but never redirects.
  * Returns true if a valid session exists, false if the visitor is a guest.
  * Use this when the app should be accessible without login (calculators, etc.).
