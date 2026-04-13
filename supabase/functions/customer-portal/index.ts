@@ -8,6 +8,10 @@ const corsHeaders = {
 
 const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
 
+// Stripe Customer Portal configuration — created 2026-04-13
+// Features: payment_method_update, subscription_cancel (at_period_end), invoice_history
+const PORTAL_CONFIGURATION_ID = "bpc_1TLsRNGMN60PfJYsM0S0ByAh";
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -66,6 +70,7 @@ serve(async (req: Request) => {
       },
       body: new URLSearchParams({
         customer: sub.stripe_customer_id,
+        configuration: PORTAL_CONFIGURATION_ID,
         return_url: "https://promogrind.bet/",
       }),
     });
