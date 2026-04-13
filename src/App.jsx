@@ -22,6 +22,7 @@ const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => 
 // PromoChat + PromoAdvisorPanel are always mounted (floating UI), load eagerly
 import PromoChat from "./components/PromoChat.jsx";
 import { PromoAdvisorPanel } from "./components/PromoAdvisorPanel.jsx";
+import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -78,7 +79,7 @@ const BookCTA = ({ promoType }) => {
         {sorted.slice(0,4).map(b=>(
           <a key={b.name} href={getBookUrl(b)} target="_blank" rel="noopener noreferrer sponsored"
             style={{padding:"4px 10px",background:`${b.color}15`,border:`1px solid ${b.color}30`,borderRadius:4,color:b.color,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
-            {b.name} →
+            {b.name} <span style={{fontSize:8,opacity:0.7,fontWeight:400}}>21+</span> →
           </a>
         ))}
         <a href={getBookUrl(sorted[4]||{})||"#"} target="_blank" rel="noopener noreferrer sponsored"
@@ -4867,7 +4868,8 @@ const Footer = () => (
         <a href="/promogrind/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
         <a href="/promogrind/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
         <a href="/promogrind/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
-        <a href="/promogrind/landing/" style={{color:K.mt,textDecoration:"none"}}>About</a>
+        <a href="/promogrind/about/" style={{color:K.mt,textDecoration:"none"}}>About</a>
+        <a href="/promogrind/compliance/" style={{color:K.mt,textDecoration:"none"}}>Compliance</a>
       </p>
     </div>
   </div>
@@ -4878,6 +4880,7 @@ const Footer = () => (
 export default function App() {
   // Calculators are public — always load immediately. Auth resolves silently in background.
   const [authReady] = useState(true);
+  const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [user, setUser] = useState(null);
   const [proStatus, setProStatus] = useState(null);
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
@@ -5208,6 +5211,7 @@ export default function App() {
     <CurrencyCtx.Provider value={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
       <CheckoutListener/>
+      {!ageVerified && <AgeGate onVerified={() => setAgeVerified(true)} />}
       <TrustStrip/>
       {!isOnline && (
         <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
