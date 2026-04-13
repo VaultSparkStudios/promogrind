@@ -19,7 +19,16 @@
   "lastSession": "S33",
   "buildStatus": "passing",
   "testStatus": "127/127",
-  "pricingTiers": ["Free Agent", "Scout", "Runner", "Closer", "The House"],
+  "pricingTiers": [
+    "Free Agent",
+    "Scout",
+    "Runner",
+    "Closer",
+    "The House"
+  ],
   "stripeStatus": "live",
-  "webhookStatus": "live"
+  "webhookStatus": "live",
+  "ignisScore": 41036,
+  "ignisGrade": "FORGE",
+  "ignisLastComputed": "2026-04-13"
 }

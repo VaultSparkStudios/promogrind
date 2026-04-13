@@ -2,179 +2,179 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Home -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/dashboard</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://promogrind.bet/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://promogrind.bet/dashboard</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
 
   <!-- Competitor comparison pages -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/promogrind-vs-profitduel/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promogrind-vs-oddsjam/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promogrind-vs-betterbet/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/promogrind-vs-profitduel/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/promogrind-vs-oddsjam/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/promogrind-vs-betterbet/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Static SEO landing pages — top-intent calculator keywords -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/income-estimator/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/embed/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/calc-api/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-expiry-widget/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bet/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/arb-calculator/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/kelly-criterion/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/no-vig/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/profit-boost/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/hedge-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/ev-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/matched-betting/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-converter/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/sportsbook-promo/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/sports-betting-tools/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/arbitrage-betting/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/income-estimator/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/embed/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://promogrind.bet/calc-api/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/promo-expiry-widget/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bet/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/arb-calculator/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/kelly-criterion/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/no-vig/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/profit-boost/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/parlay-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/hedge-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/ev-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/matched-betting/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/promo-converter/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/sportsbook-promo/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/sports-betting-tools/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/arbitrage-betting/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Convert — highest-traffic calculators -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bet</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/profit-boost</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/first-bet</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/deposit-match</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/insurance</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bet</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://promogrind.bet/profit-boost</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/first-bet</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/deposit-match</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/insurance</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Calculate -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/no-vig</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/no-vig-3way</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/ev</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/kelly</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/arb-2way</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/arb-3way</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-hedge</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/middle</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/odds-convert</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/line-shop</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/rollover</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/teaser</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/round-robin</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-builder</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/sgp-estimator</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/hold-calc</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bet-sizer</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/income-estimator</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/deposit-optimizer</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/hedge-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-guarantee</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/gut-check</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/no-vig</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/no-vig-3way</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/ev</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/kelly</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/arb-2way</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/arb-3way</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/parlay-hedge</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/middle</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/odds-convert</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/line-shop</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/rollover</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/teaser</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/round-robin</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/parlay-builder</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/sgp-estimator</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/hold-calc</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bet-sizer</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/income-estimator</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/deposit-optimizer</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/hedge-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/promo-guarantee</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/gut-check</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-stacking</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/promo-stacking</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Track -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/sportsbooks</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bet-tracker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/ledger</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/leaderboard</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/free-bet-arb</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/trade-journal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/odds-compare</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/sportsbooks</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/bet-tracker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/ledger</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/leaderboard</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/free-bet-arb</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/trade-journal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/odds-compare</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
   <!-- Learn -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/knowledge-base</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-finder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-calendar</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-board</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/glossary</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/refer-earn</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/upgrade</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/team-accounts</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/vs-competitors</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/promo-arb-finder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/knowledge-base</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/promo-finder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/promo-calendar</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/promo-board</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/glossary</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/refer-earn</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/upgrade</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/team-accounts</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/vs-competitors</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/promo-arb-finder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
   <!-- PR & Data Reports -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/annual-report/</loc><lastmod>2026-03-27</lastmod><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/annual-report/</loc><lastmod>2026-03-27</lastmod><changefreq>yearly</changefreq><priority>0.8</priority></url>
 
   <!-- Marketing & legal pages -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/promogrind-verified/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/landing/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/privacy/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/terms/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/responsible-gambling/</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/affiliate-disclosure/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/disclaimer/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/dmca/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/data-policy/</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://promogrind.bet/promogrind-verified/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/landing/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://promogrind.bet/privacy/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://promogrind.bet/terms/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://promogrind.bet/responsible-gambling/</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://promogrind.bet/affiliate-disclosure/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://promogrind.bet/disclaimer/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://promogrind.bet/dmca/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://promogrind.bet/data-policy/</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
 
   <!-- Additional keyword SEO pages -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/free-bet-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/deposit-match-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/rollover-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/same-game-parlay/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/free-bet-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/deposit-match-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/rollover-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/same-game-parlay/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- State-specific landing pages (US) -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-new-york/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-new-jersey/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-illinois/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-michigan/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-ohio/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-colorado/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-pennsylvania/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-virginia/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-arizona/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-tennessee/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-indiana/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-iowa/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-west-virginia/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-kansas/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-maryland/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-massachusetts/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-louisiana/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-kentucky/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-north-carolina/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-connecticut/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-nevada/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-oregon/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-mississippi/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-missouri/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-vermont/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-new-hampshire/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-wyoming/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-north-dakota/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-south-dakota/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-montana/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-new-york/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-new-jersey/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-illinois/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-michigan/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-ohio/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-colorado/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-pennsylvania/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-virginia/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-arizona/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-tennessee/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-indiana/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-iowa/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-west-virginia/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-kansas/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-maryland/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-massachusetts/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-louisiana/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-kentucky/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-north-carolina/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-connecticut/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-nevada/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-oregon/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-mississippi/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-missouri/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-vermont/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-new-hampshire/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-wyoming/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-north-dakota/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-south-dakota/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-montana/</loc><lastmod>2026-03-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- UK market pages -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/matched-betting-uk/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-uk/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-london/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-manchester/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-birmingham/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-glasgow/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-edinburgh/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bets-liverpool/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/matched-betting-uk/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-uk/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-london/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-manchester/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-birmingham/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-glasgow/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-edinburgh/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bets-liverpool/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Spanish (ES) market pages — US Hispanic audience -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bet-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/arb-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/no-vig-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/profit-boost-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/kelly-criterion-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/ev-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/hedge-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/matched-betting-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/sportsbook-promo-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bet-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/arb-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/no-vig-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/profit-boost-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/kelly-criterion-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/ev-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/parlay-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/hedge-calculator-es/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/matched-betting-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/sportsbook-promo-es/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Blog -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/blog/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/blog/how-matched-betting-works/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/blog/best-sportsbook-promos-2026/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/blog/draftkings-vs-fanduel-promos/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/blog/sports-betting-taxes-guide/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/blog/arbitrage-betting-explained/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/blog/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/blog/how-matched-betting-works/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/blog/best-sportsbook-promos-2026/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/blog/draftkings-vs-fanduel-promos/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/blog/sports-betting-taxes-guide/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/blog/arbitrage-betting-explained/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- PT-BR Brazilian market pages (v20) -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/bonus-bet-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/arb-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/kelly-criterion-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/ev-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/parlay-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/matched-betting-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/bonus-bet-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/arb-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/kelly-criterion-pt/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/ev-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/parlay-calculator-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://promogrind.bet/matched-betting-pt/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Growth & distribution pages (v20) -->
-  <url><loc>https://vaultsparkstudios.com/promogrind/the-grind/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://vaultsparkstudios.com/promogrind/creator-program/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/the-grind/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://promogrind.bet/creator-program/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
 </urlset>
