@@ -3,24 +3,32 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Domain live pending Namecheap → Cloudflare nameserver update. All backend services deployed. UX accessibility + account UI complete.",
-  "nextMilestone": "Namecheap nameservers → promogrind.bet live → Reddit launch posts.",
+  "currentFocus": "Domain live on Cloudflare. Auth UX complete — UserMenu with avatar/dropdown, guest gates, branding softened. Search Console submission unblocked.",
+  "nextMilestone": "Google Search Console verification → Stripe Customer Portal edge function → Reddit launch.",
   "blockers": [
-    "Namecheap nameservers not yet pointed to Cloudflare (journey.ns.cloudflare.com + piers.ns.cloudflare.com) — promogrind.bet not resolving yet",
     "Affiliate/referral links not configured in src/books.js",
-    "Stripe Customer Portal not wired — 'Manage billing' in ProfilePanel links to VaultSpark for now"
+    "Stripe Customer Portal not wired — Manage billing links to VaultSpark for now",
+    "wins_wall Supabase table does not exist — needed for community wins wall server data",
+    "Google Search Console not yet verified (unblocked — add TXT record in Cloudflare)"
   ],
   "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
-  "version": "23.5.0",
-  "lastSession": "S36",
+  "version": "23.6.0",
+  "lastSession": "S37",
+  "commits": [
+    "9b42d1b — feat(s37): UserMenu, auth header, responsive overhaul",
+    "e844044 — fix(s37): console errors, Promo Advisor auth gate, branding softening"
+  ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
   "testStatus": "127/127",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
+  "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
+  "brandingStatus": "PromoGrind-native — no Vault Membership in user-facing copy",
+  "manifestStatus": "fixed — /manifest.json (was /promogrind/manifest.json)",
   "pricingTiers": [
     "Free Agent",
     "Scout",
@@ -32,7 +40,7 @@
   "webhookStatus": "live",
   "edgeFunctions": {
     "promo-chat": "deployed",
-    "promo-advisor": "deployed",
+    "promo-advisor": "deployed — guest gate active, explicit auth headers",
     "ai-action-plan": "deployed",
     "create-checkout": "deployed",
     "stripe-webhook": "deployed"
@@ -52,8 +60,16 @@
     ]
   },
   "uiComponents": {
-    "ProfilePanel": "src/components/ProfilePanel.jsx — account/settings slide-in, launched from header Account pill"
+    "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown — replaces ProfilePanel",
+    "AgeGate": "src/components/AgeGate.jsx — full-screen blocking modal, 30-day localStorage flag",
+    "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers"
   },
+  "knownIssues": {
+    "wins_wall_404": "Supabase table does not exist — component silently degrades to localStorage, no UX impact",
+    "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code"
+  },
+  "sitemapUrls": 145,
+  "sitemapUrl": "https://promogrind.bet/sitemap.xml",
   "ignisScore": 41036,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-04-13"
