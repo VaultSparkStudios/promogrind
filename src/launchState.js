@@ -11,7 +11,7 @@ export function ensureTrailingSlash(url) {
 }
 
 export const CANONICAL_APP_URL = ensureTrailingSlash(
-  env.VITE_CANONICAL_URL || "https://promogrind.com/"
+  env.VITE_CANONICAL_URL || "https://vaultsparkstudios.com/promogrind/"
 );
 
 export const FREE_VAULT_MEMBERSHIP_URL = "https://vaultsparkstudios.com/vault-member/";

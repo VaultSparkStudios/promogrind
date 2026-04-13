@@ -4859,14 +4859,14 @@ const Footer = () => (
       </p>
       <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
         <span>© {new Date().getFullYear()} · Powered by <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{color:"inherit",textDecoration:"none"}}>VaultSpark Studios</a> · PromoGrind is a free educational calculator tool.</span>
-        <a href="/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
-        <a href="/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
-        <a href="/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
-        <a href="/affiliate-disclosure/" style={{color:K.mt,textDecoration:"none"}}>Affiliate Disclosure</a>
-        <a href="/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
-        <a href="/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
-        <a href="/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
-        <a href="/landing/" style={{color:K.mt,textDecoration:"none"}}>About</a>
+        <a href="/promogrind/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
+        <a href="/promogrind/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
+        <a href="/promogrind/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
+        <a href="/promogrind/affiliate-disclosure/" style={{color:K.mt,textDecoration:"none"}}>Affiliate Disclosure</a>
+        <a href="/promogrind/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
+        <a href="/promogrind/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
+        <a href="/promogrind/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
+        <a href="/promogrind/landing/" style={{color:K.mt,textDecoration:"none"}}>About</a>
       </p>
     </div>
   </div>
