@@ -23,7 +23,7 @@ const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => 
 import PromoChat from "./components/PromoChat.jsx";
 import { PromoAdvisorPanel } from "./components/PromoAdvisorPanel.jsx";
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
-import ProfilePanel from "./components/ProfilePanel.jsx";
+import UserMenu from "./components/UserMenu.jsx";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -4885,7 +4885,6 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [proStatus, setProStatus] = useState(null);
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [darkMode, setDarkMode] = useState(() => { try { return localStorage.getItem('pg_theme') !== 'light'; } catch { return true; } });
   Object.assign(K, darkMode ? KD : KL);
   useEffect(() => { try { localStorage.setItem('pg_theme', darkMode ? 'dark' : 'light'); } catch {} document.body.style.background = K.bg; document.body.style.color = K.tx; if (darkMode) { document.body.classList.remove('light'); } else { document.body.classList.add('light'); } }, [darkMode]);
@@ -4897,6 +4896,15 @@ export default function App() {
   const [appData, setAppData] = useState(() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3'))||{}; } catch { return {}; } });
   const [syncStatus, setSyncStatus] = useState(null);
   const syncTimer = useRef(null);
+  // Responsive breakpoint
+  const [winW, setWinW] = useState(() => typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const h = () => setWinW(window.innerWidth);
+    window.addEventListener('resize', h, { passive: true });
+    return () => window.removeEventListener('resize', h);
+  }, []);
+  const isMobile = winW < 640;
+  const isTablet = winW >= 640 && winW < 1024;
   const [calcSubcat, setCalcSubcat] = useState("All");
   const [currency, setCurrency] = useState(()=>{ try{return localStorage.getItem('pg_currency')||'USD';}catch{return 'USD';} });
   const currencyCtxVal = useMemo(()=>{ const fx=FX[currency]||FX.USD; return {...fx,fmt:(n)=>fx.sym+f(n*(fx.rate||1))}; },[currency]);
@@ -5227,69 +5235,175 @@ export default function App() {
       {showSessionModal&&<SessionModal appData={appData} visitedSlugsRef={visitedSlugsRef} onClose={()=>setShowSessionModal(false)}/>}
       {showOnboarding && <OnboardingWizard onDone={dismissOnboarding}/>}
       {showCalcSearch && <CalcSearch allCalcs={allCalcs} onNavigate={handleCalcNavigate} onClose={()=>setShowCalcSearch(false)}/>}
-      {showProfile && <ProfilePanel user={user} proStatus={proStatus} darkMode={darkMode} toggleTheme={toggleTheme} compactMode={compactMode} toggleCompact={toggleCompact} currency={currency} setCurrency={setCurrency} onClose={()=>setShowProfile(false)}/>}
-      <div style={{background:`linear-gradient(135deg,${K.s1},${K.s2})`,borderBottom:`1px solid ${K.bd}`,padding:"16px 20px"}}>
-        <div style={{maxWidth:1100,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
-          <div style={{cursor:"pointer"}} onClick={()=>navigate("/"+DEFAULT_SLUG)}>
-            <div style={{fontFamily:fontD,fontSize:20,fontWeight:700,color:K.gn}}>PROMOGRIND</div>
-            <div style={{fontSize:10,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Free Sportsbook Promo Conversion Tools</div>
-            <div style={{display:"flex",gap:12,marginTop:6,flexWrap:"wrap"}}>
-              {[[String(TABS.filter(g=>g.group==="Convert"||g.group==="Calculate").reduce((n,g)=>n+g.items.length,0)),"Calculators"],["Free","Vault Membership"],["vs $99-199/mo","Competitors charge"]].map(([val,label])=>(
-                <div key={label} style={{display:"flex",alignItems:"baseline",gap:4}}>
-                  <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
-                  <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>
-                </div>
-              ))}
-              {weeklyActive>0&&<div style={{display:"flex",alignItems:"baseline",gap:4}}>
-                <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{weeklyActive}</span>
-                <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>grinders this week</span>
-              </div>}
+      {/* ── Site Header ────────────────────────────────────────────────────── */}
+      <header style={{
+        background:`linear-gradient(135deg,${K.s1},${K.s2})`,
+        borderBottom:`1px solid ${K.bd}`,
+        padding: isMobile ? '10px 14px 8px' : isTablet ? '12px 18px 10px' : '14px 28px 12px',
+        position:'sticky', top:0, zIndex:200,
+        backdropFilter:'blur(12px)',
+        WebkitBackdropFilter:'blur(12px)',
+      }}>
+        <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
+
+          {/* ── Logo ─────────────────────────────────────────────────── */}
+          <div style={{cursor:'pointer',flexShrink:0,minWidth:0}} onClick={()=>navigate('/'+DEFAULT_SLUG)}>
+            <div style={{fontFamily:fontD,fontSize:isMobile?17:21,fontWeight:700,color:K.gn,letterSpacing:'-0.5px',lineHeight:1}}>
+              PROMOGRIND
             </div>
-          </div>
-          <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
-            <DailyStreak/>
-            {FEATURE_FLAGS.promoAdvisor && <button
-              onClick={() => setShowPromoAdvisor(v => !v)}
-              title="Promo Advisor — analyze any sportsbook promo instantly"
-              style={{padding:"4px 10px",background:showPromoAdvisor?`${K.pp}20`:"transparent",border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`,borderRadius:6,color:showPromoAdvisor?K.pp:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}
-            >
-              💡 Advisor
-            </button>}
-            {proStatus?.status === "active" && (
-              <div style={{fontSize:10,fontWeight:700,color:K.pp,background:`${K.pp}15`,padding:"3px 10px",borderRadius:50,letterSpacing:"1px"}}>PRO</div>
+            {!isMobile && (
+              <div style={{fontSize:9,color:K.mt,letterSpacing:'2px',textTransform:'uppercase',marginTop:3}}>
+                Free Sportsbook Promo Conversion Tools
+              </div>
             )}
-            {syncStatus && <span style={{fontSize:9,color:syncStatus==='syncing'?K.yl:K.gn,fontFamily:font,letterSpacing:"0.5px",transition:"opacity 0.3s"}}>{syncStatus==='syncing'?'SYNCING…':'✓ SAVED'}</span>}
-            <select value={currency} onChange={e=>{setCurrency(e.target.value);try{localStorage.setItem('pg_currency',e.target.value);}catch{}}} style={{...S.input,width:"auto",padding:"4px 8px",fontSize:10}}>
-              {Object.entries(FX).map(([code,{sym}])=><option key={code} value={code}>{code} ({sym})</option>)}
-            </select>
-            {currency!=='USD'&&<span style={{fontSize:9,color:K.yl,letterSpacing:"0.5px"}}>Showing {currency} estimates. Rates approximate.</span>}
-            <button onClick={()=>setShowSessionModal(true)} title="Session summary" style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>
-              Session
-            </button>
-            <button onClick={toggleCompact} title={compactMode?"Show help sections":"Hide help sections"} style={{padding:"4px 10px",background:compactMode?`${K.ac}15`:"transparent",border:`1px solid ${compactMode?K.ac:K.bd2}`,borderRadius:6,color:compactMode?K.ac:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>
-              {compactMode?"FULL":"COMPACT"}
-            </button>
-            <button onClick={toggleTheme} title={darkMode?"Switch to light mode":"Switch to dark mode"} style={{padding:"4px 10px",background:darkMode?"transparent":`${K.yl}15`,border:`1px solid ${darkMode?K.bd2:K.yl}`,borderRadius:6,color:darkMode?K.dm:K.yl,fontSize:10,cursor:"pointer",fontFamily:font}}>
-              {darkMode?"☀ LIGHT":"🌙 DARK"}
-            </button>
+            {!isMobile && (
+              <div style={{display:'flex',gap:14,marginTop:6,alignItems:'baseline',flexWrap:'wrap'}}>
+                {[
+                  [String(TABS.filter(g=>g.group==='Convert'||g.group==='Calculate').reduce((n,g)=>n+g.items.length,0)),'Calculators'],
+                  ['Free','Vault Membership'],
+                  ['vs $99-199/mo','Competitors charge'],
+                  ...(weeklyActive>0?[[String(weeklyActive),'grinders this week']]:[]),
+                ].map(([val,label])=>(
+                  <div key={label} style={{display:'flex',alignItems:'baseline',gap:4}}>
+                    <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
+                    <span style={{fontSize:9,color:K.mt,textTransform:'uppercase',letterSpacing:'1px'}}>{label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ── Right controls ───────────────────────────────────────── */}
+          <div style={{display:'flex',alignItems:'center',gap:isMobile?6:10,flexShrink:0}}>
+
+            {/* Streak — hide on mobile (shown in mobile strip below) */}
+            {!isMobile && <DailyStreak/>}
+
+            {/* Advisor */}
+            {FEATURE_FLAGS.promoAdvisor && !isMobile && (
+              <button
+                onClick={()=>setShowPromoAdvisor(v=>!v)}
+                title="Promo Advisor — analyze any sportsbook promo instantly"
+                style={{
+                  padding:'6px 12px', background:showPromoAdvisor?`${K.pp}20`:'transparent',
+                  border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`, borderRadius:8,
+                  color:showPromoAdvisor?K.pp:K.dm, fontSize:11, cursor:'pointer',
+                  fontFamily:font, minHeight:36,
+                }}
+              >
+                💡 Advisor
+              </button>
+            )}
+
+            {/* Theme toggle — always visible as icon */}
             <button
-              onClick={()=>setShowProfile(v=>!v)}
-              title={user ? user.email : 'Sign in / Create account'}
-              style={{display:"flex",alignItems:"center",gap:6,padding:"4px 10px 4px 6px",background:showProfile?`${K.gn}15`:"transparent",border:`1px solid ${showProfile?K.gn:K.bd2}`,borderRadius:20,color:showProfile?K.gn:K.tx,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}
+              onClick={toggleTheme}
+              title={darkMode?'Switch to light mode':'Switch to dark mode'}
+              style={{
+                width:36, height:36, borderRadius:8, cursor:'pointer',
+                background:darkMode?'transparent':`${K.yl}15`,
+                border:`1px solid ${darkMode?K.bd2:K.yl+'60'}`,
+                color:darkMode?K.dm:K.yl, fontSize:15,
+                display:'flex', alignItems:'center', justifyContent:'center',
+                flexShrink:0, transition:'all 0.2s',
+              }}
             >
-              <span style={{width:22,height:22,borderRadius:"50%",background:showProfile?`${K.gn}25`:`${K.ac}20`,border:`1px solid ${showProfile?K.gn:K.ac}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:showProfile?K.gn:K.ac,flexShrink:0}}>
-                {user ? user.email.slice(0,2).toUpperCase() : '?'}
-              </span>
-              {user ? 'Account' : 'Sign In'}
+              {darkMode?'☀':'🌙'}
             </button>
-            <div style={{fontSize:10,color:K.dm,textAlign:"right",lineHeight:1.6}}>Free educational tool. Not gambling advice.<br/>21+ only. Gamble responsibly. 1-800-GAMBLER</div>
+
+            {/* UserMenu — auth widget */}
+            <UserMenu
+              user={user}
+              proStatus={proStatus}
+              darkMode={darkMode}
+              toggleTheme={toggleTheme}
+              compactMode={compactMode}
+              toggleCompact={toggleCompact}
+              currency={currency}
+              setCurrency={setCurrency}
+              syncStatus={syncStatus}
+              onSessionClick={()=>setShowSessionModal(true)}
+            />
           </div>
         </div>
-      </div>
-      <div style={{background:K.s1,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto"}}>
-        <div style={{display:"flex",maxWidth:1100,width:"100%"}}>{TABS.map((t,i)=>(
-          <button key={t.group} onClick={()=>goTo(i,0)} style={{padding:"11px 18px",fontSize:11,fontWeight:gi===i?700:400,color:gi===i?K.gn:K.mt,background:gi===i?`${K.gn}08`:"transparent",border:"none",borderBottom:gi===i?`2px solid ${K.gn}`:"2px solid transparent",cursor:"pointer",fontFamily:font,textTransform:"uppercase",letterSpacing:"1px"}}>{t.group}</button>
-        ))}</div>
+
+        {/* ── Mobile utility strip ─────────────────────────────────── */}
+        {isMobile && (
+          <div style={{
+            display:'flex', alignItems:'center', justifyContent:'space-between',
+            marginTop:8, paddingTop:8, borderTop:`1px solid ${K.bd}40`,
+          }}>
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <DailyStreak/>
+              {FEATURE_FLAGS.promoAdvisor && (
+                <button
+                  onClick={()=>setShowPromoAdvisor(v=>!v)}
+                  style={{
+                    padding:'4px 10px', fontFamily:font, cursor:'pointer', fontSize:10,
+                    background:showPromoAdvisor?`${K.pp}20`:'transparent',
+                    border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`,
+                    borderRadius:6, color:showPromoAdvisor?K.pp:K.dm,
+                  }}
+                >
+                  💡 Advisor
+                </button>
+              )}
+            </div>
+            <div style={{fontSize:9,color:K.dm,textAlign:'right',lineHeight:1.5}}>
+              Free tool · Not gambling advice · 21+ · 1-800-GAMBLER
+            </div>
+          </div>
+        )}
+
+        {/* ── Desktop compliance line ──────────────────────────────── */}
+        {!isMobile && (
+          <div style={{maxWidth:1100,margin:'4px auto 0',textAlign:'right'}}>
+            <span style={{fontSize:9,color:K.dm}}>
+              Free educational tool · Not gambling advice · 21+ only · Gamble responsibly · 1-800-GAMBLER
+            </span>
+          </div>
+        )}
+      </header>
+
+      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
+      <div style={{
+        background:K.s1, borderBottom:`1px solid ${K.bd}`,
+        display:'flex', justifyContent:'center',
+        overflowX:'auto', scrollbarWidth:'none',
+        WebkitOverflowScrolling:'touch',
+        position:'sticky', top: isMobile ? 94 : 106, zIndex:190,
+      }}>
+        <style>{`
+          .pg-tabs::-webkit-scrollbar { display: none; }
+          .pg-tab-btn { -webkit-tap-highlight-color: transparent; }
+          .pg-tab-btn:active { opacity: 0.7; }
+        `}</style>
+        <div className="pg-tabs" style={{display:'flex',maxWidth:1100,width:'100%'}}>
+          {TABS.map((t,i)=>(
+            <button
+              key={t.group}
+              className="pg-tab-btn"
+              onClick={()=>goTo(i,0)}
+              style={{
+                flex:1, minWidth:isMobile?72:90,
+                padding: isMobile ? '12px 10px' : '12px 20px',
+                fontSize: isMobile ? 10 : 11,
+                fontWeight:gi===i?700:400,
+                color:gi===i?K.gn:K.mt,
+                background:gi===i?`${K.gn}08`:'transparent',
+                border:'none',
+                borderBottom:gi===i?`2px solid ${K.gn}`:'2px solid transparent',
+                cursor:'pointer', fontFamily:font,
+                textTransform:'uppercase', letterSpacing:'1px',
+                whiteSpace:'nowrap',
+                minHeight:44,
+                transition:'color 0.15s, background 0.15s',
+              }}
+            >
+              {t.group}
+            </button>
+          ))}
+        </div>
       </div>
       <div style={{position:"relative"}}>
         <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto",flexDirection:"column"}}>

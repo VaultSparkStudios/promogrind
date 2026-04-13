@@ -70,14 +70,66 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
     <style>
+      /* ── Reset ───────────────────────────────────────────────────────── */
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { background: #0a0e17; color: #e2e8f0; }
       body.light { background: #f8fafc; color: #1e293b; }
       #root { min-height: 100vh; }
+
+      /* ── Focus rings ─────────────────────────────────────────────────── */
       input:focus, select:focus, textarea:focus { outline: 2px solid #60a5fa; outline-offset: -1px; }
       body.light input:focus, body.light select:focus, body.light textarea:focus { outline-color: #3b82f6; }
+
+      /* ── Selection ───────────────────────────────────────────────────── */
       ::selection { background: #60a5fa40; }
       body.light ::selection { background: #3b82f640; }
+
+      /* ── Mobile: prevent iOS font-size zoom on focus ─────────────────── */
+      @media (max-width: 768px) {
+        input, select, textarea { font-size: 16px !important; }
+      }
+
+      /* ── Smooth scrolling ────────────────────────────────────────────── */
+      html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+      /* ── Touch targets ───────────────────────────────────────────────── */
+      button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+      a      { -webkit-tap-highlight-color: transparent; }
+
+      /* ── Scrollbar: thin on desktop, hidden on mobile overflows ─────── */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #475569; }
+      body.light ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+      body.light ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+      /* ── Horizontal scroll containers (tabs, strips) ─────────────────── */
+      .pg-scroll-x {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .pg-scroll-x::-webkit-scrollbar { display: none; }
+
+      /* ── Card hover lift ─────────────────────────────────────────────── */
+      @media (hover: hover) {
+        .pg-card-hover:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+      }
+
+      /* ── Mobile: larger tap targets for nav buttons ──────────────────── */
+      @media (max-width: 640px) {
+        .pg-tab-btn { min-height: 48px !important; }
+      }
+
+      /* ── Safe area padding for notched phones ────────────────────────── */
+      @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        body { padding-bottom: env(safe-area-inset-bottom); }
+      }
     </style>
     <script>try{if(localStorage.getItem('pg_theme')==='light'){document.body.classList.add('light');document.body.style.background='#f8fafc';document.body.style.color='#1e293b';}}catch(e){}</script>
     <!-- Cloudflare Web Analytics -->
