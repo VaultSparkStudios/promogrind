@@ -107,7 +107,7 @@ const CheckoutListener = () => {
 const TrustStrip = () => (
   <div style={{background:`${K.gn}08`,borderBottom:`1px solid ${K.bd}`,padding:"8px 20px"}}>
     <div style={{maxWidth:1100,margin:"0 auto",display:"flex",gap:14,flexWrap:"wrap",fontSize:10,color:K.dm,letterSpacing:"0.4px"}}>
-      <span><strong style={{color:K.gn}}>Free Vault membership</strong> unlocks access and sync across Studio tools.</span>
+      <span><strong style={{color:K.gn}}>Free PromoGrind account</strong> unlocks sync and access across all devices.</span>
       <span>Educational math only.</span>
       <span>21+ where legal.</span>
       <span>Not betting or financial advice.</span>
@@ -118,7 +118,7 @@ const TrustStrip = () => (
 
 const MembershipBanner = () => (
   <div style={{...S.note(K.ac),marginBottom:12}}>
-    PromoGrind is free to use with a free Vault membership account. That account also powers sync, referrals, and shared access across VaultSpark Studio projects.
+    PromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices — the same account works across all VaultSpark Studio tools.
   </div>
 );
 
@@ -277,8 +277,8 @@ const parseNL = (text) => {
 // ═══ SHARE CARD ═══
 function ShareCard({ title, profit, onClose }) {
   const appUrl = CANONICAL_APP_URL;
-  const text = `🎉 Just locked in ${profit} in guaranteed profit using ${title} on PromoGrind.\n\nFree Vault membership account, free core calculator suite:\n${appUrl}`;
-  const tweetText = `🎉 Just locked in ${profit} guaranteed profit from a sportsbook promo using @PromoGrind — free Vault membership, free calculator suite\n${appUrl}`;
+  const text = `🎉 Just locked in ${profit} in guaranteed profit using ${title} on PromoGrind.\n\nFree account, free calculator suite:\n${appUrl}`;
+  const tweetText = `🎉 Just locked in ${profit} guaranteed profit from a sportsbook promo using @PromoGrind — free account, free calculator suite\n${appUrl}`;
   const [copyLabel, setCopyLabel] = React.useState('📋 Copy text');
 
   const handleCopy = () => {
@@ -3305,7 +3305,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
           <div style={{fontSize:11,color:K.ac,fontWeight:700,letterSpacing:'1.4px',textTransform:'uppercase',marginBottom:6}}>Member Welcome</div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:6}}>How access works in PromoGrind</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:760}}>
-            Free Vault membership is the account layer for PromoGrind and other Studio tools. The free core product is live now; Pro and backend-dependent surfaces unlock in stages as services come online.
+            A free PromoGrind account powers sync, referrals, and access across devices. The same account works across all VaultSpark Studio tools. Pro features unlock in stages as services come online.
           </div>
         </div>
         <button onClick={dismiss} style={{background:'none',border:'none',color:K.mt,cursor:'pointer',fontSize:18,lineHeight:1,padding:0}}>×</button>
@@ -3313,7 +3313,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
 
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))',gap:10,marginBottom:12}}>
         <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:4}}>Free Vault Membership</div>
+          <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:4}}>Free PromoGrind Account</div>
           <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>Login, sync, calculators, tracker, ledger, and learning tools.</div>
         </div>
         <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
@@ -4855,7 +4855,7 @@ const Footer = () => (
         <span style={{color:K.dm,fontWeight:600}}>Affiliate Disclosure:</span> Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.
       </p>
       <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
-        <span style={{color:K.dm,fontWeight:600}}>Access:</span> PromoGrind uses free Vault membership accounts for login and sync across VaultSpark Studio products.
+        <span style={{color:K.dm,fontWeight:600}}>Access:</span> PromoGrind uses free accounts for login and sync. The same account works across all VaultSpark Studio tools.
       </p>
       <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
         Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool — not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
@@ -5167,7 +5167,7 @@ export default function App() {
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
               ["27 Free Calculators","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
-              ["Free Vault Membership","One free account unlocks PromoGrind and cross-project sync."],
+              ["Free PromoGrind Account","One free account, all 53 calculators — syncs across your devices."],
               ["Live Arb + EV Scanner","Real-time opportunities across 40+ books. VaultSparked Pro."],
             ].map(([title,desc])=>(
               <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>
@@ -5260,7 +5260,7 @@ export default function App() {
               <div style={{display:'flex',gap:14,marginTop:6,alignItems:'baseline',flexWrap:'wrap'}}>
                 {[
                   [String(TABS.filter(g=>g.group==='Convert'||g.group==='Calculate').reduce((n,g)=>n+g.items.length,0)),'Calculators'],
-                  ['Free','Vault Membership'],
+                  ['Free','Forever'],
                   ['vs $99-199/mo','Competitors charge'],
                   ...(weeklyActive>0?[[String(weeklyActive),'grinders this week']]:[]),
                 ].map(([val,label])=>(
@@ -5484,7 +5484,7 @@ export default function App() {
       <Footer/>
       <div style={{height:56}}/>
       <MobileBottomNav gi={gi} goTo={goTo}/>
-      {showPromoAdvisor && <PromoAdvisorPanel proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
+      {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
       <PromoChat navigate={navigate}/>
       <QuickCalcPanel goTo={goTo}/>
     </div>

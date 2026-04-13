@@ -75,7 +75,7 @@ export const FeatureUnavailableCard = ({ featureKey, title, body }) => {
           onClick={() => trackFeatureGateClick(feature.key, "free-membership")}
           style={{padding:"7px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,textDecoration:"none",fontFamily:font}}
         >
-          Free Vault membership
+          Free account
         </a>
         <span style={{fontSize:10,color:K.mt}}>Setup progress appears in the dashboard launch panel.</span>
       </div>

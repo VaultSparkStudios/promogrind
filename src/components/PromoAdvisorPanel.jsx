@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { supabase } from "../auth.js";
-import { FEATURE_FLAGS } from "../launchState.js";
+import { FEATURE_FLAGS, FREE_VAULT_MEMBERSHIP_URL } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
 import { K, font, fontD, S } from "../lib/shared.js";
 
-export const PromoAdvisorPanel = ({ proStatus, onClose }) => {
+export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   if (!FEATURE_FLAGS.promoAdvisor) {
     return (
       <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
@@ -33,7 +33,9 @@ export const PromoAdvisorPanel = ({ proStatus, onClose }) => {
     try {
       // Sanitize: strip HTML/script tags, cap at 2000 chars
       const sanitized = promoText.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
+      const { data: { session } } = await supabase.auth.getSession();
       const { data, error: fnErr } = await supabase.functions.invoke('promo-advisor', {
+        headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
         body: { promoText: sanitized }
       });
       if (fnErr) throw fnErr;
@@ -74,6 +76,36 @@ export const PromoAdvisorPanel = ({ proStatus, onClose }) => {
         </div>
         <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',color:K.mt,fontSize:18,padding:4}}>×</button>
       </div>
+
+      {/* Guest gate — sign in required to call edge function */}
+      {!user && (
+        <div style={{margin:16,padding:16,background:`${K.gn}08`,border:`1px solid ${K.gn}25`,borderRadius:10,textAlign:'center'}}>
+          <div style={{fontSize:22,marginBottom:8}}>💡</div>
+          <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:6}}>Sign in to use Promo Advisor</div>
+          <div style={{fontSize:11,color:K.dm,lineHeight:1.6,marginBottom:14}}>
+            Free account gets 3 analyses per day. No credit card required.
+          </div>
+          <a
+            href={FREE_VAULT_MEMBERSHIP_URL}
+            style={{
+              display:'block',padding:'10px 0',borderRadius:8,
+              background:K.gn,color:'#0a0e17',fontSize:12,fontWeight:700,
+              textDecoration:'none',fontFamily:font,
+            }}
+          >
+            Create Free Account →
+          </a>
+          <a
+            href={FREE_VAULT_MEMBERSHIP_URL}
+            style={{
+              display:'block',marginTop:8,fontSize:11,color:K.dm,
+              textDecoration:'none',fontFamily:font,
+            }}
+          >
+            Already have an account? Sign in →
+          </a>
+        </div>
+      )}
 
       <div style={{flex:1,overflow:'auto',padding:16,display:'flex',flexDirection:'column',gap:12}}>
         {/* Textarea */}
