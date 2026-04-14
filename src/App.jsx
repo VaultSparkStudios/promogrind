@@ -4782,9 +4782,213 @@ const AboutPage = () => {
   );
 };
 
+const GetStarted = () => {
+  const navigate = useNavigate();
+  const steps = [
+    {num:1,icon:"🏦",title:"Open Accounts",desc:"Open accounts at the sportsbooks you don't have yet. More accounts = more promos.",btn:"View Sportsbooks →",slug:"/sportsbooks"},
+    {num:2,icon:"🎯",title:"Find a Promo",desc:"Browse available promotions and pick the best offer to convert.",btn:"Open Promo Board →",slug:"/promo-board"},
+    {num:3,icon:"🧮",title:"Calculate Your Hedge",desc:"Enter the promo into the right calculator to find exact bet amounts.",btn:"Bonus Bet Calculator →",slug:"/bonus-bet"},
+    {num:4,icon:"📊",title:"Place & Track",desc:"Place both sides of the bet. Log it in your Bet Tracker immediately.",btn:"Bet Tracker →",slug:"/bet-tracker"},
+    {num:5,icon:"💰",title:"Check Your P/L",desc:"Every completed promo shows in your ledger. Review your running total.",btn:"P/L Ledger →",slug:"/ledger"},
+    {num:6,icon:"🤖",title:"Unlock AI Tools",desc:"Upgrade to Runner for unlimited PromoAdvisor, AI Action Plan, and Stack Builder.",btn:"View Plans →",slug:"/upgrade"},
+  ];
+  return (
+    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
+      <div style={{marginBottom:24}}>
+        <div style={{fontSize:22,fontWeight:700,color:K.tx,fontFamily:fontD,letterSpacing:-0.5,marginBottom:4}}>Get Started</div>
+        <div style={{fontSize:13,color:K.mt}}>Follow these 6 steps to start converting sportsbook promos into real profit.</div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(340px,1fr))',gap:14}}>
+        {steps.map(s=>(
+          <div key={s.num} style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px',display:'flex',flexDirection:'column',gap:10}}>
+            <div style={{display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:32,height:32,borderRadius:'50%',background:`${K.gn}15`,border:`1px solid ${K.gn}40`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,color:K.gn,flexShrink:0,fontFamily:font}}>{s.num}</div>
+              <div style={{fontSize:22,lineHeight:1}}>{s.icon}</div>
+              <div style={{fontSize:14,fontWeight:700,color:K.tx,fontFamily:fontD}}>{s.title}</div>
+            </div>
+            <div style={{fontSize:12,color:K.mt,lineHeight:1.65,paddingLeft:44}}>{s.desc}</div>
+            <div style={{paddingLeft:44}}>
+              <button onClick={()=>navigate(s.slug)} style={{padding:'6px 14px',background:`${K.gn}15`,border:`1px solid ${K.gn}40`,borderRadius:6,color:K.gn,fontSize:12,fontWeight:600,cursor:'pointer',fontFamily:font}}>{s.btn}</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const WhatsNew = () => {
+  const releases = [
+    {
+      version:"v23.7.0",date:"2026-04-13",sprint:"S39",
+      bullets:[
+        "Beta invite codes — friends can test Runner tier free for 30 days (no card required).",
+        "About tab added to Home.",
+        "All broken /promogrind/ links fixed across 40+ pages.",
+      ],
+    },
+    {
+      version:"v23.6.0",date:"2026-04-13",sprint:"S38",
+      bullets:[
+        "Stripe Customer Portal — subscribers can manage billing from user menu.",
+        "RESEND onboarding emails migrated to promogrind.bet.",
+        "Customer portal edge function deployed.",
+      ],
+    },
+    {
+      version:"v23.5.0",date:"2026-04-12",sprint:"S37",
+      bullets:[
+        "UserMenu redesign — 12 sports avatar emoji, editable display name, tier badge, animated dropdown.",
+        "Header + tab bar responsive overhaul for mobile.",
+        "Promo Advisor guest gate.",
+      ],
+    },
+    {
+      version:"v23.4.0",date:"2026-03-31",sprint:"S36",
+      bullets:[
+        "WCAG AA compliance — all text meets 4.5:1 contrast in both light and dark themes.",
+        "Income Access affiliate disclosure audit complete.",
+        "sitemap.xml updated with 145 URLs.",
+      ],
+    },
+    {
+      version:"v23.3.0",date:"2026-03-27",sprint:"S35",
+      bullets:[
+        "Full analytics stack live — Cloudflare Web Analytics, PostHog behavioral tracking, Sentry error monitoring.",
+        "PostHog user identity on auth.",
+      ],
+    },
+  ];
+  return (
+    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
+      <div style={{marginBottom:24}}>
+        <div style={{fontSize:22,fontWeight:700,color:K.tx,fontFamily:fontD,letterSpacing:-0.5,marginBottom:4}}>What's New</div>
+        <div style={{fontSize:13,color:K.mt}}>Recent releases and improvements to PromoGrind.</div>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:12}}>
+        {releases.map(r=>(
+          <div key={r.version} style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'16px 20px'}}>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+              <span style={{padding:'3px 10px',borderRadius:5,fontSize:11,fontWeight:700,background:`${K.gn}15`,border:`1px solid ${K.gn}40`,color:K.gn,fontFamily:font}}>{r.version}</span>
+              <span style={{fontSize:11,color:K.dm,fontFamily:font}}>{r.sprint}</span>
+              <span style={{fontSize:11,color:K.dm,marginLeft:'auto',fontFamily:font}}>{r.date}</span>
+            </div>
+            <ul style={{margin:0,padding:'0 0 0 18px'}}>
+              {r.bullets.map((b,i)=>(
+                <li key={i} style={{fontSize:12,color:K.mt,lineHeight:1.65,marginBottom:i<r.bullets.length-1?4:0}}>{b}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const DailyBriefPage = () => {
+  const navigate = useNavigate();
+  const { bets } = useContext(AppDataCtx);
+  const today = new Date();
+  const todayDay = DAYS_ORDER.find(d=>d===["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][today.getDay()]) || null;
+  const isWeekend = today.getDay()===0||today.getDay()===6;
+  const todayPromos = PROMO_SCHED.filter(p=>p.day==="Daily"||p.day===todayDay||(p.day==="Weekend"&&isWeekend));
+  const openBets = (bets||[]).filter(b=>b.status==="open"||b.status==="pending"||!b.status);
+  const [notifEnabled, setNotifEnabled] = useState(()=>localStorage.getItem('pg_daily_brief')==='1');
+
+  const toggleNotif = async () => {
+    if(notifEnabled){
+      localStorage.removeItem('pg_daily_brief');
+      setNotifEnabled(false);
+    } else {
+      const perm = await Notification.requestPermission();
+      if(perm==='granted'){
+        localStorage.setItem('pg_daily_brief','1');
+        setNotifEnabled(true);
+      }
+    }
+  };
+
+  const fullDate = today.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const dayName = today.toLocaleDateString('en-US',{weekday:'long'});
+
+  const actions = [
+    {icon:"🧮",label:"Calculate a promo",slug:"/bonus-bet"},
+    {icon:"📋",label:"Log a bet",slug:"/bet-tracker"},
+    {icon:"💰",label:"Check P/L",slug:"/ledger"},
+    {icon:"🎯",label:"Find promos",slug:"/promo-finder"},
+  ];
+
+  return (
+    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
+      <div style={{marginBottom:24}}>
+        <div style={{fontSize:24,fontWeight:700,color:K.tx,fontFamily:fontD,letterSpacing:-0.5,marginBottom:2}}>{fullDate}</div>
+        <div style={{fontSize:13,color:K.dm,marginBottom:4}}>{dayName}</div>
+        <div style={{fontSize:13,color:K.mt}}>Your daily PromoGrind briefing</div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(340px,1fr))',gap:14}}>
+
+        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
+          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:12}}>Today's Promos</div>
+          {todayPromos.length===0
+            ? <div style={{fontSize:12,color:K.mt}}>No recurring promos found for today.</div>
+            : <div style={{display:'flex',flexDirection:'column',gap:6}}>
+                {todayPromos.slice(0,8).map((p,i)=>(
+                  <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'6px 0',borderBottom:i<Math.min(todayPromos.length,8)-1?`1px solid ${K.bd}`:'none'}}>
+                    <div>
+                      <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{p.promo}</span>
+                      <span style={{fontSize:11,color:K.dm,marginLeft:6}}>{p.book}</span>
+                    </div>
+                    <span style={{fontSize:11,color:K.gn,fontFamily:font}}>{p.value}</span>
+                  </div>
+                ))}
+              </div>
+          }
+          <button onClick={()=>navigate('/promo-calendar')} style={{marginTop:14,padding:'6px 14px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.ac,fontSize:12,cursor:'pointer',fontFamily:font}}>View full calendar →</button>
+        </div>
+
+        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
+          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:12}}>Quick Actions</div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+            {actions.map(a=>(
+              <button key={a.slug} onClick={()=>navigate(a.slug)} style={{padding:'12px 10px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,color:K.tx,fontSize:12,fontWeight:600,cursor:'pointer',fontFamily:font,display:'flex',alignItems:'center',gap:8,textAlign:'left'}}>
+                <span style={{fontSize:18}}>{a.icon}</span>
+                <span>{a.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
+          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:6}}>9am Briefing</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:14}}>Get a daily notification at 9am with your promo rundown.</div>
+          <button onClick={toggleNotif} style={{padding:'8px 16px',background:notifEnabled?`${K.gn}15`:'transparent',border:`1px solid ${notifEnabled?K.gn:K.bd2}`,borderRadius:6,color:notifEnabled?K.gn:K.dm,fontSize:12,fontWeight:600,cursor:'pointer',fontFamily:font}}>
+            {notifEnabled ? '🔔 Notifications on — tap to disable' : '🔕 Enable daily briefing'}
+          </button>
+        </div>
+
+        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
+          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:6}}>Open Bets</div>
+          {openBets.length===0
+            ? <div style={{fontSize:12,color:K.gn}}>No open bets — you're clear!</div>
+            : <div>
+                <div style={{fontSize:12,color:K.tx,marginBottom:12}}><span style={{fontWeight:700,color:K.yl}}>{openBets.length}</span> bet{openBets.length!==1?'s':''} pending</div>
+                <button onClick={()=>navigate('/bet-tracker')} style={{padding:'6px 14px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.ac,fontSize:12,cursor:'pointer',fontFamily:font}}>View Tracker →</button>
+              </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
 const TABS = [
   { group:"Home", items:[
     {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
+    {n:"Daily Brief",slug:"daily-brief",c:DailyBriefPage},
+    {n:"Get Started",slug:"get-started",c:GetStarted},
+    {n:"What's New",slug:"whats-new",c:WhatsNew},
+    {n:"Pricing",slug:"pricing",c:PricingPage},
     {n:"About",slug:"about",c:AboutPage},
   ]},
   { group:"Convert", items:[
@@ -5428,7 +5632,7 @@ export default function App() {
                 </button>
               )}
             </div>
-            <div style={{fontSize:9,color:K.dm,textAlign:'right',lineHeight:1.5}}>
+            <div style={{fontSize:11,color:K.dm,textAlign:'right',lineHeight:1.5}}>
               Free tool · Not gambling advice · 21+ · 1-800-GAMBLER
             </div>
           </div>
@@ -5437,7 +5641,7 @@ export default function App() {
         {/* ── Desktop compliance line ──────────────────────────────── */}
         {!isMobile && (
           <div style={{maxWidth:1100,margin:'4px auto 0',textAlign:'right'}}>
-            <span style={{fontSize:9,color:K.dm}}>
+            <span style={{fontSize:11,color:K.dm}}>
               Free educational tool · Not gambling advice · 21+ only · Gamble responsibly · 1-800-GAMBLER
             </span>
           </div>
@@ -5466,7 +5670,7 @@ export default function App() {
               style={{
                 flex:1, minWidth:isMobile?72:90,
                 padding: isMobile ? '12px 10px' : '12px 20px',
-                fontSize: isMobile ? 10 : 11,
+                fontSize: isMobile ? 12 : 13,
                 fontWeight:gi===i?700:400,
                 color:gi===i?K.gn:K.mt,
                 background:gi===i?`${K.gn}08`:'transparent',
@@ -5494,7 +5698,7 @@ export default function App() {
               const favGiTi = slugMap[favSlug];
               return (
                 <button key={favSlug} onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }}
-                  style={{padding:"2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:4}}>
+                  style={{padding:"2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:4}}>
                   ★ {favItem.n}
                   <span onClick={e=>{e.stopPropagation();const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",marginLeft:2}}>✕</span>
                 </button>
@@ -5509,7 +5713,7 @@ export default function App() {
                   const firstMatch = g.items.findIndex(it=>it.subcat===sc);
                   if(firstMatch>=0) goTo(gi,firstMatch);
                 }
-              }} style={{padding:"3px 10px",background:calcSubcat===sc?K.pp:"transparent",border:`1px solid ${calcSubcat===sc?K.pp:K.bd2}`,borderRadius:50,color:calcSubcat===sc?K.bg:K.dm,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
+              }} style={{padding:"3px 10px",background:calcSubcat===sc?K.pp:"transparent",border:`1px solid ${calcSubcat===sc?K.pp:K.bd2}`,borderRadius:50,color:calcSubcat===sc?K.bg:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
                 {sc}
               </button>
             ))}
@@ -5521,7 +5725,7 @@ export default function App() {
           <div style={{display:"flex",maxWidth:1100,width:"100%",gap:2,margin:"0 auto"}}>{g.items.map((t,i)=>{
             const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
             const isFav = calcFavorites.includes(t.slug);
-            return (<button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:11,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
+            return (<button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
               {t.n}
               {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</span>}
               {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}

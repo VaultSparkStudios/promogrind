@@ -16,7 +16,7 @@ export const In = ({l,v,set,ph,pre,err}) => {
   const displayErr = err || oddsErr;
   return (<div style={S.col}><label style={S.label}>{l}</label><div style={{position:"relative"}}>{pre&&<span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:12}}>{pre}</span>}<input inputMode={isNumeric?"decimal":undefined} style={{...S.input,...(pre?{paddingLeft:22}:{}),...(displayErr?{borderColor:K.rd}:{})}} value={v} onChange={e=>set(e.target.value)} placeholder={ph}/>{displayErr&&<div style={{fontSize:10,color:K.rd,marginTop:2}}>{displayErr}</div>}</div></div>);
 };
-export const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:12,color:K.dm}}>{l}</span><span style={{fontSize:13,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
+export const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:13,color:K.dm}}>{l}</span><span style={{fontSize:14,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
 export const Tl = ({t,badge,bc,shareable,getParams}) => {
   const [copied,setCopied]=useState(false);
   const [embedCopied,setEmbedCopied]=useState(false);
@@ -37,7 +37,7 @@ export const Tl = ({t,badge,bc,shareable,getParams}) => {
     try{navigator.clipboard.writeText(iframe);}catch(e){}
     setEmbedCopied(true); setTimeout(()=>setEmbedCopied(false),1500);
   };
-  return (<div style={{fontSize:16,fontWeight:600,color:K.tx,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontFamily:fontD,flexWrap:"wrap"}}>
+  return (<div style={{fontSize:18,fontWeight:600,color:K.tx,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontFamily:fontD,flexWrap:"wrap"}}>
     <span>{t}</span>
     {badge&&<span style={{...S.tag(bc||K.ac)}}>{badge}</span>}
     {shareable&&<button onClick={copy} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{copied?"✓ COPIED":"⎘ SHARE"}</button>}
