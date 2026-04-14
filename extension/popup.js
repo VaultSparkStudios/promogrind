@@ -1,6 +1,6 @@
 // PromoGrind Extension — Popup Script
 
-const APP_BASE = 'https://vaultsparkstudios.com/promogrind/';
+const APP_BASE = 'https://promogrind.bet/';
 
 const BOOK_MAP = {
   'draftkings.com':      { name: 'DraftKings',   color: '#53d769', calcs: ['bonus-bet', 'profit-boost'] },
@@ -29,6 +29,33 @@ const CALC_LABELS = {
 function openCalc(slug) {
   chrome.tabs.create({ url: APP_BASE + '#/' + slug });
   window.close();
+}
+
+function renderSuggestedCalcs(container, book) {
+  container.replaceChildren();
+  book.calcs.forEach((slug) => {
+    const button = document.createElement('button');
+    button.className = 'calc-btn';
+    button.dataset.calc = slug;
+    button.style.background = '#0f1520';
+    button.style.borderColor = `${book.color}30`;
+
+    const textWrap = document.createElement('div');
+    const label = document.createElement('div');
+    label.style.color = book.color;
+    label.textContent = CALC_LABELS[slug] || slug;
+    textWrap.appendChild(label);
+
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow';
+    arrow.style.color = `${book.color}60`;
+    arrow.textContent = '→';
+
+    button.appendChild(textWrap);
+    button.appendChild(arrow);
+    button.addEventListener('click', () => openCalc(slug));
+    container.appendChild(button);
+  });
 }
 
 function detectBookFromUrl(url) {
@@ -68,18 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bookBadge.style.background = book.color + '12';
 
       // Show suggested calculators for this book
-      suggestedCalcs.innerHTML = book.calcs.map(slug => `
-        <button class="calc-btn" data-calc="${slug}" style="background:#0f1520;border-color:${book.color}30;">
-          <div>
-            <div style="color:${book.color};">${CALC_LABELS[slug] || slug}</div>
-          </div>
-          <span class="arrow" style="color:${book.color}60;">→</span>
-        </button>
-      `).join('');
-
-      suggestedCalcs.querySelectorAll('.calc-btn').forEach(btn => {
-        btn.addEventListener('click', () => openCalc(btn.dataset.calc));
-      });
+      renderSuggestedCalcs(suggestedCalcs, book);
     }
   });
 });

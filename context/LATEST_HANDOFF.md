@@ -2,6 +2,35 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 42 — CLOSED)
+
+- Shipped: audit-memory update + security/privacy hardening tranche 1
+- Tests: 127/127 passing
+- Build: passing
+- Deploy: code-only changes in repo; updated edge functions still require deployment
+- Session type: audit follow-through + implementation
+
+### Shipped this session
+
+**feat(s42): audit follow-through and hardening tranche 1**
+- `docs/REFINEMENT_ROADMAP.md` — public-safe execution roadmap covering modularization, activation loop, feedback loop, personalization, observability, and performance budgets
+- `context/TASK_BOARD.md` — expanded with top-priority implementation queue from the audit
+- `supabase/functions/_shared/http.ts` — shared CORS + JSON response helper with approved-origin defaults
+- `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, `gift-trial` — moved off wildcard CORS and standardized JSON responses
+- `src/analytics.js` — replay privacy tightened (`maskAllText`, `blockAllMedia`) and passive sampling reduced
+- `extension/popup.js`, `extension/content.js` — canonical domain updated to `promogrind.bet`; dynamic UI now built with DOM APIs instead of string-built `innerHTML`
+- `context/CURRENT_STATE.md`, `logs/WORK_LOG.md` — memory refreshed to S42 state
+
+### Open blockers / follow-ups
+- Deploy updated Supabase functions: `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, `gift-trial`
+- Run browser smoke after deployment
+- Start tranche 2 extraction: app shell + dashboard state out of `src/App.jsx`
+- Build the "Today" dashboard and post-result feedback loop
+
+### Session Intent: Make the audit durable and implement the highest-leverage hardening items · Outcome: Achieved
+
+---
+
 ## Where We Left Off (Session 41 — CLOSED)
 
 - Shipped: Sprint 1 hardening + activation + performance + revenue measurement

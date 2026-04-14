@@ -1,14 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { getCorsHeaders, json } from "../_shared/http.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
-
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 function generateToken(): string {
   const arr = new Uint8Array(18);
@@ -18,24 +14,25 @@ function generateToken(): string {
 }
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+  const corsHeaders = getCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: CORS });
+      return json(req, { error: "Unauthorized" }, 401);
     }
     const token = authHeader.replace("Bearer ", "");
     const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
     if (authErr || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: CORS });
+      return json(req, { error: "Unauthorized" }, 401);
     }
 
     const body = await req.json();
     const recipientEmail: string = (body.recipientEmail ?? "").trim();
     if (!recipientEmail.includes("@")) {
-      return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400, headers: CORS });
+      return json(req, { error: "Invalid email" }, 400);
     }
 
     // Rate limit: max 5 gifts per sender per 30 days
@@ -46,10 +43,7 @@ serve(async (req) => {
       .eq("sender_id", user.id)
       .gte("created_at", thirtyDaysAgo);
     if ((count ?? 0) >= 5) {
-      return new Response(
-        JSON.stringify({ error: "Gift limit reached — max 5 gifts per 30 days" }),
-        { status: 429, headers: CORS }
-      );
+      return json(req, { error: "Gift limit reached — max 5 gifts per 30 days" }, 429);
     }
 
     const giftToken = generateToken();
@@ -106,13 +100,8 @@ serve(async (req) => {
       user_metadata: { ...user.user_metadata, gift_bonus_days: currentBonus + 7 },
     }).catch(() => {});
 
-    return new Response(JSON.stringify({ ok: true, giftUrl, expiresAt }), {
-      headers: { ...CORS, "Content-Type": "application/json" },
-    });
+    return json(req, { ok: true, giftUrl, expiresAt });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
-      status: 500,
-      headers: { ...CORS, "Content-Type": "application/json" },
-    });
+    return json(req, { error: (e as Error).message }, 500);
   }
 });

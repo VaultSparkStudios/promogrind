@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  const APP_BASE = 'https://vaultsparkstudios.com/promogrind/';
+  const APP_BASE = 'https://promogrind.bet/';
 
   // Detect book from current URL
   function getBook() {
@@ -35,6 +35,19 @@
 
   // Auto-fill state: detected stake/odds from active bet slip
   var autoFill = { stake: null, odds: null };
+
+  function makeEl(tag, options) {
+    const el = document.createElement(tag);
+    if (!options) return el;
+    if (options.id) el.id = options.id;
+    if (options.className) el.className = options.className;
+    if (options.text) el.textContent = options.text;
+    if (options.style) el.style.cssText = options.style;
+    if (options.attrs) {
+      Object.entries(options.attrs).forEach(([key, value]) => el.setAttribute(key, value));
+    }
+    return el;
+  }
 
   function detectBetSlip() {
     var stakeEl = (
@@ -109,41 +122,64 @@
       overflow: hidden;
     `;
 
-    panel.innerHTML = `
-      <div style="background:#0a0e17;padding:12px 14px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:14px;font-weight:700;color:#4ade80;letter-spacing:-0.5px;">⚡ PromoGrind</span>
-          <span style="font-size:9px;padding:2px 6px;background:#53d76915;border:1px solid #53d76930;border-radius:50px;color:${book.color};font-weight:700;">${book.name}</span>
-        </div>
-        <button id="__pg_close" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:14px;padding:0;line-height:1;">✕</button>
-      </div>
-      <div style="padding:10px;">
-        <div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">Quick Calculators</div>
-        ${CALCULATORS.map(c => `
-          <button data-slug="${c.slug}" class="__pg_calc_btn" style="
-            display:flex;align-items:center;justify-content:space-between;
-            width:100%;padding:9px 10px;margin-bottom:4px;
-            background:#161d2a;border:1px solid #1e293b;border-radius:6px;
-            color:#e2e8f0;cursor:pointer;text-align:left;
-            font-family:'SF Mono','Fira Code',monospace;
-            transition:border-color 0.15s,background 0.15s;
-          ">
-            <span style="font-size:11px;font-weight:600;">${c.label}</span>
-            <span style="font-size:9px;color:#64748b;">→</span>
-          </button>
-        `).join('')}
-        <div style="height:1px;background:#1e293b;margin:10px 0;"></div>
-        <button id="__pg_open_full" style="
-          width:100%;padding:10px;
-          background:#4ade8015;border:1px solid #4ade8030;border-radius:6px;
-          color:#4ade80;font-size:11px;font-weight:700;cursor:pointer;
-          font-family:'SF Mono','Fira Code',monospace;letter-spacing:0.5px;
-        ">Open Full PromoGrind →</button>
-        <div style="margin-top:8px;font-size:9px;color:#334155;text-align:center;line-height:1.5;">
-          Free calculator · No ads · 27 tools
-        </div>
-      </div>
-    `;
+    const header = makeEl('div', {
+      style: 'background:#0a0e17;padding:12px 14px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;',
+    });
+    const brandWrap = makeEl('div', { style: 'display:flex;align-items:center;gap:8px;' });
+    const brand = makeEl('span', {
+      text: '⚡ PromoGrind',
+      style: 'font-size:14px;font-weight:700;color:#4ade80;letter-spacing:-0.5px;',
+    });
+    const badge = makeEl('span', {
+      text: book.name,
+      style: `font-size:9px;padding:2px 6px;background:#53d76915;border:1px solid #53d76930;border-radius:50px;color:${book.color};font-weight:700;`,
+    });
+    const close = makeEl('button', {
+      id: '__pg_close',
+      text: '✕',
+      style: 'background:none;border:none;color:#64748b;cursor:pointer;font-size:14px;padding:0;line-height:1;',
+    });
+    brandWrap.appendChild(brand);
+    brandWrap.appendChild(badge);
+    header.appendChild(brandWrap);
+    header.appendChild(close);
+
+    const body = makeEl('div', { style: 'padding:10px;' });
+    body.appendChild(makeEl('div', {
+      text: 'Quick Calculators',
+      style: 'font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;',
+    }));
+
+    CALCULATORS.forEach((calc) => {
+      const button = makeEl('button', {
+        className: '__pg_calc_btn',
+        style: "display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 10px;margin-bottom:4px;background:#161d2a;border:1px solid #1e293b;border-radius:6px;color:#e2e8f0;cursor:pointer;text-align:left;font-family:'SF Mono','Fira Code',monospace;transition:border-color 0.15s,background 0.15s;",
+        attrs: { 'data-slug': calc.slug },
+      });
+      button.appendChild(makeEl('span', {
+        text: calc.label,
+        style: 'font-size:11px;font-weight:600;',
+      }));
+      button.appendChild(makeEl('span', {
+        text: '→',
+        style: 'font-size:9px;color:#64748b;',
+      }));
+      body.appendChild(button);
+    });
+
+    body.appendChild(makeEl('div', { style: 'height:1px;background:#1e293b;margin:10px 0;' }));
+    body.appendChild(makeEl('button', {
+      id: '__pg_open_full',
+      text: 'Open Full PromoGrind →',
+      style: "width:100%;padding:10px;background:#4ade8015;border:1px solid #4ade8030;border-radius:6px;color:#4ade80;font-size:11px;font-weight:700;cursor:pointer;font-family:'SF Mono','Fira Code',monospace;letter-spacing:0.5px;",
+    }));
+    body.appendChild(makeEl('div', {
+      text: 'Free calculator · No ads · 27 tools',
+      style: 'margin-top:8px;font-size:9px;color:#334155;text-align:center;line-height:1.5;',
+    }));
+
+    panel.appendChild(header);
+    panel.appendChild(body);
 
     // Events
     panel.querySelector('#__pg_close').onclick = () => hidePanel();
@@ -191,10 +227,11 @@
       transition: width 0.15s;
       font-family: 'SF Mono', monospace;
     `;
-    trigger.innerHTML = `
-      <span style="font-size:13px;">⚡</span>
-      <span style="font-size:7px;font-weight:700;color:#4ade80;letter-spacing:0.5px;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);">PG</span>
-    `;
+    trigger.appendChild(makeEl('span', { text: '⚡', style: 'font-size:13px;' }));
+    trigger.appendChild(makeEl('span', {
+      text: 'PG',
+      style: 'font-size:7px;font-weight:700;color:#4ade80;letter-spacing:0.5px;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);',
+    }));
     trigger.title = 'PromoGrind Calculator';
     return trigger;
   }

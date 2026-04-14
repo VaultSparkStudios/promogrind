@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
+import { getCorsHeaders, json } from "../_shared/http.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -13,12 +14,8 @@ const SYSTEM_PROMPT = `You are a sports betting promo analyst for PromoGrind. A 
 
 Be concise and actionable. Focus on the real cash value after optimal hedging.`;
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -27,17 +24,11 @@ serve(async (req) => {
     const { promoText } = await req.json();
 
     if (!promoText || typeof promoText !== "string" || promoText.trim().length < 10) {
-      return new Response(
-        JSON.stringify({ error: "promoText must be at least 10 characters" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return json(req, { error: "promoText must be at least 10 characters" }, 400);
     }
 
     if (!ANTHROPIC_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: "AI service not configured" }),
-        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return json(req, { error: "AI service not configured" }, 503);
     }
 
     const access = await requireAiAccess(req, {
@@ -70,10 +61,7 @@ serve(async (req) => {
     if (!anthropicRes.ok) {
       const errText = await anthropicRes.text();
       console.error("Anthropic API error:", errText);
-      return new Response(
-        JSON.stringify({ error: "AI analysis failed" }),
-        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return json(req, { error: "AI analysis failed" }, 502);
     }
 
     const anthropicData = await anthropicRes.json();
@@ -99,14 +87,9 @@ serve(async (req) => {
       tier: access.tier,
     });
 
-    return new Response(JSON.stringify({ ...parsed, remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1) }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return json(req, { ...parsed, remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1) });
   } catch (err) {
     console.error("promo-advisor error:", err);
-    return new Response(
-      JSON.stringify({ error: "Internal error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json(req, { error: "Internal error" }, 500);
   }
 });

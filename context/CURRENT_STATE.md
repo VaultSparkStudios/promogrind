@@ -2,8 +2,12 @@
 
 Public-safe summary:
 - this repo remains deployable — build passing, 127/127 tests green
-- version: 23.8.0 · last session: S41 (2026-04-14)
+- version: 23.9.0 · last session: S42 (2026-04-14)
 - domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
+- **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
+- **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`
+- **Analytics privacy tightening (S42)**: `src/analytics.js` now masks replay text/media and reduces passive replay sampling
+- **Extension safety + distribution fix (S42)**: browser extension now points to `https://promogrind.bet/`; popup and content script stop using string-built `innerHTML` for generated controls
 - **Sprint 1 hardening (S41)**: shared server-side AI entitlement/quota helper added under `supabase/functions/_shared/ai-access.ts`; wired into PromoChat, PromoAdvisor, AI Action Plan, and Stack Builder
 - **Sprint 1 activation UX (S41)**: Dashboard now shows one prioritized "Next Best Action" based on bankroll, first calculation, book completion, open bets, ledger state, and affiliate readiness
 - **Sprint 1 revenue measurement (S41)**: calculator sportsbook CTAs now emit `sportsbook_cta_clicked` with book, promo type, link type, and affiliate configured status

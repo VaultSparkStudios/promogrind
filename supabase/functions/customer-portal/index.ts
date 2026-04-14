@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { getCorsHeaders, json } from "../_shared/http.ts";
 
 const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
 
@@ -13,12 +9,13 @@ const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
 const PORTAL_CONFIGURATION_ID = "bpc_1TLsRNGMN60PfJYsM0S0ByAh";
 
 serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+      return json(req, { error: "Unauthorized" }, 401);
     }
 
     const supabase = createClient(
@@ -29,7 +26,7 @@ serve(async (req: Request) => {
     const jwt = authHeader.replace("Bearer ", "");
     const { data: { user }, error: authErr } = await supabase.auth.getUser(jwt);
     if (authErr || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+      return json(req, { error: "Unauthorized" }, 401);
     }
 
     // Look up the Stripe customer ID from the subscriptions table
@@ -41,24 +38,15 @@ serve(async (req: Request) => {
 
     if (subErr) {
       console.error("subscriptions lookup error:", subErr);
-      return new Response(
-        JSON.stringify({ error: "Failed to look up subscription" }),
-        { status: 500, headers: corsHeaders },
-      );
+      return json(req, { error: "Failed to look up subscription" }, 500);
     }
 
     if (!sub?.stripe_customer_id) {
-      return new Response(
-        JSON.stringify({ error: "No billing record found. Complete a purchase first." }),
-        { status: 404, headers: corsHeaders },
-      );
+      return json(req, { error: "No billing record found. Complete a purchase first." }, 404);
     }
 
     if (!STRIPE_SECRET || !STRIPE_SECRET.startsWith("sk_")) {
-      return new Response(
-        JSON.stringify({ error: "Stripe not configured on this server" }),
-        { status: 503, headers: corsHeaders },
-      );
+      return json(req, { error: "Stripe not configured on this server" }, 503);
     }
 
     // Create a Stripe Customer Portal session
@@ -78,19 +66,13 @@ serve(async (req: Request) => {
     const portal = await portalRes.json();
     if (!portalRes.ok) {
       console.error("Stripe portal error:", portal);
-      return new Response(
-        JSON.stringify({ error: portal.error?.message ?? "Stripe portal error" }),
-        { status: 500, headers: corsHeaders },
-      );
+      return json(req, { error: portal.error?.message ?? "Stripe portal error" }, 500);
     }
 
-    return new Response(
-      JSON.stringify({ portal_url: portal.url }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
+    return json(req, { portal_url: portal.url });
 
   } catch (err) {
     console.error("customer-portal error:", err);
-    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: corsHeaders });
+    return json(req, { error: "Internal server error" }, 500);
   }
 });

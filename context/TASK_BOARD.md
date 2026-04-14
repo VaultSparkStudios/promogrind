@@ -45,6 +45,16 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
+- [ ] Audit tranche 2 — extract app shell/dashboard state from `src/App.jsx` into focused modules
+- [ ] Build a true "Today" dashboard: expiring promos, unfinished work, next-best action, bankroll posture, recent settled profit
+- [ ] Promo intake pipeline — accept pasted promo text, screenshot parse, and extension capture into one normalized promo card
+- [ ] Result feedback loop — ask "placed / skipped / settled / actual profit / calculator accurate?" after key workflows
+- [ ] Confidence layer — show assumptions, sensitivity, and trust badges on calculator outputs
+- [ ] State-aware + book-aware personalization for sportsbook CTAs and recommended workflows
+- [ ] Playbooks — reusable promo routines by bankroll, promo type, and available books
+- [ ] Community intel upgrade — freshness, verification, report quality, and region filters on promo submissions
+- [ ] Observability dashboard — activation, return rate, CTA CTR, AI usage, and monetization health
+- [ ] Bundle budget in CI — fail or warn when first-load bundle exceeds target
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
 - [ ] VAPID keys → deploy send-daily-brief push notification function
@@ -53,7 +63,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] [SIL:1] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 - [ ] [SIL] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
 - [ ] [SIL] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
-- [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, and production webhook-secret fail-closed check
+- [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults
+- [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, production webhook-secret fail-closed check, and broader rate limits
 - [ ] Browser smoke expansion — cover age gate, first calculator result, sportsbook CTA, pricing, auth menu, and 375px mobile layout
 
 ## Later
@@ -74,6 +85,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Bundle budget in CI — warn/fail when main app chunk exceeds target size
 - [ ] Offline-first ledger queue — queue writes, show sync status, and resolve conflicts per entity timestamp
 - [ ] AI response schema validation — validate JSON server-side, include assumptions/confidence, and add advice guardrails
+- [ ] Calculator domain extraction — move calculators into dedicated modules with shared hooks and tests
+- [ ] Dashboard domain extraction — isolate activity feed, next-best-action, wins wall, and onboarding surfaces
 
 ## Deferred to Project Agents
 - cross-repo item owned by another repo agent:

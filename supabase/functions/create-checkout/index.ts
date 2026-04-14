@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { getCorsHeaders, json } from "../_shared/http.ts";
 
 // Live mode requires STRIPE_TEST_MODE=false AND a sk_live_ key
 const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
@@ -73,12 +69,13 @@ const PLAN_NAME_MAP: Record<string, string> = {
 const VALID_PLANS = Object.keys(PLAN_AMOUNTS);
 
 serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+      return json(req, { error: "Unauthorized" }, 401);
     }
 
     const supabase = createClient(
@@ -89,7 +86,7 @@ serve(async (req: Request) => {
     const jwt = authHeader.replace("Bearer ", "");
     const { data: { user }, error: authErr } = await supabase.auth.getUser(jwt);
     if (authErr || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+      return json(req, { error: "Unauthorized" }, 401);
     }
 
     const { plan, success_url, cancel_url } = await req.json() as {
@@ -99,17 +96,14 @@ serve(async (req: Request) => {
     };
 
     if (!VALID_PLANS.includes(plan)) {
-      return new Response(
-        JSON.stringify({ error: `Invalid plan. Must be one of: ${VALID_PLANS.join(", ")}` }),
-        { status: 400, headers: corsHeaders },
-      );
+      return json(req, { error: `Invalid plan. Must be one of: ${VALID_PLANS.join(", ")}` }, 400);
     }
 
     const planName = PLAN_NAME_MAP[plan] ?? plan;
 
     // Test mode — simulate checkout without calling Stripe
     if (!LIVE_MODE) {
-      return new Response(JSON.stringify({
+      return json(req, {
         test_mode: true,
         message: "Stripe test mode active. Set STRIPE_SECRET_KEY (sk_live_...) and STRIPE_TEST_MODE=false to go live.",
         plan,
@@ -123,7 +117,7 @@ serve(async (req: Request) => {
           mode: "subscription",
           status: "simulated",
         },
-      }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      });
     }
 
     // Live Stripe checkout session

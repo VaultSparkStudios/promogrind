@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { getCorsHeaders, json } from "../_shared/http.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -28,14 +24,12 @@ interface Message {
 }
 
 serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
     if (!ANTHROPIC_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: "AI service not configured — set ANTHROPIC_API_KEY" }),
-        { status: 503, headers: corsHeaders },
-      );
+      return json(req, { error: "AI service not configured — set ANTHROPIC_API_KEY" }, 503);
     }
 
     const access = await requireAiAccess(req, {
@@ -53,7 +47,7 @@ serve(async (req: Request) => {
     };
 
     if (!message?.trim()) {
-      return new Response(JSON.stringify({ error: "Message is required" }), { status: 400, headers: corsHeaders });
+      return json(req, { error: "Message is required" }, 400);
     }
 
     // Build context note from user profile
@@ -90,7 +84,7 @@ serve(async (req: Request) => {
     if (!anthropicRes.ok) {
       const err = await anthropicRes.text();
       console.error("Anthropic error:", err);
-      return new Response(JSON.stringify({ error: "AI service error" }), { status: 502, headers: corsHeaders });
+      return json(req, { error: "AI service error" }, 502);
     }
 
     const aiData = await anthropicRes.json();
@@ -113,16 +107,16 @@ serve(async (req: Request) => {
     if (combined.includes("parlay")) suggestions.push("parlay");
     if (combined.includes("hedge")) suggestions.push("hedge");
 
-    return new Response(JSON.stringify({
+    return json(req, {
       message: responseText,
       response: responseText,
       suggestions: [...new Set(suggestions)].slice(0, 3),
       tier: access.tier,
       remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
-    }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    });
 
   } catch (err) {
     console.error("promo-chat error:", err);
-    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: corsHeaders });
+    return json(req, { error: "Internal server error" }, 500);
   }
 });

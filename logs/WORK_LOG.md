@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-04-14 — S42 Audit Follow-Through
+
+- Added public-safe execution roadmap in `docs/REFINEMENT_ROADMAP.md`.
+- Expanded `context/TASK_BOARD.md` with the audit-derived implementation queue: modularization, activation, feedback loop, personalization, observability, and performance controls.
+- Added `supabase/functions/_shared/http.ts` and removed wildcard CORS from key edge functions.
+- Tightened analytics replay privacy defaults in `src/analytics.js`.
+- Updated extension distribution URLs to `promogrind.bet`.
+- Replaced generated extension UI string injection with DOM-based rendering in popup + content scripts.
+- Refreshed public memory files to S42 state.
+- Verified `npm.cmd test` → 127/127 passing.
+- Verified `npm.cmd run build` → passing.
+
 ## 2026-04-14 — S41 Sprint 1 Closeout
 
 - Completed server-side AI access/quota hardening through shared `supabase/functions/_shared/ai-access.ts`.

@@ -29,7 +29,7 @@ export function initAnalytics() {
       capture_pageleave: true,
       persistence:      'localStorage+cookie',
       autocapture:      false,   // intentional tracking only
-      session_recording: { maskAllInputs: true },
+      session_recording: { maskAllInputs: true, maskTextSelector: '*' },
     });
     posthogReady = true;
   }
@@ -40,10 +40,10 @@ export function initAnalytics() {
       environment:              'production',
       tracesSampleRate:         0.1,   // 10% of transactions
       replaysOnErrorSampleRate: 1.0,   // 100% replay on errors
-      replaysSessionSampleRate: 0.05,  // 5% background sessions
+      replaysSessionSampleRate: 0.02,  // 2% background sessions
       integrations: [
         Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration({ maskAllText: false, blockAllMedia: false }),
+        Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
       ],
     });
     sentryReady = true;
