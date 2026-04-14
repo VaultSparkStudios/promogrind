@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "project": "unknown",
+  "snapshots": [
+    {
+      "date": "2026-04-14",
+      "session": null,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "green",
+      "lastReviewed": "2026-04-03",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": null,
+      "cause": "Home tab suite live (Daily Brief, Get Started, What's New, Pricing, About). Beta invite codes live. Last code blocker be"
+    }
+  ]
+}

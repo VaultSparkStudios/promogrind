@@ -43,7 +43,9 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
 - [ ] Stripe smoke test — card 4242, verify subscriptions table row + customer portal redirect
 - [ ] VAPID keys → deploy send-daily-brief push notification function
-- [ ] [SIL] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
+- [ ] [SIL:1] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
+- [ ] [SIL] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
+- [ ] [SIL] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
 
 ## Later
 - [ ] Reddit launch posts: r/sportsbook + r/matchedbetting

@@ -2,7 +2,7 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
-## Where We Left Off (Session 39 — continued)
+## Where We Left Off (Session 39 — CLOSED)
 
 ### Shipped this session (3 commits)
 

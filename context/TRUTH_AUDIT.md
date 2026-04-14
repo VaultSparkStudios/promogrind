@@ -2,5 +2,5 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-03
+Last reviewed: 2026-04-14
 Public-safe summary only. Sensitive verification notes are maintained privately.

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "date": "2026-04-14",
+  "session": 39,
+  "sessionType": "implementation",
+  "label": "home-tab-suite + global-text-size + beta-invite-codes + domain-migration-link-rot",
+  "calibration": false,
+  "scores": {
+    "devHealth": 92,
+    "creativeAlignment": 86,
+    "momentum": 89,
+    "engagement": 80,
+    "processQuality": 85
+  },
+  "total": 432,
+  "maxScore": 500,
+  "velocity": 6,
+  "protocolVelocity": null,
+  "durationMinutes": 180,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": null,
+    "creativeAlignment": null,
+    "momentum": null,
+    "engagement": null,
+    "processQuality": null,
+    "total": null
+  },
+  "rollingAvgTotals": { "3": null, "5": null, "10": null, "25": null, "all": null },
+  "topWin": "Home tab suite (5 new pages: Daily Brief, Get Started, What's New, Pricing, About) shipped in one session at high quality — app now has a complete onboarding and discovery surface for new users.",
+  "topGap": "App.jsx continues to grow larger rather than being extracted — component extraction task has been in Later for multiple sessions; approaching the point where it taxes build time.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 6,
+  "improvementGroups": {
+    "home-tabs": [
+      "DailyBriefPage — today's promo schedule, quick actions 2x2 grid, 9am briefing toggle (localStorage), open bets counter",
+      "GetStarted — 6-step onboarding guide with useNavigate() links to key features",
+      "WhatsNew — static changelog v23.3.0–v23.7.0 with version badge + sprint labels",
+      "AboutPage — app stats, feature grid, trust badges, contact info, legal links",
+      "TABS Home group expanded: Dashboard · Daily Brief · Get Started · What's New · Pricing · About"
+    ],
+    "text-size": [
+      "shared.js: S.label 10→11px, S.input 13→14px, S.note 12→13px, S.help 12→13px, S.helpH 14→15px",
+      "ui.jsx: RR label 12→13px, RR value 13→14px, Tl title 16→18px",
+      "App.jsx nav: group tabs 10/11→12/13px, sub-item tabs 11→13px, subcat/pinned 9→11px"
+    ],
+    "beta-invite": [
+      "beta_codes Supabase table + RLS + 10 PGBETA-XXXX codes seeded (Runner, 30d, single-use)",
+      "redeem-beta-code edge function deployed — JWT auth, upserts subscription row, marks code used",
+      "redeemBetaCode() in auth.js; UserMenu 'Have a beta invite code?' section for Free Agent tier"
+    ],
+    "domain-link-rot": [
+      "40+ static HTML pages batch-fixed: /promogrind/ → /",
+      "robots.txt, pg-capture.js, App.jsx footer, about/index.html all updated",
+      "Secrets audit: RESEND_API_KEY confirmed set, Stripe Customer Portal pinned"
+    ]
+  },
+  "testsTotal": 127,
+  "testsByType": {
+    "math": 71,
+    "books": 25,
+    "auth": 19,
+    "sync": 13,
+    "launchState": 5
+  },
+  "testsDelta": 0,
+  "deployStatus": "deployed",
+  "ignisFlags": ["high-velocity", "intent-achieved", "compacted-resume"],
+  "ignisNote": "Marathon session that cleared multiple categories simultaneously: domain link rot (40+ pages), secrets audit, beta invite system, and 5 new Home tab pages — all without a single test regression. The Home tabs transform PromoGrind from a tool into a product with a front door; the Getting Started guide in particular should meaningfully improve activation."
+}

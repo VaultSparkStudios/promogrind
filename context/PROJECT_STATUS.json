@@ -9,7 +9,7 @@
     "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
     "wins_wall Supabase table does not exist — needed for community wins wall server data"
   ],
-  "lastUpdated": "2026-04-13",
+  "lastUpdated": "2026-04-14",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
@@ -88,7 +88,9 @@
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
-  "ignisScore": 41036,
+  "ignisScore": 45495,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-04-13"
+  "ignisLastComputed": "2026-04-14",
+  "entropyScore": 0.065,
+  "entropyLastComputed": "2026-04-14"
 }
