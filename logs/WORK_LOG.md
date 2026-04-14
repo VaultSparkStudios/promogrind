@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-04-14 — S43 Dashboard Extraction + Closeout
+
+- Extracted dashboard derivation logic into `src/dashboard/today.js`.
+- Added `src/components/dashboard/TodayDashboardPanel.jsx` and moved `DailyBriefPage` into `src/components/dashboard/DailyBriefPage.jsx`.
+- Updated `src/App.jsx` to consume the extracted dashboard model/components and keep next-best-action logic shared.
+- Added `src/__tests__/dashboard.test.js`; suite now at 133/133 passing.
+- Synced PromoGrind-native account wording across launch smoke-covered public pages and trust-strip template.
+- Updated launch smoke validators to current copy expectations; `npm.cmd run smoke:launch` now passes.
+- Attempted browser smoke; script is updated but local execution still fails on preview subprocess `spawn EPERM`.
+- Attempted Supabase function deploy; blocked because local Supabase auth/access token is not configured.
+
 ## 2026-04-14 — S42 Audit Follow-Through
 
 - Added public-safe execution roadmap in `docs/REFINEMENT_ROADMAP.md`.

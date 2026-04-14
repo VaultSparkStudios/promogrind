@@ -11,6 +11,9 @@ import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
+import { getDashboardSnapshot, getNextBestAction } from "./dashboard/today.js";
+import TodayDashboardPanel from "./components/dashboard/TodayDashboardPanel.jsx";
+import DailyBriefPage from "./components/dashboard/DailyBriefPage.jsx";
 // Heavy tab components — lazy loaded so they don't block initial render
 const Tracker = lazy(() => import("./components/Tracker.jsx"));
 const Ledger = lazy(() => import("./components/Ledger.jsx"));
@@ -3353,30 +3356,20 @@ function MemberWelcomeCard({ navigate, proStatus }) {
 function ActivationNextAction({ data, totalProfit, openBets, booksComplete, navigate }) {
   const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
   const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
-  const hasLedger = (data.ledger || []).length > 0;
-  const hasCalc = Object.keys(usageLog).length > 0;
-  const affiliateReady = hasConfiguredAffiliateLinks();
-  const actions = [
-    !bankroll && { key:'bankroll', title:'Set your bankroll', body:'Personalized stake sizing and weekly actions need a bankroll anchor.', cta:'Set profile', slug:'dashboard', color:K.ac },
-    !hasCalc && { key:'calc', title:'Run your first conversion', body:'Start with the Bonus Bet Converter and get a hedge stake in under a minute.', cta:'Open converter', slug:'bonus-bet', color:K.gn },
-    booksComplete === 0 && { key:'books', title:'Pick your first sportsbook', body:'Mark books you already use and prioritize the highest-value welcome offers.', cta:'Open tracker', slug:'sportsbooks', color:K.yl },
-    openBets.length > 0 && { key:'open', title:'Close open bets', body:`You have ${openBets.length} open bet${openBets.length === 1 ? '' : 's'} waiting for settlement.`, cta:'Review bets', slug:'sportsbooks', color:K.yl },
-    !hasLedger && hasCalc && { key:'ledger', title:'Log the outcome', body:'Ledger entries turn one-off calculations into a profit system.', cta:'Open ledger', slug:'ledger', color:K.pp },
-    !affiliateReady && { key:'affiliate', title:'Revenue setup pending', body:'Referral or affiliate links are still placeholders, so outbound clicks are not monetized yet.', cta:'Review links', slug:'sportsbooks', color:K.rd },
-  ].filter(Boolean);
-  const action = actions[0] || { key:'scale', title:'Scale the loop', body:`You have extracted ${totalProfit >= 0 ? '$' + f(totalProfit) : '-$' + f(Math.abs(totalProfit))}. Add another book, log the next promo, and publish a win when ready.`, cta:'Find next promo', slug:'daily-brief', color:K.gn };
+  const action = getNextBestAction({ usageLog, bankroll, totalProfit, openBets, booksComplete });
+  const actionColor = { info: K.ac, positive: K.gn, watch: K.yl, risk: K.rd }[action.tone] || K.ac;
 
   return (
-    <div style={{...S.card,border:`1px solid ${action.color}40`,background:`${action.color}08`,marginBottom:12}}>
+    <div style={{...S.card,border:`1px solid ${actionColor}40`,background:`${actionColor}08`,marginBottom:12}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,flexWrap:'wrap'}}>
         <div style={{flex:1,minWidth:240}}>
-          <div style={{fontSize:10,color:action.color,fontWeight:800,letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:5}}>Next Best Action</div>
+          <div style={{fontSize:10,color:actionColor,fontWeight:800,letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:5}}>Next Best Action</div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:800,color:K.tx,marginBottom:4}}>{action.title}</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{action.body}</div>
         </div>
         <button
           onClick={() => { trackEvent('next_best_action_clicked', { key: action.key }); navigate('/' + action.slug); }}
-          style={{padding:'9px 14px',background:action.color,border:'none',borderRadius:8,color:K.bg,fontSize:12,fontWeight:800,cursor:'pointer',fontFamily:font,whiteSpace:'nowrap'}}>
+          style={{padding:'9px 14px',background:actionColor,border:'none',borderRadius:8,color:K.bg,fontSize:12,fontWeight:800,cursor:'pointer',fontFamily:font,whiteSpace:'nowrap'}}>
           {action.cta} →
         </button>
       </div>
@@ -3424,19 +3417,19 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const todayDay = dayNames[today.getDay()];
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
+  const snapshot = getDashboardSnapshot(data, PROMO_SCHED, today, bankroll);
   const bets = data.bets || [];
   const ledger = data.ledger || [];
   const done = data.done || {};
   const expiry = data.bookExpiry || {};
-  const totalProfit = ledger.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  const openBets = bets.filter(b=>b.status==='open');
-  const in3Days = new Date(Date.now()+3*24*60*60*1000).toISOString().split('T')[0];
-  const expiring = BOOKS.filter(b=>expiry[b.name]&&!done[b.name]&&expiry[b.name]<=in3Days&&expiry[b.name]>=todayStr);
-  const todayPromos = PROMO_SCHED.filter(p => p.day === "Daily" || p.day === todayDay || (p.day === "Weekend" && (today.getDay()===0||today.getDay()===6)));
-  const booksComplete = Object.values(done).filter(Boolean).length;
-  const potentialLeft = BOOKS.filter(b=>!done[b.name]).reduce((s,b)=>s+b.bonus*0.7,0);
-  const thisMonth = today.toISOString().slice(0,7);
-  const monthProfit = ledger.filter(e=>e.date?.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  const totalProfit = snapshot.totalProfit;
+  const openBets = snapshot.openBets;
+  const expiring = snapshot.expiringBooks;
+  const todayPromos = snapshot.todayPromos;
+  const booksComplete = snapshot.booksComplete;
+  const potentialLeft = snapshot.potentialLeft;
+  const monthProfit = snapshot.monthProfit;
 
   const dashIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
 
@@ -3450,6 +3443,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <LaunchReadinessPanel />
       <CommunityWinsWall />
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
+      <TodayDashboardPanel snapshot={snapshot} navigate={navigate} />
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
           <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
@@ -4930,103 +4924,6 @@ const WhatsNew = () => {
             </ul>
           </div>
         ))}
-      </div>
-    </div>
-  );
-};
-
-const DailyBriefPage = () => {
-  const navigate = useNavigate();
-  const { bets } = useContext(AppDataCtx);
-  const today = new Date();
-  const todayDay = DAYS_ORDER.find(d=>d===["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][today.getDay()]) || null;
-  const isWeekend = today.getDay()===0||today.getDay()===6;
-  const todayPromos = PROMO_SCHED.filter(p=>p.day==="Daily"||p.day===todayDay||(p.day==="Weekend"&&isWeekend));
-  const openBets = (bets||[]).filter(b=>b.status==="open"||b.status==="pending"||!b.status);
-  const [notifEnabled, setNotifEnabled] = useState(()=>localStorage.getItem('pg_daily_brief')==='1');
-
-  const toggleNotif = async () => {
-    if(notifEnabled){
-      localStorage.removeItem('pg_daily_brief');
-      setNotifEnabled(false);
-    } else {
-      const perm = await Notification.requestPermission();
-      if(perm==='granted'){
-        localStorage.setItem('pg_daily_brief','1');
-        setNotifEnabled(true);
-      }
-    }
-  };
-
-  const fullDate = today.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const dayName = today.toLocaleDateString('en-US',{weekday:'long'});
-
-  const actions = [
-    {icon:"🧮",label:"Calculate a promo",slug:"/bonus-bet"},
-    {icon:"📋",label:"Log a bet",slug:"/bet-tracker"},
-    {icon:"💰",label:"Check P/L",slug:"/ledger"},
-    {icon:"🎯",label:"Find promos",slug:"/promo-finder"},
-  ];
-
-  return (
-    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
-      <div style={{marginBottom:24}}>
-        <div style={{fontSize:24,fontWeight:700,color:K.tx,fontFamily:fontD,letterSpacing:-0.5,marginBottom:2}}>{fullDate}</div>
-        <div style={{fontSize:13,color:K.dm,marginBottom:4}}>{dayName}</div>
-        <div style={{fontSize:13,color:K.mt}}>Your daily PromoGrind briefing</div>
-      </div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(340px,1fr))',gap:14}}>
-
-        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
-          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:12}}>Today's Promos</div>
-          {todayPromos.length===0
-            ? <div style={{fontSize:12,color:K.mt}}>No recurring promos found for today.</div>
-            : <div style={{display:'flex',flexDirection:'column',gap:6}}>
-                {todayPromos.slice(0,8).map((p,i)=>(
-                  <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'6px 0',borderBottom:i<Math.min(todayPromos.length,8)-1?`1px solid ${K.bd}`:'none'}}>
-                    <div>
-                      <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{p.promo}</span>
-                      <span style={{fontSize:11,color:K.dm,marginLeft:6}}>{p.book}</span>
-                    </div>
-                    <span style={{fontSize:11,color:K.gn,fontFamily:font}}>{p.value}</span>
-                  </div>
-                ))}
-              </div>
-          }
-          <button onClick={()=>navigate('/promo-calendar')} style={{marginTop:14,padding:'6px 14px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.ac,fontSize:12,cursor:'pointer',fontFamily:font}}>View full calendar →</button>
-        </div>
-
-        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
-          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:12}}>Quick Actions</div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-            {actions.map(a=>(
-              <button key={a.slug} onClick={()=>navigate(a.slug)} style={{padding:'12px 10px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,color:K.tx,fontSize:12,fontWeight:600,cursor:'pointer',fontFamily:font,display:'flex',alignItems:'center',gap:8,textAlign:'left'}}>
-                <span style={{fontSize:18}}>{a.icon}</span>
-                <span>{a.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
-          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:6}}>9am Briefing</div>
-          <div style={{fontSize:12,color:K.mt,marginBottom:14}}>Get a daily notification at 9am with your promo rundown.</div>
-          <button onClick={toggleNotif} style={{padding:'8px 16px',background:notifEnabled?`${K.gn}15`:'transparent',border:`1px solid ${notifEnabled?K.gn:K.bd2}`,borderRadius:6,color:notifEnabled?K.gn:K.dm,fontSize:12,fontWeight:600,cursor:'pointer',fontFamily:font}}>
-            {notifEnabled ? '🔔 Notifications on — tap to disable' : '🔕 Enable daily briefing'}
-          </button>
-        </div>
-
-        <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px'}}>
-          <div style={{fontSize:13,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:6}}>Open Bets</div>
-          {openBets.length===0
-            ? <div style={{fontSize:12,color:K.gn}}>No open bets — you're clear!</div>
-            : <div>
-                <div style={{fontSize:12,color:K.tx,marginBottom:12}}><span style={{fontWeight:700,color:K.yl}}>{openBets.length}</span> bet{openBets.length!==1?'s':''} pending</div>
-                <button onClick={()=>navigate('/bet-tracker')} style={{padding:'6px 14px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.ac,fontSize:12,cursor:'pointer',fontFamily:font}}>View Tracker →</button>
-              </div>
-          }
-        </div>
-
       </div>
     </div>
   );

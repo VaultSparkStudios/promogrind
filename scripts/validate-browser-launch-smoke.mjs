@@ -49,10 +49,10 @@ preview.stderr.on("data", (chunk) => {
 try {
   await waitForServer(`${PREVIEW_URL}/`);
   await assertPath("/", [["id=\"root\"", "app root"]]);
-  await assertPath("/landing/", [["free Vault membership", "landing access copy"], ["beta rollout", "landing beta rollout copy"]]);
-  await assertPath("/bonus-bet/", [["Free Vault membership", "trust strip"], ["1-800-GAMBLER", "responsible gambling notice"]]);
-  await assertPath("/arb-calculator/", [["Free Vault membership", "trust strip"]]);
-  await assertPath("/promogrind-vs-profitduel/", [["beta-gated", "comparison beta language"], ["Start with free Vault membership", "updated CTA"]]);
+  await assertPath("/landing/", [["PromoGrind account", "landing access copy"], ["beta rollout", "landing beta rollout copy"]]);
+  await assertPath("/bonus-bet/", [["Free PromoGrind account", "trust strip"], ["1-800-GAMBLER", "responsible gambling notice"]]);
+  await assertPath("/arb-calculator/", [["Free PromoGrind account", "trust strip"]]);
+  await assertPath("/promogrind-vs-profitduel/", [["beta-gated", "comparison beta language"], ["Start with free PromoGrind account", "updated CTA"]]);
   console.log("Browser launch smoke passed.");
 } catch (error) {
   console.error("Browser launch smoke failed.");

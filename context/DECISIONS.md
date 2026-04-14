@@ -43,3 +43,11 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Follow-up trigger:** Deploy the updated AI edge functions and apply the Wins Wall migration before enabling or promoting these surfaces as fully live.
 
 ---
+
+## 2026-04-14 — Launch-surface account language canonicalized to PromoGrind-native wording
+
+**Decision:** Smoke-covered launch surfaces, trust-strip templates, and app-shell checks should use `Free PromoGrind account` / `free account` as the canonical public wording instead of `Free Vault membership`, while still allowing the underlying shared account system to remain true in implementation detail.
+
+**Rationale:** The app shell had already moved to PromoGrind-native wording, but several public launch pages and smoke scripts still expected the older phrasing. That drift created false smoke failures and a confused public narrative. The public rule is now consistent: user-facing copy leads with PromoGrind branding; cross-Studio account reuse is secondary supporting detail.
+
+---

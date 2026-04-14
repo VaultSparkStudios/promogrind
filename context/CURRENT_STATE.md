@@ -1,9 +1,14 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 127/127 tests green
-- version: 23.9.0 · last session: S42 (2026-04-14)
+- this repo remains deployable — build passing, 133/133 tests green; launch smoke passing
+- version: 24.0.0 · last session: S43 (2026-04-14)
 - domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
+- **Dashboard tranche 2 (S43)**: added `src/dashboard/today.js` plus extracted dashboard surfaces under `src/components/dashboard/`; `src/App.jsx` now consumes shared dashboard snapshot helpers instead of keeping all home-state logic inline
+- **Today dashboard (S43)**: Home dashboard now explicitly surfaces expiring promos, unfinished work, bankroll posture, recent settled profit, and next-best action in one dedicated panel
+- **Launch copy + smoke alignment (S43)**: smoke-covered marketing pages, trust-strip template, and launch validators now consistently use PromoGrind-native "Free PromoGrind account" language; `scripts/validate-launch-smoke.mjs` updated and passing
+- **Validation coverage (S43)**: added `src/__tests__/dashboard.test.js`; suite now at 133 passing tests (up from 127)
+- **Browser smoke script status (S43)**: `scripts/validate-browser-launch-smoke.mjs` updated for current copy, but running it in this environment still fails on local `spawn EPERM` when launching the preview subprocess
 - **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
 - **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`
 - **Analytics privacy tightening (S42)**: `src/analytics.js` now masks replay text/media and reduces passive replay sampling
@@ -33,5 +38,5 @@ Public-safe summary:
 - WCAG AA contrast compliance: both dark and light themes pass 4.5:1 for all body/label text
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
 - wins_wall: migration exists and client upsert path is ready; Supabase SQL still must be applied before server entries load
-- deployment follow-up: deploy updated `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` edge functions
+- deployment follow-up: deploy updated `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` edge functions; local deploy attempt failed here because `SUPABASE_ACCESS_TOKEN` / `supabase login` is not configured
 - detailed internal state now lives in the private Studio OS / ops repository

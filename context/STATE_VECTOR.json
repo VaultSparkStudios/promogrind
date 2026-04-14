@@ -1,25 +1,27 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-04-14",
-  "generatedAtMs": 1776125782116,
-  "session": "S41",
-  "vectorHash": "e8d292ca6c58cadc",
-  "silTotal": null,
-  "silAvg3": null,
-  "velocity": null,
-  "debt": null,
-  "runway": "unknown",
-  "intentRate": "unknown",
-  "openNow": 0,
-  "openNext": 7,
+  "generatedAtMs": 1776148506253,
+  "session": 43,
+  "vectorHash": "7e17fb7045bd958e",
+  "silTotal": 420,
+  "silAvg3": 420,
+  "velocity": 2,
+  "debt": "down",
+  "runway": "~1.5 sessions",
+  "intentRate": "100% (last 1)",
+  "openNow": 3,
+  "openNext": 15,
   "openBlocked": 0,
-  "topNow": [],
+  "topNow": [
+    "Result feedback loop — ask \"placed / skipped / settled / actual profit / calcula",
+    "Deploy updated AI edge functions: `promo-chat`, `promo-advisor`, `ai-action-plan",
+    "Browser smoke expansion — cover age gate, first calculator result, sportsbook CT"
+  ],
   "topNext": [
-    "Deploy updated AI edge functions: promo-chat, promo-advisor, ai-action-plan, stack-builder",
-    "Apply scripts/migration-wins-wall.sql in Supabase SQL Editor",
-    "Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)",
-    "Stripe smoke test — follow docs/STRIPE_SMOKE_TEST.md",
-    "VAPID keys → deploy send-daily-brief push notification function"
+    "Promo intake pipeline — accept pasted promo text, screenshot parse, and extensio",
+    "Confidence layer — show assumptions, sensitivity, and trust badges on calculator",
+    "State-aware + book-aware personalization for sportsbook CTAs and recommended wor"
   ],
   "health": "green",
   "truthStatus": "green",
@@ -31,11 +33,12 @@
   "slug": null,
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Deploy updated AI edge functions → apply wins_wall migration → affiliate links in src/books.js → Stripe smoke test → Reddit launch post.",
-  "currentFocus": "Sprint 1 hardening complete: server-side AI quotas/entitlements, activation next-best-action UX, sportsbook CTA tracking, Wins Wall upsert support, and build splitting are in repo.",
-  "lastShipped": "S41 Sprint 1 hardening and activation — see LATEST_HANDOFF.md",
+  "nextMilestone": "Deploy updated AI edge functions → apply wins_wall migration → run Stripe smoke test → expand browser smoke → ship post-result feedback loop.",
+  "currentFocus": "Dashboard tranche 2 is in repo: shared today/dashboard state helpers, extracted dashboard surfaces, and launch-copy/smoke alignment are complete.",
+  "lastShipped": "3 improvements across 3 groups — dashboard extraction, Today dashboard, launch-copy/smoke alignment",
   "blockers": [
     "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
-    "wins_wall Supabase migration exists but still needs to be applied in Supabase SQL Editor"
+    "wins_wall Supabase migration exists but still needs to be applied in Supabase SQL Editor",
+    "Supabase function deploys cannot be run from this environment until supabase login / SUPABASE_ACCESS_TOKEN is configured"
   ]
 }

@@ -2,6 +2,45 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 43 — CLOSED)
+
+- Shipped: 3 improvements across 3 groups — dashboard extraction, Today dashboard, launch-copy/smoke alignment
+- Tests: 133/133 passing · delta: +6
+- Build: passing · launch smoke: passing
+- Deploy: repo changes committed; Supabase edge-function deploy and Stripe smoke remain pending
+- Session type: implementation + closeout
+
+### Shipped this session
+
+**feat(s43): extract dashboard state and align launch copy**
+- `src/dashboard/today.js` — shared snapshot helpers for today promos, bankroll posture, unfinished work, and next-best action
+- `src/components/dashboard/TodayDashboardPanel.jsx` — dedicated Today panel for expiring promos, unfinished work, bankroll posture, and recent settled profit
+- `src/components/dashboard/DailyBriefPage.jsx` — Daily Brief extracted out of `src/App.jsx`
+- `src/App.jsx` — dashboard now consumes the extracted model/components; next-best-action logic reads from shared dashboard helpers
+- `src/__tests__/dashboard.test.js` — unit coverage for dashboard derivation logic
+- `public/landing/index.html`, core SEO calculator pages, comparison pages, and `docs/SEO_TRUST_STRIP_TEMPLATE.md` — PromoGrind-native account wording synced across smoke-covered launch surfaces
+- `scripts/validate-launch-smoke.mjs`, `scripts/validate-browser-launch-smoke.mjs` — smoke validators updated to current copy expectations
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/PROJECT_STATUS.json`, `context/TRUTH_AUDIT.md`, `logs/WORK_LOG.md` — memory refreshed to S43 state
+
+### Validation
+- `npm.cmd test` → 133/133 passing
+- `npm.cmd run build` → passing
+- `npm.cmd run smoke:launch` → passing
+
+### Open blockers / follow-ups
+- Deploy updated Supabase functions: `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder` (local deploy attempt blocked here because Supabase auth token/login is not configured)
+- Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor
+- Run the Stripe flow in `docs/STRIPE_SMOKE_TEST.md`
+- Run browser smoke on a host/environment that allows the preview subprocess; this local environment still throws `spawn EPERM`
+
+### Session Intent: Complete all at highest quality · Outcome: Achieved
+
+## Human Action Required
+- [ ] **Supabase deploy auth** — run `supabase login` or set `SUPABASE_ACCESS_TOKEN`, then deploy `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder`
+- [ ] **Stripe smoke test** — use the flow in `docs/STRIPE_SMOKE_TEST.md` against the deployed app and confirm `subscriptions` writes + customer-portal redirect
+- [ ] **Affiliate/referral links** — paste real referral URLs into `src/books.js` so CTA clicks monetize correctly
+- [ ] **wins_wall Supabase table** — apply `scripts/migration-wins-wall.sql` so Dashboard Wins Wall can read server entries
+
 ## Where We Left Off (Session 42 — CLOSED)
 
 - Shipped: audit-memory update + security/privacy hardening tranche 1

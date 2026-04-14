@@ -4,11 +4,11 @@ Use this snippet on high-intent public SEO pages that mention calculators, track
 
 ## Trust strip copy
 
-`<strong>Free Vault membership</strong> gives you access to PromoGrind and sync across Studio tools. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.`
+`<strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across Studio tools. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.`
 
 ## Footer note copy
 
-`Core calculators are available now with a free Vault membership. Live scanning, AI helpers, push alerts, and paid checkout remain beta-gated until their services are activated.`
+`Core calculators are available now with a free PromoGrind account. Live scanning, AI helpers, push alerts, and paid checkout remain beta-gated until their services are activated.`
 
 ## CSS
 

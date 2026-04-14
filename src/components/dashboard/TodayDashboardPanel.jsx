@@ -1,0 +1,102 @@
+import React from "react";
+import { K, S, f, font, fontD } from "../../lib/shared.js";
+import { getBankrollPosture, getUnfinishedWork } from "../../dashboard/today.js";
+
+const TONE = {
+  healthy: K.gn,
+  positive: K.gn,
+  watch: K.yl,
+  risk: K.rd,
+  missing: K.ac,
+  info: K.ac,
+};
+
+export default function TodayDashboardPanel({ snapshot, navigate }) {
+  const posture = getBankrollPosture(snapshot);
+  const unfinished = getUnfinishedWork(snapshot);
+  const tone = TONE[posture.tone] || K.ac;
+  const recentTone = snapshot.recentSettledProfit >= 0 ? K.gn : K.rd;
+
+  return (
+    <div style={{ ...S.card, border: `1px solid ${K.ac}35`, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+        <div>
+          <div style={{ fontSize: 11, color: K.ac, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 5 }}>
+            Today Dashboard
+          </div>
+          <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>
+            What needs attention right now
+          </div>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, maxWidth: 760 }}>
+            Focus on expiring promos, unfinished work, bankroll posture, and recent settled profit before adding more volume.
+          </div>
+        </div>
+        <div style={{ padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, minWidth: 150 }}>
+          <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Recent Settled Profit</div>
+          <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: recentTone }}>
+            {snapshot.recentSettledProfit >= 0 ? "+" : "-"}${f(Math.abs(snapshot.recentSettledProfit))}
+          </div>
+          <div style={{ fontSize: 10, color: K.mt }}>
+            Last 7 days · {snapshot.recentSettledCount} entr{snapshot.recentSettledCount === 1 ? "y" : "ies"}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
+        <div style={{ padding: "12px", background: K.s2, border: `1px solid ${snapshot.expiringBooks.length ? K.yl : K.bd}`, borderRadius: 8 }}>
+          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Expiring Promos</div>
+          {snapshot.expiringBooks.length ? (
+            <>
+              <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: K.yl, marginBottom: 6 }}>{snapshot.expiringBooks.length}</div>
+              <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+                {snapshot.expiringBooks.map((book) => `${book.name} (${book.bonus})`).join(", ")}
+              </div>
+              <button onClick={() => navigate("/sportsbooks")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font }}>
+                Review books →
+              </button>
+            </>
+          ) : (
+            <div style={{ fontSize: 11, color: K.gn, lineHeight: 1.6 }}>No tracked welcome offers are expiring in the next 72 hours.</div>
+          )}
+        </div>
+
+        <div style={{ padding: "12px", background: K.s2, border: `1px solid ${tone}35`, borderRadius: 8 }}>
+          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Bankroll Posture</div>
+          <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: tone, marginBottom: 6 }}>{posture.title}</div>
+          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>{posture.body}</div>
+        </div>
+
+        <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Today&apos;s Promo Volume</div>
+          <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: K.gn, marginBottom: 6 }}>{snapshot.todayPromos.length}</div>
+          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+            {snapshot.todayPromos.length ? "Recurring promos match today’s schedule." : "No recurring promos matched today’s schedule."}
+          </div>
+          <button onClick={() => navigate("/promo-calendar")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font }}>
+            Open promo calendar →
+          </button>
+        </div>
+      </div>
+
+      <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Unfinished Work</div>
+        {unfinished.length ? (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
+            {unfinished.map((item) => (
+              <button
+                key={item.key}
+                onClick={() => navigate(`/${item.slug}`)}
+                style={{ textAlign: "left", padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: "pointer", fontFamily: font }}
+              >
+                <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{item.title}</div>
+                <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>{item.detail}</div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div style={{ fontSize: 11, color: K.gn }}>No urgent unfinished work is surfaced from your current tracker and ledger state.</div>
+        )}
+      </div>
+    </div>
+  );
+}

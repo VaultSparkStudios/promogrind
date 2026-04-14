@@ -3,29 +3,30 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Sprint 1 hardening complete: server-side AI quotas/entitlements, activation next-best-action UX, sportsbook CTA tracking, Wins Wall upsert support, and build splitting are in repo.",
-  "nextMilestone": "Deploy updated AI edge functions → apply wins_wall migration → affiliate links in src/books.js → Stripe smoke test → Reddit launch post.",
+  "currentFocus": "Dashboard tranche 2 is in repo: shared today/dashboard state helpers, extracted dashboard surfaces, and launch-copy/smoke alignment are complete.",
+  "nextMilestone": "Deploy updated AI edge functions → apply wins_wall migration → run Stripe smoke test → expand browser smoke → ship post-result feedback loop.",
   "blockers": [
     "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
-    "wins_wall Supabase migration exists but still needs to be applied in Supabase SQL Editor"
+    "wins_wall Supabase migration exists but still needs to be applied in Supabase SQL Editor",
+    "Supabase function deploys cannot be run from this environment until supabase login / SUPABASE_ACCESS_TOKEN is configured"
   ],
   "lastUpdated": "2026-04-14",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-04-13",
-  "version": "23.8.0",
-  "lastSession": "S41",
+  "truthAuditLastRun": "2026-04-14",
+  "version": "24.0.0",
+  "lastSession": "S43",
   "commits": [
-    "pending — feat(s41): Sprint 1 hardening and activation",
+    "pending — feat(s43): dashboard extraction and launch copy alignment",
+    "pending — feat(s42): audit follow-through and hardening tranche 1",
     "70d1a73 — chore(s40): protocol alignment with studio-ops (CANON-007 + DECISIONS + TASK_BOARD)",
     "b046e5e — feat(s39): Home tab suite + global text size increase",
-    "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI",
-    "9b2328b — fix(s38): customer-portal — pin portal configuration ID"
+    "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
-  "testStatus": "127/127",
+  "testStatus": "133/133",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — no Vault Membership in user-facing copy",
@@ -40,10 +41,10 @@
   "stripeStatus": "live",
   "webhookStatus": "live",
   "edgeFunctions": {
-    "promo-chat": "repo updated — deploy required for shared server-side quota helper",
-    "promo-advisor": "repo updated — deploy required for shared server-side quota helper",
-    "ai-action-plan": "repo updated — deploy required for shared server-side quota helper",
-    "stack-builder": "repo updated — deploy required for shared server-side quota helper",
+    "promo-chat": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
+    "promo-advisor": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
+    "ai-action-plan": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
+    "stack-builder": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
     "create-checkout": "deployed — success/cancel URLs updated to promogrind.bet",
     "stripe-webhook": "deployed",
     "customer-portal": "deployed — config bpc_1TLsRNGMN60PfJYsM0S0ByAh pinned; cancel + payment method update enabled",
@@ -84,17 +85,26 @@
     "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown; Manage billing → customer-portal edge fn; beta invite code entry for Free Agent tier",
     "AgeGate": "src/components/AgeGate.jsx — full-screen blocking modal, 30-day localStorage flag",
     "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers, lazy-loaded",
-    "ActivationNextAction": "src/App.jsx — Dashboard next-best-action card for onboarding/revenue/ledger loop"
+    "ActivationNextAction": "src/App.jsx — Dashboard next-best-action card for onboarding/revenue/ledger loop",
+    "TodayDashboardPanel": "src/components/dashboard/TodayDashboardPanel.jsx — expiring promos, unfinished work, bankroll posture, recent settled profit",
+    "DailyBriefPage": "src/components/dashboard/DailyBriefPage.jsx — extracted Home daily briefing surface"
   },
   "knownIssues": {
     "wins_wall_404": "SQL migration ready but not yet applied — component silently degrades to localStorage, no UX impact",
-    "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code"
+    "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code",
+    "browser_smoke_spawn_eperm": "Updated browser smoke script cannot launch the local preview subprocess in this environment (spawn EPERM)"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
   "ignisScore": 45495,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-04-14",
-  "entropyScore": 0.065,
-  "entropyLastComputed": "2026-04-14"
+  "entropyScore": 0.028,
+  "entropyLastComputed": "2026-04-14",
+  "silScore": 420,
+  "silAvg3": 420,
+  "silVelocity": 2,
+  "silDebt": "down",
+  "silLastSession": "S43",
+  "currentSession": 43
 }

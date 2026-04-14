@@ -50,8 +50,8 @@ for (const relPath of requiredFiles) {
 
 if (errors.length === 0) {
   assertIncludes("src/App.jsx", "MemberWelcomeCard", "member onboarding card", errors);
-  assertIncludes("src/App.jsx", "Free Vault membership", "free membership messaging", errors);
-  assertIncludes("src/App.jsx", "Paid checkout is not live yet", "paid checkout beta messaging", errors);
+  assertIncludes("src/App.jsx", "Free PromoGrind account", "free account messaging", errors);
+  assertIncludes("src/App.jsx", "Paid checkout stays off until the Studio billing rollout is fully live.", "paid checkout beta messaging", errors);
 
   assertIncludes("docs/LAUNCH_CHECKLIST.md", "Must Have Before Soft Public Launch", "soft-launch checklist section", errors);
   assertIncludes("docs/FEATURE_FLAG_ACTIVATION_MATRIX.md", "VITE_PG_FEATURE_LIVE_SCANNER", "live scanner flag entry", errors);
@@ -69,7 +69,7 @@ if (errors.length === 0) {
   ];
 
   for (const relPath of trustPages) {
-    assertIncludes(relPath, "Free Vault membership", "free Vault membership trust copy", errors);
+    assertIncludes(relPath, "Free PromoGrind account", "free PromoGrind account trust copy", errors);
     assertIncludes(relPath, "1-800-GAMBLER", "responsible gambling notice", errors);
   }
 
@@ -81,14 +81,14 @@ if (errors.length === 0) {
 
   for (const relPath of comparisonPages) {
     assertIncludes(relPath, "beta-gated", "beta gating explanation", errors);
-    assertIncludes(relPath, "Start with free Vault membership", "updated CTA", errors);
+    assertIncludes(relPath, "Start with free PromoGrind account", "updated CTA", errors);
     assertNotIncludes(relPath, "Start for free — no credit card", "old CTA copy", errors);
     assertNotIncludes(relPath, "✅ Pro</span>", "overstated Pro-live badge", errors);
   }
 
   assertIncludes("public/landing/index.html", "beta rollout", "landing beta rollout messaging", errors);
-  assertIncludes("public/landing/index.html", "free Vault membership", "landing access model copy", errors);
-  assertIncludes("docs/SEO_TRUST_STRIP_TEMPLATE.md", "Free Vault membership", "trust strip template copy", errors);
+  assertIncludes("public/landing/index.html", "PromoGrind account", "landing access model copy", errors);
+  assertIncludes("docs/SEO_TRUST_STRIP_TEMPLATE.md", "Free PromoGrind account", "trust strip template copy", errors);
 }
 
 if (errors.length) {

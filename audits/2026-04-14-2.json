@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "date": "2026-04-14",
+  "session": 43,
+  "sessionType": "implementation",
+  "label": null,
+  "calibration": false,
+  "scores": {
+    "devHealth": 90,
+    "creativeAlignment": 82,
+    "momentum": 84,
+    "engagement": 74,
+    "processQuality": 90
+  },
+  "total": 420,
+  "maxScore": 500,
+  "velocity": 2,
+  "protocolVelocity": 0,
+  "durationMinutes": 90,
+  "debt": "down",
+  "rollingAvg3": {
+    "devHealth": 90,
+    "creativeAlignment": 82,
+    "momentum": 84,
+    "engagement": 74,
+    "processQuality": 90,
+    "total": 420
+  },
+  "rollingAvgTotals": {
+    "3": 420,
+    "5": 420,
+    "10": 420,
+    "25": null,
+    "all": 420
+  },
+  "topWin": "Dashboard tranche 2 landed with shared tested logic and a clearer Today workflow.",
+  "topGap": "Live deployment and Stripe/browser smoke still require operator access outside this environment.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 4,
+  "improvementGroups": {
+    "dashboard": 2,
+    "launch-copy": 1,
+    "validation": 1
+  },
+  "testsTotal": 133,
+  "testsByType": {
+    "unit": 133
+  },
+  "testsDelta": 6,
+  "deployStatus": "pending",
+  "ignisFlags": [
+    "intent-achieved"
+  ],
+  "ignisNote": "The highest-leverage pattern this session was separating dashboard derivation from JSX while simultaneously fixing public launch-copy drift so product structure and launch validation moved forward together."
+}

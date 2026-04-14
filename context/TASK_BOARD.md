@@ -11,6 +11,12 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] **wins_wall Supabase table** — create table so community wins wall can load from server (component already gracefully degrades to localStorage without it)
 
 ## Now
+- [x] Audit tranche 2 — extract dashboard state from `src/App.jsx` into focused modules
+- [x] Build a true "Today" dashboard: expiring promos, unfinished work, next-best action, bankroll posture, recent settled profit
+- [x] Launch copy alignment — sync smoke-covered marketing pages + trust-strip template to PromoGrind-native account wording and update smoke validators
+- [ ] Result feedback loop — ask "placed / skipped / settled / actual profit / calculator accurate?" after key workflows
+- [ ] Deploy updated AI edge functions: `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`
+- [ ] Browser smoke expansion — cover age gate, first calculator result, sportsbook CTA, pricing, auth menu, and 375px mobile layout
 - [x] Domain migration — promogrind.bet purchased, Cloudflare zones + CNAME + redirect configured, GitHub Pages custom domain set
 - [x] NS switch confirmed — promogrind.bet live on Cloudflare (DNS verified S37)
 - [x] PostHog analytics — src/analytics.js, user identity on auth, key events tracked
@@ -45,10 +51,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
-- [ ] Audit tranche 2 — extract app shell/dashboard state from `src/App.jsx` into focused modules
-- [ ] Build a true "Today" dashboard: expiring promos, unfinished work, next-best action, bankroll posture, recent settled profit
 - [ ] Promo intake pipeline — accept pasted promo text, screenshot parse, and extension capture into one normalized promo card
-- [ ] Result feedback loop — ask "placed / skipped / settled / actual profit / calculator accurate?" after key workflows
 - [ ] Confidence layer — show assumptions, sensitivity, and trust badges on calculator outputs
 - [ ] State-aware + book-aware personalization for sportsbook CTAs and recommended workflows
 - [ ] Playbooks — reusable promo routines by bankroll, promo type, and available books
@@ -59,13 +62,11 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
 - [ ] VAPID keys → deploy send-daily-brief push notification function
 - [ ] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
-- [ ] Deploy updated AI edge functions: `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`
 - [ ] [SIL:1] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 - [ ] [SIL] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
 - [ ] [SIL] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
 - [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults
 - [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, production webhook-secret fail-closed check, and broader rate limits
-- [ ] Browser smoke expansion — cover age gate, first calculator result, sportsbook CTA, pricing, auth menu, and 375px mobile layout
 
 ## Later
 - [ ] **CANON-007 staging (at SPARKED transition)** — stand up `promogrind.staging.vaultsparkstudios.com` on Hetzner before flipping vaultStatus to sparked; required once paying users exist
