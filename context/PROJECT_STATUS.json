@@ -3,20 +3,21 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Home tab suite live (Daily Brief, Get Started, What's New, Pricing, About). Beta invite codes live. Last code blocker before launch: affiliate links in src/books.js.",
-  "nextMilestone": "Affiliate links in src/books.js → Stripe smoke test → Reddit launch post.",
+  "currentFocus": "Sprint 1 hardening complete: server-side AI quotas/entitlements, activation next-best-action UX, sportsbook CTA tracking, Wins Wall upsert support, and build splitting are in repo.",
+  "nextMilestone": "Deploy updated AI edge functions → apply wins_wall migration → affiliate links in src/books.js → Stripe smoke test → Reddit launch post.",
   "blockers": [
     "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
-    "wins_wall Supabase table does not exist — needed for community wins wall server data"
+    "wins_wall Supabase migration exists but still needs to be applied in Supabase SQL Editor"
   ],
-  "lastUpdated": "2026-04-13",
+  "lastUpdated": "2026-04-14",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
-  "version": "23.7.0",
-  "lastSession": "S40",
+  "version": "23.8.0",
+  "lastSession": "S41",
   "commits": [
+    "pending — feat(s41): Sprint 1 hardening and activation",
     "70d1a73 — chore(s40): protocol alignment with studio-ops (CANON-007 + DECISIONS + TASK_BOARD)",
     "b046e5e — feat(s39): Home tab suite + global text size increase",
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI",
@@ -39,9 +40,10 @@
   "stripeStatus": "live",
   "webhookStatus": "live",
   "edgeFunctions": {
-    "promo-chat": "deployed",
-    "promo-advisor": "deployed — guest gate active, explicit auth headers",
-    "ai-action-plan": "deployed",
+    "promo-chat": "repo updated — deploy required for shared server-side quota helper",
+    "promo-advisor": "repo updated — deploy required for shared server-side quota helper",
+    "ai-action-plan": "repo updated — deploy required for shared server-side quota helper",
+    "stack-builder": "repo updated — deploy required for shared server-side quota helper",
     "create-checkout": "deployed — success/cancel URLs updated to promogrind.bet",
     "stripe-webhook": "deployed",
     "customer-portal": "deployed — config bpc_1TLsRNGMN60PfJYsM0S0ByAh pinned; cancel + payment method update enabled",
@@ -81,10 +83,11 @@
   "uiComponents": {
     "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown; Manage billing → customer-portal edge fn; beta invite code entry for Free Agent tier",
     "AgeGate": "src/components/AgeGate.jsx — full-screen blocking modal, 30-day localStorage flag",
-    "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers"
+    "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers, lazy-loaded",
+    "ActivationNextAction": "src/App.jsx — Dashboard next-best-action card for onboarding/revenue/ledger loop"
   },
   "knownIssues": {
-    "wins_wall_404": "Supabase table does not exist — component silently degrades to localStorage, no UX impact",
+    "wins_wall_404": "SQL migration ready but not yet applied — component silently degrades to localStorage, no UX impact",
     "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code"
   },
   "sitemapUrls": 145,

@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -7,7 +7,6 @@ const corsHeaders = {
 };
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
-const FREE_DAILY_LIMIT = 10;
 
 const SYSTEM_PROMPT = `You are PromoGrind's AI assistant — an expert in sports betting promo optimization, bonus bet conversion, arbitrage betting, and expected value (EV) strategy.
 
@@ -39,33 +38,13 @@ serve(async (req: Request) => {
       );
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    );
-
-    const authHeader = req.headers.get("Authorization");
-    let userId: string | null = null;
-    let isPro = false;
-
-    if (authHeader) {
-      const jwt = authHeader.replace("Bearer ", "");
-      const { data: { user } } = await supabase.auth.getUser(jwt);
-      if (user) {
-        userId = user.id;
-        const { data: sub } = await supabase
-          .from("subscriptions")
-          .select("plan, status")
-          .eq("user_id", user.id)
-          .eq("status", "active")
-          .maybeSingle();
-        isPro = !!sub;
-        if (!isPro && user.user_metadata?.trial_start) {
-          const trialEnd = new Date(user.user_metadata.trial_start).getTime() + 7 * 24 * 60 * 60 * 1000;
-          isPro = Date.now() < trialEnd;
-        }
-      }
-    }
+    const access = await requireAiAccess(req, {
+      feature: "promo_chat",
+      minTier: "scout",
+      dailyLimits: { scout: 20, runner: 50, closer: Infinity, house: Infinity },
+      corsHeaders,
+    });
+    if (access.error) return access.error;
 
     const { message, history = [], userContext } = await req.json() as {
       message: string;
@@ -75,25 +54,6 @@ serve(async (req: Request) => {
 
     if (!message?.trim()) {
       return new Response(JSON.stringify({ error: "Message is required" }), { status: 400, headers: corsHeaders });
-    }
-
-    // Rate limit free users via vault_events table
-    if (!isPro && userId) {
-      const today = new Date().toISOString().slice(0, 10);
-      const { count } = await supabase
-        .from("vault_events")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", userId)
-        .eq("event_type", "promo_chat")
-        .gte("created_at", today + "T00:00:00Z");
-      if ((count ?? 0) >= FREE_DAILY_LIMIT) {
-        return new Response(JSON.stringify({
-          error: "Daily limit reached",
-          limit: FREE_DAILY_LIMIT,
-          isPro: false,
-          upgrade_message: "Upgrade to VaultSparked for unlimited AI chat.",
-        }), { status: 429, headers: corsHeaders });
-      }
     }
 
     // Build context note from user profile
@@ -136,15 +96,11 @@ serve(async (req: Request) => {
     const aiData = await anthropicRes.json();
     const responseText = aiData.content?.[0]?.text ?? "";
 
-    // Log usage event (non-blocking)
-    if (userId) {
-      supabase.from("vault_events").insert({
-        user_id: userId,
-        event_type: "promo_chat",
-        points: 0,
-        metadata: { tokens: aiData.usage?.input_tokens ?? 0 },
-      }).then(() => {}).catch((e: Error) => console.error("vault_events insert error:", e));
-    }
+    await recordAiUsage(access.supabase, access.user.id, "promo_chat", {
+      input_tokens: aiData.usage?.input_tokens ?? 0,
+      output_tokens: aiData.usage?.output_tokens ?? 0,
+      tier: access.tier,
+    });
 
     // Suggest relevant calculators based on message content
     const combined = (message + responseText).toLowerCase();
@@ -157,24 +113,12 @@ serve(async (req: Request) => {
     if (combined.includes("parlay")) suggestions.push("parlay");
     if (combined.includes("hedge")) suggestions.push("hedge");
 
-    // Count today's usage for remaining display
-    let remaining: number | null = null;
-    if (!isPro && userId) {
-      const today = new Date().toISOString().slice(0, 10);
-      const { count } = await supabase
-        .from("vault_events")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", userId)
-        .eq("event_type", "promo_chat")
-        .gte("created_at", today + "T00:00:00Z");
-      remaining = Math.max(0, FREE_DAILY_LIMIT - (count ?? 0));
-    }
-
     return new Response(JSON.stringify({
+      message: responseText,
       response: responseText,
       suggestions: [...new Set(suggestions)].slice(0, 3),
-      isPro,
-      remaining,
+      tier: access.tier,
+      remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
     }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   } catch (err) {

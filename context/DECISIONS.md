@@ -33,3 +33,13 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** Registry entry had drifted significantly from reality (claimed 11 calculators vs actual 53; listed runtimeUrl at deprecated vaultsparkstudios.com/promogrind/ vs live promogrind.bet; reported stripeLiveKeyConfigured=false despite live Stripe mode since S36). Studio Hub reads this registry via GitHub API — stale data corrupts downstream dashboards and founder-facing reports.
 
 ---
+
+## 2026-04-14 — Sprint 1 hardening before growth push
+
+**Decision:** Prioritize server-side AI entitlement/quota enforcement, activation guidance, revenue click measurement, Wins Wall backend readiness, and bundle splitting before adding more visible features.
+
+**Rationale:** PromoGrind already has broad feature depth. The next constraint is trust, cost control, conversion measurement, and iteration speed. Moving AI quotas into edge functions protects paid surfaces and API spend; Dashboard next-best-action reduces user confusion; sportsbook CTA tracking measures revenue intent; Wins Wall upsert support enables social proof; and chunk splitting keeps the app fast enough for mobile users.
+
+**Follow-up trigger:** Deploy the updated AI edge functions and apply the Wins Wall migration before enabling or promoting these surfaces as fully live.
+
+---

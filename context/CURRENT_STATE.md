@@ -2,8 +2,14 @@
 
 Public-safe summary:
 - this repo remains deployable — build passing, 127/127 tests green
-- version: 23.7.0 · last session: S39 (2026-04-13)
+- version: 23.8.0 · last session: S41 (2026-04-14)
 - domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
+- **Sprint 1 hardening (S41)**: shared server-side AI entitlement/quota helper added under `supabase/functions/_shared/ai-access.ts`; wired into PromoChat, PromoAdvisor, AI Action Plan, and Stack Builder
+- **Sprint 1 activation UX (S41)**: Dashboard now shows one prioritized "Next Best Action" based on bankroll, first calculation, book completion, open bets, ledger state, and affiliate readiness
+- **Sprint 1 revenue measurement (S41)**: calculator sportsbook CTAs now emit `sportsbook_cta_clicked` with book, promo type, link type, and affiliate configured status
+- **Sprint 1 performance (S41)**: PromoChat and PromoAdvisor lazy-loaded; analytics split into a separate Vite chunk; main app chunk reduced from ~851 kB to ~392 kB
+- **Sprint 1 Wins Wall support (S41)**: `scripts/migration-wins-wall.sql` updated with metadata, unique user/period upsert support, stricter RLS checks; client publish path uses upsert
+- **Stripe smoke checklist (S41)**: `docs/STRIPE_SMOKE_TEST.md` added for checkout/webhook/customer-portal verification
 - **Home tab suite (S39)**: 5 new Home tabs added — Daily Brief, Get Started, What's New, Pricing, About; all accessible from the Home group in the nav
 - **Global text size increase (S39)**: all menu/nav text, labels, inputs, notes, help text, and RR rows bumped 1–2px for readability; affects shared.js, ui.jsx, and App.jsx nav
 - **Beta invite code system**: `beta_codes` Supabase table + `redeem-beta-code` edge function deployed; 10 PGBETA-XXXX codes seeded (Runner tier, 30d, single-use); UserMenu "Have a beta invite code?" section added for Free Agent tier users
@@ -22,5 +28,6 @@ Public-safe summary:
 - all GitHub Secrets set (9/9): Supabase, feature flags, PostHog, Sentry DSN
 - WCAG AA contrast compliance: both dark and light themes pass 4.5:1 for all body/label text
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
-- wins_wall: Supabase table does not yet exist — component degrades silently to localStorage, no UX impact
+- wins_wall: migration exists and client upsert path is ready; Supabase SQL still must be applied before server entries load
+- deployment follow-up: deploy updated `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` edge functions
 - detailed internal state now lives in the private Studio OS / ops repository

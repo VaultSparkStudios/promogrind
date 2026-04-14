@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -14,28 +11,20 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
   try {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: CORS });
-    }
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
-    if (authErr || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: CORS });
+    if (!ANTHROPIC_API_KEY) {
+      return new Response(JSON.stringify({ error: "AI service not configured" }), {
+        status: 503,
+        headers: { ...CORS, "Content-Type": "application/json" },
+      });
     }
 
-    // Check pro/trial status
-    const isTrial = user.user_metadata?.trial_start &&
-      new Date(user.user_metadata.trial_start).getTime() + 7 * 24 * 60 * 60 * 1000 > Date.now();
-    const { data: sub } = await supabase.from("subscriptions")
-      .select("plan, status, current_period_end")
-      .eq("user_id", user.id)
-      .maybeSingle();
-    const isPro = isTrial || (sub?.status === "active" && (sub.plan === "pro" || sub.plan === "vault_sparked"));
-    if (!isPro) {
-      return new Response(JSON.stringify({ error: "VaultSparked required" }), { status: 403, headers: CORS });
-    }
+    const access = await requireAiAccess(req, {
+      feature: "ai_action_plan",
+      minTier: "runner",
+      dailyLimits: { runner: 1, closer: 1, house: 3 },
+      corsHeaders: CORS,
+    });
+    if (access.error) return access.error;
 
     const body = await req.json();
     const { bankroll = "1000", booksComplete = 0, recentProfit = "0", ledgerCount = 0 } = body;
@@ -95,7 +84,13 @@ Respond with JSON only — no markdown, no explanation outside the JSON:
       plan = match ? JSON.parse(match[0]) : { summary: "Unable to parse plan.", actions: [] };
     }
 
-    return new Response(JSON.stringify(plan), {
+    await recordAiUsage(access.supabase, access.user.id, "ai_action_plan", {
+      tier: access.tier,
+      bankroll: String(bankroll).slice(0, 24),
+      ledgerCount,
+    });
+
+    return new Response(JSON.stringify({ ...plan, remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1) }), {
       headers: { ...CORS, "Content-Type": "application/json" },
     });
   } catch (e) {

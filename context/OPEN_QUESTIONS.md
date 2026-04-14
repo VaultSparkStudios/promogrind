@@ -16,6 +16,13 @@
 - Owner: Studio
 - Unblock path: Build a simple `odds_cache` table in Supabase. Edge Function writes to it every 5 min; all scanner clients read from it instead of calling The Odds API directly. Implement before marketing push that could spike concurrent users.
 
+### What production CORS and security-header policy should PromoGrind enforce?
+
+- Raised: 2026-04-14
+- Context: S41 moved AI quotas server-side, but edge functions still use permissive public CORS and the static app needs a CSP/security-header pass before paid traffic scales.
+- Owner: Studio / engineering
+- Unblock path: Define allowed origins for `promogrind.bet` and staging, add CSP/Referrer-Policy/Permissions-Policy headers, and make Stripe webhook secret verification fail closed in production.
+
 ### Should push notification daily briefing use VAPID web-push (server-sent) or just in-browser Notification API?
 
 - Raised: 2026-03-26
@@ -32,5 +39,5 @@
 
 ### What is the target domain?
 
-- Resolved: 2026-03-25
-- Decision: No separate domain. PromoGrind stays permanently at vaultsparkstudios.com/promogrind/. SEO equity concentrates on the studio domain.
+- Resolved: 2026-04-14
+- Decision: PromoGrind uses its standalone domain `https://promogrind.bet/`. The prior vaultsparkstudios.com/promogrind/ target is deprecated.

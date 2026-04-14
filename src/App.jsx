@@ -19,9 +19,8 @@ const TaxesEstimatorWrapper = lazy(() => import("./components/TaxesEstimator.jsx
 const AIActionPlan = lazy(() => import("./components/AIActionPlan.jsx").then(m => ({ default: m.AIActionPlan })));
 const StackBuilder = lazy(() => import("./components/StackBuilder.jsx").then(m => ({ default: m.StackBuilder })));
 const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => ({ default: m.PricingPage })));
-// PromoChat + PromoAdvisorPanel are always mounted (floating UI), load eagerly
-import PromoChat from "./components/PromoChat.jsx";
-import { PromoAdvisorPanel } from "./components/PromoAdvisorPanel.jsx";
+const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
+const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 import UserMenu from "./components/UserMenu.jsx";
 
@@ -79,11 +78,26 @@ const BookCTA = ({ promoType }) => {
       <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
         {sorted.slice(0,4).map(b=>(
           <a key={b.name} href={getBookUrl(b)} target="_blank" rel="noopener noreferrer sponsored"
+            onClick={() => trackEvent('sportsbook_cta_clicked', {
+              book: b.name,
+              promoType: promoType || 'general',
+              linkType: b.affiliateLink ? 'affiliate' : b.referralLink ? 'referral' : b.signupLink ? 'signup' : 'homepage',
+              configuredAffiliate: !!b.affiliateLink,
+            })}
             style={{padding:"4px 10px",background:`${b.color}15`,border:`1px solid ${b.color}30`,borderRadius:4,color:b.color,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
             {b.name} <span style={{fontSize:8,opacity:0.7,fontWeight:400}}>21+</span> →
           </a>
         ))}
         <a href={getBookUrl(sorted[4]||{})||"#"} target="_blank" rel="noopener noreferrer sponsored"
+          onClick={() => {
+            const book = sorted[4] || {};
+            trackEvent('sportsbook_cta_clicked', {
+              book: book.name || 'more',
+              promoType: promoType || 'general',
+              linkType: book.affiliateLink ? 'affiliate' : book.referralLink ? 'referral' : book.signupLink ? 'signup' : 'homepage',
+              configuredAffiliate: !!book.affiliateLink,
+            });
+          }}
           style={{padding:"4px 10px",background:`${K.bd}`,border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
           +{BOOKS.length-4} more →
         </a>
@@ -1614,14 +1628,15 @@ const ProfitCertificate = () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        await supabase.from('wins_wall').insert({
+        await supabase.from('wins_wall').upsert({
           user_id: session.user.id,
           period,
           period_label: periodLabel,
           total: parseFloat(f(total)) || 0,
           entry_count: count,
           book_count: books.length,
-        });
+          metadata: { best_day: bestDay.d || null, best_day_profit: bestDay.p || 0 },
+        }, { onConflict: 'user_id,period,period_label' });
       }
     } catch {}
     trackLaunchEvent('wins_wall_opt_in', { period, total: f(total) });
@@ -3335,6 +3350,40 @@ function MemberWelcomeCard({ navigate, proStatus }) {
   );
 }
 
+function ActivationNextAction({ data, totalProfit, openBets, booksComplete, navigate }) {
+  const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
+  const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
+  const hasLedger = (data.ledger || []).length > 0;
+  const hasCalc = Object.keys(usageLog).length > 0;
+  const affiliateReady = hasConfiguredAffiliateLinks();
+  const actions = [
+    !bankroll && { key:'bankroll', title:'Set your bankroll', body:'Personalized stake sizing and weekly actions need a bankroll anchor.', cta:'Set profile', slug:'dashboard', color:K.ac },
+    !hasCalc && { key:'calc', title:'Run your first conversion', body:'Start with the Bonus Bet Converter and get a hedge stake in under a minute.', cta:'Open converter', slug:'bonus-bet', color:K.gn },
+    booksComplete === 0 && { key:'books', title:'Pick your first sportsbook', body:'Mark books you already use and prioritize the highest-value welcome offers.', cta:'Open tracker', slug:'sportsbooks', color:K.yl },
+    openBets.length > 0 && { key:'open', title:'Close open bets', body:`You have ${openBets.length} open bet${openBets.length === 1 ? '' : 's'} waiting for settlement.`, cta:'Review bets', slug:'sportsbooks', color:K.yl },
+    !hasLedger && hasCalc && { key:'ledger', title:'Log the outcome', body:'Ledger entries turn one-off calculations into a profit system.', cta:'Open ledger', slug:'ledger', color:K.pp },
+    !affiliateReady && { key:'affiliate', title:'Revenue setup pending', body:'Referral or affiliate links are still placeholders, so outbound clicks are not monetized yet.', cta:'Review links', slug:'sportsbooks', color:K.rd },
+  ].filter(Boolean);
+  const action = actions[0] || { key:'scale', title:'Scale the loop', body:`You have extracted ${totalProfit >= 0 ? '$' + f(totalProfit) : '-$' + f(Math.abs(totalProfit))}. Add another book, log the next promo, and publish a win when ready.`, cta:'Find next promo', slug:'daily-brief', color:K.gn };
+
+  return (
+    <div style={{...S.card,border:`1px solid ${action.color}40`,background:`${action.color}08`,marginBottom:12}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,flexWrap:'wrap'}}>
+        <div style={{flex:1,minWidth:240}}>
+          <div style={{fontSize:10,color:action.color,fontWeight:800,letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:5}}>Next Best Action</div>
+          <div style={{fontFamily:fontD,fontSize:18,fontWeight:800,color:K.tx,marginBottom:4}}>{action.title}</div>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{action.body}</div>
+        </div>
+        <button
+          onClick={() => { trackEvent('next_best_action_clicked', { key: action.key }); navigate('/' + action.slug); }}
+          style={{padding:'9px 14px',background:action.color,border:'none',borderRadius:8,color:K.bg,fontSize:12,fontWeight:800,cursor:'pointer',fontFamily:font,whiteSpace:'nowrap'}}>
+          {action.cta} →
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ═══ DAILY DASHBOARD ═══
 const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
@@ -3396,6 +3445,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
+      <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
       <LaunchReadinessPanel />
       <CommunityWinsWall />
@@ -5767,8 +5817,10 @@ export default function App() {
       <Footer/>
       <div style={{height:56}}/>
       <MobileBottomNav gi={gi} goTo={goTo}/>
-      {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
-      <PromoChat navigate={navigate}/>
+      <Suspense fallback={null}>
+        {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
+        <PromoChat navigate={navigate}/>
+      </Suspense>
       <QuickCalcPanel goTo={goTo}/>
     </div>
     </CurrencyCtx.Provider>

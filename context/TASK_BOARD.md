@@ -38,14 +38,23 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] UserMenu — "Have a beta invite code?" section for Free Agent tier (S39)
 - [x] Home tab suite — Daily Brief, Get Started, What's New, Pricing, About tabs added to Home group (S39)
 - [x] Global text size increase — all nav/label/input/note/help/RR text bumped 1–2px (S39)
+- [x] Sprint 1 hardening — shared server-side AI entitlement/quota helper wired into PromoChat, PromoAdvisor, AI Action Plan, and Stack Builder
+- [x] Sprint 1 revenue measurement — sportsbook CTA click tracking added for calculator result CTAs
+- [x] Sprint 1 activation UX — Dashboard now shows one prioritized next-best action
+- [x] Sprint 1 performance — PromoChat/PromoAdvisor lazy-loaded and analytics split into its own build chunk
+- [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
-- [ ] Stripe smoke test — card 4242, verify subscriptions table row + customer portal redirect
+- [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
 - [ ] VAPID keys → deploy send-daily-brief push notification function
+- [ ] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
+- [ ] Deploy updated AI edge functions: `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`
 - [ ] [SIL:1] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 - [ ] [SIL] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
 - [ ] [SIL] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
+- [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, and production webhook-secret fail-closed check
+- [ ] Browser smoke expansion — cover age gate, first calculator result, sportsbook CTA, pricing, auth menu, and 375px mobile layout
 
 ## Later
 - [ ] **CANON-007 staging (at SPARKED transition)** — stand up `promogrind.staging.vaultsparkstudios.com` on Hetzner before flipping vaultStatus to sparked; required once paying users exist
@@ -54,9 +63,17 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Android: `npm run build:cap` → Play Store
 - [ ] PWA screenshots → Chrome Web Store submission ($5 fee)
 - [ ] Apply to DraftKings/FanDuel affiliate programs (Income Access network)
-- [ ] Server-side rate limiting for PromoChat/PromoAdvisor (move from localStorage to edge function + RLS)
+- [ ] AI abuse analytics — review `vault_events` quota logs for cost spikes, blocked users, and plan-limit tuning
 - [ ] Service worker improvement: stale-while-revalidate + offline ledger queue
 - [ ] App.jsx component extraction (ongoing — extract 2-3 calculators per session into src/calculators/)
+- [ ] Calculator receipt exports — generate shareable math receipts with inputs, formula, hedge, profit both outcomes, timestamp, and disclaimer
+- [ ] State/book availability intelligence — personalize sportsbook CTAs by legal state and book availability
+- [ ] Creator/referral landing packs — UTM-aware landing pages with creator attribution and calculator presets
+- [ ] Feature flag admin surface — server-controlled rollout, kill switches, beta cohorts, and tier gating
+- [ ] Observability dashboard — activation, calculator completion, sportsbook CTA CTR, AI quota usage, checkout conversion, retained ledger users
+- [ ] Bundle budget in CI — warn/fail when main app chunk exceeds target size
+- [ ] Offline-first ledger queue — queue writes, show sync status, and resolve conflicts per entity timestamp
+- [ ] AI response schema validation — validate JSON server-side, include assumptions/confidence, and add advice guardrails
 
 ## Deferred to Project Agents
 - cross-repo item owned by another repo agent:

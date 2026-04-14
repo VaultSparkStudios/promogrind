@@ -28,7 +28,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const toast = useToast();
 
   const analyze = async () => {
-    if (!promoText.trim() || uses >= DAILY_LIMIT || loading) return;
+    if (!user || !promoText.trim() || uses >= DAILY_LIMIT || loading) return;
     setLoading(true); setError(''); setResult(null);
     try {
       // Sanitize: strip HTML/script tags, cap at 2000 chars
@@ -39,12 +39,12 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         body: { promoText: sanitized }
       });
       if (fnErr) throw fnErr;
-      const newUses = uses + 1;
+      const newUses = Number.isFinite(data?.remaining) ? DAILY_LIMIT - data.remaining : uses + 1;
       setUses(newUses);
       try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
       setResult(data);
     } catch(e) {
-      setError('Analysis failed. Please try again.');
+      setError(e?.message === 'Unauthorized' ? 'Sign in to analyze promos.' : 'Analysis failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -136,10 +136,10 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         {/* Analyze button */}
         <button
           onClick={analyze}
-          disabled={loading || !promoText.trim() || isLimited}
+          disabled={loading || !user || !promoText.trim() || isLimited}
           style={{padding:'9px',background:isLimited?K.s2:'#7c3aed',border:`1px solid ${isLimited?K.bd:'#7c3aed'}`,borderRadius:8,color:isLimited?K.mt:'#fff',fontWeight:700,fontSize:12,cursor:loading||isLimited?'default':'pointer',fontFamily:font,opacity:loading?0.7:1}}
         >
-          {loading ? '⏳ Analyzing...' : '🔍 Analyze This Promo'}
+          {loading ? '⏳ Analyzing...' : !user ? 'Sign in to analyze promos' : '🔍 Analyze This Promo'}
         </button>
 
         {/* Error card with retry */}

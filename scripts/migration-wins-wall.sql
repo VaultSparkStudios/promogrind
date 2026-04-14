@@ -14,11 +14,13 @@ create table if not exists wins_wall (
   book_count int not null,        -- number of distinct books
   display_name text,              -- optional user-chosen alias (null = anonymous)
   is_approved boolean not null default true,   -- moderation flag
+  metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz default now()
 );
 
 create index if not exists wins_wall_created_idx on wins_wall(created_at desc);
 create index if not exists wins_wall_user_idx on wins_wall(user_id);
+create unique index if not exists wins_wall_user_period_idx on wins_wall(user_id, period, period_label);
 
 alter table wins_wall enable row level security;
 
@@ -30,12 +32,29 @@ create policy "wins_wall_read"
 -- Users can insert their own entries
 create policy "wins_wall_insert"
   on wins_wall for insert
-  with check (auth.uid() = user_id);
+  with check (
+    auth.uid() = user_id
+    and total >= 0
+    and entry_count > 0
+    and book_count >= 0
+  );
 
 -- Users can delete their own entries
 create policy "wins_wall_delete"
   on wins_wall for delete
   using (auth.uid() = user_id);
 
--- Rate limit: max 3 entries per user per day (enforced via app, not SQL)
+-- Users can update their own current entry without bypassing moderation.
+create policy "wins_wall_update_own"
+  on wins_wall for update
+  using (auth.uid() = user_id)
+  with check (
+    auth.uid() = user_id
+    and total >= 0
+    and entry_count > 0
+    and book_count >= 0
+  );
+
+-- Rate limit: max 3 entries per user per day should be enforced by API/app if this
+-- becomes a high-volume surface.
 -- Moderation: set is_approved = false to hide entries

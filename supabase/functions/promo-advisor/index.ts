@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -39,6 +40,16 @@ serve(async (req) => {
       );
     }
 
+    const access = await requireAiAccess(req, {
+      feature: "promo_advisor",
+      minTier: "free",
+      dailyLimits: { free: 3, scout: 10, runner: Infinity, closer: Infinity, house: Infinity },
+      corsHeaders,
+    });
+    if (access.error) return access.error;
+
+    const sanitizedPromoText = promoText.replace(/<[^>]*>/g, "").trim().slice(0, 2000);
+
     const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -51,7 +62,7 @@ serve(async (req) => {
         max_tokens: 400,
         system: SYSTEM_PROMPT,
         messages: [
-          { role: "user", content: `Analyze this sportsbook promo:\n\n${promoText.trim()}` },
+          { role: "user", content: `Analyze this sportsbook promo:\n\n${sanitizedPromoText}` },
         ],
       }),
     });
@@ -83,7 +94,12 @@ serve(async (req) => {
       };
     }
 
-    return new Response(JSON.stringify(parsed), {
+    await recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
+      chars: sanitizedPromoText.length,
+      tier: access.tier,
+    });
+
+    return new Response(JSON.stringify({ ...parsed, remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1) }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {

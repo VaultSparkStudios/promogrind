@@ -2,6 +2,41 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 41 — CLOSED)
+
+- Shipped: Sprint 1 hardening + activation + performance + revenue measurement
+- Tests: 127/127 passing
+- Build: passing
+- Deploy: code pushed to GitHub; Supabase edge function deployment and SQL migration remain manual follow-ups
+- Session type: implementation + closeout
+
+### Shipped this session
+
+**feat(s41): Sprint 1 hardening and activation**
+- `supabase/functions/_shared/ai-access.ts` — shared server-side AI entitlement/quota helper
+- `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder` edge functions — server-side auth, tier checks, quota counting via `vault_events`, and usage metadata
+- `src/App.jsx` — sportsbook CTA click tracking, Wins Wall upsert path, Dashboard "Next Best Action" card, PromoChat/PromoAdvisor lazy-load
+- `src/components/PromoAdvisorPanel.jsx` — guest calls blocked client-side and remaining quota consumes server response
+- `vite.config.js` — analytics split into its own manual chunk
+- `scripts/migration-wins-wall.sql` — metadata, unique user/period key, stricter RLS checks, update policy
+- `docs/STRIPE_SMOKE_TEST.md` — checkout/webhook/customer-portal smoke checklist
+- `context/TASK_BOARD.md` — audit backlog and deployment follow-ups updated
+
+### Validation
+- `npm.cmd test` → 127/127 passing
+- `npm.cmd run build` → passing
+- Main app chunk reduced from ~851 kB to ~392 kB; oversized main app warning cleared
+
+### Open blockers / follow-ups
+- Deploy updated Supabase functions: `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`
+- Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor
+- Paste real referral/affiliate links into `src/books.js`
+- Run `docs/STRIPE_SMOKE_TEST.md`
+
+### Session Intent: Complete Sprint 1 and close out to GitHub · Outcome: Achieved
+
+---
+
 ## Where We Left Off (Session 40 — CLOSED)
 
 - Shipped: 0 product changes · 2 protocol commits across 2 repos (promogrind, vaultspark-studio-ops)

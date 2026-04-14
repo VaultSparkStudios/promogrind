@@ -13,6 +13,7 @@
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -37,6 +38,14 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
   try {
+    const access = await requireAiAccess(req, {
+      feature: "stack_builder",
+      minTier: "closer",
+      dailyLimits: { closer: 5, house: 20 },
+      corsHeaders: CORS,
+    });
+    if (access.error) return access.error;
+
     const { bankroll, booksAvailable = [], goal = "maximize guaranteed extraction" } = await req.json();
 
     if (!bankroll || bankroll < 100) {
@@ -107,6 +116,13 @@ Be specific with dollar amounts. Format as a clean structured response.`;
     const totalMatch = aiText.match(/\$(\d[\d,]*)\s*(?:total|guaranteed|weekly)/i);
     const estimatedTotal = totalMatch ? parseInt(totalMatch[1].replace(/,/g, "")) : null;
 
+    await recordAiUsage(access.supabase, access.user.id, "stack_builder", {
+      tier: access.tier,
+      bankroll,
+      booksAvailable: booksAvailable.slice(0, 12),
+      promoCount: eligible.length,
+    });
+
     return new Response(
       JSON.stringify({
         plan: aiText,
@@ -115,6 +131,7 @@ Be specific with dollar amounts. Format as a clean structured response.`;
         booksUsed: [...new Set(eligible.map(p => p.book))].slice(0, 5),
         promoCount: eligible.length,
         generatedAt: new Date().toISOString(),
+        remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
       }),
       { headers: { ...CORS, "Content-Type": "application/json" } }
     );
