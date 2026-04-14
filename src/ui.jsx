@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toD, K, font, fontD, S as _S } from "./lib/shared.js";
-import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, getFeatureState } from "./launchState.js";
+import { CANONICAL_APP_URL, getFeatureState, getProjectAuthHref } from "./launchState.js";
 import { trackFeatureGateSeen, trackFeatureGateClick } from "./launchTelemetry.js";
 import { CompactCtx } from "./contexts.jsx";
 
@@ -71,7 +71,7 @@ export const FeatureUnavailableCard = ({ featureKey, title, body }) => {
       </div>
       <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap",alignItems:"center"}}>
         <a
-          href={FREE_VAULT_MEMBERSHIP_URL}
+          href={getProjectAuthHref("signup")}
           onClick={() => trackFeatureGateClick(feature.key, "free-membership")}
           style={{padding:"7px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,textDecoration:"none",fontFamily:font}}
         >

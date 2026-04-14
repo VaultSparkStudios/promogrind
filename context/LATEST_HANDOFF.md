@@ -2,6 +2,14 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Current Delta Since S43
+
+- PromoGrind now owns the visible account flow in-app via `src/components/AuthDialog.jsx`; account creation and sign-in no longer use the Vault member page as the primary UX.
+- Shared Vault identity remains intact underneath via shared Supabase auth plus shared `display_name` / `username` metadata.
+- Active React surfaces now point to PromoGrind-local auth links instead of Vault-branded signup CTAs.
+- Validation after the auth change: `npm.cmd test`, `npm.cmd run build`, and `npm.cmd run smoke:launch` all passed.
+- Remaining launch blockers are now narrower: Stripe smoke test, real referral links, and one friend-facing manual account-flow check.
+
 ## Where We Left Off (Session 43 — CLOSED)
 
 - Shipped: 3 improvements across 3 groups — dashboard extraction, Today dashboard, launch-copy/smoke alignment

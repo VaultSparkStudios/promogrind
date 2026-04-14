@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { K, font, fontD } from "../lib/shared.js";
-import { FEATURE_FLAGS, FREE_VAULT_MEMBERSHIP_URL } from "../launchState.js";
+import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 
@@ -18,6 +18,7 @@ function getTierLimit(plan) {
 
 const PromoChat = ({ navigate }) => {
   if (!FEATURE_FLAGS.promoChat) return null;
+  const signInHref = getProjectAuthHref('signin');
   const { appData } = React.useContext(AppDataCtx) || {};
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -110,7 +111,7 @@ const PromoChat = ({ navigate }) => {
           Ask anything about promos, calculators, or matched betting strategy.<br/>
           Requires a <strong style={{ color: K.ac }}>Scout plan</strong> or higher.
         </div>
-        <a href={FREE_VAULT_MEMBERSHIP_URL} style={{ padding: '10px 24px', background: K.gn, borderRadius: 6, color: '#0a0e17', fontWeight: 700, fontSize: 13, textDecoration: 'none', fontFamily: font }}>
+        <a href={signInHref} style={{ padding: '10px 24px', background: K.gn, borderRadius: 6, color: '#0a0e17', fontWeight: 700, fontSize: 13, textDecoration: 'none', fontFamily: font }}>
           Sign in →
         </a>
         <button onClick={() => { setChatOpen(false); navigate(SCOUT_UPGRADE_URL.replace('#/', '')); }}

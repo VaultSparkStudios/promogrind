@@ -14,7 +14,32 @@ export const CANONICAL_APP_URL = ensureTrailingSlash(
   env.VITE_CANONICAL_URL || "https://promogrind.bet/"
 );
 
-export const FREE_VAULT_MEMBERSHIP_URL = "https://vaultsparkstudios.com/vault-member/";
+export const PROJECT_AUTH_QUERY_KEY = "auth";
+export const PROJECT_AUTH_MODES = ["signin", "signup"];
+export const VAULT_ACCOUNT_PORTAL_URL = "https://vaultsparkstudios.com/vault-member/";
+
+export function getProjectAuthMode(search = "") {
+  const params = new URLSearchParams(
+    typeof search === "string" ? search.replace(/^\?/, "") : ""
+  );
+  const mode = (params.get(PROJECT_AUTH_QUERY_KEY) || "").trim().toLowerCase();
+  return PROJECT_AUTH_MODES.includes(mode) ? mode : null;
+}
+
+export function getProjectAuthHref(mode = "signup", currentUrl) {
+  const normalizedMode = PROJECT_AUTH_MODES.includes(mode) ? mode : "signup";
+
+  try {
+    const base =
+      currentUrl ||
+      (typeof window !== "undefined" ? window.location.href : CANONICAL_APP_URL);
+    const url = new URL(base, CANONICAL_APP_URL);
+    url.searchParams.set(PROJECT_AUTH_QUERY_KEY, normalizedMode);
+    return url.toString();
+  } catch {
+    return `${CANONICAL_APP_URL}?${PROJECT_AUTH_QUERY_KEY}=${normalizedMode}`;
+  }
+}
 export const FEATURE_KEYS = [
   "aiScan",
   "promoAdvisor",

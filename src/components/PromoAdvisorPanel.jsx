@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { supabase } from "../auth.js";
-import { FEATURE_FLAGS, FREE_VAULT_MEMBERSHIP_URL } from "../launchState.js";
+import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
 import { K, font, fontD, S } from "../lib/shared.js";
 
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
+  const signInHref = getProjectAuthHref('signin');
+  const signUpHref = getProjectAuthHref('signup');
   if (!FEATURE_FLAGS.promoAdvisor) {
     return (
       <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
@@ -86,7 +88,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             Free account gets 3 analyses per day. No credit card required.
           </div>
           <a
-            href={FREE_VAULT_MEMBERSHIP_URL}
+            href={signUpHref}
             style={{
               display:'block',padding:'10px 0',borderRadius:8,
               background:K.gn,color:'#0a0e17',fontSize:12,fontWeight:700,
@@ -96,7 +98,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             Create Free Account →
           </a>
           <a
-            href={FREE_VAULT_MEMBERSHIP_URL}
+            href={signInHref}
             style={{
               display:'block',marginTop:8,fontSize:11,color:K.dm,
               textDecoration:'none',fontFamily:font,

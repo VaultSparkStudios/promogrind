@@ -1,5 +1,5 @@
 /**
- * PromoGrind — Vault Member Auth Gate
+ * PromoGrind — shared Vault identity auth
  *
  * Connects to the shared VaultSpark Supabase project.
  * Any Vault-gated tool follows the same three-step pattern:
@@ -16,11 +16,10 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { CANONICAL_APP_URL, getProjectAuthHref, VAULT_ACCOUNT_PORTAL_URL } from './launchState.js';
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const VAULT_MEMBER_LOGIN = 'https://vaultsparkstudios.com/vault-member/';
-
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   console.error('[VaultGate] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env');
 }
@@ -31,12 +30,12 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  * Call once on app startup.
  *
  * Handles two cases:
- *   A) Post-redirect from vault-member page: tokens are in the URL hash.
+ *   A) Post-redirect from the shared Vault account layer: tokens are in the URL hash.
  *      We call setSession(), store them locally, strip the hash.
  *   B) Returning visit: session already in localStorage — nothing to do.
  *
  * Returns true if the user is authenticated.
- * Returns false (and redirects to vault-member) if not.
+ * Returns false (and routes to the PromoGrind sign-in surface) if not.
  */
 export async function checkAuth() {
   if (import.meta.env.VITE_DEV_BYPASS_AUTH === 'true') return true;
@@ -72,11 +71,57 @@ export async function checkAuth() {
 }
 
 /**
- * Sign out and return to the vault-member page.
+ * Sign out and return to the PromoGrind app.
  */
 export async function signOut() {
   await supabase.auth.signOut();
-  window.location.href = VAULT_MEMBER_LOGIN;
+  window.location.href = CANONICAL_APP_URL;
+}
+
+export async function signInToPromoGrind({ email, password }) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: String(email || '').trim(),
+    password,
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function createPromoGrindAccount({
+  email,
+  password,
+  displayName,
+  marketingOptIn = true,
+}) {
+  const cleanEmail = String(email || '').trim();
+  const cleanDisplayName = String(displayName || '').trim().slice(0, 24);
+  const { data, error } = await supabase.auth.signUp({
+    email: cleanEmail,
+    password,
+    options: {
+      data: {
+        display_name: cleanDisplayName,
+        username: cleanDisplayName,
+        newsletter: !!marketingOptIn,
+        signup_source: 'promogrind',
+        project_account_origin: 'promogrind',
+      },
+    },
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function saveSharedDisplayName(displayName) {
+  const cleanDisplayName = String(displayName || '').trim().slice(0, 24);
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      display_name: cleanDisplayName,
+      username: cleanDisplayName,
+    },
+  });
+  if (error) throw error;
+  return data;
 }
 
 /**
@@ -354,8 +399,5 @@ export async function tryAuth() {
 // ── Internal ───────────────────────────────────────────────────
 
 function redirectToLogin() {
-  // Preserve the full URL (including path and query) so the user returns to the
-  // exact page they were trying to reach after logging in.
-  const next = encodeURIComponent(window.location.href);
-  window.location.href = `${VAULT_MEMBER_LOGIN}?next=${next}`;
+  window.location.href = getProjectAuthHref('signin', window.location.href);
 }

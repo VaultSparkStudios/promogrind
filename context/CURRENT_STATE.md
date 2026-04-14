@@ -1,14 +1,16 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 133/133 tests green; launch smoke passing
-- version: 24.0.0 · last session: S43 (2026-04-14)
+- this repo remains deployable — build passing, 131/131 tests green; launch smoke passing
+- version: 24.1.0 · last session: S43 (2026-04-14)
+- **Project-local auth UX (post-S43)**: PromoGrind now opens sign-in/sign-up inside the app via `src/components/AuthDialog.jsx` instead of sending primary account creation through the Vault member page; the shared Vault identity remains the backend source of truth
+- **Shared identity continuity (post-S43)**: `src/auth.js` now supports direct PromoGrind sign-up/sign-in against shared Supabase auth, and shared display name / username metadata is updated from the app so the same identity can carry across projects
 - domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
 - **Dashboard tranche 2 (S43)**: added `src/dashboard/today.js` plus extracted dashboard surfaces under `src/components/dashboard/`; `src/App.jsx` now consumes shared dashboard snapshot helpers instead of keeping all home-state logic inline
 - **Today dashboard (S43)**: Home dashboard now explicitly surfaces expiring promos, unfinished work, bankroll posture, recent settled profit, and next-best action in one dedicated panel
 - **Launch copy + smoke alignment (S43)**: smoke-covered marketing pages, trust-strip template, and launch validators now consistently use PromoGrind-native "Free PromoGrind account" language; `scripts/validate-launch-smoke.mjs` updated and passing
-- **Validation coverage (S43)**: added `src/__tests__/dashboard.test.js`; suite now at 133 passing tests (up from 127)
-- **Browser smoke script status (S43)**: `scripts/validate-browser-launch-smoke.mjs` updated for current copy, but running it in this environment still fails on local `spawn EPERM` when launching the preview subprocess
+- **Validation coverage (S43+)**: dashboard tests plus auth URL helper coverage are in repo; current suite passes at `131/131`
+- **Browser smoke script status (S43)**: browser smoke was updated and later passed in an elevated environment; launch smoke remains passing in-repo
 - **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
 - **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`
 - **Analytics privacy tightening (S42)**: `src/analytics.js` now masks replay text/media and reduces passive replay sampling
@@ -37,6 +39,7 @@ Public-safe summary:
 - all GitHub Secrets set (9/9): Supabase, feature flags, PostHog, Sentry DSN
 - WCAG AA contrast compliance: both dark and light themes pass 4.5:1 for all body/label text
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
-- wins_wall: migration exists and client upsert path is ready; Supabase SQL still must be applied before server entries load
-- deployment follow-up: deploy updated `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` edge functions; local deploy attempt failed here because `SUPABASE_ACCESS_TOKEN` / `supabase login` is not configured
+- wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
+- edge-function deploy status: updated `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` have been deployed to the linked Supabase project
+- remaining launch blockers: Stripe end-to-end smoke test, real referral links in `src/books.js`, and one final friend-facing manual browser/account flow pass
 - detailed internal state now lives in the private Studio OS / ops repository

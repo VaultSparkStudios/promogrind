@@ -51,3 +51,13 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** The app shell had already moved to PromoGrind-native wording, but several public launch pages and smoke scripts still expected the older phrasing. That drift created false smoke failures and a confused public narrative. The public rule is now consistent: user-facing copy leads with PromoGrind branding; cross-Studio account reuse is secondary supporting detail.
 
 ---
+
+## 2026-04-14 — Project-local account UX on top of shared Vault identity
+
+**Decision:** PromoGrind should own its visible sign-in/sign-up experience (`Create your PromoGrind account` / `Sign in to PromoGrind`) while continuing to use the shared VaultSpark Supabase auth project and shared user metadata underneath.
+
+**Implementation rule:** The project-branded auth surface is primary. Shared Vault membership/account reuse is supporting copy and backend behavior, not the headline UI. Shared display name / username should live in auth metadata so the same identity can appear consistently across VaultSpark projects.
+
+**Rationale:** This preserves the studio's single-account system, contact graph, and cross-project portability without forcing friend-facing users through Vault-branded account creation at the point of conversion. The result is lower trust friction, cleaner project branding, and a reusable pattern for future apps.
+
+---

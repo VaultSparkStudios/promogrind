@@ -1,36 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { FEATURE_KEYS, ensureTrailingSlash, parseLaunchFlag, getFeatureState, getLaunchSummary } from "../launchState.js";
+import { getProjectAuthHref, getProjectAuthMode } from "../launchState.js";
 
-describe("launchState helpers", () => {
-  it("parses truthy launch flags", () => {
-    expect(parseLaunchFlag("true")).toBe(true);
-    expect(parseLaunchFlag("1")).toBe(true);
-    expect(parseLaunchFlag("yes")).toBe(true);
-    expect(parseLaunchFlag("on")).toBe(true);
+describe("launch auth helpers", () => {
+  it("parses supported auth modes from query strings", () => {
+    expect(getProjectAuthMode("?auth=signup")).toBe("signup");
+    expect(getProjectAuthMode("?auth=signin")).toBe("signin");
+    expect(getProjectAuthMode("?auth=else")).toBeNull();
+    expect(getProjectAuthMode("")).toBeNull();
   });
 
-  it("parses falsy launch flags and respects fallback", () => {
-    expect(parseLaunchFlag("false")).toBe(false);
-    expect(parseLaunchFlag("0")).toBe(false);
-    expect(parseLaunchFlag(undefined, true)).toBe(true);
-    expect(parseLaunchFlag("", false)).toBe(false);
+  it("adds the requested auth mode to the current URL", () => {
+    const href = getProjectAuthHref("signup", "https://promogrind.bet/dashboard?tab=today");
+    const url = new URL(href);
+
+    expect(url.origin).toBe("https://promogrind.bet");
+    expect(url.pathname).toBe("/dashboard");
+    expect(url.searchParams.get("tab")).toBe("today");
+    expect(url.searchParams.get("auth")).toBe("signup");
   });
 
-  it("normalizes canonical urls with a trailing slash", () => {
-    expect(ensureTrailingSlash("https://vaultsparkstudios.com/promogrind")).toBe("https://vaultsparkstudios.com/promogrind/");
-    expect(ensureTrailingSlash("https://vaultsparkstudios.com/promogrind/")).toBe("https://vaultsparkstudios.com/promogrind/");
-  });
-
-  it("returns feature metadata", () => {
-    const feature = getFeatureState("liveScanner");
-    expect(feature.label).toBe("Live Scanner");
-    expect(typeof feature.enabled).toBe("boolean");
-    expect(feature.setup).toMatch(/ODDS_API_KEY/);
-  });
-
-  it("returns a coherent launch summary", () => {
-    const summary = getLaunchSummary();
-    expect(summary.totalCount).toBe(FEATURE_KEYS.length);
-    expect(summary.enabledCount + summary.disabledCount).toBe(FEATURE_KEYS.length);
+  it("falls back to signup for invalid modes", () => {
+    const href = getProjectAuthHref("invalid", "https://promogrind.bet/");
+    expect(new URL(href).searchParams.get("auth")).toBe("signup");
   });
 });

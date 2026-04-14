@@ -3,21 +3,22 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Dashboard tranche 2 is in repo: shared today/dashboard state helpers, extracted dashboard surfaces, and launch-copy/smoke alignment are complete.",
-  "nextMilestone": "Deploy updated AI edge functions → apply wins_wall migration → run Stripe smoke test → expand browser smoke → ship post-result feedback loop.",
+  "currentFocus": "PromoGrind now owns project-local sign-in/sign-up UX in-app while still using the shared Vault identity backend; dashboard extraction and launch-copy alignment remain complete.",
+  "nextMilestone": "Run Stripe smoke test → add real referral links → complete a friend-facing manual account-flow/browser pass → ship post-result feedback loop.",
   "blockers": [
-    "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
-    "wins_wall Supabase migration exists but still needs to be applied in Supabase SQL Editor",
-    "Supabase function deploys cannot be run from this environment until supabase login / SUPABASE_ACCESS_TOKEN is configured"
+    "Affiliate/referral links not configured in src/books.js",
+    "Stripe end-to-end smoke still requires a real account/browser checkout pass",
+    "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
   "lastUpdated": "2026-04-14",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-14",
-  "version": "24.0.0",
+  "version": "24.1.0",
   "lastSession": "S43",
   "commits": [
+    "pending — feat(post-s43): project-local auth UX on shared Vault identity",
     "pending — feat(s43): dashboard extraction and launch copy alignment",
     "pending — feat(s42): audit follow-through and hardening tranche 1",
     "70d1a73 — chore(s40): protocol alignment with studio-ops (CANON-007 + DECISIONS + TASK_BOARD)",
@@ -26,10 +27,10 @@
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
-  "testStatus": "133/133",
+  "testStatus": "131/131",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
-  "brandingStatus": "PromoGrind-native — no Vault Membership in user-facing copy",
+  "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
   "manifestStatus": "fixed — /manifest.json (was /promogrind/manifest.json)",
   "pricingTiers": [
     "Free Agent",
@@ -41,10 +42,10 @@
   "stripeStatus": "live",
   "webhookStatus": "live",
   "edgeFunctions": {
-    "promo-chat": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
-    "promo-advisor": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
-    "ai-action-plan": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
-    "stack-builder": "repo updated — deploy required; local deploy attempt blocked by missing Supabase auth token/login",
+    "promo-chat": "deployed",
+    "promo-advisor": "deployed",
+    "ai-action-plan": "deployed",
+    "stack-builder": "deployed",
     "create-checkout": "deployed — success/cancel URLs updated to promogrind.bet",
     "stripe-webhook": "deployed",
     "customer-portal": "deployed — config bpc_1TLsRNGMN60PfJYsM0S0ByAh pinned; cancel + payment method update enabled",
@@ -82,7 +83,8 @@
     "BETAPASS": "30% off, forever"
   },
   "uiComponents": {
-    "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), display name, tier badge, animated dropdown; Manage billing → customer-portal edge fn; beta invite code entry for Free Agent tier",
+    "AuthDialog": "src/components/AuthDialog.jsx — PromoGrind-local sign-in/sign-up dialog backed by shared Supabase auth and shared display name metadata",
+    "UserMenu": "src/components/UserMenu.jsx — avatar picker (12 sports emoji), shared display name editing, tier badge, animated dropdown; Manage billing → customer-portal edge fn; beta invite code entry for Free Agent tier",
     "AgeGate": "src/components/AgeGate.jsx — full-screen blocking modal, 30-day localStorage flag",
     "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers, lazy-loaded",
     "ActivationNextAction": "src/App.jsx — Dashboard next-best-action card for onboarding/revenue/ledger loop",
@@ -90,9 +92,8 @@
     "DailyBriefPage": "src/components/dashboard/DailyBriefPage.jsx — extracted Home daily briefing surface"
   },
   "knownIssues": {
-    "wins_wall_404": "SQL migration ready but not yet applied — component silently degrades to localStorage, no UX impact",
     "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code",
-    "browser_smoke_spawn_eperm": "Updated browser smoke script cannot launch the local preview subprocess in this environment (spawn EPERM)"
+    "stripe_smoke_manual": "Checkout and billing portal still need one real manual smoke pass with a test account and card"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
@@ -101,8 +102,8 @@
   "ignisLastComputed": "2026-04-14",
   "entropyScore": 0.129,
   "entropyLastComputed": "2026-04-14",
-  "silScore": 420,
-  "silAvg3": 420,
+  "silScore": 426,
+  "silAvg3": 423,
   "silVelocity": 2,
   "silDebt": "down",
   "silLastSession": "S43",

@@ -10,10 +10,10 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { signOut, startCheckout, manageBilling, getTierName, redeemBetaCode } from '../auth.js';
+import { signOut, startCheckout, manageBilling, getTierName, redeemBetaCode, saveSharedDisplayName } from '../auth.js';
 import { K, font, fontD } from '../lib/shared.js';
 import { FX } from '../contexts.jsx';
-import { FREE_VAULT_MEMBERSHIP_URL } from '../launchState.js';
+import { getProjectAuthHref, VAULT_ACCOUNT_PORTAL_URL } from '../launchState.js';
 
 // ── Avatar catalogue ──────────────────────────────────────────────────────────
 
@@ -154,16 +154,24 @@ export default function UserMenu({
     setAvatarPicking(false);
   };
 
+  useEffect(() => {
+    const sharedName = user?.user_metadata?.display_name || user?.user_metadata?.username || '';
+    if (!sharedName) return;
+    setDisplayName(sharedName);
+    try { localStorage.setItem('pg_display_name', sharedName); } catch {}
+  }, [user?.id, user?.user_metadata?.display_name, user?.user_metadata?.username]);
+
   const startEditName = () => {
     const base = displayName || (user?.email ? user.email.split('@')[0] : '');
     setNameInput(base);
     setEditingName(true);
   };
 
-  const saveName = () => {
+  const saveName = async () => {
     const name = nameInput.trim().slice(0, 24);
     setDisplayName(name);
     try { localStorage.setItem('pg_display_name', name); } catch {}
+    try { await saveSharedDisplayName(name); } catch {}
     setEditingName(false);
   };
 
@@ -196,13 +204,16 @@ export default function UserMenu({
     ? new Date(proStatus.current_period_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
 
+  const signInHref = getProjectAuthHref('signin');
+  const signUpHref = getProjectAuthHref('signup');
+
   // ── LOGGED OUT ─────────────────────────────────────────────────────────────
 
   if (!user) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <a
-          href={FREE_VAULT_MEMBERSHIP_URL}
+          href={signInHref}
           style={{
             display: 'inline-flex', alignItems: 'center',
             padding: '8px 16px', borderRadius: 8, minHeight: 36,
@@ -217,7 +228,7 @@ export default function UserMenu({
           Sign In
         </a>
         <a
-          href={FREE_VAULT_MEMBERSHIP_URL}
+          href={signUpHref}
           style={{
             display: 'inline-flex', alignItems: 'center',
             padding: '8px 18px', borderRadius: 8, minHeight: 36,
@@ -671,7 +682,7 @@ export default function UserMenu({
             </button>
 
             <div style={{ display: 'flex', justifyContent: 'center', gap: 18 }}>
-              {[['Compliance', '/compliance/'], ['About', '/about/'], ['Privacy', '/privacy/']].map(([label, href]) => (
+              {[['Vault account', VAULT_ACCOUNT_PORTAL_URL], ['Compliance', '/compliance/'], ['Privacy', '/privacy/']].map(([label, href]) => (
                 <a
                   key={label}
                   href={href}

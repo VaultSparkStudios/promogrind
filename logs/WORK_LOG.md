@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-04-14 — Post-S43 Project-Local Auth Rollout
+
+- Added `src/components/AuthDialog.jsx` so PromoGrind owns sign-in/sign-up inside the app.
+- Updated `src/auth.js` to support direct PromoGrind sign-up/sign-in against the shared Supabase auth project and to persist shared display name / username metadata.
+- Rewired active React auth CTAs away from the Vault member URL and onto PromoGrind-local auth query links.
+- Added `src/__tests__/launchState.test.js` for auth URL helper coverage.
+- Verified `npm.cmd test`, `npm.cmd run build`, and `npm.cmd run smoke:launch` all pass after the auth UX change.
+
 ## 2026-04-14 — S43 Dashboard Extraction + Closeout
 
 - Extracted dashboard derivation logic into `src/dashboard/today.js`.

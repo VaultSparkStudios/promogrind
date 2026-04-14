@@ -2,6 +2,7 @@ import React from "react";
 import { signOut, startCheckout, getTierName } from "../auth.js";
 import { K, font, fontD } from "../lib/shared.js";
 import { FX } from "../contexts.jsx";
+import { VAULT_ACCOUNT_PORTAL_URL } from "../launchState.js";
 
 const TIER_COLOR = (name) => ({
   Scout: '#06b6d4',
@@ -150,7 +151,7 @@ export default function ProfilePanel({
           )}
 
           <a
-            href="https://vaultsparkstudios.com/vault-member/"
+            href={VAULT_ACCOUNT_PORTAL_URL}
             target="_blank" rel="noopener noreferrer"
             style={{ display: 'block', marginTop: 10, fontSize: 10, color: K.ac, textDecoration: 'none' }}
           >

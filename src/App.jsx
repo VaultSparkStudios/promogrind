@@ -5,7 +5,7 @@ import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from ".
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 import { subscribeToPush } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD } from "./lib/shared.js";
-import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary } from "./launchState.js";
+import { CANONICAL_APP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
@@ -26,6 +26,7 @@ const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
 const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 import UserMenu from "./components/UserMenu.jsx";
+import AuthDialog from "./components/AuthDialog.jsx";
 
 /*
 ═══════════════════════════════════════════════════════════════
@@ -5114,6 +5115,7 @@ export default function App() {
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [user, setUser] = useState(null);
   const [proStatus, setProStatus] = useState(null);
+  const [authModalMode, setAuthModalMode] = useState(() => getProjectAuthMode(window.location.search));
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
   const [darkMode, setDarkMode] = useState(() => { try { return localStorage.getItem('pg_theme') !== 'light'; } catch { return true; } });
   Object.assign(K, darkMode ? KD : KL);
@@ -5191,7 +5193,8 @@ export default function App() {
   const prevSlugRef = useRef(null);
   const tabMemory = useRef({});
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname, search } = location;
   const embedMode = useMemo(() => {
     try {
       const p = new URLSearchParams(window.location.search);
@@ -5300,48 +5303,106 @@ export default function App() {
       .catch(() => {});
   }, [authReady]);
 
+  useEffect(() => {
+    setAuthModalMode(getProjectAuthMode(search));
+  }, [search]);
+
   // Auth + subscription load — app always shows; this just enriches the experience for
   // signed-in users (sync, points, pro features). Guests continue in calculator-only mode.
   useEffect(() => {
-    tryAuth().then(async ok => {
-      if (ok) {
-        trackEvent('vault_member_login');
-        onDailyLogin();
-        // Expose supabase client for VaultSDK session reuse, then init SDK
-        window.VSSupabase = supabase;
-        window.VaultSDK?.init('promogrind', {
-          onReady: () => window.VaultSDK?.applyGates(),
-        });
-        // Capture authenticated user for sync prompts and feature gating
-        const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user ?? null);
-        getSubscription().then(sub => {
-          setProStatus(sub);
-          identifyUser(session?.user, sub);
-          // Write pg_pro_status for synchronous checks throughout the app
-          try {
-            const planKey = sub?.status === 'trial' ? 'trial'
-              : sub?.plan === 'vault_sparked' ? 'vault_sparked'
-              : sub?.plan === 'pro' ? 'pro'
-              : 'free';
-            localStorage.setItem('pg_pro_status', planKey);
-          } catch {}
-        });
-        // Record referral if this user arrived via a referral link
-        try {
-          const refCode = localStorage.getItem('pg_ref');
-          if (refCode && session && refCode !== session.user.id) {
-            await supabase.from('referrals').insert({
-              referrer_id: refCode,
-              referred_user_id: session.user.id,
-            });
-            localStorage.removeItem('pg_ref');
-          }
-        } catch(e) { /* non-critical — duplicate insert hits UNIQUE constraint silently */ }
+    let alive = true;
+
+    const writePlanKey = (sub) => {
+      try {
+        const planKey = sub?.status === 'trial' ? 'trial'
+          : sub?.plan === 'vault_sparked' ? 'vault_sparked'
+          : sub?.plan === 'pro' ? 'pro'
+          : 'free';
+        localStorage.setItem('pg_pro_status', planKey);
+      } catch {}
+    };
+
+    const syncAuthenticatedState = async (session, options = {}) => {
+      if (!alive) return;
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+
+      if (!currentUser) {
+        setProStatus(null);
+        writePlanKey(null);
+        return;
       }
-      // !ok → guest mode: calculators, ledger, tracker all work locally without login
+
+      if (options.trackLogin) {
+        trackEvent('vault_member_login');
+        trackEvent('promogrind_account_login');
+      }
+
+      onDailyLogin();
+      window.VSSupabase = supabase;
+      window.VaultSDK?.init('promogrind', {
+        onReady: () => window.VaultSDK?.applyGates(),
+      });
+
+      const sub = await getSubscription();
+      if (!alive) return;
+      setProStatus(sub);
+      identifyUser(currentUser, sub);
+      writePlanKey(sub);
+
+      try {
+        const refCode = localStorage.getItem('pg_ref');
+        if (refCode && refCode !== currentUser.id) {
+          await supabase.from('referrals').insert({
+            referrer_id: refCode,
+            referred_user_id: currentUser.id,
+          });
+          localStorage.removeItem('pg_ref');
+        }
+      } catch (e) {}
+    };
+
+    tryAuth().then(async (ok) => {
+      if (!ok) {
+        setUser(null);
+        setProStatus(null);
+        writePlanKey(null);
+        return;
+      }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      await syncAuthenticatedState(session, { trackLogin: true });
     });
+
+    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
+        setProStatus(null);
+        writePlanKey(null);
+        return;
+      }
+
+      await syncAuthenticatedState(session, {
+        trackLogin: event === 'SIGNED_IN',
+      });
+    });
+
+    return () => {
+      alive = false;
+      listener?.subscription?.unsubscribe();
+    };
   }, []);
+
+  const setAuthQueryMode = (mode) => {
+    const params = new URLSearchParams(search);
+    if (mode) params.set('auth', mode);
+    else params.delete('auth');
+    const nextSearch = params.toString();
+    navigate(`${pathname}${nextSearch ? `?${nextSearch}` : ''}`, { replace: true });
+  };
+
+  const authHref = (mode) => getProjectAuthHref(mode, window.location.href);
+  const closeAuthDialog = () => setAuthQueryMode(null);
 
   const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
   const { gi=0, ti=0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];
@@ -5392,7 +5453,7 @@ export default function App() {
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
-            Sign in with your free Vault account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds — no credit card required.
+            Sign in with your free PromoGrind account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds — no credit card required.
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
@@ -5410,14 +5471,14 @@ export default function App() {
             ))}
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
-            <a href={FREE_VAULT_MEMBERSHIP_URL} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color:"#0a0e17",fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
+            <a href={authHref('signup')} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color:"#0a0e17",fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
               Create Free Account →
             </a>
-            <a href={FREE_VAULT_MEMBERSHIP_URL} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,textDecoration:"none"}}>
+            <a href={authHref('signin')} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,textDecoration:"none"}}>
               Already have an account? Sign in →
             </a>
           </div>
-          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your vault…</div>
+          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your account…</div>
         </div>
       </div>
     );
@@ -5455,6 +5516,12 @@ export default function App() {
     <CurrencyCtx.Provider value={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
       <CheckoutListener/>
+      <AuthDialog
+        open={!!authModalMode}
+        mode={authModalMode || 'signup'}
+        onClose={closeAuthDialog}
+        onModeChange={setAuthQueryMode}
+      />
       {!ageVerified && <AgeGate onVerified={() => setAgeVerified(true)} />}
       <TrustStrip/>
       {!isOnline && (

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { toD, f, calcROI, downloadFile, K, font, fontD, S } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
 import { onLedgerEntry } from "../sync.js";
-import { CANONICAL_APP_URL, FREE_VAULT_MEMBERSHIP_URL } from "../launchState.js";
+import { CANONICAL_APP_URL, getProjectAuthHref } from "../launchState.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
 import { In, RR, Tl, Nt, shouldShowTrigger, dismissTrigger } from "../ui.jsx";
 
@@ -199,6 +199,7 @@ const Ledger = () => {
   const [filterTo, setFilterTo] = useState('');
   const [ledgerView, setLedgerView] = useState('entries');
   const [showGoal, setShowGoal] = useState(false);
+  const signInHref = getProjectAuthHref('signin');
   const [goalInput, setGoalInput] = useState(() => { try { return localStorage.getItem('pg_profit_goal')||''; } catch { return ''; } });
   const saveGoal = v => { setGoalInput(v); try { localStorage.setItem('pg_profit_goal', v); } catch {} };
   const total = entries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
@@ -232,7 +233,7 @@ const Ledger = () => {
     {!user && (
       <div style={{...S.note(K.gn), marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8}}>
         <span>Saving to this device only.</span>
-        <a href={FREE_VAULT_MEMBERSHIP_URL} style={{color: K.gn, textDecoration: 'none', fontWeight: 700, fontSize: 11, whiteSpace: 'nowrap'}}>Sign in free to sync →</a>
+        <a href={signInHref} style={{color: K.gn, textDecoration: 'none', fontWeight: 700, fontSize: 11, whiteSpace: 'nowrap'}}>Sign in free to sync →</a>
       </div>
     )}
     {showLedgerTrigger && (
