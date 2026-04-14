@@ -2,9 +2,9 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
-## Where We Left Off (Session 39 — full closeout)
+## Where We Left Off (Session 39 — continued)
 
-### Shipped this session (2 commits)
+### Shipped this session (3 commits)
 
 **feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI**
 
@@ -26,6 +26,22 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 - `FOUNDER50` — 50% off, 3 months
 - `BETAPASS` — 30% off, forever
 
+**feat(s39): Home tab suite + global text size increase**
+
+#### Home Tab Suite
+- 5 new Home tabs: Daily Brief, Get Started, What's New, Pricing (duplicate), About
+  - `DailyBriefPage` — today's promo schedule, quick actions 2×2 grid, 9am briefing toggle (localStorage), open bets counter
+  - `GetStarted` — 6-step onboarding guide with useNavigate() links to key features
+  - `WhatsNew` — static changelog v23.3.0–v23.7.0 with version badge + sprint labels
+  - `AboutPage` — full app stats, feature grid, trust badges, contact info, legal links
+  - `PricingPage` — duplicate of existing Pricing tab added to Home group
+- TABS Home group expanded: Dashboard · Daily Brief · Get Started · What's New · Pricing · About
+
+#### Global Text Size Increase
+- `src/lib/shared.js`: S.label 10→11px, S.input 13→14px, S.note 12→13px, S.help 12→13px, S.helpH 14→15px
+- `src/ui.jsx`: RR label 12→13px, RR value 13→14px, Tl title 16→18px
+- `src/App.jsx` nav: group tabs 10/11→12/13px, sub-item tabs 11→13px, subcat filters 9→11px, pinned favorites 9→11px
+
 Build: ✓ passing · Tests: 127/127
 
 ## Human Action Required
@@ -34,6 +50,8 @@ Build: ✓ passing · Tests: 127/127
 - [ ] **wins_wall Supabase table** — create the table (component handles 404 silently but table needed for community wins wall)
 
 ## State at Handoff
+- Home tab suite: live — 6 tabs in Home group (Dashboard, Daily Brief, Get Started, What's New, Pricing, About)
+- Global text sizes: increased across all shared primitives + nav
 - Beta invite system: deployed and live — hand PGBETA-XXXX codes to friends directly
 - RESEND drip/digest: active (key confirmed set)
 - Stripe Customer Portal: edge function live, UserMenu "Manage billing →" wired

@@ -36,6 +36,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] onboarding-drip + create-checkout re-deployed (S38)
 - [x] Beta invite code system — `beta_codes` table + `redeem-beta-code` edge function deployed (S39)
 - [x] UserMenu — "Have a beta invite code?" section for Free Agent tier (S39)
+- [x] Home tab suite — Daily Brief, Get Started, What's New, Pricing, About tabs added to Home group (S39)
+- [x] Global text size increase — all nav/label/input/note/help/RR text bumped 1–2px (S39)
 
 ## Next
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)

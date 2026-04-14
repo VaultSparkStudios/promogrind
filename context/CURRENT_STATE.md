@@ -4,6 +4,8 @@ Public-safe summary:
 - this repo remains deployable — build passing, 127/127 tests green
 - version: 23.7.0 · last session: S39 (2026-04-13)
 - domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
+- **Home tab suite (S39)**: 5 new Home tabs added — Daily Brief, Get Started, What's New, Pricing, About; all accessible from the Home group in the nav
+- **Global text size increase (S39)**: all menu/nav text, labels, inputs, notes, help text, and RR rows bumped 1–2px for readability; affects shared.js, ui.jsx, and App.jsx nav
 - **Beta invite code system**: `beta_codes` Supabase table + `redeem-beta-code` edge function deployed; 10 PGBETA-XXXX codes seeded (Runner tier, 30d, single-use); UserMenu "Have a beta invite code?" section added for Free Agent tier users
 - **RESEND_API_KEY**: CONFIRMED SET in Supabase secrets — onboarding-drip + weekly-digest are active
 - **Stripe Customer Portal**: config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in customer-portal edge function; cancel + payment method update enabled; return_url: promogrind.bet/

@@ -3,7 +3,7 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Beta invite codes live — friends can test Runner tier free for 30 days. All secrets confirmed set. Last code blocker before launch: affiliate links in src/books.js.",
+  "currentFocus": "Home tab suite live (Daily Brief, Get Started, What's New, Pricing, About). Beta invite codes live. Last code blocker before launch: affiliate links in src/books.js.",
   "nextMilestone": "Affiliate links in src/books.js → Stripe smoke test → Reddit launch post.",
   "blockers": [
     "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
@@ -17,9 +17,9 @@
   "version": "23.7.0",
   "lastSession": "S39",
   "commits": [
+    "b046e5e — feat(s39): Home tab suite + global text size increase",
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI",
-    "9b2328b — fix(s38): customer-portal — pin portal configuration ID",
-    "f0ee7ab — feat(s38): Stripe Customer Portal + RESEND URL migration"
+    "9b2328b — fix(s38): customer-portal — pin portal configuration ID"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
