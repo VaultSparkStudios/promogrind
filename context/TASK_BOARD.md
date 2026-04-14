@@ -62,9 +62,9 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
 - [ ] VAPID keys → deploy send-daily-brief push notification function
 - [ ] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
-- [ ] [SIL:1] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
-- [ ] [SIL] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
-- [ ] [SIL] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
+- [ ] [SIL:2⛔] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
+- [ ] [SIL:1] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
+- [ ] [SIL:1] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
 - [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults
 - [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, production webhook-secret fail-closed check, and broader rate limits
 
