@@ -9,14 +9,15 @@
     "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
     "wins_wall Supabase table does not exist — needed for community wins wall server data"
   ],
-  "lastUpdated": "2026-04-14",
+  "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-13",
   "version": "23.7.0",
-  "lastSession": "S39",
+  "lastSession": "S40",
   "commits": [
+    "70d1a73 — chore(s40): protocol alignment with studio-ops (CANON-007 + DECISIONS + TASK_BOARD)",
     "b046e5e — feat(s39): Home tab suite + global text size increase",
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI",
     "9b2328b — fix(s38): customer-portal — pin portal configuration ID"

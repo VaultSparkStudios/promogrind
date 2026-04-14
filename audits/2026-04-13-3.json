@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "date": "2026-04-13",
+  "session": 40,
+  "sessionType": "protocol",
+  "label": "studio-ops-protocol-alignment",
+  "calibration": false,
+  "scores": {
+    "devHealth": 88,
+    "creativeAlignment": 78,
+    "momentum": 72,
+    "engagement": 80,
+    "processQuality": 94
+  },
+  "total": 412,
+  "maxScore": 500,
+  "velocity": 0,
+  "protocolVelocity": 2,
+  "durationMinutes": 30,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": null,
+    "creativeAlignment": null,
+    "momentum": null,
+    "engagement": null,
+    "processQuality": null,
+    "total": null
+  },
+  "rollingAvgTotals": { "3": null, "5": null, "10": null, "25": null, "all": null },
+  "topWin": "Closed major drift between live PromoGrind state and ops PROJECT_REGISTRY.json — Studio Hub dashboards and founder-facing reports now read accurate data (53 calculators, live Stripe, promogrind.bet) instead of pre-launch fiction.",
+  "topGap": "Stale auto-memory went 10 days without correction — protocol doesn't enforce periodic memory reconciliation; drift surfaced only because user requested alignment pass.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 0,
+  "improvementGroups": {
+    "protocol-alignment": [
+      "Session lock written (context/.session-lock)",
+      "Auto-memory user_profile.md refreshed to live promogrind.bet state",
+      "Ops PROJECT_REGISTRY.json PromoGrind entry: 10 fields corrected",
+      "CANON-007 staging disposition logged (local while FORGE; Hetzner trigger at SPARKED)",
+      "TASK_BOARD Later bucket: Hetzner staging task queued"
+    ]
+  },
+  "testsTotal": 127,
+  "testsByType": {
+    "math": 71,
+    "books": 25,
+    "auth": 19,
+    "sync": 13,
+    "launchState": 5
+  },
+  "testsDelta": 0,
+  "deployStatus": "not-applicable",
+  "ignisFlags": ["intent-achieved", "low-velocity"],
+  "ignisNote": "Protocol-only session — highest impact was closing drift in the master registry that feeds Studio Hub. Zero product velocity but high protocol velocity (2 cross-repo commits) and high process quality (session lock, DECISIONS logged, both repos committed cleanly)."
+}

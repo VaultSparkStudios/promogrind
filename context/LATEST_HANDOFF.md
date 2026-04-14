@@ -2,6 +2,35 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 40 — CLOSED)
+
+- Shipped: 0 product changes · 2 protocol commits across 2 repos (promogrind, vaultspark-studio-ops)
+- Tests: 127/127 passing · delta: 0 · Deploy: N/A (no code changes)
+- Session type: protocol alignment pass
+
+### Shipped this session
+
+**chore(s40): protocol alignment with studio-ops** (promogrind `70d1a73`)
+- `context/DECISIONS.md` — CANON-007 staging disposition (`stagingType: "local"` while FORGE; Hetzner required at SPARKED transition) + protocol alignment pass log
+- `context/TASK_BOARD.md → Later` — Hetzner staging task queued for SPARKED transition
+
+**chore: refresh PromoGrind registry entry to live S39 state** (vaultspark-studio-ops `cbf5a41`)
+- `portfolio/PROJECT_REGISTRY.json` — 10 fields corrected: summary (11→53 calculators), currentFocus, nextMilestone, runtimeUrl (vaultsparkstudios.com/promogrind/ → https://promogrind.bet), localPath slug casing, lastInitiated, stagingType (github-pages → local per enum), supabaseHost, revenueModel, stripeLiveKeyConfigured (false → true), stripeProductionPriceIds (empty → 7 live IDs)
+
+### Alignment items completed
+- Session lock written (`context/.session-lock`)
+- Auto-memory `user_profile.md` refreshed (removed stale promogrind.com migration claim; promoted promogrind.bet to live; added LLC status)
+- Ops registry entry drift closed
+- CANON-007 disposition logged with transition trigger
+
+### Open blockers (unchanged from S39)
+- Affiliate/referral links in `src/books.js` — last code blocker before Reddit launch
+- `wins_wall` Supabase table (server-side, not in this repo)
+
+### Session Intent: Align PromoGrind with vaultspark-studio-ops protocol · Outcome: Achieved
+
+---
+
 ## Where We Left Off (Session 39 — CLOSED)
 
 ### Shipped this session (3 commits)
