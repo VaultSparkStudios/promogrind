@@ -48,6 +48,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] [SIL] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
 
 ## Later
+- [ ] **CANON-007 staging (at SPARKED transition)** — stand up `promogrind.staging.vaultsparkstudios.com` on Hetzner before flipping vaultStatus to sparked; required once paying users exist
 - [ ] Reddit launch posts: r/sportsbook + r/matchedbetting
 - [ ] YouTube: 5 explainer screen recordings
 - [ ] Android: `npm run build:cap` → Play Store
