@@ -1,5 +1,7 @@
 import { spawn } from "node:child_process";
 import { once } from "node:events";
+import { readdir, readFile } from "node:fs/promises";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const PREVIEW_PORT = 4173;
@@ -32,6 +34,24 @@ async function assertPath(pathname, checks) {
   }
 }
 
+async function fetchPreviewHtml(pathname = "/") {
+  const res = await fetch(`${PREVIEW_URL}${pathname}`);
+  if (!res.ok) throw new Error(`${pathname} returned ${res.status}`);
+  return res.text();
+}
+
+async function assertBuiltBundleMarkers(markers) {
+  const assetsDir = path.resolve(process.cwd(), "dist", "assets");
+  const assetFiles = (await readdir(assetsDir)).filter((file) => file.endsWith(".js"));
+  if (!assetFiles.length) throw new Error("No built JS assets found");
+  const bundleTexts = await Promise.all(assetFiles.map((file) => readFile(path.join(assetsDir, file), "utf8")));
+  const bundle = bundleTexts.join("\n");
+
+  for (const [needle, label] of markers) {
+    if (!bundle.includes(needle)) throw new Error(`bundle missing ${label}`);
+  }
+}
+
 const preview = spawn(
   process.execPath,
   [PREVIEW_BIN, "preview", "--host", "127.0.0.1", "--port", String(PREVIEW_PORT), "--strictPort"],
@@ -53,6 +73,15 @@ try {
   await assertPath("/bonus-bet/", [["Free PromoGrind account", "trust strip"], ["1-800-GAMBLER", "responsible gambling notice"]]);
   await assertPath("/arb-calculator/", [["Free PromoGrind account", "trust strip"]]);
   await assertPath("/promogrind-vs-profitduel/", [["beta-gated", "comparison beta language"], ["Start with free PromoGrind account", "updated CTA"]]);
+  await assertBuiltBundleMarkers([
+    ["PromoGrind is a free sportsbook promo calculator for adults.", "age gate copy"],
+    ["Create your PromoGrind account", "project-local auth dialog"],
+    ["Choose your edge.", "pricing surface"],
+    ["Don't have these books yet? Open accounts to use this promo:", "sportsbook CTA"],
+    ["Manage billing", "auth menu billing action"],
+    [".pg-mobile-nav", "mobile nav layout hook"],
+    ["@media (max-width: 768px)", "mobile breakpoint handling"],
+  ]);
   console.log("Browser launch smoke passed.");
 } catch (error) {
   console.error("Browser launch smoke failed.");

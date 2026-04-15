@@ -3,10 +3,10 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "PromoGrind now owns project-local sign-in/sign-up UX in-app while still using the shared Vault identity backend; dashboard extraction and launch-copy alignment remain complete.",
-  "nextMilestone": "Run Stripe smoke test → add real referral links → complete a friend-facing manual account-flow/browser pass → ship post-result feedback loop.",
+  "currentFocus": "PromoGrind now has a dedicated Track edge dashboard plus a post-result feedback loop on key conversion workflows, with DraftKings, FanDuel, and Caesars referral links configured and the shared Vault identity backend still project-local in visible UX.",
+  "nextMilestone": "Run Stripe smoke test → add the remaining referral links → complete a friend-facing manual account-flow/browser pass.",
   "blockers": [
-    "Affiliate/referral links not configured in src/books.js",
+    "Remaining affiliate/referral links not configured in src/books.js",
     "Stripe end-to-end smoke still requires a real account/browser checkout pass",
     "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
@@ -16,7 +16,7 @@
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-14",
   "version": "24.1.0",
-  "lastSession": "S43",
+  "lastSession": "S44",
   "commits": [
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
     "3fdbe8e — chore(s43): finalize SIL closeout state",
@@ -28,7 +28,7 @@
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing",
-  "testStatus": "131/131",
+  "testStatus": "134/134",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
@@ -103,10 +103,10 @@
   "ignisLastComputed": "2026-04-14",
   "entropyScore": 0.129,
   "entropyLastComputed": "2026-04-14",
-  "silScore": 426,
-  "silAvg3": 423,
-  "silVelocity": 2,
+  "silScore": 434,
+  "silAvg3": 426.7,
+  "silVelocity": 3,
   "silDebt": "down",
-  "silLastSession": "S43",
-  "currentSession": 43
+  "silLastSession": "S44",
+  "currentSession": 44
 }

@@ -56,7 +56,7 @@ export const BOOKS = [
     // ↓ Replace with your affiliate URL after approval at draftkings.com/partners
     affiliateLink: null,
     referral: "Up to $100 bonus bet per friend referred",
-    referralLink: "https://www.draftkings.com/refer-a-friend",
+    referralLink: "https://www.draftkings.com/r/REDACTED",
     affiliateProgram: "https://www.draftkings.com/partners",
     cpa: "$75+ per depositing user",
     color: "#53d769",
@@ -73,7 +73,7 @@ export const BOOKS = [
     // ↓ Replace with your affiliate URL after approval at partners.fanduel.com
     affiliateLink: null,
     referral: "Up to $75 bonus bet per friend",
-    referralLink: "https://www.fanduel.com/referral",
+    referralLink: "https://www.fanduel.com/referral?invitedby&cnl=da&utm_campaign=User%20Referral&utm_medium=Web&utm_source=Referral%20Center&utm_content=Link&app_name=DFS",
     affiliateProgram: "https://partners.fanduel.com",
     cpa: "$25–35 CPA or 35% RevShare for 730 days",
     color: "#1493ff",
@@ -107,7 +107,7 @@ export const BOOKS = [
     // ↓ Replace with your affiliate URL after approval at caesarsaffiliates.com
     affiliateLink: null,
     referral: "5,000 Reward Credits (~$50) per friend",
-    referralLink: "https://www.caesars.com/sportsbook-and-casino/refer-a-friend",
+    referralLink: "https://caesars.com/sportsbook-and-casino/referral?AR=RAF-737-P9Q",
     affiliateProgram: "https://www.caesarsaffiliates.com",
     cpa: "Revenue share model",
     color: "#1a472a",

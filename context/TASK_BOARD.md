@@ -7,17 +7,20 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] **RESEND_API_KEY** — confirmed set in Supabase secrets (S39 audit)
 - [x] **Stripe Customer Portal** — config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in edge function (S38/S39)
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
-- [ ] **Affiliate/referral links** — paste personal referral URLs into `referralLink` fields in `src/books.js` (Refer a Friend in each sportsbook app)
+- [ ] **Affiliate/referral links** — finish pasting personal referral URLs into `referralLink` fields in `src/books.js` for the remaining books (DraftKings, FanDuel, and Caesars are now configured)
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
 
 ## Now
+- [ ] [SIL] Promo intake pipeline — accept pasted promo text, screenshot parse, and extension capture into one normalized promo card
+- [ ] [SIL] Confidence layer — show assumptions, sensitivity, and trust badges on calculator outputs
+- [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, production webhook-secret fail-closed check, and broader rate limits
 - [x] Audit tranche 2 — extract dashboard state from `src/App.jsx` into focused modules
 - [x] Build a true "Today" dashboard: expiring promos, unfinished work, next-best action, bankroll posture, recent settled profit
 - [x] Launch copy alignment — sync smoke-covered marketing pages + trust-strip template to PromoGrind-native account wording and update smoke validators
 - [x] Project-local auth UX — keep account creation on PromoGrind while preserving shared Vault identity + shared username metadata
-- [ ] Result feedback loop — ask "placed / skipped / settled / actual profit / calculator accurate?" after key workflows
+- [x] Result feedback loop — ask "placed / skipped / settled / actual profit / calculator accurate?" after key workflows
 - [x] Deploy updated AI edge functions: `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`
-- [ ] Browser smoke expansion — cover age gate, first calculator result, sportsbook CTA, pricing, auth menu, and 375px mobile layout
+- [x] Browser smoke expansion — cover age gate, first calculator result, sportsbook CTA, pricing, auth menu, and 375px mobile layout
 - [x] Domain migration — promogrind.bet purchased, Cloudflare zones + CNAME + redirect configured, GitHub Pages custom domain set
 - [x] NS switch confirmed — promogrind.bet live on Cloudflare (DNS verified S37)
 - [x] PostHog analytics — src/analytics.js, user identity on auth, key events tracked
@@ -52,8 +55,6 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
-- [ ] Promo intake pipeline — accept pasted promo text, screenshot parse, and extension capture into one normalized promo card
-- [ ] Confidence layer — show assumptions, sensitivity, and trust badges on calculator outputs
 - [ ] State-aware + book-aware personalization for sportsbook CTAs and recommended workflows
 - [ ] Playbooks — reusable promo routines by bankroll, promo type, and available books
 - [ ] Community intel upgrade — freshness, verification, report quality, and region filters on promo submissions
@@ -63,11 +64,10 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
 - [ ] VAPID keys → deploy send-daily-brief push notification function
 - [x] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
-- [ ] [SIL:2⛔] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
-- [ ] [SIL:1] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
-- [ ] [SIL:1] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
+- [x] [SIL:2⛔] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
+- [ ] [SIL:2⛔] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
+- [ ] [SIL:2⛔] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
 - [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults
-- [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, production webhook-secret fail-closed check, and broader rate limits
 
 ## Later
 - [ ] **CANON-007 staging (at SPARKED transition)** — stand up `promogrind.staging.vaultsparkstudios.com` on Hetzner before flipping vaultStatus to sparked; required once paying users exist

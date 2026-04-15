@@ -2,8 +2,51 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Current Delta Since S44
+
+- Session 44 intent: implement the current Genius hit list at highest quality, anchored to the forced Track analytics dashboard, the post-result feedback loop, and expanded browser smoke coverage.
+- Added a dedicated Track analytics surface with realized P/L, promo-type hit rate, calculator accuracy, best books, and an unsettled workflow queue.
+- Added a reusable post-result feedback card to the key conversion calculators so users can log placed/skipped/settled outcomes and actual profit.
+- Expanded browser launch smoke to validate built-client markers for age gate, auth dialog, sportsbook CTA, pricing, auth menu billing action, and mobile layout hooks.
+- Wired personal referral links into `src/books.js` for DraftKings, FanDuel, and Caesars.
+- Validation after the session: `npm.cmd test`, `npm.cmd run build`, and `node scripts\\validate-browser-launch-smoke.mjs` all passed.
+- Remaining launch blockers are still manual: Stripe smoke, remaining referral links, and the friend-facing browser/account-flow pass.
+
+## Where We Left Off (Session 44 — CLOSED)
+
+- Shipped: 4 improvements across 4 groups — track analytics, post-result workflow capture, browser smoke coverage, referral-link monetization
+- Tests: 134/134 passing · delta: +1
+- Build: passing · browser launch smoke: passing
+- Deploy: repo changes committed; manual Stripe smoke and remaining referral-link setup still pending
+- Session type: implementation + closeout
+
+### Shipped this session
+
+**feat(s44): close launch-readiness gaps around tracking and monetization**
+- `src/track/insights.js` — pure analytics model for result-feedback normalization, hit-rate aggregation, and best-book ranking
+- `src/components/TrackInsights.jsx` — new Track `Edge` dashboard with realized P/L, promo-type hit rate, calculator accuracy, and unsettled workflow settlement queue
+- `src/components/ResultFeedbackCard.jsx` — reusable "placed / skipped / settled / actual profit / calculator accurate?" capture surface for key workflows
+- `src/App.jsx` — wired the Track `Edge` tab plus post-result capture into Bonus Bet, Profit Boost, and First Bet Safety Net flows
+- `src/__tests__/trackInsights.test.js` — coverage for the new analytics helpers
+- `scripts/validate-browser-launch-smoke.mjs` — validates launch routes plus built-client markers for age gate, auth dialog, sportsbook CTA, pricing, auth menu billing, and mobile layout hooks
+- `src/books.js` — configured personal referral URLs for DraftKings, FanDuel, and Caesars
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/PROJECT_STATUS.json`, `context/TRUTH_AUDIT.md`, `logs/WORK_LOG.md` — memory refreshed to S44 state
+
+### Validation
+- `npm.cmd test` → 134/134 passing
+- `npm.cmd run build` → passing
+- `node scripts\validate-browser-launch-smoke.mjs` → passing
+
+### Open blockers / follow-ups
+- Run the Stripe flow in `docs/STRIPE_SMOKE_TEST.md`
+- Paste the remaining personal referral links into `src/books.js`
+- Manually run a friend-facing account-flow/browser pass against the deployed app
+
+### Session Intent: Implement all genius hit list items at highest/optimal quality · Outcome: Achieved
+
 ## Current Delta Since S43
 
+- Session 44 intent: implement the current Genius hit list at highest quality, anchored to the forced Track analytics dashboard, the post-result feedback loop, and expanded browser smoke coverage.
 - PromoGrind now owns the visible account flow in-app via `src/components/AuthDialog.jsx`; account creation and sign-in no longer use the Vault member page as the primary UX.
 - Shared Vault identity remains intact underneath via shared Supabase auth plus shared `display_name` / `username` metadata.
 - Active React surfaces now point to PromoGrind-local auth links instead of Vault-branded signup CTAs.
@@ -44,10 +87,9 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 ### Session Intent: Complete all at highest quality · Outcome: Achieved
 
 ## Human Action Required
-- [ ] **Supabase deploy auth** — run `supabase login` or set `SUPABASE_ACCESS_TOKEN`, then deploy `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder`
 - [ ] **Stripe smoke test** — use the flow in `docs/STRIPE_SMOKE_TEST.md` against the deployed app and confirm `subscriptions` writes + customer-portal redirect
-- [ ] **Affiliate/referral links** — paste real referral URLs into `src/books.js` so CTA clicks monetize correctly
-- [ ] **wins_wall Supabase table** — apply `scripts/migration-wins-wall.sql` so Dashboard Wins Wall can read server entries
+- [ ] **Affiliate/referral links** — paste the remaining real referral URLs into `src/books.js` so CTA clicks monetize correctly
+- [ ] **Friend beta pass** — create/sign in with a friend-facing PromoGrind account and verify the project-local auth + calculator flow feels launch-ready
 
 ## Where We Left Off (Session 42 — CLOSED)
 

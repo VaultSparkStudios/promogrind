@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▆
-Avgs — 3: 423.0 [N=2] | 5: 423.0 [N=2] | 10: 423.0 [N=2] | 25: — | all: 423.0 [N=2]
-  └ 3-session: Dev 91.0 | Align 84.0 | Momentum 84.0 | Engage 73.0 | Process 91.0 [N=2]
-Velocity trend: →  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~1.5 sessions  |  Intent rate: 100% (last 2)
-Last session: 2026-04-14 | Session 43 | Total: 426/500 | Velocity: 2 | protocolVelocity: 0
+Sparkline (last 5 totals): ▆ ▆ ▆
+Avgs — 3: 426.7 | 5: 426.7 [N=3] | 10: 426.7 [N=3] | 25: — | all: 426.7 [N=3]
+  └ 3-session: Dev 92.0 | Align 84.7 | Momentum 85.3 | Engage 73.3 | Process 91.3
+Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
+Momentum runway: ~1.0 sessions  |  Intent rate: 100% (last 3)
+Last session: 2026-04-14 | Session 44 | Total: 434/500 | Velocity: 3 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-14 — Session 44 | Total: 434/500 | Velocity: 3 | Debt: ↓
+Avgs — 3: 426.7 | 5: 426.7 [N=3] | 10: 426.7 [N=3] | 25: — | all: 426.7 [N=3]
+  └ 3-session: Dev 92.0 | Align 84.7 | Momentum 85.3 | Engage 73.3 | Process 91.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 94 | ↑ | Added pure analytics helpers, reusable workflow capture, new Track surface, and expanded smoke coverage without breaking build or tests. |
+| Creative Alignment | 86 | → | Launch-readiness work stayed aligned with PromoGrind’s practical, trust-first identity instead of drifting into generic growth work. |
+| Momentum | 88 | ↑ | Cleared the forced analytics item, shipped the feedback loop, expanded smoke coverage, and wired three monetized referral links in one pass. |
+| Engagement | 74 | ↑ | The product now captures real workflow outcomes, but external validation still depends on the friend pass and live billing smoke. |
+| Process Quality | 92 | → | Memory, handoff, task preload, truth audit, and validation state all landed in sync with the shipped code. |
+| **Total** | **434/500** | ↑ | |
+
+**Top win:** PromoGrind now closes the loop between projected calculator profit and actual user outcomes inside the product.
+**Top gap:** Launch confidence still depends on manual Stripe verification, remaining referral-link setup, and a real friend-facing flow pass.
+**Intent outcome:** Achieved — the full repo-side Genius hit list landed with verification and closeout.
+
+**Brainstorm**
+1. Add drift alerts that flag calculators whose real settled profit is consistently below projected profit by promo type.
+2. Build a state-aware referral readiness panel that shows which books are legal in the user’s state and which links are monetized versus placeholder.
+3. Add a one-click bridge from the Track Edge queue into the ledger so settled feedback can become audited P/L entries instantly.
+
+**Committed to TASK_BOARD:** [SIL] Promo intake pipeline — accept pasted promo text, screenshot parse, and extension capture into one normalized promo card · [SIL] Confidence layer — show assumptions, sensitivity, and trust badges on calculator outputs
 
 ## 2026-04-14 — Session 43 follow-up | Total: 426/500 | Velocity: 2 | Debt: ↓
 Avgs — 3: 423.0 [N=2] | 5: 423.0 [N=2] | 10: 423.0 [N=2] | 25: — | all: 423.0 [N=2]

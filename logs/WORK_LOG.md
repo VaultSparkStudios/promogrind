@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-04-14 — S44 Track Analytics + Launch Closeout
+
+- Added `src/track/insights.js` to normalize result-feedback entries and aggregate realized P/L, hit rate by promo type, calculator accuracy, and best-book performance.
+- Added `src/components/TrackInsights.jsx` and wired a new `Track -> Edge` tab into `src/App.jsx`.
+- Added `src/components/ResultFeedbackCard.jsx` and wired post-result capture into Bonus Bet, Profit Boost, and First Bet Safety Net flows.
+- Expanded `scripts/validate-browser-launch-smoke.mjs` so it checks launch routes plus built-client markers for auth, pricing, CTA, billing, and mobile hooks.
+- Configured personal referral URLs in `src/books.js` for DraftKings, FanDuel, and Caesars.
+- Refreshed public memory files and validation metadata to S44 state.
+- Verified `npm.cmd test` → 134/134 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `node scripts\\validate-browser-launch-smoke.mjs` → passing.
+
 ## 2026-04-14 — Post-S43 Project-Local Auth Rollout
 
 - Added `src/components/AuthDialog.jsx` so PromoGrind owns sign-in/sign-up inside the app.

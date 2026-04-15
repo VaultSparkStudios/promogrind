@@ -1,0 +1,176 @@
+import React, { useMemo, useState } from "react";
+import { AppDataCtx } from "../contexts.jsx";
+import { K, font, fontD } from "../lib/shared.js";
+import { updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
+
+export default function ResultFeedbackCard({
+  calculatorKey,
+  calculatorLabel,
+  promoType,
+  expectedProfit,
+  suggestedBook = "",
+}) {
+  const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
+  const entries = appData?.resultFeedback || [];
+  const roundedExpected = useMemo(() => {
+    const parsed = Number.parseFloat(expectedProfit);
+    return Number.isFinite(parsed) ? Number(parsed.toFixed(2)) : null;
+  }, [expectedProfit]);
+
+  const [entryId, setEntryId] = useState(null);
+  const [book, setBook] = useState(suggestedBook);
+  const [actualProfit, setActualProfit] = useState("");
+  const [accuracy, setAccuracy] = useState("yes");
+  const [status, setStatus] = useState(null);
+
+  if (!syncAppData || roundedExpected === null) return null;
+
+  const writeEntries = (nextEntries) => syncAppData({ ...appData, resultFeedback: nextEntries });
+
+  const record = (nextStatus) => {
+    const entry = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      calculatorKey,
+      calculatorLabel,
+      promoType,
+      status: nextStatus,
+      expectedProfit: roundedExpected,
+      book,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    writeEntries(upsertResultFeedback(entries, entry));
+    setEntryId(entry.id);
+    setStatus(nextStatus);
+  };
+
+  const settle = () => {
+    if (!entryId) return;
+    writeEntries(updateResultFeedback(entries, entryId, {
+      status: "settled",
+      actualProfit,
+      calculatorAccurate: accuracy,
+      book,
+    }));
+    setStatus("settled");
+  };
+
+  return (
+    <div style={{ marginTop: 10, padding: 14, background: `${K.ac}08`, border: `1px solid ${K.ac}22`, borderRadius: 10 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <div>
+          <div style={{ fontSize: 10, color: K.ac, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 4 }}>
+            Result Feedback Loop
+          </div>
+          <div style={{ fontFamily: fontD, fontSize: 15, fontWeight: 700, color: K.tx, marginBottom: 4 }}>
+            What happened next?
+          </div>
+          <div style={{ fontSize: 11, color: K.mt, lineHeight: 1.6, maxWidth: 560 }}>
+            Capture whether you placed, skipped, or settled this workflow so Track can compare expected profit against real outcomes.
+          </div>
+        </div>
+        <div style={{ fontSize: 12, color: K.gn, fontWeight: 700 }}>
+          Est. profit: ${roundedExpected.toFixed(2)}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, marginBottom: 10 }}>
+        {[
+          ["placed", "Placed it"],
+          ["skipped", "Skipped it"],
+        ].map(([value, label]) => (
+          <button
+            key={value}
+            onClick={() => record(value)}
+            style={{
+              padding: "7px 12px",
+              background: status === value ? `${K.gn}18` : "transparent",
+              border: `1px solid ${status === value ? K.gn : K.bd2}`,
+              borderRadius: 8,
+              color: status === value ? K.gn : K.dm,
+              fontSize: 11,
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: font,
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10 }}>
+        <div>
+          <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Sportsbook</div>
+          <input
+            value={book}
+            onChange={(event) => setBook(event.target.value)}
+            placeholder="DraftKings"
+            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+          />
+        </div>
+        <div>
+          <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Actual profit</div>
+          <input
+            value={actualProfit}
+            onChange={(event) => setActualProfit(event.target.value)}
+            placeholder="$12.40"
+            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+          />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginTop: 10 }}>
+        <span style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Calculator accurate?</span>
+        {[
+          ["yes", "Yes"],
+          ["close", "Close"],
+          ["no", "No"],
+        ].map(([value, label]) => (
+          <button
+            key={value}
+            onClick={() => setAccuracy(value)}
+            style={{
+              padding: "6px 10px",
+              background: accuracy === value ? `${K.ac}18` : "transparent",
+              border: `1px solid ${accuracy === value ? K.ac : K.bd2}`,
+              borderRadius: 999,
+              color: accuracy === value ? K.ac : K.dm,
+              fontSize: 10,
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: font,
+            }}
+          >
+            {label}
+          </button>
+        ))}
+        <button
+          onClick={settle}
+          disabled={!entryId || !actualProfit.trim()}
+          style={{
+            marginLeft: "auto",
+            padding: "8px 14px",
+            background: !entryId || !actualProfit.trim() ? K.bd : K.ac,
+            border: "none",
+            borderRadius: 8,
+            color: K.bg,
+            fontSize: 11,
+            fontWeight: 800,
+            cursor: !entryId || !actualProfit.trim() ? "not-allowed" : "pointer",
+            fontFamily: font,
+          }}
+        >
+          Mark Settled
+        </button>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 10, color: status === "settled" ? K.gn : status === "skipped" ? K.yl : K.mt }}>
+        {status === "settled" && "Settled result saved. It now feeds the Track analytics dashboard."}
+        {status === "placed" && "Placed result saved. Settle it now or later in Track → Edge."}
+        {status === "skipped" && "Skipped result saved so PromoGrind can measure opportunity loss and execution rate."}
+        {!status && "Use this after you run the math so the app learns what converted and what stayed theoretical."}
+      </div>
+    </div>
+  );
+}

@@ -1,15 +1,19 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 131/131 tests green; launch smoke passing
-- version: 24.1.0 · last session: S43 (2026-04-14)
+- this repo remains deployable — build passing, 134/134 tests green; launch smoke passing
+- version: 24.1.0 · last session: S44 (2026-04-14)
+- **Track edge dashboard (S44)**: added a dedicated Track analytics surface that aggregates realized P/L, promo-type hit rate, calculator accuracy, best books, and an unsettled workflow queue for quick settlement
+- **Post-result feedback loop (S44)**: key conversion calculators now ask whether the user placed, skipped, or settled the workflow, capture actual profit plus calculator-accuracy feedback, and feed that data into Track analytics
+- **Browser smoke expansion (S44)**: `scripts/validate-browser-launch-smoke.mjs` now validates static launch routes plus built-client markers for age gate, auth dialog, sportsbook CTA, pricing, auth menu, and mobile layout hooks
+- **Referral-link progress (S44)**: personal referral URLs are now configured in `src/books.js` for DraftKings, FanDuel, and Caesars; remaining books still need links or affiliate approval
 - **Project-local auth UX (post-S43)**: PromoGrind now opens sign-in/sign-up inside the app via `src/components/AuthDialog.jsx` instead of sending primary account creation through the Vault member page; the shared Vault identity remains the backend source of truth
 - **Shared identity continuity (post-S43)**: `src/auth.js` now supports direct PromoGrind sign-up/sign-in against shared Supabase auth, and shared display name / username metadata is updated from the app so the same identity can carry across projects
 - domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
 - **Dashboard tranche 2 (S43)**: added `src/dashboard/today.js` plus extracted dashboard surfaces under `src/components/dashboard/`; `src/App.jsx` now consumes shared dashboard snapshot helpers instead of keeping all home-state logic inline
 - **Today dashboard (S43)**: Home dashboard now explicitly surfaces expiring promos, unfinished work, bankroll posture, recent settled profit, and next-best action in one dedicated panel
 - **Launch copy + smoke alignment (S43)**: smoke-covered marketing pages, trust-strip template, and launch validators now consistently use PromoGrind-native "Free PromoGrind account" language; `scripts/validate-launch-smoke.mjs` updated and passing
-- **Validation coverage (S43+)**: dashboard tests plus auth URL helper coverage are in repo; current suite passes at `131/131`
+- **Validation coverage (S44)**: dashboard, auth URL helpers, and track-insights coverage are in repo; current suite passes at `134/134`
 - **Browser smoke script status (S43)**: browser smoke was updated and later passed in an elevated environment; launch smoke remains passing in-repo
 - **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
 - **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`
@@ -41,5 +45,5 @@ Public-safe summary:
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
 - wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
 - edge-function deploy status: updated `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` have been deployed to the linked Supabase project
-- remaining launch blockers: Stripe end-to-end smoke test, real referral links in `src/books.js`, and one final friend-facing manual browser/account flow pass
+- remaining launch blockers: Stripe end-to-end smoke test, remaining referral links in `src/books.js`, and one final friend-facing manual browser/account flow pass
 - detailed internal state now lives in the private Studio OS / ops repository

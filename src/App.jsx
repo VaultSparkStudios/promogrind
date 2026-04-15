@@ -14,6 +14,8 @@ import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
 import { getDashboardSnapshot, getNextBestAction } from "./dashboard/today.js";
 import TodayDashboardPanel from "./components/dashboard/TodayDashboardPanel.jsx";
 import DailyBriefPage from "./components/dashboard/DailyBriefPage.jsx";
+import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
+import TrackInsights from "./components/TrackInsights.jsx";
 // Heavy tab components — lazy loaded so they don't block initial render
 const Tracker = lazy(() => import("./components/Tracker.jsx"));
 const Ledger = lazy(() => import("./components/Ledger.jsx"));
@@ -497,6 +499,14 @@ const BonusBet = () => {
       <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn}/><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r)>=70?K.gn:K.yl} b/>
       {S.meter(parseFloat(r.r),parseFloat(r.r)>=70?K.gn:parseFloat(r.r)>=50?K.yl:K.rd)}
       <BookCTA promoType="bonus"/>
+      {parseFloat(r.g)>0&&(
+        <ResultFeedbackCard
+          calculatorKey="bonus-bet"
+          calculatorLabel="Bonus Bet Converter"
+          promoType="bonus_bet"
+          expectedProfit={r.g}
+        />
+      )}
       {parseFloat(r.g)>0&&bbCount>=3&&!bbUpsellDismissed&&(
         <div style={{marginTop:14,padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
           <div><div style={{fontSize:11,fontWeight:700,color:K.pp}}>⚡ Track this win + get live arb alerts</div><div style={{fontSize:10,color:K.mt}}>VaultSparked — $24.99/mo · First 7 days free</div></div>
@@ -585,6 +595,14 @@ const ProfitBoost = () => {
       <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b/><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl}/><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`}/><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/>
       <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
       <BookCTA promoType="boost"/>
+      {parseFloat(r.g)>0&&(
+        <ResultFeedbackCard
+          calculatorKey="profit-boost"
+          calculatorLabel="Profit Boost Converter"
+          promoType="profit_boost"
+          expectedProfit={r.g}
+        />
+      )}
       {parseFloat(r.g)>0&&!showShareCardPB&&(
         <button onClick={()=>setShowShareCardPB(true)} style={{marginTop:8,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:12}}>
           🎉 Share your win
@@ -660,7 +678,14 @@ const FirstBet = () => {
     {r&&<div style={S.res(true)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.ac)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>from hedge math</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
       <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b/><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW)>=0?K.gn:K.rd}/><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW)>=0?K.gn:K.rd}/>
       <Nt c={K.yl}>If your first bet LOSES → you get ${s} in bonus bets. Convert those at ~70% using the Bonus Bet tab = ~${f(parseFloat(s)*0.7,0)} more profit!</Nt>
-      <BookCTA promoType="safety"/></div>}
+      <BookCTA promoType="safety"/>
+      <ResultFeedbackCard
+        calculatorKey="first-bet"
+        calculatorLabel="First Bet Safety Net Hedge"
+        promoType="safety_net"
+        expectedProfit={r.g}
+      />
+    </div>}
   </div>
   <Help entries={[
     ["Safety Net Promo","Books like BetMGM ($1,500), bet365 ($1,000), and BetRivers ($500) refund your first bet as bonus bets if it loses. This is different from a bonus bet — you're wagering your own real cash."],
@@ -4973,6 +4998,7 @@ const TABS = [
     {n:"Taxes Estimator",slug:"taxes-estimator",c:TaxesEstimatorWrapper,subcat:"Advanced",icon:"🧾"},
   ]},
   { group:"Track", items:[
+    {n:"Edge",slug:"edge-dashboard",c:TrackInsights},
     {n:"Sportsbooks",slug:"sportsbooks",c:Tracker},
     {n:"Bet Tracker",slug:"bet-tracker",c:BetTracker},
     {n:"P/L Ledger",slug:"ledger",c:Ledger},
