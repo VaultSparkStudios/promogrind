@@ -2,15 +2,43 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 45 (2026-04-15) — CLOSED
+
+**Session Intent:** Audit project with score, produce refinement plan covering features/depth/UX/feedback/security/speed, and recommend a single top-priority combined list. Innovative, genius-level thinking.
+
+## Where We Left Off (Session 45 — CLOSED)
+
+- Shipped: 10 improvements across 6 groups — trust/confidence layer, promo intake, shadow-book projection, accessibility/loading polish, edge hardening, performance/security guardrails
+- Tests: 150/150 passing · delta: +16
+- Deploy: pending — repo changes committed; S45 edge-function rate-limit hardening still requires deployment
+- Session type: implementation + recovery + closeout
+
 ## Current Delta Since S44
 
-- Session 44 intent: implement the current Genius hit list at highest quality, anchored to the forced Track analytics dashboard, the post-result feedback loop, and expanded browser smoke coverage.
-- Added a dedicated Track analytics surface with realized P/L, promo-type hit rate, calculator accuracy, best books, and an unsettled workflow queue.
-- Added a reusable post-result feedback card to the key conversion calculators so users can log placed/skipped/settled outcomes and actual profit.
-- Expanded browser launch smoke to validate built-client markers for age gate, auth dialog, sportsbook CTA, pricing, auth menu billing action, and mobile layout hooks.
-- Wired personal referral links into `src/books.js` for DraftKings, FanDuel, and Caesars.
-- Validation after the session: `npm.cmd test`, `npm.cmd run build`, and `node scripts\\validate-browser-launch-smoke.mjs` all passed.
-- Remaining launch blockers are still manual: Stripe smoke, remaining referral links, and the friend-facing browser/account-flow pass.
+- Recovered an interrupted S45 refinement tranche and stabilized the worktree back to green validation.
+- Added calculator trust badges plus adaptive accuracy aggregation scoped by calculator, promo type, and book.
+- Added sensitivity helpers/chips to Bonus Bet, Profit Boost, and First Bet so result rows show how much profit moves if hedge odds drift.
+- Added a new Home `Promo Intake` route with deterministic pasted-promo parsing and calculator recommendation.
+- Added Shadow Book Mode to quantify first-month upside from books the user has not opened yet.
+- Added reusable state primitives in `src/ui.jsx`, upgraded a few loading surfaces, and added `Escape` close support / dialog semantics to `AuthDialog`.
+- Added Cloudflare Pages security headers in `public/_headers`, image optimization prebuild output (`og-image.avif` + `og-image.webp`), and a bundle-budget guard script.
+- Added durable `vault_events`-backed rate limiting on top of first-line in-memory burst limiting for `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder`.
+- Added keyboard navigation for the primary and secondary tab bars (`ArrowLeft`, `ArrowRight`, `Home`, `End`) plus ARIA tab semantics.
+- Confirmed the repo no longer contains the old orphan root `.jsx` duplicates called out in the audit backlog.
+- Validation after recovery: `npm.cmd test`, `npm.cmd run build`, `npm.cmd run check:bundle`, `npm.cmd run smoke:launch`, and `npm.cmd run smoke:browser` all passed (`smoke:browser` required elevated execution in this environment).
+- Remaining S45 code follow-ups: broader keyboard-nav polish outside the tab bars and continued `App.jsx` route extraction.
+- Remaining manual / external blockers: Stripe smoke, remaining referral links, friend-facing browser/account-flow pass, and deployment of the S45 edge-function hardening changes.
+
+### Shipped this session
+
+**feat(s45): recover refinement tranche, harden edges, and close out validation**
+- `src/intake/parse.js`, `src/components/PromoIntakePanel.jsx`, `src/routes/PromoIntakeRoute.jsx` — deterministic pasted-promo parsing, normalized promo card, calculator recommendation, and first extracted route pattern
+- `src/lib/shadow.js`, `src/components/ShadowBookPanel.jsx` — first-month upside projection for books the user has not opened yet
+- `src/components/CalculatorTrustBadge.jsx`, `src/lib/shared.js`, `src/components/SensitivityChip.jsx`, `src/track/insights.js` — adaptive trust score, sensitivity bands, and safer feedback UUID generation
+- `src/ui.jsx`, `src/components/AuthDialog.jsx`, `src/components/LiveScanner.jsx`, `src/components/PromoChat.jsx`, `src/App.jsx` — state primitives, improved loading surfaces, keyboard-accessible tab bars, and better auth-dialog semantics
+- `public/_headers`, `index.html`, `package.json`, `scripts/optimize-images.mjs`, `scripts/check-bundle-budget.mjs`, `public/og-image.avif`, `public/og-image.webp` — security headers, motion guard, image optimization pipeline, and bundle-budget enforcement
+- `supabase/functions/_shared/http.ts`, `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder` — durable `vault_events`-backed rate limiting layered on top of burst protection
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`, `logs/WORK_LOG.md`, `context/SELF_IMPROVEMENT_LOOP.md`, `context/TRUTH_AUDIT.md`, `context/PROJECT_STATUS.json`, `audits/2026-04-15.json` — closeout memory refreshed to S45 state
 
 ## Where We Left Off (Session 44 — CLOSED)
 

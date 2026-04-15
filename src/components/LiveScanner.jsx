@@ -4,7 +4,7 @@ import { supabase, startCheckout } from "../auth.js";
 import { FEATURE_FLAGS } from "../launchState.js";
 import { trackFeatureEnabledUse } from "../launchTelemetry.js";
 import { useToast } from "../contexts.jsx";
-import { FeatureUnavailableCard } from "../ui.jsx";
+import { FeatureUnavailableCard, LoadingState } from "../ui.jsx";
 
 const SPORTS_LIST = [
   { key:"americanfootball_nfl",  label:"NFL"  },
@@ -215,7 +215,7 @@ const LiveScanner = ({ proStatus, mode }) => {
 
   if (proStatus===null) return (
     <div style={{...S.card,textAlign:"center",padding:40}}>
-      <div style={{color:K.mt,fontSize:11,letterSpacing:"2px",textTransform:"uppercase"}}>Loading...</div>
+      <LoadingState label="Loading scanner…"/>
     </div>
   );
 

@@ -1,13 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
+import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLimitResponse } from "../_shared/http.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 serve(async (req) => {
+  const CORS = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
   try {
@@ -18,6 +16,9 @@ serve(async (req) => {
       });
     }
 
+    const burst = inMemoryRateLimit(clientKey(req, "ai_action_plan"), 2, 30_000);
+    if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, CORS);
+
     const access = await requireAiAccess(req, {
       feature: "ai_action_plan",
       minTier: "runner",
@@ -25,6 +26,17 @@ serve(async (req) => {
       corsHeaders: CORS,
     });
     if (access.error) return access.error;
+
+    const durableLimit = await enforceRateLimit({
+      req,
+      supabase: access.supabase,
+      userId: access.user.id,
+      feature: "ai_action_plan",
+      limit: 2,
+      windowSeconds: 3600,
+      corsHeaders: CORS,
+    });
+    if (durableLimit) return durableLimit;
 
     const body = await req.json();
     const { bankroll = "1000", booksComplete = 0, recentProfit = "0", ledgerCount = 0 } = body;

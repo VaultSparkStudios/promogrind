@@ -1,44 +1,44 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-04-14",
-  "generatedAtMs": 1776148689926,
-  "session": 43,
-  "vectorHash": "49f03ef9ebc4a47d",
-  "silTotal": 420,
-  "silAvg3": 420,
-  "velocity": 2,
+  "generatedAt": "2026-04-15",
+  "generatedAtMs": 1776269500378,
+  "session": 45,
+  "vectorHash": "6452bc984a288176",
+  "silTotal": 446,
+  "silAvg3": 435.3,
+  "velocity": 8,
   "debt": "down",
-  "runway": "~1.5 sessions",
-  "intentRate": "100% (last 1)",
+  "runway": "~0.7 sessions",
+  "intentRate": "100% (last 4)",
   "openNow": 3,
-  "openNext": 15,
+  "openNext": 17,
   "openBlocked": 0,
   "topNow": [
-    "Result feedback loop — ask \"placed / skipped / settled / actual profit / calcula",
-    "Deploy updated AI edge functions: `promo-chat`, `promo-advisor`, `ai-action-plan",
-    "Browser smoke expansion — cover age gate, first calculator result, sportsbook CT"
+    "Extract `App.jsx` routes into `src/routes/*` — first route extraction pattern la",
+    "[SIL:2⛔] Smart promo alert system — push notification when high-EV promo goes li",
+    "[SIL:2⛔] Onboarding completion tracker — localStorage pg_onboarding_steps[] + pr"
   ],
   "topNext": [
-    "Promo intake pipeline — accept pasted promo text, screenshot parse, and extensio",
-    "Confidence layer — show assumptions, sensitivity, and trust badges on calculator",
-    "State-aware + book-aware personalization for sportsbook CTAs and recommended wor"
+    "[SIL] Drift alert — background diff of projected vs realized profit per promo ty",
+    "Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedba",
+    "[SIL] Self-calibration chart — surface \"Your calcs were X% accurate last 30 days"
   ],
   "health": "green",
   "truthStatus": "green",
   "genome": null,
   "ignisScore": 45495,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 0,
+  "ignisAgeDays": 1,
   "name": "PromoGrind",
   "slug": null,
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Deploy updated AI edge functions → apply wins_wall migration → run Stripe smoke test → expand browser smoke → ship post-result feedback loop.",
-  "currentFocus": "Dashboard tranche 2 is in repo: shared today/dashboard state helpers, extracted dashboard surfaces, and launch-copy/smoke alignment are complete.",
-  "lastShipped": "3 improvements across 3 groups — dashboard extraction, Today dashboard, launch-copy/smoke alignment",
+  "nextMilestone": "Deploy the S45 edge-function hardening changes, continue route extraction + broader keyboard follow-through, then clear launch blockers: Stripe smoke test, remaining referral links, and the friend-facing account-flow/browser pass.",
+  "currentFocus": "S45 is closed out: PromoGrind now has calculator trust badges, sensitivity chips, a Promo Intake route with deterministic parsing, Shadow Book Mode, Cloudflare Pages security headers, durable AI edge rate limits, keyboard-accessible tab bars, and bundle/image guardrails on top of the Track edge dashboard and project-local auth UX.",
+  "lastShipped": "10 improvements across 6 groups — trust/confidence layer, promo intake, shadow-book projection, accessibility/loading polish, edge hardening, performance/security guardrails",
   "blockers": [
-    "Affiliate/referral links not configured in src/books.js (last code blocker before launch)",
-    "wins_wall Supabase migration exists but still needs to be applied in Supabase SQL Editor",
-    "Supabase function deploys cannot be run from this environment until supabase login / SUPABASE_ACCESS_TOKEN is configured"
+    "Remaining affiliate/referral links not configured in src/books.js",
+    "Stripe end-to-end smoke still requires a real account/browser checkout pass",
+    "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ]
 }

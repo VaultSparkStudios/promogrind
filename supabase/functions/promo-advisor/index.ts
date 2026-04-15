@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
-import { getCorsHeaders, json } from "../_shared/http.ts";
+import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -31,6 +31,9 @@ serve(async (req) => {
       return json(req, { error: "AI service not configured" }, 503);
     }
 
+    const burst = inMemoryRateLimit(clientKey(req, "promo_advisor"), 4, 10_000);
+    if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, corsHeaders);
+
     const access = await requireAiAccess(req, {
       feature: "promo_advisor",
       minTier: "free",
@@ -38,6 +41,17 @@ serve(async (req) => {
       corsHeaders,
     });
     if (access.error) return access.error;
+
+    const durableLimit = await enforceRateLimit({
+      req,
+      supabase: access.supabase,
+      userId: access.user.id,
+      feature: "promo_advisor",
+      limit: 6,
+      windowSeconds: 300,
+      corsHeaders,
+    });
+    if (durableLimit) return durableLimit;
 
     const sanitizedPromoText = promoText.replace(/<[^>]*>/g, "").trim().slice(0, 2000);
 

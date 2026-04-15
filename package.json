@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/optimize-images.mjs",
     "build": "vite build",
     "build:pages": "vite build && node scripts/postbuild-pages.mjs",
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "check:bundle": "node scripts/check-bundle-budget.mjs",
     "build:cap": "VITE_APP_BASE_PATH=/ vite build --outDir dist-cap",
     "cap:sync": "npm run build:cap && npx cap sync",
     "og": "node scripts/generate-og.mjs",

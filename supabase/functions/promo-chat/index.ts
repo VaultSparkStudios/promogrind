@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
-import { getCorsHeaders, json } from "../_shared/http.ts";
+import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -32,6 +32,10 @@ serve(async (req: Request) => {
       return json(req, { error: "AI service not configured — set ANTHROPIC_API_KEY" }, 503);
     }
 
+    // First-line burst protection: 6 requests / 10s per client IP.
+    const burst = inMemoryRateLimit(clientKey(req, "promo_chat"), 6, 10_000);
+    if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, corsHeaders);
+
     const access = await requireAiAccess(req, {
       feature: "promo_chat",
       minTier: "scout",
@@ -39,6 +43,17 @@ serve(async (req: Request) => {
       corsHeaders,
     });
     if (access.error) return access.error;
+
+    const durableLimit = await enforceRateLimit({
+      req,
+      supabase: access.supabase,
+      userId: access.user.id,
+      feature: "promo_chat",
+      limit: 12,
+      windowSeconds: 60,
+      corsHeaders,
+    });
+    if (durableLimit) return durableLimit;
 
     const { message, history = [], userContext } = await req.json() as {
       message: string;

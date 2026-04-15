@@ -256,6 +256,62 @@ export const calcHold = (o1, o2) => {
   return { hold: f(hold, 2), ip1: f(ip1 * 100, 1), ip2: f(ip2 * 100, 1), ok: hold < 5 };
 };
 
+// ─── Confidence / Sensitivity helpers ────────────────────────────────────────
+// Each returns a band showing how much the guaranteed profit moves when the
+// hedge line shifts ±10% in decimal odds terms. Output is for the Confidence
+// layer chips next to result rows; consumers render `${bandLow} → ${bandHigh}`
+// and optionally show `deltaPer10pct` for a single directional read.
+
+const perturb = (decimalOdds, pct) => {
+  const d = toD(decimalOdds);
+  if (d <= 1) return null;
+  return Math.max(1.01, d * (1 + pct));
+};
+
+function sensitivityBand(baseline, low, high) {
+  if (baseline == null || low == null || high == null) return null;
+  const base = parseFloat(baseline);
+  if (!Number.isFinite(base)) return null;
+  const lo = parseFloat(low), hi = parseFloat(high);
+  if (!Number.isFinite(lo) || !Number.isFinite(hi)) return null;
+  const bandLow = Math.min(lo, hi);
+  const bandHigh = Math.max(lo, hi);
+  return {
+    base: f(base),
+    bandLow: f(bandLow),
+    bandHigh: f(bandHigh),
+    deltaPer10pct: f(Math.max(Math.abs(base - bandLow), Math.abs(bandHigh - base))),
+    stable: Math.abs(bandHigh - bandLow) < 0.5,
+  };
+}
+
+/** Sensitivity for the Bonus Bet hedge (varies hedge odds ±10%). */
+export const sensitivityBonus = (sz, bO, hO) => {
+  const base = calcBonus(sz, bO, hO);
+  if (!base) return null;
+  const lo = calcBonus(sz, bO, perturb(hO, -0.1));
+  const hi = calcBonus(sz, bO, perturb(hO,  0.1));
+  return sensitivityBand(base.g, lo?.g, hi?.g);
+};
+
+/** Sensitivity for the Profit Boost hedge (varies hedge odds ±10%). */
+export const sensitivityBoost = (s, o, bp, mx, hO) => {
+  const base = calcBoost(s, o, bp, mx, hO);
+  if (!base) return null;
+  const lo = calcBoost(s, o, bp, mx, perturb(hO, -0.1));
+  const hi = calcBoost(s, o, bp, mx, perturb(hO,  0.1));
+  return sensitivityBand(base.g, lo?.g, hi?.g);
+};
+
+/** Sensitivity for the First-Bet Safety-Net hedge (varies hedge odds ±10%). */
+export const sensitivityFirst = (s, o, hO) => {
+  const base = calcFirst(s, o, hO);
+  if (!base) return null;
+  const lo = calcFirst(s, o, perturb(hO, -0.1));
+  const hi = calcFirst(s, o, perturb(hO,  0.1));
+  return sensitivityBand(base.g, lo?.g, hi?.g);
+};
+
 // ─── Color Palette ────────────────────────────────────────────────────────────
 
 export const KD = {

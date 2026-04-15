@@ -1,5 +1,22 @@
 # Work Log
 
+## 2026-04-15 — S45 Refinement Recovery + Closeout
+
+- Recovered an interrupted S45 refinement tranche and stabilized the repo back to a clean closeout state.
+- Added `src/intake/parse.js`, `src/components/PromoIntakePanel.jsx`, and `src/routes/PromoIntakeRoute.jsx` to turn pasted promo text into deterministic promo-card parsing plus calculator recommendation.
+- Added `src/lib/shadow.js` and `src/components/ShadowBookPanel.jsx` to quantify first-month value from un-owned books.
+- Added `src/components/CalculatorTrustBadge.jsx`, sensitivity helpers in `src/lib/shared.js`, and `src/components/SensitivityChip.jsx` to surface trust and odds-drift confidence on key calculator results.
+- Added `src/ui.jsx` state primitives (`LoadingState`, `EmptyState`, `ErrorState`), upgraded several loading surfaces, and improved auth dialog semantics / keyboard support.
+- Added `public/_headers`, `scripts/optimize-images.mjs`, `scripts/check-bundle-budget.mjs`, and generated `public/og-image.avif` + `public/og-image.webp`.
+- Added durable `vault_events`-backed rate limiting in `supabase/functions/_shared/http.ts` and wired it into `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder`.
+- Added keyboard navigation + ARIA tab semantics to the primary and secondary tab bars in `src/App.jsx`.
+- Refreshed public memory/context files to S45 closeout state and wrote a new audit JSON.
+- Verified `npm.cmd test` → 150/150 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `npm.cmd run check:bundle` → passing (`~413KB` main chunk).
+- Verified `npm.cmd run smoke:launch` → passing.
+- Verified `npm.cmd run smoke:browser` → passing in elevated execution.
+
 ## 2026-04-14 — S44 Track Analytics + Launch Closeout
 
 - Added `src/track/insights.js` to normalize result-feedback entries and aggregate realized P/L, hit rate by promo type, calculator accuracy, and best-book performance.

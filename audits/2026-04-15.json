@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "date": "2026-04-15",
+  "session": 45,
+  "sessionType": "implementation",
+  "label": null,
+  "calibration": false,
+  "scores": {
+    "devHealth": 96,
+    "creativeAlignment": 88,
+    "momentum": 91,
+    "engagement": 76,
+    "processQuality": 95
+  },
+  "total": 446,
+  "maxScore": 500,
+  "velocity": 8,
+  "protocolVelocity": 0,
+  "durationMinutes": 120,
+  "debt": "down",
+  "rollingAvg3": {
+    "devHealth": 94.0,
+    "creativeAlignment": 86.7,
+    "momentum": 87.7,
+    "engagement": 74.0,
+    "processQuality": 93.0,
+    "total": 435.3
+  },
+  "rollingAvgTotals": {
+    "3": 435.3,
+    "5": 431.5,
+    "10": 431.5,
+    "25": null,
+    "all": 431.5
+  },
+  "topWin": "Recovered an interrupted refinement tranche into a fully validated closeout without dropping the new product ideas that were already in flight.",
+  "topGap": "Launch confidence still depends on manual Stripe verification, remaining referral-link setup, and a friend-facing flow pass, while the App.jsx monolith still needs further extraction.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 10,
+  "improvementGroups": {
+    "trust-confidence": 3,
+    "promo-intake": 2,
+    "shadow-book-projection": 2,
+    "accessibility-loading": 4,
+    "edge-hardening": 5,
+    "performance-security": 5
+  },
+  "testsTotal": 150,
+  "testsByType": {
+    "core": 150
+  },
+  "testsDelta": 16,
+  "deployStatus": "pending",
+  "ignisFlags": [
+    "high-velocity",
+    "debt-clear",
+    "intent-achieved",
+    "compacted-resume",
+    "cdr-gap-recovered"
+  ],
+  "ignisNote": "The strongest pattern this session was recovery discipline: once the interrupted tranche was made measurable again, the new ideas became shippable instead of speculative."
+}

@@ -4,18 +4,19 @@ import { BOOKS, getBookUrl, getConfiguredAffiliateCount, hasConfiguredAffiliateL
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 import { subscribeToPush } from "./sw-register.js";
-import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, KD, KL, K, font, fontD } from "./lib/shared.js";
+import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
+import SensitivityChip from "./components/SensitivityChip.jsx";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
-import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help } from "./ui.jsx";
+import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
 import { getDashboardSnapshot, getNextBestAction } from "./dashboard/today.js";
 import TodayDashboardPanel from "./components/dashboard/TodayDashboardPanel.jsx";
 import DailyBriefPage from "./components/dashboard/DailyBriefPage.jsx";
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
-import TrackInsights from "./components/TrackInsights.jsx";
+import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
 // Heavy tab components — lazy loaded so they don't block initial render
 const Tracker = lazy(() => import("./components/Tracker.jsx"));
 const Ledger = lazy(() => import("./components/Ledger.jsx"));
@@ -26,6 +27,8 @@ const StackBuilder = lazy(() => import("./components/StackBuilder.jsx").then(m =
 const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => ({ default: m.PricingPage })));
 const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
 const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
+const PromoIntakeRoute = lazy(() => import("./routes/PromoIntakeRoute.jsx"));
+const TrackInsights = lazy(() => import("./components/TrackInsights.jsx"));
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 import UserMenu from "./components/UserMenu.jsx";
 import AuthDialog from "./components/AuthDialog.jsx";
@@ -348,6 +351,7 @@ const BonusBet = () => {
   const {sz,bo,ho} = mem;
   const setSz = v => setMem('sz',v), setBo = v => setMem('bo',v), setHo = v => setMem('ho',v);
   const r = useMemo(()=>calcBonus(parseFloat(sz),bo,ho),[sz,bo,ho]);
+  const sens = useMemo(()=>sensitivityBonus(parseFloat(sz),bo,ho),[sz,bo,ho]);
   const [showHist, setShowHist] = useState(false);
   const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_bonus-bet')||'[]');}catch{return[];} });
   useEffect(()=>{
@@ -499,6 +503,10 @@ const BonusBet = () => {
       <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn}/><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r)>=70?K.gn:K.yl} b/>
       {S.meter(parseFloat(r.r),parseFloat(r.r)>=70?K.gn:parseFloat(r.r)>=50?K.yl:K.rd)}
       <BookCTA promoType="bonus"/>
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}}>
+        <CalculatorTrustBadge calculatorKey="bonus-bet" promoType="bonus_bet"/>
+        <SensitivityChip summary={sens}/>
+      </div>
       {parseFloat(r.g)>0&&(
         <ResultFeedbackCard
           calculatorKey="bonus-bet"
@@ -545,6 +553,7 @@ const ProfitBoost = () => {
   const {s,o,bp,mx,ho} = mem;
   const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setBp=v=>setMem('bp',v),setMx=v=>setMem('mx',v),setHo=v=>setMem('ho',v);
   const r = useMemo(()=>calcBoost(parseFloat(s),o,parseFloat(bp),mx,ho),[s,o,bp,mx,ho]);
+  const sens = useMemo(()=>sensitivityBoost(parseFloat(s),o,parseFloat(bp),mx,ho),[s,o,bp,mx,ho]);
   const [showHist, setShowHist] = useState(false);
   const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_profit-boost')||'[]');}catch{return[];} });
   useEffect(()=>{
@@ -595,6 +604,10 @@ const ProfitBoost = () => {
       <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b/><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl}/><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`}/><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/>
       <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
       <BookCTA promoType="boost"/>
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}}>
+        <CalculatorTrustBadge calculatorKey="profit-boost" promoType="profit_boost"/>
+        <SensitivityChip summary={sens}/>
+      </div>
       {parseFloat(r.g)>0&&(
         <ResultFeedbackCard
           calculatorKey="profit-boost"
@@ -631,6 +644,7 @@ const FirstBet = () => {
   const {s,o,ho}=mem;
   const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setHo=v=>setMem('ho',v);
   const r = useMemo(()=>calcFirst(parseFloat(s),o,ho),[s,o,ho]);
+  const sens = useMemo(()=>sensitivityFirst(parseFloat(s),o,ho),[s,o,ho]);
   const [showHist, setShowHist] = useState(false);
   const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_first-bet')||'[]');}catch{return[];} });
   useEffect(()=>{
@@ -679,6 +693,10 @@ const FirstBet = () => {
       <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b/><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW)>=0?K.gn:K.rd}/><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW)>=0?K.gn:K.rd}/>
       <Nt c={K.yl}>If your first bet LOSES → you get ${s} in bonus bets. Convert those at ~70% using the Bonus Bet tab = ~${f(parseFloat(s)*0.7,0)} more profit!</Nt>
       <BookCTA promoType="safety"/>
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}}>
+        <CalculatorTrustBadge calculatorKey="first-bet" promoType="safety_net"/>
+        <SensitivityChip summary={sens}/>
+      </div>
       <ResultFeedbackCard
         calculatorKey="first-bet"
         calculatorLabel="First Bet Safety Net Hedge"
@@ -2928,7 +2946,7 @@ const TeamAccounts = () => {
   };
   return (<div><div style={S.card}><Tl t="Team Accounts" badge="BETA" bc={K.pp}/>
     {loadingTeam ? (
-      <div style={{color:K.mt,textAlign:'center',padding:32}}>Loading…</div>
+      <div style={{textAlign:'center',padding:32}}><LoadingState label="Loading team…"/></div>
     ) : !team ? (
       <div>
         <div style={{fontWeight:700,color:K.tx,fontSize:18,marginBottom:8}}>Create Your Team Vault</div>
@@ -4958,6 +4976,7 @@ const WhatsNew = () => {
 const TABS = [
   { group:"Home", items:[
     {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
+    {n:"Promo Intake",slug:"promo-intake",c:PromoIntakeRoute},
     {n:"Daily Brief",slug:"daily-brief",c:DailyBriefPage},
     {n:"Get Started",slug:"get-started",c:GetStarted},
     {n:"What's New",slug:"whats-new",c:WhatsNew},
@@ -5464,6 +5483,39 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleGroupTabKeyDown = (event, index) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo((index + 1) % TABS.length);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo((index - 1 + TABS.length) % TABS.length);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      goTo(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      goTo(TABS.length - 1);
+    }
+  };
+
+  const handleSubTabKeyDown = (event, groupIndex, itemIndex) => {
+    const items = TABS[groupIndex].items;
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo(groupIndex, (itemIndex + 1) % items.length);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo(groupIndex, (itemIndex - 1 + items.length) % items.length);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      goTo(groupIndex, 0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      goTo(groupIndex, items.length - 1);
+    }
+  };
+
   // Record current sub-tab in memory whenever it changes
   useEffect(()=>{ tabMemory.current[gi] = ti; },[gi,ti]);
 
@@ -5518,7 +5570,7 @@ export default function App() {
       <CurrencyCtx.Provider value={currencyCtxVal}>
       <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
         <ErrorBoundary>
-          <Suspense fallback={<div style={{padding:32,textAlign:"center",color:K.mt,fontSize:12}}>Loading…</div>}>
+          <Suspense fallback={<div style={{padding:32,textAlign:"center"}}><LoadingState/></div>}>
             {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
           </Suspense>
         </ErrorBoundary>
@@ -5701,12 +5753,17 @@ export default function App() {
           .pg-tab-btn { -webkit-tap-highlight-color: transparent; }
           .pg-tab-btn:active { opacity: 0.7; }
         `}</style>
-        <div className="pg-tabs" style={{display:'flex',maxWidth:1100,width:'100%'}}>
+        <div className="pg-tabs" role="tablist" aria-label="Primary navigation" style={{display:'flex',maxWidth:1100,width:'100%'}}>
           {TABS.map((t,i)=>(
             <button
               key={t.group}
               className="pg-tab-btn"
               onClick={()=>goTo(i,0)}
+              onKeyDown={(event)=>handleGroupTabKeyDown(event, i)}
+              role="tab"
+              aria-selected={gi===i}
+              aria-controls={`pg-subtabs-${t.group.toLowerCase().replace(/\s+/g,"-")}`}
+              tabIndex={gi===i ? 0 : -1}
               style={{
                 flex:1, minWidth:isMobile?72:90,
                 padding: isMobile ? '12px 10px' : '12px 20px',
@@ -5762,10 +5819,15 @@ export default function App() {
               {compareMode?"✕ Exit Compare":"⊞ Compare"}
             </button>
           </div>}
-          <div style={{display:"flex",maxWidth:1100,width:"100%",gap:2,margin:"0 auto"}}>{g.items.map((t,i)=>{
+          <div
+            id={`pg-subtabs-${g.group.toLowerCase().replace(/\s+/g,"-")}`}
+            role="tablist"
+            aria-label={`${g.group} navigation`}
+            style={{display:"flex",maxWidth:1100,width:"100%",gap:2,margin:"0 auto"}}
+          >{g.items.map((t,i)=>{
             const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
             const isFav = calcFavorites.includes(t.slug);
-            return (<button key={t.n} onClick={()=>goTo(gi,i)} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
+            return (<button key={t.n} onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
               {t.n}
               {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</span>}
               {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
@@ -5777,7 +5839,7 @@ export default function App() {
       <div className="pg-main-content" style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
         {!user && <MembershipBanner/>}
         <ErrorBoundary>
-          <Suspense fallback={<div style={{padding:32,textAlign:"center",color:K.mt,fontSize:12}}>Loading…</div>}>
+          <Suspense fallback={<div style={{padding:32,textAlign:"center"}}><LoadingState/></div>}>
             {slug==='dashboard'
               ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>
               : compareMode&&gi===CALC_GI

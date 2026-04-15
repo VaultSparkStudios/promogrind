@@ -14,11 +14,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
-
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLimitResponse } from "../_shared/http.ts";
 
 // Current promos by book — update these as promos rotate
 const PROMO_DATABASE = [
@@ -35,9 +31,13 @@ const PROMO_DATABASE = [
 ];
 
 serve(async (req) => {
+  const CORS = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
   try {
+    const burst = inMemoryRateLimit(clientKey(req, "stack_builder"), 2, 30_000);
+    if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, CORS);
+
     const access = await requireAiAccess(req, {
       feature: "stack_builder",
       minTier: "closer",
@@ -45,6 +45,17 @@ serve(async (req) => {
       corsHeaders: CORS,
     });
     if (access.error) return access.error;
+
+    const durableLimit = await enforceRateLimit({
+      req,
+      supabase: access.supabase,
+      userId: access.user.id,
+      feature: "stack_builder",
+      limit: 3,
+      windowSeconds: 600,
+      corsHeaders: CORS,
+    });
+    if (durableLimit) return durableLimit;
 
     const { bankroll, booksAvailable = [], goal = "maximize guaranteed extraction" } = await req.json();
 

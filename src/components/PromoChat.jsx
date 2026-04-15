@@ -3,6 +3,7 @@ import { K, font, fontD } from "../lib/shared.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
+import { LoadingState } from "../ui.jsx";
 
 // Daily message limits per tier
 const LIMITS = { scout: 20, runner: 50, closer: Infinity, house: Infinity };
@@ -194,7 +195,7 @@ const PromoChat = ({ navigate }) => {
           {/* Loading state */}
           {(sessionLoading || subLoading) ? (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ fontSize: 12, color: K.mt }}>Loading…</div>
+              <LoadingState label="Loading chat…"/>
             </div>
           ) : !session ? renderGate('no-session')
             : !hasAccess ? renderGate('no-plan')

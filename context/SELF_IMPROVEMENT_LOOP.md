@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▆ ▆
-Avgs — 3: 426.7 | 5: 426.7 [N=3] | 10: 426.7 [N=3] | 25: — | all: 426.7 [N=3]
-  └ 3-session: Dev 92.0 | Align 84.7 | Momentum 85.3 | Engage 73.3 | Process 91.3
+Sparkline (last 5 totals): ▆ ▆ ▆ ▆
+Avgs — 3: 435.3 | 5: 431.5 [N=4] | 10: 431.5 [N=4] | 25: — | all: 431.5 [N=4]
+  └ 3-session: Dev 94.0 | Align 86.7 | Momentum 87.7 | Engage 74.0 | Process 93.0
 Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~1.0 sessions  |  Intent rate: 100% (last 3)
-Last session: 2026-04-14 | Session 44 | Total: 434/500 | Velocity: 3 | protocolVelocity: 0
+Momentum runway: ~0.7 sessions  |  Intent rate: 100% (last 4)
+Last session: 2026-04-15 | Session 45 | Total: 446/500 | Velocity: 8 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-15 — Session 45 | Total: 446/500 | Velocity: 8 | Debt: ↓
+Avgs — 3: 435.3 | 5: 431.5 [N=4] | 10: 431.5 [N=4] | 25: — | all: 431.5 [N=4]
+  └ 3-session: Dev 94.0 | Align 86.7 | Momentum 87.7 | Engage 74.0 | Process 93.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 96 | ↑ | Recovered an interrupted tranche, added deterministic parsing, trust/sensitivity helpers, durable edge limits, and kept every validation target green. |
+| Creative Alignment | 88 | ↑ | The new work stayed practical and trust-first: faster promo comprehension, clearer confidence signaling, and no drift into gimmicks. |
+| Momentum | 91 | ↑ | Closed a broken in-progress branch into a validated release-sized tranche, clearing a large Now bucket in one pass. |
+| Engagement | 76 | ↑ | Product usefulness improved materially, but real external proof still depends on the Stripe smoke, referral completion, and friend beta pass. |
+| Process Quality | 95 | ↑ | Public memory, audit JSON, task preload, truth audit, state vector, entropy, and genome snapshot were all refreshed at closeout. |
+| **Total** | **446/500** | ↑ | |
+
+**Top win:** An interrupted refinement tranche was turned into a clean, validated closeout without discarding the new product ideas already in motion.
+**Top gap:** Launch confidence still depends on manual Stripe verification, remaining referral-link setup, and a friend-facing pass, while the monolith still needs further route extraction.
+**Intent outcome:** Achieved — the audit/recovery pass produced a coherent refinement tranche, a real next-priority list, and a full closeout instead of leaving partial work behind.
+
+**Brainstorm**
+1. Add a drift-alert lane that compares expected vs realized profit by promo type and book, then flags cold calculators before trust erodes.
+2. Build a self-calibration panel inside Track that ranks calculators by recent realized accuracy so users know where the math is most dependable.
+3. Extend the accessibility sweep beyond the tab bars to pinned favorites, compare flows, and remaining dialog/button clusters.
+
+**Committed to TASK_BOARD:** [SIL] Drift alert — background diff of projected vs realized profit per promo type · [SIL] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
 
 ## 2026-04-14 — Session 44 | Total: 434/500 | Velocity: 3 | Debt: ↓
 Avgs — 3: 426.7 | 5: 426.7 [N=3] | 10: 426.7 [N=3] | 25: — | all: 426.7 [N=3]

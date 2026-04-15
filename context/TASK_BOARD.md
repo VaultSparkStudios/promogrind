@@ -11,9 +11,29 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
 
 ## Now
-- [ ] [SIL] Promo intake pipeline — accept pasted promo text, screenshot parse, and extension capture into one normalized promo card
-- [ ] [SIL] Confidence layer — show assumptions, sensitivity, and trust badges on calculator outputs
-- [ ] Security headers pass — add CSP, Referrer-Policy, Permissions-Policy, production webhook-secret fail-closed check, and broader rate limits
+- [x] **S45 stabilization pass** — recovered interrupted refinement tranche; tests, build, and bundle budget are green again
+- [x] Delete orphaned root .jsx duplicates (Promo_Engine_v2/v3, Sportsbook_Promo_Conversion_System) — no root-level orphan `.jsx` duplicates remain in this repo
+- [x] Security headers via `public/_headers` — CSP, Referrer-Policy, Permissions-Policy, X-Content-Type-Options, X-Frame-Options (Cloudflare Pages native)
+- [x] UI primitives in `src/ui.jsx` — state components landed, key loading views use `<LoadingState/>`, auth dialog supports `Escape`, and main tab bars now support Arrow/Home/End keyboard nav
+- [x] Edge rate-limit helper in `supabase/functions/_shared/http.ts` — in-memory burst limiting plus durable `vault_events`-backed enforcement wired into promo-chat, promo-advisor, ai-action-plan, and stack-builder
+- [x] Adaptive trust score — aggregate accuracy per calculator × promo-type × book in `src/track/insights.js`; render "Accuracy so far: X% (N settlements)" on calculator results; feedback ids now use `crypto.randomUUID()` when available
+- [x] [SIL] Confidence layer — pure sensitivity helpers in `src/lib/shared.js`; sensitivity chips now render on key calculator result rows
+- [x] Image pipeline — `sharp` prebuild emits AVIF/WebP for `public/og-image.png`; bundle-budget script enforces main chunk <= 420KB
+- [x] [SIL] Promo intake pipeline — paste pipeline → regex parser → normalized PromoCard (type, book, min odds, max stake, expiry) → auto-suggest calculator
+- [x] Shadow book mode — simulate workflow value on un-owned books to quantify affiliate value
+- [ ] Extract `App.jsx` routes into `src/routes/*` — first route extraction pattern landed (`PromoIntakeRoute`); broader monolith carve-up still pending
+- [ ] [SIL:2⛔] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
+- [ ] [SIL:2⛔] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
+
+## Innovation Bets (new this session)
+- **Adaptive trust score** — per-calculator × promo-type × book accuracy, visible on results
+- **Sensitivity chips** — hover bands show how much output moves per 10% input change
+- **Shadow book mode** — quantify weekly value of creating an account at un-owned books (drives affiliate conversion)
+- **Promo intake normalizer** — paste text → PromoCard; cuts entry time from 60s to ~3s
+- **Drift alert (deferred to Next)** — background diff projected vs realized per promo type; surfaces cold promo classes
+- **Reason-for-skip capture (deferred to Next)** — one-tap reason when user marks skipped; becomes promo-quality signal
+- **Self-calibration chart (deferred to Next)** — "Your calcs were 92% accurate last 30 days" makes the loop visible
+- **Micro-NPS after 3 settlements (deferred to Next)** — 1-tap "was this worth it?" → silScore input
 - [x] Audit tranche 2 — extract dashboard state from `src/App.jsx` into focused modules
 - [x] Build a true "Today" dashboard: expiring promos, unfinished work, next-best action, bankroll posture, recent settled profit
 - [x] Launch copy alignment — sync smoke-covered marketing pages + trust-strip template to PromoGrind-native account wording and update smoke validators
@@ -55,6 +75,15 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
+- [ ] [SIL] Drift alert — background diff of projected vs realized profit per promo type
+- [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)
+- [ ] [SIL] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
+- [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
+- [ ] Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
+- [ ] Offline write-queue in `src/sync.js` (IndexedDB) for ledger/feedback writes when offline
+- [ ] Keyboard-nav follow-through — extend beyond tab bars to pinned favorites, compare selector flows, and remaining dialog/button clusters
+- [ ] Motion-reduce guard for transitions (prefers-reduced-motion)
+- [ ] Aria audit pass on `src/ui.jsx` (currently 0 aria attrs)
 - [ ] State-aware + book-aware personalization for sportsbook CTAs and recommended workflows
 - [ ] Playbooks — reusable promo routines by bankroll, promo type, and available books
 - [ ] Community intel upgrade — freshness, verification, report quality, and region filters on promo submissions
@@ -65,8 +94,6 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] VAPID keys → deploy send-daily-brief push notification function
 - [x] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
 - [x] [SIL:2⛔] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
-- [ ] [SIL:2⛔] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
-- [ ] [SIL:2⛔] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
 - [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults
 
 ## Later

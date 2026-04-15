@@ -1,3 +1,14 @@
+function safeUUID() {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch {
+    // fall through to fallback
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 function toNumber(value) {
   const parsed = Number.parseFloat(value);
   return Number.isFinite(parsed) ? parsed : null;
@@ -20,7 +31,7 @@ export function formatPromoTypeLabel(value = "") {
 
 export function normalizeResultFeedback(entry = {}) {
   return {
-    id: entry.id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    id: entry.id ?? safeUUID(),
     calculatorKey: entry.calculatorKey || "unknown",
     calculatorLabel: entry.calculatorLabel || "Unknown calculator",
     promoType: entry.promoType || "other",
@@ -166,4 +177,58 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     promoTypeRows,
     bookRows,
   };
+}
+
+// ─── Adaptive trust score ────────────────────────────────────────────────────
+// Given all feedback entries and a calculator key (optionally scoped to a
+// promo type and/or book), compute an aggregate trust signal:
+//   {
+//     sampleSize: number,              // count of settled rows used
+//     accuracyRate: number|null,       // % of settled rows marked yes/close
+//     hitRate:      number|null,       // % of settled rows with profit > 0
+//     averageDrift: number|null,       // avg (actual - expected)
+//     confidence:   "low"|"medium"|"high"|null,
+//     label:        string,            // short human-readable summary
+//   }
+// Pure function. Callers pass `{ feedback, calculatorKey, promoType?, book? }`.
+// Low sample-size returns sampleSize<MIN_TRUST_SAMPLES with confidence="low".
+// Used by CalculatorTrustBadge on calculator result rows to surface
+// data-grounded self-accuracy (e.g., "Accuracy so far: 94% of 23 settlements").
+
+export const MIN_TRUST_SAMPLES = 3;
+
+export function calculatorAccuracy(input = {}) {
+  const { feedback, calculatorKey, promoType = null, book = null } = input;
+  if (!Array.isArray(feedback) || !calculatorKey) {
+    return { sampleSize: 0, accuracyRate: null, hitRate: null, averageDrift: null, confidence: null, label: "" };
+  }
+  const normalizedBook = book ? String(book).trim().toLowerCase() : null;
+  const rows = feedback
+    .map((entry) => normalizeResultFeedback(entry))
+    .filter((entry) => entry.calculatorKey === calculatorKey && entry.status === "settled")
+    .filter((entry) => !promoType || entry.promoType === promoType)
+    .filter((entry) => !normalizedBook || String(entry.book || "").trim().toLowerCase() === normalizedBook);
+
+  const sampleSize = rows.length;
+  if (!sampleSize) {
+    return { sampleSize: 0, accuracyRate: null, hitRate: null, averageDrift: null, confidence: null, label: "" };
+  }
+  const accuracyCount = rows.filter((entry) => ["yes", "close"].includes(entry.calculatorAccurate || "")).length;
+  const hitCount = rows.filter((entry) => (entry.actualProfit ?? 0) > 0).length;
+  const driftRows = rows.filter((entry) => entry.expectedProfit !== null && entry.actualProfit !== null);
+  const averageDrift = driftRows.length
+    ? driftRows.reduce((sum, entry) => sum + (entry.actualProfit - entry.expectedProfit), 0) / driftRows.length
+    : null;
+
+  const accuracyRate = (accuracyCount / sampleSize) * 100;
+  const hitRate = (hitCount / sampleSize) * 100;
+  const confidence = sampleSize < MIN_TRUST_SAMPLES ? "low" : sampleSize < 10 ? "medium" : "high";
+
+  const settlementsLabel = sampleSize === 1 ? "settlement" : "settlements";
+  const label =
+    confidence === "low"
+      ? `Building confidence — ${sampleSize} ${settlementsLabel} so far.`
+      : `Accuracy so far: ${Math.round(accuracyRate)}% across ${sampleSize} ${settlementsLabel}.`;
+
+  return { sampleSize, accuracyRate, hitRate, averageDrift, confidence, label };
 }

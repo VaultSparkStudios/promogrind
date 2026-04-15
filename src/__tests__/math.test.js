@@ -22,6 +22,7 @@ import {
   calcHold,
   calcRR, calcParlay, calcSGP,
   bestOdds,
+  sensitivityBonus, sensitivityBoost, sensitivityFirst,
 } from "../lib/shared.js";
 
 // ─── Odds Converters ──────────────────────────────────────────────────────────
@@ -437,6 +438,28 @@ describe("calcInsurance — insurance cost/benefit (additional)", () => {
     const r = calcInsurance(500, 100, 500, 0);
     expect(r).not.toBeNull();
     expect(parseFloat(r.insVal)).toBeCloseTo(350, 0); // 500 * 0.70
+  });
+});
+
+describe("sensitivity helpers — ±10% hedge-odds band", () => {
+  it("bonus-bet sensitivity returns a band bracketing the base", () => {
+    const base = calcBonus(200, "+300", "-350");
+    const sens = sensitivityBonus(200, "+300", "-350");
+    expect(sens).not.toBeNull();
+    expect(parseFloat(sens.base)).toBeCloseTo(parseFloat(base.g), 2);
+    expect(parseFloat(sens.bandLow)).toBeLessThanOrEqual(parseFloat(base.g) + 0.01);
+    expect(parseFloat(sens.bandHigh)).toBeGreaterThanOrEqual(parseFloat(base.g) - 0.01);
+    expect(parseFloat(sens.deltaPer10pct)).toBeGreaterThanOrEqual(0);
+  });
+
+  it("profit-boost sensitivity responds to hedge odds change", () => {
+    const sens = sensitivityBoost(50, "+200", 50, "250", "-220");
+    expect(sens).not.toBeNull();
+    expect(Number.isFinite(parseFloat(sens.deltaPer10pct))).toBe(true);
+  });
+
+  it("first-bet sensitivity is null with invalid odds", () => {
+    expect(sensitivityFirst(500, "abc", "-170")).toBeNull();
   });
 });
 

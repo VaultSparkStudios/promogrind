@@ -131,6 +131,19 @@
       @supports (padding-bottom: env(safe-area-inset-bottom)) {
         body { padding-bottom: env(safe-area-inset-bottom); }
       }
+
+      /* ── Loading spinner used by <LoadingState/> in src/ui.jsx ────────── */
+      @keyframes pgSpin { to { transform: rotate(360deg); } }
+
+      /* ── Respect reduced motion preference ────────────────────────────── */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
     </style>
     <script>try{if(localStorage.getItem('pg_theme')==='light'){document.body.classList.add('light');document.body.style.background='#f8fafc';document.body.style.color='#1e293b';}}catch(e){}</script>
     <!-- Cloudflare Web Analytics -->

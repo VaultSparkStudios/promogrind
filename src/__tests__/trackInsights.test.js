@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildTrackInsights, formatPromoTypeLabel, updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
+import { buildTrackInsights, calculatorAccuracy, formatPromoTypeLabel, updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
 
 describe("track insights helpers", () => {
   it("formats promo type labels for UI", () => {
@@ -82,5 +82,46 @@ describe("track insights helpers", () => {
     expect(insights.accuracyRate).toBe(50);
     expect(insights.promoTypeRows.find((row) => row.key === "bonus_bet")?.actualProfit).toBe(14);
     expect(insights.bookRows[0].book).toBe("DraftKings");
+  });
+
+  it("computes adaptive trust score per calculator with scoping", () => {
+    const feedback = Array.from({ length: 12 }, (_, i) => ({
+      id: `bb-${i}`,
+      calculatorKey: "bonus-bet",
+      promoType: "bonus_bet",
+      status: "settled",
+      expectedProfit: "15",
+      actualProfit: i < 10 ? "16" : "4",
+      calculatorAccurate: i < 10 ? "yes" : "no",
+      book: i % 2 === 0 ? "DraftKings" : "FanDuel",
+    }));
+    feedback.push({
+      id: "pb-1",
+      calculatorKey: "profit-boost",
+      promoType: "profit_boost",
+      status: "settled",
+      expectedProfit: "8",
+      actualProfit: "8",
+      calculatorAccurate: "yes",
+      book: "Caesars",
+    });
+
+    const all = calculatorAccuracy({ feedback, calculatorKey: "bonus-bet" });
+    expect(all.sampleSize).toBe(12);
+    expect(Math.round(all.accuracyRate)).toBe(83);
+    expect(all.confidence).toBe("high");
+    expect(all.averageDrift).toBeCloseTo((10 * 1 + 2 * -11) / 12, 5);
+
+    const byBook = calculatorAccuracy({ feedback, calculatorKey: "bonus-bet", book: "DraftKings" });
+    expect(byBook.sampleSize).toBe(6);
+
+    const empty = calculatorAccuracy({ feedback, calculatorKey: "no-such-calc" });
+    expect(empty.sampleSize).toBe(0);
+    expect(empty.confidence).toBeNull();
+
+    const lowSample = calculatorAccuracy({ feedback, calculatorKey: "profit-boost" });
+    expect(lowSample.sampleSize).toBe(1);
+    expect(lowSample.confidence).toBe("low");
+    expect(lowSample.label).toMatch(/Building confidence/);
   });
 });

@@ -46,6 +46,78 @@ export const Tl = ({t,badge,bc,shareable,getParams}) => {
 };
 export const Nt = ({children,c}) => (<div style={S.note(c)}>{children}</div>);
 
+// ═══ STATE PRIMITIVES ═══════════════════════════════════════════════════════
+// Use in place of ad-hoc <div>Loading…</div>. All three accept an optional
+// `compact` prop for tight layouts and `label` to override the default copy.
+
+export const LoadingState = ({ label = "Loading…", compact = false }) => (
+  <div
+    role="status"
+    aria-live="polite"
+    style={{
+      display: "flex", alignItems: "center", gap: 10,
+      padding: compact ? "8px 10px" : "14px 16px",
+      color: K.mt, fontSize: compact ? 11 : 12, fontFamily: font,
+    }}
+  >
+    <span
+      aria-hidden="true"
+      style={{
+        width: compact ? 10 : 12, height: compact ? 10 : 12,
+        borderRadius: "50%",
+        border: `2px solid ${K.bd2}`,
+        borderTopColor: K.ac,
+        animation: "pgSpin 0.8s linear infinite",
+      }}
+    />
+    <span>{label}</span>
+  </div>
+);
+
+export const EmptyState = ({ title, body, icon = "∅", action = null, compact = false }) => (
+  <div
+    role="status"
+    style={{
+      display: "flex", flexDirection: "column", alignItems: "center",
+      gap: 6, padding: compact ? "14px" : "24px 16px",
+      textAlign: "center", color: K.mt, fontFamily: font,
+    }}
+  >
+    <span aria-hidden="true" style={{ fontSize: compact ? 20 : 28, opacity: 0.45 }}>{icon}</span>
+    {title && <div style={{ fontSize: compact ? 12 : 13, fontWeight: 600, color: K.dm }}>{title}</div>}
+    {body && <div style={{ fontSize: compact ? 11 : 12, maxWidth: 360, lineHeight: 1.5 }}>{body}</div>}
+    {action}
+  </div>
+);
+
+export const ErrorState = ({ title = "Something went wrong", body, onRetry, compact = false }) => (
+  <div
+    role="alert"
+    style={{
+      display: "flex", flexDirection: "column", gap: 6,
+      padding: compact ? "10px 12px" : "14px 16px",
+      border: `1px solid ${K.rd}40`, background: `${K.rd}08`,
+      borderRadius: 8, color: K.rd, fontFamily: font,
+    }}
+  >
+    <div style={{ fontSize: compact ? 12 : 13, fontWeight: 700 }}>{title}</div>
+    {body && <div style={{ fontSize: compact ? 11 : 12, color: K.dm, lineHeight: 1.5 }}>{body}</div>}
+    {onRetry && (
+      <button
+        onClick={onRetry}
+        style={{
+          alignSelf: "flex-start", marginTop: 4,
+          padding: "6px 12px", fontSize: 11, fontWeight: 600,
+          background: "transparent", border: `1px solid ${K.rd}60`,
+          borderRadius: 6, color: K.rd, cursor: "pointer", fontFamily: font,
+        }}
+      >
+        Retry
+      </button>
+    )}
+  </div>
+);
+
 // ═══ BOOK CTA ═══
 export const BookCTA = () => (
   <div style={{marginTop:14,padding:12,background:`${K.gn}06`,border:`1px solid ${K.gn}20`,borderRadius:8}}>

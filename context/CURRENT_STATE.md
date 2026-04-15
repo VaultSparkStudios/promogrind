@@ -1,8 +1,15 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 134/134 tests green; launch smoke passing
-- version: 24.1.0 · last session: S44 (2026-04-14)
+- this repo remains deployable — build passing, 150/150 tests green; launch smoke passing; browser launch smoke passing in elevated validation; bundle budget passing at ~413KB main chunk
+- version: 24.2.0 · last session: S45 (2026-04-15)
+- **S45 recovery + closeout**: recovered an interrupted refinement tranche and closed it out cleanly with green validation, updated public memory, audit JSON, and GitHub-ready commit state
+- **Promo Intake route (S45)**: Home now includes a dedicated `Promo Intake` surface that parses pasted sportsbook promo text into a normalized promo card and recommends the right calculator
+- **Trust + confidence layer (S45)**: Bonus Bet, Profit Boost, and First Bet now surface calculator trust badges plus sensitivity chips showing how much guaranteed profit moves if hedge odds drift
+- **Shadow Book Mode (S45)**: PromoGrind now estimates first-month cash upside from books the user has not opened yet, turning account coverage into a visible value projection
+- **Accessibility + loading polish (S45)**: reusable `LoadingState` / `EmptyState` / `ErrorState` primitives landed; auth dialog now has proper dialog semantics and `Escape` close support; primary and secondary tab bars now support keyboard nav (`ArrowLeft`, `ArrowRight`, `Home`, `End`)
+- **Security + performance guardrails (S45)**: Cloudflare Pages headers now enforce CSP/referrer/permissions/XFO/HSTS policy; build pipeline now emits `og-image.avif` + `og-image.webp`; bundle budget script enforces a <=420KB main chunk target
+- **AI edge hardening (S45)**: `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` now have both in-memory burst protection and durable `vault_events`-backed rate limiting
 - **Track edge dashboard (S44)**: added a dedicated Track analytics surface that aggregates realized P/L, promo-type hit rate, calculator accuracy, best books, and an unsettled workflow queue for quick settlement
 - **Post-result feedback loop (S44)**: key conversion calculators now ask whether the user placed, skipped, or settled the workflow, capture actual profit plus calculator-accuracy feedback, and feed that data into Track analytics
 - **Browser smoke expansion (S44)**: `scripts/validate-browser-launch-smoke.mjs` now validates static launch routes plus built-client markers for age gate, auth dialog, sportsbook CTA, pricing, auth menu, and mobile layout hooks
@@ -13,7 +20,7 @@ Public-safe summary:
 - **Dashboard tranche 2 (S43)**: added `src/dashboard/today.js` plus extracted dashboard surfaces under `src/components/dashboard/`; `src/App.jsx` now consumes shared dashboard snapshot helpers instead of keeping all home-state logic inline
 - **Today dashboard (S43)**: Home dashboard now explicitly surfaces expiring promos, unfinished work, bankroll posture, recent settled profit, and next-best action in one dedicated panel
 - **Launch copy + smoke alignment (S43)**: smoke-covered marketing pages, trust-strip template, and launch validators now consistently use PromoGrind-native "Free PromoGrind account" language; `scripts/validate-launch-smoke.mjs` updated and passing
-- **Validation coverage (S44)**: dashboard, auth URL helpers, and track-insights coverage are in repo; current suite passes at `134/134`
+- **Validation coverage (S45)**: dashboard, auth URL helpers, track-insights, intake parsing, shadow mode, and sensitivity coverage are in repo; current suite passes at `150/150`
 - **Browser smoke script status (S43)**: browser smoke was updated and later passed in an elevated environment; launch smoke remains passing in-repo
 - **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
 - **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`
@@ -44,6 +51,7 @@ Public-safe summary:
 - WCAG AA contrast compliance: both dark and light themes pass 4.5:1 for all body/label text
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
 - wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
-- edge-function deploy status: updated `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` have been deployed to the linked Supabase project
-- remaining launch blockers: Stripe end-to-end smoke test, remaining referral links in `src/books.js`, and one final friend-facing manual browser/account flow pass
+- edge-function deploy status: prior AI surfaces are deployed, but the new S45 rate-limit updates in `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` are committed in repo and still require deployment
+- remaining code follow-ups: broader keyboard-nav follow-through outside tab bars and continued `App.jsx` route extraction
+- remaining launch blockers: Stripe end-to-end smoke test, remaining referral links in `src/books.js`, one final friend-facing manual browser/account flow pass, and deployment of the S45 edge-function hardening changes
 - detailed internal state now lives in the private Studio OS / ops repository

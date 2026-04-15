@@ -41,6 +41,18 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
     setPassword("");
   }, [open, mode]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        onClose?.();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
   const isSignup = mode !== "signin";
   const heading = isSignup ? "Create your PromoGrind account" : "Sign in to PromoGrind";
   const subheading = isSignup
@@ -99,6 +111,9 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
   return (
     <div
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pg-auth-heading"
       style={{
         position: "fixed",
         inset: 0,
@@ -128,7 +143,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
             <div style={{ fontSize: 10, color: K.gn, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 6 }}>
               PromoGrind Account
             </div>
-            <div style={{ fontSize: 24, color: K.tx, fontWeight: 800, fontFamily: fontD, letterSpacing: "-0.5px", marginBottom: 8 }}>
+            <div id="pg-auth-heading" style={{ fontSize: 24, color: K.tx, fontWeight: 800, fontFamily: fontD, letterSpacing: "-0.5px", marginBottom: 8 }}>
               {heading}
             </div>
             <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, maxWidth: 340 }}>
