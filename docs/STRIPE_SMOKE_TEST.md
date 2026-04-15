@@ -2,6 +2,14 @@
 
 Use this after live/test Stripe secrets and price IDs are set for the deployed Supabase functions.
 
+## Automated Preflight Completed (2026-04-15)
+
+- `create-checkout` deployed and returns HTTP `200` plus a live checkout URL for an authenticated test user.
+- `customer-portal` deployed and returns the expected `404 No billing record found. Complete a purchase first.` for a brand-new user with no subscription yet.
+- Auth-backed edge invocation compatibility was fixed by deploying browser-invoked functions with `verify_jwt = false` in `supabase/config.toml`.
+
+This means the remaining Stripe smoke work is the real payment + webhook + portal lifecycle, not basic function reachability.
+
 ## Preconditions
 
 - `create-checkout`, `stripe-webhook`, and `customer-portal` are deployed.
@@ -25,6 +33,15 @@ Use this after live/test Stripe secrets and price IDs are set for the deployed S
 7. Confirm Stripe Customer Portal opens for the same customer.
 8. Cancel or update payment method in the portal.
 9. Confirm webhook updates the `subscriptions` row.
+
+## What Still Requires A Human
+
+- Completing one real checkout in Stripe Checkout
+- Confirming the `subscriptions` row after webhook processing
+- Opening Customer Portal from the app after purchase
+- Confirming cancel/update actions flow back into Supabase
+
+Without a real browser checkout and payment step, the smoke test is not complete.
 
 ## Pass Criteria
 

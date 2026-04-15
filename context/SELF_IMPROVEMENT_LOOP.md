@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▅ ▅ ▆ ▆ ▆
-Avgs — 3: 440.0 | 5: 433.2 [N=5] | 10: 433.2 [N=5] | 25: — | all: 433.2 [N=5]
-  └ 3-session: Dev 95.0 | Align 87.0 | Momentum 89.0 | Engage 75.0 | Process 93.3
-Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~1.3 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-15 | Session 46 | Total: 440/500 | Velocity: 6 | protocolVelocity: 0
+Sparkline (last 5 totals): ▆ ▆ ▆ ▆ ▇
+Avgs — 3: 447.0 | 5: 440.2 | 10: 436.8 [N=6] | 25: — | all: 436.8 [N=6]
+  └ 3-session: Dev 95.7 | Align 88.0 | Momentum 91.0 | Engage 76.7 | Process 95.0
+Velocity trend: ↓  |  Protocol velocity: →  |  Debt: ↓
+Momentum runway: ~0.6 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-15 | Session 48 | Total: 455/500 | Velocity: 2 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-15 — Session 48 | Total: 455/500 | Velocity: 2 | Debt: ↓
+Avgs — 3: 447.0 | 5: 440.2 | 10: 436.8 [N=6] | 25: — | all: 436.8 [N=6]
+  └ 3-session: Dev 95.7 | Align 88.0 | Momentum 91.0 | Engage 76.7 | Process 95.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 96 | ↑ | The session fixed the real browser auth failure, deployed production edge changes, kept validation green, and removed fake referral-link assumptions from the product surface. |
+| Creative Alignment | 89 | ↑ | The work stayed disciplined and trust-first: no fake launch claims, no invented referral URLs, and no papering over live billing reality. |
+| Momentum | 94 | ↑ | Cleared the highest-risk launch blockers in one pass by pushing live deploys, verifying Stripe preflight, and leaving only truly human/manual launch work. |
+| Engagement | 79 | ↑ | Friend-facing and monetization readiness improved materially, but real proof still depends on the Stripe purchase flow and one manual friend pass. |
+| Process Quality | 97 | ↑ | Public memory, launch docs, truth audit, SIL, entropy, genome, and deploy state were all brought back into sync instead of leaving closeout as implied cleanup. |
+| **Total** | **455/500** | ↑ | |
+
+**Top win:** PromoGrind moved from launch-blocked by real production auth/deploy issues to launch-blocked only by final manual proof and remaining human-owned setup.
+**Top gap:** Real launch confidence still depends on one true Stripe purchase flow, VAPID frontend config, and the remaining monetization links for BetMGM, bet365, and BetRivers.
+**Intent outcome:** Achieved — the session shipped the production fixes, verified the live billing path as far as automation could take it, tightened monetization truthfulness, and closed out memory cleanly.
+
+**Brainstorm**
+1. Add a billing-proof dashboard tile that reports the last successful checkout session, last webhook event, and whether a real customer-portal round-trip has been verified. 
+2. Build a monetization readiness matrix by sportsbook that separates affiliate-approved, personal-referral, waitlisted, and unmonetized states so launch economics stay visible.
+3. Add a guided friend-pass checklist in-app that records whether signup, calculator completion, CTA click-through, and billing discovery all felt trustworthy on first use.
+
+**Committed to TASK_BOARD:** [SIL:1] Drift alert — background diff of projected vs realized profit per promo type · [SIL:1] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
 
 ## 2026-04-15 — Session 46 | Total: 440/500 | Velocity: 6 | Debt: ↓
 Avgs — 3: 440.0 | 5: 433.2 [N=5] | 10: 433.2 [N=5] | 25: — | all: 433.2 [N=5]

@@ -3,12 +3,11 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "S46 is closed out: PromoGrind now has extracted Home launch routes, shared onboarding progress state, browser push-subscription plumbing for Daily Brief, and more truthful launch-readiness / monetization reporting on top of the S45 trust, intake, shadow-book, and edge-hardening tranche.",
-  "nextMilestone": "Deploy the S45 edge-function hardening changes, deploy/enable the Daily Brief push path (`send-daily-brief` + VITE_VAPID_PUBLIC_KEY), then clear the remaining launch blockers: Stripe smoke test, remaining referral links, and the friend-facing account-flow/browser pass.",
+  "currentFocus": "S48 launch-unblock closeout is complete: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config, live Stripe preflight now reaches hosted Checkout, `send-daily-brief` is deployed, and referral-link truthfulness has been tightened around the real remaining monetization gaps.",
+  "nextMilestone": "Set VITE_VAPID_PUBLIC_KEY in production, run the real Stripe smoke test end-to-end, secure real monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and complete the friend-facing account-flow/browser pass.",
   "blockers": [
-    "S45 edge-function hardening still requires deployment",
-    "Daily Brief push alerts need send-daily-brief deployment plus VITE_VAPID_PUBLIC_KEY on the live frontend",
-    "Remaining affiliate/referral links not configured in src/books.js",
+    "Daily Brief push alerts still need VITE_VAPID_PUBLIC_KEY on the live frontend",
+    "Remaining affiliate/referral links are still missing for BetMGM, bet365, and BetRivers",
     "Stripe end-to-end smoke still requires a real account/browser checkout pass",
     "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
@@ -18,7 +17,7 @@
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-15",
   "version": "24.2.0",
-  "lastSession": "S46",
+  "lastSession": "S48",
   "commits": [
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
     "3fdbe8e — chore(s43): finalize SIL closeout state",
@@ -45,13 +44,14 @@
   "stripeStatus": "live",
   "webhookStatus": "live",
   "edgeFunctions": {
-    "promo-chat": "deployed",
-    "promo-advisor": "deployed",
-    "ai-action-plan": "deployed",
-    "stack-builder": "deployed",
+    "promo-chat": "deployed — redeployed 2026-04-15 with publishable-key compatible gateway config",
+    "promo-advisor": "deployed — redeployed 2026-04-15 with publishable-key compatible gateway config",
+    "ai-action-plan": "deployed — redeployed 2026-04-15 with publishable-key compatible gateway config",
+    "stack-builder": "deployed — redeployed 2026-04-15 with publishable-key compatible gateway config",
     "create-checkout": "deployed — success/cancel URLs updated to promogrind.bet",
     "stripe-webhook": "deployed",
     "customer-portal": "deployed — config bpc_1TLsRNGMN60PfJYsM0S0ByAh pinned; cancel + payment method update enabled",
+    "send-daily-brief": "deployed — promogrind.bet daily-brief target pushed live on 2026-04-15",
     "onboarding-drip": "deployed — 9-email drip + trial expiry; all URLs updated to promogrind.bet",
     "weekly-digest": "deployed — batched RESEND send, per-user P/L stats",
     "redeem-beta-code": "deployed — validates beta invite code, upserts subscription row (Runner 30d), marks code used"
@@ -102,21 +102,21 @@
   "knownIssues": {
     "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code",
     "stripe_smoke_manual": "Checkout and billing portal still need one real manual smoke pass with a test account and card",
+    "stripe_preflight_verified": "Live preflight now creates a real hosted Stripe Checkout URL and customer-portal correctly returns 404 for users without a billing record",
     "keyboard_nav_followthrough": "Primary and secondary tab bars now support keyboard nav, but broader interactive-control coverage is still pending",
-    "s45_edge_deploy_pending": "Durable rate-limit updates in promo-chat, promo-advisor, ai-action-plan, and stack-builder are committed locally but still need deployment",
-    "push_brief_public_config_pending": "Daily Brief push subscription wiring is in repo, but production still needs VITE_VAPID_PUBLIC_KEY and deployed send-daily-brief coverage before public enablement"
+    "push_brief_public_config_pending": "Daily Brief push subscription wiring and send-daily-brief are live, but production still needs VITE_VAPID_PUBLIC_KEY before public browser subscriptions should be enabled"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
-  "ignisScore": 45495,
+  "ignisScore": 47652,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-04-14",
-  "entropyScore": 0.179,
+  "ignisLastComputed": "2026-04-15",
+  "entropyScore": 0.136,
   "entropyLastComputed": "2026-04-15",
-  "silScore": 446,
-  "silAvg3": 440.0,
-  "silVelocity": 6,
+  "silScore": 455,
+  "silAvg3": 447,
+  "silVelocity": 2,
   "silDebt": "down",
-  "silLastSession": "S46",
-  "currentSession": 46
+  "silLastSession": "S48",
+  "currentSession": 48
 }

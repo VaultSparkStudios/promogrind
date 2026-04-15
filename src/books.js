@@ -90,7 +90,7 @@ export const BOOKS = [
     // ↓ Replace with your affiliate URL after approval at betmgmpartners.com
     affiliateLink: null,
     referral: "$100 per friend, up to 20/month",
-    referralLink: "https://sports.betmgm.com/en/sports/refer-a-friend",
+    referralLink: null,
     affiliateProgram: "https://www.betmgmpartners.com",
     cpa: "$50+ per depositing user",
     color: "#c4a44a",
@@ -123,8 +123,8 @@ export const BOOKS = [
     signupLink: "https://www.bet365.com/#/AC/B1/C1/D1002/E3/F163/",
     // ↓ Replace with your affiliate URL after approval at bet365partners.com
     affiliateLink: null,
-    referral: "Varies by state",
-    referralLink: "https://www.bet365.com/referral",
+    referral: "No personal referral code available on this account",
+    referralLink: null,
     affiliateProgram: "https://www.bet365partners.com",
     cpa: "30% of net profit RevShare",
     color: "#027b5b",
@@ -140,8 +140,8 @@ export const BOOKS = [
     signupLink: "https://www.espnbet.com/registration",
     // ↓ Replace with your affiliate URL after approval via Penn Interactive
     affiliateLink: null,
-    referral: "Varies",
-    referralLink: "https://www.espnbet.com/refer-a-friend",
+    referral: "Personal referral via TheScore BET / ESPN BET app",
+    referralLink: "https://espnbet.app.link/referafriend?promo_code=REF-CARTER-F1B72D",
     affiliateProgram: "https://www.penninteractive.com/affiliates",
     cpa: "CPA varies by state",
     color: "#d00",
@@ -157,8 +157,8 @@ export const BOOKS = [
     signupLink: "https://www.fanaticssportsbook.com/registration",
     // ↓ Replace with your affiliate URL after approval via Fanatics Partners
     affiliateLink: null,
-    referral: "Varies by state",
-    referralLink: "https://www.fanaticssportsbook.com/refer-a-friend",
+    referral: "Personal referral via Fanatics Sportsbook app",
+    referralLink: "https://fanatics.onelink.me/5kut/qjl64oe9",
     affiliateProgram: "https://www.fanaticssportsbook.com/partners",
     cpa: "CPA model — apply for rates",
     color: "#e44d26",
@@ -174,8 +174,8 @@ export const BOOKS = [
     signupLink: "https://www.betrivers.com/registration",
     // ↓ Replace with your affiliate URL after approval via Rush Street Interactive Partners
     affiliateLink: null,
-    referral: "$100 per friend ($50 deposit req.)",
-    referralLink: "https://www.betrivers.com/refer-a-friend",
+    referral: "No shareable referral URL available — in-app friend invite only",
+    referralLink: null,
     affiliateProgram: "https://www.betrivers.com/affiliates",
     cpa: "$50–100 per depositing user",
     color: "#0066cc",

@@ -6,29 +6,17 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] **Google Search Console** — verified promogrind.bet via Cloudflare DNS TXT, sitemap submitted at https://promogrind.bet/sitemap.xml
 - [x] **RESEND_API_KEY** — confirmed set in Supabase secrets (S39 audit)
 - [x] **Stripe Customer Portal** — config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in edge function (S38/S39)
-- [ ] **Deploy S45 edge-function hardening** — deploy `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` so the new durable rate limits are live in Supabase
-- [ ] **Deploy `send-daily-brief` + keep push schema live** — deploy the edge function and confirm `push_subscriptions` migration remains applied before enabling push alerts publicly
+- [x] **Deploy S45 edge-function hardening** — `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` were redeployed to production on 2026-04-15
+- [x] **Deploy `send-daily-brief` + keep push schema live** — `send-daily-brief` was deployed to production on 2026-04-15
 - [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — required for the new Daily Brief push toggle to create real browser subscriptions on the live frontend
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
-- [ ] **Affiliate/referral links** — finish pasting personal referral URLs into `referralLink` fields in `src/books.js` for the remaining books (DraftKings, FanDuel, and Caesars are now configured)
+- [ ] **Affiliate/referral links** — remaining monetization gaps are `BetMGM`, `bet365`, and `BetRivers`; ESPN BET/TheScore BET and Fanatics are now configured with real personal links
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
 
 ## Now
-- [x] Complete S47 command-center + intelligence tranche — validated new launch-command-center scoring, structured AI payloads, richer Track feedback loop, build, and bundle budget
-- [ ] Push S47 structured AI deploys — deploy updated `promo-advisor` and `ai-action-plan` functions once repo validation is green
-- [x] **S45 stabilization pass** — recovered interrupted refinement tranche; tests, build, and bundle budget are green again
-- [x] Delete orphaned root .jsx duplicates (Promo_Engine_v2/v3, Sportsbook_Promo_Conversion_System) — no root-level orphan `.jsx` duplicates remain in this repo
-- [x] Security headers via `public/_headers` — CSP, Referrer-Policy, Permissions-Policy, X-Content-Type-Options, X-Frame-Options (Cloudflare Pages native)
-- [x] UI primitives in `src/ui.jsx` — state components landed, key loading views use `<LoadingState/>`, auth dialog supports `Escape`, and main tab bars now support Arrow/Home/End keyboard nav
-- [x] Edge rate-limit helper in `supabase/functions/_shared/http.ts` — in-memory burst limiting plus durable `vault_events`-backed enforcement wired into promo-chat, promo-advisor, ai-action-plan, and stack-builder
-- [x] Adaptive trust score — aggregate accuracy per calculator × promo-type × book in `src/track/insights.js`; render "Accuracy so far: X% (N settlements)" on calculator results; feedback ids now use `crypto.randomUUID()` when available
-- [x] [SIL] Confidence layer — pure sensitivity helpers in `src/lib/shared.js`; sensitivity chips now render on key calculator result rows
-- [x] Image pipeline — `sharp` prebuild emits AVIF/WebP for `public/og-image.png`; bundle-budget script enforces main chunk <= 420KB
-- [x] [SIL] Promo intake pipeline — paste pipeline → regex parser → normalized PromoCard (type, book, min odds, max stake, expiry) → auto-suggest calculator
-- [x] Shadow book mode — simulate workflow value on un-owned books to quantify affiliate value
-- [x] Extract `App.jsx` routes into `src/routes/*` — Home `Get Started`, `What's New`, and `About` now live in `src/routes/HomeRoutes.jsx`; broader calculator/domain carve-up continues later
-- [x] [SIL:2⛔] Smart promo alert system — VAPID-aware Daily Brief toggle now writes browser subscriptions through `src/sw-register.js`; `send-daily-brief` payload updated to the live PromoGrind route
-- [x] [SIL:2⛔] Onboarding completion tracker — shared `src/onboarding.js`, dashboard progress card, and Home progress strip now keep `pg_onboarding_steps` visible and durable
+- [ ] PromoGraph domain layer — normalize promos, workflows, recommendations, execution state, and settlements into one shared model
+- [ ] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows
+- [ ] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons
 
 ## Innovation Bets (new this session)
 - **Launch command center** — replace static launch-readiness card with a scored operator cockpit driven by validation, monetization, rollout, and blocker state
@@ -84,14 +72,11 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
-- [ ] PromoGraph domain layer — normalize promos, workflows, recommendations, execution state, and settlements into one shared model
-- [ ] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows
-- [ ] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons
 - [ ] Studio OS / ops export layer — emit structured launch, growth, and intelligence summaries that the wider studio system can consume
-- [ ] [SIL] Drift alert — background diff of projected vs realized profit per promo type
+- [ ] [SIL:1] Drift alert — background diff of projected vs realized profit per promo type
 - [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
 - [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)
-- [ ] [SIL] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
+- [ ] [SIL:1] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
 - [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
 - [ ] Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
 - [ ] Offline write-queue in `src/sync.js` (IndexedDB) for ledger/feedback writes when offline
@@ -105,7 +90,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Bundle budget in CI — fail or warn when first-load bundle exceeds target
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
-- [ ] VAPID public key rollout + `send-daily-brief` deploy confirmation
+- [ ] VAPID public key rollout + real browser subscription verification
 - [x] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
 - [x] [SIL:2⛔] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 - [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults

@@ -1,0 +1,33 @@
+# Browser-invoked functions run behind the project's sb_publishable key.
+# Supabase's gateway JWT verification is not compatible with that key mode,
+# so these functions validate bearer tokens inside their own code instead.
+
+[functions.create-checkout]
+verify_jwt = false
+
+[functions.customer-portal]
+verify_jwt = false
+
+[functions.redeem-beta-code]
+verify_jwt = false
+
+[functions.gift-trial]
+verify_jwt = false
+
+[functions.promo-chat]
+verify_jwt = false
+
+[functions.promo-advisor]
+verify_jwt = false
+
+[functions.ai-action-plan]
+verify_jwt = false
+
+[functions.stack-builder]
+verify_jwt = false
+
+[functions.parse-bet-slip]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false

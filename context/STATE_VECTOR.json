@@ -1,44 +1,44 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-04-15",
-  "generatedAtMs": 1776269500378,
-  "session": 45,
-  "vectorHash": "6452bc984a288176",
-  "silTotal": 446,
-  "silAvg3": 435.3,
-  "velocity": 8,
+  "generatedAtMs": 1776294657336,
+  "session": 48,
+  "vectorHash": "55bd51bba49a3097",
+  "silTotal": 455,
+  "silAvg3": 447,
+  "velocity": 2,
   "debt": "down",
-  "runway": "~0.7 sessions",
-  "intentRate": "100% (last 4)",
+  "runway": "~0.6 sessions",
+  "intentRate": "100% (last 5)",
   "openNow": 3,
-  "openNext": 17,
+  "openNext": 19,
   "openBlocked": 0,
   "topNow": [
-    "Extract `App.jsx` routes into `src/routes/*` — first route extraction pattern la",
-    "[SIL:2⛔] Smart promo alert system — push notification when high-EV promo goes li",
-    "[SIL:2⛔] Onboarding completion tracker — localStorage pg_onboarding_steps[] + pr"
+    "PromoGraph domain layer — normalize promos, workflows, recommendations, executio",
+    "Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed →",
+    "Personalized action ranking — next-best-action should rank by bankroll, legal st"
   ],
   "topNext": [
-    "[SIL] Drift alert — background diff of projected vs realized profit per promo ty",
-    "Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedba",
-    "[SIL] Self-calibration chart — surface \"Your calcs were X% accurate last 30 days"
+    "Studio OS / ops export layer — emit structured launch, growth, and intelligence ",
+    "[SIL:1] Drift alert — background diff of projected vs realized profit per promo ",
+    "Push alert targeting — move beyond generic daily brief toward higher-EV / state-"
   ],
   "health": "green",
   "truthStatus": "green",
   "genome": null,
-  "ignisScore": 45495,
+  "ignisScore": 47652,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 1,
+  "ignisAgeDays": 0,
   "name": "PromoGrind",
   "slug": null,
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Deploy the S45 edge-function hardening changes, continue route extraction + broader keyboard follow-through, then clear launch blockers: Stripe smoke test, remaining referral links, and the friend-facing account-flow/browser pass.",
-  "currentFocus": "S45 is closed out: PromoGrind now has calculator trust badges, sensitivity chips, a Promo Intake route with deterministic parsing, Shadow Book Mode, Cloudflare Pages security headers, durable AI edge rate limits, keyboard-accessible tab bars, and bundle/image guardrails on top of the Track edge dashboard and project-local auth UX.",
-  "lastShipped": "10 improvements across 6 groups — trust/confidence layer, promo intake, shadow-book projection, accessibility/loading polish, edge hardening, performance/security guardrails",
+  "nextMilestone": "Set VITE_VAPID_PUBLIC_KEY in production, run the real Stripe smoke test end-to-end, secure real monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and complete the friend-facing account-flow/browser pass.",
+  "currentFocus": "S48 launch-unblock closeout is complete: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config, live Stripe preflight now reaches hosted Checkout, `send-daily-brief` is deployed, and referral-link truthfulness has been tightened around the real remaining monetization gaps.",
+  "lastShipped": "6 improvements across 5 groups — edge deploys, auth compatibility, Stripe preflight, referral truthfulness, closeout memory",
   "blockers": [
-    "Remaining affiliate/referral links not configured in src/books.js",
-    "Stripe end-to-end smoke still requires a real account/browser checkout pass",
-    "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
+    "Daily Brief push alerts still need VITE_VAPID_PUBLIC_KEY on the live frontend",
+    "Remaining affiliate/referral links are still missing for BetMGM, bet365, and BetRivers",
+    "Stripe end-to-end smoke still requires a real account/browser checkout pass"
   ]
 }

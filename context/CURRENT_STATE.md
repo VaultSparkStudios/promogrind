@@ -2,9 +2,10 @@
 
 Public-safe summary:
 - this repo remains deployable — build passing, 153/153 tests green; launch smoke passing; browser launch smoke passing; bundle budget passing at ~415KB main chunk
-- version: 24.2.0 · last session: S46 (2026-04-15)
-- **S47 intelligence + operator tranche (in progress)**: launch readiness is being upgraded into a scored command-center model; Track now captures skip-reason / friction intelligence; Promo Advisor and AI Action Plan are being pushed toward richer structured outputs instead of loose text blobs
+- version: 24.2.0 · last session: S48 (2026-04-15)
+- **S48 launch-unblock + closeout tranche (closed)**: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config; live Stripe preflight now reaches hosted Checkout; `send-daily-brief` is deployed; ESPN BET/TheScore BET + Fanatics now use real personal referral URLs while non-monetizable generic referral pages were removed for BetMGM, bet365, and BetRivers
 - **S47 intelligence + operator tranche (closed)**: launch readiness now uses a scored command-center model; Track now captures skip-reason / friction intelligence; Promo Advisor and AI Action Plan now expose richer structured outputs for calculator-aware recommendations and ops-facing metadata
+- **Launch verification pass (post-S47)**: live schema checks confirmed both `push_subscriptions` and `subscriptions` tables exist in Supabase; auth-compatible core Edge Functions were redeployed from this workspace; direct live probing now confirms `create-checkout` returns a live checkout URL and `customer-portal` returns the expected pre-purchase `404` for a brand-new user
 - **Operator truthfulness tranche (S47)**: `src/launchState.js` now derives launch-command-center scoring from validation, rollout, monetization, and blocker state instead of leaving the panel as mostly static display copy; test-count drift was corrected to `153/153`
 - **Feedback-loop depth (S47)**: result feedback now captures skip reasons, execution friction, and notes so Track can measure where workflows fail before settlement instead of only whether they settled
 - **AI routing cohesion (S47)**: Promo Advisor now requests/normalizes structured fields like `promoType`, `calculatorSlug`, `confidence`, `riskFlags`, `opportunityScore`, and `opsTags`; app-shell quick-calc routing now listens for those structured recommendations
@@ -61,7 +62,7 @@ Public-safe summary:
 - WCAG AA contrast compliance: both dark and light themes pass 4.5:1 for all body/label text
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
 - wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
-- edge-function deploy status: prior AI surfaces are deployed, but the new S45 rate-limit updates in `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` plus the updated `send-daily-brief` payload still require deployment
+- edge-function deploy status: auth-backed core functions (`create-checkout`, `customer-portal`, `redeem-beta-code`, `gift-trial`, `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`, `parse-bet-slip`, `stripe-webhook`) were redeployed on 2026-04-15 with publishable-key compatible gateway config; `send-daily-brief` was also deployed the same day
 - remaining code follow-ups: broader keyboard-nav follow-through outside tab bars, deeper calculator/domain extraction out of `App.jsx`, and richer promo-alert targeting beyond the current daily-brief push groundwork
-- remaining launch blockers: Stripe end-to-end smoke test, remaining referral links in `src/books.js`, one final friend-facing manual browser/account flow pass, deployment of the S45 edge-function hardening changes, and setting `VITE_VAPID_PUBLIC_KEY` in the deployed frontend if push alerts should be live
+- remaining launch blockers: setting `VITE_VAPID_PUBLIC_KEY` in the deployed frontend if push alerts should be live, Stripe end-to-end smoke test, remaining monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and one final friend-facing manual browser/account flow pass
 - detailed internal state now lives in the private Studio OS / ops repository

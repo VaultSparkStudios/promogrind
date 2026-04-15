@@ -2,6 +2,35 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 48 (2026-04-15) — CLOSED
+
+**Session Intent:** Clear the remaining repo-side launch blockers in one pass, push the production-facing fixes live, tighten referral-link truthfulness, then commit/push and close out memory cleanly.
+
+## Where We Left Off (Session 48 — CLOSED)
+
+- Shipped: 6 improvements across 5 groups — edge deploys, auth compatibility, Stripe preflight, referral truthfulness, closeout memory
+- Tests: 153/153 passing · delta: 0
+- Deploy: deployed to production — auth-backed Edge Functions and `send-daily-brief` were pushed live
+- Session type: implementation + deploy + closeout
+
+## Current Delta Since S47
+
+- Added `supabase/config.toml` and redeployed browser-invoked Edge Functions with `verify_jwt = false` so publishable-key auth works again for billing and other authenticated browser calls.
+- Confirmed the live `UNAUTHORIZED_UNSUPPORTED_TOKEN_ALGORITHM (ES256)` checkout failure is gone: `create-checkout` now returns a real hosted Stripe Checkout URL and `customer-portal` correctly returns a pre-purchase `404` for a brand-new user.
+- Deployed `send-daily-brief` so the push backend now matches the repo-side Daily Brief work.
+- Updated `src/books.js` with real personal referral links for ESPN BET / TheScore BET and Fanatics Sportsbook.
+- Removed generic/non-personal referral placeholders for BetMGM, bet365, and BetRivers so those books no longer pretend to monetize through fake referral URLs.
+- Refreshed launch-state files, Stripe smoke docs, project status, truth audit, SIL, work log, audit JSON, state vector, entropy, and genome history for a real Session 48 closeout.
+- Validation after closeout: `npm.cmd test`, `npm.cmd run build`, `node scripts/check-bundle-budget.mjs`, and `npm.cmd run smoke:launch` all passed.
+- Remaining manual / external blockers: set `VITE_VAPID_PUBLIC_KEY` in production, run the real Stripe smoke flow, secure real monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and perform the friend-facing pass.
+
+## Human Action Required
+
+- [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before the Daily Brief push toggle should be exposed as a live browser subscription feature.
+- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](/C:/Users/p4cka/documents/development/promogrind/docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
+- [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available; those books now truthfully fall back to non-monetized signup paths.
+- [ ] **Friend beta pass** — create/sign in with a normal friend-facing PromoGrind account and verify auth, calculator, CTA, and pricing flows feel launch-ready.
+
 ## Session 47 (2026-04-15) — CLOSED
 
 **Session Intent:** Upgrade PromoGrind's operator intelligence, feedback loop, and launch-readiness truthfulness in one integrated tranche rather than adding more isolated features.

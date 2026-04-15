@@ -95,8 +95,20 @@ export const LAUNCH_BLOCKERS = [
   {
     key: "edgeDeploy",
     label: "Edge hardening deploy",
+    status: "cleared",
+    detail: "Core auth-backed edge functions were redeployed on 2026-04-15 so production now matches the repo for checkout, portal, AI, gift, and beta flows.",
+  },
+  {
+    key: "pushConfig",
+    label: "Push config",
     status: "manual",
-    detail: "Deploy the updated promo-chat, promo-advisor, ai-action-plan, and stack-builder functions so durable rate limits are live.",
+    detail: "Set VITE_VAPID_PUBLIC_KEY in the live frontend before exposing Daily Brief push publicly.",
+  },
+  {
+    key: "edgeAuth",
+    label: "Edge auth compatibility",
+    status: "cleared",
+    detail: "Resolved on 2026-04-15 by deploying Edge Functions with per-function verify_jwt=false config for publishable-key browser calls.",
   },
   {
     key: "stripeSmoke",
@@ -151,7 +163,7 @@ export const FEATURE_INFO = {
   paidCheckout: {
     label: "Paid Checkout",
     shortReason: "Paid checkout stays disabled until live billing is configured.",
-    setup: "Requires live Stripe products + live secrets + webhook deployment.",
+    setup: "Requires live Stripe products + live secrets + webhook deployment + auth-compatible edge invocation.",
   },
 };
 
@@ -228,8 +240,8 @@ export function getLaunchCommandCenter(input = {}) {
     readinessScore >= 45 ? "blocked" :
     "fragile";
 
-  const nextActions = [
-    unresolvedBlockers.find((item) => item.key === "edgeDeploy"),
+    const nextActions = [
+    unresolvedBlockers.find((item) => item.key === "pushConfig"),
     unresolvedBlockers.find((item) => item.key === "stripeSmoke"),
     unresolvedBlockers.find((item) => item.key === "affiliateLinks"),
     unresolvedBlockers.find((item) => item.key === "friendPass"),

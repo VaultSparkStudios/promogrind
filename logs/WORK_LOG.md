@@ -1,5 +1,21 @@
 # Work Log
 
+## 2026-04-15 — S48 Launch Unblock + Full Closeout
+
+- Added `supabase/config.toml` so browser-invoked Edge Functions deploy with `verify_jwt = false` and remain compatible with the project's `sb_publishable_...` auth flow.
+- Redeployed `create-checkout`, `customer-portal`, `redeem-beta-code`, `gift-trial`, `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`, `parse-bet-slip`, and `stripe-webhook` to production.
+- Redeployed `supabase/functions/send-daily-brief/index.ts` so the push-notification backend now matches the repo state.
+- Verified live Supabase schema prerequisites: both `push_subscriptions` and `subscriptions` exist in production.
+- Verified live Stripe preflight: `create-checkout` returns a hosted `checkout.stripe.com` URL and `customer-portal` returns the expected `404` for users without a billing record yet.
+- Updated `src/books.js` with real personal referral links for ESPN BET / TheScore BET and Fanatics Sportsbook.
+- Removed fake/generic referral placeholders for BetMGM, bet365, and BetRivers so those books now truthfully fall back to signup/homepage links until real monetization paths exist.
+- Refreshed launch-state, Stripe smoke documentation, and public memory/context files to S48 closeout state.
+- Ran studio-ops closeout tooling: IGNIS rescore, doctor, state-vector, entropy, genome snapshot, and genome-history refresh.
+- Verified `npm.cmd test` → 153/153 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`401.4KB` main chunk under 420KB target).
+- Verified `npm.cmd run smoke:launch` → passing.
+
 ## 2026-04-15 — S46 Launch-Readiness Closeout
 
 - Extracted Home launch surfaces into `src/routes/HomeRoutes.jsx` and added shared onboarding state in `src/onboarding.js` so `App.jsx` no longer owns those pages directly.

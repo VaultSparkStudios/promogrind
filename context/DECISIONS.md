@@ -61,3 +61,13 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** This preserves the studio's single-account system, contact graph, and cross-project portability without forcing friend-facing users through Vault-branded account creation at the point of conversion. The result is lower trust friction, cleaner project branding, and a reusable pattern for future apps.
 
 ---
+
+## 2026-04-15 — Browser-invoked Supabase functions must disable gateway JWT verification under publishable-key auth
+
+**Decision:** PromoGrind's browser-invoked Supabase Edge Functions now declare `verify_jwt = false` in `supabase/config.toml` and continue validating bearer tokens inside function code with `supabase.auth.getUser(...)`.
+
+**Applies to this project:** Yes — this now covers the browser-facing billing, AI, beta-code, gift-trial, stack-builder, and bet-slip parsing functions.
+
+**Rationale:** The project uses a modern `sb_publishable_...` frontend key. Supabase gateway JWT verification is not compatible with that key mode for Edge Functions, which caused live auth-backed invocation to fail with `UNAUTHORIZED_UNSUPPORTED_TOKEN_ALGORITHM (ES256)`. Disabling gateway verification and keeping auth checks inside the function restores compatibility without relaxing project-side authorization logic.
+
+---
