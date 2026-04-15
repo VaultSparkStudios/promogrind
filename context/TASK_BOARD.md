@@ -6,6 +6,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] **Google Search Console** — verified promogrind.bet via Cloudflare DNS TXT, sitemap submitted at https://promogrind.bet/sitemap.xml
 - [x] **RESEND_API_KEY** — confirmed set in Supabase secrets (S39 audit)
 - [x] **Stripe Customer Portal** — config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in edge function (S38/S39)
+- [ ] **Deploy S45 edge-function hardening** — deploy `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` so the new durable rate limits are live in Supabase
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
 - [ ] **Affiliate/referral links** — finish pasting personal referral URLs into `referralLink` fields in `src/books.js` for the remaining books (DraftKings, FanDuel, and Caesars are now configured)
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary

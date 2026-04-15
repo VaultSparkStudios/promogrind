@@ -115,6 +115,7 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 ### Session Intent: Complete all at highest quality · Outcome: Achieved
 
 ## Human Action Required
+- [ ] **Deploy S45 edge-function hardening** — deploy `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` so the durable rate limits added this session are live
 - [ ] **Stripe smoke test** — use the flow in `docs/STRIPE_SMOKE_TEST.md` against the deployed app and confirm `subscriptions` writes + customer-portal redirect
 - [ ] **Affiliate/referral links** — paste the remaining real referral URLs into `src/books.js` so CTA clicks monetize correctly
 - [ ] **Friend beta pass** — create/sign in with a friend-facing PromoGrind account and verify the project-local auth + calculator flow feels launch-ready
