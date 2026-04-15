@@ -14,7 +14,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
 
 ## Now
-- [ ] Complete S47 command-center + intelligence tranche — validate new launch-command-center scoring, structured AI payloads, and richer Track feedback loop end-to-end
+- [x] Complete S47 command-center + intelligence tranche — validated new launch-command-center scoring, structured AI payloads, richer Track feedback loop, build, and bundle budget
 - [ ] Push S47 structured AI deploys — deploy updated `promo-advisor` and `ai-action-plan` functions once repo validation is green
 - [x] **S45 stabilization pass** — recovered interrupted refinement tranche; tests, build, and bundle budget are green again
 - [x] Delete orphaned root .jsx duplicates (Promo_Engine_v2/v3, Sportsbook_Promo_Conversion_System) — no root-level orphan `.jsx` duplicates remain in this repo
