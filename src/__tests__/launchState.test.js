@@ -1,26 +1,39 @@
 import { describe, expect, it } from "vitest";
-import { getProjectAuthHref, getProjectAuthMode } from "../launchState.js";
+import { getLaunchCommandCenter, getValidationSignal, resolveLaunchValidation } from "../launchState.js";
 
-describe("launch auth helpers", () => {
-  it("parses supported auth modes from query strings", () => {
-    expect(getProjectAuthMode("?auth=signup")).toBe("signup");
-    expect(getProjectAuthMode("?auth=signin")).toBe("signin");
-    expect(getProjectAuthMode("?auth=else")).toBeNull();
-    expect(getProjectAuthMode("")).toBeNull();
+describe("launch state helpers", () => {
+  it("classifies validation strings into signals", () => {
+    expect(getValidationSignal("passing")).toBe("passing");
+    expect(getValidationSignal("153/153 passing")).toBe("passing");
+    expect(getValidationSignal("blocked by deploy")).toBe("failing");
+    expect(getValidationSignal("stale")).toBe("warning");
   });
 
-  it("adds the requested auth mode to the current URL", () => {
-    const href = getProjectAuthHref("signup", "https://promogrind.bet/dashboard?tab=today");
-    const url = new URL(href);
+  it("resolves validation rows with merged signals", () => {
+    const validation = resolveLaunchValidation({
+      tests: { lastKnown: "153/153 passing" },
+      browserSmoke: { lastKnown: "blocked by environment" },
+    });
 
-    expect(url.origin).toBe("https://promogrind.bet");
-    expect(url.pathname).toBe("/dashboard");
-    expect(url.searchParams.get("tab")).toBe("today");
-    expect(url.searchParams.get("auth")).toBe("signup");
+    expect(validation.tests.signal).toBe("passing");
+    expect(validation.browserSmoke.signal).toBe("failing");
   });
 
-  it("falls back to signup for invalid modes", () => {
-    const href = getProjectAuthHref("invalid", "https://promogrind.bet/");
-    expect(new URL(href).searchParams.get("auth")).toBe("signup");
+  it("derives a launch command-center score and next actions", () => {
+    const center = getLaunchCommandCenter({
+      configuredAffiliateCount: 3,
+      configuredMonetizationCount: 6,
+      totalBooks: 12,
+      validation: resolveLaunchValidation({
+        tests: { lastKnown: "153/153 passing" },
+        build: { lastKnown: "passing" },
+        smokeCommand: { lastKnown: "passing" },
+        browserSmoke: { lastKnown: "passing" },
+      }),
+    });
+
+    expect(center.validationPassingCount).toBe(4);
+    expect(center.readinessScore).toBeGreaterThan(40);
+    expect(center.nextActions.length).toBeGreaterThan(0);
   });
 });

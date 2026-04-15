@@ -2,6 +2,18 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 47 (2026-04-15) — IN PROGRESS
+
+**Session Intent:** Upgrade PromoGrind's operator intelligence, feedback loop, and launch-readiness truthfulness in one integrated tranche rather than adding more isolated features.
+
+## Current Delta (Session 47 — in progress)
+
+- Launch readiness is being upgraded into a scored command-center model derived from validation, monetization, affiliate coverage, rollout, and blocker state.
+- Result feedback now captures skip reasons, execution friction, and notes so Track can learn from blocked workflows, not just settled outcomes.
+- Promo Advisor now requests and normalizes richer machine-usable fields (`promoType`, `calculatorSlug`, `confidence`, `riskFlags`, `opportunityScore`, `opsTags`) and the app shell now supports quick routing into recommended calculators.
+- AI Action Plan output is being moved toward richer structured actions with priority, target book, calculator slug, and ops tags.
+- Remaining work in this tranche: validate repo state, deploy updated edge functions, and continue the deeper roadmap items (PromoGraph, workflow inbox, personalized action ranking, Studio OS export layer) in follow-up sessions.
+
 ## Session 46 (2026-04-15) — CLOSED
 
 **Session Intent:** Complete the active Now bucket, finish repo-side launch-readiness work for social/friend sharing, push to GitHub, and close out memory/context cleanly.

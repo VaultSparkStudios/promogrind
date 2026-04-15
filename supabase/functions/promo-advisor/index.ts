@@ -5,14 +5,55 @@ import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, r
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
 const SYSTEM_PROMPT = `You are a sports betting promo analyst for PromoGrind. A user will paste sportsbook promotion text or T&Cs. Analyze it and return ONLY a valid JSON object (no markdown, no code blocks) with these exact fields:
-- "verdict": short punchy rating string (e.g., "Excellent Value", "Good Deal", "Mediocre Offer", "Skip This One")
+- "verdict": short punchy rating string
 - "rating": one of "excellent" | "good" | "fair" | "poor"
+- "confidence": one of "high" | "medium" | "low"
+- "promoType": one of "bonus_bet" | "profit_boost" | "safety_net" | "deposit_match" | "insurance" | "parlay" | "arb" | "other"
+- "calculatorSlug": one of "bonus-bet" | "profit-boost" | "first-bet" | "deposit-match" | "insurance" | "parlay" | "arb-2way" | "ev" | "hedge" | null
 - "explanation": 2-3 plain English sentences — is it worth claiming, key conditions, conversion strategy
-- "ev": estimated expected value as a percentage or dollar range (e.g., "+68% EV", "$80-130 cash equivalent", "~$140 guaranteed")
-- "action": recommended action in 1 sentence (e.g., "Claim and hedge immediately on FanDuel at -140 or better")
-- "hedge": brief hedge strategy if applicable (e.g., "Bet opposite at -150 to lock $82"), or null if not applicable
+- "ev": estimated expected value as a percentage or dollar range
+- "action": recommended action in 1 sentence
+- "hedge": brief hedge strategy if applicable, or null
+- "nextStep": one short imperative next step
+- "riskFlags": array of short risk strings (0-3 items)
+- "opportunityScore": integer 0-100
+- "opsTags": array of 1-4 short machine-friendly tags
 
-Be concise and actionable. Focus on the real cash value after optimal hedging.`;
+Be concise, practical, and product-native. Focus on real cash value after optimal hedging and route the user to the best next PromoGrind calculator when possible.`;
+
+function normalizeAdvisorResult(input: Record<string, unknown>, fallbackText = "") {
+  const rating = ["excellent", "good", "fair", "poor"].includes(String(input.rating || "").toLowerCase())
+    ? String(input.rating).toLowerCase()
+    : "fair";
+  const confidence = ["high", "medium", "low"].includes(String(input.confidence || "").toLowerCase())
+    ? String(input.confidence).toLowerCase()
+    : "medium";
+  const promoType = ["bonus_bet", "profit_boost", "safety_net", "deposit_match", "insurance", "parlay", "arb", "other"].includes(String(input.promoType || "").toLowerCase())
+    ? String(input.promoType).toLowerCase()
+    : "other";
+  const calculatorSlug = ["bonus-bet", "profit-boost", "first-bet", "deposit-match", "insurance", "parlay", "arb-2way", "ev", "hedge"].includes(String(input.calculatorSlug || ""))
+    ? String(input.calculatorSlug)
+    : null;
+  const riskFlags = Array.isArray(input.riskFlags) ? input.riskFlags.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 3) : [];
+  const opsTags = Array.isArray(input.opsTags) ? input.opsTags.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean).slice(0, 4) : [];
+  const parsedScore = Number.parseInt(String(input.opportunityScore ?? ""), 10);
+
+  return {
+    verdict: String(input.verdict || "Analysis Complete").trim(),
+    rating,
+    confidence,
+    promoType,
+    calculatorSlug,
+    explanation: String(input.explanation || fallbackText || "Analysis complete.").trim(),
+    ev: input.ev ?? null,
+    action: input.action ? String(input.action).trim() : null,
+    hedge: input.hedge ? String(input.hedge).trim() : null,
+    nextStep: input.nextStep ? String(input.nextStep).trim() : null,
+    riskFlags,
+    opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : 50,
+    opsTags,
+  };
+}
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -86,14 +127,7 @@ serve(async (req) => {
       const cleaned = content.replace(/```json?\n?/g, "").replace(/```/g, "").trim();
       parsed = JSON.parse(cleaned);
     } catch {
-      parsed = {
-        verdict: "Analysis Complete",
-        rating: "fair",
-        explanation: content,
-        ev: null,
-        action: null,
-        hedge: null,
-      };
+      parsed = {};
     }
 
     await recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
@@ -101,7 +135,10 @@ serve(async (req) => {
       tier: access.tier,
     });
 
-    return json(req, { ...parsed, remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1) });
+    return json(req, {
+      ...normalizeAdvisorResult(parsed, content),
+      remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
+    });
   } catch (err) {
     console.error("promo-advisor error:", err);
     return json(req, { error: "Internal error" }, 500);

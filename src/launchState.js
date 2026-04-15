@@ -76,7 +76,7 @@ export const LAUNCH_VALIDATION = {
   tests: {
     label: "Vitest",
     command: "npm test",
-    lastKnown: "150/150 passing",
+    lastKnown: "153/153 passing",
   },
   build: {
     label: "Build",
@@ -169,5 +169,83 @@ export function getLaunchSummary() {
     enabledCount,
     disabledCount: FEATURE_KEYS.length - enabledCount,
     totalCount: FEATURE_KEYS.length,
+  };
+}
+
+export function getValidationSignal(value = "") {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (!normalized) return "unknown";
+  if (/(fail|error|blocked|broken|timeout)/i.test(normalized)) return "failing";
+  if (/(passing|pass|\d+\/\d+)/i.test(normalized)) return "passing";
+  return "warning";
+}
+
+export function resolveLaunchValidation(overrides = {}) {
+  const resolved = {};
+  for (const [key, value] of Object.entries(LAUNCH_VALIDATION)) {
+    resolved[key] = {
+      ...value,
+      ...(overrides[key] || {}),
+      signal: getValidationSignal((overrides[key] || {}).lastKnown ?? value.lastKnown),
+    };
+  }
+  return resolved;
+}
+
+export function getLaunchCommandCenter(input = {}) {
+  const {
+    configuredAffiliateCount = 0,
+    configuredMonetizationCount = 0,
+    totalBooks = 0,
+    blockers = LAUNCH_BLOCKERS,
+    validation = resolveLaunchValidation(),
+  } = input;
+
+  const validationRows = Object.values(validation);
+  const validationPassingCount = validationRows.filter((row) => row.signal === "passing").length;
+  const validationScore = validationRows.length ? Math.round((validationPassingCount / validationRows.length) * 100) : 0;
+  const monetizationScore = totalBooks > 0 ? Math.round((configuredMonetizationCount / totalBooks) * 100) : 0;
+  const affiliateScore = totalBooks > 0 ? Math.round((configuredAffiliateCount / totalBooks) * 100) : 0;
+  const unresolvedBlockers = blockers.filter((blocker) => blocker.status === "manual");
+  const blockerPenalty = Math.min(unresolvedBlockers.length * 8, 32);
+  const featureRollout = getLaunchSummary();
+  const rolloutScore = featureRollout.totalCount ? Math.round((featureRollout.enabledCount / featureRollout.totalCount) * 100) : 0;
+
+  const readinessScore = Math.max(
+    0,
+    Math.round(
+      validationScore * 0.35 +
+      monetizationScore * 0.2 +
+      affiliateScore * 0.1 +
+      rolloutScore * 0.15 +
+      (100 - blockerPenalty) * 0.2
+    ),
+  );
+
+  const posture =
+    readinessScore >= 85 ? "ready" :
+    readinessScore >= 65 ? "advancing" :
+    readinessScore >= 45 ? "blocked" :
+    "fragile";
+
+  const nextActions = [
+    unresolvedBlockers.find((item) => item.key === "edgeDeploy"),
+    unresolvedBlockers.find((item) => item.key === "stripeSmoke"),
+    unresolvedBlockers.find((item) => item.key === "affiliateLinks"),
+    unresolvedBlockers.find((item) => item.key === "friendPass"),
+  ].filter(Boolean).slice(0, 4);
+
+  return {
+    readinessScore,
+    posture,
+    validationScore,
+    monetizationScore,
+    affiliateScore,
+    rolloutScore,
+    validationPassingCount,
+    validationTotal: validationRows.length,
+    unresolvedBlockerCount: unresolvedBlockers.length,
+    nextActions,
+    validation,
   };
 }

@@ -14,6 +14,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
 
 ## Now
+- [ ] Complete S47 command-center + intelligence tranche — validate new launch-command-center scoring, structured AI payloads, and richer Track feedback loop end-to-end
+- [ ] Push S47 structured AI deploys — deploy updated `promo-advisor` and `ai-action-plan` functions once repo validation is green
 - [x] **S45 stabilization pass** — recovered interrupted refinement tranche; tests, build, and bundle budget are green again
 - [x] Delete orphaned root .jsx duplicates (Promo_Engine_v2/v3, Sportsbook_Promo_Conversion_System) — no root-level orphan `.jsx` duplicates remain in this repo
 - [x] Security headers via `public/_headers` — CSP, Referrer-Policy, Permissions-Policy, X-Content-Type-Options, X-Frame-Options (Cloudflare Pages native)
@@ -29,6 +31,10 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] [SIL:2⛔] Onboarding completion tracker — shared `src/onboarding.js`, dashboard progress card, and Home progress strip now keep `pg_onboarding_steps` visible and durable
 
 ## Innovation Bets (new this session)
+- **Launch command center** — replace static launch-readiness card with a scored operator cockpit driven by validation, monetization, rollout, and blocker state
+- **Execution-friction telemetry** — capture why workflows were skipped or blocked, then feed that back into Track and the next-best-action loop
+- **Structured AI decision cards** — force Promo Advisor / Action Plan outputs into calculator-aware, ops-tagged JSON instead of prose-only blobs
+- **Quick-calc event routing** — AI recommendations can now deep-link directly into the right calculator instead of stopping at explanation
 - **Adaptive trust score** — per-calculator × promo-type × book accuracy, visible on results
 - **Sensitivity chips** — hover bands show how much output moves per 10% input change
 - **Shadow book mode** — quantify weekly value of creating an account at un-owned books (drives affiliate conversion)
@@ -78,6 +84,10 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
+- [ ] PromoGraph domain layer — normalize promos, workflows, recommendations, execution state, and settlements into one shared model
+- [ ] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows
+- [ ] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons
+- [ ] Studio OS / ops export layer — emit structured launch, growth, and intelligence summaries that the wider studio system can consume
 - [ ] [SIL] Drift alert — background diff of projected vs realized profit per promo type
 - [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
 - [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)

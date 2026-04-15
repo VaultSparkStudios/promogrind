@@ -49,6 +49,7 @@ export default function TrackInsights() {
         {metricCard("Month Profit", `${insights.monthProfit >= 0 ? "+" : "-"}$${f(Math.abs(insights.monthProfit))}`, `${insights.settledCount} settled workflow${insights.settledCount === 1 ? "" : "s"}`, insights.monthProfit >= 0 ? K.ac : K.rd)}
         {metricCard("Promo Hit Rate", insights.hitRate === null ? "—" : `${f(insights.hitRate, 0)}%`, insights.hitRate === null ? "Needs settled workflow data" : `${insights.settledCount} settled`, insights.hitRate !== null && insights.hitRate >= 70 ? K.gn : K.yl)}
         {metricCard("Calc Accuracy", insights.accuracyRate === null ? "—" : `${f(insights.accuracyRate, 0)}%`, insights.accuracyRate === null ? "Mark settled outcomes first" : "Yes + close responses", insights.accuracyRate !== null && insights.accuracyRate >= 75 ? K.gn : K.yl)}
+        {metricCard("Execution Rate", insights.executionRate === null ? "—" : `${f(insights.executionRate, 0)}%`, `${insights.attemptedCount} attempted · ${insights.skippedFeedback.length} skipped`, insights.executionRate !== null && insights.executionRate >= 70 ? K.gn : K.yl)}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12, alignItems: "start", marginBottom: 14 }}>
@@ -160,6 +161,44 @@ export default function TrackInsights() {
             })}
           </div>
         )}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, alignItems: "start", marginTop: 14 }}>
+        <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Skip Reasons</div>
+          {insights.skipReasonRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Skip reasons will appear once users mark why a workflow was passed over.</div>}
+          {insights.skipReasonRows.map((row) => (
+            <div key={row.key} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
+              <div style={{ fontSize: 11, color: K.dm }}>{row.label}</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: K.yl }}>{row.count}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Drift Watchlist</div>
+          {!insights.biggestNegativeDrift && !insights.biggestPositiveDrift && (
+            <div style={{ fontSize: 11, color: K.mt }}>Drift signals appear once expected and actual profit are both captured on settled workflows.</div>
+          )}
+          {insights.biggestNegativeDrift && (
+            <div style={{ padding: 10, background: `${K.rd}08`, border: `1px solid ${K.rd}20`, borderRadius: 8, marginBottom: 8 }}>
+              <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 4 }}>Coldest lane</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{insights.biggestNegativeDrift.label}</div>
+              <div style={{ fontSize: 11, color: K.rd }}>
+                Avg drift {insights.biggestNegativeDrift.averageDrift >= 0 ? "+" : "-"}${f(Math.abs(insights.biggestNegativeDrift.averageDrift || 0))}
+              </div>
+            </div>
+          )}
+          {insights.biggestPositiveDrift && (
+            <div style={{ padding: 10, background: `${K.gn}08`, border: `1px solid ${K.gn}20`, borderRadius: 8 }}>
+              <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 4 }}>Strongest lane</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{insights.biggestPositiveDrift.label}</div>
+              <div style={{ fontSize: 11, color: K.gn }}>
+                Avg drift {insights.biggestPositiveDrift.averageDrift >= 0 ? "+" : "-"}${f(Math.abs(insights.biggestPositiveDrift.averageDrift || 0))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

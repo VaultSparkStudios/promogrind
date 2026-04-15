@@ -60,9 +60,9 @@ Respond with JSON only — no markdown, no explanation outside the JSON:
 {
   "summary": "One sentence overview of their week's best opportunity.",
   "actions": [
-    { "title": "Specific action title", "why": "1-2 sentence explanation of why this is the right move for them right now", "value": "Est. $X–$Y" },
-    { "title": "Specific action title", "why": "1-2 sentence explanation", "value": "Est. $X–$Y" },
-    { "title": "Specific action title", "why": "1-2 sentence explanation", "value": "Est. $X" }
+    { "title": "Specific action title", "why": "1-2 sentence explanation of why this is the right move for them right now", "value": "Est. $X–$Y", "priority": "high", "calculatorSlug": "bonus-bet", "bookTarget": "DraftKings", "opsTags": ["welcome_offer", "fast_cash"] },
+    { "title": "Specific action title", "why": "1-2 sentence explanation", "value": "Est. $X–$Y", "priority": "medium", "calculatorSlug": "profit-boost", "bookTarget": "FanDuel", "opsTags": ["reload", "watch"] },
+    { "title": "Specific action title", "why": "1-2 sentence explanation", "value": "Est. $X", "priority": "medium", "calculatorSlug": "hedge", "bookTarget": "Caesars", "opsTags": ["cleanup"] }
   ]
 }`;
 

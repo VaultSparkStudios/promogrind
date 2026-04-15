@@ -15,20 +15,24 @@ describe("track insights helpers", () => {
       promoType: "bonus_bet",
       status: "placed",
       expectedProfit: "14.25",
+      frictionReason: "odds_moved",
     });
 
     expect(created).toHaveLength(1);
     expect(created[0].expectedProfit).toBe(14.25);
+    expect(created[0].frictionReason).toBe("odds_moved");
 
     const updated = updateResultFeedback(created, "one", {
       status: "settled",
       actualProfit: "13.8",
       calculatorAccurate: "close",
+      note: "Hedge still available",
     });
 
     expect(updated[0].status).toBe("settled");
     expect(updated[0].actualProfit).toBe(13.8);
     expect(updated[0].calculatorAccurate).toBe("close");
+    expect(updated[0].note).toBe("Hedge still available");
   });
 
   it("aggregates promo hit rate, profit, and book performance", () => {
@@ -72,16 +76,30 @@ describe("track insights helpers", () => {
           book: "BetMGM",
           createdAt: "2026-04-14T12:10:00Z",
         },
+        {
+          id: "d",
+          calculatorKey: "ev",
+          calculatorLabel: "Expected Value Calculator",
+          promoType: "other",
+          status: "skipped",
+          expectedProfit: "8",
+          skipReason: "odds_moved",
+          note: "Market moved before entry",
+          createdAt: "2026-04-14T12:15:00Z",
+        },
       ],
     }, new Date("2026-04-14T13:00:00Z"));
 
     expect(insights.totalProfit).toBe(35);
     expect(insights.settledCount).toBe(2);
     expect(insights.openFeedback).toHaveLength(1);
+    expect(insights.skippedFeedback).toHaveLength(1);
     expect(insights.hitRate).toBe(50);
     expect(insights.accuracyRate).toBe(50);
+    expect(Math.round(insights.executionRate)).toBe(75);
     expect(insights.promoTypeRows.find((row) => row.key === "bonus_bet")?.actualProfit).toBe(14);
     expect(insights.bookRows[0].book).toBe("DraftKings");
+    expect(insights.skipReasonRows[0].key).toBe("odds_moved");
   });
 
   it("computes adaptive trust score per calculator with scoping", () => {

@@ -3,6 +3,10 @@
 Public-safe summary:
 - this repo remains deployable — build passing, 153/153 tests green; launch smoke passing; browser launch smoke passing; bundle budget passing at ~415KB main chunk
 - version: 24.2.0 · last session: S46 (2026-04-15)
+- **S47 intelligence + operator tranche (in progress)**: launch readiness is being upgraded into a scored command-center model; Track now captures skip-reason / friction intelligence; Promo Advisor and AI Action Plan are being pushed toward richer structured outputs instead of loose text blobs
+- **Operator truthfulness tranche (S47)**: `src/launchState.js` now derives launch-command-center scoring from validation, rollout, monetization, and blocker state instead of leaving the panel as mostly static display copy; test-count drift was corrected to `153/153`
+- **Feedback-loop depth (S47)**: result feedback now captures skip reasons, execution friction, and notes so Track can measure where workflows fail before settlement instead of only whether they settled
+- **AI routing cohesion (S47)**: Promo Advisor now requests/normalizes structured fields like `promoType`, `calculatorSlug`, `confidence`, `riskFlags`, `opportunityScore`, and `opsTags`; app-shell quick-calc routing now listens for those structured recommendations
 - **S46 launch-readiness closeout**: closed the repo-side Now bucket with green validation, refreshed public memory, and pushed launch prep to a truthful handoff state instead of leaving it implied
 - **Route extraction tranche (S46)**: Home `Get Started`, `What's New`, and `About` now live in `src/routes/HomeRoutes.jsx`; onboarding state moved into `src/onboarding.js`, reducing `App.jsx` ownership of launch surfaces
 - **Onboarding tracker (S46)**: dashboard + Home now share a durable `pg_onboarding_steps` flow with inferred completion, progress bars, and next-step visibility

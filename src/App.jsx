@@ -1,23 +1,21 @@
 import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BOOKS, getBookUrl, getConfiguredAffiliateCount, getConfiguredMonetizationCount, hasConfiguredMonetizationLinks } from "./books.js";
+import { BOOKS, getBookUrl } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
 import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBriefEnabled } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
-import { CANONICAL_APP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
+import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
 import { getDashboardSnapshot, getNextBestAction } from "./dashboard/today.js";
-import TodayDashboardPanel from "./components/dashboard/TodayDashboardPanel.jsx";
 import DailyBriefPage from "./components/dashboard/DailyBriefPage.jsx";
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
-import { AboutRoute, GetStartedRoute, WhatsNewRoute } from "./routes/HomeRoutes.jsx";
 // Heavy tab components — lazy loaded so they don't block initial render
 const Tracker = lazy(() => import("./components/Tracker.jsx"));
 const Ledger = lazy(() => import("./components/Ledger.jsx"));
@@ -30,6 +28,11 @@ const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
 const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
 const PromoIntakeRoute = lazy(() => import("./routes/PromoIntakeRoute.jsx"));
 const TrackInsights = lazy(() => import("./components/TrackInsights.jsx"));
+const LaunchCommandCenterPanel = lazy(() => import("./components/dashboard/LaunchCommandCenterPanel.jsx"));
+const TodayDashboardPanel = lazy(() => import("./components/dashboard/TodayDashboardPanel.jsx"));
+const GetStartedRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.GetStartedRoute })));
+const WhatsNewRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.WhatsNewRoute })));
+const AboutRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.AboutRoute })));
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 import UserMenu from "./components/UserMenu.jsx";
 import AuthDialog from "./components/AuthDialog.jsx";
@@ -147,79 +150,6 @@ const MembershipBanner = () => (
 );
 
 // FeatureUnavailableCard → ./ui.jsx
-
-const LaunchReadinessPanel = () => {
-  const summary = getLaunchSummary();
-  const configuredAffiliates = getConfiguredAffiliateCount();
-  const configuredMonetization = getConfiguredMonetizationCount();
-  const affiliateReady = hasConfiguredMonetizationLinks();
-
-  return (
-    <div style={{...S.card,border:`1px solid ${K.ac}35`,marginBottom:12}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,flexWrap:"wrap",marginBottom:12}}>
-        <div>
-          <div style={{fontSize:11,color:K.ac,fontWeight:700,letterSpacing:"1.4px",textTransform:"uppercase",marginBottom:6}}>Launch Readiness</div>
-          <div style={{fontFamily:fontD,fontSize:17,fontWeight:700,color:K.tx,marginBottom:6}}>Current launch posture</div>
-          <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:760}}>
-            PromoGrind's core calculators are live. Upside is mostly bottlenecked by activation, discovery, and measurement rather than missing product scope.
-          </div>
-        </div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          <div style={{padding:"8px 10px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,minWidth:108}}>
-            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>Flags Live</div>
-            <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.gn}}>{summary.enabledCount}/{summary.totalCount}</div>
-          </div>
-          <div style={{padding:"8px 10px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,minWidth:108}}>
-            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>Monetized Links</div>
-            <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:configuredMonetization ? K.gn : K.yl}}>{configuredMonetization}/{BOOKS.length}</div>
-          </div>
-        </div>
-      </div>
-
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(240px, 1fr))",gap:10,marginBottom:12}}>
-        <div style={{padding:"12px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Validation</div>
-          {Object.values(LAUNCH_VALIDATION).map((check) => (
-            <div key={check.label} style={{display:"flex",justifyContent:"space-between",gap:10,fontSize:11,color:K.dm,marginBottom:6}}>
-              <span>{check.label}</span>
-              <span style={{color:/pass|75\/75|new/i.test(check.lastKnown) ? K.gn : K.yl,fontWeight:700}}>{check.lastKnown}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{padding:"12px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Manual blockers</div>
-          <div style={{fontSize:10,color:affiliateReady ? K.gn : K.yl,marginBottom:8}}>
-            Monetization readiness: {affiliateReady ? `${configuredMonetization}/${BOOKS.length} books monetized` : "not configured yet"}
-          </div>
-          <div style={{fontSize:10,color:configuredAffiliates ? K.gn : K.mt,marginBottom:8}}>
-            Affiliate-approved links: {configuredAffiliates}/{BOOKS.length}
-          </div>
-          {LAUNCH_BLOCKERS.slice(0, 4).map((blocker) => (
-            <div key={blocker.key} style={{marginBottom:8}}>
-              <div style={{fontSize:11,color:blocker.status === "manual" ? K.yl : K.ac,fontWeight:700}}>{blocker.label}</div>
-              <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{blocker.detail}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Feature rollout</div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(170px, 1fr))",gap:8}}>
-          {FEATURE_KEYS.map((key) => {
-            const feature = getFeatureState(key);
-            return (
-              <div key={key} style={{padding:"10px 12px",background:K.s2,border:`1px solid ${feature.enabled ? K.gn : K.bd}`,borderRadius:8}}>
-                <div style={{fontSize:11,fontWeight:700,color:feature.enabled ? K.gn : K.tx,marginBottom:4}}>{feature.label}</div>
-                <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{feature.enabled ? "Enabled" : feature.shortReason}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const CommunityWinsWall = () => {
   const [localEntries] = useState(() => {
@@ -3489,10 +3419,14 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
       <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
-      <LaunchReadinessPanel />
+      <Suspense fallback={<LoadingState label="Loading launch posture…" />}>
+        <LaunchCommandCenterPanel />
+      </Suspense>
       <CommunityWinsWall />
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
-      <TodayDashboardPanel snapshot={snapshot} navigate={navigate} appData={data} isProActive={typeof dashIsPro === "function" ? dashIsPro() : false} />
+      <Suspense fallback={<LoadingState label="Loading today dashboard…" />}>
+        <TodayDashboardPanel snapshot={snapshot} navigate={navigate} appData={data} isProActive={typeof dashIsPro === "function" ? dashIsPro() : false} />
+      </Suspense>
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
           <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
@@ -5486,6 +5420,42 @@ export default function App() {
     navigate("/" + TABS[newGi].items[resolvedTi].slug);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    const findAndOpen = (targetSlug) => {
+      if (!targetSlug) return false;
+      for (let groupIndex = 0; groupIndex < TABS.length; groupIndex += 1) {
+        const itemIndex = TABS[groupIndex].items.findIndex((item) => item.slug === targetSlug);
+        if (itemIndex >= 0) {
+          goTo(groupIndex, itemIndex);
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const handler = (event) => {
+      const detail = event?.detail || {};
+      if (findAndOpen(detail.calculatorSlug || detail.slug)) return;
+
+      const fallbackMap = {
+        bonus_bet: "bonus-bet",
+        bonus: "bonus-bet",
+        profit_boost: "profit-boost",
+        boost: "profit-boost",
+        safety_net: "first-bet",
+        firstbet: "first-bet",
+        deposit_match: "deposit-match",
+        insurance: "insurance",
+        parlay: "parlay",
+        arb: "arb-2way",
+      };
+      findAndOpen(fallbackMap[String(detail.type || "").toLowerCase()] || "bonus-bet");
+    };
+
+    window.addEventListener("pg:quick-calc", handler);
+    return () => window.removeEventListener("pg:quick-calc", handler);
+  }, [navigate]);
 
   const handleGroupTabKeyDown = (event, index) => {
     if (event.key === "ArrowRight") {

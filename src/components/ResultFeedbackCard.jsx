@@ -21,7 +21,27 @@ export default function ResultFeedbackCard({
   const [book, setBook] = useState(suggestedBook);
   const [actualProfit, setActualProfit] = useState("");
   const [accuracy, setAccuracy] = useState("yes");
+  const [skipReason, setSkipReason] = useState("");
+  const [frictionReason, setFrictionReason] = useState("");
+  const [note, setNote] = useState("");
   const [status, setStatus] = useState(null);
+
+  const skipReasons = [
+    ["odds_moved", "Odds moved"],
+    ["ev_too_low", "EV too low"],
+    ["bankroll", "Bankroll"],
+    ["stake_limited", "Stake limited"],
+    ["terms_unclear", "Terms unclear"],
+    ["not_available", "Not available"],
+  ];
+
+  const frictionReasons = [
+    ["odds_moved", "Odds moved"],
+    ["stake_limited", "Stake limited"],
+    ["book_issue", "Book issue"],
+    ["timing", "Timing"],
+    ["manual_error", "Manual error"],
+  ];
 
   if (!syncAppData || roundedExpected === null) return null;
 
@@ -36,6 +56,9 @@ export default function ResultFeedbackCard({
       status: nextStatus,
       expectedProfit: roundedExpected,
       book,
+      skipReason: nextStatus === "skipped" ? skipReason : "",
+      frictionReason: nextStatus === "placed" ? frictionReason : "",
+      note,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -51,6 +74,8 @@ export default function ResultFeedbackCard({
       actualProfit,
       calculatorAccurate: accuracy,
       book,
+      frictionReason,
+      note,
     }));
     setStatus("settled");
   };
@@ -120,6 +145,66 @@ export default function ResultFeedbackCard({
         </div>
       </div>
 
+      <div style={{ marginTop: 10 }}>
+        <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Why skip?</div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {skipReasons.map(([value, label]) => (
+            <button
+              key={value}
+              onClick={() => setSkipReason(skipReason === value ? "" : value)}
+              style={{
+                padding: "5px 10px",
+                background: skipReason === value ? `${K.yl}18` : "transparent",
+                border: `1px solid ${skipReason === value ? K.yl : K.bd2}`,
+                borderRadius: 999,
+                color: skipReason === value ? K.yl : K.dm,
+                fontSize: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontFamily: font,
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10 }}>
+        <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Execution friction</div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {frictionReasons.map(([value, label]) => (
+            <button
+              key={value}
+              onClick={() => setFrictionReason(frictionReason === value ? "" : value)}
+              style={{
+                padding: "5px 10px",
+                background: frictionReason === value ? `${K.ac}18` : "transparent",
+                border: `1px solid ${frictionReason === value ? K.ac : K.bd2}`,
+                borderRadius: 999,
+                color: frictionReason === value ? K.ac : K.dm,
+                fontSize: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontFamily: font,
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10 }}>
+        <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Notes</div>
+        <input
+          value={note}
+          onChange={(event) => setNote(event.target.value)}
+          placeholder="What blocked this or what mattered?"
+          style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+        />
+      </div>
+
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginTop: 10 }}>
         <span style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Calculator accurate?</span>
         {[
@@ -147,17 +232,17 @@ export default function ResultFeedbackCard({
         ))}
         <button
           onClick={settle}
-          disabled={!entryId || !actualProfit.trim()}
+          disabled={!entryId || !actualProfit.trim() || status === "skipped"}
           style={{
             marginLeft: "auto",
             padding: "8px 14px",
-            background: !entryId || !actualProfit.trim() ? K.bd : K.ac,
+            background: !entryId || !actualProfit.trim() || status === "skipped" ? K.bd : K.ac,
             border: "none",
             borderRadius: 8,
             color: K.bg,
             fontSize: 11,
             fontWeight: 800,
-            cursor: !entryId || !actualProfit.trim() ? "not-allowed" : "pointer",
+            cursor: !entryId || !actualProfit.trim() || status === "skipped" ? "not-allowed" : "pointer",
             fontFamily: font,
           }}
         >
@@ -168,7 +253,7 @@ export default function ResultFeedbackCard({
       <div style={{ marginTop: 10, fontSize: 10, color: status === "settled" ? K.gn : status === "skipped" ? K.yl : K.mt }}>
         {status === "settled" && "Settled result saved. It now feeds the Track analytics dashboard."}
         {status === "placed" && "Placed result saved. Settle it now or later in Track → Edge."}
-        {status === "skipped" && "Skipped result saved so PromoGrind can measure opportunity loss and execution rate."}
+        {status === "skipped" && "Skipped result saved with reason data so PromoGrind can measure opportunity loss and friction."}
         {!status && "Use this after you run the math so the app learns what converted and what stayed theoretical."}
       </div>
     </div>

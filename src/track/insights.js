@@ -40,6 +40,9 @@ export function normalizeResultFeedback(entry = {}) {
     actualProfit: toNumber(entry.actualProfit),
     calculatorAccurate: entry.calculatorAccurate || null,
     book: String(entry.book || "").trim(),
+    skipReason: String(entry.skipReason || "").trim(),
+    frictionReason: String(entry.frictionReason || "").trim(),
+    actionability: entry.actionability || null,
     note: String(entry.note || "").trim(),
     createdAt: entry.createdAt || new Date().toISOString(),
     updatedAt: entry.updatedAt || entry.createdAt || new Date().toISOString(),
@@ -86,6 +89,8 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   const settledFeedback = feedbackEntries.filter((entry) => entry.status === "settled");
   const openFeedback = feedbackEntries.filter((entry) => entry.status === "placed");
   const skippedFeedback = feedbackEntries.filter((entry) => entry.status === "skipped");
+  const attemptedCount = settledFeedback.length + openFeedback.length;
+  const executionRate = feedbackEntries.length ? (attemptedCount / feedbackEntries.length) * 100 : null;
   const settledCount = settledFeedback.length;
   const hitCount = settledFeedback.filter((entry) => (entry.actualProfit ?? 0) > 0).length;
   const accuracyCount = settledFeedback.filter((entry) => ["yes", "close"].includes(entry.calculatorAccurate || "")).length;
@@ -93,6 +98,8 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   const actualSettledProfit = settledFeedback.reduce((sum, entry) => sum + (entry.actualProfit || 0), 0);
 
   const promoTypeMap = new Map();
+  const skipReasonMap = new Map();
+  const frictionReasonMap = new Map();
   for (const entry of feedbackEntries) {
     const key = entry.promoType || "other";
     if (!promoTypeMap.has(key)) {
@@ -125,6 +132,16 @@ export function buildTrackInsights(data = {}, now = new Date()) {
         row.driftCount += 1;
         row.driftTotal += (entry.actualProfit || 0) - (entry.expectedProfit || 0);
       }
+    }
+    if (entry.skipReason) {
+      const current = skipReasonMap.get(entry.skipReason) || { key: entry.skipReason, label: formatPromoTypeLabel(entry.skipReason), count: 0 };
+      current.count += 1;
+      skipReasonMap.set(entry.skipReason, current);
+    }
+    if (entry.frictionReason) {
+      const current = frictionReasonMap.get(entry.frictionReason) || { key: entry.frictionReason, label: formatPromoTypeLabel(entry.frictionReason), count: 0 };
+      current.count += 1;
+      frictionReasonMap.set(entry.frictionReason, current);
     }
   }
 
@@ -163,11 +180,19 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     }))
     .sort((a, b) => (b.realizedProfit - a.realizedProfit) || (b.hitCount - a.hitCount) || a.book.localeCompare(b.book));
 
+  const skipReasonRows = [...skipReasonMap.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  const frictionReasonRows = [...frictionReasonMap.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  const driftRows = promoTypeRows
+    .filter((row) => row.averageDrift !== null)
+    .sort((a, b) => a.averageDrift - b.averageDrift);
+
   return {
     ...totals,
     feedbackEntries,
     openFeedback,
     skippedFeedback,
+    attemptedCount,
+    executionRate,
     settledFeedback,
     settledCount,
     hitRate: settledCount ? (hitCount / settledCount) * 100 : null,
@@ -176,6 +201,10 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     actualSettledProfit,
     promoTypeRows,
     bookRows,
+    skipReasonRows,
+    frictionReasonRows,
+    biggestNegativeDrift: driftRows[0] || null,
+    biggestPositiveDrift: driftRows.length ? driftRows[driftRows.length - 1] : null,
   };
 }
 

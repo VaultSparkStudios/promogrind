@@ -68,6 +68,19 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   );
   const evColor = evIsPositive ? K.gn : K.rd;
 
+  const openRecommendedCalculator = () => {
+    if (!result?.calculatorSlug && !result?.promoType) {
+      if (toast) toast("No calculator recommendation returned for this promo yet.", K.yl);
+      return;
+    }
+    window.dispatchEvent(new CustomEvent("pg:quick-calc", {
+      detail: {
+        calculatorSlug: result?.calculatorSlug || null,
+        type: result?.promoType || null,
+      },
+    }));
+  };
+
   return (
     <div style={{position:'fixed',right:0,top:0,bottom:0,width:360,background:K.s1,borderLeft:`1px solid ${K.bd}`,zIndex:1100,display:'flex',flexDirection:'column',boxShadow:'-4px 0 32px rgba(0,0,0,0.6)'}}>
       {/* Header */}
@@ -182,6 +195,11 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
                   {confKey}
                 </span>
               )}
+              {result?.opportunityScore != null && (
+                <span style={{padding:'2px 8px',borderRadius:50,fontSize:9,fontWeight:700,background:`${ratingColor}18`,color:ratingColor,letterSpacing:'0.8px'}}>
+                  SCORE {result.opportunityScore}
+                </span>
+              )}
             </div>
 
             {result.explanation && (
@@ -205,6 +223,13 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               </div>
             )}
 
+            {result.nextStep && (
+              <div style={{fontSize:12}}>
+                <span style={{color:K.mt}}>Next Step: </span>
+                <span style={{color:K.gn,fontWeight:700}}>{result.nextStep}</span>
+              </div>
+            )}
+
             {result.hedge && (
               <div style={{fontSize:12}}>
                 <span style={{color:K.mt}}>Hedge Strategy: </span>
@@ -212,12 +237,31 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               </div>
             )}
 
+            {Array.isArray(result?.riskFlags) && result.riskFlags.length > 0 && (
+              <div>
+                <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1px',marginBottom:6}}>Risk Flags</div>
+                <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+                  {result.riskFlags.map((flag) => (
+                    <span key={flag} style={{padding:'4px 8px',borderRadius:999,background:`${K.rd}15`,border:`1px solid ${K.rd}30`,fontSize:10,color:K.rd,fontWeight:700}}>
+                      {flag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {Array.isArray(result?.opsTags) && result.opsTags.length > 0 && (
+              <div style={{fontSize:10,color:K.mt}}>
+                Ops tags: {result.opsTags.join(" · ")}
+              </div>
+            )}
+
             {/* Quick Calc CTA */}
             <button
-              onClick={() => window.dispatchEvent(new CustomEvent('pg:quick-calc', { detail: { type: result?.promoType } }))}
+              onClick={openRecommendedCalculator}
               style={{marginTop:4,padding:'7px 12px',background:`${K.ac}15`,border:`1px solid ${K.ac}40`,borderRadius:7,color:K.ac,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
             >
-              Calculate this promo →
+              {result?.calculatorSlug ? 'Open recommended calculator →' : 'Calculate this promo →'}
             </button>
           </div>
         )}

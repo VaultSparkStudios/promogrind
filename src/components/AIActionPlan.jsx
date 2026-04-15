@@ -88,9 +88,28 @@ export function AIActionPlan({ proStatus }) {
                 <div style={{display:'flex',gap:10,alignItems:'flex-start'}}>
                   <span style={{fontSize:18,fontWeight:700,color:K.gn,minWidth:24,fontFamily:fontD}}>{i+1}</span>
                   <div style={{flex:1}}>
-                    <div style={{fontSize:13,fontWeight:600,color:K.tx,marginBottom:3}}>{action.title}</div>
+                    <div style={{display:'flex',justifyContent:'space-between',gap:8,flexWrap:'wrap',marginBottom:3}}>
+                      <div style={{fontSize:13,fontWeight:600,color:K.tx}}>{action.title}</div>
+                      {action.priority && (
+                        <span style={{padding:'2px 8px',borderRadius:999,background:`${action.priority === 'high' ? K.gn : K.ac}18`,color:action.priority === 'high' ? K.gn : K.ac,fontSize:9,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.8px'}}>
+                          {action.priority}
+                        </span>
+                      )}
+                    </div>
                     <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>{action.why}</div>
                     {action.value&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginTop:4}}>Est. value: {action.value}</div>}
+                    {(action.bookTarget || action.calculatorSlug) && (
+                      <div style={{fontSize:10,color:K.dm,marginTop:4}}>
+                        {action.bookTarget ? `Target: ${action.bookTarget}` : null}
+                        {action.bookTarget && action.calculatorSlug ? " · " : null}
+                        {action.calculatorSlug ? `Calc: ${action.calculatorSlug}` : null}
+                      </div>
+                    )}
+                    {Array.isArray(action.opsTags) && action.opsTags.length > 0 && (
+                      <div style={{fontSize:10,color:K.mt,marginTop:4}}>
+                        Tags: {action.opsTags.join(" · ")}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
