@@ -1,6 +1,7 @@
 import React from "react";
 import { K, S, f, font, fontD } from "../../lib/shared.js";
 import { getBankrollPosture, getUnfinishedWork } from "../../dashboard/today.js";
+import { getOnboardingProgress } from "../../onboarding.js";
 
 const TONE = {
   healthy: K.gn,
@@ -11,9 +12,10 @@ const TONE = {
   info: K.ac,
 };
 
-export default function TodayDashboardPanel({ snapshot, navigate }) {
+export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, isProActive = false }) {
   const posture = getBankrollPosture(snapshot);
   const unfinished = getUnfinishedWork(snapshot);
+  const onboarding = getOnboardingProgress({ appData, isProActive });
   const tone = TONE[posture.tone] || K.ac;
   const recentTone = snapshot.recentSettledProfit >= 0 ? K.gn : K.rd;
 
@@ -43,6 +45,24 @@ export default function TodayDashboardPanel({ snapshot, navigate }) {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
+        <div style={{ padding: "12px", background: K.s2, border: `1px solid ${onboarding.doneCount === onboarding.totalCount ? K.gn : K.ac}35`, borderRadius: 8 }}>
+          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Onboarding</div>
+          <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: onboarding.doneCount === onboarding.totalCount ? K.gn : K.ac, marginBottom: 6 }}>
+            {onboarding.doneCount}/{onboarding.totalCount}
+          </div>
+          <div style={{ height: 6, background: K.s1, borderRadius: 999, overflow: "hidden", marginBottom: 10 }}>
+            <div style={{ width: `${onboarding.pct}%`, height: "100%", background: onboarding.doneCount === onboarding.totalCount ? K.gn : K.ac, borderRadius: 999 }} />
+          </div>
+          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+            {onboarding.remaining[0]
+              ? `Next: ${onboarding.remaining[0].label}.`
+              : "Core launch setup is complete for this account."}
+          </div>
+          <button onClick={() => navigate("/get-started")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font }}>
+            Open setup guide →
+          </button>
+        </div>
+
         <div style={{ padding: "12px", background: K.s2, border: `1px solid ${snapshot.expiringBooks.length ? K.yl : K.bd}`, borderRadius: 8 }}>
           <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Expiring Promos</div>
           {snapshot.expiringBooks.length ? (

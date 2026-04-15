@@ -4,6 +4,8 @@ import { AppDataCtx } from "../../contexts.jsx";
 import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { K, font, fontD } from "../../lib/shared.js";
 import { getDashboardSnapshot, getTodayContext } from "../../dashboard/today.js";
+import { disableDailyBriefPush, enableDailyBriefPush, isDailyBriefEnabled } from "../../sw-register.js";
+import { FEATURE_FLAGS } from "../../launchState.js";
 
 export default function DailyBriefPage() {
   const navigate = useNavigate();
@@ -11,20 +13,36 @@ export default function DailyBriefPage() {
   const today = new Date();
   const { dayName } = getTodayContext(today);
   const fullDate = today.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-  const [notifEnabled, setNotifEnabled] = useState(() => localStorage.getItem("pg_daily_brief") === "1");
+  const [notifEnabled, setNotifEnabled] = useState(() => isDailyBriefEnabled());
+  const [notifPending, setNotifPending] = useState(false);
+  const [notifMessage, setNotifMessage] = useState("");
   const snapshot = getDashboardSnapshot(appData, PROMO_SCHED, today, localStorage.getItem("pg_bankroll") || "");
 
   const toggleNotif = async () => {
+    setNotifPending(true);
+    setNotifMessage("");
     if (notifEnabled) {
-      localStorage.removeItem("pg_daily_brief");
+      await disableDailyBriefPush();
       setNotifEnabled(false);
+      setNotifPending(false);
       return;
     }
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      localStorage.setItem("pg_daily_brief", "1");
+    const result = await enableDailyBriefPush();
+    if (result.ok) {
       setNotifEnabled(true);
+    } else {
+      const reasonMap = {
+        unsupported: "This browser does not support push notifications.",
+        missing_vapid: "Push alerts are not configured in this build yet.",
+        permission_denied: "Notification permission was denied.",
+        auth_required: "Sign in to a PromoGrind account before enabling push alerts.",
+        subscribe_failed: "The browser subscription failed. Reload and try again.",
+        invalid_subscription: "The browser returned an invalid push subscription.",
+        save_failed: "The browser subscribed, but PromoGrind could not save it yet.",
+      };
+      setNotifMessage(reasonMap[result.reason] || "Push alerts could not be enabled.");
     }
+    setNotifPending(false);
   };
 
   const actions = [
@@ -79,10 +97,22 @@ export default function DailyBriefPage() {
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>9am Briefing</div>
-          <div style={{ fontSize: 12, color: K.mt, marginBottom: 14 }}>Get a daily notification at 9am with your promo rundown.</div>
-          <button onClick={toggleNotif} style={{ padding: "8px 16px", background: notifEnabled ? `${K.gn}15` : "transparent", border: `1px solid ${notifEnabled ? K.gn : K.bd2}`, borderRadius: 6, color: notifEnabled ? K.gn : K.dm, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: font }}>
-            {notifEnabled ? "Notifications on — tap to disable" : "Enable daily briefing"}
+          <div style={{ fontSize: 12, color: K.mt, marginBottom: 14 }}>
+            Get a daily push notification at 9am with your promo rundown and open-bet count.
+          </div>
+          {!FEATURE_FLAGS.pushAlerts && (
+            <div style={{ fontSize: 11, color: K.yl, marginBottom: 10 }}>
+              Push alerts stay beta-gated until the VAPID key and scheduled Edge Function are enabled in this build.
+            </div>
+          )}
+          <button
+            onClick={toggleNotif}
+            disabled={notifPending}
+            style={{ padding: "8px 16px", background: notifEnabled ? `${K.gn}15` : "transparent", border: `1px solid ${notifEnabled ? K.gn : K.bd2}`, borderRadius: 6, color: notifEnabled ? K.gn : K.dm, fontSize: 12, fontWeight: 600, cursor: notifPending ? "wait" : "pointer", fontFamily: font }}
+          >
+            {notifPending ? "Working…" : notifEnabled ? "Push briefing on — tap to disable" : "Enable daily push briefing"}
           </button>
+          {notifMessage && <div style={{ fontSize: 11, color: K.yl, marginTop: 10, lineHeight: 1.5 }}>{notifMessage}</div>}
         </div>
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>

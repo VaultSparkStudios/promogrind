@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { BOOKS, getBookUrl, getConfiguredAffiliateCount, hasConfiguredAffiliateLinks } from "../books.js";
+import {
+  BOOKS,
+  getBookUrl,
+  getConfiguredAffiliateCount,
+  getConfiguredMonetizationCount,
+  hasConfiguredAffiliateLinks,
+  hasConfiguredMonetizationLinks,
+} from "../books.js";
 
 // ── Affiliate helpers ─────────────────────────────────────────────────────────
 
@@ -29,6 +36,12 @@ describe("book affiliate helpers", () => {
     expect(getConfiguredAffiliateCount()).toBeGreaterThanOrEqual(0);
     expect(getConfiguredAffiliateCount()).toBeLessThanOrEqual(BOOKS.length);
     expect(hasConfiguredAffiliateLinks()).toBe(getConfiguredAffiliateCount() > 0);
+  });
+
+  it("treats referral and affiliate links as monetized inventory", () => {
+    expect(getConfiguredMonetizationCount()).toBeGreaterThanOrEqual(getConfiguredAffiliateCount());
+    expect(getConfiguredMonetizationCount()).toBeLessThanOrEqual(BOOKS.length);
+    expect(hasConfiguredMonetizationLinks()).toBe(getConfiguredMonetizationCount() > 0);
   });
 });
 

@@ -1,3 +1,5 @@
+import { supabase } from "./auth.js";
+
 export function registerSW() {
   if ('serviceWorker' in navigator) {
     const base = import.meta.env.VITE_APP_BASE_PATH || '/';
@@ -44,4 +46,78 @@ export async function subscribeToPush(vapidPublicKey) {
     console.warn('[PromoGrind] Push subscribe failed:', e);
     return null;
   }
+}
+
+const DAILY_BRIEF_KEY = "pg_daily_brief";
+
+export function isDailyBriefEnabled() {
+  try {
+    return localStorage.getItem(DAILY_BRIEF_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setDailyBriefEnabled(enabled) {
+  try {
+    if (enabled) localStorage.setItem(DAILY_BRIEF_KEY, "1");
+    else localStorage.removeItem(DAILY_BRIEF_KEY);
+  } catch {}
+}
+
+function getVapidPublicKey() {
+  return import.meta.env.VITE_VAPID_PUBLIC_KEY || "";
+}
+
+export async function enableDailyBriefPush() {
+  if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+    return { ok: false, reason: "unsupported" };
+  }
+
+  const vapidPublicKey = getVapidPublicKey();
+  if (!vapidPublicKey) return { ok: false, reason: "missing_vapid" };
+
+  const permission = Notification.permission === "granted"
+    ? "granted"
+    : await Notification.requestPermission();
+  if (permission !== "granted") return { ok: false, reason: "permission_denied" };
+
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user?.id) return { ok: false, reason: "auth_required" };
+
+  const subscription = await subscribeToPush(vapidPublicKey);
+  if (!subscription) return { ok: false, reason: "subscribe_failed" };
+
+  const json = subscription.toJSON();
+  const endpoint = json.endpoint;
+  const p256dh = json.keys?.p256dh;
+  const authKey = json.keys?.auth;
+  if (!endpoint || !p256dh || !authKey) return { ok: false, reason: "invalid_subscription" };
+
+  const { error } = await supabase.from("push_subscriptions").upsert({
+    user_id: session.user.id,
+    endpoint,
+    p256dh,
+    auth_key: authKey,
+    user_agent: navigator.userAgent,
+    active: true,
+  }, { onConflict: "user_id,endpoint" });
+
+  if (error) return { ok: false, reason: "save_failed", error };
+  setDailyBriefEnabled(true);
+  return { ok: true, subscription };
+}
+
+export async function disableDailyBriefPush() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const existing = await reg.pushManager.getSubscription();
+    const endpoint = existing?.endpoint;
+    if (endpoint) {
+      await supabase.from("push_subscriptions").update({ active: false }).eq("endpoint", endpoint);
+      await existing.unsubscribe().catch(() => {});
+    }
+  } catch {}
+  setDailyBriefEnabled(false);
+  return { ok: true };
 }

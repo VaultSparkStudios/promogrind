@@ -1,8 +1,13 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 150/150 tests green; launch smoke passing; browser launch smoke passing in elevated validation; bundle budget passing at ~413KB main chunk
-- version: 24.2.0 · last session: S45 (2026-04-15)
+- this repo remains deployable — build passing, 153/153 tests green; launch smoke passing; browser launch smoke passing; bundle budget passing at ~415KB main chunk
+- version: 24.2.0 · last session: S46 (2026-04-15)
+- **S46 launch-readiness closeout**: closed the repo-side Now bucket with green validation, refreshed public memory, and pushed launch prep to a truthful handoff state instead of leaving it implied
+- **Route extraction tranche (S46)**: Home `Get Started`, `What's New`, and `About` now live in `src/routes/HomeRoutes.jsx`; onboarding state moved into `src/onboarding.js`, reducing `App.jsx` ownership of launch surfaces
+- **Onboarding tracker (S46)**: dashboard + Home now share a durable `pg_onboarding_steps` flow with inferred completion, progress bars, and next-step visibility
+- **Push briefing wiring (S46)**: Daily Brief now attempts real browser push subscription storage via `push_subscriptions`; `src/sw-register.js` owns enable/disable helpers and `send-daily-brief` now targets `promogrind.bet/#/daily-brief`
+- **Launch-readiness truthfulness (S46)**: monetization readiness now counts referral links as well as affiliate links; launch blockers now reflect the real remaining manual work instead of stale placeholders
 - **S45 recovery + closeout**: recovered an interrupted refinement tranche and closed it out cleanly with green validation, updated public memory, audit JSON, and GitHub-ready commit state
 - **Promo Intake route (S45)**: Home now includes a dedicated `Promo Intake` surface that parses pasted sportsbook promo text into a normalized promo card and recommends the right calculator
 - **Trust + confidence layer (S45)**: Bonus Bet, Profit Boost, and First Bet now surface calculator trust badges plus sensitivity chips showing how much guaranteed profit moves if hedge odds drift
@@ -20,7 +25,7 @@ Public-safe summary:
 - **Dashboard tranche 2 (S43)**: added `src/dashboard/today.js` plus extracted dashboard surfaces under `src/components/dashboard/`; `src/App.jsx` now consumes shared dashboard snapshot helpers instead of keeping all home-state logic inline
 - **Today dashboard (S43)**: Home dashboard now explicitly surfaces expiring promos, unfinished work, bankroll posture, recent settled profit, and next-best action in one dedicated panel
 - **Launch copy + smoke alignment (S43)**: smoke-covered marketing pages, trust-strip template, and launch validators now consistently use PromoGrind-native "Free PromoGrind account" language; `scripts/validate-launch-smoke.mjs` updated and passing
-- **Validation coverage (S45)**: dashboard, auth URL helpers, track-insights, intake parsing, shadow mode, and sensitivity coverage are in repo; current suite passes at `150/150`
+- **Validation coverage (S46)**: dashboard, auth URL helpers, track-insights, intake parsing, shadow mode, sensitivity coverage, monetization helpers, and onboarding helpers are in repo; current suite passes at `153/153`
 - **Browser smoke script status (S43)**: browser smoke was updated and later passed in an elevated environment; launch smoke remains passing in-repo
 - **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
 - **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`
@@ -51,7 +56,7 @@ Public-safe summary:
 - WCAG AA contrast compliance: both dark and light themes pass 4.5:1 for all body/label text
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
 - wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
-- edge-function deploy status: prior AI surfaces are deployed, but the new S45 rate-limit updates in `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` are committed in repo and still require deployment
-- remaining code follow-ups: broader keyboard-nav follow-through outside tab bars and continued `App.jsx` route extraction
-- remaining launch blockers: Stripe end-to-end smoke test, remaining referral links in `src/books.js`, one final friend-facing manual browser/account flow pass, and deployment of the S45 edge-function hardening changes
+- edge-function deploy status: prior AI surfaces are deployed, but the new S45 rate-limit updates in `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` plus the updated `send-daily-brief` payload still require deployment
+- remaining code follow-ups: broader keyboard-nav follow-through outside tab bars, deeper calculator/domain extraction out of `App.jsx`, and richer promo-alert targeting beyond the current daily-brief push groundwork
+- remaining launch blockers: Stripe end-to-end smoke test, remaining referral links in `src/books.js`, one final friend-facing manual browser/account flow pass, deployment of the S45 edge-function hardening changes, and setting `VITE_VAPID_PUBLIC_KEY` in the deployed frontend if push alerts should be live
 - detailed internal state now lives in the private Studio OS / ops repository

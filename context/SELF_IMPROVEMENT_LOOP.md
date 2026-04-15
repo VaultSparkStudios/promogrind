@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▆ ▆ ▆
-Avgs — 3: 435.3 | 5: 431.5 [N=4] | 10: 431.5 [N=4] | 25: — | all: 431.5 [N=4]
-  └ 3-session: Dev 94.0 | Align 86.7 | Momentum 87.7 | Engage 74.0 | Process 93.0
+Sparkline (last 5 totals): ▅ ▅ ▆ ▆ ▆
+Avgs — 3: 440.0 | 5: 433.2 [N=5] | 10: 433.2 [N=5] | 25: — | all: 433.2 [N=5]
+  └ 3-session: Dev 95.0 | Align 87.0 | Momentum 89.0 | Engage 75.0 | Process 93.3
 Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~0.7 sessions  |  Intent rate: 100% (last 4)
-Last session: 2026-04-15 | Session 45 | Total: 446/500 | Velocity: 8 | protocolVelocity: 0
+Momentum runway: ~1.3 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-15 | Session 46 | Total: 440/500 | Velocity: 6 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-15 — Session 46 | Total: 440/500 | Velocity: 6 | Debt: ↓
+Avgs — 3: 440.0 | 5: 433.2 [N=5] | 10: 433.2 [N=5] | 25: — | all: 433.2 [N=5]
+  └ 3-session: Dev 95.0 | Align 87.0 | Momentum 89.0 | Engage 75.0 | Process 93.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 95 | ↓ | Route extraction, onboarding state, push wiring, and validation all landed cleanly, though the broader monolith still remains for future sessions. |
+| Creative Alignment | 87 | ↓ | The work stayed launch-practical and trust-first: clearer setup progress, more truthful launch blockers, and no fake "ready" claims. |
+| Momentum | 88 | ↓ | Closed the active Now bucket repo-side and pushed the app toward launch readiness, while leaving external blockers explicit instead of blurred. |
+| Engagement | 75 | ↓ | Friend-facing readiness improved materially, but live proof still depends on the Stripe smoke, remaining referral links, and a real friend pass. |
+| Process Quality | 93 | ↓ | Code, tests, smoke runs, and public memory all landed in sync; closeout is coherent and push-ready. |
+| **Total** | **440/500** | ↓ | |
+
+**Top win:** PromoGrind's launch surfaces now expose real onboarding progress and real push-subscription plumbing instead of placeholder readiness signals.
+**Top gap:** Public launch still depends on manual deployment, Stripe verification, remaining referral-link completion, and one friend-facing pass.
+**Intent outcome:** Achieved — the repo-side Now bucket and closeout work completed end-to-end without pretending the external blockers were solved.
+
+**Brainstorm**
+1. Turn the new push-subscription plumbing into state-aware promo alerts instead of generic daily summaries.
+2. Add a launch command-center card that scores "friend-ready" from referral completeness, push config, Stripe proof, and recent smoke state.
+3. Continue lifting calculator and dashboard domains out of `App.jsx` so future launch tweaks stop paying monolith tax.
+
+**Committed to TASK_BOARD:** Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts
 
 ## 2026-04-15 — Session 45 | Total: 446/500 | Velocity: 8 | Debt: ↓
 Avgs — 3: 435.3 | 5: 431.5 [N=4] | 10: 431.5 [N=4] | 25: — | all: 431.5 [N=4]

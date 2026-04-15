@@ -1,5 +1,21 @@
 # Work Log
 
+## 2026-04-15 — S46 Launch-Readiness Closeout
+
+- Extracted Home launch surfaces into `src/routes/HomeRoutes.jsx` and added shared onboarding state in `src/onboarding.js` so `App.jsx` no longer owns those pages directly.
+- Added a visible onboarding progress card to `src/components/dashboard/TodayDashboardPanel.jsx` and a matching progress strip inside the Home `Get Started` route.
+- Upgraded `src/components/dashboard/DailyBriefPage.jsx` from localStorage-only notification intent to real browser push-subscription attempts through `src/sw-register.js`.
+- Added `enableDailyBriefPush()`, `disableDailyBriefPush()`, and `isDailyBriefEnabled()` in `src/sw-register.js`; persisted subscriptions to the `push_subscriptions` table when auth + VAPID config are present.
+- Updated `supabase/functions/send-daily-brief/index.ts` to point at the live `promogrind.bet/#/daily-brief` target instead of the deprecated Vault route.
+- Refined monetization truthfulness in `src/books.js`, `src/dashboard/today.js`, and `src/launchState.js` so referral links count as monetized inventory and launch blockers match current reality.
+- Added `src/__tests__/onboarding.test.js` and expanded `src/__tests__/books.test.js`; validation now sits at 153/153 passing.
+- Refreshed public memory/context files to S46 closeout state in preparation for commit + push.
+- Verified `npm.cmd test` → 153/153 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `npm.cmd run check:bundle` → passing (`415.4KB` main chunk under 420KB target).
+- Verified `npm.cmd run smoke:launch` → passing.
+- Verified `npm.cmd run smoke:browser` → passing.
+
 ## 2026-04-15 — S45 Refinement Recovery + Closeout
 
 - Recovered an interrupted S45 refinement tranche and stabilized the repo back to a clean closeout state.

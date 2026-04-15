@@ -7,6 +7,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] **RESEND_API_KEY** — confirmed set in Supabase secrets (S39 audit)
 - [x] **Stripe Customer Portal** — config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in edge function (S38/S39)
 - [ ] **Deploy S45 edge-function hardening** — deploy `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` so the new durable rate limits are live in Supabase
+- [ ] **Deploy `send-daily-brief` + keep push schema live** — deploy the edge function and confirm `push_subscriptions` migration remains applied before enabling push alerts publicly
+- [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — required for the new Daily Brief push toggle to create real browser subscriptions on the live frontend
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
 - [ ] **Affiliate/referral links** — finish pasting personal referral URLs into `referralLink` fields in `src/books.js` for the remaining books (DraftKings, FanDuel, and Caesars are now configured)
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
@@ -22,9 +24,9 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Image pipeline — `sharp` prebuild emits AVIF/WebP for `public/og-image.png`; bundle-budget script enforces main chunk <= 420KB
 - [x] [SIL] Promo intake pipeline — paste pipeline → regex parser → normalized PromoCard (type, book, min odds, max stake, expiry) → auto-suggest calculator
 - [x] Shadow book mode — simulate workflow value on un-owned books to quantify affiliate value
-- [ ] Extract `App.jsx` routes into `src/routes/*` — first route extraction pattern landed (`PromoIntakeRoute`); broader monolith carve-up still pending
-- [ ] [SIL:2⛔] Smart promo alert system — push notification when high-EV promo goes live; wire VAPID send-daily-brief fn + "notify me" toggle in DailyBriefPage
-- [ ] [SIL:2⛔] Onboarding completion tracker — localStorage pg_onboarding_steps[] + progress bar in Dashboard header, reads GetStarted step completion
+- [x] Extract `App.jsx` routes into `src/routes/*` — Home `Get Started`, `What's New`, and `About` now live in `src/routes/HomeRoutes.jsx`; broader calculator/domain carve-up continues later
+- [x] [SIL:2⛔] Smart promo alert system — VAPID-aware Daily Brief toggle now writes browser subscriptions through `src/sw-register.js`; `send-daily-brief` payload updated to the live PromoGrind route
+- [x] [SIL:2⛔] Onboarding completion tracker — shared `src/onboarding.js`, dashboard progress card, and Home progress strip now keep `pg_onboarding_steps` visible and durable
 
 ## Innovation Bets (new this session)
 - **Adaptive trust score** — per-calculator × promo-type × book accuracy, visible on results
@@ -77,6 +79,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Next
 - [ ] [SIL] Drift alert — background diff of projected vs realized profit per promo type
+- [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
 - [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)
 - [ ] [SIL] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
 - [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
@@ -92,7 +95,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Bundle budget in CI — fail or warn when first-load bundle exceeds target
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
-- [ ] VAPID keys → deploy send-daily-brief push notification function
+- [ ] VAPID public key rollout + `send-daily-brief` deploy confirmation
 - [x] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
 - [x] [SIL:2⛔] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 - [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults

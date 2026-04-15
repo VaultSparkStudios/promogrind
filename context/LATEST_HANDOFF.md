@@ -2,6 +2,38 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 46 (2026-04-15) — CLOSED
+
+**Session Intent:** Complete the active Now bucket, finish repo-side launch-readiness work for social/friend sharing, push to GitHub, and close out memory/context cleanly.
+
+## Where We Left Off (Session 46 — CLOSED)
+
+- Shipped: 6 improvements across 4 groups — route extraction, onboarding progress, push-brief wiring, launch-readiness truthfulness
+- Tests: 153/153 passing · delta: +3
+- Deploy: pending — repo changes committed; S45 edge-function hardening and `send-daily-brief` still require deployment
+- Session type: implementation + closeout
+
+## Current Delta Since S45
+
+- Extracted Home `Get Started`, `What's New`, and `About` into `src/routes/HomeRoutes.jsx` and moved onboarding progress state into `src/onboarding.js`.
+- Added a visible onboarding-progress card to the dashboard and a matching progress strip in the Home setup flow so friend-facing users can see what remains before launch confidence is real.
+- Upgraded Daily Brief from a localStorage-only toggle to real browser push-subscription attempts via `src/sw-register.js`, with authenticated writes to `push_subscriptions` when VAPID config is present.
+- Updated `supabase/functions/send-daily-brief/index.ts` so the payload now targets `https://promogrind.bet/#/daily-brief` instead of the deprecated Vault path.
+- Tightened launch-readiness truthfulness: monetization readiness now counts referral links as well as affiliate links, and the launch blocker list now reflects the true remaining manual work.
+- Added onboarding + monetization test coverage and re-validated the repo end-to-end.
+- Validation after closeout: `npm.cmd test`, `npm.cmd run build`, `npm.cmd run check:bundle`, `npm.cmd run smoke:launch`, and `npm.cmd run smoke:browser` all passed.
+- Remaining manual / external blockers: deploy S45 edge-function hardening, deploy/enable the Daily Brief push path, run Stripe smoke, finish the remaining referral links, and perform the friend-facing pass.
+
+### Shipped this session
+
+**feat(s46): close repo-side launch readiness and refresh closeout memory**
+- `src/routes/HomeRoutes.jsx`, `src/onboarding.js`, `src/App.jsx` — extracted Home launch routes, durable onboarding-state helpers, and app-shell wiring updates
+- `src/components/dashboard/TodayDashboardPanel.jsx`, `src/components/dashboard/DailyBriefPage.jsx`, `src/sw-register.js` — dashboard onboarding progress, real push-subscription wiring, and Daily Brief toggle upgrades
+- `src/books.js`, `src/dashboard/today.js`, `src/launchState.js`, `.env.example` — launch-readiness truthfulness, monetization helper updates, and explicit VAPID public-key guidance
+- `supabase/functions/send-daily-brief/index.ts` — live PromoGrind Daily Brief target path
+- `src/__tests__/onboarding.test.js`, `src/__tests__/books.test.js` — onboarding + monetization helper coverage
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`, `context/SELF_IMPROVEMENT_LOOP.md`, `context/TRUTH_AUDIT.md`, `context/PROJECT_STATUS.json`, `logs/WORK_LOG.md`, `audits/2026-04-15-2.json` — closeout memory refreshed to S46 state
+
 ## Session 45 (2026-04-15) — CLOSED
 
 **Session Intent:** Audit project with score, produce refinement plan covering features/depth/UX/feedback/security/speed, and recommend a single top-priority combined list. Innovative, genius-level thinking.

@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BOOKS, getBookUrl, getConfiguredAffiliateCount, hasConfiguredAffiliateLinks } from "./books.js";
+import { BOOKS, getBookUrl, getConfiguredAffiliateCount, getConfiguredMonetizationCount, hasConfiguredMonetizationLinks } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
-import { subscribeToPush } from "./sw-register.js";
+import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBriefEnabled } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, FEATURE_KEYS, LAUNCH_BLOCKERS, LAUNCH_VALIDATION, getFeatureState, getLaunchSummary, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
@@ -17,6 +17,7 @@ import TodayDashboardPanel from "./components/dashboard/TodayDashboardPanel.jsx"
 import DailyBriefPage from "./components/dashboard/DailyBriefPage.jsx";
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
+import { AboutRoute, GetStartedRoute, WhatsNewRoute } from "./routes/HomeRoutes.jsx";
 // Heavy tab components — lazy loaded so they don't block initial render
 const Tracker = lazy(() => import("./components/Tracker.jsx"));
 const Ledger = lazy(() => import("./components/Ledger.jsx"));
@@ -150,7 +151,8 @@ const MembershipBanner = () => (
 const LaunchReadinessPanel = () => {
   const summary = getLaunchSummary();
   const configuredAffiliates = getConfiguredAffiliateCount();
-  const affiliateReady = hasConfiguredAffiliateLinks();
+  const configuredMonetization = getConfiguredMonetizationCount();
+  const affiliateReady = hasConfiguredMonetizationLinks();
 
   return (
     <div style={{...S.card,border:`1px solid ${K.ac}35`,marginBottom:12}}>
@@ -168,8 +170,8 @@ const LaunchReadinessPanel = () => {
             <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.gn}}>{summary.enabledCount}/{summary.totalCount}</div>
           </div>
           <div style={{padding:"8px 10px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,minWidth:108}}>
-            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>Affiliates</div>
-            <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:configuredAffiliates ? K.gn : K.yl}}>{configuredAffiliates}/{BOOKS.length}</div>
+            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>Monetized Links</div>
+            <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:configuredMonetization ? K.gn : K.yl}}>{configuredMonetization}/{BOOKS.length}</div>
           </div>
         </div>
       </div>
@@ -187,7 +189,10 @@ const LaunchReadinessPanel = () => {
         <div style={{padding:"12px",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
           <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Manual blockers</div>
           <div style={{fontSize:10,color:affiliateReady ? K.gn : K.yl,marginBottom:8}}>
-            Affiliate readiness: {affiliateReady ? "partially configured" : "not configured yet"}
+            Monetization readiness: {affiliateReady ? `${configuredMonetization}/${BOOKS.length} books monetized` : "not configured yet"}
+          </div>
+          <div style={{fontSize:10,color:configuredAffiliates ? K.gn : K.mt,marginBottom:8}}>
+            Affiliate-approved links: {configuredAffiliates}/{BOOKS.length}
           </div>
           {LAUNCH_BLOCKERS.slice(0, 4).map((blocker) => (
             <div key={blocker.key} style={{marginBottom:8}}>
@@ -3286,7 +3291,7 @@ function OnboardingChecklist({ appData, user, isPro }) {
     const steps = [];
     const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
     if (Object.keys(usageLog).length > 0) steps.push('calc');
-    if ((appData?.sportsbooks || []).length > 0) steps.push('book');
+    if ((appData?.sportsbooks || []).length > 0 || Object.values(appData?.done || {}).some(Boolean)) steps.push('book');
     if ((appData?.bets || []).length > 0 || (appData?.ledger || []).length > 0) steps.push('bet');
     if (isPro && isPro()) steps.push('trial');
     try { if (localStorage.getItem('pg_referral_shared')) steps.push('invite'); } catch {}
@@ -3487,7 +3492,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <LaunchReadinessPanel />
       <CommunityWinsWall />
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
-      <TodayDashboardPanel snapshot={snapshot} navigate={navigate} />
+      <TodayDashboardPanel snapshot={snapshot} navigate={navigate} appData={data} isProActive={typeof dashIsPro === "function" ? dashIsPro() : false} />
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
           <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
@@ -4481,7 +4486,7 @@ const ProfitGoalTracker = ({ totalProfit }) => {
 const useDailyBriefing = (openBets, todayPromos) => {
   useEffect(()=>{
     try {
-      const enabled = localStorage.getItem('pg_daily_brief')==='true';
+      const enabled = isDailyBriefEnabled();
       if(!enabled) return;
       const now = new Date();
       const hour = now.getHours(), min = now.getMinutes();
@@ -4491,7 +4496,7 @@ const useDailyBriefing = (openBets, todayPromos) => {
       if(typeof Notification!=='undefined'&&Notification.permission==='granted') {
         const openCount = openBets?.length||0;
         const body = `${openCount} open bet${openCount!==1?"s":""} pending. ${todayPromos?.length||0} promos available today.`;
-        new Notification('PromoGrind Daily Briefing',{body, icon:'/promogrind/favicon.ico'});
+        new Notification('PromoGrind Daily Briefing',{body, icon:'/favicon.svg'});
         localStorage.setItem('pg_brief_shown_today', todayStr);
       }
     } catch(e) {}
@@ -4500,16 +4505,15 @@ const useDailyBriefing = (openBets, todayPromos) => {
 
 const DailyBriefingBtn = ({ openBets, todayPromos }) => {
   useDailyBriefing(openBets, todayPromos);
-  const [enabled, setEnabled] = useState(()=>{ try{return localStorage.getItem('pg_daily_brief')==='true';}catch{return false;} });
+  const [enabled, setEnabled] = useState(() => isDailyBriefEnabled());
   const isPro = ()=>{ try{return ['vault_sparked','pro'].includes(localStorage.getItem('pg_pro_status')||'');}catch{return false;} };
   if(!isPro()&&!enabled) return null;
   const toggle = async () => {
     if(!enabled) {
-      if(typeof Notification==='undefined') return;
-      const perm = await Notification.requestPermission();
-      if(perm==='granted') { try{localStorage.setItem('pg_daily_brief','true');}catch{} setEnabled(true); }
+      const result = await enableDailyBriefPush();
+      if(result.ok) setEnabled(true);
     } else {
-      try{localStorage.setItem('pg_daily_brief','false');}catch{}
+      await disableDailyBriefPush();
       setEnabled(false);
     }
   };
@@ -4978,10 +4982,10 @@ const TABS = [
     {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
     {n:"Promo Intake",slug:"promo-intake",c:PromoIntakeRoute},
     {n:"Daily Brief",slug:"daily-brief",c:DailyBriefPage},
-    {n:"Get Started",slug:"get-started",c:GetStarted},
-    {n:"What's New",slug:"whats-new",c:WhatsNew},
+    {n:"Get Started",slug:"get-started",c:GetStartedRoute},
+    {n:"What's New",slug:"whats-new",c:WhatsNewRoute},
     {n:"Pricing",slug:"pricing",c:PricingPage},
-    {n:"About",slug:"about",c:AboutPage},
+    {n:"About",slug:"about",c:AboutRoute},
   ]},
   { group:"Convert", items:[
     {n:"Bonus Bet",slug:"bonus-bet",c:BonusBet},

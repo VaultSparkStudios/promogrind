@@ -1,4 +1,4 @@
-import { BOOKS, hasConfiguredAffiliateLinks } from "../books.js";
+import { BOOKS, hasConfiguredMonetizationLinks } from "../books.js";
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -148,7 +148,7 @@ export function getUnfinishedWork(snapshot) {
 export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 0, openBets = [], booksComplete = 0 }) {
   const hasBankroll = !!String(bankroll || "").trim();
   const hasCalc = Object.keys(usageLog).length > 0;
-  const affiliateReady = hasConfiguredAffiliateLinks();
+  const affiliateReady = hasConfiguredMonetizationLinks();
   const actions = [
     !hasBankroll && { key: "bankroll", title: "Set your bankroll", body: "Personalized stake sizing and weekly actions need a bankroll anchor.", cta: "Set profile", slug: "dashboard", tone: "info" },
     !hasCalc && { key: "calc", title: "Run your first conversion", body: "Start with the Bonus Bet Converter and get a hedge stake in under a minute.", cta: "Open converter", slug: "bonus-bet", tone: "positive" },

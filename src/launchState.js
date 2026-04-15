@@ -71,12 +71,12 @@ export const LAUNCH_VALIDATION = {
   browserSmoke: {
     label: "Browser smoke",
     command: "npm run smoke:browser",
-    lastKnown: "new",
+    lastKnown: "passing",
   },
   tests: {
     label: "Vitest",
     command: "npm test",
-    lastKnown: "75/75 passing",
+    lastKnown: "150/150 passing",
   },
   build: {
     label: "Build",
@@ -93,22 +93,22 @@ export const LAUNCH_BLOCKERS = [
     detail: "Real affiliate-approved links still need to replace placeholders in src/books.js.",
   },
   {
-    key: "searchConsole",
-    label: "Search Console",
+    key: "edgeDeploy",
+    label: "Edge hardening deploy",
     status: "manual",
-    detail: "Sitemap submission is still pending for discovery activation.",
+    detail: "Deploy the updated promo-chat, promo-advisor, ai-action-plan, and stack-builder functions so durable rate limits are live.",
   },
   {
-    key: "anthropic",
-    label: "ANTHROPIC activation",
+    key: "stripeSmoke",
+    label: "Stripe smoke test",
     status: "manual",
-    detail: "AI surfaces stay beta-gated until the secret is set and functions are deployed.",
+    detail: "Run one real checkout and customer-portal pass against the deployed app before launch.",
   },
   {
-    key: "browserSmoke",
-    label: "Browser smoke coverage",
-    status: "repo",
-    detail: "A browser-facing smoke script now exists and should be run alongside build/test before launch work.",
+    key: "friendPass",
+    label: "Friend beta pass",
+    status: "manual",
+    detail: "Have a friend create an account and run the core calculator flow to confirm the launch experience feels ready.",
   },
 ];
 
@@ -146,7 +146,7 @@ export const FEATURE_INFO = {
   pushAlerts: {
     label: "Push Alerts",
     shortReason: "Push alerts are in beta until browser push setup is complete.",
-    setup: "Requires VAPID keys + push_subscriptions migration + send-daily-brief deployment.",
+    setup: "Requires VITE_VAPID_PUBLIC_KEY + VAPID server keys + push_subscriptions migration + send-daily-brief deployment.",
   },
   paidCheckout: {
     label: "Paid Checkout",

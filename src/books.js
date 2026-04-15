@@ -203,3 +203,12 @@ export const getConfiguredAffiliateCount = () =>
 
 export const hasConfiguredAffiliateLinks = () =>
   getConfiguredAffiliateCount() > 0;
+
+export const getConfiguredMonetizationCount = () =>
+  BOOKS.filter((book) =>
+    (typeof book.affiliateLink === "string" && book.affiliateLink.trim()) ||
+    (typeof book.referralLink === "string" && book.referralLink.trim())
+  ).length;
+
+export const hasConfiguredMonetizationLinks = () =>
+  getConfiguredMonetizationCount() > 0;

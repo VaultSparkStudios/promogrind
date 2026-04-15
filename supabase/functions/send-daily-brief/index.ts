@@ -52,9 +52,9 @@ Deno.serve(async () => {
     const payload = JSON.stringify({
       title: 'PromoGrind Daily Briefing',
       body: "Good morning! Check today's promos and open bets.",
-      icon: '/promogrind/favicon.svg',
-      badge: '/promogrind/favicon.svg',
-      url: 'https://vaultsparkstudios.com/promogrind/',
+      icon: '/favicon.svg',
+      badge: '/favicon.svg',
+      url: 'https://promogrind.bet/#/daily-brief',
       tag: 'daily-brief',
       renotify: false,
     });
