@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-04-16T19:44:42.877Z",
+  "generatedAt": "2026-04-16T22:06:50.601Z",
   "packVersion": "1.0",
   "project": {
     "slug": "promogrind",
     "name": "PromoGrind",
     "repo": "VaultSparkStudios/promogrind",
-    "localPath": "/tmp/onboard-retry-eEQDKB/promogrind"
+    "localPath": "/tmp/onboard-retry-6OS6fG/promogrind"
   },
   "sourceTemplates": {
     "agents": "docs/templates/project-system/AGENTS_PROJECT.template.md",
@@ -19,7 +19,7 @@
     "requiredFilesPresent": 15,
     "requiredFilesTotal": 15,
     "missingRequired": [],
-    "hasManifest": false,
+    "hasManifest": true,
     "hasProjectStatus": true,
     "studioOsApplied": true,
     "hubReady": true,
@@ -311,7 +311,6 @@
     "notes": ""
   },
   "repairActions": [
-    "Create context/STUDIO_MANIFEST.json from synthesized manifest.",
     "Seed .claude/settings.local.json from the CLAUDE settings template."
   ]
 }
