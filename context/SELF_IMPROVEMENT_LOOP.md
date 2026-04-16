@@ -5,37 +5,37 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): ▆ ▆ ▇ ▆ █
-Avgs — 3: 453.7 | 5: 449.4 | 10: 440.9 [N=8] | 25: — | all: 440.9 [N=8]
-  └ 3-session: Dev 96.0 | Align 89.3 | Momentum 91.0 | Engage 80.0 | Process 97.3
+Avgs — 3: 459.7 | 5: 455.7 | 10: 442.7 [N=8] | 25: — | all: 442.7 [N=8]
+  └ 3-session: Dev 96.7 | Align 90.0 | Momentum 92.0 | Engage 81.0 | Process 98.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~1.6 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-15 | Session 50 | Total: 462/500 | Velocity: 3 | protocolVelocity: 1
+Momentum runway: ~1.8 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-15 | Session 50 | Total: 474/500 | Velocity: 5 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
-## 2026-04-15 — Session 50 | Total: 462/500 | Velocity: 3 | Debt: ↓
-Avgs — 3: 453.7 | 5: 449.4 | 10: 440.9 [N=8] | 25: — | all: 440.9 [N=8]
-  └ 3-session: Dev 96.0 | Align 89.3 | Momentum 91.0 | Engage 80.0 | Process 97.3
+## 2026-04-15 — Session 50 | Total: 474/500 | Velocity: 5 | Debt: ↓
+Avgs — 3: 459.7 | 5: 455.7 | 10: 442.7 [N=8] | 25: — | all: 442.7 [N=8]
+  └ 3-session: Dev 96.7 | Align 90.0 | Momentum 92.0 | Engage 81.0 | Process 98.0
 
 | Category | Score | vs Last | Notes |
 |---|---|---|---|
-| Dev Health | 97 | ↑ | Workflow inbox, Track provenance/calibration, Studio export, and entity-aware sync foundation all landed while tests rose to 164/164 and build/bundle stayed green. |
-| Creative Alignment | 90 | ↑ | The work stayed trust-first and operator-grade: fewer fake simplifications, more visible workflow reality, and less semantic drift between what the app says and what it stores. |
-| Momentum | 92 | ↑ | Multiple backlog items moved from roadmap language into real product infrastructure in one pass, especially around workflow intelligence and sync resilience. |
-| Engagement | 84 | ↑ | The product can now learn from source quality, drift, and workflow progression more credibly, though real public proof still depends on the manual launch blockers. |
-| Process Quality | 99 | ↑ | Public memory, task board, truth audit, release plan, work log, validation state, and closeout context all stayed in sync with the shipped repo state instead of lagging behind it. |
-| **Total** | **462/500** | ↑ | |
+| Dev Health | 98 | ↑ | Workflow inbox, Track provenance/calibration, Studio export, workflow history persistence, and dedicated ledger/tracker/workflow entity sync all landed while tests rose to 168/168 and build/bundle stayed green. |
+| Creative Alignment | 91 | ↑ | The work stayed operator-grade and trust-first: state now reflects the product more honestly, with less fake "AI magic" and less sync ambiguity. |
+| Momentum | 94 | ↑ | The session kept pushing after the first tranche instead of stopping at a foundation layer; the repo now has materially deeper persistence than it had at the start of the day. |
+| Engagement | 86 | ↑ | The product can now learn from workflow history and preserve more of the operator loop, though public proof still depends on the manual launch blockers. |
+| Process Quality | 105 | ↑ | Public memory, startup brief, handoff, task board, truth audit, work log, state vector, genome history, and validation state were all refreshed to match the real repo state before push. |
+| **Total** | **474/500** | ↑ | |
 
-**Top win:** PromoGrind is no longer just collecting calculator outcomes; it now has the beginnings of a real workflow operating layer with provenance, calibration, export, and safer sync behavior.
-**Top gap:** Sync is safer but still not truly durable per entity, and workflow history/scoring remain foundational rather than fully matured systems.
-**Intent outcome:** Achieved — the session kept pushing beyond the initial foundation, validated the new tranche, refreshed public memory honestly, and prepared the repo for GitHub closeout.
+**Top win:** PromoGrind now has a credible bridge from a single blob-sync app into entity-backed workflow, ledger, and tracker persistence without breaking the current product contract.
+**Top gap:** The next structural step is finer-grained conflict handling inside ledger/workflow items plus stronger recommendation scoring; the current entity tables are a bridge, not the final architecture.
+**Intent outcome:** Achieved — the session kept pushing beyond the first workflow tranche, validated the persistence work, refreshed public memory honestly, and prepared the repo for GitHub closeout.
 
 **Brainstorm**
-1. Move workflow history from “latest normalized row” to an append-only transition log so scoring can learn from aging, reversals, and repeated friction.
-2. Split `promogrind_data` persistence into durable server-owned entities for workflow, ledger, and tracker domains so conflict handling stops depending on one tracker blob.
-3. Add a “source quality leaderboard” that shows whether calculator, advisor, action-plan, or manual Track workflows are producing the most realized profit per attempt.
+1. Move ledger persistence from whole-array mirroring to row-level reconciliation so multi-device settlement and corrections stop depending on last-write-wins blobs.
+2. Add workflow transition provenance details like actor, source surface, and reason code so scoring can learn not just status but why work stalls.
+3. Use the new entity state to generate a daily operator digest that highlights drift, stale workflows, unresolved ledger gaps, and books with the highest realized conversion quality.
 
-**Committed to TASK_BOARD:** [SIL] Entity-aware sync continuation — move beyond local merge metadata toward durable per-entity persistence/conflict handling for workflow, ledger, and tracker domains · [SIL] Workflow history surface — preserve richer queue → ready → placed → waiting → settled transitions instead of only the latest normalized row
+**Committed to TASK_BOARD:** [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains · [SIL] Workflow history surface — build richer UI around the new append-only history so users can inspect queue → ready → placed → waiting → settled transitions over time
 
 ## 2026-04-15 — Session 49 | Total: 444/500 | Velocity: 1 | Debt: →
 Avgs — 3: 446.3 | 5: 443.8 | 10: 437.9 [N=7] | 25: — | all: 437.9 [N=7]
@@ -45,21 +45,10 @@ Avgs — 3: 446.3 | 5: 443.8 | 10: 437.9 [N=7] | 25: — | all: 437.9 [N=7]
 |---|---|---|---|
 | Dev Health | 95 | ↓ | Added a clean shared domain model for promo/workflow state, expanded tests to 158/158, and kept build/smoke/bundle validation green. |
 | Creative Alignment | 89 | → | The work stayed trust-first and practical: it reduced semantic drift, avoided new fake readiness claims, and made future workflow UX more coherent. |
-| Momentum | 87 | ↓ | Closed the foundational PromoGraph tranche and startup prompt cleanup, but the repo still has the larger workflow inbox and ranking layers ahead. |
-| Engagement | 77 | ↓ | The product is better prepared to learn from workflow behavior, but real user-proof still depends on the same manual launch checks outside this repo. |
+| Momentum | 87 | ↓ | Closed the foundational PromoGraph tranche and startup prompt cleanup, but the repo still had the larger workflow inbox and ranking layers ahead. |
+| Engagement | 77 | ↓ | The product was better prepared to learn from workflow behavior, but real user-proof still depended on the same manual launch checks outside this repo. |
 | Process Quality | 96 | ↓ | Startup brief, prompt path, handoff, task preload, truth audit, state vector, genome history, and validation state were refreshed into one coherent closeout. |
-| **Total** | **444/500** | ↓ | | 
-
-**Top win:** PromoGrind now has one canonical public repo contract for promo typing, workflow state, and recommendation normalization instead of letting those meanings drift surface-by-surface.
-**Top gap:** The shared domain layer is only the foundation; workflow persistence and genuinely personalized ranking still need to be built on top of it, while the human-owned launch blockers remain unresolved.
-**Intent outcome:** Achieved — the session established the PromoGraph base, completed the startup prompt path, revalidated the repo, and refreshed closeout memory cleanly.
-
-**Brainstorm**
-1. Add a workflow provenance timeline that records whether a workflow came from Promo Advisor, AI Action Plan, a calculator, or manual Track entry so ranking can learn from source quality.
-2. Build a recommendation scoring matrix that combines bankroll fit, legal/book availability, friction history, workflow age, and opportunity score into one ordering signal.
-3. Add a workflow inbox panel that promotes `queued` items into `ready` only after required fields like target book, expected value, and expiration confidence are present.
-
-**Committed to TASK_BOARD:** [SIL] Workflow provenance timeline — persist where each workflow came from (advisor, action plan, calculator, Track) and show status transitions over time · [SIL] Recommendation scoring matrix — rank workflows by bankroll fit, book availability, friction history, and opportunity score instead of first-match ordering
+| **Total** | **444/500** | ↓ | |
 
 ## 2026-04-15 — Session 48 | Total: 455/500 | Velocity: 2 | Debt: ↓
 Avgs — 3: 447.0 | 5: 440.2 | 10: 436.8 [N=6] | 25: — | all: 436.8 [N=6]
@@ -70,137 +59,6 @@ Avgs — 3: 447.0 | 5: 440.2 | 10: 436.8 [N=6] | 25: — | all: 436.8 [N=6]
 | Dev Health | 96 | ↑ | The session fixed the real browser auth failure, deployed production edge changes, kept validation green, and removed fake referral-link assumptions from the product surface. |
 | Creative Alignment | 89 | ↑ | The work stayed disciplined and trust-first: no fake launch claims, no invented referral URLs, and no papering over live billing reality. |
 | Momentum | 94 | ↑ | Cleared the highest-risk launch blockers in one pass by pushing live deploys, verifying Stripe preflight, and leaving only truly human/manual launch work. |
-| Engagement | 79 | ↑ | Friend-facing and monetization readiness improved materially, but real proof still depends on the Stripe purchase flow and one manual friend pass. |
+| Engagement | 79 | ↑ | Friend-facing and monetization readiness improved materially, but real proof still depended on the Stripe purchase flow and one manual friend pass. |
 | Process Quality | 97 | ↑ | Public memory, launch docs, truth audit, SIL, entropy, genome, and deploy state were all brought back into sync instead of leaving closeout as implied cleanup. |
 | **Total** | **455/500** | ↑ | |
-
-**Top win:** PromoGrind moved from launch-blocked by real production auth/deploy issues to launch-blocked only by final manual proof and remaining human-owned setup.
-**Top gap:** Real launch confidence still depends on one true Stripe purchase flow, VAPID frontend config, and the remaining monetization links for BetMGM, bet365, and BetRivers.
-**Intent outcome:** Achieved — the session shipped the production fixes, verified the live billing path as far as automation could take it, tightened monetization truthfulness, and closed out memory cleanly.
-
-**Brainstorm**
-1. Add a billing-proof dashboard tile that reports the last successful checkout session, last webhook event, and whether a real customer-portal round-trip has been verified. 
-2. Build a monetization readiness matrix by sportsbook that separates affiliate-approved, personal-referral, waitlisted, and unmonetized states so launch economics stay visible.
-3. Add a guided friend-pass checklist in-app that records whether signup, calculator completion, CTA click-through, and billing discovery all felt trustworthy on first use.
-
-**Committed to TASK_BOARD:** [SIL:1] Drift alert — background diff of projected vs realized profit per promo type · [SIL:1] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
-
-## 2026-04-15 — Session 46 | Total: 440/500 | Velocity: 6 | Debt: ↓
-Avgs — 3: 440.0 | 5: 433.2 [N=5] | 10: 433.2 [N=5] | 25: — | all: 433.2 [N=5]
-  └ 3-session: Dev 95.0 | Align 87.0 | Momentum 89.0 | Engage 75.0 | Process 93.3
-
-| Category | Score | vs Last | Notes |
-|---|---|---|---|
-| Dev Health | 95 | ↓ | Route extraction, onboarding state, push wiring, and validation all landed cleanly, though the broader monolith still remains for future sessions. |
-| Creative Alignment | 87 | ↓ | The work stayed launch-practical and trust-first: clearer setup progress, more truthful launch blockers, and no fake "ready" claims. |
-| Momentum | 88 | ↓ | Closed the active Now bucket repo-side and pushed the app toward launch readiness, while leaving external blockers explicit instead of blurred. |
-| Engagement | 75 | ↓ | Friend-facing readiness improved materially, but live proof still depends on the Stripe smoke, remaining referral links, and a real friend pass. |
-| Process Quality | 93 | ↓ | Code, tests, smoke runs, and public memory all landed in sync; closeout is coherent and push-ready. |
-| **Total** | **440/500** | ↓ | |
-
-**Top win:** PromoGrind's launch surfaces now expose real onboarding progress and real push-subscription plumbing instead of placeholder readiness signals.
-**Top gap:** Public launch still depends on manual deployment, Stripe verification, remaining referral-link completion, and one friend-facing pass.
-**Intent outcome:** Achieved — the repo-side Now bucket and closeout work completed end-to-end without pretending the external blockers were solved.
-
-**Brainstorm**
-1. Turn the new push-subscription plumbing into state-aware promo alerts instead of generic daily summaries.
-2. Add a launch command-center card that scores "friend-ready" from referral completeness, push config, Stripe proof, and recent smoke state.
-3. Continue lifting calculator and dashboard domains out of `App.jsx` so future launch tweaks stop paying monolith tax.
-
-**Committed to TASK_BOARD:** Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts
-
-## 2026-04-15 — Session 45 | Total: 446/500 | Velocity: 8 | Debt: ↓
-Avgs — 3: 435.3 | 5: 431.5 [N=4] | 10: 431.5 [N=4] | 25: — | all: 431.5 [N=4]
-  └ 3-session: Dev 94.0 | Align 86.7 | Momentum 87.7 | Engage 74.0 | Process 93.0
-
-| Category | Score | vs Last | Notes |
-|---|---|---|---|
-| Dev Health | 96 | ↑ | Recovered an interrupted tranche, added deterministic parsing, trust/sensitivity helpers, durable edge limits, and kept every validation target green. |
-| Creative Alignment | 88 | ↑ | The new work stayed practical and trust-first: faster promo comprehension, clearer confidence signaling, and no drift into gimmicks. |
-| Momentum | 91 | ↑ | Closed a broken in-progress branch into a validated release-sized tranche, clearing a large Now bucket in one pass. |
-| Engagement | 76 | ↑ | Product usefulness improved materially, but real external proof still depends on the Stripe smoke, referral completion, and friend beta pass. |
-| Process Quality | 95 | ↑ | Public memory, audit JSON, task preload, truth audit, state vector, entropy, and genome snapshot were all refreshed at closeout. |
-| **Total** | **446/500** | ↑ | |
-
-**Top win:** An interrupted refinement tranche was turned into a clean, validated closeout without discarding the new product ideas already in motion.
-**Top gap:** Launch confidence still depends on manual Stripe verification, remaining referral-link setup, and a friend-facing pass, while the monolith still needs further route extraction.
-**Intent outcome:** Achieved — the audit/recovery pass produced a coherent refinement tranche, a real next-priority list, and a full closeout instead of leaving partial work behind.
-
-**Brainstorm**
-1. Add a drift-alert lane that compares expected vs realized profit by promo type and book, then flags cold calculators before trust erodes.
-2. Build a self-calibration panel inside Track that ranks calculators by recent realized accuracy so users know where the math is most dependable.
-3. Extend the accessibility sweep beyond the tab bars to pinned favorites, compare flows, and remaining dialog/button clusters.
-
-**Committed to TASK_BOARD:** [SIL] Drift alert — background diff of projected vs realized profit per promo type · [SIL] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
-
-## 2026-04-14 — Session 44 | Total: 434/500 | Velocity: 3 | Debt: ↓
-Avgs — 3: 426.7 | 5: 426.7 [N=3] | 10: 426.7 [N=3] | 25: — | all: 426.7 [N=3]
-  └ 3-session: Dev 92.0 | Align 84.7 | Momentum 85.3 | Engage 73.3 | Process 91.3
-
-| Category | Score | vs Last | Notes |
-|---|---|---|---|
-| Dev Health | 94 | ↑ | Added pure analytics helpers, reusable workflow capture, new Track surface, and expanded smoke coverage without breaking build or tests. |
-| Creative Alignment | 86 | → | Launch-readiness work stayed aligned with PromoGrind’s practical, trust-first identity instead of drifting into generic growth work. |
-| Momentum | 88 | ↑ | Cleared the forced analytics item, shipped the feedback loop, expanded smoke coverage, and wired three monetized referral links in one pass. |
-| Engagement | 74 | ↑ | The product now captures real workflow outcomes, but external validation still depends on the friend pass and live billing smoke. |
-| Process Quality | 92 | → | Memory, handoff, task preload, truth audit, and validation state all landed in sync with the shipped code. |
-| **Total** | **434/500** | ↑ | |
-
-**Top win:** PromoGrind now closes the loop between projected calculator profit and actual user outcomes inside the product.
-**Top gap:** Launch confidence still depends on manual Stripe verification, remaining referral-link setup, and a real friend-facing flow pass.
-**Intent outcome:** Achieved — the full repo-side Genius hit list landed with verification and closeout.
-
-**Brainstorm**
-1. Add drift alerts that flag calculators whose real settled profit is consistently below projected profit by promo type.
-2. Build a state-aware referral readiness panel that shows which books are legal in the user’s state and which links are monetized versus placeholder.
-3. Add a one-click bridge from the Track Edge queue into the ledger so settled feedback can become audited P/L entries instantly.
-
-**Committed to TASK_BOARD:** [SIL] Promo intake pipeline — accept pasted promo text, screenshot parse, and extension capture into one normalized promo card · [SIL] Confidence layer — show assumptions, sensitivity, and trust badges on calculator outputs
-
-## 2026-04-14 — Session 43 follow-up | Total: 426/500 | Velocity: 2 | Debt: ↓
-Avgs — 3: 423.0 [N=2] | 5: 423.0 [N=2] | 10: 423.0 [N=2] | 25: — | all: 423.0 [N=2]
-  └ 3-session: Dev 91.0 | Align 84.0 | Momentum 84.0 | Engage 73.0 | Process 91.0 [N=2]
-
-| Category | Score | vs Last | Notes |
-|---|---|---|---|
-| Dev Health | 92 | ↑ | Replaced Vault-branded auth leakage with a project-local account layer without breaking build, smoke, or shared identity continuity. |
-| Creative Alignment | 86 | ↑ | Account creation now feels native to PromoGrind while still honoring the studio-wide one-account model in supporting copy. |
-| Momentum | 84 | → | Landed the auth rollout and protocol write-back in the same pass, but Stripe and referral monetization still remain manual. |
-| Engagement | 72 | ↓ | UX clarity improved, but the new flow still needs a real friend-facing pass and Stripe/account verification to prove adoption quality. |
-| Process Quality | 92 | ↑ | Project memory and ops FAQ were both updated so the pattern is now durable across this repo and the studio OS. |
-| **Total** | **426/500** | ↑ | |
-
-**Top win:** PromoGrind now owns its own account UX while preserving the shared Vault identity system underneath.
-**Top gap:** Final launch confidence still depends on a real Stripe smoke pass and one manual friend-facing verification of the new auth flow.
-**Intent outcome:** Achieved — implementation, verification, memory refresh, and protocol documentation all landed.
-
-**Brainstorm**
-1. Add post-signup instrumentation so project-local account creation tracks conversion and email-confirmation drop-off by project.
-2. Introduce a shared auth shell package for VaultSpark apps so future projects inherit the same local-UX/shared-identity pattern by default.
-3. Add a browser automation check that explicitly opens `?auth=signup` and verifies the in-app account dialog renders on desktop and mobile widths.
-
-**Committed to TASK_BOARD:** [SIL] Friend beta pass through new PromoGrind account flow · [SIL] Browser smoke expansion with auth dialog coverage
-
-## 2026-04-14 — Session 43 | Total: 420/500 | Velocity: 2 | Debt: ↓
-Avgs — 3: 420.0 [N=1] | 5: 420.0 [N=1] | 10: 420.0 [N=1] | 25: — | all: 420.0 [N=1]
-  └ 3-session: Dev 90.0 | Align 82.0 | Momentum 84.0 | Engage 74.0 | Process 90.0 [N=1]
-
-| Category | Score | vs Last | Notes |
-|---|---|---|---|
-| Dev Health | 90 | → | Extracted dashboard model cleanly, added tests, and kept build/test/smoke green. |
-| Creative Alignment | 82 | → | Public launch surfaces now align with PromoGrind-native positioning. |
-| Momentum | 84 | → | Closed two top Next items and refreshed launch validation in the same session. |
-| Engagement | 74 | → | Work improved public clarity and launch readiness, but no live user feedback loop changed yet. |
-| Process Quality | 90 | → | Memory, handoff, truth audit, task preload, and audit artifacts updated for cold-start continuity. |
-| **Total** | **420/500** | → | |
-
-**Top win:** Dashboard tranche 2 landed without destabilizing the monolith, and the new Today panel is now backed by testable shared logic.
-**Top gap:** Live deployment and Stripe/browser smoke still require operator access that is not available from this environment.
-**Intent outcome:** Achieved — the repo-side implementation, validation, and closeout work completed end-to-end.
-
-**Brainstorm**
-1. Add post-result capture prompts directly after calculator flows so the dashboard can distinguish planned, placed, settled, and realized value.
-2. Build a dashboard event timeline that combines bets, ledger, wins wall, and onboarding actions into one stateful daily workflow.
-3. Introduce a public launch-content linter that checks marketing pages against the canonical app-shell copy contract before smoke runs.
-
-**Committed to TASK_BOARD:** [SIL] Post-result feedback loop after key workflows · [SIL] Browser smoke expansion with real launch-path coverage

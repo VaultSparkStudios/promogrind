@@ -2,5 +2,5 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-15 (S50 closeout — workflow inbox + provenance/self-calibration + Studio snapshot + sync hardening are reflected in repo state, legacy active-domain drift was cleaned up, and tests/build/bundle budget all passed)
+Last reviewed: 2026-04-15 (S50 final closeout — workflow inbox + provenance/self-calibration + Studio snapshot + workflow-history persistence + ledger/tracker entity sync are reflected in repo state; tests/build/bundle budget all passed and the remaining blockers are explicitly human-owned)
 Public-safe summary only. Sensitive verification notes are maintained privately.

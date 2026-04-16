@@ -8,7 +8,7 @@
       "total": 0,
       "maxTotal": 25,
       "overallStatus": "green",
-      "lastReviewed": "2026-04-15 (S50 closeout — workflow inbox, provenance/self-calibration, Studio snapshot export, and entity-aware sync queue are now reflected in repo state; tests/build/bundle budget passing)",
+      "lastReviewed": "2026-04-15 (S50 final closeout — workflow inbox, provenance/self-calibration, Studio snapshot export, workflow-history persistence, and ledger/tracker entity sync are now reflected in repo state; tests/build/bundle budget passing)",
       "dimensions": {
         "schema_alignment": 0,
         "prompt_template_alignment": 0,
@@ -17,75 +17,7 @@
         "contradiction_density": 0
       },
       "delta": 0,
-      "cause": "S50 workflow intelligence + sync hardening is complete: PromoGrind now has a real workflow inbox foundation, provenance-aware Track surfaces, self-calibration signals, Studio snapshot export, and safer queued sync behavior."
-    },
-    {
-      "date": "2026-04-14",
-      "session": null,
-      "total": 0,
-      "maxTotal": 25,
-      "overallStatus": "green",
-      "lastReviewed": "2026-04-14 (S41 Sprint 1 closeout — tests/build passing; AI server-side quota helper added; Dashboard activation UX, CTA tracking, Wins Wall migration, and build splitting complete)",
-      "dimensions": {
-        "schema_alignment": 0,
-        "prompt_template_alignment": 0,
-        "derived_view_freshness": 0,
-        "handoff_continuity": 0,
-        "contradiction_density": 0
-      },
-      "delta": 0,
-      "cause": "Sprint 1 hardening complete: server-side AI quotas/entitlements, activation next-best-action UX, sportsbook CTA tracking"
-    },
-    {
-      "date": "2026-04-15",
-      "session": 45,
-      "total": 0,
-      "maxTotal": 25,
-      "overallStatus": "green",
-      "lastReviewed": "2026-04-14 (S44 closeout — Track analytics + result-feedback loop + expanded browser smoke + referral-link updates; tests/build/launch smoke passing)",
-      "dimensions": {
-        "schema_alignment": 0,
-        "prompt_template_alignment": 0,
-        "derived_view_freshness": 0,
-        "handoff_continuity": 0,
-        "contradiction_density": 0
-      },
-      "delta": 0,
-      "cause": "S45 refinement tranche is stabilized and extended: PromoGrind now has calculator trust badges, sensitivity chips, a Prom"
-    },
-    {
-      "date": "2026-04-15",
-      "session": 47,
-      "total": 0,
-      "maxTotal": 25,
-      "overallStatus": "green",
-      "lastReviewed": "2026-04-15 (S46 closeout — route extraction advanced, onboarding + push-brief plumbing landed, launch-readiness metadata was refreshed, and tests/build/launch smoke/browser smoke all passed)",
-      "dimensions": {
-        "schema_alignment": 0,
-        "prompt_template_alignment": 0,
-        "derived_view_freshness": 0,
-        "handoff_continuity": 0,
-        "contradiction_density": 0
-      },
-      "delta": 0,
-      "cause": "S47 is closed out: PromoGrind now has a scored launch command center, richer result-friction capture, structured Promo A"
-    },
-    {
-      "date": "2026-04-15",
-      "session": 48,
-      "total": 0,
-      "maxTotal": 25,
-      "overallStatus": "green",
-      "lastReviewed": "2026-04-15 (S48 closeout — auth-compatible edge redeploys are live, Stripe preflight now reaches hosted Checkout, send-daily-brief is deployed, referral-link truthfulness was refreshed, and tests/build/launch smoke all passed)",
-      "dimensions": {
-        "schema_alignment": 0,
-        "prompt_template_alignment": 0,
-        "derived_view_freshness": 0,
-        "handoff_continuity": 0,
-        "contradiction_density": 0
-      },
-      "delta": 0,
-      "cause": "S48 launch-unblock closeout is complete: browser-invoked Edge Functions were redeployed with publishable-key compatible "
+      "cause": "S50 final closeout is complete: PromoGrind now spans workflow, ledger, and tracker entity sync foundations on top of the workflow-intelligence tranche while keeping the remaining manual launch blockers explicit."
     },
     {
       "date": "2026-04-15",
@@ -103,6 +35,23 @@
       },
       "delta": 0,
       "cause": "S49 PromoGraph foundation closeout is complete: shared promo/workflow normalization now exists, dashboard ranking can see open workflows, and the repo startup path no longer points at a missing initiate prompt."
+    },
+    {
+      "date": "2026-04-15",
+      "session": 48,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "green",
+      "lastReviewed": "2026-04-15 (S48 closeout — auth-compatible edge redeploys are live, Stripe preflight now reaches hosted Checkout, send-daily-brief is deployed, referral-link truthfulness was refreshed, and tests/build/launch smoke all passed)",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "S48 launch-unblock closeout is complete: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config, Stripe preflight works, and only manual launch proof remains."
     }
   ]
 }

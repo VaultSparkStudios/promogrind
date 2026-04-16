@@ -1,0 +1,25 @@
+{
+  "date": "2026-04-15",
+  "session": 50,
+  "status": "green",
+  "summary": "Final Session 50 closeout after workflow-history persistence and entity-sync continuation.",
+  "highlights": [
+    "sync.js now appends workflow-history events and hydrates/persists workflow_state, workflow_history, ledger_state, and tracker_state",
+    "migration-workflow-history.sql and migration-entity-sync.sql add the dedicated Supabase entity schema and RLS",
+    "public memory, startup brief, SIL, truth audit, state vector, and handoff files were refreshed to the final 168/168 state"
+  ],
+  "validation": {
+    "tests": "168/168",
+    "build": "passing",
+    "bundleBudget": "passing",
+    "mainChunkKb": 413.9
+  },
+  "remainingBlockers": [
+    "Apply scripts/migration-workflow-history.sql in Supabase",
+    "Apply scripts/migration-entity-sync.sql in Supabase",
+    "Set VITE_VAPID_PUBLIC_KEY in production",
+    "Run the real Stripe smoke flow end-to-end",
+    "Secure real links/approvals for BetMGM, bet365, and BetRivers",
+    "Do one friend-facing account/calculator/browser pass"
+  ]
+}

@@ -4,14 +4,14 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 
 ## Session 50 (2026-04-15) — CLOSED
 
-**Session Intent:** Implement the highest-leverage workflow-intelligence roadmap items, keep pushing deeper instead of hand-waving "complete all", then close out memory cleanly and push the repo.
+**Session Intent:** Implement the highest-leverage workflow-intelligence roadmap items, keep pushing deeper instead of hand-waving "complete all", then extend the sync model into durable entity-backed persistence and close out memory cleanly.
 
 ## Where We Left Off (Session 50 — CLOSED)
 
-- Shipped: 6 improvements across 5 groups — workflow inbox, track intelligence, Studio export, sync hardening, truth cleanup
-- Tests: 164/164 passing · delta: +6
-- Deploy: pending — repo changes committed/pushed; no production deploy required for this tranche
-- Session type: implementation + closeout
+- Shipped: 8 improvements across 6 groups — workflow inbox, Track intelligence, Studio export, truth cleanup, workflow history persistence, entity-sync continuation
+- Tests: 168/168 passing · delta: +10
+- Deploy: pending — repo changes are ready for push; repo-side code does not need a production deploy, but the new SQL migrations must be applied in Supabase before the dedicated entity tables exist live
+- Session type: implementation + persistence + closeout
 
 ## Current Delta Since S49
 
@@ -21,13 +21,16 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 - Upgraded `supabase/functions/ai-action-plan/index.ts` and `src/components/AIActionPlan.jsx` so AI actions return/store a richer machine-usable workflow contract instead of only lightweight display text.
 - Expanded `src/track/insights.js` and `src/components/TrackInsights.jsx` with workflow provenance, recent workflow timeline, and self-calibration / expected-vs-actual drift surfaces.
 - Deepened dashboard ranking in `src/dashboard/today.js` and `src/App.jsx` so next-best-action can prioritize the highest-scored workflow, not only raw workflow counts.
-- Hardened `src/sync.js` with per-entity timestamps, entity-aware merge behavior, and an offline `pg_sync_queue` for failed writes; expanded `src/__tests__/sync.test.js` accordingly.
+- Hardened `src/sync.js` with per-entity timestamps, entity-aware merge behavior, and an offline `pg_sync_queue` for failed writes; then extended it again to append workflow-history events locally and hydrate/persist dedicated `workflow_state`, `workflow_history`, `ledger_state`, and `tracker_state` tables while `promogrind_data` remains as a compatibility mirror.
+- Added `scripts/migration-workflow-history.sql` and `scripts/migration-entity-sync.sql` so Supabase can own workflow history plus separate ledger/tracker entity state with RLS.
 - Fixed remaining active truth drift in `src/launchState.js`, `supabase/functions/gift-trial/index.ts`, `supabase/functions/promo-expiry-digest/index.ts`, and `docs/RELEASE_PLAN.md`.
-- Added `src/__tests__/workflowInbox.test.js` and expanded dashboard / track / sync coverage; the suite now passes at `164/164`.
-- Validation after closeout: `npm test`, `npm run build`, and `node scripts/check-bundle-budget.mjs` all passed; bundle budget remains green at ~410KB.
+- Expanded `src/__tests__/sync.test.js` to cover workflow-history appends plus dedicated ledger/tracker/workflow table hydration and writes; the suite now passes at `168/168`.
+- Validation after closeout: `npm test`, `npm run build`, and `node scripts/check-bundle-budget.mjs` all passed; bundle budget remains green at `413.9KB` under the `420KB` cap.
 
 ## Human Action Required
 
+- [ ] **Apply `scripts/migration-workflow-history.sql` in Supabase** — required before the dedicated `workflow_state` / `workflow_history` tables exist live.
+- [ ] **Apply `scripts/migration-entity-sync.sql` in Supabase** — required before the dedicated `ledger_state` / `tracker_state` tables exist live.
 - [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before the Daily Brief push toggle should be exposed as a live browser subscription feature.
 - [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](/C:/Users/p4cka/documents/development/promogrind/docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
 - [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available; those books still truthfully fall back to non-monetized signup paths.

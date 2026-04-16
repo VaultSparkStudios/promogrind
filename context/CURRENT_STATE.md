@@ -1,8 +1,10 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 164/164 tests green, and bundle budget passing at ~410KB main chunk after the current workflow + sync tranche
-- version: 24.4.0 · last session: S50 (2026-04-15)
+- this repo remains deployable — build passing, 168/168 tests green, and bundle budget passing at ~413.9KB main chunk after the current workflow + sync tranche
+- version: 24.6.0 · last session: S50 (2026-04-15)
+- **S50 entity-sync continuation tranche (closed)**: `src/sync.js` now hydrates and persists dedicated `ledger_state` and `tracker_state` tables alongside the newer workflow tables, so ledger/tracker/workflow domains can sync through separate Supabase entities while `promogrind_data` remains as a compatibility mirror; `scripts/migration-entity-sync.sql` adds the ledger/tracker schema + RLS required for that split
+- **S50 workflow history persistence tranche (closed)**: `src/sync.js` now appends canonical workflow-history events, hydrates dedicated `workflow_state` / `workflow_history` tables when present, and best-effort persists both current workflow state and append-only history alongside the legacy `promogrind_data` blob; `scripts/migration-workflow-history.sql` adds the Supabase schema + RLS needed for durable per-user workflow history
 - **S50 workflow intelligence + sync hardening tranche (closed)**: PromoGrind now has a real workflow inbox foundation fed by calculators and AI surfaces, provenance/self-calibration/timeline intelligence in Track, top-workflow-aware dashboard ranking, a structured Studio snapshot export, and a safer sync layer with per-entity metadata plus an offline write queue
 - **S49 PromoGraph foundation + startup closeout tranche (closed)**: added a shared `src/promograph/index.js` domain layer to canonicalize promo typing, workflow statuses, and recommendation payloads; Track feedback and dashboard next-best-action now consume that shared model; `prompts/initiate.md` and `docs/STARTUP_BRIEF.md` now complete the repo's start protocol path
 - **S48 launch-unblock + closeout tranche (closed)**: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config; live Stripe preflight now reaches hosted Checkout; `send-daily-brief` is deployed; ESPN BET/TheScore BET + Fanatics now use real personal referral URLs while non-monetizable generic referral pages were removed for BetMGM, bet365, and BetRivers
@@ -42,7 +44,7 @@ Public-safe summary:
 - **Truth-drift cleanup (post-S49)**: active repo references now use `promogrind.bet` in `gift-trial`, `promo-expiry-digest`, and `docs/RELEASE_PLAN.md`; `src/launchState.js` validation text now reflects the current `158/158` suite instead of stale counts
 - **Deeper ranking (post-S49)**: dashboard snapshot helpers now look across `workflowInbox` plus `resultFeedback`, and the activation panel can prioritize the top scored workflow instead of only workflow counts
 - **Entity-aware sync foundation (S50)**: `src/sync.js` now stamps per-entity timestamps, merges newer local entity slices over remote rows where appropriate, and queues failed writes in `pg_sync_queue` for later flush instead of relying only on one blob timestamp
-- **Validation coverage (S50)**: workflow inbox, Studio export, dashboard ranking, provenance/calibration, and sync queue/entity-merge behavior are now covered; current suite passes at `164/164`
+- **Validation coverage (S50)**: workflow inbox, Studio export, dashboard ranking, provenance/calibration, sync queue/entity-merge behavior, dedicated workflow-state/history hydration, and dedicated ledger/tracker entity hydration are now covered; current suite passes at `168/168`
 - **Startup protocol completeness (S49)**: `prompts/start.md` no longer dead-ends on bootstrap/foundation because `prompts/initiate.md` now exists; `docs/STARTUP_BRIEF.md` is cached in-repo for faster canonical startup output
 - **Browser smoke script status (S43)**: browser smoke was updated and later passed in an elevated environment; launch smoke remains passing in-repo
 - **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
@@ -76,6 +78,6 @@ Public-safe summary:
 - wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
 - edge-function deploy status: auth-backed core functions (`create-checkout`, `customer-portal`, `redeem-beta-code`, `gift-trial`, `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`, `parse-bet-slip`, `stripe-webhook`) were redeployed on 2026-04-15 with publishable-key compatible gateway config; `send-daily-brief` was also deployed the same day
 - remaining code follow-ups: broader keyboard-nav follow-through outside tab bars, deeper calculator/domain extraction out of `App.jsx`, and richer promo-alert targeting beyond the current daily-brief push groundwork
-- remaining code follow-ups: deepen recommendation scoring beyond the current foundation, continue replacing whole-blob sync with truly durable per-entity persistence/history, and validate the new Studio snapshot/export path against wider studio consumers
+- remaining code follow-ups: deepen recommendation scoring beyond the current foundation, finish the move from mirrored entity storage to truly conflict-aware domain persistence where ledger/workflow items can reconcile at a finer granularity, and validate the new Studio snapshot/export path against wider studio consumers
 - remaining launch blockers: setting `VITE_VAPID_PUBLIC_KEY` in the deployed frontend if push alerts should be live, Stripe end-to-end smoke test, remaining monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and one final friend-facing manual browser/account flow pass
 - detailed internal state now lives in the private Studio OS / ops repository

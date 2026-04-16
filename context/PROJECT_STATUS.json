@@ -3,9 +3,11 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "S50 workflow intelligence + sync hardening is complete: PromoGrind now has a real workflow inbox foundation, provenance-aware Track surfaces, self-calibration signals, top-workflow-aware dashboard ranking, a structured Studio snapshot export, and a safer sync layer with per-entity metadata plus an offline write queue.",
-  "nextMilestone": "Push the current workflow foundation into truly durable per-entity persistence/history and stronger recommendation scoring while keeping the remaining human-owned launch blockers explicit.",
+  "currentFocus": "S50 entity-sync continuation is now layered on top of the workflow intelligence tranche: PromoGrind can append canonical workflow events locally, hydrate dedicated workflow_state/workflow_history/ledger_state/tracker_state tables when present, and preserve the workflow inbox, provenance, self-calibration, dashboard ranking, Studio snapshot export, and safer sync queue/entity metadata foundation.",
+  "nextMilestone": "Move from mirrored entity tables to finer-grained conflict handling inside ledger and workflow domains, deepen recommendation scoring, and keep the remaining human-owned launch blockers explicit.",
   "blockers": [
+    "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live",
+    "Apply scripts/migration-entity-sync.sql in Supabase so ledger_state/tracker_state exist live",
     "Daily Brief push alerts still need VITE_VAPID_PUBLIC_KEY on the live frontend",
     "Remaining affiliate/referral links are still missing for BetMGM, bet365, and BetRivers",
     "Stripe end-to-end smoke still requires a real account/browser checkout pass",
@@ -16,7 +18,7 @@
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-15",
-  "version": "24.4.0",
+  "version": "24.6.0",
   "lastSession": "S50",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
@@ -29,8 +31,8 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "passing — build and bundle budget revalidated after workflow intelligence + sync tranche",
-  "testStatus": "164/164",
+  "buildStatus": "passing — build and bundle budget revalidated after entity-sync continuation tranche; main chunk now ~413.9KB against a 420KB budget",
+  "testStatus": "168/168",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
@@ -107,7 +109,8 @@
     "stripe_preflight_verified": "Live preflight now creates a real hosted Stripe Checkout URL and customer-portal correctly returns 404 for users without a billing record",
     "keyboard_nav_followthrough": "Primary and secondary tab bars now support keyboard nav, but broader interactive-control coverage is still pending",
     "push_brief_public_config_pending": "Daily Brief push subscription wiring and send-daily-brief are live, but production still needs VITE_VAPID_PUBLIC_KEY before public browser subscriptions should be enabled",
-    "blob_sync_model": "sync.js now has per-entity metadata and an offline queue, but deeper workflow state still needs truly durable per-entity persistence/history before multi-device usage expands"
+    "blob_sync_model": "sync.js now mirrors workflow, ledger, and tracker domains through dedicated tables plus the legacy promogrind_data row, but finer-grained conflict handling inside ledger/workflow items is still needed before multi-device usage expands",
+    "bundle_headroom": "Main chunk is still under the 420KB budget, but only by a small margin after the sync tranche"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
@@ -116,9 +119,9 @@
   "ignisLastComputed": "2026-04-15",
   "entropyScore": 0.136,
   "entropyLastComputed": "2026-04-15",
-  "silScore": 462,
-  "silAvg3": 453.7,
-  "silVelocity": 3,
+  "silScore": 474,
+  "silAvg3": 459.7,
+  "silVelocity": 5,
   "silDebt": "down",
   "silLastSession": "S50",
   "currentSession": 50

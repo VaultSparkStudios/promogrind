@@ -17,6 +17,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] PromoGraph domain layer — normalize promos, workflows, recommendations, execution state, and settlements into one shared model
 - [x] Workflow inbox foundation — calculators, Promo Advisor, and AI Action Plan can now save canonical workflow entries into one shared inbox surface
 - [x] Entity-aware sync foundation — `sync.js` now tracks per-entity timestamps and queues failed remote writes for later flush instead of relying only on one blob timestamp
+- [x] Workflow history persistence foundation — `sync.js` now appends workflow lifecycle events locally and can hydrate/persist `workflow_state` + `workflow_history` tables when the new Supabase schema is present
+- [x] Ledger + tracker entity-sync foundation — `sync.js` can now hydrate/persist `ledger_state` and `tracker_state` so those domains no longer depend only on the shared `promogrind_data` row
 - [ ] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows
 - [x] Workflow provenance foundation — Track now exposes source-level provenance plus a recent workflow timeline
 - [x] Self-calibration foundation — Track now summarizes expected vs actual settled profit drift for the current workflow loop
@@ -87,10 +89,10 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
 - [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)
 - [ ] [SIL:2⛔] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
-- [ ] [SIL] Workflow provenance timeline — persist where each workflow came from (advisor, action plan, calculator, Track) and show status transitions over time
+- [ ] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored
 - [ ] [SIL] Recommendation scoring matrix — deepen the new scoring foundation to rank workflows by bankroll fit, book availability, friction history, urgency, and opportunity score instead of first-match ordering
-- [ ] [SIL] Entity-aware sync continuation — move beyond local merge metadata toward durable per-entity persistence/conflict handling for workflow, ledger, and tracker domains
-- [ ] [SIL] Workflow history surface — preserve richer queue → ready → placed → waiting → settled transitions instead of only the latest normalized row
+- [ ] [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
+- [ ] [SIL] Workflow history surface — build richer UI around the new append-only history so users can inspect queue → ready → placed → waiting → settled transitions over time
 - [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
 - [ ] Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
 - [ ] Offline write-queue in `src/sync.js` (IndexedDB) for ledger/feedback writes when offline
@@ -102,6 +104,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Community intel upgrade — freshness, verification, report quality, and region filters on promo submissions
 - [ ] Observability dashboard — activation, return rate, CTA CTR, AI usage, and monetization health
 - [ ] Bundle budget in CI — fail or warn when first-load bundle exceeds target
+- [ ] Bundle trim after sync tranche — main chunk is now ~413.9KB against a 420KB budget, so the next structural pass should claw back a few KB before more UI expansion
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
 - [ ] VAPID public key rollout + real browser subscription verification

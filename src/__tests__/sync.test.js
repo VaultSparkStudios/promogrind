@@ -27,16 +27,32 @@ const mocks = vi.hoisted(() => ({
   rpc:         vi.fn().mockResolvedValue({ data: null, error: null }),
   upsert:      vi.fn().mockResolvedValue({ data: null, error: null }),
   maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+  tableSelect: vi.fn().mockResolvedValue({ data: [], error: null }),
+  tableMaybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+  tableUpsert: vi.fn().mockResolvedValue({ data: null, error: null }),
 }));
 
 vi.mock('../auth.js', () => ({
   supabase: {
     auth: { getSession: mocks.getSession },
-    from: vi.fn(() => ({
+    from: vi.fn((table) => ({
       select: vi.fn(() => ({
-        eq: vi.fn(() => ({ maybeSingle: mocks.maybeSingle })),
+        eq: vi.fn(() => {
+          if (table === 'promogrind_data') {
+            return { maybeSingle: mocks.maybeSingle };
+          }
+          if (table === 'workflow_state' || table === 'workflow_history') {
+            return mocks.tableSelect(table);
+          }
+          return { maybeSingle: () => mocks.tableMaybeSingle(table) };
+        }),
       })),
-      upsert: mocks.upsert,
+      upsert: (...args) => {
+        if (table === 'promogrind_data') {
+          return mocks.upsert(...args);
+        }
+        return mocks.tableUpsert(table, ...args);
+      },
     })),
     rpc: mocks.rpc,
   },
@@ -55,6 +71,9 @@ beforeEach(() => {
   mocks.rpc.mockResolvedValue({ data: null, error: null });
   mocks.upsert.mockResolvedValue({ data: null, error: null });
   mocks.maybeSingle.mockResolvedValue({ data: null, error: null });
+  mocks.tableSelect.mockResolvedValue({ data: [], error: null });
+  mocks.tableMaybeSingle.mockResolvedValue({ data: null, error: null });
+  mocks.tableUpsert.mockResolvedValue({ data: null, error: null });
 });
 
 // ── saveData ──────────────────────────────────────────────────────────────────
@@ -90,6 +109,24 @@ describe('saveData', () => {
     expect(mocks.upsert).toHaveBeenCalled();
   });
 
+  it('persists dedicated ledger and tracker state when a session is active', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    await saveData({ ledger: [{ id: 1 }], done: { DraftKings: true }, notes: ['keep'] });
+    expect(mocks.tableUpsert).toHaveBeenCalledWith(
+      'ledger_state',
+      expect.objectContaining({ user_id: 'test-user-1', ledger: [{ id: 1 }] }),
+      expect.any(Object),
+    );
+    expect(mocks.tableUpsert).toHaveBeenCalledWith(
+      'tracker_state',
+      expect.objectContaining({
+        user_id: 'test-user-1',
+        tracker: expect.objectContaining({ done: { DraftKings: true }, notes: ['keep'] }),
+      }),
+      expect.any(Object),
+    );
+  });
+
   it('tracks per-entity timestamps for changed sync domains', async () => {
     localStorage.setItem('promo_engine_v3', JSON.stringify({
       ledger: [{ id: 1 }],
@@ -112,6 +149,38 @@ describe('saveData', () => {
     const queue = JSON.parse(localStorage.getItem('pg_sync_queue'));
     expect(queue).toHaveLength(1);
     expect(queue[0].data.ledger).toHaveLength(1);
+  });
+
+  it('appends workflow history when workflow status changes', async () => {
+    const now = new Date().toISOString();
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      workflowInbox: [{
+        id: 'wf-1',
+        title: 'Old workflow',
+        status: 'queued',
+        updatedAt: new Date(Date.now() - 60_000).toISOString(),
+      }],
+      workflowHistory: [],
+      _updated: Date.now() - 60_000,
+    }));
+
+    await saveData({
+      workflowInbox: [{
+        id: 'wf-1',
+        title: 'Old workflow',
+        status: 'placed',
+        updatedAt: now,
+      }],
+    });
+
+    const parsed = JSON.parse(localStorage.getItem('promo_engine_v3'));
+    expect(parsed.workflowHistory).toHaveLength(1);
+    expect(parsed.workflowHistory[0]).toEqual(expect.objectContaining({
+      workflowId: 'wf-1',
+      eventType: 'status_changed',
+      fromStatus: 'queued',
+      status: 'placed',
+    }));
   });
 });
 
@@ -189,6 +258,108 @@ describe('loadData', () => {
     const result = await loadData();
     expect(result.ledger[0].id).toBe(7);
     expect(result.workflowInbox[0].id).toBe('local-wf');
+  });
+
+  it('hydrates workflow state and history from dedicated remote tables', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [],
+        tracker: {},
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+    mocks.tableSelect.mockImplementation(async (table) => {
+      if (table === 'workflow_state') {
+        return {
+          data: [{
+            user_id: 'test-user-1',
+            workflow_id: 'wf-remote',
+            calculator_slug: 'bonus-bet',
+            calculator_label: 'Bonus Bet',
+            title: 'Remote workflow',
+            status: 'ready',
+            source: 'promo_advisor',
+            created_at: '2026-04-15T10:00:00.000Z',
+            updated_at: '2026-04-15T11:00:00.000Z',
+          }],
+          error: null,
+        };
+      }
+      return {
+        data: [{
+          event_key: 'wf-remote:ready:2026-04-15T11:00:00.000Z',
+          workflow_id: 'wf-remote',
+          event_type: 'created',
+          from_status: null,
+          status: 'ready',
+          source: 'promo_advisor',
+          title: 'Remote workflow',
+          calculator_slug: 'bonus-bet',
+          promo_type: 'bonus_bet',
+          book: 'DraftKings',
+          expected_profit: 22.5,
+          actual_profit: null,
+          event_at: '2026-04-15T11:00:00.000Z',
+        }],
+        error: null,
+      };
+    });
+
+    const result = await loadData();
+    expect(result.workflowInbox[0]).toEqual(expect.objectContaining({
+      id: 'wf-remote',
+      status: 'ready',
+      title: 'Remote workflow',
+    }));
+    expect(result.workflowHistory[0]).toEqual(expect.objectContaining({
+      workflowId: 'wf-remote',
+      eventType: 'created',
+    }));
+  });
+
+  it('hydrates dedicated ledger and tracker state from remote entity tables', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [{ id: 'blob-ledger' }],
+        tracker: { done: { FanDuel: true } },
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+    mocks.tableMaybeSingle.mockImplementation(async (table) => {
+      if (table === 'ledger_state') {
+        return {
+          data: {
+            user_id: 'test-user-1',
+            ledger: [{ id: 'entity-ledger', profit: '12.00' }],
+            updated_at: '2026-04-15T12:00:00.000Z',
+          },
+          error: null,
+        };
+      }
+      if (table === 'tracker_state') {
+        return {
+          data: {
+            user_id: 'test-user-1',
+            tracker: {
+              done: { DraftKings: true },
+              customFlag: 'entity-tracker',
+            },
+            updated_at: '2026-04-15T12:30:00.000Z',
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: null };
+    });
+
+    const result = await loadData();
+    expect(result.ledger).toEqual([{ id: 'entity-ledger', profit: '12.00' }]);
+    expect(result.done).toEqual({ DraftKings: true });
+    expect(result.customFlag).toBe('entity-tracker');
   });
 
   it('flushes queued writes before reading remote state', async () => {

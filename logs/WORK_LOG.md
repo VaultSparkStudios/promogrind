@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-04-15 — S50 Entity Sync + Full Closeout
+
+- Extended `src/sync.js` beyond the earlier queue/entity-stamp layer so it now appends canonical workflow-history events and hydrates/persists `workflow_state`, `workflow_history`, `ledger_state`, and `tracker_state` alongside the legacy `promogrind_data` compatibility row.
+- Added `scripts/migration-workflow-history.sql` and `scripts/migration-entity-sync.sql` so Supabase can own workflow history plus separate ledger/tracker entity state with RLS.
+- Expanded `src/__tests__/sync.test.js` to cover workflow-history appends, dedicated workflow table hydration, and dedicated ledger/tracker table hydration/writes.
+- Refreshed `CURRENT_STATE`, `TASK_BOARD`, `PROJECT_STATUS`, `LATEST_HANDOFF`, `SELF_IMPROVEMENT_LOOP`, `TRUTH_AUDIT`, `STATE_VECTOR`, `GENOME_HISTORY`, `STARTUP_BRIEF`, and audit JSON for a truthful final Session 50 closeout.
+- Verified `npm test` → 168/168 passing.
+- Verified `npm run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`413.9KB` main chunk under 420KB target).
+
 ## 2026-04-15 — S50 Workflow Intelligence + Sync Hardening
 
 - Extended `src/promograph/index.js` so canonical workflow entries can carry title/summary/confidence/opportunity metadata and support inbox upserts.
