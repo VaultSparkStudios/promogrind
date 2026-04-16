@@ -24,7 +24,7 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 - Added and refreshed `docs/STARTUP_BRIEF.md` so the repo has a cached canonical startup brief that matches current public-safe context.
 - Refreshed `CURRENT_STATE`, `TASK_BOARD`, `LATEST_HANDOFF`, `WORK_LOG`, `DECISIONS`, `SELF_IMPROVEMENT_LOOP`, `TRUTH_AUDIT`, `PROJECT_STATUS`, `STATE_VECTOR`, `GENOME_HISTORY`, and audit JSON for a real Session 49 closeout.
 - Validation after closeout: `npm.cmd test`, `npm.cmd run build`, `npm.cmd run smoke:launch`, and `node scripts/check-bundle-budget.mjs` all passed.
-- GitHub state: committed to `main` as `b026d20` (`feat(s49): add promograph foundation and close out session`) and ready to push.
+- GitHub state: pushed to `main` as `2f58087` (`feat(s49): add promograph foundation and close out session`) followed by `5a41ffd` (`chore(s49): finalize git closeout state`).
 
 ## Human Action Required
 
