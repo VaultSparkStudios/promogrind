@@ -12,6 +12,9 @@ export default function LaunchCommandCenterPanel() {
   const configuredMonetization = getConfiguredMonetizationCount();
   const affiliateReady = hasConfiguredMonetizationLinks();
   const validation = resolveLaunchValidation();
+  const snapshot = buildStudioSnapshot(appData || {}, {
+    bankroll: typeof window !== "undefined" ? localStorage.getItem("pg_bankroll") || "" : "",
+  });
   const commandCenter = getLaunchCommandCenter({
     configuredAffiliateCount: configuredAffiliates,
     configuredMonetizationCount: configuredMonetization,
@@ -24,7 +27,6 @@ export default function LaunchCommandCenterPanel() {
     commandCenter.posture === "blocked" ? K.yl :
     K.rd;
   const exportSnapshot = async () => {
-    const snapshot = buildStudioSnapshot(appData || {}, { bankroll: typeof window !== "undefined" ? localStorage.getItem("pg_bankroll") || "" : "" });
     try {
       await navigator.clipboard.writeText(JSON.stringify(snapshot, null, 2));
     } catch {}
@@ -42,7 +44,7 @@ export default function LaunchCommandCenterPanel() {
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <button onClick={exportSnapshot} style={{ padding: "8px 10px", background: "transparent", border: `1px solid ${K.ac}35`, borderRadius: 8, color: K.ac, fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
-            Copy Studio Snapshot
+            Copy Studio Contract
           </button>
           <div style={{ padding: "8px 10px", background: K.s2, border: `1px solid ${scoreColor}45`, borderRadius: 8, minWidth: 118 }}>
             <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Readiness Score</div>
@@ -55,6 +57,10 @@ export default function LaunchCommandCenterPanel() {
           <div style={{ padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, minWidth: 108 }}>
             <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Monetized Links</div>
             <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: configuredMonetization ? K.gn : K.yl }}>{configuredMonetization}/{BOOKS.length}</div>
+          </div>
+          <div style={{ padding: "8px 10px", background: K.s2, border: `1px solid ${snapshot.intelligence.driftAlerts.length ? K.yl : K.bd}`, borderRadius: 8, minWidth: 108 }}>
+            <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Drift Alerts</div>
+            <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: snapshot.intelligence.driftAlerts.length ? K.yl : K.gn }}>{snapshot.intelligence.driftAlerts.length}</div>
           </div>
         </div>
       </div>
@@ -81,6 +87,37 @@ export default function LaunchCommandCenterPanel() {
             <div key={blocker.key} style={{ marginBottom: 8 }}>
               <div style={{ fontSize: 11, color: blocker.status === "manual" ? K.yl : K.ac, fontWeight: 700 }}>{blocker.label}</div>
               <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{blocker.detail}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 10, marginBottom: 12 }}>
+        <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 8 }}>Studio priorities</div>
+          {(snapshot.feeds.priorities.length ? snapshot.feeds.priorities : [{
+            type: "none",
+            priority: "low",
+            title: "No machine priorities yet",
+            detail: "Run more workflows and settlements to deepen the operator feed.",
+          }]).map((item) => (
+            <div key={`${item.type}:${item.title}`} style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 11, color: item.priority === "high" ? K.ac : K.gn, fontWeight: 700 }}>{item.title}</div>
+              <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{item.detail}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 8 }}>Anomalies and drift</div>
+          {(snapshot.feeds.anomalies.length ? snapshot.feeds.anomalies : [{
+            type: "none",
+            severity: "low",
+            label: "No anomaly feed yet",
+            detail: "Once the workflow loop deepens, PromoGrind will surface cold lanes and operational anomalies here.",
+          }]).map((item) => (
+            <div key={`${item.type}:${item.label}`} style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 11, color: item.severity === "high" ? K.yl : item.severity === "positive" ? K.gn : K.dm, fontWeight: 700 }}>{item.label}</div>
+              <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{item.detail}</div>
             </div>
           ))}
         </div>

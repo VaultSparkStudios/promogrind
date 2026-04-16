@@ -25,9 +25,11 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Studio export foundation — Launch Command Center can now emit a structured Studio snapshot covering launch, growth, workflows, and intelligence signals
 - [x] Truth-drift sweep — fixed stale launch-test count and remaining legacy `vaultsparkstudios.com/promogrind` links in active repo surfaces
 - [x] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons — **DONE S51**: Workflow ranking now uses bankroll load, book activation, historical promo/book outcomes, friction, skip reasons, urgency, and explainable score summaries that feed dashboard next-best-action copy
-- [ ] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type
+- [x] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type — **DONE S52**: `src/track/insights.js` now emits ranked drift alerts from promo-type and book settlement deltas, and those anomalies now flow into the launch cockpit plus the Studio export contract
 - [ ] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored
 - [ ] [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
+- [ ] Studio contract publish/history layer — persist versioned Studio contract snapshots plus deltas so Studio OS / Ops / Hub / Social Dashboard can consume machine state over time instead of one-off clipboard exports
+- [ ] Canonical Promo Operating Graph — unify promo, workflow, action, drift, confidence, and settlement policy into one shared decision model across dashboard, Track, AI, sync, and Studio surfaces
 
 ## Innovation Bets (new this session)
 - **Launch command center** — replace static launch-readiness card with a scored operator cockpit driven by validation, monetization, rollout, and blocker state
@@ -35,6 +37,9 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - **Structured AI decision cards** — force Promo Advisor / Action Plan outputs into calculator-aware, ops-tagged JSON instead of prose-only blobs
 - **Workflow inbox scoring** — score open workflows by status, EV, confidence, friction, recency, and bankroll fit instead of listing them flat
 - **Studio intelligence contract** — one JSON export should feed Studio OS / Ops / Hub / Social Dashboard without markdown drift
+- **Operator command brief** — generate one machine-usable daily brief from workflows, drift alerts, friction, blockers, and bankroll posture
+- **Decision card contract** — force dashboard next-best-action, Promo Advisor, AI Action Plan, Track coaching, and Studio export to speak the same structured rationale format
+- **Operator memory layer** — derive recurring user/book/promo patterns into visible coaching and downstream Studio state, not just raw telemetry
 - **Truth drift sentinel** — derive launch-validation stats and canonical URLs from live repo truth, not stale copied strings
 - **Offline-first sync queue** — failed remote writes should accumulate safely and flush once auth/network comes back, instead of disappearing behind a single pending flag
 - **Quick-calc event routing** — AI recommendations can now deep-link directly into the right calculator instead of stopping at explanation
@@ -87,8 +92,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
-- [ ] Studio OS / ops export layer — expand the new snapshot foundation into a durable machine-consumable contract with publish/history support
-- [ ] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type
+- [x] Studio OS / ops export layer — expand the new snapshot foundation into a durable machine-consumable contract with publish/history support — **DONE S52**: `src/studio/export.js` now emits a versioned Studio contract with summary, priorities, anomalies, drift alerts, and declared Studio consumer surfaces
 - [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
 - [x] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped) — **DONE S51**: Skip reasons are now not only captured but also surfaced back into workflow scoring and Track skip-reason reporting
 - [x] [SIL:2⛔] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track — **DONE S51**: Track now renders per-promo self-calibration drift bars on top of the settled expected-vs-actual summary
@@ -96,6 +100,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] [SIL] Recommendation scoring matrix — deepen the new scoring foundation to rank workflows by bankroll fit, book availability, friction history, urgency, and opportunity score instead of first-match ordering — **DONE S51**: `src/workflows/inbox.js` now scores open workflows from live history and emits explainable ranking reasons consumed by the Today dashboard and workflow inbox
 - [ ] [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
 - [ ] [SIL] Workflow history surface — build richer UI around the new append-only history so users can inspect queue → ready → placed → waiting → settled transitions over time
+- [ ] Operator cockpit expansion — turn Launch Command Center + workflow inbox into one unified operator surface with machine priorities, anomalies, and richer provenance/history
+- [ ] Daily Command Brief — use the new Studio contract feeds plus workflow state to produce one return-loop command brief with actionable priorities instead of generic reminders
 - [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
 - [ ] Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
 - [ ] Offline write-queue in `src/sync.js` (IndexedDB) for ledger/feedback writes when offline

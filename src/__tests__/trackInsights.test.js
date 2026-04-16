@@ -105,6 +105,9 @@ describe("track insights helpers", () => {
     expect(insights.selfCalibration.averageDrift).toBe(-6.5);
     expect(insights.selfCalibrationRows.length).toBeGreaterThan(0);
     expect(insights.selfCalibrationRows[0]).toHaveProperty("label");
+    expect(insights.driftAlerts.length).toBeGreaterThan(0);
+    expect(insights.topDriftAlerts[0]).toHaveProperty("summary");
+    expect(insights.topDriftAlerts.some((alert) => alert.direction === "negative")).toBe(true);
   });
 
   it("computes adaptive trust score per calculator with scoping", () => {

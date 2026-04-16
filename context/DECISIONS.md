@@ -2,6 +2,16 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-16 — Operator intelligence should flow through one versioned contract
+
+**Decision:** PromoGrind's launch cockpit, Track drift intelligence, and Studio-facing export should all emit from one versioned operator contract containing summary, priorities, anomalies, drift alerts, and declared consumer surfaces, instead of treating the Studio snapshot as a one-off clipboard blob.
+
+**Applies to this project:** Yes — this now governs `src/studio/export.js`, `src/components/dashboard/LaunchCommandCenterPanel.jsx`, and the new drift-alert output in `src/track/insights.js`.
+
+**Rationale:** PromoGrind has moved beyond a calculator-only product. Workflow ranking, calibration, launch posture, and Studio ingestion were starting to diverge into separate interpretations of the same state. A shared contract keeps downstream Studio tools and in-app operator surfaces aligned on the same machine-readable truth.
+
+---
+
 ## 2026-04-16 — Workflow ranking must be explainable and lifecycle-aware
 
 **Decision:** PromoGrind's workflow inbox and dashboard ranking should be driven by an explainable scoring layer that incorporates bankroll pressure, actionability/opportunity, book activation, promo/book history, friction, skip reasons, freshness, and urgency, with explicit queued → ready → placed → waiting lifecycle controls reflected across workflow and result-feedback surfaces.

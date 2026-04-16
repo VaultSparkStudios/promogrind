@@ -3,8 +3,8 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Post-S50 workflow-operations refinement is now layered on top of the entity-sync tranche: PromoGrind ranks workflows with explainable reasons using bankroll/book/history/failure signals, supports explicit queued-to-waiting inbox lifecycle controls, syncs settlement state back into the inbox, and renders per-promo self-calibration drift bars in Track.",
-  "nextMilestone": "Deepen cross-device workflow provenance/history surfacing, move from mirrored entity tables to finer-grained conflict handling inside ledger and workflow domains, and keep the remaining human-owned launch blockers explicit.",
+  "currentFocus": "Post-S52 operator-contract work is now layered on top of the workflow-operations tranche: PromoGrind emits ranked drift alerts from Track, exports a versioned Studio contract with priorities/anomalies, surfaces that machine guidance in the launch cockpit, and has hardened calc-api onto the shared edge helper path.",
+  "nextMilestone": "Persist/publish the new Studio contract over time, deepen workflow provenance/history surfacing, and move from mirrored entity tables to finer-grained conflict handling inside ledger and workflow domains.",
   "blockers": [
     "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live",
     "Apply scripts/migration-entity-sync.sql in Supabase so ledger_state/tracker_state exist live",
@@ -17,9 +17,9 @@
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-04-15",
+  "truthAuditLastRun": "2026-04-16",
   "version": "24.6.0",
-  "lastSession": "S51",
+  "lastSession": "S52",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
@@ -31,8 +31,8 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "passing — build and bundle budget revalidated after workflow-operations refinement; main chunk now ~418.0KB against a 420KB budget",
-  "testStatus": "169/169",
+  "buildStatus": "passing — build and bundle budget revalidated after the operator-contract tranche; main chunk now ~419.1KB against a 420KB budget",
+  "testStatus": "170/170",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
@@ -110,7 +110,8 @@
     "keyboard_nav_followthrough": "Primary and secondary tab bars now support keyboard nav, but broader interactive-control coverage is still pending",
     "push_brief_public_config_pending": "Daily Brief push subscription wiring and send-daily-brief are live, but production still needs VITE_VAPID_PUBLIC_KEY before public browser subscriptions should be enabled",
     "blob_sync_model": "sync.js now mirrors workflow, ledger, and tracker domains through dedicated tables plus the legacy promogrind_data row, but finer-grained conflict handling inside ledger/workflow items is still needed before multi-device usage expands",
-    "bundle_headroom": "Main chunk is still under the 420KB budget, but only by a small margin after the sync tranche"
+    "studio_contract_clipboard_only": "The Studio contract is now versioned and richer, but it is still copied/exported ad hoc rather than published with history or downstream sync",
+    "bundle_headroom": "Main chunk is still under the 420KB budget, but only by a very small margin after the operator-contract tranche"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
@@ -119,10 +120,10 @@
   "ignisLastComputed": "2026-04-15",
   "entropyScore": 0.136,
   "entropyLastComputed": "2026-04-15",
-  "silScore": 474,
-  "silAvg3": 459.7,
-  "silVelocity": 5,
+  "silScore": 463,
+  "silAvg3": 461.7,
+  "silVelocity": 2,
   "silDebt": "down",
-  "silLastSession": "S50",
-  "currentSession": 50
+  "silLastSession": "S52",
+  "currentSession": 52
 }

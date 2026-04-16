@@ -192,6 +192,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     .slice()
     .sort((a, b) => Math.abs(b.averageDrift) - Math.abs(a.averageDrift))
     .slice(0, 6);
+  const driftAlerts = buildDriftAlerts({ promoTypeRows, bookRows });
 
   return {
     ...totals,
@@ -214,9 +215,55 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     workflowTimeline,
     selfCalibration,
     selfCalibrationRows,
+    driftAlerts,
+    topDriftAlerts: driftAlerts.slice(0, 5),
     biggestNegativeDrift: driftRows[0] || null,
     biggestPositiveDrift: driftRows.length ? driftRows[driftRows.length - 1] : null,
   };
+}
+
+function buildDriftAlerts(input = {}) {
+  const { promoTypeRows = [], bookRows = [] } = input;
+  const rows = [
+    ...promoTypeRows.map((row) => ({ ...row, scope: "promo_type", entityKey: row.key })),
+    ...bookRows.map((row) => ({ ...row, scope: "book", entityKey: row.book || row.key })),
+  ]
+    .filter((row) => row && row.averageDrift !== null && row.averageDrift !== undefined)
+    .filter((row) => Number.isFinite(row.averageDrift));
+
+  return rows
+    .map((row) => {
+      const settledCount = row.settled ?? row.count ?? row.sampleSize ?? 0;
+      const hitRate = Number.isFinite(row.hitRate) ? row.hitRate : null;
+      const averageDrift = row.averageDrift;
+      const isCold = averageDrift <= -5 || (settledCount >= 3 && hitRate !== null && hitRate <= 40);
+      const isHot = averageDrift >= 5 || (settledCount >= 3 && hitRate !== null && hitRate >= 75);
+
+      if (!isCold && !isHot) return null;
+
+      const severity = isCold
+        ? averageDrift <= -10 || (hitRate !== null && hitRate <= 25) ? "high" : "medium"
+        : averageDrift >= 10 || (hitRate !== null && hitRate >= 85) ? "positive" : "watch";
+      const label = row.label || row.book || formatPromoTypeLabel(row.key || row.promoType || row.entityKey || "");
+      const summary = isCold
+        ? `${label} is trailing projections by ${Math.abs(averageDrift).toFixed(1)} per settlement.`
+        : `${label} is beating projections by ${averageDrift.toFixed(1)} per settlement.`;
+
+      return {
+        id: `${row.scope}:${row.entityKey}:${severity}`,
+        scope: row.scope,
+        key: row.entityKey,
+        label,
+        severity,
+        direction: isCold ? "negative" : "positive",
+        averageDrift,
+        hitRate,
+        settledCount,
+        summary,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => Math.abs(b.averageDrift) - Math.abs(a.averageDrift));
 }
 
 // ─── Adaptive trust score ────────────────────────────────────────────────────

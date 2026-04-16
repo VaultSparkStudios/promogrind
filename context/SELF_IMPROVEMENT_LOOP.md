@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▇ ▆ █ ▇
-Avgs — 3: 455.3 | 5: 452.4 | 10: 443.3 [N=9] | 25: — | all: 443.3 [N=9]
-  └ 3-session: Dev 95.0 | Align 90.0 | Momentum 89.7 | Engage 82.0 | Process 99.0
+Sparkline (last 5 totals): ▇ ▆ ▇ ▆ ▇
+Avgs — 3: 461.7 | 5: 456.8 | 10: 445.3 [N=10] | 25: — | all: 445.3 [N=10]
+  └ 3-session: Dev 96.7 | Align 91.0 | Momentum 90.3 | Engage 85.7 | Process 98.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~1.8 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-16 | Session 51 | Total: 448/500 | Velocity: 4 | protocolVelocity: 1
+Momentum runway: ~2.0 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-16 | Session 52 | Total: 463/500 | Velocity: 2 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-16 — Session 52 | Total: 463/500 | Velocity: 2 | Debt: ↓
+Avgs — 3: 461.7 | 5: 456.8 | 10: 445.3 [N=10] | 25: — | all: 445.3 [N=10]
+  └ 3-session: Dev 96.7 | Align 91.0 | Momentum 90.3 | Engage 85.7 | Process 98.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 97 | ↑ | Track now emits ranked drift alerts, the Studio export is a richer contract, `calc-api` is off wildcard CORS, tests rose to 170/170, and build/bundle stayed green at 419.1KB. |
+| Creative Alignment | 92 | ↑ | The work stayed operator-grade and trust-first: instead of adding fluff, it turned hidden drift and downstream Studio state into explicit machine-readable guidance. |
+| Momentum | 91 | ↑ | This sprint reconstructed `/go` honestly from live repo truth, updated memory, and shipped a compounding operator-contract tranche rather than adding another isolated feature. |
+| Engagement | 87 | ↑ | PromoGrind is now better positioned to guide return loops and downstream Studio surfaces with concrete priorities/anomalies, though public proof still depends on the same manual launch blockers. |
+| Process Quality | 96 | ↑ | Public memory, task board, handoff, truth audit, state vector, audit JSON, and creative-direction review were refreshed manually, though several canonical closeout scripts/autopilot are absent in this repo. |
+| **Total** | **463/500** | ↑ | |
+
+**Top win:** PromoGrind now has a versioned operator contract instead of a thin snapshot, and both Track drift and the launch cockpit can speak the same machine-readable state.
+**Top gap:** The next compounding step is to persist/publish that contract over time and unify more of the app behind a canonical Promo Operating Graph rather than letting multiple surfaces evolve their own policy logic.
+**Intent outcome:** Achieved — the session reconstructed the missing `/go` wrapper path from repo truth, updated memory/task board honestly, shipped the top unblocked operator tranche, and validated the repo.
+
+**Brainstorm**
+1. Persist a daily Studio contract history so Studio Hub and Social Dashboard can compare not just current state but deltas, anomalies, and trend reversals over time.
+2. Reuse the new drift-alert feed to drive Daily Brief priorities and push messaging so notifications explain not only what to do, but what has gone cold and why.
+3. Promote the operator contract into a shared decision-card schema consumed by Promo Advisor, AI Action Plan, workflow inbox, and Track coaching to prevent reasoning drift.
+
+**Committed to TASK_BOARD:** Studio contract publish/history layer — persist versioned Studio contract snapshots plus deltas so downstream Studio tools can consume machine state over time · Canonical Promo Operating Graph — unify promo, workflow, action, drift, confidence, and settlement policy into one shared decision model · Daily Command Brief — use the new Studio contract feeds plus workflow state to produce one return-loop command brief with actionable priorities
 
 ## 2026-04-16 — Session 51 | Total: 448/500 | Velocity: 4 | Debt: ↓
 Avgs — 3: 455.3 | 5: 452.4 | 10: 443.3 [N=9] | 25: — | all: 443.3 [N=9]

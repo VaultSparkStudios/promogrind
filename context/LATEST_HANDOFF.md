@@ -2,6 +2,27 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 52 (2026-04-16) — CLOSED
+
+**Session Intent:** Reconstruct the `/go` worklist from live repo truth, update memory/task board with the new operator roadmap, ship the highest-leverage unblocked tranche, then close out the repo honestly.
+
+## Where We Left Off (Session 52 — CLOSED)
+
+- Shipped: 4 improvements across 4 groups — drift alerts, Studio contract, launch cockpit, calc-api hardening
+- Tests: 170/170 passing · delta: +1
+- Deploy: pending — repo-side code is ready for push; no production deploy is required for this tranche
+- Session type: implementation + closeout
+
+## Current Delta Since S51
+
+- Expanded `src/track/insights.js` so Track now emits ranked `driftAlerts` / `topDriftAlerts` from promo-type and book settlement deltas instead of keeping drift only inside passive summary rows.
+- Upgraded `src/studio/export.js` from a lightweight snapshot into a versioned Studio contract with summary, priorities, anomalies, drift alerts, and declared consumer surfaces for Studio OS / Ops / Hub / Social Dashboard.
+- Updated `src/components/dashboard/LaunchCommandCenterPanel.jsx` so the operator cockpit now shows machine priorities and anomaly/drift feeds alongside readiness, rollout, and monetization counters.
+- Hardened `supabase/functions/calc-api/index.ts` onto the shared CORS/JSON helper and corrected public attribution to `promogrind.bet`.
+- Added `src/__tests__/studioExport.test.js` and expanded `src/__tests__/trackInsights.test.js`; the suite now passes at `170/170`.
+- Updated `context/TASK_BOARD.md` so the reconstructed `/go` sprint is durable: `[SIL:2⛔] Drift alert` and the Studio export-layer tranche are now marked done, while the next operator-contract items are queued explicitly.
+- Validation after closeout: `npm.cmd test`, `npm.cmd run build`, and `node scripts/check-bundle-budget.mjs` all passed; bundle budget remains green at `419.1KB` under the `420KB` cap.
+
 ## Session 51 (2026-04-16) — CLOSED
 
 **Session Intent:** Update memory and task board with the current workflow roadmap, execute the highest-leverage unblocked `/go` items at quality bar, then close out the repo cleanly to GitHub.

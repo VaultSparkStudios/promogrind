@@ -1,10 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-};
+import { getCorsHeaders, json } from "../_shared/http.ts";
 
 function toD(v: string | number): number {
   const s = String(v).trim();
@@ -64,7 +59,7 @@ const DOCS = {
   name: "PromoGrind Calculator API",
   version: "1.0",
   baseUrl: "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api",
-  attribution: "promogrind.com — free sports betting calculator tools",
+  attribution: "promogrind.bet — free sports betting calculator tools",
   endpoints: [
     { path: "/bonus-bet", params: { bonusBetSize: "number", bonusOdds: "string", hedgeOdds: "string" } },
     { path: "/arb", params: { odds1: "string", odds2: "string", totalStake: "number" } },
@@ -77,45 +72,35 @@ const DOCS = {
 };
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+  const corsHeaders = getCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   const url = new URL(req.url);
   const segments = url.pathname.split("/").filter(Boolean);
   const endpoint = segments[segments.length - 1];
 
   if (req.method === "GET" || endpoint === "calc-api" || !endpoint) {
-    return new Response(JSON.stringify(DOCS, null, 2), {
-      headers: { ...CORS, "Content-Type": "application/json" },
-    });
+    return json(req, DOCS);
   }
 
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "POST required" }), { status: 405, headers: CORS });
+    return json(req, { error: "POST required" }, 405);
   }
 
   const calc = CALCS[endpoint];
   if (!calc) {
-    return new Response(
-      JSON.stringify({ error: `Unknown endpoint /${endpoint}. GET /calc-api for docs.` }),
-      { status: 404, headers: CORS }
-    );
+    return json(req, { error: `Unknown endpoint /${endpoint}. GET /calc-api for docs.` }, 404);
   }
 
   let body: Record<string, unknown>;
   try { body = await req.json(); } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400, headers: CORS });
+    return json(req, { error: "Invalid JSON body" }, 400);
   }
 
   const result = calc(body);
   if (!result) {
-    return new Response(
-      JSON.stringify({ error: "Invalid inputs — check parameter types and values" }),
-      { status: 400, headers: CORS }
-    );
+    return json(req, { error: "Invalid inputs — check parameter types and values" }, 400);
   }
 
-  return new Response(
-    JSON.stringify({ ok: true, result, attribution: "PromoGrind Calculator API — promogrind.com" }),
-    { headers: { ...CORS, "Content-Type": "application/json" } }
-  );
+  return json(req, { ok: true, result, attribution: "PromoGrind Calculator API — promogrind.bet" });
 });

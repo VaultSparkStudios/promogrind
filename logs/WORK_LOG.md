@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-04-16 — S52 Operator Contract + Manual Closeout
+
+- Reconstructed the `/go` worklist from live repo truth because the canonical `scripts/ops.mjs`/IGNIS wrapper is missing in this repo, then synced the resulting roadmap into `context/TASK_BOARD.md` and Codex project memory.
+- Expanded `src/track/insights.js` so Track now emits ranked drift alerts from promo-type and book settlement deltas.
+- Upgraded `src/studio/export.js` into a versioned Studio contract with summary, priorities, anomalies, drift alerts, and declared downstream Studio consumer surfaces.
+- Updated `src/components/dashboard/LaunchCommandCenterPanel.jsx` so the launch cockpit now shows machine priorities plus anomaly/drift feeds, not only static readiness counters.
+- Hardened `supabase/functions/calc-api/index.ts` onto the shared CORS/JSON helper and corrected public attribution to `promogrind.bet`.
+- Added `src/__tests__/studioExport.test.js` and expanded `src/__tests__/trackInsights.test.js`; validation now sits at 170/170 passing.
+- Refreshed `CURRENT_STATE`, `TASK_BOARD`, `LATEST_HANDOFF`, `DECISIONS`, `SELF_IMPROVEMENT_LOOP`, `TRUTH_AUDIT`, `PROJECT_STATUS`, `STATE_VECTOR`, `CREATIVE_DIRECTION_RECORD`, and `audits/2026-04-16-2.json` manually because the canonical closeout scripts/autopilot are missing in this repo.
+- Verified `npm.cmd test` → 170/170 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`419.1KB` main chunk under 420KB target).
+
 ## 2026-04-15 — S50 Entity Sync + Full Closeout
 
 - Extended `src/sync.js` beyond the earlier queue/entity-stamp layer so it now appends canonical workflow-history events and hydrates/persists `workflow_state`, `workflow_history`, `ledger_state`, and `tracker_state` alongside the legacy `promogrind_data` compatibility row.
