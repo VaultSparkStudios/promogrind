@@ -1,7 +1,25 @@
 # Project Brief
 
-This public repository contains deployable project code and public-safe documentation.
+## Identity
 
-Boundary:
-- keep deployable code and browser-safe configuration in this repo
-- keep internal planning, operator workflows, credentials, detailed handoffs, work logs, and private roadmap material in the private Studio OS / ops repository
+- Name:
+- Slug:
+- Type:
+- Status:
+- Owner:
+
+## Why this exists
+
+- Problem or opportunity:
+- Audience:
+- Studio importance:
+
+## Success
+
+- What success looks like:
+- What this project is not:
+
+## Scope
+
+- In scope:
+- Out of scope:

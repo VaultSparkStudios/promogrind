@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-04-16T19:44:42.883Z",
+  "contract": "hub",
+  "identity": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "repo": "VaultSparkStudios/promogrind",
+    "owner": "VaultSpark Studios",
+    "type": "tool",
+    "lifecycle": "deployed",
+    "audience": "public-unlaunched",
+    "vaultStatus": "FORGE"
+  },
+  "listingMetadata": {
+    "title": "PromoGrind",
+    "summary": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
+    "tagline": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
+    "tags": [
+      "tool",
+      "live",
+      "deployed"
+    ],
+    "categories": [
+      "tool",
+      "public-unlaunched"
+    ]
+  },
+  "status": {
+    "health": "yellow",
+    "currentFocus": "Most important active work right now.",
+    "nextMilestone": "Next concrete milestone."
+  },
+  "liveSurfaces": [],
+  "integration": {
+    "enabled": true,
+    "mode": "private"
+  }
+}

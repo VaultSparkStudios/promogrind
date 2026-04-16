@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-04-16T19:44:42.883Z",
+  "contract": "ignis",
+  "identity": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "repo": "VaultSparkStudios/promogrind",
+    "owner": "VaultSpark Studios",
+    "type": "tool",
+    "lifecycle": "deployed",
+    "audience": "public-unlaunched",
+    "vaultStatus": "FORGE"
+  },
+  "metrics": {
+    "ignisScore": null,
+    "ignisGrade": null,
+    "truthAuditStatus": "unknown"
+  },
+  "capabilities": {
+    "auth": false,
+    "payments": true,
+    "analytics": false,
+    "email": false,
+    "ai": false,
+    "publishing": false,
+    "community": false,
+    "storage": false,
+    "cron": false
+  },
+  "integration": {
+    "enabled": true,
+    "mode": "portfolio-intelligence"
+  }
+}

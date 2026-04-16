@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-04-16T19:44:42.883Z",
+  "contract": "website-public",
+  "identity": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "repo": "VaultSparkStudios/promogrind",
+    "owner": "VaultSpark Studios",
+    "type": "tool",
+    "lifecycle": "deployed",
+    "audience": "public-unlaunched",
+    "vaultStatus": "FORGE"
+  },
+  "listingMetadata": {
+    "title": "PromoGrind",
+    "summary": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
+    "tagline": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
+    "tags": [
+      "tool",
+      "live",
+      "deployed"
+    ],
+    "categories": [
+      "tool",
+      "public-unlaunched"
+    ]
+  },
+  "publicMetadata": {
+    "privateByDefault": true,
+    "publicReady": false,
+    "brandingRequired": true,
+    "brandingCompliant": true,
+    "footerAttribution": "Powered by VaultSpark Studios",
+    "websiteListingRequired": true
+  },
+  "surfaces": {
+    "liveUrl": "https://promogrind.bet",
+    "stagingUrl": null
+  },
+  "integration": {
+    "enabled": true,
+    "mode": "public-safe"
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "1.0",
+  "generatedFrom": "ops runtime-pack synthesized manifest",
+  "synthesized": true,
+  "identity": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "repo": "VaultSparkStudios/promogrind",
+    "owner": "VaultSpark Studios",
+    "type": "tool",
+    "lifecycle": "deployed",
+    "audience": "public-unlaunched",
+    "vaultStatus": "FORGE"
+  },
+  "studioOs": {
+    "applied": true,
+    "templateVersion": "3.2",
+    "complianceVersion": "1.5",
+    "sessionModeDefault": "builder",
+    "requiredFilesPresent": false
+  },
+  "listingMetadata": {
+    "canonicalSummary": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
+    "tagline": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
+    "tags": [
+      "tool",
+      "live",
+      "deployed"
+    ],
+    "categories": [
+      "tool",
+      "public-unlaunched"
+    ],
+    "hubDescription": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
+    "websiteDescription": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
+    "socialDescription": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
+    "brandingLabel": "Powered by VaultSpark Studios"
+  },
+  "surfaces": {
+    "local": [
+      {
+        "label": "workspace",
+        "path": "C:\\Users\\p4cka\\documents\\development\\promogrind"
+      }
+    ],
+    "staging": [],
+    "production": [
+      {
+        "label": "live",
+        "url": "https://promogrind.bet"
+      }
+    ],
+    "preview": [],
+    "admin": [],
+    "api": [],
+    "docs": [],
+    "github": [
+      {
+        "label": "repo",
+        "url": "https://github.com/VaultSparkStudios/promogrind"
+      }
+    ],
+    "testing": []
+  },
+  "capabilities": {
+    "auth": false,
+    "payments": true,
+    "analytics": false,
+    "email": false,
+    "ai": false,
+    "publishing": false,
+    "community": false,
+    "storage": false,
+    "cron": false
+  },
+  "integrations": {
+    "studioHub": {
+      "enabled": true,
+      "mode": "private"
+    },
+    "website": {
+      "enabled": true,
+      "mode": "public-safe"
+    },
+    "socialDashboard": {
+      "enabled": true,
+      "mode": "private"
+    },
+    "sparkFunnel": {
+      "enabled": true,
+      "mode": "growth"
+    },
+    "ignis": {
+      "enabled": true,
+      "mode": "portfolio-intelligence"
+    },
+    "founderQueue": {
+      "enabled": true,
+      "mode": "private"
+    }
+  },
+  "secretsCapabilities": [],
+  "hosting": {
+    "hostingProvider": "local",
+    "liveUrl": "https://promogrind.bet",
+    "stagingUrl": null,
+    "privatePreviewUrl": null,
+    "localDevUrl": null,
+    "deployStatus": "deployed-unannounced",
+    "testInstructions": []
+  },
+  "capacity": {
+    "currentPlanTier": "unknown",
+    "freePlanCeilings": [],
+    "fitsCurrentCapacity": true,
+    "preferredRuntime": "local",
+    "fallbackRuntime": "hetzner",
+    "notes": ""
+  },
+  "publicMetadata": {
+    "privateByDefault": true,
+    "publicReady": false,
+    "publicRepoSanitized": false,
+    "brandingRequired": true,
+    "brandingCompliant": true,
+    "footerAttribution": "Powered by VaultSpark Studios",
+    "websiteListingRequired": true
+  },
+  "automation": {
+    "safeActions": [
+      "refresh-generated-surfaces"
+    ],
+    "guardedActions": [
+      "propagate-templates"
+    ],
+    "blockedActions": [
+      "change-canon",
+      "flip-repo-public",
+      "alter-licensing"
+    ]
+  },
+  "contracts": {
+    "hub": "context/contracts/hub.json",
+    "websitePublic": "context/contracts/website-public.json",
+    "socialDashboard": "context/contracts/social-dashboard.json",
+    "sparkFunnel": "context/contracts/sparkfunnel.json",
+    "ignis": "context/contracts/ignis.json"
+  }
+}

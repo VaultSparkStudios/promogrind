@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-04-16T19:44:42.883Z",
+  "contract": "social-dashboard",
+  "identity": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "repo": "VaultSparkStudios/promogrind",
+    "owner": "VaultSpark Studios",
+    "type": "tool",
+    "lifecycle": "deployed",
+    "audience": "public-unlaunched",
+    "vaultStatus": "FORGE"
+  },
+  "listingMetadata": {
+    "title": "PromoGrind",
+    "summary": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
+    "tags": [
+      "tool",
+      "live",
+      "deployed"
+    ]
+  },
+  "growth": {
+    "launchStatus": "not-applicable",
+    "liveUrl": "https://promogrind.bet",
+    "stagingUrl": null
+  },
+  "integration": {
+    "enabled": true,
+    "mode": "private"
+  }
+}
