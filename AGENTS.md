@@ -14,6 +14,21 @@ Public-safe rule:
 - keep deployable code and browser-safe configuration in this repo
 - keep internal operating procedures, private planning, secret-handling workflows, and detailed studio process docs in the private Studio OS / ops repository
 
+## Public-Repo Protocol Shim
+
+This repo intentionally does **not** carry the full private Studio OS automation/tooling layer.
+
+When `docs/SESSION_PROTOCOL.md` references Studio scripts that are missing here, agents must:
+- note the missing script explicitly
+- continue with the manual fallback described by the protocol instead of stopping
+- prefer repo-truth files already present here (`context/*.md`, `context/*.json`, `audits/*.json`, `logs/WORK_LOG.md`)
+- avoid inventing placeholder private ops tooling inside this public repo unless explicitly instructed
+
+Repo-local expectations for this project:
+- if `context/ACTION_QUEUE.md` is absent, use the top unblocked item from `context/TASK_BOARD.md`
+- if closeout automation scripts are absent, perform manual write-back in canonical order and state which automation steps could not run
+- `docs/CREATIVE_DIRECTION_RECORD.md` is part of the expected closeout surface and should remain commit-able in this repo
+
 ## IP and Licensing (CANON-008)
 
 All VaultSpark Studios code, content, assets, and designs are **proprietary by default**. All rights are reserved by VaultSpark Studios LLC unless a license is explicitly declared and approved by the Studio Owner.
@@ -30,5 +45,4 @@ Any project forked from a copyleft-licensed upstream must declare its license in
 Full decision: `vaultspark-studio-ops/docs/STUDIO_CANON.md` → CANON-008
 
 ---
-
 
