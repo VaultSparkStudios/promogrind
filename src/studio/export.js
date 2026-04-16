@@ -1,10 +1,20 @@
-import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount } from "../books.js";
+import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, getRecommendedBooksForUser, hasConfiguredMonetizationLinks } from "../books.js";
 import { getLaunchCommandCenter, resolveLaunchValidation } from "../launchState.js";
+import { buildOperatingActionCandidates, selectOperatingDecision } from "../promograph/index.js";
 import { buildTrackInsights } from "../track/insights.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
 
-function buildPriorityFeed({ commandCenter, inbox, insights }) {
+function buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates = [] }) {
   const rows = [];
+
+  if (Array.isArray(actionCandidates) && actionCandidates.length) {
+    rows.push({
+      type: "action",
+      priority: (actionCandidates[0].score || 0) >= 90 ? "high" : "medium",
+      title: actionCandidates[0].title,
+      detail: actionCandidates[0].body,
+    });
+  }
 
   if (Array.isArray(insights?.topDriftAlerts) && insights.topDriftAlerts.length) {
     rows.push({
@@ -65,6 +75,7 @@ function buildAnomalyFeed({ insights, launch }) {
 
 function buildOperatorCommandBrief(input = {}) {
   const {
+    actionCandidates = [],
     topWorkflow = null,
     driftAlerts = [],
     nextActions = [],
@@ -74,71 +85,23 @@ function buildOperatorCommandBrief(input = {}) {
     posture = null,
   } = input;
 
-  const primaryAlert = Array.isArray(driftAlerts) ? driftAlerts[0] || null : null;
-  const primaryBlocker = Array.isArray(nextActions) ? nextActions[0] || null : null;
-  const workflowAction = topWorkflow
-    ? {
-        type: "workflow",
-        title: topWorkflow.title || "Advance top workflow",
-        detail:
-          topWorkflow.scoreSummary ||
-          topWorkflow.nextStep ||
-          topWorkflow.summary ||
-          `${String(topWorkflow.status || "queued").replace(/_/g, " ")} workflow needs attention.`,
-        status: topWorkflow.status || "queued",
-        score: Number.isFinite(topWorkflow.score) ? topWorkflow.score : null,
-      }
-    : null;
-
-  let headline = "Keep the loop moving.";
-  let body = "PromoGrind has machine state, but not enough signal yet to recommend a single operator move.";
-  let focus = workflowAction || null;
-  let reason = null;
-  let tone = "neutral";
-
-  if (primaryAlert?.direction === "negative") {
-    headline = `Drift check: ${primaryAlert.label}`;
-    body = primaryAlert.summary;
-    focus = {
-      type: "drift_alert",
-      title: primaryAlert.label,
-      detail: primaryAlert.summary,
-      status: primaryAlert.severity,
-      score: Math.round(Math.abs(primaryAlert.averageDrift || 0)),
-    };
-    reason = "cold_lane";
-    tone = "watch";
-  } else if (workflowAction) {
-    headline = workflowAction.title;
-    body = workflowAction.detail;
-    focus = workflowAction;
-    reason = "top_workflow";
-    tone = workflowAction.status === "ready" ? "positive" : "watch";
-  } else if (primaryBlocker) {
-    headline = primaryBlocker.label || primaryBlocker.title || "Resolve the next launch blocker";
-    body = primaryBlocker.detail || "One manual blocker is still gating the next proof point.";
-    focus = {
-      type: "launch_blocker",
-      title: headline,
-      detail: body,
-      status: primaryBlocker.status || "manual",
-      score: null,
-    };
-    reason = "launch_blocker";
-    tone = "watch";
-  }
-
+  const decision = selectOperatingDecision({
+    actionCandidates,
+    topWorkflow,
+    driftAlerts,
+    nextActions,
+    openWorkflowCount,
+    waitingWorkflowCount,
+    readinessScore,
+    posture,
+  });
   return {
-    headline,
-    body,
-    tone,
-    reason,
-    focus,
-    followUps: [
-      openWorkflowCount > 1 ? `${openWorkflowCount} workflows are still open.` : null,
-      waitingWorkflowCount > 0 ? `${waitingWorkflowCount} workflows are waiting for settlement.` : null,
-      Number.isFinite(readinessScore) ? `Launch posture is ${posture || "unknown"} at ${readinessScore}/100.` : null,
-    ].filter(Boolean),
+    headline: decision.title,
+    body: decision.body,
+    tone: decision.tone,
+    reason: decision.reason,
+    focus: decision.focus,
+    followUps: decision.followUps,
   };
 }
 
@@ -206,6 +169,14 @@ export function appendStudioContractHistory(history = [], snapshot, options = {}
 }
 
 export function buildStudioSnapshot(appData = {}, options = {}) {
+  const usageLog = options.usageLog || (() => {
+    try {
+      if (typeof localStorage === "undefined") return {};
+      return JSON.parse(localStorage.getItem("pg_usage_log") || "{}");
+    } catch {
+      return {};
+    }
+  })();
   const validation = resolveLaunchValidation();
   const configuredAffiliateCount = getConfiguredAffiliateCount();
   const configuredMonetizationCount = getConfiguredMonetizationCount();
@@ -255,6 +226,24 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
       source: workflow.source,
     })),
   };
+  const bestBook = getRecommendedBooksForUser({
+    userState: appData.userState,
+    done: appData.done || {},
+    bookStatus: appData.bookStatus || {},
+  })[0] || null;
+  const actionCandidates = buildOperatingActionCandidates({
+    hasBankroll: !!String(options.bankroll ?? appData.bankroll ?? "").trim(),
+    hasCalc: Object.keys(usageLog || {}).length > 0,
+    affiliateReady: hasConfiguredMonetizationLinks(),
+    totalProfit: growth.totalProfit,
+    openBets: Array.isArray(appData.bets)
+      ? appData.bets.filter((bet) => ["open", "pending", ""].includes(String(bet.status || "").toLowerCase()))
+      : [],
+    booksComplete: Object.values(appData.done || {}).filter(Boolean).length,
+    openWorkflowCount: workflows.openCount,
+    topWorkflow: workflows.top[0] || null,
+    bestBook,
+  });
   const intelligence = {
     topSkipReasons: insights.skipReasonRows.slice(0, 3),
     topFrictionReasons: insights.frictionReasonRows.slice(0, 3),
@@ -263,10 +252,11 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
     driftAlerts: insights.topDriftAlerts || [],
   };
   const feeds = {
-    priorities: buildPriorityFeed({ commandCenter, inbox, insights }),
+    priorities: buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates }),
     anomalies: buildAnomalyFeed({ insights, launch }),
   };
   const brief = buildOperatorCommandBrief({
+    actionCandidates,
     topWorkflow: workflows.top[0] || null,
     driftAlerts: intelligence.driftAlerts,
     nextActions: commandCenter?.nextActions || [],

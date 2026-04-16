@@ -58,7 +58,7 @@ vi.mock('../auth.js', () => ({
   },
 }));
 
-import { saveData, loadData, onCalculation, onLedgerEntry, onDailyLogin } from '../sync.js';
+import { saveData, loadData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics } from '../sync.js';
 
 // ── Session fixtures ──────────────────────────────────────────────────────────
 const NO_SESSION   = { data: { session: null } };
@@ -127,6 +127,61 @@ describe('saveData', () => {
     );
   });
 
+  it('reduces the legacy blob when tracker and workflow entity tables save successfully', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    await saveData({
+      ledger: [{ id: 1 }],
+      resultFeedback: [{ id: 'rf-1', status: 'queued' }],
+      workflowInbox: [{ id: 'wf-1', title: 'Workflow' }],
+      workflowHistory: [{ eventKey: 'wf-1:queued:2026-04-16T12:00:00.000Z', workflowId: 'wf-1', status: 'queued', eventAt: '2026-04-16T12:00:00.000Z' }],
+      promoValueHistory: { 'DraftKings-Bonus Bet': [{ date: '2026-04-16', value: 24 }] },
+      journal: [{ id: 'journal-1', book: 'DraftKings', type: 'Bonus Bet', profit: '12', date: '2026-04-16' }],
+      oddsCompare: [{ id: 'odds-1', event: 'Chiefs ML', odds: { DraftKings: '-110' } }],
+    });
+
+    expect(mocks.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tracker: expect.objectContaining({
+          _compat: expect.objectContaining({
+            blobMode: 'compact',
+            trackerStateSaved: true,
+            workflowStateSaved: true,
+          }),
+        }),
+      }),
+      expect.any(Object),
+    );
+
+    const tracker = mocks.upsert.mock.calls.at(-1)[0].tracker;
+    expect(tracker.resultFeedback).toBeUndefined();
+    expect(tracker.workflowInbox).toBeUndefined();
+    expect(tracker.workflowHistory).toBeUndefined();
+    expect(tracker.promoValueHistory).toBeUndefined();
+    expect(tracker.journal).toBeUndefined();
+    expect(tracker.oddsCompare).toBeUndefined();
+  });
+
+  it('keeps the full legacy blob when dedicated entity tables are unavailable', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    mocks.tableUpsert.mockRejectedValue(new Error('missing table'));
+
+    await expect(saveData({
+      resultFeedback: [{ id: 'rf-1', status: 'queued' }],
+      workflowInbox: [{ id: 'wf-1', title: 'Workflow' }],
+      promoValueHistory: { 'DraftKings-Bonus Bet': [{ date: '2026-04-16', value: 24 }] },
+    })).resolves.toBeUndefined();
+
+    const tracker = mocks.upsert.mock.calls.at(-1)[0].tracker;
+    expect(tracker._compat).toEqual(expect.objectContaining({
+      blobMode: 'full',
+      trackerStateSaved: false,
+      workflowStateSaved: false,
+    }));
+    expect(tracker.resultFeedback).toHaveLength(1);
+    expect(tracker.workflowInbox).toHaveLength(1);
+    expect(tracker.promoValueHistory['DraftKings-Bonus Bet']).toHaveLength(1);
+  });
+
   it('tracks per-entity timestamps for changed sync domains', async () => {
     localStorage.setItem('promo_engine_v3', JSON.stringify({
       ledger: [{ id: 1 }],
@@ -141,6 +196,16 @@ describe('saveData', () => {
     expect(parsed._entities.ledger).toBeTypeOf('number');
   });
 
+  it('stamps stable ids for odds comparison rows so tracker merges can reconcile them', async () => {
+    await saveData({ oddsCompare: [{ event: 'Chiefs ML', odds: { DraftKings: '-110' } }] });
+    const parsed = JSON.parse(localStorage.getItem('promo_engine_v3'));
+    expect(parsed.oddsCompare[0]).toEqual(expect.objectContaining({
+      id: expect.any(String),
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
+    }));
+  });
+
   it('queues a failed remote write for later retry', async () => {
     mocks.getSession.mockResolvedValue(WITH_SESSION);
     mocks.upsert.mockRejectedValueOnce(new Error('offline'));
@@ -149,6 +214,10 @@ describe('saveData', () => {
     const queue = JSON.parse(localStorage.getItem('pg_sync_queue'));
     expect(queue).toHaveLength(1);
     expect(queue[0].data.ledger).toHaveLength(1);
+    expect(readSyncDiagnostics()).toEqual(expect.objectContaining({
+      queueDepth: 1,
+      hasPendingWrites: true,
+    }));
   });
 
   it('appends workflow history when workflow status changes', async () => {
@@ -401,6 +470,127 @@ describe('loadData', () => {
     ]));
   });
 
+  it('merges promo value history per promo key instead of replacing the whole tracker slice', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      promoValueHistory: {
+        'DraftKings-Bonus Bet': [
+          { date: '2026-04-15', value: 22 },
+          { date: '2026-04-16', value: 25 },
+        ],
+      },
+      _updated: Date.now() - 1000,
+      _entities: { promoValueHistory: Date.now() - 1000 },
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [],
+        tracker: {
+          promoValueHistory: {
+            'DraftKings-Bonus Bet': [
+              { date: '2026-04-14', value: 18 },
+            ],
+            'FanDuel-Profit Boost': [
+              { date: '2026-04-16', value: 12 },
+            ],
+          },
+          _entities: { promoValueHistory: Date.now() - 2000 },
+        },
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.promoValueHistory['DraftKings-Bonus Bet']).toEqual([
+      { date: '2026-04-14', value: 18 },
+      { date: '2026-04-15', value: 22 },
+      { date: '2026-04-16', value: 25 },
+    ]);
+    expect(result.promoValueHistory['FanDuel-Profit Boost']).toEqual([
+      { date: '2026-04-16', value: 12 },
+    ]);
+  });
+
+  it('keeps both local and remote journal entries when devices add notes independently', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      journal: [
+        { id: 'journal-local', book: 'DraftKings', type: 'Bonus Bet', profit: '12', date: '2026-04-16' },
+      ],
+      _updated: Date.now() - 1000,
+      _entities: { journal: Date.now() - 1000 },
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [],
+        tracker: {
+          journal: [
+            { id: 'journal-remote', book: 'FanDuel', type: 'Profit Boost', profit: '8', date: '2026-04-15' },
+          ],
+          _entities: { journal: Date.now() - 2000 },
+        },
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.journal).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'journal-local' }),
+      expect.objectContaining({ id: 'journal-remote' }),
+    ]));
+  });
+
+  it('preserves newer local odds-compare edits while keeping remote rows from other devices', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      oddsCompare: [
+        {
+          id: 'shared-row',
+          event: 'Chiefs ML',
+          odds: { DraftKings: '-105' },
+          createdAt: '2026-04-16T12:00:00.000Z',
+          updatedAt: '2026-04-16T12:10:00.000Z',
+        },
+      ],
+      _updated: Date.now() - 1000,
+      _entities: { oddsCompare: Date.now() - 1000 },
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [],
+        tracker: {
+          oddsCompare: [
+            {
+              id: 'shared-row',
+              event: 'Chiefs ML',
+              odds: { DraftKings: '-110' },
+              createdAt: '2026-04-16T12:00:00.000Z',
+              updatedAt: '2026-04-16T12:05:00.000Z',
+            },
+            {
+              id: 'remote-row',
+              event: 'Bills ML',
+              odds: { FanDuel: '+120' },
+              createdAt: '2026-04-16T12:06:00.000Z',
+              updatedAt: '2026-04-16T12:06:00.000Z',
+            },
+          ],
+          _entities: { oddsCompare: Date.now() - 2000 },
+        },
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.oddsCompare).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'shared-row', odds: { DraftKings: '-105' } }),
+      expect.objectContaining({ id: 'remote-row', event: 'Bills ML' }),
+    ]));
+  });
+
   it('hydrates workflow state and history from dedicated remote tables', async () => {
     mocks.getSession.mockResolvedValue(WITH_SESSION);
     mocks.maybeSingle.mockResolvedValue({
@@ -511,6 +701,19 @@ describe('loadData', () => {
     await loadData();
     expect(mocks.upsert).toHaveBeenCalled();
     expect(JSON.parse(localStorage.getItem('pg_sync_queue'))).toEqual([]);
+  });
+
+  it('reports compact sync diagnostics after a successful remote save', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    await saveData({
+      workflowInbox: [{ id: 'wf-1', title: 'Workflow' }],
+      resultFeedback: [{ id: 'rf-1', status: 'queued' }],
+    });
+
+    expect(readSyncDiagnostics()).toEqual(expect.objectContaining({
+      queueDepth: 0,
+      hasPendingWrites: false,
+    }));
   });
 });
 

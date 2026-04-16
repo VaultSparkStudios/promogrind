@@ -1,5 +1,5 @@
 import { BOOKS, getRecommendedBooksForUser, hasConfiguredMonetizationLinks } from "../books.js";
-import { summarizeWorkflows } from "../promograph/index.js";
+import { buildOperatingActionCandidates, selectOperatingDecision, summarizeWorkflows } from "../promograph/index.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -107,7 +107,7 @@ export function getBankrollPosture(snapshot) {
     return {
       tone: "missing",
       title: "Set your bankroll",
-      body: "Add a bankroll anchor so stake sizing, open exposure, and weekly action plans have context.",
+      body: "Add a bankroll anchor so stake sizing and exposure have context.",
     };
   }
 
@@ -116,14 +116,14 @@ export function getBankrollPosture(snapshot) {
     return {
       tone: "high",
       title: `High exposure: ${riskPct.toFixed(1)}% at risk`,
-      body: `Open bets are tying up $${snapshot.openStake.toFixed(2)} of a $${snapshot.bankroll.toFixed(2)} bankroll.`,
+      body: `$${snapshot.openStake.toFixed(2)} is tied up against a $${snapshot.bankroll.toFixed(2)} bankroll.`,
     };
   }
   if (riskPct > 15) {
     return {
       tone: "watch",
       title: `Watch exposure: ${riskPct.toFixed(1)}% at risk`,
-      body: `You have $${snapshot.openStake.toFixed(2)} committed across open bets. Keep total risk under control.`,
+      body: `$${snapshot.openStake.toFixed(2)} is committed across open bets.`,
     };
   }
   return {
@@ -144,13 +144,13 @@ export function getUnfinishedWork(snapshot) {
     snapshot.openBets.length > 0 && {
       key: "open-bets",
       title: `${snapshot.openBets.length} open bet${snapshot.openBets.length === 1 ? "" : "s"} waiting`,
-      detail: "Settle or log pending wagers before stacking more exposure.",
+      detail: "Settle or log wagers before adding more exposure.",
       slug: "bet-tracker",
     },
     snapshot.booksRemaining > 0 && {
       key: "books-left",
       title: `${snapshot.booksRemaining} sportsbook${snapshot.booksRemaining === 1 ? "" : "s"} still unclaimed`,
-      detail: `Roughly $${snapshot.potentialLeft.toFixed(0)} of welcome-offer value is still on the table.`,
+      detail: `About $${snapshot.potentialLeft.toFixed(0)} of welcome value is still on the table.`,
       slug: "sportsbooks",
     },
     snapshot.recommendedBooks?.[0] && {
@@ -162,7 +162,7 @@ export function getUnfinishedWork(snapshot) {
     !snapshot.hasLedger && {
       key: "ledger",
       title: "No settled profit history yet",
-      detail: "Log outcomes in the ledger so the dashboard can track real extraction instead of one-off calculations.",
+      detail: "Log outcomes in the ledger so the dashboard can track real extraction.",
       slug: "ledger",
     },
   ].filter(Boolean);
@@ -173,49 +173,30 @@ export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 
   const hasCalc = Object.keys(usageLog).length > 0;
   const affiliateReady = hasConfiguredMonetizationLinks();
   const bestBook = Array.isArray(recommendedBooks) ? recommendedBooks[0] : getRecommendedBooksForUser({ userState, done, bookStatus })[0];
-  const candidates = [
-    !hasBankroll && { key: "bankroll", title: "Set your bankroll", body: "Personalized stake sizing and weekly actions need a bankroll anchor.", cta: "Set profile", slug: "dashboard", tone: "info", score: 100 },
-    !hasCalc && { key: "calc", title: "Run your first conversion", body: "Start with the Bonus Bet Converter and get a hedge stake in under a minute.", cta: "Open converter", slug: "bonus-bet", tone: "positive", score: 92 },
-    bestBook && {
-      key: "books-personalized",
-      title: `Open ${bestBook.book.name} next`,
-      body: `${bestBook.reason}${bestBook.stateCode ? ` in ${bestBook.stateCode}` : ""} · ${bestBook.book.detail}.`,
-      cta: "Review best-fit book",
-      slug: "sportsbooks",
-      tone: bestBook.status === "limited" ? "watch" : "positive",
-      score: 90 + Math.min((bestBook.book.bonus || 0) / 200, 8),
-    },
-    booksComplete === 0 && { key: "books", title: "Pick your first sportsbook", body: "Mark books you already use and prioritize the highest-value welcome offers.", cta: "Open tracker", slug: "sportsbooks", tone: "watch", score: 84 },
-    topWorkflow && {
-      key: "workflow-focus",
-      title: topWorkflow.title || "Advance highest-value workflow",
-      body:
-        topWorkflow.scoreSummary ||
-        topWorkflow.nextStep ||
-        topWorkflow.summary ||
-        `Best current workflow is ${formatWorkflowStatus(topWorkflow.status)} with score ${topWorkflow.score}.`,
-      cta: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "Open Track" : "Open workflow",
-      slug: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "track" : (topWorkflow.calculatorSlug || "track"),
-      tone: topWorkflow.score >= 90 ? "positive" : "watch",
-      score: topWorkflow.score + 2,
-    },
-    openWorkflowCount > 0 && { key: "workflows", title: "Advance queued workflows", body: `You have ${openWorkflowCount} workflow${openWorkflowCount === 1 ? "" : "s"} still in motion from calculators or Track.`, cta: "Open Track", slug: "track", tone: "watch", score: 88 + Math.min(openWorkflowCount, 4) },
-    openBets.length > 0 && { key: "open", title: "Close open bets", body: `You have ${openBets.length} open bet${openBets.length === 1 ? "" : "s"} waiting for settlement.`, cta: "Review bets", slug: "bet-tracker", tone: "watch", score: 80 + Math.min(openBets.length, 5) },
-    !affiliateReady && { key: "affiliate", title: "Revenue setup pending", body: "Referral or affiliate links are still placeholders, so outbound clicks are not monetized yet.", cta: "Review links", slug: "sportsbooks", tone: "risk", score: 48 },
-  ].filter(Boolean);
+  const candidates = buildOperatingActionCandidates({
+    hasBankroll,
+    hasCalc,
+    affiliateReady,
+    totalProfit,
+    openBets,
+    booksComplete,
+    openWorkflowCount,
+    topWorkflow,
+    bestBook,
+  });
 
-  const action = candidates.sort((a, b) => b.score - a.score)[0];
-  return action || {
-    key: "scale",
-    title: "Scale the loop",
-    body: `You have extracted ${totalProfit >= 0 ? "$" + totalProfit.toFixed(2) : "-$" + Math.abs(totalProfit).toFixed(2)}. Add another book, log the next promo, and publish a win when ready.`,
-    cta: "Find next promo",
-    slug: "daily-brief",
-    tone: "positive",
+  const decision = selectOperatingDecision({
+    actionCandidates: candidates,
+    topWorkflow,
+    openWorkflowCount,
+  });
+  return {
+    key: decision.key,
+    title: decision.title,
+    body: decision.body,
+    cta: decision.cta,
+    slug: decision.slug,
+    tone: decision.tone,
+    score: decision.score,
   };
-}
-
-function formatWorkflowStatus(status = "") {
-  const value = String(status || "").trim();
-  return value ? value.replace(/_/g, " ") : "queued";
 }

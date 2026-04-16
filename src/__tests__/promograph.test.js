@@ -5,6 +5,7 @@ import {
   normalizeCalculatorSlug,
   normalizePromoType,
   normalizeRecommendation,
+  selectOperatingDecision,
   normalizeWorkflowEntry,
   normalizeWorkflowStatus,
   summarizeWorkflows,
@@ -63,5 +64,23 @@ describe("promograph helpers", () => {
     expect(workflow.status).toBe("waiting");
     expect(workflow.expectedProfit).toBe(14.2);
     expect(workflow.book).toBe("FanDuel");
+  });
+
+  it("selects a shared operating decision with drift alerts overriding lower-priority actions", () => {
+    const decision = selectOperatingDecision({
+      actionCandidates: [
+        { key: "books", title: "Open a book", body: "General setup", cta: "Open tracker", slug: "sportsbooks", tone: "watch", score: 70 },
+      ],
+      topWorkflow: { title: "Finish workflow", status: "ready", score: 93, calculatorSlug: "bonus-bet", scoreSummary: "score 93" },
+      driftAlerts: [{ label: "Profit Boost drift", summary: "Expected edge is underperforming.", direction: "negative", severity: "high", averageDrift: -14.2 }],
+      openWorkflowCount: 2,
+      waitingWorkflowCount: 1,
+      readinessScore: 82,
+      posture: "watch",
+    });
+
+    expect(decision.key).toBe("drift-alert");
+    expect(decision.slug).toBe("track");
+    expect(decision.followUps).toContain("2 workflows are still open.");
   });
 });

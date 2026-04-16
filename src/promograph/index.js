@@ -189,3 +189,238 @@ export function summarizeWorkflows(entries = []) {
     byStatus,
   };
 }
+
+export function buildOperatingActionCandidates(input = {}) {
+  const {
+    hasBankroll = false,
+    hasCalc = false,
+    affiliateReady = false,
+    totalProfit = 0,
+    openBets = [],
+    booksComplete = 0,
+    openWorkflowCount = 0,
+    topWorkflow = null,
+    bestBook = null,
+  } = input;
+
+  return [
+    !hasBankroll && {
+      key: "bankroll",
+      title: "Set your bankroll",
+      body: "Stake sizing and action ranking need a bankroll anchor.",
+      cta: "Set profile",
+      slug: "dashboard",
+      tone: "info",
+      score: 100,
+    },
+    !hasCalc && {
+      key: "calc",
+      title: "Run your first conversion",
+      body: "Start with Bonus Bet Converter and get a hedge in under a minute.",
+      cta: "Open converter",
+      slug: "bonus-bet",
+      tone: "positive",
+      score: 92,
+    },
+    bestBook && {
+      key: "books-personalized",
+      title: `Open ${bestBook.book.name} next`,
+      body: `${bestBook.reason}${bestBook.stateCode ? ` in ${bestBook.stateCode}` : ""} · ${bestBook.book.detail}.`,
+      cta: "Review best-fit book",
+      slug: "sportsbooks",
+      tone: bestBook.status === "limited" ? "watch" : "positive",
+      score: 90 + Math.min((bestBook.book.bonus || 0) / 200, 8),
+    },
+    booksComplete === 0 && {
+      key: "books",
+      title: "Pick your first book",
+      body: "Mark your books and start with the best welcome offer.",
+      cta: "Open tracker",
+      slug: "sportsbooks",
+      tone: "watch",
+      score: 84,
+    },
+    topWorkflow && {
+      key: "workflow-focus",
+      title: topWorkflow.title || "Advance highest-value workflow",
+      body:
+        topWorkflow.scoreSummary ||
+        topWorkflow.nextStep ||
+        topWorkflow.summary ||
+        `Best current workflow is ${String(topWorkflow.status || "queued").replace(/_/g, " ")} with score ${topWorkflow.score}.`,
+      cta: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "Open Track" : "Open workflow",
+      slug: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "track" : (topWorkflow.calculatorSlug || "track"),
+      tone: (topWorkflow.score || 0) >= 90 ? "positive" : "watch",
+      score: (topWorkflow.score || 0) + 2,
+    },
+    openWorkflowCount > 0 && {
+      key: "workflows",
+      title: "Advance workflows",
+      body: `${openWorkflowCount} workflow${openWorkflowCount === 1 ? "" : "s"} still need follow-through.`,
+      cta: "Open Track",
+      slug: "track",
+      tone: "watch",
+      score: 88 + Math.min(openWorkflowCount, 4),
+    },
+    openBets.length > 0 && {
+      key: "open",
+      title: "Close open bets",
+      body: `${openBets.length} open bet${openBets.length === 1 ? "" : "s"} still need settlement.`,
+      cta: "Review bets",
+      slug: "bet-tracker",
+      tone: "watch",
+      score: 80 + Math.min(openBets.length, 5),
+    },
+    !affiliateReady && {
+      key: "affiliate",
+      title: "Revenue setup incomplete",
+      body: "Referral links are still placeholders, so outbound clicks are not monetized yet.",
+      cta: "Review links",
+      slug: "sportsbooks",
+      tone: "risk",
+      score: 48,
+    },
+    {
+      key: "scale",
+      title: "Scale the loop",
+      body: `You have extracted ${totalProfit >= 0 ? "$" + totalProfit.toFixed(2) : "-$" + Math.abs(totalProfit).toFixed(2)}. Add another book and log the next promo.`,
+      cta: "Find next promo",
+      slug: "daily-brief",
+      tone: "positive",
+      score: 24,
+    },
+  ].filter(Boolean);
+}
+
+function normalizeDecisionTone(value = "") {
+  const tone = String(value || "").trim().toLowerCase();
+  return tone || "neutral";
+}
+
+export function selectOperatingDecision(input = {}) {
+  const {
+    actionCandidates = [],
+    topWorkflow = null,
+    driftAlerts = [],
+    nextActions = [],
+    openWorkflowCount = 0,
+    waitingWorkflowCount = 0,
+    readinessScore = null,
+    posture = null,
+  } = input;
+
+  const candidates = Array.isArray(actionCandidates)
+    ? [...actionCandidates].filter(Boolean).sort((a, b) => (b.score || 0) - (a.score || 0))
+    : [];
+  const preferredAction = candidates[0] || null;
+  const primaryAlert = Array.isArray(driftAlerts) ? driftAlerts[0] || null : null;
+  const primaryBlocker = Array.isArray(nextActions) ? nextActions[0] || null : null;
+
+  let decision = preferredAction
+    ? {
+        key: preferredAction.key || "action",
+        title: preferredAction.title || "Recommended action",
+        body: preferredAction.body || "",
+        cta: preferredAction.cta || null,
+        slug: preferredAction.slug || null,
+        tone: normalizeDecisionTone(preferredAction.tone),
+        reason: preferredAction.key || "action",
+        priority: preferredAction.score >= 90 ? "high" : "medium",
+        score: preferredAction.score ?? null,
+        focus: {
+          type: "action",
+          title: preferredAction.title || "Recommended action",
+          detail: preferredAction.body || "",
+          status: preferredAction.tone || "neutral",
+          score: preferredAction.score ?? null,
+        },
+      }
+    : {
+        key: "idle",
+        title: "Keep the loop moving.",
+        body: "PromoGrind has signal, but not one dominant move yet.",
+        cta: null,
+        slug: null,
+        tone: "neutral",
+        reason: "idle",
+        priority: "medium",
+        score: null,
+      focus: null,
+    };
+
+  if (primaryAlert?.direction === "negative") {
+    decision = {
+      key: "drift-alert",
+      title: `Drift check: ${primaryAlert.label}`,
+      body: primaryAlert.summary || "One promo lane is underperforming and needs review.",
+      cta: "Review drift",
+      slug: "track",
+      tone: "watch",
+      reason: "cold_lane",
+      priority: "high",
+      score: Math.round(Math.abs(primaryAlert.averageDrift || 0)),
+      focus: {
+        type: "drift_alert",
+        title: primaryAlert.label,
+        detail: primaryAlert.summary || "",
+        status: primaryAlert.severity || "watch",
+        score: Math.round(Math.abs(primaryAlert.averageDrift || 0)),
+      },
+    };
+  } else if (topWorkflow && (!preferredAction || preferredAction.key === "workflow-focus" || (topWorkflow.score || 0) >= ((preferredAction.score || 0) - 3))) {
+    decision = {
+      key: "workflow-focus",
+      title: topWorkflow.title || "Advance top workflow",
+      body:
+        topWorkflow.scoreSummary ||
+        topWorkflow.nextStep ||
+        topWorkflow.summary ||
+        `${String(topWorkflow.status || "queued").replace(/_/g, " ")} workflow needs attention.`,
+      cta: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "Open Track" : "Open workflow",
+      slug: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "track" : (topWorkflow.calculatorSlug || "track"),
+      tone: (topWorkflow.score || 0) >= 90 ? "positive" : "watch",
+      reason: "top_workflow",
+      priority: topWorkflow.status === "ready" ? "high" : "medium",
+      score: topWorkflow.score ?? null,
+      focus: {
+        type: "workflow",
+        title: topWorkflow.title || "Top workflow",
+        detail:
+          topWorkflow.scoreSummary ||
+          topWorkflow.nextStep ||
+          topWorkflow.summary ||
+          `${String(topWorkflow.status || "queued").replace(/_/g, " ")} workflow needs attention.`,
+        status: topWorkflow.status || "queued",
+        score: topWorkflow.score ?? null,
+      },
+    };
+  } else if (!preferredAction && primaryBlocker) {
+    decision = {
+      key: "launch-blocker",
+      title: primaryBlocker.label || primaryBlocker.title || "Resolve the next launch blocker",
+      body: primaryBlocker.detail || "One manual blocker is still gating the next proof point.",
+      cta: null,
+      slug: null,
+      tone: "watch",
+      reason: "launch_blocker",
+      priority: "high",
+      score: null,
+      focus: {
+        type: "launch_blocker",
+        title: primaryBlocker.label || primaryBlocker.title || "Launch blocker",
+        detail: primaryBlocker.detail || "",
+        status: primaryBlocker.status || "manual",
+        score: null,
+      },
+    };
+  }
+
+  return {
+    ...decision,
+    followUps: [
+      openWorkflowCount > 1 ? `${openWorkflowCount} workflows are still open.` : null,
+      waitingWorkflowCount > 0 ? `${waitingWorkflowCount} workflows are waiting for settlement.` : null,
+      Number.isFinite(readinessScore) ? `Launch posture is ${posture || "unknown"} at ${readinessScore}/100.` : null,
+    ].filter(Boolean),
+  };
+}

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense 
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS, getBookUrl } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
-import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin } from "./sync.js";
+import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics } from "./sync.js";
 import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBriefEnabled } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
@@ -12,7 +12,7 @@ import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
-import { getDashboardSnapshot, getNextBestAction } from "./dashboard/today.js";
+import { getDashboardSnapshot } from "./dashboard/today.js";
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
 // Heavy tab components — lazy loaded so they don't block initial render
@@ -30,6 +30,8 @@ const TrackInsights = lazy(() => import("./components/TrackInsights.jsx"));
 const PromoWalkthrough = lazy(() => import("./components/PromoWalkthrough.jsx"));
 const DailyBriefPage = lazy(() => import("./components/dashboard/DailyBriefPage.jsx"));
 const LaunchCommandCenterPanel = lazy(() => import("./components/dashboard/LaunchCommandCenterPanel.jsx"));
+const ActivationNextAction = lazy(() => import("./components/dashboard/ActivationNextAction.jsx"));
+const DashboardHero = lazy(() => import("./components/dashboard/DashboardHero.jsx"));
 const TodayDashboardPanel = lazy(() => import("./components/dashboard/TodayDashboardPanel.jsx"));
 const GetStartedRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.GetStartedRoute })));
 const WhatsNewRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.WhatsNewRoute })));
@@ -3087,37 +3089,6 @@ const PushEnableBtn = ({ proStatus }) => {
   );
 };
 
-// ═══ DASHBOARD HERO ═══
-const DashboardHero = ({ totalProfit, openBetsCount, booksComplete, navigate }) => {
-  const percent = Math.min(100, Math.round((booksComplete / BOOKS.length) * 100));
-  const stage = booksComplete === 0 ? "Get Started" : booksComplete < 5 ? "Beginner" : booksComplete < 12 ? "Intermediate" : booksComplete < 20 ? "Advanced" : "Pro Grinder";
-  return (
-    <div style={{...S.card,background:`linear-gradient(135deg,${K.s1},${K.s2})`,border:`1px solid ${K.bd2}`,marginBottom:12,padding:"16px 20px"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
-        <div>
-          <div style={{fontFamily:fontD,fontSize:11,fontWeight:700,color:K.ac,textTransform:"uppercase",letterSpacing:"2px",marginBottom:4}}>Grinder Level: {stage}</div>
-          <div style={{fontFamily:fontD,fontSize:26,fontWeight:800,color:totalProfit>=0?K.gn:K.rd,marginBottom:4}}>
-            {totalProfit>=0?"+":"-"}${f(Math.abs(totalProfit))}
-          </div>
-          <div style={{fontSize:11,color:K.mt}}>Total profit extracted · {booksComplete}/{BOOKS.length} books done</div>
-          <div style={{height:4,background:K.s3,borderRadius:2,marginTop:8,width:220}}>
-            <div style={{height:4,borderRadius:2,background:K.gn,width:`${percent}%`,transition:"width 0.4s"}}/>
-          </div>
-        </div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          {openBetsCount>0&&<div style={{padding:"10px 16px",background:`${K.yl}10`,border:`1px solid ${K.yl}30`,borderRadius:8,textAlign:"center"}}>
-            <div style={{fontFamily:fontD,fontSize:18,fontWeight:800,color:K.yl}}>{openBetsCount}</div>
-            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Open Bets</div>
-          </div>}
-          <button onClick={()=>navigate('/ledger')} style={{padding:"10px 16px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:8,color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
-            Log Profit →
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // ═══ QUICK ADD BET ═══
 const QuickAddBet = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -3333,46 +3304,6 @@ function MemberWelcomeCard({ navigate, proStatus }) {
   );
 }
 
-function ActivationNextAction({ data, totalProfit, openBets, booksComplete, navigate }) {
-  const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
-  const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
-  const snapshot = getDashboardSnapshot(data || {}, PROMO_SCHED, new Date(), bankroll);
-  const openWorkflowCount = Array.isArray(data?.resultFeedback)
-    ? data.resultFeedback.filter((entry) => ["queued", "ready", "placed", "waiting", "open", "pending"].includes(String(entry?.status || "").toLowerCase())).length
-    : 0;
-  const action = getNextBestAction({
-    usageLog,
-    bankroll,
-    totalProfit,
-    openBets,
-    booksComplete,
-    openWorkflowCount: snapshot.openWorkflowCount || openWorkflowCount,
-    topWorkflow: snapshot.topWorkflow,
-    userState: data?.userState || "",
-    done: data?.done || {},
-    bookStatus: data?.bookStatus || {},
-    recommendedBooks: snapshot.recommendedBooks,
-  });
-  const actionColor = { info: K.ac, positive: K.gn, watch: K.yl, risk: K.rd }[action.tone] || K.ac;
-
-  return (
-    <div style={{...S.card,border:`1px solid ${actionColor}40`,background:`${actionColor}08`,marginBottom:12}}>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,flexWrap:'wrap'}}>
-        <div style={{flex:1,minWidth:240}}>
-          <div style={{fontSize:10,color:actionColor,fontWeight:800,letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:5}}>Next Best Action</div>
-          <div style={{fontFamily:fontD,fontSize:18,fontWeight:800,color:K.tx,marginBottom:4}}>{action.title}</div>
-          <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{action.body}</div>
-        </div>
-        <button
-          onClick={() => { trackEvent('next_best_action_clicked', { key: action.key }); navigate('/' + action.slug); }}
-          style={{padding:'9px 14px',background:actionColor,border:'none',borderRadius:8,color:K.bg,fontSize:12,fontWeight:800,cursor:'pointer',fontFamily:font,whiteSpace:'nowrap'}}>
-          {action.cta} →
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // ═══ DAILY DASHBOARD ═══
 const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
@@ -3413,6 +3344,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const todayDay = dayNames[today.getDay()];
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
   const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
   const snapshot = getDashboardSnapshot(data, PROMO_SCHED, today, bankroll);
   const bets = data.bets || [];
@@ -3433,8 +3365,12 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
     <div>
       {showWT&&<Suspense fallback={null}><PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/></Suspense>}
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
-      <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
-      <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
+      <Suspense fallback={<LoadingState label="Loading dashboard hero…" />}>
+        <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
+      </Suspense>
+      <Suspense fallback={<LoadingState label="Loading next action…" />}>
+        <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
+      </Suspense>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
       <Suspense fallback={<LoadingState label="Loading launch posture…" />}>
         <LaunchCommandCenterPanel />
@@ -3442,7 +3378,14 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <CommunityWinsWall />
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
       <Suspense fallback={<LoadingState label="Loading today dashboard…" />}>
-        <TodayDashboardPanel snapshot={snapshot} navigate={navigate} appData={data} isProActive={typeof dashIsPro === "function" ? dashIsPro() : false} />
+        <TodayDashboardPanel
+          snapshot={snapshot}
+          navigate={navigate}
+          appData={data}
+          isProActive={typeof dashIsPro === "function" ? dashIsPro() : false}
+          syncDiagnostics={{ ...syncDiagnostics, online: isOnline, syncStatus }}
+          usageLog={usageLog}
+        />
       </Suspense>
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
@@ -4867,6 +4810,7 @@ export default function App() {
   const toggleCompact = () => setCompactMode(c => { const n=!c; try{localStorage.setItem('pg_compact',String(n));}catch{}; return n; });
   const [appData, setAppData] = useState(() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3'))||{}; } catch { return {}; } });
   const [syncStatus, setSyncStatus] = useState(null);
+  const [syncDiagnostics, setSyncDiagnostics] = useState(() => readSyncDiagnostics());
   const syncTimer = useRef(null);
   // Responsive breakpoint
   const [winW, setWinW] = useState(() => typeof window !== 'undefined' ? window.innerWidth : 1200);
@@ -4884,18 +4828,32 @@ export default function App() {
   useEffect(() => {
     const onOnline = () => {
       setIsOnline(true);
+      setSyncDiagnostics(readSyncDiagnostics());
       try {
         if(localStorage.getItem('pg_sync_pending')) {
-          saveData(appData).then(()=>localStorage.removeItem('pg_sync_pending')).catch(()=>{});
+          saveData(appData).then(()=>{
+            localStorage.removeItem('pg_sync_pending');
+            setSyncDiagnostics(readSyncDiagnostics());
+          }).catch(()=>{
+            setSyncDiagnostics(readSyncDiagnostics());
+          });
         }
       } catch(e) {}
     };
-    const onOffline = () => setIsOnline(false);
+    const onOffline = () => {
+      setIsOnline(false);
+      setSyncDiagnostics(readSyncDiagnostics());
+    };
     window.addEventListener('online', onOnline);
     window.addEventListener('offline', onOffline);
     return () => { window.removeEventListener('online', onOnline); window.removeEventListener('offline', onOffline); };
   }, []);
-  useEffect(() => { loadData().then(d => { if(d) setAppData(d); }); }, []);
+  useEffect(() => {
+    loadData().then(d => {
+      if(d) setAppData(d);
+      setSyncDiagnostics(readSyncDiagnostics());
+    });
+  }, []);
   useEffect(() => {
     try {
       if(!sessionStorage.getItem('pg_session_start')) {
@@ -4915,11 +4873,13 @@ export default function App() {
     setSyncStatus('syncing');
     saveData(d).then(() => {
       setSyncStatus('saved');
+      setSyncDiagnostics(readSyncDiagnostics());
       clearTimeout(syncTimer.current);
       syncTimer.current = setTimeout(() => setSyncStatus(null), 2000);
     }).catch(() => {
       setSyncStatus(null);
       try { localStorage.setItem('pg_sync_pending', 'true'); } catch(e) {}
+      setSyncDiagnostics(readSyncDiagnostics());
     });
   };
   const [showCalcSearch, setShowCalcSearch] = useState(false);
@@ -5296,7 +5256,7 @@ export default function App() {
   if (embedMode) {
     return (
       <ToastProvider>
-      <AppDataCtx.Provider value={{ appData, syncAppData, user }}>
+      <AppDataCtx.Provider value={{ appData, syncAppData, user, syncDiagnostics, syncStatus, isOnline }}>
       <CompactCtx.Provider value={compactMode}>
       <CurrencyCtx.Provider value={currencyCtxVal}>
       <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
@@ -5320,7 +5280,7 @@ export default function App() {
 
   return (
     <ToastProvider>
-    <AppDataCtx.Provider value={{ appData, syncAppData, user }}>
+    <AppDataCtx.Provider value={{ appData, syncAppData, user, syncDiagnostics, syncStatus, isOnline }}>
     <CompactCtx.Provider value={compactMode}>
     <CurrencyCtx.Provider value={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>

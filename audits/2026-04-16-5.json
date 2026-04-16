@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-16",
+  "session": 55,
+  "status": "green",
+  "summary": "Session 55 closeout after the sync compatibility-mirror + operating-graph + observability tranche: the legacy blob now compacts behind entity-backed truth, dashboard and Studio share one operating-action model, dashboard observability/sync-state are live, and repo memory has been fully refreshed.",
+  "highlights": [
+    "sync.js now compacts promogrind_data into a compatibility mirror when entity-backed tables succeed and can compact older full blobs on authenticated load",
+    "promograph/index.js now exports shared operating-action candidate and decision helpers reused by dashboard and Studio export",
+    "ObservabilityPanel now surfaces activation, return, CTA, AI, monetization, and sync-state metrics on the dashboard",
+    "GitHub Actions now runs tests, build, and the bundle-budget gate automatically",
+    "Dashboard-only hero/action surfaces were split into lazy chunks and the main bundle remains under budget at about 419.4KB"
+  ],
+  "validation": {
+    "tests": "187/187",
+    "build": "passing",
+    "bundleBudget": "passing",
+    "mainChunkKb": 419.4
+  },
+  "remainingBlockers": [
+    "Apply scripts/migration-workflow-history.sql in Supabase",
+    "Apply scripts/migration-entity-sync.sql in Supabase",
+    "Set VITE_VAPID_PUBLIC_KEY in production",
+    "Run the real Stripe smoke flow end-to-end",
+    "Secure real links/approvals for BetMGM, bet365, and BetRivers",
+    "Do one friend-facing account/calculator/browser pass"
+  ]
+}

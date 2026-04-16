@@ -2,6 +2,7 @@ import React from "react";
 import { K, S, f, font, fontD } from "../../lib/shared.js";
 import { getBankrollPosture, getUnfinishedWork } from "../../dashboard/today.js";
 import { getOnboardingProgress } from "../../onboarding.js";
+import ObservabilityPanel from "./ObservabilityPanel.jsx";
 import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
 
 const TONE = {
@@ -13,7 +14,7 @@ const TONE = {
   info: K.ac,
 };
 
-export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, isProActive = false }) {
+export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, isProActive = false, syncDiagnostics = {}, usageLog = {} }) {
   const posture = getBankrollPosture(snapshot);
   const unfinished = getUnfinishedWork(snapshot);
   const onboarding = getOnboardingProgress({ appData, isProActive });
@@ -118,6 +119,8 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
           <div style={{ fontSize: 11, color: K.gn }}>No urgent unfinished work is surfaced from your current tracker and ledger state.</div>
         )}
       </div>
+
+      <ObservabilityPanel appData={appData} snapshot={snapshot} syncDiagnostics={syncDiagnostics} usageLog={usageLog} />
 
       <div style={{ marginTop: 12 }}>
         <WorkflowInboxPanel appData={appData} navigate={navigate} bankroll={snapshot.bankroll ?? ""} />
