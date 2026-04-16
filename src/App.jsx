@@ -27,6 +27,7 @@ const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
 const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
 const PromoIntakeRoute = lazy(() => import("./routes/PromoIntakeRoute.jsx"));
 const TrackInsights = lazy(() => import("./components/TrackInsights.jsx"));
+const PromoWalkthrough = lazy(() => import("./components/PromoWalkthrough.jsx"));
 const DailyBriefPage = lazy(() => import("./components/dashboard/DailyBriefPage.jsx"));
 const LaunchCommandCenterPanel = lazy(() => import("./components/dashboard/LaunchCommandCenterPanel.jsx"));
 const TodayDashboardPanel = lazy(() => import("./components/dashboard/TodayDashboardPanel.jsx"));
@@ -3430,7 +3431,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
 
   return (
     <div>
-      {showWT&&<PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/>}
+      {showWT&&<Suspense fallback={null}><PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/></Suspense>}
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
       <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
       <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
@@ -4277,86 +4278,6 @@ const BankrollWizard = () => {
   );
 };
 
-// ═══ PROMO WALKTHROUGHS ═══
-const WALKTHROUGHS = [
-  {
-    title:"DraftKings $200 Bonus Bet",
-    steps:[
-      {n:"Sign Up",body:"Create a new DraftKings account via a promo link. Deposit $5+."},
-      {n:"Place Qualifying Bet",body:"Bet $5+ on any market at -500 odds or better. Your $200 bonus bet arrives within 72 hours."},
-      {n:"Find Your Line",body:"Use the Bonus Bet Converter. Look for an underdog at +250 to +400. Sweet spot gives 65-72% conversion."},
-      {n:"Lock In Profit",body:"Place $200 bonus bet on underdog at Book A. Hedge with calculated cash amount on favorite at FanDuel or BetMGM. Collect ~$130-144 guaranteed."},
-    ],
-    calcSlug:"bonus-bet"
-  },
-  {
-    title:"FanDuel 25% Profit Boost",
-    steps:[
-      {n:"Claim the Boost",body:"Open FanDuel app, go to Promos tab. Claim the 25% profit boost token (max $10 boost, typically on a $40 bet)."},
-      {n:"Find a Sharp Line",body:"Use No-Vig calculator to find the sharpest market — typically NFL spreads or NBA moneylines. Aim for -110 or better."},
-      {n:"Calculate Your Edge",body:"Enter your bet size, odds, 25% boost, and $10 max into the Profit Boost Calculator. Note the effective boosted odds."},
-      {n:"Hedge for Guaranteed Profit",body:"Place boosted bet at FanDuel. Hedge the stake+boost payout at another book. Lock in $6-10 regardless of outcome."},
-    ],
-    calcSlug:"profit-boost"
-  },
-  {
-    title:"BetMGM First Bet Insurance",
-    steps:[
-      {n:"Sign Up & Deposit",body:"Create BetMGM account. Deposit up to $1,500 — this is your insurance amount. First bet must be $10+."},
-      {n:"Place First Bet Strategically",body:"Use the First Bet Hedge Calculator. Place a large first bet on a near-50/50 market (moneyline close to -110/-110)."},
-      {n:"If It Wins",body:"Great — you just won real money on your first bet. No bonus needed. Move on to regular promo hunting."},
-      {n:"If It Loses — Collect Bonus",body:"BetMGM returns your stake as bonus bets (up to $1,500). Use Bonus Bet Converter to extract 65-72% as cash."},
-    ],
-    calcSlug:"first-bet"
-  },
-];
-
-const PromoWalkthrough = ({ navigate, onClose }) => {
-  const [selectedWT, setSelectedWT] = useState(0);
-  const [wtStep, setWtStep] = useState(0);
-  const wt = WALKTHROUGHS[selectedWT];
-  const step = wt.steps[wtStep];
-  const isCalcStep = wtStep >= 2;
-  return (
-    <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.75)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
-      <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,maxWidth:720,width:"100%",maxHeight:"90vh",overflow:"auto",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 20px",borderBottom:`1px solid ${K.bd}`}}>
-          <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Promo Walkthroughs</div>
-          <button onClick={onClose} style={{background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:18,padding:"0 4px"}}>✕</button>
-        </div>
-        <div style={{display:"flex",minHeight:360}}>
-          <div style={{width:200,borderRight:`1px solid ${K.bd}`,padding:12,flexShrink:0}}>
-            {WALKTHROUGHS.map((w,i)=>(
-              <button key={i} onClick={()=>{setSelectedWT(i);setWtStep(0);}} style={{width:"100%",textAlign:"left",padding:"10px 12px",background:selectedWT===i?`${K.ac}15`:"transparent",border:`1px solid ${selectedWT===i?K.ac:K.bd}`,borderRadius:6,color:selectedWT===i?K.ac:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,marginBottom:6,lineHeight:1.4}}>{w.title}</button>
-            ))}
-          </div>
-          <div style={{flex:1,padding:20}}>
-            <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:4,fontFamily:fontD}}>{wt.title}</div>
-            <div style={{fontSize:10,color:K.mt,marginBottom:16}}>Step {wtStep+1} of {wt.steps.length}</div>
-            <div style={{display:"flex",gap:4,marginBottom:20}}>
-              {wt.steps.map((_,i)=>(
-                <div key={i} style={{height:4,flex:1,borderRadius:2,background:i<=wtStep?K.ac:K.bd2,transition:"background 0.2s"}}/>
-              ))}
-            </div>
-            <div style={{display:"flex",alignItems:"flex-start",gap:14,marginBottom:20}}>
-              <div style={{width:32,height:32,borderRadius:"50%",background:K.ac,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:K.bg,fontSize:14,flexShrink:0}}>{wtStep+1}</div>
-              <div>
-                <div style={{fontSize:14,fontWeight:700,color:K.tx,marginBottom:6,fontFamily:fontD}}>{step.n}</div>
-                <div style={{fontSize:12,color:K.dm,lineHeight:1.7}}>{step.body}</div>
-              </div>
-            </div>
-            <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-              {wtStep>0&&<button onClick={()=>setWtStep(s=>s-1)} style={{padding:"7px 16px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font}}>← Prev</button>}
-              {wtStep<wt.steps.length-1&&<button onClick={()=>setWtStep(s=>s+1)} style={{padding:"7px 16px",background:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Next →</button>}
-              {isCalcStep&&<button onClick={()=>{navigate('/'+wt.calcSlug);onClose();}} style={{padding:"7px 16px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Open Calculator →</button>}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // FX, CurrencyCtx → ./contexts.jsx
 const useCurrency = () => React.useContext(CurrencyCtx);
 
@@ -4746,186 +4667,6 @@ function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
 }
 
 // TaxesEstimator → ./components/TaxesEstimator.jsx
-
-// ── About Page ────────────────────────────────────────────────────────────────
-const AboutPage = () => {
-  const stat = (num, label) => (
-    <div style={{textAlign:'center',minWidth:80}}>
-      <div style={{fontSize:26,fontWeight:700,color:K.gn,lineHeight:1}}>{num}</div>
-      <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:1,marginTop:3}}>{label}</div>
-    </div>
-  );
-  const fc = (icon, title, desc) => (
-    <div style={{padding:'14px 16px',border:`1px solid ${K.bd}`,borderRadius:10,background:K.s1}}>
-      <div style={{fontSize:20,marginBottom:6}}>{icon}</div>
-      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:4}}>{title}</div>
-      <div style={{fontSize:11,color:K.mt}}>{desc}</div>
-    </div>
-  );
-  const badge = (txt) => (
-    <span style={{padding:'4px 10px',borderRadius:5,fontSize:10,fontWeight:600,border:`1px solid ${K.gn}30`,color:K.gn,background:K.gn+'08'}}>✓ {txt}</span>
-  );
-  return (
-    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
-      {/* Hero */}
-      <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'24px 22px',marginBottom:24}}>
-        <div style={{fontSize:28,fontWeight:700,color:K.gn,fontFamily:fontD,letterSpacing:-0.5,marginBottom:4}}>PROMOGRIND</div>
-        <div style={{fontSize:13,fontWeight:600,color:K.gn,marginBottom:10}}>Free Sportsbook Promo Conversion Tools</div>
-        <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:18}}>The free alternative to $99–199/month promo hunting subscriptions. 53+ calculators for matched betting, arbitrage, EV, promo conversion, and bankroll management — built for serious sports bettors who do the math.</div>
-        <div style={{display:'flex',flexWrap:'wrap',gap:24}}>{stat('53+','Calculators')}{stat('Free','Core tools')}{stat('21+','Age required')}{stat('Live','On promogrind.bet')}</div>
-      </div>
-
-      {/* What it does */}
-      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:10}}>What PromoGrind Does</div>
-      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:16}}>PromoGrind is a math calculator for sportsbook promotional offers — like a mortgage calculator for bonus bets. You enter numbers, it outputs conversion values, EV, hedge amounts, and profit projections. It does not place bets, access sportsbook accounts, or handle money of any kind.</div>
-
-      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:10,marginBottom:24}}>
-        {fc('🎯','Bonus Bet Converter','Calculate exact cash value of any bonus bet offer')}
-        {fc('⚡','Profit Boost Calculator','Find optimal profit boost usage and hedge amounts')}
-        {fc('🔄','Arbitrage Calculator','2-way and 3-way arb detection and stake sizing')}
-        {fc('📊','Kelly Criterion','Bankroll-optimal bet sizing for +EV opportunities')}
-        {fc('🔍','Expected Value','+EV calculation with devigged fair odds')}
-        {fc('📋','P/L Ledger','Track every bet and promo result over time')}
-      </div>
-
-      {/* Built by */}
-      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:8}}>Built by VaultSpark Studios</div>
-      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:8}}>PromoGrind is a product of <span style={{color:K.tx,fontWeight:600}}>VaultSpark Studios LLC</span>, an independent software studio building tools for sports bettors, traders, and analysts. We build PromoGrind because the best promo hunting tools cost $99–199/month. The math isn't complicated — it just takes good software. We built it and made it free.</div>
-      <div style={{display:'flex',flexWrap:'wrap',gap:8,marginBottom:24}}>
-        {badge('Educational calculator tool')}{badge('Not a sportsbook operator')}{badge('FTC affiliate disclosure compliant')}{badge('Privacy first — no data sold')}
-      </div>
-
-      {/* How it's free */}
-      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:8}}>How It's Free</div>
-      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:24}}>PromoGrind is supported by affiliate partnerships with the sportsbooks listed in the app. If you sign up at a listed sportsbook through our links, we may earn a commission. This never influences our calculator math — the numbers are the numbers. See our <a href="/affiliate-disclosure/" style={{color:K.ac}}>Affiliate Disclosure</a> for full details.</div>
-
-      {/* Compliance */}
-      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:8}}>Compliance &amp; Legal Status</div>
-      <div style={{fontSize:12,color:K.mt,lineHeight:1.7,marginBottom:8}}>PromoGrind is not a licensed gambling operator. We are a third-party educational software tool. Matched betting and promo hunting are legal in all US states where sports betting is authorized. See our <a href="/compliance/" style={{color:K.ac}}>Compliance &amp; Regulatory Status</a> page for full details.</div>
-      <div style={{fontSize:12,color:K.rd,fontWeight:600,marginBottom:24}}>Must be 21+ (18+ in some states). Gamble responsibly. 1-800-GAMBLER.</div>
-
-      {/* Contact */}
-      <div style={{fontSize:15,fontWeight:700,color:K.tx,fontFamily:fontD,marginBottom:10}}>Contact &amp; Support</div>
-      <div style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:10,padding:'16px 18px',marginBottom:24}}>
-        <div style={{fontSize:12,color:K.mt,lineHeight:2}}>
-          <div><span style={{color:K.tx,fontWeight:600}}>Support:</span> <a href="mailto:support@vaultsparkstudios.com" style={{color:K.ac}}>support@vaultsparkstudios.com</a></div>
-          <div><span style={{color:K.tx,fontWeight:600}}>Privacy:</span> <a href="mailto:privacy@vaultsparkstudios.com" style={{color:K.ac}}>privacy@vaultsparkstudios.com</a></div>
-          <div><span style={{color:K.tx,fontWeight:600}}>Affiliate &amp; partnerships:</span> <a href="mailto:support@vaultsparkstudios.com" style={{color:K.ac}}>support@vaultsparkstudios.com</a></div>
-        </div>
-      </div>
-
-      {/* Legal links */}
-      <div style={{display:'flex',flexWrap:'wrap',gap:10,fontSize:11,color:K.mt}}>
-        {[['Compliance','/compliance/'],['Privacy','/privacy/'],['Terms','/terms/'],['Affiliate Disclosure','/affiliate-disclosure/'],['Responsible Gambling','/responsible-gambling/'],['Disclaimer','/disclaimer/']].map(([l,h])=>(
-          <a key={h} href={h} style={{color:K.mt,textDecoration:'none'}} onMouseEnter={e=>e.currentTarget.style.color=K.ac} onMouseLeave={e=>e.currentTarget.style.color=K.mt}>{l}</a>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const GetStarted = () => {
-  const navigate = useNavigate();
-  const steps = [
-    {num:1,icon:"🏦",title:"Open Accounts",desc:"Open accounts at the sportsbooks you don't have yet. More accounts = more promos.",btn:"View Sportsbooks →",slug:"/sportsbooks"},
-    {num:2,icon:"🎯",title:"Find a Promo",desc:"Browse available promotions and pick the best offer to convert.",btn:"Open Promo Board →",slug:"/promo-board"},
-    {num:3,icon:"🧮",title:"Calculate Your Hedge",desc:"Enter the promo into the right calculator to find exact bet amounts.",btn:"Bonus Bet Calculator →",slug:"/bonus-bet"},
-    {num:4,icon:"📊",title:"Place & Track",desc:"Place both sides of the bet. Log it in your Bet Tracker immediately.",btn:"Bet Tracker →",slug:"/bet-tracker"},
-    {num:5,icon:"💰",title:"Check Your P/L",desc:"Every completed promo shows in your ledger. Review your running total.",btn:"P/L Ledger →",slug:"/ledger"},
-    {num:6,icon:"🤖",title:"Unlock AI Tools",desc:"Upgrade to Runner for unlimited PromoAdvisor, AI Action Plan, and Stack Builder.",btn:"View Plans →",slug:"/upgrade"},
-  ];
-  return (
-    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
-      <div style={{marginBottom:24}}>
-        <div style={{fontSize:22,fontWeight:700,color:K.tx,fontFamily:fontD,letterSpacing:-0.5,marginBottom:4}}>Get Started</div>
-        <div style={{fontSize:13,color:K.mt}}>Follow these 6 steps to start converting sportsbook promos into real profit.</div>
-      </div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(340px,1fr))',gap:14}}>
-        {steps.map(s=>(
-          <div key={s.num} style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'18px 20px',display:'flex',flexDirection:'column',gap:10}}>
-            <div style={{display:'flex',alignItems:'center',gap:12}}>
-              <div style={{width:32,height:32,borderRadius:'50%',background:`${K.gn}15`,border:`1px solid ${K.gn}40`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,color:K.gn,flexShrink:0,fontFamily:font}}>{s.num}</div>
-              <div style={{fontSize:22,lineHeight:1}}>{s.icon}</div>
-              <div style={{fontSize:14,fontWeight:700,color:K.tx,fontFamily:fontD}}>{s.title}</div>
-            </div>
-            <div style={{fontSize:12,color:K.mt,lineHeight:1.65,paddingLeft:44}}>{s.desc}</div>
-            <div style={{paddingLeft:44}}>
-              <button onClick={()=>navigate(s.slug)} style={{padding:'6px 14px',background:`${K.gn}15`,border:`1px solid ${K.gn}40`,borderRadius:6,color:K.gn,fontSize:12,fontWeight:600,cursor:'pointer',fontFamily:font}}>{s.btn}</button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const WhatsNew = () => {
-  const releases = [
-    {
-      version:"v23.7.0",date:"2026-04-13",sprint:"S39",
-      bullets:[
-        "Beta invite codes — friends can test Runner tier free for 30 days (no card required).",
-        "About tab added to Home.",
-        "All broken /promogrind/ links fixed across 40+ pages.",
-      ],
-    },
-    {
-      version:"v23.6.0",date:"2026-04-13",sprint:"S38",
-      bullets:[
-        "Stripe Customer Portal — subscribers can manage billing from user menu.",
-        "RESEND onboarding emails migrated to promogrind.bet.",
-        "Customer portal edge function deployed.",
-      ],
-    },
-    {
-      version:"v23.5.0",date:"2026-04-12",sprint:"S37",
-      bullets:[
-        "UserMenu redesign — 12 sports avatar emoji, editable display name, tier badge, animated dropdown.",
-        "Header + tab bar responsive overhaul for mobile.",
-        "Promo Advisor guest gate.",
-      ],
-    },
-    {
-      version:"v23.4.0",date:"2026-03-31",sprint:"S36",
-      bullets:[
-        "WCAG AA compliance — all text meets 4.5:1 contrast in both light and dark themes.",
-        "Income Access affiliate disclosure audit complete.",
-        "sitemap.xml updated with 145 URLs.",
-      ],
-    },
-    {
-      version:"v23.3.0",date:"2026-03-27",sprint:"S35",
-      bullets:[
-        "Full analytics stack live — Cloudflare Web Analytics, PostHog behavioral tracking, Sentry error monitoring.",
-        "PostHog user identity on auth.",
-      ],
-    },
-  ];
-  return (
-    <div style={{maxWidth:780,margin:'0 auto',padding:'24px 16px',fontFamily:font}}>
-      <div style={{marginBottom:24}}>
-        <div style={{fontSize:22,fontWeight:700,color:K.tx,fontFamily:fontD,letterSpacing:-0.5,marginBottom:4}}>What's New</div>
-        <div style={{fontSize:13,color:K.mt}}>Recent releases and improvements to PromoGrind.</div>
-      </div>
-      <div style={{display:'flex',flexDirection:'column',gap:12}}>
-        {releases.map(r=>(
-          <div key={r.version} style={{background:K.s1,border:`1px solid ${K.bd}`,borderRadius:12,padding:'16px 20px'}}>
-            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
-              <span style={{padding:'3px 10px',borderRadius:5,fontSize:11,fontWeight:700,background:`${K.gn}15`,border:`1px solid ${K.gn}40`,color:K.gn,fontFamily:font}}>{r.version}</span>
-              <span style={{fontSize:11,color:K.dm,fontFamily:font}}>{r.sprint}</span>
-              <span style={{fontSize:11,color:K.dm,marginLeft:'auto',fontFamily:font}}>{r.date}</span>
-            </div>
-            <ul style={{margin:0,padding:'0 0 0 18px'}}>
-              {r.bullets.map((b,i)=>(
-                <li key={i} style={{fontSize:12,color:K.mt,lineHeight:1.65,marginBottom:i<r.bullets.length-1?4:0}}>{b}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 
 const TABS = [
   { group:"Home", items:[

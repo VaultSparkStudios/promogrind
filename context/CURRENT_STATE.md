@@ -1,29 +1,93 @@
 # Current State
 
-## Snapshot
-
-- Date:
-- Overall status:
-- Current phase:
-
-## What exists
-
-- systems:
-- assets:
-- important paths:
-
-## In progress
-
-- active work:
-
-## Blockers
-
-- blocker:
-- owner:
-- unblock path:
-
-## Next 3 moves
-
-1.
-2.
-3.
+Public-safe summary:
+- this repo remains deployable — build passing, 178/178 tests green, and the latest sync merge tranche is validated with bundle budget restored; the main chunk now sits at ~415.9KB against the 420KB cap after lazy-loading Promo Walkthroughs
+- version: 24.8.0 · last session: S54 (2026-04-16)
+- **S54 sync conflict-merge tranche (closed)**: `src/sync.js` now preserves concurrent ledger rows, workflow inbox rows, result-feedback rows, and workflow-history rows across local + remote state by merging per record instead of replacing whole entity arrays; `src/__tests__/sync.test.js` now covers concurrent append/update cases
+- **S54 bundle trim tranche (closed)**: `src/components/PromoWalkthrough.jsx` now owns the walkthrough modal behind a lazy chunk imported from `src/App.jsx`, pulling walkthrough copy/UI off the startup path and restoring bundle headroom to ~415.9KB
+- **S53 operator-guidance + publish-history tranche (closed)**: `src/sync.js`, `src/track/insights.js`, and `src/workflows/inbox.js` now preserve/consume durable workflow provenance; `src/studio/export.js` now persists versioned Studio contract snapshots with delta summaries; and the launch cockpit now emits a shared Daily Command Brief from workflow, drift, and launch-blocker state
+- **S53 alerting + cockpit unification tranche (closed)**: `src/operator/briefing.js`, `src/components/dashboard/DailyBriefPage.jsx`, and `src/components/dashboard/LaunchCommandCenterPanel.jsx` now generate a targeted alert queue plus a workflow command deck from shared operator state instead of generic reminders and disconnected summary cards
+- **S53 Track trust-loop tranche (closed)**: `src/components/TrackInsights.jsx` now exposes a filterable workflow-history surface and a one-tap Micro-NPS prompt after three settled workflows, with persisted app-state feedback for future operator memory/SIL use
+- **S53 state/book personalization tranche (closed)**: `src/books.js`, `src/dashboard/today.js`, `src/workflows/inbox.js`, `src/components/Tracker.jsx`, and `src/App.jsx` now share legal-state/book-availability logic so sportsbook CTAs and workflow recommendations favor legal, open, non-degraded books for the current user
+- **S52 operator-contract + drift-alert tranche (closed)**: `src/track/insights.js` now emits ranked drift alerts from promo-type and book settlement deltas; `src/studio/export.js` now emits a versioned Studio contract with summary, priorities, anomalies, and declared consumer surfaces for Studio OS / Ops / Hub / Social Dashboard
+- **S52 launch-cockpit + API hardening tranche (closed)**: `src/components/dashboard/LaunchCommandCenterPanel.jsx` now surfaces machine priorities and anomaly/drift feeds instead of only static readiness counters; `supabase/functions/calc-api/index.ts` now uses the shared CORS/JSON helper and references `promogrind.bet` instead of stale wildcard/legacy attribution
+- **S51 workflow-operations refinement tranche (closed)**: `src/workflows/inbox.js` now ranks workflows with explainable reasons using bankroll pressure, book activation, opportunity/actionability, promo/book history, skip reasons, friction, urgency, and freshness; `src/dashboard/today.js` now reuses that score summary for next-best-action copy so the dashboard can explain why a workflow is the best current move
+- **S51 lifecycle controls + calibration surface (closed)**: `src/components/dashboard/WorkflowInboxPanel.jsx` now moves workflows through queued → ready → placed → waiting, keeps matching result-feedback rows in sync, and can skip low-value work directly from the inbox; `src/components/TrackInsights.jsx` now syncs settlement status back into the inbox and renders per-promo self-calibration drift bars from `src/track/insights.js`
+- **S50 entity-sync continuation tranche (closed)**: `src/sync.js` now hydrates and persists dedicated `ledger_state` and `tracker_state` tables alongside the newer workflow tables, so ledger/tracker/workflow domains can sync through separate Supabase entities while `promogrind_data` remains as a compatibility mirror; `scripts/migration-entity-sync.sql` adds the ledger/tracker schema + RLS required for that split
+- **S50 workflow history persistence tranche (closed)**: `src/sync.js` now appends canonical workflow-history events, hydrates dedicated `workflow_state` / `workflow_history` tables when present, and best-effort persists both current workflow state and append-only history alongside the legacy `promogrind_data` blob; `scripts/migration-workflow-history.sql` adds the Supabase schema + RLS needed for durable per-user workflow history
+- **S50 workflow intelligence + sync hardening tranche (closed)**: PromoGrind now has a real workflow inbox foundation fed by calculators and AI surfaces, provenance/self-calibration/timeline intelligence in Track, top-workflow-aware dashboard ranking, a structured Studio snapshot export, and a safer sync layer with per-entity metadata plus an offline write queue
+- **S49 PromoGraph foundation + startup closeout tranche (closed)**: added a shared `src/promograph/index.js` domain layer to canonicalize promo typing, workflow statuses, and recommendation payloads; Track feedback and dashboard next-best-action now consume that shared model; `prompts/initiate.md` and `docs/STARTUP_BRIEF.md` now complete the repo's start protocol path
+- **S48 launch-unblock + closeout tranche (closed)**: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config; live Stripe preflight now reaches hosted Checkout; `send-daily-brief` is deployed; ESPN BET/TheScore BET + Fanatics now use real personal referral URLs while non-monetizable generic referral pages were removed for BetMGM, bet365, and BetRivers
+- **S47 intelligence + operator tranche (closed)**: launch readiness now uses a scored command-center model; Track now captures skip-reason / friction intelligence; Promo Advisor and AI Action Plan now expose richer structured outputs for calculator-aware recommendations and ops-facing metadata
+- **Launch verification pass (post-S47)**: live schema checks confirmed both `push_subscriptions` and `subscriptions` tables exist in Supabase; auth-compatible core Edge Functions were redeployed from this workspace; direct live probing now confirms `create-checkout` returns a live checkout URL and `customer-portal` returns the expected pre-purchase `404` for a brand-new user
+- **Operator truthfulness tranche (S47)**: `src/launchState.js` now derives launch-command-center scoring from validation, rollout, monetization, and blocker state instead of leaving the panel as mostly static display copy; test-count drift was corrected to `153/153`
+- **Feedback-loop depth (S47)**: result feedback now captures skip reasons, execution friction, and notes so Track can measure where workflows fail before settlement instead of only whether they settled
+- **AI routing cohesion (S47)**: Promo Advisor now requests/normalizes structured fields like `promoType`, `calculatorSlug`, `confidence`, `riskFlags`, `opportunityScore`, and `opsTags`; app-shell quick-calc routing now listens for those structured recommendations
+- **S46 launch-readiness closeout**: closed the repo-side Now bucket with green validation, refreshed public memory, and pushed launch prep to a truthful handoff state instead of leaving it implied
+- **Route extraction tranche (S46)**: Home `Get Started`, `What's New`, and `About` now live in `src/routes/HomeRoutes.jsx`; onboarding state moved into `src/onboarding.js`, reducing `App.jsx` ownership of launch surfaces
+- **Onboarding tracker (S46)**: dashboard + Home now share a durable `pg_onboarding_steps` flow with inferred completion, progress bars, and next-step visibility
+- **Push briefing wiring (S46)**: Daily Brief now attempts real browser push subscription storage via `push_subscriptions`; `src/sw-register.js` owns enable/disable helpers and `send-daily-brief` now targets `promogrind.bet/#/daily-brief`
+- **Launch-readiness truthfulness (S46)**: monetization readiness now counts referral links as well as affiliate links; launch blockers now reflect the real remaining manual work instead of stale placeholders
+- **S45 recovery + closeout**: recovered an interrupted refinement tranche and closed it out cleanly with green validation, updated public memory, audit JSON, and GitHub-ready commit state
+- **Promo Intake route (S45)**: Home now includes a dedicated `Promo Intake` surface that parses pasted sportsbook promo text into a normalized promo card and recommends the right calculator
+- **Trust + confidence layer (S45)**: Bonus Bet, Profit Boost, and First Bet now surface calculator trust badges plus sensitivity chips showing how much guaranteed profit moves if hedge odds drift
+- **Shadow Book Mode (S45)**: PromoGrind now estimates first-month cash upside from books the user has not opened yet, turning account coverage into a visible value projection
+- **Accessibility + loading polish (S45)**: reusable `LoadingState` / `EmptyState` / `ErrorState` primitives landed; auth dialog now has proper dialog semantics and `Escape` close support; primary and secondary tab bars now support keyboard nav (`ArrowLeft`, `ArrowRight`, `Home`, `End`)
+- **Security + performance guardrails (S45)**: Cloudflare Pages headers now enforce CSP/referrer/permissions/XFO/HSTS policy; build pipeline now emits `og-image.avif` + `og-image.webp`; bundle budget script enforces a <=420KB main chunk target
+- **AI edge hardening (S45)**: `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` now have both in-memory burst protection and durable `vault_events`-backed rate limiting
+- **Track edge dashboard (S44)**: added a dedicated Track analytics surface that aggregates realized P/L, promo-type hit rate, calculator accuracy, best books, and an unsettled workflow queue for quick settlement
+- **Post-result feedback loop (S44)**: key conversion calculators now ask whether the user placed, skipped, or settled the workflow, capture actual profit plus calculator-accuracy feedback, and feed that data into Track analytics
+- **Browser smoke expansion (S44)**: `scripts/validate-browser-launch-smoke.mjs` now validates static launch routes plus built-client markers for age gate, auth dialog, sportsbook CTA, pricing, auth menu, and mobile layout hooks
+- **Referral-link progress (S44)**: personal referral URLs are now configured in `src/books.js` for DraftKings, FanDuel, and Caesars; remaining books still need links or affiliate approval
+- **Project-local auth UX (post-S43)**: PromoGrind now opens sign-in/sign-up inside the app via `src/components/AuthDialog.jsx` instead of sending primary account creation through the Vault member page; the shared Vault identity remains the backend source of truth
+- **Shared identity continuity (post-S43)**: `src/auth.js` now supports direct PromoGrind sign-up/sign-in against shared Supabase auth, and shared display name / username metadata is updated from the app so the same identity can carry across projects
+- domain: promogrind.bet LIVE on Cloudflare (NS switch confirmed via DNS lookup)
+- **Dashboard tranche 2 (S43)**: added `src/dashboard/today.js` plus extracted dashboard surfaces under `src/components/dashboard/`; `src/App.jsx` now consumes shared dashboard snapshot helpers instead of keeping all home-state logic inline
+- **Today dashboard (S43)**: Home dashboard now explicitly surfaces expiring promos, unfinished work, bankroll posture, recent settled profit, and next-best action in one dedicated panel
+- **Launch copy + smoke alignment (S43)**: smoke-covered marketing pages, trust-strip template, and launch validators now consistently use PromoGrind-native "Free PromoGrind account" language; `scripts/validate-launch-smoke.mjs` updated and passing
+- **Validation coverage (S49)**: dashboard, auth URL helpers, track-insights, intake parsing, PromoGraph normalization, shadow mode, sensitivity coverage, monetization helpers, and onboarding helpers are in repo; current suite passes at `158/158`
+- **PromoGraph foundation (S49)**: `src/promograph/index.js` now owns canonical promo-type aliases (`odds_boost` -> `profit_boost`, `sgp_insurance` -> `insurance`), workflow state normalization (`pending`/`open` -> `waiting`), calculator slug cleanup, recommendation normalization, and workflow summarization for shared consumers
+- **Workflow-aware ranking (S49)**: `src/dashboard/today.js` now counts open/waiting workflows from `resultFeedback` and can prioritize advancing queued workflows before more action is stacked on top
+- **Workflow inbox foundation (post-S49)**: `src/components/ResultFeedbackCard.jsx`, `src/components/PromoAdvisorPanel.jsx`, and `src/components/AIActionPlan.jsx` can now write canonical workflow entries into `appData.workflowInbox`; `src/components/dashboard/WorkflowInboxPanel.jsx` scores and surfaces the most actionable open work
+- **Workflow provenance + calibration (post-S49)**: `src/track/insights.js` now computes source-level workflow quality, recent workflow timeline rows, and a self-calibration summary; `src/components/TrackInsights.jsx` renders those new intelligence surfaces
+- **Studio export foundation (post-S49)**: `src/studio/export.js` now emits a structured launch/growth/workflow/intelligence snapshot and `LaunchCommandCenterPanel` exposes a repo-native copy action for Studio OS / Ops / Hub ingestion
+- **Truth-drift cleanup (post-S49)**: active repo references now use `promogrind.bet` in `gift-trial`, `promo-expiry-digest`, and `docs/RELEASE_PLAN.md`; `src/launchState.js` validation text now reflects the current `158/158` suite instead of stale counts
+- **Deeper ranking (post-S49)**: dashboard snapshot helpers now look across `workflowInbox` plus `resultFeedback`, and the activation panel can prioritize the top scored workflow instead of only workflow counts
+- **Entity-aware sync foundation (S50)**: `src/sync.js` now stamps per-entity timestamps, merges newer local entity slices over remote rows where appropriate, and queues failed writes in `pg_sync_queue` for later flush instead of relying only on one blob timestamp
+- **Validation coverage (S50)**: workflow inbox, Studio export, dashboard ranking, provenance/calibration, sync queue/entity-merge behavior, dedicated workflow-state/history hydration, and dedicated ledger/tracker entity hydration are now covered; current suite passes at `168/168`
+- **Startup protocol completeness (S49)**: `prompts/start.md` no longer dead-ends on bootstrap/foundation because `prompts/initiate.md` now exists; `docs/STARTUP_BRIEF.md` is cached in-repo for faster canonical startup output
+- **Browser smoke script status (S43)**: browser smoke was updated and later passed in an elevated environment; launch smoke remains passing in-repo
+- **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
+- **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`
+- **Analytics privacy tightening (S42)**: `src/analytics.js` now masks replay text/media and reduces passive replay sampling
+- **Extension safety + distribution fix (S42)**: browser extension now points to `https://promogrind.bet/`; popup and content script stop using string-built `innerHTML` for generated controls
+- **Sprint 1 hardening (S41)**: shared server-side AI entitlement/quota helper added under `supabase/functions/_shared/ai-access.ts`; wired into PromoChat, PromoAdvisor, AI Action Plan, and Stack Builder
+- **Sprint 1 activation UX (S41)**: Dashboard now shows one prioritized "Next Best Action" based on bankroll, first calculation, book completion, open bets, ledger state, and affiliate readiness
+- **Sprint 1 revenue measurement (S41)**: calculator sportsbook CTAs now emit `sportsbook_cta_clicked` with book, promo type, link type, and affiliate configured status
+- **Sprint 1 performance (S41)**: PromoChat and PromoAdvisor lazy-loaded; analytics split into a separate Vite chunk; main app chunk reduced from ~851 kB to ~392 kB
+- **Sprint 1 Wins Wall support (S41)**: `scripts/migration-wins-wall.sql` updated with metadata, unique user/period upsert support, stricter RLS checks; client publish path uses upsert
+- **Stripe smoke checklist (S41)**: `docs/STRIPE_SMOKE_TEST.md` added for checkout/webhook/customer-portal verification
+- **Home tab suite (S39)**: 5 new Home tabs added — Daily Brief, Get Started, What's New, Pricing, About; all accessible from the Home group in the nav
+- **Global text size increase (S39)**: all menu/nav text, labels, inputs, notes, help text, and RR rows bumped 1–2px for readability; affects shared.js, ui.jsx, and App.jsx nav
+- **Beta invite code system**: `beta_codes` Supabase table + `redeem-beta-code` edge function deployed; 10 PGBETA-XXXX codes seeded (Runner tier, 30d, single-use); UserMenu "Have a beta invite code?" section added for Free Agent tier users
+- **RESEND_API_KEY**: CONFIRMED SET in Supabase secrets — onboarding-drip + weekly-digest are active
+- **Stripe Customer Portal**: config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in customer-portal edge function; cancel + payment method update enabled; return_url: promogrind.bet/
+- **All Supabase secrets confirmed set**: ANTHROPIC_API_KEY, RESEND_API_KEY, STRIPE_SECRET_KEY, STRIPE_TEST_MODE=false, all 7 price IDs, STRIPE_WEBHOOK_SECRET, VAPID keys (public/private/subject), DIGEST secrets, NEWSLETTER_SECRET, SUPABASE keys
+- UserMenu: auth widget — 12 sports/betting emoji avatar picker, editable display name, tier badge, animated dropdown; Manage billing calls customer-portal edge function; beta code entry for Free Agent tier
+- header: sticky + backdrop-blur, responsive, auth always visible top-right; mobile strip layout
+- tab bar: sticky, 44px touch targets, iOS momentum scroll, tap-delay suppression
+- Promo Advisor: guest sign-in gate active, auth headers explicit on edge function calls
+- branding: all "Free Vault Membership" replaced with "Free PromoGrind Account" / "free account"
+- independent PromoGrind pricing live: Free Agent → Scout → Runner → Closer → The House
+- Stripe live mode active: checkout + webhook + customer-portal all deployed · live price IDs set in Supabase
+- PromoChat gated to Scout+ · promo-chat + promo-advisor + ai-action-plan edge functions deployed · ANTHROPIC_API_KEY live
+- analytics: Cloudflare Web Analytics + PostHog + Sentry — full stack live
+- all GitHub Secrets set (9/9): Supabase, feature flags, PostHog, Sentry DSN
+- WCAG AA contrast compliance: both dark and light themes pass 4.5:1 for all body/label text
+- sitemap.xml: 145 URLs — /about/ and /compliance/ included
+- wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
+- edge-function deploy status: auth-backed core functions (`create-checkout`, `customer-portal`, `redeem-beta-code`, `gift-trial`, `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`, `parse-bet-slip`, `stripe-webhook`) were redeployed on 2026-04-15 with publishable-key compatible gateway config; `send-daily-brief` was also deployed the same day
+- remaining code follow-ups: broader keyboard-nav follow-through outside tab bars, deeper calculator/domain extraction out of `App.jsx`, and an offline IndexedDB-backed write queue for ledger/feedback writes
+- remaining code follow-ups: unify dashboard/Track/AI/workflow reasoning behind a canonical Promo Operating Graph, finish entity-aware sync by reducing the legacy blob plus extending finer-grained conflict handling beyond ledger/workflow/history, and keep protecting bundle headroom as more UI lands
+- remaining launch blockers: setting `VITE_VAPID_PUBLIC_KEY` in the deployed frontend if push alerts should be live, Stripe end-to-end smoke test, remaining monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and one final friend-facing manual browser/account flow pass
+- detailed internal state now lives in the private Studio OS / ops repository

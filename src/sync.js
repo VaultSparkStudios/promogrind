@@ -220,6 +220,55 @@ function _normalizeTracker(tracker) {
   return tracker && typeof tracker === 'object' && !Array.isArray(tracker) ? tracker : {};
 }
 
+function _numericTimestamp(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string' && /^\d+$/.test(value)) return Number(value);
+  const parsed = new Date(value || 0).getTime();
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function _entryKey(entry = {}, kind, index = 0) {
+  if (kind !== 'history' && entry?.id !== undefined && entry?.id !== null && entry.id !== '') return String(entry.id);
+  if (kind === 'history' && entry?.eventKey) return entry.eventKey;
+  const parts = kind === 'ledger'
+    ? [entry?.date, entry?.book, entry?.type, entry?.profit]
+    : kind === 'history'
+      ? [entry?.workflowId, entry?.status, entry?.eventAt]
+      : [entry?.title, entry?.calculatorSlug || entry?.calculatorKey, entry?.createdAt];
+  return `${parts.map((value) => value || '').join('|')}|${index}`;
+}
+
+function _entryTime(entry = {}, kind) {
+  if (kind === 'ledger') return _numericTimestamp(entry?.updatedAt || entry?.date);
+  if (kind === 'history') return _numericTimestamp(entry?.eventAt);
+  return Math.max(_numericTimestamp(entry?.updatedAt), _numericTimestamp(entry?.createdAt));
+}
+
+function _preferNewerEntry(existing, incoming, kind) {
+  const existingTs = _entryTime(existing, kind);
+  const incomingTs = _entryTime(incoming, kind);
+  if (incomingTs >= existingTs) return { ...existing, ...incoming };
+  return { ...incoming, ...existing };
+}
+
+function _mergeCollection(localEntries, remoteEntries, { kind, normalize = (entry) => entry, limit = null } = {}) {
+  const merged = new Map();
+  const applyEntries = (entries = []) => {
+    entries.forEach((rawEntry, index) => {
+      const entry = normalize(rawEntry);
+      const key = _entryKey(entry, kind, index);
+      const existing = merged.get(key);
+      merged.set(key, existing ? _preferNewerEntry(existing, entry, kind) : entry);
+    });
+  };
+
+  applyEntries(remoteEntries);
+  applyEntries(localEntries);
+
+  const values = [...merged.values()];
+  return limit ? values.slice(0, limit) : values;
+}
+
 function _mergeEntityAware(local, row) {
   const trackerData = _normalizeTracker(row.tracker);
   const remote = {
@@ -230,10 +279,23 @@ function _mergeEntityAware(local, row) {
   const localMeta = local._entities && typeof local._entities === 'object' ? local._entities : {};
   const remoteMeta = trackerData._entities && typeof trackerData._entities === 'object' ? trackerData._entities : {};
   const base = remote._updated >= (local._updated ?? 0) ? { ...local, ...remote } : { ...remote, ...local };
+  const mergedMeta = { ...remoteMeta, ...localMeta };
+  for (const key of new Set([...Object.keys(remoteMeta), ...Object.keys(localMeta)])) {
+    mergedMeta[key] = Math.max(_numericTimestamp(remoteMeta[key]), _numericTimestamp(localMeta[key]));
+  }
+
+  base.ledger = _mergeCollection(local.ledger, remote.ledger, { kind: 'ledger' });
+  base.workflowInbox = _mergeCollection(local.workflowInbox, remote.workflowInbox, { kind: 'workflow', normalize: normalizeWorkflowEntry, limit: 250 });
+  base.resultFeedback = _mergeCollection(local.resultFeedback, remote.resultFeedback, { kind: 'workflow', normalize: normalizeWorkflowEntry, limit: 250 });
+  base.workflowHistory = _mergeCollection(local.workflowHistory, remote.workflowHistory, { kind: 'history', limit: 500 });
 
   for (const key of ENTITY_KEYS) {
     const localStamp = Number(localMeta[key] || 0);
     const remoteStamp = Number(remoteMeta[key] || 0);
+    if (key === 'ledger' || key === 'workflowInbox' || key === 'resultFeedback' || key === 'workflowHistory') {
+      mergedMeta[key] = Math.max(localStamp, remoteStamp);
+      continue;
+    }
     if (localStamp > remoteStamp) {
       base[key] = local[key];
     } else if (remoteStamp > localStamp) {
@@ -242,7 +304,7 @@ function _mergeEntityAware(local, row) {
   }
 
   base._updated = Math.max(remote._updated || 0, local._updated || 0);
-  base._entities = { ...remoteMeta, ...localMeta };
+  base._entities = mergedMeta;
   return base;
 }
 

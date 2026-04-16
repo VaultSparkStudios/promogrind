@@ -1,27 +1,27 @@
 ╔══════════════════════════════════════════════════════════════════╗
 ║  STARTUP BRIEF  ·  PromoGrind                                  ║
-║  2026-04-15  ·  Session 50  ·  BUILDER MODE                    ║
+║  2026-04-16  ·  Session 54  ·  BUILDER MODE                    ║
 ║  C — Returning  ·  deployed/public-unlaunched  ·  VaultSpark   ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ SCORE ════════════════════════════════════════════════════════╗
 ║                                                                ║
-║  474/500   ███████████████████████░   95%                      ║
-║  Trend  ▆ ▆ ▇ ▆ █  ↑  ·  Avg3: 459.7  ·  Days since: 0         ║
+║  468/500   ███████████████████████░   94%                      ║
+║  Trend  ▇ ▆ ▇ █ ▇  ↑  ·  Avg3: 470.7  ·  Days since: 0         ║
 ║                                                                ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ STATUS ═══════════════════════════════════════════════════════╗
-║ Health: green  ·  Truth audit: green  ·  Version: 24.6.0       ║
-║ Build/tests: passing  ·  168/168 tests green                   ║
+║ Health: green  ·  Truth audit: green  ·  Version: 24.8.0       ║
+║ Build/tests: passing  ·  178/178 tests green                   ║
 ║ Domain: promogrind.bet live on Cloudflare                      ║
 ║ Billing: live Stripe preflight reaches hosted Checkout         ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ PRIORITIES ═══════════════════════════════════════════════════╗
 ║ 1. Human-required launch blockers still gate public proof.     ║
-║ 2. Best next repo-side tranche: finer-grained conflict         ║
-║    handling plus stronger recommendation scoring.              ║
+║ 2. Best next repo-side tranche: finish entity-aware sync       ║
+║    beyond ledger/workflow/history into the legacy blob exit.   ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ HUMAN ACTION REQUIRED ════════════════════════════════════════╗
@@ -34,15 +34,15 @@
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ NOW / NEXT ═══════════════════════════════════════════════════╗
-║ Now: Workflow inbox lifecycle                                  ║
-║ Now: Personalized action ranking                               ║
-║ Next: Conflict-aware entity sync · workflow history UI         ║
+║ Now: Entity-aware sync continuation                            ║
+║ Now: Canonical Promo Operating Graph                           ║
+║ Next: Offline-first ledger queue · playbooks · observability   ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ NOTES ════════════════════════════════════════════════════════╗
-║ - Public-safe repo context is intentionally thin; detailed     ║
-║   operator reasoning stays private.                            ║
-║ - Sync now spans `promogrind_data` plus workflow/ledger/       ║
-║   tracker entity tables as a compatibility bridge.             ║
-║ - Bundle budget remains green, but headroom is now tighter.    ║
+║ - Sync now preserves per-record ledger/workflow/history        ║
+║   changes across devices instead of whole-array overwrite.     ║
+║ - Promo Walkthroughs are lazy-loaded, restoring bundle         ║
+║   headroom to ~415.9KB under the 420KB cap.                    ║
+║ - Public-safe repo context remains intentionally thin.         ║
 ╚══════════════════════════════════════════════════════════════════╝

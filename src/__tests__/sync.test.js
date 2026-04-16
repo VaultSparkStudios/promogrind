@@ -255,8 +255,150 @@ describe('loadData', () => {
     });
 
     const result = await loadData();
-    expect(result.ledger[0].id).toBe(7);
-    expect(result.workflowInbox[0].id).toBe('local-wf');
+    expect(result.ledger).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 7 }),
+      expect.objectContaining({ id: 1 }),
+    ]));
+    expect(result.workflowInbox).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'local-wf' }),
+      expect.objectContaining({ id: 'remote-wf' }),
+    ]));
+  });
+
+  it('keeps both local and remote ledger entries when devices append independently', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [
+        { id: 'local-ledger', book: 'DraftKings', profit: '12.50', date: '2026-04-16' },
+      ],
+      _updated: Date.now() - 1000,
+      _entities: { ledger: Date.now() - 1000 },
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [
+          { id: 'remote-ledger', book: 'FanDuel', profit: '7.25', date: '2026-04-15' },
+        ],
+        tracker: { _entities: { ledger: Date.now() - 2000 } },
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.ledger).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'local-ledger' }),
+      expect.objectContaining({ id: 'remote-ledger' }),
+    ]));
+  });
+
+  it('prefers the newer workflow row while preserving other workflows from both devices', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      workflowInbox: [
+        {
+          id: 'wf-shared',
+          title: 'Shared workflow',
+          status: 'waiting',
+          updatedAt: '2026-04-16T12:05:00.000Z',
+          createdAt: '2026-04-16T12:00:00.000Z',
+        },
+        {
+          id: 'wf-local-only',
+          title: 'Local only workflow',
+          status: 'ready',
+          updatedAt: '2026-04-16T12:04:00.000Z',
+          createdAt: '2026-04-16T12:04:00.000Z',
+        },
+      ],
+      _updated: Date.now() - 1000,
+      _entities: { workflowInbox: Date.now() - 1000 },
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [],
+        tracker: {
+          workflowInbox: [
+            {
+              id: 'wf-shared',
+              title: 'Shared workflow',
+              status: 'queued',
+              updatedAt: '2026-04-16T12:01:00.000Z',
+              createdAt: '2026-04-16T12:00:00.000Z',
+            },
+            {
+              id: 'wf-remote-only',
+              title: 'Remote only workflow',
+              status: 'placed',
+              updatedAt: '2026-04-16T12:03:00.000Z',
+              createdAt: '2026-04-16T12:03:00.000Z',
+            },
+          ],
+          _entities: { workflowInbox: Date.now() - 2000 },
+        },
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.workflowInbox).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'wf-shared', status: 'waiting' }),
+      expect.objectContaining({ id: 'wf-local-only' }),
+      expect.objectContaining({ id: 'wf-remote-only' }),
+    ]));
+  });
+
+  it('unions workflow history rows from both local and remote stores', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      workflowHistory: [
+        {
+          eventKey: 'wf-local:queued:2026-04-16T12:00:00.000Z',
+          workflowId: 'wf-local',
+          status: 'queued',
+          eventAt: '2026-04-16T12:00:00.000Z',
+        },
+      ],
+      _updated: Date.now() - 1000,
+      _entities: { workflowHistory: Date.now() - 1000 },
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [],
+        tracker: { _entities: { workflowHistory: Date.now() - 2000 } },
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+    mocks.tableSelect.mockImplementation(async (table) => {
+      if (table === 'workflow_state') return { data: [], error: null };
+      return {
+        data: [
+          {
+            event_key: 'wf-remote:ready:2026-04-16T12:10:00.000Z',
+            workflow_id: 'wf-remote',
+            from_status: 'queued',
+            status: 'ready',
+            source: 'promo_advisor',
+            title: 'Remote workflow',
+            calculator_slug: 'bonus-bet',
+            promo_type: 'bonus_bet',
+            book: 'FanDuel',
+            expected_profit: 18,
+            actual_profit: null,
+            event_at: '2026-04-16T12:10:00.000Z',
+          },
+        ],
+        error: null,
+      };
+    });
+
+    const result = await loadData();
+    expect(result.workflowHistory).toEqual(expect.arrayContaining([
+      expect.objectContaining({ eventKey: 'wf-local:queued:2026-04-16T12:00:00.000Z' }),
+      expect.objectContaining({ eventKey: 'wf-remote:ready:2026-04-16T12:10:00.000Z' }),
+    ]));
   });
 
   it('hydrates workflow state and history from dedicated remote tables', async () => {
