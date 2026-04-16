@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▆ ▆ ▆ ▇
-Avgs — 3: 447.0 | 5: 440.2 | 10: 436.8 [N=6] | 25: — | all: 436.8 [N=6]
-  └ 3-session: Dev 95.7 | Align 88.0 | Momentum 91.0 | Engage 76.7 | Process 95.0
-Velocity trend: ↓  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~0.6 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-15 | Session 48 | Total: 455/500 | Velocity: 2 | protocolVelocity: 0
+Sparkline (last 5 totals): ▆ ▆ ▆ ▇ ▆
+Avgs — 3: 446.3 | 5: 443.8 | 10: 437.9 [N=7] | 25: — | all: 437.9 [N=7]
+  └ 3-session: Dev 95.3 | Align 88.3 | Momentum 89.7 | Engage 77.0 | Process 95.3
+Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: →
+Momentum runway: ~0.7 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-15 | Session 49 | Total: 444/500 | Velocity: 1 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-15 — Session 49 | Total: 444/500 | Velocity: 1 | Debt: →
+Avgs — 3: 446.3 | 5: 443.8 | 10: 437.9 [N=7] | 25: — | all: 437.9 [N=7]
+  └ 3-session: Dev 95.3 | Align 88.3 | Momentum 89.7 | Engage 77.0 | Process 95.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 95 | ↓ | Added a clean shared domain model for promo/workflow state, expanded tests to 158/158, and kept build/smoke/bundle validation green. |
+| Creative Alignment | 89 | → | The work stayed trust-first and practical: it reduced semantic drift, avoided new fake readiness claims, and made future workflow UX more coherent. |
+| Momentum | 87 | ↓ | Closed the foundational PromoGraph tranche and startup prompt cleanup, but the repo still has the larger workflow inbox and ranking layers ahead. |
+| Engagement | 77 | ↓ | The product is better prepared to learn from workflow behavior, but real user-proof still depends on the same manual launch checks outside this repo. |
+| Process Quality | 96 | ↓ | Startup brief, prompt path, handoff, task preload, truth audit, state vector, genome history, and validation state were refreshed into one coherent closeout. |
+| **Total** | **444/500** | ↓ | | 
+
+**Top win:** PromoGrind now has one canonical public repo contract for promo typing, workflow state, and recommendation normalization instead of letting those meanings drift surface-by-surface.
+**Top gap:** The shared domain layer is only the foundation; workflow persistence and genuinely personalized ranking still need to be built on top of it, while the human-owned launch blockers remain unresolved.
+**Intent outcome:** Achieved — the session established the PromoGraph base, completed the startup prompt path, revalidated the repo, and refreshed closeout memory cleanly.
+
+**Brainstorm**
+1. Add a workflow provenance timeline that records whether a workflow came from Promo Advisor, AI Action Plan, a calculator, or manual Track entry so ranking can learn from source quality.
+2. Build a recommendation scoring matrix that combines bankroll fit, legal/book availability, friction history, workflow age, and opportunity score into one ordering signal.
+3. Add a workflow inbox panel that promotes `queued` items into `ready` only after required fields like target book, expected value, and expiration confidence are present.
+
+**Committed to TASK_BOARD:** [SIL] Workflow provenance timeline — persist where each workflow came from (advisor, action plan, calculator, Track) and show status transitions over time · [SIL] Recommendation scoring matrix — rank workflows by bankroll fit, book availability, friction history, and opportunity score instead of first-match ordering
 
 ## 2026-04-15 — Session 48 | Total: 455/500 | Velocity: 2 | Debt: ↓
 Avgs — 3: 447.0 | 5: 440.2 | 10: 436.8 [N=6] | 25: — | all: 436.8 [N=6]

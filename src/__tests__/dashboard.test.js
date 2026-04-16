@@ -33,6 +33,10 @@ describe("dashboard helpers", () => {
         ],
         done: { DraftKings: true },
         bookExpiry: { FanDuel: "2026-04-15", Caesars: "2026-04-25" },
+        resultFeedback: [
+          { id: "wf-1", status: "placed", promoType: "bonus_bet" },
+          { id: "wf-2", status: "pending", promoType: "odds_boost" },
+        ],
       },
       schedule,
       new Date("2026-04-14T09:00:00Z"),
@@ -46,6 +50,8 @@ describe("dashboard helpers", () => {
     expect(snapshot.booksComplete).toBe(1);
     expect(snapshot.recentSettledProfit).toBe(30);
     expect(snapshot.expiringBooks.map((book) => book.name)).toContain("FanDuel");
+    expect(snapshot.openWorkflowCount).toBe(2);
+    expect(snapshot.waitingWorkflowCount).toBe(1);
   });
 
   it("classifies bankroll posture from open exposure", () => {
@@ -78,5 +84,19 @@ describe("dashboard helpers", () => {
 
     expect(action.key).toBe("bankroll");
     expect(action.slug).toBe("dashboard");
+  });
+
+  it("surfaces queued workflows before open bets when bankroll and calculators already exist", () => {
+    const action = getNextBestAction({
+      usageLog: { "bonus-bet": 2 },
+      bankroll: "500",
+      totalProfit: 42,
+      openBets: [],
+      booksComplete: 2,
+      openWorkflowCount: 3,
+    });
+
+    expect(action.key).toBe("workflows");
+    expect(action.slug).toBe("track");
   });
 });

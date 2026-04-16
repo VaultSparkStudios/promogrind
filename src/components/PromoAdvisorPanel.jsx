@@ -4,6 +4,7 @@ import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
 import { K, font, fontD, S } from "../lib/shared.js";
+import { normalizeRecommendation } from "../promograph/index.js";
 
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const signInHref = getProjectAuthHref('signin');
@@ -69,14 +70,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const evColor = evIsPositive ? K.gn : K.rd;
 
   const openRecommendedCalculator = () => {
-    if (!result?.calculatorSlug && !result?.promoType) {
+    const recommendation = normalizeRecommendation(result || {});
+    if (!recommendation.calculatorSlug && !recommendation.promoType) {
       if (toast) toast("No calculator recommendation returned for this promo yet.", K.yl);
       return;
     }
     window.dispatchEvent(new CustomEvent("pg:quick-calc", {
       detail: {
-        calculatorSlug: result?.calculatorSlug || null,
-        type: result?.promoType || null,
+        calculatorSlug: recommendation.calculatorSlug || null,
+        type: recommendation.promoType || null,
       },
     }));
   };

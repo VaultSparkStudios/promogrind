@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { AppDataCtx } from "../contexts.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
+import { normalizePromoType } from "../promograph/index.js";
 
 export default function ResultFeedbackCard({
   calculatorKey,
@@ -52,7 +53,7 @@ export default function ResultFeedbackCard({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       calculatorKey,
       calculatorLabel,
-      promoType,
+      promoType: normalizePromoType(promoType),
       status: nextStatus,
       expectedProfit: roundedExpected,
       book,

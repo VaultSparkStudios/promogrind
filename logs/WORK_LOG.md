@@ -1,5 +1,20 @@
 # Work Log
 
+## 2026-04-15 — S49 PromoGraph Foundation + Full Closeout
+
+- Added `src/promograph/index.js` as the shared domain layer for canonical promo-type aliases, workflow-status normalization, calculator slug cleanup, recommendation normalization, and workflow summarization.
+- Rebased `src/track/insights.js` on the shared PromoGraph workflow model while preserving the existing `formatPromoTypeLabel` export contract for callers/tests.
+- Updated `src/dashboard/today.js` so dashboard snapshots include open/waiting workflow counts from `resultFeedback`, and next-best-action can prioritize advancing queued workflows before adding more action.
+- Updated `src/components/ResultFeedbackCard.jsx` and `src/components/PromoAdvisorPanel.jsx` to emit canonical promo/recommendation values instead of forwarding raw per-surface variants.
+- Added `src/__tests__/promograph.test.js` and expanded `src/__tests__/dashboard.test.js` to cover the shared domain rules and workflow-aware ranking behavior.
+- Added `prompts/initiate.md` so `prompts/start.md` no longer references a missing bootstrap/foundation prompt.
+- Added and refreshed `docs/STARTUP_BRIEF.md` so the repo has a cached canonical startup brief from current public-safe context.
+- Verified targeted PromoGraph tests after the refactor, then reran the full suite successfully.
+- Verified `npm.cmd test` → 158/158 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `npm.cmd run smoke:launch` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`401.4KB` main chunk under 420KB target).
+
 ## 2026-04-15 — S48 Launch Unblock + Full Closeout
 
 - Added `supabase/config.toml` so browser-invoked Edge Functions deploy with `verify_jwt = false` and remain compatible with the project's `sb_publishable_...` auth flow.

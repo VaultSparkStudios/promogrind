@@ -2,6 +2,16 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-15 — PromoGraph becomes the canonical shared domain layer for promo/workflow state
+
+**Decision:** PromoGrind now normalizes promo types, workflow statuses, calculator slugs, and AI recommendation payloads through `src/promograph/index.js`, with Track and dashboard helpers consuming that shared model instead of each surface keeping its own aliases and status semantics.
+
+**Applies to this project:** Yes — this now covers result-feedback normalization, workflow summarization for dashboard ranking, and normalized quick-calc routing from Promo Advisor.
+
+**Rationale:** Promo type labels and workflow states had started to drift across intake parsing, Promo Advisor, ResultFeedback, and dashboard next-best-action logic. That duplication would make the upcoming workflow inbox and personalized action ranking brittle. A pure shared domain layer reduces alias drift now and gives the next tranche one canonical contract to build on.
+
+---
+
 ## 2026-04-06 — CANON-008: All VaultSpark IP is proprietary by default
 
 **Decision:** All code, content, assets, and designs created by VaultSpark Studios are proprietary and all rights are reserved by VaultSpark Studios LLC unless an open-source license is explicitly declared and approved by the Studio Owner. No agent may apply or imply an open-source license without Studio Owner direction.

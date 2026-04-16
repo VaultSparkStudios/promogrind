@@ -14,7 +14,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
 
 ## Now
-- [ ] PromoGraph domain layer — normalize promos, workflows, recommendations, execution state, and settlements into one shared model
+- [x] PromoGraph domain layer — normalize promos, workflows, recommendations, execution state, and settlements into one shared model
 - [ ] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows
 - [ ] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons
 
@@ -73,10 +73,12 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Next
 - [ ] Studio OS / ops export layer — emit structured launch, growth, and intelligence summaries that the wider studio system can consume
-- [ ] [SIL:1] Drift alert — background diff of projected vs realized profit per promo type
+- [ ] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type
 - [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
 - [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)
-- [ ] [SIL:1] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
+- [ ] [SIL:2⛔] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
+- [ ] [SIL] Workflow provenance timeline — persist where each workflow came from (advisor, action plan, calculator, Track) and show status transitions over time
+- [ ] [SIL] Recommendation scoring matrix — rank workflows by bankroll fit, book availability, friction history, and opportunity score instead of first-match ordering
 - [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
 - [ ] Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
 - [ ] Offline write-queue in `src/sync.js` (IndexedDB) for ledger/feedback writes when offline

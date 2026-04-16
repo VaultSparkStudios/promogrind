@@ -2,6 +2,37 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 49 (2026-04-15) — CLOSED
+
+**Session Intent:** Establish the shared PromoGraph foundation for promo/workflow state, complete the repo's startup prompt path, then commit/push and close out memory cleanly.
+
+## Where We Left Off (Session 49 — CLOSED)
+
+- Shipped: 4 improvements across 4 groups — domain modeling, dashboard ranking, startup protocol, closeout memory
+- Tests: 158/158 passing · delta: +5
+- Deploy: pending — repo changes committed and pushed; no production deploy required for this tranche
+- Session type: implementation + protocol + closeout
+
+## Current Delta Since S48
+
+- Added `src/promograph/index.js` as the canonical shared domain layer for promo-type aliases, workflow-status normalization, calculator-slug cleanup, recommendation normalization, and workflow summarization.
+- Rebased `src/track/insights.js` on the PromoGraph workflow model while preserving the existing `formatPromoTypeLabel` export contract for callers and tests.
+- Updated `src/dashboard/today.js` so dashboard snapshots include open/waiting workflow counts from `resultFeedback`, and next-best-action can prioritize advancing queued workflows before more action is stacked.
+- Updated `src/components/ResultFeedbackCard.jsx` and `src/components/PromoAdvisorPanel.jsx` so workflow capture and quick-calc routing emit canonical promo/recommendation values instead of per-surface variants.
+- Added `src/__tests__/promograph.test.js` and expanded `src/__tests__/dashboard.test.js`; the suite now passes at `158/158`.
+- Added `prompts/initiate.md` so `prompts/start.md` no longer references a missing bootstrap/foundation prompt.
+- Added and refreshed `docs/STARTUP_BRIEF.md` so the repo has a cached canonical startup brief that matches current public-safe context.
+- Refreshed `CURRENT_STATE`, `TASK_BOARD`, `LATEST_HANDOFF`, `WORK_LOG`, `DECISIONS`, `SELF_IMPROVEMENT_LOOP`, `TRUTH_AUDIT`, `PROJECT_STATUS`, `STATE_VECTOR`, `GENOME_HISTORY`, and audit JSON for a real Session 49 closeout.
+- Validation after closeout: `npm.cmd test`, `npm.cmd run build`, `npm.cmd run smoke:launch`, and `node scripts/check-bundle-budget.mjs` all passed.
+- GitHub state: ready to commit and push to `main`.
+
+## Human Action Required
+
+- [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before the Daily Brief push toggle should be exposed as a live browser subscription feature.
+- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](/C:/Users/p4cka/documents/development/promogrind/docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
+- [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available; those books still truthfully fall back to non-monetized signup paths.
+- [ ] **Friend beta pass** — create/sign in with a normal friend-facing PromoGrind account and verify auth, calculator, CTA, and pricing flows feel launch-ready.
+
 ## Session 48 (2026-04-15) — CLOSED
 
 **Session Intent:** Clear the remaining repo-side launch blockers in one pass, push the production-facing fixes live, tighten referral-link truthfulness, then commit/push and close out memory cleanly.

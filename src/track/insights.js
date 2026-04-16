@@ -1,13 +1,5 @@
-function safeUUID() {
-  try {
-    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-      return crypto.randomUUID();
-    }
-  } catch {
-    // fall through to fallback
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-}
+import { formatPromoTypeLabel, normalizeWorkflowEntry } from "../promograph/index.js";
+export { formatPromoTypeLabel } from "../promograph/index.js";
 
 function toNumber(value) {
   const parsed = Number.parseFloat(value);
@@ -21,32 +13,8 @@ function dateOnly(value) {
   return date.toISOString().slice(0, 10);
 }
 
-export function formatPromoTypeLabel(value = "") {
-  return String(value || "other")
-    .split("_")
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
 export function normalizeResultFeedback(entry = {}) {
-  return {
-    id: entry.id ?? safeUUID(),
-    calculatorKey: entry.calculatorKey || "unknown",
-    calculatorLabel: entry.calculatorLabel || "Unknown calculator",
-    promoType: entry.promoType || "other",
-    status: entry.status || "placed",
-    expectedProfit: toNumber(entry.expectedProfit),
-    actualProfit: toNumber(entry.actualProfit),
-    calculatorAccurate: entry.calculatorAccurate || null,
-    book: String(entry.book || "").trim(),
-    skipReason: String(entry.skipReason || "").trim(),
-    frictionReason: String(entry.frictionReason || "").trim(),
-    actionability: entry.actionability || null,
-    note: String(entry.note || "").trim(),
-    createdAt: entry.createdAt || new Date().toISOString(),
-    updatedAt: entry.updatedAt || entry.createdAt || new Date().toISOString(),
-  };
+  return normalizeWorkflowEntry(entry);
 }
 
 export function upsertResultFeedback(entries = [], nextEntry = {}) {

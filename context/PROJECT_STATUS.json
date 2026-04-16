@@ -3,8 +3,8 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "S48 launch-unblock closeout is complete: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config, live Stripe preflight now reaches hosted Checkout, `send-daily-brief` is deployed, and referral-link truthfulness has been tightened around the real remaining monetization gaps.",
-  "nextMilestone": "Set VITE_VAPID_PUBLIC_KEY in production, run the real Stripe smoke test end-to-end, secure real monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and complete the friend-facing account-flow/browser pass.",
+  "currentFocus": "S49 PromoGraph foundation closeout is complete: PromoGrind now has a shared domain layer for promo/workflow/recommendation normalization, dashboard next-best-action can see open workflows, and the repo's startup prompt path is complete instead of referencing a missing bootstrap file.",
+  "nextMilestone": "Persist a real workflow inbox from advisor/calculator outputs, then add personalized action ranking on top of the shared PromoGraph model while the existing human-owned launch blockers remain explicit.",
   "blockers": [
     "Daily Brief push alerts still need VITE_VAPID_PUBLIC_KEY on the live frontend",
     "Remaining affiliate/referral links are still missing for BetMGM, bet365, and BetRivers",
@@ -17,7 +17,7 @@
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-15",
   "version": "24.2.0",
-  "lastSession": "S48",
+  "lastSession": "S49",
   "commits": [
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
     "3fdbe8e — chore(s43): finalize SIL closeout state",
@@ -29,7 +29,7 @@
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
   "buildStatus": "passing — build, launch smoke, browser launch smoke, and bundle budget all passing",
-  "testStatus": "153/153",
+  "testStatus": "158/158",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
@@ -113,10 +113,10 @@
   "ignisLastComputed": "2026-04-15",
   "entropyScore": 0.136,
   "entropyLastComputed": "2026-04-15",
-  "silScore": 455,
-  "silAvg3": 447,
-  "silVelocity": 2,
-  "silDebt": "down",
-  "silLastSession": "S48",
-  "currentSession": 48
+  "silScore": 444,
+  "silAvg3": 446.3,
+  "silVelocity": 1,
+  "silDebt": "same",
+  "silLastSession": "S49",
+  "currentSession": 49
 }

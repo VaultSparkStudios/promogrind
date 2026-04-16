@@ -1,8 +1,9 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 153/153 tests green; launch smoke passing; browser launch smoke passing; bundle budget passing at ~415KB main chunk
-- version: 24.2.0 · last session: S48 (2026-04-15)
+- this repo remains deployable — build passing, 158/158 tests green; launch smoke passing; browser launch smoke passing; bundle budget passing at ~401KB main chunk
+- version: 24.2.0 · last session: S49 (2026-04-15)
+- **S49 PromoGraph foundation + startup closeout tranche (closed)**: added a shared `src/promograph/index.js` domain layer to canonicalize promo typing, workflow statuses, and recommendation payloads; Track feedback and dashboard next-best-action now consume that shared model; `prompts/initiate.md` and `docs/STARTUP_BRIEF.md` now complete the repo's start protocol path
 - **S48 launch-unblock + closeout tranche (closed)**: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config; live Stripe preflight now reaches hosted Checkout; `send-daily-brief` is deployed; ESPN BET/TheScore BET + Fanatics now use real personal referral URLs while non-monetizable generic referral pages were removed for BetMGM, bet365, and BetRivers
 - **S47 intelligence + operator tranche (closed)**: launch readiness now uses a scored command-center model; Track now captures skip-reason / friction intelligence; Promo Advisor and AI Action Plan now expose richer structured outputs for calculator-aware recommendations and ops-facing metadata
 - **Launch verification pass (post-S47)**: live schema checks confirmed both `push_subscriptions` and `subscriptions` tables exist in Supabase; auth-compatible core Edge Functions were redeployed from this workspace; direct live probing now confirms `create-checkout` returns a live checkout URL and `customer-portal` returns the expected pre-purchase `404` for a brand-new user
@@ -31,7 +32,10 @@ Public-safe summary:
 - **Dashboard tranche 2 (S43)**: added `src/dashboard/today.js` plus extracted dashboard surfaces under `src/components/dashboard/`; `src/App.jsx` now consumes shared dashboard snapshot helpers instead of keeping all home-state logic inline
 - **Today dashboard (S43)**: Home dashboard now explicitly surfaces expiring promos, unfinished work, bankroll posture, recent settled profit, and next-best action in one dedicated panel
 - **Launch copy + smoke alignment (S43)**: smoke-covered marketing pages, trust-strip template, and launch validators now consistently use PromoGrind-native "Free PromoGrind account" language; `scripts/validate-launch-smoke.mjs` updated and passing
-- **Validation coverage (S46)**: dashboard, auth URL helpers, track-insights, intake parsing, shadow mode, sensitivity coverage, monetization helpers, and onboarding helpers are in repo; current suite passes at `153/153`
+- **Validation coverage (S49)**: dashboard, auth URL helpers, track-insights, intake parsing, PromoGraph normalization, shadow mode, sensitivity coverage, monetization helpers, and onboarding helpers are in repo; current suite passes at `158/158`
+- **PromoGraph foundation (S49)**: `src/promograph/index.js` now owns canonical promo-type aliases (`odds_boost` -> `profit_boost`, `sgp_insurance` -> `insurance`), workflow state normalization (`pending`/`open` -> `waiting`), calculator slug cleanup, recommendation normalization, and workflow summarization for shared consumers
+- **Workflow-aware ranking (S49)**: `src/dashboard/today.js` now counts open/waiting workflows from `resultFeedback` and can prioritize advancing queued workflows before more action is stacked on top
+- **Startup protocol completeness (S49)**: `prompts/start.md` no longer dead-ends on bootstrap/foundation because `prompts/initiate.md` now exists; `docs/STARTUP_BRIEF.md` is cached in-repo for faster canonical startup output
 - **Browser smoke script status (S43)**: browser smoke was updated and later passed in an elevated environment; launch smoke remains passing in-repo
 - **Audit implementation tranche 1 (S42)**: added `docs/REFINEMENT_ROADMAP.md`; task board expanded with activation, feedback-loop, playbook, personalization, observability, and modularization priorities
 - **Security/privacy hardening (S42)**: shared edge HTTP helper added under `supabase/functions/_shared/http.ts`; wildcard CORS removed from `create-checkout`, `promo-chat`, `promo-advisor`, `customer-portal`, and `gift-trial`

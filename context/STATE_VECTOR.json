@@ -1,26 +1,25 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-04-15",
-  "generatedAtMs": 1776294657336,
-  "session": 48,
-  "vectorHash": "55bd51bba49a3097",
-  "silTotal": 455,
-  "silAvg3": 447,
-  "velocity": 2,
-  "debt": "down",
-  "runway": "~0.6 sessions",
+  "generatedAtMs": 1776298050000,
+  "session": 49,
+  "vectorHash": "1f61a8b9d4c34f5a",
+  "silTotal": 444,
+  "silAvg3": 446.3,
+  "velocity": 1,
+  "debt": "same",
+  "runway": "~0.7 sessions",
   "intentRate": "100% (last 5)",
-  "openNow": 3,
-  "openNext": 19,
+  "openNow": 2,
+  "openNext": 21,
   "openBlocked": 0,
   "topNow": [
-    "PromoGraph domain layer — normalize promos, workflows, recommendations, executio",
     "Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed →",
     "Personalized action ranking — next-best-action should rank by bankroll, legal st"
   ],
   "topNext": [
     "Studio OS / ops export layer — emit structured launch, growth, and intelligence ",
-    "[SIL:1] Drift alert — background diff of projected vs realized profit per promo ",
+    "[SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo ",
     "Push alert targeting — move beyond generic daily brief toward higher-EV / state-"
   ],
   "health": "green",
@@ -34,11 +33,12 @@
   "type": null,
   "lifecycle": "deployed",
   "nextMilestone": "Set VITE_VAPID_PUBLIC_KEY in production, run the real Stripe smoke test end-to-end, secure real monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and complete the friend-facing account-flow/browser pass.",
-  "currentFocus": "S48 launch-unblock closeout is complete: browser-invoked Edge Functions were redeployed with publishable-key compatible gateway config, live Stripe preflight now reaches hosted Checkout, `send-daily-brief` is deployed, and referral-link truthfulness has been tightened around the real remaining monetization gaps.",
-  "lastShipped": "6 improvements across 5 groups — edge deploys, auth compatibility, Stripe preflight, referral truthfulness, closeout memory",
+  "currentFocus": "S49 PromoGraph foundation closeout is complete: PromoGrind now has a shared domain layer for promo/workflow/recommendation normalization, dashboard next-best-action can see open workflows, and the repo's startup prompt path is complete instead of referencing a missing bootstrap file.",
+  "lastShipped": "4 improvements across 4 groups — domain modeling, dashboard ranking, startup protocol, closeout memory",
   "blockers": [
     "Daily Brief push alerts still need VITE_VAPID_PUBLIC_KEY on the live frontend",
     "Remaining affiliate/referral links are still missing for BetMGM, bet365, and BetRivers",
-    "Stripe end-to-end smoke still requires a real account/browser checkout pass"
+    "Stripe end-to-end smoke still requires a real account/browser checkout pass",
+    "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ]
 }
