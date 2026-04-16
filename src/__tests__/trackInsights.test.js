@@ -88,6 +88,17 @@ describe("track insights helpers", () => {
           createdAt: "2026-04-14T12:15:00Z",
         },
       ],
+      workflowHistory: [
+        {
+          workflowId: "c",
+          fromStatus: "queued",
+          status: "placed",
+          source: "calculator_result",
+          title: "First Bet Safety Net",
+          promoType: "safety_net",
+          eventAt: "2026-04-14T12:10:00Z",
+        },
+      ],
     }, new Date("2026-04-14T13:00:00Z"));
 
     expect(insights.totalProfit).toBe(35);
@@ -101,7 +112,9 @@ describe("track insights helpers", () => {
     expect(insights.bookRows[0].book).toBe("DraftKings");
     expect(insights.skipReasonRows[0].key).toBe("odds_moved");
     expect(insights.sourceRows.find((row) => row.key === "result_feedback")?.settled).toBe(2);
-    expect(insights.workflowTimeline[0].id).toBe("d");
+    expect(insights.workflowTimeline[0].id).toBe("c");
+    expect(insights.workflowTimeline[0].transitionLabel).toBe("queued -> placed");
+    expect(insights.workflowHistoryRows[0].statuses[0]).toBe("queued -> placed");
     expect(insights.selfCalibration.averageDrift).toBe(-6.5);
     expect(insights.selfCalibrationRows.length).toBeGreaterThan(0);
     expect(insights.selfCalibrationRows[0]).toHaveProperty("label");

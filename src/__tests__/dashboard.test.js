@@ -32,6 +32,8 @@ describe("dashboard helpers", () => {
           { profit: "18", date: "2026-03-20" },
         ],
         done: { DraftKings: true },
+        userState: "NC",
+        bookStatus: { FanDuel: "pending", BetMGM: "limited" },
         bookExpiry: { FanDuel: "2026-04-15", Caesars: "2026-04-25" },
         resultFeedback: [
           { id: "wf-1", status: "placed", promoType: "bonus_bet" },
@@ -56,6 +58,7 @@ describe("dashboard helpers", () => {
     expect(snapshot.openWorkflowCount).toBe(3);
     expect(snapshot.waitingWorkflowCount).toBe(1);
     expect(snapshot.topWorkflow?.title).toBe("Highest value workflow");
+    expect(["BetRivers", "bet365", "FanDuel", "ESPN BET", "Fanatics"]).toContain(snapshot.recommendedBooks[0]?.book.name);
   });
 
   it("classifies bankroll posture from open exposure", () => {
@@ -71,10 +74,11 @@ describe("dashboard helpers", () => {
       openBets: [{ id: 1 }],
       booksRemaining: 3,
       potentialLeft: 455.5,
+      recommendedBooks: [{ book: { name: "bet365", value: "$200-$365" }, reason: "Available now" }],
       hasLedger: false,
     });
 
-    expect(items.map((item) => item.key)).toEqual(["expiring", "open-bets", "books-left", "ledger"]);
+    expect(items.map((item) => item.key)).toEqual(["expiring", "open-bets", "books-left", "recommended-book", "ledger"]);
   });
 
   it("picks the highest-priority next action", () => {
@@ -104,5 +108,22 @@ describe("dashboard helpers", () => {
     expect(action.key).toBe("workflow-focus");
     expect(action.slug).toBe("bonus-bet");
     expect(action.body).toMatch(/DraftKings is profitable/);
+  });
+
+  it("personalizes the next book CTA by state and account status", () => {
+    const action = getNextBestAction({
+      usageLog: { "bonus-bet": 1 },
+      bankroll: "500",
+      totalProfit: 0,
+      openBets: [],
+      booksComplete: 1,
+      userState: "NC",
+      done: { DraftKings: true },
+      bookStatus: { FanDuel: "pending", BetMGM: "limited" },
+    });
+
+    expect(action.key).toBe("books-personalized");
+    expect(action.slug).toBe("sportsbooks");
+    expect(action.title).toMatch(/BetRivers|FanDuel|ESPN BET|Fanatics|bet365/);
   });
 });

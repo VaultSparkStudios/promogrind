@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇ ▆ ▇ ▆ ▇
-Avgs — 3: 461.7 | 5: 456.8 | 10: 445.3 [N=10] | 25: — | all: 445.3 [N=10]
-  └ 3-session: Dev 96.7 | Align 91.0 | Momentum 90.3 | Engage 85.7 | Process 98.0
+Sparkline (last 5 totals): ▆ ▇ ▆ ▇ █
+Avgs — 3: 464.0 | 5: 462.0 | 10: 451.1 [N=10] | 25: — | all: 448.5 [N=11]
+  └ 3-session: Dev 97.0 | Align 92.3 | Momentum 91.0 | Engage 87.7 | Process 96.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~2.0 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-16 | Session 52 | Total: 463/500 | Velocity: 2 | protocolVelocity: 1
+Momentum runway: ~0.5 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-16 | Session 53 | Total: 481/500 | Velocity: 6 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-16 — Session 53 | Total: 481/500 | Velocity: 6 | Debt: ↓
+Avgs — 3: 464.0 | 5: 462.0 | 10: 451.1 [N=10] | 25: — | all: 448.5 [N=11]
+  └ 3-session: Dev 97.0 | Align 92.3 | Momentum 91.0 | Engage 87.7 | Process 96.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | ↑ | Durable workflow provenance/history, local Studio contract publish-history, targeted alert planning, and state/book-aware workflow ranking all landed while tests rose to 175/175 and build/bundle stayed green at 418.9KB. |
+| Creative Alignment | 95 | ↑ | The work stayed trust-first and operator-grade: recommendations now respect legality/account health, workflow history is inspectable instead of implied, and the product keeps turning machine state into explainable guidance rather than hype. |
+| Momentum | 96 | ↑ | The session pushed through two integrated implementation tranches and still completed full manual closeout, turning most of the top impact backlog into shipped repo truth instead of leaving partial follow-through. |
+| Engagement | 92 | ↑ | PromoGrind can now return a more concrete loop: targeted alerts, command-brief priorities, inspectable workflow history, and lightweight satisfaction capture all make the app materially more useful on return. |
+| Process Quality | 99 | ↑ | Manual `/closeout` was completed in canonical order despite missing private automation: task board, handoff, work log, decisions, SIL, truth audit, project status, state vector, creative direction, audit JSON, commit, and push were all brought back into sync with validated repo truth. |
+| **Total** | **481/500** | ↑ | |
+
+**Top win:** PromoGrind's operator loop now behaves like one system: durable workflow history, local Studio contract history, targeted alerting, cockpit priorities, and state-aware CTA ranking all draw from the same operator-state direction.
+**Top gap:** The next structural constraint is still deeper architecture, not another surface: the canonical Promo Operating Graph and finer-grained entity conflict handling remain the main compounding work left inside the repo.
+**Intent outcome:** Achieved — the session updated public memory/task board honestly, implemented the next high-impact unblocked tranche at quality bar, validated the repo, and completed commit/push closeout.
+
+**Brainstorm**
+1. Let the future Promo Operating Graph generate one shared decision object that feeds Daily Brief, workflow inbox ranking, Promo Advisor, AI Action Plan, and Studio export without per-surface re-scoring.
+2. Move entity-aware sync from mirrored table snapshots into row/domain-level merge rules so workflow-history edits and ledger settlements reconcile cleanly across devices.
+3. Use Micro-NPS plus workflow history to build operator-memory coaching like "this promo/book/state pattern tends to feel low-worth" instead of only measuring realized profit drift.
+
+**Committed to TASK_BOARD:** Canonical Promo Operating Graph — unify promo, workflow, action, drift, confidence, and settlement policy into one shared decision model · [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains · Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
 
 ## 2026-04-16 — Session 52 | Total: 463/500 | Velocity: 2 | Debt: ↓
 Avgs — 3: 461.7 | 5: 456.8 | 10: 445.3 [N=10] | 25: — | all: 445.3 [N=10]

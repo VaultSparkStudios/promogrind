@@ -3,8 +3,8 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "Post-S52 operator-contract work is now layered on top of the workflow-operations tranche: PromoGrind emits ranked drift alerts from Track, exports a versioned Studio contract with priorities/anomalies, surfaces that machine guidance in the launch cockpit, and has hardened calc-api onto the shared edge helper path.",
-  "nextMilestone": "Persist/publish the new Studio contract over time, deepen workflow provenance/history surfacing, and move from mirrored entity tables to finer-grained conflict handling inside ledger and workflow domains.",
+  "currentFocus": "Post-S53 operator-guidance work is now layered on top of the workflow-operations tranche: PromoGrind preserves/presents durable workflow history, publishes local Studio contract history with deltas, drives Daily Brief plus the launch cockpit from targeted operator-state alerting, and personalizes sportsbook CTAs/workflow ranking by legal state and book health.",
+  "nextMilestone": "Unify dashboard, Track, AI, sync, and Studio surfaces behind a canonical Promo Operating Graph while deepening entity-aware sync from mirrored tables into finer-grained conflict handling.",
   "blockers": [
     "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live",
     "Apply scripts/migration-entity-sync.sql in Supabase so ledger_state/tracker_state exist live",
@@ -18,8 +18,8 @@
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-16",
-  "version": "24.6.0",
-  "lastSession": "S52",
+  "version": "24.7.0",
+  "lastSession": "S53",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
@@ -31,8 +31,8 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "passing — build and bundle budget revalidated after the operator-contract tranche; main chunk now ~419.1KB against a 420KB budget",
-  "testStatus": "170/170",
+  "buildStatus": "passing — build and bundle budget revalidated after the operator-guidance + personalization tranche; main chunk now ~418.9KB against a 420KB budget",
+  "testStatus": "175/175",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
@@ -95,13 +95,15 @@
     "PromoAdvisorPanel": "src/components/PromoAdvisorPanel.jsx — guest gate active, explicit auth headers, lazy-loaded",
     "ActivationNextAction": "src/App.jsx — Dashboard next-best-action card for onboarding/revenue/ledger loop",
     "TodayDashboardPanel": "src/components/dashboard/TodayDashboardPanel.jsx — expiring promos, unfinished work, bankroll posture, recent settled profit",
-    "DailyBriefPage": "src/components/dashboard/DailyBriefPage.jsx — extracted Home daily briefing surface",
+    "DailyBriefPage": "src/components/dashboard/DailyBriefPage.jsx — extracted Home daily briefing surface with targeted alerting and workflow focus",
     "HomeRoutes": "src/routes/HomeRoutes.jsx — extracted Home launch pages for Get Started, What's New, and About",
     "Onboarding": "src/onboarding.js — shared onboarding-step inference and persistence powering the dashboard + Home progress surfaces",
     "PromoIntakeRoute": "src/routes/PromoIntakeRoute.jsx — pasted promo parsing + calculator recommendation route",
     "ShadowBookPanel": "src/components/ShadowBookPanel.jsx — first-month upside projection for unopened books",
     "CalculatorTrustBadge": "src/components/CalculatorTrustBadge.jsx — adaptive trust/readiness indicator on key calculator outputs",
-    "WorkflowInboxPanel": "src/components/dashboard/WorkflowInboxPanel.jsx — scored workflow inbox surface combining calculator, advisor, and AI-plan generated work"
+    "WorkflowInboxPanel": "src/components/dashboard/WorkflowInboxPanel.jsx — scored workflow inbox surface combining calculator, advisor, and AI-plan generated work",
+    "LaunchCommandCenterPanel": "src/components/dashboard/LaunchCommandCenterPanel.jsx — unified operator cockpit with launch readiness, machine priorities, targeted alert queue, and workflow command deck",
+    "TrackInsights": "src/components/TrackInsights.jsx — Track analytics, workflow history surface, drift review, and Micro-NPS capture after settled workflows"
   },
   "knownIssues": {
     "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code",
@@ -110,8 +112,8 @@
     "keyboard_nav_followthrough": "Primary and secondary tab bars now support keyboard nav, but broader interactive-control coverage is still pending",
     "push_brief_public_config_pending": "Daily Brief push subscription wiring and send-daily-brief are live, but production still needs VITE_VAPID_PUBLIC_KEY before public browser subscriptions should be enabled",
     "blob_sync_model": "sync.js now mirrors workflow, ledger, and tracker domains through dedicated tables plus the legacy promogrind_data row, but finer-grained conflict handling inside ledger/workflow items is still needed before multi-device usage expands",
-    "studio_contract_clipboard_only": "The Studio contract is now versioned and richer, but it is still copied/exported ad hoc rather than published with history or downstream sync",
-    "bundle_headroom": "Main chunk is still under the 420KB budget, but only by a very small margin after the operator-contract tranche"
+    "studio_contract_downstream_sync_pending": "Studio contract history now persists locally with delta summaries, but downstream Studio OS / Hub sync is still not automated from this public repo",
+    "bundle_headroom": "Main chunk is still under the 420KB budget, but only by a very small margin after the operator-guidance tranche"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
@@ -120,10 +122,10 @@
   "ignisLastComputed": "2026-04-15",
   "entropyScore": 0.136,
   "entropyLastComputed": "2026-04-15",
-  "silScore": 463,
-  "silAvg3": 461.7,
-  "silVelocity": 2,
+  "silScore": 481,
+  "silAvg3": 464.0,
+  "silVelocity": 6,
   "silDebt": "down",
-  "silLastSession": "S52",
-  "currentSession": 52
+  "silLastSession": "S53",
+  "currentSession": 53
 }

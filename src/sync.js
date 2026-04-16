@@ -316,14 +316,15 @@ function _appendWorkflowHistory(previous = {}, next = {}, now = Date.now()) {
       prev.status !== workflow.status ||
       prev.updatedAt !== workflow.updatedAt ||
       prev.actualProfit !== workflow.actualProfit ||
-      prev.note !== workflow.note;
+      prev.note !== workflow.note ||
+      prev.skipReason !== workflow.skipReason ||
+      prev.frictionReason !== workflow.frictionReason;
 
     if (!changed) continue;
 
     history.unshift({
       eventKey,
       workflowId: workflow.id,
-      eventType: !prev ? 'created' : prev.status !== workflow.status ? 'status_changed' : 'updated',
       fromStatus: prev?.status || null,
       status: workflow.status,
       source: workflow.source || 'result_feedback',
@@ -416,12 +417,11 @@ async function _loadRemoteWorkflowData(userId) {
     if (!error && Array.isArray(data) && data.length) {
       result.workflowHistory = data
         .map((row) => ({
-          eventKey: row.event_key,
-          workflowId: row.workflow_id,
-          eventType: row.event_type,
-          fromStatus: row.from_status,
-          status: row.status,
-          source: row.source,
+            eventKey: row.event_key,
+            workflowId: row.workflow_id,
+            fromStatus: row.from_status,
+            status: row.status,
+            source: row.source,
           title: row.title,
           calculatorSlug: row.calculator_slug,
           promoType: row.promo_type,
@@ -488,13 +488,12 @@ async function _saveWorkflowEntities(userId, data) {
   const historyRows = Array.isArray(data.workflowHistory) ? data.workflowHistory : [];
   if (historyRows.length) {
     await supabase.from(WORKFLOW_HISTORY_TABLE).upsert(historyRows.map((entry) => ({
-      event_key: entry.eventKey,
-      user_id: userId,
-      workflow_id: entry.workflowId,
-      event_type: entry.eventType,
-      from_status: entry.fromStatus,
-      status: entry.status,
-      source: entry.source,
+        event_key: entry.eventKey,
+        user_id: userId,
+        workflow_id: entry.workflowId,
+        from_status: entry.fromStatus,
+        status: entry.status,
+        source: entry.source,
       title: entry.title,
       calculator_slug: entry.calculatorSlug,
       promo_type: entry.promoType,

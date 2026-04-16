@@ -177,7 +177,6 @@ describe('saveData', () => {
     expect(parsed.workflowHistory).toHaveLength(1);
     expect(parsed.workflowHistory[0]).toEqual(expect.objectContaining({
       workflowId: 'wf-1',
-      eventType: 'status_changed',
       fromStatus: 'queued',
       status: 'placed',
     }));
@@ -291,7 +290,6 @@ describe('loadData', () => {
         data: [{
           event_key: 'wf-remote:ready:2026-04-15T11:00:00.000Z',
           workflow_id: 'wf-remote',
-          event_type: 'created',
           from_status: null,
           status: 'ready',
           source: 'promo_advisor',
@@ -315,7 +313,6 @@ describe('loadData', () => {
     }));
     expect(result.workflowHistory[0]).toEqual(expect.objectContaining({
       workflowId: 'wf-remote',
-      eventType: 'created',
     }));
   });
 

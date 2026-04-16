@@ -13,7 +13,6 @@ import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, Currency
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
 import { getDashboardSnapshot, getNextBestAction } from "./dashboard/today.js";
-import DailyBriefPage from "./components/dashboard/DailyBriefPage.jsx";
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
 // Heavy tab components — lazy loaded so they don't block initial render
@@ -28,6 +27,7 @@ const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
 const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
 const PromoIntakeRoute = lazy(() => import("./routes/PromoIntakeRoute.jsx"));
 const TrackInsights = lazy(() => import("./components/TrackInsights.jsx"));
+const DailyBriefPage = lazy(() => import("./components/dashboard/DailyBriefPage.jsx"));
 const LaunchCommandCenterPanel = lazy(() => import("./components/dashboard/LaunchCommandCenterPanel.jsx"));
 const TodayDashboardPanel = lazy(() => import("./components/dashboard/TodayDashboardPanel.jsx"));
 const GetStartedRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.GetStartedRoute })));
@@ -3339,7 +3339,19 @@ function ActivationNextAction({ data, totalProfit, openBets, booksComplete, navi
   const openWorkflowCount = Array.isArray(data?.resultFeedback)
     ? data.resultFeedback.filter((entry) => ["queued", "ready", "placed", "waiting", "open", "pending"].includes(String(entry?.status || "").toLowerCase())).length
     : 0;
-  const action = getNextBestAction({ usageLog, bankroll, totalProfit, openBets, booksComplete, openWorkflowCount: snapshot.openWorkflowCount || openWorkflowCount, topWorkflow: snapshot.topWorkflow });
+  const action = getNextBestAction({
+    usageLog,
+    bankroll,
+    totalProfit,
+    openBets,
+    booksComplete,
+    openWorkflowCount: snapshot.openWorkflowCount || openWorkflowCount,
+    topWorkflow: snapshot.topWorkflow,
+    userState: data?.userState || "",
+    done: data?.done || {},
+    bookStatus: data?.bookStatus || {},
+    recommendedBooks: snapshot.recommendedBooks,
+  });
   const actionColor = { info: K.ac, positive: K.gn, watch: K.yl, risk: K.rd }[action.tone] || K.ac;
 
   return (

@@ -1,22 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { f, calcROI, K, font, fontD } from "../lib/shared.js";
 import { CANONICAL_APP_URL } from "../launchState.js";
-import { BOOKS, getBookUrl } from "../books.js";
+import { BOOKS, US_BOOK_STATES, getBookUrl } from "../books.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { useToast } from "../contexts.jsx";
 import { Tl, Nt, S } from "../ui.jsx";
 import { PROMO_SCHED } from "../data/promoSchedule.js";
-
-const US_BOOK_STATES = {
-  "DraftKings": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","NC","VT","WY","DC","NV"],
-  "FanDuel": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","NC","VT","DC","NV"],
-  "BetMGM": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","MS","KY","LA","MD","MA","DC","NV"],
-  "Caesars": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","DC","NV"],
-  "bet365": ["NJ","CO","IA","OH","VA","KY","NC","LA","IL"],
-  "ESPN BET": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KS","KY","LA","MD","MA","NC"],
-  "Fanatics": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","TN","WV","IA","IL","KY","LA","MD","MA","NC","DC"],
-  "BetRivers": ["NJ","PA","CO","MI","VA","OH","IN","AZ","NY","IL","IA","LA","MD","NC","WV"],
-};
 
 const Tracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);

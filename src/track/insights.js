@@ -40,6 +40,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   const workflowInboxEntries = Array.isArray(data.workflowInbox)
     ? data.workflowInbox.map((entry) => normalizeWorkflowEntry(entry))
     : [];
+  const workflowHistoryEntries = Array.isArray(data.workflowHistory) ? data.workflowHistory : [];
 
   const today = now instanceof Date ? now : new Date(now);
   const todayStr = dateOnly(today);
@@ -166,14 +167,52 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   const driftRows = promoTypeRows
     .filter((row) => row.averageDrift !== null)
     .sort((a, b) => a.averageDrift - b.averageDrift);
-  const workflowTimeline = [...workflowInboxEntries, ...feedbackEntries]
-    .reduce((acc, entry) => {
-      if (acc.some((item) => item.id === entry.id && item.status === entry.status && item.updatedAt === entry.updatedAt)) return acc;
-      acc.push(entry);
-      return acc;
-    }, [])
-    .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
-    .slice(0, 12);
+  const workflowTimeline = workflowHistoryEntries.length
+    ? workflowHistoryEntries
+        .map((entry) => ({
+          ...entry,
+          id: entry.workflowId,
+          updatedAt: entry.eventAt,
+          status: entry.status,
+          title: entry.title,
+          source: entry.source,
+          transitionLabel: entry.fromStatus ? `${entry.fromStatus} -> ${entry.status}` : entry.status,
+        }))
+        .sort((a, b) => new Date(b.eventAt || b.updatedAt || 0).getTime() - new Date(a.eventAt || a.updatedAt || 0).getTime())
+        .slice(0, 12)
+    : [...workflowInboxEntries, ...feedbackEntries]
+        .reduce((acc, entry) => {
+          if (acc.some((item) => item.id === entry.id && item.status === entry.status && item.updatedAt === entry.updatedAt)) return acc;
+          acc.push(entry);
+          return acc;
+        }, [])
+        .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+        .slice(0, 12);
+  const workflowHistoryRows = Array.from(
+    workflowHistoryEntries.reduce((map, entry) => {
+      const key = entry.workflowId || entry.id;
+      if (!key) return map;
+      const current = map.get(key) || {
+        id: key,
+        title: entry.title || "Workflow",
+        source: entry.source || "result_feedback",
+        promoType: entry.promoType || "other",
+        book: entry.book || "",
+        latestAt: entry.eventAt || null,
+        statuses: [],
+      };
+      current.statuses.push(entry.fromStatus && entry.fromStatus !== entry.status ? `${entry.fromStatus} -> ${entry.status}` : entry.status);
+      if (!current.latestAt || new Date(entry.eventAt || 0).getTime() > new Date(current.latestAt || 0).getTime()) {
+        current.latestAt = entry.eventAt || current.latestAt;
+        current.book = entry.book || current.book;
+      }
+      map.set(key, current);
+      return map;
+    }, new Map()).values(),
+  )
+    .map((row) => ({ ...row, statuses: row.statuses.filter(Boolean).slice(0, 8) }))
+    .sort((a, b) => new Date(b.latestAt || 0).getTime() - new Date(a.latestAt || 0).getTime())
+    .slice(0, 8);
   const selfCalibration = {
     settledCount,
     averageDrift: settledCount ? (actualSettledProfit - expectedSettledProfit) / settledCount : null,
@@ -213,6 +252,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     frictionReasonRows,
     sourceRows,
     workflowTimeline,
+    workflowHistoryRows,
     selfCalibration,
     selfCalibrationRows,
     driftAlerts,

@@ -1,8 +1,12 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 170/170 tests green, and bundle budget passing at ~419.1KB main chunk after the current operator-contract tranche
-- version: 24.6.0 · last session: S52 (2026-04-16)
+- this repo remains deployable — build passing, 175/175 tests green, and bundle budget passing at ~418.9KB main chunk after the operator-guidance + personalization tranche
+- version: 24.7.0 · last session: S53 (2026-04-16)
+- **S53 operator-guidance + publish-history tranche (closed)**: `src/sync.js`, `src/track/insights.js`, and `src/workflows/inbox.js` now preserve/consume durable workflow provenance; `src/studio/export.js` now persists versioned Studio contract snapshots with delta summaries; and the launch cockpit now emits a shared Daily Command Brief from workflow, drift, and launch-blocker state
+- **S53 alerting + cockpit unification tranche (closed)**: `src/operator/briefing.js`, `src/components/dashboard/DailyBriefPage.jsx`, and `src/components/dashboard/LaunchCommandCenterPanel.jsx` now generate a targeted alert queue plus a workflow command deck from shared operator state instead of generic reminders and disconnected summary cards
+- **S53 Track trust-loop tranche (closed)**: `src/components/TrackInsights.jsx` now exposes a filterable workflow-history surface and a one-tap Micro-NPS prompt after three settled workflows, with persisted app-state feedback for future operator memory/SIL use
+- **S53 state/book personalization tranche (closed)**: `src/books.js`, `src/dashboard/today.js`, `src/workflows/inbox.js`, `src/components/Tracker.jsx`, and `src/App.jsx` now share legal-state/book-availability logic so sportsbook CTAs and workflow recommendations favor legal, open, non-degraded books for the current user
 - **S52 operator-contract + drift-alert tranche (closed)**: `src/track/insights.js` now emits ranked drift alerts from promo-type and book settlement deltas; `src/studio/export.js` now emits a versioned Studio contract with summary, priorities, anomalies, and declared consumer surfaces for Studio OS / Ops / Hub / Social Dashboard
 - **S52 launch-cockpit + API hardening tranche (closed)**: `src/components/dashboard/LaunchCommandCenterPanel.jsx` now surfaces machine priorities and anomaly/drift feeds instead of only static readiness counters; `supabase/functions/calc-api/index.ts` now uses the shared CORS/JSON helper and references `promogrind.bet` instead of stale wildcard/legacy attribution
 - **S51 workflow-operations refinement tranche (closed)**: `src/workflows/inbox.js` now ranks workflows with explainable reasons using bankroll pressure, book activation, opportunity/actionability, promo/book history, skip reasons, friction, urgency, and freshness; `src/dashboard/today.js` now reuses that score summary for next-best-action copy so the dashboard can explain why a workflow is the best current move
@@ -81,7 +85,7 @@ Public-safe summary:
 - sitemap.xml: 145 URLs — /about/ and /compliance/ included
 - wins_wall: `scripts/migration-wins-wall.sql` has been applied; Dashboard Wins Wall can now read server entries
 - edge-function deploy status: auth-backed core functions (`create-checkout`, `customer-portal`, `redeem-beta-code`, `gift-trial`, `promo-chat`, `promo-advisor`, `ai-action-plan`, `stack-builder`, `parse-bet-slip`, `stripe-webhook`) were redeployed on 2026-04-15 with publishable-key compatible gateway config; `send-daily-brief` was also deployed the same day
-- remaining code follow-ups: broader keyboard-nav follow-through outside tab bars, deeper calculator/domain extraction out of `App.jsx`, and richer promo-alert targeting beyond the current daily-brief push groundwork
-- remaining code follow-ups: turn the new Studio/operator contract from clipboard-only output into publish/history-backed state, unify dashboard/Track/AI/workflow reasoning behind a canonical Promo Operating Graph, and finish the move from mirrored entity storage to truly conflict-aware domain persistence where ledger/workflow items can reconcile at a finer granularity
+- remaining code follow-ups: broader keyboard-nav follow-through outside tab bars, deeper calculator/domain extraction out of `App.jsx`, and an offline IndexedDB-backed write queue for ledger/feedback writes
+- remaining code follow-ups: unify dashboard/Track/AI/workflow reasoning behind a canonical Promo Operating Graph, deepen entity-aware sync from mirrored tables into finer-grained conflict handling, and trim bundle headroom back away from the 420KB ceiling
 - remaining launch blockers: setting `VITE_VAPID_PUBLIC_KEY` in the deployed frontend if push alerts should be live, Stripe end-to-end smoke test, remaining monetization links or affiliate approvals for BetMGM / bet365 / BetRivers, and one final friend-facing manual browser/account flow pass
 - detailed internal state now lives in the private Studio OS / ops repository

@@ -1,4 +1,4 @@
-import { BOOKS, hasConfiguredMonetizationLinks } from "../books.js";
+import { BOOKS, getRecommendedBooksForUser, hasConfiguredMonetizationLinks } from "../books.js";
 import { summarizeWorkflows } from "../promograph/index.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
 
@@ -58,6 +58,11 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
   const booksComplete = Object.values(done).filter(Boolean).length;
   const booksRemaining = Math.max(BOOKS.length - booksComplete, 0);
   const potentialLeft = BOOKS.filter((book) => !done[book.name]).reduce((sum, book) => sum + book.bonus * 0.7, 0);
+  const recommendedBooks = getRecommendedBooksForUser({
+    userState: data.userState,
+    done,
+    bookStatus: data.bookStatus || {},
+  });
   const expiringBooks = BOOKS.filter(
     (book) => expiry[book.name] && !done[book.name] && expiry[book.name] <= in3DaysStr && expiry[book.name] >= todayStr,
   );
@@ -89,6 +94,8 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
     openWorkflowCount: workflowSummary.open.length,
     waitingWorkflowCount: workflowSummary.waiting.length,
     topWorkflow: workflowInbox.top[0] || null,
+    recommendedBooks: recommendedBooks.slice(0, 3),
+    availableBooksCount: recommendedBooks.length,
     hasLedger: ledger.length > 0,
     hasBetHistory: bets.length > 0,
     bankroll: Number.isFinite(bankroll) ? bankroll : null,
@@ -146,6 +153,12 @@ export function getUnfinishedWork(snapshot) {
       detail: `Roughly $${snapshot.potentialLeft.toFixed(0)} of welcome-offer value is still on the table.`,
       slug: "sportsbooks",
     },
+    snapshot.recommendedBooks?.[0] && {
+      key: "recommended-book",
+      title: `${snapshot.recommendedBooks[0].book.name} is the best open book right now`,
+      detail: `${snapshot.recommendedBooks[0].reason} · ${snapshot.recommendedBooks[0].book.value} headline value.`,
+      slug: "sportsbooks",
+    },
     !snapshot.hasLedger && {
       key: "ledger",
       title: "No settled profit history yet",
@@ -155,13 +168,23 @@ export function getUnfinishedWork(snapshot) {
   ].filter(Boolean);
 }
 
-export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 0, openBets = [], booksComplete = 0, openWorkflowCount = 0, topWorkflow = null }) {
+export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 0, openBets = [], booksComplete = 0, openWorkflowCount = 0, topWorkflow = null, userState = "", done = {}, bookStatus = {}, recommendedBooks = null }) {
   const hasBankroll = !!String(bankroll || "").trim();
   const hasCalc = Object.keys(usageLog).length > 0;
   const affiliateReady = hasConfiguredMonetizationLinks();
+  const bestBook = Array.isArray(recommendedBooks) ? recommendedBooks[0] : getRecommendedBooksForUser({ userState, done, bookStatus })[0];
   const candidates = [
     !hasBankroll && { key: "bankroll", title: "Set your bankroll", body: "Personalized stake sizing and weekly actions need a bankroll anchor.", cta: "Set profile", slug: "dashboard", tone: "info", score: 100 },
     !hasCalc && { key: "calc", title: "Run your first conversion", body: "Start with the Bonus Bet Converter and get a hedge stake in under a minute.", cta: "Open converter", slug: "bonus-bet", tone: "positive", score: 92 },
+    bestBook && {
+      key: "books-personalized",
+      title: `Open ${bestBook.book.name} next`,
+      body: `${bestBook.reason}${bestBook.stateCode ? ` in ${bestBook.stateCode}` : ""} · ${bestBook.book.detail}.`,
+      cta: "Review best-fit book",
+      slug: "sportsbooks",
+      tone: bestBook.status === "limited" ? "watch" : "positive",
+      score: 90 + Math.min((bestBook.book.bonus || 0) / 200, 8),
+    },
     booksComplete === 0 && { key: "books", title: "Pick your first sportsbook", body: "Mark books you already use and prioritize the highest-value welcome offers.", cta: "Open tracker", slug: "sportsbooks", tone: "watch", score: 84 },
     topWorkflow && {
       key: "workflow-focus",

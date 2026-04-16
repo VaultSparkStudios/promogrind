@@ -1,4 +1,5 @@
 import { normalizeWorkflowEntry } from "../promograph/index.js";
+import { isBookAvailableInState } from "../books.js";
 
 function toNumber(value) {
   const parsed = Number.parseFloat(value);
@@ -15,8 +16,10 @@ function daysOld(value, now) {
 function buildHistorySignals(appData = {}) {
   const feedbackEntries = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
   const ledgerEntries = Array.isArray(appData.ledger) ? appData.ledger : [];
+  const workflowHistory = Array.isArray(appData.workflowHistory) ? appData.workflowHistory : [];
   const byPromoType = new Map();
   const byBook = new Map();
+  const byWorkflow = new Map();
 
   const ensureRow = (map, key) => {
     if (!key) return null;
@@ -66,7 +69,25 @@ function buildHistorySignals(appData = {}) {
     if ((toNumber(entry.profit) || 0) > 0) row.positiveSettled += 1;
   }
 
-  return { byPromoType, byBook };
+  for (const entry of workflowHistory) {
+    const workflowId = String(entry.workflowId || "").trim();
+    if (!workflowId) continue;
+    if (!byWorkflow.has(workflowId)) {
+      byWorkflow.set(workflowId, {
+        totalEvents: 0,
+        statusChanges: 0,
+        hasAiSource: false,
+      });
+    }
+    const row = byWorkflow.get(workflowId);
+    row.totalEvents += 1;
+    if (entry.fromStatus && entry.fromStatus !== entry.status) row.statusChanges += 1;
+    if (String(entry.source || "").toLowerCase().includes("ai") || String(entry.source || "").toLowerCase().includes("advisor")) {
+      row.hasAiSource = true;
+    }
+  }
+
+  return { byPromoType, byBook, byWorkflow };
 }
 
 function pushReason(reasons, tone, text) {
@@ -84,9 +105,13 @@ function summarizeReasons(reasons = []) {
 function scoreWorkflow(workflow, context = {}) {
   const bankroll = toNumber(context.bankroll);
   const booksDone = context.done || {};
+  const bookStatus = context.bookStatus || {};
   const ageDays = daysOld(workflow.createdAt, context.now || new Date());
   const promoSignals = context.history?.byPromoType?.get(workflow.promoType) || null;
   const bookSignals = context.history?.byBook?.get(workflow.book) || null;
+  const workflowSignals = context.history?.byWorkflow?.get(workflow.id) || null;
+  const workflowBookStatus = String(bookStatus[workflow.book] || "").toLowerCase();
+  const availableInState = workflow.book ? isBookAvailableInState(workflow.book, context.userState) : true;
   const statusBase = {
     ready: 92,
     waiting: 86,
@@ -111,15 +136,31 @@ function scoreWorkflow(workflow, context = {}) {
   if (workflow.confidence === "high") score += 8;
   if (workflow.confidence === "medium") score += 4;
   if (workflow.confidence) {
-    pushReason(reasons, workflow.confidence === "high" ? "positive" : "neutral", `${workflow.confidence} confidence`);
+    pushReason(reasons, workflow.confidence === "high" ? "positive" : "neutral", workflow.confidence);
   }
   if (!workflow.book) score -= 8;
-  if (!workflow.book) pushReason(reasons, "risk", "missing book");
+  if (!workflow.book) pushReason(reasons, "risk", "no book");
+  if (workflow.book && !availableInState) {
+    score -= 24;
+    pushReason(reasons, "risk", "not live");
+  }
   if (workflow.book && booksDone[workflow.book]) score += 5;
-  if (workflow.book && booksDone[workflow.book]) pushReason(reasons, "positive", `${workflow.book} already active`);
+  if (workflow.book && booksDone[workflow.book]) pushReason(reasons, "positive", `${workflow.book} active`);
+  if (workflow.book && workflowBookStatus === "pending") {
+    score += 4;
+    pushReason(reasons, "positive", "account started");
+  }
+  if (workflow.book && workflowBookStatus === "limited") {
+    score -= 6;
+    pushReason(reasons, "risk", "limited");
+  }
+  if (workflow.book && (workflowBookStatus === "gubbed" || workflowBookStatus === "closed")) {
+    score -= 18;
+    pushReason(reasons, "risk", workflowBookStatus);
+  }
   if (bankroll !== null && workflow.expectedProfit !== null && workflow.expectedProfit > bankroll * 0.08) {
     score -= 10;
-    pushReason(reasons, "risk", "high bankroll load");
+    pushReason(reasons, "risk", "roll");
   }
   if (workflow.frictionReason) score -= 6;
   if (workflow.frictionReason) pushReason(reasons, "risk", workflow.frictionReason.replace(/_/g, " "));
@@ -141,34 +182,43 @@ function scoreWorkflow(workflow, context = {}) {
     const skipRate = promoSignals.skipped / promoSignals.total;
     if (skipRate >= 0.5) {
       score -= 8;
-      pushReason(reasons, "risk", "promo type often skipped");
+      pushReason(reasons, "risk", "skip");
     }
   }
   if (promoSignals?.settled >= 2) {
     if (promoSignals.actualProfit > 0) {
       score += 6;
-      pushReason(reasons, "positive", "promo type is paying");
+      pushReason(reasons, "positive", "up");
     } else if (promoSignals.actualProfit < 0) {
       score -= 6;
-      pushReason(reasons, "risk", "promo type is cold");
+        pushReason(reasons, "risk", "cold");
     }
   }
   if (bookSignals?.settled >= 2) {
     if (bookSignals.actualProfit > 0) {
       score += 5;
-      pushReason(reasons, "positive", `${workflow.book} is profitable`);
+      pushReason(reasons, "positive", `${workflow.book}+`);
     } else if (bookSignals.actualProfit < 0) {
       score -= 5;
-      pushReason(reasons, "risk", `${workflow.book} is cold`);
+        pushReason(reasons, "risk", `${workflow.book}-`);
     }
   }
   if (bookSignals?.friction >= 2) {
     score -= 4;
-    pushReason(reasons, "risk", `${workflow.book} causes friction`);
   }
   if (workflow.nextStep) {
     score += 3;
-    pushReason(reasons, "positive", "clear next step");
+    pushReason(reasons, "positive", "next");
+  }
+  if ((workflowSignals?.statusChanges || 0) >= 1 && (workflowSignals?.totalEvents || 0) >= 3) {
+    score += 3;
+  }
+  if (workflowSignals?.totalEvents >= 4 && workflow.status !== "waiting" && workflow.status !== "placed") {
+    score -= 4;
+      pushReason(reasons, "risk", "stall");
+  }
+  if (workflowSignals?.hasAiSource && workflow.status === "ready") {
+    score += 2;
   }
 
   return {
@@ -196,12 +246,19 @@ export function buildWorkflowInbox(appData = {}, options = {}) {
   const open = deduped
     .filter((workflow) => ["queued", "ready", "placed", "waiting"].includes(workflow.status))
     .map((workflow) => {
-      const scoring = scoreWorkflow(workflow, { ...options, now, done: appData.done || {}, history });
+      const enrichedScoring = scoreWorkflow(workflow, {
+        ...options,
+        now,
+        done: appData.done || {},
+        bookStatus: appData.bookStatus || {},
+        userState: appData.userState || "",
+        history,
+      });
       return {
         ...workflow,
-        score: scoring.score,
-        scoreReasons: scoring.reasons,
-        scoreSummary: scoring.scoreSummary,
+        score: enrichedScoring.score,
+        scoreReasons: enrichedScoring.reasons,
+        scoreSummary: enrichedScoring.scoreSummary,
       };
     })
     .sort((a, b) => b.score - a.score || (b.expectedProfit || 0) - (a.expectedProfit || 0));

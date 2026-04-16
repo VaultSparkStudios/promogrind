@@ -80,6 +80,67 @@ describe("workflow inbox", () => {
     expect(inbox.open.find((row) => row.id === "wf-hot")?.score).toBeGreaterThan(inbox.open.find((row) => row.id === "wf-cold")?.score || 0);
   });
 
+  it("uses durable workflow history to explain and score the next action", () => {
+    const inbox = buildWorkflowInbox({
+      workflowInbox: [
+        {
+          id: "wf-history",
+          title: "Advance shared workflow",
+          status: "ready",
+          promoType: "bonus_bet",
+          calculatorSlug: "bonus-bet",
+          expectedProfit: 20,
+          book: "DraftKings",
+          opportunityScore: 82,
+          source: "ai_action_plan",
+          createdAt: "2026-04-15T10:00:00.000Z",
+        },
+      ],
+      workflowHistory: [
+        { workflowId: "wf-history", status: "queued", source: "ai_action_plan", eventAt: "2026-04-15T10:00:00.000Z" },
+        { workflowId: "wf-history", fromStatus: "queued", status: "ready", source: "result_feedback", eventAt: "2026-04-15T10:10:00.000Z" },
+        { workflowId: "wf-history", fromStatus: "ready", status: "ready", source: "result_feedback", eventAt: "2026-04-15T10:20:00.000Z" },
+      ],
+    }, { bankroll: "500", now: new Date("2026-04-16T12:00:00.000Z") });
+
+    expect(inbox.top[0].score).toBeGreaterThan(100);
+    expect(inbox.top[0].scoreReasons.some((reason) => /score 82/i.test(reason.text))).toBe(true);
+  });
+
+  it("deprioritizes workflows tied to unavailable or degraded books", () => {
+    const inbox = buildWorkflowInbox({
+      userState: "NC",
+      bookStatus: { BetMGM: "gubbed" },
+      workflowInbox: [
+        {
+          id: "wf-legal",
+          title: "Use legal book",
+          status: "queued",
+          promoType: "bonus_bet",
+          calculatorSlug: "bonus-bet",
+          expectedProfit: 20,
+          book: "bet365",
+          opportunityScore: 82,
+          createdAt: "2026-04-15T10:00:00.000Z",
+        },
+        {
+          id: "wf-blocked",
+          title: "Use blocked book",
+          status: "queued",
+          promoType: "bonus_bet",
+          calculatorSlug: "bonus-bet",
+          expectedProfit: 20,
+          book: "BetMGM",
+          opportunityScore: 82,
+          createdAt: "2026-04-15T10:00:00.000Z",
+        },
+      ],
+    }, { bankroll: "500", now: new Date("2026-04-16T12:00:00.000Z") });
+
+    expect(inbox.top[0].id).toBe("wf-legal");
+    expect(inbox.open.find((row) => row.id === "wf-blocked")?.scoreReasons.some((reason) => /not live|gubbed/i.test(reason.text))).toBe(true);
+  });
+
   it("builds a compact Studio snapshot from live app data", () => {
     const snapshot = buildStudioSnapshot({
       workflowInbox: [

@@ -38,9 +38,33 @@ export default function TrackInsights() {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const insights = useMemo(() => buildTrackInsights(appData || {}, new Date()), [appData]);
   const [drafts, setDrafts] = useState({});
+  const [historyFilter, setHistoryFilter] = useState("all");
+  const microNpsEntries = Array.isArray(appData?.microNps) ? appData.microNps : [];
+  const hasRecentMicroNps = microNpsEntries.some((entry) => new Date(entry.createdAt || 0).getTime() >= Date.now() - (30 * 86400000));
+  const showMicroNps = insights.settledCount >= 3 && !hasRecentMicroNps;
+  const filteredHistoryRows = insights.workflowHistoryRows.filter((row) => {
+    if (historyFilter === "all") return true;
+    return row.statuses.some((status) => status.toLowerCase().includes(historyFilter));
+  });
 
   const saveDraft = (id, key, value) => {
     setDrafts((current) => ({ ...current, [id]: { ...(current[id] || {}), [key]: value } }));
+  };
+
+  const saveMicroNps = (value) => {
+    if (!syncAppData) return;
+    syncAppData({
+      ...appData,
+      microNps: [
+        {
+          value,
+          settledCount: insights.settledCount,
+          totalProfit: insights.totalProfit,
+          createdAt: new Date().toISOString(),
+        },
+        ...microNpsEntries,
+      ].slice(0, 12),
+    });
   };
 
   const settle = (entry) => {
@@ -280,7 +304,7 @@ export default function TrackInsights() {
                   <div style={{ fontSize: 10, color: K.mt }}>{new Date(entry.updatedAt || entry.createdAt).toLocaleString()}</div>
                 </div>
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: 10, color: K.dm }}>
-                  <span>Status: <strong style={{ color: K.tx }}>{entry.status}</strong></span>
+                  <span>Status: <strong style={{ color: K.tx }}>{entry.transitionLabel || entry.status}</strong></span>
                   <span>Source: <strong style={{ color: K.tx }}>{String(entry.source || "result_feedback").replace(/_/g, " ")}</strong></span>
                   <span>Type: <strong style={{ color: K.tx }}>{formatPromoTypeLabel(entry.promoType)}</strong></span>
                   {entry.book && <span>Book: <strong style={{ color: K.tx }}>{entry.book}</strong></span>}
@@ -290,6 +314,98 @@ export default function TrackInsights() {
           </div>
         )}
       </div>
+
+      <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10, marginTop: 14 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx }}>Workflow History Surface</div>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {[
+              ["all", "All"],
+              ["queued", "Queued"],
+              ["ready", "Ready"],
+              ["waiting", "Waiting"],
+              ["settled", "Settled"],
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                onClick={() => setHistoryFilter(value)}
+                style={{
+                  padding: "4px 9px",
+                  background: historyFilter === value ? `${K.ac}18` : "transparent",
+                  border: `1px solid ${historyFilter === value ? K.ac : K.bd2}`,
+                  borderRadius: 999,
+                  color: historyFilter === value ? K.ac : K.dm,
+                  fontSize: 10,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  fontFamily: font,
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {filteredHistoryRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Workflow history groups appear once synced transition history exists.</div>}
+        {filteredHistoryRows.length > 0 && (
+          <div style={{ display: "grid", gap: 8 }}>
+            {filteredHistoryRows.map((row) => (
+              <div key={row.id} style={{ padding: 10, background: K.s3, borderRadius: 8, border: `1px solid ${K.bd}` }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 4 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{row.title}</div>
+                  <div style={{ fontSize: 10, color: K.mt }}>{row.latestAt ? new Date(row.latestAt).toLocaleString() : "—"}</div>
+                </div>
+                <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.6, marginBottom: 4 }}>
+                  {String(row.source || "result_feedback").replace(/_/g, " ")} · {formatPromoTypeLabel(row.promoType)}
+                  {row.book ? ` · ${row.book}` : ""}
+                </div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {row.statuses.map((status, index) => (
+                    <span key={`${row.id}-${status}-${index}`} style={{ padding: "4px 8px", background: `${K.ac}12`, border: `1px solid ${K.ac}25`, borderRadius: 999, fontSize: 10, color: K.ac }}>
+                      {status}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {showMicroNps && (
+        <div style={{ padding: 12, background: `${K.gn}08`, border: `1px solid ${K.gn}25`, borderRadius: 10, marginTop: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.gn, marginBottom: 6 }}>Micro-NPS after {insights.settledCount} settlements</div>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+            Was this calc loop worth it so far?
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {[
+              ["yes", "Worth it"],
+              ["mixed", "Mixed"],
+              ["no", "Not worth it"],
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                onClick={() => saveMicroNps(value)}
+                style={{
+                  padding: "7px 12px",
+                  background: "transparent",
+                  border: `1px solid ${K.bd2}`,
+                  borderRadius: 8,
+                  color: K.tx,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  fontFamily: font,
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

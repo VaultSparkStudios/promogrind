@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-04-16 — S53 Operator Guidance + Full Manual Closeout
+
+- Continued the missing-script public-repo fallback path from `docs/SESSION_PROTOCOL.md` and completed manual `/go` + `/closeout` write-back because the private `scripts/ops.mjs`, startup renderer, and closeout automation are not present in this repo.
+- Deepened workflow provenance across `src/sync.js`, `src/track/insights.js`, `src/components/TrackInsights.jsx`, and `src/workflows/inbox.js` so durable workflow-history transitions now persist, surface in Track, and influence workflow scoring.
+- Added local Studio contract publish/history in `src/studio/export.js` and `src/components/dashboard/LaunchCommandCenterPanel.jsx`, including persisted snapshots plus delta summaries instead of clipboard-only exports.
+- Added a shared Daily Command Brief and targeted alert plan through `src/operator/briefing.js`, `src/components/dashboard/DailyBriefPage.jsx`, and `src/components/dashboard/LaunchCommandCenterPanel.jsx`.
+- Added a filterable workflow-history surface plus Micro-NPS capture after three settled workflows in `src/components/TrackInsights.jsx`.
+- Added state/book-aware personalization in `src/books.js`, `src/dashboard/today.js`, `src/workflows/inbox.js`, `src/components/Tracker.jsx`, and `src/App.jsx` so CTAs and workflow ranking prefer legal, open, non-degraded books for the current user.
+- Refreshed `CURRENT_STATE`, `TASK_BOARD`, `LATEST_HANDOFF`, `DECISIONS`, `SELF_IMPROVEMENT_LOOP`, `TRUTH_AUDIT`, `PROJECT_STATUS`, `STATE_VECTOR`, `CREATIVE_DIRECTION_RECORD`, and a new audit JSON manually because the canonical closeout scripts/autopilot are missing in this repo.
+- Verified `npm.cmd test` → 175/175 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`418.9KB` main chunk under 420KB target).
+
 ## 2026-04-16 — S52 Operator Contract + Manual Closeout
 
 - Reconstructed the `/go` worklist from live repo truth because the canonical `scripts/ops.mjs`/IGNIS wrapper is missing in this repo, then synced the resulting roadmap into `context/TASK_BOARD.md` and Codex project memory.

@@ -2,6 +2,16 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-16 — Book legality and account health must be shared recommendation inputs
+
+**Decision:** PromoGrind's sportsbook CTAs, next-best-action copy, Tracker availability hints, and workflow ranking should all consume one shared book-availability layer derived from legal state, completion status, and account health (`active` / `pending` / `limited` / `gubbed` / `closed`) instead of letting each surface keep its own partial ranking rules.
+
+**Applies to this project:** Yes — this now governs `src/books.js`, `src/dashboard/today.js`, `src/workflows/inbox.js`, `src/components/Tracker.jsx`, and the dashboard activation card in `src/App.jsx`.
+
+**Rationale:** The highest-value book is not simply the one with the biggest headline bonus. If a book is not legal in the user's state or the account is degraded, recommending it makes the product feel untrustworthy. Shared availability/health logic keeps CTA selection and workflow guidance aligned with real actionability.
+
+---
+
 ## 2026-04-16 — Operator intelligence should flow through one versioned contract
 
 **Decision:** PromoGrind's launch cockpit, Track drift intelligence, and Studio-facing export should all emit from one versioned operator contract containing summary, priorities, anomalies, drift alerts, and declared consumer surfaces, instead of treating the Studio snapshot as a one-off clipboard blob.

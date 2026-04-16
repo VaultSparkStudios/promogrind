@@ -26,10 +26,10 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Truth-drift sweep — fixed stale launch-test count and remaining legacy `vaultsparkstudios.com/promogrind` links in active repo surfaces
 - [x] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons — **DONE S51**: Workflow ranking now uses bankroll load, book activation, historical promo/book outcomes, friction, skip reasons, urgency, and explainable score summaries that feed dashboard next-best-action copy
 - [x] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type — **DONE S52**: `src/track/insights.js` now emits ranked drift alerts from promo-type and book settlement deltas, and those anomalies now flow into the launch cockpit plus the Studio export contract
-- [ ] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored
+- [x] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored — **DONE S53**: workflow history now preserves durable status transitions in sync storage and Track surfaces those cross-device provenance transitions directly in the timeline while workflow scoring consumes the durable-history signal
 - [ ] [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
-- [ ] Studio contract publish/history layer — persist versioned Studio contract snapshots plus deltas so Studio OS / Ops / Hub / Social Dashboard can consume machine state over time instead of one-off clipboard exports
-- [ ] Canonical Promo Operating Graph — unify promo, workflow, action, drift, confidence, and settlement policy into one shared decision model across dashboard, Track, AI, sync, and Studio surfaces
+- [x] Studio contract publish/history layer — persist versioned Studio contract snapshots plus deltas so Studio OS / Ops / Hub / Social Dashboard can consume machine state over time instead of one-off clipboard exports — **DONE S53**: Launch Command Center now publishes versioned Studio contract snapshots into persisted app state with delta summaries instead of relying on clipboard-only one-offs
+- [ ] Canonical Promo Operating Graph — unify promo, workflow, action, drift, confidence, and settlement policy into one shared decision model across dashboard, Track, AI, sync, and Studio surfaces; S53 landed the shared command-brief / contract-delta foundation but the broader cross-surface decision model remains open
 
 ## Innovation Bets (new this session)
 - **Launch command center** — replace static launch-readiness card with a scored operator cockpit driven by validation, monetization, rollout, and blocker state
@@ -93,27 +93,27 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Next
 - [x] Studio OS / ops export layer — expand the new snapshot foundation into a durable machine-consumable contract with publish/history support — **DONE S52**: `src/studio/export.js` now emits a versioned Studio contract with summary, priorities, anomalies, drift alerts, and declared Studio consumer surfaces
-- [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
+- [x] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists — **DONE S53**: Daily Brief now builds a targeted alert plan from workflow, drift, expiry, and settlement state, and push opt-in copy now reflects the current highest-value alert target instead of a generic reminder
 - [x] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped) — **DONE S51**: Skip reasons are now not only captured but also surfaced back into workflow scoring and Track skip-reason reporting
 - [x] [SIL:2⛔] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track — **DONE S51**: Track now renders per-promo self-calibration drift bars on top of the settled expected-vs-actual summary
-- [ ] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored
+- [x] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored — **DONE S53**: workflow history now persists and rehydrates durable transition context that feeds both Track timeline review and workflow prioritization
 - [x] [SIL] Recommendation scoring matrix — deepen the new scoring foundation to rank workflows by bankroll fit, book availability, friction history, urgency, and opportunity score instead of first-match ordering — **DONE S51**: `src/workflows/inbox.js` now scores open workflows from live history and emits explainable ranking reasons consumed by the Today dashboard and workflow inbox
 - [ ] [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
-- [ ] [SIL] Workflow history surface — build richer UI around the new append-only history so users can inspect queue → ready → placed → waiting → settled transitions over time
-- [ ] Operator cockpit expansion — turn Launch Command Center + workflow inbox into one unified operator surface with machine priorities, anomalies, and richer provenance/history
-- [ ] Daily Command Brief — use the new Studio contract feeds plus workflow state to produce one return-loop command brief with actionable priorities instead of generic reminders
-- [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
+- [x] [SIL] Workflow history surface — build richer UI around the new append-only history so users can inspect queue → ready → placed → waiting → settled transitions over time — **DONE S53**: Track now exposes a filterable workflow-history surface that groups transition chains per workflow instead of only showing a flat timeline
+- [x] Operator cockpit expansion — turn Launch Command Center + workflow inbox into one unified operator surface with machine priorities, anomalies, and richer provenance/history — **DONE S53**: Launch Command Center now includes a targeted alert queue plus a workflow command deck so the cockpit speaks one operator-state model instead of separate summary cards
+- [x] Daily Command Brief — use the new Studio contract feeds plus workflow state to produce one return-loop command brief with actionable priorities instead of generic reminders — **DONE S53**: the launch cockpit now emits a shared command brief generated from workflow, drift, and launch-blocker state instead of generic operator copy
+- [x] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL — **DONE S53**: Track now prompts for one-tap worth-it feedback after three settled workflows and persists the response in synced app state for future operator memory/SIL use
 - [ ] Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
 - [ ] Offline write-queue in `src/sync.js` (IndexedDB) for ledger/feedback writes when offline
 - [ ] Keyboard-nav follow-through — extend beyond tab bars to pinned favorites, compare selector flows, and remaining dialog/button clusters
 - [ ] Motion-reduce guard for transitions (prefers-reduced-motion)
 - [ ] Aria audit pass on `src/ui.jsx` (currently 0 aria attrs)
-- [ ] State-aware + book-aware personalization for sportsbook CTAs and recommended workflows
+- [x] State-aware + book-aware personalization for sportsbook CTAs and recommended workflows — **DONE S53**: shared book/state availability now lives in `src/books.js`, dashboard next-best-action now recommends the best legal/open book for the user, and workflow scoring now deprioritizes workflows tied to unavailable, closed, or degraded books
 - [ ] Playbooks — reusable promo routines by bankroll, promo type, and available books
 - [ ] Community intel upgrade — freshness, verification, report quality, and region filters on promo submissions
 - [ ] Observability dashboard — activation, return rate, CTA CTR, AI usage, and monetization health
 - [ ] Bundle budget in CI — fail or warn when first-load bundle exceeds target
-- [ ] Bundle trim after sync tranche — main chunk is now ~413.9KB against a 420KB budget, so the next structural pass should claw back a few KB before more UI expansion
+- [ ] Bundle trim after sync tranche — main chunk is now ~418.9KB against a 420KB budget, so the next structural pass should claw back headroom before more UI expansion
 - [ ] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly)
 - [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
 - [ ] VAPID public key rollout + real browser subscription verification
@@ -132,7 +132,7 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Service worker improvement: stale-while-revalidate + offline ledger queue
 - [ ] App.jsx component extraction (ongoing — extract 2-3 calculators per session into src/calculators/)
 - [ ] Calculator receipt exports — generate shareable math receipts with inputs, formula, hedge, profit both outcomes, timestamp, and disclaimer
-- [ ] State/book availability intelligence — personalize sportsbook CTAs by legal state and book availability
+- [x] State/book availability intelligence — personalize sportsbook CTAs by legal state and book availability — **DONE S53 foundation**: legal-state/book-status ranking now drives dashboard CTA selection and workflow scoring from the shared book registry instead of per-surface logic
 - [ ] Creator/referral landing packs — UTM-aware landing pages with creator attribution and calculator presets
 - [ ] Feature flag admin surface — server-controlled rollout, kill switches, beta cohorts, and tier gating
 - [ ] Observability dashboard — activation, calculator completion, sportsbook CTA CTR, AI quota usage, checkout conversion, retained ledger users

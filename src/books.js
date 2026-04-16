@@ -182,6 +182,87 @@ export const BOOKS = [
   },
 ];
 
+export const US_BOOK_STATES = {
+  DraftKings: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KS", "KY", "LA", "MD", "MA", "NC", "VT", "WY", "DC", "NV"],
+  FanDuel: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KS", "KY", "LA", "MD", "MA", "NC", "VT", "DC", "NV"],
+  BetMGM: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "MS", "KY", "LA", "MD", "MA", "DC", "NV"],
+  Caesars: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KS", "KY", "LA", "MD", "MA", "DC", "NV"],
+  bet365: ["NJ", "CO", "IA", "OH", "VA", "KY", "NC", "LA", "IL"],
+  "ESPN BET": ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KS", "KY", "LA", "MD", "MA", "NC"],
+  Fanatics: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KY", "LA", "MD", "MA", "NC", "DC"],
+  BetRivers: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "IL", "IA", "LA", "MD", "NC", "WV"],
+};
+
+function normalizeStateCode(value = "") {
+  return String(value || "").trim().toUpperCase();
+}
+
+export function isBookAvailableInState(bookName, userState = "") {
+  const stateCode = normalizeStateCode(userState);
+  const allowedStates = US_BOOK_STATES[bookName];
+  if (!stateCode || !Array.isArray(allowedStates) || allowedStates.length === 0) return true;
+  return allowedStates.includes(stateCode);
+}
+
+export function getBookPersonalization(book, options = {}) {
+  if (!book?.name) {
+    return {
+      available: true,
+      completed: false,
+      status: "untracked",
+      actionable: false,
+      score: 0,
+      reason: "",
+    };
+  }
+
+  const { userState = "", done = {}, bookStatus = {} } = options;
+  const available = isBookAvailableInState(book.name, userState);
+  const completed = !!done[book.name];
+  const status = String(bookStatus[book.name] || (completed ? "completed" : "untracked")).toLowerCase();
+  const blocked = !available || status === "closed" || status === "gubbed";
+  const actionable = !blocked && !completed;
+  let score = Number.parseFloat(book.bonus) || 0;
+
+  if (available) score += 45;
+  if (!available) score -= 90;
+  if (!completed) score += 30;
+  if (completed) score -= 80;
+  if (status === "pending") score += 8;
+  if (status === "active") score += 6;
+  if (status === "limited") score -= 12;
+  if (status === "closed") score -= 40;
+  if (status === "gubbed") score -= 55;
+  if (book.referralLink || book.affiliateLink) score += 4;
+
+  let reason = "Available now";
+  if (!available && userState) reason = `Not live in ${normalizeStateCode(userState)}`;
+  else if (completed) reason = "Already completed";
+  else if (status === "pending") reason = "Account started";
+  else if (status === "limited") reason = "Limited account";
+  else if (status === "closed") reason = "Closed account";
+  else if (status === "gubbed") reason = "Promo access degraded";
+  else if (status === "active") reason = "Account active";
+
+  return {
+    book,
+    available,
+    completed,
+    status,
+    actionable,
+    score,
+    reason,
+    stateCode: normalizeStateCode(userState),
+  };
+}
+
+export function getRecommendedBooksForUser(options = {}) {
+  return BOOKS
+    .map((book) => getBookPersonalization(book, options))
+    .filter((item) => item.available && item.actionable)
+    .sort((a, b) => b.score - a.score || (b.book.bonus || 0) - (a.book.bonus || 0));
+}
+
 /**
  * Returns the best click-through URL for a book in priority order:
  *  1. affiliateLink (tracked affiliate — earns CPA commission, requires approval)

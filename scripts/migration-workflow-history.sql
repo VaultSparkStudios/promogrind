@@ -46,7 +46,6 @@ create table if not exists workflow_history (
   event_key text not null,
   user_id uuid references auth.users(id) on delete cascade not null,
   workflow_id text not null,
-  event_type text not null,
   from_status text,
   status text not null,
   source text,
@@ -59,6 +58,7 @@ create table if not exists workflow_history (
   event_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );
+
 
 create unique index if not exists workflow_history_event_key_idx
   on workflow_history(event_key);

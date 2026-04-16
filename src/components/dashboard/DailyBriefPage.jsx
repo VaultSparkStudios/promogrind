@@ -4,6 +4,8 @@ import { AppDataCtx } from "../../contexts.jsx";
 import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { K, font, fontD } from "../../lib/shared.js";
 import { getDashboardSnapshot, getTodayContext } from "../../dashboard/today.js";
+import { buildStudioSnapshot } from "../../studio/export.js";
+import { buildTargetedAlertPlan } from "../../operator/briefing.js";
 import { disableDailyBriefPush, enableDailyBriefPush, isDailyBriefEnabled } from "../../sw-register.js";
 import { FEATURE_FLAGS } from "../../launchState.js";
 
@@ -17,6 +19,8 @@ export default function DailyBriefPage() {
   const [notifPending, setNotifPending] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
   const snapshot = getDashboardSnapshot(appData, PROMO_SCHED, today, localStorage.getItem("pg_bankroll") || "");
+  const studioSnapshot = buildStudioSnapshot(appData, { now: today, bankroll: localStorage.getItem("pg_bankroll") || "" });
+  const alertPlan = buildTargetedAlertPlan({ snapshot: studioSnapshot, dashboard: snapshot });
 
   const toggleNotif = async () => {
     setNotifPending(true);
@@ -30,6 +34,7 @@ export default function DailyBriefPage() {
     const result = await enableDailyBriefPush();
     if (result.ok) {
       setNotifEnabled(true);
+      setNotifMessage(`Targeting: ${alertPlan.primary.headline}`);
     } else {
       const reasonMap = {
         unsupported: "This browser does not support push notifications.",
@@ -61,6 +66,18 @@ export default function DailyBriefPage() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(340px,1fr))", gap: 14 }}>
+        <div style={{ background: `${K.ac}08`, border: `1px solid ${K.ac}25`, borderRadius: 12, padding: "18px 20px" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>Targeted Alert</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: K.ac, marginBottom: 8 }}>{alertPlan.primary.headline}</div>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 12 }}>{alertPlan.primary.body}</div>
+          <button onClick={() => navigate(alertPlan.primary.ctaSlug)} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
+            {alertPlan.primary.ctaLabel} →
+          </button>
+          <div style={{ fontSize: 10, color: K.mt, marginTop: 10 }}>
+            Queue: {alertPlan.queue.slice(0, 3).map((item) => item.kind).join(" · ")}
+          </div>
+        </div>
+
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 12 }}>Today&apos;s Promos</div>
           {snapshot.todayPromos.length === 0 ? (
@@ -98,7 +115,7 @@ export default function DailyBriefPage() {
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>9am Briefing</div>
           <div style={{ fontSize: 12, color: K.mt, marginBottom: 14 }}>
-            Get a daily push notification at 9am with your promo rundown and open-bet count.
+            Get a state-aware push notification at 9am with the highest-value promo, workflow, or settlement action for today.
           </div>
           {!FEATURE_FLAGS.pushAlerts && (
             <div style={{ fontSize: 11, color: K.yl, marginBottom: 10 }}>
@@ -127,6 +144,23 @@ export default function DailyBriefPage() {
               <button onClick={() => navigate("/bet-tracker")} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
                 View tracker →
               </button>
+            </div>
+          )}
+        </div>
+
+        <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 8 }}>Workflow Focus</div>
+          {studioSnapshot.workflows.top.length === 0 ? (
+            <div style={{ fontSize: 12, color: K.mt }}>No active workflows yet. Save one from calculators, Promo Advisor, or AI Action Plan.</div>
+          ) : (
+            <div style={{ display: "grid", gap: 8 }}>
+              {studioSnapshot.workflows.top.slice(0, 3).map((workflow) => (
+                <button key={workflow.id} onClick={() => navigate(workflow.status === "waiting" || workflow.status === "placed" ? "/track" : `/${workflow.calculatorSlug || "track"}`)} style={{ textAlign: "left", padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, cursor: "pointer", fontFamily: font }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>{workflow.title}</div>
+                  <div style={{ fontSize: 10, color: K.ac, marginBottom: 4 }}>{workflow.scoreSummary || `${workflow.status} workflow scored ${workflow.score}.`}</div>
+                  <div style={{ fontSize: 10, color: K.mt }}>{workflow.status} · {workflow.source.replace(/_/g, " ")}</div>
+                </button>
+              ))}
             </div>
           )}
         </div>
