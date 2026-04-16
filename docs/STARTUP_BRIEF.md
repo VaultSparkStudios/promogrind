@@ -1,27 +1,27 @@
 ╔══════════════════════════════════════════════════════════════════╗
 ║  STARTUP BRIEF  ·  PromoGrind                                  ║
-║  2026-04-15  ·  Session 49  ·  BUILDER MODE                    ║
+║  2026-04-15  ·  Session 50  ·  BUILDER MODE                    ║
 ║  C — Returning  ·  deployed/public-unlaunched  ·  VaultSpark   ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ SCORE ════════════════════════════════════════════════════════╗
 ║                                                                ║
-║  444/500   █████████████████████░░░░   89%                     ║
-║  Trend  ▆ ▆ ▆ ▇ ▆  ↓  ·  Avg3: 446.3  ·  Days since: 0         ║
+║  462/500   ██████████████████████░░   92%                      ║
+║  Trend  ▆ ▆ ▇ ▆ █  ↑  ·  Avg3: 453.7  ·  Days since: 0         ║
 ║                                                                ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ STATUS ═══════════════════════════════════════════════════════╗
-║ Health: green  ·  Truth audit: green  ·  Version: 24.2.0       ║
-║ Build/tests: passing  ·  158/158 tests green                   ║
+║ Health: green  ·  Truth audit: green  ·  Version: 24.4.0       ║
+║ Build/tests: passing  ·  164/164 tests green                   ║
 ║ Domain: promogrind.bet live on Cloudflare                      ║
 ║ Billing: live Stripe preflight reaches hosted Checkout         ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ PRIORITIES ═══════════════════════════════════════════════════╗
 ║ 1. Human-required launch blockers still gate public proof.     ║
-║ 2. Best next repo-side tranche: workflow inbox → personalized  ║
-║    action ranking, now that PromoGraph is canonical.           ║
+║ 2. Best next repo-side tranche: durable per-entity persistence ║
+║    plus stronger workflow history and recommendation scoring.  ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ HUMAN ACTION REQUIRED ════════════════════════════════════════╗
@@ -34,12 +34,12 @@
 ╔══ NOW / NEXT ═══════════════════════════════════════════════════╗
 ║ Now: Workflow inbox                                            ║
 ║ Now: Personalized action ranking                               ║
-║ Next: Drift alert · Self-calibration · scoring matrix          ║
+║ Next: Entity-aware sync continuation · workflow history        ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ NOTES ════════════════════════════════════════════════════════╗
 ║ - Public-safe repo context is intentionally thin; detailed     ║
 ║   operator reasoning stays private.                            ║
-║ - `prompts/start.md` and `prompts/initiate.md` are both live.  ║
-║ - Promo/workflow state now routes through `src/promograph/`.   ║
+║ - Workflow state now spans inbox + result feedback + Track.    ║
+║ - Launch Command Center can emit a structured Studio snapshot. ║
 ╚══════════════════════════════════════════════════════════════════╝

@@ -1,10 +1,14 @@
 import React from "react";
 import { supabase } from "../auth.js";
+import { AppDataCtx, useToast } from "../contexts.jsx";
 import { FEATURE_FLAGS } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { K, font, fontD } from "../lib/shared.js";
+import { upsertWorkflowEntry } from "../promograph/index.js";
 
 export function AIActionPlan({ proStatus }) {
+  const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
+  const toast = useToast();
   if (!FEATURE_FLAGS.aiActionPlan) {
     return <FeatureUnavailableCard featureKey="aiActionPlan" title="AI Weekly Action Plan" body="AI weekly plans stay in beta until the planning backend is activated." />;
   }
@@ -42,6 +46,34 @@ export function AIActionPlan({ proStatus }) {
       setLastGenDate(today);
     } catch (e) { setError(e.message || 'Failed to generate plan'); }
     finally { setLoading(false); }
+  };
+
+  const queueAction = (action, index) => {
+    if (!syncAppData) return;
+    const workflow = {
+      id: `plan-${lastGenDate || new Date().toISOString().slice(0, 10)}-${index}`,
+      title: action.title,
+      summary: action.why,
+      status: "queued",
+      calculatorSlug: action.calculatorSlug,
+      calculatorKey: action.calculatorSlug || "ai-action-plan",
+      calculatorLabel: "AI Action Plan",
+      bookTarget: action.bookTarget,
+      book: action.bookTarget,
+      promoType: action.promoType,
+      source: "ai_action_plan",
+      confidence: action.confidence,
+      opportunityScore: action.opportunityScore,
+      actionability: action.opportunityScore,
+      nextStep: action.nextStep,
+      note: action.value || "",
+      opsTags: action.opsTags,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], workflow);
+    syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
+    if (toast) toast(`Queued "${action.title}" in workflow inbox.`, K.gn);
   };
 
   if (!isActive) return (
@@ -98,6 +130,13 @@ export function AIActionPlan({ proStatus }) {
                     </div>
                     <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>{action.why}</div>
                     {action.value&&<div style={{fontSize:11,color:K.gn,fontWeight:600,marginTop:4}}>Est. value: {action.value}</div>}
+                    {(action.confidence || action.opportunityScore != null) && (
+                      <div style={{ fontSize: 10, color: K.mt, marginTop: 4 }}>
+                        {action.confidence ? `Confidence: ${action.confidence}` : null}
+                        {action.confidence && action.opportunityScore != null ? " · " : null}
+                        {action.opportunityScore != null ? `Score: ${action.opportunityScore}` : null}
+                      </div>
+                    )}
                     {(action.bookTarget || action.calculatorSlug) && (
                       <div style={{fontSize:10,color:K.dm,marginTop:4}}>
                         {action.bookTarget ? `Target: ${action.bookTarget}` : null}
@@ -110,6 +149,13 @@ export function AIActionPlan({ proStatus }) {
                         Tags: {action.opsTags.join(" · ")}
                       </div>
                     )}
+                    {action.nextStep && <div style={{ fontSize: 10, color: K.ac, marginTop: 4 }}>Next: {action.nextStep}</div>}
+                    <button
+                      onClick={() => queueAction(action, i)}
+                      style={{ marginTop: 8, padding: "6px 10px", background: "transparent", border: `1px solid ${K.ac}40`, borderRadius: 6, color: K.ac, fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: font }}
+                    >
+                      Save to workflow inbox →
+                    </button>
                   </div>
                 </div>
               </div>

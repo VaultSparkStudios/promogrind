@@ -3335,7 +3335,11 @@ function MemberWelcomeCard({ navigate, proStatus }) {
 function ActivationNextAction({ data, totalProfit, openBets, booksComplete, navigate }) {
   const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
   const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
-  const action = getNextBestAction({ usageLog, bankroll, totalProfit, openBets, booksComplete });
+  const snapshot = getDashboardSnapshot(data || {}, PROMO_SCHED, new Date(), bankroll);
+  const openWorkflowCount = Array.isArray(data?.resultFeedback)
+    ? data.resultFeedback.filter((entry) => ["queued", "ready", "placed", "waiting", "open", "pending"].includes(String(entry?.status || "").toLowerCase())).length
+    : 0;
+  const action = getNextBestAction({ usageLog, bankroll, totalProfit, openBets, booksComplete, openWorkflowCount: snapshot.openWorkflowCount || openWorkflowCount, topWorkflow: snapshot.topWorkflow });
   const actionColor = { info: K.ac, positive: K.gn, watch: K.yl, risk: K.rd }[action.tone] || K.ac;
 
   return (

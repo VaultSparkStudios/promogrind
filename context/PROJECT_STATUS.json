@@ -3,8 +3,8 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "S49 PromoGraph foundation closeout is complete: PromoGrind now has a shared domain layer for promo/workflow/recommendation normalization, dashboard next-best-action can see open workflows, and the repo's startup prompt path is complete instead of referencing a missing bootstrap file.",
-  "nextMilestone": "Persist a real workflow inbox from advisor/calculator outputs, then add personalized action ranking on top of the shared PromoGraph model while the existing human-owned launch blockers remain explicit.",
+  "currentFocus": "S50 workflow intelligence + sync hardening is complete: PromoGrind now has a real workflow inbox foundation, provenance-aware Track surfaces, self-calibration signals, top-workflow-aware dashboard ranking, a structured Studio snapshot export, and a safer sync layer with per-entity metadata plus an offline write queue.",
+  "nextMilestone": "Push the current workflow foundation into truly durable per-entity persistence/history and stronger recommendation scoring while keeping the remaining human-owned launch blockers explicit.",
   "blockers": [
     "Daily Brief push alerts still need VITE_VAPID_PUBLIC_KEY on the live frontend",
     "Remaining affiliate/referral links are still missing for BetMGM, bet365, and BetRivers",
@@ -16,8 +16,8 @@
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-15",
-  "version": "24.2.0",
-  "lastSession": "S49",
+  "version": "24.4.0",
+  "lastSession": "S50",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
@@ -29,8 +29,8 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "passing — build, launch smoke, browser launch smoke, and bundle budget all passing",
-  "testStatus": "158/158",
+  "buildStatus": "passing — build and bundle budget revalidated after workflow intelligence + sync tranche",
+  "testStatus": "164/164",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
@@ -98,14 +98,16 @@
     "Onboarding": "src/onboarding.js — shared onboarding-step inference and persistence powering the dashboard + Home progress surfaces",
     "PromoIntakeRoute": "src/routes/PromoIntakeRoute.jsx — pasted promo parsing + calculator recommendation route",
     "ShadowBookPanel": "src/components/ShadowBookPanel.jsx — first-month upside projection for unopened books",
-    "CalculatorTrustBadge": "src/components/CalculatorTrustBadge.jsx — adaptive trust/readiness indicator on key calculator outputs"
+    "CalculatorTrustBadge": "src/components/CalculatorTrustBadge.jsx — adaptive trust/readiness indicator on key calculator outputs",
+    "WorkflowInboxPanel": "src/components/dashboard/WorkflowInboxPanel.jsx — scored workflow inbox surface combining calculator, advisor, and AI-plan generated work"
   },
   "knownIssues": {
     "posthog_401": "Ad blocker blocks PostHog requests on some browsers — not fixable from client code",
     "stripe_smoke_manual": "Checkout and billing portal still need one real manual smoke pass with a test account and card",
     "stripe_preflight_verified": "Live preflight now creates a real hosted Stripe Checkout URL and customer-portal correctly returns 404 for users without a billing record",
     "keyboard_nav_followthrough": "Primary and secondary tab bars now support keyboard nav, but broader interactive-control coverage is still pending",
-    "push_brief_public_config_pending": "Daily Brief push subscription wiring and send-daily-brief are live, but production still needs VITE_VAPID_PUBLIC_KEY before public browser subscriptions should be enabled"
+    "push_brief_public_config_pending": "Daily Brief push subscription wiring and send-daily-brief are live, but production still needs VITE_VAPID_PUBLIC_KEY before public browser subscriptions should be enabled",
+    "blob_sync_model": "sync.js now has per-entity metadata and an offline queue, but deeper workflow state still needs truly durable per-entity persistence/history before multi-device usage expands"
   },
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
@@ -114,10 +116,10 @@
   "ignisLastComputed": "2026-04-15",
   "entropyScore": 0.136,
   "entropyLastComputed": "2026-04-15",
-  "silScore": 444,
-  "silAvg3": 446.3,
-  "silVelocity": 1,
-  "silDebt": "same",
-  "silLastSession": "S49",
-  "currentSession": 49
+  "silScore": 462,
+  "silAvg3": 453.7,
+  "silVelocity": 3,
+  "silDebt": "down",
+  "silLastSession": "S50",
+  "currentSession": 50
 }

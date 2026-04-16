@@ -37,6 +37,9 @@ describe("dashboard helpers", () => {
           { id: "wf-1", status: "placed", promoType: "bonus_bet" },
           { id: "wf-2", status: "pending", promoType: "odds_boost" },
         ],
+        workflowInbox: [
+          { id: "wf-3", title: "Highest value workflow", status: "queued", promoType: "bonus_bet", calculatorSlug: "bonus-bet", opportunityScore: 90, expectedProfit: 20 },
+        ],
       },
       schedule,
       new Date("2026-04-14T09:00:00Z"),
@@ -50,8 +53,9 @@ describe("dashboard helpers", () => {
     expect(snapshot.booksComplete).toBe(1);
     expect(snapshot.recentSettledProfit).toBe(30);
     expect(snapshot.expiringBooks.map((book) => book.name)).toContain("FanDuel");
-    expect(snapshot.openWorkflowCount).toBe(2);
+    expect(snapshot.openWorkflowCount).toBe(3);
     expect(snapshot.waitingWorkflowCount).toBe(1);
+    expect(snapshot.topWorkflow?.title).toBe("Highest value workflow");
   });
 
   it("classifies bankroll posture from open exposure", () => {
@@ -94,9 +98,10 @@ describe("dashboard helpers", () => {
       openBets: [],
       booksComplete: 2,
       openWorkflowCount: 3,
+      topWorkflow: { title: "Claim best reload", summary: "Highest scoring workflow.", status: "queued", score: 97, calculatorSlug: "bonus-bet" },
     });
 
-    expect(action.key).toBe("workflows");
-    expect(action.slug).toBe("track");
+    expect(action.key).toBe("workflow-focus");
+    expect(action.slug).toBe("bonus-bet");
   });
 });

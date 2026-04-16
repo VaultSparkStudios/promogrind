@@ -2,6 +2,37 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 50 (2026-04-15) — CLOSED
+
+**Session Intent:** Implement the highest-leverage workflow-intelligence roadmap items, keep pushing deeper instead of hand-waving "complete all", then close out memory cleanly and push the repo.
+
+## Where We Left Off (Session 50 — CLOSED)
+
+- Shipped: 6 improvements across 5 groups — workflow inbox, track intelligence, Studio export, sync hardening, truth cleanup
+- Tests: 164/164 passing · delta: +6
+- Deploy: pending — repo changes committed/pushed; no production deploy required for this tranche
+- Session type: implementation + closeout
+
+## Current Delta Since S49
+
+- Extended `src/promograph/index.js` so canonical workflow entries can carry title/summary/confidence/opportunity metadata and support inbox upserts.
+- Added `src/workflows/inbox.js` plus `src/components/dashboard/WorkflowInboxPanel.jsx`; calculators, Promo Advisor, and AI Action Plan can now save canonical workflow entries into one scored inbox surfaced on the Today dashboard.
+- Added `src/studio/export.js` and wired `LaunchCommandCenterPanel` to copy a structured Studio snapshot covering launch, growth, workflows, and intelligence signals.
+- Upgraded `supabase/functions/ai-action-plan/index.ts` and `src/components/AIActionPlan.jsx` so AI actions return/store a richer machine-usable workflow contract instead of only lightweight display text.
+- Expanded `src/track/insights.js` and `src/components/TrackInsights.jsx` with workflow provenance, recent workflow timeline, and self-calibration / expected-vs-actual drift surfaces.
+- Deepened dashboard ranking in `src/dashboard/today.js` and `src/App.jsx` so next-best-action can prioritize the highest-scored workflow, not only raw workflow counts.
+- Hardened `src/sync.js` with per-entity timestamps, entity-aware merge behavior, and an offline `pg_sync_queue` for failed writes; expanded `src/__tests__/sync.test.js` accordingly.
+- Fixed remaining active truth drift in `src/launchState.js`, `supabase/functions/gift-trial/index.ts`, `supabase/functions/promo-expiry-digest/index.ts`, and `docs/RELEASE_PLAN.md`.
+- Added `src/__tests__/workflowInbox.test.js` and expanded dashboard / track / sync coverage; the suite now passes at `164/164`.
+- Validation after closeout: `npm test`, `npm run build`, and `node scripts/check-bundle-budget.mjs` all passed; bundle budget remains green at ~410KB.
+
+## Human Action Required
+
+- [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before the Daily Brief push toggle should be exposed as a live browser subscription feature.
+- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](/C:/Users/p4cka/documents/development/promogrind/docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
+- [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available; those books still truthfully fall back to non-monetized signup paths.
+- [ ] **Friend beta pass** — create/sign in with a normal friend-facing PromoGrind account and verify auth, calculator, CTA, and pricing flows feel launch-ready.
+
 ## Session 49 (2026-04-15) — CLOSED
 
 **Session Intent:** Establish the shared PromoGraph foundation for promo/workflow state, complete the repo's startup prompt path, then commit/push and close out memory cleanly.

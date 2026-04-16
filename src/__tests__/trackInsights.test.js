@@ -100,6 +100,9 @@ describe("track insights helpers", () => {
     expect(insights.promoTypeRows.find((row) => row.key === "bonus_bet")?.actualProfit).toBe(14);
     expect(insights.bookRows[0].book).toBe("DraftKings");
     expect(insights.skipReasonRows[0].key).toBe("odds_moved");
+    expect(insights.sourceRows.find((row) => row.key === "result_feedback")?.settled).toBe(2);
+    expect(insights.workflowTimeline[0].id).toBe("d");
+    expect(insights.selfCalibration.averageDrift).toBe(-6.5);
   });
 
   it("computes adaptive trust score per calculator with scoping", () => {

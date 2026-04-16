@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { AppDataCtx } from "../contexts.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
-import { normalizePromoType } from "../promograph/index.js";
+import { normalizePromoType, upsertWorkflowEntry } from "../promograph/index.js";
 
 export default function ResultFeedbackCard({
   calculatorKey,
@@ -46,11 +46,17 @@ export default function ResultFeedbackCard({
 
   if (!syncAppData || roundedExpected === null) return null;
 
-  const writeEntries = (nextEntries) => syncAppData({ ...appData, resultFeedback: nextEntries });
+  const writeEntries = (nextEntries, workflowEntry = null) => {
+    const nextWorkflowInbox = workflowEntry
+      ? upsertWorkflowEntry(appData?.workflowInbox || [], workflowEntry)
+      : appData?.workflowInbox || [];
+    syncAppData({ ...appData, resultFeedback: nextEntries, workflowInbox: nextWorkflowInbox });
+  };
 
   const record = (nextStatus) => {
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     const entry = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      id,
       calculatorKey,
       calculatorLabel,
       promoType: normalizePromoType(promoType),
@@ -63,21 +69,46 @@ export default function ResultFeedbackCard({
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    writeEntries(upsertResultFeedback(entries, entry));
-    setEntryId(entry.id);
+    writeEntries(upsertResultFeedback(entries, entry), {
+      ...entry,
+      id,
+      title: calculatorLabel || "Calculator workflow",
+      summary: `Expected profit ${roundedExpected.toFixed(2)} from ${calculatorLabel || "calculator"} workflow.`,
+      source: "calculator_result",
+      actionability: nextStatus === "skipped" ? 20 : 72,
+    });
+    setEntryId(id);
     setStatus(nextStatus);
   };
 
   const settle = () => {
     if (!entryId) return;
-    writeEntries(updateResultFeedback(entries, entryId, {
+    const patch = {
       status: "settled",
       actualProfit,
       calculatorAccurate: accuracy,
       book,
       frictionReason,
       note,
-    }));
+      updatedAt: new Date().toISOString(),
+    };
+    writeEntries(updateResultFeedback(entries, entryId, patch), {
+      id: entryId,
+      calculatorKey,
+      calculatorLabel,
+      promoType: normalizePromoType(promoType),
+      status: "settled",
+      expectedProfit: roundedExpected,
+      actualProfit,
+      calculatorAccurate: accuracy,
+      book,
+      frictionReason,
+      note,
+      title: calculatorLabel || "Calculator workflow",
+      summary: `Settled from ${calculatorLabel || "calculator"} workflow.`,
+      source: "calculator_result",
+      updatedAt: patch.updatedAt,
+    });
     setStatus("settled");
   };
 

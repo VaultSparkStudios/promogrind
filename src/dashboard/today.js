@@ -1,5 +1,6 @@
 import { BOOKS, hasConfiguredMonetizationLinks } from "../books.js";
 import { summarizeWorkflows } from "../promograph/index.js";
+import { buildWorkflowInbox } from "../workflows/inbox.js";
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -40,7 +41,11 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
   const ledger = data.ledger || [];
   const done = data.done || {};
   const expiry = data.bookExpiry || {};
-  const workflowSummary = summarizeWorkflows(data.resultFeedback || []);
+  const workflowSummary = summarizeWorkflows([
+    ...(Array.isArray(data.workflowInbox) ? data.workflowInbox : []),
+    ...(Array.isArray(data.resultFeedback) ? data.resultFeedback : []),
+  ]);
+  const workflowInbox = buildWorkflowInbox(data, { bankroll: bankrollValue, now });
   const bankroll = Number.parseFloat(bankrollValue || "");
 
   const totalProfit = ledger.reduce((sum, entry) => sum + (Number.parseFloat(entry.profit) || 0), 0);
@@ -83,6 +88,7 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
     recentSettledCount: recentSettledEntries.length,
     openWorkflowCount: workflowSummary.open.length,
     waitingWorkflowCount: workflowSummary.waiting.length,
+    topWorkflow: workflowInbox.top[0] || null,
     hasLedger: ledger.length > 0,
     hasBetHistory: bets.length > 0,
     bankroll: Number.isFinite(bankroll) ? bankroll : null,
@@ -149,20 +155,30 @@ export function getUnfinishedWork(snapshot) {
   ].filter(Boolean);
 }
 
-export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 0, openBets = [], booksComplete = 0, openWorkflowCount = 0 }) {
+export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 0, openBets = [], booksComplete = 0, openWorkflowCount = 0, topWorkflow = null }) {
   const hasBankroll = !!String(bankroll || "").trim();
   const hasCalc = Object.keys(usageLog).length > 0;
   const affiliateReady = hasConfiguredMonetizationLinks();
-  const actions = [
-    !hasBankroll && { key: "bankroll", title: "Set your bankroll", body: "Personalized stake sizing and weekly actions need a bankroll anchor.", cta: "Set profile", slug: "dashboard", tone: "info" },
-    !hasCalc && { key: "calc", title: "Run your first conversion", body: "Start with the Bonus Bet Converter and get a hedge stake in under a minute.", cta: "Open converter", slug: "bonus-bet", tone: "positive" },
-    booksComplete === 0 && { key: "books", title: "Pick your first sportsbook", body: "Mark books you already use and prioritize the highest-value welcome offers.", cta: "Open tracker", slug: "sportsbooks", tone: "watch" },
-    openWorkflowCount > 0 && { key: "workflows", title: "Advance queued workflows", body: `You have ${openWorkflowCount} workflow${openWorkflowCount === 1 ? "" : "s"} still in motion from calculators or Track.`, cta: "Open Track", slug: "track", tone: "watch" },
-    openBets.length > 0 && { key: "open", title: "Close open bets", body: `You have ${openBets.length} open bet${openBets.length === 1 ? "" : "s"} waiting for settlement.`, cta: "Review bets", slug: "bet-tracker", tone: "watch" },
-    !affiliateReady && { key: "affiliate", title: "Revenue setup pending", body: "Referral or affiliate links are still placeholders, so outbound clicks are not monetized yet.", cta: "Review links", slug: "sportsbooks", tone: "risk" },
+  const candidates = [
+    !hasBankroll && { key: "bankroll", title: "Set your bankroll", body: "Personalized stake sizing and weekly actions need a bankroll anchor.", cta: "Set profile", slug: "dashboard", tone: "info", score: 100 },
+    !hasCalc && { key: "calc", title: "Run your first conversion", body: "Start with the Bonus Bet Converter and get a hedge stake in under a minute.", cta: "Open converter", slug: "bonus-bet", tone: "positive", score: 92 },
+    booksComplete === 0 && { key: "books", title: "Pick your first sportsbook", body: "Mark books you already use and prioritize the highest-value welcome offers.", cta: "Open tracker", slug: "sportsbooks", tone: "watch", score: 84 },
+    topWorkflow && {
+      key: "workflow-focus",
+      title: topWorkflow.title || "Advance highest-value workflow",
+      body: topWorkflow.summary || `Best current workflow is ${formatWorkflowStatus(topWorkflow.status)} with score ${topWorkflow.score}.`,
+      cta: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "Open Track" : "Open workflow",
+      slug: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "track" : (topWorkflow.calculatorSlug || "track"),
+      tone: topWorkflow.score >= 90 ? "positive" : "watch",
+      score: topWorkflow.score + 2,
+    },
+    openWorkflowCount > 0 && { key: "workflows", title: "Advance queued workflows", body: `You have ${openWorkflowCount} workflow${openWorkflowCount === 1 ? "" : "s"} still in motion from calculators or Track.`, cta: "Open Track", slug: "track", tone: "watch", score: 88 + Math.min(openWorkflowCount, 4) },
+    openBets.length > 0 && { key: "open", title: "Close open bets", body: `You have ${openBets.length} open bet${openBets.length === 1 ? "" : "s"} waiting for settlement.`, cta: "Review bets", slug: "bet-tracker", tone: "watch", score: 80 + Math.min(openBets.length, 5) },
+    !affiliateReady && { key: "affiliate", title: "Revenue setup pending", body: "Referral or affiliate links are still placeholders, so outbound clicks are not monetized yet.", cta: "Review links", slug: "sportsbooks", tone: "risk", score: 48 },
   ].filter(Boolean);
 
-  return actions[0] || {
+  const action = candidates.sort((a, b) => b.score - a.score)[0];
+  return action || {
     key: "scale",
     title: "Scale the loop",
     body: `You have extracted ${totalProfit >= 0 ? "$" + totalProfit.toFixed(2) : "-$" + Math.abs(totalProfit).toFixed(2)}. Add another book, log the next promo, and publish a win when ready.`,
@@ -170,4 +186,9 @@ export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 
     slug: "daily-brief",
     tone: "positive",
   };
+}
+
+function formatWorkflowStatus(status = "") {
+  const value = String(status || "").trim();
+  return value ? value.replace(/_/g, " ") : "queued";
 }

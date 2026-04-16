@@ -2,5 +2,5 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-15 (S49 closeout — PromoGraph is now the canonical promo/workflow domain layer, startup prompt references are complete, startup brief cache exists in-repo, and tests/build/launch smoke/bundle budget all passed)
+Last reviewed: 2026-04-15 (S50 closeout — workflow inbox + provenance/self-calibration + Studio snapshot + sync hardening are reflected in repo state, legacy active-domain drift was cleaned up, and tests/build/bundle budget all passed)
 Public-safe summary only. Sensitive verification notes are maintained privately.

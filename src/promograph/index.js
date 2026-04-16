@@ -119,6 +119,8 @@ export function isWorkflowOpen(status) {
 export function normalizeRecommendation(input = {}) {
   const parsedScore = Number.parseInt(input.opportunityScore, 10);
   return {
+    title: String(input.title || input.verdict || "").trim() || null,
+    summary: String(input.summary || input.explanation || input.action || "").trim() || null,
     promoType: normalizePromoType(input.promoType),
     calculatorSlug: normalizeCalculatorSlug(input.calculatorSlug),
     bookTarget: String(input.bookTarget || input.book || "").trim(),
@@ -130,11 +132,15 @@ export function normalizeRecommendation(input = {}) {
 
 export function normalizeWorkflowEntry(entry = {}) {
   const status = normalizeWorkflowStatus(entry.status);
+  const recommendation = normalizeRecommendation(entry);
+  const parsedActionability = Number.parseInt(entry.actionability, 10);
   return {
     id: entry.id ?? safeUUID(),
     calculatorKey: entry.calculatorKey || normalizeCalculatorSlug(entry.calculatorSlug) || "unknown",
     calculatorSlug: normalizeCalculatorSlug(entry.calculatorSlug || entry.calculatorKey),
     calculatorLabel: entry.calculatorLabel || "Unknown calculator",
+    title: String(entry.title || recommendation.title || entry.calculatorLabel || "Workflow").trim(),
+    summary: String(entry.summary || recommendation.summary || entry.note || "").trim(),
     promoType: normalizePromoType(entry.promoType),
     status,
     expectedProfit: toNumber(entry.expectedProfit),
@@ -143,12 +149,28 @@ export function normalizeWorkflowEntry(entry = {}) {
     book: String(entry.book || entry.bookTarget || "").trim(),
     skipReason: String(entry.skipReason || "").trim(),
     frictionReason: String(entry.frictionReason || "").trim(),
-    actionability: entry.actionability || null,
+    confidence: recommendation.confidence,
+    opportunityScore: recommendation.opportunityScore,
+    opsTags: recommendation.opsTags,
+    actionability: Number.isFinite(parsedActionability)
+      ? Math.max(0, Math.min(parsedActionability, 100))
+      : recommendation.opportunityScore,
     note: String(entry.note || "").trim(),
     source: String(entry.source || "result_feedback").trim(),
+    nextStep: String(entry.nextStep || "").trim(),
+    expiresAt: entry.expiresAt || null,
     createdAt: entry.createdAt || new Date().toISOString(),
     updatedAt: entry.updatedAt || entry.createdAt || new Date().toISOString(),
   };
+}
+
+export function upsertWorkflowEntry(entries = [], nextEntry = {}) {
+  const normalized = normalizeWorkflowEntry(nextEntry);
+  const index = entries.findIndex((entry) => entry?.id === normalized.id);
+  if (index === -1) return [normalized, ...entries].slice(0, 250);
+  const copy = [...entries];
+  copy[index] = { ...copy[index], ...normalized };
+  return copy;
 }
 
 export function summarizeWorkflows(entries = []) {

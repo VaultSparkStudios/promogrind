@@ -37,6 +37,9 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   const feedbackEntries = Array.isArray(data.resultFeedback)
     ? data.resultFeedback.map((entry) => normalizeResultFeedback(entry))
     : [];
+  const workflowInboxEntries = Array.isArray(data.workflowInbox)
+    ? data.workflowInbox.map((entry) => normalizeWorkflowEntry(entry))
+    : [];
 
   const today = now instanceof Date ? now : new Date(now);
   const todayStr = dateOnly(today);
@@ -55,7 +58,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   }, { totalProfit: 0, monthProfit: 0, recent7Profit: 0 });
 
   const settledFeedback = feedbackEntries.filter((entry) => entry.status === "settled");
-  const openFeedback = feedbackEntries.filter((entry) => entry.status === "placed");
+  const openFeedback = feedbackEntries.filter((entry) => entry.status === "placed" || entry.status === "waiting");
   const skippedFeedback = feedbackEntries.filter((entry) => entry.status === "skipped");
   const attemptedCount = settledFeedback.length + openFeedback.length;
   const executionRate = feedbackEntries.length ? (attemptedCount / feedbackEntries.length) * 100 : null;
@@ -68,6 +71,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   const promoTypeMap = new Map();
   const skipReasonMap = new Map();
   const frictionReasonMap = new Map();
+  const sourceMap = new Map();
   for (const entry of feedbackEntries) {
     const key = entry.promoType || "other";
     if (!promoTypeMap.has(key)) {
@@ -111,6 +115,14 @@ export function buildTrackInsights(data = {}, now = new Date()) {
       current.count += 1;
       frictionReasonMap.set(entry.frictionReason, current);
     }
+    const sourceKey = entry.source || "result_feedback";
+    const sourceCurrent = sourceMap.get(sourceKey) || { key: sourceKey, label: sourceKey.replace(/_/g, " "), total: 0, settled: 0, actualProfit: 0 };
+    sourceCurrent.total += 1;
+    if (entry.status === "settled") {
+      sourceCurrent.settled += 1;
+      sourceCurrent.actualProfit += entry.actualProfit || 0;
+    }
+    sourceMap.set(sourceKey, sourceCurrent);
   }
 
   const promoTypeRows = [...promoTypeMap.values()]
@@ -150,9 +162,31 @@ export function buildTrackInsights(data = {}, now = new Date()) {
 
   const skipReasonRows = [...skipReasonMap.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
   const frictionReasonRows = [...frictionReasonMap.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  const sourceRows = [...sourceMap.values()].sort((a, b) => (b.settled - a.settled) || (b.total - a.total) || a.label.localeCompare(b.label));
   const driftRows = promoTypeRows
     .filter((row) => row.averageDrift !== null)
     .sort((a, b) => a.averageDrift - b.averageDrift);
+  const workflowTimeline = [...workflowInboxEntries, ...feedbackEntries]
+    .reduce((acc, entry) => {
+      if (acc.some((item) => item.id === entry.id && item.status === entry.status && item.updatedAt === entry.updatedAt)) return acc;
+      acc.push(entry);
+      return acc;
+    }, [])
+    .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+    .slice(0, 12);
+  const selfCalibration = {
+    settledCount,
+    averageDrift: settledCount ? (actualSettledProfit - expectedSettledProfit) / settledCount : null,
+    expectedSettledProfit,
+    actualSettledProfit,
+    accuracyRate: settledCount ? (accuracyCount / settledCount) * 100 : null,
+    label:
+      settledCount === 0
+        ? "Needs settled workflow data."
+        : actualSettledProfit >= expectedSettledProfit
+          ? "Outcomes are meeting or beating model expectations."
+          : "Outcomes are trailing projections; review the coldest lanes and friction reasons.",
+  };
 
   return {
     ...totals,
@@ -171,6 +205,9 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     bookRows,
     skipReasonRows,
     frictionReasonRows,
+    sourceRows,
+    workflowTimeline,
+    selfCalibration,
     biggestNegativeDrift: driftRows[0] || null,
     biggestPositiveDrift: driftRows.length ? driftRows[driftRows.length - 1] : null,
   };

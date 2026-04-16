@@ -52,6 +52,35 @@ export default function TrackInsights() {
         {metricCard("Execution Rate", insights.executionRate === null ? "—" : `${f(insights.executionRate, 0)}%`, `${insights.attemptedCount} attempted · ${insights.skippedFeedback.length} skipped`, insights.executionRate !== null && insights.executionRate >= 70 ? K.gn : K.yl)}
       </div>
 
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, alignItems: "start", marginBottom: 14 }}>
+        <div style={{ padding: 12, background: `${K.ac}06`, border: `1px solid ${K.ac}25`, borderRadius: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.ac, marginBottom: 8 }}>Self-Calibration</div>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 10 }}>{insights.selfCalibration.label}</div>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", fontSize: 10, color: K.mt }}>
+            <span>Settled: <strong style={{ color: K.tx }}>{insights.selfCalibration.settledCount}</strong></span>
+            <span>Expected: <strong style={{ color: K.tx }}>${f(Math.abs(insights.selfCalibration.expectedSettledProfit || 0))}</strong></span>
+            <span>Actual: <strong style={{ color: (insights.selfCalibration.actualSettledProfit || 0) >= 0 ? K.gn : K.rd }}>{`${(insights.selfCalibration.actualSettledProfit || 0) >= 0 ? "+" : "-"}$${f(Math.abs(insights.selfCalibration.actualSettledProfit || 0))}`}</strong></span>
+            <span>Avg drift: <strong style={{ color: (insights.selfCalibration.averageDrift || 0) >= 0 ? K.gn : K.rd }}>{insights.selfCalibration.averageDrift === null ? "—" : `${insights.selfCalibration.averageDrift >= 0 ? "+" : "-"}$${f(Math.abs(insights.selfCalibration.averageDrift))}`}</strong></span>
+          </div>
+        </div>
+
+        <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Workflow Provenance</div>
+          {insights.sourceRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Workflow source quality appears once feedback is saved from calculators or AI surfaces.</div>}
+          {insights.sourceRows.map((row) => (
+            <div key={row.key} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
+              <div>
+                <div style={{ fontSize: 11, color: K.tx, fontWeight: 700 }}>{row.label}</div>
+                <div style={{ fontSize: 10, color: K.mt }}>{row.total} workflow entr{row.total === 1 ? "y" : "ies"} · {row.settled} settled</div>
+              </div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: row.actualProfit >= 0 ? K.gn : K.rd }}>
+                {row.settled ? `${row.actualProfit >= 0 ? "+" : "-"}$${f(Math.abs(row.actualProfit))}` : "—"}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12, alignItems: "start", marginBottom: 14 }}>
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Hit Rate By Promo Type</div>
@@ -199,6 +228,29 @@ export default function TrackInsights() {
             </div>
           )}
         </div>
+      </div>
+
+      <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10, marginTop: 14 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Workflow Timeline</div>
+        {insights.workflowTimeline.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Timeline populates as workflows are created, updated, and settled.</div>}
+        {insights.workflowTimeline.length > 0 && (
+          <div style={{ display: "grid", gap: 8 }}>
+            {insights.workflowTimeline.map((entry) => (
+              <div key={`${entry.id}-${entry.updatedAt || entry.createdAt}`} style={{ padding: 10, background: K.s3, borderRadius: 8, border: `1px solid ${K.bd}` }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 4 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{entry.title || entry.calculatorLabel}</div>
+                  <div style={{ fontSize: 10, color: K.mt }}>{new Date(entry.updatedAt || entry.createdAt).toLocaleString()}</div>
+                </div>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: 10, color: K.dm }}>
+                  <span>Status: <strong style={{ color: K.tx }}>{entry.status}</strong></span>
+                  <span>Source: <strong style={{ color: K.tx }}>{String(entry.source || "result_feedback").replace(/_/g, " ")}</strong></span>
+                  <span>Type: <strong style={{ color: K.tx }}>{formatPromoTypeLabel(entry.promoType)}</strong></span>
+                  {entry.book && <span>Book: <strong style={{ color: K.tx }}>{entry.book}</strong></span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

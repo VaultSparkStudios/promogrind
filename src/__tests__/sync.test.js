@@ -87,9 +87,31 @@ describe('saveData', () => {
   it('triggers a Supabase upsert when a session is active', async () => {
     mocks.getSession.mockResolvedValue(WITH_SESSION);
     await saveData({ ledger: [] });
-    // Allow the fire-and-forget upsert to settle
-    await new Promise((r) => setTimeout(r, 0));
     expect(mocks.upsert).toHaveBeenCalled();
+  });
+
+  it('tracks per-entity timestamps for changed sync domains', async () => {
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [{ id: 1 }],
+      resultFeedback: [],
+      _updated: Date.now() - 5000,
+      _entities: { ledger: Date.now() - 5000, resultFeedback: Date.now() - 5000 },
+    }));
+
+    await saveData({ ledger: [{ id: 1 }], resultFeedback: [{ id: 'wf-1' }] });
+    const parsed = JSON.parse(localStorage.getItem('promo_engine_v3'));
+    expect(parsed._entities.resultFeedback).toBeTypeOf('number');
+    expect(parsed._entities.ledger).toBeTypeOf('number');
+  });
+
+  it('queues a failed remote write for later retry', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    mocks.upsert.mockRejectedValueOnce(new Error('offline'));
+
+    await expect(saveData({ ledger: [{ id: 1 }] })).rejects.toThrow('offline');
+    const queue = JSON.parse(localStorage.getItem('pg_sync_queue'));
+    expect(queue).toHaveLength(1);
+    expect(queue[0].data.ledger).toHaveLength(1);
   });
 });
 
@@ -141,6 +163,44 @@ describe('loadData', () => {
     const result = await loadData();
     expect(result.ledger).toHaveLength(1);
     expect(result.ledger[0].id).toBe(7);
+  });
+
+  it('merges newer local entity slices over a newer remote row', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    const now = Date.now();
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [{ id: 1, profit: '5' }],
+      workflowInbox: [{ id: 'local-wf', title: 'Local workflow' }],
+      _updated: now - 2000,
+      _entities: { ledger: now - 4000, workflowInbox: now + 1000 },
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [{ id: 7 }],
+        tracker: {
+          workflowInbox: [{ id: 'remote-wf', title: 'Remote workflow' }],
+          _entities: { ledger: now + 5000, workflowInbox: now - 5000 },
+        },
+        updated_at: new Date(now + 5000).toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.ledger[0].id).toBe(7);
+    expect(result.workflowInbox[0].id).toBe('local-wf');
+  });
+
+  it('flushes queued writes before reading remote state', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('pg_sync_queue', JSON.stringify([
+      { data: { ledger: [{ id: 9 }], _updated: Date.now() }, queuedAt: Date.now() },
+    ]));
+    mocks.maybeSingle.mockResolvedValue({ data: null, error: null });
+
+    await loadData();
+    expect(mocks.upsert).toHaveBeenCalled();
+    expect(JSON.parse(localStorage.getItem('pg_sync_queue'))).toEqual([]);
   });
 });
 

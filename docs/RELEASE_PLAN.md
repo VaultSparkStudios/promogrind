@@ -1,70 +1,35 @@
 # Release Plan
 
-## Current State: v9.0 (Feature-Complete, Pre-Revenue)
+## Current State
 
-The app is live at `https://vaultsparkstudios.com/promogrind/` and auto-deploys on push to main.
-All core features are built. Revenue activation is blocked only on external setup steps.
+- Runtime: `https://promogrind.bet/`
+- Repo status: build passing, `158/158` tests green, launch smoke passing, browser smoke passing
+- Product posture: deployable and public-facing, but still blocked on final launch-proof tasks outside this repo
 
----
+## Current Manual Blockers
 
-## Phase 1 — Revenue Activation (Next)
+- Set `VITE_VAPID_PUBLIC_KEY` in the live frontend before exposing browser push publicly
+- Run the real Stripe smoke path end-to-end and verify `subscriptions` plus customer-portal lifecycle
+- Finish monetization coverage for `BetMGM`, `bet365`, and `BetRivers`
+- Complete one friend-facing pass through auth, calculator, CTA, and pricing flows
 
-**Status:** All code ready. External accounts pending.
+## Highest-Leverage Build Sequence
 
-**Checklist:**
-- [ ] Insert affiliate/referral links into `src/books.js` (DK, FD, BetMGM, Caesars, bet365, ESPN BET, Fanatics, BetRivers)
-- [ ] Apply to affiliate programs: DraftKings Partners, FanDuel Partners, BetMGM Partners (or use personal referral links as interim)
-- [ ] Set Odds API key: `supabase secrets set ODDS_API_KEY=...` → `supabase functions deploy odds`
-  - Change scanner refresh from 120s → 300s in LiveScanner
-- [ ] Set up Stripe test products: Monthly ($24.99) + Annual ($199) → get price IDs
-  - Update `create-checkout` Edge Function to route by `body.planId`
-  - `supabase secrets set STRIPE_SECRET_KEY=... STRIPE_WEBHOOK_SECRET=... STRIPE_MONTHLY_PRICE_ID=... STRIPE_ANNUAL_PRICE_ID=...`
-  - `supabase functions deploy create-checkout && supabase functions deploy stripe-webhook`
-- [ ] Set up Resend: verify domain → `supabase secrets set RESEND_API_KEY=...` → `supabase functions deploy weekly-digest`
-- [ ] Enable Google OAuth + Discord OAuth in Supabase dashboard
-- [ ] Uncomment Plausible script in `index.html` (after creating plausible.io account)
-- [ ] Submit sitemap to Google Search Console (47 URLs)
+1. Workflow inbox
+   Save AI, calculator, and Track outputs into one canonical queue with provenance and status transitions.
+2. Personalized action ranking
+   Rank workflows by bankroll fit, opportunity score, friction history, book coverage, and urgency.
+3. Studio export layer
+   Emit structured launch, growth, workflow, and intelligence summaries for Studio OS / Ops / Hub consumers.
+4. Self-calibration loop
+   Surface projected vs actual drift, calculator trust, and recurring skip/friction reasons.
+5. Sync hardening
+   Replace whole-blob sync with entity-aware persistence and an offline write queue.
 
-**Revenue unlock sequence:** Affiliate links → Odds API → Stripe (test) → live Stripe (after LLC + EIN)
+## Follow-On Refinements
 
----
-
-## Phase 2 — SEO / Organic Growth (High Priority)
-
-**Status:** Problem identified, solution not yet built.
-
-The entire app renders client-side. Google sees a blank div. This caps organic growth.
-
-**Options (pick one):**
-1. **Vite SSG plugin** (`vite-plugin-ssg`) — least disruptive. Pre-renders each slug to static HTML at build time. Preserves existing architecture.
-2. **Astro migration** — larger refactor but solves both SSG and the App.jsx file-size problem simultaneously. Calculator components become `.astro` pages.
-
-**Why it matters:** SEO is the lowest-cost acquisition channel. Knowledge base articles + calculator pages are rankable for long-tail queries ("bonus bet converter", "profit boost calculator free", etc.). Without SSG, all organic traffic is abandoned.
-
-**Recommendation:** Do Vite SSG first (1-2 sessions). Evaluate Astro migration when App.jsx exceeds 7,000 lines.
-
----
-
-## Phase 3 — Growth & Retention Layer (After Revenue Active)
-
-- Email drip sequence (5 onboarding emails via Resend)
-- 7-day VaultSparked free trial (Stripe trial_period_days)
-- Server-sent push notifications — `supabase/functions/send-daily-brief/` skeleton ready; needs VAPID keys + `scripts/migration-push-subscriptions.sql`
-- Browser extension (Chrome/Firefox) — separate repo; detects sportsbook pages, overlays relevant calculator
-- Discord community + bot integration
-
----
-
-## Phase 4 — Scale (When 50+ VaultSparked Subscribers)
-
-- Activate Team accounts backend (`team_members` table + shared data context)
-- Shared odds cache in Supabase (one API call serves all concurrent scanner users)
-- UK market module (GBP books + UK-specific promo types) — 5x TAM expansion
-- Mobile app via Capacitor (`npm run cap:sync` — config already present)
-
----
-
-## Blocked Until LLC + EIN
-
-- Stripe live mode (all Stripe infrastructure ready; just needs business entity)
-- Formal affiliate agreements (personal referral links work in interim)
+- Continue extracting domains out of `src/App.jsx`
+- Add state-aware + book-aware CTA personalization
+- Replace stale hardcoded promo intelligence in premium AI surfaces with a normalized promo registry
+- Add observability dashboards for activation, monetization, and AI usage
+- Harden auth/session handling and server-side AI response validation

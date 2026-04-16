@@ -63,7 +63,7 @@ serve(async (req) => {
         <h1 style="color:#4ade80;font-size:24px;margin-bottom:8px;">PromoGrind — Today's Promos</h1>
         <p style="color:#94a3b8;margin-bottom:24px;">Here are the time-sensitive promos available today, ${todayDay}.</p>
         <ul style="padding-left:20px;margin-bottom:24px;">${promoList}</ul>
-        <a href="https://vaultsparkstudios.com/promogrind/#/promo-calendar"
+        <a href="https://promogrind.bet/#/promo-calendar"
            style="display:inline-block;padding:12px 24px;background:#4ade80;color:#0a0e17;font-weight:700;border-radius:6px;text-decoration:none;">
           Open PromoGrind →
         </a>

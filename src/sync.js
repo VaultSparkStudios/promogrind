@@ -12,6 +12,18 @@
 import { supabase } from './auth.js';
 
 const LOCAL_KEY = 'promo_engine_v3';
+const QUEUE_KEY = 'pg_sync_queue';
+const ENTITY_KEYS = [
+  'ledger',
+  'bets',
+  'resultFeedback',
+  'workflowInbox',
+  'done',
+  'bookExpiry',
+  'promoValueHistory',
+  'journal',
+  'oddsCompare',
+];
 
 // ── Load ──────────────────────────────────────────────────────────────────────
 // Returns the most up-to-date data: remote if newer, local otherwise.
@@ -29,6 +41,7 @@ export async function loadData() {
   if (!session) return local;
 
   try {
+    await _flushQueue(session.user.id);
     const { data: row } = await supabase
       .from('promogrind_data')
       .select('ledger, tracker, updated_at')
@@ -45,17 +58,7 @@ export async function loadData() {
     const localTs  = local._updated ?? 0;
 
     if (remoteTs >= localTs) {
-      // Remote is newer — pull down and cache locally
-      // tracker column stores all non-ledger appData fields as a JSONB object
-      const trackerData = (row.tracker && typeof row.tracker === 'object' && !Array.isArray(row.tracker))
-        ? row.tracker
-        : {};
-      const merged = {
-        ...local,
-        ...trackerData,
-        ledger:   row.ledger  ?? [],
-        _updated: remoteTs,
-      };
+      const merged = _mergeEntityAware(local, row);
       _saveLocal(merged);
       return merged;
     }
@@ -73,7 +76,7 @@ export async function loadData() {
 // Writes to localStorage immediately; syncs to Supabase in background.
 
 export async function saveData(data) {
-  const stamped = { ...data, _updated: Date.now() };
+  const stamped = _stampData(data);
   _saveLocal(stamped);
 
   let session = null;
@@ -83,7 +86,13 @@ export async function saveData(data) {
   } catch { /* offline */ }
 
   if (session) {
-    _saveRemote(session.user.id, stamped).catch(() => {}); // fire-and-forget
+    try {
+      await _saveRemote(session.user.id, stamped);
+      await _flushQueue(session.user.id);
+    } catch (error) {
+      _enqueueWrite(stamped);
+      throw error;
+    }
   }
 }
 
@@ -163,4 +172,87 @@ async function _saveRemote(userId, data) {
     tracker:    rest,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'user_id' });
+}
+
+function _stampData(data) {
+  const previous = _loadLocal();
+  const now = Date.now();
+  const next = { ...data, _updated: now };
+  next._entities = _buildEntityMeta(previous, next, now);
+  return next;
+}
+
+function _buildEntityMeta(previous = {}, next = {}, now = Date.now()) {
+  const previousMeta = previous._entities && typeof previous._entities === 'object' ? previous._entities : {};
+  const meta = { ...previousMeta };
+  for (const key of ENTITY_KEYS) {
+    const prevValue = JSON.stringify(previous?.[key] ?? null);
+    const nextValue = JSON.stringify(next?.[key] ?? null);
+    if (prevValue !== nextValue) meta[key] = now;
+  }
+  return meta;
+}
+
+function _normalizeTracker(tracker) {
+  return tracker && typeof tracker === 'object' && !Array.isArray(tracker) ? tracker : {};
+}
+
+function _mergeEntityAware(local, row) {
+  const trackerData = _normalizeTracker(row.tracker);
+  const remote = {
+    ...trackerData,
+    ledger: row.ledger ?? [],
+    _updated: new Date(row.updated_at).getTime(),
+  };
+  const localMeta = local._entities && typeof local._entities === 'object' ? local._entities : {};
+  const remoteMeta = trackerData._entities && typeof trackerData._entities === 'object' ? trackerData._entities : {};
+  const base = remote._updated >= (local._updated ?? 0) ? { ...local, ...remote } : { ...remote, ...local };
+
+  for (const key of ENTITY_KEYS) {
+    const localStamp = Number(localMeta[key] || 0);
+    const remoteStamp = Number(remoteMeta[key] || 0);
+    if (localStamp > remoteStamp) {
+      base[key] = local[key];
+    } else if (remoteStamp > localStamp) {
+      base[key] = remote[key];
+    }
+  }
+
+  base._updated = Math.max(remote._updated || 0, local._updated || 0);
+  base._entities = { ...remoteMeta, ...localMeta };
+  return base;
+}
+
+function _loadQueue() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function _saveQueue(queue) {
+  try { localStorage.setItem(QUEUE_KEY, JSON.stringify(queue)); } catch {}
+}
+
+function _enqueueWrite(data) {
+  const queue = _loadQueue();
+  queue.push({ data, queuedAt: Date.now() });
+  _saveQueue(queue.slice(-20));
+}
+
+async function _flushQueue(userId) {
+  const queue = _loadQueue();
+  if (!queue.length) return;
+  const remaining = [];
+  for (const item of queue) {
+    try {
+      await _saveRemote(userId, item.data);
+    } catch {
+      remaining.push(item);
+      break;
+    }
+  }
+  _saveQueue(remaining);
 }

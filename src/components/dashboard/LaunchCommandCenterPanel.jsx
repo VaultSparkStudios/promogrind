@@ -2,8 +2,11 @@ import React from "react";
 import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, hasConfiguredMonetizationLinks } from "../../books.js";
 import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
 import { K, S, fontD } from "../../lib/shared.js";
+import { AppDataCtx } from "../../contexts.jsx";
+import { buildStudioSnapshot } from "../../studio/export.js";
 
 export default function LaunchCommandCenterPanel() {
+  const { appData } = React.useContext(AppDataCtx) || {};
   const summary = getLaunchSummary();
   const configuredAffiliates = getConfiguredAffiliateCount();
   const configuredMonetization = getConfiguredMonetizationCount();
@@ -20,6 +23,12 @@ export default function LaunchCommandCenterPanel() {
     commandCenter.posture === "advancing" ? K.ac :
     commandCenter.posture === "blocked" ? K.yl :
     K.rd;
+  const exportSnapshot = async () => {
+    const snapshot = buildStudioSnapshot(appData || {}, { bankroll: typeof window !== "undefined" ? localStorage.getItem("pg_bankroll") || "" : "" });
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(snapshot, null, 2));
+    } catch {}
+  };
 
   return (
     <div style={{ ...S.card, border: `1px solid ${K.ac}35`, marginBottom: 12 }}>
@@ -32,6 +41,9 @@ export default function LaunchCommandCenterPanel() {
           </div>
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button onClick={exportSnapshot} style={{ padding: "8px 10px", background: "transparent", border: `1px solid ${K.ac}35`, borderRadius: 8, color: K.ac, fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
+            Copy Studio Snapshot
+          </button>
           <div style={{ padding: "8px 10px", background: K.s2, border: `1px solid ${scoreColor}45`, borderRadius: 8, minWidth: 118 }}>
             <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Readiness Score</div>
             <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: scoreColor }}>{commandCenter.readinessScore}/100</div>

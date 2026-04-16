@@ -1,5 +1,20 @@
 # Work Log
 
+## 2026-04-15 — S50 Workflow Intelligence + Sync Hardening
+
+- Extended `src/promograph/index.js` so canonical workflow entries can carry title/summary/confidence/opportunity metadata and support inbox upserts.
+- Added `src/workflows/inbox.js` plus `src/components/dashboard/WorkflowInboxPanel.jsx`; calculators, Promo Advisor, and AI Action Plan can now save canonical workflow entries into one scored inbox surfaced on the Today dashboard.
+- Added `src/studio/export.js` and wired `src/components/dashboard/LaunchCommandCenterPanel.jsx` to copy a structured Studio snapshot covering launch, growth, workflows, and intelligence signals.
+- Upgraded `supabase/functions/ai-action-plan/index.ts` and `src/components/AIActionPlan.jsx` so AI actions return/store a richer machine-usable workflow contract instead of only lightweight display text.
+- Expanded `src/track/insights.js` and `src/components/TrackInsights.jsx` with workflow provenance, recent workflow timeline, and self-calibration / expected-vs-actual drift surfaces.
+- Deepened dashboard ranking in `src/dashboard/today.js` and `src/App.jsx` so next-best-action can prioritize the highest-scored workflow, not only raw workflow counts.
+- Hardened `src/sync.js` with per-entity timestamps, entity-aware merge behavior, and an offline `pg_sync_queue` for failed writes; expanded `src/__tests__/sync.test.js` accordingly.
+- Fixed remaining active truth drift in `src/launchState.js`, `supabase/functions/gift-trial/index.ts`, `supabase/functions/promo-expiry-digest/index.ts`, and `docs/RELEASE_PLAN.md`.
+- Refreshed public memory/context/task files for S50 closeout and prepared the repo for commit + push.
+- Verified `npm test` → 164/164 passing.
+- Verified `npm run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`410.2KB` main chunk under 420KB target).
+
 ## 2026-04-15 — S49 PromoGraph Foundation + Full Closeout
 
 - Added `src/promograph/index.js` as the shared domain layer for canonical promo-type aliases, workflow-status normalization, calculator slug cleanup, recommendation normalization, and workflow summarization.

@@ -15,13 +15,23 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Now
 - [x] PromoGraph domain layer — normalize promos, workflows, recommendations, execution state, and settlements into one shared model
+- [x] Workflow inbox foundation — calculators, Promo Advisor, and AI Action Plan can now save canonical workflow entries into one shared inbox surface
+- [x] Entity-aware sync foundation — `sync.js` now tracks per-entity timestamps and queues failed remote writes for later flush instead of relying only on one blob timestamp
 - [ ] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows
+- [x] Workflow provenance foundation — Track now exposes source-level provenance plus a recent workflow timeline
+- [x] Self-calibration foundation — Track now summarizes expected vs actual settled profit drift for the current workflow loop
+- [x] Studio export foundation — Launch Command Center can now emit a structured Studio snapshot covering launch, growth, workflows, and intelligence signals
+- [x] Truth-drift sweep — fixed stale launch-test count and remaining legacy `vaultsparkstudios.com/promogrind` links in active repo surfaces
 - [ ] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons
 
 ## Innovation Bets (new this session)
 - **Launch command center** — replace static launch-readiness card with a scored operator cockpit driven by validation, monetization, rollout, and blocker state
 - **Execution-friction telemetry** — capture why workflows were skipped or blocked, then feed that back into Track and the next-best-action loop
 - **Structured AI decision cards** — force Promo Advisor / Action Plan outputs into calculator-aware, ops-tagged JSON instead of prose-only blobs
+- **Workflow inbox scoring** — score open workflows by status, EV, confidence, friction, recency, and bankroll fit instead of listing them flat
+- **Studio intelligence contract** — one JSON export should feed Studio OS / Ops / Hub / Social Dashboard without markdown drift
+- **Truth drift sentinel** — derive launch-validation stats and canonical URLs from live repo truth, not stale copied strings
+- **Offline-first sync queue** — failed remote writes should accumulate safely and flush once auth/network comes back, instead of disappearing behind a single pending flag
 - **Quick-calc event routing** — AI recommendations can now deep-link directly into the right calculator instead of stopping at explanation
 - **Adaptive trust score** — per-calculator × promo-type × book accuracy, visible on results
 - **Sensitivity chips** — hover bands show how much output moves per 10% input change
@@ -72,13 +82,15 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Sprint 1 Wins Wall support — migration tightened with unique user/period upsert support and client publish path updated
 
 ## Next
-- [ ] Studio OS / ops export layer — emit structured launch, growth, and intelligence summaries that the wider studio system can consume
+- [ ] Studio OS / ops export layer — expand the new snapshot foundation into a durable machine-consumable contract with publish/history support
 - [ ] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type
 - [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
 - [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)
 - [ ] [SIL:2⛔] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
 - [ ] [SIL] Workflow provenance timeline — persist where each workflow came from (advisor, action plan, calculator, Track) and show status transitions over time
-- [ ] [SIL] Recommendation scoring matrix — rank workflows by bankroll fit, book availability, friction history, and opportunity score instead of first-match ordering
+- [ ] [SIL] Recommendation scoring matrix — deepen the new scoring foundation to rank workflows by bankroll fit, book availability, friction history, urgency, and opportunity score instead of first-match ordering
+- [ ] [SIL] Entity-aware sync continuation — move beyond local merge metadata toward durable per-entity persistence/conflict handling for workflow, ledger, and tracker domains
+- [ ] [SIL] Workflow history surface — preserve richer queue → ready → placed → waiting → settled transitions instead of only the latest normalized row
 - [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL
 - [ ] Move auth tokens to httpOnly cookies OR accept localStorage + add refresh-rotation test coverage for hijack scenarios
 - [ ] Offline write-queue in `src/sync.js` (IndexedDB) for ledger/feedback writes when offline

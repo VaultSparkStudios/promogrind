@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▆ ▆ ▇ ▆
-Avgs — 3: 446.3 | 5: 443.8 | 10: 437.9 [N=7] | 25: — | all: 437.9 [N=7]
-  └ 3-session: Dev 95.3 | Align 88.3 | Momentum 89.7 | Engage 77.0 | Process 95.3
-Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: →
-Momentum runway: ~0.7 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-15 | Session 49 | Total: 444/500 | Velocity: 1 | protocolVelocity: 1
+Sparkline (last 5 totals): ▆ ▆ ▇ ▆ █
+Avgs — 3: 453.7 | 5: 449.4 | 10: 440.9 [N=8] | 25: — | all: 440.9 [N=8]
+  └ 3-session: Dev 96.0 | Align 89.3 | Momentum 91.0 | Engage 80.0 | Process 97.3
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
+Momentum runway: ~1.6 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-15 | Session 50 | Total: 462/500 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-15 — Session 50 | Total: 462/500 | Velocity: 3 | Debt: ↓
+Avgs — 3: 453.7 | 5: 449.4 | 10: 440.9 [N=8] | 25: — | all: 440.9 [N=8]
+  └ 3-session: Dev 96.0 | Align 89.3 | Momentum 91.0 | Engage 80.0 | Process 97.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 97 | ↑ | Workflow inbox, Track provenance/calibration, Studio export, and entity-aware sync foundation all landed while tests rose to 164/164 and build/bundle stayed green. |
+| Creative Alignment | 90 | ↑ | The work stayed trust-first and operator-grade: fewer fake simplifications, more visible workflow reality, and less semantic drift between what the app says and what it stores. |
+| Momentum | 92 | ↑ | Multiple backlog items moved from roadmap language into real product infrastructure in one pass, especially around workflow intelligence and sync resilience. |
+| Engagement | 84 | ↑ | The product can now learn from source quality, drift, and workflow progression more credibly, though real public proof still depends on the manual launch blockers. |
+| Process Quality | 99 | ↑ | Public memory, task board, truth audit, release plan, work log, validation state, and closeout context all stayed in sync with the shipped repo state instead of lagging behind it. |
+| **Total** | **462/500** | ↑ | |
+
+**Top win:** PromoGrind is no longer just collecting calculator outcomes; it now has the beginnings of a real workflow operating layer with provenance, calibration, export, and safer sync behavior.
+**Top gap:** Sync is safer but still not truly durable per entity, and workflow history/scoring remain foundational rather than fully matured systems.
+**Intent outcome:** Achieved — the session kept pushing beyond the initial foundation, validated the new tranche, refreshed public memory honestly, and prepared the repo for GitHub closeout.
+
+**Brainstorm**
+1. Move workflow history from “latest normalized row” to an append-only transition log so scoring can learn from aging, reversals, and repeated friction.
+2. Split `promogrind_data` persistence into durable server-owned entities for workflow, ledger, and tracker domains so conflict handling stops depending on one tracker blob.
+3. Add a “source quality leaderboard” that shows whether calculator, advisor, action-plan, or manual Track workflows are producing the most realized profit per attempt.
+
+**Committed to TASK_BOARD:** [SIL] Entity-aware sync continuation — move beyond local merge metadata toward durable per-entity persistence/conflict handling for workflow, ledger, and tracker domains · [SIL] Workflow history surface — preserve richer queue → ready → placed → waiting → settled transitions instead of only the latest normalized row
 
 ## 2026-04-15 — Session 49 | Total: 444/500 | Velocity: 1 | Debt: →
 Avgs — 3: 446.3 | 5: 443.8 | 10: 437.9 [N=7] | 25: — | all: 437.9 [N=7]

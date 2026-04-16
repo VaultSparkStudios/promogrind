@@ -60,7 +60,7 @@ serve(async (req) => {
     });
     if (insertErr) throw new Error(insertErr.message);
 
-    const giftUrl = `https://vaultsparkstudios.com/promogrind/?gift=${giftToken}`;
+    const giftUrl = `https://promogrind.bet/?gift=${giftToken}`;
 
     // Send email if Resend is configured
     if (RESEND_API_KEY) {

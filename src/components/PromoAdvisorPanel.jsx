@@ -1,12 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { supabase } from "../auth.js";
+import { AppDataCtx } from "../contexts.jsx";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
 import { K, font, fontD, S } from "../lib/shared.js";
-import { normalizeRecommendation } from "../promograph/index.js";
+import { normalizeRecommendation, upsertWorkflowEntry } from "../promograph/index.js";
 
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
+  const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const signInHref = getProjectAuthHref('signin');
   const signUpHref = getProjectAuthHref('signup');
   if (!FEATURE_FLAGS.promoAdvisor) {
@@ -81,6 +83,33 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         type: recommendation.promoType || null,
       },
     }));
+  };
+
+  const saveWorkflow = () => {
+    const recommendation = normalizeRecommendation(result || {});
+    if (!syncAppData) return;
+    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], {
+      title: result?.verdict || "Promo Advisor recommendation",
+      summary: result?.explanation || result?.action || "",
+      status: "queued",
+      calculatorSlug: recommendation.calculatorSlug,
+      calculatorKey: recommendation.calculatorSlug || "promo-advisor",
+      calculatorLabel: "Promo Advisor",
+      promoType: recommendation.promoType,
+      bookTarget: recommendation.bookTarget,
+      book: recommendation.bookTarget,
+      source: "promo_advisor",
+      confidence: recommendation.confidence,
+      opportunityScore: recommendation.opportunityScore,
+      actionability: recommendation.opportunityScore,
+      nextStep: result?.nextStep || "",
+      note: result?.hedge || "",
+      opsTags: recommendation.opsTags,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
+    if (toast) toast("Saved to workflow inbox.", K.gn);
   };
 
   return (
@@ -264,6 +293,12 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               style={{marginTop:4,padding:'7px 12px',background:`${K.ac}15`,border:`1px solid ${K.ac}40`,borderRadius:7,color:K.ac,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
             >
               {result?.calculatorSlug ? 'Open recommended calculator →' : 'Calculate this promo →'}
+            </button>
+            <button
+              onClick={saveWorkflow}
+              style={{marginTop:4,padding:'7px 12px',background:'transparent',border:`1px solid ${K.gn}35`,borderRadius:7,color:K.gn,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
+            >
+              Save to workflow inbox →
             </button>
           </div>
         )}
