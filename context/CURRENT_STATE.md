@@ -1,8 +1,10 @@
 # Current State
 
 Public-safe summary:
-- this repo remains deployable — build passing, 168/168 tests green, and bundle budget passing at ~413.9KB main chunk after the current workflow + sync tranche
-- version: 24.6.0 · last session: S50 (2026-04-15)
+- this repo remains deployable — build passing, 169/169 tests green, and bundle budget passing at ~418.0KB main chunk after the current workflow-operations tranche
+- version: 24.6.0 · last session: S51 (2026-04-16)
+- **S51 workflow-operations refinement tranche (closed)**: `src/workflows/inbox.js` now ranks workflows with explainable reasons using bankroll pressure, book activation, opportunity/actionability, promo/book history, skip reasons, friction, urgency, and freshness; `src/dashboard/today.js` now reuses that score summary for next-best-action copy so the dashboard can explain why a workflow is the best current move
+- **S51 lifecycle controls + calibration surface (closed)**: `src/components/dashboard/WorkflowInboxPanel.jsx` now moves workflows through queued → ready → placed → waiting, keeps matching result-feedback rows in sync, and can skip low-value work directly from the inbox; `src/components/TrackInsights.jsx` now syncs settlement status back into the inbox and renders per-promo self-calibration drift bars from `src/track/insights.js`
 - **S50 entity-sync continuation tranche (closed)**: `src/sync.js` now hydrates and persists dedicated `ledger_state` and `tracker_state` tables alongside the newer workflow tables, so ledger/tracker/workflow domains can sync through separate Supabase entities while `promogrind_data` remains as a compatibility mirror; `scripts/migration-entity-sync.sql` adds the ledger/tracker schema + RLS required for that split
 - **S50 workflow history persistence tranche (closed)**: `src/sync.js` now appends canonical workflow-history events, hydrates dedicated `workflow_state` / `workflow_history` tables when present, and best-effort persists both current workflow state and append-only history alongside the legacy `promogrind_data` blob; `scripts/migration-workflow-history.sql` adds the Supabase schema + RLS needed for durable per-user workflow history
 - **S50 workflow intelligence + sync hardening tranche (closed)**: PromoGrind now has a real workflow inbox foundation fed by calculators and AI surfaces, provenance/self-calibration/timeline intelligence in Track, top-workflow-aware dashboard ranking, a structured Studio snapshot export, and a safer sync layer with per-entity metadata plus an offline write queue

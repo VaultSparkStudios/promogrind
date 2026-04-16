@@ -3,6 +3,7 @@ import { AppDataCtx } from "../contexts.jsx";
 import { K, f, font, fontD } from "../lib/shared.js";
 import { S, Tl } from "../ui.jsx";
 import { buildTrackInsights, formatPromoTypeLabel, updateResultFeedback } from "../track/insights.js";
+import { upsertWorkflowEntry } from "../promograph/index.js";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -10,6 +11,25 @@ function metricCard(label, value, sub, color = K.tx) {
       <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6 }}>{label}</div>
       <div style={{ fontFamily: fontD, fontSize: 25, fontWeight: 800, color, marginBottom: 4 }}>{value}</div>
       <div style={{ fontSize: 11, color: K.mt }}>{sub}</div>
+    </div>
+  );
+}
+
+function driftBar(row) {
+  const magnitude = Math.min(Math.abs(row.averageDrift || 0), 25);
+  const width = `${Math.max(8, (magnitude / 25) * 100)}%`;
+  const positive = (row.averageDrift || 0) >= 0;
+  return (
+    <div key={row.key} style={{ display: "grid", gap: 4 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 10, fontSize: 10 }}>
+        <span style={{ color: K.dm }}>{row.label}</span>
+        <span style={{ color: positive ? K.gn : K.rd, fontWeight: 700 }}>
+          {positive ? "+" : "-"}${f(Math.abs(row.averageDrift || 0))}
+        </span>
+      </div>
+      <div style={{ height: 8, borderRadius: 999, background: K.s3, overflow: "hidden" }}>
+        <div style={{ width, height: "100%", borderRadius: 999, background: positive ? K.gn : K.rd }} />
+      </div>
     </div>
   );
 }
@@ -26,13 +46,23 @@ export default function TrackInsights() {
   const settle = (entry) => {
     const draft = drafts[entry.id] || {};
     if (!syncAppData || !String(draft.actualProfit || "").trim()) return;
+    const nextTimestamp = new Date().toISOString();
     const nextEntries = updateResultFeedback(appData?.resultFeedback || [], entry.id, {
       status: "settled",
       actualProfit: draft.actualProfit,
       calculatorAccurate: draft.calculatorAccurate || "yes",
       book: draft.book ?? entry.book,
+      updatedAt: nextTimestamp,
     });
-    syncAppData({ ...appData, resultFeedback: nextEntries });
+    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], {
+      ...entry,
+      status: "settled",
+      actualProfit: draft.actualProfit,
+      calculatorAccurate: draft.calculatorAccurate || "yes",
+      book: draft.book ?? entry.book,
+      updatedAt: nextTimestamp,
+    });
+    syncAppData({ ...appData, resultFeedback: nextEntries, workflowInbox: nextInbox });
     setDrafts((current) => ({ ...current, [entry.id]: { actualProfit: "", calculatorAccurate: "yes", book: draft.book ?? entry.book } }));
   };
 
@@ -61,6 +91,14 @@ export default function TrackInsights() {
             <span>Expected: <strong style={{ color: K.tx }}>${f(Math.abs(insights.selfCalibration.expectedSettledProfit || 0))}</strong></span>
             <span>Actual: <strong style={{ color: (insights.selfCalibration.actualSettledProfit || 0) >= 0 ? K.gn : K.rd }}>{`${(insights.selfCalibration.actualSettledProfit || 0) >= 0 ? "+" : "-"}$${f(Math.abs(insights.selfCalibration.actualSettledProfit || 0))}`}</strong></span>
             <span>Avg drift: <strong style={{ color: (insights.selfCalibration.averageDrift || 0) >= 0 ? K.gn : K.rd }}>{insights.selfCalibration.averageDrift === null ? "—" : `${insights.selfCalibration.averageDrift >= 0 ? "+" : "-"}$${f(Math.abs(insights.selfCalibration.averageDrift))}`}</strong></span>
+          </div>
+          <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
+            {insights.selfCalibrationRows.length === 0 && (
+              <div style={{ fontSize: 10, color: K.mt }}>
+                Per-promo drift appears once settled workflows have both expected and actual profit captured.
+              </div>
+            )}
+            {insights.selfCalibrationRows.map((row) => driftBar(row))}
           </div>
         </div>
 

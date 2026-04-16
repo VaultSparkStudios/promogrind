@@ -1,0 +1,25 @@
+{
+  "date": "2026-04-16",
+  "session": 51,
+  "status": "green",
+  "summary": "Session 51 closeout after workflow ranking, lifecycle controls, and Track calibration refinement.",
+  "highlights": [
+    "workflow inbox scoring now uses bankroll, book history, friction, skip reasons, freshness, and urgency with explainable score summaries",
+    "workflow inbox cards now support queued-to-waiting progression and sync status changes back into matching result-feedback rows",
+    "Track now shows per-promo self-calibration drift bars and settles matching workflow-inbox entries alongside result feedback"
+  ],
+  "validation": {
+    "tests": "169/169",
+    "build": "passing",
+    "bundleBudget": "passing",
+    "mainChunkKb": 418.0
+  },
+  "remainingBlockers": [
+    "Apply scripts/migration-workflow-history.sql in Supabase",
+    "Apply scripts/migration-entity-sync.sql in Supabase",
+    "Set VITE_VAPID_PUBLIC_KEY in production",
+    "Run the real Stripe smoke flow end-to-end",
+    "Secure real links/approvals for BetMGM, bet365, and BetRivers",
+    "Do one friend-facing account/calculator/browser pass"
+  ]
+}

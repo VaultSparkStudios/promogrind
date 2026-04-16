@@ -98,10 +98,11 @@ describe("dashboard helpers", () => {
       openBets: [],
       booksComplete: 2,
       openWorkflowCount: 3,
-      topWorkflow: { title: "Claim best reload", summary: "Highest scoring workflow.", status: "queued", score: 97, calculatorSlug: "bonus-bet" },
+      topWorkflow: { title: "Claim best reload", summary: "Highest scoring workflow.", scoreSummary: "score 97 · DraftKings is profitable", status: "queued", score: 97, calculatorSlug: "bonus-bet" },
     });
 
     expect(action.key).toBe("workflow-focus");
     expect(action.slug).toBe("bonus-bet");
+    expect(action.body).toMatch(/DraftKings is profitable/);
   });
 });

@@ -187,6 +187,11 @@ export function buildTrackInsights(data = {}, now = new Date()) {
           ? "Outcomes are meeting or beating model expectations."
           : "Outcomes are trailing projections; review the coldest lanes and friction reasons.",
   };
+  const selfCalibrationRows = promoTypeRows
+    .filter((row) => row.averageDrift !== null)
+    .slice()
+    .sort((a, b) => Math.abs(b.averageDrift) - Math.abs(a.averageDrift))
+    .slice(0, 6);
 
   return {
     ...totals,
@@ -208,6 +213,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     sourceRows,
     workflowTimeline,
     selfCalibration,
+    selfCalibrationRows,
     biggestNegativeDrift: driftRows[0] || null,
     biggestPositiveDrift: driftRows.length ? driftRows[driftRows.length - 1] : null,
   };

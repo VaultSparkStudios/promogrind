@@ -19,12 +19,15 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Entity-aware sync foundation — `sync.js` now tracks per-entity timestamps and queues failed remote writes for later flush instead of relying only on one blob timestamp
 - [x] Workflow history persistence foundation — `sync.js` now appends workflow lifecycle events locally and can hydrate/persist `workflow_state` + `workflow_history` tables when the new Supabase schema is present
 - [x] Ledger + tracker entity-sync foundation — `sync.js` can now hydrate/persist `ledger_state` and `tracker_state` so those domains no longer depend only on the shared `promogrind_data` row
-- [ ] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows
+- [x] Workflow inbox — save AI/advisor/calculator outputs as queued → ready → placed → waiting → settled workflows — **DONE S51**: Workflow inbox cards now expose explicit queued → ready → placed → waiting controls, keep workflow/result-feedback state in sync, and route waiting items back into Track for settlement
 - [x] Workflow provenance foundation — Track now exposes source-level provenance plus a recent workflow timeline
 - [x] Self-calibration foundation — Track now summarizes expected vs actual settled profit drift for the current workflow loop
 - [x] Studio export foundation — Launch Command Center can now emit a structured Studio snapshot covering launch, growth, workflows, and intelligence signals
 - [x] Truth-drift sweep — fixed stale launch-test count and remaining legacy `vaultsparkstudios.com/promogrind` links in active repo surfaces
-- [ ] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons
+- [x] Personalized action ranking — next-best-action should rank by bankroll, legal state, book roster, execution history, and skip reasons — **DONE S51**: Workflow ranking now uses bankroll load, book activation, historical promo/book outcomes, friction, skip reasons, urgency, and explainable score summaries that feed dashboard next-best-action copy
+- [ ] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type
+- [ ] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored
+- [ ] [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
 
 ## Innovation Bets (new this session)
 - **Launch command center** — replace static launch-readiness card with a scored operator cockpit driven by validation, monetization, rollout, and blocker state
@@ -87,10 +90,10 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] Studio OS / ops export layer — expand the new snapshot foundation into a durable machine-consumable contract with publish/history support
 - [ ] [SIL:2⛔] Drift alert — background diff of projected vs realized profit per promo type
 - [ ] Push alert targeting — move beyond generic daily brief toward higher-EV / state-aware promo alerts now that the subscription plumbing exists
-- [ ] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped)
-- [ ] [SIL:2⛔] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track
+- [x] Reason-for-skip capture — one-tap reason when user marks skipped in ResultFeedbackCard (odds moved / EV too low / deposit capped) — **DONE S51**: Skip reasons are now not only captured but also surfaced back into workflow scoring and Track skip-reason reporting
+- [x] [SIL:2⛔] Self-calibration chart — surface "Your calcs were X% accurate last 30 days" inside Track — **DONE S51**: Track now renders per-promo self-calibration drift bars on top of the settled expected-vs-actual summary
 - [ ] [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored
-- [ ] [SIL] Recommendation scoring matrix — deepen the new scoring foundation to rank workflows by bankroll fit, book availability, friction history, urgency, and opportunity score instead of first-match ordering
+- [x] [SIL] Recommendation scoring matrix — deepen the new scoring foundation to rank workflows by bankroll fit, book availability, friction history, urgency, and opportunity score instead of first-match ordering — **DONE S51**: `src/workflows/inbox.js` now scores open workflows from live history and emits explainable ranking reasons consumed by the Today dashboard and workflow inbox
 - [ ] [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
 - [ ] [SIL] Workflow history surface — build richer UI around the new append-only history so users can inspect queue → ready → placed → waiting → settled transitions over time
 - [ ] Micro-NPS after 3 settlements — 1-tap "Was this calc worth it?" → feeds SIL

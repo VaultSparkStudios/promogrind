@@ -166,7 +166,11 @@ export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 
     topWorkflow && {
       key: "workflow-focus",
       title: topWorkflow.title || "Advance highest-value workflow",
-      body: topWorkflow.summary || `Best current workflow is ${formatWorkflowStatus(topWorkflow.status)} with score ${topWorkflow.score}.`,
+      body:
+        topWorkflow.scoreSummary ||
+        topWorkflow.nextStep ||
+        topWorkflow.summary ||
+        `Best current workflow is ${formatWorkflowStatus(topWorkflow.status)} with score ${topWorkflow.score}.`,
       cta: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "Open Track" : "Open workflow",
       slug: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "track" : (topWorkflow.calculatorSlug || "track"),
       tone: topWorkflow.score >= 90 ? "positive" : "watch",

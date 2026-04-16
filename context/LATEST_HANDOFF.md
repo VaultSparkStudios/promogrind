@@ -2,6 +2,27 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 51 (2026-04-16) — CLOSED
+
+**Session Intent:** Update memory and task board with the current workflow roadmap, execute the highest-leverage unblocked `/go` items at quality bar, then close out the repo cleanly to GitHub.
+
+## Where We Left Off (Session 51 — CLOSED)
+
+- Shipped: 4 improvements across 3 groups — recommendation scoring, workflow lifecycle controls, Track calibration/settlement sync
+- Tests: 169/169 passing · delta: +1
+- Deploy: pending — repo-side code is ready for push; no production deploy is required for this tranche
+- Session type: implementation + closeout
+
+## Current Delta Since S50
+
+- Deepened `src/workflows/inbox.js` so workflow ranking now uses bankroll load, opportunity/actionability, book activation, promo/book history, friction, skip reasons, freshness, and urgency rather than a mostly static score table.
+- Added explainable score summaries that now flow into both the Today dashboard next-best-action copy and `src/components/dashboard/WorkflowInboxPanel.jsx`.
+- Upgraded `src/components/dashboard/WorkflowInboxPanel.jsx` with explicit queued → ready → placed → waiting controls, direct skip handling, keyboard-accessible cards, and sync back into matching `resultFeedback` rows where they exist.
+- Updated `src/components/TrackInsights.jsx` so settling a waiting workflow also updates the corresponding workflow-inbox record, reducing status drift between Track and the inbox.
+- Expanded `src/track/insights.js` with `selfCalibrationRows` and rendered per-promo self-calibration drift bars in Track so drift is visible instead of staying only in summary text.
+- Expanded `src/__tests__/workflowInbox.test.js`, `src/__tests__/dashboard.test.js`, and `src/__tests__/trackInsights.test.js`; the suite now passes at `169/169`.
+- Validation after closeout: `npm.cmd test`, `npm.cmd run build`, and `node scripts/check-bundle-budget.mjs` all passed; bundle budget remains green at `418.0KB` under the `420KB` cap.
+
 ## Session 50 (2026-04-15) — CLOSED
 
 **Session Intent:** Implement the highest-leverage workflow-intelligence roadmap items, keep pushing deeper instead of hand-waving "complete all", then extend the sync model into durable entity-backed persistence and close out memory cleanly.

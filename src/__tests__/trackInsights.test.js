@@ -103,6 +103,8 @@ describe("track insights helpers", () => {
     expect(insights.sourceRows.find((row) => row.key === "result_feedback")?.settled).toBe(2);
     expect(insights.workflowTimeline[0].id).toBe("d");
     expect(insights.selfCalibration.averageDrift).toBe(-6.5);
+    expect(insights.selfCalibrationRows.length).toBeGreaterThan(0);
+    expect(insights.selfCalibrationRows[0]).toHaveProperty("label");
   });
 
   it("computes adaptive trust score per calculator with scoping", () => {

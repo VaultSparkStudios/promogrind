@@ -2,6 +2,16 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-16 — Workflow ranking must be explainable and lifecycle-aware
+
+**Decision:** PromoGrind's workflow inbox and dashboard ranking should be driven by an explainable scoring layer that incorporates bankroll pressure, actionability/opportunity, book activation, promo/book history, friction, skip reasons, freshness, and urgency, with explicit queued → ready → placed → waiting lifecycle controls reflected across workflow and result-feedback surfaces.
+
+**Applies to this project:** Yes — this now governs `src/workflows/inbox.js`, `src/dashboard/today.js`, `src/components/dashboard/WorkflowInboxPanel.jsx`, and Track settlement sync.
+
+**Rationale:** The previous workflow score was directionally useful but still too opaque and too static. If the app is going to guide real user action, it needs to show why a workflow is the next move and keep status transitions coherent across the inbox and Track instead of letting multiple surfaces drift.
+
+---
+
 ## 2026-04-15 — PromoGraph becomes the canonical shared domain layer for promo/workflow state
 
 **Decision:** PromoGrind now normalizes promo types, workflow statuses, calculator slugs, and AI recommendation payloads through `src/promograph/index.js`, with Track and dashboard helpers consuming that shared model instead of each surface keeping its own aliases and status semantics.

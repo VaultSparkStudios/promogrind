@@ -146,3 +146,11 @@
 - Verified `npm.cmd run build` → passing; main app chunk reduced to ~392 kB.
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
+
+## 2026-04-16 — Post-S50 workflow-operations refinement
+
+- Deepened workflow ranking in `src/workflows/inbox.js` so open workflows score against bankroll load, actionability, promo/book history, friction, skip reasons, urgency, and freshness with explainable score summaries.
+- Updated `src/dashboard/today.js` and `src/components/dashboard/WorkflowInboxPanel.jsx` so the dashboard and inbox both expose the new ranking reasons and support explicit queued → ready → placed → waiting progression.
+- Synced workflow lifecycle edits back into matching result-feedback rows when possible, and synced Track settlement actions back into the workflow inbox so status surfaces stop drifting.
+- Added a per-promo self-calibration drift chart in `src/components/TrackInsights.jsx` backed by new `selfCalibrationRows` output from `src/track/insights.js`.
+- Expanded tests in `src/__tests__/workflowInbox.test.js`, `src/__tests__/dashboard.test.js`, and `src/__tests__/trackInsights.test.js`; validated with `npm.cmd test`, `npm.cmd run build`, and `node scripts/check-bundle-budget.mjs`.

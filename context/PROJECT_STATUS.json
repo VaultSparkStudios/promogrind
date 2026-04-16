@@ -3,8 +3,8 @@
   "name": "PromoGrind",
   "status": "active",
   "health": "green",
-  "currentFocus": "S50 entity-sync continuation is now layered on top of the workflow intelligence tranche: PromoGrind can append canonical workflow events locally, hydrate dedicated workflow_state/workflow_history/ledger_state/tracker_state tables when present, and preserve the workflow inbox, provenance, self-calibration, dashboard ranking, Studio snapshot export, and safer sync queue/entity metadata foundation.",
-  "nextMilestone": "Move from mirrored entity tables to finer-grained conflict handling inside ledger and workflow domains, deepen recommendation scoring, and keep the remaining human-owned launch blockers explicit.",
+  "currentFocus": "Post-S50 workflow-operations refinement is now layered on top of the entity-sync tranche: PromoGrind ranks workflows with explainable reasons using bankroll/book/history/failure signals, supports explicit queued-to-waiting inbox lifecycle controls, syncs settlement state back into the inbox, and renders per-promo self-calibration drift bars in Track.",
+  "nextMilestone": "Deepen cross-device workflow provenance/history surfacing, move from mirrored entity tables to finer-grained conflict handling inside ledger and workflow domains, and keep the remaining human-owned launch blockers explicit.",
   "blockers": [
     "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live",
     "Apply scripts/migration-entity-sync.sql in Supabase so ledger_state/tracker_state exist live",
@@ -13,13 +13,13 @@
     "Stripe end-to-end smoke still requires a real account/browser checkout pass",
     "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
-  "lastUpdated": "2026-04-15",
+  "lastUpdated": "2026-04-16",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-04-15",
   "version": "24.6.0",
-  "lastSession": "S50",
+  "lastSession": "S51",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
@@ -31,8 +31,8 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "passing — build and bundle budget revalidated after entity-sync continuation tranche; main chunk now ~413.9KB against a 420KB budget",
-  "testStatus": "168/168",
+  "buildStatus": "passing — build and bundle budget revalidated after workflow-operations refinement; main chunk now ~418.0KB against a 420KB budget",
+  "testStatus": "169/169",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",

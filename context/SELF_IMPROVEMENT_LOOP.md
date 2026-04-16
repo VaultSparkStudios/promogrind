@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▆ ▇ ▆ █
-Avgs — 3: 459.7 | 5: 455.7 | 10: 442.7 [N=8] | 25: — | all: 442.7 [N=8]
-  └ 3-session: Dev 96.7 | Align 90.0 | Momentum 92.0 | Engage 81.0 | Process 98.0
+Sparkline (last 5 totals): ▆ ▇ ▆ █ ▇
+Avgs — 3: 455.3 | 5: 452.4 | 10: 443.3 [N=9] | 25: — | all: 443.3 [N=9]
+  └ 3-session: Dev 95.0 | Align 90.0 | Momentum 89.7 | Engage 82.0 | Process 99.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~1.8 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-15 | Session 50 | Total: 474/500 | Velocity: 5 | protocolVelocity: 1
+Last session: 2026-04-16 | Session 51 | Total: 448/500 | Velocity: 4 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-16 — Session 51 | Total: 448/500 | Velocity: 4 | Debt: ↓
+Avgs — 3: 455.3 | 5: 452.4 | 10: 443.3 [N=9] | 25: — | all: 443.3 [N=9]
+  └ 3-session: Dev 95.0 | Align 90.0 | Momentum 89.7 | Engage 82.0 | Process 99.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 95 | ↓ | The workflow ranking layer is materially smarter and more coherent now, lifecycle/status sync is tighter, tests rose to 169/169, and build/bundle stayed green, though the chunk headroom tightened from ~413.9KB to ~418.0KB. |
+| Creative Alignment | 90 | ↓ | The work stayed trust-first and operator-grade: the product now explains why a workflow is recommended and avoids fake certainty by surfacing real drift and friction. |
+| Momentum | 86 | ↓ | This was a focused refinement tranche, not a broad architecture leap, but it closed several high-leverage Now/SIL items in one pass instead of scattering effort. |
+| Engagement | 84 | ↓ | Workflow guidance is now more actionable and calibration is more visible, but public proof still depends on the same human-owned launch blockers outside the repo. |
+| Process Quality | 93 | ↓ | Public memory, task board, handoff, SIL, decisions, truth audit, state vector, genome history, and audit JSON were refreshed to match the validated repo state before push. |
+| **Total** | **448/500** | ↓ | |
+
+**Top win:** PromoGrind now has a workflow system that not only scores work more intelligently but also explains the ranking and keeps lifecycle state tighter across the inbox and Track.
+**Top gap:** The next compounding step is deeper cross-device workflow history/provenance plus finer-grained entity conflict handling; ranking is stronger now, but the persistence model is still a bridge.
+**Intent outcome:** Achieved — the session updated the task board/memory honestly, executed the highest-leverage unblocked workflow items, validated the repo, and prepared a full GitHub closeout.
+
+**Brainstorm**
+1. Add state-aware alerting that reuses the new workflow score reasons so push messages explain why a workflow matters right now instead of sending generic nudges.
+2. Preserve workflow transition actors and reason codes in history so cross-device provenance can explain not only what changed but why a workflow moved.
+3. Let the self-calibration view collapse by promo type, book, and source so operators can spot whether drift is a model problem, a sportsbook problem, or a workflow-execution problem.
+
+**Committed to TASK_BOARD:** [SIL] Workflow provenance timeline — deepen the new durable history foundation to preserve richer provenance fields and expose cross-device transition history everywhere workflows are scored · [SIL] Entity-aware sync continuation — move from mirrored entity tables to finer-grained conflict handling inside ledger/workflow domains, then reduce the legacy `promogrind_data` row to a compatibility layer
 
 ## 2026-04-15 — Session 50 | Total: 474/500 | Velocity: 5 | Debt: ↓
 Avgs — 3: 459.7 | 5: 455.7 | 10: 442.7 [N=8] | 25: — | all: 442.7 [N=8]
