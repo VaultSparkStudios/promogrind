@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.3",
+  "session": 61,
+  "date": "2026-04-17",
+  "intentOutcome": "Achieved",
+  "velocity": 2,
+  "protocolVelocity": 0,
+  "scores": {
+    "devHealth": 99,
+    "creativeAlignment": 95,
+    "momentum": 96,
+    "engagement": 90,
+    "processQuality": 103,
+    "total": 489
+  },
+  "debtDelta": "down",
+  "testsTotal": 247,
+  "testsDelta": 12,
+  "bundleKb": 324.6,
+  "bundleBudgetKb": 425,
+  "bundleDeltaKb": 0,
+  "shipped": [
+    "src/__tests__/calculators.test.jsx: +12 tests (6 ProfitBoost + 6 FirstBet — title, result, demo, exit-demo, example, help)",
+    "src/studio/export.js: matchPlaybooks import; topPlaybook computed in buildStudioSnapshot; passed to buildOperatingActionCandidates and buildOperatorCommandBrief; brief.topPlaybook structured field + followUp string"
+  ],
+  "deferred": [],
+  "humanBatched": [
+    "Set VITE_VAPID_PUBLIC_KEY in production (push alerts gate)",
+    "Stripe end-to-end smoke test (card 4242)",
+    "Affiliate links for BetMGM / bet365 / BetRivers",
+    "Friend-facing manual account-flow verification"
+  ],
+  "newDecisions": [],
+  "silItems": [
+    "[SIL] Add component tests for ProfitBoost and FirstBet — DONE",
+    "[SIL] Wire topPlaybook into Studio contract brief followUps — DONE"
+  ]
+}
