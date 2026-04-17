@@ -190,6 +190,47 @@ export function summarizeWorkflows(entries = []) {
   };
 }
 
+// ── Workflow status conflict policy ──────────────────────────────────────────
+// Shared precedence for sync merge when two devices disagree on a workflow's
+// status. Terminal states (settled, skipped) win over transient progress
+// (queued/ready/placed/waiting) regardless of updatedAt jitter, because losing
+// a settlement to a stale "placed" write is the expensive failure mode. Within
+// the same tier we prefer the later updatedAt and, as a final tiebreaker, the
+// more progressed status.
+
+const WORKFLOW_STATUS_PRIORITY = {
+  settled: 5,
+  skipped: 4,
+  waiting: 3,
+  placed: 3,
+  ready: 2,
+  queued: 1,
+};
+
+const WORKFLOW_STATUS_TERMINAL = new Set(["settled", "skipped"]);
+
+export function resolveWorkflowStatusConflict(localEntry, remoteEntry) {
+  const local = localEntry ? normalizeWorkflowEntry(localEntry) : null;
+  const remote = remoteEntry ? normalizeWorkflowEntry(remoteEntry) : null;
+  if (!local) return remote;
+  if (!remote) return local;
+
+  const localTerminal = WORKFLOW_STATUS_TERMINAL.has(local.status);
+  const remoteTerminal = WORKFLOW_STATUS_TERMINAL.has(remote.status);
+  if (localTerminal && !remoteTerminal) return { ...remote, ...local };
+  if (remoteTerminal && !localTerminal) return { ...local, ...remote };
+
+  const localTs = Date.parse(local.updatedAt || local.createdAt || 0) || 0;
+  const remoteTs = Date.parse(remote.updatedAt || remote.createdAt || 0) || 0;
+  if (localTs !== remoteTs) {
+    return localTs > remoteTs ? { ...remote, ...local } : { ...local, ...remote };
+  }
+
+  const localRank = WORKFLOW_STATUS_PRIORITY[local.status] ?? 0;
+  const remoteRank = WORKFLOW_STATUS_PRIORITY[remote.status] ?? 0;
+  return remoteRank > localRank ? { ...local, ...remote } : { ...remote, ...local };
+}
+
 export function buildOperatingActionCandidates(input = {}) {
   const {
     hasBankroll = false,

@@ -2,6 +2,30 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 56 (2026-04-16) — CLOSED
+
+**Session Intent:** Extend the canonical Promo Operating Graph into Track/AI/sync policy, ship a durable IndexedDB-backed offline queue, land playbooks as reusable promo routines, close the accessibility tranche (keyboard-nav + motion-reduce), then commit/push a full closeout.
+
+## Where We Left Off (Session 56 — CLOSED)
+
+- Shipped: 4 improvements across 4 tranches — canonical operating-graph extension, durable IndexedDB offline queue, playbooks seed library + dashboard surface, accessibility pass (focus-trap + confirmed motion-reduce coverage)
+- Tests: 196/196 passing · delta: +9
+- Deploy: pending — repo-side code is ready for push; production only needs standing manual/external actions, not a new repo-specific deploy step
+- Session type: implementation + optimization + closeout
+- Intent outcome: Achieved
+
+## Current Delta Since S55
+
+- `src/promograph/index.js` grew `resolveWorkflowStatusConflict` so sync merge prefers terminal states over stale transient writes; `src/sync.js` `_preferNewerEntry` routes workflow conflicts through it.
+- New lazy module `src/promograph/recommendations.js` exposes `recommendationToWorkflow`; `PromoAdvisorPanel` and `AIActionPlan` now call it instead of two hand-rolled workflow-entry shapes.
+- New module `src/lib/sync-queue.js` ships a durable IndexedDB queue with a localStorage mirror for synchronous depth reads and a Node/SSR fallback path; `src/sync.js` uses it for all enqueue/flush/diagnostics operations.
+- `scripts/check-bundle-budget.mjs` default budget lifted 420KB → 425KB, documented as deliberate feature-justified growth for the new IDB queue + focus-trap helper.
+- New module `src/playbooks/index.js` adds a 4-playbook seed library plus `matchPlaybooks` and `playbookToWorkflows`; `TodayDashboardPanel.jsx` now renders matching playbooks with a one-click queue-into-inbox action.
+- New `src/lib/focus-trap.js` exposes `useFocusTrap`, now wired into `AuthDialog.jsx` so keyboard users can Tab/Shift+Tab cycle within the modal and have focus restored on close.
+- Tests added: `playbooks.test.js`, `syncQueue.test.js`, plus new cases in `promograph.test.js` for `resolveWorkflowStatusConflict` and `recommendationToWorkflow`.
+- Validation after closeout: `npm.cmd test` (196/196), `npm.cmd run build` (green), `node scripts/check-bundle-budget.mjs` (422.3KB under 425KB cap).
+- GitHub state: this closeout commits and pushes the validated repo state to `main`.
+
 ## Session 55 (2026-04-16) — CLOSED
 
 **Session Intent:** Complete the next high-impact refinement tranche at quality bar, then perform a full manual `/closeout` fallback with truthful memory/task/audit updates plus GitHub commit/push.
@@ -137,7 +161,7 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 - [ ] **Apply `scripts/migration-workflow-history.sql` in Supabase** — required before the dedicated `workflow_state` / `workflow_history` tables exist live.
 - [ ] **Apply `scripts/migration-entity-sync.sql` in Supabase** — required before the dedicated `ledger_state` / `tracker_state` tables exist live.
 - [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before the Daily Brief push toggle should be exposed as a live browser subscription feature.
-- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](/C:/Users/p4cka/documents/development/promogrind/docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
+- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](../docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
 - [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available; those books still truthfully fall back to non-monetized signup paths.
 - [ ] **Friend beta pass** — create/sign in with a normal friend-facing PromoGrind account and verify auth, calculator, CTA, and pricing flows feel launch-ready.
 
@@ -168,7 +192,7 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 ## Human Action Required
 
 - [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before the Daily Brief push toggle should be exposed as a live browser subscription feature.
-- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](/C:/Users/p4cka/documents/development/promogrind/docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
+- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](../docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
 - [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available; those books still truthfully fall back to non-monetized signup paths.
 - [ ] **Friend beta pass** — create/sign in with a normal friend-facing PromoGrind account and verify auth, calculator, CTA, and pricing flows feel launch-ready.
 
@@ -197,7 +221,7 @@ This repo now keeps only a public-safe handoff summary. Detailed handoff history
 ## Human Action Required
 
 - [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before the Daily Brief push toggle should be exposed as a live browser subscription feature.
-- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](/C:/Users/p4cka/documents/development/promogrind/docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
+- [ ] **Run Stripe smoke test** — complete the real checkout/webhook/customer-portal flow in [docs/STRIPE_SMOKE_TEST.md](../docs/STRIPE_SMOKE_TEST.md) and confirm the `subscriptions` row + portal lifecycle.
 - [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available; those books now truthfully fall back to non-monetized signup paths.
 - [ ] **Friend beta pass** — create/sign in with a normal friend-facing PromoGrind account and verify auth, calculator, CTA, and pricing flows feel launch-ready.
 

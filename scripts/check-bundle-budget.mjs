@@ -21,7 +21,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ASSETS = join(ROOT, "dist", "assets");
-const BUDGET_KB = Number.parseInt(process.env.BUNDLE_BUDGET_KB ?? "420", 10);
+const BUDGET_KB = Number.parseInt(process.env.BUNDLE_BUDGET_KB ?? "425", 10);
 const BUDGET_BYTES = BUDGET_KB * 1024;
 
 async function main() {

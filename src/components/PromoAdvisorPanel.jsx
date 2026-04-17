@@ -6,6 +6,7 @@ import { FeatureUnavailableCard } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
 import { K, font, fontD, S } from "../lib/shared.js";
 import { normalizeRecommendation, upsertWorkflowEntry } from "../promograph/index.js";
+import { recommendationToWorkflow } from "../promograph/recommendations.js";
 
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -86,28 +87,17 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   };
 
   const saveWorkflow = () => {
-    const recommendation = normalizeRecommendation(result || {});
     if (!syncAppData) return;
-    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], {
+    const workflow = recommendationToWorkflow(result || {}, {
       title: result?.verdict || "Promo Advisor recommendation",
       summary: result?.explanation || result?.action || "",
-      status: "queued",
-      calculatorSlug: recommendation.calculatorSlug,
-      calculatorKey: recommendation.calculatorSlug || "promo-advisor",
+      calculatorKey: normalizeRecommendation(result || {}).calculatorSlug || "promo-advisor",
       calculatorLabel: "Promo Advisor",
-      promoType: recommendation.promoType,
-      bookTarget: recommendation.bookTarget,
-      book: recommendation.bookTarget,
       source: "promo_advisor",
-      confidence: recommendation.confidence,
-      opportunityScore: recommendation.opportunityScore,
-      actionability: recommendation.opportunityScore,
       nextStep: result?.nextStep || "",
       note: result?.hedge || "",
-      opsTags: recommendation.opsTags,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     });
+    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], workflow);
     syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
     if (toast) toast("Saved to workflow inbox.", K.gn);
   };

@@ -2,6 +2,36 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-16 — Terminal workflow states beat stale transient writes in sync merge
+
+**Decision:** `resolveWorkflowStatusConflict` in `src/promograph/index.js` now encodes the shared precedence policy that terminal states (`settled`, `skipped`) win over transient progress (`queued`/`ready`/`placed`/`waiting`) during per-record sync merge, regardless of `updatedAt` jitter. `src/sync.js` `_preferNewerEntry` routes workflow conflicts through this policy instead of pure newest-wins.
+
+**Applies to this project:** Yes — governs workflow reconciliation in `src/sync.js` and any future consumer that merges workflow collections.
+
+**Rationale:** Losing a settlement to a stale "placed" write from a laggy device is the expensive failure mode. Preferring terminal states keeps the product's scoring/telemetry honest even when local clocks drift or offline devices replay old writes.
+
+---
+
+## 2026-04-16 — Offline write queue lives in IndexedDB, mirrored to localStorage
+
+**Decision:** `src/lib/sync-queue.js` stores the offline write queue in IndexedDB as the primary durable store, with a localStorage mirror kept in sync so `readSyncDiagnostics()` can report queue depth synchronously and so Node/SSR/private-browsing environments still have a working fallback. Mirror writes are synchronous; IDB writes are awaited where possible but their failures never break the save path.
+
+**Applies to this project:** Yes — governs `_enqueueWrite`, `_flushQueue`, `readSyncDiagnostics`, and any future code that queues sync writes.
+
+**Rationale:** localStorage alone is subject to 5–10MB limits, eviction under storage pressure, and main-thread blocking. IDB is larger, async, and more durable. The localStorage mirror preserves the synchronous diagnostic path the dashboard depends on and keeps the Node/test environment path simple.
+
+---
+
+## 2026-04-16 — Bundle budget raised from 420KB to 425KB for deliberate feature growth
+
+**Decision:** `scripts/check-bundle-budget.mjs` default budget was raised 420KB → 425KB to accommodate the S56 IndexedDB offline queue module plus the reusable focus-trap hook. Both are shipping product features, not regressions. Budget stays in CI; growth within the 425KB cap remains gated.
+
+**Applies to this project:** Yes — governs CI gate for the main bundle chunk.
+
+**Rationale:** The bundle budget is a regression gate, not an absolute ceiling. When a feature itself is the source of growth and has already been trimmed to essentials, bumping the deliberate cap is the honest recording. Further compaction should come from dashboard/calculator code extraction, not from cutting durability/accessibility work.
+
+---
+
 ## 2026-04-16 — Legacy blob must be a compatibility mirror, not the active sync authority
 
 **Decision:** PromoGrind's `promogrind_data` row should only act as a backward-compatibility mirror once the dedicated entity tables save successfully; authenticated loads may compact older full blobs in the background, but product state should prefer entity-backed truth instead of treating the blob as a co-equal source of record.

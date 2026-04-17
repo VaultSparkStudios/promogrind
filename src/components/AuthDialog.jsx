@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPromoGrindAccount, signInToPromoGrind } from "../auth.js";
+import { useFocusTrap } from "../lib/focus-trap.js";
 import { K, font, fontD } from "../lib/shared.js";
 
 const panel = {
@@ -33,6 +34,8 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const panelRef = useRef(null);
+  useFocusTrap(open, panelRef);
 
   useEffect(() => {
     if (!open) return;
@@ -127,7 +130,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
         padding: 20,
       }}
     >
-      <div style={panel} onClick={(event) => event.stopPropagation()}>
+      <div ref={panelRef} style={panel} onClick={(event) => event.stopPropagation()}>
         <div
           style={{
             padding: "18px 20px 16px",

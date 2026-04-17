@@ -306,6 +306,8 @@ function buildDriftAlerts(input = {}) {
     .sort((a, b) => Math.abs(b.averageDrift) - Math.abs(a.averageDrift));
 }
 
+export { buildDriftAlerts };
+
 // ─── Adaptive trust score ────────────────────────────────────────────────────
 // Given all feedback entries and a calculator key (optionally scoped to a
 // promo type and/or book), compute an aggregate trust signal:

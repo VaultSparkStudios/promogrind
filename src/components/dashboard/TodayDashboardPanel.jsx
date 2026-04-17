@@ -1,7 +1,10 @@
 import React from "react";
+import { AppDataCtx, useToast } from "../../contexts.jsx";
 import { K, S, f, font, fontD } from "../../lib/shared.js";
 import { getBankrollPosture, getUnfinishedWork } from "../../dashboard/today.js";
 import { getOnboardingProgress } from "../../onboarding.js";
+import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
+import { upsertWorkflowEntry } from "../../promograph/index.js";
 import ObservabilityPanel from "./ObservabilityPanel.jsx";
 import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
 
@@ -20,6 +23,17 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const onboarding = getOnboardingProgress({ appData, isProActive });
   const tone = TONE[posture.tone] || K.ac;
   const recentTone = snapshot.recentSettledProfit >= 0 ? K.gn : K.rd;
+  const toast = useToast();
+  const { syncAppData } = React.useContext(AppDataCtx) || {};
+  const playbookResults = React.useMemo(() => matchPlaybooks(appData, { bankroll: snapshot?.bankroll }), [appData, snapshot?.bankroll]);
+
+  const queuePlaybook = (playbook) => {
+    if (!syncAppData) return;
+    const steps = playbookToWorkflows(playbook, {});
+    const nextInbox = steps.reduce((inbox, step) => upsertWorkflowEntry(inbox, step), appData?.workflowInbox || []);
+    syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
+    if (toast) toast(`Queued ${steps.length} playbook steps: ${playbook.name}`, K.gn);
+  };
 
   return (
     <div style={{ ...S.card, border: `1px solid ${K.ac}35`, marginBottom: 12 }}>
@@ -119,6 +133,31 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
           <div style={{ fontSize: 11, color: K.gn }}>No urgent unfinished work is surfaced from your current tracker and ledger state.</div>
         )}
       </div>
+
+      {playbookResults.top.length > 0 && (
+        <div style={{ marginTop: 12, padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Matching Playbooks</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 8 }}>
+            {playbookResults.top.map(({ playbook, fitScore, reasons }) => (
+              <div key={playbook.id} style={{ padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{playbook.name}</div>
+                  <div style={{ fontSize: 10, color: K.ac, fontFamily: fontD, fontWeight: 700 }}>{fitScore}</div>
+                </div>
+                <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6, marginBottom: 6 }}>{playbook.summary}</div>
+                <div style={{ fontSize: 10, color: K.dm, marginBottom: 8 }}>{reasons.slice(0, 2).map((r) => r.text).join(" · ")}</div>
+                <button
+                  onClick={() => queuePlaybook(playbook)}
+                  disabled={!syncAppData}
+                  style={{ padding: "6px 10px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 11, cursor: syncAppData ? "pointer" : "default", fontFamily: font }}
+                >
+                  Queue {playbook.steps.length} steps →
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <ObservabilityPanel appData={appData} snapshot={snapshot} syncDiagnostics={syncDiagnostics} usageLog={usageLog} />
 

@@ -10,10 +10,10 @@
  */
 
 import { supabase } from './auth.js';
-import { normalizeWorkflowEntry } from './promograph/index.js';
+import { normalizeWorkflowEntry, resolveWorkflowStatusConflict } from './promograph/index.js';
+import { enqueueWrite as _queueEnqueue, getQueueDepthSync, loadQueue as _queueLoad, saveQueue as _queueSave } from './lib/sync-queue.js';
 
 const LOCAL_KEY = 'promo_engine_v3';
-const QUEUE_KEY = 'pg_sync_queue';
 const LEDGER_STATE_TABLE = 'ledger_state';
 const TRACKER_STATE_TABLE = 'tracker_state';
 const WORKFLOW_STATE_TABLE = 'workflow_state';
@@ -115,7 +115,7 @@ export async function saveData(data) {
       await _saveRemote(session.user.id, stamped);
       await _flushQueue(session.user.id);
     } catch (error) {
-      _enqueueWrite(stamped);
+      await _enqueueWrite(stamped);
       throw error;
     }
   }
@@ -189,7 +189,7 @@ function _saveLocal(data) {
 }
 
 export function readSyncDiagnostics() {
-  const queueDepth = _loadQueue().length;
+  const queueDepth = getQueueDepthSync();
   return {
     queueDepth,
     hasPendingWrites: queueDepth > 0,
@@ -283,6 +283,9 @@ function _entryTime(entry = {}, kind) {
 }
 
 function _preferNewerEntry(existing, incoming, kind) {
+  if (kind === 'workflow') {
+    return resolveWorkflowStatusConflict(existing, incoming);
+  }
   const existingTs = _entryTime(existing, kind);
   const incomingTs = _entryTime(incoming, kind);
   if (incomingTs >= existingTs) return { ...existing, ...incoming };
@@ -433,17 +436,12 @@ function _mergeEntityAware(local, row) {
   return base;
 }
 
-function _loadQueue() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+async function _loadQueue() {
+  try { return await _queueLoad(); } catch { return []; }
 }
 
-function _saveQueue(queue) {
-  try { localStorage.setItem(QUEUE_KEY, JSON.stringify(queue)); } catch {}
+async function _saveQueue(queue) {
+  try { await _queueSave(queue); } catch { /* mirror keeps state */ }
 }
 
 function _buildLegacyBlobTracker(data = {}, { trackerStateSaved = false, workflowStateSaved = false } = {}) {
@@ -469,25 +467,25 @@ function _buildLegacyBlobTracker(data = {}, { trackerStateSaved = false, workflo
   return tracker;
 }
 
-function _enqueueWrite(data) {
-  const queue = _loadQueue();
-  queue.push({ data, queuedAt: Date.now() });
-  _saveQueue(queue.slice(-20));
+async function _enqueueWrite(data) {
+  try { await _queueEnqueue({ data }); } catch { /* mirror is the fallback */ }
 }
 
 async function _flushQueue(userId) {
-  const queue = _loadQueue();
+  const queue = await _loadQueue();
   if (!queue.length) return;
   const remaining = [];
+  let failed = false;
   for (const item of queue) {
+    if (failed) { remaining.push(item); continue; }
     try {
       await _saveRemote(userId, item.data);
     } catch {
       remaining.push(item);
-      break;
+      failed = true;
     }
   }
-  _saveQueue(remaining);
+  await _saveQueue(remaining);
 }
 
 function _getTrackerState(data = {}) {

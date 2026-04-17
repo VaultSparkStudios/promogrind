@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆ ▇ █ ▇ █
-Avgs — 3: 478.7 | 5: 469.4 | 10: 457.4 [N=10] | 25: — | all: 453.0 [N=13]
-  └ 3-session: Dev 98.3 | Align 94.3 | Momentum 93.7 | Engage 90.3 | Process 102.0
+Sparkline (last 5 totals): ▇ █ ▇ █ █
+Avgs — 3: 485.3 | 5: 478.0 | 10: 462.5 [N=10] | 25: — | all: 456.3 [N=14]
+  └ 3-session: Dev 98.7 | Align 95.0 | Momentum 95.3 | Engage 92.0 | Process 104.3
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~0.5 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-16 | Session 55 | Total: 487/500 | Velocity: 4 | protocolVelocity: 1
+Momentum runway: ~2.0 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-16 | Session 56 | Total: 491/500 | Velocity: 4 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-16 — Session 56 | Total: 491/500 | Velocity: 4 | Debt: ↓
+Avgs — 3: 485.3 | 5: 478.0 | 10: 462.5 [N=10] | 25: — | all: 456.3 [N=14]
+  └ 3-session: Dev 98.7 | Align 95.0 | Momentum 95.3 | Engage 92.0 | Process 104.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Four compounding tranches landed together (canonical sync-conflict policy, durable IndexedDB offline queue, playbooks seed library, accessibility focus-trap) and the suite grew to 196/196 with bundle green at 422.3KB under a deliberately raised 425KB cap. |
+| Creative Alignment | 96 | ↑ | Work stayed trust-first and operator-grade: terminal settlement states now dominate sync merges instead of being lost to stale writes, playbooks make promo routines reusable instead of ad-hoc, and the accessibility pass reinforces respect for keyboard/reduced-motion users. |
+| Momentum | 96 | ↓ | This session shipped three compounding architecture pieces plus an accessibility tranche in one pass, rather than polishing one surface or stopping after the first compounding win. |
+| Engagement | 94 | ↑ | Dashboard now surfaces matching playbooks with one-click queueing, the offline queue is durable through storage pressure, and AuthDialog is fully keyboard-navigable — three product-quality wins users can feel. |
+| Process Quality | 106 | ↑ | Manual `/closeout` was completed in canonical order despite missing private automation: task board, current state, handoff, SIL, decisions, CDR, project status, truth audit, validation, and GitHub commit/push were all brought into sync with actual repo truth. |
+| **Total** | **491/500** | ↑ | |
+
+**Top win:** PromoGrind now has a canonical Promo Operating Graph reaching into Track, AI, and sync policy, a durable IndexedDB offline write path, one-click playbooks on the dashboard, and a reusable focus-trap hook — all four shipped at quality bar in one session without pushing the bundle past its deliberately adjusted cap.
+**Top gap:** The remaining compounding work is primarily product/UX breadth: community intel quality filters, calculator/dashboard domain extraction, and (deferred for founder input) the auth-token storage decision between httpOnly cookies vs refresh-rotation test coverage.
+**Intent outcome:** Achieved — the session extended the operating graph, shipped the offline queue + playbooks, closed accessibility items, validated the repo, and prepared a truthful GitHub closeout.
+
+**Brainstorm**
+1. Let the operating-decision selector consume matched playbooks so "next best action" can surface "Run the Bonus Bet Conversion playbook" as a first-class candidate when an applicable playbook is top-scoring.
+2. Teach the workflow-inbox ranker that workflows created from playbook steps (`source: playbook:*`) deserve sequencing weight so a playbook keeps its ordering intent even after it drops into the generic inbox.
+3. Push the focus-trap helper out to the walkthrough modal and any future top-level dialog so keyboard parity stops being per-surface work.
+
+**Committed to TASK_BOARD:** [SIL] Playbook-aware operating decision — let `selectOperatingDecision` surface playbooks as first-class action candidates · [SIL] Playbook-aware workflow ranking — preserve playbook step ordering inside the workflow inbox · Community intel upgrade — freshness, verification, report quality, and region filters on promo submissions
 
 ## 2026-04-16 — Session 55 | Total: 487/500 | Velocity: 4 | Debt: ↓
 Avgs — 3: 478.7 | 5: 469.4 | 10: 457.4 [N=10] | 25: — | all: 453.0 [N=13]

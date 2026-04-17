@@ -5,6 +5,7 @@ import { FEATURE_FLAGS } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { upsertWorkflowEntry } from "../promograph/index.js";
+import { recommendationToWorkflow } from "../promograph/recommendations.js";
 
 export function AIActionPlan({ proStatus }) {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -50,27 +51,16 @@ export function AIActionPlan({ proStatus }) {
 
   const queueAction = (action, index) => {
     if (!syncAppData) return;
-    const workflow = {
+    const workflow = recommendationToWorkflow(action || {}, {
       id: `plan-${lastGenDate || new Date().toISOString().slice(0, 10)}-${index}`,
       title: action.title,
       summary: action.why,
-      status: "queued",
-      calculatorSlug: action.calculatorSlug,
       calculatorKey: action.calculatorSlug || "ai-action-plan",
       calculatorLabel: "AI Action Plan",
-      bookTarget: action.bookTarget,
-      book: action.bookTarget,
-      promoType: action.promoType,
       source: "ai_action_plan",
-      confidence: action.confidence,
-      opportunityScore: action.opportunityScore,
-      actionability: action.opportunityScore,
-      nextStep: action.nextStep,
+      nextStep: action.nextStep || "",
       note: action.value || "",
-      opsTags: action.opsTags,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    });
     const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], workflow);
     syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
     if (toast) toast(`Queued "${action.title}" in workflow inbox.`, K.gn);

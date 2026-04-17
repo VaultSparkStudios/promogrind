@@ -5,11 +5,13 @@ import {
   normalizeCalculatorSlug,
   normalizePromoType,
   normalizeRecommendation,
+  resolveWorkflowStatusConflict,
   selectOperatingDecision,
   normalizeWorkflowEntry,
   normalizeWorkflowStatus,
   summarizeWorkflows,
 } from "../promograph/index.js";
+import { recommendationToWorkflow } from "../promograph/recommendations.js";
 
 describe("promograph helpers", () => {
   it("normalizes promo vocab into shared canonical types", () => {
@@ -82,5 +84,50 @@ describe("promograph helpers", () => {
     expect(decision.key).toBe("drift-alert");
     expect(decision.slug).toBe("track");
     expect(decision.followUps).toContain("2 workflows are still open.");
+  });
+
+  it("resolves workflow conflicts so terminal states beat stale transient writes", () => {
+    const local = {
+      id: "w1",
+      status: "settled",
+      actualProfit: 22.5,
+      updatedAt: "2026-04-15T10:00:00Z",
+    };
+    const remote = {
+      id: "w1",
+      status: "placed",
+      updatedAt: "2026-04-16T10:00:00Z",
+    };
+    const winner = resolveWorkflowStatusConflict(local, remote);
+    expect(winner.status).toBe("settled");
+    expect(winner.actualProfit).toBe(22.5);
+
+    const neither = resolveWorkflowStatusConflict(
+      { id: "w2", status: "ready", updatedAt: "2026-04-16T09:00:00Z" },
+      { id: "w2", status: "placed", updatedAt: "2026-04-16T10:00:00Z" },
+    );
+    expect(neither.status).toBe("placed");
+  });
+
+  it("converts an AI recommendation into a canonical workflow entry", () => {
+    const workflow = recommendationToWorkflow(
+      {
+        promoType: "odds_boost",
+        calculatorSlug: "deposit-match-calculator",
+        bookTarget: "FanDuel",
+        opportunityScore: "88",
+        confidence: "high",
+        opsTags: ["reload"],
+      },
+      { title: "Run FanDuel reload", source: "promo_advisor", calculatorLabel: "Promo Advisor" },
+    );
+
+    expect(workflow.status).toBe("queued");
+    expect(workflow.promoType).toBe("profit_boost");
+    expect(workflow.calculatorSlug).toBe("deposit-match");
+    expect(workflow.book).toBe("FanDuel");
+    expect(workflow.source).toBe("promo_advisor");
+    expect(workflow.opportunityScore).toBe(88);
+    expect(workflow.actionability).toBe(88);
   });
 });
