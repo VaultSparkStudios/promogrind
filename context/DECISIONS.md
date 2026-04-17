@@ -2,6 +2,36 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-17 — promo-chat streaming uses Accept header negotiation (S62)
+
+**Decision:** Streaming mode in `promo-chat` is activated when the client sends `Accept: text/event-stream` rather than via a separate endpoint or request body flag. Non-streaming path is fully preserved.
+
+**Applies to this project:** Yes — governs `supabase/functions/promo-chat/index.ts` and `src/components/PromoChat.jsx`.
+
+**Rationale:** Header-based content negotiation is the canonical HTTP pattern for SSE vs JSON on the same endpoint. It avoids duplicating edge function logic into a separate `/stream` variant, and allows the non-streaming path (used by any SDK consumer or fallback scenario) to remain unchanged. Future functions that add streaming should follow the same pattern.
+
+---
+
+## 2026-04-17 — Confidence decay uses promo-type window heuristics (S62)
+
+**Decision:** Workflow urgency bars in `WorkflowInboxPanel` decay against promo-type-specific windows (`bonus_bet`=7d, `profit_boost`=5d, `arb`=3d, `deposit_match`=30d, `other`=14d) rather than a fixed window.
+
+**Applies to this project:** Yes — governs `workflowUrgency()` in `WorkflowInboxPanel.jsx`.
+
+**Rationale:** A flat 14-day window is wrong for arb (3-day window before markets move) and for deposit matches (30-day typical rollover window). Promo-type-aware windows give accurate urgency signals without requiring an explicit `expiryDate` on every workflow.
+
+---
+
+## 2026-04-17 — Portfolio EVS engine uses fraction-capped Kelly with 35% max per position (S62)
+
+**Decision:** `buildPortfolioAllocation` caps each position's Kelly fraction at `MAX_SINGLE_FRACTION = 0.35` of bankroll before normalization across positions.
+
+**Applies to this project:** Yes — governs `src/lib/portfolio.js`.
+
+**Rationale:** Raw Kelly fractions can produce very large individual allocations (e.g., 60%+ of bankroll on a single promo) which would be unacceptable risk for a promo grinder. The 35% cap ensures the allocation feels reasonable even for high-confidence plays, and the normalization step ensures the total never exceeds 100% of bankroll.
+
+---
+
 ## 2026-04-16 — Community promo board extracted to a lazy-loaded chunk (S57)
 
 **Decision:** `CommunityPromoBoard.jsx` is now a separate lazy-loaded module instead of an inline component in `App.jsx`. The board is only needed when the Promo Board tab is visited, not on startup.

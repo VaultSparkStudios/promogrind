@@ -9,6 +9,7 @@ import ResultFeedbackCard from "../components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "../components/CalculatorTrustBadge.jsx";
 import BookCTA from "../components/BookCTA.jsx";
 import ShareCard from "../components/ShareCard.jsx";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 
 function parseNL(text) {
   const dollars = text.match(/\$(\d+(?:\.\d+)?)/);
@@ -47,6 +48,7 @@ export default function BonusBet() {
   const [bbUpsellDismissed, setBbUpsellDismissed] = useState(() => { try { return !!localStorage.getItem("pg_upsell_bb_dismissed"); } catch { return true; } });
   const [rCopied, setRCopied] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
+  const [showReceipt, setShowReceipt] = useState(false);
   const fileInputRef = useRef(null);
   const [scanLoading, setScanLoading] = useState(false);
   const [scanResult, setScanResult] = useState(null);
@@ -180,6 +182,7 @@ export default function BonusBet() {
               <span style={S.big(parseFloat(r.g) > 0 ? K.gn : K.rd)}>${r.g}</span>
               <span style={{ fontSize: 12, color: K.dm }}>guaranteed profit</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b /><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn} /><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn} /><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r) >= 70 ? K.gn : K.yl} b />
             {S.meter(parseFloat(r.r), parseFloat(r.r) >= 70 ? K.gn : parseFloat(r.r) >= 50 ? K.yl : K.rd)}
@@ -207,6 +210,24 @@ export default function BonusBet() {
             )}
             {showShareCard && parseFloat(r.g) > 0 && (
               <ShareCard title="Bonus Bet Converter" profit={`$${r.g}`} onClose={() => setShowShareCard(false)} />
+            )}
+            {showReceipt && r && (
+              <CalculatorReceipt
+                calcName="Bonus Bet Converter"
+                inputs={[
+                  { label: "Bonus Bet Size", value: `$${sz}` },
+                  { label: "Bonus Bet Odds", value: bo },
+                  { label: "Hedge Odds", value: ho },
+                ]}
+                outputs={[
+                  { label: "Hedge Stake", value: `$${r.hs}` },
+                  { label: "If Bonus Wins", value: `+$${r.pBW}` },
+                  { label: "If Hedge Wins", value: `+$${r.pHW}` },
+                  { label: "Conversion Rate", value: `${r.r}%` },
+                  { label: "Guaranteed Profit", value: `$${r.g}`, highlight: true },
+                ]}
+                onClose={() => setShowReceipt(false)}
+              />
             )}
           </div>
         )}

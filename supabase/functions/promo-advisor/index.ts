@@ -62,7 +62,10 @@ serve(async (req) => {
   }
 
   try {
-    const { promoText } = await req.json();
+    const { promoText, userContext } = await req.json() as {
+      promoText: string;
+      userContext?: { bankroll?: number; books?: string[]; hitRate?: number; topPromoType?: string };
+    };
 
     if (!promoText || typeof promoText !== "string" || promoText.trim().length < 10) {
       return json(req, { error: "promoText must be at least 10 characters" }, 400);
@@ -96,19 +99,30 @@ serve(async (req) => {
 
     const sanitizedPromoText = promoText.replace(/<[^>]*>/g, "").trim().slice(0, 2000);
 
+    let contextNote = "";
+    if (userContext) {
+      const parts: string[] = [];
+      if (userContext.bankroll) parts.push(`bankroll $${userContext.bankroll}`);
+      if (userContext.books?.length) parts.push(`active books: ${userContext.books.slice(0, 5).join(", ")}`);
+      if (userContext.hitRate !== undefined) parts.push(`hit rate ${Math.round(userContext.hitRate * 100)}%`);
+      if (userContext.topPromoType) parts.push(`best lane: ${userContext.topPromoType}`);
+      if (parts.length) contextNote = `\n\nUser profile: ${parts.join(" | ")}`;
+    }
+
     const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "x-api-key": ANTHROPIC_API_KEY,
         "anthropic-version": "2023-06-01",
+        "anthropic-beta": "prompt-caching-2024-07-31",
         "content-type": "application/json",
       },
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 400,
-        system: SYSTEM_PROMPT,
+        system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
         messages: [
-          { role: "user", content: `Analyze this sportsbook promo:\n\n${sanitizedPromoText}` },
+          { role: "user", content: `Analyze this sportsbook promo:${contextNote}\n\n${sanitizedPromoText}` },
         ],
       }),
     });

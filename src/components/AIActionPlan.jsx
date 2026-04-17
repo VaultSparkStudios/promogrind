@@ -33,12 +33,26 @@ export function AIActionPlan({ proStatus }) {
       if (!session) throw new Error('Not authenticated');
       const appDataRaw = (() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3') || '{}'); } catch { return {}; } })();
       const bankroll = localStorage.getItem('pg_bankroll') || '1000';
-      const booksComplete = Object.values(appDataRaw.done || {}).filter(Boolean).length;
+      const done = appDataRaw.done || {};
+      const booksComplete = Object.values(done).filter(Boolean).length;
+      const activeBooks = Object.entries(done).filter(([, v]) => !!v).map(([k]) => k);
       const ledger = appDataRaw.ledger || [];
       const recentProfit = ledger.slice(-10).reduce((s, e) => s + (parseFloat(e.profit) || 0), 0).toFixed(2);
+      // Derive top promo type and hit rate from resultFeedback
+      const feedback = Array.isArray(appDataRaw.resultFeedback) ? appDataRaw.resultFeedback : [];
+      const settled = feedback.filter(e => e.status === 'settled');
+      const promoTypeCounts = {};
+      let hitCount = 0;
+      for (const e of settled) {
+        const pt = e.promoType || 'other';
+        promoTypeCounts[pt] = (promoTypeCounts[pt] || 0) + 1;
+        if ((parseFloat(e.actualProfit) || 0) > 0) hitCount++;
+      }
+      const topPromoType = Object.entries(promoTypeCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+      const hitRate = settled.length >= 3 ? Math.round((hitCount / settled.length) * 100) : null;
       const { data, error: fnErr } = await supabase.functions.invoke('ai-action-plan', {
         headers: { Authorization: `Bearer ${session.access_token}` },
-        body: { bankroll, booksComplete, recentProfit, ledgerCount: ledger.length },
+        body: { bankroll, booksComplete, recentProfit, ledgerCount: ledger.length, activeBooks, topPromoType, hitRate },
       });
       if (fnErr) throw fnErr;
       setPlan(data);

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { K, font, S } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
 import { supabase } from "../auth.js";
 import { In, Nt } from "../ui.jsx";
 import { AppDataCtx } from "../contexts.jsx";
+import { buildHotLanes } from "../track/insights.js";
 
 const PROMO_BOARD_STATES = ["All States","AL","AZ","CO","CT","DC","IL","IN","IA","KS","KY","LA","MA","MD","ME","MI","MS","MO","NC","NJ","NY","OH","OR","PA","TN","VA","VT","WV","WY"];
 
@@ -42,6 +43,7 @@ function resolveInitialState(userState) {
 
 const CommunityPromoBoard = () => {
   const { appData } = useContext(AppDataCtx) || {};
+  const hotLanes = useMemo(() => buildHotLanes(appData || {}), [appData]);
   const [promos, setPromos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -150,6 +152,19 @@ const CommunityPromoBoard = () => {
         <button onClick={() => setHideExpired(x => !x)} aria-pressed={hideExpired} style={{ padding: "3px 10px", background: hideExpired ? K.ac : "transparent", border: `1px solid ${hideExpired ? K.ac : K.bd2}`, borderRadius: 50, color: hideExpired ? K.bg : K.dm, fontSize: 10, cursor: "pointer", fontFamily: font }}>Hide expired</button>
       </div>
 
+      {/* Hot lane banner — shown when personal win data shows a strong lane */}
+      {hotLanes.hasHotLanes && (
+        <div style={{ marginBottom: 8, padding: "8px 12px", background: `${K.yl}10`, border: `1px solid ${K.yl}25`, borderRadius: 6, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+          <span style={{ fontSize: 10, fontWeight: 700, color: K.yl }}>🔥 Hot Lanes (your last 48h)</span>
+          {hotLanes.hotPromoTypes.slice(0, 3).map((lane) => (
+            <span key={lane.key} style={{ fontSize: 10, color: K.yl, padding: "1px 6px", border: `1px solid ${K.yl}35`, borderRadius: 99 }}>{lane.label} {lane.badge}</span>
+          ))}
+          {hotLanes.hotBooks.slice(0, 2).map((lane) => (
+            <span key={lane.key} style={{ fontSize: 10, color: K.yl, padding: "1px 6px", border: `1px solid ${K.yl}35`, borderRadius: 99 }}>{lane.label} {lane.badge}</span>
+          ))}
+        </div>
+      )}
+
       {loading && <div role="status" aria-live="polite" style={{ textAlign: "center", padding: 32, color: K.mt, fontSize: 11 }}>Loading promos…</div>}
       {!loading && filtered.length === 0 && (
         <div style={{ textAlign: "center", padding: "32px 16px" }}>
@@ -165,6 +180,9 @@ const CommunityPromoBoard = () => {
         const alreadyFlagged = flagged.includes(p.id);
         const pState = parseBoardState(p.description);
         const cleanDesc = stripBoardState(p.description);
+        const promoTypeKey = (p.promo_type || "").toLowerCase().replace(/\s+/g, "_");
+        const isHotBook = hotLanes.hotBooks.some((l) => l.key === p.book);
+        const isHotType = hotLanes.hotPromoTypes.some((l) => l.key === promoTypeKey);
         return (
           <div key={p.id} style={{ ...S.res(true), marginBottom: 8, padding: "12px 14px", opacity: expired ? 0.55 : 1 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, flexWrap: "wrap" }}>
@@ -175,6 +193,7 @@ const CommunityPromoBoard = () => {
                   {p.value && <span style={S.tag(K.gn)}>{p.value}</span>}
                   {pState && <span style={S.tag(K.ac)}>{pState}</span>}
                   {verified && <span style={{ ...S.tag(K.gn), background: `${K.gn}18`, color: K.gn }}>✓ Verified</span>}
+                  {(isHotBook || isHotType) && <span style={{ ...S.tag(K.yl), background: `${K.yl}15`, color: K.yl }}>🔥 Hot Lane</span>}
                   {expired && <span style={S.tag(K.rd)}>Expired</span>}
                 </div>
                 <div style={{ fontSize: 12, color: K.dm, marginBottom: 2 }}>{cleanDesc}</div>

@@ -8,10 +8,19 @@
 
 ## Current Manual Blockers
 
+- **Deploy S62 edge functions** (prompt caching + userContext personalization):
+  ```bash
+  bash scripts/deploy-edge-functions.sh --s62
+  # or individually:
+  supabase functions deploy promo-advisor --project-ref fjnpzjjyhnpmunfoycrp --no-verify-jwt
+  supabase functions deploy promo-chat --project-ref fjnpzjjyhnpmunfoycrp --no-verify-jwt
+  supabase functions deploy ai-action-plan --project-ref fjnpzjjyhnpmunfoycrp --no-verify-jwt
+  ```
 - Set `VITE_VAPID_PUBLIC_KEY` in the live frontend before exposing browser push publicly
-- Run the real Stripe smoke path end-to-end and verify `subscriptions` plus customer-portal lifecycle
+- Run the real Stripe smoke path end-to-end and verify `subscriptions` plus customer-portal lifecycle (see `docs/STRIPE_SMOKE_TEST.md`)
 - Finish monetization coverage for `BetMGM`, `bet365`, and `BetRivers`
 - Complete one friend-facing pass through auth, calculator, CTA, and pricing flows
+- Apply Supabase SQL migrations: `migration-workflow-history.sql`, `migration-entity-sync.sql`, `migration-cron-jobs.sql`
 
 ## Highest-Leverage Build Sequence
 

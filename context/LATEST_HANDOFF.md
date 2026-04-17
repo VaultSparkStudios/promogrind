@@ -2,6 +2,63 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 62 — CLOSED)
+
+**Session Intent:** Full project audit + innovate + implement all recommended items at highest quality.
+
+**Shipped:** 16 items at quality bar (two /go sprints of 8 each)
+
+**Sprint 1 (S62a):**
+1. **[SIL] buildSummaryDelta playbook tracking**: `buildSummaryDelta` now detects playbook rotation between Studio contract snapshots; `appendStudioContractHistory` records `topPlaybookId`/`topPlaybookName` per entry
+2. **[SIL] studioExport topPlaybook tests**: 4 new tests covering structured `brief.topPlaybook`, followUps string, rotation detection, history fields
+3. **Prompt caching**: all 3 AI edge functions use `cache_control: ephemeral` + `anthropic-beta: prompt-caching-2024-07-31` — ~90% token cost reduction
+4. **Per-user AI context (promo-advisor)**: accepts `userContext`; PromoAdvisorPanel sends bankroll + activeBooks
+5. **Promo Streak Engine**: `src/lib/streaks.js`; DashboardHero shows streak counter + 🔥 milestones at 3/7/14/30 days
+6. **Quota awareness UI**: color-coded remaining count, reset countdown, "Upgrade ↑" CTA at ≤1 remaining
+7. **Auth bypass build guard**: `vite.config.js` throws in production if `VITE_DEV_BYPASS_AUTH=true`
+8. **Portfolio EVS Engine**: `src/lib/portfolio.js` Kelly-optimal multi-workflow bankroll allocation; 8 tests
+
+**Sprint 2 (S62b):**
+9. **Portfolio EVS UI**: `WorkflowInboxPanel` Optimal Allocation card + confidence decay urgency bars per workflow
+10. **Streaming AI (promo-chat SSE)**: edge function `stream: true` + SSE transform; PromoChat native fetch + ReadableStream
+11. **`ai-action-plan` userContext**: edge function + `AIActionPlan.jsx` — `activeBooks`, `topPromoType`, `hitRate` from live appData
+12. **Confidence decay bars**: `workflowUrgency()` per promo-type window; green→yellow→red urgency bar on each card
+13. **Calculator Receipt Export**: `CalculatorReceipt.jsx` print/copy modal; wired into BonusBet "📄 Receipt" button
+14. **Edge function Deno tests**: `promo-advisor.test.ts` (9) + `ai-access.test.ts` (8) in `supabase/functions/__tests__/`
+15. **Community hot-lane signal**: `buildHotLanes()` in insights.js; CommunityPromoBoard banner + per-card badge
+16. **Deploy script**: `scripts/deploy-edge-functions.sh`; `docs/RELEASE_PLAN.md` deploy checklist
+
+**Tests:** 279/279 · Build: green · Bundle: 327.5KB / 425KB (97.5KB headroom)
+**Intent outcome:** Achieved — audit produced, all 16 items shipped at quality bar, no deferred
+
+## Current Delta Since S61
+
+- `src/studio/export.js`: `buildSummaryDelta` detects playbook rotation; `appendStudioContractHistory` records `topPlaybookId`/`topPlaybookName`
+- `src/__tests__/studioExport.test.js`: +4 tests for topPlaybook structured object, followUps, rotation, history
+- `supabase/functions/promo-advisor/index.ts`: prompt caching headers + `userContext` injection
+- `supabase/functions/promo-chat/index.ts`: prompt caching headers + SSE streaming mode
+- `supabase/functions/ai-action-plan/index.ts`: prompt caching + `ACTION_PLAN_SYSTEM` cached block + accepts `activeBooks`/`topPromoType`/`hitRate`
+- `src/components/PromoAdvisorPanel.jsx`: sends `userContext` (bankroll, activeBooks); quota awareness display
+- `src/components/AIActionPlan.jsx`: derives and sends `activeBooks`, `topPromoType`, `hitRate`
+- `src/components/PromoChat.jsx`: SSE streaming client via native fetch + ReadableStream
+- `src/lib/streaks.js`: new — `computeStreak`, `streakEmoji`, `streakLabel`, `streakMilestone`
+- `src/__tests__/streaks.test.js`: new — 13 streak tests
+- `src/components/dashboard/DashboardHero.jsx`: streak counter + fire emoji display
+- `src/App.jsx`: imports + computes `computeStreak`; passes `streak` to DashboardHero
+- `src/lib/portfolio.js`: new — `buildPortfolioAllocation` Kelly-optimal allocation
+- `src/__tests__/portfolio.test.js`: new — 8 portfolio tests
+- `src/dashboard/today.js`: `includePortfolio` option; imports `buildPortfolioAllocation`
+- `src/components/dashboard/WorkflowInboxPanel.jsx`: portfolio card + `workflowUrgency()` + decay bars
+- `src/components/CalculatorReceipt.jsx`: new — print/copy receipt modal
+- `src/calculators/BonusBet.jsx`: imports + renders `CalculatorReceipt`; "📄 Receipt" button
+- `src/track/insights.js`: `buildHotLanes()` export
+- `src/components/CommunityPromoBoard.jsx`: hot-lane banner + per-card badge
+- `vite.config.js`: production auth-bypass guard
+- `scripts/deploy-edge-functions.sh`: new — `--s62`/`--all`/named deploy modes
+- `docs/RELEASE_PLAN.md`: deploy commands + blocker checklist
+- `supabase/functions/__tests__/promo-advisor.test.ts`: new — 9 Deno tests
+- `supabase/functions/__tests__/ai-access.test.ts`: new — 8 Deno tests
+
 ## Where We Left Off (Session 61 — CLOSED)
 
 **Session Intent:** /go continuation — execute remaining Now-bucket SIL items.

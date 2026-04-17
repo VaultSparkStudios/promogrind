@@ -157,6 +157,16 @@ function buildSummaryDelta(previous, next) {
     deltas.push(`brief focus changed to "${nextHeadline}"`);
   }
 
+  const prevPlaybookId = previous.brief?.topPlaybook?.id ?? null;
+  const nextPlaybookId = next.brief?.topPlaybook?.id ?? null;
+  if (prevPlaybookId !== nextPlaybookId) {
+    if (nextPlaybookId) {
+      deltas.push(`playbook rotated to "${next.brief.topPlaybook.name}"`);
+    } else if (prevPlaybookId) {
+      deltas.push("top playbook cleared");
+    }
+  }
+
   return {
     changeType: deltas.length ? "delta" : "unchanged",
     summary: deltas.length ? deltas.join(" · ") : "No material contract delta since the last published snapshot.",
@@ -176,6 +186,8 @@ export function appendStudioContractHistory(history = [], snapshot, options = {}
       workflowCount: snapshot?.summary?.workflowCount ?? 0,
       driftAlertCount: snapshot?.summary?.driftAlertCount ?? 0,
       anomalyCount: snapshot?.summary?.anomalyCount ?? 0,
+      topPlaybookId: snapshot?.brief?.topPlaybook?.id ?? null,
+      topPlaybookName: snapshot?.brief?.topPlaybook?.name ?? null,
     },
     delta: buildSummaryDelta(previous, snapshot),
     brief: snapshot?.brief || null,

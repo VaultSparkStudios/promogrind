@@ -40,9 +40,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       // Sanitize: strip HTML/script tags, cap at 2000 chars
       const sanitized = promoText.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
       const { data: { session } } = await supabase.auth.getSession();
+      const activeBooks = Object.entries(appData?.done || {})
+        .filter(([, done]) => !!done).map(([book]) => book);
+      const bankrollNum = parseFloat(appData?.bankroll) || undefined;
+      const userContext = (activeBooks.length || bankrollNum)
+        ? { bankroll: bankrollNum, books: activeBooks.slice(0, 5) }
+        : undefined;
       const { data, error: fnErr } = await supabase.functions.invoke('promo-advisor', {
         headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
-        body: { promoText: sanitized }
+        body: { promoText: sanitized, ...(userContext && { userContext }) }
       });
       if (fnErr) throw fnErr;
       const newUses = Number.isFinite(data?.remaining) ? DAILY_LIMIT - data.remaining : uses + 1;
@@ -157,10 +163,30 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
           <div style={{fontSize:10,color:K.yl,textAlign:'right'}}>{promoText.length}/2000 chars</div>
         )}
 
-        {/* Free-tier usage counter */}
-        {!isPro && (
-          <div style={{fontSize:11,color:K.mt,textAlign:'right'}}>{uses}/{DAILY_LIMIT} free analyses today</div>
-        )}
+        {/* Quota awareness */}
+        {!isPro && DAILY_LIMIT < 9999 && (() => {
+          const remaining = Math.max(0, DAILY_LIMIT - uses);
+          const pct = remaining / DAILY_LIMIT;
+          const quotaColor = pct <= 0 ? K.rd : pct <= 0.34 ? K.yl : K.mt;
+          const resetTime = (() => {
+            const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            const hrs = Math.ceil((tomorrow - new Date()) / 3600000);
+            return hrs <= 1 ? "< 1 hr" : `${hrs} hrs`;
+          })();
+          return (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6 }}>
+              <div style={{ fontSize: 10, color: quotaColor, fontWeight: remaining === 0 ? 700 : 400 }}>
+                {remaining === 0 ? `Quota reset in ${resetTime}` : `${remaining} of ${DAILY_LIMIT} analyses remaining today`}
+              </div>
+              {remaining <= 1 && (
+                <a href="/pricing" style={{ fontSize: 10, color: K.ac, fontWeight: 700, textDecoration: "none", padding: "2px 6px", border: `1px solid ${K.ac}40`, borderRadius: 4 }}>
+                  Upgrade ↑
+                </a>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Rate limit banner */}
         {isLimited && (

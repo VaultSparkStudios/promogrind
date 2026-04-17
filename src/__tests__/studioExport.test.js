@@ -68,6 +68,63 @@ describe("studio export contract", () => {
     expect(history2[0].delta.summary).toMatch(/drift alerts|workflow count|brief focus/i);
   });
 
+  it("exposes brief.topPlaybook as a structured object when a playbook matches", () => {
+    const snapshot = buildStudioSnapshot({
+      bankroll: "600",
+      done: { DraftKings: true, FanDuel: true },
+      workflowInbox: [
+        { id: "wf-1", title: "Bonus bet workflow", status: "ready", promoType: "bonus_bet", calculatorSlug: "bonus-bet" },
+      ],
+    }, { bankroll: "600" });
+
+    expect(snapshot.brief.topPlaybook).not.toBeNull();
+    expect(snapshot.brief.topPlaybook.id).toBeTruthy();
+    expect(snapshot.brief.topPlaybook.name).toBeTruthy();
+    expect(typeof snapshot.brief.topPlaybook.fitScore).toBe("number");
+    expect(Array.isArray(snapshot.brief.topPlaybook.fitReasons)).toBe(true);
+    expect(snapshot.brief.topPlaybook.stepCount).toBeGreaterThan(0);
+    expect(snapshot.brief.followUps.some((f) => f.includes("Try:"))).toBe(true);
+  });
+
+  it("brief.topPlaybook is null when no books are active", () => {
+    const snapshot = buildStudioSnapshot({ bankroll: "600", done: {} }, { bankroll: "600" });
+    expect(snapshot.brief.topPlaybook).toBeNull();
+  });
+
+  it("buildSummaryDelta tracks playbook rotation between snapshots", () => {
+    const snap1 = buildStudioSnapshot({
+      bankroll: "600",
+      done: { DraftKings: true, FanDuel: true },
+      workflowInbox: [{ id: "wf-1", title: "Bonus work", status: "ready", promoType: "bonus_bet", calculatorSlug: "bonus-bet" }],
+    }, { bankroll: "600" });
+    const snap2 = buildStudioSnapshot({
+      bankroll: "600",
+      done: { DraftKings: true, FanDuel: true },
+      workflowInbox: [{ id: "wf-2", title: "Boost work", status: "ready", promoType: "profit_boost", calculatorSlug: "profit-boost" }],
+    }, { bankroll: "600" });
+
+    const h1 = appendStudioContractHistory([], snap1, { publishedAt: "2026-04-17T10:00:00.000Z" });
+    const h2 = appendStudioContractHistory(h1, snap2, { publishedAt: "2026-04-17T11:00:00.000Z" });
+
+    expect(h1[0].summary.topPlaybookId).toBeTruthy();
+    expect(h2[0].summary.topPlaybookId).toBeTruthy();
+
+    if (h1[0].summary.topPlaybookId !== h2[0].summary.topPlaybookId) {
+      expect(h2[0].delta.summary).toMatch(/playbook rotated/i);
+    }
+  });
+
+  it("buildSummaryDelta records topPlaybookId in history summary", () => {
+    const snap = buildStudioSnapshot({
+      bankroll: "600",
+      done: { DraftKings: true, FanDuel: true },
+    }, { bankroll: "600" });
+
+    const history = appendStudioContractHistory([], snap, { publishedAt: "2026-04-17T10:00:00.000Z" });
+    expect(history[0].summary).toHaveProperty("topPlaybookId");
+    expect(history[0].summary).toHaveProperty("topPlaybookName");
+  });
+
   it("builds a targeted alert plan from operator state", () => {
     const snapshot = buildStudioSnapshot({
       workflowInbox: [{ id: "wf-1", title: "Finish boost", status: "ready", promoType: "profit_boost", calculatorSlug: "profit-boost", source: "ai_action_plan", opportunityScore: 88 }],

@@ -81,17 +81,26 @@ serve(async (req: Request) => {
       { role: "user" as const, content: message },
     ];
 
+    const systemBlocks: Array<{ type: "text"; text: string; cache_control?: { type: "ephemeral" } }> = [
+      { type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
+    ];
+    if (contextNote) systemBlocks.push({ type: "text", text: contextNote });
+
+    const wantsStream = req.headers.get("accept") === "text/event-stream";
+
     const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "x-api-key": ANTHROPIC_API_KEY,
         "anthropic-version": "2023-06-01",
+        "anthropic-beta": "prompt-caching-2024-07-31",
         "content-type": "application/json",
       },
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 512,
-        system: SYSTEM_PROMPT + contextNote,
+        stream: wantsStream,
+        system: systemBlocks,
         messages,
       }),
     });
@@ -102,6 +111,83 @@ serve(async (req: Request) => {
       return json(req, { error: "AI service error" }, 502);
     }
 
+    if (wantsStream && anthropicRes.body) {
+      const remaining = access.remaining === null ? null : Math.max(0, access.remaining - 1);
+
+      const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
+      const writer = writable.getWriter();
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+
+      // Transform Anthropic SSE → simplified SSE
+      (async () => {
+        let fullText = "";
+        let inputTokens = 0;
+        let outputTokens = 0;
+        const reader = anthropicRes.body!.getReader();
+        let buffer = "";
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              const raw = line.slice(6).trim();
+              if (raw === "[DONE]") continue;
+              try {
+                const evt = JSON.parse(raw);
+                if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                  const text = evt.delta.text ?? "";
+                  fullText += text;
+                  await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "delta", text })}\n\n`));
+                } else if (evt.type === "message_delta" && evt.usage) {
+                  outputTokens = evt.usage.output_tokens ?? 0;
+                } else if (evt.type === "message_start" && evt.message?.usage) {
+                  inputTokens = evt.message.usage.input_tokens ?? 0;
+                }
+              } catch { /* malformed SSE line */ }
+            }
+          }
+        } finally {
+          reader.releaseLock();
+        }
+
+        // Calculator suggestions based on full text
+        const combined = (message + fullText).toLowerCase();
+        const suggestions: string[] = [];
+        if (combined.includes("bonus bet") || combined.includes("free bet")) suggestions.push("bonus-bet");
+        if (combined.includes("arbitrage") || (combined.includes("arb") && !combined.includes("carbon"))) suggestions.push("arb-2way");
+        if (combined.includes("profit boost") || combined.includes("odds boost")) suggestions.push("profit-boost");
+        if (combined.includes("kelly") || combined.includes("bankroll siz")) suggestions.push("kelly");
+        if (combined.includes("expected value") || /\bev\b/.test(combined)) suggestions.push("ev");
+        if (combined.includes("parlay")) suggestions.push("parlay");
+        if (combined.includes("hedge")) suggestions.push("hedge");
+
+        await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "done", remaining, suggestions: [...new Set(suggestions)].slice(0, 3) })}\n\n`));
+        await writer.close();
+
+        // Record usage after stream completes (best-effort)
+        recordAiUsage(access.supabase, access.user.id, "promo_chat", {
+          input_tokens: inputTokens,
+          output_tokens: outputTokens,
+          tier: access.tier,
+        }).catch(() => {});
+      })();
+
+      return new Response(readable, {
+        headers: {
+          ...corsHeaders,
+          "content-type": "text/event-stream",
+          "cache-control": "no-cache",
+          "x-accel-buffering": "no",
+        },
+      });
+    }
+
+    // Non-streaming fallback
     const aiData = await anthropicRes.json();
     const responseText = aiData.content?.[0]?.text ?? "";
 
@@ -111,7 +197,6 @@ serve(async (req: Request) => {
       tier: access.tier,
     });
 
-    // Suggest relevant calculators based on message content
     const combined = (message + responseText).toLowerCase();
     const suggestions: string[] = [];
     if (combined.includes("bonus bet") || combined.includes("free bet")) suggestions.push("bonus-bet");

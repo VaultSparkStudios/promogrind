@@ -5,6 +5,7 @@ import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from ".
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics } from "./sync.js";
 import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBriefEnabled } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
+import { computeStreak } from "./lib/streaks.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
@@ -2078,13 +2079,14 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const monthProfit = snapshot.monthProfit;
 
   const dashIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
+  const currentStreak = computeStreak(data, today).current;
 
   return (
     <div>
       {showWT&&<Suspense fallback={null}><PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/></Suspense>}
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
       <Suspense fallback={<LoadingState label="Loading dashboard heroâ€¦" />}>
-        <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
+        <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate} streak={currentStreak}/>
       </Suspense>
       <Suspense fallback={<LoadingState label="Loading next actionâ€¦" />}>
         <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>

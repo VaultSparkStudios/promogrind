@@ -4,6 +4,8 @@ import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLim
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
+const ACTION_PLAN_SYSTEM = `You are PromoGrind's AI assistant. Generate personalized weekly action plans for sports betting promo hunters. Always respond with valid JSON only — no markdown, no explanation outside the JSON. Reference real sportsbook promotion types (deposit match, bonus bet, profit boost, reload, SGP insurance, etc.). Return exactly 3 specific, actionable items appropriate for the user's bankroll tier with this schema: { "summary": string, "actions": [{ "title": string, "why": string, "value": string, "priority": "high"|"medium"|"low", "calculatorSlug": string|null, "bookTarget": string|null, "opsTags": string[], "promoType": string, "confidence": "high"|"medium"|"low", "opportunityScore": number, "nextStep": string }] }`;
+
 function normalizeAction(action: Record<string, unknown> = {}) {
   const confidence = ["high", "medium", "low"].includes(String(action.confidence || "").toLowerCase())
     ? String(action.confidence).toLowerCase()
@@ -65,44 +67,48 @@ serve(async (req) => {
     if (durableLimit) return durableLimit;
 
     const body = await req.json();
-    const { bankroll = "1000", booksComplete = 0, recentProfit = "0", ledgerCount = 0 } = body;
+    const {
+      bankroll = "1000",
+      booksComplete = 0,
+      recentProfit = "0",
+      ledgerCount = 0,
+      activeBooks = [] as string[],
+      topPromoType = null as string | null,
+      hitRate = null as number | null,
+    } = body;
 
     const bankrollNum = parseFloat(bankroll) || 1000;
     const tier = bankrollNum < 1000 ? "under $1,000 (focus on welcome promos)" :
                  bankrollNum < 3000 ? "$1,000–$3,000 (recurring promos + small arbs)" :
                  "over $3,000 (live scanner + multi-book stacking)";
 
-    const prompt = `You are PromoGrind's AI assistant. Generate a personalized weekly action plan for a sports betting promo hunter.
+    const contextLines: string[] = [
+      `- Bankroll: $${bankroll} (tier: ${tier})`,
+      `- Sportsbooks completed: ${booksComplete}`,
+      `- Recent P/L (last 10 tracked entries): $${recentProfit}`,
+      `- Total entries logged: ${ledgerCount}`,
+    ];
+    if (Array.isArray(activeBooks) && activeBooks.length > 0) {
+      contextLines.push(`- Active books: ${activeBooks.slice(0, 6).join(", ")}`);
+    }
+    if (topPromoType) contextLines.push(`- Strongest promo lane: ${topPromoType}`);
+    if (hitRate !== null && hitRate !== undefined) contextLines.push(`- Historical hit rate: ${Math.round(Number(hitRate))}%`);
 
-User context:
-- Bankroll: $${bankroll} (tier: ${tier})
-- Sportsbooks completed: ${booksComplete}
-- Recent P/L (last 10 tracked entries): $${recentProfit}
-- Total entries logged: ${ledgerCount}
-
-Generate exactly 3 specific, actionable items appropriate for their bankroll tier. Reference real sportsbook promotion types (deposit match, bonus bet, profit boost, reload, SGP insurance, etc.).
-
-Respond with JSON only — no markdown, no explanation outside the JSON:
-{
-  "summary": "One sentence overview of their week's best opportunity.",
-  "actions": [
-    { "title": "Specific action title", "why": "1-2 sentence explanation of why this is the right move for them right now", "value": "Est. $X–$Y", "priority": "high", "calculatorSlug": "bonus-bet", "bookTarget": "DraftKings", "opsTags": ["welcome_offer", "fast_cash"], "promoType": "bonus_bet", "confidence": "high", "opportunityScore": 86, "nextStep": "Open the bonus bet converter." },
-    { "title": "Specific action title", "why": "1-2 sentence explanation", "value": "Est. $X–$Y", "priority": "medium", "calculatorSlug": "profit-boost", "bookTarget": "FanDuel", "opsTags": ["reload", "watch"], "promoType": "profit_boost", "confidence": "medium", "opportunityScore": 73, "nextStep": "Check the current odds before the boost expires." },
-    { "title": "Specific action title", "why": "1-2 sentence explanation", "value": "Est. $X", "priority": "medium", "calculatorSlug": "hedge", "bookTarget": "Caesars", "opsTags": ["cleanup"], "promoType": "arb", "confidence": "medium", "opportunityScore": 65, "nextStep": "Settle yesterday's workflow before adding more exposure." }
-  ]
-}`;
+    const userPrompt = `Generate a personalized weekly action plan.\n\nUser context:\n${contextLines.join("\n")}`;
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "x-api-key": ANTHROPIC_API_KEY,
         "anthropic-version": "2023-06-01",
+        "anthropic-beta": "prompt-caching-2024-07-31",
         "content-type": "application/json",
       },
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 600,
-        messages: [{ role: "user", content: prompt }],
+        system: [{ type: "text", text: ACTION_PLAN_SYSTEM, cache_control: { type: "ephemeral" } }],
+        messages: [{ role: "user", content: userPrompt }],
       }),
     });
 

@@ -361,3 +361,67 @@ export function calculatorAccuracy(input = {}) {
 
   return { sampleSize, accuracyRate, hitRate, averageDrift, confidence, label };
 }
+
+const HOT_LANE_WINDOW_MS = 48 * 60 * 60 * 1000;
+const HOT_LANE_MIN_COUNT = 3;
+
+export function buildHotLanes(appData = {}, now = new Date()) {
+  const cutoff = new Date(now).getTime() - HOT_LANE_WINDOW_MS;
+  const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
+  const ledger = Array.isArray(appData.ledger) ? appData.ledger : [];
+
+  const byPromoType = new Map();
+  const byBook = new Map();
+
+  const bump = (map, key, profit) => {
+    if (!key) return;
+    const row = map.get(key) || { key, count: 0, profitSum: 0 };
+    row.count += 1;
+    row.profitSum += profit;
+    map.set(key, row);
+  };
+
+  for (const entry of feedback) {
+    if (entry.status !== "settled") continue;
+    const profit = toNumber(entry.actualProfit) ?? toNumber(entry.expectedProfit) ?? 0;
+    if (profit <= 0) continue;
+    const ts = new Date(entry.updatedAt || entry.createdAt || 0).getTime();
+    if (ts < cutoff) continue;
+    bump(byPromoType, entry.promoType || "other", profit);
+    bump(byBook, entry.book, profit);
+  }
+
+  for (const entry of ledger) {
+    const profit = toNumber(entry.profit) ?? 0;
+    if (profit <= 0) continue;
+    const ts = new Date(entry.date || 0).getTime();
+    if (ts < cutoff) continue;
+    bump(byBook, entry.book, profit);
+  }
+
+  const hotPromoTypes = [...byPromoType.values()]
+    .filter((r) => r.count >= HOT_LANE_MIN_COUNT)
+    .sort((a, b) => b.count - a.count)
+    .map((r) => ({
+      type: "promo_type",
+      key: r.key,
+      label: formatPromoTypeLabel(r.key),
+      count: r.count,
+      profitSum: r.profitSum,
+      badge: `🔥 ${r.count} wins in 48h`,
+    }));
+
+  const hotBooks = [...byBook.values()]
+    .filter((r) => r.count >= HOT_LANE_MIN_COUNT)
+    .sort((a, b) => b.count - a.count)
+    .map((r) => ({
+      type: "book",
+      key: r.key,
+      label: r.key,
+      count: r.count,
+      profitSum: r.profitSum,
+      badge: `🔥 ${r.count} wins in 48h`,
+    }));
+
+  return { hotPromoTypes, hotBooks, hasHotLanes: hotPromoTypes.length > 0 || hotBooks.length > 0 };
+}

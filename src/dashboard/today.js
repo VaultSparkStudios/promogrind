@@ -2,6 +2,7 @@ import { BOOKS, getRecommendedBooksForUser, hasConfiguredMonetizationLinks } fro
 import { buildOperatingActionCandidates, selectOperatingDecision, summarizeWorkflows } from "../promograph/index.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
 import { matchPlaybooks } from "../playbooks/index.js";
+import { buildPortfolioAllocation } from "../lib/portfolio.js";
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -36,7 +37,7 @@ export function getTodayPromos(schedule = [], now = new Date()) {
   );
 }
 
-export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(), bankrollValue = "", { includePlaybooks = false } = {}) {
+export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(), bankrollValue = "", { includePlaybooks = false, includePortfolio = false } = {}) {
   const { todayStr, in3DaysStr, monthKey } = getTodayContext(now);
   const bets = data.bets || [];
   const ledger = data.ledger || [];
@@ -101,6 +102,7 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
     hasBetHistory: bets.length > 0,
     bankroll: Number.isFinite(bankroll) ? bankroll : null,
     topPlaybook: includePlaybooks ? (matchPlaybooks(data, { bankroll: bankrollValue }).top[0] || null) : null,
+    portfolioAllocation: includePortfolio ? buildPortfolioAllocation(workflowInbox.open, bankroll) : null,
   };
 }
 
