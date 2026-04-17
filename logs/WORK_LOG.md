@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-04-17 — S59 Calculator Component Tests + Operator Briefing Playbook Wire
+
+- Recovery session: terminal was cut off mid-S59; identified 3 modified uncommitted files and 1 untracked file from prior agent work; root-caused the vitest config error (agent edited vite.config.js instead of vitest.config.js — `vitest.config.js` always takes precedence).
+- Fixed `vitest.config.js`: added `@vitejs/plugin-react` plugin and updated `include` to `*.test.{js,jsx}`; reverted `vite.config.js` dead test block.
+- Activated pre-written `src/__tests__/calculators.test.jsx` (13 tests for BonusBet + KellyCriterion); fixed 2 test assertions: Help component renders `{term}:` not `{term}`, and navigator.clipboard is getter-only in happy-dom so `Object.assign` throws — replaced with `Object.defineProperty`.
+- Added `topPlaybook` handling to `buildTargetedAlertPlan` in `src/operator/briefing.js`: kind="playbook" alert at priority 91 with fit-reason body and first-step CTA slug.
+- Updated `DailyBriefPage.jsx` to call `getDashboardSnapshot({ includePlaybooks: true })` and render a distinct green playbook card when a playbook is applicable.
+- Added `src/__tests__/briefing.test.js` with 6 tests covering the full playbook alert path.
+- Verified `npm.cmd test` → 235/235 passing (+19: 13 calculator + 6 briefing).
+- Verified `npm.cmd run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (345.1KB main chunk under 425KB cap).
+
 ## 2026-04-16 — S58 Playbook CTA + Calculator Extraction + /go Sprint
 
 - Continued the public-repo fallback path from `docs/SESSION_PROTOCOL.md`; performed manual write-back because private automation scripts are not present in this repo.

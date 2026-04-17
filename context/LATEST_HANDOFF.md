@@ -2,6 +2,31 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 59 — CLOSED)
+
+**Session Intent:** Recovery session — resume from mid-S59 terminal cutoff, identify what was in progress, complete both Now-bucket SIL items, and close out fully.
+
+**Shipped:** 3 improvements across 3 groups
+
+1. **vitest config fix + calculator component tests**: `vitest.config.js` now carries `@vitejs/plugin-react` and includes `*.test.{js,jsx}` — the pre-written `calculators.test.jsx` (13 tests) was silently orphaned by the old `.test.js`-only pattern; tests are now active and 2 assertion bugs were fixed at root cause (Help term rendering format + navigator.clipboard getter-only in happy-dom); `vite.config.js` dead `test` block removed
+2. **topPlaybook into operator briefing**: `buildTargetedAlertPlan` now surfaces a `kind: "playbook"` alert at priority 91; `DailyBriefPage` calls `getDashboardSnapshot({ includePlaybooks: true })` and renders a distinct playbook card; `briefing.test.js` added with 6 tests covering the full playbook alert path
+3. Infrastructure: `vitest.config.js` updated with React JSX support as a permanent improvement — future `.test.jsx` component tests work without any per-file config
+
+**Tests:** 235/235 passing · delta: +19 (13 calculator + 6 briefing)
+**Bundle:** 345.1KB / 425KB cap — 79.9KB headroom
+**Build:** green
+**Intent outcome:** Achieved — recovered from terminal cutoff, identified root cause correctly, cleared entire Now bucket
+
+## Current Delta Since S58
+
+- `vitest.config.js`: now imports `@vitejs/plugin-react`; `include` updated to `*.test.{js,jsx}`; `environment: "node"` preserved as global default (per-file `// @vitest-environment happy-dom` directive handles JSX component tests)
+- `vite.config.js`: removed the dead `test.include` block that the previous mid-session agent had added incorrectly (vitest.config.js always takes precedence)
+- `src/__tests__/calculators.test.jsx`: now active — 13 tests for BonusBet (7) and KellyCriterion (6); test assertions corrected for Help component's `{term}:` rendering format and navigator.clipboard getter-only constraint in happy-dom
+- `src/operator/briefing.js`: `buildTargetedAlertPlan` extracts `dashboard.topPlaybook`; inserts `kind: "playbook"` alert at priority 91 with `"Try: {name}"` headline, summary + fit-reasons body, and `"/{firstStepSlug}"` ctaSlug; only when `topPlaybook.applicable` is true
+- `src/components/dashboard/DailyBriefPage.jsx`: `getDashboardSnapshot` call now passes `{ includePlaybooks: true }`; new playbook card appended to the brief grid using IIFE render — shows playbook icon, name (green), summary, step count + fit line, and "Run playbook →" CTA to first step's calculator; only rendered when `snapshot.topPlaybook?.applicable` is true
+- `src/__tests__/briefing.test.js`: new file — 6 tests: general fallback, playbook alert at p91 with correct headline/ctaSlug/tags, no alert when not applicable, no alert when null, priority ordering, fit reasons in body
+- Validation: `npm.cmd test` 235/235 · `npm.cmd run build` green · `node scripts/check-bundle-budget.mjs` 345.1KB under 425KB
+
 ## Session 58 (2026-04-16) — CLOSED
 
 **Session Intent:** Execute the Unified Genius List at quality bar (implicit — user ran /start, then /go, then /closeout).

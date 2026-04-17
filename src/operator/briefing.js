@@ -11,6 +11,7 @@ export function buildTargetedAlertPlan(input = {}) {
   const anomalies = Array.isArray(snapshot?.feeds?.anomalies) ? snapshot.feeds.anomalies : [];
   const expiringBooks = Array.isArray(dashboard?.expiringBooks) ? dashboard.expiringBooks : [];
   const openBets = Array.isArray(dashboard?.openBets) ? dashboard.openBets : [];
+  const topPlaybook = dashboard?.topPlaybook || null;
 
   if (driftAlerts[0]?.direction === "negative") {
     alerts.push({
@@ -33,6 +34,20 @@ export function buildTargetedAlertPlan(input = {}) {
       ctaLabel: "Review books",
       ctaSlug: "/sportsbooks",
       tags: ["promo", "expiry"],
+    });
+  }
+
+  if (topPlaybook?.applicable && topPlaybook.playbook) {
+    const pb = topPlaybook.playbook;
+    const fitLine = topPlaybook.reasons?.map((r) => r.text).join(" · ") || `fit score ${topPlaybook.fitScore}`;
+    alerts.push({
+      kind: "playbook",
+      priority: 91,
+      headline: `Try: ${pb.name}`,
+      body: `${pb.summary} — ${fitLine}`,
+      ctaLabel: `Start: ${pb.steps[0]?.title || "Step 1"}`,
+      ctaSlug: `/${pb.steps[0]?.calculatorSlug || "bonus-bet"}`,
+      tags: ["playbook", pb.id],
     });
   }
 

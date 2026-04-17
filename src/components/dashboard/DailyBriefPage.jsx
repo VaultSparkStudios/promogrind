@@ -18,7 +18,7 @@ export default function DailyBriefPage() {
   const [notifEnabled, setNotifEnabled] = useState(() => isDailyBriefEnabled());
   const [notifPending, setNotifPending] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
-  const snapshot = getDashboardSnapshot(appData, PROMO_SCHED, today, localStorage.getItem("pg_bankroll") || "");
+  const snapshot = getDashboardSnapshot(appData, PROMO_SCHED, today, localStorage.getItem("pg_bankroll") || "", { includePlaybooks: true });
   const studioSnapshot = buildStudioSnapshot(appData, { now: today, bankroll: localStorage.getItem("pg_bankroll") || "" });
   const alertPlan = buildTargetedAlertPlan({ snapshot: studioSnapshot, dashboard: snapshot });
 
@@ -164,6 +164,35 @@ export default function DailyBriefPage() {
             </div>
           )}
         </div>
+
+        {snapshot.topPlaybook?.applicable && snapshot.topPlaybook.playbook && (() => {
+          const pb = snapshot.topPlaybook.playbook;
+          const fitLine = snapshot.topPlaybook.reasons?.map((r) => r.text).join(" · ") || `fit score ${snapshot.topPlaybook.fitScore}`;
+          return (
+            <div style={{ background: `${K.gn}08`, border: `1px solid ${K.gn}25`, borderRadius: 12, padding: "18px 20px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <span style={{ fontSize: 16 }}>📋</span>
+                <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD }}>Top Matched Playbook</div>
+              </div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: K.gn, marginBottom: 6 }}>{pb.name}</div>
+              <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 4 }}>{pb.summary}</div>
+              <div style={{ fontSize: 11, color: K.mt, marginBottom: 12 }}>
+                {pb.steps.length} step{pb.steps.length === 1 ? "" : "s"} · {fitLine}
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <button
+                  onClick={() => navigate(`/${pb.steps[0]?.calculatorSlug || "bonus-bet"}`)}
+                  style={{ padding: "6px 14px", background: `${K.gn}15`, border: `1px solid ${K.gn}40`, borderRadius: 6, color: K.gn, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: font }}
+                >
+                  Run playbook →
+                </button>
+                <span style={{ fontSize: 11, color: K.mt, alignSelf: "center" }}>
+                  via {pb.steps[0]?.title}
+                </span>
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

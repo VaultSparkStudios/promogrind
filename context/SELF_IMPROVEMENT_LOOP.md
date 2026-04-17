@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇ █ █ █ █
-Avgs — 3: 487.0 | 5: 483.2 | 10: 465.5 [N=10] | 25: — | all: 459.8 [N=16]
-  └ 3-session: Dev 99.0 | Align 94.7 | Momentum 98.0 | Engage 91.0 | Process 104.3
-Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓↓
-Momentum runway: ~3.4 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-16 | Session 58 | Total: 483/500 | Velocity: 11 | protocolVelocity: 0
+Sparkline (last 5 totals): █ █ █ █ ▇
+Avgs — 3: 481.3 | 5: 484.4 | 10: 465.9 [N=10] | 25: — | all: 460.6 [N=17]
+  └ 3-session: Dev 98.7 | Align 90.0 | Momentum 92.7 | Engage 87.3 | Process 102.7
+Velocity trend: ↓  |  Protocol velocity: →  |  Debt: →
+Momentum runway: ~2.9 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-17 | Session 59 | Total: 474/500 | Velocity: 3 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-17 — Session 59 | Total: 474/500 | Velocity: 3 | Debt: →
+Avgs — 3: 481.3 | 5: 484.4 | 10: 465.9 [N=10] | 25: — | all: 460.6 [N=17]
+  └ 3-session: Dev 98.7 | Align 90.0 | Momentum 92.7 | Engage 87.3 | Process 102.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | 235/235 tests green (+19 new: 13 calculator component tests + 6 briefing tests); build passing; bundle 345.1KB under 425KB cap — 79.9KB headroom; vitest.config.js now supports JSX component tests via react plugin, unblocking future component coverage work. |
+| Creative Alignment | 91 | ↓ | `buildTargetedAlertPlan` now surfaces matched playbooks in the daily brief at priority 91 — completing the topPlaybook architecture that spans `matchPlaybooks → getDashboardSnapshot → buildTargetedAlertPlan → DailyBriefPage`; the playbook card uses the established green-accent design language with fit reasoning visible. Majority of session was infrastructure (vitest config) + test coverage — low new-feature density. |
+| Momentum | 93 | ↓ | Recovery session: cleared entire Now bucket (both SIL items), velocity=3 including vitest infra fix; session was smaller than the recent S55-S58 cluster but highly targeted — identified root cause of terminal cutoff within minutes and executed cleanly. Scope cap = 16, shipped 3 by design. |
+| Engagement | 88 | ↓ | Playbook card in the Daily Brief is a concrete UX win — users now see a matched recommended routine in the morning brief with a direct "Run playbook →" CTA, not just a generic action reminder. Calculator component tests are internal and don't affect the live product. |
+| Process Quality | 103 | → | Recovery handled at root cause: correctly identified vitest.config.js (not vite.config.js) as the source of truth for test config; fixed test assertions at root cause (Help component rendering format + navigator.clipboard getter-only) rather than working around them; full manual closeout in canonical order; no phantom blockers; both SIL items driven to completion. |
+| **Total** | **474/500** | ↓ | |
+
+**Top win:** The vitest.config.js fix recovered 13 pre-written component tests that had been silently orphaned — BonusBet and KellyCriterion (the two most complex extracted calculators) now have component-level render/interaction coverage. The fix also unblocks all future `.test.jsx` component testing without any per-file config.
+**Top gap:** The playbook architecture is now complete across the Today dashboard and Daily Brief, but the operator command brief narrative in `LaunchCommandCenterPanel` doesn't yet reference `topPlaybook`. The `DailyCommandBrief` in the cockpit could surface the matched playbook in the machine-usable brief text.
+**Intent outcome:** Achieved — recovered from terminal cutoff, identified and fixed root cause of vitest config error, cleared entire Now bucket at quality bar, performed full closeout write-back in canonical order.
+
+**Brainstorm**
+1. Extract remaining large inline calculators from App.jsx — `TeaserCalc`, `RoundRobinCalc`, `ParlayBuilder`, `SGPEstimator`, `BetSizingAdvisor`, `LineShop` represent another ~30-40KB of potential bundle recovery per S58 brainstorm.
+2. Wire `topPlaybook` into the operator command brief narrative in `LaunchCommandCenterPanel` / `buildCommandBrief` so the machine-usable daily brief also surfaces the matched playbook in the action plan text.
+3. Add component-level tests for `ProfitBoost` and `FirstBet` — they were extracted in S58 along with BonusBet but don't have dedicated test coverage yet.
+
+**Committed to TASK_BOARD:** [SIL] Extract remaining large calculators from App.jsx (TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, BetSizingAdvisor, LineShop) · [SIL] Wire topPlaybook into LaunchCommandCenterPanel operator command brief
 
 ## 2026-04-16 — Session 58 | Total: 483/500 | Velocity: 11 | Debt: ↓↓
 Avgs — 3: 487.0 | 5: 483.2 | 10: 465.5 [N=10] | 25: — | all: 459.8 [N=16]

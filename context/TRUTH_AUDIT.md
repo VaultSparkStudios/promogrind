@@ -2,5 +2,5 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-16 (post-S58 closeout — topPlaybook wired into ActivationNextAction with distinct playbook CTA render; `getNextBestAction` returns `focus`; 12 calculator/dashboard components + 2 shared helpers extracted from App.jsx into src/calculators/ and src/components/; playbook library extended to 6; PromoWalkthrough has focus-trap + Escape; community board auto-defaults state filter from userState; getDashboardSnapshot has opt-in topPlaybook; `stripeProductionPriceIds` corrected to list 7 plan key names; `npm.cmd test` 216/216 + `npm.cmd run build` + bundle check at 353.3KB/425KB all green)
+Last reviewed: 2026-04-17 (post-S59 closeout — vitest.config.js fixed with React plugin + *.test.{js,jsx} include, activating 13 calculator component tests; vite.config.js dead test block removed; topPlaybook wired into buildTargetedAlertPlan in src/operator/briefing.js at priority 91 and DailyBriefPage now calls getDashboardSnapshot with { includePlaybooks: true }; 6 briefing.test.js tests added; `npm.cmd test` 235/235 + `npm.cmd run build` + bundle check at 345.1KB/425KB all green)
 Public-safe summary only. Sensitive verification notes are maintained privately.
