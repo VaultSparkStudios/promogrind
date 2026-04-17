@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): █ █ █ ▇ █
-Avgs — 3: 483.3 | 5: 483.6 | 10: 467.6 [N=10] | 25: — | all: 461.9 [N=18]
-  └ 3-session: Dev 99.0 | Align 91.7 | Momentum 94.7 | Engage 89.3 | Process 103.3
+Sparkline (last 5 totals): █ █ ▇ █ █
+Avgs — 3: 487.0 | 5: 484.4 | 10: 469.2 [N=10] | 25: — | all: 463.1 [N=19]
+  └ 3-session: Dev 99.0 | Align 93.3 | Momentum 95.3 | Engage 90.0 | Process 103.3
 Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~3.1 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-17 | Session 60 | Total: 486/500 | Velocity: 2 | protocolVelocity: 0
+Momentum runway: ~3.4 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-17 | Session 61 | Total: 489/500 | Velocity: 2 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-17 — Session 61 | Total: 489/500 | Velocity: 2 | Debt: ↓
+Avgs — 3: 487.0 | 5: 484.4 | 10: 469.2 [N=10] | 25: — | all: 463.1 [N=19]
+  └ 3-session: Dev 99.0 | Align 93.3 | Momentum 95.3 | Engage 90.0 | Process 103.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | 247/247 tests green (+12 new component tests for ProfitBoost + FirstBet); build passing; bundle 324.6KB under 425KB; Studio contract now carries structured topPlaybook data. |
+| Creative Alignment | 95 | ↑ | Studio contract brief now exposes `topPlaybook` as a machine-readable structured object — Hub, Social Dashboard, and ops tooling can consume it without re-computing. Playbook architecture is fully integrated from the calculator surface through the operator cockpit into the exportable contract. |
+| Momentum | 96 | → | Cleared the full Now bucket across S60+S61; 4 SIL items resolved across two sessions; each item was a compounding improvement (test infrastructure → test coverage → contract completeness). |
+| Engagement | 90 | → | ProfitBoost and FirstBet now have verified component-level test coverage, reducing regression risk on two of the highest-EV calculator flows. Studio contract topPlaybook field enables downstream personalization without a re-compute round trip. |
+| Process Quality | 103 | → | Write-back in canonical order; SIL entries pre-loaded from brainstorm before sprint; no phantom blockers; all items complete at quality bar. |
+| **Total** | **489/500** | ↑ | |
+
+**Top win:** The playbook architecture is now end-to-end: `matchPlaybooks` → `getDashboardSnapshot.topPlaybook` → `buildTargetedAlertPlan` (Daily Brief + Cockpit alert queue) + `buildOperatorCommandBrief` (Studio contract `brief.topPlaybook` structured field + followUp string) + `ActivationNextAction` CTA card. Every surface that surfaces a next-best action can now reference the matched playbook without re-computing.
+**Top gap:** The `brief.topPlaybook` field is now in the Studio contract, but the `appendStudioContractHistory` delta summary (`buildSummaryDelta`) doesn't track playbook changes between published snapshots — adding a `playbook` field to the delta would let ops tooling detect when the recommended playbook changes session-to-session.
+**Intent outcome:** Achieved — /go continuation cleared full Now bucket at quality bar.
+
+**Brainstorm**
+1. Add `topPlaybook` tracking to `buildSummaryDelta` so the Studio contract history records when the recommended playbook changes between published snapshots.
+2. Write a `studioExport.test.js` test case for `buildOperatorCommandBrief` with `topPlaybook` — verifies the structured `brief.topPlaybook` field and the followUp string in isolation.
+3. Extend the `LaunchCommandCenterPanel` "Published contract history" card to show `brief.topPlaybook.name` from the latest published snapshot.
+
+**Committed to TASK_BOARD:** [SIL] Add topPlaybook tracking to buildSummaryDelta · [SIL] Test buildOperatorCommandBrief topPlaybook path in studioExport.test.js
 
 ## 2026-04-17 — Session 60 | Total: 486/500 | Velocity: 2 | Debt: ↓
 Avgs — 3: 483.3 | 5: 483.6 | 10: 467.6 [N=10] | 25: — | all: 461.9 [N=18]

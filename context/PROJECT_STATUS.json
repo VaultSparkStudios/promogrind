@@ -24,18 +24,18 @@
     "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
   "lastUpdated": "2026-04-17",
-  "currentSession": 60,
-  "silScore": 486,
-  "silAvg3": 483.3,
+  "currentSession": 61,
+  "silScore": 489,
+  "silAvg3": 487.0,
   "silVelocity": 2,
   "silDebt": "down",
-  "silLastSession": "S60",
+  "silLastSession": "S61",
   "silSparkline": [
-    491,
     487,
     483,
     474,
-    486
+    486,
+    489
   ],
   "ignisScore": 47652,
   "ignisGrade": "FORGE",
@@ -59,8 +59,8 @@
     "closer_annual",
     "house"
   ],
-  "version": "24.10.0",
-  "lastSession": "S60",
+  "version": "24.11.0",
+  "lastSession": "S61",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
@@ -72,8 +72,8 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "build passing after S60 — all 17 calculators now in src/calculators/ as lazy modules; topPlaybook complete across Today dashboard, Daily Brief, and Launch Cockpit; main chunk 324.6KB against the 425KB budget (100.4KB headroom), CI enforces gate",
-  "testStatus": "235/235",
+  "buildStatus": "build passing after S61 — all calculators in src/calculators/; topPlaybook architecture complete across all surfaces including Studio contract brief.topPlaybook structured field; main chunk 324.6KB against 425KB budget (100.4KB headroom), CI enforces gate",
+  "testStatus": "247/247",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",

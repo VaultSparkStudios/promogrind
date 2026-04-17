@@ -108,6 +108,96 @@ describe("BonusBet calculator", () => {
   });
 });
 
+// ── ProfitBoost ────────────────────────────────────────────────────────────
+
+describe("ProfitBoost calculator", () => {
+  let ProfitBoost;
+
+  beforeEach(async () => {
+    localStorage.clear();
+    ({ default: ProfitBoost } = await import("../calculators/ProfitBoost.jsx"));
+  });
+
+  it("renders the calculator title", () => {
+    wrap(<ProfitBoost />);
+    expect(screen.getByText("Profit Boost Converter")).toBeDefined();
+  });
+
+  it("shows guaranteed profit result with default inputs", () => {
+    wrap(<ProfitBoost />);
+    expect(screen.getByText("guaranteed profit")).toBeDefined();
+  });
+
+  it("shows demo step-by-step block when Demo button is clicked", () => {
+    wrap(<ProfitBoost />);
+    fireEvent.click(screen.getByText("▶ Demo"));
+    expect(screen.getByText("Step-by-step demo")).toBeDefined();
+  });
+
+  it("exits demo mode when Exit Demo is clicked", () => {
+    wrap(<ProfitBoost />);
+    fireEvent.click(screen.getByText("▶ Demo"));
+    fireEvent.click(screen.getByText("✕ Exit Demo"));
+    expect(screen.queryByText("Step-by-step demo")).toBeNull();
+  });
+
+  it("Example button presets inputs and shows result", () => {
+    wrap(<ProfitBoost />);
+    fireEvent.click(screen.getByText("★ Show Example"));
+    expect(screen.getByText("guaranteed profit")).toBeDefined();
+  });
+
+  it("shows help section with Profit Boost term", () => {
+    wrap(<ProfitBoost />);
+    expect(screen.getByText("Profit Boost:")).toBeDefined();
+  });
+});
+
+// ── FirstBet ───────────────────────────────────────────────────────────────
+
+describe("FirstBet calculator", () => {
+  let FirstBet;
+
+  beforeEach(async () => {
+    localStorage.clear();
+    ({ default: FirstBet } = await import("../calculators/FirstBet.jsx"));
+  });
+
+  it("renders the calculator title", () => {
+    wrap(<FirstBet />);
+    expect(screen.getByText("First Bet Safety Net Hedge")).toBeDefined();
+  });
+
+  it("shows Hedge Amount result row with default inputs", () => {
+    wrap(<FirstBet />);
+    expect(screen.getByText("Hedge Amount")).toBeDefined();
+  });
+
+  it("shows demo step-by-step block when Demo button is clicked", () => {
+    wrap(<FirstBet />);
+    fireEvent.click(screen.getByText("▶ Demo"));
+    expect(screen.getByText("Step-by-step demo")).toBeDefined();
+  });
+
+  it("exits demo mode when Exit Demo is clicked", () => {
+    wrap(<FirstBet />);
+    fireEvent.click(screen.getByText("▶ Demo"));
+    fireEvent.click(screen.getByText("✕ Exit Demo"));
+    expect(screen.queryByText("Step-by-step demo")).toBeNull();
+  });
+
+  it("Example button updates inputs and shows result", () => {
+    wrap(<FirstBet />);
+    fireEvent.click(screen.getByText("★ Show Example"));
+    expect(screen.getByText("Hedge Amount")).toBeDefined();
+  });
+
+  it("shows help section with Safety Net Promo term", () => {
+    wrap(<FirstBet />);
+    expect(screen.getByText("Safety Net Promo:")).toBeDefined();
+  });
+});
+
 // ── KellyCriterion ─────────────────────────────────────────────────────────
 
 describe("KellyCriterion calculator", () => {

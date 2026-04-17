@@ -1,5 +1,12 @@
 # Work Log
 
+## 2026-04-17 — S61 ProfitBoost + FirstBet Tests + Studio Contract Playbook Wire
+
+- Added 12 component tests to calculators.test.jsx: 6 ProfitBoost (title, guaranteed profit, demo mode, exit demo, example, help) + 6 FirstBet (title, hedge amount, demo mode, exit demo, example, help).
+- Wired topPlaybook into buildStudioSnapshot: imported matchPlaybooks, computed topPlaybook, passed to buildOperatingActionCandidates (enabling playbook operating decisions in Studio snapshot) and buildOperatorCommandBrief.
+- buildOperatorCommandBrief now returns brief.topPlaybook as structured { id, name, fitScore, fitReasons, firstStepSlug, stepCount } + appends "Try: {name}" to followUps when applicable.
+- Verified: npm.cmd test 247/247 · npm.cmd run build green · bundle 324.6KB under 425KB.
+
 ## 2026-04-17 — S60 Calculator Extraction + Cockpit Playbook Wire (/go Sprint)
 
 - Extracted 7 remaining inline calculators from App.jsx to src/calculators/: TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc (bonus), BetSizingAdvisor, LineShop; all lazy-loaded.

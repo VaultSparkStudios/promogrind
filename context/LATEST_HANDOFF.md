@@ -2,6 +2,24 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 61 — CLOSED)
+
+**Session Intent:** /go continuation — execute remaining Now-bucket SIL items.
+
+**Shipped:** 2 items at quality bar
+
+1. **ProfitBoost + FirstBet component tests**: 12 new tests in `calculators.test.jsx` — 6 per calculator covering title, result row, demo mode, exit demo, example preset, help section
+2. **topPlaybook into Studio contract**: `buildStudioSnapshot` now computes `topPlaybook` via `matchPlaybooks`, passes it to `buildOperatingActionCandidates` and `buildOperatorCommandBrief`; brief returns structured `topPlaybook` + followUp string — `snapshot.brief.topPlaybook` is machine-readable for all downstream consumers
+
+**Tests:** 247/247 · Build: green · Bundle: 324.6KB / 425KB cap
+**Intent outcome:** Achieved — cleared all 4 SIL items across S60+S61 sprint
+
+## Current Delta Since S60
+
+- `src/__tests__/calculators.test.jsx`: +12 tests (6 ProfitBoost + 6 FirstBet)
+- `src/studio/export.js`: imported `matchPlaybooks`; added `topPlaybook` computation from `playbookMatch.top[0]`; `buildOperatingActionCandidates` now receives `topPlaybook`; `buildOperatorCommandBrief` accepts and exposes `topPlaybook` as structured brief field + appends playbook followUp when applicable
+- Validation: `npm.cmd test` 247/247 · `npm.cmd run build` green · bundle 324.6KB under 425KB
+
 ## Where We Left Off (Session 60 — CLOSED)
 
 **Session Intent:** /go sprint — execute all unblocked Now-bucket items at quality bar.

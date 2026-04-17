@@ -3,6 +3,7 @@ import { getLaunchCommandCenter, resolveLaunchValidation } from "../launchState.
 import { buildOperatingActionCandidates, selectOperatingDecision } from "../promograph/index.js";
 import { buildTrackInsights } from "../track/insights.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
+import { matchPlaybooks } from "../playbooks/index.js";
 
 function buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates = [] }) {
   const rows = [];
@@ -77,6 +78,7 @@ function buildOperatorCommandBrief(input = {}) {
   const {
     actionCandidates = [],
     topWorkflow = null,
+    topPlaybook = null,
     driftAlerts = [],
     nextActions = [],
     openWorkflowCount = 0,
@@ -88,20 +90,35 @@ function buildOperatorCommandBrief(input = {}) {
   const decision = selectOperatingDecision({
     actionCandidates,
     topWorkflow,
-    driftAlerts,
-    nextActions,
     openWorkflowCount,
     waitingWorkflowCount,
     readinessScore,
     posture,
   });
+
+  const playbookFollowUp = topPlaybook?.applicable && topPlaybook.playbook
+    ? `Try: ${topPlaybook.playbook.name} — ${topPlaybook.reasons?.map((r) => r.text).join(" · ") || `fit score ${topPlaybook.fitScore}`}`
+    : null;
+
   return {
     headline: decision.title,
     body: decision.body,
     tone: decision.tone,
     reason: decision.reason,
     focus: decision.focus,
-    followUps: decision.followUps,
+    followUps: playbookFollowUp
+      ? [...(decision.followUps || []), playbookFollowUp]
+      : (decision.followUps || []),
+    topPlaybook: topPlaybook?.applicable && topPlaybook.playbook
+      ? {
+          id: topPlaybook.playbook.id,
+          name: topPlaybook.playbook.name,
+          fitScore: topPlaybook.fitScore,
+          fitReasons: topPlaybook.reasons?.map((r) => r.text) || [],
+          firstStepSlug: topPlaybook.playbook.steps[0]?.calculatorSlug || null,
+          stepCount: topPlaybook.playbook.steps.length,
+        }
+      : null,
   };
 }
 
@@ -231,6 +248,8 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
     done: appData.done || {},
     bookStatus: appData.bookStatus || {},
   })[0] || null;
+  const playbookMatch = matchPlaybooks(appData, { bankroll: options.bankroll ?? appData.bankroll ?? "" });
+  const topPlaybook = playbookMatch.top[0] || null;
   const actionCandidates = buildOperatingActionCandidates({
     hasBankroll: !!String(options.bankroll ?? appData.bankroll ?? "").trim(),
     hasCalc: Object.keys(usageLog || {}).length > 0,
@@ -243,6 +262,7 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
     openWorkflowCount: workflows.openCount,
     topWorkflow: workflows.top[0] || null,
     bestBook,
+    topPlaybook,
   });
   const intelligence = {
     topSkipReasons: insights.skipReasonRows.slice(0, 3),
@@ -258,6 +278,7 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
   const brief = buildOperatorCommandBrief({
     actionCandidates,
     topWorkflow: workflows.top[0] || null,
+    topPlaybook,
     driftAlerts: intelligence.driftAlerts,
     nextActions: commandCenter?.nextActions || [],
     openWorkflowCount: workflows.openCount,
