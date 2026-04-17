@@ -2,6 +2,36 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 58 (2026-04-16) — CLOSED
+
+**Session Intent:** Execute the Unified Genius List at quality bar (implicit — user ran /start, then /go, then /closeout).
+
+## Where We Left Off (Session 58 — CLOSED)
+
+- Shipped: 11 improvements across 11 items — topPlaybook wire+CTA card, community board state filter auto-default, focus-trap PromoWalkthrough, cron trigger SQL migration, 2 calculator/dashboard extraction tranches (12 components + 2 shared helpers), getDashboardSnapshot topPlaybook, playbook library +2 (6 total), PromoWalkthrough Escape key, stripeProductionPriceIds truth fix
+- Tests: 216/216 passing · delta: +2 (two new dashboard tests for topPlaybook surfacing + non-applicable playbook guard)
+- Deploy: pending — repo-side code is ready for push; production only needs standing manual/external actions
+- Session type: implementation + extraction + accessibility + architecture + closeout
+- Intent outcome: Achieved
+
+## Current Delta Since S57
+
+- `src/components/dashboard/ActivationNextAction.jsx` now calls `matchPlaybooks(data, { bankroll })`, takes the top applicable result as `topPlaybook`, passes it to `getNextBestAction`, and renders a distinct playbook card (playbook icon, step count, bankroll-fit reason, fit score, "Run playbook →" CTA) when `action.focus.type === "playbook"`.
+- `src/dashboard/today.js` `getNextBestAction` now returns `focus: decision.focus` so callers can inspect `focus.type` and `focus.playbookId`; `getDashboardSnapshot` accepts `{ includePlaybooks: true }` and includes `topPlaybook` in the snapshot return when opted in.
+- `src/components/CommunityPromoBoard.jsx` reads `appData.userState` from `AppDataCtx` and initializes `stateFilter` from the stored state code on mount.
+- `src/components/PromoWalkthrough.jsx` uses `useFocusTrap(true, containerRef)` with `role="dialog"` + `aria-modal` + `aria-label`; Escape key handler via `useEffect` closes the modal.
+- `scripts/migration-cron-jobs.sql` created — `pg_cron` + `pg_net` schedule for `onboarding-drip` (daily 9am UTC) and `weekly-digest` (Sunday 8am UTC).
+- `src/playbooks/index.js` expanded from 4 to 6 playbooks: added `SGP Insurance Loop` (insurance, $150 min) and `Reload Match Grind` (deposit_match, $300 min).
+- `src/calculators/` now contains: `BonusBet.jsx`, `ProfitBoost.jsx`, `FirstBet.jsx`, `NoVig.jsx`, `NoVig3Way.jsx`, `PlusEV.jsx`, `Arb2Way.jsx`, `Arb3Way.jsx`, `KellyCriterion.jsx`, `InsurancePromo.jsx` — all lazy-loaded from `App.jsx`.
+- `src/components/BookCTA.jsx` and `src/components/ShareCard.jsx` extracted from inline `App.jsx` definitions.
+- `src/components/dashboard/CommunityWinsWall.jsx` and `src/components/dashboard/SmartPromoRecommender.jsx` extracted from `App.jsx` — both lazy-loaded with Suspense.
+- `context/PROJECT_STATUS.json` `stripeProductionPriceIds` corrected from `[]` to the 7 plan key names.
+- `src/__tests__/dashboard.test.js` +2 tests: playbook wins operating decision, non-applicable playbook is not surfaced.
+- Validation after closeout: `npm.cmd test` (216/216), `npm.cmd run build` (green), `node scripts/check-bundle-budget.mjs` (353.3KB under 425KB cap — 71.7KB total headroom recovered this session).
+- GitHub state: this closeout commits and pushes the validated repo state to `main`.
+
+---
+
 ## Session 57 (2026-04-16) — CLOSED
 
 **Session Intent:** Execute the Unified Genius List at quality bar (implicit — user ran /go immediately after /start).

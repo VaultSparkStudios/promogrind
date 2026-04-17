@@ -1,5 +1,19 @@
 # Work Log
 
+## 2026-04-16 — S58 Playbook CTA + Calculator Extraction + /go Sprint
+
+- Continued the public-repo fallback path from `docs/SESSION_PROTOCOL.md`; performed manual write-back because private automation scripts are not present in this repo.
+- Pre-/go tranche: wired `matchPlaybooks` into `ActivationNextAction` and added a distinct playbook CTA render (icon, step count, bankroll-fit reason, "Run playbook →") when a playbook wins the operating decision; updated `getNextBestAction` to return `focus` from the operating decision.
+- Pre-/go tranche: added community board state filter auto-default from `appData.userState` via `AppDataCtx`; extended `useFocusTrap` + Escape key handler to `PromoWalkthrough`.
+- Pre-/go tranche: created `scripts/migration-cron-jobs.sql` for `onboarding-drip` + `weekly-digest` `pg_cron` schedules; fixed `stripeProductionPriceIds` truth-drift in `PROJECT_STATUS.json`.
+- Pre-/go tranche: extracted `BonusBet`, `ProfitBoost`, `FirstBet`, `BookCTA`, `ShareCard`, `CommunityWinsWall`, `SmartPromoRecommender` from `App.jsx` into dedicated files; bundle recovered from 418.3KB to 379.8KB.
+- /go sprint: extracted `NoVig`, `NoVig3Way`, `PlusEV`, `Arb2Way`, `Arb3Way`, `KellyCriterion`, `InsurancePromo` from `App.jsx` into `src/calculators/`; bundle recovered to 353.3KB (71.7KB total this session).
+- /go sprint: added `topPlaybook` opt-in to `getDashboardSnapshot`; `TodayDashboardPanel` now uses snapshot-level playbook data when available; extended playbook library from 4 to 6 playbooks (SGP Insurance Loop + Reload Match Grind).
+- /go sprint: added Escape key handler to `PromoWalkthrough`; corrected stale TASK_BOARD items for community intel, cron trigger, and auth tokens.
+- Verified `npm.cmd test` → 216/216 passing (+2 new dashboard tests for topPlaybook operating decision).
+- Verified `npm.cmd run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`353.3KB` main chunk under 425KB cap).
+
 ## 2026-04-16 — S57 Playbook Operating Decision + Community Intel + Aria + Auth Tests
 
 - Continued the public-repo fallback path from `docs/SESSION_PROTOCOL.md`; performed manual write-back because the private `scripts/ops.mjs`, `closeout-autopilot.mjs`, and related Studio OS automation are not present in this repo.

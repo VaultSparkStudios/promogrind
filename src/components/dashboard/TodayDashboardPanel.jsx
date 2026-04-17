@@ -4,6 +4,7 @@ import { K, S, f, font, fontD } from "../../lib/shared.js";
 import { getBankrollPosture, getUnfinishedWork } from "../../dashboard/today.js";
 import { getOnboardingProgress } from "../../onboarding.js";
 import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
+// matchPlaybooks is called here as a fallback when snapshot.topPlaybook is not pre-computed
 import { upsertWorkflowEntry } from "../../promograph/index.js";
 import ObservabilityPanel from "./ObservabilityPanel.jsx";
 import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
@@ -25,7 +26,12 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const recentTone = snapshot.recentSettledProfit >= 0 ? K.gn : K.rd;
   const toast = useToast();
   const { syncAppData } = React.useContext(AppDataCtx) || {};
-  const playbookResults = React.useMemo(() => matchPlaybooks(appData, { bankroll: snapshot?.bankroll }), [appData, snapshot?.bankroll]);
+  const playbookResults = React.useMemo(
+    () => snapshot?.topPlaybook
+      ? { top: [snapshot.topPlaybook], matches: [snapshot.topPlaybook] }
+      : matchPlaybooks(appData, { bankroll: snapshot?.bankroll }),
+    [snapshot?.topPlaybook, appData, snapshot?.bankroll],
+  );
 
   const queuePlaybook = (playbook) => {
     if (!syncAppData) return;

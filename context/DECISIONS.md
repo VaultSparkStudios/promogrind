@@ -32,6 +32,26 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 
 ---
 
+## 2026-04-16 — Calculator extraction to src/calculators/ is the canonical pattern (S58)
+
+**Decision:** All inline calculator components in `App.jsx` should be extracted to individual files in `src/calculators/` as lazy-loaded chunks. Shared visual helpers (`BookCTA`, `ShareCard`) belong in `src/components/`. Dashboard-only surfaces (`CommunityWinsWall`, `SmartPromoRecommender`) belong in `src/components/dashboard/`. This is now an ongoing process, not a one-off.
+
+**Applies to this project:** Yes — governs any new calculator or dashboard surface added to `App.jsx`.
+
+**Rationale:** App.jsx at 5000+ lines is a maintenance liability and a bundle pressure. Extracting components as lazy chunks recovers startup bundle size (main chunk went from 418.3KB to 353.3KB across S58 alone), makes each component independently testable, and follows the pattern already established for Tracker, Ledger, TrackInsights, and all dashboard-panel surfaces. The pattern is: component lives in its own file, exported as default, imported via `lazy(() => import(...))` in App.jsx, used inside `<Suspense>`.
+
+---
+
+## 2026-04-16 — getDashboardSnapshot topPlaybook is opt-in (S58)
+
+**Decision:** `getDashboardSnapshot` accepts `{ includePlaybooks: true }` to include `topPlaybook` in the return value. The default (no option) does NOT call `matchPlaybooks`.
+
+**Applies to this project:** Yes — governs `getDashboardSnapshot` in `src/dashboard/today.js`.
+
+**Rationale:** `matchPlaybooks` runs scoring logic across all playbooks for every call. `getDashboardSnapshot` is called on every app state change — computing playbook scores on every update would add unnecessary overhead. The opt-in pattern lets callers that need it (e.g., the dashboard render cycle) request it explicitly, while lightweight callers (tests, batch computations) skip it for free.
+
+---
+
 ## 2026-04-16 — Terminal workflow states beat stale transient writes in sync merge
 
 **Decision:** `resolveWorkflowStatusConflict` in `src/promograph/index.js` now encodes the shared precedence policy that terminal states (`settled`, `skipped`) win over transient progress (`queued`/`ready`/`placed`/`waiting`) during per-record sync merge, regardless of `updatedAt` jitter. `src/sync.js` `_preferNewerEntry` routes workflow conflicts through this policy instead of pure newest-wins.

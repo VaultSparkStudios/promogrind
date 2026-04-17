@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { K, font, S } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
 import { supabase } from "../auth.js";
 import { In, Nt } from "../ui.jsx";
+import { AppDataCtx } from "../contexts.jsx";
 
 const PROMO_BOARD_STATES = ["All States","AL","AZ","CO","CT","DC","IL","IN","IA","KS","KY","LA","MA","MD","ME","MI","MS","MO","NC","NJ","NY","OH","OR","PA","TN","VA","VT","WV","WY"];
 
@@ -33,14 +34,21 @@ const typeColor = {
   "Safety Net": K.pp, "Odds Boost": K.rd, "Parlay Insurance": K.dm, "Other": K.mt,
 };
 
+function resolveInitialState(userState) {
+  if (!userState) return "All States";
+  const code = String(userState).trim().toUpperCase().slice(0, 2);
+  return PROMO_BOARD_STATES.includes(code) ? code : "All States";
+}
+
 const CommunityPromoBoard = () => {
+  const { appData } = useContext(AppDataCtx) || {};
   const [promos, setPromos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ book: "DraftKings", promo_type: "Profit Boost", description: "", value: "", expires_at: "", region: "" });
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState("All");
-  const [stateFilter, setStateFilter] = useState("All States");
+  const [stateFilter, setStateFilter] = useState(() => resolveInitialState(appData?.userState));
   const [hideExpired, setHideExpired] = useState(false);
   const [flagged, setFlagged] = useState(() => {
     try { return JSON.parse(localStorage.getItem("pg_promo_flagged") || "[]"); } catch { return []; }

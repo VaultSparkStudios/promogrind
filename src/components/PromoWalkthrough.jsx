@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { K, font, fontD } from "../lib/shared.js";
+import { useFocusTrap } from "../lib/focus-trap.js";
 
 const WALKTHROUGHS = [
   {
@@ -37,13 +38,20 @@ const WALKTHROUGHS = [
 export default function PromoWalkthrough({ navigate, onClose }) {
   const [selectedWT, setSelectedWT] = useState(0);
   const [wtStep, setWtStep] = useState(0);
+  const containerRef = useRef(null);
+  useFocusTrap(true, containerRef);
+  React.useEffect(() => {
+    const handler = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
   const wt = WALKTHROUGHS[selectedWT];
   const step = wt.steps[wtStep];
   const isCalcStep = wtStep >= 2;
 
   return (
     <div onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 3000, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-      <div style={{ background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 12, maxWidth: 720, width: "100%", maxHeight: "90vh", overflow: "auto", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
+      <div ref={containerRef} role="dialog" aria-modal="true" aria-label="Promo Walkthroughs" style={{ background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 12, maxWidth: 720, width: "100%", maxHeight: "90vh", overflow: "auto", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", borderBottom: `1px solid ${K.bd}` }}>
           <div style={{ fontFamily: fontD, fontSize: 16, fontWeight: 700, color: K.tx }}>Promo Walkthroughs</div>
           <button onClick={onClose} style={{ background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 18, padding: "0 4px" }}>✕</button>

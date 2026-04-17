@@ -49,6 +49,30 @@ export const PLAYBOOKS = [
     ],
     tone: "watch",
   },
+  {
+    id: "sgp-insurance-run",
+    name: "SGP Insurance Loop",
+    summary: "Collect SGP/parlay insurance refunds and convert bonus legs into realized cash.",
+    promoTypes: ["insurance"],
+    bankrollMin: 150,
+    steps: [
+      { calculatorSlug: "insurance", title: "Size the insured SGP", note: "Check the insurance % and cap — calculate your real cost-to-play before staking." },
+      { calculatorSlug: "bonus-bet", title: "Convert the refund if it loses", note: "Any bonus-bet refund from a lost insured bet should be hedged immediately." },
+    ],
+    tone: "watch",
+  },
+  {
+    id: "reload-match-grind",
+    name: "Reload Match Grind",
+    summary: "Deploy recurring reload/deposit matches on established books for steady volume.",
+    promoTypes: ["deposit_match"],
+    bankrollMin: 300,
+    steps: [
+      { calculatorSlug: "deposit-match", title: "Compute reload match EV", note: "Reload matches often have lower rollover than welcome offers — check the T&Cs." },
+      { calculatorSlug: "ev", title: "Verify expected value before placing", note: "Use fair odds from a sharp line to confirm the reload wager is +EV after rollover." },
+    ],
+    tone: "positive",
+  },
 ];
 
 function toNumber(value) {

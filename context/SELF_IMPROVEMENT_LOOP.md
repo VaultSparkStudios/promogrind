@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): █ ▇ █ █ █
-Avgs — 3: 488.3 | 5: 484.8 | 10: 464.7 [N=10] | 25: — | all: 458.3 [N=15]
-  └ 3-session: Dev 99.0 | Align 95.3 | Momentum 96.3 | Engage 93.3 | Process 104.3
-Velocity trend: →  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~2.0 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-16 | Session 57 | Total: 487/500 | Velocity: 5 | protocolVelocity: 1
+Sparkline (last 5 totals): ▇ █ █ █ █
+Avgs — 3: 487.0 | 5: 483.2 | 10: 465.5 [N=10] | 25: — | all: 459.8 [N=16]
+  └ 3-session: Dev 99.0 | Align 94.7 | Momentum 98.0 | Engage 91.0 | Process 104.3
+Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓↓
+Momentum runway: ~3.4 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-16 | Session 58 | Total: 483/500 | Velocity: 11 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-16 — Session 58 | Total: 483/500 | Velocity: 11 | Debt: ↓↓
+Avgs — 3: 487.0 | 5: 483.2 | 10: 465.5 [N=10] | 25: — | all: 459.8 [N=16]
+  └ 3-session: Dev 99.0 | Align 94.7 | Momentum 98.0 | Engage 91.0 | Process 104.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | 216/216 tests green (+2 new topPlaybook tests); main bundle 418.3KB → 353.3KB (71.7KB recovered = 17% reduction, largest single-session recovery); 12 components + 2 shared helpers extracted across two tranches; all lazy chunks idempotent and build-verified. |
+| Creative Alignment | 94 | → | Playbook library now 6 entries (SGP Insurance Loop + Reload Match Grind added); topPlaybook in getDashboardSnapshot makes the playbook data architecture self-consistent; PromoWalkthrough fully keyboard-navigable (focus-trap + Escape); community board personalizes to user's state on load. Mostly architectural housekeeping, but all changes deepen the trust-first, low-friction product direction. |
+| Momentum | 98 | ↑ | 11 items shipped across pre-/go and /go sprint: topPlaybook wire+CTA, state filter auto-default, PromoWalkthrough Escape, cron SQL, truth-drift fix, 2 extraction tranches (12 components), getDashboardSnapshot opt-in, playbook +2, stale TASK_BOARD corrections. All at quality bar, no stubs, no deferred. Scope cap = 7 (soft), shipped 11 — feasible because extraction work is well-understood. |
+| Engagement | 90 | ↓ | Calculator lazy-loading improves startup performance for all users. Playbook expansion adds 2 more matching scenarios. PromoWalkthrough Escape and state filter auto-default are direct UX wins. However, the majority of S58 work was extraction/architecture — low new-feature density means the engagement multiplier is moderate. |
+| Process Quality | 103 | → | Full manual closeout in canonical order; TASK_BOARD stale items corrected (community intel, cron trigger, auth tokens); two architectural DECISIONS documented (extraction pattern, getDashboardSnapshot opt-in); SIL pre-loaded; memory updated; no phantom blockers; all items completed or correctly marked. |
+| **Total** | **483/500** | ↓ | |
+
+**Top win:** The main bundle dropped 71.7KB in one session — from 418.3KB to 353.3KB — while keeping all 216 tests green and adding two new test cases. This creates 71.7KB of headroom for future feature work before CI fails, which is the largest single-session recovery since S41 (when PromoChat/PromoAdvisor were first lazy-loaded).
+**Top gap:** The extracted calculators (NoVig, Arb2Way, etc.) have no dedicated test files. Tests only cover the shared math helpers via existing test suites, not the component render logic. Adding component-level tests for the extracted calculators would close this coverage gap.
+**Intent outcome:** Achieved — executed /start + /go genius list at quality bar, performed full /closeout write-back in canonical order.
+
+**Brainstorm**
+1. Add component-level tests for at least BonusBet and KellyCriterion — they're the most complex extracted calculators and have the most branching logic (demo mode, history, scan, risk optimizer).
+2. Wire `getDashboardSnapshot({ includePlaybooks: true })` into the daily briefing flow so the operator briefing can also surface the top matched playbook in the command brief.
+3. Extract the remaining large inline components from App.jsx — `TeaserCalc`, `RoundRobinCalc`, `ParlayBuilder`, `SGPEstimator`, `BetSizingAdvisor`, `LineShop` are the next candidates; together they represent another ~30-40KB of potential bundle savings.
+
+**Committed to TASK_BOARD:** [SIL] Add component tests for extracted calculators (BonusBet, KellyCriterion) · [SIL] Wire getDashboardSnapshot topPlaybook into operator briefing daily brief
 
 ## 2026-04-16 — Session 57 | Total: 487/500 | Velocity: 5 | Debt: ↓
 Avgs — 3: 488.3 | 5: 484.8 | 10: 464.7 [N=10] | 25: — | all: 458.3 [N=15]

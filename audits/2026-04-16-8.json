@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.3",
+  "session": 58,
+  "date": "2026-04-16",
+  "intentOutcome": "Achieved",
+  "velocity": 11,
+  "protocolVelocity": 0,
+  "scores": {
+    "devHealth": 99,
+    "creativeAlignment": 94,
+    "momentum": 98,
+    "engagement": 90,
+    "processQuality": 103,
+    "total": 483
+  },
+  "debtDelta": "down-down",
+  "testsTotal": 216,
+  "testsDelta": 2,
+  "bundleKb": 353.3,
+  "bundleBudgetKb": 425,
+  "bundleDeltaKb": -65.0,
+  "shipped": [
+    "topPlaybook wire + playbook CTA card in ActivationNextAction",
+    "getNextBestAction returns focus field",
+    "community board state filter auto-defaults to appData.userState",
+    "PromoWalkthrough focus-trap + Escape key handler",
+    "cron trigger SQL migration (pg_cron)",
+    "stripeProductionPriceIds truth-drift fix",
+    "BonusBet/ProfitBoost/FirstBet/BookCTA/ShareCard extracted to src/calculators/ + src/components/",
+    "CommunityWinsWall/SmartPromoRecommender extracted to src/components/dashboard/",
+    "NoVig/NoVig3Way/PlusEV/Arb2Way/Arb3Way/KellyCriterion/InsurancePromo extracted to src/calculators/",
+    "getDashboardSnapshot opt-in topPlaybook field",
+    "playbook library extended from 4 to 6 (SGP Insurance Loop + Reload Match Grind)"
+  ],
+  "deferred": [],
+  "humanBatched": [],
+  "newDecisions": [
+    "Calculator extraction to src/calculators/ is the canonical ongoing pattern for App.jsx cleanup",
+    "getDashboardSnapshot topPlaybook is opt-in via parameter to avoid per-render matchPlaybooks cost"
+  ],
+  "silItems": [
+    "[SIL] Add component tests for extracted calculators (BonusBet, KellyCriterion)",
+    "[SIL] Wire getDashboardSnapshot topPlaybook into operator briefing"
+  ]
+}

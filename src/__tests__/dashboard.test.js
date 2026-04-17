@@ -126,4 +126,64 @@ describe("dashboard helpers", () => {
     expect(action.slug).toBe("sportsbooks");
     expect(action.title).toMatch(/BetRivers|FanDuel|ESPN BET|Fanatics|bet365/);
   });
+
+  it("surfaces a matched playbook as next best action when it scores highest", () => {
+    const topPlaybook = {
+      playbook: {
+        id: "bonus-bet-convert",
+        name: "Bonus Bet Conversion",
+        summary: "Convert bonus bets into guaranteed cash via a hedge.",
+        steps: [{ calculatorSlug: "bonus-bet" }, { calculatorSlug: "hedge" }],
+        tone: "positive",
+      },
+      fitScore: 85,
+      reasons: [{ tone: "positive", text: "bankroll ≥ $200" }, { tone: "positive", text: "2 active books" }],
+      applicable: true,
+    };
+
+    const action = getNextBestAction({
+      usageLog: { "bonus-bet": 1 },
+      bankroll: "500",
+      totalProfit: 10,
+      openBets: [],
+      booksComplete: 2,
+      openWorkflowCount: 0,
+      recommendedBooks: [],
+      topPlaybook,
+    });
+
+    expect(String(action.key).startsWith("playbook:")).toBe(true);
+    expect(action.title).toMatch(/Bonus Bet Conversion/);
+    expect(action.focus?.type).toBe("playbook");
+    expect(action.focus?.playbookId).toBe("bonus-bet-convert");
+    expect(action.cta).toBe("Run playbook");
+    expect(action.slug).toBe("bonus-bet");
+  });
+
+  it("does not surface a non-applicable playbook as next best action", () => {
+    const topPlaybook = {
+      playbook: {
+        id: "deposit-match-build",
+        name: "Deposit Match Build",
+        summary: "New-book deposit match deployed gradually.",
+        steps: [{ calculatorSlug: "deposit-match" }],
+        tone: "watch",
+      },
+      fitScore: 25,
+      reasons: [{ tone: "risk", text: "needs $1000 bankroll" }],
+      applicable: false,
+    };
+
+    const action = getNextBestAction({
+      usageLog: { "bonus-bet": 1 },
+      bankroll: "200",
+      totalProfit: 10,
+      openBets: [],
+      booksComplete: 2,
+      openWorkflowCount: 0,
+      topPlaybook,
+    });
+
+    expect(String(action.key).startsWith("playbook:")).toBe(false);
+  });
 });

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
+﻿import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS, getBookUrl } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
@@ -15,7 +15,7 @@ import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
 import { getDashboardSnapshot } from "./dashboard/today.js";
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
-// Heavy tab components — lazy loaded so they don't block initial render
+// Heavy tab components â€” lazy loaded so they don't block initial render
 const Tracker = lazy(() => import("./components/Tracker.jsx"));
 const Ledger = lazy(() => import("./components/Ledger.jsx"));
 const LiveScanner = lazy(() => import("./components/LiveScanner.jsx"));
@@ -34,19 +34,33 @@ const ActivationNextAction = lazy(() => import("./components/dashboard/Activatio
 const DashboardHero = lazy(() => import("./components/dashboard/DashboardHero.jsx"));
 const TodayDashboardPanel = lazy(() => import("./components/dashboard/TodayDashboardPanel.jsx"));
 const CommunityPromoBoard = lazy(() => import("./components/CommunityPromoBoard.jsx"));
+const CommunityWinsWall = lazy(() => import("./components/dashboard/CommunityWinsWall.jsx"));
+const SmartPromoRecommender = lazy(() => import("./components/dashboard/SmartPromoRecommender.jsx"));
+const BonusBet = lazy(() => import("./calculators/BonusBet.jsx"));
+const ProfitBoost = lazy(() => import("./calculators/ProfitBoost.jsx"));
+const FirstBet = lazy(() => import("./calculators/FirstBet.jsx"));
+const NoVig = lazy(() => import("./calculators/NoVig.jsx"));
+const NoVig3Way = lazy(() => import("./calculators/NoVig3Way.jsx"));
+const PlusEV = lazy(() => import("./calculators/PlusEV.jsx"));
+const Arb2Way = lazy(() => import("./calculators/Arb2Way.jsx"));
+const Arb3Way = lazy(() => import("./calculators/Arb3Way.jsx"));
+const KellyCriterion = lazy(() => import("./calculators/KellyCriterion.jsx"));
+const InsurancePromo = lazy(() => import("./calculators/InsurancePromo.jsx"));
 const GetStartedRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.GetStartedRoute })));
 const WhatsNewRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.WhatsNewRoute })));
 const AboutRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.AboutRoute })));
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 import UserMenu from "./components/UserMenu.jsx";
 import AuthDialog from "./components/AuthDialog.jsx";
+import BookCTA from "./components/BookCTA.jsx";
+import ShareCard from "./components/ShareCard.jsx";
 
 /*
-═══════════════════════════════════════════════════════════════
-  PROMO ENGINE v3 — Complete Sportsbook Profit Extraction System
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  PROMO ENGINE v3 â€” Complete Sportsbook Profit Extraction System
   
   LEGAL STATUS:
-  This is an educational calculator tool — like a tax calculator 
+  This is an educational calculator tool â€” like a tax calculator 
   or mortgage calculator. It performs math on numbers you input.
   
   - Matched betting is legal in all US states where online sports 
@@ -65,70 +79,20 @@ import AuthDialog from "./components/AuthDialog.jsx";
   sports betting is legal. All gambling winnings are taxable. 
   Gamble responsibly. If you or someone you know has a gambling 
   problem, call 1-800-GAMBLER.
-═══════════════════════════════════════════════════════════════
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 */
 
-// Math, colors, styles from ./lib/shared.js — S (with JSX meter) from ./ui.jsx
+// Math, colors, styles from ./lib/shared.js â€” S (with JSX meter) from ./ui.jsx
 
-// Toast, contexts, UI atoms, useCalcMemory, FeatureUnavailableCard → ./contexts.jsx + ./ui.jsx
+// Toast, contexts, UI atoms, useCalcMemory, FeatureUnavailableCard â†’ ./contexts.jsx + ./ui.jsx
 
-// ═══ BOOK CTA (shown at profitable calc results) ═══
-// promoType: "bonus"|"boost"|"safety"|"arb"|null — sorts most relevant books first
-const BookCTA = ({ promoType }) => {
-  const sorted = useMemo(() => {
-    if (!promoType) return BOOKS;
-    const priority = {
-      bonus: ["Bet & Get","Bet Reset"],
-      boost: ["Profit Boosts","Bet & Get"],
-      safety: ["Safety Net","Choice","Bet Reset"],
-      arb: null, // sort by bonus value desc
-    }[promoType] || null;
-    if (!priority) return [...BOOKS].sort((a,b) => b.bonus - a.bonus);
-    return [
-      ...BOOKS.filter(b => priority.includes(b.type)),
-      ...BOOKS.filter(b => !priority.includes(b.type)),
-    ];
-  }, [promoType]);
-  return (
-    <div style={{marginTop:14,padding:12,background:`${K.gn}06`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Don't have these books yet? Open accounts to use this promo:</div>
-      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-        {sorted.slice(0,4).map(b=>(
-          <a key={b.name} href={getBookUrl(b)} target="_blank" rel="noopener noreferrer sponsored"
-            onClick={() => trackEvent('sportsbook_cta_clicked', {
-              book: b.name,
-              promoType: promoType || 'general',
-              linkType: b.affiliateLink ? 'affiliate' : b.referralLink ? 'referral' : b.signupLink ? 'signup' : 'homepage',
-              configuredAffiliate: !!b.affiliateLink,
-            })}
-            style={{padding:"4px 10px",background:`${b.color}15`,border:`1px solid ${b.color}30`,borderRadius:4,color:b.color,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
-            {b.name} <span style={{fontSize:8,opacity:0.7,fontWeight:400}}>21+</span> →
-          </a>
-        ))}
-        <a href={getBookUrl(sorted[4]||{})||"#"} target="_blank" rel="noopener noreferrer sponsored"
-          onClick={() => {
-            const book = sorted[4] || {};
-            trackEvent('sportsbook_cta_clicked', {
-              book: book.name || 'more',
-              promoType: promoType || 'general',
-              linkType: book.affiliateLink ? 'affiliate' : book.referralLink ? 'referral' : book.signupLink ? 'signup' : 'homepage',
-              configuredAffiliate: !!book.affiliateLink,
-            });
-          }}
-          style={{padding:"4px 10px",background:`${K.bd}`,border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:10,fontWeight:600,textDecoration:"none",fontFamily:font}}>
-          +{BOOKS.length-4} more →
-        </a>
-      </div>
-    </div>
-  );
-};
-
-
+// â•â•â• BOOK CTA (shown at profitable calc results) â•â•â•
+// promoType: "bonus"|"boost"|"safety"|"arb"|null â€” sorts most relevant books first
 // Listens for checkout-unavailable events fired by auth.js when Stripe is in test mode
 const CheckoutListener = () => {
   const toast = useToast();
   useEffect(()=>{
-    const handler = () => toast && toast('Paid upgrades launching soon — stay tuned!');
+    const handler = () => toast && toast('Paid upgrades launching soon â€” stay tuned!');
     window.addEventListener('pg:checkout-unavailable', handler);
     return () => window.removeEventListener('pg:checkout-unavailable', handler);
   }, []);
@@ -149,807 +113,22 @@ const TrustStrip = () => (
 
 const MembershipBanner = () => (
   <div style={{...S.note(K.ac),marginBottom:12}}>
-    PromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices — the same account works across all VaultSpark Studio tools.
+    PromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices â€” the same account works across all VaultSpark Studio tools.
   </div>
 );
 
-// FeatureUnavailableCard → ./ui.jsx
+// FeatureUnavailableCard â†’ ./ui.jsx
 
-const CommunityWinsWall = () => {
-  const [localEntries] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('pg_wins_wall') || '[]'); } catch { return []; }
-  });
-  const [serverEntries, setServerEntries] = useState([]);
-  const [loading, setLoading] = useState(false);
+// CommunityWinsWall, SmartPromoRecommender extracted to src/components/dashboard/
 
-  useEffect(() => {
-    let cancelled = false;
-    const fetchWall = async () => {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('wins_wall')
-          .select('id, period_label, total, entry_count, book_count, display_name, created_at')
-          .order('created_at', { ascending: false })
-          .limit(12);
-        if (!error && data && !cancelled) setServerEntries(data);
-      } catch {}
-      if (!cancelled) setLoading(false);
-    };
-    fetchWall();
-    return () => { cancelled = true; };
-  }, []);
-
-  // Merge: server entries first, then local-only entries (deduplicated by period)
-  const serverPeriods = new Set(serverEntries.map(e => e.period_label));
-  const merged = [
-    ...serverEntries.map(e => ({
-      id: e.id, periodLabel: e.period_label, total: e.total,
-      count: e.entry_count, books: e.book_count,
-      displayName: e.display_name, source: 'server',
-    })),
-    ...localEntries.filter(e => !serverPeriods.has(e.periodLabel)).map(e => ({ ...e, source: 'local' })),
-  ].slice(0, 12);
-
-  if (!merged.length && !loading) return null;
-
-  return (
-    <div style={{...S.card,marginBottom:12}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:10,flexWrap:"wrap"}}>
-        <div>
-          <div style={{fontSize:11,color:K.pp,fontWeight:700,letterSpacing:"1.4px",textTransform:"uppercase",marginBottom:4}}>Wins Wall</div>
-          <div style={{fontFamily:fontD,fontSize:16,fontWeight:700,color:K.tx}}>Community profit opt-ins</div>
-        </div>
-      </div>
-      {loading && !merged.length && <div style={{fontSize:11,color:K.mt,padding:12}}>Loading wins wall…</div>}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(170px, 1fr))",gap:8}}>
-        {merged.slice(0, 6).map((entry) => (
-          <div key={entry.id} style={{padding:"12px",background:`${K.gn}08`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-              <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1.2px"}}>{entry.periodLabel}</span>
-              {entry.source==='server'&&<span style={{fontSize:8,color:K.ac,textTransform:"uppercase",letterSpacing:"1px"}}>verified</span>}
-            </div>
-            <div style={{fontFamily:fontD,fontSize:24,fontWeight:800,color:K.gn,marginBottom:4}}>+${entry.total}</div>
-            <div style={{fontSize:10,color:K.dm,lineHeight:1.5}}>
-              {entry.count} conversions across {entry.books} books
-              {entry.displayName && <span style={{display:"block",fontSize:9,color:K.mt,marginTop:2}}>— {entry.displayName}</span>}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// ═══════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TOOL COMPONENTS
-// ═══════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-const parseNL = (text) => {
-  const dollars = text.match(/\$(\d+(?:\.\d+)?)/);
-  const posOdds = text.match(/\+(\d+)/);
-  const negOdds = text.match(/-(\d+)/);
-  return {
-    sz: dollars ? dollars[1] : null,
-    bo: posOdds ? '+'+posOdds[1] : null,
-    ho: negOdds ? '-'+negOdds[1] : null,
-  };
-};
+// BonusBet, ProfitBoost, FirstBet extracted to src/calculators/ (lazy-loaded above)
+// BookCTA, ShareCard extracted to src/components/ (imported above)
 
-// ═══ SHARE CARD ═══
-function ShareCard({ title, profit, onClose }) {
-  const appUrl = CANONICAL_APP_URL;
-  const text = `🎉 Just locked in ${profit} in guaranteed profit using ${title} on PromoGrind.\n\nFree account, free calculator suite:\n${appUrl}`;
-  const tweetText = `🎉 Just locked in ${profit} guaranteed profit from a sportsbook promo using @PromoGrind — free account, free calculator suite\n${appUrl}`;
-  const [copyLabel, setCopyLabel] = React.useState('📋 Copy text');
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text).catch(() => {});
-    setCopyLabel('✓ Copied!');
-    setTimeout(() => setCopyLabel('📋 Copy text'), 2200);
-  };
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({ title: `I made ${profit} with PromoGrind`, text, url: appUrl }).catch(() => {});
-    } else {
-      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`, '_blank');
-    }
-  };
-
-  const handleReddit = () => {
-    const body = encodeURIComponent(`Used the free PromoGrind calculator and locked in ${profit} in guaranteed profit from ${title}. No subscription, no BS — it's completely free.\n\n${appUrl}`);
-    window.open(`https://www.reddit.com/submit?title=${encodeURIComponent(`Locked in ${profit} guaranteed profit using PromoGrind`)}&text=${body}`, '_blank');
-  };
-
-  return (
-    <div style={{marginTop:12,padding:16,background:'linear-gradient(135deg,#0f2a1e,#0a0e17)',border:'2px solid #4ade80',borderRadius:10,position:'relative'}}>
-      <button onClick={onClose} style={{position:'absolute',top:8,right:10,background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18,lineHeight:1}}>×</button>
-      <div style={{fontSize:9,color:'#64748b',letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:6}}>Guaranteed Profit Locked In</div>
-      <div style={{fontSize:32,fontWeight:800,color:'#4ade80',marginBottom:2,fontFamily:"'Space Grotesk',sans-serif"}}>{profit}</div>
-      <div style={{fontSize:12,color:'#94a3b8',marginBottom:14}}>from {title} · PromoGrind</div>
-      <div style={{display:'flex',gap:8,marginBottom:8}}>
-        <button onClick={handleCopy} style={{flex:1,padding:'8px 0',background:'#1e293b',border:'1px solid #334155',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:12,fontWeight:600,fontFamily:"'JetBrains Mono',monospace"}}>
-          {copyLabel}
-        </button>
-        <button onClick={handleShare} style={{flex:1,padding:'8px 0',background:'#4ade80',border:'none',color:'#0a0e17',borderRadius:6,cursor:'pointer',fontSize:12,fontWeight:700}}>
-          𝕏 Tweet ↗
-        </button>
-        <button onClick={handleReddit} style={{flex:1,padding:'8px 0',background:'#ff4500',border:'none',color:'#fff',borderRadius:6,cursor:'pointer',fontSize:12,fontWeight:700}}>
-          Reddit ↗
-        </button>
-      </div>
-      <div style={{fontSize:9,color:'#1e293b',textAlign:'center',letterSpacing:'0.5px'}}>{appUrl.replace(/^https?:\/\//,'')} — free sportsbook promo tools</div>
-    </div>
-  );
-}
-
-const BonusBet = () => {
-  const { appData: bbAppData, syncAppData: bbSyncAppData } = React.useContext(AppDataCtx) || {};
-  const [mem, setMem] = useCalcMemory('bonus-bet', {sz:"200",bo:"+300",ho:"-350"});
-  const {sz,bo,ho} = mem;
-  const setSz = v => setMem('sz',v), setBo = v => setMem('bo',v), setHo = v => setMem('ho',v);
-  const r = useMemo(()=>calcBonus(parseFloat(sz),bo,ho),[sz,bo,ho]);
-  const sens = useMemo(()=>sensitivityBonus(parseFloat(sz),bo,ho),[sz,bo,ho]);
-  const [showHist, setShowHist] = useState(false);
-  const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_bonus-bet')||'[]');}catch{return[];} });
-  useEffect(()=>{
-    if(!r||!parseFloat(r.g)) return;
-    const entry={ts:Date.now(),sz,bo,ho,profit:r.g,hs:r.hs,rate:r.r};
-    setHist(prev=>{
-      const next=[entry,...prev].slice(0,20);
-      try{localStorage.setItem('pg_hist_bonus-bet',JSON.stringify(next));}catch{}
-      return next;
-    });
-  },[r?.g,r?.hs]);
-  const [nlText, setNlText] = useState("");
-  const [nlPreview, setNlPreview] = useState(null);
-  const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
-  const [bbUpsellDismissed, setBbUpsellDismissed] = useState(() => { try { return !!localStorage.getItem('pg_upsell_bb_dismissed'); } catch { return true; } });
-  const [rCopied, setRCopied] = useState(false);
-  const [showShareCard, setShowShareCard] = useState(false);
-  const fileInputRef = useRef(null);
-  const [scanLoading, setScanLoading] = useState(false);
-  const [scanResult, setScanResult] = useState(null);
-  const bbCount = useMemo(()=>{ try{return parseInt(localStorage.getItem('pg_upsell_bb_count')||'0');}catch{return 0;} },[r]);
-  const applyNL = () => {
-    const p = parseNL(nlText);
-    if(p.sz) setSz(p.sz);
-    if(p.bo) setBo(p.bo);
-    if(p.ho) setHo(p.ho);
-    setNlPreview(p);
-  };
-  const applyDemo = () => { setSz("200"); setBo("+330"); setHo("-380"); setDemoMode(true); };
-  useMemo(()=>{
-    if(r&&parseFloat(r.g)>0){ try{ const c=parseInt(localStorage.getItem('pg_upsell_bb_count')||'0')+1; localStorage.setItem('pg_upsell_bb_count',String(c)); }catch{} }
-  },[r?.g]);
-  const scanBetSlip = async (file) => {
-    setScanLoading(true); setScanResult(null);
-    try {
-      const toBase64 = f => new Promise((res,rej)=>{ const rd=new FileReader(); rd.onload=()=>res(rd.result.split(',')[1]); rd.onerror=rej; rd.readAsDataURL(f); });
-      const base64 = await toBase64(file);
-      const { data: { session } } = await supabase.auth.getSession();
-      const { data: parsed, error } = await supabase.functions.invoke('parse-bet-slip', {
-        headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
-        body: { imageBase64: base64, mimeType: file.type },
-      });
-      if (error) throw error;
-      if (parsed) {
-        if (parsed.stake) setSz(String(parsed.stake));
-        if (parsed.odds) setBo(String(parsed.odds));
-        if (parsed.hedgeOdds) setHo(String(parsed.hedgeOdds));
-        setScanResult(parsed);
-      }
-    } catch(e) { console.error('[BetSlipScan]', e); setScanResult({ error: true }); }
-    finally { setScanLoading(false); }
-  };
-  const copyResult = () => {
-    if(!r) return;
-    const text = `📊 Bonus Bet Converter — PromoGrind\nBonus Size: $${sz} | Bonus Odds: ${bo} | Hedge Odds: ${ho}\nHedge Stake: $${r.hs}\nGuaranteed Profit: $${r.g} (${r.r}% conversion)\n${CANONICAL_APP_URL}`;
-    try{navigator.clipboard.writeText(text);}catch(e){}
-    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
-  };
-  return (<div><div style={S.card}><Tl t="Bonus Bet Converter" badge="STAKE NOT RETURNED" bc={K.gn} shareable getParams={()=>({sz,bo,ho})}/>
-    <div style={{marginBottom:12}}>
-      <label style={S.label}>Quick Input (natural language)</label>
-      <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
-        <textarea value={nlText} onChange={e=>{setNlText(e.target.value);setNlPreview(parseNL(e.target.value));}} placeholder='Try: "I have a $200 bonus bet at +350, hedge at -400"' style={{...S.input,height:48,resize:"none",flex:1,lineHeight:1.5,fontSize:12}}/>
-        <button onClick={applyNL} style={{padding:"8px 14px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Parse</button>
-        {FEATURE_FLAGS.aiScan ? (
-          <>
-            <input ref={fileInputRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>{if(e.target.files?.[0])scanBetSlip(e.target.files[0]);e.target.value='';}}/>
-            <button onClick={()=>fileInputRef.current?.click()} disabled={scanLoading} title="Upload a bet slip screenshot — Claude AI will auto-fill the fields" style={{padding:"8px 12px",background:scanLoading?`${K.mt}15`:`${K.pp}15`,border:`1px solid ${scanLoading?K.mt:K.pp}30`,borderRadius:4,color:scanLoading?K.mt:K.pp,fontSize:10,cursor:scanLoading?"not-allowed":"pointer",fontFamily:font,whiteSpace:"nowrap"}}>{scanLoading?"Scanning…":"📷 Scan"}</button>
-          </>
-        ) : (
-          <div style={{padding:"8px 12px",background:`${K.yl}10`,border:`1px solid ${K.yl}30`,borderRadius:4,color:K.yl,fontSize:10,fontFamily:font,whiteSpace:"nowrap"}}>
-            📷 Scan in beta
-          </div>
-        )}
-      </div>
-      {!FEATURE_FLAGS.aiScan && <div style={{fontSize:10,color:K.mt,marginTop:4}}>Bet slip scan will appear here once the AI backend is activated.</div>}
-      {scanResult&&!scanResult.error&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>✓ Scanned: {[scanResult.book,scanResult.betType?.replace(/_/g,' '),scanResult.odds&&`${scanResult.odds} odds`,scanResult.stake&&`$${scanResult.stake} stake`].filter(Boolean).join(' · ')}</div>}
-      {scanResult&&!scanResult.error&&bbSyncAppData&&<button
-        onClick={()=>{
-          const newBet={
-            id:Date.now(),
-            date:new Date().toISOString().split('T')[0],
-            book:scanResult.book||'',
-            sport:'',
-            description:scanResult.promoName||scanResult.betType||'Scanned bet',
-            betType:scanResult.betType||'straight',
-            stake:parseFloat(scanResult.stake)||0,
-            odds:scanResult.odds||'',
-            result:'pending',
-            payout:0,
-            profit:0,
-            notes:'Added via AI scan',
-            tags:['scanned'],
-          };
-          const updatedBets=[...(bbAppData?.bets||[]),newBet];
-          bbSyncAppData({...bbAppData,bets:updatedBets});
-          alert('Bet added to Tracker!');
-        }}
-        style={{marginTop:8,padding:'6px 14px',background:'#1e3a2f',border:'1px solid #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:13}}
-      >➕ Add to Tracker</button>}
-      {scanResult?.error&&<div style={{fontSize:10,color:K.rd,marginTop:4}}>⚠ Scan failed — try entering manually or use a clearer screenshot</div>}
-      {nlPreview&&(nlPreview.sz||nlPreview.bo||nlPreview.ho)&&<div style={{fontSize:10,color:K.gn,marginTop:4}}>Detected: {[nlPreview.sz&&`$${nlPreview.sz} bonus`,nlPreview.bo&&`${nlPreview.bo} odds`,nlPreview.ho&&`${nlPreview.ho} hedge`].filter(Boolean).join(", ")}</div>}
-    </div>
-    <div style={S.row}><In l="Bonus Bet Size" v={sz} set={setSz} pre="$" ph="200"/><In l="Bonus Bet Odds" v={bo} set={setBo} ph="+300"/><In l="Hedge Odds" v={ho} set={setHo} ph="-350"/></div>
-    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-      <button onClick={()=>{setSz("200");setBo("+350");setHo("-400");}} style={{padding:"4px 10px",background:`${K.ac}10`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>★ Show Example</button>
-      <button onClick={()=>demoMode?setDemoMode(false):applyDemo()} style={{padding:"4px 10px",background:demoMode?`${K.gn}15`:`${K.gn}08`,border:`1px solid ${demoMode?K.gn:K.gn+'30'}`,borderRadius:4,color:K.gn,fontSize:10,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>▶ Demo</button>
-      <span style={{fontSize:10,color:K.mt}}>$200 bonus bet at +350, hedge at -400 — DraftKings → FanDuel</span>
-    </div>
-    {demoMode&&<div style={{...S.note(K.ac),marginBottom:12}}>
-      <div style={{fontWeight:700,marginBottom:4}}>Step-by-step demo</div>
-      <div>Step 1: You received a $200 bonus bet.</div>
-      <div>Step 2: We found Warriors +330 vs Lakers tonight.</div>
-      <div>Step 3: Hedge ${r?r.hs:'~'} at -380 on FanDuel.</div>
-      <div>Step 4: Collect ~${r?r.g:'~'} guaranteed.</div>
-      <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
-    </div>}
-    {bo&&toD(bo)>1&&(()=>{
-      const a=toD(bo)>1?Math.round((toD(bo)-1)*100):0;
-      const zones=[{min:0,max:199,c:K.rd,l:"Too Low"},{min:200,max:249,c:K.yl,l:"OK"},{min:250,max:400,c:K.gn,l:"Sweet Spot"},{min:401,max:500,c:K.yl,l:"Harder to Hedge"},{min:501,max:9999,c:K.rd,l:"Too High"}];
-      const zone=zones.find(z=>a>=z.min&&a<=z.max)||zones[4];
-      const pct=Math.min(100,Math.max(0,(a-0)/(700)*100));
-      return (<div style={{marginBottom:12,padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
-        <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:6}}>Bonus Bet Odds Sweet Spot</div>
-        <div style={{position:"relative",height:8,background:K.s3,borderRadius:4,marginBottom:4}}>
-          <div style={{position:"absolute",left:0,width:"29%",height:"100%",background:`${K.rd}40`,borderRadius:"4px 0 0 4px"}}/>
-          <div style={{position:"absolute",left:"29%",width:"7%",height:"100%",background:`${K.yl}40`}}/>
-          <div style={{position:"absolute",left:"36%",width:"22%",height:"100%",background:`${K.gn}40`}}/>
-          <div style={{position:"absolute",left:"58%",width:"14%",height:"100%",background:`${K.yl}40`}}/>
-          <div style={{position:"absolute",left:"72%",width:"28%",height:"100%",background:`${K.rd}40`,borderRadius:"0 4px 4px 0"}}/>
-          <div style={{position:"absolute",left:`calc(${pct}% - 3px)`,top:-2,width:6,height:12,background:zone.c,borderRadius:2,border:`1px solid ${zone.c}`}}/>
-        </div>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:K.mt}}>
-          <span>+100</span><span style={{color:K.gn,fontWeight:600}}>+250–+400 ideal</span><span>+700</span>
-        </div>
-        <div style={{fontSize:10,color:zone.c,fontWeight:600,marginTop:4}}>{toA(toD(bo))} — {zone.l}</div>
-      </div>);
-    })()}
-    {hist.length>0&&<div style={{marginBottom:8,display:"flex",justifyContent:"flex-end"}}><button onClick={()=>setShowHist(h=>!h)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:9,cursor:"pointer",fontFamily:font}}>🕐 History ({hist.length})</button></div>}
-    {showHist&&hist.length>0&&<div style={{marginBottom:12,padding:10,background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,maxHeight:180,overflowY:"auto"}}>
-      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Last {hist.length} Calculations</div>
-      {hist.map((h,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.dm,padding:"3px 0",borderBottom:i<hist.length-1?`1px solid ${K.bd}`:"none"}}>
-        <span>${h.sz} @ {h.bo} → {h.ho}</span>
-        <span style={{color:K.gn,fontWeight:600}}>+${h.profit} ({h.rate}%)</span>
-        <span style={{color:K.mt}}>{new Date(h.ts).toLocaleDateString()}</span>
-      </div>)}
-    </div>}
-    {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
-      <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn}/><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r)>=70?K.gn:K.yl} b/>
-      {S.meter(parseFloat(r.r),parseFloat(r.r)>=70?K.gn:parseFloat(r.r)>=50?K.yl:K.rd)}
-      <BookCTA promoType="bonus"/>
-      <div style={{display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}}>
-        <CalculatorTrustBadge calculatorKey="bonus-bet" promoType="bonus_bet"/>
-        <SensitivityChip summary={sens}/>
-      </div>
-      {parseFloat(r.g)>0&&(
-        <ResultFeedbackCard
-          calculatorKey="bonus-bet"
-          calculatorLabel="Bonus Bet Converter"
-          promoType="bonus_bet"
-          expectedProfit={r.g}
-        />
-      )}
-      {parseFloat(r.g)>0&&bbCount>=3&&!bbUpsellDismissed&&(
-        <div style={{marginTop:14,padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}30`,borderRadius:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
-          <div><div style={{fontSize:11,fontWeight:700,color:K.pp}}>⚡ Track this win + get live arb alerts</div><div style={{fontSize:10,color:K.mt}}>VaultSparked — $24.99/mo · First 7 days free</div></div>
-          <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
-            <button onClick={()=>{try{localStorage.setItem('pg_upsell_bb_dismissed','1');}catch{}setBbUpsellDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Dismiss</button>
-          </div>
-        </div>
-      )}
-      {parseFloat(r.g)>0&&!showShareCard&&(
-        <button onClick={()=>setShowShareCard(true)} style={{marginTop:8,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:12}}>
-          🎉 Share your win
-        </button>
-      )}
-      {showShareCard&&parseFloat(r.g)>0&&(
-        <ShareCard
-          title="Bonus Bet Converter"
-          profit={`$${r.g}`}
-          onClose={()=>setShowShareCard(false)}
-        />
-      )}
-    </div>}
-  </div>
-  <Help entries={[
-    ["Bonus Bet","A free bet credit given by a sportsbook. If it wins, you only get the PROFIT — the original bonus amount is NOT returned. For example, a $200 bonus bet at +300 odds that wins pays you $600 in profit, but the $200 credit disappears."],
-    ["Underdog / Favorite","The underdog is the team expected to lose (shown with + odds like +300). The favorite is expected to win (shown with - odds like -350). For conversions, you always place your bonus on the underdog and hedge with cash on the favorite."],
-    ["Hedge","A second bet on the opposite outcome at a DIFFERENT sportsbook. By betting both sides, you guarantee profit regardless of who wins."],
-    ["Conversion Rate","The percentage of the bonus you extract as real cash. 70%+ is considered excellent — meaning a $200 bonus bet becomes $140+ in your pocket. The wider the odds gap, the better the conversion."],
-    ["Why +250 to +400 odds?","Higher + odds on the bonus side means more potential profit to hedge against. Below +200, conversion rates drop below 60%. Above +500, finding close hedge lines becomes harder."],
-    ["Step-by-Step","1) Get your bonus bets from a sportsbook promo. 2) Find a game with an underdog at +250 to +400. 3) Place your bonus bet on the underdog at Book A. 4) Use this calculator to find the hedge amount. 5) Place a CASH bet for that amount on the favorite at Book B. 6) No matter who wins, you profit."],
-  ]}/></div>);
-};
-
-const ProfitBoost = () => {
-  const [mem, setMem] = useCalcMemory('profit-boost', {s:"50",o:"+200",bp:"50",mx:"250",ho:"-220"});
-  const {s,o,bp,mx,ho} = mem;
-  const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setBp=v=>setMem('bp',v),setMx=v=>setMem('mx',v),setHo=v=>setMem('ho',v);
-  const r = useMemo(()=>calcBoost(parseFloat(s),o,parseFloat(bp),mx,ho),[s,o,bp,mx,ho]);
-  const sens = useMemo(()=>sensitivityBoost(parseFloat(s),o,parseFloat(bp),mx,ho),[s,o,bp,mx,ho]);
-  const [showHist, setShowHist] = useState(false);
-  const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_profit-boost')||'[]');}catch{return[];} });
-  useEffect(()=>{
-    if(!r||!parseFloat(r.g)) return;
-    const entry={ts:Date.now(),s,o,bp,mx,ho,profit:r.g,hs:r.hs};
-    setHist(prev=>{
-      const next=[entry,...prev].slice(0,20);
-      try{localStorage.setItem('pg_hist_profit-boost',JSON.stringify(next));}catch{}
-      return next;
-    });
-  },[r?.g,r?.hs]);
-  const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
-  const [rCopied, setRCopied] = useState(false);
-  const [showShareCardPB, setShowShareCardPB] = useState(false);
-  const applyDemo = () => { setS("50"); setO("-110"); setBp("25"); setMx("10"); setHo("-110"); setDemoMode(true); };
-  const copyResult = () => {
-    if(!r) return;
-    const text = `📊 Profit Boost Converter — PromoGrind\nStake: $${s} | Odds: ${o} | Boost: ${bp}% | Max: $${mx} | Hedge Odds: ${ho}\nEffective Boosted Odds: ${r.eo}\nHedge Amount: $${r.hs}\nGuaranteed Profit: $${r.g}\n${CANONICAL_APP_URL}`;
-    try{navigator.clipboard.writeText(text);}catch(e){}
-    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
-  };
-  return (<div><div style={S.card}><Tl t="Profit Boost Converter" badge="DAILY RECURRING $$$" bc={K.yl} shareable getParams={()=>({s,o,bp,mx,ho})}/>
-    <div style={S.row}><In l="Your Stake (cash)" v={s} set={setS} pre="$" ph="50"/><In l="Original Odds" v={o} set={setO} ph="+200"/><In l="Boost Percentage" v={bp} set={setBp} ph="50"/></div>
-    <div style={S.row}><In l="Max Extra Winnings" v={mx} set={setMx} pre="$" ph="250"/><In l="Hedge Odds (other book)" v={ho} set={setHo} ph="-220"/></div>
-    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-      <button onClick={()=>{setS("50");setO("+200");setBp("50");setMx("25");setHo("-220");}} style={{padding:"4px 10px",background:`${K.ac}10`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font}}>★ Show Example</button>
-      <button onClick={()=>demoMode?setDemoMode(false):applyDemo()} style={{padding:"4px 10px",background:demoMode?`${K.gn}15`:`${K.gn}08`,border:`1px solid ${demoMode?K.gn:K.gn+'30'}`,borderRadius:4,color:K.gn,fontSize:10,cursor:"pointer",fontFamily:font}}>▶ Demo</button>
-      <span style={{fontSize:10,color:K.mt}}>$50 stake, 50% boost capped at $25, hedge at -220</span>
-    </div>
-    {demoMode&&<div style={{...S.note(K.ac),marginBottom:12}}>
-      <div style={{fontWeight:700,marginBottom:4}}>Step-by-step demo</div>
-      <div>Step 1: FanDuel gave you a 25% profit boost (max $10).</div>
-      <div>Step 2: Bet $50 on Chiefs -110.</div>
-      <div>Step 3: Hedge ${r?r.hs:'~'} on the other side.</div>
-      <div>Step 4: Lock in ~${r?r.g:'~'} profit.</div>
-      <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
-    </div>}
-    {hist.length>0&&<div style={{marginBottom:8,display:"flex",justifyContent:"flex-end"}}><button onClick={()=>setShowHist(h=>!h)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:9,cursor:"pointer",fontFamily:font}}>🕐 History ({hist.length})</button></div>}
-    {showHist&&hist.length>0&&<div style={{marginBottom:12,padding:10,background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,maxHeight:180,overflowY:"auto"}}>
-      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Last {hist.length} Calculations</div>
-      {hist.map((h,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.dm,padding:"3px 0",borderBottom:i<hist.length-1?`1px solid ${K.bd}`:"none"}}>
-        <span>${h.s} @ {h.o} +{h.bp}% boost</span>
-        <span style={{color:K.gn,fontWeight:600}}>+${h.profit}</span>
-        <span style={{color:K.mt}}>{new Date(h.ts).toLocaleDateString()}</span>
-      </div>)}
-    </div>}
-    {r&&<div style={S.res(parseFloat(r.g)>0)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(parseFloat(r.g)>0?K.gn:K.rd)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed profit</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
-      <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b/><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl}/><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`}/><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b/><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/>
-      <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
-      <BookCTA promoType="boost"/>
-      <div style={{display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}}>
-        <CalculatorTrustBadge calculatorKey="profit-boost" promoType="profit_boost"/>
-        <SensitivityChip summary={sens}/>
-      </div>
-      {parseFloat(r.g)>0&&(
-        <ResultFeedbackCard
-          calculatorKey="profit-boost"
-          calculatorLabel="Profit Boost Converter"
-          promoType="profit_boost"
-          expectedProfit={r.g}
-        />
-      )}
-      {parseFloat(r.g)>0&&!showShareCardPB&&(
-        <button onClick={()=>setShowShareCardPB(true)} style={{marginTop:8,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #4ade80',color:'#4ade80',borderRadius:6,cursor:'pointer',fontSize:12}}>
-          🎉 Share your win
-        </button>
-      )}
-      {showShareCardPB&&parseFloat(r.g)>0&&(
-        <ShareCard
-          title="Profit Boost Calculator"
-          profit={`$${r.g}`}
-          onClose={()=>setShowShareCardPB(false)}
-        />
-      )}
-    </div>}
-  </div>
-  <Help entries={[
-    ["Profit Boost","A sportsbook promo that adds a percentage to your winnings IF your bet wins. A 50% profit boost on a bet that would win $100 now wins $150 instead. Unlike bonus bets, you're using your OWN money — the boost just sweetens the payout."],
-    ["How the math works","The boost changes your 'effective odds' — the real payout you'd get. We calculate those effective odds, then figure out the exact hedge amount at another book that locks in profit regardless of outcome."],
-    ["Max Extra Winnings","Most boosts have a cap. A '50% boost, max $250 extra' means even if your normal winnings would be $600, the boost only adds up to $250. Always enter this cap — it affects the hedge calculation."],
-    ["Why this is the big money","Welcome promos are one-time. But profit boosts appear DAILY. DraftKings alone offers 2-3 per day. Across 5-6 sportsbook apps, you can find 5-10 boosts daily. Even at $5 per conversion, that's $150-$300/month from one activity."],
-    ["Step-by-Step","1) Check your sportsbook apps each morning for profit boosts. 2) Find the boost, note the odds, percentage, and max extra winnings. 3) Find the opposing line at another book. 4) Enter everything here. 5) Place the boosted bet at Book A. 6) Place the hedge at Book B for the calculated amount. 7) Profit either way."],
-  ]}/></div>);
-};
-
-const FirstBet = () => {
-  const [mem,setMem]=useCalcMemory('first-bet',{s:"500",o:"+150",ho:"-170"});
-  const {s,o,ho}=mem;
-  const setS=v=>setMem('s',v),setO=v=>setMem('o',v),setHo=v=>setMem('ho',v);
-  const r = useMemo(()=>calcFirst(parseFloat(s),o,ho),[s,o,ho]);
-  const sens = useMemo(()=>sensitivityFirst(parseFloat(s),o,ho),[s,o,ho]);
-  const [showHist, setShowHist] = useState(false);
-  const [hist, setHist] = useState(()=>{ try{return JSON.parse(localStorage.getItem('pg_hist_first-bet')||'[]');}catch{return[];} });
-  useEffect(()=>{
-    if(!r||!parseFloat(r.hs)) return;
-    const entry={ts:Date.now(),s,o,ho,hs:r.hs,pOW:r.pOW,pHW:r.pHW};
-    setHist(prev=>{
-      const next=[entry,...prev].slice(0,20);
-      try{localStorage.setItem('pg_hist_first-bet',JSON.stringify(next));}catch{}
-      return next;
-    });
-  },[r?.hs,r?.pOW]);
-  const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has('demo'));
-  const [rCopied, setRCopied] = useState(false);
-  const applyDemo = () => { setS("200"); setO("-110"); setHo("-110"); setDemoMode(true); };
-  const copyResult = () => {
-    if(!r) return;
-    const text = `📊 First Bet Safety Net — PromoGrind\nFirst Bet Stake: $${s} | Your Odds: ${o} | Hedge Odds: ${ho}\nHedge Amount: $${r.hs}\nIf Original Wins: $${r.pOW} | If Hedge Wins: $${r.pHW}\n${CANONICAL_APP_URL}`;
-    try{navigator.clipboard.writeText(text);}catch(e){}
-    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
-  };
-  return (<div><div style={S.card}><Tl t="First Bet Safety Net Hedge" badge="CASH BET" bc={K.ac} shareable getParams={()=>({s,o,ho})}/>
-    <div style={S.row}><In l="First Bet Stake" v={s} set={setS} pre="$"/><In l="Your Odds" v={o} set={setO}/><In l="Hedge Odds" v={ho} set={setHo}/></div>
-    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-      <button onClick={()=>{setS("1000");setO("+120");setHo("-140");}} style={{padding:"4px 10px",background:`${K.ac}10`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font}}>★ Show Example</button>
-      <button onClick={()=>demoMode?setDemoMode(false):applyDemo()} style={{padding:"4px 10px",background:demoMode?`${K.gn}15`:`${K.gn}08`,border:`1px solid ${demoMode?K.gn:K.gn+'30'}`,borderRadius:4,color:K.gn,fontSize:10,cursor:"pointer",fontFamily:font}}>▶ Demo</button>
-      <span style={{fontSize:10,color:K.mt}}>$1,000 BetMGM safety net at +120, hedge at -140</span>
-    </div>
-    {demoMode&&<div style={{...S.note(K.ac),marginBottom:12}}>
-      <div style={{fontWeight:700,marginBottom:4}}>Step-by-step demo</div>
-      <div>Step 1: BetMGM offers $200 first bet insurance.</div>
-      <div>Step 2: Bet $200 on a near-even moneyline.</div>
-      <div>Step 3: If it loses, you get $200 in bonus bets.</div>
-      <div>Step 4: Convert those for ~${f(parseFloat(s)*0.7,0)} guaranteed.</div>
-      <button onClick={()=>setDemoMode(false)} style={{marginTop:6,background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:10,padding:0,textDecoration:"underline"}}>✕ Exit Demo</button>
-    </div>}
-    {hist.length>0&&<div style={{marginBottom:8,display:"flex",justifyContent:"flex-end"}}><button onClick={()=>setShowHist(h=>!h)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.dm,fontSize:9,cursor:"pointer",fontFamily:font}}>🕐 History ({hist.length})</button></div>}
-    {showHist&&hist.length>0&&<div style={{marginBottom:12,padding:10,background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,maxHeight:180,overflowY:"auto"}}>
-      <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Last {hist.length} Calculations</div>
-      {hist.map((h,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.dm,padding:"3px 0",borderBottom:i<hist.length-1?`1px solid ${K.bd}`:"none"}}>
-        <span>${h.s} @ {h.o}</span>
-        <span style={{color:K.ac,fontWeight:600}}>hedge ${h.hs}</span>
-        <span style={{color:K.mt}}>{new Date(h.ts).toLocaleDateString()}</span>
-      </div>)}
-    </div>}
-    {r&&<div style={S.res(true)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.ac)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>from hedge math</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
-      <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b/><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW)>=0?K.gn:K.rd}/><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW)>=0?K.gn:K.rd}/>
-      <Nt c={K.yl}>If your first bet LOSES → you get ${s} in bonus bets. Convert those at ~70% using the Bonus Bet tab = ~${f(parseFloat(s)*0.7,0)} more profit!</Nt>
-      <BookCTA promoType="safety"/>
-      <div style={{display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}}>
-        <CalculatorTrustBadge calculatorKey="first-bet" promoType="safety_net"/>
-        <SensitivityChip summary={sens}/>
-      </div>
-      <ResultFeedbackCard
-        calculatorKey="first-bet"
-        calculatorLabel="First Bet Safety Net Hedge"
-        promoType="safety_net"
-        expectedProfit={r.g}
-      />
-    </div>}
-  </div>
-  <Help entries={[
-    ["Safety Net Promo","Books like BetMGM ($1,500), bet365 ($1,000), and BetRivers ($500) refund your first bet as bonus bets if it loses. This is different from a bonus bet — you're wagering your own real cash."],
-    ["The Strategy","Place your first bet at Book A. Immediately hedge at Book B. If your bet wins: you profit from the hedge math. If it loses: you get bonus bets back, which you convert using the Bonus Bet Converter tab. Either outcome is profitable."],
-    ["Why hedge immediately?","If you don't hedge, you're just gambling. The hedge locks in a small profit from the math, and MORE IMPORTANTLY, it means when you lose (and get the bonus bets), those bonus bets are pure profit to convert — you haven't actually lost anything."],
-  ]}/></div>);
-};
-
-const NoVig = () => {
-  const [mem,setMem]=useCalcMemory('no-vig',{o1:"-110",o2:"-110"});
-  const {o1,o2}=mem;
-  const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v);
-  const r = useMemo(()=>calcNV(o1,o2),[o1,o2]);
-  return (<div><div style={S.card}><Tl t="No-Vig Fair Odds Calculator" badge="DEVIG" bc={K.pp} shareable/>
-    <div style={S.row}><In l="Side 1 Odds" v={o1} set={setO1} ph="-110"/><In l="Side 2 Odds" v={o2} set={setO2} ph="-110"/></div>
-    {r&&<div style={S.res(true)}><RR l="Sportsbook Vig (Juice)" v={`${r.v}%`} c={K.rd} b/>
-      <div style={{marginTop:8,marginBottom:2,fontSize:10,color:K.mt}}>SIDE 1</div>
-      <RR l="Implied Probability (with vig)" v={`${r.ip1}%`} c={K.dm}/><RR l="True Probability (no vig)" v={`${r.fp1}%`} c={K.gn}/><RR l="Fair Odds" v={r.fo1} c={K.pp} b/>
-      <div style={{marginTop:8,marginBottom:2,fontSize:10,color:K.mt}}>SIDE 2</div>
-      <RR l="Implied Probability (with vig)" v={`${r.ip2}%`} c={K.dm}/><RR l="True Probability (no vig)" v={`${r.fp2}%`} c={K.gn}/><RR l="Fair Odds" v={r.fo2} c={K.pp} b/>
-      <Nt c={K.ac}>If any sportsbook offers BETTER than these fair odds on either side, that bet has positive expected value (+EV).</Nt></div>}
-  </div>
-  <Help entries={[
-    ["Vig (Vigorish) / Juice","The sportsbook's built-in profit margin. It's why both sides of a coin flip aren't +100 — they're typically -110 each. That gap is the vig. Standard vig is about 4.5% (called 'the juice'). The book keeps this regardless of who wins."],
-    ["Why -110/-110 doesn't add to 100%","At -110 odds, each side has an implied probability of 52.4%. That's 104.8% total — the extra 4.8% is the vig. The true probability of each side is 50/50, but the book charges you extra for the privilege of betting."],
-    ["No-Vig / Fair Odds","What the odds WOULD be if the sportsbook took zero profit. These represent the 'true' probability of each outcome based on market consensus. If you can bet at odds BETTER than the fair odds, you have an edge."],
-    ["How to use this","Enter odds from a sharp sportsbook (one known for accurate lines — Pinnacle, Circa, or the average of several major books). The fair odds become your benchmark. Then check other books — if any offer better odds than the fair line, use the +EV calculator."],
-  ]}/></div>);
-};
-
-const NoVig3Way = () => {
-  const [mem,setMem]=useCalcMemory('no-vig-3way',{o1:"+220",o2:"+250",o3:"+300"});
-  const {o1,o2,o3}=mem;
-  const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v),setO3=v=>setMem('o3',v);
-  const r = useMemo(()=>calcNV3(o1,o2,o3),[o1,o2,o3]);
-  return (<div><div style={S.card}><Tl t="3-Way No-Vig Calculator" badge="SOCCER / HOCKEY" bc={K.pp} shareable/>
-    <div style={S.row}><In l="Home Win Odds" v={o1} set={setO1} ph="+220"/><In l="Draw Odds" v={o2} set={setO2} ph="+250"/><In l="Away Win Odds" v={o3} set={setO3} ph="+300"/></div>
-    {r&&<div style={S.res(true)}>
-      <RR l="Total Vig (Juice)" v={`${r.v}%`} c={K.rd} b/>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginTop:12}}>
-        {[["Home Win",r.ip1,r.fp1,r.fo1],[" Draw",r.ip2,r.fp2,r.fo2],["Away Win",r.ip3,r.fp3,r.fo3]].map(([label,ip,fp,fo])=>(
-          <div key={label} style={{padding:"10px",background:K.s3,borderRadius:6}}>
-            <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",marginBottom:6}}>{label}</div>
-            <div style={{fontSize:16,fontWeight:700,color:K.pp,marginBottom:4}}>{fo}</div>
-            <div style={{fontSize:10,color:K.gn}}>True: {fp}%</div>
-            <div style={{fontSize:10,color:K.mt}}>Book: {ip}%</div>
-          </div>
-        ))}
-      </div>
-      <Nt c={K.ac}>These are the fair odds with zero vig. If any book offers BETTER than these fair odds on any outcome, that bet is +EV.</Nt>
-    </div>}
-  </div>
-  <Help entries={[
-    ["3-Way Markets","Soccer and hockey regulation time have 3 outcomes: Home Win, Draw, Away Win. Standard No-Vig only handles 2-way markets — this version correctly removes vig from all three simultaneously."],
-    ["How to use","Enter the lines from a sharp sportsbook (Pinnacle, Circa, or average of 5+ major books). The fair odds become your benchmark. Check other books for better prices."],
-    ["Draw pricing","The draw is typically the hardest outcome to price accurately, creating the most +EV opportunities in 3-way markets. Sharp bettors pay particular attention to draw pricing."],
-  ]}/></div>);
-};
-
-const PlusEV = () => {
-  const [mem,setMem]=useCalcMemory('ev',{yo:"+120",fo:"+105",s:"100"});
-  const {yo,fo,s}=mem;
-  const setYo=v=>setMem('yo',v),setFo=v=>setMem('fo',v),setS=v=>setMem('s',v);
-  const r = useMemo(()=>calcEV(yo,fo,parseFloat(s)),[yo,fo,s]);
-  return (<div><div style={S.card}><Tl t="Expected Value Calculator" badge="+EV" bc={K.gn} shareable/>
-    <div style={S.row}><In l="Sportsbook's Odds" v={yo} set={setYo} ph="+120"/><In l="Fair (No-Vig) Odds" v={fo} set={setFo} ph="+105"/><In l="Bet Size" v={s} set={setS} pre="$"/></div>
-    {r&&<div style={S.res(r.ok)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?"+":""}${r.ev}</span><span style={{fontSize:12,color:K.dm}}>expected value per bet</span></div>
-      <RR l="ROI per bet" v={`${r.roi}%`} c={r.ok?K.gn:K.rd} b/><RR l="True Win Probability" v={`${r.fp}%`}/><RR l="Your Edge" v={`${r.edge}%`} c={r.ok?K.gn:K.rd}/>
-      <Nt c={r.ok?K.gn:K.rd}>{r.ok?"This bet is +EV. Over hundreds of bets at this edge, you WILL profit mathematically — individual bets can still lose.":"This bet is -EV. The sportsbook has the edge. Skip it."}</Nt></div>}
-  </div>
-  <Help entries={[
-    ["Expected Value (EV)","The average profit or loss per bet if you made this exact bet thousands of times. +EV means profitable long-term. -EV means the house wins long-term. It's the single most important concept in profitable betting."],
-    ["Example","Fair odds say a team has a 50% chance to win (fair odds: +100). A sportsbook offers +120 on that team. You're getting paid $120 for a $100 bet on something that's actually a coin flip. Over 100 such bets, you'd expect to win 50 of them at +120 = $6,000 in winnings, while losing 50 × $100 = $5,000. Net: +$1,000. That's +EV."],
-    ["This is NOT guaranteed per bet","A +EV bet can absolutely lose TODAY. It's like a casino — the house has an edge, but sometimes the player wins. You're the house now, and your edge plays out over VOLUME. You need 100+ bets for the math to smooth out."],
-    ["Where to get Fair Odds","Use the No-Vig calculator with odds from a sharp book, or use the market consensus (average of 5+ major books with the vig removed)."],
-  ]}/></div>);
-};
-
-const Arb2Way = () => {
-  const [mem,setMem]=useCalcMemory('arb-2way',{o1:"+110",o2:"+105",t:"500"});
-  const {o1,o2,t}=mem;
-  const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v),setT=v=>setMem('t',v);
-  const r = useMemo(()=>calcArb2(o1,o2,parseFloat(t)),[o1,o2,t]);
-  const [rCopied, setRCopied] = useState(false);
-  const [showShareCardArb, setShowShareCardArb] = useState(false);
-  const arbIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
-  const [showArbTrigger, setShowArbTrigger] = useState(() => {
-    try {
-      const log = JSON.parse(localStorage.getItem('pg_usage_log') || '{}');
-      const arbCount = (log['arb-2way'] || 0) + (log['arb-3way'] || 0);
-      return arbCount >= 5 && shouldShowTrigger('arb_upsell') && !arbIsPro();
-    } catch { return false; }
-  });
-  const copyResult = () => {
-    if(!r||!r.ok) return;
-    const text = `📊 2-Way Arbitrage — PromoGrind\nOutcome 1: ${o1} | Outcome 2: ${o2} | Total Stake: $${t}\nStake Side 1: $${r.s1} | Stake Side 2: $${r.s2}\nARB Profit: +$${r.pr} | ROI: ${r.roi}%\n${CANONICAL_APP_URL}`;
-    try{navigator.clipboard.writeText(text);}catch(e){}
-    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
-  };
-  return (<div><div style={S.card}><Tl t="2-Way Arbitrage" badge="SUREBET" bc={K.pp} shareable/>
-    {showArbTrigger && (
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'linear-gradient(90deg,#1e3a2f,#0f1724)',border:'1px solid #4ade80',borderRadius:8,marginBottom:12,flexWrap:'wrap',gap:8}}>
-        <div style={{fontSize:13,color:'#cbd5e1'}}>⚡ <strong style={{color:'#4ade80'}}>The Live Scanner</strong> finds these arb opportunities automatically in real time.</div>
-        <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          <a href="#/upgrade" style={{padding:'5px 12px',background:'#4ade80',color:'#0a0e17',borderRadius:5,fontSize:12,fontWeight:700,textDecoration:'none'}}>Try Free →</a>
-          <button onClick={() => dismissTrigger('arb_upsell', setShowArbTrigger)} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:16}}>×</button>
-        </div>
-      </div>
-    )}
-    <div style={S.row}><In l="Outcome 1 (Book A)" v={o1} set={setO1}/><In l="Outcome 2 (Book B)" v={o2} set={setO2}/><In l="Total Stake" v={t} set={setT} pre="$"/></div>
-    {r&&<div style={S.res(r.ok)}><div style={{display:"flex",alignItems:"center",gap:8}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?`ARB: +$${r.pr}`:"NO ARB"}</span>{r.ok&&<button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button>}</div>
-      {r.ok&&<><RR l="Stake Side 1" v={`$${r.s1}`} c={K.ac} b/><RR l="Stake Side 2" v={`$${r.s2}`} c={K.ac} b/><RR l="ROI" v={`${r.roi}%`} c={K.gn}/></>}
-      {!r.ok&&<Nt c={K.rd}>No arb exists. Both sides need + odds at different books. Typical arb margins are 1-5%. Use OddsJam or BetBurger to scan automatically.</Nt>}
-      {r.ok&&!showShareCardArb&&<button onClick={()=>setShowShareCardArb(true)} style={{marginTop:10,width:'100%',padding:'7px 0',background:'transparent',border:'1px dashed #c084fc',color:'#c084fc',borderRadius:6,cursor:'pointer',fontSize:12}}>🎉 Share this arb</button>}
-      {r.ok&&showShareCardArb&&<ShareCard title="2-Way Arbitrage" profit={`+$${r.pr} (${r.roi}% ROI)`} onClose={()=>setShowShareCardArb(false)}/>}
-    </div>}
-  </div>
-  <Help entries={[
-    ["Arbitrage","Betting both sides of the same event at different sportsbooks where the combined odds guarantee a profit. It works because different books set different odds. When the gap is big enough, you can bet both sides and win no matter what."],
-    ["How to spot one","You need both sides to be + odds (or the implied probabilities to add up to LESS than 100%). Example: Book A has Team 1 at +110, Book B has Team 2 at +105. Each side implies ~48.8% and ~48.8% = 97.6% total. The missing 2.4% is your profit."],
-    ["Why it's rare","Books monitor each other and adjust quickly. Arb opportunities last seconds to minutes. That's why people use scanning tools — humans can't check fast enough."],
-  ]}/></div>);
-};
-
-const Arb3Way = () => {
-  const [mem,setMem]=useCalcMemory('arb-3way',{o1:"+180",o2:"+250",o3:"+320",t:"500"});
-  const {o1,o2,o3,t}=mem;
-  const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v),setO3=v=>setMem('o3',v),setT=v=>setMem('t',v);
-  const r = useMemo(()=>calcArb3(o1,o2,o3,parseFloat(t)),[o1,o2,o3,t]);
-  return (<div><div style={S.card}><Tl t="3-Way Arbitrage" badge="SOCCER / HOCKEY" bc={K.pp} shareable/>
-    <div style={S.row}><In l="Home Win (Book A)" v={o1} set={setO1}/><In l="Draw (Book B)" v={o2} set={setO2}/><In l="Away Win (Book C)" v={o3} set={setO3}/><In l="Total Stake" v={t} set={setT} pre="$"/></div>
-    {r&&<div style={S.res(r.ok)}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?`ARB: +$${r.pr}`:"NO ARB"}</span>
-      {r.ok&&<><RR l="Stake Home" v={`$${r.s1}`} c={K.ac} b/><RR l="Stake Draw" v={`$${r.s2}`} c={K.ac} b/><RR l="Stake Away" v={`$${r.s3}`} c={K.ac} b/><RR l="ROI" v={`${r.roi}%`} c={K.gn}/></>}</div>}
-  </div>
-  <Help entries={[
-    ["3-Way Markets","Soccer and hockey (regulation time) have three possible outcomes: Home Win, Draw, Away Win. With three outcomes across multiple books, pricing inefficiencies are MORE common than 2-way markets because it's harder for books to price all three perfectly."],
-    ["You need 3 sportsbooks","Each outcome should be at a different book for the best odds. Same-book arbs are essentially impossible due to correlated odds."],
-  ]}/></div>);
-};
-
-const ParlayHedge = () => {
-  const [mem,setMem]=useCalcMemory('parlay-hedge',{pp:"2500",ho:"+150",os:"25"});
-  const {pp,ho,os}=mem;
-  const setPp=v=>setMem('pp',v),setHo=v=>setMem('ho',v),setOs=v=>setMem('os',v);
-  const r = useMemo(()=>calcPH(parseFloat(pp),ho,parseFloat(os)),[pp,ho,os]);
-  return (<div><div style={S.card}><Tl t="Parlay Hedge" badge="LAST LEG" bc={K.yl} shareable/>
-    <div style={S.row}><In l="Parlay Potential Payout" v={pp} set={setPp} pre="$"/><In l="Final Leg Opposing Odds" v={ho} set={setHo}/><In l="Original Parlay Stake" v={os} set={setOs} pre="$"/></div>
-    {r&&<div style={S.res(true)}><div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.gn)}>${r.g}</span><span style={{fontSize:12,color:K.dm}}>guaranteed minimum</span></div>
-      <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b/><RR l="If Parlay Hits" v={`+$${r.pPW}`} c={K.gn}/><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn}/></div>}
-  </div>
-  <Help entries={[
-    ["Parlay","A bet combining multiple games where ALL must win for the bet to pay out. High risk, high reward. A 6-leg parlay at +9000 turns $25 into $2,500 — but all 6 must hit."],
-    ["The Last Leg Situation","You hit 5 of 6 legs. Your parlay now depends on one final game. Instead of sweating it, hedge the other side of that game at another book. You lock in profit regardless."],
-    ["Potential Payout","This is the TOTAL amount you'd receive if the parlay hits (check your bet slip). Not the profit — the full payout including your original stake."],
-  ]}/></div>);
-};
-
-const MiddleBet = () => {
-  const [mem,setMem]=useCalcMemory('middle',{o1:"-110",o2:"-110",l1:"220.5",l2:"200.5",s:"100"});
-  const {o1,o2,l1,l2,s}=mem;
-  const setO1=v=>setMem('o1',v),setO2=v=>setMem('o2',v),setL1=v=>setMem('l1',v),setL2=v=>setMem('l2',v),setS=v=>setMem('s',v);
-  const r = useMemo(()=>calcMid(o1,o2,l1,l2,parseFloat(s)),[o1,o2,l1,l2,s]);
-  return (<div><div style={S.card}><Tl t="Middle Bet Calculator" badge="MIDDLE" bc={K.ac} shareable/>
-    <div style={S.row}><In l="Under Odds (Book A)" v={o1} set={setO1}/><In l="Line 1 (Under)" v={l1} set={setL1}/><In l="Over Odds (Book B)" v={o2} set={setO2}/><In l="Line 2 (Over)" v={l2} set={setL2}/></div>
-    <div style={S.row}><In l="Stake (Side 1)" v={s} set={setS} pre="$"/></div>
-    {r&&<div style={S.res(true)}><RR l="Side 2 Stake" v={`$${r.s2}`} c={K.ac} b/><RR l="Total Risked" v={`$${r.ts}`}/><RR l="Worst Case" v={`$${r.wc}`} c={parseFloat(r.wc)>=0?K.gn:K.rd}/><RR l="Middle Width" v={`${r.w} points`} c={K.pp}/><RR l="If Middle Hits (BOTH WIN)" v={`+$${r.mw}`} c={K.gn} b/></div>}
-  </div>
-  <Help entries={[
-    ["Middle Bet","When two sportsbooks have DIFFERENT lines on the same game, you can bet opposite sides and potentially win BOTH if the result lands in the 'middle'. Example: Book A has passing yards Under 220.5, Book B has Over 200.5. If the player throws 210 yards, both bets win."],
-    ["The Risk","If the result falls outside the middle, one side wins and one loses. With -110 juice, you'll lose about $5-$10 on a $100 stake. The middle itself might pay $180+. It's a risk/reward calculation."],
-    ["Best for","Player props where books disagree by 5+ points. Total points/goals where books have 3+ point gaps. The wider the middle, the more likely it hits."],
-  ]}/></div>);
-};
-
-const OddsConvert = () => {
-  const [mem,setMem]=useCalcMemory('odds-convert',{v:"-110",mode:"american"});
-  const {v,mode}=mem;
-  const setV=x=>setMem('v',x),setMode=x=>setMem('mode',x);
-  const dec = mode==="american"?toD(v):mode==="decimal"?parseFloat(v):(()=>{const[n,d]=v.split("/").map(Number);return d?n/d+1:0;})();
-  return (<div><div style={S.card}><Tl t="Odds Format Converter" badge="UTILITY" bc={K.dm} shareable/>
-    <div style={S.row}><div style={S.col}><label style={S.label}>Input Format</label><select style={S.input} value={mode} onChange={e=>setMode(e.target.value)}><option value="american">American (+/- odds)</option><option value="decimal">Decimal (e.g. 2.10)</option><option value="fractional">Fractional (e.g. 11/10)</option></select></div><In l="Enter Odds" v={v} set={setV}/></div>
-    {dec>0&&<div style={{...S.res(true),display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:12,textAlign:"center"}}>
-      {[["American",toA(dec),K.ac],["Decimal",f(dec,3),K.pp],["Fractional",toF(dec),K.yl],["Implied Prob",f(toP(dec),1)+"%",K.gn]].map(([l,v,c])=>(<div key={l}><div style={{fontSize:10,color:K.mt,marginBottom:4}}>{l}</div><div style={{fontSize:18,fontWeight:700,color:c}}>{v}</div></div>))}
-    </div>}
-  </div>
-  <Help entries={[
-    ["American Odds","The US standard. + means underdog: +200 means bet $100 to win $200. - means favorite: -150 means bet $150 to win $100. The number always relates to $100."],
-    ["Decimal Odds","Used in Europe/Australia. Your total return per $1 bet. Decimal 3.00 = bet $1, get $3 back ($2 profit + $1 stake). To convert: -150 American = 100/150 + 1 = 1.667 decimal."],
-    ["Fractional Odds","Used in UK. Shows profit relative to stake. 5/1 means win $5 for every $1 bet. 1/2 means win $1 for every $2 bet."],
-    ["Implied Probability","What the odds suggest about the likelihood of winning. -200 = 66.7% implied probability. +200 = 33.3%. Useful for comparing what a book thinks vs. what you think."],
-  ]}/></div>);
-};
-
-const RolloverCalc = () => {
-  const [mem,setMem]=useCalcMemory('rollover',{b:"500",m:"5",v:"4.5"});
-  const {b,m,v}=mem;
-  const setB=x=>setMem('b',x),setM=x=>setMem('m',x),setV=x=>setMem('v',x);
-  const r = useMemo(()=>calcRO(b,m,v),[b,m,v]);
-  return (<div><div style={S.card}><Tl t="Rollover / Playthrough Calculator" badge="DEPOSIT MATCH" bc={K.yl} shareable/>
-    <div style={S.row}><In l="Bonus Amount" v={b} set={setB} pre="$"/><In l="Rollover Multiplier" v={m} set={setM} ph="5"/><In l="Average Vig %" v={v} set={setV} ph="4.5"/></div>
-    {r&&<div style={S.res(r.ok)}><RR l="Total You Must Wager" v={`$${r.tw}`} b/><RR l="Expected Cost (lost to vig)" v={`-$${r.ec}`} c={K.rd}/><RR l="Net Value of This Bonus" v={`${r.ok?"+":""}$${r.nv}`} c={r.ok?K.gn:K.rd} b/><RR l="Approximate Bets Needed (~$50 avg)" v={r.nb}/>
-      <Nt c={r.ok?K.gn:K.rd}>{r.ok?"Worth clearing. The bonus exceeds vig cost.":"Warning: Vig cost exceeds bonus. Lower-vig markets or skip."}</Nt></div>}
-  </div>
-  <Help entries={[
-    ["Rollover / Playthrough","Some deposit match bonuses require you to wager a certain multiple of the bonus before you can withdraw it. A '5x playthrough' on a $500 bonus means you must bet $2,500 total before the bonus becomes real cash."],
-    ["Vig Cost","Every bet you place loses a tiny amount to the sportsbook's margin (the vig). At a standard 4.5% vig, betting $2,500 total costs you about $112.50. If the bonus is $500, the net value is $500 - $112.50 = $387.50."],
-    ["When to skip","If the rollover multiplier is 10x or higher, or if the vig on the required markets is above 6%, the bonus might not be worth clearing. This calculator tells you the break-even point."],
-    ["How to minimize vig cost","Bet on low-vig markets: NFL/NBA spreads and totals at -110/-110 (4.5% vig). Avoid player props (8-12% vig) and parlays (compounded vig). Just bet normally on main markets until the rollover is cleared."],
-  ]}/></div>);
-};
-
-const DepositMatch = () => {
-  const [mem,setMem]=useCalcMemory('deposit-match',{dep:"1000",pct:"20",mx:"200",ro:"5",vg:"4.5"});
-  const {dep,pct,mx,ro,vg}=mem;
-  const setDep=x=>setMem('dep',x),setPct=x=>setMem('pct',x),setMx=x=>setMem('mx',x),setRo=x=>setMem('ro',x),setVg=x=>setMem('vg',x);
-  const r = useMemo(()=>calcDeposit(dep,pct,mx,ro,vg),[dep,pct,mx,ro,vg]);
-  return (<div><div style={S.card}><Tl t="Deposit Match Calculator" badge="RELOAD BONUS" bc={K.yl} shareable/>
-    <div style={S.row}><In l="Your Deposit" v={dep} set={setDep} pre="$" ph="1000"/><In l="Match %" v={pct} set={setPct} ph="20"/><In l="Max Bonus $" v={mx} set={setMx} pre="$" ph="200"/></div>
-    <div style={S.row}><In l="Rollover (x)" v={ro} set={setRo} ph="5"/><In l="Avg Vig %" v={vg} set={setVg} ph="4.5"/></div>
-    {r&&<div style={S.res(r.ok)}>
-      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?"+":""}${r.net}</span><span style={{fontSize:12,color:K.dm}}>net bonus value</span></div>
-      <RR l="Bonus You Receive" v={`$${r.bonus}`} c={K.yl} b/><RR l="Total Must Wager" v={`$${r.tw}`}/><RR l="Vig Cost to Clear" v={`-$${r.cost}`} c={K.rd}/><RR l="Net Bonus Value" v={`${r.ok?"+":""}$${r.net}`} c={r.ok?K.gn:K.rd} b/><RR l="ROI on Deposit" v={`${r.roi}%`} c={r.ok?K.gn:K.yl}/>
-      {!r.fill&&<Nt c={K.yl}>Deposit ${r.minDep} to max this bonus — your ${f(parseFloat(dep),0)} only captures ${r.bonus} of the ${mx} max.</Nt>}
-      {r.fill&&<Nt c={K.gn}>You are depositing enough to capture the full ${mx} bonus.</Nt>}
-      <Nt c={r.ok?K.gn:K.rd}>{r.ok?"Worth clearing. Bet low-vig markets (spreads/totals at -110) to minimize cost.":"High rollover or vig makes this bonus unprofitable. Consider skipping."}</Nt>
-    </div>}
-  </div>
-  <Help entries={[
-    ["Deposit Match","The sportsbook adds bonus funds equal to a percentage of your deposit. A '20% match up to $200' on a $1,000 deposit gives you $200 in bonus funds."],
-    ["Rollover","Before withdrawing the bonus, you must wager a multiple of it. 5x on $200 means placing $1,000 in bets total. Each bet loses a small amount to vig."],
-    ["Vig Cost","At 4.5% vig, clearing $1,000 in bets costs ~$45. Minimize this by betting NFL spreads, NBA totals, and main lines at -110/-110."],
-    ["Minimum deposit","To capture the full max bonus: deposit at least Max Bonus ÷ Match%. For 20% up to $200, you need to deposit $1,000."],
-    ["When to skip","Rollover of 10x+ or high-vig required markets means the clearing cost likely exceeds the bonus. This calculator shows you the break-even."],
-  ]}/></div>);
-};
-
-const KellyCriterion = () => {
-  const [mem,setMem]=useCalcMemory('kelly',{wp:"55",odds:"+110",br:"1000",frac:"25"});
-  const {wp,odds,br,frac}=mem;
-  const setWp=v=>setMem('wp',v),setOdds=v=>setMem('odds',v),setBr=v=>setMem('br',v),setFrac=v=>setMem('frac',v);
-  const r = useMemo(()=>calcKelly(wp,odds,parseFloat(br),parseFloat(frac)/100),[wp,odds,br,frac]);
-  const [rCopied, setRCopied] = useState(false);
-  const copyResult = () => {
-    if(!r) return;
-    const text = `📊 Kelly Criterion — PromoGrind\nWin Probability: ${wp}% | Odds: ${odds} | Bankroll: $${br} | Kelly Fraction: ${frac}%\nRecommended Bet: $${r.bet}\nFull Kelly: ${r.k}% | Fractional Kelly: ${r.ak}%\n${CANONICAL_APP_URL}`;
-    try{navigator.clipboard.writeText(text);}catch(e){}
-    setRCopied(true); setTimeout(()=>setRCopied(false),1500);
-  };
-  return (<div><div style={S.card}><Tl t="Kelly Criterion Bet Sizer" badge="+EV SIZING" bc={K.gn} shareable/>
-    <div style={S.row}><In l="Win Probability %" v={wp} set={setWp} ph="55"/><In l="Odds" v={odds} set={setOdds} ph="+110"/><In l="Bankroll" v={br} set={setBr} pre="$" ph="1000"/><In l="Kelly Fraction %" v={frac} set={setFrac} ph="25"/></div>
-    {r&&<div style={S.res(r.ok)}>
-      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>${r.bet}</span><span style={{fontSize:12,color:K.dm}}>recommended bet size</span><button onClick={copyResult} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:rCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>📋 {rCopied?"Copied!":"Copy"}</button></div>
-      <RR l="Full Kelly %" v={`${r.k}%`} c={K.dm}/><RR l={`${frac}% Fractional Kelly`} v={`${r.ak}%`} c={K.ac} b/><RR l="Bet Size" v={`$${r.bet}`} c={r.ok?K.gn:K.rd} b/><RR l="Expected Value" v={`${r.ok?"+":""}${r.ev}%`} c={r.ok?K.gn:K.rd}/>
-      {!r.ok&&<Nt c={K.rd}>Kelly says skip this bet — your win probability does not support an edge at these odds.</Nt>}
-      {r.ok&&<Nt c={K.yl}>Using {frac}% fractional Kelly. Full Kelly maximizes growth but has high variance. Most pros use 20–33% Kelly.</Nt>}
-      {r.ok&&(()=>{
-        const fracNum=parseFloat(frac);
-        const riskLabel=fracNum<25?"Conservative — lower growth, minimal ruin risk":fracNum<=50?"Balanced — recommended for most bettors":fracNum<=75?"Aggressive — higher variance, 10-20% ruin risk":"Dangerous — high ruin probability";
-        const riskColor=fracNum<25?K.gn:fracNum<=50?K.ac:fracNum<=75?K.yl:K.rd;
-        const markerPct=Math.min(100,(fracNum-5)/95*100);
-        const fracBet=f(parseFloat(br)*parseFloat(r.k)/100*fracNum/100);
-        return (
-          <div style={{marginTop:12,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
-            <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1px"}}>Fraction Risk Optimizer</div>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.mt,marginBottom:4}}><span>5%</span><span>100%</span></div>
-            <div style={{position:"relative",height:8,background:`linear-gradient(to right,${K.gn},${K.yl},${K.rd})`,borderRadius:4,marginBottom:8}}>
-              <div style={{position:"absolute",left:`calc(${markerPct}% - 4px)`,top:-2,width:12,height:12,borderRadius:"50%",background:"white",border:`2px solid ${riskColor}`}}/>
-            </div>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:K.mt,marginBottom:8}}><span style={{color:K.gn}}>Low Ruin Risk</span><span style={{color:K.rd}}>High Ruin Risk</span></div>
-            <div style={{fontSize:11,color:riskColor,fontWeight:600,marginBottom:4}}>{frac}% Kelly: {riskLabel}</div>
-            <div style={{fontSize:11,color:K.dm}}>Bet at this fraction: ${fracBet}</div>
-          </div>
-        );
-      })()}
-    </div>}
-  </div>
-  <Help entries={[
-    ["Kelly Criterion","A formula that tells you what percentage of your bankroll to bet given your edge. It maximizes long-term growth. Bet too little: sub-optimal growth. Bet too much: risk of ruin."],
-    ["Win Probability","Your TRUE estimate of the bet winning — not the book's implied probability. Get this from the No-Vig calculator or sharp book consensus."],
-    ["Fractional Kelly","Most professionals use 25–33% Kelly. Full Kelly has high variance — you can have long drawdowns even when profitable. Quarter-Kelly gives 75% of the growth with far less risk."],
-    ["Edge required","If your win probability is below the book's implied probability, Kelly returns 0. Only bet when you have a genuine edge."],
-    ["Bankroll","Your total allocated betting bankroll — not your life savings. Kelly only works correctly when staked against a consistent bankroll figure."],
-  ]}/></div>);
-};
-
-const InsurancePromo = () => {
-  const [mem,setMem]=useCalcMemory('insurance',{stake:"100",insPct:"100",insMax:"100",conv:"70"});
-  const {stake,insPct,insMax,conv}=mem;
-  const setStake=x=>setMem('stake',x),setInsPct=x=>setMem('insPct',x),setInsMax=x=>setMem('insMax',x),setConv=x=>setMem('conv',x);
-  const r = useMemo(()=>calcInsurance(stake,insPct,insMax,conv),[stake,insPct,insMax,conv]);
-  return (<div><div style={S.card}><Tl t="Promo Insurance Calculator" badge="SGP / PARLAY" bc={K.pp} shareable/>
-    <div style={S.row}><In l="Your Stake" v={stake} set={setStake} pre="$" ph="100"/><In l="Insurance % of Stake" v={insPct} set={setInsPct} ph="100"/><In l="Max Insurance $" v={insMax} set={setInsMax} pre="$" ph="100"/><In l="Bonus Conversion %" v={conv} set={setConv} ph="70"/></div>
-    {r&&<div style={S.res(r.ok)}>
-      <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.gn)}>${r.insVal}</span><span style={{fontSize:12,color:K.dm}}>insurance value (real cash)</span></div>
-      <RR l="Insurance Bonus Amount" v={`$${r.insAmt}`} c={K.pp} b/><RR l="Bonus Value After Conversion" v={`$${r.insVal}`} c={K.gn} b/><RR l="Net Cost if Bet Loses" v={`$${r.netCost}`} c={parseFloat(r.netCost)<=5?K.gn:K.yl}/><RR l="Insurance Effectiveness" v={`${r.effPct}%`} c={parseFloat(r.effPct)>=60?K.gn:K.yl}/>
-      <Nt c={K.ac}>If your insured bet loses: you get ${r.insAmt} back as a bonus bet. Convert that using the Bonus Bet tab (~{conv}%) = ${r.insVal} real cash. Your net loss is only ${r.netCost}.</Nt>
-    </div>}
-  </div>
-  <Help entries={[
-    ["Insurance Promo","A sportsbook refunds part or all of your stake (as bonus bets) if your bet loses. Common forms: SGP Insurance (refund if 1 leg misses), Parlay Insurance, and Step-Up Parlays (tiered payouts by legs hit)."],
-    ["Why it changes the math","Without insurance, a $100 loss costs $100. With 100% SGP insurance, you lose $100 but get $100 in bonus bets back — worth ~$70 after conversion. Net loss is only ~$30."],
-    ["Insurance %","Some promos give 100% back, others give 50% or 25%. A '50% SGP insurance up to $50' on a $100 bet returns $50 as bonus if it loses."],
-    ["Conversion Rate","Bonus bets are worth ~70% as real cash when converted using the Bonus Bet Calculator. Adjust if your lines are particularly good or bad."],
-    ["vs. hedging","If you CAN hedge the bet, use the First Bet Hedge calculator for guaranteed profit. Insurance calcs are for bets you cannot hedge (SGPs, same-book parlays)."],
-  ]}/></div>);
-};
-
+// NoVig/NoVig3Way/PlusEV/Arb2Way/Arb3Way/KellyCriterion/InsurancePromo extracted to src/calculators/
 const TeaserCalc = () => {
   const [mem,setMem]=useCalcMemory('teaser',{legs:"2",tOdds:"-110",wp:"72"});
   const {legs,tOdds,wp}=mem;
@@ -973,15 +152,15 @@ const TeaserCalc = () => {
     {r&&<div style={S.res(r.ok)}>
       <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(r.ok?K.gn:K.rd)}>{r.ok?"+":""}{r.ev}%</span><span style={{fontSize:12,color:K.dm}}>expected value per $100</span></div>
       <RR l="Legs" v={legs}/><RR l="Combined Win Probability" v={`${r.combProb}%`} c={K.ac}/><RR l="Break-even Win % Per Leg" v={`${r.beProb}%`} c={K.yl}/><RR l="Payout (net odds)" v={`${r.payout}x`}/>
-      {r.ok&&<Nt c={K.gn}>This teaser has positive EV at your estimated per-leg win rate. Make sure your estimate accounts for the line movement — teasers are only +EV when crossing key numbers (3 and 7 in NFL).</Nt>}
-      {!r.ok&&<Nt c={K.rd}>At {wp}% per-leg win rate, this teaser is -EV. You need {r.beProb}% per leg to break even. Teasers crossing 3 and 7 in NFL can reach 72-76% per leg — otherwise avoid.</Nt>}
+      {r.ok&&<Nt c={K.gn}>This teaser has positive EV at your estimated per-leg win rate. Make sure your estimate accounts for the line movement â€” teasers are only +EV when crossing key numbers (3 and 7 in NFL).</Nt>}
+      {!r.ok&&<Nt c={K.rd}>At {wp}% per-leg win rate, this teaser is -EV. You need {r.beProb}% per leg to break even. Teasers crossing 3 and 7 in NFL can reach 72-76% per leg â€” otherwise avoid.</Nt>}
     </div>}
   </div>
   <Help entries={[
     ["Teaser","A parlay where you move the point spread/total in your favor by a set number of points (6, 6.5, or 7 in NFL) in exchange for worse payout odds. The extra points increase your per-leg win probability."],
-    ["Key numbers in NFL","Margins of 3 and 7 are far more common than any other margin (field goal and touchdown). Crossing these numbers dramatically increases win probability. A team -7 becomes -1 in a 6-point teaser — this is the value."],
+    ["Key numbers in NFL","Margins of 3 and 7 are far more common than any other margin (field goal and touchdown). Crossing these numbers dramatically increases win probability. A team -7 becomes -1 in a 6-point teaser â€” this is the value."],
     ["When teasers are +EV","The classic strategy: 2-team 6pt teasers that cross both 3 and 7 on spreads (sides ranging from +1.5 to +2.5, or -7.5 to -8.5). Historical win rate for these legs is ~72-76%."],
-    ["NBA teasers","Standard NBA teaser points are 4, 4.5, or 5. Key numbers matter less in basketball. Most NBA teasers are -EV — use with caution."],
+    ["NBA teasers","Standard NBA teaser points are 4, 4.5, or 5. Key numbers matter less in basketball. Most NBA teasers are -EV â€” use with caution."],
   ]}/></div>);
 };
 
@@ -1005,7 +184,7 @@ const RoundRobinCalc = () => {
           <div key={i} style={{display:"flex",alignItems:"center",gap:4}}>
             <span style={{fontSize:10,color:K.mt}}>#{i+1}</span>
             <input style={{...S.input,width:80}} value={p.odds} onChange={e=>updatePick(i,e.target.value)} placeholder="+150"/>
-            {picks.length>2&&<span onClick={()=>removePick(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>✕</span>}
+            {picks.length>2&&<span onClick={()=>removePick(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>âœ•</span>}
           </div>
         ))}
       </div>
@@ -1017,18 +196,18 @@ const RoundRobinCalc = () => {
     {r&&<div style={S.res(true)}>
       <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}><span style={S.big(K.ac)}>{r.nCombos}</span><span style={{fontSize:12,color:K.dm}}>combinations</span></div>
       <RR l="Total Stake" v={`$${r.totalStake}`} c={K.rd} b/><RR l="Best Case Payout" v={`$${r.maxPayout}`} c={K.gn}/><RR l="Worst Single Combo Payout" v={`$${r.minPayout}`}/><RR l="Average Payout Per Combo" v={`$${r.avgPayout}`} c={K.ac}/>
-      <Nt c={K.yl}>A round robin protects against one or two picks losing — you win multiple smaller parlays instead of needing all picks to hit. Total stake: ${r.totalStake} ({r.nCombos} combos × ${stakeEach}).</Nt>
+      <Nt c={K.yl}>A round robin protects against one or two picks losing â€” you win multiple smaller parlays instead of needing all picks to hit. Total stake: ${r.totalStake} ({r.nCombos} combos Ã— ${stakeEach}).</Nt>
     </div>}
   </div>
   <Help entries={[
     ["Round Robin","Instead of one big parlay, a round robin creates every possible smaller parlay from your pool of picks. If you have 4 picks and choose 2-team combos, you get 6 separate 2-team parlays (4 choose 2 = 6)."],
     ["Why use it","A standard 4-leg parlay requires all 4 to win. A round robin of 2-team parlays from those 4 picks means you profit even if only 2 or 3 of your picks hit."],
-    ["Risk vs reward","You spend more total (6 × $50 = $300 vs $50 for one parlay) but you have multiple chances to profit. It is risk management for high-confidence multi-pick days."],
+    ["Risk vs reward","You spend more total (6 Ã— $50 = $300 vs $50 for one parlay) but you have multiple chances to profit. It is risk management for high-confidence multi-pick days."],
     ["Best use case","When you have 3-5 strong +EV opinions on a slate. Rather than going all-or-nothing, round robins monetize partial correctness."],
   ]}/></div>);
 };
 
-// ═══ PARLAY BUILDER ═══
+// â•â•â• PARLAY BUILDER â•â•â•
 const ParlayBuilder = () => {
   const [legs, setLegs] = useState([{odds:"+150"},{odds:"+200"},{odds:"+175"}]);
   const [stake, setStake] = useState("100");
@@ -1040,7 +219,7 @@ const ParlayBuilder = () => {
   return (<div><div style={S.card}><Tl t="Parlay Builder" badge="MULTI-LEG" bc={K.yl} shareable/>
     <div style={{marginBottom:12}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-        <label style={S.label}>Legs ({legs.length}/8) — enter any odds format</label>
+        <label style={S.label}>Legs ({legs.length}/8) â€” enter any odds format</label>
         <button onClick={addLeg} disabled={legs.length>=8} style={{padding:"3px 10px",background:K.s3,border:`1px solid ${K.bd2}`,borderRadius:4,color:K.gn,fontSize:10,cursor:"pointer",fontFamily:font}}>+ Leg</button>
       </div>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
@@ -1053,7 +232,7 @@ const ParlayBuilder = () => {
               <span style={{fontSize:10,color:K.mt}}>Leg {i+1}</span>
               <input style={{...S.input,width:90,borderColor:isFav?`${K.rd}80`:undefined}} value={lg.odds} onChange={e=>updateLeg(i,e.target.value)} placeholder="+150"/>
               {isFav&&<span style={S.tag(K.rd)}>FAV</span>}
-              {legs.length>2&&<span onClick={()=>removeLeg(i)} style={{cursor:"pointer",color:K.rd,fontSize:11,padding:"0 2px"}}>✕</span>}
+              {legs.length>2&&<span onClick={()=>removeLeg(i)} style={{cursor:"pointer",color:K.rd,fontSize:11,padding:"0 2px"}}>âœ•</span>}
             </div>
             {ip&&<div style={{fontSize:9,color:isFav?K.rd:K.mt,paddingLeft:40}}>{ip}% implied</div>}
           </div>);
@@ -1068,19 +247,19 @@ const ParlayBuilder = () => {
       <RR l="True Win Probability" v={`${r.prob}%`} c={K.ac}/>
       <RR l="Expected Value" v={`${r.ok?"+":""}$${r.ev}`} c={r.ok?K.gn:K.rd} b/>
       <RR l="Implied Prob Sum (vig)" v={`${r.impSum}%`} c={parseFloat(r.impSum)>105?K.rd:K.yl}/>
-      {!r.ok&&<Nt c={K.rd}>This parlay is -EV. The sportsbook&apos;s vig compounds across each leg — long parlays almost always favor the house.</Nt>}
+      {!r.ok&&<Nt c={K.rd}>This parlay is -EV. The sportsbook&apos;s vig compounds across each leg â€” long parlays almost always favor the house.</Nt>}
       {r.ok&&<Nt c={K.gn}>This parlay has positive expected value. Verify each leg has a genuine edge using the +EV calculator first.</Nt>}
     </div>}
   </div>
   <Help entries={[
-    ["How parlay odds compound","Each leg's odds multiply together. 3 legs at +150 (+150 = 2.5x decimal each) = 2.5 × 2.5 × 2.5 = 15.625x combined. Bet $100, payout $1,562.50. But the house takes vig on EVERY leg — it compounds against you."],
+    ["How parlay odds compound","Each leg's odds multiply together. 3 legs at +150 (+150 = 2.5x decimal each) = 2.5 Ã— 2.5 Ã— 2.5 = 15.625x combined. Bet $100, payout $1,562.50. But the house takes vig on EVERY leg â€” it compounds against you."],
     ["True win probability","True probability = product of each leg's no-vig probability. This is always lower than the implied probabilities suggest because book prices include vig."],
     ["When parlays are +EV","Almost never in traditional sportsbooks. The exception: when individual legs have genuine +EV edges. If every leg is +EV, the parlay can be +EV. If any leg is -EV, it drags the whole parlay down."],
     ["Round robin alternative","Instead of one 4-leg parlay, try a round robin of 2-team parlays from your pool. Wins more often, less volatile. See the Round Robin tab."],
   ]}/></div>);
 };
 
-// ═══ SGP EV ESTIMATOR ═══
+// â•â•â• SGP EV ESTIMATOR â•â•â•
 const SGPEstimator = () => {
   const [legs, setLegs] = useState([{odds:"+200"},{odds:"+150"},{odds:"-110"}]);
   const [sgpOdds, setSgpOdds] = useState("+450");
@@ -1100,7 +279,7 @@ const SGPEstimator = () => {
           <div key={i} style={{display:"flex",alignItems:"center",gap:4}}>
             <span style={{fontSize:10,color:K.mt}}>Leg {i+1}</span>
             <input style={{...S.input,width:90}} value={lg.odds} onChange={e=>updateLeg(i,e.target.value)} placeholder="+150"/>
-            {legs.length>2&&<span onClick={()=>removeLeg(i)} style={{cursor:"pointer",color:K.rd,fontSize:11,padding:"0 2px"}}>✕</span>}
+            {legs.length>2&&<span onClick={()=>removeLeg(i)} style={{cursor:"pointer",color:K.rd,fontSize:11,padding:"0 2px"}}>âœ•</span>}
           </div>
         ))}
       </div>
@@ -1116,7 +295,7 @@ const SGPEstimator = () => {
       <RR l="SGP Discount vs Fair" v={`${r.discount}%`} c={parseFloat(r.discount)>20?K.rd:parseFloat(r.discount)>10?K.yl:K.gn} b/>
       <RR l="True Win Probability" v={`${r.prob}%`} c={K.dm}/>
       {parseFloat(r.discount)>25&&<Nt c={K.rd}>This SGP is priced 25%+ below fair value. The book is heavily discounting for leg correlation. Look for better-priced SGPs or use the individual legs separately.</Nt>}
-      {parseFloat(r.discount)<=10&&r.ok&&<Nt c={K.gn}>Low discount — this SGP is priced close to fair value with positive EV. Rare. Consider placing it.</Nt>}
+      {parseFloat(r.discount)<=10&&r.ok&&<Nt c={K.gn}>Low discount â€” this SGP is priced close to fair value with positive EV. Rare. Consider placing it.</Nt>}
     </div>}
   </div>
   <Help entries={[
@@ -1126,7 +305,7 @@ const SGPEstimator = () => {
   ]}/></div>);
 };
 
-// ═══ HOLD CALCULATOR ═══
+// â•â•â• HOLD CALCULATOR â•â•â•
 const HoldCalc = () => {
   const [mem,setMem]=useCalcMemory('hold-calc',{o1:"-110",o2:"-110"});
   const {o1,o2}=mem;
@@ -1143,7 +322,7 @@ const HoldCalc = () => {
       <RR l="Total (should be 100% for fair)" v={`${f(parseFloat(r.ip1)+parseFloat(r.ip2),1)}%`} c={K.yl}/>
       <RR l="Overround (hold)" v={`${r.hold}%`} c={gradeColor} b/>
       <Nt c={gradeColor}>
-        {parseFloat(r.hold)<3?"Sharp book pricing — minimal vig. Great line to bet.":
+        {parseFloat(r.hold)<3?"Sharp book pricing â€” minimal vig. Great line to bet.":
          parseFloat(r.hold)<5?"Fair vig. Standard -110/-110 spread pricing.":
          parseFloat(r.hold)<8?"Above-average hold. Consider shopping other books.":
          "High hold. This book is overcharging significantly. Skip unless no other options."}
@@ -1151,14 +330,14 @@ const HoldCalc = () => {
     </div>}
   </div>
   <Help entries={[
-    ["Book Hold","The total percentage the sportsbook profits from both sides of a bet. At -110/-110, each side has 52.4% implied probability — 104.8% total. The extra 4.8% is the hold. Whatever you bet, the book keeps 4.8 cents per dollar wagered long-term."],
+    ["Book Hold","The total percentage the sportsbook profits from both sides of a bet. At -110/-110, each side has 52.4% implied probability â€” 104.8% total. The extra 4.8% is the hold. Whatever you bet, the book keeps 4.8 cents per dollar wagered long-term."],
     ["Sharp books (hold < 3%)","Pinnacle, Circa, and some offshore books run <3% hold. Sharp bettors love these because more of your edge translates to actual profit."],
-    ["Retail books (hold 4.5-6%)","DraftKings, FanDuel, BetMGM typically run 4.5-5.5% hold on main lines. Player props and live betting are often 8-15% hold — much worse."],
+    ["Retail books (hold 4.5-6%)","DraftKings, FanDuel, BetMGM typically run 4.5-5.5% hold on main lines. Player props and live betting are often 8-15% hold â€” much worse."],
     ["Use this to compare books","Enter the same game at two different books. The one with lower hold is charging you less for the same bet. Over hundreds of bets, this is meaningful."],
   ]}/></div>);
 };
 
-// ═══ BET SIZING ADVISOR ═══
+// â•â•â• BET SIZING ADVISOR â•â•â•
 const BetSizingAdvisor = () => {
   const [mem,setMem]=useCalcMemory('bet-sizer',{bankroll:"1000",numBets:"5",avgEdge:"3",style:"quarter-kelly"});
   const {bankroll,numBets,avgEdge,style}=mem;
@@ -1199,11 +378,11 @@ const BetSizingAdvisor = () => {
     ["Flat betting","Bet the same dollar amount every time (1-2% of bankroll). Simple, safe, and appropriate when you're not sure of your exact edge. 1% means you can lose 100 straight bets before busting."],
     ["Kelly Criterion","Bets a percentage proportional to your edge. Maximum long-term growth but high variance. Full Kelly can cause -50% drawdowns even when profitable."],
     ["Quarter Kelly (recommended)","The industry standard. Gives 75% of Full Kelly growth with dramatically lower variance. Most professional +EV bettors use 20-33% of Kelly."],
-    ["Concurrent bets","Keep total risk under 20-30% of bankroll across all open positions. If you have 10 open bets at 5% each, you're risking 50% of your bankroll simultaneously — one bad day can be devastating."],
+    ["Concurrent bets","Keep total risk under 20-30% of bankroll across all open positions. If you have 10 open bets at 5% each, you're risking 50% of your bankroll simultaneously â€” one bad day can be devastating."],
   ]}/></div>);
 };
 
-// ═══ LINE SHOPPING ═══
+// â•â•â• LINE SHOPPING â•â•â•
 const LineShop = () => {
   const bookNames = BOOKS.map(b=>b.name);
   const [odds, setOdds] = useState(() => Object.fromEntries(bookNames.map(n=>[n,''])));
@@ -1212,12 +391,12 @@ const LineShop = () => {
   const best = entries.length ? entries.reduce((b,e)=>toD(e.odds)>toD(b.odds)?e:b) : null;
   const nvOdds = entries.length>=2 ? (()=>{ const probs=entries.map(e=>1/toD(e.odds)); const avg=probs.reduce((s,p)=>s+p,0)/probs.length; return toA(1/avg); })() : null;
   return (<div><div style={S.card}><Tl t="Line Shopping" badge="BEST ODDS FINDER" bc={K.gn} shareable/>
-    <div style={S.row}><div style={{flex:2,minWidth:200}}><label style={S.label}>Game / Event (optional)</label><input style={S.input} value={label} onChange={e=>setLabel(e.target.value)} placeholder="e.g. Chiefs vs Bills — Moneyline Chiefs"/></div></div>
+    <div style={S.row}><div style={{flex:2,minWidth:200}}><label style={S.label}>Game / Event (optional)</label><input style={S.input} value={label} onChange={e=>setLabel(e.target.value)} placeholder="e.g. Chiefs vs Bills â€” Moneyline Chiefs"/></div></div>
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:8,marginBottom:12}}>
       {bookNames.map(n=>{
         const isBest=best?.name===n;
         return (<div key={n} style={{padding:"10px",background:isBest?`${K.gn}10`:K.s2,border:`1px solid ${isBest?K.gn:K.bd2}`,borderRadius:6}}>
-          <div style={{fontSize:10,color:isBest?K.gn:K.mt,fontWeight:isBest?700:400,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{n}{isBest&&" ★"}</div>
+          <div style={{fontSize:10,color:isBest?K.gn:K.mt,fontWeight:isBest?700:400,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{n}{isBest&&" â˜…"}</div>
           <input style={{...S.input,padding:"5px 8px",fontSize:12}} value={odds[n]} onChange={e=>setOdds(o=>({...o,[n]:e.target.value}))} placeholder="e.g. -110"/>
         </div>);
       })}
@@ -1233,7 +412,7 @@ const LineShop = () => {
         ))}
       </div>
       {nvOdds&&<RR l="Market consensus (no-vig)" v={nvOdds} c={K.pp}/>}
-      {best&&<RR l="Best vs. average (cents saved per $100)" v={`+${f((1/toD(entries.reduce((s,e)=>({odds:String(toD(s.odds)+toD(e.odds)),name:'avg'})).odds*entries.length)-1/toD(best.odds))*100,1)}¢`} c={K.gn}/>}
+      {best&&<RR l="Best vs. average (cents saved per $100)" v={`+${f((1/toD(entries.reduce((s,e)=>({odds:String(toD(s.odds)+toD(e.odds)),name:'avg'})).odds*entries.length)-1/toD(best.odds))*100,1)}Â¢`} c={K.gn}/>}
       <Nt c={K.ac}>Always bet at the book offering the best odds for your side. Even 5 cents better on a $200 bet = $10 extra profit per game.</Nt>
     </div>}
     {entries.length<2&&<Nt c={K.mt}>Enter odds from 2+ books above to compare.</Nt>}
@@ -1241,12 +420,12 @@ const LineShop = () => {
   <Help entries={[
     ["Line Shopping","Checking multiple sportsbooks to find the best odds for your bet before placing. At -110 vs -105, you save $5 per $100 bet. Over hundreds of bets, this compounds into hundreds of dollars."],
     ["Market Consensus","The average implied probability across all books you entered, with vig removed. This is a rough estimate of the 'true' fair odds."],
-    ["How much it matters","A bettor who always shops lines and gets 5 cents better odds on average will beat a bettor who doesn't by 2-3% ROI over the long run — without needing better picks."],
+    ["How much it matters","A bettor who always shops lines and gets 5 cents better odds on average will beat a bettor who doesn't by 2-3% ROI over the long run â€” without needing better picks."],
     ["The golden rule","Never place a moneyline or spread bet without checking at least 3 books. Difference between books is often 5-15 cents. Set up accounts at 6+ books so you always have options."],
   ]}/></div>);
 };
 
-// ═══ BET TRACKER (PENDING BETS) ═══
+// â•â•â• BET TRACKER (PENDING BETS) â•â•â•
 const BetTracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const bets = data.bets || [];
@@ -1263,7 +442,7 @@ const BetTracker = () => {
     const toWin = calcToWin(form.odds, form.stake);
     save([{...form,toWin,id:Date.now()},...bets]);
     setForm(f=>({...f,stake:"",odds:"+110",toWin:"",notes:""}));
-    if(toast) toast('✓ Bet added');
+    if(toast) toast('âœ“ Bet added');
   };
   const setStatus = (id, status) => save(bets.map(b=>b.id===id?{...b,status}:b));
   const del = id => { const snapshot=[...bets]; save(bets.filter(b=>b.id!==id)); if(toast) toast('Bet deleted',K.rd,{label:'UNDO',fn:()=>save(snapshot)}); };
@@ -1301,12 +480,12 @@ const BetTracker = () => {
         },0);
         return <div><div style={{fontSize:10,color:K.mt}}>PORTFOLIO EV</div><div style={{...S.big(ev>=0?K.gn:K.rd),fontSize:22}}>{ev>=0?"+":""}${f(ev)}</div><div style={{fontSize:9,color:K.mt}}>book-implied</div></div>;
       })()}
-      <button onClick={()=>setShowPasteSlip(s=>!s)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>📋 Paste Slip</button>
-      <button onClick={()=>setShowImport(true)} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↑ Import CSV</button>
-      {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
+      <button onClick={()=>setShowPasteSlip(s=>!s)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>ðŸ“‹ Paste Slip</button>
+      <button onClick={()=>setShowImport(true)} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>â†‘ Import CSV</button>
+      {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>â†“ Export CSV</button>}
       {showPasteSlip&&<div style={{width:"100%",marginTop:8,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
         <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:8}}>Paste Bet Slip Text</div>
-        <textarea style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder="Paste bet slip text here…&#10;e.g. DraftKings · Chiefs Moneyline · +150 · $50"/>
+        <textarea style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder="Paste bet slip text hereâ€¦&#10;e.g. DraftKings Â· Chiefs Moneyline Â· +150 Â· $50"/>
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>{const p=parseBetSlip(slipText);setSlipParsed(p);}} style={{padding:"6px 14px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Parse</button>
           {slipParsed&&<button onClick={()=>{setForm(prev=>({...prev,...slipParsed,toWin:slipParsed.stake&&slipParsed.odds?f((parseFloat(slipParsed.stake||0))*(toD(slipParsed.odds||"+100")-1)):""}));setShowPasteSlip(false);setSlipParsed(null);setSlipText("");}} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Use Parsed Values</button>}
@@ -1326,7 +505,7 @@ const BetTracker = () => {
       <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     {bets.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
-      <div style={{fontSize:32,marginBottom:8}}>📋</div>
+      <div style={{fontSize:32,marginBottom:8}}>ðŸ“‹</div>
       <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No bets tracked yet</div>
       <div style={{fontSize:11,color:K.mt}}>Add your first pending bet above to track your open action.</div>
     </div>}
@@ -1340,34 +519,34 @@ const BetTracker = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(K.ac)}>{e.type}</span></td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.pp,fontWeight:600}}>{e.odds}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>${e.stake}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{e.toWin?`$${e.toWin}`:"—"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{e.toWin?`$${e.toWin}`:"â€”"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
               <select value={e.status} onChange={ev=>setStatus(e.id,ev.target.value)} style={{...S.input,width:80,padding:"3px 6px",fontSize:10,color:statusColor[e.status]||K.tx}}>
                 {["open","won","lost","void"].map(s=><option key={s} value={s}>{s.toUpperCase()}</option>)}
               </select>
             </td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{gr?<span style={S.tag(gr.c)}>{gr.g}</span>:<span style={{color:K.mt}}>—</span>}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>✕</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{gr?<span style={S.tag(gr.c)}>{gr.g}</span>:<span style={{color:K.mt}}>â€”</span>}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>âœ•</span></td>
           </tr>
         );})}</tbody>
       </table>
     </div>}
-    {showImport&&<CSVImportModal onImport={rows=>{save([...rows,...bets]); if(toast) toast(`✓ Imported ${rows.length} bets`,K.gn);}} onClose={()=>setShowImport(false)}/>}
+    {showImport&&<CSVImportModal onImport={rows=>{save([...rows,...bets]); if(toast) toast(`âœ“ Imported ${rows.length} bets`,K.gn);}} onClose={()=>setShowImport(false)}/>}
   </div>);
 };
 
-// Tracker → ./components/Tracker.jsx
-// Ledger (+ ShareWeekBtn, ReportCard, BetHeatmap) → ./components/Ledger.jsx
-// ═══ FAQ ACCORDION ═══
+// Tracker â†’ ./components/Tracker.jsx
+// Ledger (+ ShareWeekBtn, ReportCard, BetHeatmap) â†’ ./components/Ledger.jsx
+// â•â•â• FAQ ACCORDION â•â•â•
 const FaqAccordion = () => {
   const [open, setOpen] = useState(null);
   const faqs = [
-    ["Is this legal in my state?","Yes, if your state has legal online sports betting. As of 2026, 30+ states allow it. This tool is a math calculator — it doesn't place bets or access sportsbook systems. It's no different from a spreadsheet. The only legal question is whether online sports betting is legal in your state, not whether you can use a calculator."],
-    ["Can I get banned from sportsbooks?","You can't get 'banned' outright for matched betting — but books can limit your maximum bet size or exclude you from specific promotions. This typically happens to accounts that ONLY place hedging bets with no recreational activity. To stay under the radar: place some small normal bets, don't always withdraw immediately after a bonus, vary your bet amounts, and stick to main lines rather than props."],
+    ["Is this legal in my state?","Yes, if your state has legal online sports betting. As of 2026, 30+ states allow it. This tool is a math calculator â€” it doesn't place bets or access sportsbook systems. It's no different from a spreadsheet. The only legal question is whether online sports betting is legal in your state, not whether you can use a calculator."],
+    ["Can I get banned from sportsbooks?","You can't get 'banned' outright for matched betting â€” but books can limit your maximum bet size or exclude you from specific promotions. This typically happens to accounts that ONLY place hedging bets with no recreational activity. To stay under the radar: place some small normal bets, don't always withdraw immediately after a bonus, vary your bet amounts, and stick to main lines rather than props."],
     ["How much can I realistically make?","Welcome promos across 8-10 books: $1,000-$2,500 one-time. Daily profit boosts ongoing: $300-$1,000/month. These numbers assume you're in a state with 6-8 books and you're consistent with daily boosts. Some power users in NJ or PA who run all books aggressively see $1,500+/month ongoing. The income estimator in the Calculate tab gives you personalized projections."],
-    ["Do I need to know anything about sports?","No. This is pure math. You don't need to know the teams, the players, or anything about sports. You're just placing bets on both sides of the same event — the outcome doesn't matter. Many of the most successful promo grinders have no sports knowledge at all."],
+    ["Do I need to know anything about sports?","No. This is pure math. You don't need to know the teams, the players, or anything about sports. You're just placing bets on both sides of the same event â€” the outcome doesn't matter. Many of the most successful promo grinders have no sports knowledge at all."],
     ["Is this gambling?","Not in the traditional sense. Traditional gambling means taking a risk for the chance of reward. Matched betting eliminates the risk by betting both sides. When done correctly, the math guarantees a profit regardless of the outcome. You're exploiting the bonus value, not the game result. The +EV betting approach (Live Scanner) does involve variance, but even that is profitable over large sample sizes."],
-    ["What if I lose a bet?","With hedging (Bonus Bet, First Bet, Profit Boost), you can't 'lose' in the traditional sense — both sides are covered. Your worst case is a smaller profit than expected (if the hedge math doesn't work out perfectly). The only risk is if you forget to place the hedge, or place it at the wrong book or wrong amount. Always set up both bets before either game starts."],
+    ["What if I lose a bet?","With hedging (Bonus Bet, First Bet, Profit Boost), you can't 'lose' in the traditional sense â€” both sides are covered. Your worst case is a smaller profit than expected (if the hedge math doesn't work out perfectly). The only risk is if you forget to place the hedge, or place it at the wrong book or wrong amount. Always set up both bets before either game starts."],
   ];
   return (<div style={{marginTop:16,marginBottom:8}}>
     <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Frequently Asked Questions</div>
@@ -1375,7 +554,7 @@ const FaqAccordion = () => {
       <div key={i} style={{borderBottom:`1px solid ${K.bd}`,marginBottom:0}}>
         <button onClick={()=>setOpen(o=>o===i?null:i)} style={{width:"100%",textAlign:"left",background:"none",border:"none",padding:"10px 0",color:K.tx,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",fontFamily:font,fontSize:12,fontWeight:600}}>
           <span>{q}</span>
-          <span style={{color:K.mt,fontSize:10,marginLeft:12}}>{open===i?"▲":"▼"}</span>
+          <span style={{color:K.mt,fontSize:10,marginLeft:12}}>{open===i?"â–²":"â–¼"}</span>
         </button>
         {open===i&&<div style={{fontSize:12,color:K.dm,lineHeight:1.7,paddingBottom:12}}>{a}</div>}
       </div>
@@ -1383,7 +562,7 @@ const FaqAccordion = () => {
   </div>);
 };
 
-// ═══ KNOWLEDGE BASE ═══
+// â•â•â• KNOWLEDGE BASE â•â•â•
 const KB = () => (<div style={S.card}>
   <Tl t="Complete Knowledge Base"/>
   <div style={{fontSize:13,lineHeight:1.8,color:K.dm}}>
@@ -1391,52 +570,52 @@ const KB = () => (<div style={S.card}>
     <div style={{...S.tag(K.gn),marginBottom:12,fontSize:12}}>START HERE IF YOU'RE NEW</div>
 
     <div style={S.helpH}>What Is This Tool?</div>
-    <p>This is a math calculator for sports betting promotions. Sportsbooks (like DraftKings, FanDuel, BetMGM) give away free money through promotions to attract new customers. This tool calculates exactly how to turn those promotions into guaranteed cash — no sports knowledge needed, no gambling involved.</p>
+    <p>This is a math calculator for sports betting promotions. Sportsbooks (like DraftKings, FanDuel, BetMGM) give away free money through promotions to attract new customers. This tool calculates exactly how to turn those promotions into guaranteed cash â€” no sports knowledge needed, no gambling involved.</p>
 
     <div style={S.helpH}>Is This Legal?</div>
-    <p>Yes. Matched betting and promo conversion are completely legal in every US state where online sports betting is legal (30+ states). This tool is a calculator — like a mortgage calculator or tax calculator. It doesn't place bets, access any sportsbook, or handle money. Companies like ProfitDuel, OddsJam, and DarkHorse Odds charge $49–$199/month for similar tools. This one is free. You can share it with anyone.</p>
+    <p>Yes. Matched betting and promo conversion are completely legal in every US state where online sports betting is legal (30+ states). This tool is a calculator â€” like a mortgage calculator or tax calculator. It doesn't place bets, access any sportsbook, or handle money. Companies like ProfitDuel, OddsJam, and DarkHorse Odds charge $49â€“$199/month for similar tools. This one is free. You can share it with anyone.</p>
 
     <div style={S.helpH}>How Much Can I Make?</div>
     <p>Welcome promos (one-time, across 8-10 books): $1,000-$2,500. Daily profit boosts (recurring, 15 min/day): $300-$1,000/month. These are realistic numbers based on current sportsbook promos. This is a side hustle, not a get-rich-quick scheme.</p>
 
     <FaqAccordion/>
 
-    <div style={{...S.tag(K.ac),marginBottom:12,marginTop:24,fontSize:12}}>GLOSSARY — EVERY TERM EXPLAINED</div>
+    <div style={{...S.tag(K.ac),marginBottom:12,marginTop:24,fontSize:12}}>GLOSSARY â€” EVERY TERM EXPLAINED</div>
 
     <div style={S.helpH}>Odds Formats</div>
-    <p><span style={S.helpTerm}>American Odds (+/-)</span> — The standard US format. <strong>Positive (+200)</strong>: how much you WIN on a $100 bet. +200 means bet $100, win $200 profit. <strong>Negative (-150)</strong>: how much you must BET to win $100. -150 means bet $150 to win $100 profit. The bigger the + number, the less likely the outcome. The bigger the - number, the more likely.</p>
-    <p><span style={S.helpTerm}>Decimal Odds (2.50)</span> — Your total return per $1. Decimal 2.50 means bet $1, get $2.50 back ($1.50 profit + $1 stake). Used in Europe.</p>
-    <p><span style={S.helpTerm}>Implied Probability</span> — What the odds suggest about the chance of winning. -200 odds = 66.7% chance. +200 odds = 33.3% chance. Important: because of the vig, implied probabilities from a sportsbook always add up to MORE than 100%.</p>
+    <p><span style={S.helpTerm}>American Odds (+/-)</span> â€” The standard US format. <strong>Positive (+200)</strong>: how much you WIN on a $100 bet. +200 means bet $100, win $200 profit. <strong>Negative (-150)</strong>: how much you must BET to win $100. -150 means bet $150 to win $100 profit. The bigger the + number, the less likely the outcome. The bigger the - number, the more likely.</p>
+    <p><span style={S.helpTerm}>Decimal Odds (2.50)</span> â€” Your total return per $1. Decimal 2.50 means bet $1, get $2.50 back ($1.50 profit + $1 stake). Used in Europe.</p>
+    <p><span style={S.helpTerm}>Implied Probability</span> â€” What the odds suggest about the chance of winning. -200 odds = 66.7% chance. +200 odds = 33.3% chance. Important: because of the vig, implied probabilities from a sportsbook always add up to MORE than 100%.</p>
 
     <div style={S.helpH}>Key Betting Terms</div>
-    <p><span style={S.helpTerm}>Vig (Vigorish) / Juice</span> — The sportsbook's built-in profit margin on every bet. Think of it as a service fee. Standard vig is about 4.5%. This is why a "fair" coin flip isn't +100/+100 — it's -110/-110. That extra $10 you have to risk on each side is the vig. The sportsbook collects it regardless of who wins.</p>
-    <p><span style={S.helpTerm}>Moneyline</span> — A bet on which team wins. No point spread. Just pick the winner. Example: Chiefs -200 / Bills +170. Bet the Chiefs at -200 = bet $200 to win $100. Bet the Bills at +170 = bet $100 to win $170.</p>
-    <p><span style={S.helpTerm}>Spread</span> — A bet on the margin of victory. Chiefs -3.5 means they must win by 4+ points for your bet to win. Bills +3.5 means they can lose by up to 3 points and you still win.</p>
-    <p><span style={S.helpTerm}>Total (Over/Under)</span> — A bet on the combined score of both teams. Over 47.5 means both teams must score 48+ combined points. Under means 47 or fewer.</p>
-    <p><span style={S.helpTerm}>Parlay</span> — Combining multiple bets into one. ALL legs must win for the parlay to pay. Higher potential payout, higher risk. A 4-leg parlay might pay +1000 but all 4 must hit.</p>
-    <p><span style={S.helpTerm}>Player Props</span> — Bets on individual player stats. "Patrick Mahomes Over 275.5 passing yards" is a player prop. These are where middle bet opportunities are most common because books often disagree on player lines.</p>
+    <p><span style={S.helpTerm}>Vig (Vigorish) / Juice</span> â€” The sportsbook's built-in profit margin on every bet. Think of it as a service fee. Standard vig is about 4.5%. This is why a "fair" coin flip isn't +100/+100 â€” it's -110/-110. That extra $10 you have to risk on each side is the vig. The sportsbook collects it regardless of who wins.</p>
+    <p><span style={S.helpTerm}>Moneyline</span> â€” A bet on which team wins. No point spread. Just pick the winner. Example: Chiefs -200 / Bills +170. Bet the Chiefs at -200 = bet $200 to win $100. Bet the Bills at +170 = bet $100 to win $170.</p>
+    <p><span style={S.helpTerm}>Spread</span> â€” A bet on the margin of victory. Chiefs -3.5 means they must win by 4+ points for your bet to win. Bills +3.5 means they can lose by up to 3 points and you still win.</p>
+    <p><span style={S.helpTerm}>Total (Over/Under)</span> â€” A bet on the combined score of both teams. Over 47.5 means both teams must score 48+ combined points. Under means 47 or fewer.</p>
+    <p><span style={S.helpTerm}>Parlay</span> â€” Combining multiple bets into one. ALL legs must win for the parlay to pay. Higher potential payout, higher risk. A 4-leg parlay might pay +1000 but all 4 must hit.</p>
+    <p><span style={S.helpTerm}>Player Props</span> â€” Bets on individual player stats. "Patrick Mahomes Over 275.5 passing yards" is a player prop. These are where middle bet opportunities are most common because books often disagree on player lines.</p>
 
     <div style={S.helpH}>Promo Types</div>
-    <p><span style={S.helpTerm}>Bonus Bet / Free Bet</span> — A bet credit from the sportsbook. If it wins, you get the PROFIT only — the bonus credit disappears. A $200 bonus bet at +300 that wins pays you $600 (not $800). The stake is NOT returned. This is the most important thing to understand for conversions.</p>
-    <p><span style={S.helpTerm}>Profit Boost</span> — A percentage increase on your winnings. A 50% profit boost on a bet that would normally win $100 now wins $150. You're using your OWN money — the boost just increases the payout. These are recurring (daily) and are the long-term income source.</p>
-    <p><span style={S.helpTerm}>First Bet Safety Net</span> — Your first cash bet at a book is "insured." If it loses, you get the amount back as bonus bets. BetMGM offers up to $1,500, bet365 up to $1,000. This is the highest-value welcome promo type.</p>
-    <p><span style={S.helpTerm}>Deposit Match</span> — The sportsbook matches a percentage of your deposit with bonus funds. A "20% match up to $1,000" means deposit $5,000, get $1,000 in bonus funds. Usually comes with rollover requirements.</p>
-    <p><span style={S.helpTerm}>Rollover / Playthrough</span> — The amount you must wager before bonus funds become withdrawable cash. A 5x rollover on $500 means you must place $2,500 in total bets. Each bet costs you a tiny amount (the vig), so the true value of the bonus is less than face value.</p>
+    <p><span style={S.helpTerm}>Bonus Bet / Free Bet</span> â€” A bet credit from the sportsbook. If it wins, you get the PROFIT only â€” the bonus credit disappears. A $200 bonus bet at +300 that wins pays you $600 (not $800). The stake is NOT returned. This is the most important thing to understand for conversions.</p>
+    <p><span style={S.helpTerm}>Profit Boost</span> â€” A percentage increase on your winnings. A 50% profit boost on a bet that would normally win $100 now wins $150. You're using your OWN money â€” the boost just increases the payout. These are recurring (daily) and are the long-term income source.</p>
+    <p><span style={S.helpTerm}>First Bet Safety Net</span> â€” Your first cash bet at a book is "insured." If it loses, you get the amount back as bonus bets. BetMGM offers up to $1,500, bet365 up to $1,000. This is the highest-value welcome promo type.</p>
+    <p><span style={S.helpTerm}>Deposit Match</span> â€” The sportsbook matches a percentage of your deposit with bonus funds. A "20% match up to $1,000" means deposit $5,000, get $1,000 in bonus funds. Usually comes with rollover requirements.</p>
+    <p><span style={S.helpTerm}>Rollover / Playthrough</span> â€” The amount you must wager before bonus funds become withdrawable cash. A 5x rollover on $500 means you must place $2,500 in total bets. Each bet costs you a tiny amount (the vig), so the true value of the bonus is less than face value.</p>
 
     <div style={S.helpH}>Strategy Terms</div>
-    <p><span style={S.helpTerm}>Hedge</span> — Placing a second bet on the opposite outcome to guarantee profit (or limit loss) regardless of who wins. Always at a DIFFERENT sportsbook from your original bet.</p>
-    <p><span style={S.helpTerm}>Arbitrage (Arb)</span> — Betting both sides of an event at different books where the combined odds guarantee profit. Requires both sides to be priced favorably at different books simultaneously.</p>
-    <p><span style={S.helpTerm}>+EV (Positive Expected Value)</span> — A bet where the true probability of winning is higher than the odds suggest. Over many such bets, you profit. Unlike arbing, individual +EV bets can lose — the edge plays out over volume.</p>
-    <p><span style={S.helpTerm}>Conversion Rate</span> — The percentage of a bonus bet you extract as real cash. 70%+ is excellent. A $200 bonus at 75% conversion = $150 real cash in your pocket.</p>
-    <p><span style={S.helpTerm}>Middle</span> — Betting opposite sides at different lines where both bets can win if the result lands in the gap between the lines.</p>
-    <p><span style={S.helpTerm}>Closing Line Value (CLV)</span> — Whether the odds you bet at were better than the final odds when the game starts. Consistently beating the closing line is the strongest indicator of long-term profitability.</p>
-    <p><span style={S.helpTerm}>Getting Limited / Promo Banned</span> — Sportsbooks can reduce your maximum bet size or exclude you from promotions if they suspect you're purely converting promos. To avoid this: place some small "normal" bets, don't withdraw too often, stick to main lines, and vary your bet amounts.</p>
+    <p><span style={S.helpTerm}>Hedge</span> â€” Placing a second bet on the opposite outcome to guarantee profit (or limit loss) regardless of who wins. Always at a DIFFERENT sportsbook from your original bet.</p>
+    <p><span style={S.helpTerm}>Arbitrage (Arb)</span> â€” Betting both sides of an event at different books where the combined odds guarantee profit. Requires both sides to be priced favorably at different books simultaneously.</p>
+    <p><span style={S.helpTerm}>+EV (Positive Expected Value)</span> â€” A bet where the true probability of winning is higher than the odds suggest. Over many such bets, you profit. Unlike arbing, individual +EV bets can lose â€” the edge plays out over volume.</p>
+    <p><span style={S.helpTerm}>Conversion Rate</span> â€” The percentage of a bonus bet you extract as real cash. 70%+ is excellent. A $200 bonus at 75% conversion = $150 real cash in your pocket.</p>
+    <p><span style={S.helpTerm}>Middle</span> â€” Betting opposite sides at different lines where both bets can win if the result lands in the gap between the lines.</p>
+    <p><span style={S.helpTerm}>Closing Line Value (CLV)</span> â€” Whether the odds you bet at were better than the final odds when the game starts. Consistently beating the closing line is the strongest indicator of long-term profitability.</p>
+    <p><span style={S.helpTerm}>Getting Limited / Promo Banned</span> â€” Sportsbooks can reduce your maximum bet size or exclude you from promotions if they suspect you're purely converting promos. To avoid this: place some small "normal" bets, don't withdraw too often, stick to main lines, and vary your bet amounts.</p>
 
     <div style={{...S.tag(K.yl),marginBottom:12,marginTop:24,fontSize:12}}>STEP-BY-STEP WALKTHROUGH</div>
 
     <div style={S.helpH}>Phase 1: Setup (Day 1-3)</div>
-    <p>1) Download 6-10 sportsbook apps (DraftKings, FanDuel, BetMGM, Caesars, bet365, ESPN BET, Fanatics, BetRivers). 2) Create an account at each — you'll need your SSN and ID for verification. 3) Deposit the minimum required at each ($5-$10). 4) Do NOT place any bets yet. Get all accounts funded first so you can move fast when hedging.</p>
-    <div style={{background:"#161d2a",border:"1px dashed #1e293b",borderRadius:8,padding:16,margin:"12px 0",textAlign:"center"}}><div style={{fontSize:11,color:"#64748b"}}>📹 Video walkthrough: Setting up accounts — coming soon</div></div>
+    <p>1) Download 6-10 sportsbook apps (DraftKings, FanDuel, BetMGM, Caesars, bet365, ESPN BET, Fanatics, BetRivers). 2) Create an account at each â€” you'll need your SSN and ID for verification. 3) Deposit the minimum required at each ($5-$10). 4) Do NOT place any bets yet. Get all accounts funded first so you can move fast when hedging.</p>
+    <div style={{background:"#161d2a",border:"1px dashed #1e293b",borderRadius:8,padding:16,margin:"12px 0",textAlign:"center"}}><div style={{fontSize:11,color:"#64748b"}}>ðŸ“¹ Video walkthrough: Setting up accounts â€” coming soon</div></div>
 
     <div style={S.helpH}>Phase 2: Welcome Promos (Day 3-14)</div>
     <p>Start with "Safety Net" books (BetMGM, bet365, BetRivers). Use the First Bet Hedge calculator. Place your qualifying bet and IMMEDIATELY hedge at another book. Win = profit from hedge. Lose = get bonus bets back, which you convert in Phase 3. Then do the "Bet & Get" books (DraftKings, FanDuel, Fanatics, ESPN BET). These give bonus bets after a small qualifying wager.</p>
@@ -1446,12 +625,12 @@ const KB = () => (<div style={S.card}>
     <div style={S.helpH}>Phase 4: Daily Profit Boosts (Ongoing)</div>
     <p>After welcome promos are done, check your sportsbook apps each morning for profit boosts. Use the Profit Boost Converter. DraftKings, FanDuel, and Caesars offer 2-5 boosts daily. At $5-$15 per conversion, that's $300-$1,000/month. This is 15-20 minutes of work per day.</p>
 
-    <div style={S.helpH}>Phase 5: Advanced — +EV Betting (Optional)</div>
+    <div style={S.helpH}>Phase 5: Advanced â€” +EV Betting (Optional)</div>
     <p>Use the No-Vig calculator to find true probabilities. Compare against sportsbook odds with the +EV calculator. Unlike hedging/arbing, +EV betting involves risk per bet but is profitable over hundreds of bets. Track your Closing Line Value to verify you have an edge.</p>
 
     <div style={{...S.tag(K.rd),marginBottom:12,marginTop:24,fontSize:12}}>IMPORTANT WARNINGS</div>
-    <p><strong>This is not gambling advice.</strong> This is a math education tool. You must be 21+ in most states. Only bet where sports betting is legal in your state. All winnings are taxable — keep records. Never bet more than you can afford to lose. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
-    <p><strong>Account longevity:</strong> 1) Never hedge at the same sportsbook. 2) Place some small "recreational" bets between conversions. 3) Don't withdraw too frequently. 4) Stick to main lines (moneyline, spread, totals) — player props get you limited faster. 5) Vary your bet amounts (don't always bet round numbers).</p>
+    <p><strong>This is not gambling advice.</strong> This is a math education tool. You must be 21+ in most states. Only bet where sports betting is legal in your state. All winnings are taxable â€” keep records. Never bet more than you can afford to lose. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
+    <p><strong>Account longevity:</strong> 1) Never hedge at the same sportsbook. 2) Place some small "recreational" bets between conversions. 3) Don't withdraw too frequently. 4) Stick to main lines (moneyline, spread, totals) â€” player props get you limited faster. 5) Vary your bet amounts (don't always bet round numbers).</p>
 
     <div style={{...S.tag(K.gn),marginBottom:12,marginTop:24,fontSize:12}}>TAX GUIDE</div>
 
@@ -1459,7 +638,7 @@ const KB = () => (<div style={S.card}>
     <p>All gambling winnings are taxable ordinary income in the US, regardless of amount. You must report them even if you don't receive a W-2G form. Sportsbooks issue W-2Gs for winnings of $600+ that are 300x the wager or more, and for any winnings of $5,000+. Report everything on Schedule 1 (Form 1040), Line 8b.</p>
 
     <div style={S.helpH}>Deducting Losses</div>
-    <p>You can deduct gambling losses — but only up to the amount of your winnings, and only if you itemize deductions (Schedule A). You cannot net losses against winnings and report only the difference. If you won $2,000 and lost $1,500, you report $2,000 in income and may deduct $1,500 separately. The P/L Ledger on this app is designed to track exactly this — export it at tax time.</p>
+    <p>You can deduct gambling losses â€” but only up to the amount of your winnings, and only if you itemize deductions (Schedule A). You cannot net losses against winnings and report only the difference. If you won $2,000 and lost $1,500, you report $2,000 in income and may deduct $1,500 separately. The P/L Ledger on this app is designed to track exactly this â€” export it at tax time.</p>
 
     <div style={S.helpH}>Quarterly Estimated Taxes</div>
     <p>If you expect to owe more than $1,000 in federal taxes from gambling, consider making quarterly estimated payments (Form 1040-ES) to avoid underpayment penalties. Quarterly deadlines are typically April 15, June 15, September 15, and January 15. The Tax Estimate section in the P/L Ledger gives you a running estimate.</p>
@@ -1471,27 +650,27 @@ const KB = () => (<div style={S.card}>
 
     <div style={S.helpH}>Which Sportsbooks Operate Where</div>
     <p>Online sports betting is legal in 30+ US states as of 2026. Not all sportsbooks operate in every legal state. Here are the major books and their general availability:</p>
-    <p><span style={S.helpTerm}>DraftKings</span> — Available in most legal states (20+). One of the widest footprints.</p>
-    <p><span style={S.helpTerm}>FanDuel</span> — Available in most legal states (20+). Typically matches DraftKings availability.</p>
-    <p><span style={S.helpTerm}>BetMGM</span> — Available in 15+ states. Strong presence in NJ, PA, MI, CO, TN, VA, IN, WV, AZ, NV.</p>
-    <p><span style={S.helpTerm}>Caesars</span> — Available in 15+ states. Strong in states where Caesars has casino properties.</p>
-    <p><span style={S.helpTerm}>bet365</span> — Available in NJ, CO, IA, OH, VA, KY, and expanding. Smaller US footprint but excellent odds quality.</p>
-    <p><span style={S.helpTerm}>ESPN BET (PENN)</span> — Available in 15+ states.</p>
-    <p><span style={S.helpTerm}>Fanatics</span> — Rapidly expanding, now 15+ states after acquiring PointsBet US.</p>
-    <p><span style={S.helpTerm}>BetRivers</span> — Available in 10+ states. Strongest in PA, IL, MI, IN, CO, VA, AZ, NY.</p>
+    <p><span style={S.helpTerm}>DraftKings</span> â€” Available in most legal states (20+). One of the widest footprints.</p>
+    <p><span style={S.helpTerm}>FanDuel</span> â€” Available in most legal states (20+). Typically matches DraftKings availability.</p>
+    <p><span style={S.helpTerm}>BetMGM</span> â€” Available in 15+ states. Strong presence in NJ, PA, MI, CO, TN, VA, IN, WV, AZ, NV.</p>
+    <p><span style={S.helpTerm}>Caesars</span> â€” Available in 15+ states. Strong in states where Caesars has casino properties.</p>
+    <p><span style={S.helpTerm}>bet365</span> â€” Available in NJ, CO, IA, OH, VA, KY, and expanding. Smaller US footprint but excellent odds quality.</p>
+    <p><span style={S.helpTerm}>ESPN BET (PENN)</span> â€” Available in 15+ states.</p>
+    <p><span style={S.helpTerm}>Fanatics</span> â€” Rapidly expanding, now 15+ states after acquiring PointsBet US.</p>
+    <p><span style={S.helpTerm}>BetRivers</span> â€” Available in 10+ states. Strongest in PA, IL, MI, IN, CO, VA, AZ, NY.</p>
     <p><span style={S.helpTerm}>States with the most books (best for promo grinding)</span>: New Jersey, Pennsylvania, Colorado, Michigan, Virginia, Ohio, Indiana, Arizona, New York.</p>
     <p><span style={S.helpTerm}>Check current availability</span>: Each sportsbook&apos;s app or website will tell you if they operate in your state during account creation. Availability changes as new states legalize.</p>
 
     <div style={{...S.tag(K.ac),marginBottom:12,marginTop:24,fontSize:12}}>STAKING PLAN GUIDE</div>
 
     <div style={S.helpH}>Flat Betting</div>
-    <p>Bet the same dollar amount every time — typically 1-2% of bankroll. $1,000 bankroll = $10-$20 per bet. Simple, safe, and appropriate when you are not sure of your exact edge. You can absorb 50-100 consecutive losses without busting. Best for matched betting and promo conversions where every bet has roughly the same structure.</p>
+    <p>Bet the same dollar amount every time â€” typically 1-2% of bankroll. $1,000 bankroll = $10-$20 per bet. Simple, safe, and appropriate when you are not sure of your exact edge. You can absorb 50-100 consecutive losses without busting. Best for matched betting and promo conversions where every bet has roughly the same structure.</p>
 
     <div style={S.helpH}>Kelly Criterion</div>
-    <p>Bets proportional to your edge: <span style={{fontFamily:font,color:K.ac}}>bet% = (p × b – q) / b</span> where p = win probability, b = net odds, q = loss probability. Full Kelly maximizes long-term bankroll growth but causes large drawdowns. Most professional +EV bettors use 20–33% (Quarter Kelly) to reduce variance while capturing most of the growth benefit.</p>
+    <p>Bets proportional to your edge: <span style={{fontFamily:font,color:K.ac}}>bet% = (p Ã— b â€“ q) / b</span> where p = win probability, b = net odds, q = loss probability. Full Kelly maximizes long-term bankroll growth but causes large drawdowns. Most professional +EV bettors use 20â€“33% (Quarter Kelly) to reduce variance while capturing most of the growth benefit.</p>
 
     <div style={S.helpH}>Proportional (% of bankroll)</div>
-    <p>Bet a fixed percentage of your CURRENT bankroll each time. As the bankroll grows, bets grow. As it shrinks, bets shrink — protecting you from ruin. Common rule: 1% per unit, 2 units on strong plays, 0.5 units on weaker spots. Requires discipline to scale down after losses.</p>
+    <p>Bet a fixed percentage of your CURRENT bankroll each time. As the bankroll grows, bets grow. As it shrinks, bets shrink â€” protecting you from ruin. Common rule: 1% per unit, 2 units on strong plays, 0.5 units on weaker spots. Requires discipline to scale down after losses.</p>
 
     <table style={{width:"100%",borderCollapse:"collapse",marginTop:12,fontSize:11}}>
       <thead><tr>{["Style","Risk Level","Best For","Avg Bet ($1000 BR)"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10}}>{h}</th>)}</tr></thead>
@@ -1519,37 +698,37 @@ const KB = () => (<div style={S.card}>
         ["Late March","Opening Day MLB","New season deposits","Reload promos, first-bet offers"],
       ].map(([period,event,why,promos])=><tr key={period}><td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.yl,fontWeight:600}}>{period}</td><td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.tx}}>{event}</td><td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.dm}}>{why}</td><td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.mt}}>{promos}</td></tr>)}</tbody>
     </table>
-    <p>Books also run promos for: NBA All-Star Weekend, Masters golf, Kentucky Derby, World Cup (if applicable), college football bowl season. Check your apps weekly — daily boosts run year-round regardless of calendar.</p>
+    <p>Books also run promos for: NBA All-Star Weekend, Masters golf, Kentucky Derby, World Cup (if applicable), college football bowl season. Check your apps weekly â€” daily boosts run year-round regardless of calendar.</p>
 
     <div style={{...S.tag(K.gn),marginBottom:12,marginTop:24,fontSize:12}}>BOOK-SPECIFIC GUIDES</div>
 
     <div style={S.helpH}>DraftKings</div>
-    <p><span style={S.helpTerm}>Best promos:</span> Daily profit boost tokens (2-3/day), stepped-up parlays, SGP profit boosts. Welcome offer: Bet $5, Get $200 in bonus bets. Conversion rate on DK bonus bets: 65-72%. Promos reset daily around 8am ET — check the Promotions tab each morning. DK has the widest variety of daily boosts across all sports. Account longevity tip: place occasional small recreational bets on main lines.</p>
+    <p><span style={S.helpTerm}>Best promos:</span> Daily profit boost tokens (2-3/day), stepped-up parlays, SGP profit boosts. Welcome offer: Bet $5, Get $200 in bonus bets. Conversion rate on DK bonus bets: 65-72%. Promos reset daily around 8am ET â€” check the Promotions tab each morning. DK has the widest variety of daily boosts across all sports. Account longevity tip: place occasional small recreational bets on main lines.</p>
 
     <div style={S.helpH}>FanDuel</div>
-    <p><span style={S.helpTerm}>Best promos:</span> "No Sweat" first SGP of the day, daily profit boost tokens, parlay insurance. Welcome offer: Up to $300/day Bet Reset for 10 days. FanDuel No Sweat bets work like First Bet Insurance — if it loses, you get the stake back as bonus bets (up to the limit). Conversion: 65-72%. FD tends to offer more SGP-specific boosts than other books.</p>
+    <p><span style={S.helpTerm}>Best promos:</span> "No Sweat" first SGP of the day, daily profit boost tokens, parlay insurance. Welcome offer: Up to $300/day Bet Reset for 10 days. FanDuel No Sweat bets work like First Bet Insurance â€” if it loses, you get the stake back as bonus bets (up to the limit). Conversion: 65-72%. FD tends to offer more SGP-specific boosts than other books.</p>
 
     <div style={S.helpH}>BetMGM</div>
-    <p><span style={S.helpTerm}>Best promos:</span> Weekly deposit bonus (25% up to $100), daily odds boosts, one-game parlays. Welcome offer: Up to $1,500 First Bet Safety Net — the highest-value safety net on the market. Conversion on $1,500 bonus bets at 70%: ~$1,050 real cash. BetMGM tends to limit aggressive bonus converters faster than other books — vary your bet amounts and mix in recreational bets.</p>
+    <p><span style={S.helpTerm}>Best promos:</span> Weekly deposit bonus (25% up to $100), daily odds boosts, one-game parlays. Welcome offer: Up to $1,500 First Bet Safety Net â€” the highest-value safety net on the market. Conversion on $1,500 bonus bets at 70%: ~$1,050 real cash. BetMGM tends to limit aggressive bonus converters faster than other books â€” vary your bet amounts and mix in recreational bets.</p>
 
     <div style={S.helpH}>Caesars</div>
-    <p><span style={S.helpTerm}>Best promos:</span> Rotating 100% profit boost tokens ($25 max each), odds boosts, parlay insurance. Welcome offer: Bet $1, Get 10× 100% Profit Boost Tokens. Caesars Rewards points accumulate with every bet — these convert to real cash or hotel/resort value. Caesars has some of the strictest account limitation policies; be conservative with conversion amounts.</p>
+    <p><span style={S.helpTerm}>Best promos:</span> Rotating 100% profit boost tokens ($25 max each), odds boosts, parlay insurance. Welcome offer: Bet $1, Get 10Ã— 100% Profit Boost Tokens. Caesars Rewards points accumulate with every bet â€” these convert to real cash or hotel/resort value. Caesars has some of the strictest account limitation policies; be conservative with conversion amounts.</p>
 
     <div style={S.helpH}>bet365</div>
     <p><span style={S.helpTerm}>Best promos:</span> Early payout offers, multi-sport parlay boosts. Welcome offer: Choose between Bet $10 Get $365 Bonus Bets OR a $1K Safety Net. bet365 tends to have sharper lines than US-focused books, making it excellent for line shopping and +EV betting. Available in fewer US states (NJ, CO, IA, OH, VA, KY and expanding).</p>
 
     <div style={S.helpH}>ESPN BET</div>
-    <p><span style={S.helpTerm}>Best promos:</span> Weekly profit boost tokens, featured parlay boosts, ESPN+ integration specials. Welcome offer: Bet $5, Get $200 + Deposit Match up to $300. ESPN BET is newer (launched late 2023) and tends to be more aggressive with promos to gain market share. Conversion: 65-70%. Check the ESPN app daily — promos are often tied to featured games.</p>
+    <p><span style={S.helpTerm}>Best promos:</span> Weekly profit boost tokens, featured parlay boosts, ESPN+ integration specials. Welcome offer: Bet $5, Get $200 + Deposit Match up to $300. ESPN BET is newer (launched late 2023) and tends to be more aggressive with promos to gain market share. Conversion: 65-70%. Check the ESPN app daily â€” promos are often tied to featured games.</p>
 
     <div style={S.helpH}>Fanatics</div>
-    <p><span style={S.helpTerm}>Best promos:</span> Daily FanCash bonuses, loyalty rewards tied to Fanatics purchases, profit boosts. Welcome offer: Bet $5/day for 10 days, Get $200 FanCash. FanCash is Fanatics' bonus currency — it can be converted to cash at ~70% via the hedge method or spent on Fanatics merchandise. Uniquely, Fanatics integrates with your Fanatics shopping account for additional rewards.</p>
+    <p><span style={S.helpTerm}>Best promos:</span> Daily FanCash bonuses, loyalty rewards tied to Fanatics purchases, profit boosts. Welcome offer: Bet $5/day for 10 days, Get $200 FanCash. FanCash is Fanatics' bonus currency â€” it can be converted to cash at ~70% via the hedge method or spent on Fanatics merchandise. Uniquely, Fanatics integrates with your Fanatics shopping account for additional rewards.</p>
 
     <div style={S.helpH}>BetRivers</div>
-    <p><span style={S.helpTerm}>Best promos:</span> iRush Rewards points (high earn rate), 2nd chance parlays, weekly profit boosts. Welcome offer: Up to $500 Second Chance Bet. BetRivers has the best loyalty program in US sports betting — iRush points earn fast and convert to bonus cash. Available in 10+ states with strong presence in PA, IL, MI. Generally less aggressive about account limitations than larger books.</p>
+    <p><span style={S.helpTerm}>Best promos:</span> iRush Rewards points (high earn rate), 2nd chance parlays, weekly profit boosts. Welcome offer: Up to $500 Second Chance Bet. BetRivers has the best loyalty program in US sports betting â€” iRush points earn fast and convert to bonus cash. Available in 10+ states with strong presence in PA, IL, MI. Generally less aggressive about account limitations than larger books.</p>
   </div>
 </div>);
 
-// ═══ PROFIT CERTIFICATE ═══
+// â•â•â• PROFIT CERTIFICATE â•â•â•
 const ProfitCertificate = () => {
   const { appData: data } = React.useContext(AppDataCtx);
   const toast = useToast();
@@ -1568,12 +747,12 @@ const ProfitCertificate = () => {
 
   const shareText = () => {
     const lines = [
-      `Profit Certificate — ${periodLabel}`,
+      `Profit Certificate â€” ${periodLabel}`,
       `Total Profit: $${f(total)}`,
       `${count} conversions across ${books.length} book${books.length !== 1 ? 's' : ''}`,
       bestDay.d ? `Best day: ${bestDay.d} (+$${f(bestDay.p)})` : '',
       '',
-      'Tracked with PromoGrind — free sportsbook promo tools',
+      'Tracked with PromoGrind â€” free sportsbook promo tools',
       CANONICAL_APP_URL,
     ].filter(Boolean).join('\n');
     return lines;
@@ -1650,7 +829,7 @@ const ProfitCertificate = () => {
         <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:`linear-gradient(90deg,${K.gn},${K.ac},${K.pp})`}}/>
         <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'2px',marginBottom:12}}>Verified by PromoGrind</div>
         <div style={{fontFamily:fontD,fontSize:36,fontWeight:800,color:total>=0?K.gn:K.rd,lineHeight:1}}>${f(Math.abs(total))}</div>
-        <div style={{fontSize:11,color:K.mt,marginTop:6}}>{total>=0?'PROFIT':'LOSS'} — {periodLabel}</div>
+        <div style={{fontSize:11,color:K.mt,marginTop:6}}>{total>=0?'PROFIT':'LOSS'} â€” {periodLabel}</div>
         <div style={{display:'flex',justifyContent:'center',gap:24,marginTop:16}}>
           <div><div style={{fontSize:18,fontWeight:700,color:K.ac,fontFamily:fontD}}>{count}</div><div style={{fontSize:9,color:K.mt,textTransform:'uppercase'}}>Conversions</div></div>
           <div><div style={{fontSize:18,fontWeight:700,color:K.pp,fontFamily:fontD}}>{books.length}</div><div style={{fontSize:9,color:K.mt,textTransform:'uppercase'}}>Books</div></div>
@@ -1666,9 +845,9 @@ const ProfitCertificate = () => {
   );
 };
 
-// ═══ TAB SYSTEM ═══
-// LiveScanner (+ SPORTS_LIST, PROP_MARKETS, detectArbs, detectEV) → ./components/LiveScanner.jsx
-// ═══ LEADERBOARD ═══
+// â•â•â• TAB SYSTEM â•â•â•
+// LiveScanner (+ SPORTS_LIST, PROP_MARKETS, detectArbs, detectEV) â†’ ./components/LiveScanner.jsx
+// â•â•â• LEADERBOARD â•â•â•
 const Leaderboard = () => {
   const { appData: data } = React.useContext(AppDataCtx);
   const [rows, setRows] = useState([]);
@@ -1718,16 +897,16 @@ const Leaderboard = () => {
         <input type="checkbox" checked={privacyOn} onChange={e=>togglePrivacy(e.target.checked)} style={{cursor:"pointer"}}/>
         Show my account on the public leaderboard
       </label>
-      {privacySaving&&<span style={{fontSize:10,color:K.yl}}>Saving…</span>}
+      {privacySaving&&<span style={{fontSize:10,color:K.yl}}>Savingâ€¦</span>}
     </div>
     {myRank&&<Nt c={K.gn}>You are ranked #{myRank} on the leaderboard.</Nt>}
     <Nt c={K.ac}>Earn points by using calculators (1-5 pts), logging bets (2 pts), and daily logins (3 pts).</Nt>
-    {loading&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Loading leaderboard…</div>}
+    {loading&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Loading leaderboardâ€¦</div>}
     {!loading&&rows.length===0&&<div style={{textAlign:"center",padding:"32px 16px"}}>
-      <div style={{fontSize:32,marginBottom:8}}>🏆</div>
+      <div style={{fontSize:32,marginBottom:8}}>ðŸ†</div>
       <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>Be the first on the leaderboard</div>
       <div style={{fontSize:11,color:K.mt,marginBottom:14}}>Use calculators and log bets to earn Vault Points and claim your spot.</div>
-      <button onClick={()=>{window.location.hash='#/bonus-bet';}} style={{padding:"7px 18px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Start with Bonus Bet Converter →</button>
+      <button onClick={()=>{window.location.hash='#/bonus-bet';}} style={{padding:"7px 18px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Start with Bonus Bet Converter â†’</button>
     </div>}
     {!loading&&rows.length>0&&<div style={{marginTop:12}}>
       <div style={{display:"grid",gridTemplateColumns:"24px 1fr auto auto",gap:12,padding:"5px 12px",marginBottom:4}}>
@@ -1739,11 +918,11 @@ const Leaderboard = () => {
         const isMe=r.user_id===myUserId;
         return (
           <div key={r.user_id} style={{display:"grid",gridTemplateColumns:"24px 1fr auto auto",gap:12,alignItems:"center",padding:"10px 12px",background:isMe?`${K.gn}10`:i<3?`${rankColor(i)}08`:K.s2,borderRadius:6,marginBottom:4,border:`1px solid ${isMe?K.gn:i<3?rankColor(i)+'30':K.bd}`}}>
-            <div style={{fontSize:i<3?18:13,fontWeight:700,color:rankColor(i),textAlign:"center"}}>{i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+            <div style={{fontSize:i<3?18:13,fontWeight:700,color:rankColor(i),textAlign:"center"}}>{i===0?'ðŸ¥‡':i===1?'ðŸ¥ˆ':i===2?'ðŸ¥‰':i+1}</div>
             <div style={{fontSize:12,color:K.tx,fontWeight:i<3?600:400}}>{mask(r.user_id)}{isMe&&<span style={{...S.tag(K.gn),marginLeft:6,fontSize:8}}>YOU</span>}</div>
             <div style={{fontSize:13,fontWeight:700,color:K.yl}}>{(r.total_points||0).toLocaleString()}</div>
             <div style={{fontSize:11,color:isMe&&myAvgClv!==null?(myAvgClv>=0?K.gn:K.rd):K.mt}}>
-              {isMe&&myAvgClv!==null?`${myAvgClv>=0?"+":""}${f(myAvgClv,2)}%`:"—"}
+              {isMe&&myAvgClv!==null?`${myAvgClv>=0?"+":""}${f(myAvgClv,2)}%`:"â€”"}
             </div>
           </div>
         );
@@ -1758,7 +937,7 @@ const Leaderboard = () => {
   </div>);
 };
 
-// ═══ COMMUNITY PROMO BOARD — extracted to src/components/CommunityPromoBoard.jsx ═══
+// â•â•â• COMMUNITY PROMO BOARD â€” extracted to src/components/CommunityPromoBoard.jsx â•â•â•
 const PromoBoard = CommunityPromoBoard;
 
 class ErrorBoundary extends Component {
@@ -1768,7 +947,7 @@ class ErrorBoundary extends Component {
     if(this.state.error) return (
       <div style={{fontFamily:"'JetBrains Mono','SF Mono','Fira Code',monospace",padding:32,display:"flex",alignItems:"center",justifyContent:"center",minHeight:240}}>
         <div style={{background:"#0f1520",border:"1px solid #1e293b",borderRadius:10,padding:32,maxWidth:440,textAlign:"center"}}>
-          <div style={{fontSize:28,marginBottom:8}}>⚠</div>
+          <div style={{fontSize:28,marginBottom:8}}>âš </div>
           <div style={{fontSize:14,fontWeight:700,color:"#f87171",marginBottom:8}}>This calculator hit an error</div>
           <div style={{fontSize:12,color:"#94a3b8",marginBottom:16}}>Try refreshing, or use the navigation above to switch calculators.</div>
           {import.meta.env.DEV && <div style={{fontSize:10,color:"#64748b",marginBottom:12,textAlign:"left",padding:"8px",background:"#0a0e17",borderRadius:4,wordBreak:"break-all"}}>{this.state.error.message}</div>}
@@ -1780,7 +959,7 @@ class ErrorBoundary extends Component {
   }
 }
 
-// ═══ DAILY STREAK ═══
+// â•â•â• DAILY STREAK â•â•â•
 const DailyStreak = () => {
   const [streak, setStreak] = useState(null);
   const toast = useToast();
@@ -1814,7 +993,7 @@ const DailyStreak = () => {
         try {
           const milestonesKey='pg_streak_milestones';
           const milestones=JSON.parse(localStorage.getItem(milestonesKey)||'[]');
-          const MILESTONES=[[7,50,'🔥 7-day streak! +50 Vault Points earned!'],[30,200,'🔥 30-day streak! +200 Vault Points earned!'],[100,500,'🔥 100-day streak! +500 Vault Points earned!']];
+          const MILESTONES=[[7,50,'ðŸ”¥ 7-day streak! +50 Vault Points earned!'],[30,200,'ðŸ”¥ 30-day streak! +200 Vault Points earned!'],[100,500,'ðŸ”¥ 100-day streak! +500 Vault Points earned!']];
           const eligible=MILESTONES.filter(([days])=>s>=days&&!milestones.includes(String(days)));
           if(eligible.length){
             await Promise.all(eligible.map(([days,points])=>supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:points,p_event_type:`streak_milestone_${days}`})));
@@ -1828,21 +1007,21 @@ const DailyStreak = () => {
   if(streak===null||streak===0) return null;
   return (
     <div style={{display:"flex",alignItems:"center",gap:6,padding:"4px 12px",background:`${K.yl}15`,borderRadius:50,border:`1px solid ${K.yl}30`}}>
-      <span style={{fontSize:14}}>🔥</span>
+      <span style={{fontSize:14}}>ðŸ”¥</span>
       <span style={{fontSize:11,fontWeight:700,color:K.yl}}>{streak} day streak</span>
     </div>
   );
 };
 
-// ═══ ACHIEVEMENTS ═══
+// â•â•â• ACHIEVEMENTS â•â•â•
 const ACHIEVEMENTS = [
-  {id:'first_calc',label:'First Steps',desc:'Used your first calculator',icon:'🧮'},
-  {id:'first_ledger',label:'Record Keeper',desc:'Logged first P/L entry',icon:'📒'},
-  {id:'streak_7',label:'Week Grinder',desc:'7-day login streak',icon:'🔥'},
-  {id:'bets_10',label:'Active Bettor',desc:'Tracked 10+ bets',icon:'🎯'},
-  {id:'profit_100',label:'First $100',desc:'$100+ total profit logged',icon:'💵'},
-  {id:'profit_1000',label:'Four Figures',desc:'$1,000+ total profit logged',icon:'💰'},
-  {id:'all_tabs',label:'Explorer',desc:'Visited every calculator group',icon:'🗺️'},
+  {id:'first_calc',label:'First Steps',desc:'Used your first calculator',icon:'ðŸ§®'},
+  {id:'first_ledger',label:'Record Keeper',desc:'Logged first P/L entry',icon:'ðŸ“’'},
+  {id:'streak_7',label:'Week Grinder',desc:'7-day login streak',icon:'ðŸ”¥'},
+  {id:'bets_10',label:'Active Bettor',desc:'Tracked 10+ bets',icon:'ðŸŽ¯'},
+  {id:'profit_100',label:'First $100',desc:'$100+ total profit logged',icon:'ðŸ’µ'},
+  {id:'profit_1000',label:'Four Figures',desc:'$1,000+ total profit logged',icon:'ðŸ’°'},
+  {id:'all_tabs',label:'Explorer',desc:'Visited every calculator group',icon:'ðŸ—ºï¸'},
 ];
 
 const useAchievements = (data, streak) => {
@@ -1872,30 +1051,30 @@ const useAchievements = (data, streak) => {
   return {earned, all:ACHIEVEMENTS};
 };
 
-// ═══ GLOSSARY ═══
+// â•â•â• GLOSSARY â•â•â•
 const GLOSSARY_TERMS = [
   ["Vig / Juice","The sportsbook's built-in profit margin on every bet. Standard vig is ~4.5% (both sides at -110)."],
   ["Moneyline","Bet on who wins outright. +200 = underdog, -200 = favorite."],
   ["Spread","Bet on margin of victory. -3.5 means team must win by 4+."],
   ["Total / Over-Under","Bet on combined score of both teams."],
-  ["Parlay","Multiple bets combined — all must win. Higher payout, higher risk."],
+  ["Parlay","Multiple bets combined â€” all must win. Higher payout, higher risk."],
   ["Arbitrage","Betting both sides at different books where combined odds guarantee profit."],
-  ["+EV","Positive expected value — the bet profits over many repetitions."],
+  ["+EV","Positive expected value â€” the bet profits over many repetitions."],
   ["Closing Line Value (CLV)","Whether your odds were better than the closing odds. Consistently beating the close = long-term edge."],
   ["Hedge","Placing a second bet on the opposite outcome to lock in profit."],
-  ["Bonus Bet","A bet credit — only the profit is returned, not the stake."],
+  ["Bonus Bet","A bet credit â€” only the profit is returned, not the stake."],
   ["Profit Boost","Percentage increase added to your winnings if the bet wins."],
   ["First Bet Insurance","Refund of first bet as bonus bets if it loses."],
-  ["Rollover / Playthrough","Must wager X× the bonus before withdrawing."],
+  ["Rollover / Playthrough","Must wager XÃ— the bonus before withdrawing."],
   ["Devig / No-Vig","Removing the sportsbook's margin to find true probabilities."],
   ["Kelly Criterion","Formula for optimal bet sizing based on your edge."],
   ["Middle","Betting opposite sides at different lines where both can win."],
   ["Round Robin","Creating all possible sub-parlays from a pool of picks."],
   ["Teaser","Parlay where you move lines in your favor for reduced payout."],
   ["Hold","The total percentage a book profits from both sides of a bet."],
-  ["Sharp Book","Sportsbook with low vig and sharp (accurate) lines — e.g. Pinnacle."],
+  ["Sharp Book","Sportsbook with low vig and sharp (accurate) lines â€” e.g. Pinnacle."],
   ["Getting Limited","When a book reduces your max bet size due to consistent profiting."],
-  ["SGP","Same-Game Parlay — all legs must be from the same game."],
+  ["SGP","Same-Game Parlay â€” all legs must be from the same game."],
 ];
 
 const Glossary = () => {
@@ -1914,7 +1093,7 @@ const Glossary = () => {
   </div>);
 };
 
-// ═══ ONBOARDING WIZARD ═══
+// â•â•â• ONBOARDING WIZARD â•â•â•
 const ONBOARDING_KEY = 'pg_onboarded_v1';
 
 const OnboardingWizard = ({ onDone }) => {
@@ -1929,9 +1108,9 @@ const OnboardingWizard = ({ onDone }) => {
       sub: "Turn sportsbook promos into guaranteed cash. No gambling knowledge needed.",
       content: (
         <div style={{textAlign:"center"}}>
-          <div style={{fontSize:32,marginBottom:16}}>🤑</div>
+          <div style={{fontSize:32,marginBottom:16}}>ðŸ¤‘</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,maxWidth:380,margin:"0 auto",textAlign:"left"}}>
-            {[["Welcome Promos","$1,000–$2,500 one-time from 8+ books"],["Profit Boosts","$300–$1,000/month recurring, 15 min/day"],["100% Legal","Math calculator, not gambling. Free forever."],["No Sports Knowledge","Pure math. You don't need to know the teams."]].map(([t,d])=>(
+            {[["Welcome Promos","$1,000â€“$2,500 one-time from 8+ books"],["Profit Boosts","$300â€“$1,000/month recurring, 15 min/day"],["100% Legal","Math calculator, not gambling. Free forever."],["No Sports Knowledge","Pure math. You don't need to know the teams."]].map(([t,d])=>(
               <div key={t} style={{padding:"10px 12px",background:"#161d2a",borderRadius:8,border:"1px solid #1e293b"}}>
                 <div style={{fontSize:11,fontWeight:700,color:"#e2e8f0",marginBottom:2}}>{t}</div>
                 <div style={{fontSize:10,color:"#64748b",lineHeight:1.5}}>{d}</div>
@@ -1951,7 +1130,7 @@ const OnboardingWizard = ({ onDone }) => {
               {b}
             </button>
           ))}
-          <div style={{width:"100%",textAlign:"center",fontSize:11,color:"#64748b",marginTop:4}}>None yet? No problem — you'll start fresh.</div>
+          <div style={{width:"100%",textAlign:"center",fontSize:11,color:"#64748b",marginTop:4}}>None yet? No problem â€” you'll start fresh.</div>
         </div>
       )
     },
@@ -1961,7 +1140,7 @@ const OnboardingWizard = ({ onDone }) => {
       content: (
         <div style={{textAlign:"center"}}>
           <select style={{...S.input,maxWidth:300,padding:"10px 14px",fontSize:13,margin:"0 auto"}} value={userState} onChange={e=>{setUserState(e.target.value);try{localStorage.setItem('pg_user_state',e.target.value);}catch{}}}>
-            <option value="">— Select your state —</option>
+            <option value="">â€” Select your state â€”</option>
             {US_STATES.map(s=><option key={s} value={s}>{s}</option>)}
           </select>
           <div style={{fontSize:11,color:K.mt,marginTop:12}}>
@@ -1972,14 +1151,14 @@ const OnboardingWizard = ({ onDone }) => {
     },
     {
       title: "Start with your first promo",
-      sub: books.length > 0 ? `You have ${books.length} book${books.length>1?"s":""} — start converting promos immediately.` : "Open one or more sportsbook apps and grab a welcome promo.",
+      sub: books.length > 0 ? `You have ${books.length} book${books.length>1?"s":""} â€” start converting promos immediately.` : "Open one or more sportsbook apps and grab a welcome promo.",
       content: (
         <div style={{textAlign:"center"}}>
           <div style={{fontSize:13,color:"#94a3b8",marginBottom:16,lineHeight:1.7}}>Your best first move:</div>
           <div style={{display:"grid",gap:8,maxWidth:380,margin:"0 auto",textAlign:"left"}}>
             {[
-              ["1","Get a bonus bet promo","DraftKings, FanDuel, Fanatics, ESPN BET — all offer bonus bets after a small qualifying wager"],
-              ["2","Open Bonus Bet Converter","Enter your bonus bet size and odds — the calculator tells you exactly what hedge to place"],
+              ["1","Get a bonus bet promo","DraftKings, FanDuel, Fanatics, ESPN BET â€” all offer bonus bets after a small qualifying wager"],
+              ["2","Open Bonus Bet Converter","Enter your bonus bet size and odds â€” the calculator tells you exactly what hedge to place"],
               ["3","Place both bets","Bonus bet at Book A, hedge at Book B. Profit guaranteed no matter the result"],
             ].map(([n,t,d])=>(
               <div key={n} style={{display:"flex",gap:12,padding:"10px 12px",background:"#161d2a",borderRadius:8,border:"1px solid #1e293b"}}>
@@ -2008,7 +1187,7 @@ const OnboardingWizard = ({ onDone }) => {
           <button onClick={onDone} style={{padding:"6px 14px",background:"transparent",border:"1px solid #1e293b",borderRadius:6,color:"#334155",fontSize:11,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace"}}>Skip</button>
           <div style={{display:"flex",gap:6}}>{steps.map((_,i)=><div key={i} style={{width:6,height:6,borderRadius:"50%",background:i===step?"#4ade80":"#1e293b"}}/>)}</div>
           <button onClick={()=>{ if(step<steps.length-1) setStep(s=>s+1); else onDone(); }} style={{padding:"8px 20px",background:"#4ade80",border:"none",borderRadius:6,color:"#0a0e17",fontWeight:700,fontSize:13,cursor:"pointer",fontFamily:"'Space Grotesk',sans-serif"}}>
-            {step<steps.length-1?"Next →":"Let's Go →"}
+            {step<steps.length-1?"Next â†’":"Let's Go â†’"}
           </button>
         </div>
       </div>
@@ -2016,7 +1195,7 @@ const OnboardingWizard = ({ onDone }) => {
   );
 };
 
-// ═══ ANNUAL INCOME ESTIMATOR ═══
+// â•â•â• ANNUAL INCOME ESTIMATOR â•â•â•
 const IncomeEstimator = () => {
   const [numBooks, setNumBooks] = useState("6");
   const [hoursPerWeek, setHoursPerWeek] = useState("5");
@@ -2086,22 +1265,22 @@ const IncomeEstimator = () => {
       </div>
       <div style={{height:1,background:K.bd,marginBottom:16}}/>
       <RR l="Welcome promo season (first 2-4 weeks)" v={`$${Math.round(welcomePromos).toLocaleString()}`} c={K.yl}/>
-      <RR l={`Daily boost income (${boostsPerDay} boosts × ~$${boostPerConversion} each × 22 days)`} v={`$${Math.round(monthlyBoosts).toLocaleString()}/month`} c={K.ac}/>
-      <RR l="Year 1 estimate (conservative)" v={`$${Math.round(annualTotal * 0.8).toLocaleString()} – $${Math.round(annualTotal * 1.1).toLocaleString()}`} c={K.gn} b/>
+      <RR l={`Daily boost income (${boostsPerDay} boosts Ã— ~$${boostPerConversion} each Ã— 22 days)`} v={`$${Math.round(monthlyBoosts).toLocaleString()}/month`} c={K.ac}/>
+      <RR l="Year 1 estimate (conservative)" v={`$${Math.round(annualTotal * 0.8).toLocaleString()} â€“ $${Math.round(annualTotal * 1.1).toLocaleString()}`} c={K.gn} b/>
       <RR l="Effective hourly rate" v={`~$${Math.round(hourlyRate)}/hr`} c={K.pp}/>
       <Nt c={K.yl}>These are estimates based on current sportsbook promo values (2026). Welcome promos assume 70% conversion rate. Boost income varies by available lines and sportsbook generosity. Your actual results may be higher or lower.</Nt>
-      <Nt c={K.ac}>Year 2+ income is mostly recurring boosts — welcome promos are one-time. This is a long-term side hustle, not a one-off.</Nt>
+      <Nt c={K.ac}>Year 2+ income is mostly recurring boosts â€” welcome promos are one-time. This is a long-term side hustle, not a one-off.</Nt>
     </div>
   </div>
   <Help entries={[
     ["Welcome promo estimates","Based on current sportsbook offers: DraftKings ~$200 effective, FanDuel ~$200, BetMGM ~$180, Caesars ~$150, bet365 ~$125, ESPN BET ~$100, Fanatics ~$90, BetRivers ~$80. Assumes 70% conversion rate on bonus bets."],
     ["Boost income","Profit boosts appear daily across most sportsbooks. At 5 boosts per day averaging $9 each, that's $45/day, ~$990/month. More active grinders running all 8 books can see $200+/day on peak event days."],
-    ["Hourly rate","Based on your selected hours per week. Note: most of that time is during games — you're watching sports and clicking buttons, not at a desk. Many grinders consider this 'free money on top of entertainment.'"],
+    ["Hourly rate","Based on your selected hours per week. Note: most of that time is during games â€” you're watching sports and clicking buttons, not at a desk. Many grinders consider this 'free money on top of entertainment.'"],
     ["State matters","More legal sportsbooks in your state = more promos = more income. NJ, PA, CO, MI have the most books. Some states only have 2-3."],
   ]}/></div>);
 };
 
-// ═══ PROMO FINDER WIZARD ═══
+// â•â•â• PROMO FINDER WIZARD â•â•â•
 const PromoFinder = () => {
   const [step, setStep] = useState(0);
   const [answer, setAnswer] = useState(null);
@@ -2118,7 +1297,7 @@ const PromoFinder = () => {
     <div style={{padding:"16px",background:`${K.gn}08`,border:`1px solid ${K.gn}30`,borderRadius:8}}>
       <div style={{fontSize:14,fontWeight:700,color:K.gn,marginBottom:6}}>{title}</div>
       <div style={{fontSize:12,color:K.dm,marginBottom:12,lineHeight:1.6}}>{desc}</div>
-      <button onClick={()=>go(slug)} style={{padding:"9px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Open Calculator →</button>
+      <button onClick={()=>go(slug)} style={{padding:"9px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Open Calculator â†’</button>
       <button onClick={reset} style={{marginLeft:10,padding:"9px 16px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Start Over</button>
     </div>
   );
@@ -2140,24 +1319,24 @@ const PromoFinder = () => {
     </>}
     {step===2&&<>
       <div style={{fontSize:12,color:K.dm,marginBottom:14}}>If your bet using this credit wins, do you get your stake back?</div>
-      <Opt label="No — I only get the profit, not the credit back" sub="The stake is NOT returned" onClick={()=>{setAnswer('bonus');setStep(10);}}/>
-      <Opt label="Yes — I get everything back if it wins" sub="Acts like a real cash bet" onClick={()=>{setAnswer('firstbet');setStep(10);}}/>
+      <Opt label="No â€” I only get the profit, not the credit back" sub="The stake is NOT returned" onClick={()=>{setAnswer('bonus');setStep(10);}}/>
+      <Opt label="Yes â€” I get everything back if it wins" sub="Acts like a real cash bet" onClick={()=>{setAnswer('firstbet');setStep(10);}}/>
     </>}
     {step===10&&(()=>{
       const m = {
         bonus: {title:"Use: Bonus Bet Converter",desc:"Enter your bonus bet size, the odds you're placing it at, and the hedge odds. The calculator tells you exactly how much to hedge to lock in profit.",slug:"bonus-bet"},
         boost: {title:"Use: Profit Boost Converter",desc:"Enter your stake, the original odds, the boost percentage, and the max extra winnings. The calculator shows your effective odds and the hedge amount.",slug:"profit-boost"},
-        firstbet: {title:"Use: First Bet Safety Net Hedge",desc:"Enter your first bet amount, the odds, and hedge odds. This locks in a small profit if your bet wins — and if it loses, you get bonus bets to convert.",slug:"first-bet"},
+        firstbet: {title:"Use: First Bet Safety Net Hedge",desc:"Enter your first bet amount, the odds, and hedge odds. This locks in a small profit if your bet wins â€” and if it loses, you get bonus bets to convert.",slug:"first-bet"},
         deposit: {title:"Use: Deposit Match Calculator",desc:"Enter your deposit amount, match percentage, rollover, and average vig to find the true net value of the bonus.",slug:"deposit-match"},
         insurance: {title:"Use: Promo Insurance Calculator",desc:"Enter your stake, insurance percentage, and bonus conversion rate to find your effective net cost if the bet loses.",slug:"insurance"},
       };
       const res = m[answer];
-      return res?<Result {...res}/>:<div style={{color:K.mt,fontSize:12}}>Not sure — try the Knowledge Base for a full overview.</div>;
+      return res?<Result {...res}/>:<div style={{color:K.mt,fontSize:12}}>Not sure â€” try the Knowledge Base for a full overview.</div>;
     })()}
   </div>);
 };
 
-// ═══ QUICK CALC PANEL ═══
+// â•â•â• QUICK CALC PANEL â•â•â•
 const QuickCalcPanel = ({ goTo }) => {
   const [open, setOpen] = useState(false);
   const quickItems = [
@@ -2178,13 +1357,13 @@ const QuickCalcPanel = ({ goTo }) => {
         ))}
       </div>}
       <button onClick={()=>setOpen(o=>!o)} style={{padding:"7px 14px",background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:20,color:K.ac,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600,boxShadow:"0 2px 8px rgba(0,0,0,0.4)"}}>
-        {open?"✕ Close":"⚡ Quick"}
+        {open?"âœ• Close":"âš¡ Quick"}
       </button>
     </div>
   );
 };
 
-// ═══ CALC SEARCH (keyboard ?) ═══
+// â•â•â• CALC SEARCH (keyboard ?) â•â•â•
 const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
   const [q, setQ] = useState('');
   const inputRef = useRef(null);
@@ -2198,7 +1377,7 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
   return (
     <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",zIndex:2000,display:"flex",alignItems:"flex-start",justifyContent:"center",paddingTop:80,padding:"80px 16px 16px"}}>
       <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,padding:20,width:"100%",maxWidth:480,maxHeight:"70vh",display:"flex",flexDirection:"column",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
-        <input ref={inputRef} value={q} onChange={e=>setQ(e.target.value)} placeholder="Search calculators…" style={{...S.input,fontSize:14,marginBottom:12}}/>
+        <input ref={inputRef} value={q} onChange={e=>setQ(e.target.value)} placeholder="Search calculatorsâ€¦" style={{...S.input,fontSize:14,marginBottom:12}}/>
         <div style={{overflowY:"auto",flex:1}}>
           {filtered.map(c=>(
             <button key={c.slug} onClick={()=>{onNavigate(c.slug);onClose();}} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"10px 12px",background:"transparent",border:"none",borderBottom:`1px solid ${K.bd}`,color:K.tx,cursor:"pointer",textAlign:"left",fontFamily:font}}>
@@ -2208,15 +1387,15 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
           ))}
           {!filtered.length&&<div style={{textAlign:"center",padding:24,color:K.mt,fontSize:12}}>No matches</div>}
         </div>
-        <div style={{fontSize:10,color:K.mt,marginTop:8,textAlign:"center"}}>Press Esc to close · Press ? anywhere to reopen</div>
+        <div style={{fontSize:10,color:K.mt,marginTop:8,textAlign:"center"}}>Press Esc to close Â· Press ? anywhere to reopen</div>
       </div>
     </div>
   );
 };
 
-// ═══ MOBILE BOTTOM NAV ═══
+// â•â•â• MOBILE BOTTOM NAV â•â•â•
 const MobileBottomNav = ({ gi, goTo }) => {
-  const icons = ["🏠","⚡","📊","📈","🔴","📚"];
+  const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
   const labels = ["Home","Convert","Calc","Track","Live","Learn"];
   return (
     <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:K.s1,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"4px 0 env(safe-area-inset-bottom,0px)"}}>
@@ -2231,7 +1410,7 @@ const MobileBottomNav = ({ gi, goTo }) => {
   );
 };
 
-// ═══ CSV IMPORT MODAL ═══
+// â•â•â• CSV IMPORT MODAL â•â•â•
 const CSVImportModal = ({ onImport, onClose }) => {
   const [raw, setRaw] = useState('');
   const [preview, setPreview] = useState([]);
@@ -2295,7 +1474,7 @@ const CSVImportModal = ({ onImport, onClose }) => {
         {error&&<div style={{fontSize:11,color:K.rd,marginBottom:8}}>{error}</div>}
         {preview.length>0&&<div style={{marginBottom:12}}>
           <div style={{fontSize:10,color:K.mt,marginBottom:6,textTransform:"uppercase",letterSpacing:"1.5px"}}>Preview ({preview.length} of {raw.trim().split('\n').length-1} rows)</div>
-          {preview.map((r,i)=><div key={i} style={{fontSize:11,color:K.dm,padding:"4px 0",borderBottom:`1px solid ${K.bd}`}}>{r.date} · {r.book} · {r.odds} · ${r.stake} · <span style={{color:r.status==="won"?K.gn:r.status==="lost"?K.rd:K.yl}}>{r.status}</span></div>)}
+          {preview.map((r,i)=><div key={i} style={{fontSize:11,color:K.dm,padding:"4px 0",borderBottom:`1px solid ${K.bd}`}}>{r.date} Â· {r.book} Â· {r.odds} Â· ${r.stake} Â· <span style={{color:r.status==="won"?K.gn:r.status==="lost"?K.rd:K.yl}}>{r.status}</span></div>)}
         </div>}
         <div style={{display:"flex",gap:8,marginTop:12}}>
           <button onClick={parse} style={{flex:1,padding:"9px",background:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font}}>Parse CSV</button>
@@ -2307,10 +1486,10 @@ const CSVImportModal = ({ onImport, onClose }) => {
   );
 };
 
-// US_BOOK_STATES → ./components/Tracker.jsx
+// US_BOOK_STATES â†’ ./components/Tracker.jsx
 const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DC","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
 
-// PROMO_SCHED + DAYS_ORDER → ./data/promoSchedule.js
+// PROMO_SCHED + DAYS_ORDER â†’ ./data/promoSchedule.js
 const PromoAlertPrefs = () => {
   const [alertEmail,setAlertEmail]=useState("");
   const [alertPrefs,setAlertPrefs]=useState(()=>{try{return JSON.parse(localStorage.getItem('pg_alert_prefs')||'null')||{aGradeOnly:false,allPromos:true,dailyDigest:true,books:{}};}catch{return {aGradeOnly:false,allPromos:true,dailyDigest:true,books:{}};}});
@@ -2342,8 +1521,8 @@ const PromoAlertPrefs = () => {
       </div>
     </div>
     <button onClick={saveAlertPrefs} style={{padding:"7px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Save Alert Preferences</button>
-    {alertSaved&&<div style={{fontSize:11,color:K.gn,marginTop:8}}>✓ Alerts configured — you&apos;ll be notified when high-value promos are available</div>}
-    <Nt c={K.mt}>Email alerts coming soon — your preferences are saved and will activate when the feature launches.</Nt>
+    {alertSaved&&<div style={{fontSize:11,color:K.gn,marginTop:8}}>âœ“ Alerts configured â€” you&apos;ll be notified when high-value promos are available</div>}
+    <Nt c={K.mt}>Email alerts coming soon â€” your preferences are saved and will activate when the feature launches.</Nt>
   </div>);
 };
 const PromoROITable = ({ promoValueHistory }) => {
@@ -2362,11 +1541,11 @@ const PromoROITable = ({ promoValueHistory }) => {
   return (
     <div style={{...S.card,marginTop:12}}>
       <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
-        Promo Performance Table <span style={{color:K.mt,fontSize:10}}>{open?"▲":"▼"}</span>
+        Promo Performance Table <span style={{color:K.mt,fontSize:10}}>{open?"â–²":"â–¼"}</span>
       </button>
       {open&&<div style={{marginTop:12}}>
         {rows.length===0
-          ?<div style={{fontSize:11,color:K.mt}}>Click <strong style={{color:K.ac}}>📈 Track Value</strong> on any promo in the calendar to start building this table.</div>
+          ?<div style={{fontSize:11,color:K.mt}}>Click <strong style={{color:K.ac}}>ðŸ“ˆ Track Value</strong> on any promo in the calendar to start building this table.</div>
           :<table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
             <thead><tr>{["Rank","Promo","Avg Value","Reports","Best"].map(h=><th key={h} style={{textAlign:"left",padding:"5px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
             <tbody>{rows.map((r,i)=>(
@@ -2440,16 +1619,16 @@ const PromoCalendar = () => {
     downloadFile(lines.join("\r\n"), "promogrind-calendar.ics", "text/calendar");
   };
   return (<div><div style={S.card}><Tl t="Promo Calendar" badge="RECURRING $$$" bc={K.gn} shareable/>
-    <div style={{...S.note(K.ac),marginBottom:12}}>These are the predictable recurring promos across all major books. Stack them daily for $150–450/mo in passive profit on top of welcome bonuses.</div>
+    <div style={{...S.note(K.ac),marginBottom:12}}>These are the predictable recurring promos across all major books. Stack them daily for $150â€“450/mo in passive profit on top of welcome bonuses.</div>
     <div style={{display:"flex",gap:6,marginBottom:10,alignItems:"center",flexWrap:"wrap"}}>
       <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",whiteSpace:"nowrap"}}>Market:</span>
       {["All","US","UK"].map(m=>(
         <button key={m} onClick={()=>{setMarketFilter(m);setFilterBook("All");}} style={{padding:"4px 12px",background:marketFilter===m?K.ac:"transparent",border:`1px solid ${marketFilter===m?K.ac:K.bd2}`,borderRadius:50,color:marketFilter===m?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600,whiteSpace:"nowrap"}}>
-          {m==="UK"?"🇬🇧 UK":m==="US"?"🇺🇸 US":"🌎 All"}
+          {m==="UK"?"ðŸ‡¬ðŸ‡§ UK":m==="US"?"ðŸ‡ºðŸ‡¸ US":"ðŸŒŽ All"}
         </button>
       ))}
-      {marketFilter==="UK"&&<span style={{fontSize:9,color:K.pp,marginLeft:4}}>bet365 · Betway · William Hill · Paddy Power · Sky Bet</span>}
-      {marketFilter==="US"&&<span style={{fontSize:9,color:K.ac,marginLeft:4}}>DraftKings · FanDuel · BetMGM · Caesars · ESPN BET · Fanatics · BetRivers</span>}
+      {marketFilter==="UK"&&<span style={{fontSize:9,color:K.pp,marginLeft:4}}>bet365 Â· Betway Â· William Hill Â· Paddy Power Â· Sky Bet</span>}
+      {marketFilter==="US"&&<span style={{fontSize:9,color:K.ac,marginLeft:4}}>DraftKings Â· FanDuel Â· BetMGM Â· Caesars Â· ESPN BET Â· Fanatics Â· BetRivers</span>}
     </div>
     <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,alignItems:"center"}}>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
@@ -2462,9 +1641,9 @@ const PromoCalendar = () => {
       </select>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterGrade||"All"} onChange={e=>setFilterGrade(e.target.value)}>
         <option value="All">All Grades</option>
-        <option value="A">A — Best Value</option>
-        <option value="B">B — Good Value</option>
-        <option value="C">C — Situational</option>
+        <option value="A">A â€” Best Value</option>
+        <option value="B">B â€” Good Value</option>
+        <option value="C">C â€” Situational</option>
       </select>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterComplexity} onChange={e=>setFilterComplexity(e.target.value)}>
         <option value="All">All Complexity</option>
@@ -2472,11 +1651,11 @@ const PromoCalendar = () => {
         <option value="Medium">Medium</option>
         <option value="Hard">Hard</option>
       </select>
-      <button onClick={exportICS} style={{padding:"5px 12px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",fontWeight:600}}>📅 Export to Calendar</button>
+      <button onClick={exportICS} style={{padding:"5px 12px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",fontWeight:600}}>ðŸ“… Export to Calendar</button>
     </div>
     <div style={{overflowX:"auto"}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Time","Track","🔔",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Time","Track","ðŸ””",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
         <tbody>{filtered.map((p,i)=>{
           const key=`${p.book}-${p.promo}`;
           const hist=(data.promoValueHistory||{})[key]||[];
@@ -2495,15 +1674,15 @@ const PromoCalendar = () => {
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
                 <span style={S.tag(complexityColor[p.complexity]||K.mt)}>{p.complexity||"Easy"}</span>
               </td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.mt,fontSize:11,whiteSpace:"nowrap"}}>{p.timeMin?`~${p.timeMin}m`:"—"}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.mt,fontSize:11,whiteSpace:"nowrap"}}>{p.timeMin?`~${p.timeMin}m`:"â€”"}</td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
                 <button onClick={()=>{const val=prompt(`Enter value realized for ${p.promo} (e.g. 12.50):`);if(val&&!isNaN(parseFloat(val)))trackValue(p,parseFloat(val));}} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.gn}`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Track Value</button>
               </td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-                {typeof Notification!=='undefined'&&<button onClick={()=>toggleAlert(p)} style={{padding:"2px 6px",background:alertOn?`${K.yl}15`:"transparent",border:`1px solid ${alertOn?K.yl:K.bd2}`,borderRadius:4,color:alertOn?K.yl:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{alertOn?"🔔 On":"🔔 Off"}</button>}
+                {typeof Notification!=='undefined'&&<button onClick={()=>toggleAlert(p)} style={{padding:"2px 6px",background:alertOn?`${K.yl}15`:"transparent",border:`1px solid ${alertOn?K.yl:K.bd2}`,borderRadius:4,color:alertOn?K.yl:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{alertOn?"ðŸ”” On":"ðŸ”” Off"}</button>}
               </td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-                {hist.length>0&&<button onClick={()=>setHistoryOpen(h=>({...h,[key]:!h[key]}))} style={{padding:"2px 6px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{showHist?"▲":"History"}</button>}
+                {hist.length>0&&<button onClick={()=>setHistoryOpen(h=>({...h,[key]:!h[key]}))} style={{padding:"2px 6px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{showHist?"â–²":"History"}</button>}
               </td>
             </tr>
             {showHist&&hist.length>0&&<tr><td colSpan={10} style={{padding:"8px 12px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}>
@@ -2517,7 +1696,7 @@ const PromoCalendar = () => {
                   </div>);
                 })}
               </div>
-              <div style={{fontSize:9,color:K.mt}}>Last {hist.length} tracked values · Latest: ${hist[hist.length-1].value} on {hist[hist.length-1].date}</div>
+              <div style={{fontSize:9,color:K.mt}}>Last {hist.length} tracked values Â· Latest: ${hist[hist.length-1].value} on {hist[hist.length-1].date}</div>
             </td></tr>}
           </React.Fragment>);
         })}</tbody>
@@ -2529,12 +1708,12 @@ const PromoCalendar = () => {
   <Help entries={[
     ["Why track recurring promos","Welcome bonuses are one-time. Recurring promos are the engine of long-term profit. A serious matched bettor extracts $150-450/mo just from daily boosts across 5-6 books."],
     ["How to use this","Every morning, open each sportsbook app and check for available boosts. Cross-reference this calendar so you know what to look for. Use the Profit Boost converter to calculate each one."],
-    ["Profit boosts are the best","They come daily, they require no outcome risk when hedged, and they compound. At $10 profit per boost × 3 boosts/day × 30 days = $900/mo."],
+    ["Profit boosts are the best","They come daily, they require no outcome risk when hedged, and they compound. At $10 profit per boost Ã— 3 boosts/day Ã— 30 days = $900/mo."],
   ]}/></div>);
 };
 
-// ═══ REFERRAL HUB ═══
-// ═══ GIFT TRIAL BOX ═══
+// â•â•â• REFERRAL HUB â•â•â•
+// â•â•â• GIFT TRIAL BOX â•â•â•
 function GiftTrialBox() {
   const [email, setEmail] = React.useState('');
   const [status, setStatus] = React.useState(null);
@@ -2556,7 +1735,7 @@ function GiftTrialBox() {
   };
   if (status === 'sent') return (
     <div style={{padding:'10px 12px',background:'#1e3a2f',borderRadius:6,border:'1px solid #4ade8040'}}>
-      <div style={{fontSize:12,color:'#4ade80',fontWeight:700,marginBottom:6}}>✓ Gift sent to {email}</div>
+      <div style={{fontSize:12,color:'#4ade80',fontWeight:700,marginBottom:6}}>âœ“ Gift sent to {email}</div>
       {giftLink && <div style={{fontSize:10,color:'#64748b',wordBreak:'break-all'}}>Gift link: <span style={{color:'#60a5fa'}}>{giftLink}</span></div>}
       <div style={{fontSize:11,color:'#94a3b8',marginTop:4}}>They'll get an email with 14-day Pro access. You earned 7 bonus days.</div>
     </div>
@@ -2569,9 +1748,9 @@ function GiftTrialBox() {
       />
       <button onClick={send} disabled={status==='loading'||!email.includes('@')}
         style={{padding:'8px 16px',background:email.includes('@')?'#4ade80':'#1e293b',border:'none',borderRadius:6,color:email.includes('@')?'#0a0e17':'#475569',fontWeight:700,fontSize:12,cursor:email.includes('@')?'pointer':'not-allowed',whiteSpace:'nowrap',opacity:status==='loading'?0.7:1}}>
-        {status==='loading'?'Sending…':'Send Gift →'}
+        {status==='loading'?'Sendingâ€¦':'Send Gift â†’'}
       </button>
-      {status==='error'&&<div style={{fontSize:11,color:'#f87171',width:'100%'}}>Failed — check the email or try again.</div>}
+      {status==='error'&&<div style={{fontSize:11,color:'#f87171',width:'100%'}}>Failed â€” check the email or try again.</div>}
     </div>
   );
 }
@@ -2612,7 +1791,7 @@ const ReferralHub = () => {
     const { error } = await supabase.from('influencer_codes').upsert({ user_id: rhUser.id, code: influencerCode }, { onConflict: 'user_id' });
     if (!error) setSavedInfluencerCode(influencerCode);
   };
-  const refLink = userId ? `${CANONICAL_APP_URL}?ref=${userId}` : "Loading…";
+  const refLink = userId ? `${CANONICAL_APP_URL}?ref=${userId}` : "Loadingâ€¦";
   const copy = () => { try{navigator.clipboard.writeText(refLink); trackEvent('referral_shared'); localStorage.setItem('pg_referral_shared','1');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
   return (<div><div style={S.card}><Tl t="Refer &amp; Earn" badge="FREE VAULTSPARKED" bc={K.pp}/>
     <div style={{...S.note(K.pp),marginBottom:16}}>Share your link. When a friend signs up and subscribes to VaultSparked, you both get <strong>30 days free</strong>. No limit on referrals.</div>
@@ -2620,19 +1799,19 @@ const ReferralHub = () => {
       <div style={S.label}>Your Referral Link</div>
       <div style={{display:"flex",gap:8,alignItems:"center"}}>
         <div style={{...S.input,flex:1,color:K.dm,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",cursor:"default"}}>{refLink}</div>
-        <button onClick={copy} style={{padding:"8px 16px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Link"}</button>
+        <button onClick={copy} style={{padding:"8px 16px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"âœ“ Copied!":"Copy Link"}</button>
       </div>
     </div>
     <div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
-      <div><div style={{fontSize:10,color:K.mt}}>YOUR REFERRALS</div><div style={S.big(K.pp)}>{refCount===null?'…':refCount}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>FREE DAYS EARNED</div><div style={S.big(K.gn)}>{refCount===null?'…':(refCount||0)*30}</div></div>
+      <div><div style={{fontSize:10,color:K.mt}}>YOUR REFERRALS</div><div style={S.big(K.pp)}>{refCount===null?'â€¦':refCount}</div></div>
+      <div><div style={{fontSize:10,color:K.mt}}>FREE DAYS EARNED</div><div style={S.big(K.gn)}>{refCount===null?'â€¦':(refCount||0)*30}</div></div>
     </div>
     <div style={{marginTop:16,padding:12,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
       <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Share on</div>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
         {[
-          {label:"Twitter/X",color:"#1DA1F2",msg:`I've been making extra income every month using PromoGrind — free sportsbook promo conversion tools. Way better than paying $99/mo for OddsJam. Check it out: ${refLink}`},
-          {label:"Discord",color:"#5865F2",msg:`**PromoGrind** — free matched betting tools. 22 calculators, live arb scanner. Sign up free: ${refLink}`},
+          {label:"Twitter/X",color:"#1DA1F2",msg:`I've been making extra income every month using PromoGrind â€” free sportsbook promo conversion tools. Way better than paying $99/mo for OddsJam. Check it out: ${refLink}`},
+          {label:"Discord",color:"#5865F2",msg:`**PromoGrind** â€” free matched betting tools. 22 calculators, live arb scanner. Sign up free: ${refLink}`},
           {label:"Reddit",color:"#FF4500",msg:`Has anyone else been using PromoGrind? It's free and has all the calculators you need for promo conversion. Link: ${refLink}`},
         ].map(({label,color,msg})=>(
           <button key={label} onClick={()=>{try{navigator.clipboard.writeText(msg);}catch(e){} }} style={{padding:"6px 14px",background:`${color}15`,border:`1px solid ${color}40`,borderRadius:6,color,fontSize:11,cursor:"pointer",fontFamily:font}}>Copy {label} Post</button>
@@ -2641,7 +1820,7 @@ const ReferralHub = () => {
     </div>
     {rhIsPro() && (
       <div style={{marginTop:24,padding:16,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8}}>
-        <div style={{fontWeight:700,color:'#4ade80',marginBottom:12}}>⚡ Creator Mode</div>
+        <div style={{fontWeight:700,color:'#4ade80',marginBottom:12}}>âš¡ Creator Mode</div>
         <p style={{color:'#94a3b8',fontSize:13,marginBottom:16}}>
           Create a custom vanity link to share with your audience. Track clicks and signups in real time.
         </p>
@@ -2690,18 +1869,18 @@ const ReferralHub = () => {
       </div>
     )}
     <div style={{marginTop:20,padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>🎁 Gift 14 Days Free</div>
+      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>ðŸŽ Gift 14 Days Free</div>
       <div style={{fontSize:11,color:K.dm,marginBottom:12,lineHeight:1.6}}>Give a friend 14 days of VaultSparked Pro for free. They get the Live Scanner, +EV Scanner, and all Pro tools. You earn 7 bonus days when they sign up.</div>
       <GiftTrialBox/>
     </div>
   </div></div>);
 };
 
-// ═══ COMPETITOR COMPARISON ═══
+// â•â•â• COMPETITOR COMPARISON â•â•â•
 const CompetitorComparison = () => (
   <div><div style={S.card}>
     <Tl t="PromoGrind vs The Competition" badge="WHY FREE WINS" bc={K.gn}/>
-    <Nt c={K.gn}>PromoGrind is permanently free for all 27 calculators, tracker, and knowledge base. Competitors charge $49–$199/month for similar tools.</Nt>
+    <Nt c={K.gn}>PromoGrind is permanently free for all 27 calculators, tracker, and knowledge base. Competitors charge $49â€“$199/month for similar tools.</Nt>
     <div style={{overflowX:"auto",marginTop:16}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
         <thead>
@@ -2713,25 +1892,25 @@ const CompetitorComparison = () => (
         </thead>
         <tbody>
           {[
-            ["Price","Free","$99–$199/mo","$49–$99/mo","Free"],
-            ["Bonus Bet Converter","✓","✓","✓","Manual"],
-            ["Profit Boost Converter","✓","✓","✓","Manual"],
-            ["Arb Calculator","✓","✓","✓","Manual"],
-            ["No-Vig / +EV Calculator","✓","✓","✓","Manual"],
-            ["Live Arb Scanner","✓ (Pro $24.99/mo)","✓ Included","✓ Included","✗"],
-            ["P/L Ledger & Tracker","✓","Limited","✓","Manual"],
-            ["Cloud Sync","✓","✓","✓","✗"],
-            ["Mobile PWA","✓","✗","✗","✗"],
-            ["Knowledge Base","✓ Full guide","Limited","Limited","✗"],
-            ["CSV Import/Export","✓","✗","✗","Manual"],
-            ["Referral Program","✓","✗","✗","✗"],
-            ["Push Notifications","✓","✗","✗","✗"],
-            ["Total 27 Calculators","✓","~10","~15","DIY"],
+            ["Price","Free","$99â€“$199/mo","$49â€“$99/mo","Free"],
+            ["Bonus Bet Converter","âœ“","âœ“","âœ“","Manual"],
+            ["Profit Boost Converter","âœ“","âœ“","âœ“","Manual"],
+            ["Arb Calculator","âœ“","âœ“","âœ“","Manual"],
+            ["No-Vig / +EV Calculator","âœ“","âœ“","âœ“","Manual"],
+            ["Live Arb Scanner","âœ“ (Pro $24.99/mo)","âœ“ Included","âœ“ Included","âœ—"],
+            ["P/L Ledger & Tracker","âœ“","Limited","âœ“","Manual"],
+            ["Cloud Sync","âœ“","âœ“","âœ“","âœ—"],
+            ["Mobile PWA","âœ“","âœ—","âœ—","âœ—"],
+            ["Knowledge Base","âœ“ Full guide","Limited","Limited","âœ—"],
+            ["CSV Import/Export","âœ“","âœ—","âœ—","Manual"],
+            ["Referral Program","âœ“","âœ—","âœ—","âœ—"],
+            ["Push Notifications","âœ“","âœ—","âœ—","âœ—"],
+            ["Total 27 Calculators","âœ“","~10","~15","DIY"],
           ].map(([feature,...vals])=>(
             <tr key={feature}>
               <td style={{padding:"8px 10px",borderBottom:`1px solid ${K.bd}`,color:K.dm,fontSize:11}}>{feature}</td>
               {vals.map((v,i)=>(
-                <td key={i} style={{padding:"8px 10px",borderBottom:`1px solid ${K.bd}`,color:i===0?K.gn:v==="✗"?K.rd:K.dm,fontWeight:i===0?600:400,background:i===0?`${K.gn}03`:"transparent",fontSize:11}}>{v}</td>
+                <td key={i} style={{padding:"8px 10px",borderBottom:`1px solid ${K.bd}`,color:i===0?K.gn:v==="âœ—"?K.rd:K.dm,fontWeight:i===0?600:400,background:i===0?`${K.gn}03`:"transparent",fontSize:11}}>{v}</td>
               ))}
             </tr>
           ))}
@@ -2741,13 +1920,13 @@ const CompetitorComparison = () => (
     <div style={{marginTop:16,padding:14,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
       <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:6}}>The Bottom Line</div>
       <div style={{fontSize:12,color:K.dm,lineHeight:1.7}}>
-        OddsJam and ProfitDuel are excellent tools — but they charge $99–$199/month for a calculator suite that is fundamentally free math. PromoGrind gives you every calculator free, forever. The only paid feature is the live Arb/+EV scanner ($24.99/mo vs $99–199/mo), which pays for itself in the first hour of use.
+        OddsJam and ProfitDuel are excellent tools â€” but they charge $99â€“$199/month for a calculator suite that is fundamentally free math. PromoGrind gives you every calculator free, forever. The only paid feature is the live Arb/+EV scanner ($24.99/mo vs $99â€“199/mo), which pays for itself in the first hour of use.
       </div>
     </div>
   </div></div>
 );
 
-// ═══ TEAM ACCOUNTS (COMING SOON) ═══
+// â•â•â• TEAM ACCOUNTS (COMING SOON) â•â•â•
 const TeamAccounts = () => {
   const [taUser, setTaUser] = useState(null);
   const [team, setTeam] = useState(null);
@@ -2787,7 +1966,7 @@ const TeamAccounts = () => {
   };
   return (<div><div style={S.card}><Tl t="Team Accounts" badge="BETA" bc={K.pp}/>
     {loadingTeam ? (
-      <div style={{textAlign:'center',padding:32}}><LoadingState label="Loading team…"/></div>
+      <div style={{textAlign:'center',padding:32}}><LoadingState label="Loading teamâ€¦"/></div>
     ) : !team ? (
       <div>
         <div style={{fontWeight:700,color:K.tx,fontSize:18,marginBottom:8}}>Create Your Team Vault</div>
@@ -2808,8 +1987,8 @@ const TeamAccounts = () => {
         <div style={{padding:16,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
           <div style={{fontWeight:600,color:K.gn,marginBottom:8}}>Included with Team ($49.99/mo)</div>
           <ul style={{color:K.dm,fontSize:13,paddingLeft:20,lineHeight:2}}>
-            <li>Shared P/L Ledger — see combined profits across all members</li>
-            <li>Team leaderboard — who&apos;s grinding hardest</li>
+            <li>Shared P/L Ledger â€” see combined profits across all members</li>
+            <li>Team leaderboard â€” who&apos;s grinding hardest</li>
             <li>All VaultSparked features for every member</li>
             <li>Up to 5 team members</li>
           </ul>
@@ -2820,7 +1999,7 @@ const TeamAccounts = () => {
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
           <div>
             <div style={{fontSize:20,fontWeight:700,color:K.tx}}>{team.name}</div>
-            <div style={{fontSize:12,color:K.mt}}>Team Vault · {members.length} member{members.length !== 1 ? 's' : ''}</div>
+            <div style={{fontSize:12,color:K.mt}}>Team Vault Â· {members.length} member{members.length !== 1 ? 's' : ''}</div>
           </div>
           <span style={{padding:'4px 12px',background:`${K.gn}15`,border:`1px solid ${K.gn}`,borderRadius:999,fontSize:12,color:K.gn}}>TEAM</span>
         </div>
@@ -2844,7 +2023,7 @@ const TeamAccounts = () => {
           <div key={m.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,marginBottom:6}}>
             <div>
               <div style={{color:K.tx,fontSize:13}}>{m.invited_email || m.user_id}</div>
-              <div style={{color:K.mt,fontSize:11}}>{m.role} · {m.status}</div>
+              <div style={{color:K.mt,fontSize:11}}>{m.role} Â· {m.status}</div>
             </div>
             <span style={{padding:'2px 10px',background:m.status==='active'?`${K.gn}15`:`${K.s3}`,border:`1px solid ${m.status==='active'?K.gn:K.bd2}`,borderRadius:999,fontSize:11,color:m.status==='active'?K.gn:K.mt}}>
               {m.status}
@@ -2852,89 +2031,14 @@ const TeamAccounts = () => {
           </div>
         ))}
         {members.length === 0 && (
-          <div style={{color:K.mt,fontSize:13,textAlign:'center',padding:16}}>No members yet — invite your first teammate above</div>
+          <div style={{color:K.mt,fontSize:13,textAlign:'center',padding:16}}>No members yet â€” invite your first teammate above</div>
         )}
       </div>
     )}
   </div></div>);
 };
 
-// ═══ SMART PROMO RECOMMENDER ═══
-const SmartPromoRecommender = ({ data }) => {
-  const today = new Date();
-  const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const todayDay = dayNames[today.getDay()];
-  const isWeekend = today.getDay()===0||today.getDay()===6;
-  const todayStr = today.toISOString().split('T')[0];
-  const in3Days = new Date(Date.now()+3*24*60*60*1000).toISOString().split('T')[0];
-  const activeBooks = useMemo(()=>
-    Object.entries(data.bookStatus||{})
-      .filter(([,v])=>v==='active'||v==='Active')
-      .map(([k])=>k)
-  ,[data.bookStatus]);
-  const limitedBooks = useMemo(()=>
-    Object.entries(data.bookStatus||{})
-      .filter(([,v])=>v==='limited'||v==='Limited'||v==='gubbed'||v==='Gubbed')
-      .map(([k])=>k)
-  ,[data.bookStatus]);
-  const doneBooks = data.done||{};
-  const openBets = useMemo(()=>(data.bets||[]).filter(b=>b.status==='open'),[data.bets]);
-  const expiringSoon = useMemo(()=>PROMO_SCHED.filter(p=>p.expires&&p.expires>=todayStr&&p.expires<=in3Days),[todayStr,in3Days]);
-  const recs = useMemo(()=>{
-    return PROMO_SCHED
-      .filter(p=>{
-        const dayMatch=p.day==="Daily"||p.day===todayDay||(p.day==="Weekend"&&isWeekend);
-        if(!dayMatch) return false;
-        if(!activeBooks.length) return p.grade==="A";
-        return activeBooks.includes(p.book)&&!doneBooks[p.book];
-      })
-      .sort((a,b)=>{
-        const gradeScore={A:3,B:2,C:1};
-        const urgency=(x)=>expiringSoon.find(e=>e.book===x.book&&e.promo===x.promo)?2:0;
-        return (gradeScore[b.grade]||0)+urgency(b)-((gradeScore[a.grade]||0)+urgency(a));
-      })
-      .slice(0,5);
-  },[activeBooks,doneBooks,todayDay,isWeekend,expiringSoon]);
-  if(!recs.length&&!openBets.length&&!limitedBooks.length) return null;
-  return (
-    <div style={{...S.card,border:`1px solid ${K.gn}30`,background:`${K.gn}05`,marginBottom:12}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today's Action Plan</div>
-      {openBets.length>0&&(
-        <div style={{marginBottom:8,padding:"7px 12px",background:`${K.yl}0a`,border:`1px solid ${K.yl}30`,borderRadius:6,fontSize:11,color:K.yl}}>
-          ⚡ You have <strong>{openBets.length}</strong> open bet{openBets.length>1?"s":""} — check results before placing new hedges.
-        </div>
-      )}
-      {limitedBooks.length>0&&(
-        <div style={{marginBottom:8,padding:"7px 12px",background:`${K.rd}0a`,border:`1px solid ${K.rd}30`,borderRadius:6,fontSize:11,color:K.rd}}>
-          ⚠ {limitedBooks.join(", ")} {limitedBooks.length>1?"are":"is"} limited/gubbed — skip these promos today.
-        </div>
-      )}
-      <div style={{display:"flex",flexDirection:"column",gap:6}}>
-        {recs.map((p,i)=>{
-          const isUrgent=expiringSoon.find(e=>e.book===p.book&&e.promo===p.promo);
-          return (
-          <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${isUrgent?K.rd+'60':K.bd}`}}>
-            <div>
-              <span style={{fontSize:12,fontWeight:700,color:K.tx}}>{p.book}</span>
-              <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
-              {p.complexity&&<span style={{...S.tag(p.complexity==="Easy"?K.gn:p.complexity==="Medium"?K.yl:K.rd),marginLeft:6,fontSize:8}}>{p.complexity}</span>}
-              {p.timeMin&&<span style={{fontSize:9,color:K.mt,marginLeft:6}}>~{p.timeMin}m</span>}
-              {isUrgent&&<span style={{...S.tag(K.rd),marginLeft:6,fontSize:8}}>EXPIRES SOON</span>}
-            </div>
-            <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <span style={{fontSize:11,fontWeight:700,color:K.gn}}>{p.value}</span>
-              <span style={S.tag(p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)}>{p.grade}</span>
-            </div>
-          </div>
-          );
-        })}
-      </div>
-      {!activeBooks.length&&<div style={{fontSize:10,color:K.mt,marginTop:6}}>Set book statuses in the Sportsbooks tracker to get personalized recommendations.</div>}
-    </div>
-  );
-};
-
-// ═══ PUSH ENABLE BUTTON ═══
+// â•â•â• SMART PROMO RECOMMENDER â•â•â•
 const PushEnableBtn = ({ proStatus }) => {
   const [state, setState] = useState(() => {
     try {
@@ -2949,17 +2053,17 @@ const PushEnableBtn = ({ proStatus }) => {
   if(!FEATURE_FLAGS.pushAlerts) {
     return (
       <div style={{fontSize:10,color:K.yl,fontWeight:600,padding:"4px 10px",background:`${K.yl}10`,border:`1px solid ${K.yl}30`,borderRadius:6}}>
-        🔔 Push beta
+        ðŸ”” Push beta
       </div>
     );
   }
   const toast = useToast();
   if(state === 'unsupported') return null;
   if(state === 'enabled') return (
-    <div style={{fontSize:10,color:K.gn,fontWeight:600,padding:"4px 10px",background:`${K.gn}10`,border:`1px solid ${K.gn}30`,borderRadius:6}}>🔔 Push On</div>
+    <div style={{fontSize:10,color:K.gn,fontWeight:600,padding:"4px 10px",background:`${K.gn}10`,border:`1px solid ${K.gn}30`,borderRadius:6}}>ðŸ”” Push On</div>
   );
   if(state === 'denied') return (
-    <div style={{fontSize:10,color:K.rd,padding:"4px 10px",background:`${K.rd}10`,border:`1px solid ${K.rd}30`,borderRadius:6}} title="Push blocked in browser settings">🔕 Push Blocked</div>
+    <div style={{fontSize:10,color:K.rd,padding:"4px 10px",background:`${K.rd}10`,border:`1px solid ${K.rd}30`,borderRadius:6}} title="Push blocked in browser settings">ðŸ”• Push Blocked</div>
   );
   const enable = async () => {
     const permission = await Notification.requestPermission().catch(()=>'denied');
@@ -2980,19 +2084,19 @@ const PushEnableBtn = ({ proStatus }) => {
         }
       } catch(e) {}
       setState('enabled');
-      if(toast) toast('🔔 Push alerts enabled! Daily briefings + arb alerts incoming.', K.gn);
+      if(toast) toast('ðŸ”” Push alerts enabled! Daily briefings + arb alerts incoming.', K.gn);
     } else {
-      if(toast) toast('Could not subscribe to push — try again', K.rd);
+      if(toast) toast('Could not subscribe to push â€” try again', K.rd);
     }
   };
   return (
     <button onClick={enable} style={{padding:"6px 12px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
-      🔔 Enable Push Alerts
+      ðŸ”” Enable Push Alerts
     </button>
   );
 };
 
-// ═══ QUICK ADD BET ═══
+// â•â•â• QUICK ADD BET â•â•â•
 const QuickAddBet = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const toast = useToast();
@@ -3014,7 +2118,7 @@ const QuickAddBet = () => {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <div style={{fontSize:11,fontWeight:700,color:K.dm,textTransform:"uppercase",letterSpacing:"1.5px"}}>Quick Add Bet</div>
         <button onClick={()=>setOpen(o=>!o)} style={{padding:"4px 10px",background:open?K.gn:"transparent",border:`1px solid ${open?K.gn:K.bd2}`,borderRadius:6,color:open?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font}}>
-          {open?"▲ Close":"+ Add Bet"}
+          {open?"â–² Close":"+ Add Bet"}
         </button>
       </div>
       {open&&<div style={{marginTop:12}}>
@@ -3038,13 +2142,13 @@ const QuickAddBet = () => {
   );
 };
 
-// ═══ ONBOARDING CHECKLIST ═══
-// ═══ STARTER PACK MODAL ═══
+// â•â•â• ONBOARDING CHECKLIST â•â•â•
+// â•â•â• STARTER PACK MODAL â•â•â•
 function StarterPackModal({ onClose, syncAppData, appData }) {
   const PACKS = [
-    { id:'casual', label:'Casual Bettor', icon:'🎲', bankroll:'500', goal:200, hrs:'2 hrs/week', desc:'A few books, occasional promos. Perfect for weekends.' },
-    { id:'hunter', label:'Promo Hunter', icon:'🎯', bankroll:'2000', goal:800, hrs:'5 hrs/week', desc:'Hit every welcome offer. Build a steady side income.' },
-    { id:'grinder', label:'Full Grinder', icon:'⚡', bankroll:'5000', goal:2500, hrs:'Daily', desc:'All books, recurring promos, live scanner. Maximum extraction.' },
+    { id:'casual', label:'Casual Bettor', icon:'ðŸŽ²', bankroll:'500', goal:200, hrs:'2 hrs/week', desc:'A few books, occasional promos. Perfect for weekends.' },
+    { id:'hunter', label:'Promo Hunter', icon:'ðŸŽ¯', bankroll:'2000', goal:800, hrs:'5 hrs/week', desc:'Hit every welcome offer. Build a steady side income.' },
+    { id:'grinder', label:'Full Grinder', icon:'âš¡', bankroll:'5000', goal:2500, hrs:'Daily', desc:'All books, recurring promos, live scanner. Maximum extraction.' },
   ];
   const [selected, setSelected] = React.useState(null);
   const apply = (pack) => {
@@ -3057,7 +2161,7 @@ function StarterPackModal({ onClose, syncAppData, appData }) {
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',zIndex:3000,display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
       <div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:12,padding:24,maxWidth:480,width:'100%',boxShadow:'0 8px 32px rgba(0,0,0,0.6)'}}>
         <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:4}}>How do you want to play it?</div>
-        <div style={{fontSize:12,color:K.mt,marginBottom:20}}>Choose a starter profile — sets your bankroll and profit goal. You can change these anytime.</div>
+        <div style={{fontSize:12,color:K.mt,marginBottom:20}}>Choose a starter profile â€” sets your bankroll and profit goal. You can change these anytime.</div>
         <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:20}}>
           {PACKS.map(p=>(
             <div key={p.id} onClick={()=>setSelected(p.id)}
@@ -3065,16 +2169,16 @@ function StarterPackModal({ onClose, syncAppData, appData }) {
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:4}}>
                 <span style={{fontSize:20}}>{p.icon}</span>
                 <span style={{fontWeight:700,color:K.tx,fontSize:14}}>{p.label}</span>
-                <span style={{marginLeft:'auto',fontSize:10,color:K.ac,fontWeight:600}}>${parseInt(p.bankroll).toLocaleString()} bankroll · ${p.goal.toLocaleString()} goal</span>
+                <span style={{marginLeft:'auto',fontSize:10,color:K.ac,fontWeight:600}}>${parseInt(p.bankroll).toLocaleString()} bankroll Â· ${p.goal.toLocaleString()} goal</span>
               </div>
-              <div style={{fontSize:11,color:K.mt,marginLeft:30}}>{p.desc} · {p.hrs}</div>
+              <div style={{fontSize:11,color:K.mt,marginLeft:30}}>{p.desc} Â· {p.hrs}</div>
             </div>
           ))}
         </div>
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>{const p=PACKS.find(x=>x.id===selected);if(p)apply(p);}} disabled={!selected}
             style={{flex:1,padding:'10px',background:selected?K.gn:K.bd,border:'none',borderRadius:6,color:selected?K.bg:K.mt,fontWeight:700,fontSize:13,cursor:selected?'pointer':'not-allowed',fontFamily:font,transition:'background 0.15s'}}>
-            Start with this profile →
+            Start with this profile â†’
           </button>
           <button onClick={()=>{try{localStorage.setItem('pg_starter_pack_done','1');}catch{}onClose();}}
             style={{padding:'10px 16px',background:'transparent',border:`1px solid ${K.bd}`,borderRadius:6,color:K.mt,cursor:'pointer',fontSize:12,fontFamily:font}}>
@@ -3109,11 +2213,11 @@ function OnboardingChecklist({ appData, user, isPro }) {
   if (done || !user) return null;
 
   const STEPS = [
-    { id: 'calc', label: 'Run your first calculator', icon: '🧮' },
-    { id: 'book', label: 'Add a sportsbook to your vault', icon: '📚' },
-    { id: 'bet', label: 'Log your first bet or promo', icon: '📝' },
-    { id: 'trial', label: 'Start your 7-day free trial', icon: '⚡' },
-    { id: 'invite', label: 'Invite a friend', icon: '👥' },
+    { id: 'calc', label: 'Run your first calculator', icon: 'ðŸ§®' },
+    { id: 'book', label: 'Add a sportsbook to your vault', icon: 'ðŸ“š' },
+    { id: 'bet', label: 'Log your first bet or promo', icon: 'ðŸ“' },
+    { id: 'trial', label: 'Start your 7-day free trial', icon: 'âš¡' },
+    { id: 'invite', label: 'Invite a friend', icon: 'ðŸ‘¥' },
   ];
 
   const doneCount = STEPS.filter(s => completed.includes(s.id)).length;
@@ -3131,7 +2235,7 @@ function OnboardingChecklist({ appData, user, isPro }) {
           <span style={{fontWeight:700,color:'#e2e8f0',fontSize:14}}>Getting Started</span>
           <span style={{marginLeft:8,color:'#64748b',fontSize:12}}>{doneCount}/{STEPS.length} complete</span>
         </div>
-        <button onClick={() => { localStorage.setItem('pg_onboarding_done','1'); setDone(true); }} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18,lineHeight:1}}>×</button>
+        <button onClick={() => { localStorage.setItem('pg_onboarding_done','1'); setDone(true); }} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18,lineHeight:1}}>Ã—</button>
       </div>
       <div style={{height:4,background:'#1e293b',borderRadius:2,marginBottom:12}}>
         <div style={{height:4,background:'#4ade80',borderRadius:2,width:`${pct}%`,transition:'width .3s'}} />
@@ -3141,7 +2245,7 @@ function OnboardingChecklist({ appData, user, isPro }) {
           const isDone = completed.includes(s.id);
           return (
             <div key={s.id} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 10px',background:'#0a0e17',borderRadius:6,opacity: isDone ? 0.5 : 1}}>
-              <span style={{fontSize:16}}>{isDone ? '✅' : s.icon}</span>
+              <span style={{fontSize:16}}>{isDone ? 'âœ…' : s.icon}</span>
               <span style={{fontSize:12,color: isDone ? '#64748b' : '#cbd5e1',textDecoration: isDone ? 'line-through' : 'none'}}>{s.label}</span>
             </div>
           );
@@ -3165,7 +2269,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
   };
 
   const proLabel = proStatus?.status === 'trial'
-    ? `VaultSparked Pro trial active — ${proStatus.trial_days_left} day${proStatus.trial_days_left !== 1 ? 's' : ''} left`
+    ? `VaultSparked Pro trial active â€” ${proStatus.trial_days_left} day${proStatus.trial_days_left !== 1 ? 's' : ''} left`
     : proStatus?.status === 'active'
       ? 'VaultSparked Pro active'
       : 'VaultSparked Pro is optional';
@@ -3180,7 +2284,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
             A free PromoGrind account powers sync, referrals, and access across devices. The same account works across all VaultSpark Studio tools. Pro features unlock in stages as services come online.
           </div>
         </div>
-        <button onClick={dismiss} style={{background:'none',border:'none',color:K.mt,cursor:'pointer',fontSize:18,lineHeight:1,padding:0}}>×</button>
+        <button onClick={dismiss} style={{background:'none',border:'none',color:K.mt,cursor:'pointer',fontSize:18,lineHeight:1,padding:0}}>Ã—</button>
       </div>
 
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))',gap:10,marginBottom:12}}>
@@ -3199,7 +2303,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
       </div>
 
       <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-        <button onClick={() => navigate('/bonus-bet')} style={{padding:'7px 12px',background:K.gn,border:'none',borderRadius:6,color:K.bg,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>Start with free tools →</button>
+        <button onClick={() => navigate('/bonus-bet')} style={{padding:'7px 12px',background:K.gn,border:'none',borderRadius:6,color:K.bg,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>Start with free tools â†’</button>
         <button onClick={() => navigate('/upgrade')} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>See Pro status</button>
         <button onClick={dismiss} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:'pointer',fontFamily:font}}>Dismiss</button>
       </div>
@@ -3207,7 +2311,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
   );
 }
 
-// ═══ DAILY DASHBOARD ═══
+// â•â•â• DAILY DASHBOARD â•â•â•
 const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
   const navigate = navigateProp || navigateHook;
@@ -3268,19 +2372,19 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
     <div>
       {showWT&&<Suspense fallback={null}><PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/></Suspense>}
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
-      <Suspense fallback={<LoadingState label="Loading dashboard hero…" />}>
+      <Suspense fallback={<LoadingState label="Loading dashboard heroâ€¦" />}>
         <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate}/>
       </Suspense>
-      <Suspense fallback={<LoadingState label="Loading next action…" />}>
+      <Suspense fallback={<LoadingState label="Loading next actionâ€¦" />}>
         <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
       </Suspense>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
-      <Suspense fallback={<LoadingState label="Loading launch posture…" />}>
+      <Suspense fallback={<LoadingState label="Loading launch postureâ€¦" />}>
         <LaunchCommandCenterPanel />
       </Suspense>
-      <CommunityWinsWall />
+      <Suspense fallback={null}><CommunityWinsWall /></Suspense>
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
-      <Suspense fallback={<LoadingState label="Loading today dashboard…" />}>
+      <Suspense fallback={<LoadingState label="Loading today dashboardâ€¦" />}>
         <TodayDashboardPanel
           snapshot={snapshot}
           navigate={navigate}
@@ -3292,7 +2396,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       </Suspense>
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
-          <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
+          <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started â€” 3 Steps</div>
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
             {[
               {n:"1",t:"Convert your first bonus bet",d:"Open any sportsbook app, grab a welcome promo, enter it in the Bonus Bet Converter.",slug:"bonus-bet",color:K.gn},
@@ -3302,7 +2406,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
               <div key={s.n} style={{display:"flex",gap:12,alignItems:"flex-start",padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,cursor:"pointer"}} onClick={()=>navigate("/"+s.slug)}>
                 <div style={{fontSize:15,fontWeight:700,color:s.color,minWidth:20}}>{s.n}</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:12,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} →</div>
+                  <div style={{fontSize:12,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} â†’</div>
                   <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{s.d}</div>
                 </div>
               </div>
@@ -3310,18 +2414,18 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           </div>
         </div>
       )}
-      <SmartPromoRecommender data={data}/>
+      <Suspense fallback={null}><SmartPromoRecommender data={data}/></Suspense>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8,marginBottom:8}}>
         <div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:2}}>
             Good {today.getHours()<12?"morning":today.getHours()<17?"afternoon":"evening"}
           </div>
           <div style={{fontSize:11,color:K.mt}}>
-            {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} · Here&apos;s your daily promo briefing
+            {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} Â· Here&apos;s your daily promo briefing
           </div>
         </div>
         <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-          <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>▶ Promo Walkthroughs</button>
+          <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>â–¶ Promo Walkthroughs</button>
           <DailyBriefingBtn openBets={openBets} todayPromos={todayPromos}/>
           <PushEnableBtn proStatus={proStatus}/>
         </div>
@@ -3330,10 +2434,10 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       {streakCount>=3&&!upsellStreakDismissed&&(
         <div style={{...S.card,border:`1px solid ${K.pp}40`,background:`${K.pp}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
           <div>
-            <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:2}}>🔥 {streakCount}-day streak! Unlock live arb alerts &amp; daily briefings with VaultSparked</div>
+            <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:2}}>ðŸ”¥ {streakCount}-day streak! Unlock live arb alerts &amp; daily briefings with VaultSparked</div>
           </div>
           <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
+            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade â†’</button>
             <button onClick={()=>{try{localStorage.setItem('pg_upsell_streak_dismissed','1');}catch{}setUpsellStreakDismissed(true);}} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Not now</button>
           </div>
         </div>
@@ -3343,29 +2447,29 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:2}}>
-                🎉 VaultSparked Pro Trial — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
+                ðŸŽ‰ VaultSparked Pro Trial â€” {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
               </div>
               <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
             </div>
-            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
           </div>
         ):proStatus.trial_days_left>1?(
           <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.yl,marginBottom:2}}>
-                ⏳ Trial ending soon — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
+                â³ Trial ending soon â€” {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
               </div>
             </div>
-            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
           </div>
         ):(
           <div style={{...S.card,border:`1px solid ${K.rd}40`,background:`${K.rd}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.rd,marginBottom:2}}>
-                🚨 Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
+                ðŸš¨ Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
               </div>
             </div>
-            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
           </div>
         )
       )}
@@ -3392,7 +2496,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{fontSize:9,color:K.mt}}>days</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="% of days you've visited in your active period">CONSISTENCY ⓘ</div>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="% of days you've visited in your active period">CONSISTENCY â“˜</div>
           <div style={S.big(consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm)}>{consistencyScore}%</div>
           <div style={{height:3,background:K.s3,borderRadius:2,marginTop:4}}><div style={{height:3,borderRadius:2,background:consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm,width:`${consistencyScore}%`}}/></div>
         </div>
@@ -3405,12 +2509,12 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <DailyRoutinePanel openBetsCount={openBets.length} expiringCount={expiring.length}/>
       {expiring.length>0&&(
         <div style={{...S.note(K.yl),marginBottom:12}}>
-          ⚠ Expiring soon: {expiring.map(b=>`${b.name} (${expiry[b.name]})`).join(", ")}
+          âš  Expiring soon: {expiring.map(b=>`${b.name} (${expiry[b.name]})`).join(", ")}
         </div>
       )}
       {todayPromos.length>0&&(
         <div style={{...S.card,marginBottom:12}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today&apos;s Promos — {todayDay}</div>
+          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today&apos;s Promos â€” {todayDay}</div>
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {todayPromos.slice(0,6).map((p,i)=>(
               <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
@@ -3444,7 +2548,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
             {label:"Update P/L Ledger",slug:"ledger",color:K.ac},
           ].map(a=>(
             <button key={a.slug} onClick={()=>navigate("/"+a.slug)} style={{padding:"7px 14px",background:`${a.color}10`,border:`1px solid ${a.color}30`,borderRadius:6,color:a.color,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>
-              {a.label} →
+              {a.label} â†’
             </button>
           ))}
         </div>
@@ -3453,7 +2557,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   );
 };
 
-// ═══ DEPOSIT OPTIMIZER ═══
+// â•â•â• DEPOSIT OPTIMIZER â•â•â•
 const DepositOptimizer = () => {
   const [bankroll, setBankroll] = useState("3000");
   const [userState, setUserState] = useState(() => { try { return localStorage.getItem('pg_user_state')||''; } catch { return ''; } });
@@ -3506,7 +2610,7 @@ const DepositOptimizer = () => {
   ]}/></div>);
 };
 
-// ═══ HEDGE VALIDATOR ═══
+// â•â•â• HEDGE VALIDATOR â•â•â•
 const HedgeValidator = () => {
   const [mem,setMem]=useCalcMemory('hedge-validator',{o1:"+300",s1:"100",o2:"-350",s2:""});
   const {o1,s1,o2,s2}=mem;
@@ -3527,12 +2631,12 @@ const HedgeValidator = () => {
     <div style={S.row}><In l="Side B Odds" v={o2} set={setO2} ph="-350"/><In l="Side B Stake (blank=auto)" v={s2} set={setS2} pre="$" ph="auto"/></div>
     {d1>1&&d2>1&&<div style={{marginTop:12}}>
       {!s2&&s2n>0&&<div style={{...S.note(K.ac),marginBottom:8}}>Auto-computed Side B stake: ${f(s2n)} (to guarantee equal profit on both outcomes)</div>}
-      {bothPos&&<div style={{...S.note(K.rd),marginBottom:8}}>Both sides are favorites — this may not be a valid hedge. Verify you are betting opposite outcomes.</div>}
-      {bothNeg&&<div style={{...S.note(K.yl),marginBottom:8}}>Both sides are dogs — verify you are betting opposite outcomes.</div>}
+      {bothPos&&<div style={{...S.note(K.rd),marginBottom:8}}>Both sides are favorites â€” this may not be a valid hedge. Verify you are betting opposite outcomes.</div>}
+      {bothNeg&&<div style={{...S.note(K.yl),marginBottom:8}}>Both sides are dogs â€” verify you are betting opposite outcomes.</div>}
       <div style={{...S.res(isValidHedge),marginBottom:8}}>
         <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Odds Relationship</div>
         <div style={{fontSize:12,fontWeight:600,color:ipSum>100&&ipSum<110?K.gn:ipSum>=110&&ipSum<=120?K.yl:ipSum<100?K.gn:K.rd}}>
-          {ipSum<100?"Possible arb opportunity!":ipSum<110?"Plausible market":ipSum<120?"High vig market":"Unusual — double check these lines"}
+          {ipSum<100?"Possible arb opportunity!":ipSum<110?"Plausible market":ipSum<120?"High vig market":"Unusual â€” double check these lines"}
           {" "}({f(ipSum,1)}% combined implied)
         </div>
         {gProfit!==null&&<div style={{marginTop:8}}>
@@ -3541,20 +2645,20 @@ const HedgeValidator = () => {
         </div>}
         {pBW!==null&&<RR l="If Side A wins" v={`${pBW>=0?"+":""}$${f(pBW)}`} c={pBW>=0?K.gn:K.rd}/>}
         {pHW!==null&&<RR l="If Side B wins" v={`${pHW>=0?"+":""}$${f(pHW)}`} c={pHW>=0?K.gn:K.rd}/>}
-        {gProfit!==null&&gProfit<-0.5&&<Nt c={K.rd}>INVALID HEDGE — you will lose ${f(Math.abs(gProfit))} on the worse outcome. Adjust your stakes.</Nt>}
+        {gProfit!==null&&gProfit<-0.5&&<Nt c={K.rd}>INVALID HEDGE â€” you will lose ${f(Math.abs(gProfit))} on the worse outcome. Adjust your stakes.</Nt>}
         {gProfit!==null&&gProfit>=0&&<Nt c={K.gn}>Valid hedge. Profit guaranteed regardless of outcome.</Nt>}
       </div>
     </div>}
   </div>
   <Help entries={[
     ["What is a hedge","A bet on the opposite outcome at a different sportsbook to guarantee profit regardless of who wins."],
-    ["Common mistake 1","Hedging at the SAME sportsbook — books may void both bets if they detect same-game hedging."],
-    ["Common mistake 2","Both sides at positive odds does NOT always mean it is a valid hedge — it depends on whether they cover opposite outcomes."],
-    ["Common mistake 3","Wrong stake amounts — use Side B blank auto-compute to get the exactly correct hedge stake."],
+    ["Common mistake 1","Hedging at the SAME sportsbook â€” books may void both bets if they detect same-game hedging."],
+    ["Common mistake 2","Both sides at positive odds does NOT always mean it is a valid hedge â€” it depends on whether they cover opposite outcomes."],
+    ["Common mistake 3","Wrong stake amounts â€” use Side B blank auto-compute to get the exactly correct hedge stake."],
   ]}/></div>);
 };
 
-// ═══ PROMO GUARANTEE ═══
+// â•â•â• PROMO GUARANTEE â•â•â•
 const PromoGuarantee = () => {
   const [promoType, setPromoType] = useState("bonus-bet");
   const [promoSize, setPromoSize] = useState("200");
@@ -3593,13 +2697,13 @@ const PromoGuarantee = () => {
     </div>
     {sz>0&&<div style={S.res(true)}>
       <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:12}}>
-        <span style={S.big(K.gn)}>${f(loEst)} – ${f(hiEst)}</span>
+        <span style={S.big(K.gn)}>${f(loEst)} â€“ ${f(hiEst)}</span>
       </div>
       <div style={{fontSize:11,color:K.dm,marginBottom:8}}>Estimated guaranteed profit range</div>
-      <RR l="Conversion rate range" v={`${Math.round(pt.rate[0]*100)}% – ${Math.round(pt.rate[1]*100)}%`} c={K.yl}/>
+      <RR l="Conversion rate range" v={`${Math.round(pt.rate[0]*100)}% â€“ ${Math.round(pt.rate[1]*100)}%`} c={K.yl}/>
       <RR l="Confidence" v={pt.conf||"MEDIUM"} c={confColor[pt.conf||"MEDIUM"]} b/>
       <RR l="Steps to convert" v={`${pt.steps} steps`} c={K.ac}/>
-      <Nt c={K.ac}>→ Use the {pt.label} calculator to run the exact math for your odds.</Nt>
+      <Nt c={K.ac}>â†’ Use the {pt.label} calculator to run the exact math for your odds.</Nt>
       {relatedPromos.length>0&&<div style={{marginTop:8}}>
         <div style={{fontSize:10,color:K.mt,marginBottom:4}}>Books with this promo type:</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{relatedPromos.map(p=><span key={p.book+p.promo} style={S.tag(K.ac)}>{p.book}</span>)}</div>
@@ -3607,14 +2711,14 @@ const PromoGuarantee = () => {
     </div>}
   </div>
   <Help entries={[
-    ["Bonus Bet","A free bet credit — only the profit is returned. 70-75% conversion rate at ideal odds (+250 to +400)."],
+    ["Bonus Bet","A free bet credit â€” only the profit is returned. 70-75% conversion rate at ideal odds (+250 to +400)."],
     ["First Bet Insurance","Your first real-cash bet is refunded as bonus bets if it loses. Convert those at 70%."],
     ["Profit Boost","Percentage increase to your winnings. 40-55% of the boost value is extractable as guaranteed profit."],
     ["Reload Match","Book matches 20% of your deposit as bonus funds. Factor in rollover requirements (~4.5% vig cost)."],
   ]}/></div>);
 };
 
-// ═══ GUT CHECK ═══
+// â•â•â• GUT CHECK â•â•â•
 const GutCheck = () => {
   const [mem,setMem]=useCalcMemory('gut-check',{o1:"+200",o2:"-220"});
   const {o1,o2}=mem;
@@ -3633,12 +2737,12 @@ const GutCheck = () => {
       <div style={{marginBottom:8}}>
         <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Odds Relationship: </span>
         <span style={{fontSize:12,fontWeight:700,color:oppositeSides?K.gn:bothPlus?K.yl:K.mt}}>
-          {oppositeSides?"VALID — opposite sides":bothPlus?"MAYBE — both sides show value":"Check manually"}
+          {oppositeSides?"VALID â€” opposite sides":bothPlus?"MAYBE â€” both sides show value":"Check manually"}
         </span>
       </div>
       <RR l="Combined implied probability" v={`${f(ipSum,1)}%`} c={ipSum<100?K.gn:ipSum<110?K.gn:ipSum<120?K.yl:K.rd}/>
       <div style={{marginBottom:8,fontSize:12,fontWeight:600,color:ipSum<100?K.gn:ipSum<110?K.gn:ipSum<120?K.yl:K.rd}}>
-        {ipSum<100?"Possible arb opportunity!":ipSum<110?"Plausible market":ipSum<120?"High vig market":"Unusual — double check these lines"}
+        {ipSum<100?"Possible arb opportunity!":ipSum<110?"Plausible market":ipSum<120?"High vig market":"Unusual â€” double check these lines"}
       </div>
       {arb&&<>
         <RR l="Hedge math check ($100 total)" v={arb.ok?`ARB: +$${arb.pr}`:"No arb"} c={arb.ok?K.gn:K.rd} b/>
@@ -3654,7 +2758,7 @@ const GutCheck = () => {
   ]}/></div>);
 };
 
-// ═══ FREE BET ARB TRACKER ═══
+// â•â•â• FREE BET ARB TRACKER â•â•â•
 const FreeBetArbTracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const arbs = data.freeBetArbs || [];
@@ -3665,7 +2769,7 @@ const FreeBetArbTracker = () => {
     if(!form.amount) return;
     save([{...form,id:Date.now()},...arbs]);
     setForm(f=>({...f,amount:'',hedgeAmt:'',profit:'',notes:''}));
-    if(toast) toast('✓ Arb logged',K.gn);
+    if(toast) toast('âœ“ Arb logged',K.gn);
   };
   const del = id => { const snap=[...arbs]; save(arbs.filter(a=>a.id!==id)); if(toast) toast('Deleted',K.rd,{label:'UNDO',fn:()=>save(snap)}); };
   const totalProfit = arbs.reduce((s,a)=>s+(parseFloat(a.profit)||0),0);
@@ -3681,7 +2785,7 @@ const FreeBetArbTracker = () => {
       <div><div style={{fontSize:10,color:K.mt}}>TOTAL ARBS</div><div style={S.big(K.ac)}>{arbs.length}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(K.gn)}>${f(totalProfit)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>AVG PROFIT</div><div style={S.big(K.yl)}>${f(avgProfit)}</div></div>
-      {arbs.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600}}>↓ Export CSV</button>}
+      {arbs.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600}}>â†“ Export CSV</button>}
     </div>
     <div style={S.row}>
       <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
@@ -3712,17 +2816,17 @@ const FreeBetArbTracker = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{a.bookA}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{a.bookB}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(K.pp)}>{a.promoType}</span></td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.amount?`$${a.amount}`:"—"}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.hedgeAmt?`$${a.hedgeAmt}`:"—"}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(a.profit)>=0?K.gn:K.rd,fontWeight:600}}>{a.profit?`${parseFloat(a.profit)>=0?"+":""}$${a.profit}`:"—"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.amount?`$${a.amount}`:"â€”"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.hedgeAmt?`$${a.hedgeAmt}`:"â€”"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(a.profit)>=0?K.gn:K.rd,fontWeight:600}}>{a.profit?`${parseFloat(a.profit)>=0?"+":""}$${a.profit}`:"â€”"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(a.status==="won"?K.gn:a.status==="lost"?K.rd:K.yl)}>{a.status}</span></td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(a.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>✕</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(a.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>âœ•</span></td>
           </tr>
         ))}</tbody>
       </table>
     </div>}
     {arbs.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
-      <div style={{fontSize:32,marginBottom:8}}>🎯</div>
+      <div style={{fontSize:32,marginBottom:8}}>ðŸŽ¯</div>
       <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No arb plays tracked yet</div>
       <div style={{fontSize:11,color:K.mt}}>Log your free bet arb plays above to track performance.</div>
     </div>}
@@ -3733,9 +2837,9 @@ const FreeBetArbTracker = () => {
   </div>);
 };
 
-// ═══ v9.0 NEW COMPONENTS ═══
+// â•â•â• v9.0 NEW COMPONENTS â•â•â•
 
-// ═══ PROMO STACKING CALCULATOR ═══
+// â•â•â• PROMO STACKING CALCULATOR â•â•â•
 const PromoStacking = () => {
   const [mem, setMem] = useCalcMemory('promo-stacking', {stake:"100",odds:"+200",boost:"50",boostMax:"250",insPct:"100",insMax:"100",conv:"70"});
   const {stake,odds,boost,boostMax,insPct,insMax,conv} = mem;
@@ -3772,18 +2876,18 @@ const PromoStacking = () => {
           <div style={{fontSize:10,color:K.mt}}>after insurance value</div>
         </div>
       </div>
-      <Nt c={r.ok?K.gn:K.yl}>{r.ok?"Positive EV after stacking boost and insurance.":"Check boost/insurance terms — may not be stackable at all books."}</Nt>
+      <Nt c={r.ok?K.gn:K.yl}>{r.ok?"Positive EV after stacking boost and insurance.":"Check boost/insurance terms â€” may not be stackable at all books."}</Nt>
     </div>}
   </div>
   <Help entries={[
     ["Promo Stacking","Combining a profit boost with an insurance/refund on the same bet for maximum value extraction."],
     ["Boost Value","The extra profit added to your winnings above normal. Capped by Boost Max."],
-    ["Insurance","If your bet loses, you get a portion back as bonus bets. Value = Insurance Amount × Conversion Rate."],
+    ["Insurance","If your bet loses, you get a portion back as bonus bets. Value = Insurance Amount Ã— Conversion Rate."],
     ["EV","Expected value weighs the if-win and if-lose scenarios by their probabilities."],
   ]}/></div>);
 };
 
-// ═══ PROMO TRADE JOURNAL ═══
+// â•â•â• PROMO TRADE JOURNAL â•â•â•
 const PromoJournal = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const journal = data.journal || [];
@@ -3797,7 +2901,7 @@ const PromoJournal = () => {
     const entry={...form,id:Date.now(),tags:form.tags.split(',').map(t=>t.trim()).filter(Boolean)};
     save([entry,...journal]);
     setForm(f=>({...f,notes:"",profit:"",tags:""}));
-    if(toast) toast('✓ Journal entry added',K.gn);
+    if(toast) toast('âœ“ Journal entry added',K.gn);
   };
   const del = id => { const snap=[...journal]; save(journal.filter(e=>e.id!==id)); if(toast) toast('Deleted',K.rd,{label:'UNDO',fn:()=>save(snap)}); };
   const TYPES = ["Bonus Bet","Profit Boost","First Bet","Arb","EV Bet","Other"];
@@ -3813,7 +2917,7 @@ const PromoJournal = () => {
       <In l="Net Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$" ph="50"/>
       <In l="Tags (comma-sep)" v={form.tags} set={v=>setForm(f=>({...f,tags:v}))} ph="arb,boost"/>
     </div>
-    <div style={{marginBottom:12}}><label style={S.label}>Notes</label><textarea style={{...S.input,height:64,resize:"vertical"}} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What promo, outcome, lessons learned…"/></div>
+    <div style={{marginBottom:12}}><label style={S.label}>Notes</label><textarea style={{...S.input,height:64,resize:"vertical"}} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What promo, outcome, lessons learnedâ€¦"/></div>
     <button onClick={add} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,marginBottom:16}}>+ Add Entry</button>
     <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
       <span style={{fontSize:10,color:K.mt}}>Filter:</span>
@@ -3827,7 +2931,7 @@ const PromoJournal = () => {
       </select>
     </div>
     {sorted.length===0&&<div style={{textAlign:"center",padding:"24px 16px"}}>
-      <div style={{fontSize:24,marginBottom:8}}>📓</div>
+      <div style={{fontSize:24,marginBottom:8}}>ðŸ““</div>
       <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No journal entries yet</div>
       <div style={{fontSize:11,color:K.mt}}>Fill in the form and click <strong style={{color:K.gn}}>+ Add Entry</strong> to start tracking.</div>
     </div>}
@@ -3844,14 +2948,14 @@ const PromoJournal = () => {
             {e.notes&&<div style={{fontSize:11,color:K.dm,marginBottom:4,maxWidth:400,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{e.notes}</div>}
             {e.tags&&e.tags.length>0&&<div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{e.tags.map((t,i)=><span key={i} style={S.tag(K.pp)}>{t}</span>)}</div>}
           </div>
-          <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:11,flexShrink:0}}>✕</span>
+          <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:11,flexShrink:0}}>âœ•</span>
         </div>
       </div>
     ))}
   </div>);
 };
 
-// ═══ ODDS COMPARISON TABLE ═══
+// â•â•â• ODDS COMPARISON TABLE â•â•â•
 const OddsComparisonTable = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const rows = data.oddsCompare || [{event:"",odds:{}}];
@@ -3904,26 +3008,26 @@ const OddsComparisonTable = () => {
               return (<td key={b} style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,background:isB?`${K.gn}10`:"transparent",position:"relative"}}>
                 <input style={{...S.input,padding:"3px 6px",fontSize:11,borderColor:isB?K.gn:undefined,width:76}} value={row.odds[b]||""} onChange={e=>updateOdds(i,b,e.target.value)} placeholder="-110"/>
                 {ip&&<div style={{fontSize:9,color:isB?K.gn:K.mt,marginTop:2,textAlign:"center"}}>{ip}%</div>}
-                {badge&&<span style={{position:"absolute",top:2,right:4,fontSize:9,fontWeight:700,color:badge==="up"?K.gn:K.rd,pointerEvents:"none",animation:"fadeIn 0.2s"}}>{badge==="up"?"▲":"▼"}</span>}
+                {badge&&<span style={{position:"absolute",top:2,right:4,fontSize:9,fontWeight:700,color:badge==="up"?K.gn:K.rd,pointerEvents:"none",animation:"fadeIn 0.2s"}}>{badge==="up"?"â–²":"â–¼"}</span>}
               </td>);
             })}
             <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:700,fontSize:12}}>
               {bestBook&&<div>{bestBook.val}<div style={{fontSize:9,color:K.mt}}>{bestBook.book}</div></div>}
-              {spread&&<div style={{fontSize:9,color:K.yl}}>+{spread}¢ vs worst</div>}
+              {spread&&<div style={{fontSize:9,color:K.yl}}>+{spread}Â¢ vs worst</div>}
             </td>
             <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`}}>
-              {rows.length>1&&<span onClick={()=>removeRow(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>✕</span>}
+              {rows.length>1&&<span onClick={()=>removeRow(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>âœ•</span>}
             </td>
           </tr>);
         })}</tbody>
       </table>
     </div>
     <button onClick={addRow} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.gn,fontSize:11,cursor:"pointer",fontFamily:font}}>+ Add Event</button>
-    <Nt c={K.ac}>Green cells = best odds in that row. ▲▼ badges show when a line moves. Always bet where the odds are highest for your side.</Nt>
+    <Nt c={K.ac}>Green cells = best odds in that row. â–²â–¼ badges show when a line moves. Always bet where the odds are highest for your side.</Nt>
   </div>);
 };
 
-// ═══ PROMO ARB FINDER ═══
+// â•â•â• PROMO ARB FINDER â•â•â•
 const KNOWN_STACKABLE = [
   {book1:"DraftKings",book2:"FanDuel",desc:"DK Stepped-Up Parlay + FD SGP Insurance on same slate",value:"Stack same-slate SGP for double coverage"},
   {book1:"Caesars",book2:"BetMGM",desc:"Caesars 100% Profit Boost + BetMGM Safety Net on same game",value:"Hedge both outcomes with bonus protection"},
@@ -3980,7 +3084,7 @@ const PromoArbFinder = () => {
   </div>);
 };
 
-// ═══ STATE LEGAL ALERT ═══
+// â•â•â• STATE LEGAL ALERT â•â•â•
 const RECENTLY_LEGALIZED = [
   {state:"North Carolina",abbr:"NC",date:"2024-03-11",note:"Mobile betting went live March 11, 2024"},
   {state:"Vermont",abbr:"VT",date:"2024-01-11",note:"Mobile betting live January 11, 2024"},
@@ -4001,22 +3105,22 @@ const StateLegalAlert = ({ userState }) => {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
         <div style={{flex:1}}>
           {recent&&<>
-            <div style={{fontSize:13,fontWeight:700,color:K.gn,marginBottom:4}}>🎉 Your state [{userState}] recently launched sports betting!</div>
+            <div style={{fontSize:13,fontWeight:700,color:K.gn,marginBottom:4}}>ðŸŽ‰ Your state [{userState}] recently launched sports betting!</div>
             <div style={{fontSize:12,color:K.dm,marginBottom:4}}>{recent.note}</div>
             <div style={{fontSize:11,color:K.dm}}>DraftKings, FanDuel, BetMGM, and Caesars are all available. Check the Sportsbooks tab to start tracking.</div>
           </>}
           {comingSoon&&!recent&&<>
-            <div style={{fontSize:13,fontWeight:700,color:K.yl,marginBottom:4}}>⏳ Sports betting is not yet available in your state ({userState})</div>
+            <div style={{fontSize:13,fontWeight:700,color:K.yl,marginBottom:4}}>â³ Sports betting is not yet available in your state ({userState})</div>
             <div style={{fontSize:11,color:K.dm}}>We'll keep the tools ready for when it launches. Set your state in the Sportsbooks tab to get updates.</div>
           </>}
         </div>
-        <button onClick={dismiss} style={{background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:14,padding:"0 4px",flexShrink:0}}>✕</button>
+        <button onClick={dismiss} style={{background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:14,padding:"0 4px",flexShrink:0}}>âœ•</button>
       </div>
     </div>
   );
 };
 
-// ═══ WEEKLY GRIND REPORT ═══
+// â•â•â• WEEKLY GRIND REPORT â•â•â•
 const WeeklyGrindReport = () => {
   const { appData: data } = React.useContext(AppDataCtx);
   const [report, setReport] = useState(null);
@@ -4037,8 +3141,8 @@ const WeeklyGrindReport = () => {
   };
   const copyReport = () => {
     if(!report) return;
-    const bestDay = report.best ? new Date(report.best.date).toLocaleDateString('en-US',{weekday:'short'}) : '—';
-    const text = `📊 PromoGrind Weekly Report — Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\n${CANONICAL_APP_URL}`;
+    const bestDay = report.best ? new Date(report.best.date).toLocaleDateString('en-US',{weekday:'short'}) : 'â€”';
+    const text = `ðŸ“Š PromoGrind Weekly Report â€” Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setCopied(true); setTimeout(()=>setCopied(false),1500);
   };
@@ -4054,7 +3158,7 @@ const WeeklyGrindReport = () => {
           <div><div style={{fontSize:9,color:K.mt}}>STREAK</div><div style={{fontSize:20,fontWeight:700,color:report.streak>=3?K.gn:K.yl,fontFamily:fontD}}>{report.streak}W</div></div>
         </div>
         <div style={{display:"flex",gap:8}}>
-          <button onClick={copyReport} style={{padding:"6px 14px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{copied?"✓ Copied!":"📋 Copy Report"}</button>
+          <button onClick={copyReport} style={{padding:"6px 14px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{copied?"âœ“ Copied!":"ðŸ“‹ Copy Report"}</button>
           <button onClick={()=>setReport(null)} style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Regenerate</button>
         </div>
       </>}
@@ -4062,7 +3166,7 @@ const WeeklyGrindReport = () => {
   );
 };
 
-// ═══ BANKROLL ALLOCATION WIZARD ═══
+// â•â•â• BANKROLL ALLOCATION WIZARD â•â•â•
 const BankrollWizard = () => {
   const { appData: data } = React.useContext(AppDataCtx);
   const defaultBankroll = data.bankroll || (() => { try{return localStorage.getItem('pg_bankroll')||'';}catch{return '';} })();
@@ -4124,10 +3228,10 @@ const BankrollWizard = () => {
   );
 };
 
-// FX, CurrencyCtx → ./contexts.jsx
+// FX, CurrencyCtx â†’ ./contexts.jsx
 const useCurrency = () => React.useContext(CurrencyCtx);
 
-// ═══ DAILY ROUTINE PANEL ═══
+// â•â•â• DAILY ROUTINE PANEL â•â•â•
 const DailyRoutinePanel = ({ openBetsCount, expiringCount }) => {
   const hour = new Date().getHours();
   const [checks, setChecks] = useState({});
@@ -4140,8 +3244,8 @@ const DailyRoutinePanel = ({ openBetsCount, expiringCount }) => {
     tasks = ["Settle today's open bets","Log profits to ledger","Check tomorrow's promos"];
   }
   const alerts = [];
-  if(openBetsCount>3) alerts.push(`⚠ ${openBetsCount} open bets need attention`);
-  if(expiringCount>0) alerts.push(`🔥 ${expiringCount} promos expiring soon`);
+  if(openBetsCount>3) alerts.push(`âš  ${openBetsCount} open bets need attention`);
+  if(expiringCount>0) alerts.push(`ðŸ”¥ ${expiringCount} promos expiring soon`);
   return (
     <div style={{...S.card,marginBottom:12}}>
       <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:10,fontFamily:fontD}}>Today's Grind</div>
@@ -4149,7 +3253,7 @@ const DailyRoutinePanel = ({ openBetsCount, expiringCount }) => {
       {tasks.map((task,i)=>(
         <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:`1px solid ${K.bd}`}}>
           <div role="checkbox" aria-checked={!!checks[i]} onClick={()=>setChecks(c=>({...c,[i]:!c[i]}))} style={{width:16,height:16,borderRadius:3,border:`2px solid ${checks[i]?K.gn:K.bd2}`,background:checks[i]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-            {checks[i]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}
+            {checks[i]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>âœ“</span>}
           </div>
           <span style={{fontSize:12,color:checks[i]?K.mt:K.tx,textDecoration:checks[i]?"line-through":"none"}}>{i+1}. {task}</span>
         </div>
@@ -4158,7 +3262,7 @@ const DailyRoutinePanel = ({ openBetsCount, expiringCount }) => {
   );
 };
 
-// ═══ PROFIT GOAL MILESTONE ═══
+// â•â•â• PROFIT GOAL MILESTONE â•â•â•
 const ProfitGoalTracker = ({ totalProfit }) => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const [showInput, setShowInput] = useState(false);
@@ -4190,7 +3294,7 @@ const ProfitGoalTracker = ({ totalProfit }) => {
           <div style={{height:8,borderRadius:4,background:barColor,width:`${pct}%`,transition:"width 0.5s"}}/>
         </div>
         {pct>=100&&<div style={{textAlign:"center",padding:"10px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,fontSize:14,fontWeight:700,color:K.gn,animation:"pulse 1s infinite alternate"}}>
-          🎉🎉🎉 GOAL REACHED! 🎉🎉🎉
+          ðŸŽ‰ðŸŽ‰ðŸŽ‰ GOAL REACHED! ðŸŽ‰ðŸŽ‰ðŸŽ‰
           <style>{`@keyframes pulse{from{opacity:0.7}to{opacity:1}}`}</style>
         </div>}
       </>}
@@ -4199,7 +3303,7 @@ const ProfitGoalTracker = ({ totalProfit }) => {
   );
 };
 
-// ═══ DAILY BRIEFING ═══
+// â•â•â• DAILY BRIEFING â•â•â•
 const useDailyBriefing = (openBets, todayPromos) => {
   useEffect(()=>{
     try {
@@ -4236,12 +3340,12 @@ const DailyBriefingBtn = ({ openBets, todayPromos }) => {
   };
   return (
     <button onClick={toggle} style={{padding:"5px 12px",background:enabled?`${K.gn}15`:"transparent",border:`1px solid ${enabled?K.gn:K.bd2}`,borderRadius:6,color:enabled?K.gn:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
-      {enabled?"🔔 9am Briefing ON":"🔕 Enable 9am Briefing"}
+      {enabled?"ðŸ”” 9am Briefing ON":"ðŸ”• Enable 9am Briefing"}
     </button>
   );
 };
 
-// ═══ MULTI-BOOK EXPOSURE DASHBOARD ═══
+// â•â•â• MULTI-BOOK EXPOSURE DASHBOARD â•â•â•
 const OpenExposurePanel = ({ bets }) => {
   const openBets = (bets||[]).filter(b=>b.status==='open');
   if(!openBets.length) return null;
@@ -4283,7 +3387,7 @@ const OpenExposurePanel = ({ bets }) => {
   );
 };
 
-// ═══ TOP TOOLS PANEL ═══
+// â•â•â• TOP TOOLS PANEL â•â•â•
 let TABS_REF = [];
 const TopToolsPanel = ({ navigate }) => {
   const usage = useMemo(()=>{ try{return JSON.parse(localStorage.getItem('pg_usage_log')||'{}');}catch{return {};} },[]);
@@ -4306,7 +3410,7 @@ const TopToolsPanel = ({ navigate }) => {
   );
 };
 
-// ═══ COPY MY SETUP ═══
+// â•â•â• COPY MY SETUP â•â•â•
 const CopyMySetup = ({ appData: data, syncAppData }) => {
   const [bankroll, setBankroll] = useState(()=>{ try{return localStorage.getItem('pg_bankroll')||'';}catch{return '';} });
   const [copied, setCopied] = useState(false);
@@ -4335,9 +3439,9 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
     const booksComplete=Object.values(data.done||{}).filter(Boolean).length;
     const totalProfit=(data.ledger||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
     const card=[
-      "💰 PromoGrind Setup",
-      `State: ${data.userState||"Not set"} · Bankroll: ${bankroll?"$"+bankroll:"Not set"}`,
-      `Books done: ${booksComplete}/${BOOKS.length} · Total profit: $${f(totalProfit)}`,
+      "ðŸ’° PromoGrind Setup",
+      `State: ${data.userState||"Not set"} Â· Bankroll: ${bankroll?"$"+bankroll:"Not set"}`,
+      `Books done: ${booksComplete}/${BOOKS.length} Â· Total profit: $${f(totalProfit)}`,
       CANONICAL_APP_URL.replace(/^https?:\/\//,''),
     ].join('\n');
     try{navigator.clipboard.writeText(card);}catch(e){}
@@ -4355,8 +3459,8 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
         <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Share My Setup</div>
         <div style={{display:"flex",gap:8,marginBottom:8}}>
           <input style={{...S.input,flex:1}} value={bankroll} onChange={e=>{setBankroll(e.target.value);try{localStorage.setItem('pg_bankroll',e.target.value);}catch{}}} placeholder="Your bankroll $"/>
-          <button onClick={copyLink} style={{padding:"7px 14px",background:copied?K.gn:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Setup Link"}</button>
-          <button onClick={shareCard} style={{padding:"7px 14px",background:cardCopied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{cardCopied?"✓ Copied!":"Share Card"}</button>
+          <button onClick={copyLink} style={{padding:"7px 14px",background:copied?K.gn:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"âœ“ Copied!":"Copy Setup Link"}</button>
+          <button onClick={shareCard} style={{padding:"7px 14px",background:cardCopied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{cardCopied?"âœ“ Copied!":"Share Card"}</button>
         </div>
         <div style={{fontSize:10,color:K.mt}}>Shares your state, completed books, and bankroll. Anyone with the link can load your setup.</div>
       </div>
@@ -4380,8 +3484,8 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
   );
 };
 
-// TaxTimingAdvisor → ./components/Ledger.jsx
-// ═══ BET SLIP TEXT PARSER ═══
+// TaxTimingAdvisor â†’ ./components/Ledger.jsx
+// â•â•â• BET SLIP TEXT PARSER â•â•â•
 const parseBetSlip = (text) => {
   const result = {};
   const dollarMatch = text.match(/\$?([\d,]+(?:\.\d{1,2})?)/);
@@ -4400,7 +3504,7 @@ const parseBetSlip = (text) => {
   return result;
 };
 
-// ═══ COMMUNITY PROMOS ═══
+// â•â•â• COMMUNITY PROMOS â•â•â•
 function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
   const [promos, setPromos] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -4441,7 +3545,7 @@ function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
         <div>
           <div style={{fontSize:18,fontWeight:700,color:'#e2e8f0'}}>Community Promos</div>
-          <div style={{fontSize:12,color:'#64748b'}}>User-submitted sportsbook offers — upvote the best ones</div>
+          <div style={{fontSize:12,color:'#64748b'}}>User-submitted sportsbook offers â€” upvote the best ones</div>
         </div>
         {cpIsPro() ? (
           <button onClick={() => setShowSubmit(s => !s)} style={{padding:'8px 16px',background:'#4ade80',color:'#0a0e17',border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13}}>+ Submit Promo</button>
@@ -4484,16 +3588,16 @@ function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
         </div>
       )}
       {loading ? (
-        <div style={{color:'#64748b',textAlign:'center',padding:32}}>Loading community promos…</div>
+        <div style={{color:'#64748b',textAlign:'center',padding:32}}>Loading community promosâ€¦</div>
       ) : promos.length === 0 ? (
         <div style={{color:'#64748b',textAlign:'center',padding:32}}>
-          <div style={{fontSize:32,marginBottom:8}}>📋</div>
-          <div>No promos yet — be the first to submit one!</div>
+          <div style={{fontSize:32,marginBottom:8}}>ðŸ“‹</div>
+          <div>No promos yet â€” be the first to submit one!</div>
         </div>
       ) : promos.map(p => (
         <div key={p.id} style={{padding:14,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8,marginBottom:8,display:'flex',gap:12,alignItems:'flex-start'}}>
           <button onClick={() => upvote(p.id)} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:6,cursor:'pointer',minWidth:44}}>
-            <span style={{color:'#4ade80',fontSize:14}}>▲</span>
+            <span style={{color:'#4ade80',fontSize:14}}>â–²</span>
             <span style={{color:'#e2e8f0',fontSize:14,fontWeight:700}}>{p.upvotes||0}</span>
           </button>
           <div style={{flex:1}}>
@@ -4512,7 +3616,7 @@ function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {
   );
 }
 
-// TaxesEstimator → ./components/TaxesEstimator.jsx
+// TaxesEstimator â†’ ./components/TaxesEstimator.jsx
 
 const TABS = [
   { group:"Home", items:[
@@ -4555,7 +3659,7 @@ const TABS = [
     {n:"Promo Guarantee",slug:"promo-guarantee",c:PromoGuarantee,subcat:"Promo"},
     {n:"Gut Check",slug:"gut-check",c:GutCheck,subcat:"Promo"},
     {n:"Promo Stacking",slug:"promo-stacking",c:PromoStacking,subcat:"Promo"},
-    {n:"Taxes Estimator",slug:"taxes-estimator",c:TaxesEstimatorWrapper,subcat:"Advanced",icon:"🧾"},
+    {n:"Taxes Estimator",slug:"taxes-estimator",c:TaxesEstimatorWrapper,subcat:"Advanced",icon:"ðŸ§¾"},
   ]},
   { group:"Track", items:[
     {n:"Edge",slug:"edge-dashboard",c:TrackInsights},
@@ -4616,14 +3720,14 @@ const SessionModal = ({appData, visitedSlugsRef, onClose}) => {
         <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{visited.map(s=><span key={s} style={S.tag(K.ac)}>{getTabName(s)}</span>)}</div>
       </div>}
       <div style={{display:"flex",gap:8,marginTop:12}}>
-        <button onClick={()=>{try{navigator.clipboard.writeText(sessionCard);}catch(e){} setSsCopied(true);setTimeout(()=>setSsCopied(false),2000);}} style={{flex:1,padding:"8px",background:ssCopied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{ssCopied?"✓ Copied!":"Share Session"}</button>
+        <button onClick={()=>{try{navigator.clipboard.writeText(sessionCard);}catch(e){} setSsCopied(true);setTimeout(()=>setSsCopied(false),2000);}} style={{flex:1,padding:"8px",background:ssCopied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{ssCopied?"âœ“ Copied!":"Share Session"}</button>
         <button onClick={onClose} style={{padding:"8px 16px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,cursor:"pointer",fontFamily:font,fontSize:11}}>Close</button>
       </div>
     </div>
   </div>);
 };
 
-// ═══ EMAIL CAPTURE ═══
+// â•â•â• EMAIL CAPTURE â•â•â•
 const EmailCapture = () => {
   const [status, setStatus] = useState(null); // null | 'loading' | 'done' | 'error'
   const [subbed, setSubbed] = useState(false);
@@ -4642,7 +3746,7 @@ const EmailCapture = () => {
   };
   if(subbed) return (
     <div style={{...S.card,background:K.s2,textAlign:"center",padding:"16px 20px"}}>
-      <span style={{fontSize:12,color:K.gn,fontWeight:600}}>✓ Subscribed to weekly promo tips</span>
+      <span style={{fontSize:12,color:K.gn,fontWeight:600}}>âœ“ Subscribed to weekly promo tips</span>
     </div>
   );
   return (
@@ -4653,18 +3757,18 @@ const EmailCapture = () => {
       </div>
       <select style={{...S.input,width:"auto",padding:"6px 10px",fontSize:11}} value={freq} onChange={e=>setFreq(e.target.value)}>
         <option value="daily">Daily digest</option>
-        <option value="3x">3× per week</option>
+        <option value="3x">3Ã— per week</option>
         <option value="weekly">Weekly digest</option>
       </select>
       <button onClick={subscribe} disabled={status==='loading'} style={{padding:"9px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:fontD,whiteSpace:"nowrap",opacity:status==='loading'?0.7:1}}>
-        {status==='loading'?"Subscribing…":"Subscribe — it's free"}
+        {status==='loading'?"Subscribingâ€¦":"Subscribe â€” it's free"}
       </button>
       {status==='error'&&<div style={{fontSize:11,color:K.rd,width:"100%"}}>Something went wrong. Try again.</div>}
     </div>
   );
 };
 
-// ═══ FOOTER ═══
+// â•â•â• FOOTER â•â•â•
 const Footer = () => (
   <div style={{borderTop:`1px solid ${K.bd}`,padding:"28px 20px",marginTop:8}}>
     <div style={{maxWidth:1100,margin:"0 auto"}}>
@@ -4675,10 +3779,10 @@ const Footer = () => (
         <span style={{color:K.dm,fontWeight:600}}>Access:</span> PromoGrind uses free accounts for login and sync. The same account works across all VaultSpark Studio tools.
       </p>
       <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
-        Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool — not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
+        Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool â€” not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
       </p>
       <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
-        <span>© {new Date().getFullYear()} · Powered by <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{color:"inherit",textDecoration:"none"}}>VaultSpark Studios</a> · PromoGrind is a free educational calculator tool.</span>
+        <span>Â© {new Date().getFullYear()} Â· Powered by <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{color:"inherit",textDecoration:"none"}}>VaultSpark Studios</a> Â· PromoGrind is a free educational calculator tool.</span>
         <a href="/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
         <a href="/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
         <a href="/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
@@ -4693,10 +3797,10 @@ const Footer = () => (
   </div>
 );
 
-// PromoChat → ./components/PromoChat.jsx
-// ═══ MAIN APP ═══
+// PromoChat â†’ ./components/PromoChat.jsx
+// â•â•â• MAIN APP â•â•â•
 export default function App() {
-  // Calculators are public — always load immediately. Auth resolves silently in background.
+  // Calculators are public â€” always load immediately. Auth resolves silently in background.
   const [authReady] = useState(true);
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [user, setUser] = useState(null);
@@ -4844,7 +3948,7 @@ export default function App() {
         if(totalProfit>=m&&!reached.includes(m)){
           reached.push(m);
           updated=true;
-          try{if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(`PromoGrind: $${m} milestone reached! 🎉`,{body:`You've extracted $${m}+ in total profit. Keep grinding!`,icon:'/promogrind/favicon.svg'});}catch(e){}
+          try{if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(`PromoGrind: $${m} milestone reached! ðŸŽ‰`,{body:`You've extracted $${m}+ in total profit. Keep grinding!`,icon:'/promogrind/favicon.svg'});}catch(e){}
         }
       }
       if(updated) localStorage.setItem('pg_milestones_reached',JSON.stringify(reached));
@@ -4863,7 +3967,7 @@ export default function App() {
         if(!localStorage.getItem(key)){
           localStorage.setItem(key,'1');
           if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
-            new Notification('PromoGrind: Profit Goal Reached! 🎯',{body:`You hit your $${f(goal)} profit goal! Time to set a new one.`,icon:'/promogrind/favicon.svg'});
+            new Notification('PromoGrind: Profit Goal Reached! ðŸŽ¯',{body:`You hit your $${f(goal)} profit goal! Time to set a new one.`,icon:'/promogrind/favicon.svg'});
           }
         }
       }catch(e){}
@@ -4910,7 +4014,7 @@ export default function App() {
     setAuthModalMode(getProjectAuthMode(search));
   }, [search]);
 
-  // Auth + subscription load — app always shows; this just enriches the experience for
+  // Auth + subscription load â€” app always shows; this just enriches the experience for
   // signed-in users (sync, points, pro features). Guests continue in calculator-only mode.
   useEffect(() => {
     let alive = true;
@@ -5125,16 +4229,16 @@ export default function App() {
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
-            Sign in with your free PromoGrind account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds — no credit card required.
+            Sign in with your free PromoGrind account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds â€” no credit card required.
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
               ["27 Free Calculators","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
-              ["Free PromoGrind Account","One free account, all 53 calculators — syncs across your devices."],
+              ["Free PromoGrind Account","One free account, all 53 calculators â€” syncs across your devices."],
               ["Live Arb + EV Scanner","Real-time opportunities across 40+ books. VaultSparked Pro."],
             ].map(([title,desc])=>(
               <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>
-                <span style={{color:K.gn,fontWeight:700,marginTop:1}}>✓</span>
+                <span style={{color:K.gn,fontWeight:700,marginTop:1}}>âœ“</span>
                 <div>
                   <div style={{fontSize:12,fontWeight:700,color:K.tx}}>{title}</div>
                   <div style={{fontSize:11,color:K.mt,marginTop:2}}>{desc}</div>
@@ -5144,13 +4248,13 @@ export default function App() {
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
             <a href={authHref('signup')} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color:"#0a0e17",fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
-              Create Free Account →
+              Create Free Account â†’
             </a>
             <a href={authHref('signin')} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,textDecoration:"none"}}>
-              Already have an account? Sign in →
+              Already have an account? Sign in â†’
             </a>
           </div>
-          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your account…</div>
+          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your accountâ€¦</div>
         </div>
       </div>
     );
@@ -5198,13 +4302,13 @@ export default function App() {
       <TrustStrip/>
       {!isOnline && (
         <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
-          OFFLINE MODE — Changes will sync when connection is restored
+          OFFLINE MODE â€” Changes will sync when connection is restored
         </div>
       )}
       {showSessionModal&&<SessionModal appData={appData} visitedSlugsRef={visitedSlugsRef} onClose={()=>setShowSessionModal(false)}/>}
       {showOnboarding && <OnboardingWizard onDone={dismissOnboarding}/>}
       {showCalcSearch && <CalcSearch allCalcs={allCalcs} onNavigate={handleCalcNavigate} onClose={()=>setShowCalcSearch(false)}/>}
-      {/* ── Site Header ────────────────────────────────────────────────────── */}
+      {/* â”€â”€ Site Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <header style={{
         background:`linear-gradient(135deg,${K.s1},${K.s2})`,
         borderBottom:`1px solid ${K.bd}`,
@@ -5215,7 +4319,7 @@ export default function App() {
       }}>
         <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
 
-          {/* ── Logo ─────────────────────────────────────────────────── */}
+          {/* â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <div style={{cursor:'pointer',flexShrink:0,minWidth:0}} onClick={()=>navigate('/'+DEFAULT_SLUG)}>
             <div style={{fontFamily:fontD,fontSize:isMobile?17:21,fontWeight:700,color:K.gn,letterSpacing:'-0.5px',lineHeight:1}}>
               PROMOGRIND
@@ -5242,17 +4346,17 @@ export default function App() {
             )}
           </div>
 
-          {/* ── Right controls ───────────────────────────────────────── */}
+          {/* â”€â”€ Right controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <div style={{display:'flex',alignItems:'center',gap:isMobile?6:10,flexShrink:0}}>
 
-            {/* Streak — hide on mobile (shown in mobile strip below) */}
+            {/* Streak â€” hide on mobile (shown in mobile strip below) */}
             {!isMobile && <DailyStreak/>}
 
             {/* Advisor */}
             {FEATURE_FLAGS.promoAdvisor && !isMobile && (
               <button
                 onClick={()=>setShowPromoAdvisor(v=>!v)}
-                title="Promo Advisor — analyze any sportsbook promo instantly"
+                title="Promo Advisor â€” analyze any sportsbook promo instantly"
                 style={{
                   padding:'6px 12px', background:showPromoAdvisor?`${K.pp}20`:'transparent',
                   border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`, borderRadius:8,
@@ -5260,11 +4364,11 @@ export default function App() {
                   fontFamily:font, minHeight:36,
                 }}
               >
-                💡 Advisor
+                ðŸ’¡ Advisor
               </button>
             )}
 
-            {/* Theme toggle — always visible as icon */}
+            {/* Theme toggle â€” always visible as icon */}
             <button
               onClick={toggleTheme}
               title={darkMode?'Switch to light mode':'Switch to dark mode'}
@@ -5277,10 +4381,10 @@ export default function App() {
                 flexShrink:0, transition:'all 0.2s',
               }}
             >
-              {darkMode?'☀':'🌙'}
+              {darkMode?'â˜€':'ðŸŒ™'}
             </button>
 
-            {/* UserMenu — auth widget */}
+            {/* UserMenu â€” auth widget */}
             <UserMenu
               user={user}
               proStatus={proStatus}
@@ -5296,7 +4400,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── Mobile utility strip ─────────────────────────────────── */}
+        {/* â”€â”€ Mobile utility strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {isMobile && (
           <div style={{
             display:'flex', alignItems:'center', justifyContent:'space-between',
@@ -5314,27 +4418,27 @@ export default function App() {
                     borderRadius:6, color:showPromoAdvisor?K.pp:K.dm,
                   }}
                 >
-                  💡 Advisor
+                  ðŸ’¡ Advisor
                 </button>
               )}
             </div>
             <div style={{fontSize:11,color:K.dm,textAlign:'right',lineHeight:1.5}}>
-              Free tool · Not gambling advice · 21+ · 1-800-GAMBLER
+              Free tool Â· Not gambling advice Â· 21+ Â· 1-800-GAMBLER
             </div>
           </div>
         )}
 
-        {/* ── Desktop compliance line ──────────────────────────────── */}
+        {/* â”€â”€ Desktop compliance line â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {!isMobile && (
           <div style={{maxWidth:1100,margin:'4px auto 0',textAlign:'right'}}>
             <span style={{fontSize:11,color:K.dm}}>
-              Free educational tool · Not gambling advice · 21+ only · Gamble responsibly · 1-800-GAMBLER
+              Free educational tool Â· Not gambling advice Â· 21+ only Â· Gamble responsibly Â· 1-800-GAMBLER
             </span>
           </div>
         )}
       </header>
 
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
+      {/* â”€â”€ Main nav tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
@@ -5390,8 +4494,8 @@ export default function App() {
               return (
                 <button key={favSlug} onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }}
                   style={{padding:"2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:4}}>
-                  ★ {favItem.n}
-                  <span onClick={e=>{e.stopPropagation();const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",marginLeft:2}}>✕</span>
+                  â˜… {favItem.n}
+                  <span onClick={e=>{e.stopPropagation();const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",marginLeft:2}}>âœ•</span>
                 </button>
               );
             })}
@@ -5410,7 +4514,7 @@ export default function App() {
             ))}
             <div style={{flex:1}}/>
             <button onClick={()=>{setCompareMode(m=>!m);if(!compareMode)setCompareSlug('');}} style={{padding:"3px 10px",background:compareMode?`${K.ac}20`:"transparent",border:`1px solid ${compareMode?K.ac:K.bd2}`,borderRadius:50,color:compareMode?K.ac:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
-              {compareMode?"✕ Exit Compare":"⊞ Compare"}
+              {compareMode?"âœ• Exit Compare":"âŠž Compare"}
             </button>
           </div>}
           <div
@@ -5423,7 +4527,7 @@ export default function App() {
             const isFav = calcFavorites.includes(t.slug);
             return (<button key={t.n} onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
               {t.n}
-              {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</span>}
+              {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>â˜…</span>}
               {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
             </button>);
           })}</div>
@@ -5439,14 +4543,14 @@ export default function App() {
               : compareMode&&gi===CALC_GI
                 ? <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
                     <div>
-                      <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:8,fontFamily:font}}>Primary — {item?.n}</div>
+                      <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:8,fontFamily:font}}>Primary â€” {item?.n}</div>
                       {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
                     </div>
                     <div>
                       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                        <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",fontFamily:font}}>Compare —</span>
+                        <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",fontFamily:font}}>Compare â€”</span>
                         <select value={compareSlug} onChange={e=>setCompareSlug(e.target.value)} style={{...S.input,width:"auto",padding:"3px 8px",fontSize:10}}>
-                          <option value="">Pick a calculator…</option>
+                          <option value="">Pick a calculatorâ€¦</option>
                           {g.items.filter(it=>it.slug!==slug).map(it=><option key={it.slug} value={it.slug}>{it.n}</option>)}
                         </select>
                       </div>

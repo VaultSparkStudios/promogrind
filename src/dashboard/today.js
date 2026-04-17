@@ -1,6 +1,7 @@
 import { BOOKS, getRecommendedBooksForUser, hasConfiguredMonetizationLinks } from "../books.js";
 import { buildOperatingActionCandidates, selectOperatingDecision, summarizeWorkflows } from "../promograph/index.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
+import { matchPlaybooks } from "../playbooks/index.js";
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -35,7 +36,7 @@ export function getTodayPromos(schedule = [], now = new Date()) {
   );
 }
 
-export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(), bankrollValue = "") {
+export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(), bankrollValue = "", { includePlaybooks = false } = {}) {
   const { todayStr, in3DaysStr, monthKey } = getTodayContext(now);
   const bets = data.bets || [];
   const ledger = data.ledger || [];
@@ -99,6 +100,7 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
     hasLedger: ledger.length > 0,
     hasBetHistory: bets.length > 0,
     bankroll: Number.isFinite(bankroll) ? bankroll : null,
+    topPlaybook: includePlaybooks ? (matchPlaybooks(data, { bankroll: bankrollValue }).top[0] || null) : null,
   };
 }
 
@@ -199,5 +201,6 @@ export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 
     slug: decision.slug,
     tone: decision.tone,
     score: decision.score,
+    focus: decision.focus || null,
   };
 }
