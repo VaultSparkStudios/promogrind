@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-04-17 — S60 Calculator Extraction + Cockpit Playbook Wire (/go Sprint)
+
+- Extracted 7 remaining inline calculators from App.jsx to src/calculators/: TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc (bonus), BetSizingAdvisor, LineShop; all lazy-loaded.
+- Main bundle recovered from 345.1KB → 324.6KB (20.5KB reduction; 100.4KB total headroom under 425KB cap).
+- Added getDashboardSnapshot({ includePlaybooks: true }) call to LaunchCommandCenterPanel; passed result as dashboard to buildTargetedAlertPlan; added "Top Matched Playbook" subsection to Daily Command Brief card.
+- topPlaybook architecture now complete across Today dashboard (ActivationNextAction), Daily Brief, and Launch Cockpit.
+- Verified: npm.cmd test 235/235 · npm.cmd run build green · bundle 324.6KB under 425KB.
+
 ## 2026-04-17 — S59 Calculator Component Tests + Operator Briefing Playbook Wire
 
 - Recovery session: terminal was cut off mid-S59; identified 3 modified uncommitted files and 1 untracked file from prior agent work; root-caused the vitest config error (agent edited vite.config.js instead of vitest.config.js — `vitest.config.js` always takes precedence).

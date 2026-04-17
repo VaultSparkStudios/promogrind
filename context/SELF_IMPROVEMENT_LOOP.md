@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): █ █ █ █ ▇
-Avgs — 3: 481.3 | 5: 484.4 | 10: 465.9 [N=10] | 25: — | all: 460.6 [N=17]
-  └ 3-session: Dev 98.7 | Align 90.0 | Momentum 92.7 | Engage 87.3 | Process 102.7
-Velocity trend: ↓  |  Protocol velocity: →  |  Debt: →
-Momentum runway: ~2.9 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-17 | Session 59 | Total: 474/500 | Velocity: 3 | protocolVelocity: 0
+Sparkline (last 5 totals): █ █ █ ▇ █
+Avgs — 3: 483.3 | 5: 483.6 | 10: 467.6 [N=10] | 25: — | all: 461.9 [N=18]
+  └ 3-session: Dev 99.0 | Align 91.7 | Momentum 94.7 | Engage 89.3 | Process 103.3
+Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
+Momentum runway: ~3.1 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-17 | Session 60 | Total: 486/500 | Velocity: 2 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-17 — Session 60 | Total: 486/500 | Velocity: 2 | Debt: ↓
+Avgs — 3: 483.3 | 5: 483.6 | 10: 467.6 [N=10] | 25: — | all: 461.9 [N=18]
+  └ 3-session: Dev 99.0 | Align 91.7 | Momentum 94.7 | Engage 89.3 | Process 103.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | 235/235 tests green; build passing; bundle 324.6KB under 425KB cap — 100.4KB headroom; every calculator in the app is now an independent lazy module; `App.jsx` no longer contains any inline calculator definitions; reduced technical debt in the largest source file. |
+| Creative Alignment | 93 | ↑ | topPlaybook architecture is now complete across all three operator surfaces — Today dashboard (ActivationNextAction), Daily Brief, and Launch Cockpit. The cockpit now surfaces a matched playbook in both the alert queue and the command brief narrative, consistent with the trust-first, proactive-surfacing product direction. |
+| Momentum | 96 | ↑ | Cleared entire Now bucket (2 SIL items); /go sprint produced two high-impact compounding items — calculator extraction is a structural improvement that enables faster future work, and the cockpit playbook wire completes an architecture that started in S56. Velocity=2 is low but items are large. |
+| Engagement | 90 | ↑ | Calculator extraction is transparent to users (same UI, faster load), but the cockpit now gives operators a matched playbook recommendation in the Daily Command Brief — a meaningful action intelligence improvement for the operator loop. |
+| Process Quality | 103 | → | Full /go sprint with manual fallback (scripts absent in public repo); write-back in canonical order; HoldCalc included as a bonus (was also inline, obvious to extract alongside the group); no phantom blockers; quality bar maintained — all items complete, not stubbed. |
+| **Total** | **486/500** | ↑ | |
+
+**Top win:** `App.jsx` now owns zero inline calculator definitions. Every calculator is an independent lazy module in `src/calculators/`. The main bundle sits at 324.6KB — 100.4KB under the 425KB cap — the most headroom since before S43. This creates a compounding structural advantage for all future feature additions.
+**Top gap:** The extraction pattern is complete, but `ProfitBoost` and `FirstBet` still lack dedicated component-level tests (BonusBet + KellyCriterion were covered in S59). These are lower complexity than KellyCriterion but still worth covering given the history of quick test misses.
+**Intent outcome:** Achieved — /go sprint cleared entire Now bucket at quality bar with correct canonical write-back.
+
+**Brainstorm**
+1. Add component tests for `ProfitBoost.jsx` and `FirstBet.jsx` — they were extracted in S58 alongside BonusBet/KellyCriterion but don't have dedicated test coverage; now that the vitest JSX infrastructure is in place, adding them is straightforward.
+2. Wire the topPlaybook `playbookId` and `steps` into the operator command brief `followUps` in `buildStudioSnapshot` so the machine-readable Studio contract also carries the matched playbook as a structured object (not just as a UI display).
+3. Begin App.jsx route extraction — the remaining non-calculator inline content (`BetTracker`, `Ledger`, route switches) are candidates for extraction to reduce App.jsx further.
+
+**Committed to TASK_BOARD:** [SIL] Add component tests for ProfitBoost and FirstBet · [SIL] Wire topPlaybook into Studio contract brief followUps (structured, not just display)
 
 ## 2026-04-17 — Session 59 | Total: 474/500 | Velocity: 3 | Debt: →
 Avgs — 3: 481.3 | 5: 484.4 | 10: 465.9 [N=10] | 25: — | all: 460.6 [N=17]

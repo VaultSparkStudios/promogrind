@@ -2,5 +2,5 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-17 (post-S59 closeout — vitest.config.js fixed with React plugin + *.test.{js,jsx} include, activating 13 calculator component tests; vite.config.js dead test block removed; topPlaybook wired into buildTargetedAlertPlan in src/operator/briefing.js at priority 91 and DailyBriefPage now calls getDashboardSnapshot with { includePlaybooks: true }; 6 briefing.test.js tests added; `npm.cmd test` 235/235 + `npm.cmd run build` + bundle check at 345.1KB/425KB all green)
+Last reviewed: 2026-04-17 (post-S60 closeout — 7 remaining inline calculators extracted to src/calculators/, all lazy-loaded, App.jsx zero inline calculator defs; LaunchCommandCenterPanel now calls getDashboardSnapshot({ includePlaybooks: true }) and passes dashboard to buildTargetedAlertPlan — topPlaybook surfaced in cockpit alert queue and command brief; bundle 324.6KB/425KB, 235/235 tests, build green)
 Public-safe summary only. Sensitive verification notes are maintained privately.

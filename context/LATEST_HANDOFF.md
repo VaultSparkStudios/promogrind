@@ -2,6 +2,31 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 60 — CLOSED)
+
+**Session Intent:** /go sprint — execute all unblocked Now-bucket items at quality bar.
+
+**Shipped:** 2 items at quality bar
+
+1. **Remaining calculator extraction** (SIL): `TeaserCalc`, `RoundRobinCalc`, `ParlayBuilder`, `SGPEstimator`, `HoldCalc` (bonus — was also inline), `BetSizingAdvisor`, `LineShop` extracted to `src/calculators/`; all lazy-loaded; `App.jsx` no longer owns any inline calculator definitions; main bundle 345.1KB → 324.6KB (20.5KB / 100.4KB total headroom)
+2. **topPlaybook into LaunchCommandCenterPanel** (SIL): `getDashboardSnapshot({ includePlaybooks: true })` call added; `dashboard` passed to `buildTargetedAlertPlan`; Targeted Alert Queue now fires the playbook alert; Daily Command Brief shows matched playbook name + fit reasons — topPlaybook architecture complete across all three operator surfaces
+
+**Tests:** 235/235 · Build: green · Bundle: 324.6KB / 425KB cap
+**Intent outcome:** Achieved — cleared entire Now bucket
+
+## Current Delta Since S59
+
+- `src/App.jsx`: 7 lazy imports added (TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc, BetSizingAdvisor, LineShop); ~24KB of inline calculator code removed
+- `src/calculators/TeaserCalc.jsx` — new, lazy-loaded
+- `src/calculators/RoundRobinCalc.jsx` — new, lazy-loaded
+- `src/calculators/ParlayBuilder.jsx` — new, lazy-loaded
+- `src/calculators/SGPEstimator.jsx` — new, lazy-loaded
+- `src/calculators/HoldCalc.jsx` — new, lazy-loaded (bonus: was also inline but not in original list)
+- `src/calculators/BetSizingAdvisor.jsx` — new, lazy-loaded
+- `src/calculators/LineShop.jsx` — new, lazy-loaded; imports `BOOKS` from `../books.js`
+- `src/components/dashboard/LaunchCommandCenterPanel.jsx`: added `getDashboardSnapshot` import; `bankroll` extracted to local const; `dashboardSnapshot` computed with `{ includePlaybooks: true }`; `buildTargetedAlertPlan` now receives `{ snapshot, dashboard: dashboardSnapshot }`; Daily Command Brief section conditionally renders "Top Matched Playbook" subsection
+- Validation: `npm.cmd test` 235/235 · `npm.cmd run build` green · `node scripts/check-bundle-budget.mjs` 324.6KB under 425KB
+
 ## Where We Left Off (Session 59 — CLOSED)
 
 **Session Intent:** Recovery session — resume from mid-S59 terminal cutoff, identify what was in progress, complete both Now-bucket SIL items, and close out fully.

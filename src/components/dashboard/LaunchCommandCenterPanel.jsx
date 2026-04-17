@@ -5,6 +5,7 @@ import { K, S, fontD } from "../../lib/shared.js";
 import { AppDataCtx } from "../../contexts.jsx";
 import { appendStudioContractHistory, buildStudioSnapshot } from "../../studio/export.js";
 import { buildTargetedAlertPlan } from "../../operator/briefing.js";
+import { getDashboardSnapshot } from "../../dashboard/today.js";
 
 export default function LaunchCommandCenterPanel() {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -13,10 +14,10 @@ export default function LaunchCommandCenterPanel() {
   const configuredMonetization = getConfiguredMonetizationCount();
   const affiliateReady = hasConfiguredMonetizationLinks();
   const validation = resolveLaunchValidation();
-  const snapshot = buildStudioSnapshot(appData || {}, {
-    bankroll: typeof window !== "undefined" ? localStorage.getItem("pg_bankroll") || "" : "",
-  });
-  const alertPlan = buildTargetedAlertPlan({ snapshot });
+  const bankroll = typeof window !== "undefined" ? localStorage.getItem("pg_bankroll") || "" : "";
+  const snapshot = buildStudioSnapshot(appData || {}, { bankroll });
+  const dashboardSnapshot = getDashboardSnapshot(appData || {}, [], new Date(), bankroll, { includePlaybooks: true });
+  const alertPlan = buildTargetedAlertPlan({ snapshot, dashboard: dashboardSnapshot });
   const commandCenter = getLaunchCommandCenter({
     configuredAffiliateCount: configuredAffiliates,
     configuredMonetizationCount: configuredMonetization,
@@ -107,6 +108,15 @@ export default function LaunchCommandCenterPanel() {
           <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
             {snapshot.brief.followUps.length ? snapshot.brief.followUps.join(" · ") : "The operator loop will deepen as more workflows and settlements land."}
           </div>
+          {dashboardSnapshot.topPlaybook?.applicable && dashboardSnapshot.topPlaybook.playbook && (
+            <div style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${K.gn}25` }}>
+              <div style={{ fontSize: 10, color: K.gn, fontWeight: 700, marginBottom: 4, textTransform: "uppercase", letterSpacing: "1px" }}>Top Matched Playbook</div>
+              <div style={{ fontSize: 11, color: K.tx, fontWeight: 700, marginBottom: 2 }}>{dashboardSnapshot.topPlaybook.playbook.name}</div>
+              <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>
+                {dashboardSnapshot.topPlaybook.reasons?.map((r) => r.text).join(" · ") || `Fit score ${dashboardSnapshot.topPlaybook.fitScore}`}
+              </div>
+            </div>
+          )}
         </div>
         <div style={{ padding: "12px", background: `${K.gn}08`, border: `1px solid ${K.gn}25`, borderRadius: 8 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: K.gn, marginBottom: 8 }}>Targeted Alert Queue</div>

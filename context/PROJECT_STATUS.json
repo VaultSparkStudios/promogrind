@@ -13,8 +13,8 @@
   "localPath": "C:\\Users\\p4cka\\documents\\development\\promogrind",
   "github": "https://github.com/VaultSparkStudios/promogrind",
   "liveUrl": "https://promogrind.bet",
-  "currentFocus": "S59 recovery session: fixed vitest.config.js to include React plugin and *.test.{js,jsx} pattern, activating the pre-written calculator component tests (13 tests for BonusBet + KellyCriterion); wired getDashboardSnapshot { includePlaybooks: true } into DailyBriefPage and added topPlaybook alert at priority 91 in buildTargetedAlertPlan so the daily brief surfaces a matched playbook with a direct CTA; added briefing.test.js with 6 tests.",
-  "nextMilestone": "Remaining compounding work: extract remaining large inline calculators (TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, BetSizingAdvisor, LineShop) from App.jsx for ~30-40KB bundle recovery; wire topPlaybook into LaunchCommandCenterPanel command brief; and close the remaining human-gated launch blockers (Stripe smoke test, VAPID key, affiliate links, friend beta pass).",
+  "currentFocus": "S60 /go sprint: extracted TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc, BetSizingAdvisor, LineShop to src/calculators/ — App.jsx now owns zero inline calculator definitions, bundle 345.1KB → 324.6KB (100.4KB headroom); wired topPlaybook into LaunchCommandCenterPanel via getDashboardSnapshot({ includePlaybooks: true }) so cockpit Targeted Alert Queue and Daily Command Brief both surface matched playbooks — topPlaybook architecture complete across all three operator surfaces.",
+  "nextMilestone": "Next compounding items: add ProfitBoost + FirstBet component tests (vitest JSX infra ready), wire topPlaybook into Studio contract brief followUps (structured), and close the remaining human-gated launch blockers (Stripe smoke test, VAPID key, affiliate links, friend beta pass).",
   "blockers": [
     "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live",
     "Apply scripts/migration-entity-sync.sql in Supabase so ledger_state/tracker_state exist live",
@@ -24,18 +24,18 @@
     "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
   "lastUpdated": "2026-04-17",
-  "currentSession": 59,
-  "silScore": 474,
-  "silAvg3": 481.3,
-  "silVelocity": 3,
-  "silDebt": "flat",
-  "silLastSession": "S59",
+  "currentSession": 60,
+  "silScore": 486,
+  "silAvg3": 483.3,
+  "silVelocity": 2,
+  "silDebt": "down",
+  "silLastSession": "S60",
   "silSparkline": [
-    487,
     491,
     487,
     483,
-    474
+    474,
+    486
   ],
   "ignisScore": 47652,
   "ignisGrade": "FORGE",
@@ -59,8 +59,8 @@
     "closer_annual",
     "house"
   ],
-  "version": "24.9.0",
-  "lastSession": "S59",
+  "version": "24.10.0",
+  "lastSession": "S60",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
@@ -72,7 +72,7 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "build passing after S59 — vitest.config.js now supports JSX component tests (React plugin + *.test.{js,jsx} include); topPlaybook wired into DailyBriefPage operator briefing; main chunk 345.1KB against the 425KB budget (79.9KB headroom), CI continues to enforce the gate",
+  "buildStatus": "build passing after S60 — all 17 calculators now in src/calculators/ as lazy modules; topPlaybook complete across Today dashboard, Daily Brief, and Launch Cockpit; main chunk 324.6KB against the 425KB budget (100.4KB headroom), CI enforces gate",
   "testStatus": "235/235",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
