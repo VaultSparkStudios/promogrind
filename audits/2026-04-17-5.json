@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.3",
+  "session": 63,
+  "date": "2026-04-17",
+  "sessionIntent": "Update memory/task board, then implement all high-impact items at highest quality in one pass (two /go sprints)",
+  "intentOutcome": "achieved",
+  "velocity": 20,
+  "protocolVelocity": 0,
+  "silItems": 3,
+  "scores": {
+    "devHealth": 99,
+    "creativeAlignment": 96,
+    "momentum": 100,
+    "engagement": 95,
+    "processQuality": 100,
+    "total": 490
+  },
+  "rollingAvgs": {
+    "n3": 489.7,
+    "n5": 487.8,
+    "n10": 472.0,
+    "all": 465.6,
+    "nAll": 21
+  },
+  "sparkline": [485, 486, 489, 490, 490],
+  "debt": "down",
+  "tests": { "total": 288, "passed": 288, "failed": 0, "newThisSession": 9 },
+  "bundle": { "mainChunkKB": 329.3, "budgetKB": 425, "headroomKB": 95.7 },
+  "buildStatus": "green",
+  "shippedItems": [
+    "CalculatorReceipt wired to all 16 calculators (15 new + BonusBet from S62)",
+    "Deno CI integration: denoland/setup-deno@v2 + deno test in .github/workflows/ci.yml",
+    "promo-advisor SSE streaming (edge function delta/done events + PromoAdvisorPanel ReadableStream)",
+    "buildPortfolioAllocation in Studio contract (buildStudioSnapshot.portfolioAllocation)",
+    "_shared/validate.ts: VALID_CALCULATOR_SLUGS, VALID_PROMO_TYPES, validateCalculatorSlug, parseAiJson, sanitizeInput, SLUG_GUARDRAIL",
+    "ai-action-plan + promo-advisor + stack-builder: slug/type guardrails in system prompts",
+    "SW v5: stale-while-revalidate static assets + sync event → PG_FLUSH_QUEUE client message",
+    "sw-register.js: triggerQueueFlush on PG_FLUSH_QUEUE message + window.online sync registration",
+    "src/sync.js: triggerQueueFlush() public export",
+    "Creator/referral landing pages (src/routes/LandingRoute.jsx + /land/:creator route in App.jsx)",
+    "Feature flag system (src/lib/featureFlags.js + FeatureFlagAdmin.jsx + migration-feature-flags.sql + /feature-flags route)",
+    "CalculatorReceipt test coverage (+9 tests → 288/288)",
+    "promo-advisor SUPABASE_URL fallback to supabase.functions.invoke",
+    "UTM attribution in analytics.js identifyUser + trackPage (_readUtmAttribution helper)",
+    "assumptions[] collapsible section in PromoAdvisorPanel",
+    "useFeatureFlag hook adoption in PromoAdvisorPanel (fixes React hooks violation)",
+    "Boot-time IDB queue flush in App.jsx loadData()",
+    "landing_page_view analytics event in LandingRoute on mount",
+    "referral_source in createPromoGrindAccount user metadata",
+    "Feature Flags link in LaunchCommandCenterPanel",
+    "supabase/functions/__tests__/validate.test.ts (20 Deno tests)",
+    "stack-builder structured JSON response (steps[], summary, assumptions[], estimatedTotal)",
+    "docs/STARTUP_BRIEF.md refreshed to S63 state"
+  ],
+  "deferredItems": [],
+  "humanBatched": [
+    "Apply scripts/migration-feature-flags.sql in Supabase SQL Editor",
+    "Deploy updated edge functions (promo-advisor SSE, validate.ts import, stack-builder JSON schema, ai-action-plan guardrails)"
+  ],
+  "newModules": [
+    "src/routes/LandingRoute.jsx",
+    "src/lib/featureFlags.js",
+    "src/components/FeatureFlagAdmin.jsx",
+    "scripts/migration-feature-flags.sql",
+    "supabase/functions/_shared/validate.ts",
+    "supabase/functions/__tests__/validate.test.ts"
+  ],
+  "ignisRefreshRequired": false,
+  "ignisLastComputed": "2026-04-15",
+  "truthAuditStatus": "green",
+  "memoryUpdated": true
+}

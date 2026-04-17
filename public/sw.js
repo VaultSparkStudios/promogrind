@@ -1,4 +1,4 @@
-const CACHE = 'promogrind-v4';
+const CACHE = 'promogrind-v5';
 const BASE = self.location.pathname.replace('/sw.js','');
 
 const SHELL = [
@@ -81,17 +81,30 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Cache-first for everything else (fonts, images, etc.)
+  // Stale-while-revalidate for static assets (fonts, images, etc.)
+  // Serve cached version immediately while refreshing in background.
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const network = fetch(e.request).then(res => {
-        if (res.ok && res.type !== 'opaque') {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return res;
-      });
-      return cached || network;
-    })
+    caches.open(CACHE).then(cache =>
+      cache.match(e.request).then(cached => {
+        const networkFetch = fetch(e.request).then(res => {
+          if (res.ok && res.type !== 'opaque') cache.put(e.request, res.clone());
+          return res;
+        }).catch(() => cached);
+        return cached || networkFetch;
+      })
+    )
   );
+});
+
+// ── Background Sync — flush IDB write queue on reconnect ────────────────
+self.addEventListener('sync', e => {
+  if (e.tag === 'pg-flush-queue') {
+    e.waitUntil(
+      self.clients.matchAll({ type: 'window', includeUncontrolled: false }).then(wins => {
+        // Message the focused window (or first available) to flush its queue
+        const target = wins.find(w => w.focused) || wins[0];
+        if (target) target.postMessage({ type: 'PG_FLUSH_QUEUE' });
+      })
+    );
+  }
 });

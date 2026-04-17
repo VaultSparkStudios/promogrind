@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
-import { calcNV3, K } from "../lib/shared.js";
+import React, { useMemo, useState } from "react";
+import { calcNV3, K, font } from "../lib/shared.js";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function NoVig3Way() {
@@ -9,6 +10,7 @@ export default function NoVig3Way() {
   const setO2 = (v) => setMem("o2", v);
   const setO3 = (v) => setMem("o3", v);
   const r = useMemo(() => calcNV3(o1, o2, o3), [o1, o2, o3]);
+  const [showReceipt, setShowReceipt] = useState(false);
   return (
     <div>
       <div style={S.card}>
@@ -16,6 +18,9 @@ export default function NoVig3Way() {
         <div style={S.row}><In l="Home Win Odds" v={o1} set={setO1} ph="+220" /><In l="Draw Odds" v={o2} set={setO2} ph="+250" /><In l="Away Win Odds" v={o3} set={setO3} ph="+300" /></div>
         {r && (
           <div style={S.res(true)}>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+            </div>
             <RR l="Total Vig (Juice)" v={`${r.v}%`} c={K.rd} b />
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 12 }}>
               {[["Home Win", r.ip1, r.fp1, r.fo1], [" Draw", r.ip2, r.fp2, r.fo2], ["Away Win", r.ip3, r.fp3, r.fo3]].map(([label, ip, fp, fo]) => (
@@ -28,6 +33,24 @@ export default function NoVig3Way() {
               ))}
             </div>
             <Nt c={K.ac}>These are the fair odds with zero vig. If any book offers BETTER than these fair odds on any outcome, that bet is +EV.</Nt>
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="3-Way No-Vig Calculator"
+                inputs={[
+                  { label: "Home Win Odds", value: o1 },
+                  { label: "Draw Odds", value: o2 },
+                  { label: "Away Win Odds", value: o3 },
+                ]}
+                outputs={[
+                  { label: "Total Vig", value: `${r.v}%` },
+                  { label: "Home Fair Odds", value: r.fo1 },
+                  { label: "Draw Fair Odds", value: r.fo2 },
+                  { label: "Away Fair Odds", value: r.fo3 },
+                ]}
+                disclaimer="Fair odds are estimates based on market consensus. Use as a benchmark only."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

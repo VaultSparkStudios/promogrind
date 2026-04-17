@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
-import { calcInsurance, K } from "../lib/shared.js";
+import React, { useMemo, useState } from "react";
+import { calcInsurance, K, font } from "../lib/shared.js";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function InsurancePromo() {
@@ -10,6 +11,7 @@ export default function InsurancePromo() {
   const setInsMax = (x) => setMem("insMax", x);
   const setConv = (x) => setMem("conv", x);
   const r = useMemo(() => calcInsurance(stake, insPct, insMax, conv), [stake, insPct, insMax, conv]);
+  const [showReceipt, setShowReceipt] = useState(false);
   return (
     <div>
       <div style={S.card}>
@@ -20,9 +22,28 @@ export default function InsurancePromo() {
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.gn)}>${r.insVal}</span>
               <span style={{ fontSize: 12, color: K.dm }}>insurance value (real cash)</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Insurance Bonus Amount" v={`$${r.insAmt}`} c={K.pp} b /><RR l="Bonus Value After Conversion" v={`$${r.insVal}`} c={K.gn} b /><RR l="Net Cost if Bet Loses" v={`$${r.netCost}`} c={parseFloat(r.netCost) <= 5 ? K.gn : K.yl} /><RR l="Insurance Effectiveness" v={`${r.effPct}%`} c={parseFloat(r.effPct) >= 60 ? K.gn : K.yl} />
             <Nt c={K.ac}>If your insured bet loses: you get ${r.insAmt} back as a bonus bet. Convert that using the Bonus Bet tab (~{conv}%) = ${r.insVal} real cash. Your net loss is only ${r.netCost}.</Nt>
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Promo Insurance Calculator"
+                inputs={[
+                  { label: "Stake", value: `$${stake}` },
+                  { label: "Insurance %", value: `${insPct}%` },
+                  { label: "Max Insurance", value: `$${insMax}` },
+                  { label: "Bonus Conversion %", value: `${conv}%` },
+                ]}
+                outputs={[
+                  { label: "Insurance Bonus Amount", value: `$${r.insAmt}` },
+                  { label: "Insurance Effectiveness", value: `${r.effPct}%` },
+                  { label: "Net Cost if Bet Loses", value: `$${r.netCost}` },
+                  { label: "Insurance Value (Cash)", value: `$${r.insVal}`, highlight: true },
+                ]}
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

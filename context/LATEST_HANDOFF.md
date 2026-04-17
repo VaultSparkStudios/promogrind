@@ -2,6 +2,65 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 63 — CLOSED)
+
+**Session Intent:** Update memory/task board, then implement all 8 identified high-impact items at highest quality — then run /go for a full genius-list sprint.
+
+**Shipped:** 20 items across two /go sprints at quality bar — new session record.
+
+**Sprint 1 (S63a — 8 items):**
+1. **CalculatorReceipt → all 16 calculators**: "📄 Receipt" button wired to every calculator with calc-specific inputs/outputs
+2. **Deno CI integration**: `.github/workflows/ci.yml` installs Deno v2, runs `deno test` on all edge function tests post-build
+3. **promo-advisor SSE streaming**: edge function streams delta + done events; PromoAdvisorPanel uses ReadableStream with live preview
+4. **Portfolio allocation in Studio contract**: `buildStudioSnapshot` now includes `portfolioAllocation` when bankroll + ≥2 open workflows
+5. **AI schema validation + guardrails**: `_shared/validate.ts` centralizes slug/type whitelists + `parseAiJson`; system prompts include `SLUG_GUARDRAIL`; `assumptions[]` added to action plan
+6. **SW stale-while-revalidate + IDB flush**: SW v5 serves cached assets immediately; sync event flushes queue on reconnect; `triggerQueueFlush()` exported
+7. **Creator/referral landing pages**: `/land/:creator` standalone conversion surface with UTM attribution, creator credit, calculator grid
+8. **Feature flag admin surface**: `src/lib/featureFlags.js` + `FeatureFlagAdmin.jsx` + migration SQL; hidden route `/feature-flags`; house-tier admin panel
+
+**Sprint 2 (S63b — 12 items):**
+9. **Receipt test coverage**: 9 new tests (288/288 total)
+10. **promo-advisor SUPABASE_URL fallback**: SSE when URL present, invoke fallback when absent
+11. **UTM attribution in PostHog**: `_readUtmAttribution()` in `identifyUser()` + `trackPage()`
+12. **assumptions[] in PromoAdvisorPanel**: collapsible section under opsTags
+13. **useFeatureFlag hook adoption**: PromoAdvisorPanel gate now remote-overridable; hooks-above-return ordering fixed
+14. **Boot-time IDB queue flush**: `App.jsx` calls `triggerQueueFlush()` on load when `hasPendingWrites`
+15. **Landing page analytics event**: `trackEvent('landing_page_view', {...utm})` on mount
+16. **Creator referral on signup**: `pg_ref` attached as `referral_source` in user metadata
+17. **Feature flag link in LaunchCommandCenterPanel**
+18. **validate.ts Deno unit tests**: 20 tests covering all shared validators
+19. **Stack-builder structured JSON**: JSON schema prompt + `parseAiJson` normalization
+20. **STARTUP_BRIEF refresh**
+
+**Tests:** 288/288 · Build: green · Bundle: 329.3KB / 425KB (95.7KB headroom)
+**Intent outcome:** Achieved — task board updated, 20 items shipped at quality bar, new velocity record
+
+## Current Delta Since S62
+
+- `src/calculators/` (15 files): all now import + render `CalculatorReceipt` with calc-specific `inputs`/`outputs` arrays; `showReceipt` state + "📄 Receipt" button added to each result section
+- `.github/workflows/ci.yml`: added `denoland/setup-deno@v2` step + `deno test --allow-env` post-build step
+- `supabase/functions/promo-advisor/index.ts`: SSE streaming mode (`Accept: text/event-stream`), streams `delta`/`done` events; `normalizeAdvisorResult` uses shared validators; system prompt includes slug/type guardrails; `assumptions[]` field added
+- `supabase/functions/_shared/validate.ts`: new — `VALID_CALCULATOR_SLUGS`, `VALID_PROMO_TYPES`, validators, `parseAiJson`, `sanitizeInput`, `SLUG_GUARDRAIL`
+- `supabase/functions/ai-action-plan/index.ts`: uses shared validators; `assumptions[]` in schema; prompt includes guardrails
+- `supabase/functions/stack-builder/index.ts`: prompt caching added; structured JSON schema prompt; `parseAiJson` + `validateCalculatorSlug` normalize output; `summary`/`steps[]`/`assumptions[]` returned
+- `src/studio/export.js`: imports `buildPortfolioAllocation`; `portfolioAllocation` field in `buildStudioSnapshot` return
+- `public/sw.js`: bumped to v5; stale-while-revalidate for static assets; `sync` event listener → `PG_FLUSH_QUEUE` message to clients
+- `src/sw-register.js`: imports `triggerQueueFlush`; listens for `PG_FLUSH_QUEUE` SW message; registers `pg-flush-queue` sync on `window.online`
+- `src/sync.js`: exports `triggerQueueFlush()` public wrapper
+- `src/routes/LandingRoute.jsx`: new — `/land/:creator` standalone conversion page; UTM storage + analytics event
+- `src/App.jsx`: `LandingRoute` + `FeatureFlagAdmin` lazy imports; `/land/` early-return route guard; `/feature-flags` route; `triggerQueueFlush` on boot; `triggerQueueFlush` imported from sync
+- `src/lib/featureFlags.js`: new — `useFeatureFlag`, `resolveFlag`, `fetchRemoteFlags`, `invalidateFlagCache`; 5-min localStorage cache
+- `src/components/FeatureFlagAdmin.jsx`: new — house-tier toggle panel with tier selector + build default indicator
+- `scripts/migration-feature-flags.sql`: new — `feature_flags` table + RLS + `get_feature_flag()` SQL function
+- `src/components/PromoAdvisorPanel.jsx`: SSE streaming via fetch + SUPABASE_URL guard; `supabase.functions.invoke` fallback; `useFeatureFlag` adoption; hooks moved above early return; `assumptions[]` collapsible section; streaming text progress indicator; `useRef` + reader cancel
+- `src/analytics.js`: `_readUtmAttribution()` helper; included in `identifyUser()` + `trackPage()`
+- `src/auth.js`: `createPromoGrindAccount` reads `pg_ref` and attaches `referral_source` to user metadata
+- `src/components/dashboard/LaunchCommandCenterPanel.jsx`: "Feature Flags →" link in operator buttons
+- `supabase/functions/__tests__/validate.test.ts`: new — 20 Deno tests
+- `src/__tests__/calculators.test.jsx`: +9 receipt tests (CalculatorReceipt × 6, ProfitBoost × 2, Arb2Way × 1)
+- `docs/STARTUP_BRIEF.md`: refreshed to S63 state
+- `context/TASK_BOARD.md`: all 20 items marked DONE with session tag
+
 ## Where We Left Off (Session 62 — CLOSED)
 
 **Session Intent:** Full project audit + innovate + implement all recommended items at highest quality.

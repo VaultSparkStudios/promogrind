@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { calcRR, K, font } from "../lib/shared.js";
 import { S, In, RR, Nt, Tl, Help } from "../ui.jsx";
 
@@ -8,6 +9,7 @@ export default function RoundRobinCalc() {
   const [stakeEach, setStakeEach] = useState("50");
   const pickOdds = picks.map((p) => p.odds);
   const r = useMemo(() => calcRR(pickOdds, size, stakeEach), [pickOdds, size, stakeEach]);
+  const [showReceipt, setShowReceipt] = useState(false);
   const addPick = () => setPicks((p) => [...p, { odds: "+150" }]);
   const removePick = (i) => setPicks((p) => p.filter((_, j) => j !== i));
   const updatePick = (i, v) => setPicks((p) => p.map((pk, j) => j === i ? { odds: v } : pk));
@@ -45,12 +47,31 @@ export default function RoundRobinCalc() {
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>{r.nCombos}</span>
               <span style={{ fontSize: 12, color: K.dm }}>combinations</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Total Stake" v={`$${r.totalStake}`} c={K.rd} b />
             <RR l="Best Case Payout" v={`$${r.maxPayout}`} c={K.gn} />
             <RR l="Worst Single Combo Payout" v={`$${r.minPayout}`} />
             <RR l="Average Payout Per Combo" v={`$${r.avgPayout}`} c={K.ac} />
             <Nt c={K.yl}>A round robin protects against one or two picks losing — you win multiple smaller parlays instead of needing all picks to hit. Total stake: ${r.totalStake} ({r.nCombos} combos × ${stakeEach}).</Nt>
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Round Robin Calculator"
+                inputs={[
+                  { label: "Picks", value: picks.map((p, i) => `#${i + 1}: ${p.odds}`).join(", ") },
+                  { label: "Combo Size", value: `${size}-team` },
+                  { label: "Stake Per Combo", value: `$${stakeEach}` },
+                ]}
+                outputs={[
+                  { label: "Combinations", value: String(r.nCombos) },
+                  { label: "Total Stake", value: `$${r.totalStake}` },
+                  { label: "Worst Combo Payout", value: `$${r.minPayout}` },
+                  { label: "Avg Payout Per Combo", value: `$${r.avgPayout}` },
+                  { label: "Best Case Payout", value: `$${r.maxPayout}`, highlight: true },
+                ]}
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

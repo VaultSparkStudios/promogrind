@@ -54,6 +54,9 @@ export default function LaunchCommandCenterPanel() {
           <button onClick={exportSnapshot} style={{ padding: "8px 10px", background: "transparent", border: `1px solid ${K.ac}35`, borderRadius: 8, color: K.ac, fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
             Publish Studio Contract
           </button>
+          <a href="/feature-flags" style={{ padding: "8px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 8, color: K.dm, fontSize: 10, fontWeight: 600, textDecoration: "none", display: "flex", alignItems: "center" }}>
+            Feature Flags →
+          </a>
           <div style={{ padding: "8px 10px", background: K.s2, border: `1px solid ${scoreColor}45`, borderRadius: 8, minWidth: 118 }}>
             <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Readiness Score</div>
             <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: scoreColor }}>{commandCenter.readinessScore}/100</div>

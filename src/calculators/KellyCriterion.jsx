@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { calcKelly, K, font, f } from "../lib/shared.js";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 import { CANONICAL_APP_URL } from "../launchState.js";
@@ -12,6 +13,7 @@ export default function KellyCriterion() {
   const setFrac = (v) => setMem("frac", v);
   const r = useMemo(() => calcKelly(wp, odds, parseFloat(br), parseFloat(frac) / 100), [wp, odds, br, frac]);
   const [rCopied, setRCopied] = useState(false);
+  const [showReceipt, setShowReceipt] = useState(false);
   const copyResult = () => {
     if (!r) return;
     const text = `📊 Kelly Criterion — PromoGrind\nWin Probability: ${wp}% | Odds: ${odds} | Bankroll: $${br} | Kelly Fraction: ${frac}%\nRecommended Bet: $${r.bet}\nFull Kelly: ${r.k}% | Fractional Kelly: ${r.ak}%\n${CANONICAL_APP_URL}`;
@@ -29,8 +31,27 @@ export default function KellyCriterion() {
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.bet}</span>
               <span style={{ fontSize: 12, color: K.dm }}>recommended bet size</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Full Kelly %" v={`${r.k}%`} c={K.dm} /><RR l={`${frac}% Fractional Kelly`} v={`${r.ak}%`} c={K.ac} b /><RR l="Bet Size" v={`$${r.bet}`} c={r.ok ? K.gn : K.rd} b /><RR l="Expected Value" v={`${r.ok ? "+" : ""}${r.ev}%`} c={r.ok ? K.gn : K.rd} />
+            {showReceipt && r.ok && (
+              <CalculatorReceipt
+                calcName="Kelly Criterion Bet Sizer"
+                inputs={[
+                  { label: "Win Probability", value: `${wp}%` },
+                  { label: "Odds", value: odds },
+                  { label: "Bankroll", value: `$${br}` },
+                  { label: "Kelly Fraction", value: `${frac}%` },
+                ]}
+                outputs={[
+                  { label: "Full Kelly %", value: `${r.k}%` },
+                  { label: `${frac}% Fractional Kelly`, value: `${r.ak}%` },
+                  { label: "Expected Value", value: `${r.ev}%` },
+                  { label: "Recommended Bet", value: `$${r.bet}`, highlight: true },
+                ]}
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
             {!r.ok && <Nt c={K.rd}>Kelly says skip this bet — your win probability does not support an edge at these odds.</Nt>}
             {r.ok && <Nt c={K.yl}>Using {frac}% fractional Kelly. Full Kelly maximizes growth but has high variance. Most pros use 20–33% Kelly.</Nt>}
             {r.ok && (() => {

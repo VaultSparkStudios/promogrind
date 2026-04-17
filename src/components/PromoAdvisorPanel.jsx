@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { supabase } from "../auth.js";
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? "";
 import { AppDataCtx } from "../contexts.jsx";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
+import { useFeatureFlag } from "../lib/featureFlags.js";
 import { useToast } from "../contexts.jsx";
 import { K, font, fontD, S } from "../lib/shared.js";
 import { normalizeRecommendation, upsertWorkflowEntry } from "../promograph/index.js";
@@ -12,13 +15,8 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const signInHref = getProjectAuthHref('signin');
   const signUpHref = getProjectAuthHref('signup');
-  if (!FEATURE_FLAGS.promoAdvisor) {
-    return (
-      <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
-        <FeatureUnavailableCard featureKey="promoAdvisor" title="Promo Advisor" body="Promo Advisor will appear here once the AI explainer backend is activated." />
-      </div>
-    );
-  }
+  // Remote-overridable feature gate (falls back to build-time FEATURE_FLAGS.promoAdvisor)
+  const { enabled: advisorEnabled } = useFeatureFlag('promoAdvisor');
   const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const DAILY_LIMIT = isPro ? 9999 : 3;
   const [promoText, setPromoText] = useState('');
@@ -31,13 +29,23 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       return parseInt(localStorage.getItem(todayKey) || '0');
     } catch { return 0; }
   });
+  const [streamingText, setStreamingText] = useState('');
+  const readerRef = useRef(null);
   const toast = useToast();
+
+  // Gate check after all hooks — safe per Rules of Hooks
+  if (!advisorEnabled && !FEATURE_FLAGS.promoAdvisor) {
+    return (
+      <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
+        <FeatureUnavailableCard featureKey="promoAdvisor" title="Promo Advisor" body="Promo Advisor will appear here once the AI explainer backend is activated." />
+      </div>
+    );
+  }
 
   const analyze = async () => {
     if (!user || !promoText.trim() || uses >= DAILY_LIMIT || loading) return;
-    setLoading(true); setError(''); setResult(null);
+    setLoading(true); setError(''); setResult(null); setStreamingText('');
     try {
-      // Sanitize: strip HTML/script tags, cap at 2000 chars
       const sanitized = promoText.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
       const { data: { session } } = await supabase.auth.getSession();
       const activeBooks = Object.entries(appData?.done || {})
@@ -46,19 +54,69 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       const userContext = (activeBooks.length || bankrollNum)
         ? { bankroll: bankrollNum, books: activeBooks.slice(0, 5) }
         : undefined;
-      const { data, error: fnErr } = await supabase.functions.invoke('promo-advisor', {
-        headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
-        body: { promoText: sanitized, ...(userContext && { userContext }) }
-      });
-      if (fnErr) throw fnErr;
-      const newUses = Number.isFinite(data?.remaining) ? DAILY_LIMIT - data.remaining : uses + 1;
-      setUses(newUses);
-      try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
-      setResult(data);
+
+      const body = JSON.stringify({ promoText: sanitized, ...(userContext && { userContext }) });
+      const authHeader = session ? { 'Authorization': `Bearer ${session.access_token}` } : {};
+
+      // Use SSE streaming when SUPABASE_URL is available; fallback to supabase.functions.invoke otherwise
+      if (SUPABASE_URL) {
+        const fnUrl = `${SUPABASE_URL}/functions/v1/promo-advisor`;
+        const res = await fetch(fnUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream', ...authHeader },
+          body,
+        });
+
+        if (!res.ok || !res.body) {
+          const errJson = await res.json().catch(() => ({}));
+          throw new Error(errJson?.error || `HTTP ${res.status}`);
+        }
+
+        const reader = res.body.getReader();
+        readerRef.current = reader;
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() ?? '';
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            try {
+              const evt = JSON.parse(line.slice(6));
+              if (evt.type === 'delta') {
+                setStreamingText(prev => prev + (evt.text || ''));
+              } else if (evt.type === 'done') {
+                const data = evt.result;
+                const newUses = Number.isFinite(evt.remaining) ? DAILY_LIMIT - evt.remaining : uses + 1;
+                setUses(newUses);
+                try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
+                setResult(data);
+                setStreamingText('');
+              }
+            } catch { /* malformed SSE */ }
+          }
+        }
+      } else {
+        // Fallback: supabase.functions.invoke (no SUPABASE_URL configured)
+        const { data, error: fnErr } = await supabase.functions.invoke('promo-advisor', {
+          headers: authHeader,
+          body: JSON.parse(body),
+        });
+        if (fnErr) throw fnErr;
+        const newUses = Number.isFinite(data?.remaining) ? DAILY_LIMIT - data.remaining : uses + 1;
+        setUses(newUses);
+        try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
+        setResult(data);
+      }
     } catch(e) {
       setError(e?.message === 'Unauthorized' ? 'Sign in to analyze promos.' : 'Analysis failed. Please try again.');
     } finally {
       setLoading(false);
+      readerRef.current = null;
     }
   };
 
@@ -218,6 +276,14 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
           </div>
         )}
 
+        {/* Streaming progress indicator */}
+        {loading && streamingText && (
+          <div style={{ background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, padding: '10px 12px' }}>
+            <div style={{ fontSize: 10, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 6 }}>Analyzing…</div>
+            <div style={{ fontSize: 11, color: K.dm, fontFamily: 'monospace', whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'hidden', opacity: 0.7 }}>{streamingText.slice(-300)}</div>
+          </div>
+        )}
+
         {/* Empty state hint */}
         {!result && !error && !loading && (
           <div style={{background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,padding:'12px 14px'}}>
@@ -301,6 +367,19 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               <div style={{fontSize:10,color:K.mt}}>
                 Ops tags: {result.opsTags.join(" · ")}
               </div>
+            )}
+
+            {Array.isArray(result?.assumptions) && result.assumptions.length > 0 && (
+              <details style={{marginTop:4}}>
+                <summary style={{fontSize:10,color:K.mt,cursor:'pointer',userSelect:'none',listStyle:'none',display:'flex',alignItems:'center',gap:4}}>
+                  <span>▸</span><span style={{textDecoration:'underline',textDecorationStyle:'dotted'}}>Assumptions ({result.assumptions.length})</span>
+                </summary>
+                <div style={{marginTop:6,paddingLeft:12,borderLeft:`2px solid ${K.bd2}`}}>
+                  {result.assumptions.map((a, i) => (
+                    <div key={i} style={{fontSize:10,color:K.dm,lineHeight:1.6}}>• {a}</div>
+                  ))}
+                </div>
+              </details>
             )}
 
             {/* Quick Calc CTA */}

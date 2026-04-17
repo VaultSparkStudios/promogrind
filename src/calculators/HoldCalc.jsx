@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
-import { calcHold, f, K } from "../lib/shared.js";
+import React, { useMemo, useState } from "react";
+import { calcHold, f, K, font } from "../lib/shared.js";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function HoldCalc() {
@@ -8,6 +9,7 @@ export default function HoldCalc() {
   const setO1 = (x) => setMem("o1", x);
   const setO2 = (x) => setMem("o2", x);
   const r = useMemo(() => calcHold(o1, o2), [o1, o2]);
+  const [showReceipt, setShowReceipt] = useState(false);
   const grade = r ? (parseFloat(r.hold) < 3 ? "SHARP" : parseFloat(r.hold) < 5 ? "FAIR" : parseFloat(r.hold) < 8 ? "HIGH" : "AVOID") : null;
   const gradeColor = r ? (parseFloat(r.hold) < 3 ? K.gn : parseFloat(r.hold) < 5 ? K.ac : parseFloat(r.hold) < 8 ? K.yl : K.rd) : K.mt;
 
@@ -25,6 +27,7 @@ export default function HoldCalc() {
               <span style={S.big(gradeColor)}>{r.hold}%</span>
               <span style={{ fontSize: 12, color: K.dm }}>book hold</span>
               <span style={S.tag(gradeColor)}>{grade}</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Side 1 Implied Probability" v={`${r.ip1}%`} c={K.dm} />
             <RR l="Side 2 Implied Probability" v={`${r.ip2}%`} c={K.dm} />
@@ -36,6 +39,23 @@ export default function HoldCalc() {
                parseFloat(r.hold) < 8 ? "Above-average hold. Consider shopping other books." :
                "High hold. This book is overcharging significantly. Skip unless no other options."}
             </Nt>
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Book Hold Calculator"
+                inputs={[
+                  { label: "Side 1 Odds", value: o1 },
+                  { label: "Side 2 Odds", value: o2 },
+                ]}
+                outputs={[
+                  { label: "Side 1 Implied Prob", value: `${r.ip1}%` },
+                  { label: "Side 2 Implied Prob", value: `${r.ip2}%` },
+                  { label: "Grade", value: grade },
+                  { label: "Book Hold", value: `${r.hold}%`, highlight: true },
+                ]}
+                disclaimer="Lower hold = less vig. Sharp books run <3%. Retail books typically 4.5-5.5%."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

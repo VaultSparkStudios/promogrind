@@ -95,6 +95,9 @@ export async function createPromoGrindAccount({
 }) {
   const cleanEmail = String(email || '').trim();
   const cleanDisplayName = String(displayName || '').trim().slice(0, 24);
+  // Attach referral/UTM attribution stored by LandingRoute on first visit
+  let referralSource;
+  try { referralSource = localStorage.getItem('pg_ref') || undefined; } catch {}
   const { data, error } = await supabase.auth.signUp({
     email: cleanEmail,
     password,
@@ -105,6 +108,7 @@ export async function createPromoGrindAccount({
         newsletter: !!marketingOptIn,
         signup_source: 'promogrind',
         project_account_origin: 'promogrind',
+        ...(referralSource && { referral_source: referralSource }),
       },
     },
   });

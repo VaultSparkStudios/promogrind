@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { toD, toA, f, K } from "../lib/shared.js";
+import { toD, toA, f, K, font } from "../lib/shared.js";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { BOOKS } from "../books.js";
 import { S, RR, Nt, Tl, Help } from "../ui.jsx";
 
 export default function LineShop() {
   const bookNames = BOOKS.map((b) => b.name);
+  const [showReceipt, setShowReceipt] = useState(false);
   const [odds, setOdds] = useState(() => Object.fromEntries(bookNames.map((n) => [n, ""])));
   const [label, setLabel] = useState("");
   const entries = bookNames.map((n) => ({ name: n, odds: odds[n], color: BOOKS.find((b) => b.name === n)?.color || "#60a5fa" })).filter((e) => e.odds && toD(e.odds) > 1);
@@ -38,6 +40,7 @@ export default function LineShop() {
               <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                 <span style={S.big(K.gn)}>{best.odds}</span>
                 <span style={{ fontSize: 12, color: K.dm }}>best odds at {best.name}</span>
+                <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
               </div>
             )}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
@@ -51,6 +54,19 @@ export default function LineShop() {
             {nvOdds && <RR l="Market consensus (no-vig)" v={nvOdds} c={K.pp} />}
             {best && <RR l="Best vs. average (cents saved per $100)" v={`+${f((1 / toD(entries.reduce((s, e) => ({ odds: String(toD(s.odds) + toD(e.odds)), name: "avg" })).odds * entries.length) - 1 / toD(best.odds)) * 100, 1)}¢`} c={K.gn} />}
             <Nt c={K.ac}>Always bet at the book offering the best odds for your side. Even 5 cents better on a $200 bet = $10 extra profit per game.</Nt>
+            {showReceipt && best && (
+              <CalculatorReceipt
+                calcName="Line Shopping"
+                inputs={label ? [{ label: "Event", value: label }, ...entries.map((e) => ({ label: e.name, value: e.odds }))] : entries.map((e) => ({ label: e.name, value: e.odds }))}
+                outputs={[
+                  ...(nvOdds ? [{ label: "Market Consensus (no-vig)", value: nvOdds }] : []),
+                  ...entries.sort((a, b) => toD(b.odds) - toD(a.odds)).slice(0, 3).map((e, i) => ({ label: `#${i + 1} ${e.name}`, value: e.odds })),
+                  { label: "Best Odds", value: `${best.odds} @ ${best.name}`, highlight: true },
+                ]}
+                disclaimer="Always verify odds are still available before placing."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
         {entries.length < 2 && <Nt c={K.mt}>Enter odds from 2+ books above to compare.</Nt>}

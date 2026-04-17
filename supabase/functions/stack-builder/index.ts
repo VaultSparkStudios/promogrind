@@ -15,6 +15,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLimitResponse } from "../_shared/http.ts";
+import { parseAiJson, SLUG_GUARDRAIL, validateCalculatorSlug } from "../_shared/validate.ts";
 
 // Current promos by book — update these as promos rotate
 const PROMO_DATABASE = [
@@ -95,37 +96,61 @@ Rules:
 Available promos for this user (bankroll: $${bankroll}):
 ${promoContext}
 
-Goal: ${goal}`;
+Goal: ${goal}
 
-    const userPrompt = `My bankroll is $${bankroll}. Based on the available promos, give me:
-1. My optimal 3-step promo stack for this week
-2. Estimated guaranteed extraction for each step
-3. Total guaranteed extraction this week
-4. Order of operations (what to do first)
+${SLUG_GUARDRAIL}`;
 
-Be specific with dollar amounts. Format as a clean structured response.`;
+    const userPrompt = `My bankroll is $${bankroll}. Return ONLY a valid JSON object (no markdown, no code blocks):
+{
+  "summary": "one-sentence overview of the plan",
+  "estimatedTotal": <number — total guaranteed extraction in dollars>,
+  "steps": [
+    { "order": 1, "book": "BookName", "promoType": "bonus_bet", "value": <number>, "action": "one-sentence action", "calculatorSlug": "bonus-bet|profit-boost|first-bet|null", "hedgeRequired": true|false }
+  ],
+  "assumptions": ["assumption 1", "assumption 2"]
+}
+Steps should be in execution order (welcome bonuses first, then recurring). Be specific with dollar amounts.`;
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "x-api-key": apiKey,
         "anthropic-version": "2023-06-01",
+        "anthropic-beta": "prompt-caching-2024-07-31",
         "content-type": "application/json",
       },
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 800,
-        system: systemPrompt,
+        system: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }],
         messages: [{ role: "user", content: userPrompt }],
       }),
     });
 
-    const data = await response.json();
-    const aiText = data.content?.[0]?.text || "Unable to generate plan.";
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(`Claude API error: ${response.status} — ${err}`);
+    }
 
-    // Parse estimated total from AI response (best-effort)
-    const totalMatch = aiText.match(/\$(\d[\d,]*)\s*(?:total|guaranteed|weekly)/i);
-    const estimatedTotal = totalMatch ? parseInt(totalMatch[1].replace(/,/g, "")) : null;
+    const claudeData = await response.json();
+    const raw = claudeData.content?.[0]?.text ?? "{}";
+    const plan = parseAiJson(raw);
+
+    const normalizedSteps = Array.isArray(plan.steps)
+      ? (plan.steps as Record<string, unknown>[]).map((s) => ({
+          order: Number(s.order) || 1,
+          book: String(s.book || "").trim(),
+          promoType: String(s.promoType || "other"),
+          value: Number(s.value) || 0,
+          action: String(s.action || "").trim(),
+          calculatorSlug: validateCalculatorSlug(s.calculatorSlug),
+          hedgeRequired: !!s.hedgeRequired,
+        }))
+      : [];
+
+    const estimatedTotal = Number.isFinite(Number(plan.estimatedTotal))
+      ? Number(plan.estimatedTotal)
+      : null;
 
     await recordAiUsage(access.supabase, access.user.id, "stack_builder", {
       tier: access.tier,
@@ -136,10 +161,14 @@ Be specific with dollar amounts. Format as a clean structured response.`;
 
     return new Response(
       JSON.stringify({
-        plan: aiText,
+        summary: String(plan.summary || "Optimal promo stack generated.").trim(),
+        steps: normalizedSteps,
+        assumptions: Array.isArray(plan.assumptions)
+          ? (plan.assumptions as unknown[]).map((a) => String(a || "").trim()).filter(Boolean).slice(0, 3)
+          : [],
         bankroll,
         estimatedTotal,
-        booksUsed: [...new Set(eligible.map(p => p.book))].slice(0, 5),
+        booksUsed: [...new Set(normalizedSteps.map((s) => s.book))].filter(Boolean).slice(0, 5),
         promoCount: eligible.length,
         generatedAt: new Date().toISOString(),
         remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),

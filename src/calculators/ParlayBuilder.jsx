@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { calcParlay, toD, f, K, font } from "../lib/shared.js";
 import { S, In, RR, Nt, Tl, Help } from "../ui.jsx";
 
@@ -7,6 +8,7 @@ export default function ParlayBuilder() {
   const [stake, setStake] = useState("100");
   const legOdds = legs.map((l) => l.odds);
   const r = useMemo(() => calcParlay(legOdds, stake), [legOdds, stake]);
+  const [showReceipt, setShowReceipt] = useState(false);
   const addLeg = () => { if (legs.length < 8) setLegs((l) => [...l, { odds: "+150" }]); };
   const removeLeg = (i) => setLegs((l) => l.filter((_, j) => j !== i));
   const updateLeg = (i, v) => setLegs((l) => l.map((lg, j) => j === i ? { odds: v } : lg));
@@ -45,6 +47,7 @@ export default function ParlayBuilder() {
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.profit}</span>
               <span style={{ fontSize: 12, color: K.dm }}>profit if hits</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Combined Odds" v={`${r.combA} (${r.combined}x)`} c={K.pp} b />
             <RR l="Total Payout" v={`$${r.payout}`} c={K.gn} />
@@ -53,6 +56,21 @@ export default function ParlayBuilder() {
             <RR l="Implied Prob Sum (vig)" v={`${r.impSum}%`} c={parseFloat(r.impSum) > 105 ? K.rd : K.yl} />
             {!r.ok && <Nt c={K.rd}>This parlay is -EV. The sportsbook&apos;s vig compounds across each leg — long parlays almost always favor the house.</Nt>}
             {r.ok && <Nt c={K.gn}>This parlay has positive expected value. Verify each leg has a genuine edge using the +EV calculator first.</Nt>}
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Parlay Builder"
+                inputs={legs.map((lg, i) => ({ label: `Leg ${i + 1}`, value: lg.odds }))}
+                outputs={[
+                  { label: "Combined Odds", value: r.combA },
+                  { label: "True Win Probability", value: `${r.prob}%` },
+                  { label: "Total Payout", value: `$${r.payout}` },
+                  { label: "Expected Value", value: `${r.ok ? "+" : ""}$${r.ev}` },
+                  { label: "Profit if Hits", value: `$${r.profit}`, highlight: true },
+                ]}
+                disclaimer="Parlay EV assumes independent legs. Verify each leg edge separately."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

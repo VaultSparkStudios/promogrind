@@ -2,7 +2,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS, getBookUrl } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
-import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics } from "./sync.js";
+import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
 import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBriefEnabled } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import { computeStreak } from "./lib/streaks.js";
@@ -27,6 +27,8 @@ const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => 
 const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
 const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
 const PromoIntakeRoute = lazy(() => import("./routes/PromoIntakeRoute.jsx"));
+const LandingRoute = lazy(() => import("./routes/LandingRoute.jsx"));
+const FeatureFlagAdmin = lazy(() => import("./components/FeatureFlagAdmin.jsx"));
 const TrackInsights = lazy(() => import("./components/TrackInsights.jsx"));
 const PromoWalkthrough = lazy(() => import("./components/PromoWalkthrough.jsx"));
 const DailyBriefPage = lazy(() => import("./components/dashboard/DailyBriefPage.jsx"));
@@ -3571,7 +3573,10 @@ export default function App() {
   useEffect(() => {
     loadData().then(d => {
       if(d) setAppData(d);
-      setSyncDiagnostics(readSyncDiagnostics());
+      const diag = readSyncDiagnostics();
+      setSyncDiagnostics(diag);
+      // Flush any writes queued during a prior offline session
+      if (diag.hasPendingWrites) triggerQueueFlush().catch(() => {});
     });
   }, []);
   useEffect(() => {
@@ -3823,6 +3828,30 @@ export default function App() {
 
   const authHref = (mode) => getProjectAuthHref(mode, window.location.href);
   const closeAuthDialog = () => setAuthQueryMode(null);
+
+  // Creator/referral landing pages — rendered outside the main nav shell
+  if (pathname.startsWith("/land/")) {
+    return (
+      <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
+        <LandingRoute />
+      </Suspense>
+    );
+  }
+
+  // Feature flag admin — hidden route, house tier only
+  if (pathname === "/feature-flags") {
+    return (
+      <ToastProvider>
+      <AppDataCtx.Provider value={{ appData, syncAppData, user, syncDiagnostics, syncStatus, isOnline }}>
+      <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100vh", padding: 16 }}>
+        <Suspense fallback={<div style={{ padding: 32 }}>Loading…</div>}>
+          <FeatureFlagAdmin proStatus={proStatus} />
+        </Suspense>
+      </div>
+      </AppDataCtx.Provider>
+      </ToastProvider>
+    );
+  }
 
   const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
   const { gi=0, ti=0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];

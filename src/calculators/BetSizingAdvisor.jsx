@@ -1,5 +1,6 @@
-import React from "react";
-import { f, K } from "../lib/shared.js";
+import React, { useState } from "react";
+import { f, K, font } from "../lib/shared.js";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function BetSizingAdvisor() {
@@ -9,6 +10,7 @@ export default function BetSizingAdvisor() {
   const setNumBets = (x) => setMem("numBets", x);
   const setAvgEdge = (x) => setMem("avgEdge", x);
   const setStyle = (x) => setMem("style", x);
+  const [showReceipt, setShowReceipt] = useState(false);
   const br = parseFloat(bankroll) || 0;
   const nb = parseInt(numBets) || 1;
   const edge = parseFloat(avgEdge) / 100;
@@ -42,6 +44,7 @@ export default function BetSizingAdvisor() {
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>${f(current)}</span>
               <span style={{ fontSize: 12, color: K.dm }}>per bet ({style})</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Flat 1% of bankroll" v={`$${f(br * 0.01)}`} c={K.dm} />
             <RR l="Quarter Kelly (recommended)" v={`$${f(qkAmt)}`} c={K.gn} />
@@ -52,6 +55,26 @@ export default function BetSizingAdvisor() {
               {parseFloat(riskPct) > 30 ? "You have more than 30% of bankroll at risk simultaneously. High drawdown risk. Reduce bet count or size." :
               "Risk level is healthy. Less than 30% of bankroll across all open bets."}
             </Nt>
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Bet Sizing Advisor"
+                inputs={[
+                  { label: "Bankroll", value: `$${bankroll}` },
+                  { label: "Concurrent Bets", value: numBets },
+                  { label: "Avg Edge", value: `${avgEdge}%` },
+                  { label: "Sizing Style", value: style },
+                ]}
+                outputs={[
+                  { label: "Flat 1%", value: `$${f(br * 0.01)}` },
+                  { label: "Quarter Kelly", value: `$${f(qkAmt)}` },
+                  { label: "Half Kelly", value: `$${f(kellyAmt * 0.5)}` },
+                  { label: "Total Risk", value: `$${f(totalRisk)} (${riskPct}%)` },
+                  { label: `Per Bet (${style})`, value: `$${f(current)}`, highlight: true },
+                ]}
+                disclaimer="Sizing recommendations only. Bankroll management does not guarantee profit."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

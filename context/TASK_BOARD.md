@@ -2,9 +2,14 @@
 
 Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
-## Next-Session Pre-load (pulled from brainstorm)
-- [ ] [SIL] Wire CalculatorReceipt into remaining 15 calculators — component is generic; needs `inputs`/`outputs` arrays per calc; ProfitBoost and FirstBet are highest-traffic
-- [ ] [SIL] Add Deno edge function tests to CI workflow — `.github/workflows/ci.yml` should run `deno test supabase/functions/__tests__/` alongside vitest
+## Next-Session Pre-load (pulled from S63 brainstorm)
+- [ ] [SIL] Wire `useFeatureFlag` into PromoChat, AIActionPlan, LiveScanner — three remaining static FEATURE_FLAGS gates with hooks-order risk
+- [ ] [SIL] Update StackBuilder UI to render structured `steps[]` / `summary` / `assumptions[]` response instead of raw `aiText`
+- [ ] [SIL] Add landing page smoke test — verify `/land/test` renders without crashing in `scripts/validate-launch-smoke.mjs`
+
+## Previous Pre-load (done)
+- [x] [SIL] Wire CalculatorReceipt into remaining 15 calculators — **DONE S63**: all 15 calculators (ProfitBoost, FirstBet, KellyCriterion, Arb2Way, Arb3Way, NoVig, NoVig3Way, PlusEV, InsurancePromo, TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc, BetSizingAdvisor, LineShop) now show "📄 Receipt" button; component wired with calc-specific inputs/outputs arrays
+- [x] [SIL] Add Deno edge function tests to CI workflow — **DONE S63**: `.github/workflows/ci.yml` now installs Deno v2 and runs `deno test --allow-env supabase/functions/__tests__/` as a post-build step
 
 ## Human Action Required
 - [x] **Google Search Console** — verified promogrind.bet via Cloudflare DNS TXT, sitemap submitted at https://promogrind.bet/sitemap.xml
@@ -16,6 +21,21 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
 - [ ] **Affiliate/referral links** — remaining monetization gaps are `BetMGM`, `bet365`, and `BetRivers`; ESPN BET/TheScore BET and Fanatics are now configured with real personal links
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
+- [ ] **Apply `scripts/migration-feature-flags.sql`** — creates `feature_flags` table + RLS + `get_feature_flag()` SQL function in Supabase; required before the `/feature-flags` admin panel can read/write flags
+
+## Now (S63 /go sprint 2 additions — all DONE)
+- [x] [SIL] Calculator Receipt test coverage — **DONE S63**: 9 new tests (CalculatorReceipt component × 6 + ProfitBoost receipt button × 2 + Arb2Way × 1); 288/288 green
+- [x] promo-advisor SSE SUPABASE_URL fallback — **DONE S63**: falls back to `supabase.functions.invoke` when `VITE_SUPABASE_URL` is empty
+- [x] UTM attribution in PostHog — **DONE S63**: `_readUtmAttribution()` helper in analytics.js; `pg_ref`/`pg_utm_*` included in `identifyUser()` and `trackPage()` calls
+- [x] assumptions[] in PromoAdvisorPanel — **DONE S63**: collapsible "Assumptions (N)" section under opsTags in result card
+- [x] useFeatureFlag hook adoption — **DONE S63**: PromoAdvisorPanel now calls `useFeatureFlag('promoAdvisor')` for remote-overridable gate; hooks moved above conditional return (fixes prior Rules-of-Hooks violation)
+- [x] Flush IDB queue on app boot — **DONE S63**: App.jsx now calls `triggerQueueFlush()` on loadData() if `hasPendingWrites` is true
+- [x] Landing page analytics event — **DONE S63**: `trackEvent('landing_page_view', {creator, utm_source, calc_preset})` fired on LandingRoute mount
+- [x] Creator referral on signup — **DONE S63**: `createPromoGrindAccount` reads `pg_ref` from localStorage and attaches as `referral_source` in user metadata
+- [x] Feature flag admin link — **DONE S63**: "Feature Flags →" link added to LaunchCommandCenterPanel operator buttons
+- [x] validate.ts Deno unit tests — **DONE S63**: `supabase/functions/__tests__/validate.test.ts` with 20 tests covering all shared validation functions
+- [x] Stack-builder structured JSON — **DONE S63**: system prompt now requests JSON with steps/summary/assumptions schema; `parseAiJson` + `validateCalculatorSlug` normalize output
+- [x] STARTUP_BRIEF refresh — **DONE S63**: docs/STARTUP_BRIEF.md updated to S63 state
 
 ## Now
 - [x] Surface Portfolio EVS allocation card in WorkflowInboxPanel — **DONE S63**: `WorkflowInboxPanel` now imports `buildPortfolioAllocation`, computes allocation from `inbox.open`, and renders an "Optimal Allocation" card with per-workflow $-allocation and EV estimate when ≥2 workflows + bankroll present

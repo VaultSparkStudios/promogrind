@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
-import { calcNV, K } from "../lib/shared.js";
+import React, { useMemo, useState } from "react";
+import { calcNV, K, font } from "../lib/shared.js";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function NoVig() {
@@ -8,6 +9,7 @@ export default function NoVig() {
   const setO1 = (v) => setMem("o1", v);
   const setO2 = (v) => setMem("o2", v);
   const r = useMemo(() => calcNV(o1, o2), [o1, o2]);
+  const [showReceipt, setShowReceipt] = useState(false);
   return (
     <div>
       <div style={S.card}>
@@ -15,12 +17,33 @@ export default function NoVig() {
         <div style={S.row}><In l="Side 1 Odds" v={o1} set={setO1} ph="-110" /><In l="Side 2 Odds" v={o2} set={setO2} ph="-110" /></div>
         {r && (
           <div style={S.res(true)}>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+            </div>
             <RR l="Sportsbook Vig (Juice)" v={`${r.v}%`} c={K.rd} b />
             <div style={{ marginTop: 8, marginBottom: 2, fontSize: 10, color: K.mt }}>SIDE 1</div>
             <RR l="Implied Probability (with vig)" v={`${r.ip1}%`} c={K.dm} /><RR l="True Probability (no vig)" v={`${r.fp1}%`} c={K.gn} /><RR l="Fair Odds" v={r.fo1} c={K.pp} b />
             <div style={{ marginTop: 8, marginBottom: 2, fontSize: 10, color: K.mt }}>SIDE 2</div>
             <RR l="Implied Probability (with vig)" v={`${r.ip2}%`} c={K.dm} /><RR l="True Probability (no vig)" v={`${r.fp2}%`} c={K.gn} /><RR l="Fair Odds" v={r.fo2} c={K.pp} b />
             <Nt c={K.ac}>If any sportsbook offers BETTER than these fair odds on either side, that bet has positive expected value (+EV).</Nt>
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="No-Vig Fair Odds Calculator"
+                inputs={[
+                  { label: "Side 1 Odds", value: o1 },
+                  { label: "Side 2 Odds", value: o2 },
+                ]}
+                outputs={[
+                  { label: "Vig (Juice)", value: `${r.v}%` },
+                  { label: "Side 1 Fair Odds", value: r.fo1 },
+                  { label: "Side 1 True Prob", value: `${r.fp1}%` },
+                  { label: "Side 2 Fair Odds", value: r.fo2 },
+                  { label: "Side 2 True Prob", value: `${r.fp2}%` },
+                ]}
+                disclaimer="Fair odds are estimates based on market consensus. Use as a benchmark only."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

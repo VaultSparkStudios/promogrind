@@ -33,3 +33,11 @@ jobs:
 
       - name: Check bundle budget
         run: npm run check:bundle
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Test edge functions (Deno)
+        run: deno test --allow-env supabase/functions/__tests__/

@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { calcTeaser, K, font } from "../lib/shared.js";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
@@ -9,6 +10,7 @@ export default function TeaserCalc() {
   const setTOdds = (x) => setMem("tOdds", x);
   const setWp = (x) => setMem("wp", x);
   const r = useMemo(() => calcTeaser(legs, tOdds, wp), [legs, tOdds, wp]);
+  const [showReceipt, setShowReceipt] = useState(false);
   const presets = [["2-leg 6pt", "-110"], ["2-leg 6.5pt", "-120"], ["2-leg 7pt", "-130"], ["3-leg 6pt", "+165"]];
 
   return (
@@ -42,11 +44,30 @@ export default function TeaserCalc() {
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? "+" : ""}{r.ev}%</span>
               <span style={{ fontSize: 12, color: K.dm }}>expected value per $100</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Legs" v={legs} />
             <RR l="Combined Win Probability" v={`${r.combProb}%`} c={K.ac} />
             <RR l="Break-even Win % Per Leg" v={`${r.beProb}%`} c={K.yl} />
             <RR l="Payout (net odds)" v={`${r.payout}x`} />
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Teaser Calculator"
+                inputs={[
+                  { label: "Legs", value: legs },
+                  { label: "Teaser Odds", value: tOdds },
+                  { label: "Win % Per Leg", value: `${wp}%` },
+                ]}
+                outputs={[
+                  { label: "Combined Win Prob", value: `${r.combProb}%` },
+                  { label: "Break-even Win %", value: `${r.beProb}%` },
+                  { label: "Payout", value: `${r.payout}x` },
+                  { label: "Expected Value", value: `${r.ok ? "+" : ""}${r.ev}%`, highlight: true },
+                ]}
+                disclaimer="EV estimates assume independent legs at your stated win probability. Key-number teaser analysis only."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
             {r.ok && <Nt c={K.gn}>This teaser has positive EV at your estimated per-leg win rate. Make sure your estimate accounts for the line movement — teasers are only +EV when crossing key numbers (3 and 7 in NFL).</Nt>}
             {!r.ok && <Nt c={K.rd}>At {wp}% per-leg win rate, this teaser is -EV. You need {r.beProb}% per leg to break even. Teasers crossing 3 and 7 in NFL can reach 72-76% per leg — otherwise avoid.</Nt>}
           </div>

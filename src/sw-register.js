@@ -1,14 +1,35 @@
 import { supabase } from "./auth.js";
+import { triggerQueueFlush } from "./sync.js";
 
 export function registerSW() {
-  if ('serviceWorker' in navigator) {
-    const base = import.meta.env.VITE_APP_BASE_PATH || '/';
-    const swUrl = base.endsWith('/') ? base + 'sw.js' : base + '/sw.js';
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register(swUrl, { scope: base })
-        .catch(() => {}); // silently fail — app still works without SW
-    });
-  }
+  if (!('serviceWorker' in navigator)) return;
+
+  const base = import.meta.env.VITE_APP_BASE_PATH || '/';
+  const swUrl = base.endsWith('/') ? base + 'sw.js' : base + '/sw.js';
+
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(swUrl, { scope: base })
+      .catch(() => {}); // silently fail — app still works without SW
+  });
+
+  // Flush queue when SW signals reconnect via Background Sync
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'PG_FLUSH_QUEUE') {
+      triggerQueueFlush().catch(() => {});
+    }
+  });
+
+  // Fallback: flush on window online event (browsers without Background Sync)
+  window.addEventListener('online', () => {
+    // Register background sync if supported, else flush directly
+    navigator.serviceWorker.ready.then(reg => {
+      if ('sync' in reg) {
+        reg.sync.register('pg-flush-queue').catch(() => triggerQueueFlush());
+      } else {
+        triggerQueueFlush().catch(() => {});
+      }
+    }).catch(() => {});
+  });
 }
 
 /**

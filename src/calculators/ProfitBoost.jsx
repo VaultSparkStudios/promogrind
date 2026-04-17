@@ -7,6 +7,7 @@ import ResultFeedbackCard from "../components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "../components/CalculatorTrustBadge.jsx";
 import BookCTA from "../components/BookCTA.jsx";
 import ShareCard from "../components/ShareCard.jsx";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 
 export default function ProfitBoost() {
   const [mem, setMem] = useCalcMemory("profit-boost", { s: "50", o: "+200", bp: "50", mx: "250", ho: "-220" });
@@ -32,6 +33,7 @@ export default function ProfitBoost() {
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has("demo"));
   const [rCopied, setRCopied] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
+  const [showReceipt, setShowReceipt] = useState(false);
   const applyDemo = () => { setS("50"); setO("-110"); setBp("25"); setMx("10"); setHo("-110"); setDemoMode(true); };
   const copyResult = () => {
     if (!r) return;
@@ -79,6 +81,7 @@ export default function ProfitBoost() {
               <span style={S.big(parseFloat(r.g) > 0 ? K.gn : K.rd)}>${r.g}</span>
               <span style={{ fontSize: 12, color: K.dm }}>guaranteed profit</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b /><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl} /><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`} /><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b /><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn} /><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn} />
             <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
@@ -97,6 +100,27 @@ export default function ProfitBoost() {
             )}
             {showShareCard && parseFloat(r.g) > 0 && (
               <ShareCard title="Profit Boost Calculator" profit={`$${r.g}`} onClose={() => setShowShareCard(false)} />
+            )}
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Profit Boost Converter"
+                inputs={[
+                  { label: "Stake", value: `$${s}` },
+                  { label: "Original Odds", value: o },
+                  { label: "Boost %", value: `${bp}%` },
+                  { label: "Max Extra Winnings", value: `$${mx}` },
+                  { label: "Hedge Odds", value: ho },
+                ]}
+                outputs={[
+                  { label: "Boosted Odds", value: r.eo },
+                  { label: "Boost Value Added", value: `+$${r.bv}` },
+                  { label: "Hedge Amount", value: `$${r.hs}` },
+                  { label: "If Boosted Wins", value: `+$${r.pBW}` },
+                  { label: "If Hedge Wins", value: `+$${r.pHW}` },
+                  { label: "Guaranteed Profit", value: `$${r.g}`, highlight: true },
+                ]}
+                onClose={() => setShowReceipt(false)}
+              />
             )}
           </div>
         )}

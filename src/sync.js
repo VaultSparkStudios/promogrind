@@ -196,6 +196,15 @@ export function readSyncDiagnostics() {
   };
 }
 
+/** Flush any queued offline writes. Safe to call on reconnect — no-ops if queue is empty. */
+export async function triggerQueueFlush() {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user?.id) return;
+    await _flushQueue(session.user.id);
+  } catch { /* best-effort */ }
+}
+
 async function _saveRemote(userId, data) {
   const trackerStateSaved = await _saveEntityState(userId, data).then(() => true).catch(() => false);
   const workflowStateSaved = await _saveWorkflowEntities(userId, data).then(() => true).catch(() => false);

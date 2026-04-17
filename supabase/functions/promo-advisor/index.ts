@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
+import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL, validateCalculatorSlug, validateConfidence, validatePromoType, validateRating } from "../_shared/validate.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -19,31 +20,23 @@ const SYSTEM_PROMPT = `You are a sports betting promo analyst for PromoGrind. A 
 - "opportunityScore": integer 0-100
 - "opsTags": array of 1-4 short machine-friendly tags
 
-Be concise, practical, and product-native. Focus on real cash value after optimal hedging and route the user to the best next PromoGrind calculator when possible.`;
+Be concise, practical, and product-native. Focus on real cash value after optimal hedging and route the user to the best next PromoGrind calculator when possible.
+
+${SLUG_GUARDRAIL}
+${PROMO_TYPE_GUARDRAIL}`;
 
 function normalizeAdvisorResult(input: Record<string, unknown>, fallbackText = "") {
-  const rating = ["excellent", "good", "fair", "poor"].includes(String(input.rating || "").toLowerCase())
-    ? String(input.rating).toLowerCase()
-    : "fair";
-  const confidence = ["high", "medium", "low"].includes(String(input.confidence || "").toLowerCase())
-    ? String(input.confidence).toLowerCase()
-    : "medium";
-  const promoType = ["bonus_bet", "profit_boost", "safety_net", "deposit_match", "insurance", "parlay", "arb", "other"].includes(String(input.promoType || "").toLowerCase())
-    ? String(input.promoType).toLowerCase()
-    : "other";
-  const calculatorSlug = ["bonus-bet", "profit-boost", "first-bet", "deposit-match", "insurance", "parlay", "arb-2way", "ev", "hedge"].includes(String(input.calculatorSlug || ""))
-    ? String(input.calculatorSlug)
-    : null;
   const riskFlags = Array.isArray(input.riskFlags) ? input.riskFlags.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 3) : [];
   const opsTags = Array.isArray(input.opsTags) ? input.opsTags.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean).slice(0, 4) : [];
   const parsedScore = Number.parseInt(String(input.opportunityScore ?? ""), 10);
+  const assumptions = Array.isArray(input.assumptions) ? input.assumptions.map((a) => String(a || "").trim()).filter(Boolean).slice(0, 3) : [];
 
   return {
     verdict: String(input.verdict || "Analysis Complete").trim(),
-    rating,
-    confidence,
-    promoType,
-    calculatorSlug,
+    rating: validateRating(input.rating),
+    confidence: validateConfidence(input.confidence),
+    promoType: validatePromoType(input.promoType),
+    calculatorSlug: validateCalculatorSlug(input.calculatorSlug),
     explanation: String(input.explanation || fallbackText || "Analysis complete.").trim(),
     ev: input.ev ?? null,
     action: input.action ? String(input.action).trim() : null,
@@ -52,6 +45,7 @@ function normalizeAdvisorResult(input: Record<string, unknown>, fallbackText = "
     riskFlags,
     opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : 50,
     opsTags,
+    assumptions,
   };
 }
 
@@ -109,6 +103,8 @@ serve(async (req) => {
       if (parts.length) contextNote = `\n\nUser profile: ${parts.join(" | ")}`;
     }
 
+    const wantsStream = req.headers.get("accept") === "text/event-stream";
+
     const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -120,6 +116,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 400,
+        stream: wantsStream,
         system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
         messages: [
           { role: "user", content: `Analyze this sportsbook promo:${contextNote}\n\n${sanitizedPromoText}` },
@@ -133,16 +130,76 @@ serve(async (req) => {
       return json(req, { error: "AI analysis failed" }, 502);
     }
 
+    const remaining = access.remaining === null ? null : Math.max(0, access.remaining - 1);
+
+    if (wantsStream && anthropicRes.body) {
+      const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
+      const writer = writable.getWriter();
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+
+      (async () => {
+        let fullText = "";
+        let inputTokens = 0;
+        let outputTokens = 0;
+        const reader = anthropicRes.body!.getReader();
+        let buffer = "";
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              const raw = line.slice(6).trim();
+              if (raw === "[DONE]") continue;
+              try {
+                const evt = JSON.parse(raw);
+                if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                  const text = evt.delta.text ?? "";
+                  fullText += text;
+                  await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "delta", text })}\n\n`));
+                } else if (evt.type === "message_delta" && evt.usage) {
+                  outputTokens = evt.usage.output_tokens ?? 0;
+                } else if (evt.type === "message_start" && evt.message?.usage) {
+                  inputTokens = evt.message.usage.input_tokens ?? 0;
+                }
+              } catch { /* malformed SSE line */ }
+            }
+          }
+        } finally {
+          reader.releaseLock();
+        }
+
+        const parsed = parseAiJson(fullText);
+
+        const result = normalizeAdvisorResult(parsed, fullText);
+        await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "done", result, remaining })}\n\n`));
+        await writer.close();
+
+        recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
+          input_tokens: inputTokens,
+          output_tokens: outputTokens,
+          tier: access.tier,
+        }).catch(() => {});
+      })();
+
+      return new Response(readable, {
+        headers: {
+          ...corsHeaders,
+          "content-type": "text/event-stream",
+          "cache-control": "no-cache",
+          "x-accel-buffering": "no",
+        },
+      });
+    }
+
     const anthropicData = await anthropicRes.json();
     const content = anthropicData.content?.[0]?.text ?? "{}";
 
-    let parsed;
-    try {
-      const cleaned = content.replace(/```json?\n?/g, "").replace(/```/g, "").trim();
-      parsed = JSON.parse(cleaned);
-    } catch {
-      parsed = {};
-    }
+    const parsed = parseAiJson(content);
 
     await recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
       chars: sanitizedPromoText.length,
@@ -151,7 +208,7 @@ serve(async (req) => {
 
     return json(req, {
       ...normalizeAdvisorResult(parsed, content),
-      remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
+      remaining,
     });
   } catch (err) {
     console.error("promo-advisor error:", err);

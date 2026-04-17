@@ -252,3 +252,102 @@ describe("KellyCriterion calculator", () => {
     expect(screen.getByText("Fractional Kelly:")).toBeDefined();
   });
 });
+
+// ── CalculatorReceipt ─────────────────────────────────────────────────────
+
+describe("CalculatorReceipt component", () => {
+  let CalculatorReceipt;
+
+  beforeEach(async () => {
+    localStorage.clear();
+    ({ default: CalculatorReceipt } = await import("../components/CalculatorReceipt.jsx"));
+  });
+
+  const defaultProps = {
+    calcName: "Test Calculator",
+    inputs: [{ label: "Stake", value: "$200" }, { label: "Odds", value: "+300" }],
+    outputs: [
+      { label: "Hedge Amount", value: "$150" },
+      { label: "Guaranteed Profit", value: "$42", highlight: true },
+    ],
+    onClose: vi.fn(),
+  };
+
+  it("renders the calculator name in the receipt header", () => {
+    render(<CalculatorReceipt {...defaultProps} />);
+    expect(screen.getByText("Test Calculator")).toBeDefined();
+  });
+
+  it("renders all input labels and values", () => {
+    render(<CalculatorReceipt {...defaultProps} />);
+    expect(screen.getByText("Stake")).toBeDefined();
+    expect(screen.getByText("$200")).toBeDefined();
+    expect(screen.getByText("Odds")).toBeDefined();
+    expect(screen.getByText("+300")).toBeDefined();
+  });
+
+  it("renders all output rows including highlighted profit row", () => {
+    render(<CalculatorReceipt {...defaultProps} />);
+    expect(screen.getByText("Hedge Amount")).toBeDefined();
+    expect(screen.getByText("Guaranteed Profit")).toBeDefined();
+    expect(screen.getByText("$42")).toBeDefined();
+  });
+
+  it("calls onClose when the × close button is clicked", () => {
+    const onClose = vi.fn();
+    render(<CalculatorReceipt {...defaultProps} onClose={onClose} />);
+    fireEvent.click(screen.getByText("×"));
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("renders Copy and Print buttons", () => {
+    render(<CalculatorReceipt {...defaultProps} />);
+    expect(screen.getByText("📋 Copy")).toBeDefined();
+    expect(screen.getByText("🖨 Print / Save PDF")).toBeDefined();
+  });
+
+  it("uses custom disclaimer when provided", () => {
+    render(<CalculatorReceipt {...defaultProps} disclaimer="Custom disclaimer text." />);
+    expect(screen.getByText(/Custom disclaimer text/)).toBeDefined();
+  });
+});
+
+// ── Receipt button integration ────────────────────────────────────────────
+
+describe("Receipt button in ProfitBoost", () => {
+  let ProfitBoost;
+
+  beforeEach(async () => {
+    localStorage.clear();
+    ({ default: ProfitBoost } = await import("../calculators/ProfitBoost.jsx"));
+  });
+
+  it("shows Receipt button in result section with default inputs", () => {
+    render(<ProfitBoost />);
+    expect(screen.getByText("📄 Receipt")).toBeDefined();
+  });
+
+  it("opens CalculatorReceipt modal when Receipt button clicked", () => {
+    render(<ProfitBoost />);
+    fireEvent.click(screen.getByText("📄 Receipt"));
+    // Both the calc card title and receipt header now show the name
+    expect(screen.getAllByText("Profit Boost Converter").length).toBeGreaterThanOrEqual(2);
+    // Print button is unique to the receipt modal
+    expect(screen.getByText("🖨 Print / Save PDF")).toBeDefined();
+  });
+});
+
+describe("Receipt button in Arb2Way", () => {
+  let Arb2Way;
+
+  beforeEach(async () => {
+    localStorage.clear();
+    ({ default: Arb2Way } = await import("../calculators/Arb2Way.jsx"));
+  });
+
+  it("shows Receipt button when arb exists (both + odds)", () => {
+    render(<Arb2Way />);
+    // Default inputs: o1=+110, o2=+105 → arb exists
+    expect(screen.getByText("📄 Receipt")).toBeDefined();
+  });
+});

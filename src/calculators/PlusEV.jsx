@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
-import { calcEV, K } from "../lib/shared.js";
+import React, { useMemo, useState } from "react";
+import { calcEV, K, font } from "../lib/shared.js";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function PlusEV() {
@@ -9,6 +10,7 @@ export default function PlusEV() {
   const setFo = (v) => setMem("fo", v);
   const setS = (v) => setMem("s", v);
   const r = useMemo(() => calcEV(yo, fo, parseFloat(s)), [yo, fo, s]);
+  const [showReceipt, setShowReceipt] = useState(false);
   return (
     <div>
       <div style={S.card}>
@@ -19,9 +21,28 @@ export default function PlusEV() {
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? "+" : ""}${r.ev}</span>
               <span style={{ fontSize: 12, color: K.dm }}>expected value per bet</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="ROI per bet" v={`${r.roi}%`} c={r.ok ? K.gn : K.rd} b /><RR l="True Win Probability" v={`${r.fp}%`} /><RR l="Your Edge" v={`${r.edge}%`} c={r.ok ? K.gn : K.rd} />
             <Nt c={r.ok ? K.gn : K.rd}>{r.ok ? "This bet is +EV. Over hundreds of bets at this edge, you WILL profit mathematically — individual bets can still lose." : "This bet is -EV. The sportsbook has the edge. Skip it."}</Nt>
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="Expected Value Calculator"
+                inputs={[
+                  { label: "Sportsbook Odds", value: yo },
+                  { label: "Fair (No-Vig) Odds", value: fo },
+                  { label: "Bet Size", value: `$${s}` },
+                ]}
+                outputs={[
+                  { label: "True Win Probability", value: `${r.fp}%` },
+                  { label: "Your Edge", value: `${r.edge}%` },
+                  { label: "ROI per Bet", value: `${r.roi}%` },
+                  { label: "Expected Value", value: `${r.ok ? "+" : ""}$${r.ev}`, highlight: true },
+                ]}
+                disclaimer="EV is a long-run estimate. Individual results vary. Only bet with a genuine edge."
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

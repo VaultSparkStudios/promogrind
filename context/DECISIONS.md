@@ -2,6 +2,46 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-17 — promo-advisor streaming mirrors promo-chat Accept header pattern (S63)
+
+**Decision:** `promo-advisor` SSE streaming follows the same `Accept: text/event-stream` negotiation as `promo-chat`. Client falls back to `supabase.functions.invoke` when `VITE_SUPABASE_URL` is absent.
+
+**Applies to this project:** Yes — governs `supabase/functions/promo-advisor/index.ts` and `src/components/PromoAdvisorPanel.jsx`.
+
+**Rationale:** Consistency with the established `promo-chat` pattern means the same streaming infrastructure handles both panels. The `SUPABASE_URL` guard ensures dev/test environments (where the env var may be absent) still work via the invoke fallback without any code branching at import time.
+
+---
+
+## 2026-04-17 — Feature flag gate must be placed after all hooks (S63)
+
+**Decision:** `PromoAdvisorPanel` moved its feature gate check (`if (!advisorEnabled)`) below all `useState`/`useRef`/`useContext`/`useToast`/`useFeatureFlag` calls. The component now calls every hook unconditionally before any early return.
+
+**Applies to this project:** Yes — establishes the rule for all gated panels in this repo.
+
+**Rationale:** The prior code had `if (!FEATURE_FLAGS.promoAdvisor) return ...` at line 17, with `useState` and `useRef` calls at lines 22+. This is a React Rules-of-Hooks violation. While it worked because `FEATURE_FLAGS.promoAdvisor` is a build-time constant, it would break under React strict mode or when switched to the dynamic `useFeatureFlag` hook. All feature gates must appear after hooks.
+
+---
+
+## 2026-04-17 — AI output validation is centralised in _shared/validate.ts (S63)
+
+**Decision:** Calculator slug whitelisting, promo type validation, rating/confidence validation, JSON parsing, and input sanitisation are now centralised in `supabase/functions/_shared/validate.ts`. All three AI edge functions (`promo-advisor`, `ai-action-plan`, `stack-builder`) import from this module.
+
+**Applies to this project:** Yes — governs all current and future AI edge functions in this repo.
+
+**Rationale:** Prior to this, each edge function had its own inline validator arrays and JSON parse/clean logic. A new valid calculator slug required changes in 3 places. Centralisation means the whitelist is updated once, and the `SLUG_GUARDRAIL` string injected into system prompts is always consistent with the actual validation logic.
+
+---
+
+## 2026-04-17 — stack-builder responses use structured JSON schema (S63)
+
+**Decision:** `stack-builder` now requests a structured JSON response (`steps[]`, `summary`, `assumptions[]`, `estimatedTotal`) instead of free-form prose. Output is normalised through `parseAiJson` + `validateCalculatorSlug` before returning.
+
+**Applies to this project:** Yes — governs `supabase/functions/stack-builder/index.ts` and any downstream consumer of the stack-builder response.
+
+**Rationale:** Prose responses are hard to consume programmatically. The existing `ai-action-plan` function already uses a structured schema. Making `stack-builder` consistent enables both functions to feed the same workflow inbox normalization layer and makes the responses testable. The previous `plan: aiText` field is replaced with `steps[]`, `summary`, and `assumptions[]`.
+
+---
+
 ## 2026-04-17 — promo-chat streaming uses Accept header negotiation (S62)
 
 **Decision:** Streaming mode in `promo-chat` is activated when the client sends `Accept: text/event-stream` rather than via a separate endpoint or request body flag. Non-streaming path is fully preserved.

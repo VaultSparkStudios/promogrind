@@ -1,6 +1,7 @@
 import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, getRecommendedBooksForUser, hasConfiguredMonetizationLinks } from "../books.js";
 import { getLaunchCommandCenter, resolveLaunchValidation } from "../launchState.js";
 import { buildOperatingActionCandidates, selectOperatingDecision } from "../promograph/index.js";
+import { buildPortfolioAllocation } from "../lib/portfolio.js";
 import { buildTrackInsights } from "../track/insights.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
 import { matchPlaybooks } from "../playbooks/index.js";
@@ -276,6 +277,11 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
     bestBook,
     topPlaybook,
   });
+  const bankrollNum = parseFloat(options.bankroll ?? appData.bankroll ?? "") || 0;
+  const portfolioAllocation = bankrollNum > 0 && inbox.open.length >= 2
+    ? buildPortfolioAllocation(inbox.open, bankrollNum)
+    : null;
+
   const intelligence = {
     topSkipReasons: insights.skipReasonRows.slice(0, 3),
     topFrictionReasons: insights.frictionReasonRows.slice(0, 3),
@@ -313,6 +319,7 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
     launch,
     growth,
     workflows,
+    portfolioAllocation,
     intelligence,
     feeds,
     brief,

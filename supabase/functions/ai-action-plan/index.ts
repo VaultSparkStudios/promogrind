@@ -1,32 +1,27 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLimitResponse } from "../_shared/http.ts";
+import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL, validateCalculatorSlug, validateConfidence, validatePromoType } from "../_shared/validate.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
-const ACTION_PLAN_SYSTEM = `You are PromoGrind's AI assistant. Generate personalized weekly action plans for sports betting promo hunters. Always respond with valid JSON only — no markdown, no explanation outside the JSON. Reference real sportsbook promotion types (deposit match, bonus bet, profit boost, reload, SGP insurance, etc.). Return exactly 3 specific, actionable items appropriate for the user's bankroll tier with this schema: { "summary": string, "actions": [{ "title": string, "why": string, "value": string, "priority": "high"|"medium"|"low", "calculatorSlug": string|null, "bookTarget": string|null, "opsTags": string[], "promoType": string, "confidence": "high"|"medium"|"low", "opportunityScore": number, "nextStep": string }] }`;
+const ACTION_PLAN_SYSTEM = `You are PromoGrind's AI assistant. Generate personalized weekly action plans for sports betting promo hunters. Always respond with valid JSON only — no markdown, no explanation outside the JSON. Reference real sportsbook promotion types (deposit match, bonus bet, profit boost, reload, SGP insurance, etc.). Return exactly 3 specific, actionable items appropriate for the user's bankroll tier with this schema: { "summary": string, "assumptions": string[], "actions": [{ "title": string, "why": string, "value": string, "priority": "high"|"medium"|"low", "calculatorSlug": string|null, "bookTarget": string|null, "opsTags": string[], "promoType": string, "confidence": "high"|"medium"|"low", "opportunityScore": number, "nextStep": string }] }
+
+${SLUG_GUARDRAIL}
+${PROMO_TYPE_GUARDRAIL}`;
 
 function normalizeAction(action: Record<string, unknown> = {}) {
-  const confidence = ["high", "medium", "low"].includes(String(action.confidence || "").toLowerCase())
-    ? String(action.confidence).toLowerCase()
-    : "medium";
-  const promoType = ["bonus_bet", "profit_boost", "safety_net", "deposit_match", "insurance", "parlay", "arb", "other"].includes(String(action.promoType || "").toLowerCase())
-    ? String(action.promoType).toLowerCase()
-    : "other";
-  const calculatorSlug = ["bonus-bet", "profit-boost", "first-bet", "deposit-match", "insurance", "parlay", "arb-2way", "ev", "hedge"].includes(String(action.calculatorSlug || ""))
-    ? String(action.calculatorSlug)
-    : null;
   const parsedScore = Number.parseInt(String(action.opportunityScore ?? ""), 10);
   return {
     title: String(action.title || "Action").trim(),
     why: String(action.why || "").trim(),
     value: action.value ? String(action.value).trim() : null,
     priority: String(action.priority || "medium").trim().toLowerCase(),
-    calculatorSlug,
+    calculatorSlug: validateCalculatorSlug(action.calculatorSlug),
     bookTarget: action.bookTarget ? String(action.bookTarget).trim() : null,
     opsTags: Array.isArray(action.opsTags) ? action.opsTags.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean).slice(0, 4) : [],
-    promoType,
-    confidence,
+    promoType: validatePromoType(action.promoType),
+    confidence: validateConfidence(action.confidence),
     nextStep: action.nextStep ? String(action.nextStep).trim() : null,
     opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : 60,
   };
@@ -120,13 +115,7 @@ serve(async (req) => {
     const claude = await response.json();
     const raw = claude.content?.[0]?.text ?? "{}";
 
-    let plan;
-    try {
-      plan = JSON.parse(raw);
-    } catch {
-      const match = raw.match(/\{[\s\S]*\}/);
-      plan = match ? JSON.parse(match[0]) : { summary: "Unable to parse plan.", actions: [] };
-    }
+    const plan = parseAiJson(raw);
 
     await recordAiUsage(access.supabase, access.user.id, "ai_action_plan", {
       tier: access.tier,
@@ -136,7 +125,8 @@ serve(async (req) => {
 
     const normalizedPlan = {
       summary: String(plan?.summary || "Weekly plan generated.").trim(),
-      actions: Array.isArray(plan?.actions) ? plan.actions.map((action: Record<string, unknown>) => normalizeAction(action)) : [],
+      assumptions: Array.isArray(plan?.assumptions) ? (plan.assumptions as unknown[]).map((a) => String(a || "").trim()).filter(Boolean).slice(0, 3) : [],
+      actions: Array.isArray(plan?.actions) ? (plan.actions as Record<string, unknown>[]).map((action) => normalizeAction(action)) : [],
     };
 
     return new Response(JSON.stringify({ ...normalizedPlan, remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1) }), {

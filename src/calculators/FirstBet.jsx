@@ -6,6 +6,7 @@ import SensitivityChip from "../components/SensitivityChip.jsx";
 import ResultFeedbackCard from "../components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "../components/CalculatorTrustBadge.jsx";
 import BookCTA from "../components/BookCTA.jsx";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 
 export default function FirstBet() {
   const [mem, setMem] = useCalcMemory("first-bet", { s: "500", o: "+150", ho: "-170" });
@@ -28,6 +29,7 @@ export default function FirstBet() {
   }, [r?.hs, r?.pOW]);
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has("demo"));
   const [rCopied, setRCopied] = useState(false);
+  const [showReceipt, setShowReceipt] = useState(false);
   const applyDemo = () => { setS("200"); setO("-110"); setHo("-110"); setDemoMode(true); };
   const copyResult = () => {
     if (!r) return;
@@ -74,6 +76,7 @@ export default function FirstBet() {
               <span style={S.big(K.ac)}>${r.g}</span>
               <span style={{ fontSize: 12, color: K.dm }}>from hedge math</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b /><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW) >= 0 ? K.gn : K.rd} /><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW) >= 0 ? K.gn : K.rd} />
             <Nt c={K.yl}>If your first bet LOSES → you get ${s} in bonus bets. Convert those at ~70% using the Bonus Bet tab = ~${f(parseFloat(s) * 0.7, 0)} more profit!</Nt>
@@ -83,6 +86,23 @@ export default function FirstBet() {
               <SensitivityChip summary={sens} />
             </div>
             <ResultFeedbackCard calculatorKey="first-bet" calculatorLabel="First Bet Safety Net Hedge" promoType="safety_net" expectedProfit={r.g} />
+            {showReceipt && (
+              <CalculatorReceipt
+                calcName="First Bet Safety Net Hedge"
+                inputs={[
+                  { label: "First Bet Stake", value: `$${s}` },
+                  { label: "Your Odds", value: o },
+                  { label: "Hedge Odds", value: ho },
+                ]}
+                outputs={[
+                  { label: "Hedge Amount", value: `$${r.hs}` },
+                  { label: "If Original Wins", value: `$${r.pOW}` },
+                  { label: "If Hedge Wins", value: `$${r.pHW}` },
+                  { label: "Hedge Math Result", value: `$${r.g}`, highlight: true },
+                ]}
+                onClose={() => setShowReceipt(false)}
+              />
+            )}
           </div>
         )}
       </div>

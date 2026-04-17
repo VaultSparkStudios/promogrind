@@ -57,10 +57,24 @@ export function initAnalytics() {
  * @param {object} user       — Supabase session.user
  * @param {object|null} sub   — getSubscription() result
  */
+function _readUtmAttribution() {
+  try {
+    return {
+      referral_source: localStorage.getItem('pg_ref') || undefined,
+      utm_source:      localStorage.getItem('pg_utm_source') || undefined,
+      utm_medium:      localStorage.getItem('pg_utm_medium') || undefined,
+      utm_campaign:    localStorage.getItem('pg_utm_campaign') || undefined,
+    };
+  } catch {
+    return {};
+  }
+}
+
 export function identifyUser(user, sub) {
   if (!user) return;
   const plan   = sub?.plan   ?? 'free';
   const status = sub?.status ?? 'none';
+  const utm    = _readUtmAttribution();
 
   if (posthogReady) {
     posthog.identify(user.id, {
@@ -68,6 +82,7 @@ export function identifyUser(user, sub) {
       plan,
       status,
       trial:  status === 'trial',
+      ...utm,
     });
   }
 
@@ -101,9 +116,11 @@ export function trackEvent(event, props = {}) {
 export function trackPage(slug) {
   try {
     if (posthogReady) {
+      const utm = _readUtmAttribution();
       posthog.capture('$pageview', {
         $current_url: `${window.location.origin}/${slug}`,
         slug,
+        ...utm,
       });
     }
   } catch {}
