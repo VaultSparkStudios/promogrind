@@ -6,13 +6,14 @@ import { FeatureUnavailableCard } from "../ui.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { upsertWorkflowEntry } from "../promograph/index.js";
 import { recommendationToWorkflow } from "../promograph/recommendations.js";
+import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
 
 export function AIActionPlan({ proStatus }) {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const toast = useToast();
-  if (!FEATURE_FLAGS.aiActionPlan) {
-    return <FeatureUnavailableCard featureKey="aiActionPlan" title="AI Weekly Action Plan" body="AI weekly plans stay in beta until the planning backend is activated." />;
-  }
+  const { enabled: actionPlanEnabled } = useFeatureFlag("aiActionPlan", {
+    tier: normalizeFeatureTier(proStatus?.plan),
+  });
   const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const [plan, setPlan] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -79,6 +80,10 @@ export function AIActionPlan({ proStatus }) {
     syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
     if (toast) toast(`Queued "${action.title}" in workflow inbox.`, K.gn);
   };
+
+  if (!actionPlanEnabled && !FEATURE_FLAGS.aiActionPlan) {
+    return <FeatureUnavailableCard featureKey="aiActionPlan" title="AI Weekly Action Plan" body="AI weekly plans stay in beta until the planning backend is activated." />;
+  }
 
   if (!isActive) return (
     <div><div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:10,padding:20,marginBottom:16}}>

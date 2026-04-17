@@ -28,6 +28,7 @@ const requiredFiles = [
   "docs/FEATURE_FLAG_ACTIVATION_MATRIX.md",
   "src/launchState.js",
   "src/App.jsx",
+  "src/routes/LandingRoute.jsx",
   "public/landing/index.html",
   "public/bonus-bet/index.html",
   "public/arb-calculator/index.html",
@@ -57,6 +58,10 @@ if (errors.length === 0) {
   assertIncludes("docs/FEATURE_FLAG_ACTIVATION_MATRIX.md", "VITE_PG_FEATURE_LIVE_SCANNER", "live scanner flag entry", errors);
   assertIncludes("src/launchState.js", "FEATURE_FLAGS", "feature flag map", errors);
   assertIncludes("src/launchState.js", "FEATURE_INFO", "feature info map", errors);
+  assertIncludes("src/App.jsx", 'pathname.startsWith("/land/")', "creator landing route guard", errors);
+  assertIncludes("src/App.jsx", "LandingRoute", "creator landing route component", errors);
+  assertIncludes("src/routes/LandingRoute.jsx", "landing_page_view", "landing page analytics event", errors);
+  assertIncludes("src/routes/LandingRoute.jsx", "pg_ref", "creator attribution storage", errors);
 
   const trustPages = [
     "public/bonus-bet/index.html",

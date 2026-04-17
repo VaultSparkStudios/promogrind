@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildObservabilitySnapshot } from "../observability.js";
+import { buildAiUsageSnapshot, buildObservabilitySnapshot } from "../observability.js";
 
 describe("observability snapshot", () => {
   it("summarizes activation, return loop, monetization, and sync health", () => {
@@ -24,6 +24,12 @@ describe("observability snapshot", () => {
       },
       usageLog: { "bonus-bet": 3, "profit-boost": 2 },
       syncDiagnostics: { queueDepth: 2, hasPendingWrites: true },
+      aiEvents: [
+        { event_type: "promo_chat", created_at: "2026-04-17T12:00:00.000Z", metadata: { remaining: 19 } },
+        { event_type: "promo_advisor", created_at: "2026-04-16T12:00:00.000Z", metadata: { remaining: 4 } },
+        { event_type: "daily_login", created_at: "2026-04-17T12:00:00.000Z" },
+      ],
+      now: new Date("2026-04-17T18:00:00.000Z"),
     });
 
     expect(snapshot.calculatorsUsed).toBe(2);
@@ -35,5 +41,24 @@ describe("observability snapshot", () => {
     expect(snapshot.hasPendingWrites).toBe(true);
     expect(snapshot.latestMicroNps).toBe("mixed");
     expect(snapshot.activationScore).toBeGreaterThan(0);
+    expect(snapshot.aiUsage.today).toBe(1);
+    expect(snapshot.aiUsage.week).toBe(2);
+    expect(snapshot.aiUsage.topFeature).toBe("promo_chat");
+  });
+
+  it("flags bursty or exhausted AI usage as abuse risk", () => {
+    const now = new Date("2026-04-17T18:00:00.000Z");
+    const events = Array.from({ length: 8 }, (_, index) => ({
+      event_type: index % 2 === 0 ? "promo_chat" : "stack_builder",
+      created_at: `2026-04-17T17:5${index}:00.000Z`,
+      metadata: { remaining: index === 7 ? 0 : 4 },
+    }));
+
+    const usage = buildAiUsageSnapshot(events, now);
+
+    expect(usage.today).toBe(8);
+    expect(usage.recentBurst).toBe(8);
+    expect(usage.lowestRemaining).toBe(0);
+    expect(usage.risk).toBe("high");
   });
 });

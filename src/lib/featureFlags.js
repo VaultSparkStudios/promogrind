@@ -36,6 +36,15 @@ export async function fetchRemoteFlags() {
   }
 }
 
+export function normalizeFeatureTier(tier) {
+  const normalized = String(tier || "free").toLowerCase();
+  if (["house"].includes(normalized)) return "house";
+  if (["closer", "vault_sparked"].includes(normalized)) return "closer";
+  if (["runner", "pro", "sharp"].includes(normalized)) return "runner";
+  if (["scout", "grinder", "concierge"].includes(normalized)) return "scout";
+  return "free";
+}
+
 /** Resolve effective flag value for a user.
  *  Remote overrides build-time defaults. Tier + cohort gates applied client-side.
  */
@@ -55,7 +64,7 @@ export function resolveFlag(key, remoteFlags, userTier, userId) {
   const tierOrder = ["free", "scout", "runner", "closer", "house"];
   if (flag.min_tier) {
     const minIdx = tierOrder.indexOf(flag.min_tier);
-    const userIdx = tierOrder.indexOf(userTier || "free");
+    const userIdx = tierOrder.indexOf(normalizeFeatureTier(userTier));
     if (userIdx < minIdx) return false;
   }
 

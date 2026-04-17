@@ -2,6 +2,46 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-17 — Feature tiers are normalized before remote flag resolution (S64)
+
+**Decision:** `resolveFlag` normalizes tier/plan labels before comparing against remote feature flag rows.
+
+**Applies to this project:** Yes — governs `src/lib/featureFlags.js` and every client gate using `useFeatureFlag`.
+
+**Rationale:** The app has accumulated both product plan names and user tier labels over time. Normalizing before comparison lets remote flags work across legacy labels without duplicating rows or accidentally hiding a feature from an equivalent tier.
+
+---
+
+## 2026-04-17 — Structured StackBuilder UI keeps legacy plan fallback (S64)
+
+**Decision:** `StackBuilder.jsx` renders the structured `summary` / `steps[]` / `assumptions[]` response as the primary UI, but still accepts the old `plan` string.
+
+**Applies to this project:** Yes — governs the StackBuilder client while the edge function rollout may lag production deployment.
+
+**Rationale:** The code is ahead of production edge deployment. Keeping the fallback prevents a blank or broken StackBuilder UI while Supabase functions are being updated.
+
+---
+
+## 2026-04-17 — build:cap must be shell-neutral (S64)
+
+**Decision:** `npm run build:cap` no longer sets `VITE_APP_BASE_PATH=/` using POSIX inline env syntax.
+
+**Applies to this project:** Yes — governs `package.json` scripts.
+
+**Rationale:** This repo is actively worked from Windows PowerShell. Shell-specific syntax made the Android/Capacitor build check fail locally even though the Vite build itself was valid.
+
+---
+
+## 2026-04-17 — TASK_BOARD Human Action Required is the canonical blocker list (S64)
+
+**Decision:** Current manual blockers live in the top `Human Action Required` section of `context/TASK_BOARD.md`; older handoff/history entries remain historical and should not be treated as active blockers.
+
+**Applies to this project:** Yes — governs closeout/status reads for launch blockers.
+
+**Rationale:** Repeated sessions left duplicate Stripe, VAPID, migration, and deployment notes in lower roadmap sections. Consolidating active blockers avoids double-counting and keeps status reports truthful.
+
+---
+
 ## 2026-04-17 — promo-advisor streaming mirrors promo-chat Accept header pattern (S63)
 
 **Decision:** `promo-advisor` SSE streaming follows the same `Accept: text/event-stream` negotiation as `promo-chat`. Client falls back to `supabase.functions.invoke` when `VITE_SUPABASE_URL` is absent.

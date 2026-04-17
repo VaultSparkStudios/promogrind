@@ -4,6 +4,7 @@ import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { LoadingState } from "../ui.jsx";
+import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? "";
 
@@ -20,7 +21,6 @@ function getTierLimit(plan) {
 }
 
 const PromoChat = ({ navigate }) => {
-  if (!FEATURE_FLAGS.promoChat) return null;
   const signInHref = getProjectAuthHref('signin');
   const { appData } = React.useContext(AppDataCtx) || {};
   const [chatOpen, setChatOpen] = useState(false);
@@ -32,6 +32,10 @@ const PromoChat = ({ navigate }) => {
   const [subPlan, setSubPlan] = useState(null);   // raw plan string or null
   const [subLoading, setSubLoading] = useState(true);
   const messagesEndRef = useRef(null);
+  const { enabled: promoChatEnabled } = useFeatureFlag("promoChat", {
+    tier: normalizeFeatureTier(subPlan),
+    userId: session?.user?.id ?? null,
+  });
 
   const dailyLimit = getTierLimit(subPlan);
   const todayKey = `pg_chat_uses_${new Date().toISOString().slice(0, 10)}`;
@@ -67,6 +71,7 @@ const PromoChat = ({ navigate }) => {
 
   const isLimited = dailyLimit !== Infinity && chatRemaining <= 0;
   const hasAccess = subPlan !== null && dailyLimit > 0;
+  const featureEnabled = promoChatEnabled || FEATURE_FLAGS.promoChat;
 
   const sendMessage = async () => {
     if (!chatInput.trim() || chatLoading || !session || !hasAccess || isLimited) return;
@@ -147,6 +152,8 @@ const PromoChat = ({ navigate }) => {
       setChatLoading(false);
     }
   };
+
+  if (!featureEnabled) return null;
 
   // ── Upgrade gate content ───────────────────────────────────────────────────
   const renderGate = (type) => {

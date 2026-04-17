@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.3",
+  "session": 64,
+  "date": "2026-04-17",
+  "sessionIntent": "Execute repeated /go passes from S63 pre-load, implement highest-impact refinements, reconcile public truth surfaces, and close out",
+  "intentOutcome": "achieved",
+  "velocity": 24,
+  "protocolVelocity": 0,
+  "silItems": 3,
+  "scores": {
+    "devHealth": 99,
+    "creativeAlignment": 96,
+    "momentum": 100,
+    "engagement": 96,
+    "processQuality": 100,
+    "total": 491
+  },
+  "rollingAvgs": {
+    "n3": 490.3,
+    "n5": 488.8,
+    "n10": 473.5,
+    "all": 466.8,
+    "nAll": 22
+  },
+  "sparkline": [486, 489, 490, 490, 491],
+  "debt": "down",
+  "tests": { "total": 289, "passed": 289, "failed": 0, "newThisSession": 1 },
+  "bundle": { "mainChunkKB": 329.3, "budgetKB": 425, "headroomKB": 95.7 },
+  "buildStatus": "green",
+  "shippedItems": [
+    "PromoChat, AIActionPlan, LiveScanner, and StackBuilder now use useFeatureFlag after unconditional hooks",
+    "Feature tier normalization added for remote flag resolution",
+    "StackBuilder renders structured summary, steps, assumptions, books used, and structured copy output with legacy plan fallback",
+    "Launch smoke validates /land/:creator route guard, LandingRoute, landing_page_view, and pg_ref attribution",
+    "Observability builds aiUsage from AI vault_events and shows AI Load / abuse risk in the dashboard",
+    "Observability unit coverage added for high-risk burst/exhausted quota state",
+    "build:cap script made Windows-safe and dist-cap ignored",
+    "PROJECT_STATUS, TASK_BOARD, TRUTH_AUDIT, STARTUP_BRIEF, LATEST_HANDOFF, CURRENT_STATE, WORK_LOG, DECISIONS, SELF_IMPROVEMENT_LOOP, and CDR refreshed for S64",
+    "Duplicate/stale blocker rows removed from active task board truth"
+  ],
+  "deferredItems": [],
+  "humanBatched": [
+    "Apply scripts/migration-feature-flags.sql in Supabase SQL Editor",
+    "Deploy updated edge functions for promo-advisor, stack-builder, ai-action-plan, and promo-chat",
+    "Run live billing/customer-portal production checkout verification",
+    "Apply push subscription/VAPID production setup before relying on push delivery"
+  ],
+  "newModules": [],
+  "automationUnavailable": [
+    "scripts/detect-session-mode.mjs",
+    "scripts/check-secrets.mjs",
+    "scripts/ops.mjs",
+    "scripts/render-startup-brief.mjs",
+    "scripts/cache-genius-list.mjs",
+    "scripts/render-state-vector.mjs",
+    "scripts/compute-entropy.mjs",
+    "scripts/append-genome-snapshot.mjs",
+    "scripts/scan-secrets.mjs",
+    "scripts/closeout-autopilot.mjs",
+    "scripts/sanitize-claude-settings.mjs"
+  ],
+  "ignisRefreshRequired": false,
+  "ignisLastComputed": "2026-04-15",
+  "truthAuditStatus": "green",
+  "memoryUpdated": true
+}

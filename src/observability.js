@@ -5,7 +5,51 @@ function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {}, usageLog = {}, syncDiagnostics = {} } = {}) {
+const AI_FEATURES = new Set(["promo_advisor", "promo_chat", "ai_action_plan", "stack_builder"]);
+
+function normalizeEventTime(value) {
+  const time = new Date(value || 0).getTime();
+  return Number.isFinite(time) ? time : 0;
+}
+
+export function buildAiUsageSnapshot(events = [], now = new Date()) {
+  const nowMs = normalizeEventTime(now);
+  const dayStart = new Date(now);
+  dayStart.setHours(0, 0, 0, 0);
+  const dayStartMs = dayStart.getTime();
+  const sevenDaysAgo = nowMs - 7 * 24 * 60 * 60 * 1000;
+  const aiEvents = (Array.isArray(events) ? events : []).filter((entry) => AI_FEATURES.has(String(entry.event_type || "")));
+  const todayEvents = aiEvents.filter((entry) => normalizeEventTime(entry.created_at) >= dayStartMs);
+  const weekEvents = aiEvents.filter((entry) => normalizeEventTime(entry.created_at) >= sevenDaysAgo);
+  const byFeature = {};
+  for (const entry of weekEvents) {
+    const feature = String(entry.event_type || "unknown");
+    byFeature[feature] = (byFeature[feature] || 0) + 1;
+  }
+  const topFeatureEntry = Object.entries(byFeature).sort((a, b) => b[1] - a[1])[0] || null;
+  const recentBurst = aiEvents.filter((entry) => normalizeEventTime(entry.created_at) >= nowMs - 10 * 60 * 1000).length;
+  const remainingValues = todayEvents
+    .map((entry) => toNumber(entry.metadata?.remaining))
+    .filter((value) => value !== null);
+  const lowestRemaining = remainingValues.length ? Math.min(...remainingValues) : null;
+  const risk =
+    recentBurst >= 8 || lowestRemaining === 0 ? "high"
+      : recentBurst >= 4 || (lowestRemaining !== null && lowestRemaining <= 2) ? "watch"
+      : "normal";
+
+  return {
+    today: todayEvents.length,
+    week: weekEvents.length,
+    recentBurst,
+    byFeature,
+    topFeature: topFeatureEntry ? topFeatureEntry[0] : null,
+    topFeatureCount: topFeatureEntry ? topFeatureEntry[1] : 0,
+    lowestRemaining,
+    risk,
+  };
+}
+
+export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {}, usageLog = {}, syncDiagnostics = {}, aiEvents = [], now = new Date() } = {}) {
   const workflows = Array.isArray(appData.workflowInbox) ? appData.workflowInbox : [];
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
   const microNps = Array.isArray(appData.microNps) ? appData.microNps : [];
@@ -36,5 +80,6 @@ export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {
     hasPendingWrites: Boolean(syncDiagnostics.hasPendingWrites),
     latestMicroNps: latestMicroNps?.value || null,
     latestMicroNpsSettledCount: toNumber(latestMicroNps?.settledCount) || 0,
+    aiUsage: buildAiUsageSnapshot(aiEvents.length ? aiEvents : appData.vaultEvents, now),
   };
 }

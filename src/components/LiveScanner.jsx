@@ -5,6 +5,7 @@ import { FEATURE_FLAGS } from "../launchState.js";
 import { trackFeatureEnabledUse } from "../launchTelemetry.js";
 import { useToast } from "../contexts.jsx";
 import { FeatureUnavailableCard, LoadingState } from "../ui.jsx";
+import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
 
 const SPORTS_LIST = [
   { key:"americanfootball_nfl",  label:"NFL"  },
@@ -110,18 +111,14 @@ const detectEV = (games) => {
 };
 
 const LiveScanner = ({ proStatus, mode }) => {
-  if (!FEATURE_FLAGS.liveScanner) {
-    return (
-      <FeatureUnavailableCard
-        featureKey="liveScanner"
-        title="Live Scanner"
-        body="Real-time arb and +EV scanning stays in beta until the live odds backend is activated. The core free calculators, tracker, and learning tools remain available now."
-      />
-    );
-  }
+  const { enabled: liveScannerEnabled } = useFeatureFlag("liveScanner", {
+    tier: normalizeFeatureTier(proStatus?.plan),
+  });
+  const featureEnabled = liveScannerEnabled || FEATURE_FLAGS.liveScanner;
   useEffect(() => {
+    if (!featureEnabled) return;
     trackFeatureEnabledUse('liveScanner', mode || 'live');
-  }, [mode]);
+  }, [featureEnabled, mode]);
   const toast = useToast();
   const [sports, setSports] = useState(["americanfootball_nfl"]);
   const [activeTab, setActiveTab] = useState(mode==="ev-scanner"?"ev":"arb");
@@ -201,17 +198,27 @@ const LiveScanner = ({ proStatus, mode }) => {
   };
 
   useEffect(()=>{
-    if(!isActive) return;
+    if(!featureEnabled || !isActive) return;
     fetchOdds();
     intervalRef.current=setInterval(fetchOdds,120_000);
     return ()=>clearInterval(intervalRef.current);
-  },[sports,isActive]);
+  },[sports,isActive,featureEnabled]);
 
   const handleUpgrade = async () => {
     setUpgrading(true);
     await startCheckout();
     setUpgrading(false);
   };
+
+  if (!featureEnabled) {
+    return (
+      <FeatureUnavailableCard
+        featureKey="liveScanner"
+        title="Live Scanner"
+        body="Real-time arb and +EV scanning stays in beta until the live odds backend is activated. The core free calculators, tracker, and learning tools remain available now."
+      />
+    );
+  }
 
   if (proStatus===null) return (
     <div style={{...S.card,textAlign:"center",padding:40}}>

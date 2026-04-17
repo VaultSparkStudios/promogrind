@@ -5,11 +5,12 @@ import { S, In, Tl, FeatureUnavailableCard, Help } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
 import { K, font } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
+import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
 
 export function StackBuilder({ proStatus }) {
-  if (!FEATURE_FLAGS.stackBuilder) {
-    return <FeatureUnavailableCard featureKey="stackBuilder" title="Stack Builder" body="Stack Builder will unlock here once the AI planning backend is activated." />;
-  }
+  const { enabled: stackBuilderEnabled } = useFeatureFlag("stackBuilder", {
+    tier: normalizeFeatureTier(proStatus?.plan),
+  });
   const isActive = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -48,10 +49,33 @@ export function StackBuilder({ proStatus }) {
   };
 
   const copyPlan = () => {
-    if (!plan?.plan) return;
-    navigator.clipboard.writeText(`PromoGrind Stack Builder — $${bankroll} bankroll\n\n${plan.plan}`).catch(() => {});
+    if (!plan) return;
+    const stepLines = Array.isArray(plan.steps)
+      ? plan.steps.map((step, index) => {
+          const order = step.order || index + 1;
+          const value = Number.isFinite(Number(step.value)) ? ` — est. $${Number(step.value).toFixed(0)}` : "";
+          const calc = step.calculatorSlug ? ` (${step.calculatorSlug})` : "";
+          return `${order}. ${step.book || "Book"}${calc}: ${step.action || "Run the recommended promo step."}${value}`;
+        })
+      : [];
+    const fallback = plan.plan ? [plan.plan] : [];
+    const assumptions = Array.isArray(plan.assumptions) && plan.assumptions.length
+      ? ["", "Assumptions:", ...plan.assumptions.map((a) => `- ${a}`)]
+      : [];
+    navigator.clipboard.writeText([
+      `PromoGrind Stack Builder — $${bankroll} bankroll`,
+      "",
+      plan.summary || "Optimal promo stack generated.",
+      ...stepLines,
+      ...fallback,
+      ...assumptions,
+    ].join("\n")).catch(() => {});
     setCopied(true); setTimeout(() => setCopied(false), 1800);
   };
+
+  if (!stackBuilderEnabled && !FEATURE_FLAGS.stackBuilder) {
+    return <FeatureUnavailableCard featureKey="stackBuilder" title="Stack Builder" body="Stack Builder will unlock here once the AI planning backend is activated." />;
+  }
 
   return (
     <div data-vault-requires="vault_sparked" data-vault-gate-action="blur">
@@ -116,8 +140,43 @@ export function StackBuilder({ proStatus }) {
               </div>
             </div>
             <div style={{fontSize:12,color:K.tx,lineHeight:1.8,whiteSpace:'pre-wrap'}}>
-              {plan.plan}
+              {plan.summary}
             </div>
+            {Array.isArray(plan.steps) && plan.steps.length > 0 && (
+              <div style={{display:'flex',flexDirection:'column',gap:8,marginTop:12}}>
+                {plan.steps.map((step, index) => (
+                  <div key={`${step.book || 'book'}-${step.order || index}`} style={{padding:'10px 12px',background:K.s3,border:`1px solid ${K.bd}`,borderRadius:8}}>
+                    <div style={{display:'flex',justifyContent:'space-between',gap:8,alignItems:'flex-start',marginBottom:4}}>
+                      <div style={{fontSize:12,fontWeight:700,color:K.tx}}>
+                        {step.order || index + 1}. {step.book || 'Sportsbook step'}
+                      </div>
+                      {step.value != null && (
+                        <span style={{fontSize:10,color:K.gn,fontWeight:700}}>Est. ${Number(step.value).toFixed(0)}</span>
+                      )}
+                    </div>
+                    <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>{step.action}</div>
+                    <div style={{display:'flex',flexWrap:'wrap',gap:6,marginTop:8}}>
+                      {step.promoType && <span style={{...S.tag(K.ac)}}>{step.promoType.replace(/_/g, ' ')}</span>}
+                      {step.calculatorSlug && <span style={{...S.tag(K.pp)}}>{step.calculatorSlug}</span>}
+                      {step.hedgeRequired && <span style={{...S.tag(K.yl)}}>hedge required</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {!Array.isArray(plan.steps) && plan.plan && (
+              <div style={{fontSize:12,color:K.tx,lineHeight:1.8,whiteSpace:'pre-wrap',marginTop:12}}>
+                {plan.plan}
+              </div>
+            )}
+            {Array.isArray(plan.assumptions) && plan.assumptions.length > 0 && (
+              <div style={{marginTop:12,padding:'10px 12px',background:K.s3,border:`1px solid ${K.bd}`,borderRadius:8}}>
+                <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1px',marginBottom:6}}>Assumptions</div>
+                <ul style={{margin:'0 0 0 16px',padding:0,color:K.dm,fontSize:11,lineHeight:1.7}}>
+                  {plan.assumptions.map((assumption, index) => <li key={index}>{assumption}</li>)}
+                </ul>
+              </div>
+            )}
             {plan.booksUsed?.length > 0 && (
               <div style={{marginTop:12,display:'flex',flexWrap:'wrap',gap:6}}>
                 {plan.booksUsed.map(b => (

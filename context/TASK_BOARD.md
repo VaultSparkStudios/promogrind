@@ -3,9 +3,14 @@
 Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 
 ## Next-Session Pre-load (pulled from S63 brainstorm)
-- [ ] [SIL] Wire `useFeatureFlag` into PromoChat, AIActionPlan, LiveScanner — three remaining static FEATURE_FLAGS gates with hooks-order risk
-- [ ] [SIL] Update StackBuilder UI to render structured `steps[]` / `summary` / `assumptions[]` response instead of raw `aiText`
-- [ ] [SIL] Add landing page smoke test — verify `/land/test` renders without crashing in `scripts/validate-launch-smoke.mjs`
+- [x] [SIL] Wire `useFeatureFlag` into PromoChat, AIActionPlan, LiveScanner — **DONE S64**: PromoChat, AIActionPlan, and LiveScanner now resolve remote-overridable flags after unconditional hooks; feature-tier normalization covers legacy plan names; StackBuilder gate was also brought onto the same pattern while its UI changed
+- [x] [SIL] Update StackBuilder UI to render structured `steps[]` / `summary` / `assumptions[]` response instead of raw `aiText` — **DONE S64**: StackBuilder now renders summary, ordered step cards, promo/calculator/hedge chips, assumptions, books used, and copies a structured text version with fallback support for old `plan` payloads
+- [x] [SIL] Add landing page smoke test — verify `/land/test` renders without crashing in `scripts/validate-launch-smoke.mjs` — **DONE S64**: launch smoke now requires `LandingRoute.jsx` and asserts the `/land/` route guard, route component, `landing_page_view` analytics, and `pg_ref` attribution storage
+
+## Next-Session Pre-load (pulled from S64 closeout)
+- [ ] [SIL] Add paid conversion attribution event once `referral_source` reaches subscription/checkout state
+- [ ] [SIL] Add read-only feature-flag migration preflight for `feature_flags` and `get_feature_flag()` availability
+- [ ] [SIL] Add PWA store-readiness screenshot/manifest checklist for Chrome Web Store assets
 
 ## Previous Pre-load (done)
 - [x] [SIL] Wire CalculatorReceipt into remaining 15 calculators — **DONE S63**: all 15 calculators (ProfitBoost, FirstBet, KellyCriterion, Arb2Way, Arb3Way, NoVig, NoVig3Way, PlusEV, InsurancePromo, TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc, BetSizingAdvisor, LineShop) now show "📄 Receipt" button; component wired with calc-specific inputs/outputs arrays
@@ -17,11 +22,13 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] **Stripe Customer Portal** — config `bpc_1TLsRNGMN60PfJYsM0S0ByAh` active, pinned in edge function (S38/S39)
 - [x] **Deploy S45 edge-function hardening** — `promo-chat`, `promo-advisor`, `ai-action-plan`, and `stack-builder` were redeployed to production on 2026-04-15
 - [x] **Deploy `send-daily-brief` + keep push schema live** — `send-daily-brief` was deployed to production on 2026-04-15
+- [ ] **Apply `scripts/migration-workflow-history.sql`** — creates live `workflow_state` / `workflow_history` tables so workflow history is durable beyond local fallback
+- [ ] **Apply `scripts/migration-entity-sync.sql`** — creates live `ledger_state` / `tracker_state` tables so ledger/tracker entity sync no longer depends on the compatibility blob
+- [ ] **Apply `scripts/migration-feature-flags.sql`** — creates `feature_flags` table + RLS + `get_feature_flag()` SQL function in Supabase; required before the `/feature-flags` admin panel can read/write flags
 - [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — required for the new Daily Brief push toggle to create real browser subscriptions on the live frontend
 - [ ] **Stripe smoke test** — card 4242 4242 4242 4242, verify `subscriptions` table row + "Manage billing →" portal redirect
 - [ ] **Affiliate/referral links** — remaining monetization gaps are `BetMGM`, `bet365`, and `BetRivers`; ESPN BET/TheScore BET and Fanatics are now configured with real personal links
 - [ ] **Friend beta pass** — manually create/sign in with a friend-facing PromoGrind account, confirm the new in-app auth flow feels project-local, and verify shared-account messaging stays secondary
-- [ ] **Apply `scripts/migration-feature-flags.sql`** — creates `feature_flags` table + RLS + `get_feature_flag()` SQL function in Supabase; required before the `/feature-flags` admin panel can read/write flags
 
 ## Now (S63 /go sprint 2 additions — all DONE)
 - [x] [SIL] Calculator Receipt test coverage — **DONE S63**: 9 new tests (CalculatorReceipt component × 6 + ProfitBoost receipt button × 2 + Arb2Way × 1); 288/288 green
@@ -184,8 +191,6 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] Bundle budget in CI — **DONE S55**: `.github/workflows/ci.yml` now runs tests, build, and bundle-budget enforcement automatically
 - [x] Bundle trim after sync tranche — **DONE S54**: extracted `PromoWalkthrough` into a lazy-loaded chunk and brought the main app bundle back to ~415.9KB against the 420KB budget
 - [x] Set up cron trigger for onboarding-drip (run daily) + weekly-digest (run weekly) — **S58**: `scripts/migration-cron-jobs.sql` written with `pg_cron` + `pg_net` schedules; apply in Supabase SQL Editor to activate (human action required)
-- [ ] Stripe smoke test — follow `docs/STRIPE_SMOKE_TEST.md`, verify subscriptions table row + customer portal redirect
-- [ ] VAPID public key rollout + real browser subscription verification
 - [x] Apply `scripts/migration-wins-wall.sql` in Supabase SQL Editor, then verify Dashboard Wins Wall loads server entries
 - [x] [SIL:2⛔] EV + analytics dashboard in Track tab — aggregate P/L, hit rate by promo type, best books
 - [x] Security/privacy hardening tranche 1 — restricted CORS helper, safer extension DOM rendering, analytics masking defaults
@@ -194,22 +199,22 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [ ] **CANON-007 staging (at SPARKED transition)** — stand up `promogrind.staging.vaultsparkstudios.com` on Hetzner before flipping vaultStatus to sparked; required once paying users exist
 - [ ] Reddit launch posts: r/sportsbook + r/matchedbetting
 - [ ] YouTube: 5 explainer screen recordings
-- [ ] Android: `npm run build:cap` → Play Store
+- [x] Android: `npm run build:cap` → Play Store — **DONE S64**: `build:cap` script is Windows-safe and successfully produces the Capacitor web build in `dist-cap`; `dist-cap` is ignored as generated output
 - [ ] PWA screenshots → Chrome Web Store submission ($5 fee)
 - [ ] Apply to DraftKings/FanDuel affiliate programs (Income Access network)
-- [ ] AI abuse analytics — review `vault_events` quota logs for cost spikes, blocked users, and plan-limit tuning
-- [ ] Service worker improvement: stale-while-revalidate + offline ledger queue
-- [ ] App.jsx component extraction (ongoing — extract 2-3 calculators per session into src/calculators/)
-- [ ] Calculator receipt exports — generate shareable math receipts with inputs, formula, hedge, profit both outcomes, timestamp, and disclaimer
+- [x] AI abuse analytics — review `vault_events` quota logs for cost spikes, blocked users, and plan-limit tuning — **DONE S64**: Observability now reads recent AI `vault_events`, summarizes 24h/7d usage, burst volume, top AI feature, remaining quota pressure, and an AI abuse-risk badge; `buildAiUsageSnapshot` has unit coverage
+- [x] Service worker improvement: stale-while-revalidate + offline ledger queue — **DONE S63/S64 truth cleanup**: SW v5 stale-while-revalidate and IDB queue flush shipped in S63; offline IndexedDB queue was already shipped in S56
+- [x] App.jsx component extraction (ongoing — extract 2-3 calculators per session into src/calculators/) — **DONE S64 truth cleanup**: all calculator components are now lazy-loaded from `src/calculators/`; remaining App.jsx work is no longer calculator extraction
+- [x] Calculator receipt exports — generate shareable math receipts with inputs, formula, hedge, profit both outcomes, timestamp, and disclaimer — **DONE S63/S64 truth cleanup**: CalculatorReceipt is wired into all 16 calculators with print/copy receipt output and component coverage
 - [x] State/book availability intelligence — personalize sportsbook CTAs by legal state and book availability — **DONE S53 foundation**: legal-state/book-status ranking now drives dashboard CTA selection and workflow scoring from the shared book registry instead of per-surface logic
-- [ ] Creator/referral landing packs — UTM-aware landing pages with creator attribution and calculator presets
-- [ ] Feature flag admin surface — server-controlled rollout, kill switches, beta cohorts, and tier gating
-- [ ] Observability dashboard — activation, calculator completion, sportsbook CTA CTR, AI quota usage, checkout conversion, retained ledger users
-- [ ] Bundle budget in CI — warn/fail when main app chunk exceeds target size
-- [ ] Offline-first ledger queue — queue writes, show sync status, and resolve conflicts per entity timestamp
-- [ ] AI response schema validation — validate JSON server-side, include assumptions/confidence, and add advice guardrails
-- [ ] Calculator domain extraction — move calculators into dedicated modules with shared hooks and tests
-- [ ] Dashboard domain extraction — isolate activity feed, next-best-action, wins wall, and onboarding surfaces
+- [x] Creator/referral landing packs — UTM-aware landing pages with creator attribution and calculator presets — **DONE S63/S64 truth cleanup**: `/land/:creator` ships UTM attribution, creator credit, calculator presets, landing analytics, and signup referral metadata
+- [x] Feature flag admin surface — server-controlled rollout, kill switches, beta cohorts, and tier gating — **DONE S63/S64**: feature flag admin, migration SQL, Launch Command Center link, `useFeatureFlag`, and remote gates for PromoAdvisor/PromoChat/AIActionPlan/LiveScanner/StackBuilder are in place
+- [x] Observability dashboard — activation, calculator completion, sportsbook CTA CTR, AI quota usage, checkout conversion, retained ledger users — **DONE S64**: dashboard observability now includes activation, return loop, monetization, usage volume, sync health, micro-NPS, and AI quota/abuse pressure
+- [x] Bundle budget in CI — warn/fail when main app chunk exceeds target size — **DONE S55/S64 truth cleanup**: CI enforces the bundle budget and local S64 validation remains green at 329.3KB / 425KB
+- [x] Offline-first ledger queue — queue writes, show sync status, and resolve conflicts per entity timestamp — **DONE S56/S64 truth cleanup**: IndexedDB-backed sync queue, diagnostics, queue flush, and workflow conflict policy are shipped
+- [x] AI response schema validation — validate JSON server-side, include assumptions/confidence, and add advice guardrails — **DONE S63/S64 truth cleanup**: `_shared/validate.ts` centralizes AI validators and guardrails; PromoAdvisor/AIActionPlan/StackBuilder consume structured schemas and assumptions
+- [x] Calculator domain extraction — move calculators into dedicated modules with shared hooks and tests — **DONE S60/S64 truth cleanup**: calculators live under `src/calculators/` as lazy-loaded modules with focused component coverage
+- [x] Dashboard domain extraction — isolate activity feed, next-best-action, wins wall, and onboarding surfaces — **DONE S55/S64 truth cleanup**: dashboard state/helpers and dashboard-only surfaces are split into focused modules with lazy loading and shared snapshot contracts
 
 ## Deferred to Project Agents
 - cross-repo item owned by another repo agent:

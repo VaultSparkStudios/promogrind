@@ -1,6 +1,15 @@
 # Current State
 
 Public-safe summary:
+- version: 24.14.0 · last session: S64 (2026-04-17)
+- **S64 feature gates + StackBuilder structured UI + closeout cleanup (closed)**:
+  - PromoChat, AIActionPlan, LiveScanner, and StackBuilder now resolve feature availability through `useFeatureFlag` after unconditional hooks; `normalizeFeatureTier` handles legacy plan/tier labels before remote flag matching.
+  - `StackBuilder.jsx` now renders the structured stack-builder response (`summary`, ordered `steps[]`, assumptions, books used, estimate/calc/promo chips) and keeps fallback support for older `plan` payloads; copy output now mirrors the structured view.
+  - `scripts/validate-launch-smoke.mjs` now covers the `/land/:creator` route path by checking `LandingRoute.jsx`, the `/land/` guard, `landing_page_view`, and `pg_ref` attribution storage.
+  - `src/observability.js` now builds an `aiUsage` snapshot from AI `vault_events`; `ObservabilityPanel.jsx` best-effort fetches recent AI events and surfaces AI Load plus abuse-risk status.
+  - `package.json` `build:cap` is shell-neutral on Windows and verified to emit `dist-cap`; generated `dist-cap` output is ignored.
+  - Public truth surfaces were reconciled: task-board duplicate blockers removed, current Human Action Required list consolidated, project status/startup brief/truth audit updated to S64.
+  - Verified: `npm.cmd test` → 289/289, `npm.cmd run build` → passing, `node scripts/check-bundle-budget.mjs` → passing (`329.3KB` / `425KB`), `node scripts/validate-launch-smoke.mjs` → passing, `npm.cmd run build:cap` → passing.
 - this repo remains deployable — build passing, 235/235 tests green; main bundle 324.6KB against the 425KB cap (100.4KB headroom), and the S58 playbook-CTA + focus-trap + community-state-filter + calculator/dashboard-extraction + cron-migration tranche is validated; the main chunk now sits at ~353.3KB against the 425KB cap, 71.7KB of headroom recovered across S58 via extraction of 12 components (BonusBet, ProfitBoost, FirstBet, NoVig, NoVig3Way, PlusEV, Arb2Way, Arb3Way, KellyCriterion, InsurancePromo, CommunityWinsWall, SmartPromoRecommender) plus 2 shared helpers (BookCTA, ShareCard)
 - version: 24.9.0 · last session: S59 (2026-04-17)
 - **S59 vitest config fix + calculator component tests (closed)**: `vitest.config.js` now includes `@vitejs/plugin-react` plugin and an updated `include` pattern covering `*.test.{js,jsx}` — the previous config only matched `.test.js`, silently orphaning the pre-written `src/__tests__/calculators.test.jsx`; vite.config.js dead `test` block removed; all 13 calculator tests now active: 7 for BonusBet (title render, profit result, demo mode, exit demo, example preset, NL parse, scan-beta label) and 6 for KellyCriterion (title, recommended bet size, risk optimizer panel, skip-message at low win-prob, copy feedback, help entries)

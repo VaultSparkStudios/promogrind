@@ -5,13 +5,39 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █ █ █ █ █
-Avgs — 3: 489.7 | 5: 487.8 | 10: 472.0 [N=11] | 25: — | all: 465.6 [N=21]
-  └ 3-session: Dev 99.0 | Align 95.7 | Momentum 98.3 | Engage 94.0 | Process 100.7
+Avgs — 3: 490.3 | 5: 488.8 | 10: 473.5 [N=12] | 25: — | all: 466.8 [N=22]
+  └ 3-session: Dev 99.0 | Align 96.0 | Momentum 99.7 | Engage 95.7 | Process 100.3
 Velocity trend: ↑↑  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: ~4.0 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-17 | Session 63 | Total: 490/500 | Velocity: 20 | protocolVelocity: 0
+Last session: 2026-04-17 | Session 64 | Total: 491/500 | Velocity: 24 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-17 — Session 64 | Total: 491/500 | Velocity: 24 | Debt: ↓
+Avgs — 3: 490.3 | 5: 488.8 | 10: 473.5 [N=12] | 25: — | all: 466.8 [N=22]
+  └ 3-session: Dev 99.0 | Align 96.0 | Momentum 99.7 | Engage 95.7 | Process 100.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | 289/289 tests green; build, bundle budget, launch smoke, and build:cap green; feature gates now respect hook ordering; build:cap fixed for Windows; AI usage snapshot has focused coverage. |
+| Creative Alignment | 96 | → | Structured StackBuilder output, feature-flag rollout control, landing smoke, and AI abuse telemetry all serve the trust-first operator product direction without changing brand or UX principles. |
+| Momentum | 100 | → | Velocity 24 across repeated `/go` passes and truth cleanup; S63 pre-load cleared plus extra blocker/status drift removed. |
+| Engagement | 96 | ↑ | StackBuilder now presents usable step cards instead of raw prose; remote flags improve controlled rollout; observability helps protect AI feature quality under real usage. |
+| Process Quality | 100 | → | Manual public-repo closeout followed because private automation is absent; duplicate blockers cleaned; historical handoff drift separated from active Human Action Required. |
+| **Total** | **491/500** | **↑** | |
+
+**Top win:** S64 converted the remaining feature gates to the dynamic flag path, made StackBuilder consume the structured AI schema, and cleaned active blocker truth so the next session starts from a sharper launch surface.
+**Top gap:** Production still needs the human-applied Supabase migrations/function deploys before remote flags, AI schema changes, push delivery, and billing verification can be considered live.
+**Intent outcome:** Achieved — repeated `/go` implementation passes completed, then public-safe closeout surfaces were reconciled.
+
+**Brainstorm**
+1. Add paid conversion attribution once `referral_source` reaches subscription/checkout events.
+2. Add a read-only Supabase feature-flag migration preflight so the app can report whether `feature_flags` / `get_feature_flag()` exist.
+3. Add a PWA store-readiness screenshot/manifest checklist for Chrome Web Store assets.
+4. Add an operator-facing production deploy checklist that distinguishes repo-green from Supabase-live.
+5. Add remote feature flag smoke coverage once the SQL migration is applied.
+
+**Committed to TASK_BOARD:** Paid conversion attribution · feature-flag migration preflight · PWA store-readiness checklist.
 
 ## 2026-04-17 — Session 63 | Total: 490/500 | Velocity: 20 | Debt: ↓
 Avgs — 3: 489.7 | 5: 487.8 | 10: 472.0 [N=11] | 25: — | all: 465.6 [N=21]

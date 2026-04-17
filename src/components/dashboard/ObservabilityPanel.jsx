@@ -1,6 +1,9 @@
 import React from "react";
 import { K, S, font, fontD } from "../../lib/shared.js";
 import { buildObservabilitySnapshot } from "../../observability.js";
+import { supabase } from "../../auth.js";
+
+const AI_EVENT_TYPES = ["promo_advisor", "promo_chat", "ai_action_plan", "stack_builder"];
 
 function metric(label, value, note, color = K.tx) {
   return (
@@ -13,8 +16,41 @@ function metric(label, value, note, color = K.tx) {
 }
 
 export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDiagnostics = {}, usageLog = {} }) {
-  const obs = buildObservabilitySnapshot({ appData, dashboardSnapshot: snapshot, syncDiagnostics, usageLog });
+  const [aiEvents, setAiEvents] = React.useState([]);
+  const [aiEventsLoaded, setAiEventsLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    async function loadAiEvents() {
+      try {
+        const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          if (!cancelled) setAiEventsLoaded(true);
+          return;
+        }
+        const { data, error } = await supabase
+          .from("vault_events")
+          .select("event_type,created_at,metadata")
+          .in("event_type", AI_EVENT_TYPES)
+          .gte("created_at", since)
+          .order("created_at", { ascending: false })
+          .limit(500);
+        if (!cancelled) {
+          setAiEvents(error || !Array.isArray(data) ? [] : data);
+          setAiEventsLoaded(true);
+        }
+      } catch {
+        if (!cancelled) setAiEventsLoaded(true);
+      }
+    }
+    loadAiEvents();
+    return () => { cancelled = true; };
+  }, []);
+
+  const obs = buildObservabilitySnapshot({ appData, dashboardSnapshot: snapshot, syncDiagnostics, usageLog, aiEvents });
   const syncTone = syncDiagnostics.online === false ? K.rd : obs.hasPendingWrites ? K.yl : K.gn;
+  const aiTone = obs.aiUsage.risk === "high" ? K.rd : obs.aiUsage.risk === "watch" ? K.yl : obs.aiUsage.today > 0 ? K.gn : K.mt;
   const microNpsLabel = obs.latestMicroNps
     ? (obs.latestMicroNps === "yes" ? "Worth it" : obs.latestMicroNps === "mixed" ? "Mixed" : "Not worth it")
     : "No signal";
@@ -50,6 +86,7 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
         {metric("Workflow Load", `${obs.openWorkflows}`, `${obs.waitingWorkflows} waiting/placed · ${obs.settledFeedback} settled feedback rows`, obs.openWorkflows > 0 ? K.ac : K.mt)}
         {metric("Monetization", `${obs.monetizationCoverage}%`, `${obs.monetizedBooks} of ${snapshot.booksComplete !== undefined ? "tracked" : "total"} books have monetized links configured`, obs.monetizationCoverage >= 60 ? K.gn : K.yl)}
         {metric("Usage Volume", `${obs.totalCalculations}`, `${obs.calculatorsUsed} distinct calculators used from local usage log`, obs.totalCalculations > 0 ? K.gn : K.mt)}
+        {metric("AI Load", aiEventsLoaded ? `${obs.aiUsage.today}` : "…", `${obs.aiUsage.week} in 7d · ${obs.aiUsage.recentBurst} in 10m${obs.aiUsage.topFeature ? ` · top: ${obs.aiUsage.topFeature}` : ""}`, aiTone)}
         {metric("Micro-NPS", microNpsLabel, obs.latestMicroNps ? `Captured after ${obs.latestMicroNpsSettledCount} settled workflows` : "Waiting for post-settlement feedback", obs.latestMicroNps === "no" ? K.rd : obs.latestMicroNps === "mixed" ? K.yl : K.gn)}
       </div>
 
@@ -62,6 +99,9 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
         </span>
         <span style={{ padding: "4px 8px", background: `${obs.activationScore >= 70 ? K.gn : K.yl}12`, border: `1px solid ${obs.activationScore >= 70 ? K.gn : K.yl}25`, borderRadius: 999, fontSize: 10, color: obs.activationScore >= 70 ? K.gn : K.yl, fontFamily: font }}>
           Activation score {obs.activationScore}/100
+        </span>
+        <span style={{ padding: "4px 8px", background: `${aiTone}12`, border: `1px solid ${aiTone}25`, borderRadius: 999, fontSize: 10, color: aiTone, fontFamily: font }}>
+          AI abuse risk {obs.aiUsage.risk}
         </span>
       </div>
     </div>

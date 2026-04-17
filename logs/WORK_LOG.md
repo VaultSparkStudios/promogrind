@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-04-17 — S64 Feature Gates + Observability + Truth Cleanup
+
+- Continued from S63 pre-load and repeated `/go` passes, then closed out manually because the private Studio OS closeout scripts are not present in this public repo.
+- Wired remaining client feature gates through `useFeatureFlag`: PromoChat, AIActionPlan, LiveScanner, and StackBuilder now keep hooks unconditional and support remote overrides; feature tier matching now normalizes legacy tier/plan labels.
+- Upgraded StackBuilder client rendering for the new structured response shape: summary, ordered steps, assumptions, books used, chips for promo/calculator/hedge fields, and structured copy text with old `plan` fallback.
+- Expanded launch smoke coverage for `/land/:creator` by requiring the landing route guard, route component, `landing_page_view`, and `pg_ref` attribution storage.
+- Added AI usage/abuse observability: `buildAiUsageSnapshot` in `src/observability.js`, ObservabilityPanel AI Load/risk display, and focused unit coverage.
+- Fixed `build:cap` for Windows by removing POSIX-only env assignment; `dist-cap` is now ignored.
+- Reconciled public truth surfaces: task-board blockers, startup brief, project status, truth audit, and latest handoff now reflect S64 repo truth.
+- Verified: npm.cmd test → 289/289 · npm.cmd run build → passing · bundle 329.3KB under 425KB · launch smoke passing · build:cap passing.
+
 ## 2026-04-17 — S63 Task Board Update + Two /go Sprints (20 items — new record)
 
 - Session started with ranked analysis of 6–10 highest-impact items; founder confirmed to implement all.

@@ -1,5 +1,6 @@
 node_modules
 dist
+dist-cap
 .env
 .env.local
 .env.admin
@@ -22,3 +23,4 @@ DEPLOYMENT_GUIDE.md
 context/.session-lock
 docs/RIGHTS_PROVENANCE.md
 .beta-codes
+docs/CREATIVE_DIRECTION_RECORD.md

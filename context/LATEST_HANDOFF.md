@@ -2,6 +2,34 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 64 — CLOSED)
+
+**Session Intent:** Execute repeated `/go` passes from the S63 pre-load, then clean public-safe truth surfaces and blocker drift before closeout.
+
+**Shipped:**
+1. **Remote feature-flag gates expanded**: PromoChat, AIActionPlan, LiveScanner, and StackBuilder now use `useFeatureFlag` with unconditional hook ordering; feature-tier normalization covers legacy plan names.
+2. **StackBuilder structured-response UI**: renders `summary`, ordered `steps[]`, promo/calculator/hedge chips, assumptions, books used, and copy output with fallback support for old `plan` payloads.
+3. **Landing-route smoke coverage**: launch smoke now verifies `LandingRoute.jsx`, `/land/` route guard, `landing_page_view`, and `pg_ref` attribution storage.
+4. **AI abuse observability**: Observability reads recent AI `vault_events`, summarizes today/7d usage, burst volume, top AI feature, remaining quota pressure, and risk status; `buildAiUsageSnapshot` has unit coverage.
+5. **Capacitor build script fixed**: `npm run build:cap` is Windows-safe and verified to emit `dist-cap`; generated output is ignored.
+6. **Truth surfaces reconciled**: `PROJECT_STATUS.json`, `TRUTH_AUDIT.md`, `STARTUP_BRIEF.md`, and `TASK_BOARD.md` reflect S64 state instead of stale S62/S63 values.
+7. **Blocker drift cleanup**: Active Human Action Required items are now consolidated in `TASK_BOARD.md`; duplicate Stripe/VAPID entries were removed from the lower Next section.
+
+**Validation:** `npm.cmd test` 289/289, `npm.cmd run build` green, bundle budget green at 329.3KB/425KB, launch smoke green, `build:cap` green.
+
+**Manual next actions:** Apply the pending Supabase migrations/functions listed in `TASK_BOARD.md` Human Action Required before relying on remote feature flags, AI schema changes, push delivery, or production billing flows.
+
+**Validation:** 289/289 tests · build green · launch smoke green · bundle 329.3KB / 425KB · build:cap green.
+
+## Human Action Required (canonical current list)
+- [ ] **Apply `scripts/migration-workflow-history.sql` in Supabase** — required before dedicated `workflow_state` / `workflow_history` tables exist live.
+- [ ] **Apply `scripts/migration-entity-sync.sql` in Supabase** — required before dedicated `ledger_state` / `tracker_state` tables exist live.
+- [ ] **Apply `scripts/migration-feature-flags.sql` in Supabase** — required before `/feature-flags` can read/write remote rollout state.
+- [ ] **Set `VITE_VAPID_PUBLIC_KEY` in production** — needed before Daily Brief push should be exposed as a live browser subscription feature.
+- [ ] **Run Stripe smoke test** — complete checkout/webhook/customer-portal flow in `docs/STRIPE_SMOKE_TEST.md` and confirm `subscriptions` row + portal lifecycle.
+- [ ] **Monetization links for BetMGM / bet365 / BetRivers** — wait for affiliate decisions or provide real personal referral/share links once available.
+- [ ] **Friend beta pass** — create/sign in with a normal friend-facing PromoGrind account and verify auth, calculator, CTA, and pricing flows feel launch-ready.
+
 ## Where We Left Off (Session 63 — CLOSED)
 
 **Session Intent:** Update memory/task board, then implement all 8 identified high-impact items at highest quality — then run /go for a full genius-list sprint.
