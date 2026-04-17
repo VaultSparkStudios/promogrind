@@ -4,14 +4,38 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇ █ ▇ █ █
-Avgs — 3: 485.3 | 5: 478.0 | 10: 462.5 [N=10] | 25: — | all: 456.3 [N=14]
-  └ 3-session: Dev 98.7 | Align 95.0 | Momentum 95.3 | Engage 92.0 | Process 104.3
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
+Sparkline (last 5 totals): █ ▇ █ █ █
+Avgs — 3: 488.3 | 5: 484.8 | 10: 464.7 [N=10] | 25: — | all: 458.3 [N=15]
+  └ 3-session: Dev 99.0 | Align 95.3 | Momentum 96.3 | Engage 93.3 | Process 104.3
+Velocity trend: →  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: ~2.0 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-16 | Session 56 | Total: 491/500 | Velocity: 4 | protocolVelocity: 1
+Last session: 2026-04-16 | Session 57 | Total: 487/500 | Velocity: 5 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-16 — Session 57 | Total: 487/500 | Velocity: 5 | Debt: ↓
+Avgs — 3: 488.3 | 5: 484.8 | 10: 464.7 [N=10] | 25: — | all: 458.3 [N=15]
+  └ 3-session: Dev 99.0 | Align 95.3 | Momentum 96.3 | Engage 93.3 | Process 104.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Five items shipped with 214/214 tests passing (+18 new); bundle recovered from 426.8KB to 418.3KB via lazy extraction of CommunityPromoBoard, keeping 6.7KB headroom under the 425KB cap. |
+| Creative Alignment | 95 | ↓ | Playbooks as first-class operating decisions deepen the trust-first action surface; community intel verification signals make the board more useful; aria improvements respect AT/keyboard users — all consistent with product direction. Two of the five items (workflow ordering, auth tests) are architectural trust work rather than visible UX. |
+| Momentum | 96 | → | Five items from the top of the genius list in one session (scope cap = 6); SIL items pre-loaded per momentum-runway protocol before feature work began; one item deferred (cron trigger, human-gated); all shipped items are complete not stubs. |
+| Engagement | 93 | ↓ | Playbooks now surface as "Try: [Name]" in next-best-action — a concrete routine rather than a generic action prompt. Community board adds freshness, verification, and region relevance for promo discovery. Two items (workflow step ordering, auth tests) are infra-facing. |
+| Process Quality | 104 | → | Full manual closeout fallback again; momentum runway rule followed (TASK_BOARD pre-load before feature work); bundle regression detected and fixed mid-sprint via lazy extraction; all items driven to completion, no stubs; vi.hoisted used correctly for the auth mock refactor. |
+| **Total** | **487/500** | ↓ | |
+
+**Top win:** Playbooks are now first-class operating-decision candidates — the dashboard can surface "Try: Bonus Bet Conversion" when that's the highest-fit next move, and playbook step ordering is protected inside the inbox ranker so a queued playbook's steps stay in sequence.
+**Top gap:** The playbook surface still needs a TodayDashboardPanel caller that passes `topPlaybook` from a `matchPlaybooks` call into `getNextBestAction`, and `getNextBestAction` output isn't yet wired back into the existing next-best-action UI render path with playbook-specific CTA copy.
+**Intent outcome:** Achieved — executed the top 5 unblocked items from the genius list at quality bar, pre-loaded SIL items per startup protocol, and performed a full manual closeout.
+
+**Brainstorm**
+1. Wire `matchPlaybooks` output into `TodayDashboardPanel`'s `getNextBestAction` call so a matched playbook can actually appear as the dashboard's recommended action card — the decision layer now supports it but no caller passes `topPlaybook` yet.
+2. Add a dedicated playbook CTA card format to the dashboard UI so "Try: Bonus Bet Conversion" renders with a playbook icon, step count, and bankroll-fit reason rather than a generic action button.
+3. Extend the state filter on the community board to auto-default to the user's stored `appData.userState` so the region filter pre-populates without requiring manual selection.
+
+**Committed to TASK_BOARD:** [SIL] Wire topPlaybook into TodayDashboardPanel → getNextBestAction call · [SIL] Playbook CTA card in dashboard UI — dedicated render format with step count and bankroll-fit reason
 
 ## 2026-04-16 — Session 56 | Total: 491/500 | Velocity: 4 | Debt: ↓
 Avgs — 3: 485.3 | 5: 478.0 | 10: 462.5 [N=10] | 25: — | all: 456.3 [N=14]

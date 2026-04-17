@@ -9,12 +9,32 @@ _S.meter = (pct, c) => (<div style={{marginTop:8}}><div style={{display:"flex",j
 export const S = _S;
 
 // ═══ UI ATOMS ═══
-export const In = ({l,v,set,ph,pre,err}) => {
+export const In = ({l, v, set, ph, pre, err, id: idProp}) => {
   const isOdds = l && /odds/i.test(l);
   const isNumeric = l && /amount|size|stake|bet|bankroll|balance|fee|payout|odds|%|boost/i.test(l);
   const oddsErr = isOdds && v && v.trim() && toD(v) <= 1 ? 'Invalid odds' : null;
   const displayErr = err || oddsErr;
-  return (<div style={S.col}><label style={S.label}>{l}</label><div style={{position:"relative"}}>{pre&&<span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:12}}>{pre}</span>}<input inputMode={isNumeric?"decimal":undefined} style={{...S.input,...(pre?{paddingLeft:22}:{}),...(displayErr?{borderColor:K.rd}:{})}} value={v} onChange={e=>set(e.target.value)} placeholder={ph}/>{displayErr&&<div style={{fontSize:10,color:K.rd,marginTop:2}}>{displayErr}</div>}</div></div>);
+  const inputId = idProp || (l ? `pg-in-${String(l).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}` : undefined);
+  const errorId = displayErr && inputId ? `${inputId}-err` : undefined;
+  return (
+    <div style={S.col}>
+      <label htmlFor={inputId} style={S.label}>{l}</label>
+      <div style={{position:"relative"}}>
+        {pre && <span aria-hidden="true" style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:12}}>{pre}</span>}
+        <input
+          id={inputId}
+          inputMode={isNumeric ? "decimal" : undefined}
+          style={{...S.input,...(pre?{paddingLeft:22}:{}),...(displayErr?{borderColor:K.rd}:{})}}
+          value={v}
+          onChange={e=>set(e.target.value)}
+          placeholder={ph}
+          aria-invalid={displayErr ? "true" : undefined}
+          aria-describedby={errorId}
+        />
+        {displayErr && <div id={errorId} role="alert" style={{fontSize:10,color:K.rd,marginTop:2}}>{displayErr}</div>}
+      </div>
+    </div>
+  );
 };
 export const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:13,color:K.dm}}>{l}</span><span style={{fontSize:14,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
 export const Tl = ({t,badge,bc,shareable,getParams}) => {
@@ -40,8 +60,8 @@ export const Tl = ({t,badge,bc,shareable,getParams}) => {
   return (<div style={{fontSize:18,fontWeight:600,color:K.tx,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontFamily:fontD,flexWrap:"wrap"}}>
     <span>{t}</span>
     {badge&&<span style={{...S.tag(bc||K.ac)}}>{badge}</span>}
-    {shareable&&<button onClick={copy} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{copied?"✓ COPIED":"⎘ SHARE"}</button>}
-    {shareable&&<button onClick={copyEmbed} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:embedCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{embedCopied?"✓ Copied!":"<> Embed"}</button>}
+    {shareable&&<button onClick={copy} aria-label={copied?"Link copied":"Copy share link"} aria-pressed={copied} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{copied?"✓ COPIED":"⎘ SHARE"}</button>}
+    {shareable&&<button onClick={copyEmbed} aria-label={embedCopied?"Embed code copied":"Copy embed code"} aria-pressed={embedCopied} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:embedCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{embedCopied?"✓ Copied!":"<> Embed"}</button>}
   </div>);
 };
 export const Nt = ({children,c}) => (<div style={S.note(c)}>{children}</div>);

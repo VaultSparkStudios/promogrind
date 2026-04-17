@@ -141,6 +141,46 @@ describe("workflow inbox", () => {
     expect(inbox.open.find((row) => row.id === "wf-blocked")?.scoreReasons.some((reason) => /not live|gubbed/i.test(reason.text))).toBe(true);
   });
 
+  it("preserves playbook step insertion order within a single playbook regardless of individual scores", () => {
+    const now = new Date("2026-04-16T12:00:00.000Z");
+    // Step 1 is "ready" (score base 92); step 2 is "queued" (score base 78) but has a high
+    // expectedProfit/opportunityScore that would normally push it above step 1. The ranker
+    // must keep step 1 first because they share the same playbook source.
+    const inbox = buildWorkflowInbox({
+      done: { DraftKings: true, FanDuel: true },
+      workflowInbox: [
+        {
+          id: "playbook-bonus-bet-convert-001-0",
+          title: "Run Bonus Bet Converter",
+          status: "ready",
+          promoType: "bonus_bet",
+          calculatorSlug: "bonus-bet",
+          expectedProfit: 10,
+          book: "DraftKings",
+          source: "playbook:bonus-bet-convert",
+          createdAt: "2026-04-16T10:00:00.000Z",
+        },
+        {
+          id: "playbook-bonus-bet-convert-001-1",
+          title: "Lock the hedge",
+          status: "queued",
+          promoType: "bonus_bet",
+          calculatorSlug: "hedge",
+          expectedProfit: 40,
+          opportunityScore: 95,
+          book: "FanDuel",
+          source: "playbook:bonus-bet-convert",
+          createdAt: "2026-04-16T10:00:01.000Z",
+        },
+      ],
+    }, { bankroll: "1000", now });
+
+    const playbookSteps = inbox.open.filter((wf) => wf.source === "playbook:bonus-bet-convert");
+    expect(playbookSteps).toHaveLength(2);
+    expect(playbookSteps[0].id).toBe("playbook-bonus-bet-convert-001-0");
+    expect(playbookSteps[1].id).toBe("playbook-bonus-bet-convert-001-1");
+  });
+
   it("builds a compact Studio snapshot from live app data", () => {
     const snapshot = buildStudioSnapshot({
       workflowInbox: [

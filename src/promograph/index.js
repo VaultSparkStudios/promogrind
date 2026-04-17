@@ -242,6 +242,7 @@ export function buildOperatingActionCandidates(input = {}) {
     openWorkflowCount = 0,
     topWorkflow = null,
     bestBook = null,
+    topPlaybook = null,
   } = input;
 
   return [
@@ -312,6 +313,16 @@ export function buildOperatingActionCandidates(input = {}) {
       tone: "watch",
       score: 80 + Math.min(openBets.length, 5),
     },
+    topPlaybook?.applicable && {
+      key: `playbook:${topPlaybook.playbook.id}`,
+      title: `Try: ${topPlaybook.playbook.name}`,
+      body: topPlaybook.playbook.summary,
+      cta: "Run playbook",
+      slug: topPlaybook.playbook.steps?.[0]?.calculatorSlug || "dashboard",
+      tone: topPlaybook.playbook.tone || "positive",
+      score: Math.round(60 + Math.max(0, topPlaybook.fitScore - 50) * 0.6),
+      playbookId: topPlaybook.playbook.id,
+    },
     !affiliateReady && {
       key: "affiliate",
       title: "Revenue setup incomplete",
@@ -357,6 +368,7 @@ export function selectOperatingDecision(input = {}) {
   const primaryAlert = Array.isArray(driftAlerts) ? driftAlerts[0] || null : null;
   const primaryBlocker = Array.isArray(nextActions) ? nextActions[0] || null : null;
 
+  const isPlaybookCandidate = String(preferredAction?.key || "").startsWith("playbook:");
   let decision = preferredAction
     ? {
         key: preferredAction.key || "action",
@@ -369,11 +381,12 @@ export function selectOperatingDecision(input = {}) {
         priority: preferredAction.score >= 90 ? "high" : "medium",
         score: preferredAction.score ?? null,
         focus: {
-          type: "action",
+          type: isPlaybookCandidate ? "playbook" : "action",
           title: preferredAction.title || "Recommended action",
           detail: preferredAction.body || "",
           status: preferredAction.tone || "neutral",
           score: preferredAction.score ?? null,
+          ...(preferredAction.playbookId ? { playbookId: preferredAction.playbookId } : {}),
         },
       }
     : {

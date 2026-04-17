@@ -243,6 +243,8 @@ export function buildWorkflowInbox(appData = {}, options = {}) {
     deduped.push(workflow);
   }
 
+  const ordinal = new Map(deduped.map((wf, i) => [wf.id, i]));
+
   const open = deduped
     .filter((workflow) => ["queued", "ready", "placed", "waiting"].includes(workflow.status))
     .map((workflow) => {
@@ -261,7 +263,14 @@ export function buildWorkflowInbox(appData = {}, options = {}) {
         scoreSummary: enrichedScoring.scoreSummary,
       };
     })
-    .sort((a, b) => b.score - a.score || (b.expectedProfit || 0) - (a.expectedProfit || 0));
+    .sort((a, b) => {
+      const aPlaybook = a.source?.match(/^playbook:(.+)/)?.[1];
+      const bPlaybook = b.source?.match(/^playbook:(.+)/)?.[1];
+      if (aPlaybook && aPlaybook === bPlaybook) {
+        return (ordinal.get(a.id) ?? 0) - (ordinal.get(b.id) ?? 0);
+      }
+      return b.score - a.score || (b.expectedProfit || 0) - (a.expectedProfit || 0);
+    });
 
   return {
     workflows: deduped,

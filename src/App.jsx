@@ -33,6 +33,7 @@ const LaunchCommandCenterPanel = lazy(() => import("./components/dashboard/Launc
 const ActivationNextAction = lazy(() => import("./components/dashboard/ActivationNextAction.jsx"));
 const DashboardHero = lazy(() => import("./components/dashboard/DashboardHero.jsx"));
 const TodayDashboardPanel = lazy(() => import("./components/dashboard/TodayDashboardPanel.jsx"));
+const CommunityPromoBoard = lazy(() => import("./components/CommunityPromoBoard.jsx"));
 const GetStartedRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.GetStartedRoute })));
 const WhatsNewRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.WhatsNewRoute })));
 const AboutRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.AboutRoute })));
@@ -1757,106 +1758,8 @@ const Leaderboard = () => {
   </div>);
 };
 
-// ═══ COMMUNITY PROMO BOARD ═══
-const PromoBoard = () => {
-  const [promos, setPromos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({book:"DraftKings",promo_type:"Profit Boost",description:"",value:"",expires_at:""});
-  const [showForm, setShowForm] = useState(false);
-  const [filter, setFilter] = useState("All");
-
-  const load = async () => {
-    const { data } = await supabase.from('promo_submissions')
-      .select('*').eq('active',true).order('created_at',{ascending:false}).limit(50);
-    if (data) setPromos(data);
-    setLoading(false);
-  };
-
-  useEffect(()=>{ load(); },[]);
-
-  const submit = async () => {
-    if(!form.description||!form.book) return;
-    setSubmitting(true);
-    try {
-      const { data:{user} } = await supabase.auth.getUser();
-      await supabase.from('promo_submissions').insert({...form,user_id:user.id});
-      setShowForm(false);
-      setForm(f=>({...f,description:"",value:"",expires_at:""}));
-      await load();
-    } catch(e) {}
-    setSubmitting(false);
-  };
-
-  const upvote = async (id) => {
-    await supabase.from('promo_submissions').update({upvotes:supabase.rpc('increment_upvotes',{row_id:id})}).eq('id',id);
-    setPromos(p=>p.map(x=>x.id===id?{...x,upvotes:(x.upvotes||0)+1}:x));
-  };
-
-  const typeColor = {
-    "Profit Boost":K.yl,"Bonus Bet":K.gn,"Deposit Match":K.ac,
-    "Safety Net":K.pp,"Odds Boost":K.rd,"Parlay Insurance":K.dm,"Other":K.mt
-  };
-
-  const filtered = filter==="All" ? promos : promos.filter(p=>p.book===filter||p.promo_type===filter);
-
-  return (<div style={S.card}>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-      <Tl t="Community Promo Board" badge="LIVE" bc={K.gn}/>
-      <button onClick={()=>setShowForm(s=>!s)} style={{padding:"7px 14px",background:showForm?"transparent":K.gn,border:`1px solid ${K.gn}`,borderRadius:6,color:showForm?K.gn:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font,flexShrink:0}}>
-        {showForm?"Cancel":"+ Share a Promo"}
-      </button>
-    </div>
-
-    {showForm&&<div style={{...S.card,background:K.s2,marginBottom:12}}>
-      <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10}}>Share what you&apos;re seeing</div>
-      <div style={S.row}>
-        <div style={S.col}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
-        <div style={S.col}><label style={S.label}>Type</label><select style={S.input} value={form.promo_type} onChange={e=>setForm(f=>({...f,promo_type:e.target.value}))}>{["Profit Boost","Bonus Bet","Deposit Match","Safety Net","Odds Boost","Parlay Insurance","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
-        <In l="Value (e.g. 50%)" v={form.value} set={v=>setForm(f=>({...f,value:v}))} ph="50%"/>
-        <div style={S.col}><label style={S.label}>Expires</label><input style={S.input} type="date" value={form.expires_at} onChange={e=>setForm(f=>({...f,expires_at:e.target.value}))}/></div>
-      </div>
-      <div style={{marginBottom:10}}><label style={S.label}>Description</label><input style={S.input} value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))} placeholder="e.g. 50% profit boost on NBA, max $250 extra, all game types"/></div>
-      <button onClick={submit} disabled={submitting||!form.description} style={{padding:"8px 18px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font,opacity:submitting?0.7:1}}>{submitting?"Submitting…":"Submit Promo"}</button>
-      <Nt c={K.yl}>Only share promos you have personally verified. Do not submit expired or inaccurate promos.</Nt>
-    </div>}
-
-    <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
-      {["All","DraftKings","FanDuel","BetMGM","Caesars","Profit Boost","Bonus Bet","Deposit Match"].map(f=>(
-        <button key={f} onClick={()=>setFilter(f)} style={{padding:"3px 10px",background:filter===f?K.gn:"transparent",border:`1px solid ${filter===f?K.gn:K.bd2}`,borderRadius:50,color:filter===f?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font}}>{f}</button>
-      ))}
-    </div>
-
-    {loading&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Loading promos…</div>}
-    {!loading&&filtered.length===0&&<div style={{textAlign:"center",padding:"32px 16px"}}>
-      <div style={{fontSize:24,marginBottom:8}}>📋</div>
-      <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:6}}>No promos yet — be the first</div>
-      <div style={{fontSize:11,color:K.mt,marginBottom:14}}>Share a promo you're seeing at your sportsbook and help the community.</div>
-      <button onClick={()=>setShowForm(true)} style={{padding:"7px 18px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>+ Share a Promo</button>
-    </div>}
-    {filtered.map(p=>(
-      <div key={p.id} style={{...S.res(true),marginBottom:8,padding:"12px 14px"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8,flexWrap:"wrap"}}>
-          <div>
-            <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}>
-              <span style={{fontWeight:700,fontSize:13,color:K.tx}}>{p.book}</span>
-              <span style={S.tag(typeColor[p.promo_type]||K.mt)}>{p.promo_type}</span>
-              {p.value&&<span style={S.tag(K.gn)}>{p.value}</span>}
-            </div>
-            <div style={{fontSize:12,color:K.dm,marginBottom:2}}>{p.description}</div>
-            <div style={{fontSize:10,color:K.mt}}>
-              {new Date(p.created_at).toLocaleDateString()}
-              {p.expires_at&&` · Expires ${new Date(p.expires_at).toLocaleDateString()}`}
-            </div>
-          </div>
-          <button onClick={()=>upvote(p.id)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.yl,fontSize:11,padding:"4px 10px",cursor:"pointer",fontFamily:font,flexShrink:0}}>
-            ▲ {p.upvotes||0}
-          </button>
-        </div>
-      </div>
-    ))}
-  </div>);
-};
+// ═══ COMMUNITY PROMO BOARD — extracted to src/components/CommunityPromoBoard.jsx ═══
+const PromoBoard = CommunityPromoBoard;
 
 class ErrorBoundary extends Component {
   constructor(props) { super(props); this.state={error:null}; }

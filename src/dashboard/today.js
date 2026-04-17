@@ -168,7 +168,7 @@ export function getUnfinishedWork(snapshot) {
   ].filter(Boolean);
 }
 
-export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 0, openBets = [], booksComplete = 0, openWorkflowCount = 0, topWorkflow = null, userState = "", done = {}, bookStatus = {}, recommendedBooks = null }) {
+export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 0, openBets = [], booksComplete = 0, openWorkflowCount = 0, topWorkflow = null, userState = "", done = {}, bookStatus = {}, recommendedBooks = null, topPlaybook = null }) {
   const hasBankroll = !!String(bankroll || "").trim();
   const hasCalc = Object.keys(usageLog).length > 0;
   const affiliateReady = hasConfiguredMonetizationLinks();
@@ -183,6 +183,7 @@ export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 
     openWorkflowCount,
     topWorkflow,
     bestBook,
+    topPlaybook,
   });
 
   const decision = selectOperatingDecision({

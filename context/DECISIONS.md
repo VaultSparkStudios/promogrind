@@ -2,6 +2,36 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-16 — Community promo board extracted to a lazy-loaded chunk (S57)
+
+**Decision:** `CommunityPromoBoard.jsx` is now a separate lazy-loaded module instead of an inline component in `App.jsx`. The board is only needed when the Promo Board tab is visited, not on startup.
+
+**Applies to this project:** Yes — governs `src/components/CommunityPromoBoard.jsx` and the `c: CommunityPromoBoard` tab registration in `App.jsx`.
+
+**Rationale:** The community intel upgrade (freshness, verification, flag, state filter) expanded the component meaningfully. Without extraction, the main bundle exceeded the 425KB cap. Lazy-loading follows the established pattern for non-critical surfaces (Tracker, Ledger, TrackInsights, etc.) and keeps the startup path lean.
+
+---
+
+## 2026-04-16 — Auth tests use vi.hoisted for mock handle sharing (S57)
+
+**Decision:** `src/__tests__/auth.test.js` uses `vi.hoisted` to expose shared `mockGetSession`, `mockSetSession`, and `mockMaybySingle` handles that can be controlled per-test via `mockResolvedValueOnce`. `vi.stubEnv` overrides `VITE_DEV_BYPASS_AUTH` so auth guard functions actually run in the test environment.
+
+**Applies to this project:** Yes — establishes the pattern for auth test coverage in this repo.
+
+**Rationale:** The prior mock was static (all fns returned the same value, no way to simulate errors per-test). Vitest's `vi.hoisted` is the correct mechanism for exposing mock handles to both the `vi.mock` factory (which is hoisted before imports) and the test body. `vi.stubEnv` is necessary because the local `.env` has `VITE_DEV_BYPASS_AUTH=true` which bypasses all auth checks in tests without it.
+
+---
+
+## 2026-04-16 — Playbook candidates score as 60 + (fitScore−50) × 0.6 (S57)
+
+**Decision:** Matched playbooks inserted into `buildOperatingActionCandidates` score between 60 (fitScore=50) and 90 (fitScore=100). This places them below urgent workflow/book setup signals (≥90) and above low-priority actions (affiliate, scale), ensuring playbooks compete meaningfully without pre-empting active work.
+
+**Applies to this project:** Yes — governs `buildOperatingActionCandidates` in `src/promograph/index.js`.
+
+**Rationale:** A playbook should surface as a next-best-action when nothing more urgent exists, not override an active workflow that needs settlement. The score formula scales with fit quality so highly-matched playbooks naturally compete with lower-priority action candidates.
+
+---
+
 ## 2026-04-16 — Terminal workflow states beat stale transient writes in sync merge
 
 **Decision:** `resolveWorkflowStatusConflict` in `src/promograph/index.js` now encodes the shared precedence policy that terminal states (`settled`, `skipped`) win over transient progress (`queued`/`ready`/`placed`/`waiting`) during per-record sync merge, regardless of `updatedAt` jitter. `src/sync.js` `_preferNewerEntry` routes workflow conflicts through this policy instead of pure newest-wins.

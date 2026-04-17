@@ -2,6 +2,29 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Session 57 (2026-04-16) — CLOSED
+
+**Session Intent:** Execute the Unified Genius List at quality bar (implicit — user ran /go immediately after /start).
+
+## Where We Left Off (Session 57 — CLOSED)
+
+- Shipped: 5 improvements across 5 items — playbook-as-operating-decision, playbook-aware workflow ranking, community intel upgrade, aria audit on ui.jsx, auth token refresh/hijack test coverage
+- Tests: 214/214 passing · delta: +18
+- Deploy: pending — repo-side code is ready for push; production only needs standing manual/external actions, not a new repo-specific deploy step
+- Session type: implementation + accessibility + test coverage + closeout
+- Intent outcome: Achieved
+
+## Current Delta Since S56
+
+- `src/promograph/index.js` `buildOperatingActionCandidates` now accepts `topPlaybook` and generates a `playbook:*` candidate scored at `60 + max(0, fitScore-50) × 0.6`; `selectOperatingDecision` sets `focus.type = "playbook"` with `focus.playbookId` when a playbook candidate wins; non-applicable playbooks are never surfaced.
+- `src/dashboard/today.js` `getNextBestAction` accepts a new `topPlaybook` parameter and passes it through to `buildOperatingActionCandidates`.
+- `src/workflows/inbox.js` `buildWorkflowInbox` tracks insertion-order ordinals and the sort comparator preserves original step order for workflows sharing the same `playbook:*` source prefix instead of sorting them by generic score.
+- `src/components/CommunityPromoBoard.jsx` extracted from `App.jsx` (lazy-loaded) with freshness age display, expired dimming, ✓ Verified badge (≥3 upvotes), 🚩 flag button (vault_events), state filter, hide-expired toggle; extraction recovered 4KB of main-chunk headroom (418.3KB from 426.8KB, under 425KB cap).
+- `src/ui.jsx` `In` atom now has `htmlFor`/`id` label association, `aria-invalid`, `aria-describedby` for error messages, and `aria-hidden` on prefix span; `Tl` share buttons have `aria-label` + `aria-pressed`; filter groups have `role="group"`.
+- `src/__tests__/auth.test.js` expanded from 18 to 32 tests using `vi.hoisted` shared mock handles covering session lifecycle, expired redirect token errors, revoked refresh token scenarios, subscription tier checks for `isPro`/`isRunnerPlus`.
+- Validation after closeout: `npm.cmd test` (214/214), `npm.cmd run build` (green), `node scripts/check-bundle-budget.mjs` (418.3KB under 425KB cap).
+- GitHub state: this closeout commits and pushes the validated repo state to `main`.
+
 ## Session 56 (2026-04-16) — CLOSED
 
 **Session Intent:** Extend the canonical Promo Operating Graph into Track/AI/sync policy, ship a durable IndexedDB-backed offline queue, land playbooks as reusable promo routines, close the accessibility tranche (keyboard-nav + motion-reduce), then commit/push a full closeout.

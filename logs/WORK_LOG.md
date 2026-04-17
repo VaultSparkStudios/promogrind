@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-04-16 — S57 Playbook Operating Decision + Community Intel + Aria + Auth Tests
+
+- Continued the public-repo fallback path from `docs/SESSION_PROTOCOL.md`; performed manual write-back because the private `scripts/ops.mjs`, `closeout-autopilot.mjs`, and related Studio OS automation are not present in this repo.
+- Pre-loaded two [SIL] items during startup (momentum runway = 2.0) before beginning feature work.
+- Wired matched playbooks as first-class candidates in `src/promograph/index.js` `buildOperatingActionCandidates` and `selectOperatingDecision`; updated `src/dashboard/today.js` `getNextBestAction` to accept and pass `topPlaybook`.
+- Added insertion-order ordinal tracking to `src/workflows/inbox.js` `buildWorkflowInbox` so playbook step ordering is preserved in the inbox sort.
+- Extracted `PromoBoard` into `src/components/CommunityPromoBoard.jsx` (lazy-loaded), adding freshness, verified badge, flag button, state filter, and hide-expired toggle; lazy extraction recovered 4KB of main-chunk headroom.
+- Applied aria audit to `src/ui.jsx`: `In` now has proper label-input association, `aria-invalid`, `aria-describedby`; `Tl` buttons have `aria-label` and `aria-pressed`.
+- Expanded `src/__tests__/auth.test.js` from 18 to 32 tests using `vi.hoisted` covering session lifecycle, token hijack/expiry scenarios, and subscription tier checks.
+- Verified `npm.cmd test` → 214/214 passing.
+- Verified `npm.cmd run build` → passing.
+- Verified `node scripts/check-bundle-budget.mjs` → passing (`418.3KB` main chunk under 425KB cap).
+
 ## 2026-04-16 — S55 Sync Compatibility Mirror + Operating Graph + Full Closeout
 
 - Continued the public-repo fallback path from `docs/SESSION_PROTOCOL.md` because the private `scripts/ops.mjs`, `closeout-autopilot.mjs`, and related Studio OS automation are not present here; performed the write-back manually instead of stopping.

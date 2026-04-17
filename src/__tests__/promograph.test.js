@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildOperatingActionCandidates,
   formatPromoTypeLabel,
   isWorkflowOpen,
   normalizeCalculatorSlug,
@@ -107,6 +108,74 @@ describe("promograph helpers", () => {
       { id: "w2", status: "placed", updatedAt: "2026-04-16T10:00:00Z" },
     );
     expect(neither.status).toBe("placed");
+  });
+
+  it("surfaces a matched playbook as a first-class action candidate", () => {
+    const topPlaybook = {
+      playbook: {
+        id: "bonus-bet-convert",
+        name: "Bonus Bet Conversion",
+        summary: "Convert free/bonus bets into guaranteed cash via a hedge.",
+        steps: [{ calculatorSlug: "bonus-bet", title: "Run converter" }],
+        tone: "positive",
+      },
+      fitScore: 85,
+      applicable: true,
+    };
+
+    const candidates = buildOperatingActionCandidates({
+      hasBankroll: true,
+      hasCalc: true,
+      affiliateReady: true,
+      booksComplete: 2,
+      topPlaybook,
+    });
+
+    const playbookCandidate = candidates.find((c) => c.key.startsWith("playbook:"));
+    expect(playbookCandidate).toBeDefined();
+    expect(playbookCandidate.key).toBe("playbook:bonus-bet-convert");
+    expect(playbookCandidate.playbookId).toBe("bonus-bet-convert");
+    expect(playbookCandidate.score).toBeGreaterThan(60);
+    expect(playbookCandidate.slug).toBe("bonus-bet");
+  });
+
+  it("routes selectOperatingDecision to playbook focus type when playbook candidate wins", () => {
+    const topPlaybook = {
+      playbook: {
+        id: "profit-boost-stack",
+        name: "Profit Boost Stack",
+        summary: "Deploy boosts on hedgeable favorites.",
+        steps: [{ calculatorSlug: "profit-boost", title: "Size the boost" }],
+        tone: "positive",
+      },
+      fitScore: 100,
+      applicable: true,
+    };
+
+    const candidates = buildOperatingActionCandidates({
+      hasBankroll: true,
+      hasCalc: true,
+      affiliateReady: true,
+      booksComplete: 3,
+      topPlaybook,
+    });
+
+    const decision = selectOperatingDecision({ actionCandidates: candidates });
+    expect(decision.key).toBe("playbook:profit-boost-stack");
+    expect(decision.focus.type).toBe("playbook");
+    expect(decision.focus.playbookId).toBe("profit-boost-stack");
+  });
+
+  it("does not surface non-applicable playbooks as candidates", () => {
+    const candidates = buildOperatingActionCandidates({
+      hasBankroll: true,
+      hasCalc: true,
+      affiliateReady: true,
+      booksComplete: 2,
+      topPlaybook: { playbook: { id: "p1", name: "P1", steps: [] }, fitScore: 90, applicable: false },
+    });
+
+    expect(candidates.some((c) => c.key?.startsWith("playbook:"))).toBe(false);
   });
 
   it("converts an AI recommendation into a canonical workflow entry", () => {

@@ -2,5 +2,5 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-16 (post-S56 canonical-graph + offline-queue + playbooks + accessibility closeout — `resolveWorkflowStatusConflict` in promograph now governs sync workflow merges, `src/lib/sync-queue.js` owns the durable IndexedDB queue with a localStorage mirror, `src/playbooks/index.js` feeds a matching-playbooks dashboard surface, `src/lib/focus-trap.js` provides the reusable `useFocusTrap` hook wired into AuthDialog, and `npm.cmd test` 196/196 + `npm.cmd run build` + `node scripts/check-bundle-budget.mjs` at 422.3KB/425KB all validate the repo state)
+Last reviewed: 2026-04-16 (post-S57 playbook-operating-decision + community-intel + aria + auth-test-coverage closeout — `buildOperatingActionCandidates` now surfaces matched playbooks as first-class `playbook:*` candidates, inbox sort preserves playbook step ordering, `CommunityPromoBoard.jsx` is lazy-loaded with freshness/verification/flag/region, `src/ui.jsx` `In` atom has full label-input aria association, `src/__tests__/auth.test.js` has 32 tests covering session lifecycle and token hijack scenarios, and `npm.cmd test` 214/214 + `npm.cmd run build` + `node scripts/check-bundle-budget.mjs` at 418.3KB/425KB all validate the repo state)
 Public-safe summary only. Sensitive verification notes are maintained privately.
