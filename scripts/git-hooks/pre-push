@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+# pre-push — Studio Ops secret scan + router-adherence hook.
+# Scans outgoing commits for credential patterns before they reach the remote
+# and blocks new Anthropic chokepoint violations outside model-router.
+#
+# Install: node scripts/install-hooks.mjs
+# Bypass (with justification): git push --no-verify
+#
+# What it checks:
+#   1. Committed .env files (not .env.example/.env.sample/.env.template)
+#   2. High-entropy credential-like patterns (Stripe live keys, Render keys, GitHub tokens, AWS keys, JWTs, DB URLs)
+#   3. Absolute local paths that leak machine-specific info into public repos
+#   4. Anthropic/router references outside scripts/lib/model-router.mjs
+#   5. Local Claude settings sanitization
+#   6. Canon gate (`docs/CANON_RULES.json`)
+
+set -euo pipefail
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+VIOLATIONS=0
+declare -a MESSAGES=()
+
+# Read stdin: each line is "<local_ref> <local_sha> <remote_ref> <remote_sha>"
+while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
+  # Skip deletes
+  [[ "$local_sha" == "0000000000000000000000000000000000000000" ]] && continue
+
+  # Determine commit range
+  if [[ "$remote_sha" == "0000000000000000000000000000000000000000" ]]; then
+    # New branch — scan everything up to this commit
+    range="$local_sha"
+    new_files=$(git diff-tree --no-commit-id -r --name-only "$local_sha" 2>/dev/null || true)
+  else
+    range="$remote_sha..$local_sha"
+    new_files=$(git diff --name-only "$range" 2>/dev/null || true)
+  fi
+
+  [[ -z "$new_files" ]] && continue
+
+  while IFS= read -r file; do
+    [[ -z "$file" ]] && continue
+    full_path="$REPO_ROOT/$file"
+    [[ ! -f "$full_path" ]] && continue
+
+    # Skip binary files (require 'file' command or fall back gracefully)
+    if command -v file &>/dev/null; then
+      file "$full_path" 2>/dev/null | grep -qi 'text\|empty\|ascii' || continue
+    fi
+
+    # ── Rule 1: .env files ──────────────────────────────────────────────────
+    base=$(basename "$file")
+    if [[ "$base" == .env || "$base" == .env.* ]]; then
+      case "$base" in
+        .env.example|.env.sample|.env.template) ;;  # safe templates
+        *) MESSAGES+=("  ⛔ .env file committed: $file")
+           ((VIOLATIONS++)) || true ;;
+      esac
+    fi
+
+    # ── Rule 2: Credential patterns ────────────────────────────────────────
+    # Stripe live secret key
+    grep -qE 'sk_live_[A-Za-z0-9]{24,}' "$full_path" 2>/dev/null && \
+      MESSAGES+=("  ⛔ Stripe live secret key: $file") && ((VIOLATIONS++)) || true
+
+    # Render deploy key
+    grep -qE 'rnd_[A-Za-z0-9]{20,}' "$full_path" 2>/dev/null && \
+      MESSAGES+=("  ⛔ Render API key: $file") && ((VIOLATIONS++)) || true
+
+    # GitHub personal access token (classic + fine-grained)
+    grep -qE '(ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{82})' "$full_path" 2>/dev/null && \
+      MESSAGES+=("  ⛔ GitHub PAT: $file") && ((VIOLATIONS++)) || true
+
+    # AWS access key
+    grep -qE 'AKIA[A-Z0-9]{16}' "$full_path" 2>/dev/null && \
+      MESSAGES+=("  ⛔ AWS access key: $file") && ((VIOLATIONS++)) || true
+
+    # Supabase service role key (long JWT starting with eyJ)
+    grep -qE 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[A-Za-z0-9_-]{50,}' "$full_path" 2>/dev/null && \
+      MESSAGES+=("  ⚠  JWT token (service role?): $file") && ((VIOLATIONS++)) || true
+
+    # PostgreSQL connection string with embedded password.
+    # Skip standard CI/test patterns whose host is localhost / 127.0.0.1 /
+    # well-known compose service names (db, postgres, postgres-test, shadow-db).
+    # Also skip matches where the password portion is the literal [REDACTED]
+    # marker written by scripts/sanitize-claude-settings.mjs — that is not a
+    # real credential. These are CI test creds / redacted markers, not
+    # production secrets — flagging them is a false positive that erodes
+    # trust in the hook.
+    if grep -E 'postgresql://[^:]+:[^@]{8,}@' "$full_path" 2>/dev/null \
+         | grep -vE '\[REDACTED\]' \
+         | grep -qvE '@(localhost|127\.0\.0\.1|db|postgres|postgres-test|shadow-db)(:[0-9]+)?(/|$)'; then
+      MESSAGES+=("  ⚠  DB connection string with password: $file")
+      ((VIOLATIONS++)) || true
+    fi
+
+    # ── Rule 3: Absolute local paths ────────────────────────────────────────
+    # Skip .claude/settings.local.json — by design it records Claude Code's
+    # allowed Bash paths including absolute local paths. This is expected
+    # per-user state, not a leak.
+    if [[ "$file" != ".claude/settings.local.json" ]]; then
+      grep -qEi '(C:\\Users\\|/Users/[A-Za-z0-9_.-]+/documents/development/)' "$full_path" 2>/dev/null && \
+        MESSAGES+=("  ⚠  Absolute local path leak: $file") && ((VIOLATIONS++)) || true
+    fi
+
+    # ── Rule 4: Anthropic chokepoint adherence ─────────────────────────────
+    # Skip this hook itself — it literally contains the anti-pattern as part
+    # of its own detection regex, and would trip on itself every time the
+    # hook is edited.
+    if [[ "$file" == scripts/* && "$file" != "scripts/lib/model-router.mjs" && "$file" != "scripts/git-hooks/pre-push" ]]; then
+      while IFS= read -r match; do
+        [[ -z "$match" ]] && continue
+        line_no="${match%%:*}"
+        MESSAGES+=("  ⛔ Router adherence violation: $file:$line_no")
+        ((VIOLATIONS++)) || true
+      done < <(
+        grep -nE 'api\.anthropic\.com|@anthropic-ai/sdk|claude-(opus|sonnet|haiku)-[0-9]' "$full_path" 2>/dev/null \
+          | grep -vE '^[0-9]+:\s*(//|#)'
+      )
+    fi
+
+  done <<< "$new_files"
+done
+
+# ── Rule 5: .claude/settings.local.json must be sanitized ────────────────────
+# Run the sanitizer in --check mode if the file is in the push range.
+if echo "${new_files:-}" | grep -q '\.claude/settings\.local\.json'; then
+  if command -v node &>/dev/null && [[ -f "$REPO_ROOT/scripts/sanitize-claude-settings.mjs" ]]; then
+    if ! (cd "$REPO_ROOT" && node scripts/sanitize-claude-settings.mjs --check >/dev/null 2>&1); then
+      MESSAGES+=("  ⛔ .claude/settings.local.json contains secrets — run: node scripts/ops.mjs sanitize-settings")
+      ((VIOLATIONS++)) || true
+    fi
+  fi
+fi
+
+# ── Rule 6: Canon gate ───────────────────────────────────────────────────────
+if command -v node &>/dev/null && [[ -f "$REPO_ROOT/scripts/canon-enforcer.mjs" ]]; then
+  if ! (cd "$REPO_ROOT" && node scripts/canon-enforcer.mjs --gate >/dev/null 2>&1); then
+    MESSAGES+=("  ⛔ Canon gate failed — run: node scripts/canon-enforcer.mjs --report")
+    ((VIOLATIONS++)) || true
+  fi
+fi
+
+# ── Report ────────────────────────────────────────────────────────────────────
+if [[ $VIOLATIONS -gt 0 ]]; then
+  echo ""
+  echo "⛔ Pre-push checks: $VIOLATIONS issue(s) found"
+  echo ""
+  for msg in "${MESSAGES[@]}"; do echo "$msg"; done
+  echo ""
+  echo "  Review the flagged files before pushing."
+  echo "  To push anyway with justification: git push --no-verify"
+  echo "  Sanitization guide: vaultspark-studio-ops/docs/SANITIZATION_PROTOCOL.md"
+  echo ""
+  exit 1
+fi
+
+exit 0

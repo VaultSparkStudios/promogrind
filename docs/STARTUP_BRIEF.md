@@ -1,47 +1,83 @@
-╔══════════════════════════════════════════════════════════════════╗
-║  STARTUP BRIEF  ·  PromoGrind                                  ║
-║  2026-04-17  ·  Session 64  ·  BUILDER MODE                    ║
-║  C — Returning  ·  deployed/public-unlaunched  ·  VaultSpark   ║
-╚══════════════════════════════════════════════════════════════════╝
+<!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
+<!-- generated-at: 2026-04-18 (Session 65 closeout) -->
+<!-- fast-boot-valid-until: next session if within 24h -->
 
-╔══ SCORE ════════════════════════════════════════════════════════╗
-║                                                                ║
-║  490/500   ████████████████████████░   98%                      ║
-║  Trend  █ █ █ █ █  ↑  ·  Avg3: 488.3  ·  Days since: 0         ║
-║                                                                ║
-╚══════════════════════════════════════════════════════════════════╝
+# Startup Brief — PromoGrind
 
-╔══ STATUS ═══════════════════════════════════════════════════════╗
-║ Health: green  ·  Truth audit: green  ·  Version: 24.14.0      ║
-║ Build/tests: passing  ·  289/289 tests green                   ║
-║ Bundle: 329.3KB / 425KB cap (95.7KB headroom)                  ║
-║ Domain: promogrind.bet live on Cloudflare                      ║
-║ Billing: live Stripe preflight reaches hosted Checkout         ║
-╚══════════════════════════════════════════════════════════════════╝
+> **Fast-boot brief** — generated at Session 65 closeout · 2026-04-18.
+> Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
-╔══ S64 SHIPPED ══════════════════════════════════════════════════╗
-║ /go sprint tranche:                                            ║
-║   Remote feature-flag gates expanded to PromoChat,             ║
-║   AIActionPlan, LiveScanner, and StackBuilder                  ║
-║   StackBuilder UI renders steps[], summary, assumptions[]      ║
-║   Launch smoke covers /land/:creator attribution path          ║
-║   Observability adds AI usage / abuse-pressure readout         ║
-║   build:cap is Windows-safe and emits dist-cap                 ║
-║   TASK_BOARD + PROJECT_STATUS truth drift cleaned              ║
-╚══════════════════════════════════════════════════════════════════╝
+---
 
-╔══ SIGNALS ══════════════════════════════════════════════════════╗
-║ Engagement (lowest SIL cat): 92.3 avg                          ║
-║ Momentum runway: 3.8 sessions                                  ║
-║ Velocity: 24 repo-side items across S64 /go passes             ║
-║ Intent rate: 100% last 5 sessions                              ║
-╚══════════════════════════════════════════════════════════════════╝
+```
+╔════════════════════════════════════════════════════════════════╗
+║  📱 PROMOGRIND                                                   ║
+║  app · deployed/public-unlaunched · FORGE                        ║
+║  Session 66 · 2026-04-18 · BUILDER MODE                          ║
+║  Owner: VaultSpark Studios                                       ║
+╚════════════════════════════════════════════════════════════════╝
 
-╔══ HUMAN PRESSURE ═══════════════════════════════════════════════╗
-║ • VAPID public key → set in Cloudflare Pages env               ║
-║ • Stripe smoke test → docs/STRIPE_SMOKE_TEST.md                ║
-║ • Affiliate links → BetMGM, bet365, BetRivers                  ║
-║ • Friend beta pass → auth + calculator + pricing flow          ║
-║ • Apply scripts/migration-feature-flags.sql in Supabase        ║
-║ • Apply workflow/entity sync migrations in Supabase            ║
-╚══════════════════════════════════════════════════════════════════╝
+
+
+╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
+║  (no testing surfaces registered — add to PROJECT_STATUS.json)   ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SCORE ═══════════════════════════════════════════════════════╗
+║                                                                  ║
+║    493/500   ███████████████████████░   99%                      ║
+║    Project health   ?/100  ·  SIL process score                  ║
+║    Trend  ▂███▂  ↓  ·  Avg3: 491.7  ·  Days since last: 1        ║
+║                                                                  ║
+║    Dev Health    100  ████████████████████  →                    ║
+║    Alignment      97  ███████████████████░  →                    ║
+║    Momentum       99  ████████████████████  →                    ║
+║    Engagement     96  ███████████████████░  →                    ║
+║    Process Qual  101  ████████████████████  →                    ║
+║                                                                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ WHERE WE LEFT OFF  ·  Session 65 ════════════════════════════╗
+║  Shipped:  see LATEST_HANDOFF.md                                 ║
+║  Tests:    289 passing  ·  Deploy: deployed                      ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SIGNALS ═════════════════════════════════════════════════════╗
+║  ✓  Tests         289/? passing                                  ║
+║  ⚠  Velocity      1 ↓  ·  Debt: ↓                                ║
+║  ⚠  Runway        ~3.8 sessions                                  ║
+║  ✓  Headroom      94% remaining · ~9 large item(s) fit           ║
+║  ⛔  Context age   ?d                                             ║
+║  ✓  IGNIS         47652 FORGE  ·  3d old                         ║
+║  ✓  Truth         green  ·  Genome: green                        ║
+║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
+║  ✓  Genome dims   all stable  (0/25)                             ║
+║  ✓  Entropy       0.136  (healthy)                               ║
+║  ✓  CDR           no gap detected                                ║
+║  ⚠  Patterns      PROTOCOL top-5 × 3 sessions — carry-forward    ║
+║  ✓  Templates     v3.3 aligned                                   ║
+║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
+║  ⚠  Doctor        not yet tracked — run: node scripts/ops.mjs d  ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ HUMAN PRESSURE ══════════════════════════════════════════════╗
+║  Single founder actions that reopen sprint surface:              ║
+║                                                                  ║
+║   new · Apply `scripts/migration-workflow-history.sql`           ║
+║   new · Apply `scripts/migration-entity-sync.sql`                ║
+║   new · Apply `scripts/migration-feature-flags.sql`              ║
+║   new · Set `VITE_VAPID_PUBLIC_KEY` in production                ║
+║   new · Stripe smoke test                                        ║
+║   new · Affiliate/referral links                                 ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
+║  Run `node scripts/ops.mjs genius-list` to generate fresh recom  ║
+╚════════════════════════════════════════════════════════════════╝
+
+```
+
+---
+
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 65 closeout · 2026-04-18*
+*Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

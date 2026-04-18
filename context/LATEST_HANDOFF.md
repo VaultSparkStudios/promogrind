@@ -2,6 +2,21 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 65 — CLOSED)
+
+**Session Intent:** Conform PromoGrind to the Studio OS/ops protocol by bringing in the missing script layer, then commit/push and close out.
+
+**Shipped:**
+1. **Canonical ops script surface installed**: imported `scripts/ops.mjs`, the `scripts/ops/` registry, `scripts/lib/`, and the registered Studio Ops command scripts from local `vaultspark-studio-ops`.
+2. **Protocol drift fixed**: `docs/SESSION_PROTOCOL.md` now uses the canonical SIL grep `^## [0-9]`, matching this repo's existing `SELF_IMPROVEMENT_LOOP.md` format.
+3. **Project-mode guard added**: `detect-session-mode.mjs` no longer flips app repos to Founder mode from archived portfolio vocabulary alone; PromoGrind remains `builder` unless current-session intent says otherwise.
+4. **Startup brief renderer aligned**: `render-startup-brief.mjs` emits uppercase vault status and `HUMAN PRESSURE`, and `docs/STARTUP_BRIEF.md` validates cleanly.
+5. **Generated ops artifacts ignored**: `.cache/` and `portfolio/ACCESS_LEDGER.ndjson` are ignored as local runtime/cache outputs.
+
+**Validation:** `node scripts/ops.mjs help` green; ops registry complete (`missing=0 total=167`); `node --check` across scripts green; context meter `CONTINUE`; fast-start green; startup brief format green; targeted/staged secret scans clean; `npm.cmd test` 289/289; `npm.cmd run build` green; bundle budget green at 329.3KB/425KB.
+
+**Known residual risk:** Full working-tree secret scan still reports pre-existing findings in ignored build output, package-lock integrity strings, and public Supabase anon-key surfaces. The changed files and staged changes scanned clean.
+
 ## Where We Left Off (Session 64 — CLOSED)
 
 **Session Intent:** Execute repeated `/go` passes from the S63 pre-load, then clean public-safe truth surfaces and blocker drift before closeout.

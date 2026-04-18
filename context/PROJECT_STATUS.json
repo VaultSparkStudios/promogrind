@@ -13,7 +13,7 @@
   "localPath": "C:\\Users\\p4cka\\documents\\development\\promogrind",
   "github": "https://github.com/VaultSparkStudios/promogrind",
   "liveUrl": "https://promogrind.bet",
-  "currentFocus": "S64 repo-side launch hardening: remote feature-flag gates now cover PromoAdvisor, PromoChat, AIActionPlan, LiveScanner, and StackBuilder; StackBuilder renders structured steps/summary/assumptions; launch smoke covers /land/:creator; Observability reads AI vault_events for quota/abuse pressure; Android build:cap is Windows-safe. 289/289 tests, build green, bundle 329.3KB/425KB.",
+  "currentFocus": "S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.",
   "nextMilestone": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
   "blockers": [
     "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live",
@@ -25,18 +25,18 @@
     "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
   "lastUpdated": "2026-04-17",
-  "currentSession": 64,
-  "silScore": 490,
-  "silAvg3": 488,
-  "silVelocity": 24,
+  "currentSession": 65,
+  "silScore": 493,
+  "silAvg3": 492,
+  "silVelocity": 1,
   "silDebt": "down",
-  "silLastSession": "S64 pending closeout",
+  "silLastSession": "S65 pending closeout",
   "silSparkline": [
-    484,
-    485,
-    486,
     489,
-    490
+    490,
+    490,
+    491,
+    493
   ],
   "ignisScore": 47652,
   "ignisGrade": "FORGE",
@@ -163,5 +163,6 @@
   "sitemapUrls": 145,
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
   "entropyScore": 0.136,
-  "entropyLastComputed": "2026-04-15"
+  "entropyLastComputed": "2026-04-15",
+  "sessionMode": "builder"
 }

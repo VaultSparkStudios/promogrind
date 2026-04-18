@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-04-17 — S65 Studio OS/Ops Script Conformance
+
+- Imported the canonical Studio Ops script layer from the local `vaultspark-studio-ops` checkout into PromoGrind so `docs/SESSION_PROTOCOL.md` no longer points at missing startup/go/closeout scripts.
+- Installed `scripts/ops.mjs`, the composed command registry under `scripts/ops/`, shared helpers under `scripts/lib/`, and all registered command targets; registry completeness now reports `missing=0 total=167`.
+- Updated `docs/SESSION_PROTOCOL.md` to the canonical SIL entry grep (`^## [0-9]`) so the repo's existing session history passes the initiation check.
+- Patched `detect-session-mode.mjs` so archived portfolio vocabulary in public repo docs does not auto-flip PromoGrind into Founder mode without explicit current-session intent.
+- Patched `render-startup-brief.mjs`, regenerated `docs/STARTUP_BRIEF.md`, and confirmed `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` passes.
+- Ignored local ops artifacts: `.cache/` and `portfolio/ACCESS_LEDGER.ndjson`.
+- Verified: `node scripts/ops.mjs help`; ops registry completeness; `node --check` across scripts; `node scripts/context-meter.mjs --json`; `node scripts/ops.mjs fast-start --stdout`; targeted/staged secret scans; `npm.cmd test` 289/289; `npm.cmd run build`; `node scripts/check-bundle-budget.mjs` 329.3KB/425KB.
+
 ## 2026-04-17 — S64 Feature Gates + Observability + Truth Cleanup
 
 - Continued from S63 pre-load and repeated `/go` passes, then closed out manually because the private Studio OS closeout scripts are not present in this public repo.

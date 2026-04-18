@@ -5,13 +5,37 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █ █ █ █ █
-Avgs — 3: 490.3 | 5: 488.8 | 10: 473.5 [N=12] | 25: — | all: 466.8 [N=22]
-  └ 3-session: Dev 99.0 | Align 96.0 | Momentum 99.7 | Engage 95.7 | Process 100.3
-Velocity trend: ↑↑  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: ~4.0 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-17 | Session 64 | Total: 491/500 | Velocity: 24 | protocolVelocity: 0
+Avgs — 3: 491.7 | 5: 490.8 | 10: 475.8 [N=13] | 25: — | all: 467.9 [N=23]
+  └ 3-session: Dev 99.3 | Align 96.3 | Momentum 99.7 | Engage 96.0 | Process 100.3
+Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: ↓
+Momentum runway: ~3.8 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-17 | Session 65 | Total: 493/500 | Velocity: 1 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-17 — Session 65 | Total: 493/500 | Velocity: 1 | Debt: ↓
+Avgs — 3: 491.7 | 5: 490.8 | 10: 475.8 [N=13] | 25: — | all: 467.9 [N=23]
+  └ 3-session: Dev 99.3 | Align 96.3 | Momentum 99.7 | Engage 96.0 | Process 100.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 100 | ↑ | Studio Ops script surface is now locally present; ops registry completeness is 167/167; `node --check` passed across scripts; app tests/build/bundle remain green. |
+| Creative Alignment | 97 | ↑ | Protocol conformance keeps public-safe repo truth aligned with the Studio OS operating model without changing PromoGrind product UX or brand direction. |
+| Momentum | 99 | ↓ | Narrow but compounding session: one protocol infrastructure item completed end to end, unblocking reliable future `/start`/`/go`/`/closeout` execution. |
+| Engagement | 96 | → | No direct product UX change; engagement risk improves indirectly because future sessions can start from validated hit lists and fewer manual fallbacks. |
+| Process Quality | 101 | ↑ | Missing-script fallback removed for core ops, startup brief validator passes, staged secret scan clean, generated ops cache/ledger ignored, and mode detection no longer mutates app repos to Founder mode from archived context. |
+| **Total** | **493/500** | **↑** | |
+
+**Top win:** PromoGrind now carries the Studio OS script surface its own protocol references, so agent sessions can execute the canonical flow instead of degrading to manual fallback.
+**Top gap:** Full working-tree secret scan still reports pre-existing findings in ignored build output, package-lock integrity strings, and public Supabase anon-key surfaces; changed files and staged changes scanned clean.
+**Intent outcome:** Achieved — protocol conformance implemented, validated, and prepared for commit/push.
+
+**Brainstorm**
+1. Add a repo-local allowlist/exclude policy for `scan-secrets.mjs` so ignored build outputs and package-lock integrity strings do not obscure real findings.
+2. Add `testingSurfaces` to `PROJECT_STATUS.json` so generated startup briefs list concrete PromoGrind verification paths instead of "no testing surfaces registered."
+3. Add a compact `scripts/ops.mjs protocol-doctor --json` CI gate once the public-safe ops layer stabilizes in this repo.
+
+**Committed to TASK_BOARD:** No new product tasks; protocol debt tracked in closeout surfaces.
 
 ## 2026-04-17 — Session 64 | Total: 491/500 | Velocity: 24 | Debt: ↓
 Avgs — 3: 490.3 | 5: 488.8 | 10: 473.5 [N=12] | 25: — | all: 466.8 [N=22]

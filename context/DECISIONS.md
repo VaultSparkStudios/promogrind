@@ -2,6 +2,26 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-17 — PromoGrind carries the public-safe Studio Ops script layer (S65)
+
+**Decision:** This repo now includes the Studio OS/ops script surface required by `docs/SESSION_PROTOCOL.md` rather than relying on the old public-repo fallback for missing automation.
+
+**Applies to this project:** Yes — governs `scripts/ops.mjs`, `scripts/ops/*`, `scripts/lib/*`, startup/closeout/genius/security helpers, and future `/start` → `/go` → `/closeout` sessions in this repo.
+
+**Rationale:** The founder explicitly requested conformance to the Studio OS/ops protocol and asked to get the scripts. Keeping the protocol document while omitting its script targets made `/start`, `/go`, and `/closeout` degrade into manual fallback. Importing the public-safe ops layer makes protocol execution testable and agent-neutral in this repo.
+
+---
+
+## 2026-04-17 — Session mode only flips on explicit current-session intent (S65)
+
+**Decision:** `detect-session-mode.mjs` must not classify PromoGrind as Founder mode from archived handoff/task-board/protocol vocabulary alone.
+
+**Applies to this project:** Yes — governs session mode detection for this app repo.
+
+**Rationale:** Public repo docs naturally mention portfolio, roadmap, and Studio OS concepts. Those are background context, not a founder-mode directive. Without the guard, a builder session can mutate `PROJECT_STATUS.json` incorrectly before work starts.
+
+---
+
 ## 2026-04-17 — Feature tiers are normalized before remote flag resolution (S64)
 
 **Decision:** `resolveFlag` normalizes tier/plan labels before comparing against remote feature flag rows.

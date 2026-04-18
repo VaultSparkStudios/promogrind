@@ -2,6 +2,14 @@
 
 Public-safe summary:
 - version: 24.14.0 · last session: S64 (2026-04-17)
+- **S65 Studio OS/ops protocol conformance (closed)**:
+  - Canonical Studio Ops script surface imported from the local `vaultspark-studio-ops` checkout into this public repo: `scripts/ops.mjs`, `scripts/ops/*`, `scripts/lib/*`, closeout/startup/genius/context/security helpers, and registered command targets.
+  - `docs/SESSION_PROTOCOL.md` refreshed to the canonical initiation grep (`^## [0-9]`) so existing SIL entries count correctly.
+  - `scripts/detect-session-mode.mjs` patched for project repos so archived portfolio/protocol vocabulary does not flip PromoGrind from BUILDER to FOUNDER mode without explicit current-session intent.
+  - `scripts/render-startup-brief.mjs` patched so generated briefs pass the local validator with uppercase vault status and `HUMAN PRESSURE` block naming.
+  - `docs/STARTUP_BRIEF.md` regenerated from the imported renderer; `context/PROJECT_STATUS.json` now records `sessionMode: builder`.
+  - `.cache/` and generated `portfolio/ACCESS_LEDGER.ndjson` are ignored as local ops runtime artifacts.
+  - Verified: `node scripts/ops.mjs help`, ops registry completeness (`missing=0 total=167`), `node --check` across scripts, context meter, fast-start, startup brief validator, targeted secret scans, staged secret scan, `npm.cmd test` → 289/289, `npm.cmd run build` → passing, bundle budget 329.3KB/425KB.
 - **S64 feature gates + StackBuilder structured UI + closeout cleanup (closed)**:
   - PromoChat, AIActionPlan, LiveScanner, and StackBuilder now resolve feature availability through `useFeatureFlag` after unconditional hooks; `normalizeFeatureTier` handles legacy plan/tier labels before remote flag matching.
   - `StackBuilder.jsx` now renders the structured stack-builder response (`summary`, ordered `steps[]`, assumptions, books used, estimate/calc/promo chips) and keeps fallback support for older `plan` payloads; copy output now mirrors the structured view.
