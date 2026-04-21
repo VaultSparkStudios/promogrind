@@ -78,17 +78,45 @@ if (fs.existsSync(lockPath)) {
 }
 // Context window size comes from the model-router chokepoint — never hardcode IDs.
 const limit = contextWindowForAgent(agent);
-const model = agent === 'claude-code' ? 'opus-1m' : agent === 'codex' ? 'codex-1m' : 'default';
+const model = agent === 'claude-code' ? (process.env.CLAUDE_CONTEXT_LIMIT === '1000000' ? 'opus-1m' : 'sonnet-200k') : agent === 'codex' ? 'codex-1m' : 'default';
 
 // --- Used-tokens estimate
-// (a) context/ files that get read at session start
-let ctxBytes = 0;
-const ctxFiles = ['AGENTS.md', 'CLAUDE.md', 'context/PROJECT_BRIEF.md', 'context/SOUL.md', 'context/BRAIN.md',
-                  'context/CURRENT_STATE.md', 'context/DECISIONS.md', 'context/TASK_BOARD.md',
-                  'context/LATEST_HANDOFF.md', 'context/SELF_IMPROVEMENT_LOOP.md', 'context/TRUTH_AUDIT.md'];
-for (const f of ctxFiles) ctxBytes += bytesOf(path.join(ROOT, f));
+// v1.3 fix: only charge for files HOT (modified after session start).
+// Mature repo files that existed before this session are NOT counted —
+// they are not in the conversation context window. This prevents the
+// false "90% full" reading on session start caused by large repo state.
+//
+// Baseline: STARTUP_BRIEF.md only (~3K tokens — the sole file read at start).
+// Hot files: any file under context/ or docs/ modified after sessionStart.
+// Churn: git working-tree changes as proxy for tool-output volume.
 
-// (b) working-tree churn = proxy for tool-output volume
+const STARTUP_BASELINE = bytesOf(path.join(ROOT, 'docs/STARTUP_BRIEF.md'));
+
+// Hot files: modified after session start (agent actually touched them this session)
+function hotFilesBytes() {
+  const dirs = ['context', 'docs', 'logs', 'portfolio'];
+  let total = 0;
+  for (const dir of dirs) {
+    const dirPath = path.join(ROOT, dir);
+    if (!fs.existsSync(dirPath)) continue;
+    try {
+      for (const entry of fs.readdirSync(dirPath)) {
+        const fp = path.join(dirPath, entry);
+        try {
+          const stat = fs.statSync(fp);
+          if (stat.isFile() && stat.mtimeMs > sessionStart) {
+            total += stat.size;
+          }
+        } catch { /* skip */ }
+      }
+    } catch { /* skip */ }
+  }
+  return total;
+}
+
+let ctxBytes = STARTUP_BASELINE + hotFilesBytes();
+
+// Working-tree churn = proxy for tool-output volume this session
 const diffStat = sh('git diff --shortstat').trim();
 const churnMatch = diffStat.match(/(\d+) insertions.*?(\d+) deletions/);
 const churnBytes = churnMatch ? (parseInt(churnMatch[1], 10) + parseInt(churnMatch[2], 10)) * 80 : 0;
