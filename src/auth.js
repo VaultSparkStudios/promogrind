@@ -16,6 +16,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { trackEvent } from './analytics.js';
 import { CANONICAL_APP_URL, getProjectAuthHref, VAULT_ACCOUNT_PORTAL_URL } from './launchState.js';
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL;
@@ -25,6 +26,24 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 }
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function readCheckoutAttribution() {
+  try {
+    return {
+      referral_source: localStorage.getItem('pg_ref') || null,
+      utm_source: localStorage.getItem('pg_utm_source') || null,
+      utm_medium: localStorage.getItem('pg_utm_medium') || null,
+      utm_campaign: localStorage.getItem('pg_utm_campaign') || null,
+    };
+  } catch {
+    return {
+      referral_source: null,
+      utm_source: null,
+      utm_medium: null,
+      utm_campaign: null,
+    };
+  }
+}
 
 /**
  * Call once on app startup.
@@ -294,10 +313,11 @@ export function getTierName(plan) {
 export async function startCheckout(planId = 'monthly') {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) { redirectToLogin(); return; }
+  const attribution = readCheckoutAttribution();
 
   const { data, error } = await supabase.functions.invoke('create-checkout', {
     headers: { Authorization: `Bearer ${session.access_token}` },
-    body: { plan: planId },
+    body: { plan: planId, attribution },
   });
 
   if (error) {
@@ -308,12 +328,22 @@ export async function startCheckout(planId = 'monthly') {
   // Test mode — Stripe not yet configured (pending live keys)
   if (data?.test_mode) {
     console.warn('[PromoGrind] Stripe test mode — checkout not yet live. Set STRIPE_SECRET_KEY (sk_live_...) and STRIPE_TEST_MODE=false in Supabase secrets.');
+    trackEvent('paid_checkout_started', {
+      plan: planId,
+      mode: 'test',
+      ...attribution,
+    });
     // Dispatch a custom event so the UI can show a friendly message without alert()
     window.dispatchEvent(new CustomEvent('pg:checkout-unavailable', { detail: { reason: 'test_mode' } }));
     return;
   }
 
   if (data?.checkout_url) {
+    trackEvent('paid_checkout_started', {
+      plan: planId,
+      mode: 'live',
+      ...attribution,
+    });
     window.location.href = data.checkout_url;
   } else {
     console.error('[PromoGrind] No checkout URL returned:', data);

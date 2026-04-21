@@ -25,6 +25,29 @@ const today = new Date().toISOString().slice(0, 10);
 const historyPath = path.join(ROOT, 'context', 'COMPLIANCE_HISTORY.json');
 const docsPath = path.join(ROOT, 'docs', 'COMPLIANCE_HISTORY.md');
 
+function quoteArg(arg) {
+  if (/^[A-Za-z0-9_./:\\-]+$/.test(arg)) return arg;
+  return `"${String(arg).replace(/"/g, '\\"')}"`;
+}
+
+function runNodeScript(scriptPath, args) {
+  const base = {
+    cwd: ROOT,
+    encoding: 'utf8',
+    timeout: 60000,
+  };
+  const direct = spawnSync(process.execPath, [scriptPath, ...args], base);
+  if (!direct.error || direct.error.code !== 'EPERM') {
+    return direct;
+  }
+  if (process.platform === 'win32') {
+    const command = [quoteArg(process.execPath), quoteArg(scriptPath), ...args.map(quoteArg)].join(' ');
+    return spawnSync('cmd.exe', ['/d', '/s', '/c', command], base);
+  }
+  const command = [quoteArg(process.execPath), quoteArg(scriptPath), ...args.map(quoteArg)].join(' ');
+  return spawnSync('/bin/sh', ['-lc', command], base);
+}
+
 const validation = runValidation();
 const history = readJson(historyPath, { snapshots: [] });
 const snapshots = Array.isArray(history.snapshots) ? history.snapshots : [];
@@ -71,11 +94,7 @@ if (jsonMode) {
 process.exit(validation.violations > 0 ? 1 : 0);
 
 function runValidation() {
-  const res = spawnSync(process.execPath, [path.join(ROOT, 'scripts', 'validate-compliance.mjs'), '--json'], {
-    cwd: ROOT,
-    encoding: 'utf8',
-    timeout: 60000,
-  });
+  const res = runNodeScript(path.join(ROOT, 'scripts', 'validate-compliance.mjs'), ['--json']);
 
   let parsed = null;
   try {

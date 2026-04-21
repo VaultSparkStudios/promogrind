@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-16T22:06:50.609Z",
+  "generatedAt": "2026-04-21T01:47:14.789Z",
   "contract": "hub",
   "identity": {
     "slug": "promogrind",
@@ -13,8 +13,8 @@
   },
   "listingMetadata": {
     "title": "PromoGrind",
-    "summary": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
-    "tagline": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
+    "summary": "S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.",
+    "tagline": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
     "tags": [
       "tool",
       "live",
@@ -26,11 +26,35 @@
     ]
   },
   "status": {
-    "health": "yellow",
-    "currentFocus": "Most important active work right now.",
-    "nextMilestone": "Next concrete milestone."
+    "health": "green",
+    "currentFocus": "S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.",
+    "nextMilestone": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
+    "truthAuditStatus": "green",
+    "ignisScore": 47652,
+    "ignisGrade": "FORGE",
+    "silScore": 493,
+    "silAvg3": 492
   },
-  "liveSurfaces": [],
+  "liveSurfaces": [
+    {
+      "label": "live",
+      "scope": "production",
+      "url": "https://promogrind.bet",
+      "path": null
+    },
+    {
+      "label": "repo",
+      "scope": "github",
+      "url": "https://github.com/VaultSparkStudios/promogrind",
+      "path": null
+    },
+    {
+      "label": "workspace",
+      "scope": "local",
+      "url": null,
+      "path": "C:\\Users\\p4cka\\documents\\development\\promogrind"
+    }
+  ],
   "integration": {
     "enabled": true,
     "mode": "private"

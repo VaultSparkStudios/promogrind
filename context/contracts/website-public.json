@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-16T22:06:50.609Z",
+  "generatedAt": "2026-04-21T01:47:14.789Z",
   "contract": "website-public",
   "identity": {
     "slug": "promogrind",
@@ -14,7 +14,7 @@
   "listingMetadata": {
     "title": "PromoGrind",
     "summary": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
-    "tagline": "Home tab suite (Daily Brief, Get Started, What's New, Pricing, About) live. Beta invite codes live (Runner 30d). Last code blocker: affiliate links in src/books.js.",
+    "tagline": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
     "tags": [
       "tool",
       "live",

@@ -16,10 +16,15 @@ import fs from 'fs';
 import path from 'path';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
-const registry = JSON.parse(fs.readFileSync(path.join(root, 'portfolio', 'PROJECT_REGISTRY.json'), 'utf8'));
+const registryPath = path.join(root, 'portfolio', 'PROJECT_REGISTRY.json');
+const statusPath = path.join(root, 'context', 'PROJECT_STATUS.json');
+const manifestPath = path.join(root, 'context', 'STUDIO_MANIFEST.json');
 const today = new Date().toISOString().slice(0, 10);
-
-const activeProjects = registry.projects.filter((p) => p.status !== 'archived');
+const registry = readJson(registryPath);
+const status = readJson(statusPath) || {};
+const manifest = readJson(manifestPath) || {};
+const activeProjects = registry?.projects?.filter((p) => p.status !== 'archived') || [buildLocalProject(status, manifest)];
+const isPortfolioMode = !!registry?.projects?.length;
 
 // Revenue readiness scoring
 const rows = activeProjects.map((project) => {
@@ -139,8 +144,12 @@ const lines = [
   '',
 ];
 
-fs.writeFileSync(path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'), lines.join('\n'));
-console.log(`REVENUE_SIGNALS.md written (${rows.length} projects scored, ${today})`);
+const outPath = isPortfolioMode
+  ? path.join(root, 'portfolio', 'REVENUE_SIGNALS.md')
+  : path.join(root, 'docs', 'REVENUE_SIGNALS.md');
+fs.mkdirSync(path.dirname(outPath), { recursive: true });
+fs.writeFileSync(outPath, lines.join('\n'));
+console.log(`REVENUE_SIGNALS.md written (${rows.length} project${rows.length === 1 ? '' : 's'} scored, ${today}) → ${path.relative(root, outPath).replace(/\\/g, '/')}`);
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -149,13 +158,28 @@ function readJson(filePath) {
   try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); } catch { return null; }
 }
 
-function readText(filePath) {
-  if (!filePath || !fs.existsSync(filePath)) return '';
-  return fs.readFileSync(filePath, 'utf8');
-}
-
 function num(v) { const n = Number(v); return Number.isFinite(n) ? n : null; }
 function truncate(s, max) { return s.length > max ? s.slice(0, max - 1) + '...' : s; }
+function buildLocalProject(status = {}, manifest = {}) {
+  const identity = manifest.identity || {};
+  const listing = manifest.listingMetadata || {};
+  const hosting = manifest.hosting || {};
+  return {
+    name: status.name || identity.name || path.basename(root),
+    slug: status.slug || identity.slug || path.basename(root),
+    status: status.status || 'active',
+    medium: identity.type || status.type || 'tool',
+    lifecycle: status.lifecycle || identity.lifecycle || 'active',
+    audience: status.audience || identity.audience || 'public-unlaunched',
+    type: status.type ? [status.type] : [],
+    runtimeUrl: hosting.liveUrl || status.liveUrl || '',
+    currentFocus: status.currentFocus || listing.canonicalSummary || '',
+    nextMilestone: status.nextMilestone || '',
+    summary: listing.canonicalSummary || '',
+    localPath: root,
+    health: status.health || 'unknown',
+  };
+}
 
 function buildActions({ revenueReady, preRevenue, rows }) {
   const actions = [];

@@ -16,13 +16,13 @@ import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { loadProjectRegistry } from './lib/project-registry.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const registryPath = path.join(root, 'portfolio', 'PROJECT_REGISTRY.json');
 const allowlistPath = path.join(root, 'audits', 'sanitization', 'allowlist.json');
 
-const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+const registry = loadProjectRegistry();
 const allowlist = fs.existsSync(allowlistPath)
   ? JSON.parse(fs.readFileSync(allowlistPath, 'utf8'))
   : { ignoredPathPrefixes: [], findings: [] };

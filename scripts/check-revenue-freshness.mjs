@@ -25,7 +25,8 @@ const today    = new Date().toISOString().slice(0, 10);
 const WARN_DAYS = 7;
 const CRITICAL_DAYS = 14;
 
-const content  = readText(path.join(ROOT, 'portfolio', 'REVENUE_SIGNALS.md'));
+const content  = readText(path.join(ROOT, 'portfolio', 'REVENUE_SIGNALS.md')) ||
+  readText(path.join(ROOT, 'docs', 'REVENUE_SIGNALS.md'));
 const match    = content.match(/Generated:\s*(\d{4}-\d{2}-\d{2})/);
 const genDate  = match?.[1] ?? null;
 const ageDays  = genDate ? Math.floor((new Date(today) - new Date(genDate)) / 86400000) : 999;

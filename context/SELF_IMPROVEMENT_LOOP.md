@@ -5,13 +5,37 @@ Public-safe scoring summary only. Detailed internal scoring, audit trends, and b
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █ █ █ █ █
-Avgs — 3: 491.7 | 5: 490.8 | 10: 475.8 [N=13] | 25: — | all: 467.9 [N=23]
-  └ 3-session: Dev 99.3 | Align 96.3 | Momentum 99.7 | Engage 96.0 | Process 100.3
-Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~3.8 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-17 | Session 65 | Total: 493/500 | Velocity: 1 | protocolVelocity: 1
+Avgs — 3: 493.3 | 5: 492.0 | 10: 478.0 [N=14] | 25: — | all: 469.1 [N=24]
+  └ 3-session: Dev 99.7 | Align 96.7 | Momentum 99.7 | Engage 96.7 | Process 100.3
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
+Momentum runway: ~4.2 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-21 | Session 66 | Total: 496/500 | Velocity: 7 | protocolVelocity: 3
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-21 — Session 66 | Total: 496/500 | Velocity: 7 | Debt: ↓
+Avgs — 3: 493.3 | 5: 492.0 | 10: 478.0 [N=14] | 25: — | all: 469.1 [N=24]
+  └ 3-session: Dev 99.7 | Align 96.7 | Momentum 99.7 | Engage 96.7 | Process 100.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 100 | ↑ | Deterministic promo parsing, shared operator-state extraction, contract regeneration, and public-safe validator hardening all landed while tests rose to 296/296 and build stayed green. |
+| Creative Alignment | 97 | → | The work stayed trust-first and operator-grade: the app got faster and clearer without adding fake intelligence, and the Studio/Ops layer became more truthful in a public repo context. |
+| Momentum | 100 | ↑ | One session shipped multiple compounding items, completed `/go`, repaired the local doctor path, and still reached full validation and closeout instead of stopping at a partial tranche. |
+| Engagement | 98 | ↑ | Instant advisor answers, better operator-surface cohesion, and cleaner attribution/contract loops improve the core return loop without adding shallow gamification. |
+| Process Quality | 101 | → | Task board, handoff, work log, truth audit, decisions, and closeout surfaces were updated to match validated repo truth; local `/go` now completes cleanly in the public-safe environment. |
+| **Total** | **496/500** | **↑** | |
+
+**Top win:** PromoGrind now has a cheaper and faster advisor path plus a public-safe ops layer that can actually execute `/go` and doctor truthfully inside this repo.
+**Top gap:** The main compounding product constraint is still architecture and live launch follow-through: `src/App.jsx` decomposition, feature-flag migration preflight, gamified workflow depth, and the human-owned production blockers remain.
+**Intent outcome:** Achieved — audit follow-through shipped, `/go` completed, repo truth refreshed, and the session is ready for GitHub closeout.
+
+**Brainstorm**
+1. Extend deterministic parsing beyond Promo Advisor so pasted promo intake, playbook matching, and workflow seeding can share one normalized offer contract before any model call.
+2. Add a read-only feature-flag/live-schema preflight card in the operator cockpit so the app can report remote rollout readiness without implying migrations are already live.
+3. Use the new operator-surfaces helper as the extraction seam for the next `src/App.jsx` split so shell/search/session responsibilities stop accumulating in one file.
+
+**Committed to TASK_BOARD:** Continue `src/App.jsx` decomposition · add read-only feature-flag migration preflight · strengthen workflow streaks/settlement loop.
 
 ## 2026-04-17 — Session 65 | Total: 493/500 | Velocity: 1 | Debt: ↓
 Avgs — 3: 491.7 | 5: 490.8 | 10: 475.8 [N=13] | 25: — | all: 467.9 [N=23]

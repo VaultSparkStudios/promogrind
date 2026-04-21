@@ -89,17 +89,30 @@ serve(async (req: Request) => {
       return json(req, { error: "Unauthorized" }, 401);
     }
 
-    const { plan, success_url, cancel_url } = await req.json() as {
+    const payload = await req.json() as {
       plan: string;
       success_url?: string;
       cancel_url?: string;
+      attribution?: {
+        referral_source?: string | null;
+        utm_source?: string | null;
+        utm_medium?: string | null;
+        utm_campaign?: string | null;
+      };
     };
+    const { plan, success_url, cancel_url, attribution: rawAttribution } = payload;
 
     if (!VALID_PLANS.includes(plan)) {
       return json(req, { error: `Invalid plan. Must be one of: ${VALID_PLANS.join(", ")}` }, 400);
     }
 
     const planName = PLAN_NAME_MAP[plan] ?? plan;
+    const attribution = {
+      referral_source: String(rawAttribution?.referral_source || "").trim() || null,
+      utm_source: String(rawAttribution?.utm_source || "").trim() || null,
+      utm_medium: String(rawAttribution?.utm_medium || "").trim() || null,
+      utm_campaign: String(rawAttribution?.utm_campaign || "").trim() || null,
+    };
 
     // Test mode — simulate checkout without calling Stripe
     if (!LIVE_MODE) {
@@ -147,6 +160,10 @@ serve(async (req: Request) => {
         "subscription_data[metadata][user_id]": user.id,
         "subscription_data[metadata][plan]": planName,
         "subscription_data[metadata][billing_plan]": plan,
+        ...(attribution.referral_source ? { "subscription_data[metadata][referral_source]": attribution.referral_source } : {}),
+        ...(attribution.utm_source ? { "subscription_data[metadata][utm_source]": attribution.utm_source } : {}),
+        ...(attribution.utm_medium ? { "subscription_data[metadata][utm_medium]": attribution.utm_medium } : {}),
+        ...(attribution.utm_campaign ? { "subscription_data[metadata][utm_campaign]": attribution.utm_campaign } : {}),
       }),
     });
 

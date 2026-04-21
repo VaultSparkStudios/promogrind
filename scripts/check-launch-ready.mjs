@@ -11,9 +11,10 @@
 import fs from 'fs';
 import path from 'path';
 import { validateSlug } from './lib/validate.mjs';
+import { loadProjectRegistry } from './lib/project-registry.mjs';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
-const registry = JSON.parse(fs.readFileSync(path.join(root, 'portfolio', 'PROJECT_REGISTRY.json'), 'utf8'));
+const registry = loadProjectRegistry();
 
 const SPARKED_ONLY = process.argv.includes('--sparked');
 const JSON_OUT     = process.argv.includes('--json');
@@ -33,7 +34,8 @@ const results = [];
 for (const project of registry.projects) {
   if (project.status === 'archived') continue;
   if (TARGET && project.slug !== TARGET) continue;
-  if (SPARKED_ONLY && project.vaultStatus !== 'SPARKED') continue;
+  const vaultStatus = String(project.vaultStatus || '').toUpperCase();
+  if (SPARKED_ONLY && vaultStatus !== 'SPARKED') continue;
   if (project.audience === 'internal') continue;
 
   const checks = {};
@@ -45,7 +47,7 @@ for (const project of registry.projects) {
 
   // Live URL (required for SPARKED)
   checks.liveUrl = !!project.liveUrl;
-  if (!checks.liveUrl && project.vaultStatus === 'SPARKED') blockers.push('liveUrl missing (SPARKED — required)');
+  if (!checks.liveUrl && vaultStatus === 'SPARKED') blockers.push('liveUrl missing (SPARKED — required)');
 
   // CANON-006 branding
   if (project.brandingRequired === false || project.audience === 'internal') {
@@ -56,7 +58,7 @@ for (const project of registry.projects) {
   }
 
   // CANON-007 staging (required for SPARKED public)
-  const needsStaging = project.vaultStatus === 'SPARKED' && project.audience !== 'internal';
+  const needsStaging = vaultStatus === 'SPARKED' && project.audience !== 'internal';
   if (!needsStaging || project.stagingType === 'none' || !project.stagingType) {
     checks.staging = !needsStaging; // FORGE/VAULTED — not required
   } else {
@@ -83,11 +85,11 @@ for (const project of registry.projects) {
 
   // Go/No-Go
   const criticalBlockers = blockers.filter(b => b.includes('SPARKED'));
-  const goNoGo = project.vaultStatus === 'SPARKED'
+  const goNoGo = vaultStatus === 'SPARKED'
     ? (criticalBlockers.length === 0 ? '✓ GO' : '⛔ NO-GO')
     : (score >= 80 ? '✓ READY' : score >= 50 ? '⚠ PARTIAL' : '○ NOT READY');
 
-  results.push({ slug: project.slug, name: project.name, vaultStatus: project.vaultStatus, score, checks, blockers, goNoGo });
+  results.push({ slug: project.slug, name: project.name, vaultStatus, score, checks, blockers, goNoGo });
 }
 
 // Sort: SPARKED first, then by score desc

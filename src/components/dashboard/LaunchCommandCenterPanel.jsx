@@ -3,9 +3,8 @@ import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, has
 import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
 import { K, S, fontD } from "../../lib/shared.js";
 import { AppDataCtx } from "../../contexts.jsx";
-import { appendStudioContractHistory, buildStudioSnapshot } from "../../studio/export.js";
-import { buildTargetedAlertPlan } from "../../operator/briefing.js";
-import { getDashboardSnapshot } from "../../dashboard/today.js";
+import { appendStudioContractHistory } from "../../studio/export.js";
+import { buildOperatorSurfaceState } from "../../dashboard/operatorSurfaces.js";
 
 export default function LaunchCommandCenterPanel() {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -14,10 +13,10 @@ export default function LaunchCommandCenterPanel() {
   const configuredMonetization = getConfiguredMonetizationCount();
   const affiliateReady = hasConfiguredMonetizationLinks();
   const validation = resolveLaunchValidation();
-  const bankroll = typeof window !== "undefined" ? localStorage.getItem("pg_bankroll") || "" : "";
-  const snapshot = buildStudioSnapshot(appData || {}, { bankroll });
-  const dashboardSnapshot = getDashboardSnapshot(appData || {}, [], new Date(), bankroll, { includePlaybooks: true });
-  const alertPlan = buildTargetedAlertPlan({ snapshot, dashboard: dashboardSnapshot });
+  const { bankroll, studioSnapshot: snapshot, dashboardSnapshot, alertPlan } = buildOperatorSurfaceState({
+    appData: appData || {},
+    now: new Date(),
+  });
   const commandCenter = getLaunchCommandCenter({
     configuredAffiliateCount: configuredAffiliates,
     configuredMonetizationCount: configuredMonetization,

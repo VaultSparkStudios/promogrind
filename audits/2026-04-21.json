@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.3",
+  "session": 66,
+  "date": "2026-04-21",
+  "sessionIntent": "Audit the project, implement the highest-impact unblocked refinements, continue the operator-surface work, complete /go, then commit/push and close out",
+  "intentOutcome": "achieved",
+  "velocity": 7,
+  "protocolVelocity": 3,
+  "silItems": 2,
+  "scores": {
+    "devHealth": 100,
+    "creativeAlignment": 97,
+    "momentum": 100,
+    "engagement": 98,
+    "processQuality": 101,
+    "total": 496
+  },
+  "rollingAvgs": {
+    "n3": 493.3,
+    "n5": 492.0,
+    "n10": 478.0,
+    "all": 469.1,
+    "nAll": 24
+  },
+  "sparkline": [490, 490, 491, 493, 496],
+  "debt": "down",
+  "tests": { "total": 296, "passed": 296, "failed": 0, "newThisSession": 7 },
+  "bundle": { "mainChunkKB": 337.73, "budgetKB": 425, "headroomKB": 87.27 },
+  "buildStatus": "green",
+  "shippedItems": [
+    "Deterministic promo parser fast path added for promo-advisor",
+    "Checkout attribution now persists through Stripe subscription metadata",
+    "Daily Brief and Launch Command Center now share operator-surface helpers",
+    "Studio contract summaries regenerated from live project truth",
+    "Revenue-signals generation now works in public-repo mode",
+    "Doctor and validator surfaces now pass locally without private portfolio registry dependencies",
+    "Protocol Oracle FAQ cache surface verified cleanly"
+  ],
+  "deferredItems": [
+    "Continue src/App.jsx decomposition",
+    "Add read-only feature-flag migration preflight",
+    "Deepen the workflow streaks and settlement loop",
+    "Human-owned launch blockers remain in TASK_BOARD Human Action Required"
+  ],
+  "humanBatched": [
+    "Apply workflow/entity-sync/feature-flag migrations in Supabase",
+    "Set VITE_VAPID_PUBLIC_KEY in production",
+    "Run Stripe smoke test and friend beta pass",
+    "Resolve BetMGM/bet365/BetRivers monetization links"
+  ],
+  "newModules": [
+    "src/lib/promoParse.js",
+    "supabase/functions/_shared/promo-parse.ts",
+    "src/dashboard/operatorSurfaces.js",
+    "scripts/lib/project-registry.mjs"
+  ],
+  "automationUnavailable": [],
+  "ignisRefreshRequired": false,
+  "ignisLastComputed": "2026-04-15",
+  "truthAuditStatus": "green",
+  "memoryUpdated": true
+}

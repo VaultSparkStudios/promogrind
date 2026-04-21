@@ -33,6 +33,9 @@ const dateArg = validateDate('date', _dateRaw);
 
 // Resolve the _summary.json to compare against
 function resolveSummaryPath() {
+  if (!fs.existsSync(auditsBase)) {
+    return null;
+  }
   if (reportDirArg) {
     // reportDirArg is already an absolute path (validated by validateDir)
     return path.join(reportDirArg, '_summary.json');
@@ -65,9 +68,15 @@ async function main() {
   const summaryPath = resolveSummaryPath();
 
   console.log('── Sanitization baseline ratchet ──');
-  console.log(`   Current: ${summaryPath}`);
+  console.log(`   Current: ${summaryPath ?? 'unavailable'}`);
   console.log(`   Baseline: ${baselinePath}`);
   console.log('');
+
+  if (!summaryPath) {
+    console.log('   No sanitization reports are present in this public repo.');
+    console.log('   Treating ratchet as unchanged until a report is generated.');
+    process.exit(0);
+  }
 
   // Load current summary
   if (!fs.existsSync(summaryPath)) {

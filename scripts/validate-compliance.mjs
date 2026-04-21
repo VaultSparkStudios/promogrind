@@ -3,9 +3,10 @@
 import fs from 'fs';
 import path from 'path';
 import { validateSlug } from './lib/validate.mjs';
+import { loadProjectRegistry } from './lib/project-registry.mjs';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
-const registry = JSON.parse(fs.readFileSync(path.join(root, 'portfolio', 'PROJECT_REGISTRY.json'), 'utf8'));
+const registry = loadProjectRegistry();
 const startTemplate = fs.readFileSync(path.join(root, 'docs', 'templates', 'project-system', 'START_PROMPT.template.md'), 'utf8');
 const closeoutTemplate = fs.readFileSync(path.join(root, 'docs', 'templates', 'project-system', 'CLOSEOUT_PROMPT.template.md'), 'utf8');
 const truthTemplate = fs.readFileSync(path.join(root, 'docs', 'templates', 'project-system', 'TRUTH_AUDIT.template.md'), 'utf8');

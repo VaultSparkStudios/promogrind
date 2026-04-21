@@ -2,6 +2,22 @@
 
 This repo now keeps only a public-safe handoff summary. Detailed handoff history is maintained privately.
 
+## Where We Left Off (Session 66 — CLOSED)
+
+**Session Intent:** Audit the project, implement the highest-impact unblocked refinements, continue the operator-surface work, complete `/go`, then commit/push and close out.
+
+**Shipped:**
+1. **Deterministic AI fast path**: added `src/lib/promoParse.js` and `supabase/functions/_shared/promo-parse.ts`; `supabase/functions/promo-advisor/index.ts` now resolves obvious promos without Anthropic and `PromoAdvisorPanel.jsx` labels them `INSTANT`.
+2. **Paid attribution continuity**: `src/auth.js` now forwards referral/UTM attribution into checkout and emits `paid_checkout_started`; `supabase/functions/create-checkout/index.ts` stores that attribution in Stripe subscription metadata.
+3. **Shared operator-state helper**: `src/dashboard/operatorSurfaces.js` now owns bankroll lookup, dashboard snapshot assembly, studio snapshot assembly, alert-plan generation, and workflow action routing for both dashboard cockpit surfaces.
+4. **Studio contract truth refresh**: `scripts/generate-project-contracts.mjs` now emits Hub/Social/Sparkfunnel/Website contract summaries from live project state, and the generated contract files were refreshed.
+5. **Public-safe doctor hardening**: added `scripts/lib/project-registry.mjs`, public-safe template shims under `docs/templates/project-system/`, and local-repo fallbacks across the validator layer so `node scripts/ops.mjs doctor` no longer fails on missing private portfolio files or local nested-process limits.
+6. **Revenue-signals + protocol cache surfaces verified**: `docs/REVENUE_SIGNALS.md` now renders from local project truth in public-repo mode, and `node scripts/ops.mjs ask --list` cleanly reports an empty FAQ cache instead of failing.
+
+**Validation:** `npm.cmd test` 296/296 · `npm.cmd run build` green · `node scripts/ops.mjs doctor` 12/12 passing locally · `node scripts/ops.mjs ask --list` clean (`No cached FAQ entries yet`) · build main chunk `337.73KB` / `425KB`.
+
+**Known residual risk:** Human-side launch blockers remain unchanged: three Supabase migrations, production `VITE_VAPID_PUBLIC_KEY`, Stripe end-to-end smoke, remaining BetMGM/bet365/BetRivers links, and a friend beta pass.
+
 ## Where We Left Off (Session 65 — CLOSED)
 
 **Session Intent:** Conform PromoGrind to the Studio OS/ops protocol by bringing in the missing script layer, then commit/push and close out.

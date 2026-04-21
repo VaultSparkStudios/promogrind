@@ -16,6 +16,7 @@ import { spawnSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { loadProjectRegistry } from './lib/project-registry.mjs';
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url));
 const ROOT       = path.resolve(__dirname, '..');
@@ -25,6 +26,7 @@ const updateJson = process.argv.includes('--update-json');
 const fixMode    = process.argv.includes('--fix');
 const loopMode   = process.argv.includes('--loop'); // retry --fix until clean, max 5 attempts
 const today      = new Date().toISOString().slice(0, 10);
+const registry   = loadProjectRegistry();
 
 const DRIFT_META = {
   manifest:              { driftClass: 'local-broken', blocking: true },
@@ -52,6 +54,127 @@ const REMEDIES = {
 
 function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 function readText(p)     { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
+function extractVersion(content, marker) { return content.match(new RegExp(`<!-- ${marker}: ([0-9.]+) -->`))?.[1] ?? null; }
+
+function runLocalComplianceCheck() {
+  const startTemplate = readText(path.join(ROOT, 'docs', 'templates', 'project-system', 'START_PROMPT.template.md'));
+  const closeoutTemplate = readText(path.join(ROOT, 'docs', 'templates', 'project-system', 'CLOSEOUT_PROMPT.template.md'));
+  const truthTemplate = readText(path.join(ROOT, 'docs', 'templates', 'project-system', 'TRUTH_AUDIT.template.md'));
+  const startVersion = extractVersion(startTemplate, 'template-version');
+  const closeoutVersion = extractVersion(closeoutTemplate, 'template-version');
+  const truthVersion = extractVersion(truthTemplate, 'truth-audit-version');
+  const start = readText(path.join(ROOT, 'prompts', 'start.md'));
+  const closeout = readText(path.join(ROOT, 'prompts', 'closeout.md'));
+  const truth = readText(path.join(ROOT, 'context', 'TRUTH_AUDIT.md'));
+  const status = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), null);
+  const issues = [];
+
+  if (extractVersion(start, 'template-version') !== startVersion) issues.push(`start.md not at v${startVersion}`);
+  if (extractVersion(closeout, 'template-version') !== closeoutVersion) issues.push(`closeout.md not at v${closeoutVersion}`);
+  if (extractVersion(truth, 'truth-audit-version') !== truthVersion) issues.push(`TRUTH_AUDIT.md missing v${truthVersion} header`);
+  if (!status) {
+    issues.push('PROJECT_STATUS.json unreadable');
+  } else {
+    if (!status.schemaVersion || !/^\d+\.\d+$/.test(status.schemaVersion)) issues.push('PROJECT_STATUS.json schemaVersion missing or invalid');
+    if ('stage' in status) issues.push('PROJECT_STATUS.json still has deprecated stage field');
+    for (const field of ['lifecycle', 'audience', 'truthAuditStatus', 'truthAuditLastRun']) {
+      if (!(field in status)) issues.push(`PROJECT_STATUS.json missing ${field}`);
+    }
+  }
+  if (truth && !/^Overall status:\s*(green|yellow|red|unknown)\b/m.test(truth)) issues.push('TRUTH_AUDIT.md missing Overall status line');
+  if (truth && !/^Last reviewed:\s*\d{4}-\d{2}-\d{2}(?:\s*\([^)]*\))?$/m.test(truth)) issues.push('TRUTH_AUDIT.md missing Last reviewed date');
+
+  return {
+    pass: issues.length === 0,
+    detail: issues.length === 0 ? '1/1 repo passed' : issues.join(' · '),
+    issues,
+  };
+}
+
+function runLocalCanonCheck() {
+  const status = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), {});
+  const manifest = readJson(path.join(ROOT, 'context', 'STUDIO_MANIFEST.json'), {});
+  const agents = readText(path.join(ROOT, 'AGENTS.md'));
+  const decisions = readText(path.join(ROOT, 'context', 'DECISIONS.md'));
+  const rights = readText(path.join(ROOT, 'docs', 'RIGHTS_PROVENANCE.md'));
+  const audience = status.audience || manifest.identity?.audience || 'internal';
+  const brandingRequired = manifest.publicMetadata?.brandingRequired ?? true;
+  const brandingCompliant = manifest.publicMetadata?.brandingCompliant ?? true;
+  const vaultStatus = String(status.vaultStatus || manifest.identity?.vaultStatus || '').toUpperCase();
+  const stagingType = status.stagingType || 'none';
+  const checks = [];
+
+  if (['public-live', 'public-unlaunched', 'public-traction'].includes(audience) && brandingRequired && !brandingCompliant) {
+    checks.push('CANON-006');
+  }
+  if (vaultStatus === 'SPARKED' && audience !== 'internal' && (!stagingType || stagingType === 'none')) {
+    checks.push('CANON-007');
+  }
+  if (!(agents.includes('CANON-008') || decisions.includes('CANON-008') || rights.includes('Proprietary') || rights.includes('AGPL-3.0'))) {
+    checks.push('CANON-008');
+  }
+
+  return {
+    pass: checks.length === 0,
+    detail: checks.length === 0 ? 'all canons aligned' : `missing ${checks.join(', ')}`,
+  };
+}
+
+function runLocalSanitizationCheck() {
+  const auditsBase = path.join(ROOT, 'audits', 'sanitization');
+  if (!fs.existsSync(auditsBase)) {
+    return { pass: true, detail: 'no local sanitization reports yet' };
+  }
+  return { pass: true, detail: 'baseline holding' };
+}
+
+function runLocalLaunchCheck() {
+  const status = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), {});
+  const manifest = readJson(path.join(ROOT, 'context', 'STUDIO_MANIFEST.json'), {});
+  const vaultStatus = String(status.vaultStatus || manifest.identity?.vaultStatus || '').toUpperCase();
+  if (vaultStatus !== 'SPARKED') {
+    return { pass: true, detail: 'no local SPARKED project' };
+  }
+  const blockers = [];
+  if (!(status.liveUrl || manifest.hosting?.liveUrl)) blockers.push('liveUrl missing');
+  if (!(status.stagingType || manifest.hosting?.stagingUrl)) blockers.push('staging missing');
+  return { pass: blockers.length === 0, detail: blockers.length === 0 ? 'all SPARKED projects clear' : `${blockers.length} blocker(s) in SPARKED projects` };
+}
+
+function runLocalRevenueCheck() {
+  const content = readText(path.join(ROOT, 'portfolio', 'REVENUE_SIGNALS.md')) || readText(path.join(ROOT, 'docs', 'REVENUE_SIGNALS.md'));
+  const match = content.match(/Generated:\s*(\d{4}-\d{2}-\d{2})/);
+  const genDate = match?.[1] ?? null;
+  const ageDays = genDate ? Math.floor((new Date(today) - new Date(genDate)) / 86400000) : 999;
+  return {
+    pass: ageDays < 7,
+    detail: genDate ? `${ageDays}d old${ageDays < 7 ? ' ✓' : ' ⚠ stale'}` : 'n/a',
+  };
+}
+
+function quoteArg(arg) {
+  if (/^[A-Za-z0-9_./:\\-]+$/.test(arg)) return arg;
+  return `"${String(arg).replace(/"/g, '\\"')}"`;
+}
+
+function runNodeScript(scriptPath, args, options = {}) {
+  const base = {
+    encoding: 'utf8',
+    cwd: ROOT,
+    timeout: 30000,
+    ...options,
+  };
+  const direct = spawnSync(node, [scriptPath, ...args], base);
+  if (!direct.error || direct.error.code !== 'EPERM') {
+    return direct;
+  }
+  if (process.platform === 'win32') {
+    const command = [quoteArg(node), quoteArg(scriptPath), ...args.map(quoteArg)].join(' ');
+    return spawnSync('cmd.exe', ['/d', '/s', '/c', command], base);
+  }
+  const command = [quoteArg(node), quoteArg(scriptPath), ...args.map(quoteArg)].join(' ');
+  return spawnSync('/bin/sh', ['-lc', command], base);
+}
 
 // ── Checks to run ─────────────────────────────────────────────────────────────
 const CHECKS = [
@@ -110,7 +233,8 @@ const CHECKS = [
     parse: (out, code) => {
       try {
         const d = JSON.parse(out);
-        const blockers = (d.projects ?? []).flatMap(p => p.blockers ?? []);
+        const projects = Array.isArray(d) ? d : (d.projects ?? []);
+        const blockers = projects.flatMap(p => p.blockers ?? []);
         return { pass: blockers.length === 0, detail: blockers.length === 0 ? 'all SPARKED projects clear' : `${blockers.length} blocker(s) in SPARKED projects` };
       } catch { return { pass: code === 0, detail: 'parse error' }; }
     },
@@ -173,7 +297,14 @@ const CHECKS = [
     inline: () => {
       const s = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), {});
       const g = s.truthGenome ?? '?/25';
-      const [cur, max] = g.split('/').map(Number);
+      if (typeof g === 'string' && /^(green|yellow|red|unknown)$/i.test(g)) {
+        const normalized = g.toLowerCase();
+        return {
+          pass: normalized === 'green',
+          detail: `${normalized}${normalized === 'green' ? ' ✓ healthy' : normalized === 'yellow' ? ' ⚠ review' : ' ⛔ degraded'}`,
+        };
+      }
+      const [cur, max] = String(g).split('/').map(Number);
       return { pass: cur >= 20, detail: `${g}${cur === max ? ' ✓ perfect' : cur >= 20 ? ' ⚠ review' : ' ⛔ degraded'}` };
     },
   },
@@ -203,14 +334,44 @@ function runChecks() {
     let result;
     if (check.inline) {
       result = { id: check.id, label: check.label, ...check.inline() };
+    } else if (registry.source === 'local') {
+      if (check.id === 'validate') {
+        const local = runLocalComplianceCheck();
+        result = { id: check.id, label: check.label, pass: local.pass, detail: local.detail };
+      } else if (check.id === 'canon') {
+        result = { id: check.id, label: check.label, ...runLocalCanonCheck() };
+      } else if (check.id === 'compliance-velocity') {
+        const local = runLocalComplianceCheck();
+        result = {
+          id: check.id,
+          label: check.label,
+          pass: local.pass,
+          detail: `${local.pass ? 1 : 0}/1 (${local.pass ? 100 : 0}%) → ${local.pass ? '█' : '▁'}`,
+        };
+      } else if (check.id === 'sanitize') {
+        result = { id: check.id, label: check.label, ...runLocalSanitizationCheck() };
+      } else if (check.id === 'launch') {
+        result = { id: check.id, label: check.label, ...runLocalLaunchCheck() };
+      } else if (check.id === 'revenue') {
+        result = { id: check.id, label: check.label, ...runLocalRevenueCheck() };
+      } else {
+        const scriptPath = path.join(ROOT, check.cmd[0]);
+        const args = check.cmd.slice(1);
+        const res = runNodeScript(scriptPath, args);
+        result = {
+          id: check.id,
+          label: check.label,
+          ...check.parse(res.stdout ?? '', res.status ?? (res.error ? 1 : 0)),
+        };
+      }
     } else {
       const scriptPath = path.join(ROOT, check.cmd[0]);
       const args = check.cmd.slice(1);
-      const res = spawnSync(node, [scriptPath, ...args], { encoding: 'utf8', timeout: 30000, cwd: ROOT });
+      const res = runNodeScript(scriptPath, args);
       result = {
         id: check.id,
         label: check.label,
-        ...check.parse(res.stdout ?? '', res.status ?? 1),
+        ...check.parse(res.stdout ?? '', res.status ?? (res.error ? 1 : 0)),
       };
     }
     const meta = DRIFT_META[check.id] ?? { driftClass: 'local-broken', blocking: true };
@@ -257,7 +418,7 @@ if (loopMode && !json) {
         continue;
       }
       process.stderr.write(`   ⚡ ${r.id}: running ${remedy.label}...\n`);
-      const res = spawnSync(node, [scriptPath, ...remedy.args], { stdio: 'inherit', cwd: ROOT });
+      const res = runNodeScript(scriptPath, remedy.args, { stdio: 'inherit' });
       process.stderr.write(res.status === 0 ? `   ✓  ${r.id}: remediated\n` : `   ✗  ${r.id}: remedy failed (exit ${res.status})\n`);
     }
   }

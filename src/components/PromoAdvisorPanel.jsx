@@ -303,6 +303,11 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             {/* Verdict + confidence badge */}
             <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
               <div style={{fontSize:15,fontWeight:800,color:ratingColor,flex:1}}>{result.verdict || 'Analysis Complete'}</div>
+              {result?.analysisSource === 'rule_engine' && (
+                <span style={{padding:'2px 8px',borderRadius:50,fontSize:9,fontWeight:700,background:`${K.ac}18`,color:K.ac,letterSpacing:'0.8px'}}>
+                  INSTANT
+                </span>
+              )}
               {confColor && (
                 <span style={{padding:'2px 8px',borderRadius:50,fontSize:9,fontWeight:700,background:`${confColor}20`,color:confColor,letterSpacing:'0.8px'}}>
                   {confKey}
@@ -317,6 +322,11 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
             {result.explanation && (
               <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{result.explanation}</div>
+            )}
+            {result?.analysisSource === 'rule_engine' && (
+              <div style={{fontSize:10,color:K.mt}}>
+                PromoGrind resolved this instantly from recognizable offer terms instead of spending an AI call.
+              </div>
             )}
 
             {/* EV pill */}

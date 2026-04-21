@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-04-21 — S66 AI Efficiency + Operator Surfaces + Public-Safe /go Closeout
+
+- Added deterministic promo parsing in `src/lib/promoParse.js` and `supabase/functions/_shared/promo-parse.ts`; `promo-advisor` now short-circuits obvious promo types before Anthropic and `PromoAdvisorPanel.jsx` marks those results as `INSTANT`.
+- Routed referral/UTM attribution through checkout in `src/auth.js` and `supabase/functions/create-checkout/index.ts`; Stripe subscription metadata now retains source attribution for downstream revenue analysis.
+- Added `src/dashboard/operatorSurfaces.js` and refactored `DailyBriefPage.jsx` plus `LaunchCommandCenterPanel.jsx` onto one shared operator-state helper.
+- Regenerated Studio contract outputs after upgrading `scripts/generate-project-contracts.mjs` to derive live-surface summaries from current repo truth.
+- Hardened public-safe ops validators with `scripts/lib/project-registry.mjs`, public-safe prompt/truth template shims, revenue-signal local fallback, and doctor-local evaluation logic so `node scripts/ops.mjs doctor` passes in this repo without private portfolio dependencies.
+- Ran `/go` genius items to completion: revenue-signals refresh, doctor sweep, and Protocol Oracle cache verification.
+- Verified: `npm.cmd test` → 296/296 passing · `npm.cmd run build` → green · `node scripts/ops.mjs doctor` → 12/12 passing locally.
+
 ## 2026-04-17 — S65 Studio OS/Ops Script Conformance
 
 - Imported the canonical Studio Ops script layer from the local `vaultspark-studio-ops` checkout into PromoGrind so `docs/SESSION_PROTOCOL.md` no longer points at missing startup/go/closeout scripts.

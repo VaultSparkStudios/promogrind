@@ -36,6 +36,34 @@ const hosting = manifest.hosting ?? {};
 const integrations = manifest.integrations ?? {};
 const publicMetadata = manifest.publicMetadata ?? {};
 
+function buildStatusSummary(primary, fallback = '') {
+  const cleanPrimary = String(primary || '').trim();
+  if (cleanPrimary) return cleanPrimary;
+  return String(fallback || '').trim();
+}
+
+function buildLiveSurfaces() {
+  const groups = [
+    ...(surfaces.production || []).map((surface) => ({ scope: 'production', ...surface })),
+    ...(surfaces.testing || []).map((surface) => ({ scope: 'testing', ...surface })),
+    ...(surfaces.github || []).map((surface) => ({ scope: 'github', ...surface })),
+    ...(surfaces.local || []).map((surface) => ({ scope: 'local', ...surface })),
+  ];
+  return groups.map((surface) => ({
+    label: surface.label || surface.scope,
+    scope: surface.scope,
+    url: surface.url || null,
+    path: surface.path || null,
+  }));
+}
+
+const liveSurfaces = buildLiveSurfaces();
+const hubSummary = buildStatusSummary(status.currentFocus, listing.hubDescription || listing.canonicalSummary || '');
+const websiteSummary = buildStatusSummary(listing.websiteDescription, listing.canonicalSummary || hubSummary);
+const socialSummary = buildStatusSummary(status.currentFocus, listing.socialDescription || listing.canonicalSummary || '');
+const sparkfunnelSummary = buildStatusSummary(status.currentFocus, listing.websiteDescription || listing.canonicalSummary || '');
+const nextMilestone = String(status.nextMilestone || '').trim();
+
 const payloads = {
   hub: {
     generatedAt,
@@ -43,8 +71,8 @@ const payloads = {
     identity,
     listingMetadata: {
       title: identity.name,
-      summary: listing.hubDescription || listing.canonicalSummary || '',
-      tagline: listing.tagline || '',
+      summary: hubSummary,
+      tagline: nextMilestone || listing.tagline || '',
       tags: listing.tags || [],
       categories: listing.categories || []
     },
@@ -58,7 +86,7 @@ const payloads = {
       silScore: status.silScore ?? null,
       silAvg3: status.silAvg3 ?? null
     },
-    liveSurfaces: status.testingSurfaces || [],
+    liveSurfaces,
     integration: integrations.studioHub || { enabled: false }
   },
   'website-public': {
@@ -67,8 +95,8 @@ const payloads = {
     identity,
     listingMetadata: {
       title: identity.name,
-      summary: listing.websiteDescription || listing.canonicalSummary || '',
-      tagline: listing.tagline || '',
+      summary: websiteSummary,
+      tagline: nextMilestone || listing.tagline || '',
       tags: listing.tags || [],
       categories: listing.categories || []
     },
@@ -92,7 +120,7 @@ const payloads = {
     identity,
     listingMetadata: {
       title: identity.name,
-      summary: listing.socialDescription || listing.canonicalSummary || '',
+      summary: socialSummary,
       tags: listing.tags || []
     },
     growth: {
@@ -108,8 +136,8 @@ const payloads = {
     identity,
     listingMetadata: {
       title: identity.name,
-      summary: listing.websiteDescription || listing.canonicalSummary || '',
-      tagline: listing.tagline || '',
+      summary: sparkfunnelSummary,
+      tagline: nextMilestone || listing.tagline || '',
       tags: listing.tags || []
     },
     funnel: {

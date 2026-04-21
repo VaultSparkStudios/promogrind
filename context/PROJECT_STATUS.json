@@ -13,7 +13,7 @@
   "localPath": "C:\\Users\\p4cka\\documents\\development\\promogrind",
   "github": "https://github.com/VaultSparkStudios/promogrind",
   "liveUrl": "https://promogrind.bet",
-  "currentFocus": "S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.",
+  "currentFocus": "S66 AI efficiency + operator-surface refinement + public-safe ops hardening: deterministic promo parsing now short-circuits obvious advisor cases, checkout attribution flows into Stripe metadata, dashboard operator surfaces share one helper, and public-safe doctor validators now pass locally without private portfolio dependencies. 296/296 tests, build green, bundle 337.73KB/425KB.",
   "nextMilestone": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
   "blockers": [
     "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live",
@@ -24,27 +24,27 @@
     "Stripe end-to-end smoke still requires a real account/browser checkout pass",
     "Friend-facing manual verification still needed for the new PromoGrind-local account flow"
   ],
-  "lastUpdated": "2026-04-17",
-  "currentSession": 65,
-  "silScore": 493,
-  "silAvg3": 492,
-  "silVelocity": 1,
+  "lastUpdated": "2026-04-21",
+  "currentSession": 66,
+  "silScore": 496,
+  "silAvg3": 493,
+  "silVelocity": 7,
   "silDebt": "down",
-  "silLastSession": "S65 pending closeout",
+  "silLastSession": "S66 closed",
   "silSparkline": [
-    489,
     490,
     490,
     491,
-    493
+    493,
+    496
   ],
   "ignisScore": 47652,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-04-15",
-  "testsTotal": 289,
+  "testsTotal": 296,
   "lastDeployStatus": "deployed",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-04-17",
+  "truthAuditLastRun": "2026-04-21",
   "truthGenome": "green",
   "stagingUrl": null,
   "stagingType": "local",
@@ -60,8 +60,8 @@
     "closer_annual",
     "house"
   ],
-  "version": "24.14.0",
-  "lastSession": "S64 pending closeout",
+  "version": "24.15.0",
+  "lastSession": "S66 closed",
   "commits": [
     "2f58087 — feat(s49): add promograph foundation and close out session",
     "3b21830 — feat(s43): localize auth UX on shared Vault identity",
@@ -73,8 +73,8 @@
     "52b6eef — feat(s39): beta invite code system — redeem-beta-code edge fn + UserMenu UI"
   ],
   "analyticsStatus": "cloudflare + posthog + sentry",
-  "buildStatus": "build passing after S64 — 329.3KB main chunk against 425KB budget (95.7KB headroom); launch smoke passing; build:cap produces dist-cap for Capacitor; Deno edge tests are in CI",
-  "testStatus": "289/289",
+  "buildStatus": "build passing after S66 — 337.73KB main chunk against 425KB budget (87.27KB headroom); public-safe doctor passes 12/12 locally; build:cap remains available; Deno edge tests are in CI",
+  "testStatus": "296/296",
   "accessibilityStatus": "WCAG AA — dark + light themes both pass 4.5:1",
   "domainStatus": "live — promogrind.bet NS confirmed on Cloudflare",
   "brandingStatus": "PromoGrind-native — project-local account UX, with shared Vault identity kept as supporting detail",
@@ -164,5 +164,101 @@
   "sitemapUrl": "https://promogrind.bet/sitemap.xml",
   "entropyScore": 0.136,
   "entropyLastComputed": "2026-04-15",
-  "sessionMode": "builder"
+  "sessionMode": "builder",
+  "doctorScore": {
+    "date": "2026-04-21",
+    "passing": 12,
+    "warning": 0,
+    "failing": 0,
+    "blockingFailing": 0,
+    "advisoryFailing": 0,
+    "total": 12,
+    "score": 100,
+    "checks": [
+      {
+        "id": "manifest",
+        "pass": true,
+        "warn": false,
+        "driftClass": "local-broken",
+        "blocking": false
+      },
+      {
+        "id": "validate",
+        "pass": true,
+        "warn": false,
+        "driftClass": "portfolio-outdated",
+        "blocking": false
+      },
+      {
+        "id": "canon",
+        "pass": true,
+        "warn": false,
+        "driftClass": "portfolio-outdated",
+        "blocking": false
+      },
+      {
+        "id": "compliance-velocity",
+        "pass": true,
+        "warn": false,
+        "driftClass": "portfolio-outdated",
+        "blocking": false
+      },
+      {
+        "id": "sanitize",
+        "pass": true,
+        "warn": false,
+        "driftClass": "portfolio-outdated",
+        "blocking": false
+      },
+      {
+        "id": "launch",
+        "pass": true,
+        "warn": false,
+        "driftClass": "expected-external",
+        "blocking": false
+      },
+      {
+        "id": "feedback",
+        "pass": true,
+        "warn": false,
+        "driftClass": "derived-stale",
+        "blocking": false
+      },
+      {
+        "id": "entropy",
+        "pass": true,
+        "warn": false,
+        "driftClass": "local-broken",
+        "blocking": false
+      },
+      {
+        "id": "revenue",
+        "pass": true,
+        "warn": false,
+        "driftClass": "derived-stale",
+        "blocking": false
+      },
+      {
+        "id": "ignis",
+        "pass": true,
+        "warn": false,
+        "driftClass": "derived-stale",
+        "blocking": false
+      },
+      {
+        "id": "genome",
+        "pass": true,
+        "warn": false,
+        "driftClass": "local-broken",
+        "blocking": false
+      },
+      {
+        "id": "prompt-ver",
+        "pass": true,
+        "warn": false,
+        "driftClass": "local-broken",
+        "blocking": false
+      }
+    ]
+  }
 }

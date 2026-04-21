@@ -2,6 +2,26 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-21 — Promo Advisor must deterministically parse obvious promos before LLM escalation (S66)
+
+**Decision:** `promo-advisor` now runs a deterministic promo parser first and only escalates to Anthropic when the promo text is ambiguous or low-confidence.
+
+**Applies to this project:** Yes — governs `src/lib/promoParse.js`, `supabase/functions/_shared/promo-parse.ts`, `supabase/functions/promo-advisor/index.ts`, and `src/components/PromoAdvisorPanel.jsx`.
+
+**Rationale:** A large share of promo-advisor usage is made of recognizable structures like bonus bets, boosts, insurance, safety nets, and deposit matches. Deterministic classification reduces token cost and latency while improving consistency on the easiest cases instead of spending model calls on work the app can already do reliably.
+
+---
+
+## 2026-04-21 — Public-repo ops validators must fall back to local project truth (S66)
+
+**Decision:** Public-safe validator/doctor surfaces must not require `portfolio/PROJECT_REGISTRY.json` or private template files when operating inside a single public project repo.
+
+**Applies to this project:** Yes — governs `scripts/run-doctor.mjs`, `scripts/validate-compliance.mjs`, `scripts/check-canon-compliance.mjs`, `scripts/check-launch-ready.mjs`, `scripts/check-public-repo-sanitization.mjs`, `scripts/check-revenue-freshness.mjs`, `scripts/check-sanitization-ratchet.mjs`, and `scripts/lib/project-registry.mjs`.
+
+**Rationale:** This repo intentionally carries a public-safe subset of Studio Ops. Treating missing private portfolio surfaces as local failure makes `/go` and `/closeout` noisy and misleading. The doctor should fail on real local repo drift, not on absent upstream private infrastructure.
+
+---
+
 ## 2026-04-17 — PromoGrind carries the public-safe Studio Ops script layer (S65)
 
 **Decision:** This repo now includes the Studio OS/ops script surface required by `docs/SESSION_PROTOCOL.md` rather than relying on the old public-repo fallback for missing automation.

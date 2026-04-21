@@ -1,6 +1,14 @@
 # Current State
 
 Public-safe summary:
+- version: 24.15.0 · last session: S65 (2026-04-17)
+- **S66 AI efficiency + operator-surface refinement + public-safe ops hardening (closed)**:
+  - Added a deterministic promo parser in `src/lib/promoParse.js` and `supabase/functions/_shared/promo-parse.ts`; `promo-advisor` now short-circuits recognizable promos (bonus bet, boost, safety net, deposit match, insurance) before Anthropic, and `PromoAdvisorPanel.jsx` marks those results as `INSTANT`.
+  - Checkout attribution now persists end-to-end: `src/auth.js` forwards `pg_ref`/UTM context into `create-checkout`, emits `paid_checkout_started`, and `supabase/functions/create-checkout/index.ts` writes attribution into Stripe subscription metadata.
+  - Shared dashboard operator-state now lives in `src/dashboard/operatorSurfaces.js`; `DailyBriefPage.jsx` and `LaunchCommandCenterPanel.jsx` consume one snapshot/alert-plan pipeline instead of rebuilding overlapping logic.
+  - `scripts/generate-project-contracts.mjs` now derives Hub/Social/Sparkfunnel/Website contract summaries from live project truth; `context/contracts/*.json` were regenerated from that source.
+  - `scripts/render-revenue-signals.mjs`, `run-doctor.mjs`, and related validators now degrade cleanly in this public repo: they fall back to local project truth and public-safe templates instead of crashing on missing private `portfolio/PROJECT_REGISTRY.json` or nested Node subprocess restrictions.
+  - Verified current repo truth: `npm.cmd test` → 296/296 passing; `npm.cmd run build` → green; Vite main chunk `337.73KB` against the `425KB` budget.
 - version: 24.14.0 · last session: S64 (2026-04-17)
 - **S65 Studio OS/ops protocol conformance (closed)**:
   - Canonical Studio Ops script surface imported from the local `vaultspark-studio-ops` checkout into this public repo: `scripts/ops.mjs`, `scripts/ops/*`, `scripts/lib/*`, closeout/startup/genius/context/security helpers, and registered command targets.

@@ -8,9 +8,19 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] [SIL] Add landing page smoke test — verify `/land/test` renders without crashing in `scripts/validate-launch-smoke.mjs` — **DONE S64**: launch smoke now requires `LandingRoute.jsx` and asserts the `/land/` route guard, route component, `landing_page_view` analytics, and `pg_ref` attribution storage
 
 ## Next-Session Pre-load (pulled from S64 closeout)
-- [ ] [SIL] Add paid conversion attribution event once `referral_source` reaches subscription/checkout state
+- [x] [SIL] Add paid conversion attribution event once `referral_source` reaches subscription/checkout state — **DONE S66**: `startCheckout()` now forwards referral/UTM attribution into `create-checkout`, emits `paid_checkout_started`, and Stripe subscription metadata carries referral + UTM source fields for downstream revenue tracing
 - [ ] [SIL] Add read-only feature-flag migration preflight for `feature_flags` and `get_feature_flag()` availability
 - [ ] [SIL] Add PWA store-readiness screenshot/manifest checklist for Chrome Web Store assets
+
+## Next-Session Pre-load (pulled from S66 audit tranche)
+- [x] [SIL] Unify Daily Brief + Launch Command Center snapshot building behind one operator-surface helper — **DONE S66**: shared `src/dashboard/operatorSurfaces.js` now owns bankroll lookup, dashboard snapshot, studio snapshot, alert plan assembly, and workflow action routing for both dashboard panels
+- [ ] [SIL] Continue App shell decomposition out of `src/App.jsx` — header/nav/session/search/compare modes first
+- [ ] [SIL] Turn workflow streaks + settlements into a stronger gamified operator loop
+
+## Unified Genius List Sync (S66 /go)
+- [x] [GENIUS][medium][intelligence] Refresh `REVENUE_SIGNALS.md` — **DONE S66**: revenue-signals generator now falls back to local project truth in public repos and writes `docs/REVENUE_SIGNALS.md` instead of crashing on missing portfolio registry
+- [x] [GENIUS][medium][speed] Run `node scripts/ops.mjs doctor` — **DONE S66**: doctor/validator surfaces now degrade cleanly in this public repo, using local project truth instead of crashing on missing private portfolio registry/templates or nested Node subprocess limits; `ops.mjs doctor` now returns 12/12 passing locally
+- [x] [GENIUS][low][protocol] Refresh Protocol Oracle FAQ cache — **DONE S66**: `node scripts/ops.mjs ask --list` now verifies the cache surface cleanly in this repo; current state is correctly empty (`No cached FAQ entries yet`) rather than stale or broken
 
 ## Previous Pre-load (done)
 - [x] [SIL] Wire CalculatorReceipt into remaining 15 calculators — **DONE S63**: all 15 calculators (ProfitBoost, FirstBet, KellyCriterion, Arb2Way, Arb3Way, NoVig, NoVig3Way, PlusEV, InsurancePromo, TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc, BetSizingAdvisor, LineShop) now show "📄 Receipt" button; component wired with calc-specific inputs/outputs arrays
@@ -45,6 +55,8 @@ Public-safe roadmap only. Detailed backlog sequencing is maintained privately.
 - [x] STARTUP_BRIEF refresh — **DONE S63**: docs/STARTUP_BRIEF.md updated to S63 state
 
 ## Now
+- [x] [SIL] Promo Advisor deterministic fast path — **DONE S66**: recognizable offers (bonus bet, profit boost, safety net, deposit match, insurance) now resolve via a rule-engine parser before hitting Anthropic, return an `INSTANT` verdict badge, and avoid unnecessary token burn on high-confidence promos
+- [x] [SIL] Contract truth refresh — **DONE S66**: `scripts/generate-project-contracts.mjs` now derives Hub/Social/Sparkfunnel summaries from live project status and emits concrete live surfaces instead of placeholder contract metadata
 - [x] Surface Portfolio EVS allocation card in WorkflowInboxPanel — **DONE S63**: `WorkflowInboxPanel` now imports `buildPortfolioAllocation`, computes allocation from `inbox.open`, and renders an "Optimal Allocation" card with per-workflow $-allocation and EV estimate when ≥2 workflows + bankroll present
 - [x] Streaming AI responses — **DONE S63**: `promo-chat` edge function now supports SSE when client sends `Accept: text/event-stream`; PromoChat component uses native `fetch` with `ReadableStream` to stream tokens progressively; non-streaming fallback retained for compatibility
 - [x] `ai-action-plan` userContext injection — **DONE S63**: edge function now accepts `activeBooks`, `topPromoType`, `hitRate` in body and injects them as explicit context lines into the user prompt; `AIActionPlan.jsx` derives and sends all three from live `appData`

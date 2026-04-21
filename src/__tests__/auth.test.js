@@ -13,10 +13,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Expose mock handles so individual tests can change return values
-const { mockGetSession, mockSetSession, mockMaybySingle } = vi.hoisted(() => ({
+const { mockGetSession, mockSetSession, mockMaybySingle, mockInvoke, trackEventMock } = vi.hoisted(() => ({
   mockGetSession:  vi.fn().mockResolvedValue({ data: { session: null } }),
   mockSetSession:  vi.fn().mockResolvedValue({ error: null }),
   mockMaybySingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+  mockInvoke:      vi.fn().mockResolvedValue({ data: null, error: null }),
+  trackEventMock:  vi.fn(),
 }));
 
 vi.mock('@supabase/supabase-js', () => ({
@@ -32,9 +34,13 @@ vi.mock('@supabase/supabase-js', () => ({
       eq:          vi.fn().mockReturnThis(),
       maybeSingle: mockMaybySingle,
     })),
-    functions: { invoke: vi.fn().mockResolvedValue({ data: null, error: null }) },
+    functions: { invoke: mockInvoke },
     rpc: vi.fn().mockResolvedValue({ data: null }),
   })),
+}));
+
+vi.mock('../analytics.js', () => ({
+  trackEvent: trackEventMock,
 }));
 
 import {
@@ -44,6 +50,7 @@ import {
   getSubscription,
   isPro,
   isRunnerPlus,
+  startCheckout,
 } from '../auth.js';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -209,6 +216,8 @@ describe('getSubscription / isPro — subscription and session scenarios', () =>
   beforeEach(() => {
     mockGetSession.mockReset();
     mockMaybySingle.mockReset();
+    mockInvoke.mockReset();
+    trackEventMock.mockReset();
   });
 
   it('getSubscription returns null when no active session (logged out)', async () => {
@@ -269,5 +278,45 @@ describe('getSubscription / isPro — subscription and session scenarios', () =>
     const futureDate = new Date(Date.now() + 30 * 86400000).toISOString();
     mockMaybySingle.mockResolvedValueOnce({ data: { plan: 'runner', status: 'active', current_period_end: futureDate } });
     expect(await isRunnerPlus()).toBe(true);
+  });
+
+  it('startCheckout forwards referral attribution and emits checkout analytics', async () => {
+    vi.stubGlobal('window', {
+      location: { href: '' },
+      dispatchEvent: vi.fn(),
+    });
+    vi.stubGlobal('localStorage', {
+      getItem: vi.fn((key) => ({
+        pg_ref: 'creator-42',
+        pg_utm_source: 'reddit',
+        pg_utm_medium: 'organic',
+        pg_utm_campaign: 'launch-week',
+      }[key] ?? null)),
+    });
+    mockGetSession.mockResolvedValue(sessionFor({ id: 'u-checkout', user_metadata: {} }));
+    mockInvoke.mockResolvedValueOnce({
+      data: { checkout_url: 'https://checkout.stripe.test/session_123' },
+      error: null,
+    });
+
+    await startCheckout('runner_monthly');
+
+    expect(mockInvoke).toHaveBeenCalledWith('create-checkout', expect.objectContaining({
+      body: expect.objectContaining({
+        plan: 'runner_monthly',
+        attribution: expect.objectContaining({
+          referral_source: 'creator-42',
+          utm_source: 'reddit',
+          utm_medium: 'organic',
+          utm_campaign: 'launch-week',
+        }),
+      }),
+    }));
+    expect(trackEventMock).toHaveBeenCalledWith('paid_checkout_started', expect.objectContaining({
+      plan: 'runner_monthly',
+      mode: 'live',
+      referral_source: 'creator-42',
+    }));
+    expect(window.location.href).toBe('https://checkout.stripe.test/session_123');
   });
 });

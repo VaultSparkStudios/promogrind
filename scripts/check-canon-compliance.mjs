@@ -12,10 +12,11 @@ import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { loadProjectRegistry } from './lib/project-registry.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const registry = JSON.parse(fs.readFileSync(path.join(root, 'portfolio', 'PROJECT_REGISTRY.json'), 'utf8'));
+const registry = loadProjectRegistry();
 
 const args = process.argv.slice(2);
 const jsonOut = args.includes('--json');
