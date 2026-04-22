@@ -50,44 +50,76 @@ export async function invokeProjectFunction(supabase, functionName, { session = 
   return data;
 }
 
+const RETRY_DELAYS = [1000, 3000];
+
 export async function streamProjectFunction(functionName, {
   session,
   body = {},
+  signal = null,
   onDelta = () => {},
   onDone = () => {},
 } = {}) {
-  const response = await fetch(`${SUPABASE_URL}/functions/v1/${functionName}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "text/event-stream",
-      ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok || !response.body) {
-    const errJson = await response.json().catch(() => ({}));
-    throw new Error(errJson?.error || `HTTP ${response.status}`);
-  }
-
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
+  let attempt = 0;
 
   while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split("\n");
-    buffer = lines.pop() ?? "";
+    if (signal?.aborted) return;
 
-    for (const line of lines) {
-      if (!line.startsWith("data: ")) continue;
-      const payload = JSON.parse(line.slice(6));
-      if (payload.type === "delta") onDelta(payload);
-      if (payload.type === "done") onDone(payload);
+    let response;
+    try {
+      response = await fetch(`${SUPABASE_URL}/functions/v1/${functionName}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/event-stream",
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify(body),
+        signal,
+      });
+    } catch (err) {
+      if (err.name === "AbortError") return;
+      if (attempt < RETRY_DELAYS.length) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAYS[attempt++]));
+        continue;
+      }
+      throw err;
     }
+
+    if (!response.ok || !response.body) {
+      const errJson = await response.json().catch(() => ({}));
+      const err = new Error(errJson?.error || `HTTP ${response.status}`);
+      if (response.status >= 500 && attempt < RETRY_DELAYS.length) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAYS[attempt++]));
+        continue;
+      }
+      throw err;
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const payload = JSON.parse(line.slice(6));
+          if (payload.type === "delta") onDelta(payload);
+          if (payload.type === "done") onDone(payload);
+        }
+      }
+    } catch (err) {
+      if (err.name === "AbortError") return;
+      throw err;
+    }
+
+    return;
   }
 }
 

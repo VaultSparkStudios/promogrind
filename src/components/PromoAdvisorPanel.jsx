@@ -25,7 +25,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const [error, setError] = useState('');
   const [uses, setUses] = useState(() => readDailyUsage("pg_advisor_uses"));
   const [streamingText, setStreamingText] = useState('');
-  const readerRef = useRef(null);
+  const abortRef = useRef(null);
   const toast = useToast();
 
   // Gate check after all hooks — safe per Rules of Hooks
@@ -39,6 +39,9 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
   const analyze = async () => {
     if (!user || !promoText.trim() || uses >= DAILY_LIMIT || loading) return;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
     setLoading(true); setError(''); setResult(null); setStreamingText('');
     try {
       const sanitized = promoText.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
@@ -56,6 +59,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         await streamProjectFunction("promo-advisor", {
           session,
           body,
+          signal: controller.signal,
           onDelta: (evt) => setStreamingText((prev) => prev + (evt.text || "")),
           onDone: (evt) => {
             const data = evt.result;
@@ -77,10 +81,12 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         setResult(data);
       }
     } catch(e) {
-      setError(e?.message === 'Unauthorized' ? 'Sign in to analyze promos.' : 'Analysis failed. Please try again.');
+      if (e?.name !== 'AbortError') {
+        setError(e?.message === 'Unauthorized' ? 'Sign in to analyze promos.' : 'Analysis failed. Please try again.');
+      }
     } finally {
       setLoading(false);
-      readerRef.current = null;
+      abortRef.current = null;
     }
   };
 

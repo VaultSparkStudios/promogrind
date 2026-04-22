@@ -31,6 +31,7 @@ const PromoChat = ({ navigate }) => {
   const [subPlan, setSubPlan] = useState(null);   // raw plan string or null
   const [subLoading, setSubLoading] = useState(true);
   const messagesEndRef = useRef(null);
+  const abortRef = useRef(null);
   const { enabled: promoChatEnabled } = useFeatureFlag("promoChat", {
     tier: normalizeFeatureTier(subPlan),
     userId: session?.user?.id ?? null,
@@ -67,6 +68,8 @@ const PromoChat = ({ navigate }) => {
     }
   }, [messages, chatLoading]);
 
+  useEffect(() => () => { abortRef.current?.abort(); }, []);
+
   const isLimited = dailyLimit !== Infinity && chatRemaining <= 0;
   const hasAccess = subPlan !== null && dailyLimit > 0;
   const featureEnabled = promoChatEnabled || FEATURE_FLAGS.promoChat;
@@ -95,10 +98,14 @@ const PromoChat = ({ navigate }) => {
       });
 
       if (!hasStreamingGateway()) throw new Error("Streaming gateway unavailable");
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
       let fullText = "";
       await streamProjectFunction("promo-chat", {
         session,
         body: JSON.parse(body),
+        signal: controller.signal,
         onDelta: (evt) => {
           fullText += evt.text || "";
           setMessages((prev) => prev.map((message) =>
@@ -117,13 +124,16 @@ const PromoChat = ({ navigate }) => {
         },
       });
     } catch (e) {
-      setMessages(prev => prev.map(m =>
-        m._id === streamingId
-          ? { role: 'assistant', content: 'Something went wrong. Please try again.', suggestions: [] }
-          : m,
-      ));
+      if (e?.name !== 'AbortError') {
+        setMessages(prev => prev.map(m =>
+          m._id === streamingId
+            ? { role: 'assistant', content: 'Something went wrong. Please try again.', suggestions: [] }
+            : m,
+        ));
+      }
     } finally {
       setChatLoading(false);
+      abortRef.current = null;
     }
   };
 
