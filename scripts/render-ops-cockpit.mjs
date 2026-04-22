@@ -10,6 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { scanProjects, writeReports } from './check-public-repo-sanitization.mjs';
 import { readEntries, filterWindow, aggregate, renderSnapshot } from './render-cache-ledger.mjs';
+import { extractBetween, extractSection, readJson, readText } from './lib/context-parsing.mjs';
 
 const JSON_MODE = process.argv.includes('--json');
 
@@ -129,32 +130,6 @@ if (JSON_MODE) {
 
 fs.writeFileSync(outputPath, lines.join('\n'), 'utf8');
 console.log(`✓ Cockpit → ${path.relative(root, outputPath)}`);
-
-function readText(filePath) {
-  try { return fs.readFileSync(filePath, 'utf8'); } catch { return ''; }
-}
-
-function readJson(filePath, fallback) {
-  try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); } catch { return fallback; }
-}
-
-function extractSection(content, heading) {
-  // Split on H2 headings and find the matching section.
-  // More robust than a single regex — avoids multiline $ lookahead pitfalls.
-  const parts = content.split(/^## /m);
-  const match = parts.find(p => p.startsWith(heading));
-  if (!match) return '';
-  // Drop the heading line, return section body (up to the next heading is implicit from the split)
-  const newlineIdx = match.indexOf('\n');
-  return newlineIdx === -1 ? '' : match.slice(newlineIdx + 1);
-}
-
-function extractBetween(content, start, end) {
-  const startIndex = content.indexOf(start);
-  const endIndex = content.indexOf(end);
-  if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) return '';
-  return content.slice(startIndex, endIndex + end.length);
-}
 
 function cleanTaskLine(line) {
   return line.replace(/^- \[ \]\s*/, '- ');

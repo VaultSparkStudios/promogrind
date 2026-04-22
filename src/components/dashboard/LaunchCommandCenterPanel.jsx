@@ -6,6 +6,8 @@ import { AppDataCtx } from "../../contexts.jsx";
 import { appendStudioContractHistory } from "../../studio/export.js";
 import { buildOperatorSurfaceState } from "../../dashboard/operatorSurfaces.js";
 import { getWorkflowActionSlug, normalizeAppRoute } from "../../workflows/actionGraph.js";
+import { appendWorkflow } from "../../workflows/store.js";
+import { launchBlockerToWorkflow } from "../../workflows/suggestions.js";
 
 export default function LaunchCommandCenterPanel({ navigate: navigateProp = null }) {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -40,6 +42,11 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
     } catch {}
   };
   const latestPublished = Array.isArray(appData?.studioContractHistory) ? appData.studioContractHistory[0] : null;
+  const queueLaunchBlocker = (blocker, index) => {
+    if (!syncAppData) return;
+    const workflow = launchBlockerToWorkflow(blocker, { index, now: new Date() });
+    syncAppData(appendWorkflow(appData || {}, workflow));
+  };
 
   return (
     <div style={{ ...S.card, border: `1px solid ${K.ac}35`, marginBottom: 12 }}>
@@ -99,6 +106,12 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
             <div key={blocker.key} style={{ marginBottom: 8 }}>
               <div style={{ fontSize: 11, color: blocker.status === "manual" ? K.yl : K.ac, fontWeight: 700 }}>{blocker.label}</div>
               <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{blocker.detail}</div>
+              <button
+                onClick={() => queueLaunchBlocker(blocker, commandCenter.nextActions.findIndex((item) => item.key === blocker.key))}
+                style={{ marginTop: 6, padding: "5px 8px", background: "transparent", border: `1px solid ${K.ac}30`, borderRadius: 6, color: K.ac, fontSize: 10, cursor: "pointer" }}
+              >
+                Queue blocker →
+              </button>
             </div>
           ))}
         </div>

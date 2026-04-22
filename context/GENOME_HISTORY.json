@@ -161,7 +161,7 @@
       "total": 14,
       "maxTotal": 25,
       "overallStatus": "yellow",
-      "lastReviewed": "2026-04-22",
+      "lastReviewed": "2026-04-22 (S70)",
       "dimensions": {
         "schema_alignment": 3,
         "prompt_template_alignment": 3,
@@ -169,8 +169,25 @@
         "handoff_continuity": 3,
         "contradiction_density": 2
       },
-      "delta": 1,
+      "delta": 0,
       "cause": "Extend the newly shipped shared app-shell/workflow/AI contract into remaining scanner/community surfaces, then apply the"
+    },
+    {
+      "date": "2026-04-22",
+      "session": 71,
+      "total": 15,
+      "maxTotal": 25,
+      "overallStatus": "yellow",
+      "lastReviewed": "2026-04-22 (S71)",
+      "dimensions": {
+        "schema_alignment": 3,
+        "prompt_template_alignment": 3,
+        "derived_view_freshness": 4,
+        "handoff_continuity": 3,
+        "contradiction_density": 2
+      },
+      "delta": 1,
+      "cause": "Apply the live workflow/entity-sync/feature-flag Supabase migrations, complete launch proof, and finish the remaining tr"
     }
   ]
 }

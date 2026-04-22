@@ -6,6 +6,7 @@ import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
+import { readJson, readText } from './lib/context-parsing.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STUDIO_ROOT = path.resolve(__dirname, '..');
@@ -19,14 +20,6 @@ const message = valueAfter('--message') ?? '';
 function valueAfter(flag) {
   const idx = args.indexOf(flag);
   return idx >= 0 ? args[idx + 1] : null;
-}
-
-function readText(p) {
-  try { return fs.readFileSync(p, 'utf8'); } catch { return ''; }
-}
-
-function readJson(p, fallback) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fallback; }
 }
 
 function sh(command, commandArgs = [], cwd = projectRoot) {

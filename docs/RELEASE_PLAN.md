@@ -3,24 +3,17 @@
 ## Current State
 
 - Runtime: `https://promogrind.bet/`
-- Repo status: build passing, `158/158` tests green, launch smoke passing, browser smoke passing
+- Repo status: build passing, `372/372` tests green, launch smoke passing, browser smoke passing
 - Product posture: deployable and public-facing, but still blocked on final launch-proof tasks outside this repo
 
 ## Current Manual Blockers
 
-- **Deploy S62 edge functions** (prompt caching + userContext personalization):
-  ```bash
-  bash scripts/deploy-edge-functions.sh --s62
-  # or individually:
-  supabase functions deploy promo-advisor --project-ref fjnpzjjyhnpmunfoycrp --no-verify-jwt
-  supabase functions deploy promo-chat --project-ref fjnpzjjyhnpmunfoycrp --no-verify-jwt
-  supabase functions deploy ai-action-plan --project-ref fjnpzjjyhnpmunfoycrp --no-verify-jwt
-  ```
+- Shared edge deploy/auth compatibility appears cleared in production; keep this out of the blocker list unless a fresh production regression proves otherwise.
 - Set `VITE_VAPID_PUBLIC_KEY` in the live frontend before exposing browser push publicly
 - Run the real Stripe smoke path end-to-end and verify `subscriptions` plus customer-portal lifecycle (see `docs/STRIPE_SMOKE_TEST.md`)
 - Finish monetization coverage for `BetMGM`, `bet365`, and `BetRivers`
 - Complete one friend-facing pass through auth, calculator, CTA, and pricing flows
-- Apply Supabase SQL migrations: `migration-workflow-history.sql`, `migration-entity-sync.sql`, `migration-cron-jobs.sql`
+- Apply Supabase SQL migrations: `migration-workflow-history.sql`, `migration-entity-sync.sql`, `migration-feature-flags.sql`, and confirm whether `migration-cron-jobs.sql` is still needed in production
 
 ## Highest-Leverage Build Sequence
 

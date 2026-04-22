@@ -45,6 +45,7 @@ const DailyMissionsPanel = lazy(() => import("./components/dashboard/DailyMissio
 const BonusBet = lazy(() => import("./calculators/BonusBet.jsx"));
 const ProfitBoost = lazy(() => import("./calculators/ProfitBoost.jsx"));
 const FirstBet = lazy(() => import("./calculators/FirstBet.jsx"));
+const DepositMatch = lazy(() => import("./calculators/DepositMatch.jsx"));
 const NoVig = lazy(() => import("./calculators/NoVig.jsx"));
 const NoVig3Way = lazy(() => import("./calculators/NoVig3Way.jsx"));
 const PlusEV = lazy(() => import("./calculators/PlusEV.jsx"));

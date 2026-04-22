@@ -17,6 +17,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { extractSection, readJson, readText } from './lib/context-parsing.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -28,20 +29,6 @@ const bucketArg = (() => {
   const i = process.argv.indexOf('--bucket');
   return i !== -1 ? process.argv[i + 1] : 'all';
 })();
-
-function readJson(p, fb = {}) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; }
-}
-function readText(p) {
-  try { return fs.readFileSync(p, 'utf8'); } catch { return ''; }
-}
-function extractSection(content, heading) {
-  const parts = content.split(/^## /m);
-  const match = parts.find(p => p.startsWith(heading));
-  if (!match) return '';
-  const nl = match.indexOf('\n');
-  return nl === -1 ? '' : match.slice(nl + 1);
-}
 
 const taskBoard = readText(path.join(ROOT, 'context', 'TASK_BOARD.md'));
 const status    = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'));

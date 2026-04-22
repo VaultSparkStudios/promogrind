@@ -24,7 +24,7 @@
     "11 new tests: flagCalcUsed, flagVisit, mastery catalog integrity"
   ],
   "openHumanActions": [
-    "Rotate Render deploy hook key rnd_OSQijzSJCUZE22etoih0xnFI5QZh via Render dashboard",
+    "Rotate Render deploy hook key (see local rotate-render-key.mjs) via Render dashboard",
     "Deploy S62+S63 edge functions",
     "Apply Supabase migration-feature-flags.sql",
     "Set VITE_VAPID_PUBLIC_KEY in production",

@@ -6,6 +6,9 @@ import { trackFeatureEnabledUse } from "../launchTelemetry.js";
 import { useToast } from "../contexts.jsx";
 import { FeatureUnavailableCard, LoadingState } from "../ui.jsx";
 import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
+import { AppDataCtx } from "../contexts.jsx";
+import { appendWorkflow } from "../workflows/store.js";
+import { scannerOpportunityToWorkflow } from "../workflows/suggestions.js";
 
 const SPORTS_LIST = [
   { key:"americanfootball_nfl",  label:"NFL"  },
@@ -111,6 +114,7 @@ const detectEV = (games) => {
 };
 
 const LiveScanner = ({ proStatus, mode }) => {
+  const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const { enabled: liveScannerEnabled } = useFeatureFlag("liveScanner", {
     tier: normalizeFeatureTier(proStatus?.plan),
   });
@@ -159,6 +163,12 @@ const LiveScanner = ({ proStatus, mode }) => {
       e.acted?'Yes':'No',
     ].join(','));
     downloadFile([header,...rows].join('\n'),'promogrind-opp-log.csv','text/csv');
+  };
+  const queueWorkflow = (opportunity, kind) => {
+    if (!syncAppData) return;
+    const workflow = scannerOpportunityToWorkflow(opportunity, kind, { bankroll: scannerBankroll, now: new Date() });
+    syncAppData(appendWorkflow(appData || {}, workflow));
+    if (toast) toast(`Saved ${kind === 'arb' ? 'arb' : '+EV'} workflow to inbox.`, K.gn);
   };
   const intervalRef = useRef(null);
   const isActive = proStatus?.status==="active" || proStatus?.status==="trial";
@@ -328,6 +338,7 @@ const LiveScanner = ({ proStatus, mode }) => {
                   <span style={{...S.tag(K.gn),fontSize:12}}>+{r.roi}% ROI</span>
                   <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
                   <button onClick={()=>logOpportunity(r,'arb')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
+                  <button onClick={()=>queueWorkflow(r,'arb')} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.gn}30`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Queue</button>
                 </div>
               </div>
               <div style={{fontSize:11,color:K.mt,marginBottom:10}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
@@ -355,6 +366,7 @@ const LiveScanner = ({ proStatus, mode }) => {
                 <div style={{display:"flex",gap:6}}>
                   <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
                   <button onClick={()=>logOpportunity(r,'ev')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
+                  <button onClick={()=>queueWorkflow(r,'ev')} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.gn}30`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Queue</button>
                 </div>
               </div>
             </div>

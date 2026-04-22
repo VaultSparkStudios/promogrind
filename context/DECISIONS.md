@@ -57,3 +57,21 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: delete files entirely; redact sensitive content and keep tracked.
 - Why this was chosen: files have legitimate local ops value; untracking preserves them for local workflows while removing them from public history going forward. The Render key in `rotate-render-key.mjs` was already exposed in a prior handoff doc, so untracking the helper script doesn't make it worse — but it stops re-publishing the reference in future commits.
 - Follow-up: rotate the Render deploy hook key via the Render dashboard (human action required). Run `git grep` with the old key after rotation to confirm zero references across all repos.
+
+### 2026-04-22 - Restore missing calculator modules instead of soft-hiding broken routes
+
+- Status: accepted
+- Context: the deployed app stopped loading because `src/App.jsx` still referenced `DepositMatch`, but the module was missing, causing `Uncaught ReferenceError: DepositMatch is not defined` during boot.
+- Decision: restore `DepositMatch` as a real calculator component and keep it in the app’s calculator registry rather than removing the route or hiding the feature.
+- Alternatives considered: remove the calculator reference from the registry; wrap the missing reference in a conditional fallback; hide the feature behind a flag until later.
+- Why this was chosen: the product already presents the calculator surface as part of its public feature set, and restoring the module preserves user-facing breadth while fixing the hard boot failure at the correct seam.
+- Follow-up: keep the calculator registry aligned with actual modules and add regression coverage around any future calculator set changes that touch startup routing.
+
+### 2026-04-22 - Canonicalize scanner/community/launch queue actions through workflow suggestion builders
+
+- Status: accepted
+- Context: the shared workflow graph existed, but Live Scanner, Community Promo Board, and Launch Command Center still exposed recommendations as isolated UI actions instead of emitting shared workflow-ready suggestions.
+- Decision: introduce `src/workflows/suggestions.js` as the canonical builder layer for surfaced promo/workflow suggestions and route queue actions from those surfaces through it.
+- Alternatives considered: let each surface keep its own local queue payload shape; wait for live Supabase migrations before wiring the UI layer; add only one-off button handlers without a shared builder layer.
+- Why this was chosen: it unifies local behavior immediately, lowers future drift, and gives the post-migration remote reconciliation path one shared input contract instead of three divergent UI-specific payloads.
+- Follow-up: once live migrations are applied, add remote reconciliation coverage so scanner/community suggestions persist across devices and sessions.

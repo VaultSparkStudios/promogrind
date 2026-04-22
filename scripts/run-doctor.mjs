@@ -17,6 +17,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { loadProjectRegistry } from './lib/project-registry.mjs';
+import { readJson, readText } from './lib/context-parsing.mjs';
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url));
 const ROOT       = path.resolve(__dirname, '..');
@@ -52,8 +53,6 @@ const REMEDIES = {
   'prompt-ver':          { script: null,                             args: [],          label: 'prompt-version drift — run: bash scripts/propagate-templates.sh --apply' },
 };
 
-function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
-function readText(p)     { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 function extractVersion(content, marker) { return content.match(new RegExp(`<!-- ${marker}: ([0-9.]+) -->`))?.[1] ?? null; }
 
 function runLocalComplianceCheck() {

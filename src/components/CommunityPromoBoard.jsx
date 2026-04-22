@@ -3,8 +3,10 @@ import { K, font, S } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
 import { supabase } from "../auth.js";
 import { In, Nt } from "../ui.jsx";
-import { AppDataCtx } from "../contexts.jsx";
+import { AppDataCtx, useToast } from "../contexts.jsx";
 import { buildHotLanes } from "../track/insights.js";
+import { appendWorkflow } from "../workflows/store.js";
+import { communityPromoToWorkflow } from "../workflows/suggestions.js";
 
 const PROMO_BOARD_STATES = ["All States","AL","AZ","CO","CT","DC","IL","IN","IA","KS","KY","LA","MA","MD","ME","MI","MS","MO","NC","NJ","NY","OH","OR","PA","TN","VA","VT","WV","WY"];
 
@@ -42,7 +44,8 @@ function resolveInitialState(userState) {
 }
 
 const CommunityPromoBoard = () => {
-  const { appData } = useContext(AppDataCtx) || {};
+  const { appData, syncAppData } = useContext(AppDataCtx) || {};
+  const toast = useToast();
   const hotLanes = useMemo(() => buildHotLanes(appData || {}), [appData]);
   const [promos, setPromos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -93,6 +96,12 @@ const CommunityPromoBoard = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) await supabase.from("vault_events").insert({ user_id: user.id, event_type: "promo_flagged", metadata: { promo_id: id } });
     } catch {}
+  };
+  const queuePromo = (promo) => {
+    if (!syncAppData) return;
+    const workflow = communityPromoToWorkflow(promo, { now: new Date() });
+    syncAppData(appendWorkflow(appData || {}, workflow));
+    if (toast) toast("Community promo saved to workflow inbox.", K.gn);
   };
 
   const filtered = promos.filter(p => {
@@ -217,6 +226,13 @@ const CommunityPromoBoard = () => {
                   style={{ background: "transparent", border: `1px solid ${alreadyFlagged ? K.rd : K.bd2}`, borderRadius: 6, color: alreadyFlagged ? K.rd : K.mt, fontSize: 9, padding: "3px 8px", cursor: alreadyFlagged ? "default" : "pointer", fontFamily: font, opacity: alreadyFlagged ? 0.7 : 1 }}
                 >
                   {alreadyFlagged ? "🚩 Flagged" : "🚩 Flag"}
+                </button>
+                <button
+                  onClick={() => queuePromo(p)}
+                  aria-label="Save promo to workflow inbox"
+                  style={{ background: "transparent", border: `1px solid ${K.gn}30`, borderRadius: 6, color: K.gn, fontSize: 9, padding: "3px 8px", cursor: "pointer", fontFamily: font }}
+                >
+                  Queue
                 </button>
               </div>
             </div>

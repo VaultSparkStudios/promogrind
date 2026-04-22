@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-22",
+  "session": 71,
+  "sessionIntent": "fix the stuck app boot screen, complete the remaining local workflow-routing/truth-helper tranche, refresh launch truth, then close out and push cleanly",
+  "intentOutcome": "achieved",
+  "testsPassingAtClose": 372,
+  "testsDelta": 3,
+  "buildPassing": true,
+  "sanitizationFindings": { "critical": 0, "warning": 0 },
+  "silTotal": 663,
+  "silDelta": 52,
+  "velocity": 6,
+  "protocolVelocity": 4,
+  "debtDirection": "down",
+  "shippedItems": [
+    "restored src/calculators/DepositMatch.jsx and removed the app boot crash caused by DepositMatch being undefined",
+    "added src/workflows/suggestions.js and wired queue actions into LiveScanner, CommunityPromoBoard, and LaunchCommandCenterPanel",
+    "moved run-doctor, render-ops-cockpit, score-tasks, and closeout-summary onto the shared context parsing helper",
+    "refreshed docs/RELEASE_PLAN.md to reflect current blockers and 372/372 passing tests",
+    "patched scripts/render-state-vector.mjs so plain-bullet TASK_BOARD sections render truthful Now/Next/Blocked counts"
+  ],
+  "openHumanActions": [
+    "Rotate Render deploy hook key (see local rotate-render-key.mjs) via Render dashboard",
+    "Apply Supabase migration-workflow-history.sql in production",
+    "Apply Supabase migration-entity-sync.sql in production",
+    "Apply Supabase migration-feature-flags.sql in production",
+    "Confirm whether migration-cron-jobs.sql still needs to be applied in production",
+    "Replace remaining placeholder affiliate links with approved live links",
+    "Run a real Stripe checkout plus customer portal smoke in production",
+    "Set VITE_VAPID_PUBLIC_KEY in production and verify browser push",
+    "Complete a friend beta pass through auth, calculators, CTA, and pricing"
+  ],
+  "closeoutMethod": "manual (genome gate still yellow at 15/25)",
+  "contextPctAtClose": 1.1
+}

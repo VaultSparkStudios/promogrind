@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-22",
+  "session": 70,
+  "sessionIntent": "complete S69's blocked push — fix pre-push hook false positive for gitignored files, redact Render key reference from DECISIONS.md",
+  "intentOutcome": "achieved",
+  "testsPassingAtClose": 369,
+  "testsDelta": 0,
+  "buildPassing": true,
+  "sanitizationFindings": { "critical": 0, "warning": 0 },
+  "silTotal": 611,
+  "silDelta": -7,
+  "velocity": 2,
+  "protocolVelocity": 4,
+  "debtDirection": "down",
+  "shippedItems": [
+    "context/DECISIONS.md: redacted Render deploy key reference from 'Untrack private ops scripts' follow-up line",
+    ".git/hooks/pre-push: added --diff-filter=ACMRT to exclude deleted/gitignored files from secret scanning"
+  ],
+  "openHumanActions": [
+    "Rotate Render deploy hook key (see local rotate-render-key.mjs) via Render dashboard",
+    "Deploy S62+S63 edge functions",
+    "Apply Supabase migration-feature-flags.sql",
+    "Set VITE_VAPID_PUBLIC_KEY in production",
+    "Stripe smoke test",
+    "Affiliate links for BetMGM/bet365/BetRivers",
+    "Friend beta pass",
+    "Apply Supabase migration-workflow-history.sql + migration-entity-sync.sql",
+    "Apply Supabase migration-cron-jobs.sql"
+  ],
+  "closeoutMethod": "manual (genome gate still yellow at 14/25)",
+  "contextPctAtClose": 3.5
+}

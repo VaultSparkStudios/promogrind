@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ███
-Avgs — 3: 555.7 [N=3] | 5: 555.7 [N=3] | 10: 555.7 [N=3] | 25: 555.7 [N=3] | all: 555.7
-  └ 3-session: Dev 84.7 | Align 95.7 | Momentum 87.0 | Engage 80.0 | Process 82.0 | Coher 22.0 | Sec 29.3 | Eco 30.0 | Cap 24.3 | Auto 20.7
+Sparkline (last 5 totals): S66:496 | S67:553 | S69:618 | S70:611 | S71:663
+Avgs — 3: 630.7 [N=3] | all: 588.2 [N=5]
+  └ 3-session (S69/S70/S71): Dev 91.0 | Align 96.0 | Momentum 79.3 | Engage 88.7 | Process 89.7 | Coher 26.7 | Sec 60.3 | Eco 34.0 | Cap 36.0 | Auto 29.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
-Momentum runway: ~1.5 sessions  |  Intent rate: 100% achieved (last 3)
-Last session: 2026-04-22 | Session 69 | Total: 618/1000 | Velocity: 8 | protocolVelocity: 5
+Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 4)
+Last session: 2026-04-22 | Session 71 | Total: 663/1000 | Velocity: 6 | protocolVelocity: 4
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,6 +93,35 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 1.
 2.
 3.
+
+### 2026-04-22 — Session 71 | Total: 663/1000 | Velocity: 6 | Debt: down
+Rolling avg (last 3): Dev 91.0 | Align 96.0 | Momentum 79.3 | Engage 88.7 | Process 89.7 | Coher 26.7 | Sec 60.3 | Eco 34.0 | Cap 36.0 | Auto 29.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 93 | ↑ | Fixed the app-load crash, added workflow suggestion coverage, kept build green, and expanded tests to `372/372`. |
+| Creative Alignment | 96 | → | The product stays aligned with the operator-system direction; no creative drift this session. |
+| Momentum | 86 | ↑ | A blocked launch-hardening tranche converted into shipped user-facing and ops-facing fixes instead of more planning. |
+| Engagement | 90 | ↑ | Scanner, community, and launch surfaces now feed the shared workflow inbox, improving recommendation follow-through. |
+| Process Quality | 91 | ↓ | Full write-back and verification are clean, but manual closeout is still required because genome handling remains too strict for public-safe repos. |
+| Cross-Repo Coherence | 32 | ↑ | More doctor/closeout surfaces now share the same context parser, reducing truth drift across startup, doctor, and closeout. |
+| Security Posture | 64 | ↑ | No new exposure path introduced; release truth and push validation were refreshed while keeping the public repo sanitized. |
+| Ecosystem Integration | 36 | ↑ | Launch-readiness surfaces and workflow suggestion seams now describe the same local reality more consistently. |
+| Capital Efficiency | 40 | ↑ | Fixes targeted high-leverage breakpoints: one boot repair and one shared builder layer removed multiple future support/debug loops. |
+| Automation Coverage | 35 | ↑ | More UI actions now pass through reusable workflow builders, but production launch proof and closeout autopilot still require human/manual steps. |
+| **Total** | **663 / 1000** | | |
+
+**Top win:** the site is no longer broken on boot, and the remaining local scanner/community/launch workflow actions now flow through the shared inbox contract instead of diverging per surface.
+
+**Top gap:** the biggest remaining blockers are no longer local code gaps but production/manual launch gates: live Supabase migrations, real monetization links, Stripe smoke, production push, and friend beta.
+
+**Intent outcome:** Achieved. The stuck screen was fixed, the local contract-extension tranche shipped, verification passed, and the repo truth now reflects the current launch state.
+
+**Brainstorm**
+
+1. Add a launch-readiness diagnostic that reads one canonical source and renders friend-beta/public-launch verdicts directly in the command center.
+2. Add remote reconciliation tests for workflow suggestions once the live Supabase migrations land so cross-device persistence is verified instead of assumed.
+3. Split genome failures into red/yellow handling so public-safe repos can use honest autopilot closeout when truth is coherent but not fully green.
 
 ### 2026-04-22 — Session 67 | Total: 553/1000 | Velocity: 4 | Debt: down
 Rolling avg (last 3): Dev 82.0 | Align 95.5 | Momentum 84.5 | Engage 76.0 | Process 80.0 | Coher 21.0 | Sec 16.5 | Eco 28.5 | Cap 21.5 | Auto 19.0
@@ -181,3 +210,32 @@ Rolling avg (last 3): Dev 84.7 | Align 95.7 | Momentum 87.0 | Engage 80.0 | Proc
 1. Wire a deterministic promo-type shortcut into PromoAdvisor (keyword→template) to reduce edge-function calls for obviously-identifiable promos.
 2. Add a community "streak leaderboard" surface that uses mastery + streak data to show relative standing without exposing private P&L.
 3. Auto-route scanner and community findings into the shared workflow graph with remote reconciliation once live migrations are in place.
+
+### 2026-04-22 — Session 70 | Total: 611/1000 | Velocity: 2 | Debt: down
+Rolling avg (last 3): Dev 88.7 | Align 96.0 | Momentum 79.7 | Engage 84.7 | Process 87.3 | Coher 24.0 | Sec 44.7 | Eco 33.0 | Cap 31.3 | Auto 24.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 90 | → | No code changes; 369 tests still green, build passing. |
+| Creative Alignment | 96 | → | No direction changes this session. |
+| Momentum | 60 | ↓ | Micro-session — 2 fix commits only; necessary to complete S69 but low output volume. |
+| Engagement | 88 | → | No new engagement features. |
+| Process Quality | 92 | ↑ | Push landed cleanly, full write-backs complete, hook hardened so future sessions won't face the same false-positive block. |
+| Cross-Repo Coherence | 24 | → | No cross-repo changes. |
+| Security Posture | 62 | ↑ | Pre-push hook now skips deleted/gitignored files; avoids false-positive block when ops scripts live locally after git rm --cached. |
+| Ecosystem Integration | 33 | → | No ecosystem changes. |
+| Capital Efficiency | 38 | ↑ | Minimal context (1%) to unblock a specific infrastructure issue; efficient micro-session. |
+| Automation Coverage | 28 | ↑ | Pre-push hook more reliable for real-world repo state (untrack+ignore pattern is now safe). |
+| **Total** | **611 / 1000** | | |
+
+**Top win:** pre-push hook `--diff-filter=ACMRT` fix means the gitignored-but-local ops script pattern is now first-class safe — future `git rm --cached` operations won't ghost-block pushes.
+
+**Top gap:** Momentum dropped to 60 because this was a housekeeping session with no product output. The scanner/community contract extension remains the highest-leverage unblocked work.
+
+**Intent outcome:** Achieved. S69's 10 commits reached origin/main; all write-backs complete.
+
+**Brainstorm**
+
+1. Add a `--check-gitignored` flag to `scan-secrets.mjs` that reports findings in gitignored-but-local files as advisory only (not exit 1), so security visibility is preserved without false-positive push blocks.
+2. Extend pre-push hook with a diff-filter legend comment so future maintainers know why ACMRT was chosen.
+3. Consider a micro-session SIL category modifier: sessions explicitly tagged as "micro/fix" shouldn't drag down Momentum avg unfairly — document this in SIL_RUBRIC_V3.md.

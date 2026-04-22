@@ -43,12 +43,14 @@ const intentRate = silHeader.match(/Intent rate:\s*([^\n|]+)/)?.[1]?.trim() ?? '
 const nowSection     = extractSection(taskBoard, 'Now');
 const nextSection    = extractSection(taskBoard, 'Next');
 const blockedSection = extractSection(taskBoard, 'Blocked');
-const openNow     = nowSection.split(/\r?\n/).filter(l => /^- \[ \]/.test(l));
-const openNext    = nextSection.split(/\r?\n/).filter(l => /^- \[ \]/.test(l));
-const openBlocked = blockedSection.split(/\r?\n/).filter(l => /^- \[ \]/.test(l));
+const listItem = (line) => /^- (?:\[\s\]\s*)?/.test(line);
+const cleanListItem = (line) => line.replace(/^- (?:\[\s\]\s*)?/, '').slice(0, 80);
+const openNow     = nowSection.split(/\r?\n/).filter(listItem);
+const openNext    = nextSection.split(/\r?\n/).filter(listItem);
+const openBlocked = blockedSection.split(/\r?\n/).filter(listItem);
 
-const topNow  = openNow.slice(0, 3).map(l => l.replace(/^- \[ \]\s*/, '').slice(0, 80));
-const topNext = openNext.slice(0, 3).map(l => l.replace(/^- \[ \]\s*/, '').slice(0, 80));
+const topNow  = openNow.slice(0, 3).map(cleanListItem);
+const topNext = openNext.slice(0, 3).map(cleanListItem);
 
 const handoffBlock = handoff.match(/^## Where We Left Off \([^)]+\)\n([\s\S]*?)(?=\n---|\n## )/m)?.[1]?.trim() ?? '';
 const lastShipped  = handoffBlock.match(/^- Shipped:\s*(.+)$/m)?.[1] ?? 'see LATEST_HANDOFF.md';
