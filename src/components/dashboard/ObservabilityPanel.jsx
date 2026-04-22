@@ -103,6 +103,16 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
         <span style={{ padding: "4px 8px", background: `${aiTone}12`, border: `1px solid ${aiTone}25`, borderRadius: 999, fontSize: 10, color: aiTone, fontFamily: font }}>
           AI abuse risk {obs.aiUsage.risk}
         </span>
+        {obs.hotLanes.hotPromoTypes.slice(0, 2).map((lane) => (
+          <span key={lane.key} style={{ padding: "4px 8px", background: `${K.gn}12`, border: `1px solid ${K.gn}25`, borderRadius: 999, fontSize: 10, color: K.gn, fontFamily: font }}>
+            {lane.badge} · {lane.label}
+          </span>
+        ))}
+        {obs.latestMicroNps && obs.latestMicroNps !== "yes" && (
+          <span style={{ padding: "4px 8px", background: `${obs.latestMicroNps === "no" ? K.rd : K.yl}12`, border: `1px solid ${obs.latestMicroNps === "no" ? K.rd : K.yl}25`, borderRadius: 999, fontSize: 10, color: obs.latestMicroNps === "no" ? K.rd : K.yl, fontFamily: font }}>
+            Micro-NPS requires follow-up
+          </span>
+        )}
       </div>
     </div>
   );

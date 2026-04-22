@@ -1,12 +1,13 @@
 import React from "react";
 import { supabase } from "../auth.js";
+import { invokeProjectFunction, readJsonCache, writeJsonCache } from "../ai/gateway.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
 import { FEATURE_FLAGS } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { K, font, fontD } from "../lib/shared.js";
-import { upsertWorkflowEntry } from "../promograph/index.js";
 import { recommendationToWorkflow } from "../promograph/recommendations.js";
 import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
+import { appendWorkflow } from "../workflows/store.js";
 
 export function AIActionPlan({ proStatus }) {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -23,7 +24,8 @@ export function AIActionPlan({ proStatus }) {
   React.useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
     if (lastGenDate === today) {
-      try { const c = JSON.parse(localStorage.getItem('pg_action_plan_cache') || 'null'); if (c) setPlan(c); } catch {}
+      const cached = readJsonCache("pg_action_plan_cache");
+      if (cached) setPlan(cached);
     }
   }, []);
 
@@ -51,14 +53,14 @@ export function AIActionPlan({ proStatus }) {
       }
       const topPromoType = Object.entries(promoTypeCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
       const hitRate = settled.length >= 3 ? Math.round((hitCount / settled.length) * 100) : null;
-      const { data, error: fnErr } = await supabase.functions.invoke('ai-action-plan', {
-        headers: { Authorization: `Bearer ${session.access_token}` },
+      const data = await invokeProjectFunction(supabase, "ai-action-plan", {
+        session,
         body: { bankroll, booksComplete, recentProfit, ledgerCount: ledger.length, activeBooks, topPromoType, hitRate },
       });
-      if (fnErr) throw fnErr;
       setPlan(data);
       const today = new Date().toISOString().split('T')[0];
-      try { localStorage.setItem('pg_action_plan_date', today); localStorage.setItem('pg_action_plan_cache', JSON.stringify(data)); } catch {}
+      try { localStorage.setItem('pg_action_plan_date', today); } catch {}
+      writeJsonCache("pg_action_plan_cache", data);
       setLastGenDate(today);
     } catch (e) { setError(e.message || 'Failed to generate plan'); }
     finally { setLoading(false); }
@@ -76,8 +78,7 @@ export function AIActionPlan({ proStatus }) {
       nextStep: action.nextStep || "",
       note: action.value || "",
     });
-    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], workflow);
-    syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
+    syncAppData(appendWorkflow(appData || {}, workflow));
     if (toast) toast(`Queued "${action.title}" in workflow inbox.`, K.gn);
   };
 

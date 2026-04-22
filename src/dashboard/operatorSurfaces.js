@@ -1,6 +1,9 @@
 import { buildTargetedAlertPlan } from "../operator/briefing.js";
 import { buildStudioSnapshot } from "../studio/export.js";
+import { getWorkflowActionSlug } from "../workflows/actionGraph.js";
 import { getDashboardSnapshot } from "./today.js";
+
+export { getWorkflowActionSlug } from "../workflows/actionGraph.js";
 
 export function readStoredBankroll() {
   if (typeof window === "undefined") return "";
@@ -37,11 +40,4 @@ export function buildOperatorSurfaceState({
     studioSnapshot,
     alertPlan,
   };
-}
-
-export function getWorkflowActionSlug(workflow) {
-  if (!workflow) return "/track";
-  return workflow.status === "waiting" || workflow.status === "placed"
-    ? "/track"
-    : `/${workflow.calculatorSlug || "track"}`;
 }

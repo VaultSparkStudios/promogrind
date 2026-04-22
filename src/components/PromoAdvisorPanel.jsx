@@ -1,15 +1,15 @@
 import React, { useState, useRef } from "react";
 import { supabase } from "../auth.js";
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? "";
 import { AppDataCtx } from "../contexts.jsx";
+import { hasStreamingGateway, invokeProjectFunction, readDailyUsage, streamProjectFunction, writeDailyUsage } from "../ai/gateway.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useFeatureFlag } from "../lib/featureFlags.js";
 import { useToast } from "../contexts.jsx";
 import { K, font, fontD, S } from "../lib/shared.js";
-import { normalizeRecommendation, upsertWorkflowEntry } from "../promograph/index.js";
+import { normalizeRecommendation } from "../promograph/index.js";
 import { recommendationToWorkflow } from "../promograph/recommendations.js";
+import { appendWorkflow } from "../workflows/store.js";
 
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -23,12 +23,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [uses, setUses] = useState(() => {
-    try {
-      const todayKey = `pg_advisor_uses_${new Date().toISOString().slice(0,10)}`;
-      return parseInt(localStorage.getItem(todayKey) || '0');
-    } catch { return 0; }
-  });
+  const [uses, setUses] = useState(() => readDailyUsage("pg_advisor_uses"));
   const [streamingText, setStreamingText] = useState('');
   const readerRef = useRef(null);
   const toast = useToast();
@@ -55,61 +50,30 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         ? { bankroll: bankrollNum, books: activeBooks.slice(0, 5) }
         : undefined;
 
-      const body = JSON.stringify({ promoText: sanitized, ...(userContext && { userContext }) });
-      const authHeader = session ? { 'Authorization': `Bearer ${session.access_token}` } : {};
+      const body = { promoText: sanitized, ...(userContext && { userContext }) };
 
-      // Use SSE streaming when SUPABASE_URL is available; fallback to supabase.functions.invoke otherwise
-      if (SUPABASE_URL) {
-        const fnUrl = `${SUPABASE_URL}/functions/v1/promo-advisor`;
-        const res = await fetch(fnUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream', ...authHeader },
+      if (hasStreamingGateway()) {
+        await streamProjectFunction("promo-advisor", {
+          session,
+          body,
+          onDelta: (evt) => setStreamingText((prev) => prev + (evt.text || "")),
+          onDone: (evt) => {
+            const data = evt.result;
+            const newUses = Number.isFinite(evt.remaining) ? DAILY_LIMIT - evt.remaining : uses + 1;
+            setUses(newUses);
+            writeDailyUsage("pg_advisor_uses", newUses);
+            setResult(data);
+            setStreamingText("");
+          },
+        });
+      } else {
+        const data = await invokeProjectFunction(supabase, "promo-advisor", {
+          session,
           body,
         });
-
-        if (!res.ok || !res.body) {
-          const errJson = await res.json().catch(() => ({}));
-          throw new Error(errJson?.error || `HTTP ${res.status}`);
-        }
-
-        const reader = res.body.getReader();
-        readerRef.current = reader;
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() ?? '';
-          for (const line of lines) {
-            if (!line.startsWith('data: ')) continue;
-            try {
-              const evt = JSON.parse(line.slice(6));
-              if (evt.type === 'delta') {
-                setStreamingText(prev => prev + (evt.text || ''));
-              } else if (evt.type === 'done') {
-                const data = evt.result;
-                const newUses = Number.isFinite(evt.remaining) ? DAILY_LIMIT - evt.remaining : uses + 1;
-                setUses(newUses);
-                try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
-                setResult(data);
-                setStreamingText('');
-              }
-            } catch { /* malformed SSE */ }
-          }
-        }
-      } else {
-        // Fallback: supabase.functions.invoke (no SUPABASE_URL configured)
-        const { data, error: fnErr } = await supabase.functions.invoke('promo-advisor', {
-          headers: authHeader,
-          body: JSON.parse(body),
-        });
-        if (fnErr) throw fnErr;
         const newUses = Number.isFinite(data?.remaining) ? DAILY_LIMIT - data.remaining : uses + 1;
         setUses(newUses);
-        try { localStorage.setItem(`pg_advisor_uses_${new Date().toISOString().slice(0,10)}`, String(newUses)); } catch {}
+        writeDailyUsage("pg_advisor_uses", newUses);
         setResult(data);
       }
     } catch(e) {
@@ -161,8 +125,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       nextStep: result?.nextStep || "",
       note: result?.hedge || "",
     });
-    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], workflow);
-    syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
+    syncAppData(appendWorkflow(appData || {}, workflow));
     if (toast) toast("Saved to workflow inbox.", K.gn);
   };
 

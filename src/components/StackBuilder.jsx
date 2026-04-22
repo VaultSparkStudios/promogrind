@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase, startTrial } from "../auth.js";
+import { invokeProjectFunction } from "../ai/gateway.js";
 import { FEATURE_FLAGS } from "../launchState.js";
 import { S, In, Tl, FeatureUnavailableCard, Help } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
@@ -35,11 +36,10 @@ export function StackBuilder({ proStatus }) {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Not authenticated');
-      const { data, error: fnErr } = await supabase.functions.invoke('stack-builder', {
-        headers: { Authorization: `Bearer ${session.access_token}` },
+      const data = await invokeProjectFunction(supabase, "stack-builder", {
+        session,
         body: { bankroll: parseFloat(bankroll), booksAvailable },
       });
-      if (fnErr) throw fnErr;
       setPlan(data);
     } catch (e) {
       setError(e.message || 'Failed to generate stack');

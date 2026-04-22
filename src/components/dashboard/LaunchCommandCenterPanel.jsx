@@ -5,9 +5,11 @@ import { K, S, fontD } from "../../lib/shared.js";
 import { AppDataCtx } from "../../contexts.jsx";
 import { appendStudioContractHistory } from "../../studio/export.js";
 import { buildOperatorSurfaceState } from "../../dashboard/operatorSurfaces.js";
+import { getWorkflowActionSlug, normalizeAppRoute } from "../../workflows/actionGraph.js";
 
-export default function LaunchCommandCenterPanel() {
+export default function LaunchCommandCenterPanel({ navigate: navigateProp = null }) {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
+  const navigate = typeof navigateProp === "function" ? navigateProp : null;
   const summary = getLaunchSummary();
   const configuredAffiliates = getConfiguredAffiliateCount();
   const configuredMonetization = getConfiguredMonetizationCount();
@@ -110,6 +112,14 @@ export default function LaunchCommandCenterPanel() {
           <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
             {snapshot.brief.followUps.length ? snapshot.brief.followUps.join(" · ") : "The operator loop will deepen as more workflows and settlements land."}
           </div>
+          {navigate && snapshot.brief.focus?.type && (
+            <button
+              onClick={() => navigate(normalizeAppRoute(snapshot.brief.focus.type === "workflow" ? getWorkflowActionSlug(snapshot.workflows.top[0]) : "/dashboard"))}
+              style={{ marginTop: 10, padding: "6px 12px", background: "transparent", border: `1px solid ${K.ac}35`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer" }}
+            >
+              Open brief focus →
+            </button>
+          )}
           {dashboardSnapshot.topPlaybook?.applicable && dashboardSnapshot.topPlaybook.playbook && (
             <div style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${K.gn}25` }}>
               <div style={{ fontSize: 10, color: K.gn, fontWeight: 700, marginBottom: 4, textTransform: "uppercase", letterSpacing: "1px" }}>Top Matched Playbook</div>
@@ -169,7 +179,11 @@ export default function LaunchCommandCenterPanel() {
         {snapshot.workflows.top.length > 0 && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
             {snapshot.workflows.top.slice(0, 4).map((workflow) => (
-              <div key={workflow.id} style={{ padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+              <div
+                key={workflow.id}
+                onClick={() => navigate && navigate(getWorkflowActionSlug(workflow))}
+                style={{ padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: navigate ? "pointer" : "default" }}
+              >
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: K.tx }}>{workflow.title}</div>
                   <div style={{ fontSize: 10, color: workflow.score >= 90 ? K.gn : K.ac, fontWeight: 700 }}>Score {workflow.score}</div>

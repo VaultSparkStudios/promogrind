@@ -5,9 +5,9 @@ import { getBankrollPosture, getUnfinishedWork } from "../../dashboard/today.js"
 import { getOnboardingProgress } from "../../onboarding.js";
 import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
 // matchPlaybooks is called here as a fallback when snapshot.topPlaybook is not pre-computed
-import { upsertWorkflowEntry } from "../../promograph/index.js";
 import ObservabilityPanel from "./ObservabilityPanel.jsx";
 import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
+import { appendWorkflows } from "../../workflows/store.js";
 
 const TONE = {
   healthy: K.gn,
@@ -36,8 +36,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const queuePlaybook = (playbook) => {
     if (!syncAppData) return;
     const steps = playbookToWorkflows(playbook, {});
-    const nextInbox = steps.reduce((inbox, step) => upsertWorkflowEntry(inbox, step), appData?.workflowInbox || []);
-    syncAppData({ ...(appData || {}), workflowInbox: nextInbox });
+    syncAppData(appendWorkflows(appData || {}, steps));
     if (toast) toast(`Queued ${steps.length} playbook steps: ${playbook.name}`, K.gn);
   };
 

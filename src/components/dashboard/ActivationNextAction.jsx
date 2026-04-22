@@ -5,6 +5,7 @@ import { matchPlaybooks } from "../../playbooks/index.js";
 import { trackEvent } from "../../analytics.js";
 import { K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
+import { normalizeAppRoute } from "../../workflows/actionGraph.js";
 
 export default function ActivationNextAction({ data, totalProfit, openBets, booksComplete, navigate }) {
   const usageLog = (() => { try { return JSON.parse(localStorage.getItem("pg_usage_log") || "{}"); } catch { return {}; } })();
@@ -65,7 +66,7 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
           <button
             onClick={() => {
               trackEvent("next_best_action_clicked", { key: action.key, playbookId: playbook.id });
-              navigate("/" + (playbook.steps[0]?.calculatorSlug || "dashboard"));
+              navigate(normalizeAppRoute(playbook.steps[0]?.calculatorSlug || "dashboard"));
             }}
             style={{ padding: "9px 14px", background: K.gn, border: "none", borderRadius: 8, color: K.bg, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
           >
@@ -85,7 +86,7 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
           <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>{action.body}</div>
         </div>
         <button
-          onClick={() => { trackEvent("next_best_action_clicked", { key: action.key }); navigate("/" + action.slug); }}
+          onClick={() => { trackEvent("next_best_action_clicked", { key: action.key }); navigate(normalizeAppRoute(action.slug)); }}
           style={{ padding: "9px 14px", background: actionColor, border: "none", borderRadius: 8, color: K.bg, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
         >
           {action.cta} →

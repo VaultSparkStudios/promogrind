@@ -2,11 +2,11 @@ import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, get
 import { getLaunchCommandCenter, resolveLaunchValidation } from "../launchState.js";
 import { buildOperatingActionCandidates, selectOperatingDecision } from "../promograph/index.js";
 import { buildPortfolioAllocation } from "../lib/portfolio.js";
-import { buildTrackInsights } from "../track/insights.js";
+import { buildHotLanes, buildTrackInsights } from "../track/insights.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
 import { matchPlaybooks } from "../playbooks/index.js";
 
-function buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates = [] }) {
+function buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates = [], hotLanes = {}, microNps = null }) {
   const rows = [];
 
   if (Array.isArray(actionCandidates) && actionCandidates.length) {
@@ -37,6 +37,24 @@ function buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates = 
     });
   }
 
+  if (Array.isArray(hotLanes?.hotPromoTypes) && hotLanes.hotPromoTypes.length) {
+    rows.push({
+      type: "hot_lane",
+      priority: "medium",
+      title: `Lean into ${hotLanes.hotPromoTypes[0].label}`,
+      detail: `${hotLanes.hotPromoTypes[0].badge} · +$${hotLanes.hotPromoTypes[0].profitSum.toFixed(2)} realized recently.`,
+    });
+  }
+
+  if (microNps && microNps.value && microNps.value !== "yes") {
+    rows.push({
+      type: "micro_nps",
+      priority: "high",
+      title: "Review post-settlement trust friction",
+      detail: `Latest micro-NPS came back "${microNps.value}" after ${microNps.settledCount || 0} settled workflows.`,
+    });
+  }
+
   for (const blocker of commandCenter?.nextActions || []) {
     rows.push({
       type: "launch_blocker",
@@ -49,7 +67,7 @@ function buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates = 
   return rows.slice(0, 6);
 }
 
-function buildAnomalyFeed({ insights, launch }) {
+function buildAnomalyFeed({ insights, launch, microNps = null }) {
   const rows = [];
 
   for (const alert of insights?.topDriftAlerts || []) {
@@ -69,6 +87,16 @@ function buildAnomalyFeed({ insights, launch }) {
       area: "launch",
       label: "Manual launch blockers remain",
       detail: `${launch.unresolvedBlockers} manual blockers are still gating launch proof.`,
+    });
+  }
+
+  if (microNps?.value === "no" || microNps?.value === "mixed") {
+    rows.push({
+      type: "micro_nps",
+      severity: microNps.value === "no" ? "high" : "medium",
+      area: "trust",
+      label: "Post-settlement satisfaction is slipping",
+      detail: `Latest micro-NPS is "${microNps.value}" after ${microNps.settledCount || 0} settled workflows.`,
     });
   }
 
@@ -217,6 +245,7 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
     validation,
   });
   const insights = buildTrackInsights(appData, options.now || new Date());
+  const hotLanes = buildHotLanes(appData, options.now || new Date());
   const inbox = buildWorkflowInbox(appData, {
     now: options.now || new Date(),
     bankroll: options.bankroll ?? appData.bankroll ?? "",
@@ -288,10 +317,19 @@ export function buildStudioSnapshot(appData = {}, options = {}) {
     strongestLane: insights.biggestPositiveDrift?.label || null,
     coldestLane: insights.biggestNegativeDrift?.label || null,
     driftAlerts: insights.topDriftAlerts || [],
+    hotLanes,
+    latestMicroNps: Array.isArray(appData?.microNps) ? appData.microNps[0] || null : null,
   };
   const feeds = {
-    priorities: buildPriorityFeed({ commandCenter, inbox, insights, actionCandidates }),
-    anomalies: buildAnomalyFeed({ insights, launch }),
+    priorities: buildPriorityFeed({
+      commandCenter,
+      inbox,
+      insights,
+      actionCandidates,
+      hotLanes,
+      microNps: intelligence.latestMicroNps,
+    }),
+    anomalies: buildAnomalyFeed({ insights, launch, microNps: intelligence.latestMicroNps }),
   };
   const brief = buildOperatorCommandBrief({
     actionCandidates,

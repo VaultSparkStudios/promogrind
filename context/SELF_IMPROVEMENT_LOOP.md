@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆
-Avgs — 3: 496 | 5: 496 | 10: 496 | 25: 496 | all: 496
-  └ 3-session: Dev 78 | Align 95 | Momentum 82 | Engage 74 | Process 76
-Velocity trend: →  |  Protocol velocity: →  |  Debt: down
-Momentum runway: ~4.2 sessions  |  Intent rate: achieved with redirect
-Last session: 2026-04-22 | Session 66 | Total: 496/1000 | Velocity: 7 | protocolVelocity: 3
+Sparkline (last 5 totals): ██
+Avgs — 3: 524.5 [N=2] | 5: 524.5 [N=2] | 10: 524.5 [N=2] | 25: 524.5 [N=2] | all: 524.5
+  └ 3-session: Dev 82.0 [N=2] | Align 95.5 [N=2] | Momentum 84.5 [N=2] | Engage 76.0 [N=2] | Process 80.0 [N=2]
+Velocity trend: ↑  |  Protocol velocity: →  |  Debt: down
+Momentum runway: ~0.5 sessions  |  Intent rate: 50% achieved (last 2)
+Last session: 2026-04-22 | Session 67 | Total: 553/1000 | Velocity: 4 | protocolVelocity: 3
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,6 +93,35 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 1.
 2.
 3.
+
+### 2026-04-22 — Session 67 | Total: 553/1000 | Velocity: 4 | Debt: down
+Rolling avg (last 3): Dev 82.0 | Align 95.5 | Momentum 84.5 | Engage 76.0 | Process 80.0 | Coher 21.0 | Sec 16.5 | Eco 28.5 | Cap 21.5 | Auto 19.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 86 | ↑ | Shared app-shell, workflow, and AI seams landed cleanly and the repo stayed green at `296/296` with build passing. |
+| Creative Alignment | 96 | ↑ | The product is materially closer to the operator-grade, cohesive system direction set earlier in the day. |
+| Momentum | 87 | ↑ | The highest-leverage unblocked architecture tranche shipped rather than remaining on the board. |
+| Engagement | 78 | ↑ | Post-settlement hot-lane and micro-NPS signals now shape operator surfaces, but no live-user validation moved this session. |
+| Process Quality | 84 | ↑ | Handoff, state, task, truth, and audit surfaces now describe Session 67 instead of the prior ops-only tranche. |
+| Cross-Repo Coherence | 24 | ↑ | Shared truth parsing reduced local drift, but doctor still blocks on a yellow genome without a remediation path. |
+| Security Posture | 17 | ↑ | No new secrets surface was introduced and closeout still includes a scan, but there was no broader security expansion. |
+| Ecosystem Integration | 33 | ↑ | Export, observability, launch cockpit, and startup/state surfaces now consume the deeper operator loop more coherently. |
+| Capital Efficiency | 26 | ↑ | Shared AI gateway and deterministic routing reduce future duplicate calls and repeated orchestration churn. |
+| Automation Coverage | 22 | ↑ | More of the product now flows through reusable seams, but closeout autopilot still cannot complete honestly. |
+| **Total** | **553 / 1000** | | |
+
+**Top win:** the app’s biggest local debt was retired by making shell state, workflow mutations, AI invocation, and truth parsing shared seams instead of per-surface improvisation.
+
+**Top gap:** the remaining scanner/community execution paths and live Supabase migrations still sit outside the fully unified contract, so the last mile is not done.
+
+**Intent outcome:** Achieved. The stated `/go` tranche shipped, and closeout truth now matches what actually landed.
+
+**Brainstorm**
+
+1. Add a settlement-driven mastery ladder that rewards lane diversity, trust, and execution quality instead of generic streaks.
+2. Auto-route scanner and community findings into the shared workflow graph with remote reconciliation once live migrations are in place.
+3. Move doctor, startup, and closeout onto the same truth helper so yellow-genome sessions stop blocking honest automation.
 
 ### 2026-04-22 — Session 66 | Total: 496/1000 | Velocity: 7 | Debt: down
 Rolling avg (last 3): Dev 78 | Align 95 | Momentum 82 | Engage 74 | Process 76 | Coher 18 | Sec 16 | Eco 24 | Cap 17 | Auto 16

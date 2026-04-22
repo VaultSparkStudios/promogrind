@@ -1,4 +1,5 @@
 import { BOOKS, getConfiguredMonetizationCount } from "./books.js";
+import { buildHotLanes } from "./track/insights.js";
 
 function toNumber(value) {
   const parsed = Number.parseFloat(value);
@@ -60,6 +61,7 @@ export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {
   const waitingWorkflows = workflows.filter((entry) => ["waiting", "placed", "pending", "open"].includes(String(entry.status || "").toLowerCase()));
   const openWorkflows = workflows.filter((entry) => ["queued", "ready", "placed", "waiting", "pending", "open"].includes(String(entry.status || "").toLowerCase()));
   const latestMicroNps = microNps[0] || null;
+  const hotLanes = buildHotLanes(appData, now);
   const activationScore =
     (calculatorsUsed.length ? 30 : 0) +
     (Object.values(appData.done || {}).filter(Boolean).length ? 30 : 0) +
@@ -81,5 +83,6 @@ export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {
     latestMicroNps: latestMicroNps?.value || null,
     latestMicroNpsSettledCount: toNumber(latestMicroNps?.settledCount) || 0,
     aiUsage: buildAiUsageSnapshot(aiEvents.length ? aiEvents : appData.vaultEvents, now),
+    hotLanes,
   };
 }

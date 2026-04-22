@@ -30,3 +30,12 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: falsify `truthGenome` to green so autopilot passes; skip closeout; use `--no-verify`.
 - Why this was chosen: it preserves truthful repo state, keeps the safety gates that do work, and avoids introducing a dishonest or bypassed closeout artifact.
 - Follow-up: downgrade non-red genome states from blocking for public-safe repos or give doctor a legitimate remediation path before requiring autopilot as a hard gate.
+
+### 2026-04-22 - Shared app-shell, workflow graph, and AI gateway are now the canonical orchestration seams
+
+- Status: accepted
+- Context: PromoGrind had strong feature depth but too much component-local orchestration in `src/App.jsx` and across the AI/dashboard surfaces, which made feedback loops, persistence, and token governance inconsistent.
+- Decision: treat `src/app/usePromoAppShell.js`, `src/workflows/store.js`, `src/workflows/actionGraph.js`, and `src/ai/gateway.js` as the canonical product seams for shell state, mutation routing, action resolution, and model invocation.
+- Alternatives considered: continue with ad hoc component-local state; add one-off helpers to each surface without introducing shared contracts.
+- Why this was chosen: it lowers local architecture debt, makes operator-facing recommendations deterministic enough to govern, and gives the remaining scanner/community surfaces a clear path onto the same contract.
+- Follow-up: migrate the remaining scanner/community execution paths and live Supabase persistence onto these seams, then expand regression coverage around the shared contract.

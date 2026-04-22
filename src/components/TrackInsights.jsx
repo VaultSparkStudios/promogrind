@@ -3,7 +3,7 @@ import { AppDataCtx } from "../contexts.jsx";
 import { K, f, font, fontD } from "../lib/shared.js";
 import { S, Tl } from "../ui.jsx";
 import { buildTrackInsights, formatPromoTypeLabel, updateResultFeedback } from "../track/insights.js";
-import { upsertWorkflowEntry } from "../promograph/index.js";
+import { patchWorkflowState } from "../workflows/store.js";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -78,15 +78,19 @@ export default function TrackInsights() {
       book: draft.book ?? entry.book,
       updatedAt: nextTimestamp,
     });
-    const nextInbox = upsertWorkflowEntry(appData?.workflowInbox || [], {
+    syncAppData(patchWorkflowState({
+      ...appData,
+      resultFeedback: nextEntries,
+    }, {
       ...entry,
+      id: entry.id,
+    }, {
       status: "settled",
       actualProfit: draft.actualProfit,
       calculatorAccurate: draft.calculatorAccurate || "yes",
       book: draft.book ?? entry.book,
       updatedAt: nextTimestamp,
-    });
-    syncAppData({ ...appData, resultFeedback: nextEntries, workflowInbox: nextInbox });
+    }));
     setDrafts((current) => ({ ...current, [entry.id]: { actualProfit: "", calculatorAccurate: "yes", book: draft.book ?? entry.book } }));
   };
 

@@ -1,6 +1,7 @@
 import { BOOKS, getRecommendedBooksForUser, hasConfiguredMonetizationLinks } from "../books.js";
 import { buildOperatingActionCandidates, selectOperatingDecision, summarizeWorkflows } from "../promograph/index.js";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
+import { getWorkflowActionSlug } from "../workflows/actionGraph.js";
 import { matchPlaybooks } from "../playbooks/index.js";
 import { buildPortfolioAllocation } from "../lib/portfolio.js";
 
@@ -200,7 +201,7 @@ export function getNextBestAction({ usageLog = {}, bankroll = "", totalProfit = 
     title: decision.title,
     body: decision.body,
     cta: decision.cta,
-    slug: decision.slug,
+    slug: decision.slug || getWorkflowActionSlug(topWorkflow),
     tone: decision.tone,
     score: decision.score,
     focus: decision.focus || null,

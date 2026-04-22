@@ -18,33 +18,13 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
+import { extractBetween, extractSection, readJson, readText } from './lib/context-parsing.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
 const projectIdx = process.argv.indexOf('--project');
 const targetPath = projectIdx !== -1 ? path.resolve(process.argv[projectIdx + 1]) : ROOT;
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function readJson(p, fb = {}) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; }
-}
-function readText(p) {
-  try { return fs.readFileSync(p, 'utf8'); } catch { return ''; }
-}
-function extractSection(content, heading) {
-  const parts = content.split(/^## /m);
-  const match = parts.find(p => p.startsWith(heading));
-  if (!match) return '';
-  const nl = match.indexOf('\n');
-  return nl === -1 ? '' : match.slice(nl + 1);
-}
-function extractBetween(content, start, end) {
-  const si = content.indexOf(start);
-  const ei = content.indexOf(end);
-  if (si === -1 || ei === -1 || ei <= si) return '';
-  return content.slice(si + start.length, ei).trim();
-}
 
 // ── Load sources ──────────────────────────────────────────────────────────────
 const ctx = (f) => path.join(targetPath, 'context', f);

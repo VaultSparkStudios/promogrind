@@ -2,7 +2,8 @@ import React, { useMemo, useState } from "react";
 import { AppDataCtx } from "../contexts.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
-import { normalizePromoType, upsertWorkflowEntry } from "../promograph/index.js";
+import { normalizePromoType } from "../promograph/index.js";
+import { patchWorkflowState, writeWorkflowFeedback } from "../workflows/store.js";
 
 export default function ResultFeedbackCard({
   calculatorKey,
@@ -47,10 +48,15 @@ export default function ResultFeedbackCard({
   if (!syncAppData || roundedExpected === null) return null;
 
   const writeEntries = (nextEntries, workflowEntry = null) => {
-    const nextWorkflowInbox = workflowEntry
-      ? upsertWorkflowEntry(appData?.workflowInbox || [], workflowEntry)
-      : appData?.workflowInbox || [];
-    syncAppData({ ...appData, resultFeedback: nextEntries, workflowInbox: nextWorkflowInbox });
+    if (!workflowEntry) {
+      syncAppData({ ...appData, resultFeedback: nextEntries });
+      return;
+    }
+    syncAppData(writeWorkflowFeedback(
+      { ...appData, resultFeedback: nextEntries },
+      nextEntries.find((entry) => entry?.id === workflowEntry.id) || workflowEntry,
+      workflowEntry,
+    ));
   };
 
   const record = (nextStatus) => {
@@ -92,23 +98,20 @@ export default function ResultFeedbackCard({
       note,
       updatedAt: new Date().toISOString(),
     };
-    writeEntries(updateResultFeedback(entries, entryId, patch), {
+    syncAppData(patchWorkflowState({
+      ...appData,
+      resultFeedback: updateResultFeedback(entries, entryId, patch),
+    }, {
       id: entryId,
       calculatorKey,
       calculatorLabel,
       promoType: normalizePromoType(promoType),
-      status: "settled",
+      status: "placed",
       expectedProfit: roundedExpected,
-      actualProfit,
-      calculatorAccurate: accuracy,
-      book,
-      frictionReason,
-      note,
       title: calculatorLabel || "Calculator workflow",
       summary: `Settled from ${calculatorLabel || "calculator"} workflow.`,
       source: "calculator_result",
-      updatedAt: patch.updatedAt,
-    });
+    }, patch));
     setStatus("settled");
   };
 

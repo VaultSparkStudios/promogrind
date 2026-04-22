@@ -1,3 +1,5 @@
+import { getWorkflowActionSlug, normalizeAppRoute } from "../workflows/actionGraph.js";
+
 export function buildTargetedAlertPlan(input = {}) {
   const {
     snapshot = {},
@@ -46,7 +48,7 @@ export function buildTargetedAlertPlan(input = {}) {
       headline: `Try: ${pb.name}`,
       body: `${pb.summary} — ${fitLine}`,
       ctaLabel: `Start: ${pb.steps[0]?.title || "Step 1"}`,
-      ctaSlug: `/${pb.steps[0]?.calculatorSlug || "bonus-bet"}`,
+      ctaSlug: normalizeAppRoute(pb.steps[0]?.calculatorSlug || "bonus-bet"),
       tags: ["playbook", pb.id],
     });
   }
@@ -58,7 +60,7 @@ export function buildTargetedAlertPlan(input = {}) {
       headline: topWorkflow.title || "Advance top workflow",
       body: topWorkflow.scoreSummary || topWorkflow.summary || "Highest-value workflow is ready for action.",
       ctaLabel: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "Open Track" : "Open workflow",
-      ctaSlug: topWorkflow.status === "waiting" || topWorkflow.status === "placed" ? "/track" : `/${topWorkflow.calculatorSlug || "track"}`,
+      ctaSlug: getWorkflowActionSlug(topWorkflow),
       tags: ["workflow", topWorkflow.status || "queued"],
     });
   }

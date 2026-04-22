@@ -136,8 +136,7 @@ const truth       = readText(path.join(root, 'context', 'TRUTH_AUDIT.md'));
 const csmd        = readText(path.join(root, 'context', 'CURRENT_STATE.md'));
 const sessionPlan = readText(path.join(root, 'docs', 'SESSION_PLAN.md'));
 const cdr         = readText(path.join(root, 'docs', 'CREATIVE_DIRECTION_RECORD.md'));
-const revSig      = readText(path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'))
-                 || readText(path.join(root, 'docs', 'REVENUE_SIGNALS.md'));
+const revSig      = readText(path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'));
 const complianceHistory = readJson(path.join(root, 'context', 'COMPLIANCE_HISTORY.json'), { snapshots: [] });
 const intentPlan  = readText(path.join(root, 'context', 'SESSION_INTENT_PLAN.md'));
 const humanPressure = readJson(path.join(root, 'portfolio', 'compiled', 'HUMAN_ACTION_PRESSURE.json'), { items: [] });
@@ -159,13 +158,11 @@ const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
 const silHeader = extractBetween(sil, '<!-- rolling-status-start -->', '<!-- rolling-status-end -->');
 
 const silTotalMatch = silHeader.match(/Total:\s*(\d+)\/(\d+)/);
-const silTotalFromHeader = parseInt(silTotalMatch?.[1] ?? '') || 0;
-const silTotal      = silTotalFromHeader || status.silScore || 0;
+const silTotal      = parseInt(silTotalMatch?.[1] ?? '') || 0;
 const silMax        = parseInt(silTotalMatch?.[2] ?? '') || status.silMax || 1000;
-const velocity      = parseInt(silHeader.match(/Velocity:\s*(\d+)/)?.[1] ?? '') || status.silVelocity || 0;
-const sparkline     = silHeader.match(/Sparkline[^:]*:\s*([▁▂▃▄▅▆▇█ ]+)/)?.[1]?.trim()
-                   ?? (Array.isArray(status.silSparkline) && status.silSparkline.length ? spark(status.silSparkline, silMax) : '');
-const avg3Raw       = parseFloat(silHeader.match(/Avgs — 3:\s*([\d.]+)/)?.[1] ?? '') || status.silAvg3 || null;
+const velocity      = parseInt(silHeader.match(/Velocity:\s*(\d+)/)?.[1] ?? '') || 0;
+const sparkline     = silHeader.match(/Sparkline[^:]*:\s*([▁▂▃▄▅▆▇█ ]+)/)?.[1]?.trim() ?? '';
+const avg3Raw       = parseFloat(silHeader.match(/Avgs — 3:\s*([\d.]+)/)?.[1] ?? '') || null;
 const runwayRaw     = silHeader.match(/[Mm]omentum runway:\s*([^|]+)/)?.[1]?.trim()
                    ?? silHeader.match(/Runway:\s*([^|]+)/)?.[1]?.trim()
                    ?? 'unknown';
@@ -337,8 +334,8 @@ const candidateDates = [
   lastSilDate,
   status.lastUpdated,
   status.lastHandoffDate,
-  status.silLastDate,
-].filter((value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value));
+  status.silLastSession,
+].filter(Boolean);
 const freshestDate = candidateDates.length > 0
   ? candidateDates.sort().slice(-1)[0]  // max lex-sorted date
   : null;

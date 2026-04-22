@@ -7,6 +7,7 @@ import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBr
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import { computeStreak } from "./lib/streaks.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
+import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
@@ -64,6 +65,7 @@ import UserMenu from "./components/UserMenu.jsx";
 import AuthDialog from "./components/AuthDialog.jsx";
 import BookCTA from "./components/BookCTA.jsx";
 import ShareCard from "./components/ShareCard.jsx";
+import { getQuickCalcFallbackSlug } from "./workflows/actionGraph.js";
 
 /*
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -3522,63 +3524,29 @@ export default function App() {
   const [proStatus, setProStatus] = useState(null);
   const [authModalMode, setAuthModalMode] = useState(() => getProjectAuthMode(window.location.search));
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => { try { return localStorage.getItem('pg_theme') !== 'light'; } catch { return true; } });
-  Object.assign(K, darkMode ? KD : KL);
-  useEffect(() => { try { localStorage.setItem('pg_theme', darkMode ? 'dark' : 'light'); } catch {} document.body.style.background = K.bg; document.body.style.color = K.tx; if (darkMode) { document.body.classList.remove('light'); } else { document.body.classList.add('light'); } }, [darkMode]);
-  const toggleTheme = () => setDarkMode(d => !d);
-  const [compactMode, setCompactMode] = useState(() => {
-    try { return localStorage.getItem('pg_compact')==='true'; } catch { return false; }
-  });
-  const toggleCompact = () => setCompactMode(c => { const n=!c; try{localStorage.setItem('pg_compact',String(n));}catch{}; return n; });
-  const [appData, setAppData] = useState(() => { try { return JSON.parse(localStorage.getItem('promo_engine_v3'))||{}; } catch { return {}; } });
-  const [syncStatus, setSyncStatus] = useState(null);
-  const [syncDiagnostics, setSyncDiagnostics] = useState(() => readSyncDiagnostics());
-  const syncTimer = useRef(null);
-  // Responsive breakpoint
-  const [winW, setWinW] = useState(() => typeof window !== 'undefined' ? window.innerWidth : 1200);
-  useEffect(() => {
-    const h = () => setWinW(window.innerWidth);
-    window.addEventListener('resize', h, { passive: true });
-    return () => window.removeEventListener('resize', h);
-  }, []);
-  const isMobile = winW < 640;
-  const isTablet = winW >= 640 && winW < 1024;
+  const {
+    darkMode,
+    toggleTheme,
+    compactMode,
+    toggleCompact,
+    appData,
+    setAppData,
+    syncAppData,
+    syncStatus,
+    syncDiagnostics,
+    winW,
+    isMobile,
+    isTablet,
+    currency,
+    setCurrency,
+    currencyCtxVal,
+    isOnline,
+    showCalcSearch,
+    setShowCalcSearch,
+    showOnboarding,
+    dismissOnboarding,
+  } = usePromoAppShell({ onboardingKey: ONBOARDING_KEY });
   const [calcSubcat, setCalcSubcat] = useState("All");
-  const [currency, setCurrency] = useState(()=>{ try{return localStorage.getItem('pg_currency')||'USD';}catch{return 'USD';} });
-  const currencyCtxVal = useMemo(()=>{ const fx=FX[currency]||FX.USD; return {...fx,fmt:(n)=>fx.sym+f(n*(fx.rate||1))}; },[currency]);
-  const [isOnline, setIsOnline] = useState(() => { try { return navigator.onLine; } catch { return true; } });
-  useEffect(() => {
-    const onOnline = () => {
-      setIsOnline(true);
-      setSyncDiagnostics(readSyncDiagnostics());
-      try {
-        if(localStorage.getItem('pg_sync_pending')) {
-          saveData(appData).then(()=>{
-            localStorage.removeItem('pg_sync_pending');
-            setSyncDiagnostics(readSyncDiagnostics());
-          }).catch(()=>{
-            setSyncDiagnostics(readSyncDiagnostics());
-          });
-        }
-      } catch(e) {}
-    };
-    const onOffline = () => {
-      setIsOnline(false);
-      setSyncDiagnostics(readSyncDiagnostics());
-    };
-    window.addEventListener('online', onOnline);
-    window.addEventListener('offline', onOffline);
-    return () => { window.removeEventListener('online', onOnline); window.removeEventListener('offline', onOffline); };
-  }, []);
-  useEffect(() => {
-    loadData().then(d => {
-      if(d) setAppData(d);
-      const diag = readSyncDiagnostics();
-      setSyncDiagnostics(diag);
-      // Flush any writes queued during a prior offline session
-      if (diag.hasPendingWrites) triggerQueueFlush().catch(() => {});
-    });
-  }, []);
   useEffect(() => {
     try {
       if(!sessionStorage.getItem('pg_session_start')) {
@@ -3593,28 +3561,6 @@ export default function App() {
       }
     } catch(e) {}
   }, [appData]);
-  const syncAppData = (d) => {
-    setAppData(d);
-    setSyncStatus('syncing');
-    saveData(d).then(() => {
-      setSyncStatus('saved');
-      setSyncDiagnostics(readSyncDiagnostics());
-      clearTimeout(syncTimer.current);
-      syncTimer.current = setTimeout(() => setSyncStatus(null), 2000);
-    }).catch(() => {
-      setSyncStatus(null);
-      try { localStorage.setItem('pg_sync_pending', 'true'); } catch(e) {}
-      setSyncDiagnostics(readSyncDiagnostics());
-    });
-  };
-  const [showCalcSearch, setShowCalcSearch] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(() => {
-    try { return !localStorage.getItem(ONBOARDING_KEY); } catch { return false; }
-  });
-  const dismissOnboarding = () => {
-    try { localStorage.setItem(ONBOARDING_KEY, '1'); } catch {}
-    setShowOnboarding(false);
-  };
   const prevSlugRef = useRef(null);
   const tabMemory = useRef({});
   const navigate = useNavigate();
@@ -3904,19 +3850,7 @@ export default function App() {
       const detail = event?.detail || {};
       if (findAndOpen(detail.calculatorSlug || detail.slug)) return;
 
-      const fallbackMap = {
-        bonus_bet: "bonus-bet",
-        bonus: "bonus-bet",
-        profit_boost: "profit-boost",
-        boost: "profit-boost",
-        safety_net: "first-bet",
-        firstbet: "first-bet",
-        deposit_match: "deposit-match",
-        insurance: "insurance",
-        parlay: "parlay",
-        arb: "arb-2way",
-      };
-      findAndOpen(fallbackMap[String(detail.type || "").toLowerCase()] || "bonus-bet");
+      findAndOpen(getQuickCalcFallbackSlug(detail.type));
     };
 
     window.addEventListener("pg:quick-calc", handler);

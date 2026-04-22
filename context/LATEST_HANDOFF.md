@@ -1,36 +1,43 @@
 # Latest Handoff
 
 Last updated: 2026-04-22
-Session: 66
-Session Intent: Audit PromoGrind, identify the highest-leverage improvements, execute the top unblocked `/go` items, and leave the repo in a truthful closeout-ready state.
-Intent Outcome: Achieved with scope redirected into truth-surface repair before app-side feature implementation.
-Where we stopped: closeout-complete on the truth/ops tranche; the next real product seam is `src/App.jsx` decomposition and workflow/action-graph unification.
+Session: 67
+Session Intent: Execute the highest-leverage unblocked `/go` tranche by moving PromoGrind onto shared app-shell, workflow, AI, and truth-parsing seams, then leave repo truth aligned with what actually shipped.
+Intent Outcome: Achieved. Shared shell/workflow/AI layers are in, operator surfaces now consume deeper post-settlement signals, and the remaining blockers are external launch/migration work rather than local architecture debt.
+Where we stopped: core app orchestration is no longer the main bottleneck; the next real seam is extending the shared contract into the remaining scanner/community execution surfaces and applying the live Supabase/launch-proof blockers.
+
+## Where We Left Off (Session 67)
+
+- Shipped: 5 improvements across app-shell architecture, AI/workflow unification, operator feedback loops, truth parsing, and closeout/truth alignment
+- Tests: 296 passing (296 total) · delta: +0
+- Deploy: pending
 
 ## What was completed
 
-- restored `scripts/lib/human-action-ages.mjs`, which unblocked `scripts/render-startup-brief.mjs`
-- patched runtime-pack synthesis and local IGNIS rescoring so this repo can regenerate status surfaces without a private portfolio registry
-- refreshed revenue signals and reran IGNIS to `47857 FORGE`
-- repaired manifest/runtime-pack capability truth to match the actual deployed app surface
-- rewrote template-grade `CURRENT_STATE`, `LATEST_HANDOFF`, `SOUL`, `PROJECT_STATUS`, and `TRUTH_AUDIT` surfaces with real project state
-- regenerated contracts, runtime pack, genome history, state vector, doctor score, and startup brief from repaired truth
+- extracted shared app-shell state into `src/app/usePromoAppShell.js`, pulling theme/compact/sync/currency/onboarding persistence out of the `src/App.jsx` monolith
+- added shared workflow mutation and route helpers in `src/workflows/store.js` and `src/workflows/actionGraph.js`, then rewired dashboard, Track, feedback, and AI surfaces onto them
+- added shared AI invocation/caching helpers in `src/ai/gateway.js`, then moved Promo Advisor, Promo Chat, AI Action Plan, and Stack Builder onto one governed call path
+- surfaced hot-lane and micro-NPS signals into Studio export, observability, launch cockpit, and targeted operator routing so post-settlement feedback now changes what the operator sees next
+- extracted shared truth parsing into `scripts/lib/context-parsing.mjs` and moved startup/state-vector renderers onto it
+- kept the repo green after the refactor: `npm run build` and `npm test` both pass (`296/296`)
 
 ## What is mid-flight
 
-- app-side work remains product-depth oriented, with the highest leverage seam still the monolithic orchestration in `src/App.jsx`
-- protocol genome is still yellow at `12/25`, so the repo is operationally coherent but not yet fully hardened against future drift
+- some execution surfaces still bypass the new shared contract, especially the remaining scanner/community paths
+- doctor still treats the yellow `13/25` protocol genome as a blocking local failure, so automated closeout remains unavailable even though repo truth is coherent enough to ship a manual closeout
+- protocol genome is still yellow at `13/25`, so the repo is operationally coherent but not yet fully hardened against future drift
 
 ## What to do next
 
-1. Split `src/App.jsx` into a product shell plus operator-loop modules.
-2. Unify calculator, AI, scanner, and community outcomes into one workflow/action graph.
-3. Deepen the post-settlement feedback loop and shared AI gateway so recommendations get better while token waste falls.
+1. Extend the shared AI/workflow contract into remaining scanner/community execution surfaces so every recommendation and persistence path uses the same mutation model.
+2. Apply Supabase workflow/entity sync and feature-flag migrations live, then verify remote persistence for the unified workflow loop.
+3. Finish launch proof: real affiliate links, Stripe smoke, production VAPID, and friend beta.
 
 ## Constraints
 
 - This public repo does not carry the full private Studio Ops layer; use repo-local truth files instead of assuming portfolio scripts exist.
 - Avoid rerunning broad repair scripts blindly: `ops-onboard --repair --write` can overwrite valid repo-local truth with scaffolds.
-- Launch proof is still not done: production VAPID, real affiliate links, and Stripe smoke remain external gating items.
+- Launch proof is still not done: production VAPID, real affiliate links, Stripe smoke, and live Supabase migrations remain external gating items.
 
 ## Read these first next session
 
@@ -44,4 +51,5 @@ Where we stopped: closeout-complete on the truth/ops tranche; the next real prod
 - `context/TRUTH_AUDIT.md`
 - `context/LATEST_HANDOFF.md`
 - `context/CURRENT_STATE.md`
-- `src/App.jsx`
+- `src/components/dashboard/LaunchCommandCenterPanel.jsx`
+- `src/studio/export.js`

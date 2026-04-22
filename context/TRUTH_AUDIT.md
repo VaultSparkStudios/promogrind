@@ -3,7 +3,7 @@
 
 Last reviewed: 2026-04-22
 Overall status: yellow
-Next action: consolidate startup/closeout truth parsing into one tested helper so repaired repo-local truth stays stable across future automation passes.
+Next action: finish moving doctor/closeout generation onto the shared truth helper and stop treating yellow local genome states as hard-closeout blockers for public-safe repos.
 
 ---
 
@@ -20,11 +20,11 @@ Next action: consolidate startup/closeout truth parsing into one tested helper s
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 3 | `PROJECT_STATUS.json` was clobbered by repair automation and restored manually; manifest/runtime-pack now agree on deployed public-unlaunched state, but this path is still fragile. |
-| Prompt/template alignment | 3 | Canonical template versions are aligned, but repo-local continuity files were still placeholders after ops repair and needed manual write-back. |
-| Derived-view freshness | 3 | Revenue signals, IGNIS, contracts, runtime pack, genome history, and startup rendering were regenerated after status repair; the remaining drag is historical template-era output, not current generation failure. |
-| Handoff continuity | 2 | `LATEST_HANDOFF.md` and `CURRENT_STATE.md` now reflect real work instead of scaffolds, but they are session-repair quality rather than closeout-quality narrative continuity. |
-| Contradiction density | 2 | Major contradictions are reduced, but historical drift between status, doctor, contracts, and startup surfaces means the repo is not yet fully contradiction-clean. |
+| Schema alignment | 3 | `PROJECT_STATUS.json`, `CURRENT_STATE.md`, and `LATEST_HANDOFF.md` now agree on the shipped shared-shell/workflow/AI tranche, but live Supabase migration status is still manual truth. |
+| Prompt/template alignment | 3 | Canonical template versions are aligned and closeout surfaces are no longer scaffold-grade, though doctor/autopilot assumptions still lag the public-safe repo reality. |
+| Derived-view freshness | 3 | Startup brief, compact handoff, state vector, and other derived surfaces can now read the shared parsing helper, but some doctor/closeout paths still use duplicated logic. |
+| Handoff continuity | 2 | Session 67 handoff now reflects the shipped architecture tranche; the remaining weakness is that autopilot cannot carry that continuity through automatically. |
+| Contradiction density | 2 | The big local contradictions are resolved, but the repo still has an operational contradiction where truthful yellow genome state is treated as a blocking closeout failure. |
 | **Total** | **13 / 25** | Yellow: core truth is restorable and mostly coherent, but derived surfaces remain vulnerable to repair-script regression. |
 
 ---
@@ -34,20 +34,20 @@ Next action: consolidate startup/closeout truth parsing into one tested helper s
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
 | Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | yellow | 2026-04-22 | Keep this file authoritative and avoid broad repair writes that collapse it. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief | yellow | 2026-04-22 | Replace with closeout-grade notes at next session close. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | yellow | 2026-04-22 | Maintain manual closeout write-back until autopilot stops blocking on non-red local genome states. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-22 | Keep manifest as source of capability truth. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-22 | Fresh rescore landed and derived IGNIS surfaces now agree on `47857 FORGE`. |
-| Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/human-action-ages.mjs` | `docs/STARTUP_BRIEF.md` | yellow | 2026-04-22 | Monitor after helper restore; add regression coverage later. |
+| Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | yellow | 2026-04-22 | Extend the same parser into doctor/closeout surfaces so startup is not the only truthful renderer. |
 
 ---
 
 ## Current Contradictions
 
-- `context/PROJECT_STATUS.json` was briefly reduced to IGNIS-only fields by `ops-onboard --repair --write`; this audit reflects the manual restoration.
+- `run-doctor` still blocks closeout on a yellow `13/25` genome even though the repo’s canonical truth surfaces are consistent enough for an honest manual closeout.
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 
 ## Resolved This Session
 
-- Restored the missing `scripts/lib/human-action-ages.mjs` dependency so startup brief rendering no longer fails.
-- Patched runtime-pack and local IGNIS rescoring to support single-repo/public-safe execution without a private portfolio registry.
-- Repaired manifest/runtime-pack capability truth so the app is no longer misreported as lacking auth, AI, community, analytics, storage, or publishing.
+- Added `scripts/lib/context-parsing.mjs` and moved startup/state-vector rendering onto the shared truth parser.
+- Refreshed handoff, task, state, status, and audit surfaces so Session 67 architecture work is now the canonical repo narrative.
+- Reduced local orchestration drift by centralizing app-shell, workflow, and AI seams instead of continuing component-local truth and routing.

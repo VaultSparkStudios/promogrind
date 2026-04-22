@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { hasStreamingGateway, incrementDailyUsage, readDailyUsage, streamProjectFunction } from "../ai/gateway.js";
 import { K, font, fontD } from "../lib/shared.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { LoadingState } from "../ui.jsx";
 import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? "";
 
 // Daily message limits per tier
 const LIMITS = { scout: 20, runner: 50, closer: Infinity, house: Infinity };
@@ -38,9 +37,8 @@ const PromoChat = ({ navigate }) => {
   });
 
   const dailyLimit = getTierLimit(subPlan);
-  const todayKey = `pg_chat_uses_${new Date().toISOString().slice(0, 10)}`;
-  const getUsesToday = () => { try { return parseInt(localStorage.getItem(todayKey) || '0'); } catch { return 0; } };
-  const incUsesToday = () => { try { localStorage.setItem(todayKey, String(getUsesToday() + 1)); } catch {} };
+  const getUsesToday = () => readDailyUsage("pg_chat_uses");
+  const incUsesToday = () => incrementDailyUsage("pg_chat_uses");
 
   const [chatRemaining, setChatRemaining] = useState(() => {
     const used = getUsesToday();
@@ -96,52 +94,28 @@ const PromoChat = ({ navigate }) => {
         },
       });
 
-      const fnUrl = `${SUPABASE_URL}/functions/v1/promo-chat`;
-      const res = await fetch(fnUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json',
-          'Accept': 'text/event-stream',
+      if (!hasStreamingGateway()) throw new Error("Streaming gateway unavailable");
+      let fullText = "";
+      await streamProjectFunction("promo-chat", {
+        session,
+        body: JSON.parse(body),
+        onDelta: (evt) => {
+          fullText += evt.text || "";
+          setMessages((prev) => prev.map((message) =>
+            message._id === streamingId ? { ...message, content: fullText } : message,
+          ));
         },
-        body,
+        onDone: (evt) => {
+          incUsesToday();
+          const newRemaining = dailyLimit === Infinity ? Infinity : Math.max(0, dailyLimit - getUsesToday());
+          setChatRemaining(newRemaining);
+          setMessages((prev) => prev.map((message) =>
+            message._id === streamingId
+              ? { role: "assistant", content: fullText || "No response.", suggestions: evt.suggestions || [] }
+              : message,
+          ));
+        },
       });
-
-      if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-      let fullText = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          try {
-            const evt = JSON.parse(line.slice(6));
-            if (evt.type === 'delta') {
-              fullText += evt.text;
-              setMessages(prev => prev.map(m =>
-                m._id === streamingId ? { ...m, content: fullText } : m,
-              ));
-            } else if (evt.type === 'done') {
-              incUsesToday();
-              const newRemaining = dailyLimit === Infinity ? Infinity : Math.max(0, dailyLimit - getUsesToday());
-              setChatRemaining(newRemaining);
-              setMessages(prev => prev.map(m =>
-                m._id === streamingId
-                  ? { role: 'assistant', content: fullText || 'No response.', suggestions: evt.suggestions || [] }
-                  : m,
-              ));
-            }
-          } catch { /* malformed SSE */ }
-        }
-      }
     } catch (e) {
       setMessages(prev => prev.map(m =>
         m._id === streamingId

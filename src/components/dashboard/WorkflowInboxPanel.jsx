@@ -2,9 +2,10 @@ import React from "react";
 import { AppDataCtx, useToast } from "../../contexts.jsx";
 import { K, font, fontD, f } from "../../lib/shared.js";
 import { buildWorkflowInbox } from "../../workflows/inbox.js";
-import { formatPromoTypeLabel, upsertWorkflowEntry } from "../../promograph/index.js";
-import { updateResultFeedback } from "../../track/insights.js";
+import { formatPromoTypeLabel } from "../../promograph/index.js";
 import { buildPortfolioAllocation } from "../../lib/portfolio.js";
+import { getWorkflowActionSlug, getWorkflowTransitionActions } from "../../workflows/actionGraph.js";
+import { patchWorkflowState } from "../../workflows/store.js";
 
 // Urgency heuristic: days before a promo type typically expires or loses value
 const PROMO_WINDOW_DAYS = {
@@ -36,30 +37,8 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
 
   const patchWorkflow = (workflow, patch = {}) => {
     if (!syncAppData) return;
-    const nextTimestamp = new Date().toISOString();
-    const nextWorkflow = { ...workflow, ...patch, updatedAt: nextTimestamp };
-    const nextInbox = upsertWorkflowEntry(appData.workflowInbox || [], nextWorkflow);
-    const hasFeedbackEntry = Array.isArray(appData.resultFeedback) && appData.resultFeedback.some((entry) => entry?.id === workflow.id);
-    const nextFeedback = hasFeedbackEntry
-      ? updateResultFeedback(appData.resultFeedback || [], workflow.id, { ...patch, updatedAt: nextTimestamp })
-      : appData.resultFeedback || [];
-    syncAppData({ ...appData, workflowInbox: nextInbox, resultFeedback: nextFeedback });
+    syncAppData(patchWorkflowState(appData, workflow, patch));
     if (toast) toast(`Workflow moved to ${String(patch.status || workflow.status).replace(/_/g, " ")}.`, K.gn);
-  };
-
-  const nextActions = (workflow) => {
-    switch (workflow.status) {
-      case "queued":
-        return [{ label: "Mark ready", patch: { status: "ready" } }];
-      case "ready":
-        return [{ label: "Mark placed", patch: { status: "placed" } }];
-      case "placed":
-        return [{ label: "Mark waiting", patch: { status: "waiting" } }];
-      case "waiting":
-        return [{ label: "Open Track", navigateTo: "/track" }];
-      default:
-        return [];
-    }
   };
 
   return (
@@ -114,13 +93,13 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
             return (
             <div
               key={workflow.id}
-              onClick={() => navigate(workflow.status === "waiting" || workflow.status === "placed" ? "/track" : `/${workflow.calculatorSlug || "track"}`)}
+              onClick={() => navigate(getWorkflowActionSlug(workflow))}
               role="button"
               tabIndex={0}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
-                  navigate(workflow.status === "waiting" || workflow.status === "placed" ? "/track" : `/${workflow.calculatorSlug || "track"}`);
+                  navigate(getWorkflowActionSlug(workflow));
                 }
               }}
               style={{ textAlign: "left", padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: "pointer", fontFamily: font, overflow: "hidden", position: "relative" }}
@@ -161,7 +140,7 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
                 </div>
               )}
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
-                {nextActions(workflow).map((action) => (
+                {getWorkflowTransitionActions(workflow).map((action) => (
                   <button
                     key={action.label}
                     onClick={(event) => {
