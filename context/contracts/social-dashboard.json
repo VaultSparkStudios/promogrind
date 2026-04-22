@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-21T01:47:14.789Z",
+  "generatedAt": "2026-04-22T01:47:21.365Z",
   "contract": "social-dashboard",
   "identity": {
     "slug": "promogrind",
@@ -13,7 +13,7 @@
   },
   "listingMetadata": {
     "title": "PromoGrind",
-    "summary": "S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.",
+    "summary": "S66 AI efficiency + operator-surface refinement + public-safe ops hardening: deterministic promo parsing now short-circuits obvious advisor cases, checkout attribution flows into Stripe metadata, dashboard operator surfaces share one helper, and public-safe doctor validators now pass locally without private portfolio dependencies. 296/296 tests, build green, bundle 337.73KB/425KB.",
     "tags": [
       "tool",
       "live",
@@ -21,7 +21,7 @@
     ]
   },
   "growth": {
-    "launchStatus": "deployed",
+    "launchStatus": "deployed-unannounced",
     "liveUrl": "https://promogrind.bet",
     "stagingUrl": null
   },

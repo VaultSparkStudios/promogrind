@@ -58,17 +58,12 @@ const handoff = readText(HANDOFF);
 const taskboard = readText(TASKBOARD);
 const currentMode = status.sessionMode || 'builder';
 
-// Collect text to analyze.
-// In project repos, protocol/history docs can contain portfolio vocabulary as
-// background truth. Treat explicit current-session messages as the strongest
-// signal and avoid flipping to Founder mode from archived context alone.
-const hasExplicitIntent = Boolean(userMessages.trim());
-const intentText = userMessages;
-const backgroundText = [
+// Collect text to analyze
+const text = [
+  userMessages,
   handoff.slice(0, 3000),
   taskboard.slice(0, 6000),
 ].join('\n');
-const text = [intentText, hasExplicitIntent ? backgroundText : ''].join('\n');
 
 // Count signals
 let founderHits = 0;
@@ -85,11 +80,7 @@ for (const p of BUILDER_PHRASES) {
 }
 
 // Cross-project references in TASK_BOARD = Founder signal
-const currentSlug = (status.slug || path.basename(ROOT)).toLowerCase();
-const crossProjectRefs = hasExplicitIntent
-  ? ((taskboard.match(/\b(mindframe|velaxis|call-of-doodie|football-gm|vaultfront|voidfall|vorn|ideaforge|scriptorium|social-dashboard|spark-funnel)\b/gi) || [])
-      .filter((ref) => ref.toLowerCase() !== currentSlug).length)
-  : 0;
+const crossProjectRefs = (taskboard.match(/\b(mindframe|velaxis|call-of-doodie|football-gm|vaultfront|voidfall|promogrind|vorn|ideaforge|scriptorium|social-dashboard|spark-funnel)\b/gi) || []).length;
 
 // Portfolio-wide commands in recent intent = Founder
 const portfolioCommands = (userMessages + handoff.slice(0, 2000)).match(/\b(studio[- ]review|portfolio[- ]ignis|propagate[- ]templates|studio[- ]brain|weekly[- ]digest|pulse|founder[- ]queue)\b/gi)?.length || 0;
@@ -97,11 +88,8 @@ const portfolioCommands = (userMessages + handoff.slice(0, 2000)).match(/\b(stud
 const founderScore = founderHits * 2 + Math.min(crossProjectRefs, 6) + portfolioCommands * 2;
 const builderScore = builderHits * 2 + (crossProjectRefs === 0 ? 3 : 0);
 
-const recommended = founderScore > builderScore + 2 && (hasExplicitIntent || portfolioCommands > 0)
-  ? 'founder'
-  : 'builder';
+const recommended = founderScore > builderScore + 2 ? 'founder' : 'builder';
 const shouldFlip = recommended !== currentMode;
-const shouldPersist = shouldFlip || status.sessionMode !== recommended;
 
 const result = {
   currentMode,
@@ -131,11 +119,6 @@ if (shouldFlip) {
   console.log(`   PROJECT_STATUS.json updated.`);
 } else {
   console.log(`= Mode stable: ${currentMode.toUpperCase()}  (founder ${founderScore} / builder ${builderScore})`);
-  if (shouldPersist) {
-    status.sessionMode = recommended;
-    fs.writeFileSync(STATUS, JSON.stringify(status, null, 2) + '\n');
-    console.log(`   PROJECT_STATUS.json updated.`);
-  }
 }
 
 if (explain) {

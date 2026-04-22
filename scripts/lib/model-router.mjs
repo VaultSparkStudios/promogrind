@@ -29,7 +29,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LEDGER_DEFAULT = path.resolve(__dirname, '..', '..', 'docs', 'cache-ledger.ndjson');
 
 export const MODELS = {
-  opus:   'claude-opus-4-6',
+  opus:   'claude-opus-4-7',
   sonnet: 'claude-sonnet-4-6',
   haiku:  'claude-haiku-4-5-20251001',
 };
@@ -50,6 +50,10 @@ export const CONTEXT_WINDOWS = {
 };
 
 export function contextWindowForAgent(agent) {
+  // Env override: CLAUDE_CONTEXT_LIMIT=1000000 for Max/extended-context plans
+  if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
+  // Studio Ops founder runs Opus 4.7 (1M context) exclusively across Claude Code sessions.
+  // Set CLAUDE_CONTEXT_LIMIT=200000 to pin to the legacy 200K window.
   if (agent === 'claude-code') return CONTEXT_WINDOWS['opus-1m'];
   if (agent === 'codex') return CONTEXT_WINDOWS['codex-1m'];
   return CONTEXT_WINDOWS.default;
@@ -65,6 +69,13 @@ export const PRICING_PER_MTOK = {
   [MODELS.sonnet]: { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
   [MODELS.haiku]:  { input:  1.00, cacheWrite:  1.25, cacheRead: 0.10, output:  5.00 },
 };
+// Batch API pricing: 50% discount on input/output (cache pricing unchanged)
+export const BATCH_PRICING_PER_MTOK = Object.fromEntries(
+  Object.entries(PRICING_PER_MTOK).map(([model, p]) => [
+    model,
+    { ...p, input: p.input * 0.5, output: p.output * 0.5 },
+  ])
+);
 export const FALLBACK_PRICE = PRICING_PER_MTOK[MODELS.sonnet];
 
 /**
@@ -375,6 +386,42 @@ export function logMetrics({ script, model, usage, mode = null, logPath = null }
 }
 
 /**
+ * Generic Anthropic REST call (non-messages endpoints: vaults, sessions, files, etc.)
+ * Keeps api.anthropic.com confined to the chokepoint for all endpoint families.
+ *
+ * @param {object} opts
+ * @param {string} opts.apiKey
+ * @param {string} opts.method     - GET | POST | DELETE | PATCH
+ * @param {string} opts.path       - e.g. '/v1/vaults'
+ * @param {object} [opts.body]     - JSON body (omit for GET/DELETE)
+ * @param {string} [opts.betaHeader] - extra anthropic-beta value(s)
+ * @returns {Promise<{ status: number, body: object }>}
+ */
+export function callAnthropicRaw({ apiKey, method, path, body = null, betaHeader = null }, httpsModule) {
+  const headers = buildHeaders(apiKey);
+  if (betaHeader) headers['anthropic-beta'] = betaHeader;
+  const payload = body ? JSON.stringify(body) : null;
+  if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
+
+  return new Promise((resolve, reject) => {
+    const req = httpsModule.request(
+      { hostname: 'api.anthropic.com', path, method, headers },
+      (res) => {
+        let data = '';
+        res.on('data', c => data += c);
+        res.on('end', () => {
+          try { resolve({ status: res.statusCode, body: JSON.parse(data) }); }
+          catch (e) { reject(new Error(`JSON parse error: ${e.message}\nRaw: ${data.slice(0, 200)}`)); }
+        });
+      }
+    );
+    req.on('error', reject);
+    if (payload) req.write(payload);
+    req.end();
+  });
+}
+
+/**
  * Submit a Messages Batch (50% cost discount, async).
  * Returns batch object with id for polling.
  */
@@ -438,4 +485,33 @@ export async function pollBatch(apiKey, batchId, httpsModule, { pollIntervalMs =
     await new Promise(r => setTimeout(r, pollIntervalMs));
   }
   throw new Error(`Batch ${batchId} timed out after ${maxWaitMs / 1000}s`);
+}
+
+/**
+ * Fetch all results for a completed batch (streams NDJSON from results endpoint).
+ * Returns array of { custom_id, result: { type, message } | { type, error } }.
+ */
+export function fetchBatchResults(apiKey, batchId, httpsModule) {
+  const headers = buildHeaders(apiKey);
+  return new Promise((resolve, reject) => {
+    const req = httpsModule.request({
+      hostname: 'api.anthropic.com',
+      path:     `/v1/messages/batches/${batchId}/results`,
+      method:   'GET',
+      headers,
+    }, (res) => {
+      let raw = '';
+      res.on('data', c => raw += c);
+      res.on('end', () => {
+        const results = raw
+          .split('\n')
+          .filter(Boolean)
+          .map(line => { try { return JSON.parse(line); } catch { return null; } })
+          .filter(Boolean);
+        resolve(results);
+      });
+    });
+    req.on('error', reject);
+    req.end();
+  });
 }

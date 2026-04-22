@@ -116,8 +116,13 @@ function bar20(score) {
   const n = Math.min(20, Math.max(0, Math.round(score / 5)));
   return '█'.repeat(n) + '░'.repeat(20 - n);
 }
-// Progress bar: total /500 → 24 chars  █░
-function bar24(total, max = 500) {
+// 10-char proportional bar for category rows (score 0-100 → 0-10 blocks).
+function bar10(score) {
+  const n = Math.min(10, Math.max(0, Math.round((score ?? 0) / 10)));
+  return '█'.repeat(n) + '░'.repeat(10 - n);
+}
+// Progress bar: total / silMax → 24 chars  █░  (SIL v3.0 default 1000)
+function bar24(total, max = 1000) {
   const n = Math.min(24, Math.max(0, Math.floor((total ?? 0) / max * 24)));
   return '█'.repeat(n) + '░'.repeat(24 - n);
 }
@@ -131,7 +136,8 @@ const truth       = readText(path.join(root, 'context', 'TRUTH_AUDIT.md'));
 const csmd        = readText(path.join(root, 'context', 'CURRENT_STATE.md'));
 const sessionPlan = readText(path.join(root, 'docs', 'SESSION_PLAN.md'));
 const cdr         = readText(path.join(root, 'docs', 'CREATIVE_DIRECTION_RECORD.md'));
-const revSig      = readText(path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'));
+const revSig      = readText(path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'))
+                 || readText(path.join(root, 'docs', 'REVENUE_SIGNALS.md'));
 const complianceHistory = readJson(path.join(root, 'context', 'COMPLIANCE_HISTORY.json'), { snapshots: [] });
 const intentPlan  = readText(path.join(root, 'context', 'SESSION_INTENT_PLAN.md'));
 const humanPressure = readJson(path.join(root, 'portfolio', 'compiled', 'HUMAN_ACTION_PRESSURE.json'), { items: [] });
@@ -153,11 +159,13 @@ const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
 const silHeader = extractBetween(sil, '<!-- rolling-status-start -->', '<!-- rolling-status-end -->');
 
 const silTotalMatch = silHeader.match(/Total:\s*(\d+)\/(\d+)/);
-const silTotal      = parseInt(silTotalMatch?.[1] ?? '') || 0;
-const silMax        = parseInt(silTotalMatch?.[2] ?? '') || status.silMax || 500;
-const velocity      = parseInt(silHeader.match(/Velocity:\s*(\d+)/)?.[1] ?? '') || 0;
-const sparkline     = silHeader.match(/Sparkline[^:]*:\s*([▁▂▃▄▅▆▇█ ]+)/)?.[1]?.trim() ?? '';
-const avg3Raw       = parseFloat(silHeader.match(/Avgs — 3:\s*([\d.]+)/)?.[1] ?? '') || null;
+const silTotalFromHeader = parseInt(silTotalMatch?.[1] ?? '') || 0;
+const silTotal      = silTotalFromHeader || status.silScore || 0;
+const silMax        = parseInt(silTotalMatch?.[2] ?? '') || status.silMax || 1000;
+const velocity      = parseInt(silHeader.match(/Velocity:\s*(\d+)/)?.[1] ?? '') || status.silVelocity || 0;
+const sparkline     = silHeader.match(/Sparkline[^:]*:\s*([▁▂▃▄▅▆▇█ ]+)/)?.[1]?.trim()
+                   ?? (Array.isArray(status.silSparkline) && status.silSparkline.length ? spark(status.silSparkline, silMax) : '');
+const avg3Raw       = parseFloat(silHeader.match(/Avgs — 3:\s*([\d.]+)/)?.[1] ?? '') || status.silAvg3 || null;
 const runwayRaw     = silHeader.match(/[Mm]omentum runway:\s*([^|]+)/)?.[1]?.trim()
                    ?? silHeader.match(/Runway:\s*([^|]+)/)?.[1]?.trim()
                    ?? 'unknown';
@@ -197,6 +205,107 @@ function trend(last, avg) {
   return delta >= 2 ? '↑' : delta <= -2 ? '↓' : '→';
 }
 
+// ── v4.0: Per-category sparkline history (last N sessions) ────────────────────
+// Parse all SIL entries for each of the 5 v2 categories. v3 categories come from
+// PROJECT_STATUS.json silCategoriesV3 (single snapshot) + any future append-only history.
+function parseCategoryHistory(label) {
+  const series = [];
+  for (const match of allSilEntries) {
+    const body = match[1] ?? '';
+    const m = body.match(new RegExp(`\\|\\s*${label}\\s*\\|\\s*(\\d+)`, 'i'));
+    if (m) series.push(parseInt(m[1], 10));
+  }
+  return series.reverse().slice(-8);  // oldest → newest, last 8
+}
+function spark(values, max = 100) {
+  if (!values || values.length === 0) return '—';
+  const chars = '▁▂▃▄▅▆▇█';
+  return values.map(v => {
+    const n = Math.min(7, Math.max(0, Math.floor((v / max) * 7)));
+    return chars[n];
+  }).join('');
+}
+const catHistory = {
+  dev:      parseCategoryHistory('Dev Health'),
+  align:    parseCategoryHistory('Creative Alignment'),
+  momentum: parseCategoryHistory('Momentum'),
+  engage:   parseCategoryHistory('Engagement'),
+  process:  parseCategoryHistory('Process Quality'),
+};
+// v3 categories — single-point snapshot (will grow as new sessions score v3)
+const v3Cats = status.silCategoriesV3 || {};
+const lastCoherence  = v3Cats.crossRepoCoherence ?? 0;
+const lastSecurity   = v3Cats.securityPosture ?? 0;
+const lastEcosystem  = v3Cats.ecosystemIntegration ?? 0;
+const lastCapital    = v3Cats.capitalEfficiency ?? 0;
+const lastAutomation = v3Cats.automationCoverage ?? 0;
+
+// ── v4.0: Session voice — pull a distinctive line from SOUL.md (or BRAIN.md) ──
+function extractSessionVoice() {
+  const candidates = [
+    path.join(root, 'context', 'SOUL.md'),
+    path.join(root, 'context', 'BRAIN.md'),
+    path.join(root, 'context', 'PROJECT_BRIEF.md'),
+    path.join(root, 'context', 'CURRENT_STATE.md'),
+  ];
+  // Reject boilerplate template lines: they all describe the template itself or have placeholder syntax.
+  const TEMPLATE_MARKERS = [
+    /describe the (emotional|creative|mission|promise)/i,
+    /must always be true/i, /audience should feel/i, /quality bar/i,
+    /must never drift/i, /cheap imitation/i, /tonal failure mode/i,
+    /how this project wins/i, /^<.*>$/, /^\[.*\]$/,
+    /template|placeholder|fill in|TODO/i,
+  ];
+  // Require real content: a verb or structural word that indicates lived description.
+  const SUBSTANTIVE = /\b(is|are|ships?|builds?|must|always|every|never|powered|operates?|tracks?|runs?|orchestrat|manag|serves?|coordinat|enforces?|protocol|canon|rubric|audit|pipeline|portfolio)\b/i;
+
+  for (const p of candidates) {
+    if (!fs.existsSync(p)) continue;
+    const src = fs.readFileSync(p, 'utf8');
+    const lines = src.split('\n');
+    for (const line of lines) {
+      if (/^#/.test(line) || !line.trim()) continue;
+      const bulletMatch = line.match(/^\s*[-*]\s+(.{25,140}?)(?:\s*\.|$)/);
+      const proseMatch = line.match(/^(?!\s*[-*#])(.{40,140}?)\.\s*$/);
+      let text = (bulletMatch?.[1] || proseMatch?.[1] || '').trim();
+      // Strip markdown artifacts: bold/italic, backticks, link brackets.
+      text = text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/`/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim();
+      if (!text || text.endsWith(':')) continue;
+      if (TEMPLATE_MARKERS.some(re => re.test(text))) continue;
+      if (!SUBSTANTIVE.test(text)) continue;
+      return { text, source: path.basename(p) };
+    }
+  }
+  return null;
+}
+const sessionVoice = extractSessionVoice();
+
+// ── v4.0: Momentum meter — velocity streak + intent + cost ────────────────────
+function momentumStreak() {
+  // Parse last 8 SIL entries; count consecutive sessions where intent was "achieved"
+  let streak = 0;
+  for (const match of allSilEntries.slice(0, 10)) {
+    const body = match[1] ?? '';
+    if (/Classification:.*(Achieved|achieved)|Intent outcome:.*(Achieved|achieved|✓)/i.test(body)) streak++;
+    else break;
+  }
+  return streak;
+}
+const streak = momentumStreak();
+const intentPct = parseFloat(intentRate.match(/(\d+)%/)?.[1] ?? '0');
+const cacheLedger = readJson(path.join(root, 'portfolio', 'compiled', 'CACHE_HIT_LEDGER.json'), {});
+const cacheHitPct = typeof cacheLedger.avgHitRate === 'number' ? Math.round(cacheLedger.avgHitRate * 100) : null;
+const weeklyCost = cacheLedger.weeklyCostUsd ?? null;
+
+// ── v4.0: Genius-list autonomy cue (agent-owned vs human-blocked) ─────────────
+function autonomyCue(item) {
+  if (!item) return '  ';
+  const status = (item.status || '').toLowerCase();
+  if (status.includes('human') || status.includes('founder')) return '🔒';
+  if (status.includes('blocked') || status.includes('locked')) return '⏳';
+  return '⚡';
+}
+
 // ── Parse TASK_BOARD ──────────────────────────────────────────────────────────
 const unifiedItems   = parseUnifiedItems(taskBoard);
 const openNow        = unifiedItems.filter((item) => item.status === 'unblocked');
@@ -219,9 +328,24 @@ const ctxUpdated     = csmd.match(/^Last updated:\s*(\d{4}-\d{2}-\d{2})/m)?.[1] 
 const ctxAge         = ctxUpdated ? daysBetween(ctxUpdated, today) : '?';
 const scopeCap       = velocity > 0 ? Math.floor(velocity * 1.5) : null;
 
-// Session days since
-const lastSessDateMatch = lastSessionStr.match(/(\d{4}-\d{2}-\d{2})/);
-const daysSinceLast = lastSessDateMatch ? daysBetween(lastSessDateMatch[1], today) : '?';
+// ── Last active (freshest of: SIL closeout, lastUpdated, lastHandoffDate) ────
+// "Days since last" was previously SIL-only, which lied when sessions shipped without
+// running /closeout. Now takes the newest signal across all three sources.
+const lastSilDateMatch = lastSessionStr.match(/(\d{4}-\d{2}-\d{2})/);
+const lastSilDate = lastSilDateMatch?.[1] || null;
+const candidateDates = [
+  lastSilDate,
+  status.lastUpdated,
+  status.lastHandoffDate,
+  status.silLastDate,
+].filter((value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value));
+const freshestDate = candidateDates.length > 0
+  ? candidateDates.sort().slice(-1)[0]  // max lex-sorted date
+  : null;
+const daysSinceActive = freshestDate ? daysBetween(freshestDate, today) : '?';
+const daysSinceClosedOut = lastSilDate ? daysBetween(lastSilDate, today) : '?';
+// Keep daysSinceLast alias for any downstream reader, but prefer the new honest value.
+const daysSinceLast = daysSinceActive;
 
 // IGNIS freshness
 const ignisAge = status.ignisLastComputed ? daysBetween(status.ignisLastComputed, today) : '?';
@@ -297,9 +421,14 @@ function loadPatternMemory() {
   } catch { /* fall through to history fallback */ }
 
   if (patterns.length === 0) {
-    // Fallback: recompute from GENIUS_HISTORY.json (same logic as pattern-memory.mjs)
+    // Fallback: recompute from GENIUS_HISTORY.json (same logic as pattern-memory.mjs).
+    // Skip if the most recent history entry is older than 14 days — a frozen history
+    // would otherwise produce phantom carry-forward pressure long after the pattern cleared.
     const hist = readJson(path.join(root, 'portfolio', 'compiled', 'GENIUS_HISTORY.json'), null);
     const entries = Array.isArray(hist?.entries) ? hist.entries : [];
+    const latest = entries[entries.length - 1];
+    const histAgeDays = latest?.date ? Math.floor((Date.now() - new Date(latest.date).getTime()) / 86400000) : 999;
+    if (histAgeDays > 3) return patterns;  // stale — memory-based detection is canonical; frozen history produces phantom pressure
     const THRESH = 3;
     if (entries.length >= THRESH) {
       const window = entries.slice(-THRESH);
@@ -349,6 +478,23 @@ const genomeDetail = droppedDims.length > 0
   ? `drop: ${droppedDims.map(d => `${d.dim} ${d.from}→${d.to}`).join(' · ')}`
   : `all stable  (${genSnaps.length > 0 ? genSnaps[genSnaps.length - 1].total : '?'}/25)`;
 
+// ── Deploy gaps ──────────────────────────────────────────────────────────────
+let sigDeploy = '✓';
+let deployLabel = 'no gaps (run: ops deploy-gaps)';
+try {
+  const gapsPath = path.join(root, 'portfolio', 'DEPLOY_GAPS.json');
+  if (fs.existsSync(gapsPath)) {
+    const gaps = JSON.parse(fs.readFileSync(gapsPath, 'utf8'));
+    if (gaps.flaggedCount > 0) {
+      sigDeploy = gaps.flaggedCount >= 3 ? '⛔' : '⚠';
+      const top = (gaps.results || []).filter(r => r.flagged).slice(0, 2).map(r => r.slug).join(', ');
+      deployLabel = `${gaps.flaggedCount}/${gaps.sparkedCount} SPARKED flagged (${top}${gaps.flaggedCount > 2 ? '…' : ''})`;
+    } else if (gaps.sparkedCount > 0) {
+      deployLabel = `0/${gaps.sparkedCount} gaps — all SPARKED shipped through`;
+    }
+  }
+} catch { /* keep defaults */ }
+
 // ── Doctor score ─────────────────────────────────────────────────────────────
 const doctorScore  = status.doctorScore ?? null;
 const sigDoctor    = !doctorScore ? '⚠' : doctorScore.failing === 0 ? (doctorScore.warning > 0 ? '⚠' : '✓') : '⛔';
@@ -380,8 +526,29 @@ function sig(val, green, warn) {
   if (warn(val))  return '⚠';
   return '⛔';
 }
-const runwayNum = parseFloat(runwayRaw.match(/~?([\d.]+)/)?.[1] ?? '5');
-const sigTests  = status.testsTotal ? (status.testsTotal > 0 ? '✓' : '⛔') : '⚠';
+// Runway is qualitative ("strong"/"healthy") OR quantitative ("~3 sessions"). Never match embedded version numbers like "v1.3".
+const runwayQualitative = /\b(strong|healthy|robust)\b/i.test(runwayRaw);
+const runwayWeak = /\b(weak|low|critical|depleted|empty)\b/i.test(runwayRaw);
+const runwayNumMatch = runwayRaw.match(/~\s*([\d.]+)\s*(?:session|sprint|run)/i);
+const runwayNum = runwayNumMatch ? parseFloat(runwayNumMatch[1])
+                : runwayQualitative ? 9
+                : runwayWeak ? 1
+                : 5;
+// Prefer explicit pass/total from run-tests; fall back to testsTotal only; then exempt; else warn.
+const testsExempt = !status.testsTotal && (status.audience === 'internal' || status.type === 'infrastructure' || status.type === 'internal-ops') && !status.testsPassing;
+let sigTests, testsLabel;
+if (typeof status.testsPassing === 'number' && typeof status.testsTotal === 'number' && status.testsTotal > 0) {
+  const allPass = status.testsPassing === status.testsTotal;
+  const mostlyPass = status.testsPassing / status.testsTotal >= 0.9;
+  sigTests = allPass ? '✓' : mostlyPass ? '⚠' : '⛔';
+  testsLabel = `${status.testsPassing}/${status.testsTotal} passing` + (status.testsLastRun ? ` (${status.testsLastRun})` : '');
+} else if (testsExempt) {
+  sigTests = '✓';
+  testsLabel = 'N/A (protocol repo)';
+} else {
+  sigTests = '⚠';
+  testsLabel = `${status.testsTotal ?? '?'}/? passing`;
+}
 const sigVel    = sig(velocity, v => v >= 2, v => v === 1);
 const sigRun    = sig(runwayNum, v => v > 4, v => v >= 2);
 const sigCtx    = sig(typeof ctxAge === 'number' ? ctxAge : 99, v => v <= 7, v => v <= 14);
@@ -459,6 +626,7 @@ function buildPortfolioBoxLines() {
 }
 
 // ── FOUNDER UNLOCKS — outstanding human actions that reopen sprint surface ───
+import { ensureAges, daysSince } from './lib/human-action-ages.mjs';
 function buildFounderUnlocksBox() {
   const humanSection = (() => {
     const parts = taskBoard.split(/^## /m);
@@ -469,15 +637,25 @@ function buildFounderUnlocksBox() {
   })();
   const items = humanSection.split(/\r?\n/).filter(l => /^- \[ \]/.test(l)).slice(0, 6);
   if (items.length === 0) return null;
-  const out = [top('HUMAN PRESSURE')];
+  // Backfill first-seen dates so items without ~N sessions notation still age.
+  const ledger = ensureAges(taskBoard, { root });
+  const out = [top('FOUNDER UNLOCKS')];
   out.push(row('Single founder actions that reopen sprint surface:'));
   out.push(blank());
   for (const line of items) {
     const clean = line.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '');
     const ageMatch = clean.match(/~?(\d+)\s*sessions/);
-    const age = ageMatch ? `${ageMatch[1]}s` : 'new';
-    const title = clean.split(/\s+—\s+/)[0].slice(0, W - 10);
-    out.push(row(`${age.padStart(4)} · ${title}`));
+    const title = clean.split(/\s+—\s+/)[0];
+    let age;
+    if (ageMatch) {
+      age = `${ageMatch[1]}s`;
+    } else if (ledger[title]?.firstSeen) {
+      const d = daysSince(ledger[title].firstSeen);
+      age = d === 0 ? 'today' : `${d}d`;
+    } else {
+      age = 'new';
+    }
+    out.push(row(`${age.padStart(5)} · ${title.slice(0, W - 12)}`));
   }
   out.push(bot());
   return out.join('\n');
@@ -555,7 +733,7 @@ const lines = [
     type: status.type,
     lifecycle: status.lifecycle,
     audience: status.audience,
-    vaultStatus: String(status.vaultStatus || 'FORGE').toUpperCase(),
+    vaultStatus: status.vaultStatus || 'FORGE',
     session: currentSession,
     date: today,
     mode: (status.sessionMode || 'builder').toUpperCase(),
@@ -566,18 +744,28 @@ const lines = [
   ``,
   renderTestItNow({ name: status.name || 'Studio Ops', testingSurfaces: status.testingSurfaces || [] }),
   ``,
-  // ── SCORE box ──────────────────────────────────────────────────────────────
+  // ── SCORE box (v4.0 — 10-category breakdown + sparklines) ──────────────────
   top('SCORE'),
   blank(),
   row(`  ${silTotal}/${silMax}   ${bar24(silTotal, silMax)}   ${pct}`),
-  row(`  Project health ${String(status.projectHealthScore ?? '?').padStart(3)}/100  ·  SIL process score`),
-  row(`  Trend  ${velHistBar || sparkline}  ${velTrend || '→'}  ·  Avg3: ${avg3Raw ?? '?'}  ·  Days since last: ${daysSinceLast}`),
+  row(`  SIL v3.0  ·  Avg3: ${avg3Raw ?? '?'}  ·  Velocity ${velocity}${velTrend || '→'}`),
+  row(`  Last active: ${daysSinceActive}d  ·  Last closeout: ${daysSinceClosedOut}d  ·  (active = newest of SIL/status/handoff)`),
+  row(`  Trend  ${velHistBar || sparkline}  ${velTrend || '→'}  (last ${(velLast5 || []).length || 5} sessions)`),
   blank(),
-  row(`  Dev Health    ${String(lastDev).padStart(3)}  ${bar20(lastDev)}  ${trend(lastDev, cat3.dev)}`),
-  row(`  Alignment     ${String(lastAlign).padStart(3)}  ${bar20(lastAlign)}  ${trend(lastAlign, cat3.align)}`),
-  row(`  Momentum      ${String(lastMomentum).padStart(3)}  ${bar20(lastMomentum)}  ${trend(lastMomentum, cat3.momentum)}`),
-  row(`  Engagement    ${String(lastEngage).padStart(3)}  ${bar20(lastEngage)}  ${trend(lastEngage, cat3.engage)}`),
-  row(`  Process Qual  ${String(lastProcess).padStart(3)}  ${bar20(lastProcess)}  ${trend(lastProcess, cat3.process)}`),
+  row(`  Category         Score  Bar        Spark   Δ`),
+  row(`  ─────────────── ────── ────────── ──────── ─`),
+  // Original 5 — with multi-session sparkline
+  row(`  Dev Health       ${String(lastDev).padStart(3)}    ${bar10(lastDev)}  ${spark(catHistory.dev).padEnd(8)} ${trend(lastDev, cat3.dev)}`),
+  row(`  Alignment        ${String(lastAlign).padStart(3)}    ${bar10(lastAlign)}  ${spark(catHistory.align).padEnd(8)} ${trend(lastAlign, cat3.align)}`),
+  row(`  Momentum         ${String(lastMomentum).padStart(3)}    ${bar10(lastMomentum)}  ${spark(catHistory.momentum).padEnd(8)} ${trend(lastMomentum, cat3.momentum)}`),
+  row(`  Engagement       ${String(lastEngage).padStart(3)}    ${bar10(lastEngage)}  ${spark(catHistory.engage).padEnd(8)} ${trend(lastEngage, cat3.engage)}`),
+  row(`  Process Qual     ${String(lastProcess).padStart(3)}    ${bar10(lastProcess)}  ${spark(catHistory.process).padEnd(8)} ${trend(lastProcess, cat3.process)}`),
+  // v3.0 new categories — single snapshot for now, sparkline builds as history accrues
+  row(`  Coherence        ${String(lastCoherence).padStart(3)}    ${bar10(lastCoherence)}  ${'·'.repeat(8)} →`),
+  row(`  Security         ${String(lastSecurity).padStart(3)}    ${bar10(lastSecurity)}  ${'·'.repeat(8)} →`),
+  row(`  Ecosystem        ${String(lastEcosystem).padStart(3)}    ${bar10(lastEcosystem)}  ${'·'.repeat(8)} →`),
+  row(`  Capital          ${String(lastCapital).padStart(3)}    ${bar10(lastCapital)}  ${'·'.repeat(8)} →`),
+  row(`  Automation       ${String(lastAutomation).padStart(3)}    ${bar10(lastAutomation)}  ${'·'.repeat(8)} →`),
   blank(),
   bot(),
   ``,
@@ -589,7 +777,7 @@ const lines = [
   ``,
   // ── SIGNALS ────────────────────────────────────────────────────────────────
   top('SIGNALS'),
-  row(`${sigTests}  Tests         ${status.testsTotal ?? '?'}/? passing`),
+  row(`${sigTests}  Tests         ${testsLabel}`),
   row(`${sigVel}  Velocity      ${velocity} ${velTrend}  ·  Debt: ${debtRaw}`),
   row(`${sigRun}  Runway        ${runwayRaw}`),
   row(`✓  Headroom      ${meterRemainingPct}% remaining · ~${estimatedItemsFit} large item(s) fit`),
@@ -603,6 +791,7 @@ const lines = [
   row(`${sigPatterns}  Patterns      ${patternsDetail}`),
   row(`${sigVer}  Templates     ${versionDrift ? `version drift (start: ${startVer} vs tpl: ${startTplVer})` : `v${startVer || '?'} aligned`}`),
   row(`${sigRev}  Revenue sig.  ${revGenDate ? `${revAge}d old (${revGenDate})` : 'not found'}${revAge > 7 ? '  ⚠ stale' : ''}`),
+  row(`${sigDeploy}  Deploy gaps   ${deployLabel}`),
   row(`${sigDoctor}  Doctor        ${doctorDetail}`),
   bot(),
   ``,
@@ -640,6 +829,23 @@ const lines = [
     bot(),
     ``,
   ] : []),
+  // ── v4.0: SESSION VOICE (personable cue) ────────────────────────────────────
+  ...(sessionVoice ? [
+    top('SESSION VOICE'),
+    row(`"${sessionVoice.text.slice(0, W - 6)}"`),
+    row(`  — from ${sessionVoice.source}`),
+    bot(),
+    ``,
+  ] : []),
+  // ── v4.0: MOMENTUM METER (velocity + intent + streak + cost) ────────────────
+  top('MOMENTUM METER'),
+  row(`Velocity:   ${velHistBar || '—'}  ${velocity}${velTrend || '→'}  (last 5 sessions)`),
+  row(`Intent:     ${intentPct || '?'}% achieved last 5`),
+  row(`Streak:     ${streak > 0 ? `✓ ${streak} consecutive achieved-intent session${streak > 1 ? 's' : ''}` : '— (last intent not achieved)'}`),
+  ...(cacheHitPct !== null ? [row(`Cache hit:  ${cacheHitPct}%  ${cacheHitPct >= 60 ? '✓ meeting target' : '⚠ below 60% target'}`)] : []),
+  ...(weeklyCost !== null ? [row(`Weekly spend: $${weeklyCost.toFixed(2)}`)] : []),
+  bot(),
+  ``,
   // ── GENIUS HIT LIST ────────────────────────────────────────────────────────
   geniusBlock,
   ``,

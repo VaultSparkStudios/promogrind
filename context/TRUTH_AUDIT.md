@@ -1,16 +1,53 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Overall status: green
-Last reviewed: 2026-04-21 (S66 deterministic promo parsing, shared operator surfaces, public-safe doctor hardening — 296/296 tests, build green, doctor 12/12, bundle 337.73KB/425KB)
-Key source-of-truth changes this session:
-- `src/lib/promoParse.js` and `supabase/functions/_shared/promo-parse.ts` are now the deterministic source of truth for recognizable promo-offer classification before LLM escalation.
-- `supabase/functions/promo-advisor/index.ts` now uses the deterministic parser as a fast path and only calls Anthropic for ambiguous cases; `PromoAdvisorPanel.jsx` surfaces the result source as `INSTANT`.
-- `src/auth.js` is now the client source of truth for checkout attribution forwarding (`pg_ref` + UTMs) and emits `paid_checkout_started`; `supabase/functions/create-checkout/index.ts` is the server source of truth for copying attribution into Stripe subscription metadata.
-- `src/dashboard/operatorSurfaces.js` is now the shared source of truth for bankroll lookup, dashboard/studio snapshot assembly, alert-plan generation, and workflow routing used by both Daily Brief and Launch Command Center.
-- `scripts/generate-project-contracts.mjs` now derives contract summaries and live surfaces from repo truth instead of emitting placeholder contract content.
-- `scripts/lib/project-registry.mjs` is now the public-safe fallback source of project truth for validator scripts when the private portfolio registry is absent.
-- Public-safe template shims now exist at `docs/templates/project-system/START_PROMPT.template.md`, `CLOSEOUT_PROMPT.template.md`, and `TRUTH_AUDIT.template.md` so prompt-version/compliance checks do not fail on missing private templates.
-- `scripts/run-doctor.mjs` now treats local public-repo mode as first-class: genome strings like `green` are parsed correctly, launch JSON arrays are handled correctly, revenue freshness can read `docs/REVENUE_SIGNALS.md`, and local doctor checks no longer depend on nested Node subprocesses that fail in this environment.
-- `docs/REVENUE_SIGNALS.md` is now a real generated surface for this public repo; revenue freshness reads from it when no portfolio-wide file exists.
-Public-safe summary only. Sensitive verification notes are maintained privately.
+Last reviewed: 2026-04-22
+Overall status: yellow
+Next action: consolidate startup/closeout truth parsing into one tested helper so repaired repo-local truth stays stable across future automation passes.
+
+---
+
+## Source Hierarchy
+
+1. `context/PROJECT_STATUS.json`
+2. `context/LATEST_HANDOFF.md`
+3. `context/CURRENT_STATE.md`
+4. Generated contracts, runtime pack, startup brief, and other derived status surfaces
+
+---
+
+## Protocol Genome (/25)
+
+| Dimension | Score | Notes |
+|---|---|---|
+| Schema alignment | 3 | `PROJECT_STATUS.json` was clobbered by repair automation and restored manually; manifest/runtime-pack now agree on deployed public-unlaunched state, but this path is still fragile. |
+| Prompt/template alignment | 3 | Canonical template versions are aligned, but repo-local continuity files were still placeholders after ops repair and needed manual write-back. |
+| Derived-view freshness | 3 | Revenue signals, IGNIS, contracts, runtime pack, genome history, and startup rendering were regenerated after status repair; the remaining drag is historical template-era output, not current generation failure. |
+| Handoff continuity | 2 | `LATEST_HANDOFF.md` and `CURRENT_STATE.md` now reflect real work instead of scaffolds, but they are session-repair quality rather than closeout-quality narrative continuity. |
+| Contradiction density | 2 | Major contradictions are reduced, but historical drift between status, doctor, contracts, and startup surfaces means the repo is not yet fully contradiction-clean. |
+| **Total** | **13 / 25** | Yellow: core truth is restorable and mostly coherent, but derived surfaces remain vulnerable to repair-script regression. |
+
+---
+
+## Drift Heatmap
+
+| Area | Canonical source | Derived surfaces | Status | Last checked | Action |
+|---|---|---|---|---|---|
+| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | yellow | 2026-04-22 | Keep this file authoritative and avoid broad repair writes that collapse it. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief | yellow | 2026-04-22 | Replace with closeout-grade notes at next session close. |
+| Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-22 | Keep manifest as source of capability truth. |
+| IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-22 | Fresh rescore landed and derived IGNIS surfaces now agree on `47857 FORGE`. |
+| Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/human-action-ages.mjs` | `docs/STARTUP_BRIEF.md` | yellow | 2026-04-22 | Monitor after helper restore; add regression coverage later. |
+
+---
+
+## Current Contradictions
+
+- `context/PROJECT_STATUS.json` was briefly reduced to IGNIS-only fields by `ops-onboard --repair --write`; this audit reflects the manual restoration.
+- Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
+
+## Resolved This Session
+
+- Restored the missing `scripts/lib/human-action-ages.mjs` dependency so startup brief rendering no longer fails.
+- Patched runtime-pack and local IGNIS rescoring to support single-repo/public-safe execution without a private portfolio registry.
+- Repaired manifest/runtime-pack capability truth so the app is no longer misreported as lacking auth, AI, community, analytics, storage, or publishing.

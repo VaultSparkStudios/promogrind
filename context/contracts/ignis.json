@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-21T01:47:14.789Z",
+  "generatedAt": "2026-04-22T01:47:21.365Z",
   "contract": "ignis",
   "identity": {
     "slug": "promogrind",
@@ -12,22 +12,22 @@
     "vaultStatus": "FORGE"
   },
   "metrics": {
-    "ignisScore": 47652,
+    "ignisScore": 47857,
     "ignisGrade": "FORGE",
-    "ignisLastComputed": "2026-04-15",
-    "truthAuditStatus": "green",
-    "truthGenome": "green"
+    "ignisLastComputed": "2026-04-22",
+    "truthAuditStatus": "yellow",
+    "truthGenome": "12/25"
   },
   "capabilities": {
-    "auth": false,
+    "auth": true,
     "payments": true,
-    "analytics": false,
-    "email": false,
-    "ai": false,
-    "publishing": false,
-    "community": false,
-    "storage": false,
-    "cron": false
+    "analytics": true,
+    "email": true,
+    "ai": true,
+    "publishing": true,
+    "community": true,
+    "storage": true,
+    "cron": true
   },
   "integration": {
     "enabled": true,

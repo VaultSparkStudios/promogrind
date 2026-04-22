@@ -5,11 +5,11 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ---
 
-## 2026-04-21 — Revenue Readiness Assessment
+## 2026-04-22 — Revenue Readiness Assessment
 
 ### Pipeline Summary
 
-> Revenue-ready (7+): **1** | Pre-revenue (4-6): **0** | 
+> Revenue-ready (7+): **0** | Pre-revenue (4-6): **1** | 
 > Early-build (2-3): **0** | Concept (0-1): **0** | 
 > Total active: **1**
 
@@ -17,30 +17,30 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 | Project | Readiness | Stage | Lifecycle | Audience | Medium | Health | Next Milestone |
 |---|---:|---|---|---|---|---|---|
-| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Apply Supabase migrations for workflow/entity syn... |
+| PromoGrind | 4/10 | pre-revenue | building | internal | tool | yellow | Next concrete milestone. |
 
 ### Revenue-Ready Projects (score 7+)
 
-- **PromoGrind** (7/10) — S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.
+- No projects have reached revenue-ready status yet.
 
 ### Pre-Revenue Pipeline (score 4-6)
 
-- No pre-revenue projects.
+- **PromoGrind** (4/10) — Next concrete milestone.
 
 ### Funding Readiness
 
 | Signal | Status |
 |---|---|
 | Projects with live runtime | 1 |
-| Public-facing products | 1 |
-| Deployed + public products | 1 |
-| Products mentioning monetization | 1 |
+| Public-facing products | 0 |
+| Deployed + public products | 0 |
+| Products mentioning monetization | 0 |
 
 ### Recommended Actions
 
-1. Focus monetization effort on revenue-ready projects: PromoGrind.
-2. 1 deployed product(s) are public-unlaunched — marketing/launch push would unlock revenue potential.
+1. Push **PromoGrind** (4/10) toward revenue-ready by resolving: Next concrete milestone..
+2. Closest to revenue-ready: **PromoGrind** — accelerate to public launch.
 
 ---
 
-*Generated: 2026-04-21 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*
+*Generated: 2026-04-22 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-21T01:47:14.789Z",
+  "generatedAt": "2026-04-22T01:47:21.365Z",
   "contract": "hub",
   "identity": {
     "slug": "promogrind",
@@ -13,7 +13,7 @@
   },
   "listingMetadata": {
     "title": "PromoGrind",
-    "summary": "S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.",
+    "summary": "S66 AI efficiency + operator-surface refinement + public-safe ops hardening: deterministic promo parsing now short-circuits obvious advisor cases, checkout attribution flows into Stripe metadata, dashboard operator surfaces share one helper, and public-safe doctor validators now pass locally without private portfolio dependencies. 296/296 tests, build green, bundle 337.73KB/425KB.",
     "tagline": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
     "tags": [
       "tool",
@@ -27,13 +27,13 @@
   },
   "status": {
     "health": "green",
-    "currentFocus": "S65 Studio OS/ops conformance: canonical ops script surface is now present locally, ops registry has 167/167 command targets, SESSION_PROTOCOL initiation grep is aligned, startup brief validates, and PromoGrind remains BUILDER mode unless explicit current-session intent requests Founder mode. 289/289 tests, build green, bundle 329.3KB/425KB.",
+    "currentFocus": "S66 AI efficiency + operator-surface refinement + public-safe ops hardening: deterministic promo parsing now short-circuits obvious advisor cases, checkout attribution flows into Stripe metadata, dashboard operator surfaces share one helper, and public-safe doctor validators now pass locally without private portfolio dependencies. 296/296 tests, build green, bundle 337.73KB/425KB.",
     "nextMilestone": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
-    "truthAuditStatus": "green",
-    "ignisScore": 47652,
+    "truthAuditStatus": "yellow",
+    "ignisScore": 47857,
     "ignisGrade": "FORGE",
-    "silScore": 493,
-    "silAvg3": 492
+    "silScore": 496,
+    "silAvg3": 493
   },
   "liveSurfaces": [
     {

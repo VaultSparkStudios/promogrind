@@ -20,6 +20,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from 'child_process';
+import { loadProjectRegistry } from './lib/project-registry.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -37,7 +38,7 @@ function readText(p)      { try { return fs.readFileSync(p, 'utf8'); } catch { r
 function daysBetween(a,b) { try { return Math.floor((new Date(b)-new Date(a))/86400000); } catch { return 999; } }
 
 // ── Find IGNIS repo path ──────────────────────────────────────────────────────
-const registry = readJson(path.join(ROOT, 'portfolio', 'PROJECT_REGISTRY.json'), { projects: [] });
+const registry = loadProjectRegistry();
 const projects  = registry.projects ?? [];
 
 function detectIgnisPath() {

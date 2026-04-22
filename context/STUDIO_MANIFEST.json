@@ -17,7 +17,7 @@
     "templateVersion": "3.2",
     "complianceVersion": "1.5",
     "sessionModeDefault": "builder",
-    "requiredFilesPresent": false
+    "requiredFilesPresent": true
   },
   "listingMetadata": {
     "canonicalSummary": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
@@ -63,15 +63,15 @@
     "testing": []
   },
   "capabilities": {
-    "auth": false,
+    "auth": true,
     "payments": true,
-    "analytics": false,
-    "email": false,
-    "ai": false,
-    "publishing": false,
-    "community": false,
-    "storage": false,
-    "cron": false
+    "analytics": true,
+    "email": true,
+    "ai": true,
+    "publishing": true,
+    "community": true,
+    "storage": true,
+    "cron": true
   },
   "integrations": {
     "studioHub": {

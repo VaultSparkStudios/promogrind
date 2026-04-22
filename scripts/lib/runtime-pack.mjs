@@ -49,6 +49,66 @@ export function normalizeVaultStatus(value) {
   return String(value ?? 'FORGE').toUpperCase();
 }
 
+function hasFile(targetRoot, relativePath) {
+  return fs.existsSync(path.join(targetRoot, relativePath));
+}
+
+export function inferCapabilities(targetRoot, project = {}, status = {}, existing = {}) {
+  const merged = { ...(existing || {}) };
+  const aiFunctions = ['promo-advisor', 'promo-chat', 'ai-action-plan', 'stack-builder', 'parse-bet-slip'];
+
+  return {
+    auth: Boolean(merged.auth || hasFile(targetRoot, 'src/auth.js')),
+    payments: Boolean(
+      merged.payments ||
+      project.stripeReady ||
+      status.stripeReady ||
+      hasFile(targetRoot, 'supabase/functions/create-checkout/index.ts') ||
+      hasFile(targetRoot, 'supabase/functions/stripe-webhook/index.ts')
+    ),
+    analytics: Boolean(merged.analytics || hasFile(targetRoot, 'src/analytics.js')),
+    email: Boolean(
+      merged.email ||
+      hasFile(targetRoot, 'supabase/functions/send-daily-brief/index.ts') ||
+      hasFile(targetRoot, 'supabase/functions/weekly-digest/index.ts')
+    ),
+    ai: Boolean(merged.ai || aiFunctions.some((name) => hasFile(targetRoot, `supabase/functions/${name}/index.ts`))),
+    publishing: Boolean(merged.publishing || hasFile(targetRoot, 'scripts/post-announcement.mjs')),
+    community: Boolean(
+      merged.community ||
+      hasFile(targetRoot, 'src/components/CommunityPromoBoard.jsx') ||
+      hasFile(targetRoot, 'scripts/migration-community-board.sql')
+    ),
+    storage: Boolean(merged.storage || hasFile(targetRoot, 'src/sync.js')),
+    cron: Boolean(merged.cron || hasFile(targetRoot, 'scripts/migration-cron-jobs.sql'))
+  };
+}
+
+export function normalizeManifest(manifest, project = {}, status = {}, targetRoot) {
+  const resolvedRoot = path.resolve(targetRoot || project.localPath || process.cwd());
+  const requiredFiles = getRequiredFileStatus(resolvedRoot);
+  const hasAllRequired = requiredFiles.every((entry) => entry.exists);
+  const capabilities = inferCapabilities(
+    resolvedRoot,
+    project,
+    status,
+    manifest?.capabilities || {}
+  );
+
+  return {
+    ...manifest,
+    studioOs: {
+      ...(manifest?.studioOs || {}),
+      applied: manifest?.studioOs?.applied ?? Boolean(project.studioOsApplied),
+      templateVersion: manifest?.studioOs?.templateVersion || '3.2',
+      complianceVersion: manifest?.studioOs?.complianceVersion || '1.5',
+      sessionModeDefault: manifest?.studioOs?.sessionModeDefault || 'builder',
+      requiredFilesPresent: hasAllRequired
+    },
+    capabilities,
+  };
+}
+
 export function relativeTo(basePath, targetPath) {
   return path.relative(basePath, targetPath).replace(/\\/g, '/');
 }
@@ -58,11 +118,52 @@ export function detectProjectByRoot(root, registry) {
   return (registry.projects || []).find((project) => String(project.localPath || '').toLowerCase() === normalizedRoot) || null;
 }
 
-export function inferManifest(project, status) {
+export function buildLocalProjectFromRoot(root) {
+  const resolvedRoot = path.resolve(root);
+  const status = readJson(path.join(resolvedRoot, 'context', 'PROJECT_STATUS.json')) || {};
+  const manifest = readJson(path.join(resolvedRoot, 'context', 'STUDIO_MANIFEST.json')) || {};
+  const identity = manifest.identity || {};
+  const publicMeta = manifest.publicMetadata || {};
+  const hosting = manifest.hosting || {};
+  const studioOs = manifest.studioOs || {};
+
+  const repoFromGithub = (() => {
+    const github = status.github || '';
+    const match = github.match(/github\.com\/([^/]+\/[^/]+)/i);
+    return match?.[1] ?? identity.repo ?? null;
+  })();
+
+  return {
+    slug: status.slug || identity.slug || path.basename(resolvedRoot),
+    name: status.name || identity.name || path.basename(resolvedRoot),
+    repo: repoFromGithub,
+    localPath: resolvedRoot,
+    studioOsApplied: studioOs.applied ?? true,
+    status: status.status || 'active',
+    lifecycle: status.lifecycle || identity.lifecycle || 'active',
+    audience: status.audience || identity.audience || 'internal',
+    vaultStatus: normalizeVaultStatus(status.vaultStatus || identity.vaultStatus || 'FORGE'),
+    brandingRequired: publicMeta.brandingRequired ?? true,
+    brandingCompliant: publicMeta.brandingCompliant ?? true,
+    stagingType: status.stagingType || (hosting.stagingUrl ? 'staging' : 'none'),
+    stagingUrl: status.stagingUrl || hosting.stagingUrl || null,
+    liveUrl: status.liveUrl || hosting.liveUrl || null,
+    launchStatus: status.launchStatus || hosting.deployStatus || null,
+    revenueModel: status.revenueModel || 'none',
+    stripeReady: status.stripeReady === true,
+    health: status.health || 'unknown',
+    medium: status.type || identity.type || 'app',
+    owner: status.owner || identity.owner || 'VaultSpark Studios'
+  };
+}
+
+export function inferManifest(project, status, targetRoot = null) {
+  const resolvedRoot = path.resolve(targetRoot || project.localPath || process.cwd());
   const runtimeUrl = project.runtimeUrl || status.liveUrl || null;
   const stagingUrl = project.stagingUrl ?? status.stagingUrl ?? null;
   const githubUrl = project.repo ? `https://github.com/${project.repo}` : status.github || null;
   const testing = status.testingSurfaces || [];
+  const requiredFilesPresent = getRequiredFileStatus(resolvedRoot).every((entry) => entry.exists);
 
   return {
     schemaVersion: '1.0',
@@ -83,7 +184,7 @@ export function inferManifest(project, status) {
       templateVersion: '3.2',
       complianceVersion: '1.5',
       sessionModeDefault: 'builder',
-      requiredFilesPresent: false
+      requiredFilesPresent
     },
     listingMetadata: {
       canonicalSummary: project.summary || status.currentFocus || `${project.name} in the VaultSpark ecosystem.`,
@@ -110,17 +211,7 @@ export function inferManifest(project, status) {
         url: surface.url ?? null
       }))
     },
-    capabilities: {
-      auth: false,
-      payments: Boolean(project.stripeReady || status.stripeReady),
-      analytics: false,
-      email: false,
-      ai: false,
-      publishing: false,
-      community: false,
-      storage: false,
-      cron: false
-    },
+    capabilities: inferCapabilities(resolvedRoot, project, status),
     integrations: {
       studioHub: { enabled: true, mode: 'private' },
       website: { enabled: Boolean(project.audience?.includes('public') || runtimeUrl), mode: 'public-safe' },
@@ -174,7 +265,7 @@ export function inferManifest(project, status) {
 export function resolveProjectBundle(root, projectArg = null, options = {}) {
   const registryPath = path.join(root, 'portfolio', 'PROJECT_REGISTRY.json');
   const registry = readJson(registryPath, { projects: [] });
-  const currentProject = detectProjectByRoot(root, registry);
+  const currentProject = detectProjectByRoot(root, registry) || buildLocalProjectFromRoot(root);
   const project = projectArg
     ? (registry.projects || []).find((entry) => entry.slug === projectArg || entry.name === projectArg || entry.repo === projectArg)
     : currentProject;
@@ -190,7 +281,12 @@ export function resolveProjectBundle(root, projectArg = null, options = {}) {
   const manifestPath = path.join(targetRoot, 'context', 'STUDIO_MANIFEST.json');
   const status = readJson(statusPath, {});
   const manifest = readJson(manifestPath, null);
-  const effectiveManifest = manifest || inferManifest(project, status);
+  const effectiveManifest = normalizeManifest(
+    manifest || inferManifest(project, status, targetRoot),
+    project,
+    status,
+    targetRoot
+  );
 
   return {
     registry,

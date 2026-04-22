@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-04-16T22:06:50.601Z",
+  "generatedAt": "2026-04-22T01:47:20.640Z",
   "packVersion": "1.0",
   "project": {
     "slug": "promogrind",
     "name": "PromoGrind",
     "repo": "VaultSparkStudios/promogrind",
-    "localPath": "/tmp/onboard-retry-6OS6fG/promogrind"
+    "localPath": "C:\\Users\\p4cka\\documents\\development\\promogrind"
   },
   "sourceTemplates": {
     "agents": "docs/templates/project-system/AGENTS_PROJECT.template.md",
@@ -134,7 +134,7 @@
       "templateVersion": "3.2",
       "complianceVersion": "1.5",
       "sessionModeDefault": "builder",
-      "requiredFilesPresent": false
+      "requiredFilesPresent": true
     },
     "listingMetadata": {
       "canonicalSummary": "Sports betting promo conversion tool. 53 calculators, P/L tracker, AI features (PromoChat, PromoAdvisor, AIActionPlan), 5-tier subscription model. Revenue: affiliate commissions + PromoGrind subscriptions.",
@@ -180,15 +180,15 @@
       "testing": []
     },
     "capabilities": {
-      "auth": false,
+      "auth": true,
       "payments": true,
-      "analytics": false,
-      "email": false,
-      "ai": false,
-      "publishing": false,
-      "community": false,
-      "storage": false,
-      "cron": false
+      "analytics": true,
+      "email": true,
+      "ai": true,
+      "publishing": true,
+      "community": true,
+      "storage": true,
+      "cron": true
     },
     "integrations": {
       "studioHub": {
@@ -300,7 +300,9 @@
     "Use scripts/lib/model-router.mjs as the single Claude/Anthropic chokepoint.",
     "Prefer Haiku-first escalation, long-cache blocks, and semantic cache helpers before direct model calls.",
     "Reuse generated contracts and compiled fabric outputs instead of scraping multiple Markdown sources.",
-    "Use ops-level commands before inventing repo-local variants when Studio Ops already owns the workflow."
+    "Use ops-level commands before inventing repo-local variants when Studio Ops already owns the workflow.",
+    "This project declares AI capability: install the Anthropic wrapper template before adding any new AI entrypoint.",
+    "Treat generated telemetry, cache ledgers, and event files as append-only operational data, not ad hoc scratch files."
   ],
   "capacity": {
     "currentPlanTier": "unknown",
@@ -310,7 +312,5 @@
     "fallbackRuntime": "hetzner",
     "notes": ""
   },
-  "repairActions": [
-    "Seed .claude/settings.local.json from the CLAUDE settings template."
-  ]
+  "repairActions": []
 }
