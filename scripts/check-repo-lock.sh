@@ -15,8 +15,8 @@
 #
 # Example:
 #   ./scripts/check-repo-lock.sh \
-#     "C:/Users/p4cka/documents/development/StatsForge" \
-#     "C:/Users/p4cka/documents/development/Velaxis"
+#     "/path/to/repo-a" \
+#     "/path/to/repo-b"
 
 set -euo pipefail
 

@@ -24,4 +24,9 @@ DEPLOYMENT_GUIDE.md
 
 context/.session-lock
 docs/RIGHTS_PROVENANCE.md
+docs/CREATIVE_DIRECTION_RECORD.md
 .beta-codes
+
+# Private ops scripts — contain user-specific paths or sensitive references
+scripts/rotate-render-key.mjs
+scripts/soul-interview.mjs
