@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
 import { AppDataCtx } from "../../contexts.jsx";
@@ -14,6 +14,29 @@ export default function DailyMissionsPanel({ navigate }) {
   const xpToday = getTodayXp(todayStr);
   const maxXp = missions.reduce((s, m) => s + m.xp, 0);
   const doneCount = missions.filter(m => m.completed).length;
+
+  // Auto-complete any mission whose check has passed
+  useEffect(() => {
+    let changed = false;
+    for (const m of missions) {
+      if (m.eligible && !m.completed) {
+        completeMission(m.id, todayStr);
+        changed = true;
+      }
+    }
+    if (changed) setTick(t => t + 1);
+  }, [missions, todayStr]);
+
+  // Refresh when window regains focus so localStorage-based checks pick up new flags
+  useEffect(() => {
+    const refresh = () => setTick(t => t + 1);
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+    };
+  }, []);
 
   function handleComplete(mission) {
     if (mission.completed) {
