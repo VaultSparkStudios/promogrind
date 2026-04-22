@@ -31,7 +31,14 @@ export const ToastProvider = ({ children }) => {
           </div>
         ))}
       </div>
-      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
+      <style>{`
+        @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes pgFadeIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+        @keyframes pgBadgeIn{from{opacity:0;transform:translateX(12px) scale(0.8)}to{opacity:1;transform:translateX(0) scale(1)}}
+        @keyframes pgCheckIn{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+        @keyframes pgSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .pg-badge-earned{animation:pgBadgeIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both}
+      `}</style>
     </ToastCtx.Provider>
   );
 };

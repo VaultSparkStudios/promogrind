@@ -9,7 +9,7 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ### Pipeline Summary
 
-> Revenue-ready (7+): **0** | Pre-revenue (4-6): **1** | 
+> Revenue-ready (7+): **1** | Pre-revenue (4-6): **0** | 
 > Early-build (2-3): **0** | Concept (0-1): **0** | 
 > Total active: **1**
 
@@ -17,29 +17,29 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 | Project | Readiness | Stage | Lifecycle | Audience | Medium | Health | Next Milestone |
 |---|---:|---|---|---|---|---|---|
-| PromoGrind | 4/10 | pre-revenue | building | internal | tool | yellow | Next concrete milestone. |
+| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Apply Supabase migrations for workflow/entity syn... |
 
 ### Revenue-Ready Projects (score 7+)
 
-- No projects have reached revenue-ready status yet.
+- **PromoGrind** (7/10) — Extend the newly shipped shared app-shell/workflow/AI contract into remaining scanner/community surfaces, then apply the live workflow/entity-sync/feature-flag Supabase migrations and complete launch proof.
 
 ### Pre-Revenue Pipeline (score 4-6)
 
-- **PromoGrind** (4/10) — Next concrete milestone.
+- No pre-revenue projects.
 
 ### Funding Readiness
 
 | Signal | Status |
 |---|---|
 | Projects with live runtime | 1 |
-| Public-facing products | 0 |
-| Deployed + public products | 0 |
-| Products mentioning monetization | 0 |
+| Public-facing products | 1 |
+| Deployed + public products | 1 |
+| Products mentioning monetization | 1 |
 
 ### Recommended Actions
 
-1. Push **PromoGrind** (4/10) toward revenue-ready by resolving: Next concrete milestone..
-2. Closest to revenue-ready: **PromoGrind** — accelerate to public launch.
+1. Focus monetization effort on revenue-ready projects: PromoGrind.
+2. 1 deployed product(s) are public-unlaunched — marketing/launch push would unlock revenue potential.
 
 ---
 

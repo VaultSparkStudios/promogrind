@@ -9,11 +9,12 @@
 ## Next
 
 - extract startup/closeout truth parsing into one tested helper across the remaining renderers/closeout surfaces so public-safe repos stop drifting between status, contracts, and briefs [SIL]
-- add a settlement-driven mastery ladder that rewards execution quality, lane diversity, and verified discipline rather than shallow streak spam [SIL]
 - auto-route scanner/community findings into the shared workflow graph with remote reconciliation once the live migrations are in place
 
 ## Shipped This Session
 
+- add settlement mastery ladder + 30-badge achievement system + daily missions + micro-animations [SIL] — **DONE S68**: shipped `src/lib/mastery.js`, `src/lib/achievements.js`, `src/lib/missions.js`, `DailyMissionsPanel`, overhauled `DashboardHero` (rank badge, lane mastery bars, count-up animation), extended `ProfilePanel` (mastery section + achievement grid), wired achievement toast evaluation into `DailyDashboard`. 296/296 tests green.
+- refresh REVENUE_SIGNALS.md — **DONE S68**: regenerated via `ops.mjs revenue-signals`; PromoGrind scored 7/10 revenue-ready, 1 deployed public-unlaunched product.
 - decompose the highest-leverage `src/App.jsx` orchestration seams into dedicated product-shell and operator-loop modules [SIL] — **DONE S67**: extracted `usePromoAppShell`, centralized quick-calc fallback routing, and moved shared shell state out of the monolith
 - unify calculator, AI, scanner, and community outcomes into one workflow/action graph [SIL] — **DONE S67**: added shared workflow store/action-graph modules and rewired dashboard + feedback surfaces onto them
 - route all AI feature calls through one shared budgeted/cached gateway pattern — **DONE S67**: added shared AI gateway helpers and moved Promo Advisor, Promo Chat, AI Action Plan, and Stack Builder onto them

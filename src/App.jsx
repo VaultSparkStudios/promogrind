@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS, getBookUrl } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
+import { flagCalcUsed } from "./lib/missions.js";
 import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBriefEnabled } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import { computeStreak } from "./lib/streaks.js";
@@ -40,6 +41,7 @@ const TodayDashboardPanel = lazy(() => import("./components/dashboard/TodayDashb
 const CommunityPromoBoard = lazy(() => import("./components/CommunityPromoBoard.jsx"));
 const CommunityWinsWall = lazy(() => import("./components/dashboard/CommunityWinsWall.jsx"));
 const SmartPromoRecommender = lazy(() => import("./components/dashboard/SmartPromoRecommender.jsx"));
+const DailyMissionsPanel = lazy(() => import("./components/dashboard/DailyMissionsPanel.jsx"));
 const BonusBet = lazy(() => import("./calculators/BonusBet.jsx"));
 const ProfitBoost = lazy(() => import("./calculators/ProfitBoost.jsx"));
 const FirstBet = lazy(() => import("./calculators/FirstBet.jsx"));
@@ -729,43 +731,29 @@ const DailyStreak = () => {
   );
 };
 
-// â•â•â• ACHIEVEMENTS â•â•â•
-const ACHIEVEMENTS = [
-  {id:'first_calc',label:'First Steps',desc:'Used your first calculator',icon:'ðŸ§®'},
-  {id:'first_ledger',label:'Record Keeper',desc:'Logged first P/L entry',icon:'ðŸ“’'},
-  {id:'streak_7',label:'Week Grinder',desc:'7-day login streak',icon:'ðŸ”¥'},
-  {id:'bets_10',label:'Active Bettor',desc:'Tracked 10+ bets',icon:'ðŸŽ¯'},
-  {id:'profit_100',label:'First $100',desc:'$100+ total profit logged',icon:'ðŸ’µ'},
-  {id:'profit_1000',label:'Four Figures',desc:'$1,000+ total profit logged',icon:'ðŸ’°'},
-  {id:'all_tabs',label:'Explorer',desc:'Visited every calculator group',icon:'ðŸ—ºï¸'},
-];
+// Achievement evaluation moved to src/lib/achievements.js
+import { evaluateAchievements, loadEarned, saveEarned, getNewlyUnlocked, ACHIEVEMENT_MAP } from "./lib/achievements.js";
+import { computeMastery } from "./lib/mastery.js";
 
-const useAchievements = (data, streak) => {
-  const [earned, setEarned] = useState(()=>{
-    try{return JSON.parse(localStorage.getItem('pg_achievements')||'[]');}catch{return [];}
-  });
-  useEffect(()=>{
-    const newEarned=[...earned];
-    const entries=data?.ledger||[]; const bets=data?.bets||[];
-    const total=entries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-    const visitedTabs=JSON.parse(localStorage.getItem('pg_visited_tabs')||'[]');
-    const checks=[
-      ['first_calc', ()=>Object.keys(data?.done||{}).length>0||entries.length>0],
-      ['first_ledger', ()=>entries.length>0],
-      ['streak_7', ()=>streak>=7],
-      ['bets_10', ()=>bets.length>=10],
-      ['profit_100', ()=>total>=100],
-      ['profit_1000', ()=>total>=1000],
-      ['all_tabs', ()=>visitedTabs.length>=5],
-    ];
-    let changed=false;
-    checks.forEach(([id,check])=>{
-      if(!newEarned.includes(id)&&check()){newEarned.push(id);changed=true;}
-    });
-    if(changed){setEarned(newEarned);try{localStorage.setItem('pg_achievements',JSON.stringify(newEarned));}catch{}}
-  },[data,streak]);
-  return {earned, all:ACHIEVEMENTS};
-};
+function useAchievements(data, streak) {
+  const toast = useToast();
+  useEffect(() => {
+    try {
+      const mastery = computeMastery(data || {});
+      const checks = evaluateAchievements(data || {}, streak, mastery);
+      const earned = loadEarned();
+      const newly = getNewlyUnlocked(checks, earned);
+      if (newly.length > 0) {
+        const updated = [...earned, ...newly];
+        saveEarned(updated);
+        newly.forEach(({ id }) => {
+          const a = ACHIEVEMENT_MAP[id];
+          if (a && toast) toast(a.icon + " Achievement unlocked: " + a.label, K.yl);
+        });
+      }
+    } catch {}
+  }, [data, streak]);
+}
 
 // â•â•â• GLOSSARY â•â•â•
 const GLOSSARY_TERMS = [
@@ -2084,6 +2072,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
 
   const dashIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
   const currentStreak = computeStreak(data, today).current;
+  useAchievements(data, currentStreak);
 
   return (
     <div>
@@ -2095,6 +2084,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <Suspense fallback={<LoadingState label="Loading next actionâ€¦" />}>
         <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
       </Suspense>
+      <Suspense fallback={null}><DailyMissionsPanel navigate={navigate} /></Suspense>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
       <Suspense fallback={<LoadingState label="Loading launch postureâ€¦" />}>
         <LaunchCommandCenterPanel />
@@ -3821,6 +3811,7 @@ export default function App() {
       const wasEmpty = Object.keys(log).length === 0;
       log[slug] = (log[slug]||0)+1;
       localStorage.setItem('pg_usage_log', JSON.stringify(log));
+      flagCalcUsed(slug);
       if(wasEmpty) trackEvent('first_calc_run');
     } catch(e) {}
     trackEvent('calculator_viewed', { slug, name: item?.n ?? slug });

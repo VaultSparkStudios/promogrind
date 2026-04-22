@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useMemo, useContext } from "react";
 import { signOut, startCheckout, getTierName } from "../auth.js";
 import { K, font, fontD } from "../lib/shared.js";
-import { FX } from "../contexts.jsx";
+import { FX, AppDataCtx } from "../contexts.jsx";
 import { VAULT_ACCOUNT_PORTAL_URL } from "../launchState.js";
+import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
+import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
 
 const TIER_COLOR = (name) => ({
   Scout: '#06b6d4',
@@ -16,6 +18,122 @@ const UPGRADE_NEXT = {
   Scout:        { planId: 'runner_monthly', label: 'Upgrade to Runner', price: '$19.99/mo' },
   Runner:       { planId: 'closer_monthly', label: 'Upgrade to Closer', price: '$34.99/mo' },
 };
+
+function AchievementsSection() {
+  const earned = useMemo(() => loadEarned(), []);
+  const earnedIds = new Set(earned.map(e => e.id));
+  const earnedCount = earnedIds.size;
+  const [expanded, setExpanded] = React.useState(false);
+
+  const categories = [
+    { key: 'profit',   label: 'Profit'   },
+    { key: 'books',    label: 'Books'    },
+    { key: 'streak',   label: 'Streak'   },
+    { key: 'mastery',  label: 'Mastery'  },
+    { key: 'engage',   label: 'Activity' },
+    { key: 'accuracy', label: 'Accuracy' },
+    { key: 'start',    label: 'Start'    },
+    { key: 'missions', label: 'Missions' },
+  ];
+
+  return (
+    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
+      <div
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, cursor: 'pointer' }}
+        onClick={() => setExpanded(e => !e)}
+      >
+        <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+          Achievements
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 10, color: K.yl, fontWeight: 700 }}>{earnedCount}/{ACHIEVEMENTS.length}</span>
+          <span style={{ fontSize: 10, color: K.mt }}>{expanded ? '▲' : '▼'}</span>
+        </div>
+      </div>
+
+      {!expanded && (
+        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+          {ACHIEVEMENTS.filter(a => earnedIds.has(a.id)).slice(0, 8).map(a => (
+            <span key={a.id} title={a.label} style={{ fontSize: 18, animation: 'pgBadgeIn 0.35s ease backwards' }}>{a.icon}</span>
+          ))}
+          {earnedCount === 0 && <span style={{ fontSize: 10, color: K.mt }}>Complete actions to earn badges</span>}
+        </div>
+      )}
+
+      {expanded && categories.map(cat => {
+        const catAchievements = ACHIEVEMENTS.filter(a => a.category === cat.key);
+        if (catAchievements.length === 0) return null;
+        return (
+          <div key={cat.key} style={{ marginBottom: 10 }}>
+            <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 4 }}>{cat.label}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+              {catAchievements.map(a => {
+                const unlocked = earnedIds.has(a.id);
+                return (
+                  <div
+                    key={a.id}
+                    title={`${a.label}: ${a.desc}`}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 4,
+                      padding: '3px 8px', borderRadius: 6,
+                      background: unlocked ? `${K.yl}12` : `${K.s3}`,
+                      border: `1px solid ${unlocked ? K.yl + '40' : K.bd}`,
+                      opacity: unlocked ? 1 : 0.45,
+                      animation: unlocked ? 'pgBadgeIn 0.3s ease' : 'none',
+                    }}
+                  >
+                    <span style={{ fontSize: 13 }}>{a.icon}</span>
+                    <span style={{ fontSize: 9, fontWeight: 600, color: unlocked ? K.tx : K.mt, fontFamily: font }}>{a.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function MasterySection() {
+  const ctx = useContext(AppDataCtx);
+  const mastery = useMemo(() => ctx?.appData ? computeMastery(ctx.appData) : null, [ctx?.appData]);
+  if (!mastery) return null;
+
+  const { globalRank, perType } = mastery;
+  const activeLanes = Object.entries(perType).filter(([, d]) => d.xp > 0).sort(([, a], [, b]) => b.xp - a.xp);
+
+  return (
+    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+        Operator Mastery
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: globalRank.color, background: `${globalRank.color}18`, border: `1px solid ${globalRank.color}35`, padding: '3px 12px', borderRadius: 99, fontFamily: font }}>
+          {globalRank.name}
+        </span>
+        <span style={{ fontSize: 10, color: K.mt }}>Global Rank</span>
+      </div>
+      {activeLanes.length === 0 && (
+        <div style={{ fontSize: 10, color: K.mt }}>Settle bets to build lane mastery</div>
+      )}
+      {activeLanes.map(([key, d]) => {
+        const color = MASTERY_COLOR[d.level] || K.mt;
+        return (
+          <div key={key} style={{ marginBottom: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+              <span style={{ fontSize: 10, color: K.tx }}>{d.label}</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color }}>{d.level} · {d.xp} XP</span>
+            </div>
+            <div style={{ height: 4, background: K.s3, borderRadius: 2, overflow: 'hidden' }}>
+              <div style={{ height: 4, background: color, borderRadius: 2, width: `${d.levelPct}%`, transition: 'width 0.7s cubic-bezier(0.22,1,0.36,1)' }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function ProfilePanel({
   user, proStatus, darkMode, toggleTheme,
@@ -204,6 +322,12 @@ export default function ProfilePanel({
             </select>
           </div>
         </div>
+
+        {/* ── Mastery ──────────────────────────────────────────────── */}
+        <MasterySection />
+
+        {/* ── Achievements ─────────────────────────────────────────── */}
+        <AchievementsSection />
 
         {/* ── Footer actions ───────────────────────────────────────── */}
         <div style={{ padding: '14px 20px' }}>
