@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeMastery, MASTERY_COLOR, MASTERY_RANK } from "../lib/mastery.js";
+import { computeMastery, MASTERY_COLOR, MASTERY_RANK, PROMO_TYPE_KEYS, PROMO_LABELS, MASTERY_NEXT_XP } from "../lib/mastery.js";
 
 function makeAppData(overrides = {}) {
   return { ledger: [], resultFeedback: [], done: {}, bets: [], ...overrides };
@@ -149,5 +149,35 @@ describe("MASTERY_RANK", () => {
     expect(MASTERY_RANK.Shark).toBeGreaterThan(MASTERY_RANK.Closer);
     expect(MASTERY_RANK.Closer).toBeGreaterThan(MASTERY_RANK.Executor);
     expect(MASTERY_RANK.Executor).toBeGreaterThan(MASTERY_RANK.Analyst);
+  });
+});
+
+describe("PROMO_TYPE_KEYS catalog integrity", () => {
+  it("has 8 promo type keys", () => {
+    expect(PROMO_TYPE_KEYS).toHaveLength(8);
+  });
+
+  it("every key has a non-empty label in PROMO_LABELS", () => {
+    for (const key of PROMO_TYPE_KEYS) {
+      expect(typeof PROMO_LABELS[key]).toBe("string");
+      expect(PROMO_LABELS[key].length).toBeGreaterThan(0);
+    }
+  });
+
+  it("perType result includes label for every key", () => {
+    const { perType } = computeMastery(makeAppData());
+    for (const key of PROMO_TYPE_KEYS) {
+      expect(typeof perType[key].label).toBe("string");
+      expect(perType[key].label.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("MASTERY_NEXT_XP is null at Shark (max level)", () => {
+    expect(MASTERY_NEXT_XP.Shark).toBeNull();
+  });
+
+  it("MASTERY_NEXT_XP thresholds increase with level", () => {
+    expect(MASTERY_NEXT_XP.Executor).toBeGreaterThan(MASTERY_NEXT_XP.Analyst);
+    expect(MASTERY_NEXT_XP.Closer).toBeGreaterThan(MASTERY_NEXT_XP.Executor);
   });
 });

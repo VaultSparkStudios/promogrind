@@ -13,6 +13,11 @@
 
 ## Shipped This Session
 
+- streaming cancellation + exponential-backoff retry in AI gateway — **DONE S69**: `streamProjectFunction` now accepts AbortController signal; PromoAdvisorPanel and PromoChat abort on unmount/re-submission; 2-attempt retry (1s/3s) for transient 5xx/network failures.
+- calculator input persistence for ParlayBuilder, RoundRobinCalc, SGPEstimator — **DONE S69**: stake and combo-size preferences now persist via `useCalcMemory`.
+- fix 4 un-completable missions — **DONE S69**: added `flagVisit` helper; wired on-mount flags in PromoAdvisorPanel, TrackInsights, DailyBriefPage; on-toggle flag in Tracker.
+- PromoChat HTML input sanitization + mission auto-complete + focus-refresh — **DONE S69**: PromoChat strips HTML before sending; DailyMissionsPanel auto-completes eligible missions and refreshes on window focus.
+- sanitization: untrack private ops files, sanitize absolute paths — **DONE S69**: `docs/CREATIVE_DIRECTION_RECORD.md`, `scripts/rotate-render-key.mjs`, `scripts/soul-interview.mjs` untracked and gitignored; `check-repo-lock.sh` example paths generalized. Scan now 0 critical/0 warning.
 - add settlement mastery ladder + 30-badge achievement system + daily missions + micro-animations [SIL] — **DONE S68**: shipped `src/lib/mastery.js`, `src/lib/achievements.js`, `src/lib/missions.js`, `DailyMissionsPanel`, overhauled `DashboardHero` (rank badge, lane mastery bars, count-up animation), extended `ProfilePanel` (mastery section + achievement grid), wired achievement toast evaluation into `DailyDashboard`. 296/296 tests green.
 - refresh REVENUE_SIGNALS.md — **DONE S68**: regenerated via `ops.mjs revenue-signals`; PromoGrind scored 7/10 revenue-ready, 1 deployed public-unlaunched product.
 - decompose the highest-leverage `src/App.jsx` orchestration seams into dedicated product-shell and operator-loop modules [SIL] — **DONE S67**: extracted `usePromoAppShell`, centralized quick-calc fallback routing, and moved shared shell state out of the monolith
