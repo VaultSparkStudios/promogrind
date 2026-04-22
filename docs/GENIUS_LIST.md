@@ -1,20 +1,16 @@
-# Genius Hit List — Session 66
+# Genius Hit List — Session 67
 
 > Generated: 2026-04-22 | Scope: founder-portfolio | Pattern detectors: 2 signals evaluated | Top 12 shown
 
 ---
 
-## 💡 #1  Refresh REVENUE_SIGNALS.md (999d stale)
+## 💡 #1  Intent completion rate low (50%) — reduce session scope
 
-**Tier:** 💡 MEDIUM · **Category:** intelligence · **Pattern:** 77 · **IGNIS:** 84 (fire) · **Final:** 119
+**Tier:** 💡 MEDIUM · **Category:** sil · **Pattern:** 80 · **IGNIS:** 80 (fire) · **Final:** 120
 
-Revenue intelligence is time-sensitive. Regenerate to surface current opportunities.
+More sessions ending Partial than Achieved. Halve declared scope for next 2 sessions.
 
-*IGNIS rank:* cat:INTELLIGENCE(+24)
-
-```bash
-node scripts/ops.mjs revenue-signals
-```
+*IGNIS rank:* cat:AUTOMATION(+20)
 
 ---
 

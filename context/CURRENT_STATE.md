@@ -5,19 +5,22 @@ Last updated: 2026-04-22
 ## Snapshot
 
 - Date: 2026-04-22
-- Overall status: deployed product with strong feature depth, green code health, and yellow Studio truth continuity, now with shared app-shell, workflow, and AI execution seams
-- Current phase: launch-hardening plus operator-surface consolidation
+- Overall status: deployed product with strong feature depth, gamification stack, green code health, and clean public-repo sanitization posture
+- Current phase: engagement-deepening + launch-hardening
 
 ## What exists
 
 - Live product: `https://promogrind.bet` with calculators, tracker, workflow surfaces, community board, daily brief, AI advisor/chat/action plan, subscriptions, and launch/admin tooling
-- Systems: Supabase-backed auth/data flows, Stripe billing paths, AI edge functions, push/onboarding/community surfaces, Studio export/contract generation, shared AI gateway/workflow store layers, and broad automated test coverage
-- Important paths: `src/App.jsx`, `src/app/`, `src/ai/`, `src/workflows/`, `src/components/`, `supabase/functions/`, `scripts/`, `context/`
+- Gamification: settlement mastery ladder (8 promo types × 4 levels), 30-badge achievement system, daily missions (15-pool, LCG-seeded) with auto-completion and XP tracking
+- Systems: Supabase-backed auth/data flows, Stripe billing paths, AI edge functions (with AbortController + exponential-backoff retry), push/onboarding/community surfaces, Studio export/contract generation, shared AI gateway/workflow store layers
+- Test coverage: 369 tests passing (up from 296 at S67)
+- Security: sanitization scan 0 critical / 0 warning (3 private ops files untracked + gitignored, absolute paths sanitized)
+- Important paths: `src/App.jsx`, `src/app/`, `src/ai/gateway.js`, `src/workflows/`, `src/lib/` (mastery.js, achievements.js, missions.js), `src/components/`, `supabase/functions/`, `scripts/`, `context/`
 
 ## In progress
 
-- Active work: extending the newly shared shell/workflow/AI contract into the remaining scanner/community execution surfaces so all recommendations and persistence paths use one mutation model
-- Active work: moving the remaining startup/doctor/closeout truth surfaces onto the shared parsing helper so the repo stops carrying yellow-genome drift from duplicated logic
+- Active work: extending the shared workflow/AI contract into remaining scanner/community execution surfaces so all recommendations persist through one mutation path
+- Active work: applying live Supabase migrations for workflow/entity sync and feature flags
 
 ## Blockers
 
@@ -27,6 +30,6 @@ Last updated: 2026-04-22
 
 ## Next 3 moves
 
-1. Extend the shared AI/workflow contract into the remaining scanner/community execution paths so every recommendation persists and routes through one governed mutation path.
-2. Apply live Supabase workflow/entity sync and feature-flag migrations, then verify the unified workflow loop persists beyond local storage.
-3. Finish launch proof with real affiliate links, Stripe smoke, production VAPID, and a friend beta pass now that the core local architecture tranche is in place.
+1. Extend the shared AI/workflow contract into remaining scanner/community execution surfaces.
+2. Apply live Supabase workflow/entity sync and feature-flag migrations, verify the unified workflow loop persists beyond local storage.
+3. Finish launch proof: real affiliate links, Stripe smoke, production VAPID, friend beta.

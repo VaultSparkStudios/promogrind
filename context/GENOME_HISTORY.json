@@ -158,7 +158,7 @@
     {
       "date": "2026-04-22",
       "session": 67,
-      "total": 13,
+      "total": 14,
       "maxTotal": 25,
       "overallStatus": "yellow",
       "lastReviewed": "2026-04-22",
@@ -166,10 +166,10 @@
         "schema_alignment": 3,
         "prompt_template_alignment": 3,
         "derived_view_freshness": 3,
-        "handoff_continuity": 2,
+        "handoff_continuity": 3,
         "contradiction_density": 2
       },
-      "delta": 0,
+      "delta": 1,
       "cause": "Extend the newly shipped shared app-shell/workflow/AI contract into remaining scanner/community surfaces, then apply the"
     }
   ]

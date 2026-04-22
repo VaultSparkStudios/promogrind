@@ -39,3 +39,21 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: continue with ad hoc component-local state; add one-off helpers to each surface without introducing shared contracts.
 - Why this was chosen: it lowers local architecture debt, makes operator-facing recommendations deterministic enough to govern, and gives the remaining scanner/community surfaces a clear path onto the same contract.
 - Follow-up: migrate the remaining scanner/community execution paths and live Supabase persistence onto these seams, then expand regression coverage around the shared contract.
+
+### 2026-04-22 - Gamification computed from existing appData (no schema migrations)
+
+- Status: accepted
+- Context: Settlement mastery, achievements, and daily missions all needed player state — but adding new Supabase tables or schema fields would block shipping behind live migration work.
+- Decision: compute all gamification state (`computeMastery`, `evaluateAchievements`, `getDailyMissions`) purely from the existing `appData` shape (ledger, resultFeedback, bets, done, workflowInbox, vaultEvents) plus localStorage for per-device mission completion. No schema changes required.
+- Alternatives considered: add new Supabase tables for mastery/achievements/missions; store everything in localStorage only.
+- Why this was chosen: ships immediately without external dependencies, leverages data already synced, and keeps local-first resilience. localStorage handles device-level state (mission completion, visit flags) which is appropriately ephemeral.
+- Follow-up: if multi-device sync of achievements becomes a product requirement, add Supabase columns to existing user_data table at that point.
+
+### 2026-04-22 - Untrack private ops scripts from public repo, not delete
+
+- Status: accepted
+- Context: `docs/CREATIVE_DIRECTION_RECORD.md`, `scripts/rotate-render-key.mjs`, and `scripts/soul-interview.mjs` were committed to the public PromoGrind repo. They contain private Studio OS documents and a confirmed-exposed Render key reference.
+- Decision: `git rm --cached` to untrack from git, add to `.gitignore`, keep files locally for ops use.
+- Alternatives considered: delete files entirely; redact sensitive content and keep tracked.
+- Why this was chosen: files have legitimate local ops value; untracking preserves them for local workflows while removing them from public history going forward. The Render key in `rotate-render-key.mjs` was already exposed in a prior handoff doc, so untracking the helper script doesn't make it worse — but it stops re-publishing the reference in future commits.
+- Follow-up: rotate the Render deploy hook key via the Render dashboard (human action required). Run `git grep rnd_OSQijzSJCUZE22etoih0xnFI5QZh` after rotation to confirm zero references.
