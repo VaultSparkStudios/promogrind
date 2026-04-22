@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from "react";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { calcParlay, toD, f, K, font } from "../lib/shared.js";
-import { S, In, RR, Nt, Tl, Help } from "../ui.jsx";
+import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function ParlayBuilder() {
   const [legs, setLegs] = useState([{ odds: "+150" }, { odds: "+200" }, { odds: "+175" }]);
-  const [stake, setStake] = useState("100");
+  const [mem, setMem] = useCalcMemory("parlay-builder", { stake: "100" });
+  const { stake } = mem;
+  const setStake = (v) => setMem("stake", v);
   const legOdds = legs.map((l) => l.odds);
   const r = useMemo(() => calcParlay(legOdds, stake), [legOdds, stake]);
   const [showReceipt, setShowReceipt] = useState(false);

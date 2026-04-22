@@ -1,12 +1,14 @@
 import React, { useState, useMemo } from "react";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { calcSGP, toD, f, K, font } from "../lib/shared.js";
-import { S, In, RR, Nt, Tl, Help } from "../ui.jsx";
+import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function SGPEstimator() {
   const [legs, setLegs] = useState([{ odds: "+200" }, { odds: "+150" }, { odds: "-110" }]);
   const [sgpOdds, setSgpOdds] = useState("+450");
-  const [stake, setStake] = useState("50");
+  const [mem, setMem] = useCalcMemory("sgp-estimator", { stake: "50" });
+  const { stake } = mem;
+  const setStake = (v) => setMem("stake", v);
   const r = useMemo(() => calcSGP(legs.map((l) => l.odds), sgpOdds, stake), [legs, sgpOdds, stake]);
   const [showReceipt, setShowReceipt] = useState(false);
   const addLeg = () => { if (legs.length < 4) setLegs((l) => [...l, { odds: "+150" }]); };

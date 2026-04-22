@@ -1,12 +1,14 @@
 import React, { useState, useMemo } from "react";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import { calcRR, K, font } from "../lib/shared.js";
-import { S, In, RR, Nt, Tl, Help } from "../ui.jsx";
+import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function RoundRobinCalc() {
   const [picks, setPicks] = useState([{ odds: "+150" }, { odds: "+200" }, { odds: "+175" }]);
-  const [size, setSize] = useState("2");
-  const [stakeEach, setStakeEach] = useState("50");
+  const [mem, setMem] = useCalcMemory("round-robin", { size: "2", stakeEach: "50" });
+  const { size, stakeEach } = mem;
+  const setSize = (v) => setMem("size", v);
+  const setStakeEach = (v) => setMem("stakeEach", v);
   const pickOdds = picks.map((p) => p.odds);
   const r = useMemo(() => calcRR(pickOdds, size, stakeEach), [pickOdds, size, stakeEach]);
   const [showReceipt, setShowReceipt] = useState(false);
