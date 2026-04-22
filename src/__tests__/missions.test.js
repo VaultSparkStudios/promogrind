@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { getDailyMissions, isMissionCompleted, completeMission, getTodayXp, MISSION_POOL } from "../lib/missions.js";
+import { getDailyMissions, isMissionCompleted, completeMission, getTodayXp, MISSION_POOL, flagCalcUsed, flagVisit } from "../lib/missions.js";
 
 // Minimal localStorage mock for node test environment
 const _store = {};
@@ -112,6 +112,45 @@ describe("getTodayXp", () => {
     completeMission(m1.id, date);
     completeMission(m2.id, date);
     expect(getTodayXp(date)).toBe(m1.xp + m2.xp);
+  });
+});
+
+describe("flagCalcUsed", () => {
+  it("sets today's date for known slugs", () => {
+    const today = new Date().toISOString().slice(0, 10);
+    flagCalcUsed("bonus-bet");
+    expect(localStorage.getItem("pg_used_bonus_bet")).toBe(today);
+  });
+
+  it("is a no-op for unknown slugs", () => {
+    flagCalcUsed("unknown-slug");
+    expect(localStorage.getItem("pg_used_unknown-slug")).toBeNull();
+  });
+
+  it("covers all mapped slugs", () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const slugs = ["arb-2way", "profit-boost", "kelly", "no-vig", "first-bet"];
+    const keys = ["pg_used_arb", "pg_used_boost", "pg_used_kelly", "pg_used_novig", "pg_used_first_bet"];
+    slugs.forEach((s, i) => { flagCalcUsed(s); expect(localStorage.getItem(keys[i])).toBe(today); });
+  });
+});
+
+describe("flagVisit", () => {
+  it("sets today's date for known features", () => {
+    const today = new Date().toISOString().slice(0, 10);
+    flagVisit("advisor");
+    expect(localStorage.getItem("pg_advisor_opened")).toBe(today);
+  });
+
+  it("covers insights, brief, and book features", () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const pairs = [["insights","pg_insights_visited"],["brief","pg_brief_visited"],["book","pg_book_updated"]];
+    pairs.forEach(([feature, key]) => { flagVisit(feature); expect(localStorage.getItem(key)).toBe(today); });
+  });
+
+  it("is a no-op for unknown features", () => {
+    flagVisit("nonexistent");
+    expect(localStorage.getItem("pg_nonexistent")).toBeNull();
   });
 });
 
