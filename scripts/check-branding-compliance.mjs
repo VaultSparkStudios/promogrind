@@ -9,22 +9,11 @@
  *   node scripts/check-branding-compliance.mjs --summary
  */
 
-import { readFileSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const registryPath = resolve(__dirname, '../portfolio/PROJECT_REGISTRY.json');
+import { loadProjectRegistry } from './lib/project-registry.mjs';
 
 const summaryOnly = process.argv.includes('--summary');
 
-let registry;
-try {
-  registry = JSON.parse(readFileSync(registryPath, 'utf8'));
-} catch (err) {
-  console.error(`Error reading PROJECT_REGISTRY.json: ${err.message}`);
-  process.exit(1);
-}
+const registry = loadProjectRegistry();
 
 const projects = registry.projects ?? [];
 

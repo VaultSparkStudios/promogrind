@@ -1,0 +1,69 @@
+{
+  "version": "1.0",
+  "updated": "2026-04-22",
+  "description": "Declarative canon rules enforced by scripts/canon-enforcer.mjs for PromoGrind's public-safe repo.",
+  "rules": [
+    {
+      "id": "canon-001-sil-markers",
+      "canon": "CANON-001",
+      "kind": "regex-must-match",
+      "severity": "error",
+      "path": "context/SELF_IMPROVEMENT_LOOP.md",
+      "pattern": "<!-- rolling-status-start -->[\\s\\S]*?<!-- rolling-status-end -->"
+    },
+    {
+      "id": "canon-003-initiate-separate",
+      "canon": "CANON-003",
+      "kind": "file-exists",
+      "severity": "warn",
+      "path": "prompts/initiate.md"
+    },
+    {
+      "id": "canon-006-branding-compliant",
+      "canon": "CANON-006",
+      "kind": "shell",
+      "severity": "error",
+      "command": "node scripts/check-branding-compliance.mjs --silent"
+    },
+    {
+      "id": "canon-007-staging-type-declared",
+      "canon": "CANON-007",
+      "kind": "regex-must-match",
+      "severity": "error",
+      "path": "context/PROJECT_STATUS.json",
+      "pattern": "\"stagingType\""
+    },
+    {
+      "id": "canon-008-rights-provenance",
+      "canon": "CANON-008",
+      "kind": "regex-must-match",
+      "severity": "warn",
+      "path": "docs/RIGHTS_PROVENANCE.md",
+      "pattern": "(Proprietary|AGPL|MIT|Apache|BSD)"
+    },
+    {
+      "id": "canon-009-sil-v3-adopted",
+      "canon": "CANON-009",
+      "kind": "regex-must-match",
+      "severity": "warn",
+      "path": "context/SELF_IMPROVEMENT_LOOP.md",
+      "pattern": "/\\s*1000|sil-rubric-version:\\s*3"
+    },
+    {
+      "id": "session-lock-agent-field",
+      "canon": "PROTOCOL-v1.0",
+      "kind": "regex-must-not-match",
+      "severity": "warn",
+      "path": "context/.session-lock",
+      "pattern": "^(?!.*\\bagent:).*$",
+      "flags": "s"
+    },
+    {
+      "id": "model-router-chokepoint",
+      "canon": "FEEDBACK",
+      "kind": "shell",
+      "severity": "error",
+      "command": "node scripts/check-model-router-adherence.mjs"
+    }
+  ]
+}
