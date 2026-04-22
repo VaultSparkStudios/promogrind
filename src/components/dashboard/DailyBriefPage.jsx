@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDataCtx } from "../../contexts.jsx";
 import { PROMO_SCHED } from "../../data/promoSchedule.js";
@@ -7,8 +7,10 @@ import { getTodayContext } from "../../dashboard/today.js";
 import { buildOperatorSurfaceState, getWorkflowActionSlug } from "../../dashboard/operatorSurfaces.js";
 import { disableDailyBriefPush, enableDailyBriefPush, isDailyBriefEnabled } from "../../sw-register.js";
 import { FEATURE_FLAGS } from "../../launchState.js";
+import { flagVisit } from "../../lib/missions.js";
 
 export default function DailyBriefPage() {
+  useEffect(() => { flagVisit('brief'); }, []);
   const navigate = useNavigate();
   const { appData = {} } = useContext(AppDataCtx) || {};
   const today = new Date();

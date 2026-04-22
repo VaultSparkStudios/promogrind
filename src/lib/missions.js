@@ -97,4 +97,16 @@ export function flagCalcUsed(slug) {
   if (key) try { localStorage.setItem(key, todayStr()); } catch {}
 }
 
+// Mark a page/feature visit for mission detection
+export function flagVisit(feature) {
+  const flagMap = {
+    'advisor':   'pg_advisor_opened',
+    'insights':  'pg_insights_visited',
+    'brief':     'pg_brief_visited',
+    'book':      'pg_book_updated',
+  };
+  const key = flagMap[feature];
+  if (key) try { localStorage.setItem(key, todayStr()); } catch {}
+}
+
 export const MISSION_POOL = POOL;

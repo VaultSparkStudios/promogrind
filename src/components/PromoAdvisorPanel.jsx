@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { hasStreamingGateway, invokeProjectFunction, readDailyUsage, streamProjectFunction, writeDailyUsage } from "../ai/gateway.js";
@@ -10,8 +10,10 @@ import { K, font, fontD, S } from "../lib/shared.js";
 import { normalizeRecommendation } from "../promograph/index.js";
 import { recommendationToWorkflow } from "../promograph/recommendations.js";
 import { appendWorkflow } from "../workflows/store.js";
+import { flagVisit } from "../lib/missions.js";
 
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
+  useEffect(() => { flagVisit('advisor'); }, []);
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const signInHref = getProjectAuthHref('signin');
   const signUpHref = getProjectAuthHref('signup');

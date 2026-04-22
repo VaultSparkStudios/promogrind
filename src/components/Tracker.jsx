@@ -6,6 +6,7 @@ import { AppDataCtx } from "../contexts.jsx";
 import { useToast } from "../contexts.jsx";
 import { Tl, Nt, S } from "../ui.jsx";
 import { PROMO_SCHED } from "../data/promoSchedule.js";
+import { flagVisit } from "../lib/missions.js";
 
 const Tracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -17,7 +18,7 @@ const Tracker = () => {
   const setBookStatus = (n, v) => syncAppData({...data, bookStatus:{...bookStatus,[n]:v}});
   const setBookRating = (n, v) => syncAppData({...data, bookRatings:{...bookRatings,[n]:v}});
   const toast = useToast();
-  const toggle = n => { const newDone=!done[n]; const d = {...data, done:{...done,[n]:newDone}}; syncAppData(d); if(toast&&newDone) toast('✓ Book marked complete'); };
+  const toggle = n => { const newDone=!done[n]; const d = {...data, done:{...done,[n]:newDone}}; syncAppData(d); flagVisit('book'); if(toast&&newDone) toast('✓ Book marked complete'); };
   const setP = (n, v) => syncAppData({...data, profits:{...profits,[n]:v}});
   const setExpiry = (n, v) => syncAppData({...data, bookExpiry:{...expiry,[n]:v}});
   const todayStr = new Date().toISOString().split('T')[0];

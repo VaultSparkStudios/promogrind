@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { AppDataCtx } from "../contexts.jsx";
 import { K, f, font, fontD } from "../lib/shared.js";
 import { S, Tl } from "../ui.jsx";
 import { buildTrackInsights, formatPromoTypeLabel, updateResultFeedback } from "../track/insights.js";
 import { patchWorkflowState } from "../workflows/store.js";
+import { flagVisit } from "../lib/missions.js";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -35,6 +36,7 @@ function driftBar(row) {
 }
 
 export default function TrackInsights() {
+  useEffect(() => { flagVisit('insights'); }, []);
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const insights = useMemo(() => buildTrackInsights(appData || {}, new Date()), [appData]);
   const [drafts, setDrafts] = useState({});

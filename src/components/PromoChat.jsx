@@ -76,7 +76,7 @@ const PromoChat = ({ navigate }) => {
 
   const sendMessage = async () => {
     if (!chatInput.trim() || chatLoading || !session || !hasAccess || isLimited) return;
-    const userMsg = { role: 'user', content: chatInput.trim().slice(0, 1000) };
+    const userMsg = { role: 'user', content: chatInput.replace(/<[^>]*>/g, '').trim().slice(0, 1000) };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setChatInput('');
