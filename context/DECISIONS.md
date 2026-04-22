@@ -56,4 +56,4 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Decision: `git rm --cached` to untrack from git, add to `.gitignore`, keep files locally for ops use.
 - Alternatives considered: delete files entirely; redact sensitive content and keep tracked.
 - Why this was chosen: files have legitimate local ops value; untracking preserves them for local workflows while removing them from public history going forward. The Render key in `rotate-render-key.mjs` was already exposed in a prior handoff doc, so untracking the helper script doesn't make it worse — but it stops re-publishing the reference in future commits.
-- Follow-up: rotate the Render deploy hook key via the Render dashboard (human action required). Run `git grep rnd_OSQijzSJCUZE22etoih0xnFI5QZh` after rotation to confirm zero references.
+- Follow-up: rotate the Render deploy hook key via the Render dashboard (human action required). Run `git grep` with the old key after rotation to confirm zero references across all repos.
