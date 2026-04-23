@@ -32,6 +32,7 @@ import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { redact } from './lib/secrets.mjs';
 import { appendEvent } from './lib/studio-events.mjs';
+import { readJson } from './lib/context-parsing.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STUDIO_ROOT = path.resolve(__dirname, '..');
@@ -131,7 +132,8 @@ if (DRY) {
 // ── Step 3: Stamp PROJECT_STATUS.json lastUpdated ────────────────────────────
 header('Step 3 · Stamp PROJECT_STATUS.json');
 try {
-  const s = JSON.parse(fs.readFileSync(STATUS_PATH, 'utf8'));
+  const s = readJson(STATUS_PATH, null);
+  if (!s) throw new Error('PROJECT_STATUS.json unreadable');
   const today = new Date().toISOString().slice(0, 10);
   s.lastUpdated = today;
   if (!DRY) fs.writeFileSync(STATUS_PATH, JSON.stringify(s, null, 2) + '\n');
@@ -197,7 +199,7 @@ if (/^[\sMADRCU?]+secrets\//m.test(status)) {
 // ── Step 5: Confirm ──────────────────────────────────────────────────────────
 header('Step 5 · Confirm commit + push');
 const suggestedMsg = CUSTOM_MSG || (() => {
-  const s = JSON.parse(fs.readFileSync(STATUS_PATH, 'utf8'));
+  const s = readJson(STATUS_PATH, {});
   const focus = (s.currentFocus || 'session closeout').slice(0, 60);
   return `chore(S${sessionNumber(s)}): ${focus}`;
 })();
@@ -290,7 +292,8 @@ console.log(`\n✓ Closeout autopilot finished. Startup brief ready for next ses
 
 if (!DRY) {
   try {
-    const s = JSON.parse(fs.readFileSync(STATUS_PATH, 'utf8'));
+    const s = readJson(STATUS_PATH, null);
+    if (!s) throw new Error('PROJECT_STATUS.json unreadable');
     appendEvent(STUDIO_ROOT, {
       type: 'session-closed',
       slug: s.slug || path.basename(PROJECT_ROOT) || 'studio-ops',

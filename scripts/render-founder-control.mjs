@@ -2,20 +2,13 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readJson } from './lib/context-parsing.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const OUT_MD = path.join(ROOT, 'docs', 'FOUNDER_CONTROL.md');
 const OUT_JSON = path.join(ROOT, 'portfolio', 'compiled', 'FOUNDER_CONTROL.json');
 const jsonMode = process.argv.includes('--json');
-
-function readJson(filePath, fallback = null) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch {
-    return fallback;
-  }
-}
 
 const projectStatus = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), {});
 const humanPressure = readJson(path.join(ROOT, 'portfolio', 'compiled', 'HUMAN_ACTION_PRESSURE.json'), { items: [] });

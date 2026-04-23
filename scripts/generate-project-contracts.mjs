@@ -3,25 +3,20 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readProjectJson } from './lib/context-parsing.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const manifestPath = path.join(ROOT, 'context', 'STUDIO_MANIFEST.json');
-const statusPath = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
 const outDir = path.join(ROOT, 'context', 'contracts');
 const jsonOut = process.argv.includes('--json');
-
-function readJson(filePath, fallback = null) {
-  try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); } catch { return fallback; }
-}
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(value, null, 2) + '\n');
 }
 
-const manifest = readJson(manifestPath, null);
-const status = readJson(statusPath, {});
+const manifest = readProjectJson(ROOT, 'context/STUDIO_MANIFEST.json', null);
+const status = readProjectJson(ROOT, 'context/PROJECT_STATUS.json', {});
 
 if (!manifest) {
   console.error('STUDIO_MANIFEST.json missing or unreadable.');

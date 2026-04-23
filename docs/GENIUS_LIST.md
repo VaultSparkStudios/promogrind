@@ -1,16 +1,20 @@
-# Genius Hit List — Session 67
+# Genius Hit List — Session 71
 
-> Generated: 2026-04-22 | Scope: founder-portfolio | Pattern detectors: 2 signals evaluated | Top 12 shown
+> Generated: 2026-04-23 | Scope: founder-portfolio | Pattern detectors: 2 signals evaluated | Top 12 shown
 
 ---
 
-## 💡 #1  Intent completion rate low (50%) — reduce session scope
+## 💡 #1  Run ops.mjs doctor — full studio health check before planning
 
-**Tier:** 💡 MEDIUM · **Category:** sil · **Pattern:** 80 · **IGNIS:** 80 (fire) · **Final:** 120
+**Tier:** 💡 MEDIUM · **Category:** speed · **Pattern:** 68 · **IGNIS:** 76 (fire) · **Final:** 106
 
-More sessions ending Partial than Achieved. Halve declared scope for next 2 sessions.
+One command runs all validators. Use at session start to catch issues early.
 
-*IGNIS rank:* cat:AUTOMATION(+20)
+*IGNIS rank:* cat:INFRA(+16)
+
+```bash
+node scripts/ops.mjs doctor
+```
 
 ---
 

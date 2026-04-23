@@ -83,35 +83,55 @@ export function buildAdaptivePromoPlan({
       .filter((alert) => alert.direction === "negative" && alert.scope === "book")
       .map((alert) => alert.key),
   );
+  const workflowBacklog = (snapshot.openWorkflowCount || 0) + (snapshot.waitingWorkflowCount || 0);
+  const feedbackCoverage = trackInsights.feedbackEntries?.length
+    ? ((trackInsights.settledCount + trackInsights.skippedFeedback.length) / trackInsights.feedbackEntries.length) * 100
+    : 0;
 
   const topPromos = todayPromos
     .map((promo) => {
       const promoType = inferPromoTypeFromSchedule(promo);
       const reasons = [];
       let score = GRADE_SCORE[promo.grade] || 0;
-      if (snapshot.expiringBooks?.some((book) => book.name === promo.book)) {
-        score += 3;
+      const isExpiring = snapshot.expiringBooks?.some((book) => book.name === promo.book);
+      const promoIsHot = hotPromoKeys.has(promoType);
+      const bookIsHot = hotBookKeys.has(promo.book);
+      const promoIsCold = coldPromoKeys.has(promoType);
+      const bookIsCold = coldBookKeys.has(promo.book);
+
+      if (isExpiring) {
+        score += workflowBacklog >= 3 ? 5 : 4;
         reasons.push("expiring");
       }
-      if (hotPromoKeys.has(promoType)) {
-        score += 2;
+      if (promoIsHot) {
+        score += 3;
         reasons.push("hot lane");
       }
-      if (hotBookKeys.has(promo.book)) {
+      if (bookIsHot) {
         score += 2;
         reasons.push("book running hot");
       }
-      if (coldPromoKeys.has(promoType)) {
-        score -= 3;
+      if (promoIsCold) {
+        score -= 4;
         reasons.push("cold lane");
       }
-      if (coldBookKeys.has(promo.book)) {
-        score -= 2;
+      if (bookIsCold) {
+        score -= 3;
         reasons.push("book underperforming");
       }
       if (limitedBooks.includes(promo.book)) {
         score -= 4;
         reasons.push("limit risk");
+      }
+      if (workflowBacklog >= 3 && !isExpiring) {
+        score -= 2;
+        reasons.push("backlog pressure");
+      }
+      if (workflowBacklog >= 5 && !promoIsHot && !bookIsHot) {
+        score -= 1;
+      }
+      if (feedbackCoverage < 45 && !promoIsHot && !bookIsHot) {
+        score -= 1;
       }
       return { ...promo, promoType, score, reasons };
     })
@@ -120,10 +140,6 @@ export function buildAdaptivePromoPlan({
 
   const topLane = trackInsights.promoTypeRows?.find((row) => row.settled >= 2 && row.actualProfit > 0) || null;
   const coldLane = (trackInsights.topDriftAlerts || []).find((alert) => alert.direction === "negative") || null;
-  const workflowBacklog = (snapshot.openWorkflowCount || 0) + (snapshot.waitingWorkflowCount || 0);
-  const feedbackCoverage = trackInsights.feedbackEntries?.length
-    ? ((trackInsights.settledCount + trackInsights.skippedFeedback.length) / trackInsights.feedbackEntries.length) * 100
-    : 0;
 
   let mode = "build";
   let headline = "Build a fresh edge stack";

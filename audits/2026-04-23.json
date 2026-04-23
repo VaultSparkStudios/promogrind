@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-23",
+  "session": 73,
+  "sessionIntent": "execute the remaining unblocked /go items, update repo truth, then close out and push a verified state cleanly to GitHub",
+  "intentOutcome": "achieved-with-external-blockers",
+  "testsPassingAtClose": 375,
+  "testsDelta": 1,
+  "buildPassing": true,
+  "sanitizationFindings": { "critical": 0, "warning": 0 },
+  "silTotal": 783,
+  "silDelta": 14,
+  "velocity": 3,
+  "protocolVelocity": 5,
+  "debtDirection": "down",
+  "shippedItems": [
+    "patched the GitHub Pages deploy workflow so browser push rollout receives both VITE_VAPID_PUBLIC_KEY and VITE_PG_FEATURE_PUSH_ALERTS",
+    "tuned adaptive ranking weights so expiring value outranks non-urgent backlog while hot/cold lane pressure is surfaced explicitly",
+    "added dashboard regression coverage for expiring-vs-backlog prioritization and verified the full suite at 375/375",
+    "moved fast-start, action-queue, founder-control, contract generation, and closeout code paths further onto scripts/lib/context-parsing.mjs",
+    "refreshed CURRENT_STATE, TASK_BOARD, LATEST_HANDOFF, RELEASE_PLAN, TRUTH_AUDIT, SELF_IMPROVEMENT_LOOP, and PROJECT_STATUS for Session 73"
+  ],
+  "openHumanActions": [
+    "Provide real approved affiliate/referral tracking URLs for BetMGM, bet365, and BetRivers",
+    "Run one real Stripe smoke purchase and verify the portal/subscription path",
+    "Complete one friend-facing auth/calculator/pricing pass after deploy"
+  ],
+  "closeoutMethod": "attempt autopilot first; keep existing manual fallback if the yellow genome gate still blocks public-safe closeout",
+  "contextPctAtClose": 0.4
+}

@@ -18,6 +18,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { resolveCapability } from './lib/secrets.mjs';
 import { classifyBlocker } from './lib/blocker-rules.mjs';
+import { readJson, readText } from './lib/context-parsing.mjs';
 import { parseHumanItems, parseUnifiedItems } from './lib/task-board.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -27,22 +28,6 @@ const STATUS = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
 const OUT = path.join(ROOT, 'context', 'ACTION_QUEUE.md');
 const AUTOMATION_QUEUE = path.join(ROOT, 'portfolio', 'AUTOMATION_QUEUE.json');
 const jsonMode = process.argv.includes('--json');
-
-function readText(filePath) {
-  try {
-    return fs.readFileSync(filePath, 'utf8');
-  } catch {
-    return '';
-  }
-}
-
-function readJson(filePath, fallback) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch {
-    return fallback;
-  }
-}
 
 const board = readText(TASK_BOARD);
 const status = readJson(STATUS, {});

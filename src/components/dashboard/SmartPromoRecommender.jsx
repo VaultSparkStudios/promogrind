@@ -80,6 +80,7 @@ export default function SmartPromoRecommender({ data }) {
                 {isUrgent && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 8 }}>EXPIRES SOON</span>}
                 {reasons.includes("hot lane") && <span style={{ ...S.tag(K.gn), marginLeft: 6, fontSize: 8 }}>HOT LANE</span>}
                 {reasons.includes("cold lane") && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>COLD LANE</span>}
+                {reasons.includes("backlog pressure") && <span style={{ ...S.tag(K.ac), marginLeft: 6, fontSize: 8 }}>CLEAR BACKLOG</span>}
                 {reasons.includes("limit risk") && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 8 }}>LIMIT RISK</span>}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

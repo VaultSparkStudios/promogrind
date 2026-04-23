@@ -10,33 +10,23 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { contextWindowForAgent } from './lib/model-router.mjs';
+import {
+  extractRollingStatusHeader,
+  readProjectJson,
+  readProjectText,
+  readSessionLock,
+} from './lib/context-parsing.mjs';
 
 const ROOT = process.cwd();
 const args = new Set(process.argv.slice(2));
 const asJson = args.has('--json');
 const stdoutOnly = args.has('--stdout') || asJson;
 
-function readText(rel, fallback = '') {
-  try { return fs.readFileSync(path.join(ROOT, rel), 'utf8'); } catch { return fallback; }
-}
-function readJson(rel, fallback = null) {
-  try { return JSON.parse(readText(rel)); } catch { return fallback; }
-}
-function parseLock() {
-  const text = readText('context/.session-lock');
-  const out = {};
-  for (const raw of text.split(/\r?\n/)) {
-    const line = raw.trim();
-    const m = line.match(/^(\w+):\s*(.+)$/);
-    if (m) out[m[1]] = m[2].trim();
-  }
-  return out;
-}
 function bytesOf(rel) {
   try { return fs.statSync(path.join(ROOT, rel)).size; } catch { return 0; }
 }
 function estimateContextMeter() {
-  const lock = parseLock();
+  const lock = readSessionLock(ROOT);
   const agent = lock.agent || 'unknown';
   const limit = contextWindowForAgent(agent);
   const model = agent === 'claude-code' ? 'opus-1m' : agent === 'codex' ? 'codex-1m' : 'default';
@@ -80,12 +70,10 @@ function estimateContextMeter() {
   };
 }
 function rollingHeader() {
-  const text = readText('context/SELF_IMPROVEMENT_LOOP.md');
-  const m = text.match(/<!-- rolling-status-start -->([\s\S]*?)<!-- rolling-status-end -->/);
-  return (m?.[1] || '').trim().split(/\r?\n/).filter(Boolean).slice(0, 7);
+  return extractRollingStatusHeader(readProjectText(ROOT, 'context/SELF_IMPROVEMENT_LOOP.md'));
 }
 function actionSummary() {
-  const text = readText('context/ACTION_QUEUE.md');
+  const text = readProjectText(ROOT, 'context/ACTION_QUEUE.md');
   const exec = text.match(/## Execute Now \((\d+)\)/)?.[1] ?? '0';
   const tryFirst = text.match(/## Try Before Escalating \((\d+)\)/)?.[1] ?? '0';
   const advisory = text.match(/## Advisory Drift \((\d+)\)/)?.[1] ?? '0';
@@ -98,15 +86,15 @@ function actionSummary() {
   };
 }
 function externalSignalSummary() {
-  const text = readText('portfolio/EXTERNAL_SIGNAL_LOG.md');
+  const text = readProjectText(ROOT, 'portfolio/EXTERNAL_SIGNAL_LOG.md');
   const entries = text.split(/^### /m).slice(1);
   if (!entries.length) return { count: 0, latest: null };
   const latest = entries[entries.length - 1].split(/\r?\n/)[0]?.trim() || null;
   return { count: entries.length, latest };
 }
 
-const status = readJson('context/PROJECT_STATUS.json', {});
-const genius = readJson('.cache/genius-list.json', null) || readJson('context/GENIUS_LIST.json', null);
+const status = readProjectJson(ROOT, 'context/PROJECT_STATUS.json', {});
+const genius = readProjectJson(ROOT, '.cache/genius-list.json', null) || readProjectJson(ROOT, 'context/GENIUS_LIST.json', null);
 const geniusItems = Array.isArray(genius?.items)
   ? genius.items
   : Array.isArray(genius?.list?.ranked)
@@ -114,7 +102,7 @@ const geniusItems = Array.isArray(genius?.items)
     : Array.isArray(genius?.list)
       ? genius.list
       : [];
-const sessions = readJson('portfolio/compiled/SESSION_ORCHESTRATOR.json', null) || readJson('portfolio/ACTIVE_SESSIONS.json', null);
+const sessions = readProjectJson(ROOT, 'portfolio/compiled/SESSION_ORCHESTRATOR.json', null) || readProjectJson(ROOT, 'portfolio/ACTIVE_SESSIONS.json', null);
 const meter = estimateContextMeter();
 const actions = actionSummary();
 const externalSignals = externalSignalSummary();

@@ -93,3 +93,21 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: paste generic partner-program landing pages; fabricate placeholders; copy unverifiable referral links from the web.
 - Why this was chosen: CTA monetization truth directly affects user trust, revenue attribution, and compliance. Fake or generic links would create a dishonest release state.
 - Follow-up: once the operator provides approved URLs, wire them into `src/books.js`, rerun `scripts/verify-production-launch.mjs`, and clear the final launch blocker.
+
+### 2026-04-23 - GitHub Pages push rollout must inject both the VAPID key and the push-alert feature flag
+
+- Status: accepted
+- Context: the client build already gated push UI on `VITE_PG_FEATURE_PUSH_ALERTS`, but the Pages deploy workflow only injected `VITE_VAPID_PUBLIC_KEY`, which meant a live Pages build could still suppress the feature even after VAPID wiring was configured.
+- Decision: treat `.github/workflows/deploy-pages.yml` as the canonical rollout seam for browser push and inject both `VITE_VAPID_PUBLIC_KEY` and `VITE_PG_FEATURE_PUSH_ALERTS` from GitHub Actions secrets.
+- Alternatives considered: leave the feature flag off until a later manual sweep; hardcode the push-alert flag in the app; expose push UI based only on VAPID presence.
+- Why this was chosen: it keeps rollout behavior environment-driven, matches the existing launch-state contract, and avoids a misleading live build where push is partly configured but still silently gated off.
+- Follow-up: let the next push trigger a Pages deploy, then confirm the live bundle reflects the env-backed push rollout before clearing launch-proof tasks.
+
+### 2026-04-23 - Shared context parsing is now the default for closeout- and contract-facing repo truth surfaces
+
+- Status: accepted
+- Context: several public-safe repo scripts still hand-read `PROJECT_STATUS.json`, session locks, or SIL header blocks directly even after startup/doctor surfaces had already moved onto `scripts/lib/context-parsing.mjs`.
+- Decision: continue consolidating repo-facing status parsing onto `scripts/lib/context-parsing.mjs`, including fast-start, founder-control, action-queue, contract generation, and closeout autopilot paths.
+- Alternatives considered: tolerate duplicated local parsers; only patch the one script that most recently drifted; postpone consolidation until after launch.
+- Why this was chosen: keeping repo truth parsing in one helper reduces drift across startup, contracts, closeout, and derived release surfaces in this public-safe repo where the private ops layer is intentionally absent.
+- Follow-up: keep moving remaining repo-facing scripts onto the shared helper and downgrade the yellow-genome autopilot contradiction once doctor/autopilot logic catches up.

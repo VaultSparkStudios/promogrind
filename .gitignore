@@ -30,3 +30,4 @@ docs/CREATIVE_DIRECTION_RECORD.md
 # Private ops scripts — contain user-specific paths or sensitive references
 scripts/rotate-render-key.mjs
 scripts/soul-interview.mjs
+supabase/.temp/

@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S67:553 | S69:618 | S70:611 | S71:663 | S72:769
-Avgs — 3: 681.0 [N=3] | all: 618.3 [N=6]
-  └ 3-session (S70/S71/S72): Dev 92.7 | Align 96.0 | Momentum 78.7 | Engage 90.0 | Process 91.7 | Coher 32.7 | Sec 68.0 | Eco 43.3 | Cap 48.7 | Auto 39.3
+Sparkline (last 5 totals): S69:618 | S70:611 | S71:663 | S72:769 | S73:783
+Avgs — 3: 738.3 [N=3] | all: 641.9 [N=7]
+  └ 3-session (S71/S72/S73): Dev 94.7 | Align 96.0 | Momentum 84.0 | Engage 91.7 | Process 92.7 | Coher 40.7 | Sec 69.3 | Eco 56.0 | Cap 61.3 | Auto 52.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
-Momentum runway: ~3 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-22 | Session 72 | Total: 769/1000 | Velocity: 8 | protocolVelocity: 6
+Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
+Last session: 2026-04-23 | Session 73 | Total: 783/1000 | Velocity: 3 | protocolVelocity: 5
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -94,7 +94,36 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 2.
 3.
 
-### 2026-04-22 — Session 72 | Total: 769/1000 | Velocity: 8 | Debt: down
+## 2026-04-23 — Session 73 | Total: 783/1000 | Velocity: 3 | Debt: down
+Rolling avg (last 3): Dev 94.7 | Align 96.0 | Momentum 84.0 | Engage 91.7 | Process 92.7 | Coher 40.7 | Sec 69.3 | Eco 56.0 | Cap 61.3 | Auto 52.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 96 | ↑ | Full suite passed at `375/375`, build stayed green, and the adaptive ranking change landed with direct regression coverage. |
+| Creative Alignment | 96 | → | The work stayed tightly on the operator-grade system direction without adding noise or gimmicks. |
+| Momentum | 76 | ↓ | This was a strong refinement/closeout session with multiple shippable fixes, but not the same breadth as the prior live-unblock tranche. |
+| Engagement | 93 | ↑ | Adaptive mission-control recommendations now respond more intelligently to expiring value, hot/cold lanes, and workflow backlog pressure. |
+| Process Quality | 95 | ↑ | Session 73 closed with full write-back, updated release truth, green verification, and cleaner task preload for the next run. |
+| Cross-Repo Coherence | 48 | ↑ | More repo-facing startup/contract/closeout surfaces now share the same parser contract, reducing public-safe drift. |
+| Security Posture | 66 | ↓ | No new exposure was introduced and `supabase/.temp/` is now ignored, but the session did not materially expand security coverage beyond existing gates. |
+| Ecosystem Integration | 71 | ↑ | Pages deploy config, launch-state gating, contract generation, and release truth now align more closely around the same rollout model. |
+| Capital Efficiency | 76 | ↑ | Shared parsing reduced duplicate diagnostics, and targeted dashboard tuning shipped with one focused regression test instead of broad churn. |
+| Automation Coverage | 66 | ↑ | More derived surfaces now consume shared helpers, but the yellow-genome closeout contradiction still keeps full autopilot trust below green. |
+| **Total** | **783 / 1000** | | |
+
+**Top win:** the remaining unblocked repo-local launch-hardening work was actually cleared, not just reviewed: Pages env rollout, adaptive ranking tune, and more closeout/contracts truth parsing all shipped with green verification.
+
+**Top gap:** public launch is still gated by external operator work rather than repo code now, especially the missing real `BetMGM` / `bet365` / `BetRivers` links plus the real Stripe smoke and friend-beta passes.
+
+**Intent outcome:** Achieved with external blockers still open. The current `/go` list is exhausted locally, repo truth is current, and the remaining launch-proof work sits outside what this workspace can honestly invent.
+
+**Brainstorm**
+
+1. Add a post-deploy production verification artifact/job around `scripts/verify-production-launch.mjs` so deploy health is emitted automatically.
+2. Add affiliate-link validation so missing or placeholder sportsbook monetization URLs fail release truth earlier.
+3. Add adaptive-ranking telemetry snapshots so hot/cold lane tuning can graduate from heuristics to observed conversion data.
+
+## 2026-04-22 — Session 72 | Total: 769/1000 | Velocity: 8 | Debt: down
 Rolling avg (last 3): Dev 92.7 | Align 96.0 | Momentum 78.7 | Engage 90.0 | Process 91.7 | Coher 32.7 | Sec 68.0 | Eco 43.3 | Cap 48.7 | Auto 39.3
 
 | Category | Score | vs Last | Notes |
@@ -123,7 +152,7 @@ Rolling avg (last 3): Dev 92.7 | Align 96.0 | Momentum 78.7 | Engage 90.0 | Proc
 2. Move affiliate coverage into a small structured config validator so missing/placeholder sportsbook URLs fail CI before release docs drift.
 3. Add adaptive-ranking telemetry snapshots so hot/cold lane scoring can be tuned from real outcome data instead of only heuristics.
 
-### 2026-04-22 — Session 71 | Total: 663/1000 | Velocity: 6 | Debt: down
+## 2026-04-22 — Session 71 | Total: 663/1000 | Velocity: 6 | Debt: down
 Rolling avg (last 3): Dev 91.0 | Align 96.0 | Momentum 79.3 | Engage 88.7 | Process 89.7 | Coher 26.7 | Sec 60.3 | Eco 34.0 | Cap 36.0 | Auto 29.0
 
 | Category | Score | vs Last | Notes |
@@ -152,7 +181,7 @@ Rolling avg (last 3): Dev 91.0 | Align 96.0 | Momentum 79.3 | Engage 88.7 | Proc
 2. Add remote reconciliation tests for workflow suggestions once the live Supabase migrations land so cross-device persistence is verified instead of assumed.
 3. Split genome failures into red/yellow handling so public-safe repos can use honest autopilot closeout when truth is coherent but not fully green.
 
-### 2026-04-22 — Session 67 | Total: 553/1000 | Velocity: 4 | Debt: down
+## 2026-04-22 — Session 67 | Total: 553/1000 | Velocity: 4 | Debt: down
 Rolling avg (last 3): Dev 82.0 | Align 95.5 | Momentum 84.5 | Engage 76.0 | Process 80.0 | Coher 21.0 | Sec 16.5 | Eco 28.5 | Cap 21.5 | Auto 19.0
 
 | Category | Score | vs Last | Notes |
@@ -181,7 +210,7 @@ Rolling avg (last 3): Dev 82.0 | Align 95.5 | Momentum 84.5 | Engage 76.0 | Proc
 2. Auto-route scanner and community findings into the shared workflow graph with remote reconciliation once live migrations are in place.
 3. Move doctor, startup, and closeout onto the same truth helper so yellow-genome sessions stop blocking honest automation.
 
-### 2026-04-22 — Session 66 | Total: 496/1000 | Velocity: 7 | Debt: down
+## 2026-04-22 — Session 66 | Total: 496/1000 | Velocity: 7 | Debt: down
 Rolling avg (last 3): Dev 78 | Align 95 | Momentum 82 | Engage 74 | Process 76 | Coher 18 | Sec 16 | Eco 24 | Cap 17 | Auto 16
 
 | Category | Score | vs Last | Notes |
@@ -211,7 +240,7 @@ Rolling avg (last 3): Dev 78 | Align 95 | Momentum 82 | Engage 74 | Process 76 |
 3. Replace shallow streaks with operator mastery ladders tied to settlement quality, lane diversity, and verified execution discipline.
 4. Add a deterministic AI gateway that resolves obvious promo cases without a model call and logs cache hit rates into the daily brief.
 
-### 2026-04-22 — Session 69 | Total: 618/1000 | Velocity: 8 | Debt: down
+## 2026-04-22 — Session 69 | Total: 618/1000 | Velocity: 8 | Debt: down
 Rolling avg (last 3): Dev 84.7 | Align 95.7 | Momentum 87.0 | Engage 80.0 | Process 82.0 | Coher 22.0 | Sec 29.3 | Eco 30.0 | Cap 24.3 | Auto 20.7
 
 | Category | Score | vs Last | Notes |
@@ -240,7 +269,7 @@ Rolling avg (last 3): Dev 84.7 | Align 95.7 | Momentum 87.0 | Engage 80.0 | Proc
 2. Add a community "streak leaderboard" surface that uses mastery + streak data to show relative standing without exposing private P&L.
 3. Auto-route scanner and community findings into the shared workflow graph with remote reconciliation once live migrations are in place.
 
-### 2026-04-22 — Session 70 | Total: 611/1000 | Velocity: 2 | Debt: down
+## 2026-04-22 — Session 70 | Total: 611/1000 | Velocity: 2 | Debt: down
 Rolling avg (last 3): Dev 88.7 | Align 96.0 | Momentum 79.7 | Engage 84.7 | Process 87.3 | Coher 24.0 | Sec 44.7 | Eco 33.0 | Cap 31.3 | Auto 24.7
 
 | Category | Score | vs Last | Notes |

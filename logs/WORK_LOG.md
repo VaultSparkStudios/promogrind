@@ -10,6 +10,14 @@ Append chronological entries.
 - Risks created or removed:
 - Recommended next move:
 
+### 2026-04-23 - Session 73 closeout and final unblocked launch-hardening pass
+
+- Goal: finish the remaining unblocked `/go` items, refresh all repo-truth surfaces, and push a verified closeout to GitHub.
+- What changed: patched the GitHub Pages workflow so push rollout receives both `VITE_VAPID_PUBLIC_KEY` and `VITE_PG_FEATURE_PUSH_ALERTS`; tuned adaptive dashboard ranking so expiring promos outrank non-urgent backlog while hot/cold lane signals have clearer weight; pushed more repo-facing scripts (`render-fast-start`, `render-action-queue`, `render-founder-control`, `generate-project-contracts`, `closeout-autopilot`) onto the shared context parser; refreshed handoff/state/task/truth/release surfaces for Session 73; full suite passed at `375/375` and production build passed.
+- Files or systems touched: `.github/workflows/deploy-pages.yml`, `src/dashboard/today.js`, `src/components/dashboard/SmartPromoRecommender.jsx`, `src/__tests__/dashboard.test.js`, `scripts/lib/context-parsing.mjs`, `scripts/render-fast-start.mjs`, `scripts/render-action-queue.mjs`, `scripts/render-founder-control.mjs`, `scripts/generate-project-contracts.mjs`, `scripts/closeout-autopilot.mjs`, `context/*.md`, `context/PROJECT_STATUS.json`, `docs/RELEASE_PLAN.md`, `audits/2026-04-23.json`.
+- Risks created or removed: removed the remaining local mismatch between Pages deploy env and push-alert feature gating, reduced truth-parser drift across more public-safe repo surfaces, and verified the repo is green before push. Remaining risk is external and unchanged: real affiliate links, one live Stripe smoke, and one friend beta pass still gate public launch.
+- Recommended next move: after this push/deploy, add the real `BetMGM` / `bet365` / `BetRivers` links, rerun `node scripts/verify-production-launch.mjs`, and complete the Stripe/friend-beta checklist.
+
 ### 2026-04-22 - Session 72 adaptive intelligence tranche
 
 - Goal: turn the audit into a shipped product tranche instead of a memo by improving the dashboard operating loop, deepening feedback telemetry, and cutting repeated AI spend.

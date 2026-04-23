@@ -2,41 +2,41 @@
 
 # Latest Handoff
 
-Last updated: 2026-04-22
-Session: 67
-Session Intent: Execute the highest-leverage unblocked `/go` tranche by moving PromoGrind onto shared app-shell, workflow, AI, and truth-parsing seams, then leave repo truth aligned with what actually shipped.
-Intent Outcome: Achieved. Shared shell/workflow/AI layers are in, operator surfaces now consume deeper post-settlement signals, and the remaining blockers are external launch/migration work rather than local architecture debt.
-Where we stopped: core app orchestration is no longer the main bottleneck; the next real seam is extending the shared contract into the remaining scanner/community execution surfaces and applying the live Supabase/launch-proof blockers.
+Last updated: 2026-04-22 (S72)
+Session: 72
+Session Intent: update memory/task board where needed, implement the highest-leverage audit items, complete the remaining live operator work, then close out and push cleanly.
+Intent Outcome: Achieved with one honest external remainder. Adaptive dashboard intelligence, deeper feedback telemetry, AI caching, migration hardening, startup performance, live Supabase schema reconciliation, live billing auth repair, and VAPID secret wiring all landed. The only verifier failure left is missing sportsbook affiliate URLs.
+Where we stopped: repo and live backend are in a much stronger state, verification is green except for `affiliate_coverage`, and the next action after this push is simply to paste real `BetMGM` / `bet365` / `BetRivers` tracking links and redeploy.
 
-## Where We Left Off (Session 67)
+## Where We Left Off (Session 72)
 
-- Shipped: 5 improvements across app-shell architecture, AI/workflow unification, operator feedback loops, truth parsing, and closeout/truth alignment
-- Tests: 296 passing (296 total) · delta: +0
-- Deploy: pending
+- Shipped: adaptive dashboard intelligence, deeper workflow telemetry, AI response caching, rerunnable migration hardening, startup deferral/perf work, live schema reconciliation, live billing auth repair, VAPID wiring for Pages + Supabase, and launch verifier expansion
+- Tests: 374 passing (374 total) · delta: +2 from S71
+- Deploy: ready to push at closeout
 
 ## What was completed
 
-- extracted shared app-shell state into `src/app/usePromoAppShell.js`, pulling theme/compact/sync/currency/onboarding persistence out of the `src/App.jsx` monolith
-- added shared workflow mutation and route helpers in `src/workflows/store.js` and `src/workflows/actionGraph.js`, then rewired dashboard, Track, feedback, and AI surfaces onto them
-- added shared AI invocation/caching helpers in `src/ai/gateway.js`, then moved Promo Advisor, Promo Chat, AI Action Plan, and Stack Builder onto one governed call path
-- surfaced hot-lane and micro-NPS signals into Studio export, observability, launch cockpit, and targeted operator routing so post-settlement feedback now changes what the operator sees next
-- extracted shared truth parsing into `scripts/lib/context-parsing.mjs` and moved startup/state-vector renderers onto it
-- kept the repo green after the refactor: `npm run build` and `npm test` both pass (`296/296`)
+- **Adaptive mission-control tranche (S72)**: `src/dashboard/today.js`, `TodayDashboardPanel`, and `SmartPromoRecommender` now compute and surface adaptive ranking, calibration, hot/cold lanes, and ranked daily promo actions instead of mostly static recommendations.
+- **Deeper feedback loop (S72)**: `ResultFeedbackCard`, `src/promograph/index.js`, `src/track/insights.js`, and `src/sync.js` now carry `execution_minutes` and `would_repeat` through local insight aggregation and durable sync.
+- **AI cost/quality tranche (S72)**: `src/ai/gateway.js`, `PromoAdvisorPanel`, and `PromoChat` now reuse timed cached responses for identical requests instead of burning repeated calls.
+- **Startup/perf tranche (S72)**: `src/main.jsx`, `src/analytics.js`, and `vite.config.js` now lazy-load `App`, defer SW/analytics boot, and split PostHog/Sentry into deferred chunks.
+- **Live launch unblock (S72)**: repaired Supabase migration history, pushed `supabase/migrations/20260422200000_reconcile_live_sync_schema.sql`, verified production query access for `workflow_state`, `workflow_history`, `ledger_state`, `tracker_state`, `feature_flags`, and `push_subscriptions`, and redeployed billing/beta functions with `--no-verify-jwt` so live `create-checkout` now returns `200`.
+- **Push plumbing (S72)**: set a fresh VAPID keypair in live Supabase secrets, set `VITE_VAPID_PUBLIC_KEY` as a GitHub Actions secret, and patched `.github/workflows/deploy-pages.yml` so the next Pages deploy includes it.
+- **Verification (S72)**: `npm test` (`374/374`), `npm run build`, and `node scripts/verify-production-launch.mjs` all passed except for the single affiliate-link inventory failure.
 
 ## What is mid-flight
 
-- some execution surfaces still bypass the new shared contract, especially the remaining scanner/community paths
-- doctor still treats the yellow `13/25` protocol genome as a blocking local failure, so automated closeout remains unavailable even though repo truth is coherent enough to ship a manual closeout
-- protocol genome is still yellow at `13/25`, so the repo is operationally coherent but not yet fully hardened against future drift
+- Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` are still missing
+- The Pages workflow update is committed locally but only becomes live after this push/build path runs
+- Closeout autopilot still remains a manual-judgment path in this public-safe repo because of the yellow genome gate and pre-existing dirty `context/PROJECT_STATUS.json`
 
 ## What to do next
 
-1. Extend the shared AI/workflow contract into remaining scanner/community execution surfaces so every recommendation and persistence path uses the same mutation model.
-2. Apply Supabase workflow/entity sync and feature-flag migrations live, then verify remote persistence for the unified workflow loop.
-3. Finish launch proof: real affiliate links, Stripe smoke, production VAPID, and friend beta.
+1. Push this branch so GitHub Pages can build with `VITE_VAPID_PUBLIC_KEY` available.
+2. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`, then rerun `node scripts/verify-production-launch.mjs`.
+3. Validate the adaptive mission-control ranking with real usage data and keep decomposing `src/App.jsx`.
 
 ## Constraints
 
 - This public repo does not carry the full private Studio Ops layer; use repo-local truth files instead of assuming portfolio scripts exist.
 - Avoid rerunning broad repair scripts blindly: `ops-onboard --repair --write` can overwrite valid repo-local truth with scaffolds.
-- Launch proof is still not done: production VAPID, real affiliate links, Stripe smoke, and live Supabase migrations remain external gating items.

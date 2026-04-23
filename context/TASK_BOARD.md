@@ -3,18 +3,24 @@
 ## Now
 
 - finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
-- push the Pages workflow update so GitHub Pages consumes `VITE_VAPID_PUBLIC_KEY` from Actions secrets on the next live deploy
-- validate the new adaptive mission-control loop with real user flows and tune ranking weights for hot/cold lanes, backlog pressure, and expiring-value urgency
-- extract startup/closeout truth parsing into one tested helper across the remaining renderers/closeout surfaces so public-safe repos stop drifting between status, contracts, and briefs [SIL]
+- harden launch-state/project-status derivation so public launch readiness reads from one canonical source instead of mixed manual notes
+- continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
 
 ## Next
 
 - auto-route scanner/community findings into the shared workflow graph with remote reconciliation once the live migrations are in place
+- add a post-deploy production verification artifact/job around `scripts/verify-production-launch.mjs` so launch truth is emitted automatically after deploy [SIL]
+- add affiliate-link validation so missing or placeholder sportsbook monetization URLs fail release truth earlier [SIL]
 - harden launch-state/project-status derivation so public launch readiness reads from one canonical source instead of mixed manual notes
 - continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
 
 ## Shipped This Session
 
+- consolidate another closeout/contracts truth-parsing slice onto the shared helper [SIL] — **DONE S73**: moved `scripts/generate-project-contracts.mjs` and the remaining `PROJECT_STATUS.json` reads in `scripts/closeout-autopilot.mjs` onto `scripts/lib/context-parsing.mjs`; syntax checks passed and `node scripts/generate-project-contracts.mjs --json` rendered valid contract payloads.
+- validate and tune adaptive mission-control ranking weights — **DONE S73**: tuned `src/dashboard/today.js` so expiring promos get stronger urgency, hot/cold lane signals have clearer weight, and backlog pressure demotes non-urgent promos while workflows are stacked; surfaced the new backlog state in `SmartPromoRecommender` and added a dashboard test covering expiring-vs-backlog prioritization. `npm test -- dashboard.test.js` passed (`13/13`).
+- finish the Pages workflow env plumbing for browser push rollout — **DONE S73**: patched `.github/workflows/deploy-pages.yml` so the GitHub Pages build now receives both `VITE_VAPID_PUBLIC_KEY` and `VITE_PG_FEATURE_PUSH_ALERTS`, matching the app’s push-alert gating in `src/launchState.js`; syntax check on `scripts/postbuild-pages.mjs` stayed clean, and the remaining step is the next live deploy consuming the secret-backed env.
+- extract more startup/derived-surface truth parsing into the shared helper [SIL] — **DONE S73**: extended `scripts/lib/context-parsing.mjs` with project-root reads, session-lock parsing, and rolling-status extraction, then moved `render-fast-start`, `render-action-queue`, and `render-founder-control` off their local ad hoc context readers; syntax checks and renderer smoke runs passed.
+- run the full studio health check before planning — **DONE S73**: executed `node scripts/ops.mjs doctor`; repo remains `11/12` with the same known blocking item (`Protocol genome` at `15/25`) already reflected in `TRUTH_AUDIT`, `DECISIONS`, and the startup brief rather than a new regression.
 - repair live Supabase workflow/entity schema exposure, fix billing auth in production, and wire VAPID secret plumbing — **DONE S72**: repaired remote migration history, added a reconciliation migration that actually creates the missing sync tables + reloads PostgREST schema, pushed it live, redeployed `create-checkout` / `customer-portal` / `redeem-beta-code` / `gift-trial` with `--no-verify-jwt`, verified live Checkout now returns `200`, set a fresh VAPID keypair into Supabase secrets and GitHub Actions secrets, patched the Pages workflow to read `VITE_VAPID_PUBLIC_KEY`, and reran `scripts/verify-production-launch.mjs` until only the affiliate-link blocker remained.
 - harden rerunnable Supabase migrations + persist new workflow telemetry + defer heavy startup dependencies — **DONE S72**: made the workflow/entity-sync/feature-flag SQL scripts idempotent for repeated apply; added durable schema/sync support for `execution_minutes` and `would_repeat`; moved service worker registration and analytics init off the first paint; lazy-loaded `App` from `main.jsx`; split PostHog and Sentry into deferred chunks. Tests still 374/374 and production build passes.
 - ship adaptive mission-control intelligence + deeper feedback telemetry + AI response caching — **DONE S72**: `TodayDashboardPanel` and `SmartPromoRecommender` now consume adaptive dashboard intelligence from shared helpers; result feedback now captures execution minutes + repeat intent; track insights now aggregate execution/repeat calibration; Promo Advisor and Promo Chat reuse cached identical responses to cut repeated AI calls; dashboard tests expanded and suite now passes at 374/374.
@@ -42,6 +48,7 @@
 ## Blocked
 
 - no local architecture blocker remains; the only unresolved launch-proof blocker still verified from this workspace is missing real approved affiliate tracking links for sportsbook CTAs, especially `BetMGM`, `bet365`, and `BetRivers`
+- Protocol Oracle FAQ cache refresh is blocked in this workspace: `node scripts/ops.mjs ask --list` is read-only when `docs/PROTOCOL_FAQ.md` is empty, and `scripts/ask-protocol.mjs` cannot generate/cache answers without an `ANTHROPIC_API_KEY`
 
 ## Later
 

@@ -1,43 +1,44 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-04-22",
-  "generatedAtMs": 1776902355158,
-  "session": 72,
-  "vectorHash": "a2f95a62b79d91bf",
-  "silTotal": 769,
-  "silAvg3": 681,
-  "velocity": 8,
+  "generatedAt": "2026-04-23",
+  "generatedAtMs": 1776908819790,
+  "session": 73,
+  "vectorHash": "07c01109e5f4b22d",
+  "silTotal": 783,
+  "silAvg3": 738.3,
+  "velocity": 3,
   "debt": "down",
-  "runway": "~3 sessions",
+  "runway": "~2 sessions",
   "intentRate": "100% achieved (last 5)",
-  "openNow": 4,
-  "openNext": 3,
-  "openBlocked": 1,
+  "openNow": 3,
+  "openNext": 5,
+  "openBlocked": 2,
   "topNow": [
     "finish monetization coverage with real approved affiliate/referral links for `Be",
-    "push the Pages workflow update so GitHub Pages consumes `VITE_VAPID_PUBLIC_KEY` ",
-    "validate the new adaptive mission-control loop with real user flows and tune ran"
-  ],
-  "topNext": [
-    "auto-route scanner/community findings into the shared workflow graph with remote",
     "harden launch-state/project-status derivation so public launch readiness reads f",
     "continue decomposing the remaining high-churn `src/App.jsx` seams now that analy"
   ],
+  "topNext": [
+    "auto-route scanner/community findings into the shared workflow graph with remote",
+    "add a post-deploy production verification artifact/job around `scripts/verify-pr",
+    "add affiliate-link validation so missing or placeholder sportsbook monetization "
+  ],
   "health": "green",
   "truthStatus": "yellow",
-  "genome": "17/25",
+  "genome": "18/25",
   "ignisScore": 47857,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 0,
+  "ignisAgeDays": 1,
   "name": "PromoGrind",
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Push the Pages workflow/VAPID update live, add real BetMGM/bet365/BetRivers tracking URLs, and rerun production launch verification.",
-  "currentFocus": "Clear the final monetization-link blocker while validating the adaptive mission-control loop and continuing truth-helper consolidation.",
-  "lastShipped": "adaptive dashboard intelligence, deeper workflow telemetry, AI response caching, rerunnable migration hardening, startup deferral/perf work, live schema reconciliation, live billing auth repair, VAPID wiring for Pages + Supabase, and launch verifier expansion",
+  "nextMilestone": "Let the next Pages deploy consume the push-alert env wiring; add real BetMGM/bet365/BetRivers monetization links; rerun verify-production-launch; complete the real Stripe smoke and friend beta pass.",
+  "currentFocus": "Push the verified S73 launch-hardening refinements, then clear the remaining external launch blockers: real affiliate links, one live Stripe smoke, and one friend beta pass.",
+  "lastShipped": "GitHub Pages push-alert env plumbing, adaptive ranking-weight tuning with backlog pressure, more closeout/contracts truth parsing on the shared helper, and the final task-board/writeback cleanup for a clean verified closeout",
   "blockers": [
-    "Paste real approved affiliate/referral tracking URLs for BetMGM, bet365, and BetRivers into src/books.js.",
-    "Push/deploy the Pages workflow update so the live frontend consumes VITE_VAPID_PUBLIC_KEY."
+    "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement.",
+    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path.",
+    "Complete one friend-facing auth/calculator/pricing pass after deploy."
   ]
 }

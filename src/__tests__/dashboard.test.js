@@ -241,4 +241,44 @@ describe("dashboard helpers", () => {
     expect(plan.topPromos[0].book).toBe("DraftKings");
     expect(plan.topPromos[0].reasons.some((reason) => ["hot lane", "book running hot"].includes(reason))).toBe(true);
   });
+
+  it("prioritizes expiring value over backlog and demotes non-urgent promos when workflows are stacked", () => {
+    const now = new Date("2026-04-14T13:00:00Z");
+    const snapshot = {
+      todayPromos: [
+        { book: "FanDuel", promo: "Daily Profit Boost", day: "Daily", grade: "A", value: "+$14" },
+        { book: "DraftKings", promo: "Daily Bonus Bet", day: "Daily", grade: "B", value: "+$10" },
+      ],
+      expiringBooks: [{ name: "DraftKings", bonus: 200 }],
+      openWorkflowCount: 4,
+      waitingWorkflowCount: 1,
+      openBets: [],
+      bankroll: 500,
+      openStake: 0,
+    };
+
+    const plan = buildAdaptivePromoPlan({
+      data: {},
+      snapshot,
+      schedule: snapshot.todayPromos,
+      now,
+      insights: {
+        feedbackEntries: [],
+        settledCount: 0,
+        skippedFeedback: [],
+        promoTypeRows: [],
+        topDriftAlerts: [],
+        selfCalibration: {},
+      },
+      hotLanes: {
+        hotPromoTypes: [],
+        hotBooks: [],
+      },
+    });
+
+    expect(plan.workflowBacklog).toBe(5);
+    expect(plan.topPromos[0].book).toBe("DraftKings");
+    expect(plan.topPromos[0].reasons).toContain("expiring");
+    expect(plan.topPromos[1].reasons).toContain("backlog pressure");
+  });
 });
