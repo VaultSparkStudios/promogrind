@@ -6,6 +6,7 @@ import { buildTrackInsights, formatPromoTypeLabel, updateResultFeedback } from "
 import { patchWorkflowState } from "../workflows/store.js";
 import { flagVisit } from "../lib/missions.js";
 import { useViewport } from "../app/responsive.js";
+import BetHistoryCharts from "./BetHistoryCharts.jsx";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -108,6 +109,8 @@ export default function TrackInsights() {
       <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.7, marginBottom: 14 }}>
         Aggregate realized P/L, promo hit rate, calculator accuracy, and the books actually producing profit.
       </div>
+
+      <BetHistoryCharts />
 
       <div style={{ display: "grid", gridTemplateColumns: summaryColumns, gap: 10, marginBottom: 14 }}>
         {metricCard("Realized P/L", `${insights.totalProfit >= 0 ? "+" : "-"}$${f(Math.abs(insights.totalProfit))}`, `Last 7d: ${insights.recent7Profit >= 0 ? "+" : "-"}$${f(Math.abs(insights.recent7Profit))}`, insights.totalProfit >= 0 ? K.gn : K.rd)}
