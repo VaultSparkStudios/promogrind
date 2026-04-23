@@ -138,3 +138,16 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: keep verification local-only; add a workflow step that logs to stdout without a retained artifact; wait until all external launch blockers are resolved before automating deploy proof.
 - Why this was chosen: production readiness needs a retained deploy artifact so launch truth can be inspected after the fact instead of reconstructed from memory or scattered terminal output.
 - Follow-up: once the next deploy runs, consume the artifact as the preferred post-push verification record and keep the launch dashboard aligned with that output.
+## 2026-04-23 — Session 75
+
+### Decision: public root is marketing-first; app shell lives behind an intentional app route
+
+- Context: the user explicitly said `vaultsparkstudios.com/promogrind` should not redirect straight into the app and should land on the game/product landing page with buttons into the app. The current root path was dropping visitors directly into the app shell.
+- Decision: make `/` render the landing page first, and treat `/dashboard` as the intentional app-entry path used by landing CTAs and public app links.
+- Why: public acquisition traffic and referral traffic need a stable explanatory surface before authentication/app shell context. It also prevents the landing page CTA loop caused by pointing “Open App” back at `/` once `/` becomes the public landing surface.
+
+### Decision: fix the real runtime faults before touching analytics noise
+
+- Context: the console dump included extension noise, PostHog noise, a `ReferenceError: ParlayHedge is not defined`, and a service-worker `Response.clone()` failure.
+- Decision: repair the boot/runtime faults first by restoring `ParlayHedge` and hardening service-worker cache writes; treat the PostHog 404/401 chatter as a follow-up task.
+- Why: the app-breaking errors prevent reliable product use, while the analytics noise is secondary and should be cleaned up only after the site boots and routes correctly.

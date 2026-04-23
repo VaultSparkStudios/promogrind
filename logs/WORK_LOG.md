@@ -97,3 +97,10 @@ Append chronological entries.
 - Files or systems touched: `context/DECISIONS.md`, `.git/hooks/pre-push`, `context/LATEST_HANDOFF.md`, `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/SELF_IMPROVEMENT_LOOP.md`, `context/TRUTH_AUDIT.md`, `logs/WORK_LOG.md`, `audits/2026-04-22-s70.json`.
 - Risks created or removed: removed false-positive push-block risk when gitignored ops scripts remain locally after `git rm --cached`.
 - Recommended next move: extend shared workflow/AI contract into scanner/community surfaces, then apply live Supabase migrations and complete launch proof.
+### 2026-04-23 - Session 75 runtime/routing closeout
+
+- Goal: diagnose why the deployed site was failing in production, fix the actual runtime/entrypoint faults, and close out with the public root landing on a real marketing surface first.
+- What changed: traced the browser-console failures to two real product issues instead of extension noise; restored a concrete `ParlayHedge` calculator and route so the app no longer crashes on boot; hardened `public/sw.js` cache writes to avoid cloning consumed responses; changed `/` to render `LandingRoute` instead of dropping directly into the app shell; rewired landing CTAs and the standalone landing page to send users to `/dashboard` or signup intentionally.
+- Files or systems touched: `src/App.jsx`, `src/calculators/ParlayHedge.jsx`, `src/routes/LandingRoute.jsx`, `src/launchState.js`, `public/sw.js`, `public/landing/index.html`, `context/*.md`, `audits/2026-04-23-s75.json`, Codex memory.
+- Risks created or removed: removed the boot-time `ParlayHedge is not defined` failure and the service-worker consumed-response clone error that could break asset caching. Remaining risk is now non-blocking production noise and the unchanged external launch-proof blockers: real affiliate links, one real Stripe smoke, and one friend beta pass.
+- Recommended next move: push/deploy these fixes, then clean up the PostHog config/flag noise and resume the external monetization + launch-proof checklist.

@@ -1,4 +1,4 @@
-const CACHE = 'promogrind-v5';
+const CACHE = 'promogrind-v6';
 const BASE = self.location.pathname.replace('/sw.js','');
 
 const SHELL = [
@@ -68,33 +68,40 @@ self.addEventListener('fetch', e => {
 
   if (isAppAsset) {
     // Network-first for HTML/JS/CSS — ensures new deploys take effect immediately
-    e.respondWith(
-      fetch(e.request)
-        .then(res => {
-          if (res.ok && res.type !== 'opaque') {
-            caches.open(CACHE).then(c => c.put(e.request, res.clone()));
-          }
-          return res;
-        })
-        .catch(() => caches.match(e.request))
-    );
+    e.respondWith((async () => {
+      try {
+        const res = await fetch(e.request);
+        await putInCache(e.request, res);
+        return res;
+      } catch {
+        return (await caches.match(e.request)) || Response.error();
+      }
+    })());
     return;
   }
 
   // Stale-while-revalidate for static assets (fonts, images, etc.)
   // Serve cached version immediately while refreshing in background.
-  e.respondWith(
-    caches.open(CACHE).then(cache =>
-      cache.match(e.request).then(cached => {
-        const networkFetch = fetch(e.request).then(res => {
-          if (res.ok && res.type !== 'opaque') cache.put(e.request, res.clone());
-          return res;
-        }).catch(() => cached);
-        return cached || networkFetch;
+  e.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    const cached = await cache.match(e.request);
+    const networkFetch = fetch(e.request)
+      .then(async (res) => {
+        await putInCache(e.request, res);
+        return res;
       })
-    )
-  );
+      .catch(() => cached);
+    return cached || networkFetch;
+  })());
 });
+
+async function putInCache(request, response) {
+  if (!response || !response.ok || response.type === 'opaque' || response.bodyUsed) return;
+  try {
+    const cache = await caches.open(CACHE);
+    await cache.put(request, response.clone());
+  } catch {}
+}
 
 // ── Background Sync — flush IDB write queue on reconnect ────────────────
 self.addEventListener('sync', e => {

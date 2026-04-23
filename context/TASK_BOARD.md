@@ -3,6 +3,7 @@
 ## Now
 
 - finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
+- clean up the remaining production analytics noise (`PostHog` remote-config `404` / flags `401`) now that the real boot/runtime issues are fixed
 - continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
 
 ## Next
@@ -13,6 +14,9 @@
 - add adaptive-ranking telemetry snapshots so hot/cold lane tuning can move from heuristics toward observed outcome data [SIL]
 
 ## Shipped This Session
+
+- restore public-root routing and app-entry intent so `vaultsparkstudios.com/promogrind` / `/` land on the marketing page instead of dropping straight into the app shell — **DONE S75**: root path now renders `LandingRoute`, landing CTAs point intentionally to `/dashboard` or signup, and the standalone landing page links were rewired to the app instead of looping back to `/`.
+- fix the production boot/runtime faults surfaced in the browser console — **DONE S75**: restored a concrete `ParlayHedge` calculator route so the app no longer crashes on `ReferenceError: ParlayHedge is not defined`, and hardened `public/sw.js` cache writes so the service worker stops trying to clone already-consumed responses.
 
 - harden launch-state/project-status derivation so public launch readiness reads from one canonical source instead of mixed manual notes — **DONE S74**: added `context/LAUNCH_PROOFS.json` plus `scripts/lib/launch-proofs.mjs`, and taught `scripts/check-launch-ready.mjs` to consume that machine-readable manual blocker surface so PromoGrind now reports `⚠ PARTIAL` with the real external launch proofs instead of a misleading `✓ READY`.
 - add affiliate-link validation so missing or placeholder sportsbook monetization URLs fail release truth earlier [SIL] — **DONE S74**: `src/books.js` now exposes required launch monetization helpers for `BetMGM`, `bet365`, and `BetRivers`, rejects generic partner/signup URLs as tracked links, and `scripts/verify-production-launch.mjs` now fails explicitly on those missing books instead of a vague aggregate affiliate count.

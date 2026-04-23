@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { K, font, fontD } from "../lib/shared.js";
-import { CANONICAL_APP_URL } from "../launchState.js";
+import { APP_DASHBOARD_PATH, getAbsoluteAppUrl, getProjectAuthHref } from "../launchState.js";
 import { trackEvent } from "../analytics.js";
 
 const CALCULATOR_PRESETS = {
@@ -52,11 +52,16 @@ export default function LandingRoute() {
     });
   }, [creator, utmSource, utmMedium, utmCampaign, calcPreset]);
 
-  const signupUrl = `${CANONICAL_APP_URL}?ref=${encodeURIComponent(creator)}&utm_source=${encodeURIComponent(utmSource)}&utm_medium=${encodeURIComponent(utmMedium)}&utm_campaign=${encodeURIComponent(utmCampaign)}`;
+  const appUrl = getAbsoluteAppUrl("dashboard");
+  const signupUrl = getProjectAuthHref("signup", `${appUrl}?ref=${encodeURIComponent(creator)}&utm_source=${encodeURIComponent(utmSource)}&utm_medium=${encodeURIComponent(utmMedium)}&utm_campaign=${encodeURIComponent(utmCampaign)}`);
 
   const goToCalc = () => {
     const target = preset ? preset.slug : "bonus-bet";
     navigate(`/${target}`);
+  };
+
+  const goToApp = () => {
+    navigate("/dashboard");
   };
 
   return (
@@ -113,13 +118,22 @@ export default function LandingRoute() {
       {/* CTA buttons */}
       <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
         <button
-          onClick={goToCalc}
+          onClick={goToApp}
           style={{
             padding: "14px 0", background: K.gn, border: "none", borderRadius: 10,
             color: "#0a0e17", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: font,
           }}
         >
-          {preset ? `Open ${preset.name} →` : "Start with Bonus Bet Converter →"}
+          Open PromoGrind App →
+        </button>
+        <button
+          onClick={goToCalc}
+          style={{
+            padding: "12px 0", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 10,
+            color: K.dm, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: font,
+          }}
+        >
+          {preset ? `Jump to ${preset.name} →` : "Try the Bonus Bet Converter →"}
         </button>
         <a
           href={signupUrl}
@@ -179,7 +193,7 @@ export default function LandingRoute() {
 
       {/* Footer */}
       <div style={{ fontSize: 10, color: K.dm, textAlign: "center", lineHeight: 1.7 }}>
-        <a href={CANONICAL_APP_URL} style={{ color: K.gn, textDecoration: "none", fontWeight: 600 }}>promogrind.bet</a>
+        <a href={APP_DASHBOARD_PATH} style={{ color: K.gn, textDecoration: "none", fontWeight: 600 }}>Open the app</a>
         {" "}— Free sportsbook promo calculator suite
         <br />
         <span style={{ color: K.mt }}>Results are estimates. Verify all odds before placing bets. Must be 21+ and in a legal jurisdiction.</span>

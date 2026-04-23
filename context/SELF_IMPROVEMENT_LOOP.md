@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S70:611 | S71:663 | S72:769 | S73:783 | S74:822
-Avgs — 3: 791.3 [N=3] | all: 664.4 [N=8]
-  └ 3-session (S72/S73/S74): Dev 95.3 | Align 96.0 | Momentum 82.7 | Engage 92.3 | Process 94.7 | Coher 49.3 | Sec 70.0 | Eco 70.0 | Cap 74.7 | Auto 66.3
+Sparkline (last 5 totals): S71:663 | S72:769 | S73:783 | S74:822 | S75:834
+Avgs — 3: 813.0 [N=3] | all: 683.3 [N=9]
+  └ 3-session (S73/S74/S75): Dev 94.7 | Align 96.3 | Momentum 79.3 | Engage 92.7 | Process 96.0 | Coher 58.7 | Sec 67.3 | Eco 76.3 | Cap 80.0 | Auto 76.7
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-23 | Session 74 | Total: 822/1000 | Velocity: 5 | protocolVelocity: 6
+Last session: 2026-04-23 | Session 75 | Total: 834/1000 | Velocity: 2 | protocolVelocity: 5
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -326,3 +326,32 @@ Rolling avg (last 3): Dev 88.7 | Align 96.0 | Momentum 79.7 | Engage 84.7 | Proc
 1. Add a `--check-gitignored` flag to `scan-secrets.mjs` that reports findings in gitignored-but-local files as advisory only (not exit 1), so security visibility is preserved without false-positive push blocks.
 2. Extend pre-push hook with a diff-filter legend comment so future maintainers know why ACMRT was chosen.
 3. Consider a micro-session SIL category modifier: sessions explicitly tagged as "micro/fix" shouldn't drag down Momentum avg unfairly — document this in SIL_RUBRIC_V3.md.
+
+## 2026-04-23 — Session 75 | Total: 834/1000 | Velocity: 2 | Debt: down
+Rolling avg (last 3): Dev 94.7 | Align 96.3 | Momentum 79.3 | Engage 92.7 | Process 96.0 | Coher 58.7 | Sec 67.3 | Eco 76.3 | Cap 80.0 | Auto 76.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 95 | → | The real boot-time failures were fixed, the route graph is whole again, and production build still passes. |
+| Creative Alignment | 97 | ↑ | Public entry now matches the intended acquisition flow: landing page first, app second. |
+| Momentum | 74 | ↓ | This was a targeted repair/closeout session with a small number of high-leverage fixes rather than a broad feature sprint. |
+| Engagement | 92 | → | No new engagement systems shipped, but the public first-touch experience is less confusing and more intentional. |
+| Process Quality | 98 | ↑ | Full manual write-back completed with clear findings, truthful handoff, and a clean closeout path to commit/push. |
+| Cross-Repo Coherence | 60 | ↑ | Public landing/app-entry behavior is now aligned across app routing, landing CTAs, and the standalone landing page. |
+| Security Posture | 70 | ↑ | Service-worker caching is safer, and the session remained within the existing clean secrets posture. |
+| Ecosystem Integration | 79 | ↑ | Root-path behavior, app URLs, and landing/app surfaces now agree on how PromoGrind should be entered publicly. |
+| Capital Efficiency | 83 | ↑ | The session prioritized the two actual breakages instead of chasing extension noise, which kept scope tight and effective. |
+| Automation Coverage | 86 | ↑ | The service-worker fix removed a brittle production path, and the closeout surfaces were fully refreshed again. |
+| **Total** | **834 / 1000** | | |
+
+**Top win:** fixed the real user-facing breakage instead of the noisy console distractions: the app boots again and the public root now lands on a real PromoGrind landing page first.
+
+**Top gap:** PostHog still emits production 404/401 console noise, and the honest launch blockers are still external: real affiliate links, one real Stripe smoke, and one friend beta pass.
+
+**Intent outcome:** Achieved. The deployed-site failures were diagnosed and fixed, routing now matches product intent, and the repo is ready to push.
+
+**Brainstorm**
+
+1. Gate or disable PostHog remote-config/feature-flag calls until production credentials and endpoints are fully valid, so launch consoles stay signal-rich.
+2. Keep splitting `src/App.jsx` by route-level seams now that landing/app entry behavior is clearly separated.
+3. Add a tiny browser smoke that asserts `/` renders landing copy while `/dashboard` renders the app shell, so this routing truth does not regress.

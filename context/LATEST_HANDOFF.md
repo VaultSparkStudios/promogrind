@@ -1,35 +1,36 @@
 # Latest Handoff
 
-Last updated: 2026-04-23 (S74)
-Session: 74
-Session Intent: complete the highest-impact remaining local launch/truth/monolith items, refresh the repo’s closeout surfaces, then commit and push a clean verified state to GitHub.
-Intent Outcome: Achieved with only the honest external launch proofs still open. Launch blockers are now machine-readable, CTA monetization truth is normalized, deploys emit a production-verification artifact, and the next `App.jsx` seam/copy-fix tranche shipped cleanly.
-Where we stopped: all meaningful repo-local work from the current list is shipped, targeted tests/build are green, and the next meaningful product move is still external proof completion (`BetMGM` / `bet365` / `BetRivers` links, one real Stripe smoke, one friend beta pass) plus continued `src/App.jsx` decomposition.
+Last updated: 2026-04-23 (S75)
+Session: 75
+Session Intent: analyze why the deployed site was not working, fix the real runtime/entrypoint faults, make the public root land on the marketing page instead of the app shell, then push and close out cleanly.
+Intent Outcome: Achieved. The real boot-time failures were fixed (`ParlayHedge` route crash and service-worker consumed-response caching), `/` now renders the landing page first with explicit app-entry CTAs, and the repo is closed out for push with the same honest external launch blockers still open.
+Where we stopped: the app should boot again, the public entry path now matches product intent, build is green, and the next meaningful work is still the external monetization/launch-proof tranche plus cleanup of non-blocking PostHog console noise.
 
-## Where We Left Off (Session 74)
+## Where We Left Off (Session 75)
 
-- Shipped: canonical launch proofs + exact-book verifier hardening, post-deploy verification artifacts, normalized CTA link metadata, and another `App.jsx` extraction/copy-repair tranche
-- Tests: targeted regression tests passed (`24/24`) and production build passed; last full-suite baseline remains `375/375`
-- Deploy: ready to push at closeout so the next Pages run can emit the new verification artifact
+- Shipped: public-root routing correction, restored `ParlayHedge` route coverage, safer service-worker caching, and landing-page CTA rewiring so the marketing surface hands users into `/dashboard` intentionally
+- Tests: production build passed after the runtime/routing fixes; last full-suite baseline remains `375/375`
+- Deploy: ready to push at closeout so the next Pages run can pick up the routing/runtime fixes and the prior launch-verification artifact path
 
 ## What was completed
 
-- **Canonical launch proofs (S74)**: `context/LAUNCH_PROOFS.json` plus `scripts/lib/launch-proofs.mjs` now hold the manual launch blockers in one machine-readable place; `scripts/check-launch-ready.mjs` reads that surface and correctly reports `⚠ PARTIAL`.
-- **Verifier hardening (S74)**: `src/books.js` and `scripts/verify-production-launch.mjs` now fail on the exact required monetization books (`BetMGM`, `bet365`, `BetRivers`) instead of a lossy aggregate affiliate count.
-- **Deploy artifact path (S74)**: `.github/workflows/deploy-pages.yml` now runs `npm run verify:production`, renders a markdown verdict, and uploads a `launch-verification` artifact so deploy truth is emitted automatically.
-- **CTA/app-shell cleanup (S74)**: `src/components/BookCTA.jsx` now consumes shared link metadata, and `src/App.jsx` is lighter via `src/app/AppChrome.jsx` plus `src/app/appText.js`, with several public-facing mojibake/copy issues fixed.
+- **Public-root correction (S75)**: `src/App.jsx` now renders `LandingRoute` for `/` instead of dropping straight into the app shell, so `vaultsparkstudios.com/promogrind` and the canonical root behave like a real landing surface first.
+- **Runtime fault repair (S75)**: `src/calculators/ParlayHedge.jsx` was restored and wired back into the route table, eliminating the `ReferenceError: ParlayHedge is not defined` boot failure.
+- **Service-worker hardening (S75)**: `public/sw.js` now caches through a guarded helper that skips consumed/opaque responses, fixing the `Failed to execute 'clone' on 'Response'` error path from production.
+- **Landing CTA truth (S75)**: `src/routes/LandingRoute.jsx`, `src/launchState.js`, and `public/landing/index.html` now send users to `/dashboard` or signup intentionally instead of recursively routing back to the landing page.
 
 ## What is mid-flight
 
 - Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` are still missing
 - One real Stripe smoke purchase and one friend-facing auth/calculator/pricing pass are still required after deploy
 - The new deploy verification artifact exists locally and in workflow config, but it still needs the normal push/deploy cycle to become the live source of truth
+- PostHog remote-config / feature-flag console noise (`config.js` 404 and flags 401) is still present and should be cleaned up separately now that the true product-breaking issues are fixed
 
 ## What to do next
 
-1. Let this push trigger the next GitHub Pages deploy so the workflow emits the new `launch-verification` artifact.
+1. Let this push trigger the next GitHub Pages deploy so the workflow emits the new `launch-verification` artifact and the root/app routing fix goes live.
 2. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`, then rerun `node scripts/verify-production-launch.mjs`.
-3. Run the real Stripe smoke + friend-beta pass, then keep decomposing `src/App.jsx` from the new app-shell seam.
+3. Clean up the remaining PostHog production noise, then run the real Stripe smoke + friend-beta pass and keep decomposing `src/App.jsx`.
 
 ## Constraints
 
@@ -49,5 +50,5 @@ Where we stopped: all meaningful repo-local work from the current list is shippe
 
 - `src/books.js`
 - `src/App.jsx`
+- `src/analytics.js`
 - `docs/RELEASE_PLAN.md`
-- `context/LAUNCH_PROOFS.json`

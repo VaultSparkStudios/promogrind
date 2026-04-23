@@ -53,6 +53,7 @@ const NoVig3Way = lazy(() => import("./calculators/NoVig3Way.jsx"));
 const PlusEV = lazy(() => import("./calculators/PlusEV.jsx"));
 const Arb2Way = lazy(() => import("./calculators/Arb2Way.jsx"));
 const Arb3Way = lazy(() => import("./calculators/Arb3Way.jsx"));
+const ParlayHedge = lazy(() => import("./calculators/ParlayHedge.jsx"));
 const KellyCriterion = lazy(() => import("./calculators/KellyCriterion.jsx"));
 const InsurancePromo = lazy(() => import("./calculators/InsurancePromo.jsx"));
 const TeaserCalc = lazy(() => import("./calculators/TeaserCalc.jsx"));
@@ -3722,6 +3723,15 @@ export default function App() {
 
   // Creator/referral landing pages — rendered outside the main nav shell
   if (pathname.startsWith("/land/")) {
+    return (
+      <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
+        <LandingRoute />
+      </Suspense>
+    );
+  }
+
+  // Public root should be a landing page, not an immediate drop into the app shell.
+  if (pathname === "/") {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
         <LandingRoute />

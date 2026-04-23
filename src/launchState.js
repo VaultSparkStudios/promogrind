@@ -10,9 +10,37 @@ export function ensureTrailingSlash(url) {
   return url.endsWith("/") ? url : `${url}/`;
 }
 
+export function normalizeBasePath(path = "/") {
+  const value = String(path || "/").trim();
+  if (!value || value === "/") return "/";
+  const withLeadingSlash = value.startsWith("/") ? value : `/${value}`;
+  return ensureTrailingSlash(withLeadingSlash);
+}
+
+export function getAppPath(path = "") {
+  const base = normalizeBasePath(env.VITE_APP_BASE_PATH || "/");
+  const cleanPath = String(path || "").replace(/^\/+/, "");
+  if (!cleanPath) return base;
+  return `${base}${cleanPath}`;
+}
+
 export const CANONICAL_APP_URL = ensureTrailingSlash(
   env.VITE_CANONICAL_URL || "https://promogrind.bet/"
 );
+export const APP_BASE_PATH = normalizeBasePath(env.VITE_APP_BASE_PATH || "/");
+export const APP_DASHBOARD_PATH = getAppPath("dashboard");
+
+export function getAbsoluteAppUrl(path = "") {
+  const targetPath = getAppPath(path);
+  try {
+    if (typeof window !== "undefined" && window.location?.origin) {
+      return new URL(targetPath, window.location.origin).toString();
+    }
+    return new URL(targetPath, CANONICAL_APP_URL).toString();
+  } catch {
+    return `${CANONICAL_APP_URL.replace(/\/$/, "")}${targetPath}`;
+  }
+}
 
 export const PROJECT_AUTH_QUERY_KEY = "auth";
 export const PROJECT_AUTH_MODES = ["signin", "signup"];

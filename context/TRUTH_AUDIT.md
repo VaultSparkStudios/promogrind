@@ -79,3 +79,9 @@ Next action: keep affiliate-link truth honest until real URLs exist, use `contex
 - Added `flagVisit` helper and wired all 4 previously un-completable mission check flags.
 - Untracked `docs/CREATIVE_DIRECTION_RECORD.md`, `scripts/rotate-render-key.mjs`, `scripts/soul-interview.mjs` from git; added to `.gitignore`. Public-repo sanitization scan now clean.
 - Refreshed handoff, work log, decisions, SIL, and state surfaces to describe S69.
+## 2026-04-23 (S75) — runtime + routing truth refresh
+
+- Root-path truth changed: `/` is now the marketing landing surface, not the immediate app shell. App-entry truth for public CTAs is `/dashboard`.
+- Runtime truth changed: the missing `ParlayHedge` route was a real boot blocker and is now restored with a concrete calculator module.
+- Service-worker truth changed: `public/sw.js` now guards cache writes against consumed/opaque responses, matching the production console failure that previously occurred.
+- Remaining noise is honestly classified as non-blocking: browser-extension messages and PostHog remote-config/feature-flag failures are still visible in production but were not the cause of the app failing to boot.
