@@ -1090,16 +1090,16 @@ const QuickCalcPanel = ({ goTo }) => {
     {n:"2-Way Arb",gi:2,ti:4},
   ];
   return (
-    <div className="pg-quick-calc" style={{position:"fixed",bottom:64,left:12,zIndex:200}}>
-      <style>{`@media (min-width: 769px) { .pg-quick-calc { display: none !important; } }`}</style>
-      {open&&<div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:10,padding:10,marginBottom:8,boxShadow:"0 4px 16px rgba(0,0,0,0.5)",minWidth:140}}>
+    <div className="pg-quick-calc" style={{position:"fixed",bottom:84,left:14,zIndex:200}}>
+      <style>{`@media (min-width: 640px) { .pg-quick-calc { display: none !important; } }`}</style>
+      {open&&<div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:14,padding:10,marginBottom:8,boxShadow:"0 16px 36px rgba(0,0,0,0.38)",minWidth:180}}>
         {quickItems.map(item=>(
-          <button key={item.n} onClick={()=>{goTo(item.gi,item.ti);setOpen(false);}} style={{display:"block",width:"100%",padding:"8px 12px",background:"transparent",border:"none",color:K.tx,cursor:"pointer",textAlign:"left",fontSize:12,fontFamily:font,borderBottom:`1px solid ${K.bd}`,borderRadius:0}}>
+          <button key={item.n} onClick={()=>{goTo(item.gi,item.ti);setOpen(false);}} style={{display:"block",width:"100%",padding:"10px 12px",background:"transparent",border:"none",color:K.tx,cursor:"pointer",textAlign:"left",fontSize:12,fontFamily:font,borderBottom:`1px solid ${K.bd}`,borderRadius:0}}>
             {item.n}
           </button>
         ))}
       </div>}
-      <button onClick={()=>setOpen(o=>!o)} style={{padding:"7px 14px",background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:20,color:K.ac,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600,boxShadow:"0 2px 8px rgba(0,0,0,0.4)"}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:999,color:K.ac,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:700,boxShadow:"0 10px 24px rgba(0,0,0,0.3)"}}>
         {open?"âœ• Close":"âš¡ Quick"}
       </button>
     </div>
@@ -1141,11 +1141,11 @@ const MobileBottomNav = ({ gi, goTo }) => {
   const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
   const labels = ["Home","Convert","Calc","Track","Live","Learn"];
   return (
-    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:K.s1,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"4px 0 env(safe-area-inset-bottom,0px)"}}>
-      <style>{`@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } } @media (max-width: 768px) { .pg-main-content { padding-bottom: 72px !important; } }`}</style>
+    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
+      <style>{`@media (min-width: 640px) { .pg-mobile-nav { display: none !important; } } @media (max-width: 639px) { .pg-main-content { padding-bottom: 88px !important; } }`}</style>
       {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"6px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-          <span style={{fontSize:18}}>{icons[i]}</span>
+        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+          <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
           <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
         </button>
       ))}
@@ -3535,8 +3535,10 @@ export default function App() {
     syncStatus,
     syncDiagnostics,
     winW,
+    viewport,
     isMobile,
     isTablet,
+    isDesktop,
     currency,
     setCurrency,
     currencyCtxVal,
@@ -3546,6 +3548,10 @@ export default function App() {
     showOnboarding,
     dismissOnboarding,
   } = usePromoAppShell({ onboardingKey: ONBOARDING_KEY });
+  const shellMaxWidth = viewport.contentMaxWidth;
+  const shellPadding = viewport.shellPadding;
+  const contentPadding = viewport.contentPadding;
+  const stickyTop = isMobile ? 74 : isTablet ? 92 : 104;
   const [calcSubcat, setCalcSubcat] = useState("All");
   useEffect(() => {
     try {
@@ -3915,7 +3921,7 @@ export default function App() {
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
-            Sign in with your free PromoGrind account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds â€” no credit card required.
+            Sign in with your Free PromoGrind account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds â€” no credit card required.
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
@@ -3996,26 +4002,27 @@ export default function App() {
       {showCalcSearch && <CalcSearch allCalcs={allCalcs} onNavigate={handleCalcNavigate} onClose={()=>setShowCalcSearch(false)}/>}
       {/* â”€â”€ Site Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <header style={{
-        background:`linear-gradient(135deg,${K.s1},${K.s2})`,
+        background:`linear-gradient(180deg,${K.s1},${K.s2})`,
         borderBottom:`1px solid ${K.bd}`,
-        padding: isMobile ? '10px 14px 8px' : isTablet ? '12px 18px 10px' : '14px 28px 12px',
+        padding: isMobile ? `10px ${shellPadding}px 10px` : isTablet ? `12px ${shellPadding}px 12px` : `14px ${shellPadding}px 12px`,
         position:'sticky', top:0, zIndex:200,
         backdropFilter:'blur(12px)',
         WebkitBackdropFilter:'blur(12px)',
+        boxShadow:'0 10px 24px rgba(0,0,0,0.12)',
       }}>
-        <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
+        <div style={{maxWidth:shellMaxWidth,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
 
           {/* â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <div style={{cursor:'pointer',flexShrink:0,minWidth:0}} onClick={()=>navigate('/'+DEFAULT_SLUG)}>
-            <div style={{fontFamily:fontD,fontSize:isMobile?17:21,fontWeight:700,color:K.gn,letterSpacing:'-0.5px',lineHeight:1}}>
+            <div style={{fontFamily:fontD,fontSize:isMobile?18:21,fontWeight:800,color:K.gn,letterSpacing:'-0.5px',lineHeight:1}}>
               PROMOGRIND
             </div>
             {!isMobile && (
-              <div style={{fontSize:9,color:K.mt,letterSpacing:'2px',textTransform:'uppercase',marginTop:3}}>
+              <div style={{fontSize:9,color:K.mt,letterSpacing:'1.6px',textTransform:'uppercase',marginTop:4}}>
                 Free Sportsbook Promo Conversion Tools
               </div>
             )}
-            {!isMobile && (
+            {isDesktop && (
               <div style={{display:'flex',gap:14,marginTop:6,alignItems:'baseline',flexWrap:'wrap'}}>
                 {[
                   [String(TABS.filter(g=>g.group==='Convert'||g.group==='Calculate').reduce((n,g)=>n+g.items.length,0)),'Calculators'],
@@ -4051,6 +4058,26 @@ export default function App() {
                 }}
               >
                 Advisor
+              </button>
+            )}
+
+            {!isMobile && (
+              <button
+                onClick={()=>setShowCalcSearch(true)}
+                title="Search calculators"
+                style={{
+                  padding:'6px 12px',
+                  background:'transparent',
+                  border:`1px solid ${K.bd2}`,
+                  borderRadius:8,
+                  color:K.dm,
+                  fontSize:11,
+                  cursor:'pointer',
+                  fontFamily:font,
+                  minHeight:36,
+                }}
+              >
+                Search
               </button>
             )}
 
@@ -4090,10 +4117,25 @@ export default function App() {
         {isMobile && (
           <div style={{
             display:'flex', alignItems:'center', justifyContent:'space-between',
-            marginTop:8, paddingTop:8, borderTop:`1px solid ${K.bd}40`,
+            marginTop:8, paddingTop:8, borderTop:`1px solid ${K.bd}40`, gap: 10,
           }}>
-            <div style={{display:'flex',alignItems:'center',gap:8}}>
+            <div style={{display:'flex',alignItems:'center',gap:8, flexWrap:'wrap'}}>
               <DailyStreak/>
+              <button
+                onClick={()=>setShowCalcSearch(true)}
+                style={{
+                  padding:'5px 10px',
+                  fontFamily:font,
+                  cursor:'pointer',
+                  fontSize:10,
+                  background:'transparent',
+                  border:`1px solid ${K.bd2}`,
+                  borderRadius:999,
+                  color:K.dm,
+                }}
+              >
+                Search
+              </button>
               {FEATURE_FLAGS.promoAdvisor && (
                 <button
                   onClick={()=>setShowPromoAdvisor(v=>!v)}
@@ -4108,7 +4150,7 @@ export default function App() {
                 </button>
               )}
             </div>
-            <div style={{fontSize:11,color:K.dm,textAlign:'right',lineHeight:1.5}}>
+            <div style={{fontSize:10,color:K.dm,textAlign:'right',lineHeight:1.5, maxWidth: 140}}>
               {APP_CHROME_COPY.mobileCompliance}
             </div>
           </div>
@@ -4116,7 +4158,7 @@ export default function App() {
 
         {/* â”€â”€ Desktop compliance line â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {!isMobile && (
-          <div style={{maxWidth:1100,margin:'4px auto 0',textAlign:'right'}}>
+          <div style={{maxWidth:shellMaxWidth,margin:'4px auto 0',textAlign:'right'}}>
             <span style={{fontSize:11,color:K.dm}}>
               {APP_CHROME_COPY.desktopCompliance}
             </span>
@@ -4130,14 +4172,14 @@ export default function App() {
         display:'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',
         WebkitOverflowScrolling:'touch',
-        position:'sticky', top: isMobile ? 94 : 106, zIndex:190,
+        position:'sticky', top: stickyTop, zIndex:190,
       }}>
         <style>{`
           .pg-tabs::-webkit-scrollbar { display: none; }
           .pg-tab-btn { -webkit-tap-highlight-color: transparent; }
           .pg-tab-btn:active { opacity: 0.7; }
         `}</style>
-        <div className="pg-tabs" role="tablist" aria-label="Primary navigation" style={{display:'flex',maxWidth:1100,width:'100%'}}>
+        <div className="pg-tabs pg-scroll-x" role="tablist" aria-label="Primary navigation" style={{display:'flex',maxWidth:shellMaxWidth,width:'100%'}}>
           {TABS.map((t,i)=>(
             <button
               key={t.group}
@@ -4149,8 +4191,8 @@ export default function App() {
               aria-controls={`pg-subtabs-${t.group.toLowerCase().replace(/\s+/g,"-")}`}
               tabIndex={gi===i ? 0 : -1}
               style={{
-                flex:1, minWidth:isMobile?72:90,
-                padding: isMobile ? '12px 10px' : '12px 20px',
+                flex:isDesktop?1:'0 0 auto', minWidth:isMobile?76:isTablet?96:110,
+                padding: isMobile ? '12px 12px' : '12px 20px',
                 fontSize: isMobile ? 12 : 13,
                 fontWeight:gi===i?700:400,
                 color:gi===i?K.gn:K.mt,
@@ -4171,7 +4213,7 @@ export default function App() {
       </div>
       <div style={{position:"relative"}}>
         <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto",flexDirection:"column"}}>
-          {gi===CALC_GI&&calcFavorites.length>0&&<div style={{maxWidth:1100,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"4px 8px 0",alignItems:"center"}}>
+          {gi===CALC_GI&&calcFavorites.length>0&&<div className="pg-scroll-x" style={{maxWidth:shellMaxWidth,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"6px 8px 0",alignItems:"center",overflowX:"auto"}}>
             <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",whiteSpace:"nowrap",marginRight:2}}>Pinned:</span>
             {calcFavorites.map(favSlug=>{
               const favItem = g.items.find(it=>it.slug===favSlug) || TABS.flatMap(gr=>gr.items).find(it=>it.slug===favSlug);
@@ -4186,7 +4228,7 @@ export default function App() {
               );
             })}
           </div>}
-          {gi===CALC_GI&&<div style={{maxWidth:1100,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"6px 8px 0",alignItems:"center"}}>
+          {gi===CALC_GI&&<div className="pg-scroll-x" style={{maxWidth:shellMaxWidth,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"8px 8px 0",alignItems:"center",overflowX:"auto"}}>
             {SUBCATS.map(sc=>(
               <button key={sc} onClick={()=>{
                 setCalcSubcat(sc);
@@ -4207,7 +4249,8 @@ export default function App() {
             id={`pg-subtabs-${g.group.toLowerCase().replace(/\s+/g,"-")}`}
             role="tablist"
             aria-label={`${g.group} navigation`}
-            style={{display:"flex",maxWidth:1100,width:"100%",gap:2,margin:"0 auto"}}
+            className="pg-scroll-x"
+            style={{display:"flex",maxWidth:shellMaxWidth,width:"100%",gap:2,margin:"0 auto",overflowX:"auto"}}
           >{g.items.map((t,i)=>{
             const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
             const isFav = calcFavorites.includes(t.slug);
@@ -4218,16 +4261,16 @@ export default function App() {
             </button>);
           })}</div>
         </div>
-        <div style={{position:"absolute",right:0,top:0,bottom:0,width:64,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>
+        {!isDesktop && <div style={{position:"absolute",right:0,top:0,bottom:0,width:42,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>}
       </div>
-      <div className="pg-main-content" style={{maxWidth:1100,margin:"0 auto",padding:"20px"}}>
+      <div className="pg-main-content" style={{maxWidth:shellMaxWidth,margin:"0 auto",padding:`${contentPadding}px`}}>
         {!user && <MembershipBanner/>}
         <ErrorBoundary>
           <Suspense fallback={<div style={{padding:32,textAlign:"center"}}><LoadingState/></div>}>
             {slug==='dashboard'
               ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>
               : compareMode&&gi===CALC_GI
-                ? <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+                ? <div style={{display:"grid",gridTemplateColumns:isDesktop?"1fr 1fr":"1fr",gap:16}}>
                     <div>
                       <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:8,fontFamily:font}}>Primary â€” {item?.n}</div>
                       {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
@@ -4251,7 +4294,7 @@ export default function App() {
       </div>
       <EmailCapture/>
       <AppFooter/>
-      <div style={{height:56}}/>
+      {isMobile && <div style={{height:82}}/>}
       <MobileBottomNav gi={gi} goTo={goTo}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}

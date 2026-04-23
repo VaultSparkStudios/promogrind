@@ -7,9 +7,12 @@ import { useToast } from "../contexts.jsx";
 import { Tl, Nt, S } from "../ui.jsx";
 import { PROMO_SCHED } from "../data/promoSchedule.js";
 import { flagVisit } from "../lib/missions.js";
+import { useViewport } from "../app/responsive.js";
 
 const Tracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const viewport = useViewport();
+  const isCompact = viewport.isPhone;
   const done = data.done || {};
   const profits = data.profits || {};
   const expiry = data.bookExpiry || {};
@@ -83,13 +86,13 @@ const Tracker = () => {
         </div>
       );
     })()}
-    <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
+    <div style={{display:"grid",gridTemplateColumns:isCompact?"repeat(2,minmax(0,1fr))":"repeat(auto-fit,minmax(150px,1fr))",gap:14,marginBottom:16,alignItems:"end"}}>
       <div><div style={{fontSize:10,color:K.mt}}>EXTRACTED</div><div style={S.big(K.gn)}>${f(total)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>COMPLETED</div><div style={S.big(K.ac)}>{cnt}/{BOOKS.length}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>REMAINING</div><div style={S.big(K.yl)}>~${f(BOOKS.filter(b=>!done[b.name]).reduce((s,b)=>s+b.bonus*0.7,0),0)}</div></div>
-      <div style={{marginLeft:"auto",display:"flex",gap:6}}>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:isCompact?"stretch":"flex-end",gridColumn:isCompact?"1 / -1":"auto"}}>
         {["tracker","progress"].map(v=>(
-          <button key={v} onClick={()=>setTrackerView(v)} style={{padding:"4px 12px",background:trackerView===v?K.ac:"transparent",border:`1px solid ${trackerView===v?K.ac:K.bd2}`,borderRadius:4,color:trackerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
+          <button key={v} onClick={()=>setTrackerView(v)} style={{flex:isCompact?1:"0 0 auto",padding:"6px 12px",background:trackerView===v?K.ac:"transparent",border:`1px solid ${trackerView===v?K.ac:K.bd2}`,borderRadius:8,color:trackerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
             {v==="tracker"?"Tracker":"Progress"}
           </button>
         ))}

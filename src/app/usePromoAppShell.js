@@ -2,6 +2,7 @@ import React from "react";
 import { FX } from "../contexts.jsx";
 import { K, KD, KL, f } from "../lib/shared.js";
 import { loadData, readSyncDiagnostics, saveData, triggerQueueFlush } from "../sync.js";
+import { useViewport } from "./responsive.js";
 
 export function usePromoAppShell({ onboardingKey }) {
   const [darkMode, setDarkMode] = React.useState(() => {
@@ -48,12 +49,7 @@ export function usePromoAppShell({ onboardingKey }) {
   const [syncDiagnostics, setSyncDiagnostics] = React.useState(() => readSyncDiagnostics());
   const syncTimer = React.useRef(null);
 
-  const [winW, setWinW] = React.useState(() => typeof window !== "undefined" ? window.innerWidth : 1200);
-  React.useEffect(() => {
-    const onResize = () => setWinW(window.innerWidth);
-    window.addEventListener("resize", onResize, { passive: true });
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const viewport = useViewport();
 
   const [currency, setCurrency] = React.useState(() => {
     try {
@@ -153,9 +149,11 @@ export function usePromoAppShell({ onboardingKey }) {
     syncAppData,
     syncStatus,
     syncDiagnostics,
-    winW,
-    isMobile: winW < 640,
-    isTablet: winW >= 640 && winW < 1024,
+    winW: viewport.width,
+    viewport,
+    isMobile: viewport.isMobile,
+    isTablet: viewport.isTablet,
+    isDesktop: viewport.isDesktop,
     currency,
     setCurrency,
     currencyCtxVal,

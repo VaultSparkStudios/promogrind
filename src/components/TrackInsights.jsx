@@ -5,6 +5,7 @@ import { S, Tl } from "../ui.jsx";
 import { buildTrackInsights, formatPromoTypeLabel, updateResultFeedback } from "../track/insights.js";
 import { patchWorkflowState } from "../workflows/store.js";
 import { flagVisit } from "../lib/missions.js";
+import { useViewport } from "../app/responsive.js";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -38,6 +39,10 @@ function driftBar(row) {
 export default function TrackInsights() {
   useEffect(() => { flagVisit('insights'); }, []);
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
+  const viewport = useViewport();
+  const summaryColumns = viewport.isDesktop ? "repeat(5, minmax(0, 1fr))" : viewport.isTablet ? "repeat(3, minmax(0, 1fr))" : "repeat(2, minmax(0, 1fr))";
+  const pairColumns = viewport.isDesktop ? "1fr 1fr" : "1fr";
+  const splitColumns = viewport.isDesktop ? "1.3fr 1fr" : "1fr";
   const insights = useMemo(() => buildTrackInsights(appData || {}, new Date()), [appData]);
   const [drafts, setDrafts] = useState({});
   const [historyFilter, setHistoryFilter] = useState("all");
@@ -104,7 +109,7 @@ export default function TrackInsights() {
         Aggregate realized P/L, promo hit rate, calculator accuracy, and the books actually producing profit.
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: summaryColumns, gap: 10, marginBottom: 14 }}>
         {metricCard("Realized P/L", `${insights.totalProfit >= 0 ? "+" : "-"}$${f(Math.abs(insights.totalProfit))}`, `Last 7d: ${insights.recent7Profit >= 0 ? "+" : "-"}$${f(Math.abs(insights.recent7Profit))}`, insights.totalProfit >= 0 ? K.gn : K.rd)}
         {metricCard("Month Profit", `${insights.monthProfit >= 0 ? "+" : "-"}$${f(Math.abs(insights.monthProfit))}`, `${insights.settledCount} settled workflow${insights.settledCount === 1 ? "" : "s"}`, insights.monthProfit >= 0 ? K.ac : K.rd)}
         {metricCard("Promo Hit Rate", insights.hitRate === null ? "—" : `${f(insights.hitRate, 0)}%`, insights.hitRate === null ? "Needs settled workflow data" : `${insights.settledCount} settled`, insights.hitRate !== null && insights.hitRate >= 70 ? K.gn : K.yl)}
@@ -112,7 +117,7 @@ export default function TrackInsights() {
         {metricCard("Execution Rate", insights.executionRate === null ? "—" : `${f(insights.executionRate, 0)}%`, `${insights.attemptedCount} attempted · ${insights.skippedFeedback.length} skipped`, insights.executionRate !== null && insights.executionRate >= 70 ? K.gn : K.yl)}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, alignItems: "start", marginBottom: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: pairColumns, gap: 12, alignItems: "start", marginBottom: 14 }}>
         <div style={{ padding: 12, background: `${K.ac}06`, border: `1px solid ${K.ac}25`, borderRadius: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: K.ac, marginBottom: 8 }}>Self-Calibration</div>
           <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 10 }}>{insights.selfCalibration.label}</div>
@@ -149,7 +154,7 @@ export default function TrackInsights() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12, alignItems: "start", marginBottom: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: splitColumns, gap: 12, alignItems: "start", marginBottom: 14 }}>
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Hit Rate By Promo Type</div>
           {insights.promoTypeRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>No result feedback yet. Mark placed or skipped workflows from the conversion calculators.</div>}
@@ -215,7 +220,7 @@ export default function TrackInsights() {
                     </div>
                     <div style={{ fontSize: 11, color: K.yl, fontWeight: 700 }}>Waiting to settle</div>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "minmax(120px, 1fr) minmax(120px, 1fr) auto", gap: 10, alignItems: "end" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: viewport.isPhone ? "1fr" : "minmax(120px, 1fr) minmax(120px, 1fr) auto", gap: 10, alignItems: "end" }}>
                     <div>
                       <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Book</div>
                       <input value={draft.book || ""} onChange={(event) => saveDraft(entry.id, "book", event.target.value)} style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }} />
@@ -260,7 +265,7 @@ export default function TrackInsights() {
         )}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, alignItems: "start", marginTop: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: pairColumns, gap: 12, alignItems: "start", marginTop: 14 }}>
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Skip Reasons</div>
           {insights.skipReasonRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Skip reasons will appear once users mark why a workflow was passed over.</div>}

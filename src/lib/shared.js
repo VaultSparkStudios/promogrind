@@ -336,13 +336,13 @@ export const fontD = "'Space Grotesk','SF Pro Display',sans-serif";
 // ─── Style Primitives ─────────────────────────────────────────────────────────
 
 export const S = {
-  get card() { return { background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 10, padding: 20, marginBottom: 16 }; },
-  get label() { return { display: "block", fontSize: 11, color: K.mt, marginBottom: 5, textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600 }; },
-  get input() { return { width: "100%", padding: "9px 11px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontFamily: font, fontSize: 14, outline: "none", boxSizing: "border-box" }; },
-  row: { display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12 },
-  col: { flex: 1, minWidth: 120 },
+  get card() { return { background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 14, padding: "clamp(14px, 2vw, 20px)", marginBottom: 16, boxShadow: `0 8px 28px ${K.bg}14` }; },
+  get label() { return { display: "block", fontSize: 11, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1.3px", fontWeight: 700 }; },
+  get input() { return { width: "100%", minHeight: 44, padding: "11px 12px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14, outline: "none", boxSizing: "border-box" }; },
+  row: { display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12, alignItems: "flex-start" },
+  col: { flex: 1, minWidth: 140 },
   res: (ok) => ({ background: ok ? `${K.gn}08` : `${K.rd}08`, border: `1px solid ${ok ? K.gn : K.rd}25`, borderRadius: 8, padding: 16, marginTop: 12 }),
-  big: (c) => ({ fontSize: 28, fontWeight: 700, color: c || K.gn, fontFamily: fontD, lineHeight: 1 }),
+  big: (c) => ({ fontSize: "clamp(24px, 4vw, 30px)", fontWeight: 700, color: c || K.gn, fontFamily: fontD, lineHeight: 1 }),
   tag: (c) => ({ display: "inline-block", padding: "2px 8px", borderRadius: 50, fontSize: 10, fontWeight: 600, background: `${c}15`, color: c }),
   get rr() { return { display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${K.bd}` }; },
   note: (c) => ({ marginTop: 10, padding: 10, background: `${c || K.yl}0d`, borderRadius: 6, fontSize: 13, color: c || K.yl, lineHeight: 1.6 }),

@@ -7,6 +7,7 @@ import { AppDataCtx, useToast } from "../contexts.jsx";
 import { buildHotLanes } from "../track/insights.js";
 import { appendWorkflow } from "../workflows/store.js";
 import { communityPromoToWorkflow } from "../workflows/suggestions.js";
+import { useViewport } from "../app/responsive.js";
 
 const PROMO_BOARD_STATES = ["All States","AL","AZ","CO","CT","DC","IL","IN","IA","KS","KY","LA","MA","MD","ME","MI","MS","MO","NC","NJ","NY","OH","OR","PA","TN","VA","VT","WV","WY"];
 
@@ -45,6 +46,8 @@ function resolveInitialState(userState) {
 
 const CommunityPromoBoard = () => {
   const { appData, syncAppData } = useContext(AppDataCtx) || {};
+  const viewport = useViewport();
+  const isCompact = viewport.isPhone;
   const toast = useToast();
   const hotLanes = useMemo(() => buildHotLanes(appData || {}), [appData]);
   const [promos, setPromos] = useState([]);
@@ -116,13 +119,13 @@ const CommunityPromoBoard = () => {
 
   return (
     <div style={S.card}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: isCompact ? "stretch" : "center", flexDirection: isCompact ? "column" : "row", gap: 10, marginBottom: 14 }}>
         <div style={{ fontSize: 18, fontWeight: 600, color: K.tx }}>Community Promo Board <span style={{ ...S.tag(K.gn) }}>LIVE</span></div>
         <button
           onClick={() => setShowForm(s => !s)}
           aria-expanded={showForm}
           aria-controls="promo-submit-form"
-          style={{ padding: "7px 14px", background: showForm ? "transparent" : K.gn, border: `1px solid ${K.gn}`, borderRadius: 6, color: showForm ? K.gn : K.bg, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font, flexShrink: 0 }}
+          style={{ width: isCompact ? "100%" : "auto", padding: "9px 14px", background: showForm ? "transparent" : K.gn, border: `1px solid ${K.gn}`, borderRadius: 8, color: showForm ? K.gn : K.bg, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font, flexShrink: 0 }}
         >
           {showForm ? "Cancel" : "+ Share a Promo"}
         </button>
@@ -155,10 +158,10 @@ const CommunityPromoBoard = () => {
         ))}
       </div>
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8, alignItems: "center" }}>
-        <select aria-label="Filter by state" style={{ ...S.input, padding: "3px 8px", fontSize: 10, height: "auto", width: "auto" }} value={stateFilter} onChange={e => setStateFilter(e.target.value)}>
+        <select aria-label="Filter by state" style={{ ...S.input, padding: "6px 10px", fontSize: 10, height: "auto", width: isCompact ? "100%" : "auto" }} value={stateFilter} onChange={e => setStateFilter(e.target.value)}>
           {PROMO_BOARD_STATES.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
-        <button onClick={() => setHideExpired(x => !x)} aria-pressed={hideExpired} style={{ padding: "3px 10px", background: hideExpired ? K.ac : "transparent", border: `1px solid ${hideExpired ? K.ac : K.bd2}`, borderRadius: 50, color: hideExpired ? K.bg : K.dm, fontSize: 10, cursor: "pointer", fontFamily: font }}>Hide expired</button>
+        <button onClick={() => setHideExpired(x => !x)} aria-pressed={hideExpired} style={{ padding: "6px 10px", background: hideExpired ? K.ac : "transparent", border: `1px solid ${hideExpired ? K.ac : K.bd2}`, borderRadius: 50, color: hideExpired ? K.bg : K.dm, fontSize: 10, cursor: "pointer", fontFamily: font, width: isCompact ? "100%" : "auto" }}>Hide expired</button>
       </div>
 
       {/* Hot lane banner — shown when personal win data shows a strong lane */}
@@ -193,7 +196,7 @@ const CommunityPromoBoard = () => {
         const isHotBook = hotLanes.hotBooks.some((l) => l.key === p.book);
         const isHotType = hotLanes.hotPromoTypes.some((l) => l.key === promoTypeKey);
         return (
-          <div key={p.id} style={{ ...S.res(true), marginBottom: 8, padding: "12px 14px", opacity: expired ? 0.55 : 1 }}>
+          <div key={p.id} style={{ ...S.res(true), marginBottom: 8, padding: isCompact ? "12px" : "12px 14px", opacity: expired ? 0.55 : 1 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, flexWrap: "wrap" }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, flexWrap: "wrap" }}>
@@ -211,11 +214,11 @@ const CommunityPromoBoard = () => {
                   {p.expires_at && !expired && <span>Expires {new Date(p.expires_at).toLocaleDateString()}</span>}
                 </div>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end", flexShrink: 0 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isCompact ? "repeat(3,minmax(0,1fr))" : "1fr", gap: 6, alignItems: "stretch", width: isCompact ? "100%" : "auto", flexShrink: 0 }}>
                 <button
                   onClick={() => upvote(p.id)}
                   aria-label={`Upvote (${p.upvotes || 0})`}
-                  style={{ background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.yl, fontSize: 11, padding: "4px 10px", cursor: "pointer", fontFamily: font }}
+                  style={{ background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 8, color: K.yl, fontSize: 11, padding: "7px 10px", cursor: "pointer", fontFamily: font }}
                 >
                   ▲ {p.upvotes || 0}
                 </button>
@@ -223,14 +226,14 @@ const CommunityPromoBoard = () => {
                   onClick={() => flagPromo(p.id)}
                   aria-label={alreadyFlagged ? "Flagged" : "Flag as incorrect"}
                   disabled={alreadyFlagged}
-                  style={{ background: "transparent", border: `1px solid ${alreadyFlagged ? K.rd : K.bd2}`, borderRadius: 6, color: alreadyFlagged ? K.rd : K.mt, fontSize: 9, padding: "3px 8px", cursor: alreadyFlagged ? "default" : "pointer", fontFamily: font, opacity: alreadyFlagged ? 0.7 : 1 }}
+                  style={{ background: "transparent", border: `1px solid ${alreadyFlagged ? K.rd : K.bd2}`, borderRadius: 8, color: alreadyFlagged ? K.rd : K.mt, fontSize: 9, padding: "7px 8px", cursor: alreadyFlagged ? "default" : "pointer", fontFamily: font, opacity: alreadyFlagged ? 0.7 : 1 }}
                 >
                   {alreadyFlagged ? "🚩 Flagged" : "🚩 Flag"}
                 </button>
                 <button
                   onClick={() => queuePromo(p)}
                   aria-label="Save promo to workflow inbox"
-                  style={{ background: "transparent", border: `1px solid ${K.gn}30`, borderRadius: 6, color: K.gn, fontSize: 9, padding: "3px 8px", cursor: "pointer", fontFamily: font }}
+                  style={{ background: "transparent", border: `1px solid ${K.gn}30`, borderRadius: 8, color: K.gn, fontSize: 9, padding: "7px 8px", cursor: "pointer", fontFamily: font }}
                 >
                   Queue
                 </button>

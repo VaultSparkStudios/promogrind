@@ -5,6 +5,7 @@ import { onLedgerEntry } from "../sync.js";
 import { CANONICAL_APP_URL, getProjectAuthHref } from "../launchState.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
 import { In, RR, Tl, Nt, shouldShowTrigger, dismissTrigger } from "../ui.jsx";
+import { useViewport } from "../app/responsive.js";
 
 // ═══ SHARE WEEK BUTTON ═══
 const ShareWeekBtn = ({entries}) => {
@@ -167,6 +168,8 @@ const TaxTimingAdvisor = ({ entries }) => {
 // ═══ LEDGER ═══
 const Ledger = () => {
   const { appData: data, syncAppData, user } = React.useContext(AppDataCtx);
+  const viewport = useViewport();
+  const isCompact = viewport.isPhone;
   const entries = data.ledger || [];
   const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Bonus Conversion",bonus:"",hedge:"",profit:"",ev:"",myOdds:"",closingOdds:"",notes:""});
   const save = (newEntries) => syncAppData({...data, ledger: newEntries});
@@ -257,7 +260,7 @@ const Ledger = () => {
     {(()=>{
       const clvEntries=entries.filter(e=>e.myOdds&&e.closingOdds);
       const avgClv=clvEntries.length?clvEntries.reduce((s,e)=>{const my=toD(e.myOdds),cl=toD(e.closingOdds);return s+(my>1&&cl>1?(my/cl-1)*100:0);},0)/clvEntries.length:null;
-      return (<div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
+      return (<div style={{display:"grid",gridTemplateColumns:isCompact?"repeat(2,minmax(0,1fr))":"repeat(auto-fit,minmax(140px,1fr))",gap:14,marginBottom:16,alignItems:"end"}}>
         <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
         <div><div style={{fontSize:10,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
         {avgClv!==null&&<div><div style={{fontSize:10,color:K.mt}}>AVG CLV</div><div style={S.big(avgClv>=0?K.gn:K.rd)}>{avgClv>=0?"+":""}{f(avgClv,2)}%</div></div>}
@@ -281,8 +284,9 @@ const Ledger = () => {
           if(!recent.length) return null;
           return <div><div style={{fontSize:10,color:K.mt}}>LAST 7 DAYS</div><div style={S.big(recentPL>=0?K.gn:K.rd,{fontSize:20})}>{recentPL>=0?"+":""}${f(recentPL)}</div><div style={{fontSize:9,color:K.mt}}>{recent.length} bets</div></div>;
         })()}
-        {entries.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
-        <button onClick={()=>{
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",gridColumn:isCompact?"1 / -1":"auto",justifyContent:isCompact?"stretch":"flex-end"}}>
+          {entries.length>0&&<button onClick={exportCSV} style={{flex:isCompact?1:"0 0 auto",padding:"8px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
+          <button onClick={()=>{
           const cutoff=new Date(Date.now()-7*24*60*60*1000);
           const week=entries.filter(e=>e.date&&new Date(e.date)>=cutoff);
           const wPL=week.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
@@ -292,7 +296,8 @@ const Ledger = () => {
 \nFree tools at ${CANONICAL_APP_URL}`;
           try{navigator.clipboard.writeText(card);}catch(e){}
           if(toast) toast('📋 Week card copied!',K.pp);
-        }} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>📊 Share Week</button>
+        }} style={{flex:isCompact?1:"0 0 auto",padding:"8px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:8,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>📊 Share Week</button>
+        </div>
       </div>);
     })()}
     {(()=>{
@@ -365,7 +370,7 @@ const Ledger = () => {
     })()}
     <BetHeatmap entries={entries}/>
     <Nt c={K.yl}>All gambling winnings are taxable income. Keep records year-round. Export this ledger each tax season.</Nt>
-    <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
+    <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center",flexWrap:"wrap"}}>
       <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>View:</span>
       {["entries","by-book"].map(v=>(
         <button key={v} onClick={()=>setLedgerView(v)} style={{padding:"4px 12px",background:ledgerView===v?K.ac:"transparent",border:`1px solid ${ledgerView===v?K.ac:K.bd2}`,borderRadius:4,color:ledgerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
@@ -385,8 +390,22 @@ const Ledger = () => {
       });
       const rows=Object.entries(byBook).sort((a,b)=>b[1].profit-a[1].profit);
       if(!rows.length) return <div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}><div style={{fontSize:28,marginBottom:8}}>📊</div><div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div><div style={{fontSize:11,color:K.mt}}>Log your first promo conversion in the Ledger tab and it'll appear here sorted by book.</div></div>;
-      return (<div><div style={{overflowX:"auto",marginBottom:8}}>
-        <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+      return (<div><div style={isCompact?{display:"grid",gap:10,marginBottom:8}:{overflowX:"auto",marginBottom:8}}>
+        {isCompact ? rows.map(([book,d])=>{
+          const roi=calcROI(d.profit,d.wagered);
+          return <div key={book} style={{padding:12,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:10}}>
+            <div style={{display:"flex",justifyContent:"space-between",gap:10,marginBottom:8}}>
+              <div style={{fontSize:13,fontWeight:700,color:K.tx}}>{book}</div>
+              <div style={{fontSize:14,fontWeight:800,color:d.profit>=0?K.gn:K.rd,fontFamily:fontD}}>{d.profit>=0?"+":""}${f(d.profit)}</div>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,fontSize:10,color:K.mt}}>
+              <div>Entries: <span style={{color:K.tx}}>{d.count}</span></div>
+              <div>ROI: <span style={{color:roi===null?K.mt:roi>=0?K.gn:K.rd,fontWeight:700}}>{roi===null?"—":`${roi>=0?"+":""}${f(roi,1)}%`}</span></div>
+              <div>Bonus: <span style={{color:K.tx}}>{d.bonus?`$${f(d.bonus)}`:"—"}</span></div>
+              <div>Wagered: <span style={{color:K.tx}}>{d.wagered?`$${f(d.wagered)}`:"—"}</span></div>
+            </div>
+          </div>;
+        }) : <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
           <thead><tr>{["Book","Entries","Total Bonus","Total Wagered","Net Profit","ROI%"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
           <tbody>{rows.map(([book,d])=>{
             const roi=calcROI(d.profit,d.wagered);
@@ -399,7 +418,7 @@ const Ledger = () => {
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:roi===null?K.mt:roi>=0?K.gn:K.rd,fontWeight:roi!==null?600:400}}>{roi===null?"—":`${roi>=0?"+":""}${f(roi,1)}%`}</td>
             </tr>);
           })}</tbody>
-        </table>
+        </table>}
       </div>
       <Nt c={K.ac}>Best performing book = highest ROI%. Worst = consider retiring that book.</Nt>
       </div>);
@@ -440,6 +459,54 @@ const Ledger = () => {
               + Add demo entry
             </button>
           </div>;
+      if (isCompact) return (<div style={{display:"grid",gap:10,marginTop:12}}>
+        {filteredEntries.map(e=>{
+          const editing = editId === e.id;
+          const iStyle = {...S.input, padding:"7px 8px", fontSize:11};
+          if(editing) return (
+            <div key={e.id} style={{padding:12,background:`${K.ac}08`,border:`1px solid ${K.ac}20`,borderRadius:10}}>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+                <input style={iStyle} type="date" value={editForm.date||''} onChange={ev=>setEditForm(f=>({...f,date:ev.target.value}))}/>
+                <select style={iStyle} value={editForm.book||''} onChange={ev=>setEditForm(f=>({...f,book:ev.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select>
+                <select style={{...iStyle,gridColumn:"1 / -1"}} value={editForm.type||''} onChange={ev=>setEditForm(f=>({...f,type:ev.target.value}))}>{["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}</select>
+                <input style={iStyle} value={editForm.bonus||''} onChange={ev=>setEditForm(f=>({...f,bonus:ev.target.value}))} placeholder="Bonus $"/>
+                <input style={iStyle} value={editForm.hedge||''} onChange={ev=>setEditForm(f=>({...f,hedge:ev.target.value}))} placeholder="Hedge $"/>
+                <input style={iStyle} value={editForm.profit||''} onChange={ev=>setEditForm(f=>({...f,profit:ev.target.value}))} placeholder="Profit $"/>
+                <input style={iStyle} value={editForm.myOdds||''} onChange={ev=>setEditForm(f=>({...f,myOdds:ev.target.value}))} placeholder="Your odds"/>
+                <input style={iStyle} value={editForm.closingOdds||''} onChange={ev=>setEditForm(f=>({...f,closingOdds:ev.target.value}))} placeholder="Closing odds"/>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <button onClick={commitEdit} style={{flex:1,padding:"8px 12px",background:K.gn,border:"none",borderRadius:8,color:K.bg,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Save</button>
+                <button onClick={cancelEdit} style={{flex:1,padding:"8px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Cancel</button>
+              </div>
+            </div>
+          );
+          const clv = (()=>{if(!e.myOdds||!e.closingOdds)return null;const my=toD(e.myOdds),cl=toD(e.closingOdds);if(my<=1||cl<=1)return null;return (my/cl-1)*100;})();
+          return <div key={e.id} style={{padding:12,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:10}}>
+            <div style={{display:"flex",justifyContent:"space-between",gap:8,marginBottom:8}}>
+              <div>
+                <div style={{fontSize:13,fontWeight:700,color:K.tx}}>{e.book}</div>
+                <div style={{fontSize:10,color:K.mt}}>{e.date}</div>
+              </div>
+              <div style={{fontSize:15,fontWeight:800,color:parseFloat(e.profit)>=0?K.gn:K.rd,fontFamily:fontD}}>{parseFloat(e.profit)>=0?"+":""}${e.profit}</div>
+            </div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+              <span style={S.tag(K.ac)}>{e.type}</span>
+              {e.bonus&&<span style={S.tag(K.gn)}>Bonus ${e.bonus}</span>}
+              {e.hedge&&<span style={S.tag(K.dm)}>Hedge ${e.hedge}</span>}
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,fontSize:10,color:K.mt}}>
+              <div>EV: <span style={{color:K.tx}}>{e.ev?`${e.ev}%`:"—"}</span></div>
+              <div>CLV: <span style={{color:clv===null?K.mt:clv>=0?K.gn:K.rd,fontWeight:700}}>{clv===null?"—":`${clv>=0?"+":""}${f(clv,2)}%`}</span></div>
+              {e.notes&&<div style={{gridColumn:"1 / -1",lineHeight:1.5}}>Notes: <span style={{color:K.dm}}>{e.notes}</span></div>}
+            </div>
+            <div style={{display:"flex",gap:8,marginTop:10}}>
+              <button onClick={()=>startEdit(e)} style={{flex:1,padding:"7px 10px",background:"transparent",border:`1px solid ${K.ac}40`,borderRadius:8,color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Edit</button>
+              <button onClick={()=>del(e.id)} style={{flex:1,padding:"7px 10px",background:"transparent",border:`1px solid ${K.rd}30`,borderRadius:8,color:K.rd,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Delete</button>
+            </div>
+          </div>;
+        })}
+      </div>);
       return (<div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
         <thead><tr>{["Date","Book","Type","Bonus","Hedge","Profit","CLV",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
@@ -490,10 +557,10 @@ const Ledger = () => {
       return (<div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
         <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Monthly Breakdown</div>
         {months.map(([month,d])=>(
-          <div key={month} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderBottom:`1px solid ${K.bd}`}}>
+          <div key={month} style={{display:"grid",gridTemplateColumns:isCompact?"1fr auto":"1fr auto auto",gap:8,padding:"8px 0",borderBottom:`1px solid ${K.bd}`,alignItems:"center"}}>
             <span style={{fontSize:12,color:K.dm}}>{month}</span>
-            <span style={{fontSize:12,color:K.mt}}>{d.count} entries</span>
-            <span style={{fontSize:13,fontWeight:600,color:d.profit>=0?K.gn:K.rd}}>{d.profit>=0?"+":""}${f(d.profit)}</span>
+            <span style={{fontSize:12,color:K.mt,textAlign:isCompact?"left":"right"}}>{d.count} entries</span>
+            <span style={{fontSize:13,fontWeight:600,color:d.profit>=0?K.gn:K.rd,textAlign:"right"}}>{d.profit>=0?"+":""}${f(d.profit)}</span>
           </div>
         ))}
       </div>);
