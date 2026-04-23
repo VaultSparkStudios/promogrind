@@ -174,20 +174,20 @@
     },
     {
       "date": "2026-04-22",
-      "session": 71,
-      "total": 15,
+      "session": 72,
+      "total": 17,
       "maxTotal": 25,
       "overallStatus": "yellow",
-      "lastReviewed": "2026-04-22 (S71)",
+      "lastReviewed": "2026-04-22 (S72)",
       "dimensions": {
-        "schema_alignment": 3,
+        "schema_alignment": 4,
         "prompt_template_alignment": 3,
         "derived_view_freshness": 4,
-        "handoff_continuity": 3,
+        "handoff_continuity": 4,
         "contradiction_density": 2
       },
-      "delta": 1,
-      "cause": "Apply the live workflow/entity-sync/feature-flag Supabase migrations, complete launch proof, and finish the remaining tr"
+      "delta": 2,
+      "cause": "S72 cleared the live schema, billing-auth, and VAPID configuration blockers while keeping affiliate-link truth honest; the remaining genome drag is autopilot policy, not repo-state confusion."
     }
   ]
 }

@@ -73,6 +73,10 @@ export function buildTrackInsights(data = {}, now = new Date()) {
   const skipReasonMap = new Map();
   const frictionReasonMap = new Map();
   const sourceMap = new Map();
+  let executionMinutesTotal = 0;
+  let executionMinutesCount = 0;
+  let repeatPositiveCount = 0;
+  let repeatDecisionCount = 0;
   for (const entry of feedbackEntries) {
     const key = entry.promoType || "other";
     if (!promoTypeMap.has(key)) {
@@ -89,6 +93,10 @@ export function buildTrackInsights(data = {}, now = new Date()) {
         accuracyCount: 0,
         driftCount: 0,
         driftTotal: 0,
+        executionMinutesTotal: 0,
+        executionMinutesCount: 0,
+        repeatPositiveCount: 0,
+        repeatDecisionCount: 0,
       });
     }
     const row = promoTypeMap.get(key);
@@ -104,6 +112,20 @@ export function buildTrackInsights(data = {}, now = new Date()) {
       if (entry.expectedProfit !== null && entry.actualProfit !== null) {
         row.driftCount += 1;
         row.driftTotal += (entry.actualProfit || 0) - (entry.expectedProfit || 0);
+      }
+    }
+    if (entry.executionMinutes !== null && entry.executionMinutes !== undefined) {
+      row.executionMinutesTotal += entry.executionMinutes;
+      row.executionMinutesCount += 1;
+      executionMinutesTotal += entry.executionMinutes;
+      executionMinutesCount += 1;
+    }
+    if (entry.wouldRepeat === "yes" || entry.wouldRepeat === "maybe" || entry.wouldRepeat === "no") {
+      row.repeatDecisionCount += 1;
+      repeatDecisionCount += 1;
+      if (entry.wouldRepeat === "yes") {
+        row.repeatPositiveCount += 1;
+        repeatPositiveCount += 1;
       }
     }
     if (entry.skipReason) {
@@ -132,6 +154,8 @@ export function buildTrackInsights(data = {}, now = new Date()) {
       hitRate: row.settled ? (row.hitCount / row.settled) * 100 : null,
       accuracyRate: row.settled ? (row.accuracyCount / row.settled) * 100 : null,
       averageDrift: row.driftCount ? row.driftTotal / row.driftCount : null,
+      averageExecutionMinutes: row.executionMinutesCount ? row.executionMinutesTotal / row.executionMinutesCount : null,
+      repeatRate: row.repeatDecisionCount ? (row.repeatPositiveCount / row.repeatDecisionCount) * 100 : null,
     }))
     .sort((a, b) => (b.actualProfit - a.actualProfit) || (b.expectedProfit - a.expectedProfit) || (b.total - a.total));
 
@@ -219,6 +243,8 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     expectedSettledProfit,
     actualSettledProfit,
     accuracyRate: settledCount ? (accuracyCount / settledCount) * 100 : null,
+    averageExecutionMinutes: executionMinutesCount ? executionMinutesTotal / executionMinutesCount : null,
+    repeatRate: repeatDecisionCount ? (repeatPositiveCount / repeatDecisionCount) * 100 : null,
     label:
       settledCount === 0
         ? "Needs settled workflow data."

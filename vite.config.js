@@ -20,7 +20,8 @@ export default defineConfig({
           vendor: ['react', 'react-dom', 'react-router-dom'],
           // Supabase — large but rarely changes; cache independently
           supabase: ['@supabase/supabase-js'],
-          analytics: ['posthog-js', '@sentry/react'],
+          posthog: ['posthog-js'],
+          sentry: ['@sentry/react'],
         },
       },
     },

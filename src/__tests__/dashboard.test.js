@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getBankrollPosture, getDashboardSnapshot, getNextBestAction, getTodayPromos, getUnfinishedWork } from "../dashboard/today.js";
+import { buildAdaptivePromoPlan, getBankrollPosture, getDashboardSnapshot, getNextBestAction, getTodayPromos, getUnfinishedWork, inferPromoTypeFromSchedule } from "../dashboard/today.js";
 
 const schedule = [
   { book: "DraftKings", promo: "Daily Boost", day: "Daily", value: "+$9" },
@@ -59,6 +59,14 @@ describe("dashboard helpers", () => {
     expect(snapshot.waitingWorkflowCount).toBe(1);
     expect(snapshot.topWorkflow?.title).toBe("Highest value workflow");
     expect(["BetRivers", "bet365", "FanDuel", "ESPN BET", "Fanatics"]).toContain(snapshot.recommendedBooks[0]?.book.name);
+    expect(snapshot.adaptivePlan).toBeTruthy();
+    expect(snapshot.adaptivePlan.mode).toBe("capture");
+  });
+
+  it("infers promo type keywords from schedule entries", () => {
+    expect(inferPromoTypeFromSchedule({ promo: "NBA Profit Boost" })).toBe("profit_boost");
+    expect(inferPromoTypeFromSchedule({ promo: "$200 Bonus Bet if your first bet loses" })).toBe("bonus_bet");
+    expect(inferPromoTypeFromSchedule({ promo: "Same Game Parlay insurance" })).toBe("safety_net");
   });
 
   it("classifies bankroll posture from open exposure", () => {
@@ -185,5 +193,52 @@ describe("dashboard helpers", () => {
     });
 
     expect(String(action.key).startsWith("playbook:")).toBe(false);
+  });
+
+  it("builds an adaptive promo plan that presses hot lanes and flags cold ones", () => {
+    const now = new Date("2026-04-14T13:00:00Z");
+    const snapshot = getDashboardSnapshot(
+      {
+        ledger: [
+          { book: "DraftKings", profit: "14", date: "2026-04-14" },
+          { book: "DraftKings", profit: "12", date: "2026-04-13" },
+          { book: "DraftKings", profit: "10", date: "2026-04-12" },
+        ],
+        resultFeedback: [
+          { id: "a", calculatorKey: "bonus-bet", promoType: "bonus_bet", status: "settled", expectedProfit: "10", actualProfit: "14", calculatorAccurate: "yes", book: "DraftKings", updatedAt: "2026-04-14T09:00:00Z" },
+          { id: "b", calculatorKey: "bonus-bet", promoType: "bonus_bet", status: "settled", expectedProfit: "9", actualProfit: "13", calculatorAccurate: "yes", book: "DraftKings", updatedAt: "2026-04-13T09:00:00Z" },
+          { id: "c", calculatorKey: "bonus-bet", promoType: "bonus_bet", status: "settled", expectedProfit: "8", actualProfit: "11", calculatorAccurate: "yes", book: "DraftKings", updatedAt: "2026-04-12T09:00:00Z" },
+          { id: "d", calculatorKey: "profit-boost", promoType: "profit_boost", status: "settled", expectedProfit: "10", actualProfit: "-4", calculatorAccurate: "no", book: "FanDuel", updatedAt: "2026-04-14T09:10:00Z" },
+          { id: "e", calculatorKey: "profit-boost", promoType: "profit_boost", status: "settled", expectedProfit: "10", actualProfit: "-6", calculatorAccurate: "no", book: "FanDuel", updatedAt: "2026-04-13T09:10:00Z" },
+          { id: "f", calculatorKey: "profit-boost", promoType: "profit_boost", status: "settled", expectedProfit: "10", actualProfit: "-7", calculatorAccurate: "no", book: "FanDuel", updatedAt: "2026-04-12T09:10:00Z" },
+        ],
+      },
+      [
+        { book: "DraftKings", promo: "Daily Bonus Bet", day: "Daily", grade: "A", value: "+$12" },
+        { book: "FanDuel", promo: "Daily Profit Boost", day: "Daily", grade: "A", value: "+$14" },
+      ],
+      now,
+      "500",
+    );
+
+    const plan = buildAdaptivePromoPlan({
+      data: {
+        resultFeedback: snapshot.trackInsights.feedbackEntries,
+        ledger: [{ book: "DraftKings", profit: "14", date: "2026-04-14" }],
+      },
+      snapshot,
+      schedule: [
+        { book: "DraftKings", promo: "Daily Bonus Bet", day: "Daily", grade: "A", value: "+$12" },
+        { book: "FanDuel", promo: "Daily Profit Boost", day: "Daily", grade: "A", value: "+$14" },
+      ],
+      now,
+      insights: snapshot.trackInsights,
+      hotLanes: snapshot.hotLanes,
+    });
+
+    expect(plan.topLane?.key).toBe("bonus_bet");
+    expect(plan.coldLane?.key).toBe("profit_boost");
+    expect(plan.topPromos[0].book).toBe("DraftKings");
+    expect(plan.topPromos[0].reasons.some((reason) => ["hot lane", "book running hot"].includes(reason))).toBe(true);
   });
 });

@@ -616,6 +616,8 @@ async function _loadRemoteWorkflowData(userId) {
         book: row.book,
         skipReason: row.skip_reason,
         frictionReason: row.friction_reason,
+        executionMinutes: row.execution_minutes,
+        wouldRepeat: row.would_repeat,
         confidence: row.confidence,
         opportunityScore: row.opportunity_score,
         actionability: row.actionability,
@@ -645,6 +647,8 @@ async function _loadRemoteWorkflowData(userId) {
           book: row.book,
           expectedProfit: row.expected_profit,
           actualProfit: row.actual_profit,
+          executionMinutes: row.execution_minutes,
+          wouldRepeat: row.would_repeat,
           eventAt: row.event_at,
         }))
         .sort((a, b) => new Date(b.eventAt).getTime() - new Date(a.eventAt).getTime());
@@ -690,6 +694,8 @@ async function _saveWorkflowEntities(userId, data) {
       book: workflow.book,
       skip_reason: workflow.skipReason,
       friction_reason: workflow.frictionReason,
+      execution_minutes: workflow.executionMinutes,
+      would_repeat: workflow.wouldRepeat,
       confidence: workflow.confidence,
       opportunity_score: workflow.opportunityScore,
       actionability: workflow.actionability,
@@ -717,6 +723,8 @@ async function _saveWorkflowEntities(userId, data) {
       book: entry.book,
       expected_profit: entry.expectedProfit,
       actual_profit: entry.actualProfit,
+      execution_minutes: entry.executionMinutes,
+      would_repeat: entry.wouldRepeat,
       event_at: entry.eventAt,
     })), { onConflict: 'event_key' });
   }

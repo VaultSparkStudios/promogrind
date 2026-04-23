@@ -16,23 +16,31 @@ describe("track insights helpers", () => {
       status: "placed",
       expectedProfit: "14.25",
       frictionReason: "odds_moved",
+      executionMinutes: "11",
+      wouldRepeat: "yes",
     });
 
     expect(created).toHaveLength(1);
     expect(created[0].expectedProfit).toBe(14.25);
     expect(created[0].frictionReason).toBe("odds_moved");
+    expect(created[0].executionMinutes).toBe(11);
+    expect(created[0].wouldRepeat).toBe("yes");
 
     const updated = updateResultFeedback(created, "one", {
       status: "settled",
       actualProfit: "13.8",
       calculatorAccurate: "close",
       note: "Hedge still available",
+      executionMinutes: "14",
+      wouldRepeat: "maybe",
     });
 
     expect(updated[0].status).toBe("settled");
     expect(updated[0].actualProfit).toBe(13.8);
     expect(updated[0].calculatorAccurate).toBe("close");
     expect(updated[0].note).toBe("Hedge still available");
+    expect(updated[0].executionMinutes).toBe(14);
+    expect(updated[0].wouldRepeat).toBe("maybe");
   });
 
   it("aggregates promo hit rate, profit, and book performance", () => {
@@ -52,6 +60,8 @@ describe("track insights helpers", () => {
           actualProfit: "14",
           calculatorAccurate: "yes",
           book: "DraftKings",
+          executionMinutes: "9",
+          wouldRepeat: "yes",
           createdAt: "2026-04-14T12:00:00Z",
         },
         {
@@ -64,6 +74,8 @@ describe("track insights helpers", () => {
           actualProfit: "-2",
           calculatorAccurate: "no",
           book: "FanDuel",
+          executionMinutes: "18",
+          wouldRepeat: "no",
           createdAt: "2026-04-14T12:05:00Z",
         },
         {
@@ -116,6 +128,8 @@ describe("track insights helpers", () => {
     expect(insights.workflowTimeline[0].transitionLabel).toBe("queued -> placed");
     expect(insights.workflowHistoryRows[0].statuses[0]).toBe("queued -> placed");
     expect(insights.selfCalibration.averageDrift).toBe(-6.5);
+    expect(insights.selfCalibration.averageExecutionMinutes).toBe(13.5);
+    expect(insights.selfCalibration.repeatRate).toBe(50);
     expect(insights.selfCalibrationRows.length).toBeGreaterThan(0);
     expect(insights.selfCalibrationRows[0]).toHaveProperty("label");
     expect(insights.driftAlerts.length).toBeGreaterThan(0);

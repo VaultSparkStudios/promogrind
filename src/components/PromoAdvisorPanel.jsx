@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
-import { hasStreamingGateway, invokeProjectFunction, readDailyUsage, streamProjectFunction, writeDailyUsage } from "../ai/gateway.js";
+import { buildCacheKey, hasStreamingGateway, invokeProjectFunction, readDailyUsage, readTimedCache, streamProjectFunction, writeDailyUsage, writeTimedCache } from "../ai/gateway.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useFeatureFlag } from "../lib/featureFlags.js";
@@ -56,6 +56,13 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         : undefined;
 
       const body = { promoText: sanitized, ...(userContext && { userContext }) };
+      const cacheKey = buildCacheKey("promo-advisor", body);
+      const cached = readTimedCache(cacheKey, 12 * 60 * 60 * 1000, null);
+      if (cached) {
+        setResult({ ...cached, cacheHit: true });
+        setLoading(false);
+        return;
+      }
 
       if (hasStreamingGateway()) {
         await streamProjectFunction("promo-advisor", {
@@ -69,6 +76,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             setUses(newUses);
             writeDailyUsage("pg_advisor_uses", newUses);
             setResult(data);
+            writeTimedCache(cacheKey, data);
             setStreamingText("");
           },
         });
@@ -81,6 +89,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         setUses(newUses);
         writeDailyUsage("pg_advisor_uses", newUses);
         setResult(data);
+        writeTimedCache(cacheKey, data);
       }
     } catch(e) {
       if (e?.name !== 'AbortError') {
@@ -297,6 +306,11 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             {result?.analysisSource === 'rule_engine' && (
               <div style={{fontSize:10,color:K.mt}}>
                 PromoGrind resolved this instantly from recognizable offer terms instead of spending an AI call.
+              </div>
+            )}
+            {result?.cacheHit && (
+              <div style={{fontSize:10,color:K.ac}}>
+                Reused a cached analysis for this exact promo text to avoid another AI call.
               </div>
             )}
 

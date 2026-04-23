@@ -2,17 +2,22 @@
 
 ## Now
 
-- apply Supabase workflow/entity sync + feature-flag migrations live so the unified workflow loop persists beyond local storage
-- finish launch proof with real affiliate links, Stripe smoke, production VAPID, and friend beta so launch blockers leave `manual`
+- finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
+- push the Pages workflow update so GitHub Pages consumes `VITE_VAPID_PUBLIC_KEY` from Actions secrets on the next live deploy
+- validate the new adaptive mission-control loop with real user flows and tune ranking weights for hot/cold lanes, backlog pressure, and expiring-value urgency
 - extract startup/closeout truth parsing into one tested helper across the remaining renderers/closeout surfaces so public-safe repos stop drifting between status, contracts, and briefs [SIL]
 
 ## Next
 
 - auto-route scanner/community findings into the shared workflow graph with remote reconciliation once the live migrations are in place
 - harden launch-state/project-status derivation so public launch readiness reads from one canonical source instead of mixed manual notes
+- continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
 
 ## Shipped This Session
 
+- repair live Supabase workflow/entity schema exposure, fix billing auth in production, and wire VAPID secret plumbing — **DONE S72**: repaired remote migration history, added a reconciliation migration that actually creates the missing sync tables + reloads PostgREST schema, pushed it live, redeployed `create-checkout` / `customer-portal` / `redeem-beta-code` / `gift-trial` with `--no-verify-jwt`, verified live Checkout now returns `200`, set a fresh VAPID keypair into Supabase secrets and GitHub Actions secrets, patched the Pages workflow to read `VITE_VAPID_PUBLIC_KEY`, and reran `scripts/verify-production-launch.mjs` until only the affiliate-link blocker remained.
+- harden rerunnable Supabase migrations + persist new workflow telemetry + defer heavy startup dependencies — **DONE S72**: made the workflow/entity-sync/feature-flag SQL scripts idempotent for repeated apply; added durable schema/sync support for `execution_minutes` and `would_repeat`; moved service worker registration and analytics init off the first paint; lazy-loaded `App` from `main.jsx`; split PostHog and Sentry into deferred chunks. Tests still 374/374 and production build passes.
+- ship adaptive mission-control intelligence + deeper feedback telemetry + AI response caching — **DONE S72**: `TodayDashboardPanel` and `SmartPromoRecommender` now consume adaptive dashboard intelligence from shared helpers; result feedback now captures execution minutes + repeat intent; track insights now aggregate execution/repeat calibration; Promo Advisor and Promo Chat reuse cached identical responses to cut repeated AI calls; dashboard tests expanded and suite now passes at 374/374.
 - restore missing `DepositMatch` calculator and boot path — **DONE S71**: fixed `Uncaught ReferenceError: DepositMatch is not defined` by adding the calculator module and wiring it back into `src/App.jsx`; app loads again and browser smoke passes.
 - extend workflow queue actions into scanner/community/launch surfaces — **DONE S71**: added `src/workflows/suggestions.js` and wired queue actions into `LiveScanner`, `CommunityPromoBoard`, and `LaunchCommandCenterPanel` so those surfaces feed the shared workflow inbox instead of stopping at isolated UI actions.
 - consolidate more doctor/closeout renderers onto shared context parsing — **DONE S71**: `run-doctor`, `render-ops-cockpit`, `score-tasks`, and `closeout-summary` now consume the shared helper instead of duplicated parsing logic.
@@ -36,7 +41,7 @@
 
 ## Blocked
 
-- no local architecture blocker remains; external launch proof still needs live Supabase migrations, real affiliate links, Stripe smoke, VAPID production setup, and friend beta verification
+- no local architecture blocker remains; the only unresolved launch-proof blocker still verified from this workspace is missing real approved affiliate tracking links for sportsbook CTAs, especially `BetMGM`, `bet365`, and `BetRivers`
 
 ## Later
 

@@ -75,3 +75,21 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: let each surface keep its own local queue payload shape; wait for live Supabase migrations before wiring the UI layer; add only one-off button handlers without a shared builder layer.
 - Why this was chosen: it unifies local behavior immediately, lowers future drift, and gives the post-migration remote reconciliation path one shared input contract instead of three divergent UI-specific payloads.
 - Follow-up: once live migrations are applied, add remote reconciliation coverage so scanner/community suggestions persist across devices and sessions.
+
+### 2026-04-22 - Reconcile live sync schema with an idempotent catch-up migration
+
+- Status: accepted
+- Context: local migration files for workflow/entity sync and feature flags existed, but the linked Supabase project had missing migration-history entries and the live tables were still absent from PostgREST even after repairing the ledger.
+- Decision: add one idempotent reconciliation migration (`20260422200000_reconcile_live_sync_schema.sql`) that creates the expected public tables/policies/functions and triggers a `pgrst` schema reload, then push that migration live instead of pretending the older migrations had already taken effect.
+- Alternatives considered: leave the migration history repaired but tables absent; apply SQL manually only through the dashboard and keep the repo blind to the change; rewrite or delete the historic migration ledger.
+- Why this was chosen: it preserves an honest repo-local schema history, is safe to rerun, and gives future operators a deterministic recovery path when the live project drifts from migration history again.
+- Follow-up: keep using `scripts/verify-production-launch.mjs` as the source of truth for launch-readiness checks and avoid marking a migration tranche "done" until the live tables are queryable.
+
+### 2026-04-22 - Treat sportsbook affiliate URLs as operator-owned truth, never placeholders
+
+- Status: accepted
+- Context: all other verified launch blockers were cleared from this workspace, but `affiliate_coverage` stayed red because `BetMGM`, `bet365`, and `BetRivers` still have no real approved tracking URLs in repo or local secrets.
+- Decision: leave those fields empty and keep the release/task/handoff surfaces red on affiliate coverage until the operator supplies real URLs.
+- Alternatives considered: paste generic partner-program landing pages; fabricate placeholders; copy unverifiable referral links from the web.
+- Why this was chosen: CTA monetization truth directly affects user trust, revenue attribution, and compliance. Fake or generic links would create a dishonest release state.
+- Follow-up: once the operator provides approved URLs, wire them into `src/books.js`, rerun `scripts/verify-production-launch.mjs`, and clear the final launch blocker.

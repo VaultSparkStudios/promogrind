@@ -24,9 +24,22 @@ ON CONFLICT (key) DO NOTHING;
 
 -- Row Level Security: service role only for writes, no public reads (fetched via edge fn)
 ALTER TABLE feature_flags ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "service_role_all" ON feature_flags FOR ALL TO service_role USING (true) WITH CHECK (true);
--- Allow authenticated reads — client fetches flags on load
-CREATE POLICY "authenticated_read" ON feature_flags FOR SELECT TO authenticated USING (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'feature_flags' AND policyname = 'service_role_all'
+  ) THEN
+    CREATE POLICY "service_role_all" ON feature_flags FOR ALL TO service_role USING (true) WITH CHECK (true);
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'feature_flags' AND policyname = 'authenticated_read'
+  ) THEN
+    CREATE POLICY "authenticated_read" ON feature_flags FOR SELECT TO authenticated USING (true);
+  END IF;
+END $$;
 
 -- Function to evaluate a flag for a given user + tier
 CREATE OR REPLACE FUNCTION get_feature_flag(p_key TEXT, p_user_id UUID, p_tier TEXT)

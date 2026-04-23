@@ -134,6 +134,7 @@ export function normalizeWorkflowEntry(entry = {}) {
   const status = normalizeWorkflowStatus(entry.status);
   const recommendation = normalizeRecommendation(entry);
   const parsedActionability = Number.parseInt(entry.actionability, 10);
+  const parsedExecutionMinutes = Number.parseFloat(entry.executionMinutes);
   return {
     id: entry.id ?? safeUUID(),
     calculatorKey: entry.calculatorKey || normalizeCalculatorSlug(entry.calculatorSlug) || "unknown",
@@ -149,6 +150,8 @@ export function normalizeWorkflowEntry(entry = {}) {
     book: String(entry.book || entry.bookTarget || "").trim(),
     skipReason: String(entry.skipReason || "").trim(),
     frictionReason: String(entry.frictionReason || "").trim(),
+    executionMinutes: Number.isFinite(parsedExecutionMinutes) ? Math.max(0, parsedExecutionMinutes) : null,
+    wouldRepeat: entry.wouldRepeat === "no" ? "no" : entry.wouldRepeat === "maybe" ? "maybe" : entry.wouldRepeat === "yes" ? "yes" : null,
     confidence: recommendation.confidence,
     opportunityScore: recommendation.opportunityScore,
     opsTags: recommendation.opsTags,

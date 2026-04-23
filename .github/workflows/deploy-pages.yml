@@ -43,6 +43,7 @@ jobs:
       VITE_PG_FEATURE_STACK_BUILDER: ${{ secrets.VITE_PG_FEATURE_STACK_BUILDER }}
       VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
       VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+      VITE_VAPID_PUBLIC_KEY: ${{ secrets.VITE_VAPID_PUBLIC_KEY }}
     steps:
       - uses: actions/checkout@v4
 

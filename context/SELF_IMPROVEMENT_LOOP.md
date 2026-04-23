@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S66:496 | S67:553 | S69:618 | S70:611 | S71:663
-Avgs — 3: 630.7 [N=3] | all: 588.2 [N=5]
-  └ 3-session (S69/S70/S71): Dev 91.0 | Align 96.0 | Momentum 79.3 | Engage 88.7 | Process 89.7 | Coher 26.7 | Sec 60.3 | Eco 34.0 | Cap 36.0 | Auto 29.0
+Sparkline (last 5 totals): S67:553 | S69:618 | S70:611 | S71:663 | S72:769
+Avgs — 3: 681.0 [N=3] | all: 618.3 [N=6]
+  └ 3-session (S70/S71/S72): Dev 92.7 | Align 96.0 | Momentum 78.7 | Engage 90.0 | Process 91.7 | Coher 32.7 | Sec 68.0 | Eco 43.3 | Cap 48.7 | Auto 39.3
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
-Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 4)
-Last session: 2026-04-22 | Session 71 | Total: 663/1000 | Velocity: 6 | protocolVelocity: 4
+Momentum runway: ~3 sessions  |  Intent rate: 100% achieved (last 5)
+Last session: 2026-04-22 | Session 72 | Total: 769/1000 | Velocity: 8 | protocolVelocity: 6
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,6 +93,35 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 1.
 2.
 3.
+
+### 2026-04-22 — Session 72 | Total: 769/1000 | Velocity: 8 | Debt: down
+Rolling avg (last 3): Dev 92.7 | Align 96.0 | Momentum 78.7 | Engage 90.0 | Process 91.7 | Coher 32.7 | Sec 68.0 | Eco 43.3 | Cap 48.7 | Auto 39.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 95 | ↑ | Adaptive dashboard logic, sync telemetry, startup deferral, migration hardening, and live schema reconciliation all landed while keeping `374/374` tests and build green. |
+| Creative Alignment | 96 | → | Work stayed tightly aligned with the operator-grade, immersive, intelligence-first direction set for the product. |
+| Momentum | 90 | ↑ | One session shipped meaningful product depth plus real production unblock work instead of stopping at planning or diagnosis. |
+| Engagement | 92 | ↑ | Mission-control ranking, calibration, hot/cold lanes, and richer result feedback make the app feel more alive and self-improving. |
+| Process Quality | 92 | ↑ | Release truth, handoff, work log, decisions, and verifier evidence now line up cleanly around what is genuinely done versus still external. |
+| Cross-Repo Coherence | 42 | ↑ | Release docs, task board, handoff, verifier, GitHub Actions secret path, and live Supabase state now describe the same launch posture. |
+| Security Posture | 78 | ↑ | No secret leakage introduced, VAPID rotation was done through secrets systems instead of hardcoding, and production auth misconfiguration was removed from the billing path. |
+| Ecosystem Integration | 61 | ↑ | GitHub Pages workflow, Supabase schema/secrets, live edge functions, and local verifier now operate as one connected system instead of fragmented manual truth. |
+| Capital Efficiency | 68 | ↑ | Timed AI response caching, deterministic launch verification, and deferred startup dependencies cut repeated spend and wasted debugging loops. |
+| Automation Coverage | 55 | ↑ | The verifier now catches live launch regressions deterministically, but closeout autopilot still cannot be treated as fully trustworthy in this public-safe repo state. |
+| **Total** | **769 / 1000** | | |
+
+**Top win:** the session converted the biggest remaining launch blockers from vague manual items into resolved production state: live workflow tables are queryable, Checkout works, and VAPID plumbing is wired through secrets and deploy config.
+
+**Top gap:** monetization truth is still incomplete because real approved `BetMGM`, `bet365`, and `BetRivers` tracking URLs do not exist in repo/local context, so the final verifier cannot honestly go fully green yet.
+
+**Intent outcome:** Achieved with one honest external remainder. The high-leverage audit tranche shipped, the live operator fixes landed, and the release state is now constrained by partner-link inventory rather than code or infra breakage.
+
+**Brainstorm**
+
+1. Add a post-deploy GitHub Actions smoke job that runs `scripts/verify-production-launch.mjs` against production and posts a compact verdict artifact.
+2. Move affiliate coverage into a small structured config validator so missing/placeholder sportsbook URLs fail CI before release docs drift.
+3. Add adaptive-ranking telemetry snapshots so hot/cold lane scoring can be tuned from real outcome data instead of only heuristics.
 
 ### 2026-04-22 — Session 71 | Total: 663/1000 | Velocity: 6 | Debt: down
 Rolling avg (last 3): Dev 91.0 | Align 96.0 | Momentum 79.3 | Engage 88.7 | Process 89.7 | Coher 26.7 | Sec 60.3 | Eco 34.0 | Cap 36.0 | Auto 29.0

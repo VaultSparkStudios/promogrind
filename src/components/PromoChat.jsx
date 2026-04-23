@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { hasStreamingGateway, incrementDailyUsage, readDailyUsage, streamProjectFunction } from "../ai/gateway.js";
+import { buildCacheKey, hasStreamingGateway, incrementDailyUsage, readDailyUsage, readTimedCache, streamProjectFunction, writeTimedCache } from "../ai/gateway.js";
 import { K, font, fontD } from "../lib/shared.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
@@ -88,14 +88,24 @@ const PromoChat = ({ navigate }) => {
 
     try {
       const history = newMessages.slice(-10).map(m => ({ role: m.role, content: m.content }));
-      const body = JSON.stringify({
+      const requestBody = {
         message: userMsg.content,
         history: history.slice(0, -1),
         userContext: {
           bankroll: appData?.bankroll,
           books: Object.entries(appData?.done || {}).filter(([, v]) => !!v).map(([k]) => k).slice(0, 5),
         },
-      });
+      };
+      const cacheKey = buildCacheKey("promo-chat", requestBody);
+      const cached = readTimedCache(cacheKey, 6 * 60 * 60 * 1000, null);
+      if (cached) {
+        setMessages((prev) => prev.map((message) =>
+          message._id === streamingId
+            ? { role: "assistant", content: cached.message || "No response.", suggestions: cached.suggestions || [], cacheHit: true }
+            : message,
+        ));
+        return;
+      }
 
       if (!hasStreamingGateway()) throw new Error("Streaming gateway unavailable");
       abortRef.current?.abort();
@@ -104,7 +114,7 @@ const PromoChat = ({ navigate }) => {
       let fullText = "";
       await streamProjectFunction("promo-chat", {
         session,
-        body: JSON.parse(body),
+        body: requestBody,
         signal: controller.signal,
         onDelta: (evt) => {
           fullText += evt.text || "";
@@ -116,6 +126,7 @@ const PromoChat = ({ navigate }) => {
           incUsesToday();
           const newRemaining = dailyLimit === Infinity ? Infinity : Math.max(0, dailyLimit - getUsesToday());
           setChatRemaining(newRemaining);
+          writeTimedCache(cacheKey, { message: fullText || "No response.", suggestions: evt.suggestions || [] });
           setMessages((prev) => prev.map((message) =>
             message._id === streamingId
               ? { role: "assistant", content: fullText || "No response.", suggestions: evt.suggestions || [] }
@@ -263,6 +274,11 @@ const PromoChat = ({ navigate }) => {
                     }}>
                       {msg.content}
                     </div>
+                    {msg.cacheHit && (
+                      <div style={{ marginTop: 4, fontSize: 10, color: K.ac }}>
+                        Reused cached answer for this exact question.
+                      </div>
+                    )}
                     {msg.suggestions && msg.suggestions.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
                         {msg.suggestions.map(slug => (

@@ -25,6 +25,8 @@ export default function ResultFeedbackCard({
   const [accuracy, setAccuracy] = useState("yes");
   const [skipReason, setSkipReason] = useState("");
   const [frictionReason, setFrictionReason] = useState("");
+  const [executionMinutes, setExecutionMinutes] = useState("");
+  const [wouldRepeat, setWouldRepeat] = useState("yes");
   const [note, setNote] = useState("");
   const [status, setStatus] = useState(null);
 
@@ -71,6 +73,8 @@ export default function ResultFeedbackCard({
       book,
       skipReason: nextStatus === "skipped" ? skipReason : "",
       frictionReason: nextStatus === "placed" ? frictionReason : "",
+      executionMinutes,
+      wouldRepeat,
       note,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -95,6 +99,8 @@ export default function ResultFeedbackCard({
       calculatorAccurate: accuracy,
       book,
       frictionReason,
+      executionMinutes,
+      wouldRepeat,
       note,
       updatedAt: new Date().toISOString(),
     };
@@ -178,6 +184,15 @@ export default function ResultFeedbackCard({
             style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
           />
         </div>
+        <div>
+          <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Minutes spent</div>
+          <input
+            value={executionMinutes}
+            onChange={(event) => setExecutionMinutes(event.target.value.replace(/[^\d.]/g, ""))}
+            placeholder="12"
+            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+          />
+        </div>
       </div>
 
       <div style={{ marginTop: 10 }}>
@@ -240,6 +255,35 @@ export default function ResultFeedbackCard({
         />
       </div>
 
+      <div style={{ marginTop: 10 }}>
+        <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Would you run this again?</div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {[
+            ["yes", "Yes"],
+            ["maybe", "Maybe"],
+            ["no", "No"],
+          ].map(([value, label]) => (
+            <button
+              key={value}
+              onClick={() => setWouldRepeat(value)}
+              style={{
+                padding: "5px 10px",
+                background: wouldRepeat === value ? `${K.gn}18` : "transparent",
+                border: `1px solid ${wouldRepeat === value ? K.gn : K.bd2}`,
+                borderRadius: 999,
+                color: wouldRepeat === value ? K.gn : K.dm,
+                fontSize: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontFamily: font,
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginTop: 10 }}>
         <span style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Calculator accurate?</span>
         {[
@@ -289,7 +333,7 @@ export default function ResultFeedbackCard({
         {status === "settled" && "Settled result saved. It now feeds the Track analytics dashboard."}
         {status === "placed" && "Placed result saved. Settle it now or later in Track → Edge."}
         {status === "skipped" && "Skipped result saved with reason data so PromoGrind can measure opportunity loss and friction."}
-        {!status && "Use this after you run the math so the app learns what converted and what stayed theoretical."}
+        {!status && "Use this after you run the math so the app learns what converted, how long it took, and which workflows you would actually repeat."}
       </div>
     </div>
   );

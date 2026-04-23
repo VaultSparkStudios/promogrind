@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-22",
+  "session": 72,
+  "sessionIntent": "update memory/task board where needed, implement the highest-leverage audit items, complete the remaining live operator work, then close out and push cleanly",
+  "intentOutcome": "achieved-with-external-remainder",
+  "testsPassingAtClose": 374,
+  "testsDelta": 2,
+  "buildPassing": true,
+  "sanitizationFindings": { "critical": 0, "warning": 0 },
+  "silTotal": 769,
+  "silDelta": 106,
+  "velocity": 8,
+  "protocolVelocity": 6,
+  "debtDirection": "down",
+  "shippedItems": [
+    "added adaptive dashboard ranking, calibration, and mission-control UI across TodayDashboardPanel and SmartPromoRecommender",
+    "carried execution_minutes and would_repeat through result feedback, insights aggregation, and remote sync",
+    "added timed AI response caching for Promo Advisor and Promo Chat to reduce repeated token spend",
+    "made workflow/entity-sync/feature-flag/push-subscription migrations rerunnable and committed Supabase migration files",
+    "deferred App, analytics, and service worker startup work to reduce first-load pressure",
+    "added scripts/verify-production-launch.mjs and used it to verify live launch blockers deterministically",
+    "repaired remote Supabase migration history and pushed a reconciliation migration so workflow_state, workflow_history, ledger_state, tracker_state, feature_flags, and push_subscriptions are queryable in production",
+    "redeployed create-checkout, customer-portal, redeem-beta-code, and gift-trial with compatible JWT gateway settings so live checkout now succeeds",
+    "rotated VAPID secrets, set the GitHub Actions secret, and patched the Pages workflow to consume VITE_VAPID_PUBLIC_KEY"
+  ],
+  "openHumanActions": [
+    "Provide real approved affiliate/referral tracking URLs for BetMGM, bet365, and BetRivers",
+    "Let the normal GitHub Pages deploy path run so the live frontend consumes VITE_VAPID_PUBLIC_KEY",
+    "Run one friend-facing pass through auth, calculator, CTA, and pricing flows after deploy"
+  ],
+  "closeoutMethod": "manual (yellow genome gate and pre-existing dirty context/PROJECT_STATUS.json kept autopilot off the table)",
+  "contextPctAtClose": 1.1
+}

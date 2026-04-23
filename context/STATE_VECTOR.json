@@ -1,30 +1,31 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-04-22",
-  "generatedAtMs": 1776842990148,
-  "session": 71,
-  "vectorHash": "a212c74ae12a7ad7",
-  "silTotal": 663,
-  "silAvg3": 630.7,
-  "velocity": 6,
+  "generatedAtMs": 1776902355158,
+  "session": 72,
+  "vectorHash": "a2f95a62b79d91bf",
+  "silTotal": 769,
+  "silAvg3": 681,
+  "velocity": 8,
   "debt": "down",
-  "runway": "~2 sessions",
-  "intentRate": "100% achieved (last 4)",
-  "openNow": 3,
-  "openNext": 2,
+  "runway": "~3 sessions",
+  "intentRate": "100% achieved (last 5)",
+  "openNow": 4,
+  "openNext": 3,
   "openBlocked": 1,
   "topNow": [
-    "apply Supabase workflow/entity sync + feature-flag migrations live so the unifie",
-    "finish launch proof with real affiliate links, Stripe smoke, production VAPID, a",
-    "extract startup/closeout truth parsing into one tested helper across the remaini"
+    "finish monetization coverage with real approved affiliate/referral links for `Be",
+    "push the Pages workflow update so GitHub Pages consumes `VITE_VAPID_PUBLIC_KEY` ",
+    "validate the new adaptive mission-control loop with real user flows and tune ran"
   ],
   "topNext": [
     "auto-route scanner/community findings into the shared workflow graph with remote",
-    "harden launch-state/project-status derivation so public launch readiness reads f"
+    "harden launch-state/project-status derivation so public launch readiness reads f",
+    "continue decomposing the remaining high-churn `src/App.jsx` seams now that analy"
   ],
   "health": "green",
   "truthStatus": "yellow",
-  "genome": "15/25",
+  "genome": "17/25",
   "ignisScore": 47857,
   "ignisGrade": "FORGE",
   "ignisAgeDays": 0,
@@ -32,12 +33,11 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Apply Supabase migrations for workflow/entity sync and feature_flags; run Stripe end-to-end smoke; set VITE_VAPID_PUBLIC_KEY in production and verify browser push; complete friend beta pass; resolve remaining BetMGM/bet365/BetRivers monetization links.",
-  "currentFocus": "Apply the live workflow/entity-sync/feature-flag Supabase migrations, complete launch proof, and finish the remaining truth-renderer/helper consolidation after shipping the local workflow-routing tranche.",
-  "lastShipped": "boot crash repair, workflow queue routing for scanner/community/launch surfaces, truth-helper consolidation in closeout scripts, launch-plan truth refresh",
+  "nextMilestone": "Push the Pages workflow/VAPID update live, add real BetMGM/bet365/BetRivers tracking URLs, and rerun production launch verification.",
+  "currentFocus": "Clear the final monetization-link blocker while validating the adaptive mission-control loop and continuing truth-helper consolidation.",
+  "lastShipped": "adaptive dashboard intelligence, deeper workflow telemetry, AI response caching, rerunnable migration hardening, startup deferral/perf work, live schema reconciliation, live billing auth repair, VAPID wiring for Pages + Supabase, and launch verifier expansion",
   "blockers": [
-    "Apply scripts/migration-workflow-history.sql in Supabase so workflow_state/workflow_history exist live.",
-    "Apply scripts/migration-entity-sync.sql in Supabase so ledger_state/tracker_state exist live.",
-    "Apply scripts/migration-feature-flags.sql in Supabase so remote feature flags can read/write live."
+    "Paste real approved affiliate/referral tracking URLs for BetMGM, bet365, and BetRivers into src/books.js.",
+    "Push/deploy the Pages workflow update so the live frontend consumes VITE_VAPID_PUBLIC_KEY."
   ]
 }

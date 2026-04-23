@@ -4,8 +4,19 @@ import { buildWorkflowInbox } from "../workflows/inbox.js";
 import { getWorkflowActionSlug } from "../workflows/actionGraph.js";
 import { matchPlaybooks } from "../playbooks/index.js";
 import { buildPortfolioAllocation } from "../lib/portfolio.js";
+import { buildHotLanes, buildTrackInsights } from "../track/insights.js";
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const GRADE_SCORE = { A: 3, B: 2, C: 1 };
+const PROMO_KEYWORDS = {
+  bonus_bet: ["bonus", "free bet", "bonus bet"],
+  profit_boost: ["boost", "odds boost", "profit boost"],
+  safety_net: ["safety", "first bet", "no sweat", "insurance"],
+  deposit_match: ["deposit", "match"],
+  insurance: ["insurance"],
+  parlay: ["parlay", "sgp", "same game"],
+  arb: ["arb", "arbitrage"],
+};
 
 function dateOnly(value) {
   if (!value) return null;
@@ -36,6 +47,120 @@ export function getTodayPromos(schedule = [], now = new Date()) {
   return schedule.filter((promo) =>
     promo.day === "Daily" || promo.day === dayName || (promo.day === "Weekend" && isWeekend),
   );
+}
+
+export function inferPromoTypeFromSchedule(promo = {}) {
+  const haystack = `${promo.promo || ""} ${promo.desc || ""} ${promo.book || ""}`.toLowerCase();
+  for (const [key, needles] of Object.entries(PROMO_KEYWORDS)) {
+    if (needles.some((needle) => haystack.includes(needle))) return key;
+  }
+  return "other";
+}
+
+export function buildAdaptivePromoPlan({
+  data = {},
+  snapshot = {},
+  schedule = [],
+  now = new Date(),
+  insights = null,
+  hotLanes = null,
+} = {}) {
+  const trackInsights = insights || buildTrackInsights(data, now);
+  const heat = hotLanes || buildHotLanes(data, now);
+  const todayPromos = snapshot.todayPromos || getTodayPromos(schedule, now);
+  const limitedBooks = Object.entries(data.bookStatus || {})
+    .filter(([, value]) => ["limited", "gubbed"].includes(String(value || "").trim().toLowerCase()))
+    .map(([book]) => book);
+  const hotPromoKeys = new Set((heat.hotPromoTypes || []).map((lane) => lane.key));
+  const hotBookKeys = new Set((heat.hotBooks || []).map((lane) => lane.key));
+  const coldPromoKeys = new Set(
+    (trackInsights.topDriftAlerts || [])
+      .filter((alert) => alert.direction === "negative" && alert.scope === "promo_type")
+      .map((alert) => alert.key),
+  );
+  const coldBookKeys = new Set(
+    (trackInsights.topDriftAlerts || [])
+      .filter((alert) => alert.direction === "negative" && alert.scope === "book")
+      .map((alert) => alert.key),
+  );
+
+  const topPromos = todayPromos
+    .map((promo) => {
+      const promoType = inferPromoTypeFromSchedule(promo);
+      const reasons = [];
+      let score = GRADE_SCORE[promo.grade] || 0;
+      if (snapshot.expiringBooks?.some((book) => book.name === promo.book)) {
+        score += 3;
+        reasons.push("expiring");
+      }
+      if (hotPromoKeys.has(promoType)) {
+        score += 2;
+        reasons.push("hot lane");
+      }
+      if (hotBookKeys.has(promo.book)) {
+        score += 2;
+        reasons.push("book running hot");
+      }
+      if (coldPromoKeys.has(promoType)) {
+        score -= 3;
+        reasons.push("cold lane");
+      }
+      if (coldBookKeys.has(promo.book)) {
+        score -= 2;
+        reasons.push("book underperforming");
+      }
+      if (limitedBooks.includes(promo.book)) {
+        score -= 4;
+        reasons.push("limit risk");
+      }
+      return { ...promo, promoType, score, reasons };
+    })
+    .sort((a, b) => b.score - a.score || (GRADE_SCORE[b.grade] || 0) - (GRADE_SCORE[a.grade] || 0))
+    .slice(0, 5);
+
+  const topLane = trackInsights.promoTypeRows?.find((row) => row.settled >= 2 && row.actualProfit > 0) || null;
+  const coldLane = (trackInsights.topDriftAlerts || []).find((alert) => alert.direction === "negative") || null;
+  const workflowBacklog = (snapshot.openWorkflowCount || 0) + (snapshot.waitingWorkflowCount || 0);
+  const feedbackCoverage = trackInsights.feedbackEntries?.length
+    ? ((trackInsights.settledCount + trackInsights.skippedFeedback.length) / trackInsights.feedbackEntries.length) * 100
+    : 0;
+
+  let mode = "build";
+  let headline = "Build a fresh edge stack";
+  let detail = "You have room to add profitable volume and capture more offers.";
+  if ((snapshot.expiringBooks || []).length > 0) {
+    mode = "capture";
+    headline = "Capture expiring value first";
+    detail = "Welcome offers are leaving the board soon. Convert decaying value before adding new experiments.";
+  } else if ((snapshot.openBets || []).length > 0 || workflowBacklog >= 3) {
+    mode = "settle";
+    headline = "Close loops before adding noise";
+    detail = "Open bets and queued workflows are stacking up. Settlements and follow-through are the current bottleneck.";
+  } else if ((snapshot.bankroll || 0) > 0 && snapshot.openStake > snapshot.bankroll * 0.2) {
+    mode = "protect";
+    headline = "Protect bankroll bandwidth";
+    detail = "Exposure is high relative to bankroll. Tighten execution and avoid lower-confidence promos for now.";
+  } else if (topLane || heat.hotPromoTypes?.length || heat.hotBooks?.length) {
+    mode = "attack";
+    headline = "Press the hottest lane";
+    detail = topLane
+      ? `${topLane.label} is your best converting lane right now. Lean into it while the edge is working.`
+      : "Recent wins suggest a live hot lane. Press the advantage while keeping execution disciplined.";
+  }
+
+  return {
+    mode,
+    headline,
+    detail,
+    feedbackCoverage,
+    topLane,
+    coldLane,
+    topPromos,
+    hotPromoLane: heat.hotPromoTypes?.[0] || null,
+    hotBookLane: heat.hotBooks?.[0] || null,
+    workflowBacklog,
+    calibration: trackInsights.selfCalibration,
+  };
 }
 
 export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(), bankrollValue = "", { includePlaybooks = false, includePortfolio = false } = {}) {
@@ -79,8 +204,10 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
     })
     .sort((a, b) => new Date(b.date) - new Date(a.date));
   const recentSettledProfit = recentSettledEntries.reduce((sum, entry) => sum + (Number.parseFloat(entry.profit) || 0), 0);
+  const trackInsights = buildTrackInsights(data, now);
+  const hotLanes = buildHotLanes(data, now);
 
-  return {
+  const snapshot = {
     todayStr,
     totalProfit,
     monthProfit,
@@ -104,7 +231,20 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
     bankroll: Number.isFinite(bankroll) ? bankroll : null,
     topPlaybook: includePlaybooks ? (matchPlaybooks(data, { bankroll: bankrollValue }).top[0] || null) : null,
     portfolioAllocation: includePortfolio ? buildPortfolioAllocation(workflowInbox.open, bankroll) : null,
+    trackInsights,
+    hotLanes,
   };
+
+  snapshot.adaptivePlan = buildAdaptivePromoPlan({
+    data,
+    snapshot,
+    schedule,
+    now,
+    insights: trackInsights,
+    hotLanes,
+  });
+
+  return snapshot;
 }
 
 export function getBankrollPosture(snapshot) {

@@ -18,12 +18,35 @@ const TONE = {
   info: K.ac,
 };
 
+function InsightChip({ label, value, tone = K.ac }) {
+  return (
+    <div style={{ padding: "8px 10px", background: `${tone}10`, border: `1px solid ${tone}30`, borderRadius: 999 }}>
+      <span style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.1px", marginRight: 6 }}>{label}</span>
+      <span style={{ fontSize: 11, color: tone, fontWeight: 700 }}>{value}</span>
+    </div>
+  );
+}
+
+function AdaptiveFocusCard({ title, body, badge, tone = K.ac }) {
+  return (
+    <div style={{ padding: "12px", background: K.s1, border: `1px solid ${tone}30`, borderRadius: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center", marginBottom: 6 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{title}</div>
+        {badge ? <span style={{ padding: "2px 8px", borderRadius: 999, background: `${tone}18`, color: tone, fontSize: 9, fontWeight: 800, letterSpacing: "0.8px" }}>{badge}</span> : null}
+      </div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.7 }}>{body}</div>
+    </div>
+  );
+}
+
 export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, isProActive = false, syncDiagnostics = {}, usageLog = {} }) {
   const posture = getBankrollPosture(snapshot);
   const unfinished = getUnfinishedWork(snapshot);
   const onboarding = getOnboardingProgress({ appData, isProActive });
   const tone = TONE[posture.tone] || K.ac;
   const recentTone = snapshot.recentSettledProfit >= 0 ? K.gn : K.rd;
+  const adaptivePlan = snapshot.adaptivePlan || {};
+  const calibration = adaptivePlan.calibration || snapshot.trackInsights?.selfCalibration || {};
   const toast = useToast();
   const { syncAppData } = React.useContext(AppDataCtx) || {};
   const playbookResults = React.useMemo(
@@ -119,6 +142,37 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
         </div>
       </div>
 
+      <div style={{ padding: "12px", background: K.s2, border: `1px solid ${tone}35`, borderRadius: 8, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 10 }}>
+          <div>
+            <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6 }}>
+              Mission Control
+            </div>
+            <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>
+              {adaptivePlan.headline || "Build today’s operating edge"}
+            </div>
+            <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.7, maxWidth: 760 }}>
+              {adaptivePlan.detail || "Convert the highest-value promos, settle active workflows, and feed outcomes back into the system."}
+            </div>
+          </div>
+          <div style={{ padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, minWidth: 170 }}>
+            <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Operating Mode</div>
+            <div style={{ fontFamily: fontD, fontSize: 20, fontWeight: 800, color: tone, textTransform: "capitalize" }}>
+              {adaptivePlan.mode || "build"}
+            </div>
+            <div style={{ fontSize: 10, color: K.mt }}>
+              Queue pressure {adaptivePlan.workflowBacklog || 0} · feedback coverage {Math.round(adaptivePlan.feedbackCoverage || 0)}%
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <InsightChip label="Calibration" value={calibration.averageDrift == null ? "No settled baseline" : `${calibration.averageDrift >= 0 ? "+" : ""}$${calibration.averageDrift.toFixed(2)}/settled`} tone={calibration.averageDrift == null ? K.ac : calibration.averageDrift >= 0 ? K.gn : K.yl} />
+          <InsightChip label="Accuracy" value={calibration.accuracyRate == null ? "No sample" : `${Math.round(calibration.accuracyRate)}%`} tone={calibration.accuracyRate >= 75 ? K.gn : calibration.accuracyRate >= 55 ? K.ac : K.yl} />
+          <InsightChip label="Execution" value={calibration.averageExecutionMinutes == null ? "Not tracked" : `~${Math.round(calibration.averageExecutionMinutes)}m`} tone={K.ac} />
+          <InsightChip label="Repeat Rate" value={calibration.repeatRate == null ? "No vote" : `${Math.round(calibration.repeatRate)}%`} tone={calibration.repeatRate >= 65 ? K.gn : calibration.repeatRate >= 40 ? K.ac : K.yl} />
+        </div>
+      </div>
+
       <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
         <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Unfinished Work</div>
         {unfinished.length ? (
@@ -137,6 +191,64 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
         ) : (
           <div style={{ fontSize: 11, color: K.gn }}>No urgent unfinished work is surfaced from your current tracker and ledger state.</div>
         )}
+      </div>
+
+      <div style={{ marginTop: 12, padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
+        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Adaptive Edge</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8, marginBottom: adaptivePlan.topPromos?.length ? 10 : 0 }}>
+          <AdaptiveFocusCard
+            title={adaptivePlan.topLane ? `${adaptivePlan.topLane.label} is converting` : "No strong winning lane yet"}
+            body={adaptivePlan.topLane
+              ? `${adaptivePlan.topLane.settled} settled workflows · ${Math.round(adaptivePlan.topLane.hitRate || 0)}% hit rate · ${adaptivePlan.topLane.averageExecutionMinutes ? `~${Math.round(adaptivePlan.topLane.averageExecutionMinutes)}m to execute.` : "Keep settling results to sharpen the model."}`
+              : "You need more settled outcomes before PromoGrind can identify your best lane with confidence."}
+            badge={adaptivePlan.topLane ? "PRESS" : "LEARN"}
+            tone={adaptivePlan.topLane ? K.gn : K.ac}
+          />
+          <AdaptiveFocusCard
+            title={adaptivePlan.coldLane ? `${adaptivePlan.coldLane.label} needs caution` : "No cold lane surfaced"}
+            body={adaptivePlan.coldLane
+              ? adaptivePlan.coldLane.summary
+              : "No major negative drift alert is currently strong enough to down-rank a lane or book."}
+            badge={adaptivePlan.coldLane ? "PROTECT" : "CLEAR"}
+            tone={adaptivePlan.coldLane ? K.yl : K.gn}
+          />
+          <AdaptiveFocusCard
+            title={adaptivePlan.hotBookLane ? `${adaptivePlan.hotBookLane.label} is active` : "No hot-book cluster yet"}
+            body={adaptivePlan.hotBookLane
+              ? `${adaptivePlan.hotBookLane.badge} · ${snapshot.hotLanes?.hotBooks?.length || 1} book cluster(s) feeding recent wins.`
+              : calibration.label || "Keep logging real outcomes so PromoGrind can detect which books are actually paying off for you."}
+            badge={adaptivePlan.hotBookLane ? "ATTACK" : "CALIBRATE"}
+            tone={adaptivePlan.hotBookLane ? K.ac : K.ac}
+          />
+        </div>
+        {adaptivePlan.topPromos?.length ? (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
+            {adaptivePlan.topPromos.slice(0, 3).map((promo) => (
+              <button
+                key={`${promo.book}-${promo.promo}`}
+                onClick={() => navigate("/promo-calendar")}
+                style={{ textAlign: "left", padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: "pointer", fontFamily: font }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 4, alignItems: "baseline" }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{promo.book}</div>
+                  <div style={{ fontSize: 10, color: promo.score >= 5 ? K.gn : promo.score >= 3 ? K.ac : K.yl, fontWeight: 800 }}>
+                    score {promo.score}
+                  </div>
+                </div>
+                <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.6, marginBottom: 6 }}>{promo.promo}</div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {promo.reasons.length
+                    ? promo.reasons.slice(0, 2).map((reason) => (
+                        <span key={reason} style={{ padding: "2px 8px", borderRadius: 999, background: `${reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn}15`, border: `1px solid ${(reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn)}35`, fontSize: 9, color: reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn, fontWeight: 700 }}>
+                          {reason}
+                        </span>
+                      ))
+                    : <span style={{ fontSize: 9, color: K.mt }}>baseline ranked</span>}
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       {playbookResults.top.length > 0 && (

@@ -22,6 +22,8 @@ create table if not exists workflow_state (
   book text,
   skip_reason text,
   friction_reason text,
+  execution_minutes numeric,
+  would_repeat text,
   confidence text,
   opportunity_score int,
   actionability int,
@@ -55,6 +57,8 @@ create table if not exists workflow_history (
   book text,
   expected_profit numeric,
   actual_profit numeric,
+  execution_minutes numeric,
+  would_repeat text,
   event_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );
@@ -69,39 +73,87 @@ create index if not exists workflow_history_user_event_idx
 create index if not exists workflow_history_user_workflow_idx
   on workflow_history(user_id, workflow_id, event_at desc);
 
+alter table workflow_state add column if not exists execution_minutes numeric;
+alter table workflow_state add column if not exists would_repeat text;
+alter table workflow_history add column if not exists execution_minutes numeric;
+alter table workflow_history add column if not exists would_repeat text;
+
 alter table workflow_state enable row level security;
 alter table workflow_history enable row level security;
 
-create policy "workflow_state_read_own"
-  on workflow_state for select
-  using (auth.uid() = user_id);
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_state' and policyname = 'workflow_state_read_own'
+  ) then
+    create policy "workflow_state_read_own"
+      on workflow_state for select
+      using (auth.uid() = user_id);
+  end if;
 
-create policy "workflow_state_insert_own"
-  on workflow_state for insert
-  with check (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_state' and policyname = 'workflow_state_insert_own'
+  ) then
+    create policy "workflow_state_insert_own"
+      on workflow_state for insert
+      with check (auth.uid() = user_id);
+  end if;
 
-create policy "workflow_state_update_own"
-  on workflow_state for update
-  using (auth.uid() = user_id)
-  with check (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_state' and policyname = 'workflow_state_update_own'
+  ) then
+    create policy "workflow_state_update_own"
+      on workflow_state for update
+      using (auth.uid() = user_id)
+      with check (auth.uid() = user_id);
+  end if;
 
-create policy "workflow_state_delete_own"
-  on workflow_state for delete
-  using (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_state' and policyname = 'workflow_state_delete_own'
+  ) then
+    create policy "workflow_state_delete_own"
+      on workflow_state for delete
+      using (auth.uid() = user_id);
+  end if;
 
-create policy "workflow_history_read_own"
-  on workflow_history for select
-  using (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_history' and policyname = 'workflow_history_read_own'
+  ) then
+    create policy "workflow_history_read_own"
+      on workflow_history for select
+      using (auth.uid() = user_id);
+  end if;
 
-create policy "workflow_history_insert_own"
-  on workflow_history for insert
-  with check (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_history' and policyname = 'workflow_history_insert_own'
+  ) then
+    create policy "workflow_history_insert_own"
+      on workflow_history for insert
+      with check (auth.uid() = user_id);
+  end if;
 
-create policy "workflow_history_update_own"
-  on workflow_history for update
-  using (auth.uid() = user_id)
-  with check (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_history' and policyname = 'workflow_history_update_own'
+  ) then
+    create policy "workflow_history_update_own"
+      on workflow_history for update
+      using (auth.uid() = user_id)
+      with check (auth.uid() = user_id);
+  end if;
 
-create policy "workflow_history_delete_own"
-  on workflow_history for delete
-  using (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'workflow_history' and policyname = 'workflow_history_delete_own'
+  ) then
+    create policy "workflow_history_delete_own"
+      on workflow_history for delete
+      using (auth.uid() = user_id);
+  end if;
+end $$;

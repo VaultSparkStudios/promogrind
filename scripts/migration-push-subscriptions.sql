@@ -21,11 +21,41 @@ CREATE TABLE IF NOT EXISTS public.push_subscriptions (
   UNIQUE(user_id, endpoint)       -- one subscription per browser per user
 );
 
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid();
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE;
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS endpoint text;
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS p256dh text;
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS auth_key text;
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS user_agent text;
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS created_at timestamptz DEFAULT now();
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS last_sent_at timestamptz;
+ALTER TABLE public.push_subscriptions ADD COLUMN IF NOT EXISTS active boolean DEFAULT true;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'push_subscriptions_user_id_endpoint_key'
+  ) THEN
+    ALTER TABLE public.push_subscriptions
+      ADD CONSTRAINT push_subscriptions_user_id_endpoint_key UNIQUE(user_id, endpoint);
+  END IF;
+END $$;
+
 ALTER TABLE public.push_subscriptions ENABLE ROW LEVEL SECURITY;
 
 -- Users can manage their own subscriptions only
-CREATE POLICY "Manage own push subscriptions" ON public.push_subscriptions
-  FOR ALL USING (user_id = auth.uid());
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'push_subscriptions' AND policyname = 'Manage own push subscriptions'
+  ) THEN
+    CREATE POLICY "Manage own push subscriptions" ON public.push_subscriptions
+      FOR ALL USING (user_id = auth.uid());
+  END IF;
+END $$;
 
 -- ── Notes ─────────────────────────────────────────────────────────────────────
 -- When implementing:

@@ -40,6 +40,37 @@ export function writeJsonCache(key, value) {
   }
 }
 
+function stableSort(value) {
+  if (Array.isArray(value)) return value.map(stableSort);
+  if (value && typeof value === "object") {
+    return Object.keys(value)
+      .sort()
+      .reduce((acc, key) => {
+        acc[key] = stableSort(value[key]);
+        return acc;
+      }, {});
+  }
+  return value;
+}
+
+export function buildCacheKey(prefix, payload = {}) {
+  return `${prefix}:${JSON.stringify(stableSort(payload))}`;
+}
+
+export function readTimedCache(key, maxAgeMs, fallback = null) {
+  const cached = readJsonCache(key, null);
+  if (!cached || typeof cached !== "object") return fallback;
+  if (!cached.cachedAt || Date.now() - cached.cachedAt > maxAgeMs) return fallback;
+  return cached.value ?? fallback;
+}
+
+export function writeTimedCache(key, value) {
+  writeJsonCache(key, {
+    cachedAt: Date.now(),
+    value,
+  });
+}
+
 export async function invokeProjectFunction(supabase, functionName, { session = null, body = {} } = {}) {
   const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
   const { data, error } = await supabase.functions.invoke(functionName, {
@@ -126,4 +157,3 @@ export async function streamProjectFunction(functionName, {
 export function hasStreamingGateway() {
   return Boolean(SUPABASE_URL);
 }
-
