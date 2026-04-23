@@ -182,6 +182,8 @@ export const BOOKS = [
   },
 ];
 
+export const REQUIRED_LAUNCH_MONETIZATION_BOOKS = ["BetMGM", "bet365", "BetRivers"];
+
 export const US_BOOK_STATES = {
   DraftKings: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KS", "KY", "LA", "MD", "MA", "NC", "VT", "WY", "DC", "NV"],
   FanDuel: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KS", "KY", "LA", "MD", "MA", "NC", "VT", "DC", "NV"],
@@ -279,17 +281,75 @@ export function getRecommendedBooksForUser(options = {}) {
 export const getBookUrl = (book) =>
   book.affiliateLink || book.referralLink || book.signupLink || book.link;
 
+function isConfiguredTrackedUrl(url, disallowed = []) {
+  if (typeof url !== "string") return false;
+  const normalized = url.trim();
+  if (!normalized.startsWith("https://")) return false;
+  return !disallowed.some((candidate) => candidate && normalized === candidate);
+}
+
+export function hasConfiguredAffiliateUrl(book) {
+  return isConfiguredTrackedUrl(book?.affiliateLink, [
+    book?.affiliateProgram,
+    book?.signupLink,
+    book?.link,
+  ]);
+}
+
+export function hasConfiguredReferralUrl(book) {
+  return isConfiguredTrackedUrl(book?.referralLink, [
+    book?.affiliateProgram,
+    book?.signupLink,
+    book?.link,
+  ]);
+}
+
+export function hasConfiguredMonetizationUrl(book) {
+  return hasConfiguredAffiliateUrl(book) || hasConfiguredReferralUrl(book);
+}
+
+export function getBookLinkMeta(book) {
+  const url = getBookUrl(book);
+  const hasAffiliate = hasConfiguredAffiliateUrl(book);
+  const hasReferral = hasConfiguredReferralUrl(book);
+  return {
+    url,
+    linkType: hasAffiliate ? "affiliate" : hasReferral ? "referral" : book?.signupLink ? "signup" : "homepage",
+    configuredAffiliate: hasAffiliate,
+    configuredMonetization: hasAffiliate || hasReferral,
+  };
+}
+
+export function getRequiredLaunchMonetizationStatus(requiredBooks = REQUIRED_LAUNCH_MONETIZATION_BOOKS) {
+  const details = requiredBooks.map((name) => {
+    const book = BOOKS.find((entry) => entry.name === name) || null;
+    const hasAffiliate = hasConfiguredAffiliateUrl(book);
+    const hasReferral = hasConfiguredReferralUrl(book);
+    return {
+      name,
+      found: !!book,
+      hasAffiliate,
+      hasReferral,
+      monetized: !!book && (hasAffiliate || hasReferral),
+    };
+  });
+
+  return {
+    requiredBooks: [...requiredBooks],
+    configuredBooks: details.filter((entry) => entry.monetized).map((entry) => entry.name),
+    missingBooks: details.filter((entry) => !entry.monetized).map((entry) => entry.name),
+    details,
+  };
+}
+
 export const getConfiguredAffiliateCount = () =>
-  BOOKS.filter((book) => typeof book.affiliateLink === "string" && book.affiliateLink.trim()).length;
+  BOOKS.filter((book) => hasConfiguredAffiliateUrl(book)).length;
 
 export const hasConfiguredAffiliateLinks = () =>
   getConfiguredAffiliateCount() > 0;
 
 export const getConfiguredMonetizationCount = () =>
-  BOOKS.filter((book) =>
-    (typeof book.affiliateLink === "string" && book.affiliateLink.trim()) ||
-    (typeof book.referralLink === "string" && book.referralLink.trim())
-  ).length;
+  BOOKS.filter((book) => hasConfiguredMonetizationUrl(book)).length;
 
 export const hasConfiguredMonetizationLinks = () =>
   getConfiguredMonetizationCount() > 0;

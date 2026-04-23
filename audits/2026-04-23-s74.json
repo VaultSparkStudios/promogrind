@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-23",
+  "session": 74,
+  "sessionIntent": "complete the highest-impact remaining local launch/truth/monolith items, refresh repo truth, then close out and push a clean verified state to GitHub",
+  "intentOutcome": "achieved-with-external-blockers",
+  "testsPassingAtClose": 375,
+  "testsDelta": 0,
+  "buildPassing": true,
+  "sanitizationFindings": { "critical": 0, "warning": 0 },
+  "silTotal": 822,
+  "silDelta": 39,
+  "velocity": 5,
+  "protocolVelocity": 6,
+  "debtDirection": "down",
+  "shippedItems": [
+    "added context/LAUNCH_PROOFS.json plus shared proof helpers so launch readiness reads from one machine-readable blocker surface",
+    "tightened src/books.js and scripts/verify-production-launch.mjs so monetization truth fails on the exact missing BetMGM, bet365, and BetRivers links",
+    "normalized BookCTA onto shared link metadata so CTA labeling and analytics match verifier truth",
+    "patched the GitHub Pages workflow to run production verification, render a markdown summary, and upload a launch-verification artifact",
+    "extracted AppChrome/appText from src/App.jsx and fixed several public-facing mojibake/copy issues"
+  ],
+  "openHumanActions": [
+    "Provide real approved affiliate/referral tracking URLs for BetMGM, bet365, and BetRivers",
+    "Run one real Stripe smoke purchase and verify the portal/subscription path",
+    "Complete one friend-facing auth/calculator/pricing pass after deploy"
+  ],
+  "closeoutMethod": "autopilot attempted and aborted on the yellow genome check; session closed with the documented manual fallback",
+  "contextPctAtClose": 0.6
+}

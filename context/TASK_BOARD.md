@@ -3,19 +3,22 @@
 ## Now
 
 - finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
-- harden launch-state/project-status derivation so public launch readiness reads from one canonical source instead of mixed manual notes
 - continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
 
 ## Next
 
 - auto-route scanner/community findings into the shared workflow graph with remote reconciliation once the live migrations are in place
-- add a post-deploy production verification artifact/job around `scripts/verify-production-launch.mjs` so launch truth is emitted automatically after deploy [SIL]
-- add affiliate-link validation so missing or placeholder sportsbook monetization URLs fail release truth earlier [SIL]
-- harden launch-state/project-status derivation so public launch readiness reads from one canonical source instead of mixed manual notes
-- continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
+- normalize any remaining launch/admin CTA surfaces onto `getBookLinkMeta` so monetization truth and analytics stay on one helper contract
+- keep decomposing the remaining high-churn `src/App.jsx` seams beyond `AppChrome`/`appText`
+- add adaptive-ranking telemetry snapshots so hot/cold lane tuning can move from heuristics toward observed outcome data [SIL]
 
 ## Shipped This Session
 
+- harden launch-state/project-status derivation so public launch readiness reads from one canonical source instead of mixed manual notes — **DONE S74**: added `context/LAUNCH_PROOFS.json` plus `scripts/lib/launch-proofs.mjs`, and taught `scripts/check-launch-ready.mjs` to consume that machine-readable manual blocker surface so PromoGrind now reports `⚠ PARTIAL` with the real external launch proofs instead of a misleading `✓ READY`.
+- add affiliate-link validation so missing or placeholder sportsbook monetization URLs fail release truth earlier [SIL] — **DONE S74**: `src/books.js` now exposes required launch monetization helpers for `BetMGM`, `bet365`, and `BetRivers`, rejects generic partner/signup URLs as tracked links, and `scripts/verify-production-launch.mjs` now fails explicitly on those missing books instead of a vague aggregate affiliate count.
+- add a post-deploy production verification artifact/job around `scripts/verify-production-launch.mjs` so launch truth is emitted automatically after deploy [SIL] — **DONE S74**: `.github/workflows/deploy-pages.yml` now writes env files from Actions secrets, runs `npm run verify:production`, renders `artifacts/launch-verification/*.md`, uploads a `launch-verification` artifact, and fails the deploy job when production verification is red.
+- normalize CTA monetization and analytics to the shared link helper — **DONE S74**: `src/components/BookCTA.jsx` now consumes `getBookLinkMeta`, so CTA labeling/tracking agrees with the stricter launch monetization rules instead of raw `!!affiliateLink` checks.
+- extract another `src/App.jsx` seam and repair public copy corruption — **DONE S74**: moved app chrome/text constants into `src/app/AppChrome.jsx` and `src/app/appText.js`, then fixed several public-facing mojibake/copy issues while reducing shell churn in the monolith.
 - consolidate another closeout/contracts truth-parsing slice onto the shared helper [SIL] — **DONE S73**: moved `scripts/generate-project-contracts.mjs` and the remaining `PROJECT_STATUS.json` reads in `scripts/closeout-autopilot.mjs` onto `scripts/lib/context-parsing.mjs`; syntax checks passed and `node scripts/generate-project-contracts.mjs --json` rendered valid contract payloads.
 - validate and tune adaptive mission-control ranking weights — **DONE S73**: tuned `src/dashboard/today.js` so expiring promos get stronger urgency, hot/cold lane signals have clearer weight, and backlog pressure demotes non-urgent promos while workflows are stacked; surfaced the new backlog state in `SmartPromoRecommender` and added a dashboard test covering expiring-vs-backlog prioritization. `npm test -- dashboard.test.js` passed (`13/13`).
 - finish the Pages workflow env plumbing for browser push rollout — **DONE S73**: patched `.github/workflows/deploy-pages.yml` so the GitHub Pages build now receives both `VITE_VAPID_PUBLIC_KEY` and `VITE_PG_FEATURE_PUSH_ALERTS`, matching the app’s push-alert gating in `src/launchState.js`; syntax check on `scripts/postbuild-pages.mjs` stayed clean, and the remaining step is the next live deploy consuming the secret-backed env.

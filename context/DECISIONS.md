@@ -13,6 +13,15 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen:
 - Follow-up:
 
+### 2026-04-23 - Canonicalize manual launch blockers in LAUNCH_PROOFS and fail on the exact required books
+
+- Status: accepted
+- Context: PromoGrind's repo truth correctly said launch was still blocked by external steps, but the machine-readable surfaces were inconsistent: `check-launch-ready` could still report `✓ READY`, and `verify-production-launch` only failed on a vague aggregate affiliate count rather than the actual missing `BetMGM` / `bet365` / `BetRivers` monetization links.
+- Decision: add `context/LAUNCH_PROOFS.json` as the canonical manual blocker surface, teach `scripts/check-launch-ready.mjs` to read it, and tighten `src/books.js` + `scripts/verify-production-launch.mjs` so launch monetization truth fails on the exact required books while rejecting generic partner/signup URLs as fake tracked links.
+- Alternatives considered: keep relying on scattered prose in release docs and handoff notes; keep the verifier at the aggregate affiliate-count level; mark PromoGrind launch-ready and treat the manual steps as informal follow-ups.
+- Why this was chosen: launch/marketing truth needs one canonical machine-readable surface, and the verifier should fail on the operator-owned books that actually block monetization instead of a lossy summary metric.
+- Follow-up: when the operator supplies real URLs and completes the Stripe/friend-beta passes, update `context/LAUNCH_PROOFS.json`, rerun `scripts/check-launch-ready.mjs` and `scripts/verify-production-launch.mjs`, then clear the remaining launch blockers.
+
 ### 2026-04-22 - Public-safe repos need local truth fallbacks
 
 - Status: accepted
@@ -111,3 +120,21 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: tolerate duplicated local parsers; only patch the one script that most recently drifted; postpone consolidation until after launch.
 - Why this was chosen: keeping repo truth parsing in one helper reduces drift across startup, contracts, closeout, and derived release surfaces in this public-safe repo where the private ops layer is intentionally absent.
 - Follow-up: keep moving remaining repo-facing scripts onto the shared helper and downgrade the yellow-genome autopilot contradiction once doctor/autopilot logic catches up.
+
+### 2026-04-23 - Book CTA truth must use normalized link metadata, not raw affiliate fields
+
+- Status: accepted
+- Context: launch verification had become stricter about what counts as a real tracked monetization link, but `BookCTA` still derived `linkType` and analytics flags from raw `affiliateLink` presence, which could disagree with the verifier and the launch dashboard.
+- Decision: treat `getBookLinkMeta` in `src/books.js` as the canonical CTA truth seam for link classification, monetization readiness, and analytics labeling.
+- Alternatives considered: leave UI/analytics on raw `affiliateLink` checks; duplicate the verifier logic inside `BookCTA`; soften the verifier back to aggregate counts.
+- Why this was chosen: one shared helper keeps UI, analytics, and launch readiness aligned around the same monetization contract and avoids reintroducing drift after verifier hardening.
+- Follow-up: move any remaining launch/admin surfaces that still reason about raw affiliate fields onto the same helper.
+
+### 2026-04-23 - Deploy-time launch verification should emit an artifact, not just local console output
+
+- Status: accepted
+- Context: `scripts/verify-production-launch.mjs` already gave an honest local verdict, but deploy truth still depended on humans rerunning it manually and reading console output after each push.
+- Decision: make the GitHub Pages deploy workflow run `npm run verify:production`, render a markdown summary, and upload a `launch-verification` artifact as part of the normal deploy path.
+- Alternatives considered: keep verification local-only; add a workflow step that logs to stdout without a retained artifact; wait until all external launch blockers are resolved before automating deploy proof.
+- Why this was chosen: production readiness needs a retained deploy artifact so launch truth can be inspected after the fact instead of reconstructed from memory or scattered terminal output.
+- Follow-up: once the next deploy runs, consume the artifact as the preferred post-push verification record and keep the launch dashboard aligned with that output.

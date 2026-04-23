@@ -1,5 +1,5 @@
 import React from "react";
-import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, hasConfiguredMonetizationLinks } from "../../books.js";
+import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, getRequiredLaunchMonetizationStatus, hasConfiguredMonetizationLinks } from "../../books.js";
 import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
 import { K, S, fontD } from "../../lib/shared.js";
 import { AppDataCtx } from "../../contexts.jsx";
@@ -16,6 +16,7 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
   const configuredAffiliates = getConfiguredAffiliateCount();
   const configuredMonetization = getConfiguredMonetizationCount();
   const affiliateReady = hasConfiguredMonetizationLinks();
+  const requiredLaunchMonetization = getRequiredLaunchMonetizationStatus();
   const validation = resolveLaunchValidation();
   const { bankroll, studioSnapshot: snapshot, dashboardSnapshot, alertPlan } = buildOperatorSurfaceState({
     appData: appData || {},
@@ -101,6 +102,10 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
           </div>
           <div style={{ fontSize: 10, color: configuredAffiliates ? K.gn : K.mt, marginBottom: 8 }}>
             Affiliate-approved links: {configuredAffiliates}/{BOOKS.length}
+          </div>
+          <div style={{ fontSize: 10, color: requiredLaunchMonetization.missingBooks.length ? K.yl : K.gn, marginBottom: 8, lineHeight: 1.5 }}>
+            Required launch books: {requiredLaunchMonetization.configuredBooks.length}/{requiredLaunchMonetization.requiredBooks.length}
+            {requiredLaunchMonetization.missingBooks.length ? ` (${requiredLaunchMonetization.missingBooks.join(", ")} pending)` : " (complete)"}
           </div>
           {commandCenter.nextActions.map((blocker) => (
             <div key={blocker.key} style={{ marginBottom: 8 }}>

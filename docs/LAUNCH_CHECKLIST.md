@@ -6,6 +6,8 @@ This checklist reflects the current repo truth for PromoGrind's launch readiness
 Use it to distinguish between a soft public launch that is honest today and a full
 activation launch that depends on external systems.
 
+Canonical machine-readable blocker/proof status lives in `context/LAUNCH_PROOFS.json`.
+
 ## Launch Readiness Snapshot
 
 - Soft public launch readiness: 75-80%
@@ -68,3 +70,9 @@ activation launch that depends on external systems.
 3. Run a soft-launch smoke test across landing, auth, calculators, and redirects.
 4. Soft launch with beta-gated premium surfaces still off.
 5. Turn on feature flags one by one only as each backend is truly live.
+
+When a manual proof is completed, update `context/LAUNCH_PROOFS.json` directly or use:
+
+```bash
+node scripts/update-launch-proof.mjs --proof <affiliateLinks|stripeSmoke|friendBeta> --status complete --evidence "What was verified"
+```

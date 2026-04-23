@@ -9,6 +9,8 @@ import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calc
 import { computeStreak } from "./lib/streaks.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
+import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
+import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_UI, SEARCH_UI } from "./app/appText.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
@@ -114,24 +116,6 @@ const CheckoutListener = () => {
   return null;
 };
 
-const TrustStrip = () => (
-  <div style={{background:`${K.gn}08`,borderBottom:`1px solid ${K.bd}`,padding:"8px 20px"}}>
-    <div style={{maxWidth:1100,margin:"0 auto",display:"flex",gap:14,flexWrap:"wrap",fontSize:10,color:K.dm,letterSpacing:"0.4px"}}>
-      <span><strong style={{color:K.gn}}>Free PromoGrind account</strong> unlocks sync and access across all devices.</span>
-      <span>Educational math only.</span>
-      <span>21+ where legal.</span>
-      <span>Not betting or financial advice.</span>
-      <span>Gamble responsibly: 1-800-GAMBLER.</span>
-    </div>
-  </div>
-);
-
-const MembershipBanner = () => (
-  <div style={{...S.note(K.ac),marginBottom:12}}>
-    PromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices â€” the same account works across all VaultSpark Studio tools.
-  </div>
-);
-
 // FeatureUnavailableCard â†’ ./ui.jsx
 
 // CommunityWinsWall, SmartPromoRecommender extracted to src/components/dashboard/
@@ -161,7 +145,7 @@ const BetTracker = () => {
     const toWin = calcToWin(form.odds, form.stake);
     save([{...form,toWin,id:Date.now()},...bets]);
     setForm(f=>({...f,stake:"",odds:"+110",toWin:"",notes:""}));
-    if(toast) toast('âœ“ Bet added');
+    if(toast) toast("Bet added");
   };
   const setStatus = (id, status) => save(bets.map(b=>b.id===id?{...b,status}:b));
   const del = id => { const snapshot=[...bets]; save(bets.filter(b=>b.id!==id)); if(toast) toast('Bet deleted',K.rd,{label:'UNDO',fn:()=>save(snapshot)}); };
@@ -199,12 +183,12 @@ const BetTracker = () => {
         },0);
         return <div><div style={{fontSize:10,color:K.mt}}>PORTFOLIO EV</div><div style={{...S.big(ev>=0?K.gn:K.rd),fontSize:22}}>{ev>=0?"+":""}${f(ev)}</div><div style={{fontSize:9,color:K.mt}}>book-implied</div></div>;
       })()}
-      <button onClick={()=>setShowPasteSlip(s=>!s)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>ðŸ“‹ Paste Slip</button>
-      <button onClick={()=>setShowImport(true)} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>â†‘ Import CSV</button>
-      {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>â†“ Export CSV</button>}
+      <button onClick={()=>setShowPasteSlip(s=>!s)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.pasteSlipButton}</button>
+      <button onClick={()=>setShowImport(true)} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.importCsvButton}</button>
+      {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.exportCsvButton}</button>}
       {showPasteSlip&&<div style={{width:"100%",marginTop:8,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
         <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:8}}>Paste Bet Slip Text</div>
-        <textarea style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder="Paste bet slip text hereâ€¦&#10;e.g. DraftKings Â· Chiefs Moneyline Â· +150 Â· $50"/>
+        <textarea style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder={BET_TRACKER_UI.slipPlaceholder}/>
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>{const p=parseBetSlip(slipText);setSlipParsed(p);}} style={{padding:"6px 14px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Parse</button>
           {slipParsed&&<button onClick={()=>{setForm(prev=>({...prev,...slipParsed,toWin:slipParsed.stake&&slipParsed.odds?f((parseFloat(slipParsed.stake||0))*(toD(slipParsed.odds||"+100")-1)):""}));setShowPasteSlip(false);setSlipParsed(null);setSlipText("");}} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Use Parsed Values</button>}
@@ -224,8 +208,8 @@ const BetTracker = () => {
       <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     {bets.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
-      <div style={{fontSize:32,marginBottom:8}}>ðŸ“‹</div>
-      <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No bets tracked yet</div>
+      <div style={{fontSize:18,fontWeight:700,letterSpacing:"1px",marginBottom:8,color:K.mt}}>{BET_TRACKER_UI.noBetsGlyph}</div>
+      <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>{BET_TRACKER_UI.noBetsTitle}</div>
       <div style={{fontSize:11,color:K.mt}}>Add your first pending bet above to track your open action.</div>
     </div>}
     {bets.length>0&&<div style={{overflowX:"auto",marginTop:12}}>
@@ -238,19 +222,19 @@ const BetTracker = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(K.ac)}>{e.type}</span></td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.pp,fontWeight:600}}>{e.odds}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>${e.stake}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{e.toWin?`$${e.toWin}`:"â€”"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{e.toWin?`$${e.toWin}`:"-"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
               <select value={e.status} onChange={ev=>setStatus(e.id,ev.target.value)} style={{...S.input,width:80,padding:"3px 6px",fontSize:10,color:statusColor[e.status]||K.tx}}>
                 {["open","won","lost","void"].map(s=><option key={s} value={s}>{s.toUpperCase()}</option>)}
               </select>
             </td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{gr?<span style={S.tag(gr.c)}>{gr.g}</span>:<span style={{color:K.mt}}>â€”</span>}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>âœ•</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{gr?<span style={S.tag(gr.c)}>{gr.g}</span>:<span style={{color:K.mt}}>-</span>}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>x</span></td>
           </tr>
         );})}</tbody>
       </table>
     </div>}
-    {showImport&&<CSVImportModal onImport={rows=>{save([...rows,...bets]); if(toast) toast(`âœ“ Imported ${rows.length} bets`,K.gn);}} onClose={()=>setShowImport(false)}/>}
+    {showImport&&<CSVImportModal onImport={rows=>{save([...rows,...bets]); if(toast) toast(`Imported ${rows.length} bets`,K.gn);}} onClose={()=>setShowImport(false)}/>}
   </div>);
 };
 
@@ -712,7 +696,7 @@ const DailyStreak = () => {
         try {
           const milestonesKey='pg_streak_milestones';
           const milestones=JSON.parse(localStorage.getItem(milestonesKey)||'[]');
-          const MILESTONES=[[7,50,'ðŸ”¥ 7-day streak! +50 Vault Points earned!'],[30,200,'ðŸ”¥ 30-day streak! +200 Vault Points earned!'],[100,500,'ðŸ”¥ 100-day streak! +500 Vault Points earned!']];
+          const MILESTONES = DAILY_STREAK_COPY.messages;
           const eligible=MILESTONES.filter(([days])=>s>=days&&!milestones.includes(String(days)));
           if(eligible.length){
             await Promise.all(eligible.map(([days,points])=>supabase.rpc('award_vault_points',{p_user_id:user.id,p_points:points,p_event_type:`streak_milestone_${days}`})));
@@ -726,8 +710,7 @@ const DailyStreak = () => {
   if(streak===null||streak===0) return null;
   return (
     <div style={{display:"flex",alignItems:"center",gap:6,padding:"4px 12px",background:`${K.yl}15`,borderRadius:50,border:`1px solid ${K.yl}30`}}>
-      <span style={{fontSize:14}}>ðŸ”¥</span>
-      <span style={{fontSize:11,fontWeight:700,color:K.yl}}>{streak} day streak</span>
+      <span style={{fontSize:11,fontWeight:700,color:K.yl}}>{streak} {DAILY_STREAK_COPY.label}</span>
     </div>
   );
 };
@@ -1082,7 +1065,7 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
   return (
     <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",zIndex:2000,display:"flex",alignItems:"flex-start",justifyContent:"center",paddingTop:80,padding:"80px 16px 16px"}}>
       <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,padding:20,width:"100%",maxWidth:480,maxHeight:"70vh",display:"flex",flexDirection:"column",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
-        <input ref={inputRef} value={q} onChange={e=>setQ(e.target.value)} placeholder="Search calculatorsâ€¦" style={{...S.input,fontSize:14,marginBottom:12}}/>
+        <input ref={inputRef} value={q} onChange={e=>setQ(e.target.value)} placeholder={SEARCH_UI.calculatorPlaceholder} style={{...S.input,fontSize:14,marginBottom:12}}/>
         <div style={{overflowY:"auto",flex:1}}>
           {filtered.map(c=>(
             <button key={c.slug} onClick={()=>{onNavigate(c.slug);onClose();}} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"10px 12px",background:"transparent",border:"none",borderBottom:`1px solid ${K.bd}`,color:K.tx,cursor:"pointer",textAlign:"left",fontFamily:font}}>
@@ -1765,10 +1748,10 @@ const PushEnableBtn = ({ proStatus }) => {
   const toast = useToast();
   if(state === 'unsupported') return null;
   if(state === 'enabled') return (
-    <div style={{fontSize:10,color:K.gn,fontWeight:600,padding:"4px 10px",background:`${K.gn}10`,border:`1px solid ${K.gn}30`,borderRadius:6}}>ðŸ”” Push On</div>
+    <div style={{fontSize:10,color:K.gn,fontWeight:600,padding:"4px 10px",background:`${K.gn}10`,border:`1px solid ${K.gn}30`,borderRadius:6}}>{PUSH_UI.onLabel}</div>
   );
   if(state === 'denied') return (
-    <div style={{fontSize:10,color:K.rd,padding:"4px 10px",background:`${K.rd}10`,border:`1px solid ${K.rd}30`,borderRadius:6}} title="Push blocked in browser settings">ðŸ”• Push Blocked</div>
+    <div style={{fontSize:10,color:K.rd,padding:"4px 10px",background:`${K.rd}10`,border:`1px solid ${K.rd}30`,borderRadius:6}} title="Push blocked in browser settings">{PUSH_UI.blockedLabel}</div>
   );
   const enable = async () => {
     const permission = await Notification.requestPermission().catch(()=>'denied');
@@ -2445,7 +2428,7 @@ const GutCheck = () => {
       <div style={{marginBottom:8}}>
         <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Odds Relationship: </span>
         <span style={{fontSize:12,fontWeight:700,color:oppositeSides?K.gn:bothPlus?K.yl:K.mt}}>
-          {oppositeSides?"VALID â€” opposite sides":bothPlus?"MAYBE â€” both sides show value":"Check manually"}
+          {oppositeSides ? GUT_CHECK_UI.valid : bothPlus ? GUT_CHECK_UI.maybe : GUT_CHECK_UI.manual}
         </span>
       </div>
       <RR l="Combined implied probability" v={`${f(ipSum,1)}%`} c={ipSum<100?K.gn:ipSum<110?K.gn:ipSum<120?K.yl:K.rd}/>
@@ -3476,35 +3459,6 @@ const EmailCapture = () => {
   );
 };
 
-// â•â•â• FOOTER â•â•â•
-const Footer = () => (
-  <div style={{borderTop:`1px solid ${K.bd}`,padding:"28px 20px",marginTop:8}}>
-    <div style={{maxWidth:1100,margin:"0 auto"}}>
-      <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
-        <span style={{color:K.dm,fontWeight:600}}>Affiliate Disclosure:</span> Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.
-      </p>
-      <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
-        <span style={{color:K.dm,fontWeight:600}}>Access:</span> PromoGrind uses free accounts for login and sync. The same account works across all VaultSpark Studio tools.
-      </p>
-      <p style={{fontSize:11,color:K.mt,lineHeight:1.9,marginBottom:8}}>
-        Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool â€” not gambling advice. If you or someone you know has a gambling problem, call <span style={{color:K.rd,fontWeight:600}}>1-800-GAMBLER</span>.
-      </p>
-      <p style={{fontSize:10,color:K.bd2,marginTop:12,display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
-        <span>Â© {new Date().getFullYear()} Â· Powered by <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{color:"inherit",textDecoration:"none"}}>VaultSpark Studios</a> Â· PromoGrind is a free educational calculator tool.</span>
-        <a href="/privacy/" style={{color:K.mt,textDecoration:"none"}}>Privacy</a>
-        <a href="/terms/" style={{color:K.mt,textDecoration:"none"}}>Terms</a>
-        <a href="/responsible-gambling/" style={{color:K.mt,textDecoration:"none"}}>Responsible Gambling</a>
-        <a href="/affiliate-disclosure/" style={{color:K.mt,textDecoration:"none"}}>Affiliate Disclosure</a>
-        <a href="/disclaimer/" style={{color:K.mt,textDecoration:"none"}}>Disclaimer</a>
-        <a href="/dmca/" style={{color:K.mt,textDecoration:"none"}}>DMCA / IP</a>
-        <a href="/data-policy/" style={{color:K.mt,textDecoration:"none"}}>Data Policy</a>
-        <a href="/about/" style={{color:K.mt,textDecoration:"none"}}>About</a>
-        <a href="/compliance/" style={{color:K.mt,textDecoration:"none"}}>Compliance</a>
-      </p>
-    </div>
-  </div>
-);
-
 // PromoChat â†’ ./components/PromoChat.jsx
 // â•â•â• MAIN APP â•â•â•
 export default function App() {
@@ -4024,7 +3978,7 @@ export default function App() {
             {FEATURE_FLAGS.promoAdvisor && !isMobile && (
               <button
                 onClick={()=>setShowPromoAdvisor(v=>!v)}
-                title="Promo Advisor â€” analyze any sportsbook promo instantly"
+                title="Promo Advisor - analyze any sportsbook promo instantly"
                 style={{
                   padding:'6px 12px', background:showPromoAdvisor?`${K.pp}20`:'transparent',
                   border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`, borderRadius:8,
@@ -4032,7 +3986,7 @@ export default function App() {
                   fontFamily:font, minHeight:36,
                 }}
               >
-                ðŸ’¡ Advisor
+                Advisor
               </button>
             )}
 
@@ -4049,7 +4003,7 @@ export default function App() {
                 flexShrink:0, transition:'all 0.2s',
               }}
             >
-              {darkMode?'â˜€':'ðŸŒ™'}
+              {darkMode ? "☀" : "☾"}
             </button>
 
             {/* UserMenu â€” auth widget */}
@@ -4086,12 +4040,12 @@ export default function App() {
                     borderRadius:6, color:showPromoAdvisor?K.pp:K.dm,
                   }}
                 >
-                  ðŸ’¡ Advisor
+                  Advisor
                 </button>
               )}
             </div>
             <div style={{fontSize:11,color:K.dm,textAlign:'right',lineHeight:1.5}}>
-              Free tool Â· Not gambling advice Â· 21+ Â· 1-800-GAMBLER
+              {APP_CHROME_COPY.mobileCompliance}
             </div>
           </div>
         )}
@@ -4100,7 +4054,7 @@ export default function App() {
         {!isMobile && (
           <div style={{maxWidth:1100,margin:'4px auto 0',textAlign:'right'}}>
             <span style={{fontSize:11,color:K.dm}}>
-              Free educational tool Â· Not gambling advice Â· 21+ only Â· Gamble responsibly Â· 1-800-GAMBLER
+              {APP_CHROME_COPY.desktopCompliance}
             </span>
           </div>
         )}
@@ -4232,7 +4186,7 @@ export default function App() {
         </ErrorBoundary>
       </div>
       <EmailCapture/>
-      <Footer/>
+      <AppFooter/>
       <div style={{height:56}}/>
       <MobileBottomNav gi={gi} goTo={goTo}/>
       <Suspense fallback={null}>

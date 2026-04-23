@@ -5,6 +5,7 @@
 - Runtime: `https://promogrind.bet/`
 - Repo status: build passing, `375/375` tests green, launch smoke passing, browser smoke passing
 - Product posture: deployable and public-facing, but still blocked on final launch-proof tasks outside this repo
+- Canonical manual blocker surface: `context/LAUNCH_PROOFS.json`
 
 ## Current Manual Blockers
 

@@ -18,6 +18,14 @@ Append chronological entries.
 - Risks created or removed: removed the remaining local mismatch between Pages deploy env and push-alert feature gating, reduced truth-parser drift across more public-safe repo surfaces, and verified the repo is green before push. Remaining risk is external and unchanged: real affiliate links, one live Stripe smoke, and one friend beta pass still gate public launch.
 - Recommended next move: after this push/deploy, add the real `BetMGM` / `bet365` / `BetRivers` links, rerun `node scripts/verify-production-launch.mjs`, and complete the Stripe/friend-beta checklist.
 
+### 2026-04-23 - Session 74 closeout and launch-truth automation pass
+
+- Goal: finish the highest-impact remaining local launch/truth items, reduce `App.jsx` churn another step, and leave the repo in a clean closeout-ready state for push.
+- What changed: added `context/LAUNCH_PROOFS.json` plus shared proof helpers so launch readiness reads from one machine-readable blocker surface; tightened `src/books.js` and `scripts/verify-production-launch.mjs` so monetization truth fails on the exact missing books (`BetMGM`, `bet365`, `BetRivers`) instead of vague affiliate totals; normalized `BookCTA` onto shared link metadata; patched `.github/workflows/deploy-pages.yml` to run `npm run verify:production`, render a markdown summary, and upload a `launch-verification` artifact; extracted `src/app/AppChrome.jsx` and `src/app/appText.js`; fixed several public-facing mojibake/copy issues; refreshed closeout truth surfaces for Session 74.
+- Files or systems touched: `context/LAUNCH_PROOFS.json`, `scripts/lib/launch-proofs.mjs`, `scripts/check-launch-ready.mjs`, `scripts/verify-production-launch.mjs`, `scripts/render-launch-verification-summary.mjs`, `scripts/update-launch-proof.mjs`, `.github/workflows/deploy-pages.yml`, `package.json`, `src/books.js`, `src/components/BookCTA.jsx`, `src/components/dashboard/LaunchCommandCenterPanel.jsx`, `src/app/AppChrome.jsx`, `src/app/appText.js`, `src/App.jsx`, `src/__tests__/books.test.js`, `context/*.md`, `audits/2026-04-23-s74.json`.
+- Risks created or removed: removed the mismatch between manual launch blockers and machine-readable readiness, removed CTA analytics/link classification drift from raw `affiliateLink` checks, and added a deploy-time artifact path for production verification. Remaining risk is still external and unchanged: real tracking URLs plus one real Stripe smoke and one friend beta pass are required before launch/marketing.
+- Recommended next move: let this push trigger the artifact-producing Pages deploy, then add the real sportsbook links, rerun `node scripts/verify-production-launch.mjs`, and complete the Stripe/friend-beta checklist.
+
 ### 2026-04-22 - Session 72 adaptive intelligence tranche
 
 - Goal: turn the audit into a shipped product tranche instead of a memo by improving the dashboard operating loop, deepening feedback telemetry, and cutting repeated AI spend.

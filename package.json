@@ -15,6 +15,7 @@
     "og": "node scripts/generate-og.mjs",
     "smoke:launch": "node scripts/validate-launch-smoke.mjs",
     "smoke:browser": "npm run build && node scripts/validate-browser-launch-smoke.mjs",
+    "verify:production": "node scripts/verify-production-launch.mjs",
     "preview": "vite preview",
     "deploy:functions": "supabase functions deploy odds && supabase functions deploy create-checkout && supabase functions deploy stripe-webhook && supabase functions deploy weekly-digest",
     "deploy:brief": "supabase functions deploy send-daily-brief",

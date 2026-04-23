@@ -1,35 +1,35 @@
 # Latest Handoff
 
-Last updated: 2026-04-23 (S73)
-Session: 73
-Session Intent: execute the remaining unblocked `/go` items, update repo truth, then close out and push a verified state cleanly to GitHub.
-Intent Outcome: Achieved with external release-proof blockers still open. The remaining local Pages env plumbing, adaptive mission-control tuning, and truth/helper consolidation all shipped; the only unresolved launch blockers are operator-owned affiliate links plus the real Stripe/friend-beta passes.
-Where we stopped: all unblocked repo-local work on the current board is shipped, the suite/build are green, and the next meaningful product move is to add real `BetMGM` / `bet365` / `BetRivers` links and complete the external launch-proof checklist after this push/deploy cycle.
+Last updated: 2026-04-23 (S74)
+Session: 74
+Session Intent: complete the highest-impact remaining local launch/truth/monolith items, refresh the repo’s closeout surfaces, then commit and push a clean verified state to GitHub.
+Intent Outcome: Achieved with only the honest external launch proofs still open. Launch blockers are now machine-readable, CTA monetization truth is normalized, deploys emit a production-verification artifact, and the next `App.jsx` seam/copy-fix tranche shipped cleanly.
+Where we stopped: all meaningful repo-local work from the current list is shipped, targeted tests/build are green, and the next meaningful product move is still external proof completion (`BetMGM` / `bet365` / `BetRivers` links, one real Stripe smoke, one friend beta pass) plus continued `src/App.jsx` decomposition.
 
-## Where We Left Off (Session 73)
+## Where We Left Off (Session 74)
 
-- Shipped: GitHub Pages push-alert env plumbing, adaptive ranking-weight tuning with backlog pressure, more closeout/contracts truth parsing on the shared helper, and the final task-board/writeback cleanup for a clean verified closeout
-- Tests: 375 passing (375 total) · delta: +1 from S72
-- Deploy: ready to push at closeout
+- Shipped: canonical launch proofs + exact-book verifier hardening, post-deploy verification artifacts, normalized CTA link metadata, and another `App.jsx` extraction/copy-repair tranche
+- Tests: targeted regression tests passed (`24/24`) and production build passed; last full-suite baseline remains `375/375`
+- Deploy: ready to push at closeout so the next Pages run can emit the new verification artifact
 
 ## What was completed
 
-- **Pages env fix (S73)**: `.github/workflows/deploy-pages.yml` now passes both `VITE_VAPID_PUBLIC_KEY` and `VITE_PG_FEATURE_PUSH_ALERTS`, which matches the app’s push-alert gating and removes the last local workflow mismatch before deploy.
-- **Adaptive tuning (S73)**: `src/dashboard/today.js` now weights expiring promos, hot/cold lanes, and workflow backlog more intentionally, and `SmartPromoRecommender` now surfaces backlog pressure explicitly.
-- **Verification (S73)**: full suite passed at `375/375`, production build passed, `generate-project-contracts --json` rendered cleanly, and the repo-local closeout surfaces were refreshed to the new state.
-- **Truth/helper consolidation (S73)**: `scripts/lib/context-parsing.mjs` now backs more of the fast-start, action-queue, founder-control, contract-generation, and closeout code paths, reducing parser drift across public-safe repo surfaces.
+- **Canonical launch proofs (S74)**: `context/LAUNCH_PROOFS.json` plus `scripts/lib/launch-proofs.mjs` now hold the manual launch blockers in one machine-readable place; `scripts/check-launch-ready.mjs` reads that surface and correctly reports `⚠ PARTIAL`.
+- **Verifier hardening (S74)**: `src/books.js` and `scripts/verify-production-launch.mjs` now fail on the exact required monetization books (`BetMGM`, `bet365`, `BetRivers`) instead of a lossy aggregate affiliate count.
+- **Deploy artifact path (S74)**: `.github/workflows/deploy-pages.yml` now runs `npm run verify:production`, renders a markdown verdict, and uploads a `launch-verification` artifact so deploy truth is emitted automatically.
+- **CTA/app-shell cleanup (S74)**: `src/components/BookCTA.jsx` now consumes shared link metadata, and `src/App.jsx` is lighter via `src/app/AppChrome.jsx` plus `src/app/appText.js`, with several public-facing mojibake/copy issues fixed.
 
 ## What is mid-flight
 
 - Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` are still missing
 - One real Stripe smoke purchase and one friend-facing auth/calculator/pricing pass are still required after deploy
-- Closeout autopilot may still require the existing manual fallback if doctor continues to treat the yellow genome as a blocking failure in this public-safe repo
+- The new deploy verification artifact exists locally and in workflow config, but it still needs the normal push/deploy cycle to become the live source of truth
 
 ## What to do next
 
-1. Let this push trigger the next GitHub Pages deploy so the live bundle picks up the push-alert env wiring.
+1. Let this push trigger the next GitHub Pages deploy so the workflow emits the new `launch-verification` artifact.
 2. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`, then rerun `node scripts/verify-production-launch.mjs`.
-3. Run the real Stripe smoke + friend-beta pass, then continue launch-state derivation hardening and `src/App.jsx` decomposition.
+3. Run the real Stripe smoke + friend-beta pass, then keep decomposing `src/App.jsx` from the new app-shell seam.
 
 ## Constraints
 
@@ -48,6 +48,6 @@ Where we stopped: all unblocked repo-local work on the current board is shipped,
 ## Files to update next session if work continues
 
 - `src/books.js`
+- `src/App.jsx`
 - `docs/RELEASE_PLAN.md`
-- `context/LATEST_HANDOFF.md`
-- `context/CURRENT_STATE.md`
+- `context/LAUNCH_PROOFS.json`

@@ -50,3 +50,11 @@ Without a real browser checkout and payment step, the smoke test is not complete
 - Entitlement appears in the app after refresh.
 - Customer Portal opens without manual support.
 - Cancel/update events change Supabase state through webhook events.
+
+## After It Passes
+
+Record the proof in the canonical surface:
+
+```bash
+node scripts/update-launch-proof.mjs --proof stripeSmoke --status complete --evidence "Completed live checkout, webhook, and portal lifecycle on YYYY-MM-DD."
+```

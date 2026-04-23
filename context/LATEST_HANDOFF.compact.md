@@ -2,41 +2,41 @@
 
 # Latest Handoff
 
-Last updated: 2026-04-22 (S72)
-Session: 72
-Session Intent: update memory/task board where needed, implement the highest-leverage audit items, complete the remaining live operator work, then close out and push cleanly.
-Intent Outcome: Achieved with one honest external remainder. Adaptive dashboard intelligence, deeper feedback telemetry, AI caching, migration hardening, startup performance, live Supabase schema reconciliation, live billing auth repair, and VAPID secret wiring all landed. The only verifier failure left is missing sportsbook affiliate URLs.
-Where we stopped: repo and live backend are in a much stronger state, verification is green except for `affiliate_coverage`, and the next action after this push is simply to paste real `BetMGM` / `bet365` / `BetRivers` tracking links and redeploy.
+Last updated: 2026-04-23 (S73)
+Session: 73
+Session Intent: execute the remaining unblocked `/go` items, update repo truth, then close out and push a verified state cleanly to GitHub.
+Intent Outcome: Achieved with external release-proof blockers still open. The remaining local Pages env plumbing, adaptive mission-control tuning, and truth/helper consolidation all shipped; the only unresolved launch blockers are operator-owned affiliate links plus the real Stripe/friend-beta passes.
+Where we stopped: all unblocked repo-local work on the current board is shipped, the suite/build are green, and the next meaningful product move is to add real `BetMGM` / `bet365` / `BetRivers` links and complete the external launch-proof checklist after this push/deploy cycle.
 
-## Where We Left Off (Session 72)
+## Where We Left Off (Session 73)
 
-- Shipped: adaptive dashboard intelligence, deeper workflow telemetry, AI response caching, rerunnable migration hardening, startup deferral/perf work, live schema reconciliation, live billing auth repair, VAPID wiring for Pages + Supabase, and launch verifier expansion
-- Tests: 374 passing (374 total) · delta: +2 from S71
+- Shipped: GitHub Pages push-alert env plumbing, adaptive ranking-weight tuning with backlog pressure, more closeout/contracts truth parsing on the shared helper, and the final task-board/writeback cleanup for a clean verified closeout
+- Tests: 375 passing (375 total) · delta: +1 from S72
 - Deploy: ready to push at closeout
 
 ## What was completed
 
-- **Adaptive mission-control tranche (S72)**: `src/dashboard/today.js`, `TodayDashboardPanel`, and `SmartPromoRecommender` now compute and surface adaptive ranking, calibration, hot/cold lanes, and ranked daily promo actions instead of mostly static recommendations.
-- **Deeper feedback loop (S72)**: `ResultFeedbackCard`, `src/promograph/index.js`, `src/track/insights.js`, and `src/sync.js` now carry `execution_minutes` and `would_repeat` through local insight aggregation and durable sync.
-- **AI cost/quality tranche (S72)**: `src/ai/gateway.js`, `PromoAdvisorPanel`, and `PromoChat` now reuse timed cached responses for identical requests instead of burning repeated calls.
-- **Startup/perf tranche (S72)**: `src/main.jsx`, `src/analytics.js`, and `vite.config.js` now lazy-load `App`, defer SW/analytics boot, and split PostHog/Sentry into deferred chunks.
-- **Live launch unblock (S72)**: repaired Supabase migration history, pushed `supabase/migrations/20260422200000_reconcile_live_sync_schema.sql`, verified production query access for `workflow_state`, `workflow_history`, `ledger_state`, `tracker_state`, `feature_flags`, and `push_subscriptions`, and redeployed billing/beta functions with `--no-verify-jwt` so live `create-checkout` now returns `200`.
-- **Push plumbing (S72)**: set a fresh VAPID keypair in live Supabase secrets, set `VITE_VAPID_PUBLIC_KEY` as a GitHub Actions secret, and patched `.github/workflows/deploy-pages.yml` so the next Pages deploy includes it.
-- **Verification (S72)**: `npm test` (`374/374`), `npm run build`, and `node scripts/verify-production-launch.mjs` all passed except for the single affiliate-link inventory failure.
+- **Pages env fix (S73)**: `.github/workflows/deploy-pages.yml` now passes both `VITE_VAPID_PUBLIC_KEY` and `VITE_PG_FEATURE_PUSH_ALERTS`, which matches the app’s push-alert gating and removes the last local workflow mismatch before deploy.
+- **Adaptive tuning (S73)**: `src/dashboard/today.js` now weights expiring promos, hot/cold lanes, and workflow backlog more intentionally, and `SmartPromoRecommender` now surfaces backlog pressure explicitly.
+- **Verification (S73)**: full suite passed at `375/375`, production build passed, `generate-project-contracts --json` rendered cleanly, and the repo-local closeout surfaces were refreshed to the new state.
+- **Truth/helper consolidation (S73)**: `scripts/lib/context-parsing.mjs` now backs more of the fast-start, action-queue, founder-control, contract-generation, and closeout code paths, reducing parser drift across public-safe repo surfaces.
 
 ## What is mid-flight
 
 - Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` are still missing
-- The Pages workflow update is committed locally but only becomes live after this push/build path runs
-- Closeout autopilot still remains a manual-judgment path in this public-safe repo because of the yellow genome gate and pre-existing dirty `context/PROJECT_STATUS.json`
+- One real Stripe smoke purchase and one friend-facing auth/calculator/pricing pass are still required after deploy
+- Closeout autopilot may still require the existing manual fallback if doctor continues to treat the yellow genome as a blocking failure in this public-safe repo
 
 ## What to do next
 
-1. Push this branch so GitHub Pages can build with `VITE_VAPID_PUBLIC_KEY` available.
+1. Let this push trigger the next GitHub Pages deploy so the live bundle picks up the push-alert env wiring.
 2. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`, then rerun `node scripts/verify-production-launch.mjs`.
-3. Validate the adaptive mission-control ranking with real usage data and keep decomposing `src/App.jsx`.
+3. Run the real Stripe smoke + friend-beta pass, then continue launch-state derivation hardening and `src/App.jsx` decomposition.
 
 ## Constraints
 
 - This public repo does not carry the full private Studio Ops layer; use repo-local truth files instead of assuming portfolio scripts exist.
 - Avoid rerunning broad repair scripts blindly: `ops-onboard --repair --write` can overwrite valid repo-local truth with scaffolds.
+- Do not fabricate sportsbook affiliate links. If the operator has not provided a real approved URL, leave the field empty and keep the blocker honest.
+- Do not commit `supabase/.temp/*`; it is local linkage state, not public repo truth.
+- `docs/CREATIVE_DIRECTION_RECORD.md`, `scripts/rotate-render-key.mjs`, `scripts/soul-interview.mjs` are now gitignored — they exist locally but must not be committed to the public repo.

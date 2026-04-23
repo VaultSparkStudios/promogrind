@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S69:618 | S70:611 | S71:663 | S72:769 | S73:783
-Avgs — 3: 738.3 [N=3] | all: 641.9 [N=7]
-  └ 3-session (S71/S72/S73): Dev 94.7 | Align 96.0 | Momentum 84.0 | Engage 91.7 | Process 92.7 | Coher 40.7 | Sec 69.3 | Eco 56.0 | Cap 61.3 | Auto 52.0
+Sparkline (last 5 totals): S70:611 | S71:663 | S72:769 | S73:783 | S74:822
+Avgs — 3: 791.3 [N=3] | all: 664.4 [N=8]
+  └ 3-session (S72/S73/S74): Dev 95.3 | Align 96.0 | Momentum 82.7 | Engage 92.3 | Process 94.7 | Coher 49.3 | Sec 70.0 | Eco 70.0 | Cap 74.7 | Auto 66.3
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-23 | Session 73 | Total: 783/1000 | Velocity: 3 | protocolVelocity: 5
+Last session: 2026-04-23 | Session 74 | Total: 822/1000 | Velocity: 5 | protocolVelocity: 6
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,6 +93,35 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 1.
 2.
 3.
+
+## 2026-04-23 — Session 74 | Total: 822/1000 | Velocity: 5 | Debt: down
+Rolling avg (last 3): Dev 95.3 | Align 96.0 | Momentum 82.7 | Engage 92.3 | Process 94.7 | Coher 49.3 | Sec 70.0 | Eco 70.0 | Cap 74.7 | Auto 66.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 95 | ↓ | Targeted regression coverage passed (`24/24`), build stayed green, and the launch-proof/CTA/app-shell tranche landed without destabilizing the repo. |
+| Creative Alignment | 96 | → | The work stayed tightly aligned with the operator-grade, truth-first product direction and avoided fake launch shortcuts. |
+| Momentum | 82 | ↑ | Several high-impact local blockers shipped in one pass: canonical launch proofs, stricter verifier truth, deploy artifact automation, CTA normalization, and another `App.jsx` seam. |
+| Engagement | 92 | ↓ | This tranche was more launch/ops-facing than net-new engagement work, but public-facing copy quality and CTA behavior both improved. |
+| Process Quality | 97 | ↑ | Session 74 leaves the repo with cleaner closeout truth, a new audit, refreshed handoff/log/SIL surfaces, and a machine-readable launch-proof contract. |
+| Cross-Repo Coherence | 58 | ↑ | Workflow config, launch docs, dashboard truth, CTA logic, and closeout surfaces now agree more closely on what launch-ready actually means. |
+| Security Posture | 66 | → | No new exposure was introduced, but this session did not materially improve security beyond existing hygiene and verification gates. |
+| Ecosystem Integration | 78 | ↑ | The deploy workflow, local verifier, launch proof surface, and dashboard status now form a stronger end-to-end release truth chain. |
+| Capital Efficiency | 80 | ↑ | Shared link metadata and deploy-time verification reduce repeated manual interpretation and prevent wasted re-debugging of launch status. |
+| Automation Coverage | 78 | ↑ | Production verification now emits a retained artifact in the deploy path, and proof-update tooling gives the remaining manual blockers a clean machine-readable completion path. |
+| **Total** | **822 / 1000** | | |
+
+**Top win:** launch truth is materially harder to lie to now. Manual blockers live in one canonical proof surface, deploys emit a retained verifier artifact, and CTA logic shares the same monetization contract as the launch checks.
+
+**Top gap:** the only blockers left are still external and cannot be solved from this repo: real `BetMGM` / `bet365` / `BetRivers` tracking URLs, one real Stripe smoke, and one friend beta pass.
+
+**Intent outcome:** Achieved with external blockers still open. The highest-impact local refinement list shipped, and the remaining launch work is now explicitly operator/tester owned rather than buried in repo drift.
+
+**Brainstorm**
+
+1. Pull the latest deploy verification artifact into the launch dashboard so post-push truth is visible without opening GitHub Actions.
+2. Keep extracting `src/App.jsx` by moving the next public-facing panel cluster into `src/app/` with shallow smoke coverage around copy/labels.
+3. Add adaptive-ranking telemetry snapshots so recommendation weighting can graduate from heuristics toward observed outcome data.
 
 ## 2026-04-23 — Session 73 | Total: 783/1000 | Velocity: 3 | Debt: down
 Rolling avg (last 3): Dev 94.7 | Align 96.0 | Momentum 84.0 | Engage 91.7 | Process 92.7 | Coher 40.7 | Sec 69.3 | Eco 56.0 | Cap 61.3 | Auto 52.0

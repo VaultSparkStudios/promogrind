@@ -1,5 +1,14 @@
 import fs from "node:fs";
+import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
+import {
+  BOOKS,
+  getConfiguredAffiliateCount,
+  getConfiguredMonetizationCount,
+  getRequiredLaunchMonetizationStatus,
+  hasConfiguredAffiliateUrl,
+  hasConfiguredMonetizationUrl,
+} from "../src/books.js";
 
 function readEnvFile(path) {
   return Object.fromEntries(
@@ -14,6 +23,11 @@ function report(name, ok, detail, extra = {}) {
   return { name, ok, detail, ...extra };
 }
 
+function readFlag(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : null;
+}
+
 async function checkTable(admin, table, select = "*") {
   const { data, error } = await admin.from(table).select(select).limit(1);
   if (error) return report(table, false, error.message, { code: error.code || null });
@@ -21,6 +35,7 @@ async function checkTable(admin, table, select = "*") {
 }
 
 async function main() {
+  const outPath = readFlag("--out");
   const adminEnv = readEnvFile(".env.admin");
   const clientEnv = readEnvFile(".env");
 
@@ -106,35 +121,50 @@ async function main() {
     }
   }
 
-  const configuredAffiliateBooks = (await import("../src/books.js"))
-    .BOOKS
-    .filter((book) => typeof book.affiliateLink === "string" && book.affiliateLink.trim())
-    .map((book) => book.name);
-
-  const configuredReferralBooks = (await import("../src/books.js"))
-    .BOOKS
-    .filter((book) => typeof book.referralLink === "string" && book.referralLink.trim())
-    .map((book) => book.name);
+  const launchMonetization = getRequiredLaunchMonetizationStatus();
 
   results.push(report(
     "affiliate_coverage",
-    configuredAffiliateBooks.length > 0,
-    `affiliate links configured for ${configuredAffiliateBooks.length} books`,
-    { books: configuredAffiliateBooks },
+    getConfiguredAffiliateCount() > 0,
+    `affiliate links configured for ${getConfiguredAffiliateCount()} books`,
+    {
+      books: BOOKS.filter((book) => hasConfiguredAffiliateUrl(book)).map((book) => book.name),
+    },
   ));
   results.push(report(
     "monetization_coverage",
-    configuredReferralBooks.length > 0 || configuredAffiliateBooks.length > 0,
-    `monetization links configured for ${new Set([...configuredAffiliateBooks, ...configuredReferralBooks]).size} books`,
-    { referralBooks: configuredReferralBooks },
+    getConfiguredMonetizationCount() > 0,
+    `monetization links configured for ${getConfiguredMonetizationCount()} books`,
+    {
+      books: BOOKS.filter((book) => hasConfiguredMonetizationUrl(book)).map((book) => book.name),
+    },
+  ));
+  results.push(report(
+    "required_launch_monetization",
+    launchMonetization.missingBooks.length === 0,
+    launchMonetization.missingBooks.length === 0
+      ? `required launch monetization links configured for ${launchMonetization.configuredBooks.join(", ")}`
+      : `missing tracked monetization links for ${launchMonetization.missingBooks.join(", ")}`,
+    {
+      requiredBooks: launchMonetization.requiredBooks,
+      configuredBooks: launchMonetization.configuredBooks,
+      missingBooks: launchMonetization.missingBooks,
+    },
   ));
 
   const failed = results.filter((item) => !item.ok);
-  console.log(JSON.stringify({
+  const payload = {
     ok: failed.length === 0,
     failedCount: failed.length,
     results,
-  }, null, 2));
+  };
+
+  if (outPath) {
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.writeFileSync(outPath, JSON.stringify(payload, null, 2));
+  }
+
+  console.log(JSON.stringify(payload, null, 2));
 
   if (failed.length) process.exit(1);
 }

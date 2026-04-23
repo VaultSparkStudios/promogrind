@@ -31,3 +31,4 @@ docs/CREATIVE_DIRECTION_RECORD.md
 scripts/rotate-render-key.mjs
 scripts/soul-interview.mjs
 supabase/.temp/
+artifacts/launch-verification/

@@ -68,5 +68,44 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      - name: Prepare verification env files
+        run: |
+          cat > .env <<'EOF'
+          VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_VAPID_PUBLIC_KEY=${{ secrets.VITE_VAPID_PUBLIC_KEY }}
+          EOF
+          cat > .env.admin <<'EOF'
+          SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          EOF
+
+      - name: Verify production launch
+        id: verify_launch
+        continue-on-error: true
+        run: |
+          mkdir -p artifacts/launch-verification
+          npm run verify:production -- --out artifacts/launch-verification/launch-verification.json
+
+      - name: Render verification summary
+        if: always()
+        run: |
+          if [ -f artifacts/launch-verification/launch-verification.json ]; then
+            node scripts/render-launch-verification-summary.mjs artifacts/launch-verification/launch-verification.json artifacts/launch-verification/summary.md
+          else
+            printf "# Launch Verification Summary\n\n- Overall: FAIL\n- Checks passed: 0\n- Checks failed: unknown\n\n- Verification script did not emit JSON output.\n" > artifacts/launch-verification/summary.md
+          fi
+
+      - name: Upload launch verification artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: launch-verification
+          path: artifacts/launch-verification
+
+      - name: Fail if launch verification failed
+        if: steps.verify_launch.outcome == 'failure'
+        run: exit 1
+
 # One-time repo setup required:
 # Go to Settings → Pages and set Source to "GitHub Actions"

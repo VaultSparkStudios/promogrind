@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-04-23 (S73)
+Last reviewed: 2026-04-23 (S74)
 Overall status: yellow
-Next action: keep affiliate-link truth honest until real URLs exist, let the next Pages deploy pick up the push-alert env wiring, and stop treating yellow local genome states as hard-closeout blockers for public-safe repos.
+Next action: keep affiliate-link truth honest until real URLs exist, use `context/LAUNCH_PROOFS.json` as the canonical manual blocker surface, let the next Pages deploy emit the new `launch-verification` artifact, and stop treating yellow local genome states as hard-closeout blockers for public-safe repos.
 
 ---
 
@@ -20,12 +20,12 @@ Next action: keep affiliate-link truth honest until real URLs exist, let the nex
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 4 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `RELEASE_PLAN.md`, and `PROJECT_STATUS.json` now agree that the only remaining launch blockers are external affiliate/verification tasks. |
+| Schema alignment | 4 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `RELEASE_PLAN.md`, `LAUNCH_PROOFS.json`, and `PROJECT_STATUS.json` now agree that the only remaining launch blockers are external affiliate/verification tasks. |
 | Prompt/template alignment | 3 | Canonical templates are aligned, but doctor/autopilot policy still assumes yellow genome should block public-safe closeout. |
-| Derived-view freshness | 5 | Startup brief, contract generation, action queue, fast-start, and release truth now share more of the same parser layer and describe the same S73 state. |
-| Handoff continuity | 4 | Session 73 handoff fully reflects the shipped repo-local work, green verification, and the remaining external blockers. |
+| Derived-view freshness | 5 | Startup brief, contract generation, action queue, fast-start, release truth, and deploy verification artifacts now describe the same S74 posture. |
+| Handoff continuity | 4 | Session 74 handoff fully reflects the shipped repo-local work, targeted verification, and the remaining external blockers. |
 | Contradiction density | 2 | The main contradiction left is still operational: closeout autopilot may abort on the yellow genome even though repo truth is coherent enough for an honest manual fallback. |
-| **Total** | **18 / 25** | Yellow: derived truth is tighter after S73 consolidation, but autopilot policy still over-blocks public-safe repos. |
+| **Total** | **18 / 25** | Yellow: derived truth is tighter after S74 launch-proof automation, but autopilot policy still over-blocks public-safe repos. |
 
 ---
 
@@ -34,11 +34,11 @@ Next action: keep affiliate-link truth honest until real URLs exist, let the nex
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
 | Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | yellow | 2026-04-23 | Keep this file authoritative and avoid broad repair writes that collapse it. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-23 | S73 write-back aligns state, handoff, task board, and work log around the same verified repo state. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-23 | S74 write-back aligns state, handoff, task board, work log, and audit around the same launch-truth automation tranche. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
-| IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE`. |
+| IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-23 | Fast-start/action-queue/founder-control/contract generation now share more of the same parsing seam, reducing startup-side drift. |
-| Launch-proof truth | `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs | yellow | 2026-04-23 | Repo truth is aligned on the remaining external blockers, but the next Pages deploy still needs to pick up the new push-alert env wiring. |
+| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts | yellow | 2026-04-23 | Repo truth now has one canonical manual blocker surface, the verifier fails on the exact missing monetization books, and deploys are configured to emit retained verification artifacts, but the external proofs remain incomplete. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-23 | 0 critical / 0 warning findings; `supabase/.temp/` is now ignored to keep local linkage state out of public commits. |
 
 ---
@@ -47,8 +47,16 @@ Next action: keep affiliate-link truth honest until real URLs exist, let the nex
 
 - `run-doctor` still blocks closeout on a yellow `18/25` genome even though the repo's canonical truth surfaces are consistent enough for an honest manual closeout.
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
-- `affiliate_coverage` is still red by design because no real approved tracking URLs exist locally; docs and verifier must keep saying that until the operator provides them.
-- The live Pages bundle will not reflect the new `VITE_PG_FEATURE_PUSH_ALERTS` wiring until the next successful push/deploy cycle completes.
+- `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
+- The new deploy-time verification artifact does not exist remotely until the next successful push/deploy cycle completes.
+
+## Resolved This Session (S74)
+
+- Added `context/LAUNCH_PROOFS.json` as the canonical machine-readable surface for manual launch blockers.
+- Taught `scripts/check-launch-ready.mjs` to treat pending launch proofs as partial readiness instead of reporting PromoGrind as launch-ready while manual blockers remain.
+- Tightened `scripts/verify-production-launch.mjs` and `src/books.js` so launch monetization truth now fails on the exact missing books (`BetMGM`, `bet365`, `BetRivers`) and rejects generic partner/signup URLs as fake tracked links.
+- Added a deploy-time `launch-verification` artifact path in `.github/workflows/deploy-pages.yml` so post-push verification produces a retained summary instead of local console output only.
+- Extracted `AppChrome`/`appText` from `src/App.jsx` and fixed several public-facing mojibake/copy issues without changing the external blocker truth.
 
 ## Resolved This Session (S73)
 

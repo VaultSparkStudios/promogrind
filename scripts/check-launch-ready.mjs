@@ -12,6 +12,7 @@ import fs from 'fs';
 import path from 'path';
 import { validateSlug } from './lib/validate.mjs';
 import { loadProjectRegistry } from './lib/project-registry.mjs';
+import { getBlockingLaunchProofs } from './lib/launch-proofs.mjs';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const registry = loadProjectRegistry();
@@ -27,6 +28,7 @@ const CHECKS = {
   staging:          { label: 'Staging env (CANON-007)',  weight: 2 },
   launchStatus:     { label: 'launchStatus set',         weight: 1 },
   stripeReady:      { label: 'Stripe ready',             weight: 2 },
+  launchProofs:     { label: 'Manual launch proofs',     weight: 3 },
 };
 
 const results = [];
@@ -78,6 +80,16 @@ for (const project of registry.projects) {
     if (!checks.stripeReady) blockers.push('Stripe not ready (revenue model set)');
   }
 
+  // Canonical manual launch-proof surface for local/public-safe repos
+  if (registry.source === 'local') {
+    const proofRoot = project.localPath || root;
+    const pendingProofs = getBlockingLaunchProofs(proofRoot);
+    checks.launchProofs = pendingProofs.length === 0;
+    for (const proof of pendingProofs) blockers.push(`Launch proof pending: ${proof.label}`);
+  } else {
+    checks.launchProofs = true;
+  }
+
   // Score
   const passed = Object.entries(checks).filter(([, v]) => v).length;
   const total  = Object.keys(checks).length;
@@ -85,9 +97,10 @@ for (const project of registry.projects) {
 
   // Go/No-Go
   const criticalBlockers = blockers.filter(b => b.includes('SPARKED'));
+  const hasManualProofBlockers = blockers.some((b) => b.startsWith('Launch proof pending:'));
   const goNoGo = vaultStatus === 'SPARKED'
     ? (criticalBlockers.length === 0 ? '✓ GO' : '⛔ NO-GO')
-    : (score >= 80 ? '✓ READY' : score >= 50 ? '⚠ PARTIAL' : '○ NOT READY');
+    : ((score >= 80 && !hasManualProofBlockers) ? '✓ READY' : score >= 50 ? '⚠ PARTIAL' : '○ NOT READY');
 
   results.push({ slug: project.slug, name: project.name, vaultStatus, score, checks, blockers, goNoGo });
 }
