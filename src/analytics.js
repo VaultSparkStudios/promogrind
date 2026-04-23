@@ -7,6 +7,7 @@
  */
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY;
+const POSTHOG_ENABLED = import.meta.env.VITE_POSTHOG_ENABLED === "true";
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
 const IS_PROD = import.meta.env.PROD;
 
@@ -35,7 +36,7 @@ export function initAnalytics() {
   initPromise = (async () => {
     const tasks = [];
 
-    if (POSTHOG_KEY) {
+    if (POSTHOG_ENABLED && POSTHOG_KEY) {
       tasks.push(
         import("posthog-js").then((module) => {
           const posthog = module.default;
