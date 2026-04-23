@@ -45,8 +45,24 @@ export function normalizeFeatureTier(tier) {
   return "free";
 }
 
+/**
+ * Deterministic hash of a string → integer in range [0, 100).
+ * Same userId always maps to the same bucket, enabling stable percentage rollouts.
+ */
+function stableHash(s) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = (h * 0x01000193) >>> 0;
+  }
+  return h % 100;
+}
+
 /** Resolve effective flag value for a user.
  *  Remote overrides build-time defaults. Tier + cohort gates applied client-side.
+ *  Cohort supports:
+ *    - Array<string> (exact userId match, existing behavior)
+ *    - { type: "percentage", value: N } — stable N% rollout by userId hash
  */
 export function resolveFlag(key, remoteFlags, userTier, userId) {
   const buildDefault = !!FEATURE_FLAGS[key];
@@ -56,8 +72,14 @@ export function resolveFlag(key, remoteFlags, userTier, userId) {
   if (!flag.enabled) return false;
 
   // Cohort gate
-  if (Array.isArray(flag.cohort) && flag.cohort.length > 0) {
-    if (!userId || !flag.cohort.includes(userId)) return false;
+  if (flag.cohort) {
+    if (Array.isArray(flag.cohort) && flag.cohort.length > 0) {
+      if (!userId || !flag.cohort.includes(userId)) return false;
+    } else if (flag.cohort && typeof flag.cohort === "object" && flag.cohort.type === "percentage") {
+      const pct = Number(flag.cohort.value) || 0;
+      if (!userId) return false;
+      if (stableHash(key + ":" + userId) >= pct) return false;
+    }
   }
 
   // Tier gate
