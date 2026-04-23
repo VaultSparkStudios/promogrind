@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { getDashboardSnapshot, getNextBestAction } from "../../dashboard/today.js";
 import { matchPlaybooks } from "../../playbooks/index.js";
@@ -6,6 +6,31 @@ import { trackEvent } from "../../analytics.js";
 import { K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
 import { normalizeAppRoute } from "../../workflows/actionGraph.js";
+import { getUserProfile } from "../../lib/userProfile.js";
+
+function PlayStyleCard({ navigate }) {
+  const profile = useMemo(() => getUserProfile(), []);
+  if (profile.count < 3) return null;
+  return (
+    <div style={{ ...S.card, border: `1px solid ${K.pp}30`, background: `${K.pp}06`, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: 220 }}>
+          <div style={{ fontSize: 10, color: K.pp, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 4 }}>
+            {profile.icon} Your Play Style
+          </div>
+          <div style={{ fontFamily: fontD, fontSize: 15, fontWeight: 800, color: K.tx, marginBottom: 3 }}>{profile.label}</div>
+          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>{profile.tip}</div>
+        </div>
+        <button
+          onClick={() => navigate(`/${profile.nextCalc}`)}
+          style={{ padding: "8px 14px", background: `${K.pp}20`, border: `1px solid ${K.pp}40`, borderRadius: 8, color: K.pp, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
+        >
+          {profile.nextLabel} →
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function ActivationNextAction({ data, totalProfit, openBets, booksComplete, navigate }) {
   const usageLog = (() => { try { return JSON.parse(localStorage.getItem("pg_usage_log") || "{}"); } catch { return {}; } })();
@@ -78,20 +103,23 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
   }
 
   return (
-    <div style={{ ...S.card, border: `1px solid ${actionColor}40`, background: `${actionColor}08`, marginBottom: 12 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <div style={{ flex: 1, minWidth: 240 }}>
-          <div style={{ fontSize: 10, color: actionColor, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 5 }}>Next Best Action</div>
-          <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>{action.title}</div>
-          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>{action.body}</div>
+    <>
+      <div style={{ ...S.card, border: `1px solid ${actionColor}40`, background: `${actionColor}08`, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <div style={{ fontSize: 10, color: actionColor, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 5 }}>Next Best Action</div>
+            <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>{action.title}</div>
+            <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>{action.body}</div>
+          </div>
+          <button
+            onClick={() => { trackEvent("next_best_action_clicked", { key: action.key }); navigate(normalizeAppRoute(action.slug)); }}
+            style={{ padding: "9px 14px", background: actionColor, border: "none", borderRadius: 8, color: K.bg, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
+          >
+            {action.cta} →
+          </button>
         </div>
-        <button
-          onClick={() => { trackEvent("next_best_action_clicked", { key: action.key }); navigate(normalizeAppRoute(action.slug)); }}
-          style={{ padding: "9px 14px", background: actionColor, border: "none", borderRadius: 8, color: K.bg, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
-        >
-          {action.cta} →
-        </button>
       </div>
-    </div>
+      <PlayStyleCard navigate={navigate} />
+    </>
   );
 }
