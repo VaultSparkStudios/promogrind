@@ -2,6 +2,7 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { AppDataCtx } from "../contexts.jsx";
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
@@ -39,9 +40,11 @@ const appDataDefault = {
 
 function wrap(ui, appData = appDataDefault) {
   return render(
-    <AppDataCtx.Provider value={{ appData, syncAppData: vi.fn() }}>
-      {ui}
-    </AppDataCtx.Provider>
+    <MemoryRouter>
+      <AppDataCtx.Provider value={{ appData, syncAppData: vi.fn() }}>
+        {ui}
+      </AppDataCtx.Provider>
+    </MemoryRouter>
   );
 }
 
@@ -346,7 +349,7 @@ describe("Receipt button in Arb2Way", () => {
   });
 
   it("shows Receipt button when arb exists (both + odds)", () => {
-    render(<Arb2Way />);
+    render(<MemoryRouter><Arb2Way /></MemoryRouter>);
     // Default inputs: o1=+110, o2=+105 → arb exists
     expect(screen.getByText("📄 Receipt")).toBeDefined();
   });

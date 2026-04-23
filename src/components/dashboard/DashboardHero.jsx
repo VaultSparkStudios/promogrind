@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { BOOKS } from "../../books.js";
 import { f, K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
-import { streakEmoji, streakLabel, streakMilestone } from "../../lib/streaks.js";
+import { streakEmoji, streakLabel, streakMilestone, computeStreak } from "../../lib/streaks.js";
 import { computeMastery, MASTERY_COLOR } from "../../lib/mastery.js";
 import { AppDataCtx } from "../../contexts.jsx";
 
@@ -56,6 +56,14 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
   const animatedProfit = useCountUp(totalProfit);
   const globalRank = mastery?.globalRank;
 
+  const streakData = useMemo(() => ctx?.appData ? computeStreak(ctx.appData) : null, [ctx?.appData]);
+  const daysSinceActive = useMemo(() => {
+    if (!streakData?.lastActiveDay) return null;
+    const ms = Date.now() - new Date(streakData.lastActiveDay + 'T00:00:00Z').getTime();
+    return Math.floor(ms / 86400000);
+  }, [streakData?.lastActiveDay]);
+  const showComeback = streak === 0 && daysSinceActive != null && daysSinceActive >= 3 && daysSinceActive <= 30;
+
   const activeLanes = mastery
     ? Object.entries(mastery.perType).filter(([, d]) => d.xp > 0).sort(([, a], [, b]) => b.xp - a.xp).slice(0, 4)
     : [];
@@ -84,6 +92,11 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
           </div>
           {milestone && (
             <div style={{ fontSize: 10, color: K.yl, fontWeight: 700, marginBottom: 4 }}>🎉 {milestone}-day milestone reached!</div>
+          )}
+          {showComeback && (
+            <div style={{ padding: '6px 10px', background: `${K.pp}12`, border: `1px solid ${K.pp}30`, borderRadius: 6, marginBottom: 6, fontSize: 10, color: K.pp, fontWeight: 600 }}>
+              ⚡ Comeback Bonus — away {daysSinceActive}d · complete a mission for 2× XP today
+            </div>
           )}
           <div style={{ fontFamily: fontD, fontSize: 26, fontWeight: 800, color: totalProfit >= 0 ? K.gn : K.rd, marginBottom: 4 }}>
             {totalProfit >= 0 ? '+' : '-'}${f(Math.abs(animatedProfit))}

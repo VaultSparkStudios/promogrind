@@ -59,10 +59,11 @@ export function computeStreak(appData = {}, now = new Date()) {
 
   const best = bestStreakFromSet(profitDays);
   const activeToday = profitDays.has(todayStr);
+  const lastActiveDay = profitDays.size > 0 ? [...profitDays].sort().at(-1) : null;
 
   // Streak is active if today OR yesterday has profit (allows one check-in per day)
   const streakAnchor = activeToday ? todayStr : profitDays.has(addDays(todayStr, -1)) ? addDays(todayStr, -1) : null;
-  if (!streakAnchor) return { current: 0, best, activeToday };
+  if (!streakAnchor) return { current: 0, best, activeToday, lastActiveDay };
 
   let current = 0;
   let cursor = streakAnchor;
@@ -71,7 +72,7 @@ export function computeStreak(appData = {}, now = new Date()) {
     cursor = addDays(cursor, -1);
   }
 
-  return { current, best, activeToday };
+  return { current, best, activeToday, lastActiveDay };
 }
 
 export function streakEmoji(streak) {
