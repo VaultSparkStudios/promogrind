@@ -46,6 +46,9 @@ export function initAnalytics() {
             capture_pageleave: true,
             persistence: "localStorage+cookie",
             autocapture: false,
+            // PromoGrind uses Supabase-backed feature flags — disable PostHog polling
+            advanced_disable_decide: true,
+            disable_surveys: true,
             session_recording: { maskAllInputs: true, maskTextSelector: "*" },
           });
           posthogClient = posthog;
