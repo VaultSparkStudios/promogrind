@@ -9,6 +9,8 @@ import ResultFeedbackCard from "../components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "../components/CalculatorTrustBadge.jsx";
 import BookCTA from "../components/BookCTA.jsx";
 import ShareCard from "../components/ShareCard.jsx";
+import JuiceScore from "../components/JuiceScore.jsx";
+import { juiceFromConversion } from "../lib/juiceScore.js";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 
 function parseNL(text) {
@@ -186,6 +188,7 @@ export default function BonusBet() {
             </div>
             <RR l="Hedge Bet Amount (real cash)" v={`$${r.hs}`} c={K.ac} b /><RR l="If Bonus Bet Wins" v={`+$${r.pBW}`} c={K.gn} /><RR l="If Hedge Bet Wins" v={`+$${r.pHW}`} c={K.gn} /><RR l="Conversion Rate" v={`${r.r}%`} c={parseFloat(r.r) >= 70 ? K.gn : K.yl} b />
             {S.meter(parseFloat(r.r), parseFloat(r.r) >= 70 ? K.gn : parseFloat(r.r) >= 50 ? K.yl : K.rd)}
+            <JuiceScore score={juiceFromConversion(r.r)} />
             <BookCTA promoType="bonus" />
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
               <CalculatorTrustBadge calculatorKey="bonus-bet" promoType="bonus_bet" />

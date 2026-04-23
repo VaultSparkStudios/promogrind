@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
+import ShareCard from "../components/ShareCard.jsx";
 import { calcParlay, toD, f, K, font } from "../lib/shared.js";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
@@ -11,6 +12,7 @@ export default function ParlayBuilder() {
   const legOdds = legs.map((l) => l.odds);
   const r = useMemo(() => calcParlay(legOdds, stake), [legOdds, stake]);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
   const addLeg = () => { if (legs.length < 8) setLegs((l) => [...l, { odds: "+150" }]); };
   const removeLeg = (i) => setLegs((l) => l.filter((_, j) => j !== i));
   const updateLeg = (i, v) => setLegs((l) => l.map((lg, j) => j === i ? { odds: v } : lg));
@@ -72,6 +74,14 @@ export default function ParlayBuilder() {
                 disclaimer="Parlay EV assumes independent legs. Verify each leg edge separately."
                 onClose={() => setShowReceipt(false)}
               />
+            )}
+            {r && r.ok && !showShareCard && (
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+                🎉 Share this parlay edge
+              </button>
+            )}
+            {showShareCard && r && r.ok && (
+              <ShareCard title="Parlay Builder" profit={`$${r.profit} profit if hits (${r.prob}% prob)`} onClose={() => setShowShareCard(false)} />
             )}
           </div>
         )}

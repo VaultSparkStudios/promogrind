@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { calcEV, K, font } from "../lib/shared.js";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
+import ShareCard from "../components/ShareCard.jsx";
+import JuiceScore from "../components/JuiceScore.jsx";
+import { juiceFromEdge } from "../lib/juiceScore.js";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function PlusEV() {
@@ -11,6 +14,7 @@ export default function PlusEV() {
   const setS = (v) => setMem("s", v);
   const r = useMemo(() => calcEV(yo, fo, parseFloat(s)), [yo, fo, s]);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
   return (
     <div>
       <div style={S.card}>
@@ -25,6 +29,7 @@ export default function PlusEV() {
             </div>
             <RR l="ROI per bet" v={`${r.roi}%`} c={r.ok ? K.gn : K.rd} b /><RR l="True Win Probability" v={`${r.fp}%`} /><RR l="Your Edge" v={`${r.edge}%`} c={r.ok ? K.gn : K.rd} />
             <Nt c={r.ok ? K.gn : K.rd}>{r.ok ? "This bet is +EV. Over hundreds of bets at this edge, you WILL profit mathematically — individual bets can still lose." : "This bet is -EV. The sportsbook has the edge. Skip it."}</Nt>
+            {r.ok && <JuiceScore score={juiceFromEdge(r.edge)} />}
             {showReceipt && (
               <CalculatorReceipt
                 calcName="Expected Value Calculator"
@@ -42,6 +47,14 @@ export default function PlusEV() {
                 disclaimer="EV is a long-run estimate. Individual results vary. Only bet with a genuine edge."
                 onClose={() => setShowReceipt(false)}
               />
+            )}
+            {r.ok && !showShareCard && (
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+                🎉 Share this edge
+              </button>
+            )}
+            {r.ok && showShareCard && (
+              <ShareCard title="+EV Calculator" profit={`+$${r.ev} EV (${r.edge}% edge)`} onClose={() => setShowShareCard(false)} />
             )}
           </div>
         )}

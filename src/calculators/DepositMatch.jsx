@@ -3,6 +3,9 @@ import { calcDeposit, K, font } from "../lib/shared.js";
 import { S, In, RR, Tl, Nt, Help, useCalcMemory } from "../ui.jsx";
 import CalculatorTrustBadge from "../components/CalculatorTrustBadge.jsx";
 import ResultFeedbackCard from "../components/ResultFeedbackCard.jsx";
+import ShareCard from "../components/ShareCard.jsx";
+import JuiceScore from "../components/JuiceScore.jsx";
+import { juiceFromROI } from "../lib/juiceScore.js";
 
 export default function DepositMatch() {
   const [mem, setMem] = useCalcMemory("deposit-match", { dep: "500", pct: "100", mx: "500", ro: "1", vg: "4.5" });
@@ -13,6 +16,7 @@ export default function DepositMatch() {
   const setRo = (v) => setMem("ro", v);
   const setVg = (v) => setMem("vg", v);
   const r = useMemo(() => calcDeposit(dep, pct, mx, ro, vg), [dep, pct, mx, ro, vg]);
+  const [showShareCard, setShowShareCard] = useState(false);
   const [showHist, setShowHist] = useState(false);
   const [hist, setHist] = useState(() => {
     try {
@@ -84,6 +88,7 @@ export default function DepositMatch() {
             <RR l="Total Wagering Required" v={`$${r.tw}`} c={K.pp} />
             <RR l="Estimated Vig Cost" v={`-$${r.cost}`} c={K.yl} />
             <RR l="ROI on Deposit" v={`${r.roi}%`} c={parseFloat(r.roi) >= 20 ? K.gn : K.yl} />
+            {r.ok && <JuiceScore score={juiceFromROI(r.roi)} />}
             <RR l="Deposit Needed to Max This Promo" v={`$${r.minDep}`} c={r.fill ? K.gn : K.yl} />
             {!r.fill && (
               <Nt c={K.yl}>
@@ -99,6 +104,8 @@ export default function DepositMatch() {
             {parseFloat(r.net) > 0 && (
               <ResultFeedbackCard calculatorKey="deposit-match" calculatorLabel="Deposit Match Calculator" promoType="deposit_match" expectedProfit={r.net} />
             )}
+            {r.ok && !showShareCard && <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>🎉 Share this win</button>}
+            {r.ok && showShareCard && <ShareCard title="Deposit Match" profit={`$${r.net} net value (${r.roi}% ROI)`} onClose={() => setShowShareCard(false)} />}
           </div>
         )}
       </div>

@@ -7,6 +7,7 @@ import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
 // matchPlaybooks is called here as a fallback when snapshot.topPlaybook is not pre-computed
 import ObservabilityPanel from "./ObservabilityPanel.jsx";
 import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
+import PromoExpiryWidget from "./PromoExpiryWidget.jsx";
 import { appendWorkflows } from "../../workflows/store.js";
 
 const TONE = {
@@ -87,6 +88,8 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
           </div>
         </div>
       </div>
+
+      <PromoExpiryWidget />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
         <div style={{ padding: "12px", background: K.s2, border: `1px solid ${onboarding.doneCount === onboarding.totalCount ? K.gn : K.ac}35`, borderRadius: 8 }}>

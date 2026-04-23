@@ -1,8 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { calcPH, K } from "../lib/shared.js";
+import ShareCard from "../components/ShareCard.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function ParlayHedge() {
+  const [showShareCard, setShowShareCard] = useState(false);
   const [mem, setMem] = useCalcMemory("parlay-hedge", {
     payout: "500",
     hedgeOdds: "-150",
@@ -33,6 +35,14 @@ export default function ParlayHedge() {
             <Nt c={K.ac}>
               Enter the total payout returned by the parlay book, the odds for the hedge side, and your original parlay stake. PromoGrind sizes the hedge so both outcomes stay profitable.
             </Nt>
+            {result && !showShareCard && parseFloat(result.pHW) > 0 && (
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #60a5fa", color: "#60a5fa", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+                🎉 Share this hedge
+              </button>
+            )}
+            {showShareCard && result && parseFloat(result.pHW) > 0 && (
+              <ShareCard title="Parlay Hedge" profit={`$${result.pHW} locked in`} onClose={() => setShowShareCard(false)} />
+            )}
           </div>
         )}
         {!result && (

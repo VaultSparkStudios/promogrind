@@ -27,13 +27,16 @@ function useCountUp(target, duration = 700) {
   return val;
 }
 
-function MasteryBar({ label, level, levelPct }) {
+function MasteryBar({ label, level, levelPct, accuracy }) {
   const color = MASTERY_COLOR[level] || K.mt;
   return (
     <div style={{ flex: 1, minWidth: 72 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
         <span style={{ fontSize: 9, color: K.mt }}>{label}</span>
-        <span style={{ fontSize: 9, fontWeight: 700, color }}>{level}</span>
+        <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+          {accuracy != null && <span style={{ fontSize: 8, color: K.mt, background: `${K.mt}15`, padding: '0 4px', borderRadius: 3 }}>{accuracy}% acc</span>}
+          <span style={{ fontSize: 9, fontWeight: 700, color }}>{level}</span>
+        </div>
       </div>
       <div style={{ height: 3, background: K.s3, borderRadius: 2, overflow: 'hidden' }}>
         <div style={{ height: 3, borderRadius: 2, background: color, width: `${levelPct}%`, transition: 'width 0.7s cubic-bezier(0.22,1,0.36,1)' }} />
@@ -56,6 +59,12 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
   const activeLanes = mastery
     ? Object.entries(mastery.perType).filter(([, d]) => d.xp > 0).sort(([, a], [, b]) => b.xp - a.xp).slice(0, 4)
     : [];
+  const allLanes = mastery ? Object.entries(mastery.perType) : [];
+  const weakLane = allLanes.length > 0
+    ? allLanes
+        .filter(([, d]) => d.xp < 15)  // not yet at Closer level
+        .sort(([, a], [, b]) => a.xp - b.xp)[0]
+    : null;
 
   return (
     <div style={{ ...S.card, background: `linear-gradient(135deg,${K.s1},${K.s2})`, border: `1px solid ${K.bd2}`, marginBottom: 12, padding: '16px 20px' }}>
@@ -107,8 +116,22 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
         <div style={{ marginTop: 14, borderTop: `1px solid ${K.bd}`, paddingTop: 10 }}>
           <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 8, fontFamily: font }}>Lane Mastery</div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            {activeLanes.map(([key, d]) => <MasteryBar key={key} label={d.label} level={d.level} levelPct={d.levelPct} />)}
+            {activeLanes.map(([key, d]) => <MasteryBar key={key} label={d.label} level={d.level} levelPct={d.levelPct} accuracy={d.accuracy} />)}
           </div>
+        </div>
+      )}
+      {weakLane && (
+        <div
+          onClick={() => navigate && navigate('/dashboard')}
+          style={{ marginTop: 10, padding: '8px 12px', background: `${MASTERY_COLOR[weakLane[1].level] || K.mt}0d`, border: `1px solid ${MASTERY_COLOR[weakLane[1].level] || K.mt}25`, borderRadius: 7, cursor: navigate ? 'pointer' : 'default', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+        >
+          <div>
+            <div style={{ fontSize: 10, color: K.mt, marginBottom: 1 }}>Weakest Lane · Boost it →</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: MASTERY_COLOR[weakLane[1].level] || K.mt }}>
+              {weakLane[1].label} · {weakLane[1].level} · {weakLane[1].nextXp != null ? `${weakLane[1].nextXp - weakLane[1].xp} XP to next level` : 'Max level'}
+            </div>
+          </div>
+          <span style={{ fontSize: 9, color: K.mt }}>▸</span>
         </div>
       )}
     </div>

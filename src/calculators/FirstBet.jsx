@@ -7,6 +7,7 @@ import ResultFeedbackCard from "../components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "../components/CalculatorTrustBadge.jsx";
 import BookCTA from "../components/BookCTA.jsx";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
+import ShareCard from "../components/ShareCard.jsx";
 
 export default function FirstBet() {
   const [mem, setMem] = useCalcMemory("first-bet", { s: "500", o: "+150", ho: "-170" });
@@ -30,6 +31,7 @@ export default function FirstBet() {
   const [demoMode, setDemoMode] = useState(() => new URLSearchParams(window.location.search).has("demo"));
   const [rCopied, setRCopied] = useState(false);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
   const applyDemo = () => { setS("200"); setO("-110"); setHo("-110"); setDemoMode(true); };
   const copyResult = () => {
     if (!r) return;
@@ -86,6 +88,14 @@ export default function FirstBet() {
               <SensitivityChip summary={sens} />
             </div>
             <ResultFeedbackCard calculatorKey="first-bet" calculatorLabel="First Bet Safety Net Hedge" promoType="safety_net" expectedProfit={r.g} />
+            {parseFloat(r.g) > 0 && !showShareCard && (
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #60a5fa", color: "#60a5fa", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+                🎉 Share your hedge
+              </button>
+            )}
+            {showShareCard && parseFloat(r.g) > 0 && (
+              <ShareCard title="First Bet Safety Net Hedge" profit={`$${r.g} guaranteed`} onClose={() => setShowShareCard(false)} />
+            )}
             {showReceipt && (
               <CalculatorReceipt
                 calcName="First Bet Safety Net Hedge"

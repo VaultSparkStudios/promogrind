@@ -1,10 +1,14 @@
 import React, { useMemo, useState } from "react";
 import { calcArb3, K, font } from "../lib/shared.js";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
+import ShareCard from "../components/ShareCard.jsx";
+import JuiceScore from "../components/JuiceScore.jsx";
+import { juiceFromROI } from "../lib/juiceScore.js";
 import { S, In, RR, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function Arb3Way() {
   const [showReceipt, setShowReceipt] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
   const [mem, setMem] = useCalcMemory("arb-3way", { o1: "+180", o2: "+250", o3: "+320", t: "500" });
   const { o1, o2, o3, t } = mem;
   const setO1 = (v) => setMem("o1", v);
@@ -24,6 +28,7 @@ export default function Arb3Way() {
               {r.ok && <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>}
             </div>
             {r.ok && <><RR l="Stake Home" v={`$${r.s1}`} c={K.ac} b /><RR l="Stake Draw" v={`$${r.s2}`} c={K.ac} b /><RR l="Stake Away" v={`$${r.s3}`} c={K.ac} b /><RR l="ROI" v={`${r.roi}%`} c={K.gn} /></>}
+            {r.ok && <JuiceScore score={juiceFromROI(r.roi)} />}
             {showReceipt && r.ok && (
               <CalculatorReceipt
                 calcName="3-Way Arbitrage"
@@ -43,6 +48,8 @@ export default function Arb3Way() {
                 onClose={() => setShowReceipt(false)}
               />
             )}
+            {r.ok && !showShareCard && <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #c084fc", color: "#c084fc", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>🎉 Share this arb</button>}
+            {r.ok && showShareCard && <ShareCard title="3-Way Arbitrage" profit={`+$${r.pr} (${r.roi}% ROI)`} onClose={() => setShowShareCard(false)} />}
           </div>
         )}
       </div>

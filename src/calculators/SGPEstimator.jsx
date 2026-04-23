@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from "react";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
+import ShareCard from "../components/ShareCard.jsx";
+import JuiceScore from "../components/JuiceScore.jsx";
+import { juiceFromEVPct } from "../lib/juiceScore.js";
 import { calcSGP, toD, f, K, font } from "../lib/shared.js";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
@@ -11,6 +14,7 @@ export default function SGPEstimator() {
   const setStake = (v) => setMem("stake", v);
   const r = useMemo(() => calcSGP(legs.map((l) => l.odds), sgpOdds, stake), [legs, sgpOdds, stake]);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
   const addLeg = () => { if (legs.length < 4) setLegs((l) => [...l, { odds: "+150" }]); };
   const removeLeg = (i) => setLegs((l) => l.filter((_, j) => j !== i));
   const updateLeg = (i, v) => setLegs((l) => l.map((lg, j) => j === i ? { odds: v } : lg));
@@ -51,6 +55,7 @@ export default function SGPEstimator() {
             <RR l="True Win Probability" v={`${r.prob}%`} c={K.dm} />
             {parseFloat(r.discount) > 25 && <Nt c={K.rd}>This SGP is priced 25%+ below fair value. The book is heavily discounting for leg correlation. Look for better-priced SGPs or use the individual legs separately.</Nt>}
             {parseFloat(r.discount) <= 10 && r.ok && <Nt c={K.gn}>Low discount — this SGP is priced close to fair value with positive EV. Rare. Consider placing it.</Nt>}
+            {r.ok && <JuiceScore score={juiceFromEVPct(Math.min(15, Math.max(0, 10 - parseFloat(r.discount || 10))))} />}
             {showReceipt && (
               <CalculatorReceipt
                 calcName="SGP EV Estimator"
@@ -68,6 +73,14 @@ export default function SGPEstimator() {
                 disclaimer="Assumes independent legs. Correlated legs reduce true fair value further."
                 onClose={() => setShowReceipt(false)}
               />
+            )}
+            {r.ok && !showShareCard && (
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+                🎉 Share this SGP edge
+              </button>
+            )}
+            {r.ok && showShareCard && (
+              <ShareCard title="SGP Estimator" profit={`+$${r.ev} EV`} onClose={() => setShowShareCard(false)} />
             )}
           </div>
         )}

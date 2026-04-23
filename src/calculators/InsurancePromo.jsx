@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { calcInsurance, K, font } from "../lib/shared.js";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
+import ShareCard from "../components/ShareCard.jsx";
 import { S, In, RR, Nt, Tl, Help, useCalcMemory } from "../ui.jsx";
 
 export default function InsurancePromo() {
@@ -12,6 +13,7 @@ export default function InsurancePromo() {
   const setConv = (x) => setMem("conv", x);
   const r = useMemo(() => calcInsurance(stake, insPct, insMax, conv), [stake, insPct, insMax, conv]);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
   return (
     <div>
       <div style={S.card}>
@@ -26,6 +28,14 @@ export default function InsurancePromo() {
             </div>
             <RR l="Insurance Bonus Amount" v={`$${r.insAmt}`} c={K.pp} b /><RR l="Bonus Value After Conversion" v={`$${r.insVal}`} c={K.gn} b /><RR l="Net Cost if Bet Loses" v={`$${r.netCost}`} c={parseFloat(r.netCost) <= 5 ? K.gn : K.yl} /><RR l="Insurance Effectiveness" v={`${r.effPct}%`} c={parseFloat(r.effPct) >= 60 ? K.gn : K.yl} />
             <Nt c={K.ac}>If your insured bet loses: you get ${r.insAmt} back as a bonus bet. Convert that using the Bonus Bet tab (~{conv}%) = ${r.insVal} real cash. Your net loss is only ${r.netCost}.</Nt>
+            {r.ok && !showShareCard && (
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #c084fc", color: "#c084fc", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+                🎉 Share insurance value
+              </button>
+            )}
+            {r.ok && showShareCard && (
+              <ShareCard title="Promo Insurance" profit={`$${r.insVal} insurance value`} onClose={() => setShowShareCard(false)} />
+            )}
             {showReceipt && (
               <CalculatorReceipt
                 calcName="Promo Insurance Calculator"
