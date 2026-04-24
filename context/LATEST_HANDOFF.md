@@ -1,36 +1,37 @@
 # Latest Handoff
 
-Last updated: 2026-04-24 (S76)
-Session: 76
-Session Intent: Gamification sprint — audit and implement the highest-leverage improvements to calculator depth, UI/UX engagement, AI intelligence, and analytics. Ship as many top-ranked items as possible.
-Intent Outcome: Achieved. All 11 planned items shipped: Juice Score, CalcNextStep chaining, ShareCard expansion, Promo Expiry Widget, Bet History Charts, UserProfile play-style inference, PlayStyleCard, Comeback Bonus + weak-lane boost, feature flag % rollout, PostHog analytics noise fix. 378/378 tests passing.
+Last updated: 2026-04-24 (S77)
+Session: 77
+Session Intent: Full public-unveil audit and implementation pass: find broken features/navigation/security/code/UX issues, add valuable tests/checks, run the full suite including user-experience verification, and sync the VaultSpark Studios website landing copy to PromoGrind's current launch state.
+Intent Outcome: Achieved locally. PromoGrind now has a green `verify:launch-local` gate (`380/380` tests, launch smoke, UX route integrity, browser smoke, bundle budget, strict sanitization), website PromoGrind copy is synced to FORGE/public-unlaunched truth, and the only remaining launch blockers are external proofs.
 
-## Where We Left Off (Session 76)
+## Where We Left Off (Session 77)
 
-- Shipped 11 features across calculators, dashboard, analytics, and feature flag infrastructure
-- Tests: 378/378 passing (up from 375 before S76)
-- PostHog `/decide` and survey polling now disabled — production analytics noise eliminated
-- Genome: 25/25 perfect (templates synced to prompts)
-- Deploy: all 6 commits pushed to main, Cloudflare Pages deploying automatically
+- PromoGrind local launch gate is green: `npm run verify:launch-local` passed end-to-end
+- Tests: `380/380` passing across 27 test files
+- UX route integrity: 60 app routes and 98 public HTML files validated
+- Browser launch smoke: passing after dynamic preview-port allocation
+- Public repo sanitization: strict scan 0 critical / 0 warning
+- Launch readiness: still `71% PARTIAL`, blocked only by external proofs (real sportsbook monetization links, real Stripe smoke, friend-facing beta pass)
+- VaultSpark website: PromoGrind project page/catalog/home copy now matches current `FORGE`/public-unlaunched/product truth and `npm run build:check` passes with 0 P0/P1/P2 drift
 
 ## What was completed
 
-- **Juice Score (S76)**: `src/lib/juiceScore.js` + `src/components/JuiceScore.jsx` — 0–100 composite promo quality score with animated fill bar, integrated into BonusBet, Arb2Way, Arb3Way, DepositMatch, PlusEV, SGPEstimator, TeaserCalc
-- **CalcNextStep chaining (S76)**: `src/components/CalcNextStep.jsx` — context-aware "next step" suggestions for 13 calculator types, uses internal `useNavigate()`
-- **ShareCard expansion (S76)**: Added ShareCard to 8 additional calculators (Arb3Way, DepositMatch, FirstBet, InsurancePromo, ParlayHedge, ParlayBuilder, PlusEV, SGPEstimator, TeaserCalc)
-- **Promo Expiry Widget (S76)**: `src/components/dashboard/PromoExpiryWidget.jsx` — countdown timers with urgency color coding, inline add form, persisted to localStorage
-- **Bet History Charts (S76)**: `src/components/BetHistoryCharts.jsx` — profit by book/type (H-bars) + 8-week trend (column bars), rendered in TrackInsights
-- **UserProfile inference (S76)**: `src/lib/userProfile.js` — arb/bonus/ev/parlay cohort classification from existing pg_hist_* keys, requires ≥3 uses and 1.5× dominance
-- **PlayStyleCard (S76)**: Added to `ActivationNextAction.jsx` — shows play-style label/tip/next-calc CTA below the Next Best Action card
-- **Comeback Bonus + weak-lane boost (S76)**: `DashboardHero.jsx` — comeback banner (≥3 days away → 2× XP prompt), weak-lane suggestion card, accuracy % tag on MasteryBar
-- **Feature flag % rollout (S76)**: `src/lib/featureFlags.js` — stable FNV-1a hash enables deterministic percentage cohort rollouts by userId without server state
-- **PostHog noise fix (S76)**: `src/analytics.js` — `advanced_disable_decide: true` + `disable_surveys: true` eliminates /decide and /remote-config 404/401 console errors
+- **Launch gate consolidation (S77)**: added `npm run verify:launch-local` to run tests, launch smoke, UX route integrity, browser smoke, bundle budget, and strict public sanitization in one command.
+- **UX route integrity (S77)**: added `scripts/validate-ux-route-integrity.mjs`, validating app route slugs, public HTML internal links, required public pages, responsible-gambling copy, and free-account launch copy.
+- **Responsive regression coverage (S77)**: added mobile nav responsive smoke CSS marker and `src/__tests__/responsive.test.js`.
+- **Browser smoke hardening (S77)**: changed `scripts/validate-browser-launch-smoke.mjs` to allocate a fresh preview port instead of relying on hardcoded `4173`.
+- **Public-repo checks (S77)**: fixed Stripe readiness fallback for standalone public repos and reduced false positives in strict sanitization.
+- **Launch truth refresh (S77)**: updated `PROJECT_STATUS`, launch proofs, release plan, launch checklist, README, and stale test-count references to `380/380`.
+- **Missouri SEO truth (S77)**: updated the Missouri bonus-bet page to reflect Missouri sports wagering live as of December 1, 2025.
+- **VaultSpark website sync (S77)**: updated `VaultSparkStudios.github.io` PromoGrind public copy, status, CTAs, metadata, and generated site contracts to match current PromoGrind truth.
 
 ## What is mid-flight
 
 - Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` still missing from `src/books.js`
 - Stripe smoke purchase (one real transaction) still required
-- VAPID key still needed for PWA push notifications
+- One friend-facing auth/calculator/pricing pass still required
+- VAPID key still needed for PWA push notifications if push rollout resumes
 - Seasonal missions/tournaments require a Supabase leaderboard table
 - AI Mastery Coach (weekly personalized coaching letter) — not started
 - Smart Promo Stack Builder AI upgrade — not started
@@ -40,9 +41,9 @@ Intent Outcome: Achieved. All 11 planned items shipped: Juice Score, CalcNextSte
 
 1. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`
 2. Run the real Stripe smoke purchase and verify post-checkout portal flow
-3. Set the VAPID key in Cloudflare env vars and wire up the push notification opt-in
-4. Create the Supabase `missions` and `leaderboard` tables for seasonal tournaments
-5. Ship the AI Mastery Coach weekly email via Resend edge function
+3. Complete one friend-facing auth/calculator/pricing pass and mark the proof in `context/LAUNCH_PROOFS.json`
+4. Re-run `npm run verify:launch-local`, deploy, and inspect the retained launch-verification artifact
+5. Resume seasonal missions/tournaments, push notifications, and AI Mastery Coach after launch proofs are complete
 
 ## Constraints
 

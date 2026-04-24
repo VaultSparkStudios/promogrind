@@ -3,7 +3,7 @@
 ## Current State
 
 - Runtime: `https://promogrind.bet/`
-- Repo status: build passing, `375/375` tests green, launch smoke passing, browser smoke passing
+- Repo status: build passing, `380/380` tests green, launch smoke passing, UX route integrity passing, browser smoke passing, public-repo sanitization passing
 - Product posture: deployable and public-facing, but still blocked on final launch-proof tasks outside this repo
 - Canonical manual blocker surface: `context/LAUNCH_PROOFS.json`
 
@@ -15,6 +15,16 @@
 - Finish monetization coverage for `BetMGM`, `bet365`, and `BetRivers` with real approved tracking URLs. This is the only blocker still failing `scripts/verify-production-launch.mjs`.
 - Run the real Stripe smoke path end-to-end with an actual completed purchase and verify `subscriptions` plus customer-portal lifecycle (see `docs/STRIPE_SMOKE_TEST.md`).
 - Complete one friend-facing pass through auth, calculator, CTA, and pricing flows.
+
+## Local Launch Gate
+
+Run the complete local gate before any public announcement:
+
+```bash
+npm run verify:launch-local
+```
+
+This executes unit/component tests, production build, launch smoke, UX route integrity, browser smoke, bundle budget, and public-repo sanitization.
 
 ## Highest-Leverage Build Sequence
 

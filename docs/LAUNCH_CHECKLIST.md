@@ -1,6 +1,6 @@
 # PromoGrind Launch Checklist
 
-Last updated: 2026-03-31
+Last updated: 2026-04-24
 
 This checklist reflects the current repo truth for PromoGrind's launch readiness.
 Use it to distinguish between a soft public launch that is honest today and a full
@@ -31,6 +31,7 @@ Canonical machine-readable blocker/proof status lives in `context/LAUNCH_PROOFS.
   - top calculators
   - landing page
   - key SEO redirects
+- Local launch gate completed with `npm run verify:launch-local`
 
 ## Can Wait Until After Soft Launch
 

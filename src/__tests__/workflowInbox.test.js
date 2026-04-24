@@ -197,6 +197,6 @@ describe("workflow inbox", () => {
     expect(snapshot.project).toBe("promogrind");
     expect(snapshot.workflows.openCount).toBe(1);
     expect(snapshot.growth.totalProfit).toBe(10);
-    expect(snapshot.launch.validation.tests.lastKnown).toBe("158/158 passing");
+    expect(snapshot.launch.validation.tests.lastKnown).toBe("380/380 passing");
   });
 });

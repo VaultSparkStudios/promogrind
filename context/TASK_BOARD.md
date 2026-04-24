@@ -3,7 +3,8 @@
 ## Now
 
 - finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
-- clean up the remaining production analytics noise (`PostHog` remote-config `404` / flags `401`) now that the real boot/runtime issues are fixed
+- run one real Stripe smoke purchase and verify the post-checkout portal/subscription path
+- complete one friend-facing auth/calculator/pricing pass after deploy and record it in `context/LAUNCH_PROOFS.json`
 - continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
 
 ## Next
@@ -14,6 +15,13 @@
 - add adaptive-ranking telemetry snapshots so hot/cold lane tuning can move from heuristics toward observed outcome data [SIL]
 
 ## Shipped This Session
+
+- audit launch readiness end-to-end and add a complete local launch gate — **DONE S77**: added `npm run verify:launch-local`, fixed stale launch truth to `380/380`, and verified tests, launch smoke, UX route integrity, browser smoke, bundle budget, and strict public-repo sanitization in one command.
+- add UX/navigation integrity coverage for public unveil confidence — **DONE S77**: added `scripts/validate-ux-route-integrity.mjs` to scan app route slugs, public HTML internal links, required public pages, responsible-gambling copy, and free-account launch copy across 60 app routes and 98 public HTML files.
+- harden responsive/browser smoke checks — **DONE S77**: added mobile nav responsive CSS regression coverage, wired the smoke marker through `src/App.jsx`, and fixed browser launch smoke to allocate a fresh preview port instead of colliding with stale Vite processes.
+- repair public-repo readiness checks for standalone public mode — **DONE S77**: fixed Stripe readiness fallback to `context/PROJECT_STATUS.json` and hardened public sanitization so public protocol docs stay commit-able while ignored local ops state does not false-fail launch checks.
+- refresh public SEO/legal copy where external facts changed — **DONE S77**: updated Missouri bonus-bet copy to reflect Missouri sports wagering live as of December 1, 2025, while preserving responsible-gambling and free-account trust copy.
+- sync VaultSpark website PromoGrind landing copy with current project truth — **DONE S77**: updated the website project page/home/project catalog to describe PromoGrind as deployed/FORGE/public-unlaunched, 53-calculator sportsbook promo software with beta-gated paid/AI surfaces and real `https://promogrind.bet/` CTAs; website `npm run build:check` passed with 0 P0/P1/P2 drift.
 
 - restore public-root routing and app-entry intent so `vaultsparkstudios.com/promogrind` / `/` land on the marketing page instead of dropping straight into the app shell — **DONE S75**: root path now renders `LandingRoute`, landing CTAs point intentionally to `/dashboard` or signup, and the standalone landing page links were rewired to the app instead of looping back to `/`.
 - fix the production boot/runtime faults surfaced in the browser console — **DONE S75**: restored a concrete `ParlayHedge` calculator route so the app no longer crashes on `ReferenceError: ParlayHedge is not defined`, and hardened `public/sw.js` cache writes so the service worker stops trying to clone already-consumed responses.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "lastUpdated": "2026-04-23",
+  "lastUpdated": "2026-04-24",
   "notes": "Canonical machine-readable launch proof surface for PromoGrind. Use this instead of scattered prose when reporting external/manual launch blockers.",
   "proofs": {
     "affiliateLinks": {
@@ -26,7 +26,13 @@
       "blocking": true,
       "requiredFor": ["soft-launch", "marketing-push", "full-launch"],
       "details": "One friend-facing pass through auth, calculator, CTA, and pricing still needs to be completed.",
-      "evidence": []
+      "evidence": [
+        {
+          "date": "2026-04-24",
+          "type": "automated-preflight",
+          "detail": "Added and passed npm run smoke:ux for app-route/public-page integrity and top launch-page trust copy. Human friend-facing pass remains pending."
+        }
+      ]
     }
   }
 }

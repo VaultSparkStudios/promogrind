@@ -66,8 +66,6 @@ const FORBIDDEN_PATH_RULES = [
       const normalized = rel.toLowerCase();
       const base = path.posix.basename(normalized);
       return (
-        normalized === 'docs/creative_direction_record.md' ||
-        normalized === 'docs/rights_provenance.md' ||
         base === 'innovation_pipeline.md' ||
         base === 'canon.md' ||
         base === 'franchise_bible.md' ||
@@ -234,14 +232,28 @@ function scanFileContent(content, relPath, findings) {
 
 function getTrackedFiles(localPath) {
   const safeDir = relToPosix(path.resolve(localPath));
-  try {
-    const output = execFileSync('git', ['-c', `safe.directory=${safeDir}`, '-C', localPath, 'ls-files'], { encoding: 'utf8' });
-    return output.split(/\r?\n/).map(s => s.trim()).filter(Boolean).map(relToPosix);
-  } catch {
+  const commands = [
+    ['-C', localPath, 'ls-files'],
+    ['-c', `safe.directory=${safeDir}`, '-C', localPath, 'ls-files'],
+  ];
+
+  for (const args of commands) {
+    try {
+      const output = execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+      return output.split(/\r?\n/).map(s => s.trim()).filter(Boolean).map(relToPosix);
+    } catch {}
+  }
+
+  if (fs.existsSync(path.join(localPath, '.git'))) {
+    return [];
+  }
+
+  {
     const ignoredDirs = new Set([
-      '.git', 'node_modules', '.next', 'dist', 'build', 'coverage',
-      '.turbo', '.vercel', 'vendor', 'tmp', 'temp',
+      '.git', '.claude', 'node_modules', '.next', 'dist', 'dist-cap', 'build', 'coverage',
+      '.cache', '.ops-cache', '.turbo', '.vercel', 'vendor', 'tmp', 'temp', 'secrets',
     ]);
+    const ignoredFiles = new Set(['.env', '.env.local', '.env.admin', '.beta-codes']);
     const files = [];
 
     function walk(dir) {
@@ -262,6 +274,7 @@ function getTrackedFiles(localPath) {
           }
           continue;
         }
+        if (ignoredFiles.has(entry.name)) continue;
         files.push(rel);
       }
     }

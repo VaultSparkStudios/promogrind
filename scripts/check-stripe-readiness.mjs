@@ -2,15 +2,38 @@
 // check-stripe-readiness.mjs — Report Stripe integration status across all projects
 // Usage: node scripts/check-stripe-readiness.mjs
 
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const registryPath = join(__dirname, '../portfolio/PROJECT_REGISTRY.json');
-const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
+const statusPath = join(__dirname, '../context/PROJECT_STATUS.json');
 
-const projects = registry.projects.filter(p => p.status !== 'archived');
+function readProjects() {
+  if (existsSync(registryPath)) {
+    const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
+    return {
+      schemaVersion: registry.schemaVersion,
+      source: 'portfolio/PROJECT_REGISTRY.json',
+      projects: registry.projects.filter(p => p.status !== 'archived'),
+    };
+  }
+
+  if (existsSync(statusPath)) {
+    const status = JSON.parse(readFileSync(statusPath, 'utf8'));
+    return {
+      schemaVersion: status.schemaVersion ?? 'project-status',
+      source: 'context/PROJECT_STATUS.json',
+      projects: [status].filter(p => p.status !== 'archived'),
+    };
+  }
+
+  throw new Error('Missing portfolio/PROJECT_REGISTRY.json and context/PROJECT_STATUS.json');
+}
+
+const registry = readProjects();
+const projects = registry.projects;
 
 const RESET  = '\x1b[0m';
 const GREEN  = '\x1b[32m';
@@ -20,7 +43,7 @@ const BOLD   = '\x1b[1m';
 const DIM    = '\x1b[2m';
 
 console.log(`\n${BOLD}Stripe Readiness Report — VaultSpark Studios${RESET}`);
-console.log(`Registry v${registry.schemaVersion} · ${projects.length} active projects\n`);
+console.log(`Source: ${registry.source} · v${registry.schemaVersion} · ${projects.length} active projects\n`);
 
 let readyCount = 0, configuredCount = 0, revenueCount = 0;
 
@@ -40,10 +63,12 @@ const rows = projects.map(p => {
   else if (hasRevenue && !ready) status = `${YELLOW}→ HAS REVENUE MODEL — not yet wired${RESET}`;
   else status = `${DIM}— no revenue${RESET}`;
 
-  const sparked = p.vaultStatus === 'sparked' && p.audience?.includes('public');
+  const vaultStatus = String(p.vaultStatus || p.status || 'unknown');
+  const audience = String(p.audience || '');
+  const sparked = vaultStatus.toLowerCase() === 'sparked' && audience.includes('public');
   const flag = sparked && ready && !configured ? `${RED}⛔ SPARKED+PUBLIC — missing live keys${RESET}` : '';
 
-  return { name: p.name, vaultStatus: p.vaultStatus, revenueModel: p.revenueModel || 'none', status, priceCount, flag };
+  return { name: p.name, vaultStatus, revenueModel: p.revenueModel || 'none', status, priceCount, flag };
 });
 
 // Print table

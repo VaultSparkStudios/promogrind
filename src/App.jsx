@@ -14,6 +14,7 @@ import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
+import { MOBILE_NAV_RESPONSIVE_CSS } from "./app/responsive.js";
 import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
@@ -1142,7 +1143,7 @@ const MobileBottomNav = ({ gi, goTo }) => {
   const labels = ["Home","Convert","Calc","Track","Live","Learn"];
   return (
     <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
-      <style>{`@media (min-width: 640px) { .pg-mobile-nav { display: none !important; } } @media (max-width: 639px) { .pg-main-content { padding-bottom: 88px !important; } }`}</style>
+      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
       {TABS.map((t,i)=>(
         <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
           <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>

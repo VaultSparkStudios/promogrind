@@ -2,41 +2,41 @@
 
 # Latest Handoff
 
-Last updated: 2026-04-23 (S75)
-Session: 75
-Session Intent: analyze why the deployed site was not working, fix the real runtime/entrypoint faults, make the public root land on the marketing page instead of the app shell, then push and close out cleanly.
-Intent Outcome: Achieved. The real boot-time failures were fixed (`ParlayHedge` route crash and service-worker consumed-response caching), `/` now renders the landing page first with explicit app-entry CTAs, and the repo is closed out for push with the same honest external launch blockers still open.
-Where we stopped: the app should boot again, the public entry path now matches product intent, build is green, and the next meaningful work is still the external monetization/launch-proof tranche plus cleanup of non-blocking PostHog console noise.
+Last updated: 2026-04-24 (S77)
+Session: 77
+Session Intent: Full public-unveil audit and implementation pass: find broken features/navigation/security/code/UX issues, add valuable tests/checks, run the full suite including user-experience verification, and sync the VaultSpark Studios website landing copy to PromoGrind's current launch state.
+Intent Outcome: Achieved locally. PromoGrind now has a green `verify:launch-local` gate (`380/380` tests, launch smoke, UX route integrity, browser smoke, bundle budget, strict sanitization), website PromoGrind copy is synced to FORGE/public-unlaunched truth, and the only remaining launch blockers are external proofs.
 
-## Where We Left Off (Session 75)
+## Where We Left Off (Session 77)
 
-- Shipped: public-root routing correction, restored `ParlayHedge` route coverage, safer service-worker caching, and landing-page CTA rewiring so the marketing surface hands users into `/dashboard` intentionally
-- Tests: production build passed after the runtime/routing fixes; last full-suite baseline remains `375/375`
-- Deploy: ready to push at closeout so the next Pages run can pick up the routing/runtime fixes and the prior launch-verification artifact path
+- PromoGrind local launch gate is green: `npm run verify:launch-local` passed end-to-end
+- Tests: `380/380` passing across 27 test files
+- UX route integrity: 60 app routes and 98 public HTML files validated
+- Browser launch smoke: passing after dynamic preview-port allocation
+- Public repo sanitization: strict scan 0 critical / 0 warning
+- Launch readiness: still `71% PARTIAL`, blocked only by external proofs (real sportsbook monetization links, real Stripe smoke, friend-facing beta pass)
+- VaultSpark website: PromoGrind project page/catalog/home copy now matches current `FORGE`/public-unlaunched/product truth and `npm run build:check` passes with 0 P0/P1/P2 drift
 
 ## What was completed
 
-- **Public-root correction (S75)**: `src/App.jsx` now renders `LandingRoute` for `/` instead of dropping straight into the app shell, so `vaultsparkstudios.com/promogrind` and the canonical root behave like a real landing surface first.
-- **Runtime fault repair (S75)**: `src/calculators/ParlayHedge.jsx` was restored and wired back into the route table, eliminating the `ReferenceError: ParlayHedge is not defined` boot failure.
-- **Service-worker hardening (S75)**: `public/sw.js` now caches through a guarded helper that skips consumed/opaque responses, fixing the `Failed to execute 'clone' on 'Response'` error path from production.
-- **Landing CTA truth (S75)**: `src/routes/LandingRoute.jsx`, `src/launchState.js`, and `public/landing/index.html` now send users to `/dashboard` or signup intentionally instead of recursively routing back to the landing page.
+- **Launch gate consolidation (S77)**: added `npm run verify:launch-local` to run tests, launch smoke, UX route integrity, browser smoke, bundle budget, and strict public sanitization in one command.
+- **UX route integrity (S77)**: added `scripts/validate-ux-route-integrity.mjs`, validating app route slugs, public HTML internal links, required public pages, responsible-gambling copy, and free-account launch copy.
+- **Responsive regression coverage (S77)**: added mobile nav responsive smoke CSS marker and `src/__tests__/responsive.test.js`.
+- **Browser smoke hardening (S77)**: changed `scripts/validate-browser-launch-smoke.mjs` to allocate a fresh preview port instead of relying on hardcoded `4173`.
+- **Public-repo checks (S77)**: fixed Stripe readiness fallback for standalone public repos and reduced false positives in strict sanitization.
+- **Launch truth refresh (S77)**: updated `PROJECT_STATUS`, launch proofs, release plan, launch checklist, README, and stale test-count references to `380/380`.
+- **Missouri SEO truth (S77)**: updated the Missouri bonus-bet page to reflect Missouri sports wagering live as of December 1, 2025.
+- **VaultSpark website sync (S77)**: updated `VaultSparkStudios.github.io` PromoGrind public copy, status, CTAs, metadata, and generated site contracts to match current PromoGrind truth.
 
 ## What is mid-flight
 
-- Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` are still missing
-- One real Stripe smoke purchase and one friend-facing auth/calculator/pricing pass are still required after deploy
-- The new deploy verification artifact exists locally and in workflow config, but it still needs the normal push/deploy cycle to become the live source of truth
-- PostHog remote-config / feature-flag console noise (`config.js` 404 and flags 401) is still present and should be cleaned up separately now that the true product-breaking issues are fixed
+- Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` still missing from `src/books.js`
+- Stripe smoke purchase (one real transaction) still required
+- One friend-facing auth/calculator/pricing pass still required
+- VAPID key still needed for PWA push notifications if push rollout resumes
+- Seasonal missions/tournaments require a Supabase leaderboard table
+- AI Mastery Coach (weekly personalized coaching letter) — not started
+- Smart Promo Stack Builder AI upgrade — not started
+- `src/App.jsx` decomposition ongoing
 
 ## What to do next
-
-1. Let this push trigger the next GitHub Pages deploy so the workflow emits the new `launch-verification` artifact and the root/app routing fix goes live.
-2. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`, then rerun `node scripts/verify-production-launch.mjs`.
-3. Clean up the remaining PostHog production noise, then run the real Stripe smoke + friend-beta pass and keep decomposing `src/App.jsx`.
-
-## Constraints
-
-- This public repo does not carry the full private Studio Ops layer; use repo-local truth files instead of assuming portfolio scripts exist.
-- Avoid rerunning broad repair scripts blindly: `ops-onboard --repair --write` can overwrite valid repo-local truth with scaffolds.
-- Do not fabricate sportsbook affiliate links. If the operator has not provided a real approved URL, leave the field empty and keep the blocker honest.
-- Do not commit `supabase/.temp/*`; it is local linkage state, not public repo truth.

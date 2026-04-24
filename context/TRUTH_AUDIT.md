@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-04-23 (S74)
+Last reviewed: 2026-04-24 (S77)
 Overall status: yellow
-Next action: keep affiliate-link truth honest until real URLs exist, use `context/LAUNCH_PROOFS.json` as the canonical manual blocker surface, let the next Pages deploy emit the new `launch-verification` artifact, and stop treating yellow local genome states as hard-closeout blockers for public-safe repos.
+Next action: keep affiliate-link truth honest until real URLs exist, keep `npm run verify:launch-local` green as the canonical local launch gate, use `context/LAUNCH_PROOFS.json` as the canonical manual blocker surface, and verify the next deploy artifact after push.
 
 ---
 
@@ -33,13 +33,14 @@ Next action: keep affiliate-link truth honest until real URLs exist, use `contex
 
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
-| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | yellow | 2026-04-23 | Keep this file authoritative and avoid broad repair writes that collapse it. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-23 | S74 write-back aligns state, handoff, task board, work log, and audit around the same launch-truth automation tranche. |
+| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-04-24 | PromoGrind status now reflects `FORGE`, public-unlaunched, `380/380` tests, green local launch gate, and unchanged external blockers. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-24 | S77 write-back aligns state, handoff, task board, work log, release docs, and audit around the same public-unveil hardening tranche. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
-| Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-23 | Fast-start/action-queue/founder-control/contract generation now share more of the same parsing seam, reducing startup-side drift. |
-| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts | yellow | 2026-04-23 | Repo truth now has one canonical manual blocker surface, the verifier fails on the exact missing monetization books, and deploys are configured to emit retained verification artifacts, but the external proofs remain incomplete. |
-| Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-23 | 0 critical / 0 warning findings; `supabase/.temp/` is now ignored to keep local linkage state out of public commits. |
+| Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
+| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts | yellow | 2026-04-24 | Local launch gate is green and docs are current, but required sportsbook monetization links, real Stripe smoke, and friend beta remain incomplete. |
+| Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-24 | Strict public-repo sanitization reports 0 critical / 0 warning and no longer false-flags public protocol/provenance docs or ignored local ops state. |
+| VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
 
 ---
 
@@ -48,7 +49,16 @@ Next action: keep affiliate-link truth honest until real URLs exist, use `contex
 - `run-doctor` still blocks closeout on a yellow `18/25` genome even though the repo's canonical truth surfaces are consistent enough for an honest manual closeout.
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
-- The new deploy-time verification artifact does not exist remotely until the next successful push/deploy cycle completes.
+- The deploy-time verification artifact needs to be checked after this push/deploy cycle completes.
+
+## Resolved This Session (S77)
+
+- Added `npm run verify:launch-local` as the canonical local readiness gate.
+- Added UX route integrity validation for app route slugs, public HTML links, required public pages, responsible-gambling copy, and free-account copy.
+- Fixed browser smoke port allocation so stale local preview processes do not create false failures.
+- Fixed Stripe readiness fallback and public-repo sanitization behavior for standalone public repo mode.
+- Refreshed Missouri legal/SEO copy and release docs to match current facts and `380/380` test truth.
+- Synced VaultSpark website PromoGrind project copy/status/CTAs to current deployed/FORGE/public-unlaunched truth and cleared website project-info P1 drift.
 
 ## Resolved This Session (S74)
 

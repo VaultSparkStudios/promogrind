@@ -1,10 +1,10 @@
 # Promo Engine v3
 
-Free sportsbook promo conversion tool suite with knowledge base, profit tracking, and affiliate monetization built in. PromoGrind uses the shared Vault identity system, so users create a free Vault membership account to access the app and sync across Studio projects.
+Free sportsbook promo conversion tool suite with knowledge base, profit tracking, AI-assisted beta surfaces, and affiliate/subscription monetization built in. PromoGrind uses the shared Vault identity system, so users create a free Vault membership account to access the app and sync across Studio projects.
 
 ## What This Is
 
-A complete web app that helps people convert sportsbook promotions into guaranteed cash using math (matched betting / promo conversion). Includes 11 calculators, a sportsbook tracker, P/L ledger, and comprehensive knowledge base for beginners.
+A complete web app that helps people convert sportsbook promotions into guaranteed cash using math (matched betting / promo conversion). Includes 53 calculators, a sportsbook tracker, P/L ledger, beta-gated AI helpers, and a comprehensive knowledge base for beginners.
 
 ## Launch-State Flags
 

@@ -76,6 +76,24 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen: the product already presents the calculator surface as part of its public feature set, and restoring the module preserves user-facing breadth while fixing the hard boot failure at the correct seam.
 - Follow-up: keep the calculator registry aligned with actual modules and add regression coverage around any future calculator set changes that touch startup routing.
 
+### 2026-04-24 - Public-unveil launch truth requires a single green local gate plus external proof separation
+
+- Status: accepted
+- Context: PromoGrind had many individual checks, but public-unveil readiness was split across unit tests, browser smoke, launch smoke, bundle budget, sanitization, docs, website copy, and manual proof blockers.
+- Decision: make `npm run verify:launch-local` the canonical local launch gate for repo-owned readiness, while keeping operator-owned proofs separate in `context/LAUNCH_PROOFS.json` and `check-launch-ready`.
+- Alternatives considered: rely on scattered one-off commands; mark the project ready because local tests pass; block local engineering on Stripe/affiliate items that require external credentials or approvals.
+- Why this was chosen: it creates a clear boundary between code quality that the repo can prove and revenue/beta proofs that need real-world operator action.
+- Follow-up: after real affiliate links, Stripe smoke, and friend beta complete, rerun `npm run verify:launch-local` and `node scripts/check-launch-ready.mjs` before public announcement.
+
+### 2026-04-24 - VaultSpark website must market PromoGrind as FORGE/public-unlaunched until launch proofs close
+
+- Status: accepted
+- Context: the VaultSpark Studios website had stale PromoGrind copy that described a creator promotion dashboard, linked to a missing `/promogrind/` route, and presented the product as fully Sparked despite `PROJECT_STATUS.json` saying `FORGE` and `public-unlaunched`.
+- Decision: update the website to describe PromoGrind as a deployed sportsbook promo conversion suite in launch hardening, with 53 calculators, beta-gated paid/AI surfaces, real `https://promogrind.bet/` CTAs, and public announcement gated on affiliate/Stripe/friend-beta proof.
+- Alternatives considered: keep the website status as Sparked for marketing momentum; remove PromoGrind until public launch; link only to the internal project page.
+- Why this was chosen: public marketing should build confidence without overstating launch status or sending users to a dead route.
+- Follow-up: once launch proofs are complete, update website status from FORGE/public-unlaunched to the approved public status and rerun the website drift gate.
+
 ### 2026-04-22 - Canonicalize scanner/community/launch queue actions through workflow suggestion builders
 
 - Status: accepted

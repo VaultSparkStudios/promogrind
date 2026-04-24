@@ -104,7 +104,7 @@ export const LAUNCH_VALIDATION = {
   tests: {
     label: "Vitest",
     command: "npm test",
-    lastKnown: "158/158 passing",
+    lastKnown: "380/380 passing",
   },
   build: {
     label: "Build",

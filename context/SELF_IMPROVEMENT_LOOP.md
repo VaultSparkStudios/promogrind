@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S71:663 | S72:769 | S73:783 | S74:822 | S75:834
-Avgs — 3: 813.0 [N=3] | all: 683.3 [N=9]
-  └ 3-session (S73/S74/S75): Dev 94.7 | Align 96.3 | Momentum 79.3 | Engage 92.7 | Process 96.0 | Coher 58.7 | Sec 67.3 | Eco 76.3 | Cap 80.0 | Auto 76.7
+Sparkline (last 5 totals): S72:769 | S73:783 | S74:822 | S75:834 | S77:878
+Avgs — 3: 844.7 [N=3] | all: 703.8 [N=10]
+  └ 3-session (S74/S75/S77): Dev 96.7 | Align 97.0 | Momentum 81.3 | Engage 92.7 | Process 98.3 | Coher 72.0 | Sec 78.3 | Eco 85.7 | Cap 86.3 | Auto 92.7
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-23 | Session 75 | Total: 834/1000 | Velocity: 2 | protocolVelocity: 5
+Last session: 2026-04-24 | Session 77 | Total: 878/1000 | Velocity: 6 | protocolVelocity: 6
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -238,6 +238,35 @@ Rolling avg (last 3): Dev 82.0 | Align 95.5 | Momentum 84.5 | Engage 76.0 | Proc
 1. Add a settlement-driven mastery ladder that rewards lane diversity, trust, and execution quality instead of generic streaks.
 2. Auto-route scanner and community findings into the shared workflow graph with remote reconciliation once live migrations are in place.
 3. Move doctor, startup, and closeout onto the same truth helper so yellow-genome sessions stop blocking honest automation.
+
+## 2026-04-24 — Session 77 | Total: 878/1000 | Velocity: 6 | Debt: down
+Rolling avg (last 3): Dev 96.7 | Align 97.0 | Momentum 81.3 | Engage 92.7 | Process 98.3 | Coher 72.0 | Sec 78.3 | Eco 85.7 | Cap 86.3 | Auto 92.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 97 | ↑ | Full local launch gate is green, 380/380 tests pass, browser smoke is less brittle, and route/public-page checks now cover UX integrity. |
+| Creative Alignment | 97 | → | Public messaging now matches the real product: sportsbook promo conversion software, not stale creator-dashboard copy or premature Sparked status. |
+| Momentum | 78 | ↑ | Broad audit sprint shipped six concrete readiness improvements plus cross-repo website alignment; external launch blockers remain outside code ownership. |
+| Engagement | 92 | → | No new engagement loop shipped, but public-first UX and route integrity are stronger before acquisition traffic. |
+| Process Quality | 99 | ↑ | One canonical launch gate, launch-proof separation, website drift gate, release docs, and handoff surfaces now agree. |
+| Cross-Repo Coherence | 88 | ↑ | PromoGrind repo truth and VaultSpark website marketing copy are now aligned; website `build:check` reports 0 P0/P1/P2 drift. |
+| Security Posture | 82 | ↑ | Strict public-repo sanitization passes with fewer false positives, and public-safe repo docs remain commit-able under CANON-008. |
+| Ecosystem Integration | 90 | ↑ | VaultSpark website, PromoGrind release docs, launch proofs, and project status now share the same deployed/FORGE/public-unlaunched story. |
+| Capital Efficiency | 88 | ↑ | Dynamic preview ports eliminate wasted reruns from stale Vite processes; a single launch command reduces operator overhead. |
+| Automation Coverage | 97 | ↑ | Added UX route integrity, responsive regression coverage, launch-gate aggregation, and stronger standalone public-repo readiness checks. |
+| **Total** | **878 / 1000** | | |
+
+**Top win:** launch readiness moved from scattered confidence to a repeatable local gate plus aligned public website copy.
+
+**Top gap:** PromoGrind still cannot honestly be publicly announced until the three external proofs land: real sportsbook monetization links, a real Stripe smoke purchase, and a friend-facing beta pass.
+
+**Intent outcome:** Achieved locally. Full audit, fixes, added tests/checks, UX smoke, security/sanitization gate, and website marketing sync completed; launch remains partial only because of external proofs.
+
+**Brainstorm**
+
+1. Add a small post-deploy artifact ingester that reads the GitHub launch-verification artifact and writes the result back into `context/LAUNCH_PROOFS.json`.
+2. Build a public-launch command that refuses to flip status unless local launch gate, website drift gate, affiliate proof, Stripe proof, and friend-beta proof are all green.
+3. Add website-side link integrity coverage for outbound product CTAs so dead sibling-domain launch links are caught before marketing pages ship.
 
 ## 2026-04-22 — Session 66 | Total: 496/1000 | Velocity: 7 | Debt: down
 Rolling avg (last 3): Dev 78 | Align 95 | Momentum 82 | Engage 74 | Process 76 | Coher 18 | Sec 16 | Eco 24 | Cap 17 | Auto 16
