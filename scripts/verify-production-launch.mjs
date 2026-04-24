@@ -15,7 +15,10 @@ function readEnvFile(path) {
     fs.readFileSync(path, "utf8")
       .split(/\r?\n/)
       .filter((line) => line && !line.trim().startsWith("#"))
-      .map((line) => line.split(/=(.*)/s).slice(0, 2)),
+      .map((line) => {
+        const [key, value = ""] = line.split(/=(.*)/s).slice(0, 2);
+        return [key.trim(), value.trim()];
+      }),
   );
 }
 
