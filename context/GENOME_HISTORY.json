@@ -239,6 +239,23 @@
       },
       "delta": 0,
       "cause": "Push the S75 runtime/routing fixes so the public root lands on the PromoGrind landing page, the app boots cleanly again,"
+    },
+    {
+      "date": "2026-04-24",
+      "session": 75,
+      "total": 18,
+      "maxTotal": 25,
+      "overallStatus": "yellow",
+      "lastReviewed": "2026-04-23 (S74)",
+      "dimensions": {
+        "schema_alignment": 4,
+        "prompt_template_alignment": 3,
+        "derived_view_freshness": 5,
+        "handoff_continuity": 4,
+        "contradiction_density": 2
+      },
+      "delta": 0,
+      "cause": "Push the S75 runtime/routing fixes so the public root lands on the PromoGrind landing page, the app boots cleanly again,"
     }
   ]
 }
