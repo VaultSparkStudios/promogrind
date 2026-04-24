@@ -91,14 +91,14 @@
     "automationCoverage": 86
   },
   "doctorScore": {
-    "date": "2026-04-23",
-    "passing": 11,
+    "date": "2026-04-24",
+    "passing": 12,
     "warning": 0,
-    "failing": 1,
-    "blockingFailing": 1,
+    "failing": 0,
+    "blockingFailing": 0,
     "advisoryFailing": 0,
     "total": 12,
-    "score": 92,
+    "score": 100,
     "checks": [
       {
         "id": "manifest",
@@ -172,10 +172,10 @@
       },
       {
         "id": "genome",
-        "pass": false,
+        "pass": true,
         "warn": false,
         "driftClass": "local-broken",
-        "blocking": true
+        "blocking": false
       },
       {
         "id": "prompt-ver",

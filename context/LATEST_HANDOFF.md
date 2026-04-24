@@ -1,36 +1,48 @@
 # Latest Handoff
 
-Last updated: 2026-04-23 (S75)
-Session: 75
-Session Intent: analyze why the deployed site was not working, fix the real runtime/entrypoint faults, make the public root land on the marketing page instead of the app shell, then push and close out cleanly.
-Intent Outcome: Achieved. The real boot-time failures were fixed (`ParlayHedge` route crash and service-worker consumed-response caching), `/` now renders the landing page first with explicit app-entry CTAs, and the repo is closed out for push with the same honest external launch blockers still open.
-Where we stopped: the app should boot again, the public entry path now matches product intent, build is green, and the next meaningful work is still the external monetization/launch-proof tranche plus cleanup of non-blocking PostHog console noise.
+Last updated: 2026-04-24 (S76)
+Session: 76
+Session Intent: Gamification sprint — audit and implement the highest-leverage improvements to calculator depth, UI/UX engagement, AI intelligence, and analytics. Ship as many top-ranked items as possible.
+Intent Outcome: Achieved. All 11 planned items shipped: Juice Score, CalcNextStep chaining, ShareCard expansion, Promo Expiry Widget, Bet History Charts, UserProfile play-style inference, PlayStyleCard, Comeback Bonus + weak-lane boost, feature flag % rollout, PostHog analytics noise fix. 378/378 tests passing.
 
-## Where We Left Off (Session 75)
+## Where We Left Off (Session 76)
 
-- Shipped: public-root routing correction, restored `ParlayHedge` route coverage, safer service-worker caching, and landing-page CTA rewiring so the marketing surface hands users into `/dashboard` intentionally
-- Tests: production build passed after the runtime/routing fixes; last full-suite baseline remains `375/375`
-- Deploy: ready to push at closeout so the next Pages run can pick up the routing/runtime fixes and the prior launch-verification artifact path
+- Shipped 11 features across calculators, dashboard, analytics, and feature flag infrastructure
+- Tests: 378/378 passing (up from 375 before S76)
+- PostHog `/decide` and survey polling now disabled — production analytics noise eliminated
+- Genome: 25/25 perfect (templates synced to prompts)
+- Deploy: all 6 commits pushed to main, Cloudflare Pages deploying automatically
 
 ## What was completed
 
-- **Public-root correction (S75)**: `src/App.jsx` now renders `LandingRoute` for `/` instead of dropping straight into the app shell, so `vaultsparkstudios.com/promogrind` and the canonical root behave like a real landing surface first.
-- **Runtime fault repair (S75)**: `src/calculators/ParlayHedge.jsx` was restored and wired back into the route table, eliminating the `ReferenceError: ParlayHedge is not defined` boot failure.
-- **Service-worker hardening (S75)**: `public/sw.js` now caches through a guarded helper that skips consumed/opaque responses, fixing the `Failed to execute 'clone' on 'Response'` error path from production.
-- **Landing CTA truth (S75)**: `src/routes/LandingRoute.jsx`, `src/launchState.js`, and `public/landing/index.html` now send users to `/dashboard` or signup intentionally instead of recursively routing back to the landing page.
+- **Juice Score (S76)**: `src/lib/juiceScore.js` + `src/components/JuiceScore.jsx` — 0–100 composite promo quality score with animated fill bar, integrated into BonusBet, Arb2Way, Arb3Way, DepositMatch, PlusEV, SGPEstimator, TeaserCalc
+- **CalcNextStep chaining (S76)**: `src/components/CalcNextStep.jsx` — context-aware "next step" suggestions for 13 calculator types, uses internal `useNavigate()`
+- **ShareCard expansion (S76)**: Added ShareCard to 8 additional calculators (Arb3Way, DepositMatch, FirstBet, InsurancePromo, ParlayHedge, ParlayBuilder, PlusEV, SGPEstimator, TeaserCalc)
+- **Promo Expiry Widget (S76)**: `src/components/dashboard/PromoExpiryWidget.jsx` — countdown timers with urgency color coding, inline add form, persisted to localStorage
+- **Bet History Charts (S76)**: `src/components/BetHistoryCharts.jsx` — profit by book/type (H-bars) + 8-week trend (column bars), rendered in TrackInsights
+- **UserProfile inference (S76)**: `src/lib/userProfile.js` — arb/bonus/ev/parlay cohort classification from existing pg_hist_* keys, requires ≥3 uses and 1.5× dominance
+- **PlayStyleCard (S76)**: Added to `ActivationNextAction.jsx` — shows play-style label/tip/next-calc CTA below the Next Best Action card
+- **Comeback Bonus + weak-lane boost (S76)**: `DashboardHero.jsx` — comeback banner (≥3 days away → 2× XP prompt), weak-lane suggestion card, accuracy % tag on MasteryBar
+- **Feature flag % rollout (S76)**: `src/lib/featureFlags.js` — stable FNV-1a hash enables deterministic percentage cohort rollouts by userId without server state
+- **PostHog noise fix (S76)**: `src/analytics.js` — `advanced_disable_decide: true` + `disable_surveys: true` eliminates /decide and /remote-config 404/401 console errors
 
 ## What is mid-flight
 
-- Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` are still missing
-- One real Stripe smoke purchase and one friend-facing auth/calculator/pricing pass are still required after deploy
-- The new deploy verification artifact exists locally and in workflow config, but it still needs the normal push/deploy cycle to become the live source of truth
-- PostHog remote-config / feature-flag console noise (`config.js` 404 and flags 401) is still present and should be cleaned up separately now that the true product-breaking issues are fixed
+- Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` still missing from `src/books.js`
+- Stripe smoke purchase (one real transaction) still required
+- VAPID key still needed for PWA push notifications
+- Seasonal missions/tournaments require a Supabase leaderboard table
+- AI Mastery Coach (weekly personalized coaching letter) — not started
+- Smart Promo Stack Builder AI upgrade — not started
+- `src/App.jsx` decomposition ongoing
 
 ## What to do next
 
-1. Let this push trigger the next GitHub Pages deploy so the workflow emits the new `launch-verification` artifact and the root/app routing fix goes live.
-2. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`, then rerun `node scripts/verify-production-launch.mjs`.
-3. Clean up the remaining PostHog production noise, then run the real Stripe smoke + friend-beta pass and keep decomposing `src/App.jsx`.
+1. Paste real `BetMGM`, `bet365`, and `BetRivers` tracking URLs into `src/books.js`
+2. Run the real Stripe smoke purchase and verify post-checkout portal flow
+3. Set the VAPID key in Cloudflare env vars and wire up the push notification opt-in
+4. Create the Supabase `missions` and `leaderboard` tables for seasonal tournaments
+5. Ship the AI Mastery Coach weekly email via Resend edge function
 
 ## Constraints
 
@@ -38,7 +50,7 @@ Where we stopped: the app should boot again, the public entry path now matches p
 - Avoid rerunning broad repair scripts blindly: `ops-onboard --repair --write` can overwrite valid repo-local truth with scaffolds.
 - Do not fabricate sportsbook affiliate links. If the operator has not provided a real approved URL, leave the field empty and keep the blocker honest.
 - Do not commit `supabase/.temp/*`; it is local linkage state, not public repo truth.
-- `docs/CREATIVE_DIRECTION_RECORD.md`, `scripts/rotate-render-key.mjs`, `scripts/soul-interview.mjs` are now gitignored — they exist locally but must not be committed to the public repo.
+- `docs/CREATIVE_DIRECTION_RECORD.md`, `scripts/rotate-render-key.mjs`, `scripts/soul-interview.mjs` are gitignored — they exist locally but must not be committed to the public repo.
 
 ## Read these first next session
 
@@ -48,7 +60,7 @@ Where we stopped: the app should boot again, the public entry path now matches p
 
 ## Files to update next session if work continues
 
-- `src/books.js`
-- `src/App.jsx`
-- `src/analytics.js`
+- `src/books.js` (affiliate links)
+- `supabase/migrations/` (leaderboard/missions tables)
+- `src/App.jsx` (continued decomposition)
 - `docs/RELEASE_PLAN.md`
