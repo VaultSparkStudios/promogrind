@@ -5,16 +5,19 @@
 - finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
 - run one real Stripe smoke purchase and verify the post-checkout portal/subscription path
 - complete one friend-facing auth/calculator/pricing pass after deploy and record it in `context/LAUNCH_PROOFS.json`
-- continue decomposing the remaining high-churn `src/App.jsx` seams now that analytics bootstrap is deferred and the initial entry is lighter
+- continue decomposing the remaining high-churn `src/App.jsx` seams now that checkout notification handling is extracted and the initial entry is lighter
 
 ## Next
 
 - auto-route scanner/community findings into the shared workflow graph with remote reconciliation once the live migrations are in place
-- normalize any remaining launch/admin CTA surfaces onto `getBookLinkMeta` so monetization truth and analytics stay on one helper contract
 - keep decomposing the remaining high-churn `src/App.jsx` seams beyond `AppChrome`/`appText`
-- add adaptive-ranking telemetry snapshots so hot/cold lane tuning can move from heuristics toward observed outcome data [SIL]
 
 ## Shipped This Session
+
+- normalize remaining sportsbook CTA surfaces onto `getBookLinkMeta` — **DONE S78**: calculator CTAs, tracker signup links, unclaimed-value cards, and shadow-book open links now share the canonical link metadata/analytics contract, including launch-required and monetization-readiness flags.
+- add adaptive-ranking telemetry snapshots so hot/cold lane tuning can move from heuristics toward observed outcome data [SIL] — **DONE S78**: dashboard snapshots now include `adaptiveRankingSnapshot` with top promo, reason counts, hot/cold signals, queue pressure, and feedback coverage; tests cover the new snapshot.
+- continue decomposing the remaining high-churn `src/App.jsx` seams — **DONE S78 partial**: extracted checkout-unavailable notification handling into `src/app/AppNotifications.jsx`, reducing another app-shell responsibility without changing checkout truth.
+- harden manual launch-proof updates — **DONE S78**: `scripts/update-launch-proof.mjs` now lists proof blockers, validates status values, and requires evidence before a proof can be marked complete.
 
 - audit launch readiness end-to-end and add a complete local launch gate — **DONE S77**: added `npm run verify:launch-local`, fixed stale launch truth to `380/380`, and verified tests, launch smoke, UX route integrity, browser smoke, bundle budget, and strict public-repo sanitization in one command.
 - add UX/navigation integrity coverage for public unveil confidence — **DONE S77**: added `scripts/validate-ux-route-integrity.mjs` to scan app route slugs, public HTML internal links, required public pages, responsible-gambling copy, and free-account launch copy across 60 app routes and 98 public HTML files.

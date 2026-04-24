@@ -179,6 +179,61 @@ export function buildAdaptivePromoPlan({
   };
 }
 
+export function buildAdaptiveRankingSnapshot({
+  plan = {},
+  snapshot = {},
+  insights = {},
+  hotLanes = {},
+  now = new Date(),
+} = {}) {
+  const rankedPromos = Array.isArray(plan.topPromos) ? plan.topPromos : [];
+  const reasonCounts = rankedPromos.reduce((counts, promo) => {
+    (promo.reasons || []).forEach((reason) => {
+      counts[reason] = (counts[reason] || 0) + 1;
+    });
+    return counts;
+  }, {});
+  const topPromo = rankedPromos[0] || null;
+  const settledCount = Number(insights.settledCount || 0);
+  const feedbackCount = Array.isArray(insights.feedbackEntries) ? insights.feedbackEntries.length : 0;
+  const feedbackCoverage = feedbackCount > 0
+    ? Math.round(((settledCount + (insights.skippedFeedback?.length || 0)) / feedbackCount) * 100)
+    : 0;
+  const coldAlert = (insights.topDriftAlerts || []).find((alert) => alert.direction === "negative") || null;
+
+  return {
+    generatedAt: (now instanceof Date ? now : new Date(now)).toISOString(),
+    mode: plan.mode || "build",
+    topPromo: topPromo
+      ? {
+          book: topPromo.book,
+          promo: topPromo.promo,
+          promoType: topPromo.promoType,
+          score: topPromo.score,
+          reasons: topPromo.reasons || [],
+        }
+      : null,
+    rankedCount: rankedPromos.length,
+    reasonCounts,
+    queuePressure: Number(plan.workflowBacklog || 0),
+    feedbackCoverage,
+    hotSignals: {
+      promoTypes: (hotLanes.hotPromoTypes || []).map((lane) => lane.key),
+      books: (hotLanes.hotBooks || []).map((lane) => lane.key),
+    },
+    coldSignal: coldAlert
+      ? {
+          scope: coldAlert.scope,
+          key: coldAlert.key,
+          summary: coldAlert.summary,
+        }
+      : null,
+    expiringCount: snapshot.expiringBooks?.length || 0,
+    openWorkflowCount: snapshot.openWorkflowCount || 0,
+    waitingWorkflowCount: snapshot.waitingWorkflowCount || 0,
+  };
+}
+
 export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(), bankrollValue = "", { includePlaybooks = false, includePortfolio = false } = {}) {
   const { todayStr, in3DaysStr, monthKey } = getTodayContext(now);
   const bets = data.bets || [];
@@ -258,6 +313,13 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
     now,
     insights: trackInsights,
     hotLanes,
+  });
+  snapshot.adaptiveRankingSnapshot = buildAdaptiveRankingSnapshot({
+    plan: snapshot.adaptivePlan,
+    snapshot,
+    insights: trackInsights,
+    hotLanes,
+    now,
   });
 
   return snapshot;

@@ -313,10 +313,24 @@ export function getBookLinkMeta(book) {
   const hasAffiliate = hasConfiguredAffiliateUrl(book);
   const hasReferral = hasConfiguredReferralUrl(book);
   return {
+    book: book?.name || "unknown",
     url,
     linkType: hasAffiliate ? "affiliate" : hasReferral ? "referral" : book?.signupLink ? "signup" : "homepage",
     configuredAffiliate: hasAffiliate,
     configuredMonetization: hasAffiliate || hasReferral,
+    launchRequired: REQUIRED_LAUNCH_MONETIZATION_BOOKS.includes(book?.name),
+  };
+}
+
+export function getBookLinkAnalyticsProps(book, extra = {}) {
+  const meta = getBookLinkMeta(book);
+  return {
+    book: meta.book,
+    linkType: meta.linkType,
+    configuredAffiliate: meta.configuredAffiliate,
+    configuredMonetization: meta.configuredMonetization,
+    launchRequired: meta.launchRequired,
+    ...extra,
   };
 }
 

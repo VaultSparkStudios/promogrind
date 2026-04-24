@@ -3,6 +3,7 @@ import {
   BOOKS,
   REQUIRED_LAUNCH_MONETIZATION_BOOKS,
   getBookUrl,
+  getBookLinkAnalyticsProps,
   getConfiguredAffiliateCount,
   getConfiguredMonetizationCount,
   getBookLinkMeta,
@@ -86,10 +87,24 @@ describe("book affiliate helpers", () => {
       configuredMonetization: true,
     });
     expect(getBookLinkMeta(signupBook)).toMatchObject({
+      book: signupBook.name,
       url: signupBook.signupLink,
       linkType: "signup",
       configuredAffiliate: false,
       configuredMonetization: false,
+      launchRequired: true,
+    });
+  });
+
+  it("returns canonical analytics props with caller overrides", () => {
+    const book = BOOKS.find((entry) => entry.name === "BetMGM");
+    expect(getBookLinkAnalyticsProps(book, { surface: "test", book: "Override" })).toMatchObject({
+      book: "Override",
+      surface: "test",
+      linkType: "signup",
+      configuredAffiliate: false,
+      configuredMonetization: false,
+      launchRequired: true,
     });
   });
 });

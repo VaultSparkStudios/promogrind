@@ -1,24 +1,10 @@
-# Genius Hit List — Session 71
+# Genius Hit List — Session 77
 
-> Generated: 2026-04-23 | Scope: founder-portfolio | Pattern detectors: 2 signals evaluated | Top 12 shown
-
----
-
-## 💡 #1  Run ops.mjs doctor — full studio health check before planning
-
-**Tier:** 💡 MEDIUM · **Category:** speed · **Pattern:** 68 · **IGNIS:** 76 (fire) · **Final:** 106
-
-One command runs all validators. Use at session start to catch issues early.
-
-*IGNIS rank:* cat:INFRA(+16)
-
-```bash
-node scripts/ops.mjs doctor
-```
+> Generated: 2026-04-24 | Scope: founder-portfolio | Pattern detectors: 1 signals evaluated | Top 12 shown
 
 ---
 
-## 🔧 #2  Protocol Oracle FAQ cache stale (999d)
+## 🔧 #1  Protocol Oracle FAQ cache stale (999d)
 
 **Tier:** 🔧 LOW · **Category:** protocol · **Pattern:** 45 · **IGNIS:** 80 (fire) · **Final:** 85
 

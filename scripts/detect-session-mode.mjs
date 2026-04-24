@@ -152,6 +152,45 @@ try {
 } catch { /* best effort */ }
 const modelShiftSuggested = currentTierModel && recommendedModel && recommendedModel !== currentTierModel;
 
+// ── Session-mode hints + intent classification (S63e) ──────────────────────
+let hint = null;
+let hintSlug = null;
+try {
+  const hintsPath = path.join(ROOT, 'portfolio', 'SESSION_MODE_HINTS.json');
+  if (fs.existsSync(hintsPath)) {
+    const hints = JSON.parse(fs.readFileSync(hintsPath, 'utf8'));
+    // Match current repo slug via PROJECT_STATUS.slug or basename.
+    const slug = status.slug || path.basename(ROOT);
+    hintSlug = slug;
+    hint = hints.bySlug?.[slug] || null;
+  }
+} catch { /* best-effort */ }
+
+let intentClassification = null;
+try {
+  const mod = await import('./classify-session-intent.mjs');
+  intentClassification = mod.classifyIntent(ROOT);
+} catch { /* non-fatal — defaults apply */ }
+
+// Auto-de-escalation: once plan-phase recorded + intent=execution + hint allows,
+// recommend dropping to sonnet mid-session.
+let autoDeescalateSuggested = false;
+if (hint?.autoDeescalate && intentClassification?.intent === 'execution' && currentTierModel === 'opus') {
+  // Was plan-mode active earlier this session?
+  const lockText = (() => { try { return fs.readFileSync(path.join(ROOT, 'context', '.session-lock'), 'utf8'); } catch { return ''; } })();
+  const planDetectedActive = /plan_mode_detected:\s*active/i.test(lockText) || !!status.planModeLastActivatedAt;
+  if (planDetectedActive) autoDeescalateSuggested = true;
+}
+
+// Apply intent override when hint's preferredIntent differs from classifier,
+// using hint as strong signal + classifier as observed reality. If the two
+// agree, boost confidence.
+let effectiveIntent = intentClassification?.intent || null;
+if (hint?.preferredIntent && (!effectiveIntent || (intentClassification?.scores?.[hint.preferredIntent] || 0) > 0)) {
+  effectiveIntent = hint.preferredIntent;
+}
+const intentModel = intentClassification?.intentModel || null;
+
 const result = {
   currentMode,
   recommended,
@@ -173,6 +212,12 @@ const result = {
   modelShiftSuggested,
   planModeActive,
   planModeSlash,
+  hintSlug,
+  hint,
+  intentClassification,
+  effectiveIntent,
+  intentModel,
+  autoDeescalateSuggested,
 };
 
 if (jsonMode) {
@@ -201,6 +246,23 @@ if (modelShiftSuggested) {
 if (planModeActive && planModeSlash && recommended !== 'founder') {
   console.log(`ℹ Plan-mode reminder: this repo is ${currentTier} — run ${planModeSlash} once this session to activate Opus-plans-Sonnet-executes.`);
   console.log(`   (settings.json can only pin concrete models; plan-mode is a runtime slash-command toggle.)`);
+  // Emit the literal slash string on its own line so Claude Code re-reads it
+  // as an in-session instruction (S63e #2 auto-emit).
+  console.log('');
+  console.log(planModeSlash);
+  console.log('');
+  console.log(`   (After running the above, stamp it with: node scripts/mark-plan-mode.mjs)`);
+}
+
+if (effectiveIntent) {
+  const intentTag = intentClassification?.intent === effectiveIntent ? '' : ' (hint-overridden)';
+  console.log(`◆ Session intent: ${effectiveIntent.toUpperCase()}${intentTag} · prefers ${intentModel || '?'}`);
+  if (hint?.note) console.log(`  hint: ${hint.note}`);
+}
+
+if (autoDeescalateSuggested) {
+  console.log(`⚡ Auto-de-escalate: plan phase complete + execution intent detected.`);
+  console.log(`   Consider /model sonnet for the remaining implementation work (hint: ${hintSlug}).`);
 }
 
 if (explain) {

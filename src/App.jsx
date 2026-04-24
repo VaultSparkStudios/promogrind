@@ -1,6 +1,6 @@
 ﻿import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BOOKS, getBookUrl } from "./books.js";
+import { BOOKS } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
 import { flagCalcUsed } from "./lib/missions.js";
@@ -10,6 +10,7 @@ import { computeStreak } from "./lib/streaks.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
+import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_UI, SEARCH_UI } from "./app/appText.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
@@ -107,17 +108,6 @@ import { getQuickCalcFallbackSlug } from "./workflows/actionGraph.js";
 
 // â•â•â• BOOK CTA (shown at profitable calc results) â•â•â•
 // promoType: "bonus"|"boost"|"safety"|"arb"|null â€” sorts most relevant books first
-// Listens for checkout-unavailable events fired by auth.js when Stripe is in test mode
-const CheckoutListener = () => {
-  const toast = useToast();
-  useEffect(()=>{
-    const handler = () => toast && toast('Paid upgrades launching soon â€” stay tuned!');
-    window.addEventListener('pg:checkout-unavailable', handler);
-    return () => window.removeEventListener('pg:checkout-unavailable', handler);
-  }, []);
-  return null;
-};
-
 // FeatureUnavailableCard â†’ ./ui.jsx
 
 // CommunityWinsWall, SmartPromoRecommender extracted to src/components/dashboard/

@@ -78,3 +78,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: public-unveil work must pair ambitious polish with strict truthfulness: green local gates, verified UX/navigation, clear security posture, current legal/SEO copy, and marketing that says FORGE/public-unlaunched until external launch proofs are complete.
 - Why it matters: public marketing must create trust before traffic arrives; overstated status, dead links, stale copy, or unverified flows would damage launch credibility.
 - Supersedes prior entry: —
+
+### 2026-04-24 — Implement highest-impact items in one optimal pass
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): Implement all next highest-impact PromoGrind items at the highest/optimal quality in one pass, in the recommended efficient order; then close out, update memory/context/CDR/task-board files, commit, and push to GitHub.
+- Area affected: feature / scope / process
+- Previous state: the next-impact list mixed repo-controllable improvements with external launch proofs that required operator/tester action.
+- New required direction: implement all code-controllable improvements in one rigorous pass, keep external proof blockers honest rather than fabricating completion, and leave the repo closed out with all context surfaces updated and pushed.
+- Why it matters: PromoGrind's public-unveil posture depends on both high product quality and strict launch truth; code improvements should compound without erasing real proof requirements.
+- Supersedes prior entry: —

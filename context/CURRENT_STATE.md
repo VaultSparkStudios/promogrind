@@ -1,11 +1,11 @@
 # Current State
 
-Last updated: 2026-04-24 (S77)
+Last updated: 2026-04-24 (S78)
 
 ## Snapshot
 
 - Date: 2026-04-24
-- Overall status: deployed product with a green local launch gate, expanded UX/navigation smoke coverage, public-repo sanitization passing, and only external release-proof blockers still open
+- Overall status: deployed product with a green local launch gate, canonical sportsbook CTA link metadata, adaptive ranking telemetry snapshots, public-repo sanitization passing, and only external release-proof blockers still open
 - Current phase: public-unveil launch hardening with external blocker cleanup
 - Canonical launch proof surface: `context/LAUNCH_PROOFS.json`
 
@@ -17,8 +17,8 @@ Last updated: 2026-04-24 (S77)
 - UX route integrity: `scripts/validate-ux-route-integrity.mjs` checks 60 app routes, 98 public HTML files, required public pages, internal links, responsible-gambling copy, and free-account launch copy
 - Cross-repo public marketing sync: `vaultsparkstudios.com/projects/promogrind/` now describes PromoGrind as deployed/FORGE/public-unlaunched with 53 calculators, beta-gated paid/AI surfaces, real `https://promogrind.bet/` CTAs, and no stale creator-dashboard claims
 - Gamification: settlement mastery ladder (8 promo types × 4 levels), 30-badge achievement system, daily missions (15-pool, LCG-seeded) with auto-completion and XP tracking
-- Systems: Supabase-backed auth/data flows, repaired Stripe checkout/customer-portal paths, AI edge functions (with AbortController + exponential-backoff retry), push/onboarding/community surfaces, Studio export/contract generation, shared AI gateway/workflow store layers, adaptive dashboard planning, shared workflow suggestion builders, Pages push-alert env plumbing, a machine-readable launch proof surface, post-deploy launch-verification artifacts, normalized CTA link metadata, `AppChrome`/`appText` seams, restored `ParlayHedge` route coverage, and safer service-worker cache writes that avoid the consumed-response clone failure seen in production
-- Test coverage: 380 tests passing
+- Systems: Supabase-backed auth/data flows, repaired Stripe checkout/customer-portal paths, AI edge functions (with AbortController + exponential-backoff retry), push/onboarding/community surfaces, Studio export/contract generation, shared AI gateway/workflow store layers, adaptive dashboard planning with `adaptiveRankingSnapshot`, shared workflow suggestion builders, Pages push-alert env plumbing, a machine-readable launch proof surface, post-deploy launch-verification artifacts, normalized CTA link metadata and analytics, `AppChrome`/`appText`/`AppNotifications` seams, restored `ParlayHedge` route coverage, and safer service-worker cache writes that avoid the consumed-response clone failure seen in production
+- Test coverage: 381 tests passing
 - Security: strict public-repo sanitization scan 0 critical / 0 warning; scan now respects public-repo protocol docs and git-tracked public files instead of false-failing on ignored local ops state
 - Important paths: `src/App.jsx`, `src/app/`, `src/ai/gateway.js`, `src/workflows/`, `src/lib/` (mastery.js, achievements.js, missions.js), `src/components/`, `supabase/functions/`, `scripts/`, `context/`
 
@@ -26,7 +26,7 @@ Last updated: 2026-04-24 (S77)
 
 - Active work: finishing monetization coverage for sportsbook CTAs with real approved affiliate/referral links
 - Active work: completing one live Stripe smoke purchase and one friend-facing auth/calculator/pricing pass before public announcement
-- Active work: continuing to decompose the remaining high-churn `src/App.jsx` seams from the current app-shell boundaries
+- Active work: continuing to decompose the remaining high-churn `src/App.jsx` seams from the current app-shell boundaries after extracting checkout-unavailable notification handling
 
 ## Blockers
 

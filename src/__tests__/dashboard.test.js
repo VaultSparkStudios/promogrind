@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildAdaptivePromoPlan, getBankrollPosture, getDashboardSnapshot, getNextBestAction, getTodayPromos, getUnfinishedWork, inferPromoTypeFromSchedule } from "../dashboard/today.js";
+import { buildAdaptivePromoPlan, buildAdaptiveRankingSnapshot, getBankrollPosture, getDashboardSnapshot, getNextBestAction, getTodayPromos, getUnfinishedWork, inferPromoTypeFromSchedule } from "../dashboard/today.js";
 
 const schedule = [
   { book: "DraftKings", promo: "Daily Boost", day: "Daily", value: "+$9" },
@@ -60,6 +60,7 @@ describe("dashboard helpers", () => {
     expect(snapshot.topWorkflow?.title).toBe("Highest value workflow");
     expect(["BetRivers", "bet365", "FanDuel", "ESPN BET", "Fanatics"]).toContain(snapshot.recommendedBooks[0]?.book.name);
     expect(snapshot.adaptivePlan).toBeTruthy();
+    expect(snapshot.adaptiveRankingSnapshot.rankedCount).toBeGreaterThan(0);
     expect(snapshot.adaptivePlan.mode).toBe("capture");
   });
 
@@ -240,6 +241,18 @@ describe("dashboard helpers", () => {
     expect(plan.coldLane?.key).toBe("profit_boost");
     expect(plan.topPromos[0].book).toBe("DraftKings");
     expect(plan.topPromos[0].reasons.some((reason) => ["hot lane", "book running hot"].includes(reason))).toBe(true);
+
+    const telemetry = buildAdaptiveRankingSnapshot({
+      plan,
+      snapshot,
+      insights: snapshot.trackInsights,
+      hotLanes: snapshot.hotLanes,
+      now,
+    });
+    expect(telemetry.topPromo.book).toBe("DraftKings");
+    expect((telemetry.reasonCounts["hot lane"] || 0) + (telemetry.reasonCounts["book running hot"] || 0)).toBeGreaterThanOrEqual(1);
+    expect(telemetry.hotSignals.books).toContain("DraftKings");
+    expect(telemetry.coldSignal.key).toBe("profit_boost");
   });
 
   it("prioritizes expiring value over backlog and demotes non-urgent promos when workflows are stacked", () => {

@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-04-24 (S77)
+Last reviewed: 2026-04-24 (S78)
 Overall status: yellow
-Next action: keep affiliate-link truth honest until real URLs exist, keep `npm run verify:launch-local` green as the canonical local launch gate, use `context/LAUNCH_PROOFS.json` as the canonical manual blocker surface, and verify the next deploy artifact after push.
+Next action: inspect the next deploy artifact after push, keep affiliate-link truth honest until real URLs exist, keep `npm run verify:launch-local` green as the canonical local launch gate, and use `context/LAUNCH_PROOFS.json` / `scripts/update-launch-proof.mjs --list` as the canonical manual blocker surface.
 
 ---
 
@@ -20,12 +20,12 @@ Next action: keep affiliate-link truth honest until real URLs exist, keep `npm r
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 4 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `RELEASE_PLAN.md`, `LAUNCH_PROOFS.json`, and `PROJECT_STATUS.json` now agree that the only remaining launch blockers are external affiliate/verification tasks. |
-| Prompt/template alignment | 3 | Canonical templates are aligned, but doctor/autopilot policy still assumes yellow genome should block public-safe closeout. |
-| Derived-view freshness | 5 | Startup brief, contract generation, action queue, fast-start, release truth, and deploy verification artifacts now describe the same S74 posture. |
-| Handoff continuity | 4 | Session 74 handoff fully reflects the shipped repo-local work, targeted verification, and the remaining external blockers. |
-| Contradiction density | 2 | The main contradiction left is still operational: closeout autopilot may abort on the yellow genome even though repo truth is coherent enough for an honest manual fallback. |
-| **Total** | **18 / 25** | Yellow: derived truth is tighter after S74 launch-proof automation, but autopilot policy still over-blocks public-safe repos. |
+| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `RELEASE_PLAN.md`, `LAUNCH_PROOFS.json`, and `PROJECT_STATUS.json` now agree that repo-owned work advanced while the only remaining launch blockers are external affiliate/verification tasks. |
+| Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
+| Derived-view freshness | 5 | Startup brief, task board, release truth, launch checklist, and proof queue now describe the same S78 posture. |
+| Handoff continuity | 5 | Session 78 handoff reflects shipped repo-local work, green verification, and the remaining external blockers. |
+| Contradiction density | 4 | The main contradiction left is operational/public-repo policy around generated private-shim files, not product launch truth. |
+| **Total** | **23 / 25** | Green-yellow: canonical truth surfaces are coherent; remaining yellow state is due to external launch proofs and public/private ops shim tension. |
 
 ---
 
@@ -33,12 +33,12 @@ Next action: keep affiliate-link truth honest until real URLs exist, keep `npm r
 
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
-| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-04-24 | PromoGrind status now reflects `FORGE`, public-unlaunched, `380/380` tests, green local launch gate, and unchanged external blockers. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-24 | S77 write-back aligns state, handoff, task board, work log, release docs, and audit around the same public-unveil hardening tranche. |
+| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-04-24 | PromoGrind status now reflects `FORGE`, public-unlaunched, `381/381` tests, green local launch gate, S78 repo improvements, and unchanged external blockers. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-24 | S78 write-back aligns state, handoff, task board, work log, release docs, and audit around the same proof-honest launch-hardening tranche. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
-| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts | yellow | 2026-04-24 | Local launch gate is green and docs are current, but required sportsbook monetization links, real Stripe smoke, and friend beta remain incomplete. |
+| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts | yellow | 2026-04-24 | Local launch gate is green and proof updates are evidence-gated, but required sportsbook monetization links, real Stripe smoke, and friend beta remain incomplete. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-24 | Strict public-repo sanitization reports 0 critical / 0 warning and no longer false-flags public protocol/provenance docs or ignored local ops state. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
 
@@ -46,10 +46,17 @@ Next action: keep affiliate-link truth honest until real URLs exist, keep `npm r
 
 ## Current Contradictions
 
-- `run-doctor` still blocks closeout on a yellow `18/25` genome even though the repo's canonical truth surfaces are consistent enough for an honest manual closeout.
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
 - The deploy-time verification artifact needs to be checked after this push/deploy cycle completes.
+
+## Resolved This Session (S78)
+
+- Normalized calculator, tracker, and shadow-book sportsbook CTA analytics onto `getBookLinkMeta` / `getBookLinkAnalyticsProps`.
+- Added `adaptiveRankingSnapshot` so dashboard ranking decisions expose top promo, reason counts, hot/cold signals, queue pressure, and feedback coverage.
+- Extracted checkout-unavailable notification handling into `src/app/AppNotifications.jsx`, reducing `src/App.jsx` shell responsibility.
+- Hardened `scripts/update-launch-proof.mjs` with `--list`, status validation, and evidence-required proof completion.
+- Verified `npm run verify:launch-local` green with `381/381` tests, launch smoke, UX route integrity, browser smoke, bundle budget, and strict public-repo sanitization.
 
 ## Resolved This Session (S77)
 

@@ -47,6 +47,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const tone = TONE[posture.tone] || K.ac;
   const recentTone = snapshot.recentSettledProfit >= 0 ? K.gn : K.rd;
   const adaptivePlan = snapshot.adaptivePlan || {};
+  const rankingSnapshot = snapshot.adaptiveRankingSnapshot || {};
   const calibration = adaptivePlan.calibration || snapshot.trackInsights?.selfCalibration || {};
   const toast = useToast();
   const { syncAppData } = React.useContext(AppDataCtx) || {};
@@ -173,6 +174,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
           <InsightChip label="Accuracy" value={calibration.accuracyRate == null ? "No sample" : `${Math.round(calibration.accuracyRate)}%`} tone={calibration.accuracyRate >= 75 ? K.gn : calibration.accuracyRate >= 55 ? K.ac : K.yl} />
           <InsightChip label="Execution" value={calibration.averageExecutionMinutes == null ? "Not tracked" : `~${Math.round(calibration.averageExecutionMinutes)}m`} tone={K.ac} />
           <InsightChip label="Repeat Rate" value={calibration.repeatRate == null ? "No vote" : `${Math.round(calibration.repeatRate)}%`} tone={calibration.repeatRate >= 65 ? K.gn : calibration.repeatRate >= 40 ? K.ac : K.yl} />
+          <InsightChip label="Rank Signals" value={`${rankingSnapshot.rankedCount || 0} ranked · ${Object.keys(rankingSnapshot.reasonCounts || {}).length} reasons`} tone={K.ac} />
         </div>
       </div>
 

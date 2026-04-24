@@ -290,6 +290,23 @@
       },
       "delta": 0,
       "cause": "S77 public-unveil hardening — green local launch gate, UX route integrity, responsive/browser smoke regression coverage,"
+    },
+    {
+      "date": "2026-04-24",
+      "session": 78,
+      "total": 23,
+      "maxTotal": 25,
+      "overallStatus": "yellow",
+      "lastReviewed": "2026-04-24 (S78)",
+      "dimensions": {
+        "schema_alignment": 5,
+        "prompt_template_alignment": 4,
+        "derived_view_freshness": 5,
+        "handoff_continuity": 5,
+        "contradiction_density": 4
+      },
+      "delta": 5,
+      "cause": "S78 launch-hardening refinement — canonical sportsbook CTA link analytics, adaptive ranking telemetry snapshots, evidenc"
     }
   ]
 }

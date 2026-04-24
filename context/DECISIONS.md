@@ -89,6 +89,33 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 
 - Status: accepted
 - Context: the VaultSpark Studios website had stale PromoGrind copy that described a creator promotion dashboard, linked to a missing `/promogrind/` route, and presented the product as fully Sparked despite `PROJECT_STATUS.json` saying `FORGE` and `public-unlaunched`.
+### 2026-04-24 - Keep launch proofs evidence-gated and listable
+
+- Status: accepted
+- Context: Session 78 improved the repo-owned launch surfaces, but the remaining full-launch blockers are still operator/tester proofs that cannot be honestly completed from code alone.
+- Decision: harden `scripts/update-launch-proof.mjs` so proofs can be listed mechanically, status values are constrained, and `complete` requires explicit evidence.
+- Alternatives considered: manually editing `context/LAUNCH_PROOFS.json`; allowing proof completion without evidence; marking blockers partial after local checks only.
+- Why this was chosen: launch truth should be auditable, and external proof state must not drift just because local code quality improved.
+- Follow-up: after each real proof, use `node scripts/update-launch-proof.mjs --proof <key> --status complete --evidence "..."` and rerun launch verification.
+
+### 2026-04-24 - Extend book-link metadata to all sportsbook CTA analytics
+
+- Status: accepted
+- Context: `BookCTA` already used normalized link metadata, but tracker and shadow-book surfaces still had raw URL handling that could diverge from launch monetization truth and analytics labels.
+- Decision: add `getBookLinkAnalyticsProps` in `src/books.js` and move sportsbook CTA click events onto that shared contract, including `launchRequired`, `configuredAffiliate`, and `configuredMonetization`.
+- Alternatives considered: leave tracker/shadow-book links as plain links; duplicate metadata props per component; only normalize the calculator CTA.
+- Why this was chosen: monetization, launch verification, and analytics need one interpretation of affiliate/referral/signup/homepage links across all CTA surfaces.
+- Follow-up: keep any new sportsbook CTA surface on the same helper rather than reading raw `affiliateLink` fields.
+
+### 2026-04-24 - Adaptive ranking needs snapshots before live weight tuning
+
+- Status: accepted
+- Context: PromoGrind's adaptive promo ranking had useful hot/cold/backlog heuristics, but no compact snapshot that downstream Studio or product surfaces could use to understand what signals actually influenced ranking.
+- Decision: add `buildAdaptiveRankingSnapshot` to `src/dashboard/today.js` and attach it to dashboard snapshots with top promo, reason counts, hot/cold signals, queue pressure, and feedback coverage.
+- Alternatives considered: tune weights directly from tests; log only raw track insights; postpone telemetry until remote persistence is complete.
+- Why this was chosen: a deterministic local snapshot gives future tuning and Studio exports a stable seam without requiring live telemetry infrastructure first.
+- Follow-up: after real user sessions accumulate, compare ranking snapshots against settled outcomes and tune weights from observed behavior.
+
 - Decision: update the website to describe PromoGrind as a deployed sportsbook promo conversion suite in launch hardening, with 53 calculators, beta-gated paid/AI surfaces, real `https://promogrind.bet/` CTAs, and public announcement gated on affiliate/Stripe/friend-beta proof.
 - Alternatives considered: keep the website status as Sparked for marketing momentum; remove PromoGrind until public launch; link only to the internal project page.
 - Why this was chosen: public marketing should build confidence without overstating launch status or sending users to a dead route.

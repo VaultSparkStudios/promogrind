@@ -13,8 +13,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 77,
-  "currentFocus": "S77 public-unveil hardening — green local launch gate, UX route integrity, responsive/browser smoke regression coverage, public-repo sanitization hardening, Missouri legal copy refresh, and VaultSpark website PromoGrind copy/status sync.",
+  "currentSession": 78,
+  "currentFocus": "S78 launch-hardening refinement — canonical sportsbook CTA link analytics, adaptive ranking telemetry snapshots, evidence-gated launch proof updates, checkout notification seam extraction, and green verify:launch-local gate.",
   "nextMilestone": "Replace real affiliate links for BetMGM/bet365/BetRivers, complete one real Stripe smoke purchase, complete one friend-facing auth/calculator/pricing pass, then rerun launch gates and deploy/announce.",
   "blockers": [
     "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement.",
@@ -22,24 +22,24 @@
     "Complete one friend-facing auth/calculator/pricing pass after deploy."
   ],
   "lastUpdated": "2026-04-24",
-  "silScore": 878,
-  "silAvg3": 845,
-  "silVelocity": 6,
+  "silScore": 891,
+  "silAvg3": 868,
+  "silVelocity": 4,
   "silDebt": "down",
-  "silLastSession": 77,
+  "silLastSession": 78,
   "silMax": 1000,
   "silSparkline": [
-    769,
     783,
     822,
     834,
-    878
+    878,
+    891
   ],
   "ignisScore": 47857,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-04-22",
-  "testsPassing": 380,
-  "testsTotal": 380,
+  "testsPassing": 381,
+  "testsTotal": 381,
   "testsLastRun": "2026-04-24",
   "lastDeployStatus": "deployed-unannounced",
   "truthAuditStatus": "green",
@@ -89,16 +89,16 @@
   "stripeProductionPriceIds": [],
   "silRubricVersion": "3.0",
   "silCategoriesV3": {
-    "devHealth": 97,
+    "devHealth": 96,
     "creativeAlignment": 97,
-    "momentum": 78,
+    "momentum": 76,
     "engagement": 92,
     "processQuality": 99,
     "crossRepoCoherence": 88,
-    "securityPosture": 82,
-    "ecosystemIntegration": 90,
-    "capitalEfficiency": 88,
-    "automationCoverage": 97
+    "securityPosture": 84,
+    "ecosystemIntegration": 91,
+    "capitalEfficiency": 90,
+    "automationCoverage": 98
   },
   "doctorScore": {
     "date": "2026-04-24",
@@ -198,9 +198,11 @@
   },
   "entropyScore": 0.042,
   "entropyLastComputed": "2026-04-23",
-  "modelTier": "T1_sonnet",
-  "modelTierDefault": "sonnet",
+  "modelTier": "T2_opusplan",
+  "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
-  "modelPlanMode": false,
-  "modelPlanModeSlash": null
+  "modelPlanMode": true,
+  "modelPlanModeSlash": "/model opusplan",
+  "sessionMode": "founder",
+  "sessionModeAutoShiftedAt": "2026-04-24T20:07:46.133Z"
 }

@@ -43,12 +43,19 @@ function resolveCapabilities(capabilities) {
 const items = parseHumanItems(readText(TASK_BOARD)).map((item) => {
   const info = classifyBlocker(`${item.title} ${item.description}`);
   const capabilityResults = resolveCapabilities(info.capabilities);
-  const autoReady = capabilityResults.some((entry) => entry.ok);
+  const autoReady = capabilityResults.length > 0 && capabilityResults.every((entry) => entry.ok);
+  // signupUiOnly: capability requires Studio Owner to register at a third-party
+  // dashboard before keys exist. If the keys are MISSING AND signupUiOnly, the
+  // agent cannot "try first" — the elevated-access rule doesn't apply.
+  const signupUiOnly = Boolean(info.signupUiOnly);
+  const capabilitiesMissing = capabilityResults.length > 0 && capabilityResults.some((entry) => !entry.ok);
+  const effectivelyAttemptable = info.attemptable && !(signupUiOnly && capabilitiesMissing);
 
   return {
     ...item,
     category: info.category,
-    attemptable: info.attemptable,
+    attemptable: effectivelyAttemptable,
+    signupUiOnly,
     elevatedProbe: info.elevatedProbe,
     probeCommands: info.probeCommands,
     capabilityResults,
@@ -83,7 +90,7 @@ for (const item of items) {
   lines.push(`## ${item.autoReady ? '⚡' : item.attemptable ? '⚠' : '•'} ${item.title}`);
   lines.push('');
   lines.push(`- **Category:** ${item.category}`);
-  lines.push(`- **Current classification:** ${item.autoReady ? 'agent-attemptable now' : item.attemptable ? 'agent should try first' : 'true human-only unless new access appears'}`);
+  lines.push(`- **Current classification:** ${item.autoReady ? 'agent-attemptable now' : item.attemptable ? 'agent should try first' : item.signupUiOnly ? 'true human-only (dashboard signup required)' : 'true human-only unless new access appears'}`);
   if (item.capabilityResults.length > 0) {
     lines.push(`- **Capabilities:** ${item.capabilityResults.map((entry) => `${entry.capability}=${entry.ok ? 'READY' : 'MISSING'}`).join(' · ')}`);
   } else {

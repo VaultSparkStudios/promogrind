@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { BOOKS, getBookLinkMeta } from "../books.js";
+import { BOOKS, getBookLinkAnalyticsProps, getBookLinkMeta } from "../books.js";
 import { trackEvent } from "../analytics.js";
 import { K, font } from "../lib/shared.js";
 
@@ -30,13 +30,10 @@ const BookCTA = ({ promoType }) => {
             href={linkMeta.url}
             target="_blank"
             rel="noopener noreferrer sponsored"
-            onClick={() => trackEvent("sportsbook_cta_clicked", {
-              book: b.name,
+            onClick={() => trackEvent("sportsbook_cta_clicked", getBookLinkAnalyticsProps(b, {
               promoType: promoType || "general",
-              linkType: linkMeta.linkType,
-              configuredAffiliate: linkMeta.configuredAffiliate,
-              configuredMonetization: linkMeta.configuredMonetization,
-            })}
+              surface: "calculator_cta",
+            }))}
             style={{ padding: "4px 10px", background: `${b.color}15`, border: `1px solid ${b.color}30`, borderRadius: 4, color: b.color, fontSize: 10, fontWeight: 600, textDecoration: "none", fontFamily: font }}
           >
             {b.name} <span style={{ fontSize: 8, opacity: 0.7, fontWeight: 400 }}>21+</span> →
@@ -48,14 +45,11 @@ const BookCTA = ({ promoType }) => {
           rel="noopener noreferrer sponsored"
           onClick={() => {
             const book = sorted[4] || {};
-            const linkMeta = getBookLinkMeta(book);
-            trackEvent("sportsbook_cta_clicked", {
+            trackEvent("sportsbook_cta_clicked", getBookLinkAnalyticsProps(book, {
               book: book.name || "more",
               promoType: promoType || "general",
-              linkType: linkMeta.linkType,
-              configuredAffiliate: linkMeta.configuredAffiliate,
-              configuredMonetization: linkMeta.configuredMonetization,
-            });
+              surface: "calculator_cta_more",
+            }));
           }}
           style={{ padding: "4px 10px", background: `${K.bd}`, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 10, fontWeight: 600, textDecoration: "none", fontFamily: font }}
         >

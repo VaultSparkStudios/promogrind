@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import { K, font, fontD } from "../lib/shared.js";
-import { BOOKS, getBookUrl } from "../books.js";
+import { BOOKS, getBookLinkAnalyticsProps, getBookLinkMeta } from "../books.js";
+import { trackEvent } from "../analytics.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { buildShadowBookProjection } from "../lib/shadow.js";
 
@@ -63,7 +64,8 @@ export default function ShadowBookPanel({ compact = false }) {
       <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 8 }}>
         {missingBooks.map((row) => {
           const book = BOOKS.find((candidate) => candidate.name === row.name);
-          const href = book ? getBookUrl(book) : null;
+          const linkMeta = book ? getBookLinkMeta(book) : null;
+          const href = linkMeta?.url || null;
           return (
             <li
               key={row.name}
@@ -103,7 +105,10 @@ export default function ShadowBookPanel({ compact = false }) {
                 <a
                   href={href}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer sponsored"
+                  onClick={() => trackEvent("sportsbook_cta_clicked", getBookLinkAnalyticsProps(book, {
+                    surface: "shadow_book_panel",
+                  }))}
                   style={{
                     padding: "7px 12px",
                     borderRadius: 8,

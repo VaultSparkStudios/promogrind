@@ -8,18 +8,39 @@ function readFlag(name) {
 const proofKey = readFlag("--proof");
 const status = readFlag("--status");
 const evidence = readFlag("--evidence");
-
-if (!proofKey || !status) {
-  console.error("Usage: node scripts/update-launch-proof.mjs --proof <key> --status <pending|complete> [--evidence \"note\"]");
-  process.exit(1);
-}
+const list = process.argv.includes("--list");
 
 const proofPath = "context/LAUNCH_PROOFS.json";
 const payload = JSON.parse(fs.readFileSync(proofPath, "utf8"));
+
+if (list) {
+  for (const [key, proof] of Object.entries(payload?.proofs || {})) {
+    const marker = proof.status === "complete" ? "complete" : proof.blocking ? "blocking" : "pending";
+    console.log(`${key}: ${marker} - ${proof.label}`);
+  }
+  process.exit(0);
+}
+
+if (!proofKey || !status) {
+  console.error("Usage: node scripts/update-launch-proof.mjs --proof <key> --status <pending|complete> --evidence \"note\"");
+  console.error("       node scripts/update-launch-proof.mjs --list");
+  process.exit(1);
+}
+
 const proof = payload?.proofs?.[proofKey];
 
 if (!proof) {
   console.error(`Unknown proof key: ${proofKey}`);
+  process.exit(1);
+}
+
+if (!["pending", "complete"].includes(status)) {
+  console.error(`Unsupported proof status: ${status}`);
+  process.exit(1);
+}
+
+if (status === "complete" && !evidence?.trim()) {
+  console.error(`Evidence is required before marking ${proofKey} complete.`);
   process.exit(1);
 }
 

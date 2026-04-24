@@ -77,3 +77,9 @@ When a manual proof is completed, update `context/LAUNCH_PROOFS.json` directly o
 ```bash
 node scripts/update-launch-proof.mjs --proof <affiliateLinks|stripeSmoke|friendBeta> --status complete --evidence "What was verified"
 ```
+
+To review the remaining proof queue:
+
+```bash
+node scripts/update-launch-proof.mjs --list
+```

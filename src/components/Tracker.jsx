@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { f, calcROI, K, font, fontD } from "../lib/shared.js";
 import { CANONICAL_APP_URL } from "../launchState.js";
-import { BOOKS, US_BOOK_STATES, getBookUrl } from "../books.js";
+import { BOOKS, US_BOOK_STATES, getBookLinkMeta } from "../books.js";
+import { trackEvent } from "../analytics.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { useToast } from "../contexts.jsx";
 import { Tl, Nt, S } from "../ui.jsx";
@@ -51,14 +52,14 @@ const Tracker = () => {
     {(()=>{
       const completedNames = Object.entries(done).filter(([,v])=>v).map(([k])=>k.toLowerCase());
       const BOOK_LIST = [
-        { name: 'DraftKings', value: 350, link: '' },
-        { name: 'FanDuel', value: 300, link: '' },
-        { name: 'BetMGM', value: 250, link: '' },
-        { name: 'Caesars', value: 300, link: '' },
-        { name: 'bet365', value: 200, link: '' },
-        { name: 'ESPN BET', value: 250, link: '' },
-        { name: 'Fanatics', value: 200, link: '' },
-        { name: 'BetRivers', value: 150, link: '' },
+        { name: 'DraftKings', value: 350 },
+        { name: 'FanDuel', value: 300 },
+        { name: 'BetMGM', value: 250 },
+        { name: 'Caesars', value: 300 },
+        { name: 'bet365', value: 200 },
+        { name: 'ESPN BET', value: 250 },
+        { name: 'Fanatics', value: 200 },
+        { name: 'BetRivers', value: 150 },
       ];
       const unsigned = BOOK_LIST.filter(b => !completedNames.includes(b.name.toLowerCase()));
       if (unsigned.length === 0) return null;
@@ -72,16 +73,20 @@ const Tracker = () => {
             </div>
           </div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:8}}>
-            {unsigned.map(b => (
+            {unsigned.map(b => {
+              const book = BOOKS.find((candidate) => candidate.name === b.name) || b;
+              const linkMeta = getBookLinkMeta(book);
+              return (
               <div key={b.name} style={{padding:10,background:'#0a0e17',borderRadius:8,border:'1px solid #1e293b'}}>
                 <div style={{fontWeight:600,color:'#e2e8f0',fontSize:13,marginBottom:4}}>{b.name}</div>
                 <div style={{color:'#4ade80',fontSize:12,marginBottom:8}}>~${b.value} signup value</div>
-                <a href={getBookUrl(b) || `${CANONICAL_APP_URL}#/promo-finder`} target="_blank" rel="noopener noreferrer sponsored"
+                <a href={linkMeta.url || `${CANONICAL_APP_URL}#/promo-finder`} target="_blank" rel="noopener noreferrer sponsored"
+                   onClick={() => trackEvent("sportsbook_cta_clicked", { book: b.name, surface: "tracker_unclaimed_value", linkType: linkMeta.linkType, configuredAffiliate: linkMeta.configuredAffiliate, configuredMonetization: linkMeta.configuredMonetization, launchRequired: linkMeta.launchRequired })}
                    style={{display:'block',textAlign:'center',padding:'5px 0',background:'#1e3a2f',border:'1px solid #4ade80',color:'#4ade80',borderRadius:5,fontSize:11,fontWeight:700,textDecoration:'none'}}>
                   Claim →
                 </a>
               </div>
-            ))}
+            );})}
           </div>
         </div>
       );
@@ -228,7 +233,20 @@ const Tracker = () => {
             />
           </td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
-            <a href={b.link} target="_blank" rel="noopener noreferrer sponsored" style={{display:"inline-block",padding:"5px 12px",background:K.gn,color:K.bg,borderRadius:5,fontSize:11,fontWeight:700,textDecoration:"none",opacity:done[b.name]?0.4:1}}>Sign Up →</a>
+            {(() => {
+              const linkMeta = getBookLinkMeta(b);
+              return (
+                <a
+                  href={linkMeta.url}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  onClick={() => trackEvent("sportsbook_cta_clicked", { book: b.name, surface: "tracker_table", linkType: linkMeta.linkType, configuredAffiliate: linkMeta.configuredAffiliate, configuredMonetization: linkMeta.configuredMonetization, launchRequired: linkMeta.launchRequired })}
+                  style={{display:"inline-block",padding:"5px 12px",background:K.gn,color:K.bg,borderRadius:5,fontSize:11,fontWeight:700,textDecoration:"none",opacity:done[b.name]?0.4:1}}
+                >
+                  Sign Up →
+                </a>
+              );
+            })()}
           </td>
         </tr>
         {bookEntries.length>0&&<tr key={b.name+'-stats'} style={{opacity:done[b.name]?0.4:1}}><td colSpan={13} style={{padding:"4px 8px 8px 34px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}><div style={{display:"flex",gap:14,fontSize:10,color:K.mt}}><span>Bets: <span style={{color:K.tx,fontWeight:600}}>{bookEntries.length}</span></span><span>P/L: <span style={{color:bookProfit>=0?K.gn:K.rd,fontWeight:600}}>{bookProfit>=0?"+":""}<span>$</span>{f(bookProfit)}</span></span>{roi!==null&&<span>ROI: <span style={{color:roi>=0?K.gn:K.rd,fontWeight:600}}>{f(roi,1)}%</span></span>}</div></td></tr>}

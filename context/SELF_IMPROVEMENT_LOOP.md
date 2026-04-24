@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S72:769 | S73:783 | S74:822 | S75:834 | S77:878
-Avgs — 3: 844.7 [N=3] | all: 703.8 [N=10]
-  └ 3-session (S74/S75/S77): Dev 96.7 | Align 97.0 | Momentum 81.3 | Engage 92.7 | Process 98.3 | Coher 72.0 | Sec 78.3 | Eco 85.7 | Cap 86.3 | Auto 92.7
+Sparkline (last 5 totals): S73:783 | S74:822 | S75:834 | S77:878 | S78:891
+Avgs — 3: 867.7 [N=3] | all: 720.8 [N=11]
+  └ 3-session (S75/S77/S78): Dev 95.3 | Align 96.7 | Momentum 76.7 | Engage 92.0 | Process 98.7 | Coher 78.7 | Sec 78.7 | Eco 86.7 | Cap 87.7 | Auto 93.7
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-24 | Session 77 | Total: 878/1000 | Velocity: 6 | protocolVelocity: 6
+Last session: 2026-04-24 | Session 78 | Total: 891/1000 | Velocity: 4 | protocolVelocity: 4
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -297,6 +297,35 @@ Rolling avg (last 3): Dev 78 | Align 95 | Momentum 82 | Engage 74 | Process 76 |
 2. Turn the workflow kernel into an action graph that every calculator, AI output, scanner hit, and community promo can write into.
 3. Replace shallow streaks with operator mastery ladders tied to settlement quality, lane diversity, and verified execution discipline.
 4. Add a deterministic AI gateway that resolves obvious promo cases without a model call and logs cache hit rates into the daily brief.
+
+## 2026-04-24 — Session 78 | Total: 891/1000 | Velocity: 4 | Debt: down
+Rolling avg (last 3): Dev 95.7 | Align 96.7 | Momentum 78.0 | Engage 92.0 | Process 98.0 | Coher 78.7 | Sec 78.0 | Eco 84.3 | Cap 86.3 | Auto 93.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 96 | ↑ | 381 tests passing, full local launch gate green, and shared link/telemetry seams covered by focused tests. |
+| Creative Alignment | 97 | → | Work stayed aligned with honest public-unveil posture: improve product confidence without fabricating external launch proofs. |
+| Momentum | 76 | ↓ | Four repo-owned improvements shipped plus closeout; external proof items could not be completed from code. |
+| Engagement | 92 | → | Mission Control now exposes adaptive rank-signal coverage, improving user confidence in recommendation learning. |
+| Process Quality | 99 | → | Context surfaces updated, proof completion evidence-gated, and launch blockers kept honest. |
+| Cross-Repo Coherence | 88 | → | No new cross-repo website changes, but repo-local launch/proof surfaces remain aligned with public status. |
+| Security Posture | 84 | ↑ | Strict public-repo sanitization remains 0 critical / 0 warning; proof updater now prevents unsupported or evidence-free proof state transitions. |
+| Ecosystem Integration | 91 | ↑ | CTA analytics and adaptive ranking snapshots now provide cleaner downstream Studio/product signals. |
+| Capital Efficiency | 90 | ↑ | Ranking telemetry creates an observed-outcome path for future tuning instead of repeated heuristic-only review. |
+| Automation Coverage | 98 | ↑ | Launch proof queue can now be listed mechanically and completion requires evidence; full local gate remains automated. |
+| **Total** | **891 / 1000** | | |
+
+**Top win:** the repo-owned work moved launch confidence forward without corrupting truth: CTA monetization analytics are canonical, ranking snapshots are inspectable, and launch proofs are evidence-gated.
+
+**Top gap:** the three highest business-impact launch proofs remain external: real sportsbook URLs, live Stripe smoke, and friend beta.
+
+**Intent outcome:** Achieved for all controllable work. External proof completion remains pending by design.
+
+**Brainstorm**
+
+1. Add a post-deploy artifact ingester that reads the GitHub launch-verification artifact and updates a local proof summary without overwriting manual proof status.
+2. Persist adaptive ranking snapshots into the Studio export contract so later sessions can compare recommendations against actual settled outcomes.
+3. Continue shrinking `src/App.jsx` by extracting session/profit notification effects into a dedicated app lifecycle module.
 
 ## 2026-04-22 — Session 69 | Total: 618/1000 | Velocity: 8 | Debt: down
 Rolling avg (last 3): Dev 84.7 | Align 95.7 | Momentum 87.0 | Engage 80.0 | Process 82.0 | Coher 22.0 | Sec 29.3 | Eco 30.0 | Cap 24.3 | Auto 20.7
