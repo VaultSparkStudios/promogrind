@@ -33,6 +33,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveCapability, getSecret, redact } from './lib/secrets.mjs';
+import { probeModelsEndpoint } from './lib/model-router.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -56,7 +57,7 @@ if (!ALL && !FILTER) {
 const PROBES = {
   'claude.api': async () => {
     const key = getSecret('ANTHROPIC_API_KEY', 'claude.api');
-    const r = await httpFetch('https://api.anthropic.com/v1/models', { headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' } });
+    const r = await probeModelsEndpoint(key, (url, opts) => httpFetch(url, opts));
     return interpret(r);
   },
   'stripe.checkout': async () => {
