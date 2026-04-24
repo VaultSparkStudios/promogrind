@@ -31,6 +31,14 @@ function readFlag(name) {
   return index >= 0 ? process.argv[index + 1] : null;
 }
 
+function writePayload(outPath, payload) {
+  if (outPath) {
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.writeFileSync(outPath, JSON.stringify(payload, null, 2));
+  }
+  console.log(JSON.stringify(payload, null, 2));
+}
+
 async function checkTable(admin, table, select = "*") {
   const { data, error } = await admin.from(table).select(select).limit(1);
   if (error) return report(table, false, error.message, { code: error.code || null });
@@ -41,6 +49,28 @@ async function main() {
   const outPath = readFlag("--out");
   const adminEnv = readEnvFile(".env.admin");
   const clientEnv = readEnvFile(".env");
+
+  const missingEnv = [
+    ["SUPABASE_URL", adminEnv.SUPABASE_URL],
+    ["SUPABASE_SERVICE_ROLE_KEY", adminEnv.SUPABASE_SERVICE_ROLE_KEY],
+    ["VITE_SUPABASE_URL", clientEnv.VITE_SUPABASE_URL],
+    ["VITE_SUPABASE_ANON_KEY", clientEnv.VITE_SUPABASE_ANON_KEY],
+  ]
+    .filter(([, value]) => !value)
+    .map(([name]) => name);
+
+  if (missingEnv.length) {
+    writePayload(outPath, {
+      ok: false,
+      failedCount: missingEnv.length,
+      results: missingEnv.map((name) => report(
+        `env:${name}`,
+        false,
+        "required launch verification environment variable is missing",
+      )),
+    });
+    process.exit(1);
+  }
 
   const admin = createClient(adminEnv.SUPABASE_URL, adminEnv.SUPABASE_SERVICE_ROLE_KEY, {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -162,17 +192,13 @@ async function main() {
     results,
   };
 
-  if (outPath) {
-    fs.mkdirSync(path.dirname(outPath), { recursive: true });
-    fs.writeFileSync(outPath, JSON.stringify(payload, null, 2));
-  }
-
-  console.log(JSON.stringify(payload, null, 2));
+  writePayload(outPath, payload);
 
   if (failed.length) process.exit(1);
 }
 
 main().catch((error) => {
-  console.error(JSON.stringify({ ok: false, fatal: error.message }, null, 2));
+  const outPath = readFlag("--out");
+  writePayload(outPath, { ok: false, fatal: error.message });
   process.exit(1);
 });

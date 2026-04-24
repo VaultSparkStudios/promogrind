@@ -10,6 +10,8 @@ on:
       - "index.html"
       - "package.json"
       - "scripts/postbuild-pages.mjs"
+      - "scripts/render-launch-verification-summary.mjs"
+      - "scripts/verify-production-launch.mjs"
       - "src/**"
       - "public/**"
       - "vite.config.js"
