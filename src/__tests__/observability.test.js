@@ -41,6 +41,9 @@ describe("observability snapshot", () => {
     expect(snapshot.hasPendingWrites).toBe(true);
     expect(snapshot.latestMicroNps).toBe("mixed");
     expect(snapshot.activationScore).toBeGreaterThan(0);
+    expect(snapshot.activationFunnel.completion).toBeGreaterThan(0);
+    expect(snapshot.launchProofSummary.affiliateLinksReady).toBe(false);
+    expect(snapshot.launchProofSummary.missingLaunchBooks).toEqual(expect.arrayContaining(["BetMGM", "bet365", "BetRivers"]));
     expect(snapshot.aiUsage.today).toBe(1);
     expect(snapshot.aiUsage.week).toBe(2);
     expect(snapshot.aiUsage.topFeature).toBe("promo_chat");

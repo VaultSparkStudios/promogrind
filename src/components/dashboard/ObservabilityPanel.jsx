@@ -54,6 +54,7 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
   const microNpsLabel = obs.latestMicroNps
     ? (obs.latestMicroNps === "yes" ? "Worth it" : obs.latestMicroNps === "mixed" ? "Mixed" : "Not worth it")
     : "No signal";
+  const missingLaunchBooks = obs.launchProofSummary.missingLaunchBooks.join(", ");
 
   return (
     <div style={{ ...S.card, border: `1px solid ${K.pp}35`, marginTop: 12 }}>
@@ -82,9 +83,11 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 8, marginBottom: 10 }}>
         {metric("Activation", `${obs.activationScore}/100`, `${obs.calculatorsUsed} calculators used · ${snapshot.booksComplete || 0}/${snapshot.booksRemaining !== undefined ? (snapshot.booksComplete || 0) + snapshot.booksRemaining : 0} books activated`, obs.activationScore >= 70 ? K.gn : K.yl)}
+        {metric("Funnel", `${obs.activationFunnel.completion}%`, `${obs.activationFunnel.firstWorkflowQueued ? "workflow queued" : "no workflow yet"} · ${obs.activationFunnel.firstSettlement ? "settled" : "no settlement yet"}`, obs.activationFunnel.completion >= 60 ? K.gn : K.yl)}
         {metric("Return Loop", `${obs.recentSettledCount}`, `${obs.recentSettledProfit >= 0 ? "+" : "-"}$${Math.abs(obs.recentSettledProfit || 0).toFixed(2)} settled in the last 7 days`, obs.recentSettledCount > 0 ? K.gn : K.ac)}
         {metric("Workflow Load", `${obs.openWorkflows}`, `${obs.waitingWorkflows} waiting/placed · ${obs.settledFeedback} settled feedback rows`, obs.openWorkflows > 0 ? K.ac : K.mt)}
         {metric("Monetization", `${obs.monetizationCoverage}%`, `${obs.monetizedBooks} of ${snapshot.booksComplete !== undefined ? "tracked" : "total"} books have monetized links configured`, obs.monetizationCoverage >= 60 ? K.gn : K.yl)}
+        {metric("Launch Links", obs.launchProofSummary.affiliateLinksReady ? "Ready" : "Blocked", obs.launchProofSummary.affiliateLinksReady ? "Required launch books have tracked links." : `Missing ${missingLaunchBooks || "required books"}`, obs.launchProofSummary.affiliateLinksReady ? K.gn : K.yl)}
         {metric("Usage Volume", `${obs.totalCalculations}`, `${obs.calculatorsUsed} distinct calculators used from local usage log`, obs.totalCalculations > 0 ? K.gn : K.mt)}
         {metric("AI Load", aiEventsLoaded ? `${obs.aiUsage.today}` : "…", `${obs.aiUsage.week} in 7d · ${obs.aiUsage.recentBurst} in 10m${obs.aiUsage.topFeature ? ` · top: ${obs.aiUsage.topFeature}` : ""}`, aiTone)}
         {metric("Micro-NPS", microNpsLabel, obs.latestMicroNps ? `Captured after ${obs.latestMicroNpsSettledCount} settled workflows` : "Waiting for post-settlement feedback", obs.latestMicroNps === "no" ? K.rd : obs.latestMicroNps === "mixed" ? K.yl : K.gn)}
@@ -99,6 +102,9 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
         </span>
         <span style={{ padding: "4px 8px", background: `${obs.activationScore >= 70 ? K.gn : K.yl}12`, border: `1px solid ${obs.activationScore >= 70 ? K.gn : K.yl}25`, borderRadius: 999, fontSize: 10, color: obs.activationScore >= 70 ? K.gn : K.yl, fontFamily: font }}>
           Activation score {obs.activationScore}/100
+        </span>
+        <span style={{ padding: "4px 8px", background: `${obs.launchProofSummary.affiliateLinksReady ? K.gn : K.yl}12`, border: `1px solid ${obs.launchProofSummary.affiliateLinksReady ? K.gn : K.yl}25`, borderRadius: 999, fontSize: 10, color: obs.launchProofSummary.affiliateLinksReady ? K.gn : K.yl, fontFamily: font }}>
+          Required launch links {obs.launchProofSummary.affiliateLinksReady ? "ready" : "missing"}
         </span>
         <span style={{ padding: "4px 8px", background: `${aiTone}12`, border: `1px solid ${aiTone}25`, borderRadius: 999, fontSize: 10, color: aiTone, fontFamily: font }}>
           AI abuse risk {obs.aiUsage.risk}

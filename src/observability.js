@@ -1,4 +1,4 @@
-import { BOOKS, getConfiguredMonetizationCount } from "./books.js";
+import { BOOKS, getConfiguredMonetizationCount, getRequiredLaunchMonetizationStatus } from "./books.js";
 import { buildHotLanes } from "./track/insights.js";
 
 function toNumber(value) {
@@ -57,21 +57,50 @@ export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {
   const calculatorsUsed = Object.keys(usageLog || {});
   const totalCalculations = calculatorsUsed.reduce((sum, key) => sum + (Number(usageLog[key]) || 0), 0);
   const monetizedBooks = getConfiguredMonetizationCount();
+  const launchMonetization = getRequiredLaunchMonetizationStatus();
   const settledFeedback = feedback.filter((entry) => String(entry.status || "").toLowerCase() === "settled");
   const waitingWorkflows = workflows.filter((entry) => ["waiting", "placed", "pending", "open"].includes(String(entry.status || "").toLowerCase()));
   const openWorkflows = workflows.filter((entry) => ["queued", "ready", "placed", "waiting", "pending", "open"].includes(String(entry.status || "").toLowerCase()));
   const latestMicroNps = microNps[0] || null;
   const hotLanes = buildHotLanes(appData, now);
+  const booksDone = Object.values(appData.done || {}).filter(Boolean).length;
+  const hasSavedWorkflow = workflows.length > 0;
+  const hasFirstLedger = Array.isArray(appData.ledger) && appData.ledger.length > 0;
   const activationScore =
     (calculatorsUsed.length ? 30 : 0) +
-    (Object.values(appData.done || {}).filter(Boolean).length ? 30 : 0) +
-    (Array.isArray(appData.ledger) && appData.ledger.length ? 40 : 0);
+    (booksDone ? 20 : 0) +
+    (hasSavedWorkflow ? 20 : 0) +
+    (hasFirstLedger ? 30 : 0);
+  const launchProofs = appData.launchProofs || {};
+  const launchProofSummary = {
+    affiliateLinksReady: launchMonetization.missingBooks.length === 0,
+    missingLaunchBooks: launchMonetization.missingBooks,
+    stripeSmokeReady: launchProofs.stripeSmoke === "complete",
+    friendBetaReady: launchProofs.friendBeta === "complete",
+  };
+  const activationFunnel = {
+    firstCalculation: calculatorsUsed.length > 0,
+    firstBookMarked: booksDone > 0,
+    firstWorkflowQueued: hasSavedWorkflow,
+    firstLedgerEntry: hasFirstLedger,
+    firstSettlement: settledFeedback.length > 0,
+    completion: Math.round([
+      calculatorsUsed.length > 0,
+      booksDone > 0,
+      hasSavedWorkflow,
+      hasFirstLedger,
+      settledFeedback.length > 0,
+    ].filter(Boolean).length / 5 * 100),
+  };
 
   return {
     calculatorsUsed: calculatorsUsed.length,
     totalCalculations,
     monetizedBooks,
     monetizationCoverage: BOOKS.length ? Math.round((monetizedBooks / BOOKS.length) * 100) : 0,
+    launchMonetization,
+    launchProofSummary,
+    activationFunnel,
     openWorkflows: openWorkflows.length,
     waitingWorkflows: waitingWorkflows.length,
     settledFeedback: settledFeedback.length,

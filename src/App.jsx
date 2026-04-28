@@ -3422,7 +3422,7 @@ const TABS = [
     {n:"Promo Board",slug:"promo-board",c:PromoBoard},
     {n:"Glossary",slug:"glossary",c:Glossary},
     {n:"Refer & Earn",slug:"refer-earn",c:ReferralHub},
-    {n:"Community Promos",slug:"community-promos",c:CommunityPromos},
+    {n:"Community Promos",slug:"community-promos",c:PromoBoard},
     {n:"Upgrade",slug:"upgrade",c:PricingPage},
     {n:"Team Accounts",slug:"team-accounts",c:TeamAccounts},
     {n:"vs Competitors",slug:"vs-competitors",c:CompetitorComparison},

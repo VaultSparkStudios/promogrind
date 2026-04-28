@@ -160,6 +160,8 @@ export function normalizeWorkflowEntry(entry = {}) {
       : recommendation.opportunityScore,
     note: String(entry.note || "").trim(),
     source: String(entry.source || "result_feedback").trim(),
+    sourceId: entry.sourceId ? String(entry.sourceId).trim() : null,
+    sourceUrl: entry.sourceUrl ? String(entry.sourceUrl).trim() : null,
     nextStep: String(entry.nextStep || "").trim(),
     expiresAt: entry.expiresAt || null,
     createdAt: entry.createdAt || new Date().toISOString(),
@@ -172,7 +174,12 @@ export function upsertWorkflowEntry(entries = [], nextEntry = {}) {
   const index = entries.findIndex((entry) => entry?.id === normalized.id);
   if (index === -1) return [normalized, ...entries].slice(0, 250);
   const copy = [...entries];
-  copy[index] = { ...copy[index], ...normalized };
+  const existing = normalizeWorkflowEntry(copy[index]);
+  const existingRank = WORKFLOW_STATUS_PRIORITY[existing.status] ?? 0;
+  const nextRank = WORKFLOW_STATUS_PRIORITY[normalized.status] ?? 0;
+  copy[index] = existingRank > nextRank && normalized.status === "queued"
+    ? { ...normalized, ...existing }
+    : resolveWorkflowStatusConflict(existing, normalized);
   return copy;
 }
 

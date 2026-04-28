@@ -9,6 +9,7 @@ const proofKey = readFlag("--proof");
 const status = readFlag("--status");
 const evidence = readFlag("--evidence");
 const list = process.argv.includes("--list");
+const guide = process.argv.includes("--guide");
 
 const proofPath = "context/LAUNCH_PROOFS.json";
 const payload = JSON.parse(fs.readFileSync(proofPath, "utf8"));
@@ -17,13 +18,21 @@ if (list) {
   for (const [key, proof] of Object.entries(payload?.proofs || {})) {
     const marker = proof.status === "complete" ? "complete" : proof.blocking ? "blocking" : "pending";
     console.log(`${key}: ${marker} - ${proof.label}`);
+    if (guide) {
+      if (proof.details) console.log(`  details: ${proof.details}`);
+      if (proof.nextStep) console.log(`  next: ${proof.nextStep}`);
+      if (Array.isArray(proof.evidenceRequired) && proof.evidenceRequired.length) {
+        console.log("  evidence:");
+        for (const item of proof.evidenceRequired) console.log(`    - ${item}`);
+      }
+    }
   }
   process.exit(0);
 }
 
 if (!proofKey || !status) {
   console.error("Usage: node scripts/update-launch-proof.mjs --proof <key> --status <pending|complete> --evidence \"note\"");
-  console.error("       node scripts/update-launch-proof.mjs --list");
+  console.error("       node scripts/update-launch-proof.mjs --list [--guide]");
   process.exit(1);
 }
 

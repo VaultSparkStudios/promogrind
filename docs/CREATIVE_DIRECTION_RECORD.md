@@ -88,3 +88,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: implement all code-controllable improvements in one rigorous pass, keep external proof blockers honest rather than fabricating completion, and leave the repo closed out with all context surfaces updated and pushed.
 - Why it matters: PromoGrind's public-unveil posture depends on both high product quality and strict launch truth; code improvements should compound without erasing real proof requirements.
 - Supersedes prior entry: —
+
+### 2026-04-28 — Close out with complete repo truth and GitHub push
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): "closeout and push & commit to GitHub - Update all memory/context/CDR/task board files and anything else that need updates"
+- Area affected: process / scope
+- Previous state: Session 79 implementation work was complete locally, but closeout write-back, audit/memory refresh, commit, and push were still pending.
+- New required direction: perform full Studio OS closeout for PromoGrind, refresh all canonical repo-truth and memory surfaces, then commit and push the resulting state to GitHub.
+- Why it matters: the next session and deployment checks need a truthful handoff that distinguishes shipped repo work from still-external launch proofs.
+- Supersedes prior entry: —

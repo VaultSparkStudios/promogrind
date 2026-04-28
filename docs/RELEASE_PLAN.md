@@ -3,7 +3,7 @@
 ## Current State
 
 - Runtime: `https://promogrind.bet/`
-- Repo status: build passing, `380/380` tests green, launch smoke passing, UX route integrity passing, browser smoke passing, public-repo sanitization passing
+- Repo status: production build passing, targeted regression suite passing, isolated calculator suite passing, launch smoke passing, UX route integrity passing, bundle budget passing, public-repo sanitization passing. Full parallel `npm test` needs follow-up because Vitest timed out importing `calculators.test.jsx` even though that file passes in isolation.
 - Product posture: deployable and public-facing, but still blocked on final launch-proof tasks outside this repo
 - Canonical manual blocker surface: `context/LAUNCH_PROOFS.json`
 
@@ -15,6 +15,7 @@
 - Finish monetization coverage for `BetMGM`, `bet365`, and `BetRivers` with real approved tracking URLs. This is the only blocker still failing `scripts/verify-production-launch.mjs`.
 - Run the real Stripe smoke path end-to-end with an actual completed purchase and verify `subscriptions` plus customer-portal lifecycle (see `docs/STRIPE_SMOKE_TEST.md`).
 - Complete one friend-facing pass through auth, calculator, CTA, and pricing flows.
+- Use `node scripts/update-launch-proof.mjs --list --guide` to print exact next steps and required evidence before marking any proof complete.
 
 ## Local Launch Gate
 
@@ -44,5 +45,6 @@ This executes unit/component tests, production build, launch smoke, UX route int
 - Continue extracting domains out of `src/App.jsx`
 - Add state-aware + book-aware CTA personalization
 - Replace stale hardcoded promo intelligence in premium AI surfaces with a normalized promo registry
-- Add observability dashboards for activation, monetization, and AI usage
+- Add post-deploy artifact ingestion for the retained `launch-verification` artifact
+- Stabilize full-suite Vitest worker/runtime behavior so `npm test` is a clean launch signal again
 - Harden auth/session handling and server-side AI response validation

@@ -5,14 +5,21 @@
 - finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
 - run one real Stripe smoke purchase and verify the post-checkout portal/subscription path
 - complete one friend-facing auth/calculator/pricing pass after deploy and record it in `context/LAUNCH_PROOFS.json`
-- continue decomposing the remaining high-churn `src/App.jsx` seams now that checkout notification handling is extracted and the initial entry is lighter
+- inspect the next deploy's retained `launch-verification` artifact after this push
+- continue decomposing the remaining high-churn `src/App.jsx` seams now that checkout notification handling and the community-promos tab route are extracted
 
 ## Next
 
-- auto-route scanner/community findings into the shared workflow graph with remote reconciliation once the live migrations are in place
-- keep decomposing the remaining high-churn `src/App.jsx` seams beyond `AppChrome`/`appText`
+- add a post-deploy artifact ingester that reads the GitHub `launch-verification` artifact into a local proof summary without overwriting manual proof status
+- keep decomposing the remaining high-churn `src/App.jsx` seams beyond `AppChrome`/`appText`/`AppNotifications`
+- clean up PostHog production remote-config/feature-flag noise so launch consoles stay signal-rich
 
 ## Shipped This Session
+
+- harden scanner/community workflow reconciliation — **DONE S79**: scanner and community workflow builders now emit stable IDs/source IDs so duplicate queue actions reconcile instead of multiplying; workflow upserts preserve progressed states when a fresh queued duplicate arrives; regression coverage added.
+- deepen observability around activation and launch blockers — **DONE S79**: observability snapshots now include activation-funnel completion plus required launch-link status, and the dashboard panel surfaces missing launch books alongside existing activation, AI, sync, and monetization signals.
+- continue decomposing the remaining high-churn `src/App.jsx` seams — **DONE S79 partial**: the `Community Promos` tab now routes to the extracted `CommunityPromoBoard` instead of the stale inline `CommunityPromos` implementation.
+- make manual launch proofs more executable without weakening evidence gates — **DONE S79**: `context/LAUNCH_PROOFS.json` now records next steps and evidence requirements for affiliate links, Stripe smoke, and friend beta; `scripts/update-launch-proof.mjs --list --guide` prints those requirements.
 
 - normalize remaining sportsbook CTA surfaces onto `getBookLinkMeta` — **DONE S78**: calculator CTAs, tracker signup links, unclaimed-value cards, and shadow-book open links now share the canonical link metadata/analytics contract, including launch-required and monetization-readiness flags.
 - add adaptive-ranking telemetry snapshots so hot/cold lane tuning can move from heuristics toward observed outcome data [SIL] — **DONE S78**: dashboard snapshots now include `adaptiveRankingSnapshot` with top promo, reason counts, hot/cold signals, queue pressure, and feedback coverage; tests cover the new snapshot.

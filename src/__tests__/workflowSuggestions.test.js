@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { upsertWorkflowEntry } from "../promograph/index.js";
 import { communityPromoToWorkflow, launchBlockerToWorkflow, scannerOpportunityToWorkflow } from "../workflows/suggestions.js";
 
 describe("workflow suggestions", () => {
   it("builds arb scanner opportunities into workflow entries", () => {
-    const workflow = scannerOpportunityToWorkflow({
+    const opportunity = {
       game: "Chiefs vs Bills",
       market: "Moneyline",
       roi: "2.4",
@@ -15,9 +16,13 @@ describe("workflow suggestions", () => {
       s2: "51.20",
       start: "2026-04-23T19:00:00.000Z",
       sport: "NFL",
-    }, "arb", { bankroll: "1000" });
+    };
+    const workflow = scannerOpportunityToWorkflow(opportunity, "arb", { bankroll: "1000" });
+    const duplicate = scannerOpportunityToWorkflow(opportunity, "arb", { bankroll: "1000" });
 
     expect(workflow.source).toBe("live_scanner");
+    expect(workflow.id).toBe(duplicate.id);
+    expect(workflow.sourceId).toContain("chiefs-vs-bills");
     expect(workflow.calculatorSlug).toBe("arb-2way");
     expect(workflow.promoType).toBe("arb");
     expect(workflow.book).toContain("DraftKings");
@@ -35,6 +40,8 @@ describe("workflow suggestions", () => {
     });
 
     expect(workflow.source).toBe("community_promo");
+    expect(workflow.id).toContain("community:");
+    expect(workflow.sourceId).toContain("draftkings");
     expect(workflow.calculatorSlug).toBe("deposit-match");
     expect(workflow.promoType).toBe("deposit_match");
     expect(workflow.confidence).toBe("high");
@@ -52,5 +59,21 @@ describe("workflow suggestions", () => {
     expect(workflow.calculatorSlug).toBe("dashboard");
     expect(workflow.title).toMatch(/Launch: Stripe smoke test/);
     expect(workflow.opportunityScore).toBeGreaterThanOrEqual(70);
+  });
+
+  it("keeps progressed workflow state when the same scanner item is queued again", () => {
+    const queued = scannerOpportunityToWorkflow({ game: "Chiefs vs Bills", roi: "2.4", b1: "DraftKings", b2: "FanDuel" }, "arb", {
+      now: "2026-04-17T12:00:00.000Z",
+    });
+    const placed = { ...queued, status: "placed", updatedAt: "2026-04-17T12:05:00.000Z" };
+    const duplicateQueued = scannerOpportunityToWorkflow({ game: "Chiefs vs Bills", roi: "2.4", b1: "DraftKings", b2: "FanDuel" }, "arb", {
+      now: "2026-04-17T12:10:00.000Z",
+    });
+
+    const merged = upsertWorkflowEntry([placed], duplicateQueued);
+
+    expect(merged).toHaveLength(1);
+    expect(merged[0].id).toBe(queued.id);
+    expect(merged[0].status).toBe("placed");
   });
 });

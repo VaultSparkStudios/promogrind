@@ -13,6 +13,16 @@ function safeIsoDate(value) {
   return parsed.toISOString();
 }
 
+function stableKey(...parts) {
+  return parts
+    .map((part) => String(part || "").trim().toLowerCase())
+    .filter(Boolean)
+    .join("|")
+    .replace(/[^a-z0-9|]+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 160);
+}
+
 function humanizePromoType(value = "") {
   return String(value || "")
     .trim()
@@ -51,7 +61,7 @@ export function scannerOpportunityToWorkflow(opportunity = {}, kind = "arb", con
     confidence: score >= 85 ? "high" : score >= 70 ? "medium" : "low",
     opsTags: ["live_scanner", normalizedKind, opportunity.sport].filter(Boolean),
   }, {
-    id: context.id,
+    id: context.id || `scanner:${stableKey(normalizedKind, opportunity.game, opportunity.market || opportunity.outcome, opportunity.b1 || opportunity.book, opportunity.b2, opportunity.start)}`,
     title: normalizedKind === "arb"
       ? `Live arb: ${opportunity.game || "Opportunity"}`
       : `Live +EV: ${opportunity.game || "Opportunity"}`,
@@ -66,6 +76,7 @@ export function scannerOpportunityToWorkflow(opportunity = {}, kind = "arb", con
       : null,
     expiresAt: safeIsoDate(opportunity.start),
     actionability: score,
+    sourceId: stableKey(opportunity.game, opportunity.market || opportunity.outcome, opportunity.start),
     now: context.now,
   });
 }
@@ -87,7 +98,7 @@ export function communityPromoToWorkflow(promo = {}, context = {}) {
     confidence: (promo.upvotes || 0) >= 3 ? "high" : (promo.upvotes || 0) >= 1 ? "medium" : "low",
     opsTags: ["community_promo", promo.book, promo.promo_type].filter(Boolean),
   }, {
-    id: context.id,
+    id: context.id || `community:${promo.id || stableKey(promo.book, promo.promo_type || promo.promoType, description, promo.expires_at || promo.expiresAt)}`,
     title: `Community promo: ${promo.book || "Promo"}${promo.value ? ` ${promo.value}` : ""}`.trim(),
     summary: description || "Community-submitted promo surfaced for review.",
     calculatorKey: calculatorSlug || "community-promos",
@@ -97,6 +108,7 @@ export function communityPromoToWorkflow(promo = {}, context = {}) {
     note: promo.value ? `Reported value: ${promo.value}` : "",
     expiresAt: safeIsoDate(promo.expires_at || promo.expiresAt),
     actionability: score,
+    sourceId: promo.id || stableKey(promo.book, promo.promo_type || promo.promoType, description),
     now: context.now,
   });
 }

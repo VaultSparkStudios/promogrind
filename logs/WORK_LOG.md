@@ -42,6 +42,15 @@ Append chronological entries.
 - Remaining blockers: real `BetMGM` / `bet365` / `BetRivers` tracking URLs, one real Stripe smoke purchase, and one friend-facing auth/calculator/CTA/pricing pass.
 - Recommended next move: inspect the deploy artifact after this push, then complete the three operator/tester proofs before public marketing.
 
+### 2026-04-28 - Session 79 closeout
+
+- Goal: implement the seven highest-impact PromoGrind items in one optimal pass, then close out and push without fabricating external launch proofs.
+- What changed: added guided evidence requirements for `affiliateLinks`, `stripeSmoke`, and `friendBeta`; extended `scripts/update-launch-proof.mjs --list --guide`; made scanner/community workflow suggestions deterministic with stable IDs/source IDs; hardened workflow upserts so duplicate queued suggestions preserve progressed states; added activation-funnel and required-launch-link observability; routed the `Community Promos` tab to the extracted board component instead of the stale inline implementation.
+- Files or systems touched: `context/LAUNCH_PROOFS.json`, `scripts/update-launch-proof.mjs`, `src/workflows/suggestions.js`, `src/promograph/index.js`, `src/promograph/recommendations.js`, `src/observability.js`, `src/components/dashboard/ObservabilityPanel.jsx`, `src/App.jsx`, `src/__tests__/workflowSuggestions.test.js`, `src/__tests__/observability.test.js`, closeout context surfaces, audit JSON, and Codex memory.
+- Verification: `npm test -- workflowSuggestions.test.js observability.test.js books.test.js calculators.test.jsx` passed `66/66`; isolated `npm test -- calculators.test.jsx` passed `34/34`; `npm run build`, `npm run smoke:launch`, `npm run smoke:ux`, `node scripts/check-bundle-budget.mjs`, and `node scripts/check-public-repo-sanitization.mjs --strict` passed. Full `npm test` hit a Vitest worker/import timeout in `calculators.test.jsx`, while that file passed in isolation.
+- Risks created or removed: removed duplicate scanner/community workflow drift and made manual launch blockers more actionable without weakening truth. Remaining blockers are still external: real required sportsbook tracking URLs, real Stripe smoke, and friend beta evidence.
+- Recommended next move: inspect the next deploy's `launch-verification` artifact, then complete the three external proofs and add a post-deploy artifact ingester.
+
 - Recommended next move: commit/push both repos, inspect CI/deploy artifacts, then complete the three external proofs before flipping PromoGrind from FORGE/public-unlaunched toward public marketing.
 
 ### 2026-04-22 - Session 72 adaptive intelligence tranche

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-28",
+  "session": 79,
+  "sessionIntent": "implement all seven highest-impact PromoGrind items in optimal order, close out, update context/memory/CDR/task-board surfaces, commit, and push to GitHub",
+  "intentOutcome": "achieved-for-repo-controllable-work",
+  "testsPassingAtClose": 66,
+  "testsDelta": 1,
+  "buildPassing": true,
+  "sanitizationFindings": {
+    "critical": 0,
+    "warning": 0
+  },
+  "silTotal": 919,
+  "silDelta": 28,
+  "velocity": 4,
+  "protocolVelocity": 4,
+  "debtDirection": "down",
+  "shippedItems": [
+    "added launch-proof next steps and evidence requirements for affiliateLinks, stripeSmoke, and friendBeta",
+    "extended update-launch-proof with --list --guide",
+    "made scanner/community workflow suggestions deterministic with stable IDs and source IDs",
+    "hardened workflow upserts so duplicate queued suggestions preserve progressed workflow states",
+    "added activation-funnel and required launch-link observability",
+    "routed Community Promos to the extracted CommunityPromoBoard instead of the stale inline App component"
+  ],
+  "verification": [
+    "npm test -- workflowSuggestions.test.js observability.test.js books.test.js calculators.test.jsx passed with 66/66 tests",
+    "npm test -- calculators.test.jsx passed with 34/34 tests",
+    "npm run build passed",
+    "npm run smoke:launch passed",
+    "npm run smoke:ux passed",
+    "node scripts/check-bundle-budget.mjs passed",
+    "node scripts/check-public-repo-sanitization.mjs --strict passed",
+    "full npm test hit a Vitest worker/import timeout in calculators.test.jsx; the isolated suite passed"
+  ],
+  "openHumanActions": [
+    "Provide real approved affiliate/referral tracking URLs for BetMGM, bet365, and BetRivers",
+    "Run one real Stripe smoke purchase and verify the checkout, webhook/subscription, and portal path",
+    "Complete one friend-facing auth/calculator/CTA/pricing pass after deploy",
+    "Inspect the next deploy's retained launch-verification artifact"
+  ],
+  "closeoutMethod": "manual protocol closeout with commit and push",
+  "contextPctAtClose": 0.7
+}

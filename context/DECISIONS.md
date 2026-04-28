@@ -196,3 +196,17 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Context: the console dump included extension noise, PostHog noise, a `ReferenceError: ParlayHedge is not defined`, and a service-worker `Response.clone()` failure.
 - Decision: repair the boot/runtime faults first by restoring `ParlayHedge` and hardening service-worker cache writes; treat the PostHog 404/401 chatter as a follow-up task.
 - Why: the app-breaking errors prevent reliable product use, while the analytics noise is secondary and should be cleaned up only after the site boots and routes correctly.
+
+## 2026-04-28 — Session 79
+
+### Decision: scanner/community workflow suggestions need deterministic provenance
+
+- Context: scanner and community findings could be queued into the shared workflow graph, but repeated queue actions could create duplicate workflow entries or overwrite progressed state with a fresh queued copy.
+- Decision: give scanner/community workflow builders stable IDs plus `sourceId`, and make workflow upserts preserve progressed statuses when the same source item is queued again.
+- Why: remote reconciliation and multi-device sync need a stable source contract. A live scanner refresh should not erase the operator's already-placed or settled workflow state.
+
+### Decision: launch proof guidance can improve execution without clearing external blockers
+
+- Context: the three highest business-impact blockers are external, but the repo could make them more executable by spelling out required evidence.
+- Decision: add `nextStep` and `evidenceRequired` metadata to `context/LAUNCH_PROOFS.json` and expose it through `scripts/update-launch-proof.mjs --list --guide`, while keeping completion evidence-gated.
+- Why: this moves the operator checklist forward without pretending approved sportsbook links, a real Stripe purchase, or friend-beta feedback exist before they do.

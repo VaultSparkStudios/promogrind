@@ -21,6 +21,8 @@ export function recommendationToWorkflow(recommendation = {}, context = {}) {
     nextStep: context.nextStep || "",
     note: context.note || "",
     opsTags: normalized.opsTags,
+    sourceId: context.sourceId,
+    sourceUrl: context.sourceUrl,
     expectedProfit: context.expectedProfit,
     expiresAt: context.expiresAt,
     createdAt: context.createdAt || now,

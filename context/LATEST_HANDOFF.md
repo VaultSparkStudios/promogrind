@@ -1,44 +1,44 @@
 # Latest Handoff
 
-Last updated: 2026-04-24 (S78)
-Session: 78
-Session Intent: Implement the next seven highest-impact PromoGrind items in the most efficient order, then close out, update context/memory/CDR/task-board surfaces, commit, and push to GitHub.
+Last updated: 2026-04-28 (S79)
+Session: 79
+Session Intent: Implement all seven highest-impact PromoGrind items at the highest/optimal quality in one efficient pass, then close out, update context/memory/CDR/task-board surfaces, commit, and push to GitHub.
 Intent Outcome: Achieved for all repo-controllable work. External proofs remain honestly pending because real sportsbook tracking URLs, a live Stripe smoke purchase, and a friend-facing beta pass require operator/tester action.
 
-## Where We Left Off (Session 78)
+## Where We Left Off (Session 79)
 
-- PromoGrind local launch gate is green: `npm run verify:launch-local` passed end-to-end.
-- Tests: `381/381` passing across 27 test files.
-- UX route integrity: 60 app routes and 98 public HTML files validated.
-- Browser launch smoke: passing after production build.
-- Public repo sanitization: strict scan 0 critical / 0 warning.
-- Launch proof queue: `affiliateLinks`, `stripeSmoke`, and `friendBeta` still report as blocking via `node scripts/update-launch-proof.mjs --list`.
-- Repo-owned improvements shipped: canonical sportsbook CTA/link analytics across CTA surfaces, adaptive ranking telemetry snapshots, evidence-required launch-proof updates, and one more `src/App.jsx` seam extracted.
+- PromoGrind now has stronger launch-proof execution guidance: `context/LAUNCH_PROOFS.json` includes next steps and evidence requirements, and `node scripts/update-launch-proof.mjs --list --guide` prints them.
+- Scanner/community workflow reconciliation is safer: generated workflows have stable IDs/source IDs, and duplicate queue actions no longer downgrade progressed workflow state.
+- Observability is deeper: activation-funnel completion and required launch-link status are now included in `buildObservabilitySnapshot` and surfaced in the dashboard observability panel.
+- `src/App.jsx` is slightly lighter: the `Community Promos` tab now routes to the extracted `CommunityPromoBoard` instead of the stale inline component.
+- Verification completed: targeted regression run `66/66` passing, isolated calculator suite `34/34` passing, production build passing, launch smoke passing, UX route integrity passing, bundle budget passing, and strict public-repo sanitization 0 critical / 0 warning.
+- Caveat: full `npm test` hit a Vitest worker/import timeout in `calculators.test.jsx` during the parallel full-suite run; the same calculator suite passed by itself.
+- Launch proof queue still reports `affiliateLinks`, `stripeSmoke`, and `friendBeta` as blocking via `node scripts/update-launch-proof.mjs --list`.
 
 ## What was completed
 
-- **Canonical sportsbook CTA metadata (S78)**: added `getBookLinkAnalyticsProps` beside `getBookLinkMeta` and moved calculator CTA, tracker unclaimed-value/signup links, and shadow-book links onto the same monetization/link-type/launch-required analytics contract.
-- **Adaptive ranking telemetry (S78)**: added `buildAdaptiveRankingSnapshot` and attached `adaptiveRankingSnapshot` to dashboard snapshots with top promo, reason counts, hot/cold signals, queue pressure, feedback coverage, and workflow counts.
-- **Mission Control ranking visibility (S78)**: surfaced rank-signal coverage in `TodayDashboardPanel` so dashboard users can see whether adaptive ranking has observed reasons to learn from.
-- **App seam decomposition (S78)**: extracted checkout-unavailable toast handling from `src/App.jsx` into `src/app/AppNotifications.jsx`.
-- **Manual proof hardening (S78)**: `scripts/update-launch-proof.mjs` now supports `--list`, validates statuses, and refuses to mark a proof complete without evidence.
-- **Closeout truth updates (S78)**: updated current state, task board, handoff, work log, decisions, SIL, truth audit, CDR, project status, audit JSON, and Codex memory.
+- **Launch proof guidance (S79)**: added `nextStep` and `evidenceRequired` fields for affiliate links, Stripe smoke, and friend beta, then extended `scripts/update-launch-proof.mjs` with `--guide`.
+- **Workflow reconciliation (S79)**: made `scannerOpportunityToWorkflow` and `communityPromoToWorkflow` generate stable IDs/source IDs for repeated scanner/community items.
+- **Workflow state preservation (S79)**: hardened `upsertWorkflowEntry` so a duplicate queued scanner/community item does not overwrite a progressed `placed`/`waiting`/`settled` workflow.
+- **Observability (S79)**: added launch monetization summary and activation-funnel state to `src/observability.js`, and surfaced both in `ObservabilityPanel`.
+- **App seam decomposition (S79 partial)**: changed the `Community Promos` tab to use the extracted `PromoBoard`/`CommunityPromoBoard` route.
+- **Tests (S79)**: expanded workflow suggestion and observability regression coverage.
 
 ## What is mid-flight
 
 - Real affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers` are still missing from `src/books.js`.
 - Stripe smoke purchase with real checkout/webhook/subscription/customer-portal lifecycle still required.
 - One friend-facing auth/calculator/CTA/pricing pass still required.
-- `src/App.jsx` decomposition remains worth continuing beyond `AppChrome`, `appText`, and `AppNotifications`.
-- Scanner/community findings still need remote reconciliation once live persistence is ready for that path.
+- `src/App.jsx` decomposition remains worth continuing beyond `AppChrome`, `appText`, `AppNotifications`, and the community-promos route.
+- The deploy-time `launch-verification` artifact still needs inspection after this push/deploy cycle.
 
 ## What to do next
 
 1. Let this push deploy, then inspect the retained `launch-verification` artifact.
-2. Paste real `BetMGM`, `bet365`, and `BetRivers` approved tracking URLs into `src/books.js`.
+2. Paste real `BetMGM`, `bet365`, and `BetRivers` approved tracking URLs into `src/books.js`, then rerun `npm run verify:production`.
 3. Run the real Stripe smoke purchase and verify post-checkout portal/subscription behavior.
 4. Complete one friend-facing auth/calculator/CTA/pricing pass and mark evidence in `context/LAUNCH_PROOFS.json`.
-5. Re-run `npm run verify:launch-local`, deploy, and then continue the next bounded `src/App.jsx` extraction or scanner/community remote reconciliation tranche.
+5. Add the post-deploy artifact ingester, continue the next bounded `src/App.jsx` extraction, and clean up PostHog production console noise.
 
 ## Constraints
 
@@ -60,5 +60,5 @@ Intent Outcome: Achieved for all repo-controllable work. External proofs remain 
 - `src/books.js` (affiliate links)
 - `context/LAUNCH_PROOFS.json` (proof evidence)
 - `src/App.jsx` and `src/app/` (continued decomposition)
-- `src/workflows/` and remote sync paths (scanner/community reconciliation)
+- `src/workflows/`, `src/promograph/`, and remote sync paths (workflow reconciliation)
 - `docs/RELEASE_PLAN.md`

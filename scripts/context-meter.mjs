@@ -18,7 +18,7 @@
 //   - git diff --stat                        (working-tree churn as proxy)
 //   - prompt cache stats                     (portfolio/ops/cache-cockpit.json if present)
 //
-// Use:
+// Usage:
 //   node scripts/context-meter.mjs           (human summary + recommendation)
 //   node scripts/context-meter.mjs --json
 //   node scripts/context-meter.mjs --warn-threshold=0.75
@@ -26,16 +26,47 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
-import { FALLBACK_PRICE, PRICING_PER_MTOK, contextWindowForAgent, shortModelName } from './lib/model-router.mjs';
+// Inline context window sizes — keeps this script self-contained for propagation to all project repos.
+// Update here if new models are added to the studio fleet.
+function contextWindowForAgent(agent) {
+  if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
+  if (agent === 'codex') return 1_000_000;
+  if (agent === 'claude-code') return 1_000_000;
+  return 200_000;
+}
+
+// Price table per model — kept in sync with scripts/lib/model-router.mjs PRICING_PER_MTOK.
+// Per 1M tokens (list price, non-batch). Keyed first by exact model-ID prefix
+// (so a future Opus 4.8 with a different price shows up correctly), falling
+// back to tier substring match.
+const PRICING = {
+  opus:   { input: 15.00, cacheWrite: 18.75, cacheRead: 1.50, output: 75.00 },
+  sonnet: { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
+  haiku:  { input:  1.00, cacheWrite:  1.25, cacheRead: 0.10, output:  5.00 },
+};
+// Exact-prefix overrides for known model IDs. Add to this map when pricing
+// diverges for a specific generation; fallback below keeps the tier default.
+const PRICING_BY_ID = {
+  'claude-opus-4-7':         PRICING.opus,
+  'claude-opus-4-6':         PRICING.opus,
+  'claude-sonnet-4-6':       PRICING.sonnet,
+  'claude-haiku-4-5':        PRICING.haiku,
+};
 function priceFor(modelId) {
-  if (!modelId) return FALLBACK_PRICE;
-  for (const [prefix, p] of Object.entries(PRICING_PER_MTOK)) {
+  if (!modelId) return PRICING.sonnet;
+  for (const [prefix, p] of Object.entries(PRICING_BY_ID)) {
     if (modelId.startsWith(prefix)) return p;
   }
-  return FALLBACK_PRICE;
+  if (modelId.includes('opus'))   return PRICING.opus;
+  if (modelId.includes('haiku'))  return PRICING.haiku;
+  return PRICING.sonnet;
 }
 function tierOf(modelId) {
-  return shortModelName(modelId);
+  if (!modelId) return 'unknown';
+  if (modelId.includes('opus'))   return 'opus';
+  if (modelId.includes('haiku'))  return 'haiku';
+  if (modelId.includes('sonnet')) return 'sonnet';
+  return modelId;
 }
 function costOfEntry(e) {
   const p = priceFor(e.model);

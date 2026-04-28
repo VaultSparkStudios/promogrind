@@ -13,49 +13,48 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 78,
-  "currentFocus": "S78 launch-hardening refinement — canonical sportsbook CTA link analytics, adaptive ranking telemetry snapshots, evidence-gated launch proof updates, checkout notification seam extraction, and green verify:launch-local gate.",
+  "currentSession": 79,
+  "currentFocus": "S79 launch-hardening refinement - launch proof guidance, deterministic scanner/community workflow reconciliation, activation/launch-link observability, community-promos route extraction, and green targeted/build/smoke gates.",
   "nextMilestone": "Replace real affiliate links for BetMGM/bet365/BetRivers, complete one real Stripe smoke purchase, complete one friend-facing auth/calculator/pricing pass, then rerun launch gates and deploy/announce.",
   "blockers": [
     "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path.",
     "Complete one friend-facing auth/calculator/pricing pass after deploy."
   ],
-  "lastUpdated": "2026-04-24",
-  "silScore": 891,
-  "silAvg3": 868,
+  "lastUpdated": "2026-04-28",
+  "silScore": 919,
+  "silAvg3": 896,
   "silVelocity": 4,
   "silDebt": "down",
-  "silLastSession": 78,
+  "silLastSession": 79,
   "silMax": 1000,
   "silSparkline": [
-    783,
-    822,
     834,
     878,
-    891
+    891,
+    919
   ],
   "ignisScore": 47857,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-04-22",
-  "testsPassing": 381,
-  "testsTotal": 381,
-  "testsLastRun": "2026-04-24",
+  "testsPassing": 66,
+  "testsTotal": 66,
+  "testsLastRun": "2026-04-28",
   "lastDeployStatus": "deployed-unannounced",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-04-24",
-  "truthGenome": "25/25",
+  "truthAuditLastRun": "2026-04-28",
+  "truthGenome": "23/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
-      "command": "npm test",
-      "status": "passing"
+      "command": "npm test -- workflowSuggestions.test.js observability.test.js books.test.js calculators.test.jsx",
+      "status": "targeted-passing; full npm test hit Vitest worker timeout"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing"
+      "status": "not-run-this-session"
     },
     {
       "type": "ux-integrity",
@@ -89,19 +88,19 @@
   "stripeProductionPriceIds": [],
   "silRubricVersion": "3.0",
   "silCategoriesV3": {
-    "devHealth": 96,
+    "devHealth": 95,
     "creativeAlignment": 97,
-    "momentum": 76,
-    "engagement": 92,
-    "processQuality": 99,
-    "crossRepoCoherence": 88,
-    "securityPosture": 84,
-    "ecosystemIntegration": 91,
-    "capitalEfficiency": 90,
-    "automationCoverage": 98
+    "momentum": 78,
+    "engagement": 93,
+    "processQuality": 98,
+    "crossRepoCoherence": 90,
+    "securityPosture": 85,
+    "ecosystemIntegration": 92,
+    "capitalEfficiency": 91,
+    "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-04-24",
+    "date": "2026-04-28",
     "passing": 12,
     "warning": 0,
     "failing": 0,
@@ -196,8 +195,8 @@
       }
     ]
   },
-  "entropyScore": 0.042,
-  "entropyLastComputed": "2026-04-23",
+  "entropyScore": 0.063,
+  "entropyLastComputed": "2026-04-28",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,

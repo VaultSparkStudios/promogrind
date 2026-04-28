@@ -173,18 +173,6 @@ export function buildHeaders(apiKey, { useThinking = false, longCache = false, f
   return headers;
 }
 
-export async function probeModelsEndpoint(apiKey, fetchImpl = fetch) {
-  const response = await fetchImpl('https://api.anthropic.com/v1/models', {
-    headers: buildHeaders(apiKey),
-  });
-  const text = await response.text().catch(() => '');
-  return {
-    status: response.status,
-    ok: response.ok,
-    bodyPreview: text.slice(0, 200),
-  };
-}
-
 /**
  * Make a Claude API messages call via raw https (no SDK dependency).
  * Returns the parsed response or throws on error.
