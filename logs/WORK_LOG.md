@@ -131,3 +131,11 @@ Append chronological entries.
 - Files or systems touched: `src/App.jsx`, `src/calculators/ParlayHedge.jsx`, `src/routes/LandingRoute.jsx`, `src/launchState.js`, `public/sw.js`, `public/landing/index.html`, `context/*.md`, `audits/2026-04-23-s75.json`, Codex memory.
 - Risks created or removed: removed the boot-time `ParlayHedge is not defined` failure and the service-worker consumed-response clone error that could break asset caching. Remaining risk is now non-blocking production noise and the unchanged external launch-proof blockers: real affiliate links, one real Stripe smoke, and one friend beta pass.
 - Recommended next move: push/deploy these fixes, then clean up the PostHog config/flag noise and resume the external monetization + launch-proof checklist.
+
+### 2026-04-28 - Session 80 protocol/trust closeout
+
+- Goal: audit PromoGrind for the next highest-impact improvement plan, execute the refreshed Genius List work, then close out with all context/memory/CDR/task-board surfaces updated and pushed.
+- What changed: produced the combined improvement plan for UI/UX, engagement, AI, security, speed, organization, and API/token efficiency; added `docs/PROTOCOL_FAQ.md` with 10 public-safe protocol Q&A entries; updated public privacy and data-policy pages so they match the actual PostHog/Sentry analytics and diagnostics implementation; refreshed closeout state, handoff, SIL, truth audit, decisions, audit JSON, CDR, work log, and Codex memory.
+- Files or systems touched: `docs/PROTOCOL_FAQ.md`, `public/privacy/index.html`, `public/data-policy/index.html`, `context/CURRENT_STATE.md`, `context/LATEST_HANDOFF.md`, `context/TASK_BOARD.md`, `context/SELF_IMPROVEMENT_LOOP.md`, `context/TRUTH_AUDIT.md`, `context/DECISIONS.md`, `context/PROJECT_STATUS.json`, `docs/CREATIVE_DIRECTION_RECORD.md`, `logs/WORK_LOG.md`, `audits/2026-04-28-s80.json`, Codex memory.
+- Risks created or removed: removed stale public trust claims and removed the empty Protocol Oracle FAQ state. Remaining risk is external launch proof plus the known full-suite Vitest worker timeout caveat from S79.
+- Recommended next move: push/deploy this closeout, inspect the retained launch-verification artifact, then complete affiliate-link, Stripe-smoke, and friend-beta proof requirements.

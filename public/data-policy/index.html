@@ -49,10 +49,10 @@
     </nav>
 
     <h1>Data Use Policy</h1>
-    <p class="updated">Last updated: April 3, 2026</p>
+    <p class="updated">Last updated: April 28, 2026</p>
 
     <div class="callout">
-      <strong>Plain-language summary:</strong> We collect only what we need to run PromoGrind. Your bet data stays yours — you can export or delete it anytime. We use privacy-friendly analytics (no ad tracking). We never sell your personal data.
+      <strong>Plain-language summary:</strong> We collect only what we need to run PromoGrind. Your bet data stays yours — you can export or delete it anytime. We use product analytics and error monitoring for quality, not ad tracking. We never sell your personal data.
     </div>
 
     <h2>1. Who We Are</h2>
@@ -66,7 +66,7 @@
       <tr><th>Data Type</th><th>What It Is</th><th>Where Stored</th><th>Why</th></tr>
       <tr><td>Calculator inputs</td><td>Numbers you type into calculators</td><td>Your browser only (never sent)</td><td>To compute results locally</td></tr>
       <tr><td>App preferences</td><td>Dark mode, compact mode settings</td><td>Browser localStorage</td><td>To remember your preferences</td></tr>
-      <tr><td>Page visit analytics</td><td>Page URL, referrer, approximate country, device type</td><td>Plausible (no personal ID)</td><td>To understand which features are used</td></tr>
+      <tr><td>Product analytics</td><td>Page URL, feature events, referrer/UTM fields, device/browser metadata, masked replay metadata when enabled</td><td>PostHog when configured</td><td>To understand which features are used and improve activation, reliability, and launch quality</td></tr>
     </table>
 
     <h3>If You Create a Free Vault Account</h3>
@@ -96,17 +96,18 @@
       <tr><td>Supabase</td><td>Database, auth, edge functions</td><td>Account data, app data</td><td><a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a></td></tr>
       <tr><td>Stripe</td><td>Payment processing</td><td>Email, payment details</td><td><a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a></td></tr>
       <tr><td>Resend</td><td>Transactional + newsletter email</td><td>Email address</td><td><a href="https://resend.com/privacy" target="_blank" rel="noopener">resend.com/privacy</a></td></tr>
-      <tr><td>Plausible Analytics</td><td>Privacy-friendly web analytics</td><td>Page URL, referrer, approximate location, device type (no cookies, no personal ID)</td><td><a href="https://plausible.io/privacy" target="_blank" rel="noopener">plausible.io/privacy</a></td></tr>
+      <tr><td>PostHog</td><td>Product analytics and feature usage measurement</td><td>Page URL, feature events, referrer/UTM fields, device/browser metadata, masked replay metadata when enabled</td><td><a href="https://posthog.com/privacy" target="_blank" rel="noopener">posthog.com/privacy</a></td></tr>
+      <tr><td>Sentry</td><td>Error monitoring and crash diagnostics</td><td>Error details, browser/runtime metadata, masked replay data when enabled</td><td><a href="https://sentry.io/privacy/" target="_blank" rel="noopener">sentry.io/privacy</a></td></tr>
       <tr><td>Google Fonts</td><td>Typography (Space Grotesk)</td><td>Your IP address (Google's CDN)</td><td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></td></tr>
       <tr><td>Anthropic (Claude)</td><td>AI features (PromoChat, Advisor)</td><td>Text inputs you provide to AI features</td><td><a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">anthropic.com/privacy</a></td></tr>
     </table>
 
     <h2>4. Cookies and Local Storage</h2>
-    <p>PromoGrind does not use advertising cookies or tracking cookies.</p>
+    <p>PromoGrind does not use advertising cookies or sell tracking data.</p>
     <ul>
       <li><strong>Browser localStorage:</strong> We use localStorage to save your calculator preferences, app settings, and offline cache of your ledger/tracker data. This stays on your device.</li>
       <li><strong>Supabase auth token:</strong> When you log in, Supabase stores an auth session token in localStorage (key prefix: <code>sb-</code>). This is how your session persists between visits.</li>
-      <li><strong>Plausible Analytics:</strong> Plausible does not use cookies and does not collect personal data. It uses aggregate anonymized data.</li>
+      <li><strong>Product analytics:</strong> When enabled, PostHog may use localStorage and first-party cookies to measure product usage and avoid duplicate events. PromoGrind disables automatic interaction capture and masks replay text and inputs.</li>
     </ul>
 
     <h2>5. Data Retention</h2>
@@ -118,7 +119,7 @@
       <tr><td>Payment records (Stripe)</td><td>As required by Stripe's financial record obligations</td></tr>
       <tr><td>Newsletter subscriptions</td><td>Until you unsubscribe</td></tr>
       <tr><td>Community content (public wins, promos)</td><td>Until you request removal</td></tr>
-      <tr><td>Analytics data (Plausible)</td><td>Aggregate, anonymized — retained indefinitely</td></tr>
+      <tr><td>Analytics and error-monitoring data</td><td>Retained as needed for product-quality, security, and reliability analysis</td></tr>
     </table>
 
     <h2>6. Your Rights</h2>

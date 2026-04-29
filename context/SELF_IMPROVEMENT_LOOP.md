@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S73:783 | S74:822 | S75:834 | S77:878 | S78:891
-Avgs — 3: 867.7 [N=3] | all: 720.8 [N=11]
-  └ 3-session (S75/S77/S78): Dev 95.3 | Align 96.7 | Momentum 76.7 | Engage 92.0 | Process 98.7 | Coher 78.7 | Sec 78.7 | Eco 86.7 | Cap 87.7 | Auto 93.7
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
+Sparkline (last 5 totals): S75:834 | S77:878 | S78:891 | S79:919 | S80:931
+Avgs - 3: 913.7 [N=3] | all: 739.9 [N=12]
+  └ 3-session (S78/S79/S80): Dev 95.3 | Align 97.7 | Momentum 79.3 | Engage 93.0 | Process 98.7 | Coher 90.7 | Sec 87.0 | Eco 92.7 | Cap 92.3 | Auto 100.0
+Velocity trend: ↓  |  Protocol velocity: ↓  |  Debt: down
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-24 | Session 78 | Total: 891/1000 | Velocity: 4 | protocolVelocity: 4
+Last session: 2026-04-28 | Session 80 | Total: 931/1000 | Velocity: 2 | protocolVelocity: 2
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -413,6 +413,35 @@ Rolling avg (last 3): Dev 88.7 | Align 96.0 | Momentum 79.7 | Engage 84.7 | Proc
 1. Add a `--check-gitignored` flag to `scan-secrets.mjs` that reports findings in gitignored-but-local files as advisory only (not exit 1), so security visibility is preserved without false-positive push blocks.
 2. Extend pre-push hook with a diff-filter legend comment so future maintainers know why ACMRT was chosen.
 3. Consider a micro-session SIL category modifier: sessions explicitly tagged as "micro/fix" shouldn't drag down Momentum avg unfairly — document this in SIL_RUBRIC_V3.md.
+
+## 2026-04-28 — Session 80 | Total: 931/1000 | Velocity: 2 | Debt: down
+Rolling avg (last 3): Dev 94.0 | Align 97.7 | Momentum 79.7 | Engage 92.7 | Process 98.3 | Coher 90.3 | Sec 87.0 | Eco 92.0 | Cap 92.3 | Auto 99.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 96 | ↑ | No app runtime churn; UX route integrity, protocol FAQ listing, public sanitization, and doctor are green. |
+| Creative Alignment | 98 | ↑ | The audit direction and public trust copy sharpen PromoGrind toward a truthful, consumer-grade operator system. |
+| Momentum | 80 | ↑ | Two scoped S80 items shipped after the audit: protocol self-serve and public trust copy alignment. |
+| Engagement | 93 | → | No new consumer loop shipped, but the audit identifies the next engagement/personalization tranche. |
+| Process Quality | 99 | ↑ | Closeout surfaces, CDR, audit, memory, truth audit, and task board are refreshed around the same S80 state. |
+| Cross-Repo Coherence | 91 | ↑ | Public repo protocol shim, local protocol FAQ, and startup/go surfaces are less dependent on private ops availability. |
+| Security Posture | 88 | ↑ | Privacy/data-policy copy now matches the real analytics/diagnostics stack; strict public-repo sanitization remains clean. |
+| Ecosystem Integration | 93 | ↑ | Protocol Oracle, Studio doctor, startup brief, and public trust pages now tell the same repo-safe story. |
+| Capital Efficiency | 93 | ↑ | Cached protocol FAQ reduces repeated context/API spend for common session questions without weakening protocol quality. |
+| Automation Coverage | 100 | → | Doctor and route/sanitization checks remain green; cache staleness is now a known refresh step rather than a blocker. |
+| **Total** | **931 / 1000** | | |
+
+**Top win:** S80 removed two quiet trust/process leaks: protocol help is no longer empty without an AI-key-backed refresh, and public privacy/data-policy copy no longer contradicts the analytics implementation.
+
+**Top gap:** the highest business-impact blockers are still external launch proofs: real sportsbook tracking URLs, one live Stripe smoke purchase, and one friend-facing beta pass.
+
+**Intent outcome:** Achieved. The project audit was completed, the refreshed repo-controllable Genius List work shipped, and closeout truth now points to S80.
+
+**Brainstorm**
+
+1. Build a personalized "Promo OS" onboarding path that calibrates bankroll, jurisdiction, book coverage, risk tolerance, and preferred promo lanes, then drives every dashboard recommendation from that profile.
+2. Add an AI post-settlement coach that turns actual result feedback into one next best action, one mistake pattern, and one bankroll/risk adjustment.
+3. Add a privacy/trust dashboard that shows users which diagnostics, analytics, and AI features are active, with plain toggles where technically feasible.
 
 ## 2026-04-23 — Session 75 | Total: 834/1000 | Velocity: 2 | Debt: down
 Rolling avg (last 3): Dev 94.7 | Align 96.3 | Momentum 79.3 | Engage 92.7 | Process 96.0 | Coher 58.7 | Sec 67.3 | Eco 76.3 | Cap 80.0 | Auto 76.7

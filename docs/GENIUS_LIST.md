@@ -1,20 +1,6 @@
-# Genius Hit List — Session 77
+# Genius Hit List — Session 80
 
-> Generated: 2026-04-24 | Scope: founder-portfolio | Pattern detectors: 1 signals evaluated | Top 12 shown
-
----
-
-## 🔧 #1  Protocol Oracle FAQ cache stale (999d)
-
-**Tier:** 🔧 LOW · **Category:** protocol · **Pattern:** 45 · **IGNIS:** 80 (fire) · **Final:** 85
-
-Refresh the 10 Q&A pairs so agents self-serve current protocol knowledge.
-
-*IGNIS rank:* cat:PROTOCOL(+20)
-
-```bash
-node scripts/ops.mjs ask --list
-```
+> Generated: 2026-04-29 | Scope: founder-portfolio | Pattern detectors: 0 signals evaluated | Top 12 shown
 
 ---
 

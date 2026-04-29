@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-04-28 (S79)
+Last reviewed: 2026-04-28 (S80)
 Overall status: yellow
-Next action: inspect the next deploy artifact after push, keep affiliate-link truth honest until real URLs exist, use `node scripts/update-launch-proof.mjs --list --guide` for external proof evidence, and follow up on the full-suite Vitest worker timeout.
+Next action: inspect the next deploy artifact after push, keep affiliate-link truth honest until real URLs exist, use `node scripts/update-launch-proof.mjs --list --guide` for external proof evidence, refresh the Genius List cache after closeout context changes, and follow up on the full-suite Vitest worker timeout.
 
 ---
 
@@ -20,10 +20,10 @@ Next action: inspect the next deploy artifact after push, keep affiliate-link tr
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, and `PROJECT_STATUS.json` agree that S79 repo-owned work advanced while the remaining launch blockers are external affiliate/verification tasks. |
+| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, and `PROJECT_STATUS.json` agree that S80 repo-owned work advanced while the remaining launch blockers are external affiliate/verification tasks. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Startup brief, task board, launch proof queue, and closeout surfaces now describe the same S79 posture. |
-| Handoff continuity | 5 | Session 79 handoff reflects shipped repo-local work, verification caveats, and the remaining external blockers. |
+| Derived-view freshness | 5 | Startup brief, task board, launch proof queue, and closeout surfaces now describe the same S80 posture. |
+| Handoff continuity | 5 | Session 80 handoff reflects shipped repo-local work, verification caveats, and the remaining external blockers. |
 | Contradiction density | 4 | The main contradiction left is operational/public-repo policy around generated private-shim files, not product launch truth. |
 | **Total** | **23 / 25** | Green-yellow: canonical truth surfaces are coherent; remaining yellow state is due to external launch proofs and public/private ops shim tension. |
 
@@ -33,14 +33,16 @@ Next action: inspect the next deploy artifact after push, keep affiliate-link tr
 
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
-| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-04-28 | PromoGrind status reflects `FORGE`, public-unlaunched, targeted regression/build/smoke verification, S79 repo improvements, and unchanged external blockers. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-28 | S79 write-back aligns state, handoff, task board, work log, proof docs, audit, and memory around the same proof-honest launch-hardening tranche. |
+| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-04-28 | PromoGrind status reflects `FORGE`, public-unlaunched, S80 public trust/protocol improvements, and unchanged external blockers. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-28 | S80 write-back aligns state, handoff, task board, work log, protocol FAQ docs, audit, and memory around the same proof-honest launch-hardening tranche. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
 | Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts | yellow | 2026-04-28 | Proof updates are evidence-gated and now have machine-readable next steps/evidence requirements, but required sportsbook monetization links, real Stripe smoke, and friend beta remain incomplete. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-24 | Strict public-repo sanitization reports 0 critical / 0 warning and no longer false-flags public protocol/provenance docs or ignored local ops state. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
+| Public trust copy | `src/analytics.js` + public pages | `/privacy/`, `/data-policy/` | green | 2026-04-28 | Privacy/data-policy pages now describe the PostHog/Sentry analytics and diagnostics posture instead of stale Plausible/no-cookie claims. |
+| Protocol FAQ cache | `docs/SESSION_PROTOCOL.md` + `AGENTS.md` | `docs/PROTOCOL_FAQ.md`, `ops.mjs ask --list` | green | 2026-04-28 | Cached public-safe protocol Q&A exists and `node scripts/ops.mjs ask --list` returns populated entries. |
 
 ---
 
@@ -50,6 +52,15 @@ Next action: inspect the next deploy artifact after push, keep affiliate-link tr
 - `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
 - The deploy-time verification artifact needs to be checked after this push/deploy cycle completes.
 - Full-suite `npm test` is not currently a clean signal because the parallel run timed out in `calculators.test.jsx`; the same suite passed in isolation and targeted regression/build/smoke gates passed.
+- Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+
+## Resolved This Session (S80)
+
+- Added `docs/PROTOCOL_FAQ.md` with 10 public-safe session-protocol Q&A entries.
+- Restored `node scripts/ops.mjs ask --list` to a populated protocol FAQ output.
+- Updated public `/privacy/` and `/data-policy/` copy to match the actual PostHog/Sentry analytics and diagnostics stack.
+- Produced the S80 project audit plan covering UI/UX, engagement, AI, security, performance, organization, and API/token efficiency.
+- Verified UX route integrity, strict public-repo sanitization, protocol FAQ listing, and Studio doctor.
 
 ## Resolved This Session (S79)
 

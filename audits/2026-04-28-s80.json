@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-28",
+  "session": 80,
+  "sessionIntent": "audit PromoGrind for top improvements, execute refreshed Genius List work, close out, update memory/context/CDR/task-board surfaces, commit, and push to GitHub",
+  "intentOutcome": "achieved-for-repo-controllable-work",
+  "testsPassingAtClose": 66,
+  "testsDelta": 0,
+  "buildPassing": true,
+  "sanitizationFindings": {
+    "critical": 0,
+    "warning": 0
+  },
+  "silTotal": 931,
+  "silDelta": 12,
+  "velocity": 2,
+  "protocolVelocity": 2,
+  "debtDirection": "down",
+  "shippedItems": [
+    "produced a ranked improvement plan for UI/UX, gamification, AI, security, performance, organization, and API/token efficiency",
+    "added docs/PROTOCOL_FAQ.md with 10 public-safe protocol Q&A entries",
+    "restored node scripts/ops.mjs ask --list to populated protocol FAQ output",
+    "updated public privacy and data-policy pages to match the PostHog/Sentry analytics and diagnostics implementation"
+  ],
+  "verification": [
+    "npm run smoke:ux passed",
+    "node scripts/check-public-repo-sanitization.mjs --strict passed",
+    "node scripts/ops.mjs ask --list passed",
+    "node scripts/ops.mjs doctor passed with 12/12 checks",
+    "full npm test not rerun in S80; S79 caveat remains that full parallel npm test hit a Vitest worker/import timeout while targeted and isolated suites passed"
+  ],
+  "openHumanActions": [
+    "Provide real approved affiliate/referral tracking URLs for BetMGM, bet365, and BetRivers",
+    "Run one real Stripe smoke purchase and verify the checkout, webhook/subscription, and portal path",
+    "Complete one friend-facing auth/calculator/CTA/pricing pass after deploy",
+    "Inspect the next deploy's retained launch-verification artifact"
+  ],
+  "closeoutMethod": "manual protocol closeout with commit and push",
+  "contextPctAtClose": 1.2
+}

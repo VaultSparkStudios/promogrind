@@ -98,3 +98,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: perform full Studio OS closeout for PromoGrind, refresh all canonical repo-truth and memory surfaces, then commit and push the resulting state to GitHub.
 - Why it matters: the next session and deployment checks need a truthful handoff that distinguishes shipped repo work from still-external launch proofs.
 - Supersedes prior entry: —
+
+### 2026-04-28 — Make PromoGrind best-in-class across product, intelligence, and trust
+
+- Category: Direction
+- Human input (verbatim or close paraphrase): Audit the project and recommend refinements that improve current features, add depth and innovative features, improve UI/UX and user feedback loops, make the app more gamified, engaging, and immersive for consumers, improve AI/intelligence integration, improve security, speed, organization, efficiency, and reduce token/API consumption without sacrificing quality.
+- Area affected: feature / brand / tone / scope / process
+- Previous state: PromoGrind had strong launch-hardening and engagement systems, but the next product direction had not been consolidated into one ranked consumer-grade improvement plan.
+- New required direction: future work should compound toward a deeply personalized, trustworthy, AI-assisted promo operating system with rich feedback loops, measurable mastery, visible trust controls, faster operation, and disciplined AI/API spend.
+- Why it matters: the product should feel like an elite consumer co-pilot rather than a bundle of calculators and dashboards; every improvement should increase retention, trust, decision quality, or launch readiness.
+- Supersedes prior entry: —

@@ -16,6 +16,9 @@
 
 ## Shipped This Session
 
+- refresh Protocol Oracle FAQ cache — **DONE S80**: added `docs/PROTOCOL_FAQ.md` with 10 public-safe session-protocol Q&A entries; `node scripts/ops.mjs ask --list` now returns cached protocol entries instead of an empty-cache message.
+- align public privacy/data-policy copy with actual analytics stack — **DONE S80**: replaced stale Plausible/no-cookie claims with PostHog/Sentry-aware language matching `src/analytics.js`; UX route integrity and strict public sanitization passed.
+
 - harden scanner/community workflow reconciliation — **DONE S79**: scanner and community workflow builders now emit stable IDs/source IDs so duplicate queue actions reconcile instead of multiplying; workflow upserts preserve progressed states when a fresh queued duplicate arrives; regression coverage added.
 - deepen observability around activation and launch blockers — **DONE S79**: observability snapshots now include activation-funnel completion plus required launch-link status, and the dashboard panel surfaces missing launch books alongside existing activation, AI, sync, and monetization signals.
 - continue decomposing the remaining high-churn `src/App.jsx` seams — **DONE S79 partial**: the `Community Promos` tab now routes to the extracted `CommunityPromoBoard` instead of the stale inline `CommunityPromos` implementation.
@@ -73,7 +76,7 @@
 ## Blocked
 
 - no local architecture blocker remains; the only unresolved launch-proof blocker still verified from this workspace is missing real approved affiliate tracking links for sportsbook CTAs, especially `BetMGM`, `bet365`, and `BetRivers`
-- Protocol Oracle FAQ cache refresh is blocked in this workspace: `node scripts/ops.mjs ask --list` is read-only when `docs/PROTOCOL_FAQ.md` is empty, and `scripts/ask-protocol.mjs` cannot generate/cache answers without an `ANTHROPIC_API_KEY`
+- Protocol Oracle FAQ cache refresh blocker cleared in S80: `docs/PROTOCOL_FAQ.md` now contains 10 cached protocol entries, so `node scripts/ops.mjs ask --list` returns a populated FAQ without requiring `ANTHROPIC_API_KEY`
 
 ## Later
 
