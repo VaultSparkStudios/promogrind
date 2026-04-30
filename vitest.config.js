@@ -7,5 +7,11 @@ export default defineConfig({
     environment: "node",
     globals: true,
     include: ["src/__tests__/**/*.test.{js,jsx}"],
+    testTimeout: 20000,
+    hookTimeout: 20000,
+    pool: "forks",
+    maxWorkers: 4,
+    minWorkers: 1,
+    isolate: true,
   },
 });

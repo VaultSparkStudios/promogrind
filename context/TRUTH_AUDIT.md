@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-04-28 (S80)
-Overall status: yellow
-Next action: inspect the next deploy artifact after push, keep affiliate-link truth honest until real URLs exist, use `node scripts/update-launch-proof.mjs --list --guide` for external proof evidence, refresh the Genius List cache after closeout context changes, and follow up on the full-suite Vitest worker timeout.
+Last reviewed: 2026-04-30 (S81)
+Overall status: green
+Next action: capture and root-cause the founder-reported live dashboard console errors next session; once Stripe live keys land, run `npm run smoke:stripe -- --record`; with one trusted tester, run `npm run beta:check -- --record`; after the next deploy, run `npm run ingest:launch` and confirm `post-deploy.json` shows `ok: true`; keep affiliate-link truth honest until real partner approvals exist.
 
 ---
 

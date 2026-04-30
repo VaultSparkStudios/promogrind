@@ -12,6 +12,7 @@ import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_UI, SEARCH_UI } from "./app/appText.js";
+import { parseBetSlip } from "./app/parseBetSlip.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
@@ -3223,23 +3224,7 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
 
 // TaxTimingAdvisor â†’ ./components/Ledger.jsx
 // â•â•â• BET SLIP TEXT PARSER â•â•â•
-const parseBetSlip = (text) => {
-  const result = {};
-  const dollarMatch = text.match(/\$?([\d,]+(?:\.\d{1,2})?)/);
-  if(dollarMatch) result.stake = dollarMatch[1].replace(',','');
-  const americanOdds = text.match(/([+-]\d{3,4})/);
-  const decimalOdds = text.match(/\b([1-9]\d?\.\d{2})\b/);
-  const fractOdds = text.match(/\b(\d+\/\d+)\b/);
-  if(americanOdds) result.odds = americanOdds[1];
-  else if(decimalOdds) result.odds = decimalOdds[1];
-  else if(fractOdds) result.odds = fractOdds[1];
-  const bookNames = ["DraftKings","FanDuel","BetMGM","Caesars","bet365","ESPN BET","Fanatics","BetRivers","Draftkings","Fanduel","Betmgm"];
-  for(const b of bookNames) { if(text.toLowerCase().includes(b.toLowerCase())) { result.book = BOOKS.find(bk=>bk.name.toLowerCase()===b.toLowerCase())?.name||b; break; } }
-  if(/parlay/i.test(text)) result.type = "Parlay";
-  const descMatch = text.match(/([A-Z][a-z]+ (?:vs?\.?|@) [A-Z][a-z]+)/);
-  if(descMatch) result.notes = descMatch[1];
-  return result;
-};
+// parseBetSlip extracted to ./app/parseBetSlip.js
 
 // â•â•â• COMMUNITY PROMOS â•â•â•
 function CommunityPromos({ user, supabase: sb, isPro: isProFn }) {

@@ -46,9 +46,20 @@ export function initAnalytics() {
             capture_pageleave: true,
             persistence: "localStorage+cookie",
             autocapture: false,
-            // PromoGrind uses Supabase-backed feature flags — disable PostHog polling
+            // PromoGrind uses Supabase-backed feature flags — disable PostHog polling/remote config
             advanced_disable_decide: true,
+            advanced_disable_feature_flags: true,
+            advanced_disable_feature_flags_on_first_load: true,
+            advanced_disable_toolbar_metrics: true,
             disable_surveys: true,
+            disable_session_recording: false,
+            // Silence verbose console output in production; keep dev signal
+            debug: !IS_PROD,
+            loaded: (ph) => {
+              if (IS_PROD) {
+                try { ph.debug(false); } catch {}
+              }
+            },
             session_recording: { maskAllInputs: true, maskTextSelector: "*" },
           });
           posthogClient = posthog;

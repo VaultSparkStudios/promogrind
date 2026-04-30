@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S75:834 | S77:878 | S78:891 | S79:919 | S80:931
-Avgs - 3: 913.7 [N=3] | all: 739.9 [N=12]
-  └ 3-session (S78/S79/S80): Dev 95.3 | Align 97.7 | Momentum 79.3 | Engage 93.0 | Process 98.7 | Coher 90.7 | Sec 87.0 | Eco 92.7 | Cap 92.3 | Auto 100.0
-Velocity trend: ↓  |  Protocol velocity: ↓  |  Debt: down
-Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-28 | Session 80 | Total: 931/1000 | Velocity: 2 | protocolVelocity: 2
+Sparkline (last 5 totals): S77:878 | S78:891 | S79:919 | S80:931 | S81:947
+Avgs - 3: 932.3 [N=3] | all: 756.5 [N=13]
+  └ 3-session (S79/S80/S81): Dev 96.3 | Align 98.0 | Momentum 84.0 | Engage 92.7 | Process 98.3 | Coher 91.3 | Sec 88.7 | Eco 93.3 | Cap 93.3 | Auto 100.0
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
+Momentum runway: ~3 sessions  |  Intent rate: 100% achieved (last 5)
+Last session: 2026-04-30 | Session 81 | Total: 947/1000 | Velocity: 16 | protocolVelocity: 16
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -413,6 +413,35 @@ Rolling avg (last 3): Dev 88.7 | Align 96.0 | Momentum 79.7 | Engage 84.7 | Proc
 1. Add a `--check-gitignored` flag to `scan-secrets.mjs` that reports findings in gitignored-but-local files as advisory only (not exit 1), so security visibility is preserved without false-positive push blocks.
 2. Extend pre-push hook with a diff-filter legend comment so future maintainers know why ACMRT was chosen.
 3. Consider a micro-session SIL category modifier: sessions explicitly tagged as "micro/fix" shouldn't drag down Momentum avg unfairly — document this in SIL_RUBRIC_V3.md.
+
+## 2026-04-30 — Session 81 | Total: 947/1000 | Velocity: 16 | Debt: down
+Rolling avg (last 3): Dev 96.3 | Align 98.0 | Momentum 84.0 | Engage 92.7 | Process 98.3 | Coher 91.3 | Sec 88.7 | Eco 93.3 | Cap 93.3 | Auto 100.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 97 | ↑ | Vitest full suite stabilized 392/392 in ~95s (was 380/382 at ~274s with timeouts); build, smoke:browser, smoke:ux, sanitization all green. |
+| Creative Alignment | 98 | → | Scripted runners enforce evidence-based proof recording; manual launch-proof surface stays honest about partner-side affiliate gap. |
+| Momentum | 90 | ↑ | Six substantial deliverables in one pass: vitest fix, PostHog hygiene, ingester, seam extraction, two operator runners, secret sync; one external blocker (`SUPABASE_SERVICE_ROLE_KEY`) actually flipped from missing to set in CI. |
+| Engagement | 93 | → | No new consumer engagement loop shipped this session — focus was launch-hardening + operator workflow. |
+| Process Quality | 99 | → | Full S81 write-back across all 10 closeout surfaces; uncommitted-changes-vs-deployed-site distinction made explicit in handoff. |
+| Cross-Repo Coherence | 92 | ↑ | New `sync:secrets` and `ingest:launch` close the gap between repo truth and CI/Actions truth without leaking either way. |
+| Security Posture | 90 | ↑ | PostHog hygiene reduces production telemetry chatter; `SUPABASE_SERVICE_ROLE_KEY` properly seated in CI; strict sanitization 0/0. |
+| Ecosystem Integration | 94 | ↑ | `gh` CLI now wired into two operator-facing scripts; LAUNCH_PROOFS remains the single canonical manual proof surface; post-deploy artifact has its own additive surface. |
+| Capital Efficiency | 94 | ↑ | Test suite ~3× faster on green path saves CI minutes; scripted runners + ingester avoid future manual context spend on the same checklists. |
+| Automation Coverage | 100 | → | Doctor + sanitization + UX route integrity green; new automation surfaces add coverage without subtracting. |
+| **Total** | **947 / 1000** | | |
+
+**Top win:** Vitest full suite went green and fast in one config + import-hoist pass — `npm test` now reliably passes 392/392 in ~95s instead of timing out, and the fix is the right kind (canonical static imports + Vitest 4-aligned pool config), not a workaround.
+
+**Top gap:** the founder reported live dashboard errors at the end of the session; my S81 changes are uncommitted at that report so the live errors predate this work and remain unfixed pending console-error capture or a headless scan next session.
+
+**Intent outcome:** Achieved. All 7 prioritized items shipped, every external blocker reachable from this repo was fixed (`SUPABASE_SERVICE_ROLE_KEY` synced + redeploy triggered), and operator-side blockers (affiliate approvals, manual smoke/beta) now have one-command runners ready.
+
+**Brainstorm**
+
+1. Wire a tiny puppeteer/playwright headless smoke that hits `https://promogrind.bet/dashboard` after each deploy and reports console errors into `artifacts/launch-verification/post-deploy.json`, so dashboard regressions can't slip past the static smoke.
+2. Extract `EmailCapture`, `SessionModal`, and `Glossary` from `src/App.jsx` next — they're self-contained surfaces with limited shared state and would meaningfully shrink the monolith.
+3. Add a one-button "`/launch`" command that runs `verify:launch-local` + `ingest:launch` + a `--print` of both proof runners so a single command tells the operator everything still required for full launch.
 
 ## 2026-04-28 — Session 80 | Total: 931/1000 | Velocity: 2 | Debt: down
 Rolling avg (last 3): Dev 94.0 | Align 97.7 | Momentum 79.7 | Engage 92.7 | Process 98.3 | Coher 90.3 | Sec 87.0 | Eco 92.0 | Cap 92.3 | Auto 99.3

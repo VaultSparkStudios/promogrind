@@ -13,6 +13,24 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen:
 - Follow-up:
 
+### 2026-04-30 - Stabilize Vitest full suite via static imports + explicit pool config (S81)
+
+- Status: accepted
+- Context: `npm test` was failing the full parallel run with a 20s `beforeEach` timeout in `calculators.test.jsx`, while the same file passed when run in isolation. Root cause: per-`beforeEach` `await import("../calculators/*.jsx")` dynamic imports incurred per-test transform/import cost across happy-dom forked workers, blowing the default timeout. Vitest 4 also deprecated `test.poolOptions`.
+- Decision: hoist all six dynamic calculator imports in `calculators.test.jsx` to top-level static imports, drop `let X` reassignments in each `describe`, and configure `vitest.config.js` with `testTimeout: 20000`, `hookTimeout: 20000`, `pool: "forks"`, `maxWorkers: 4`, `minWorkers: 1`, `isolate: true`. Use top-level pool options (Vitest 4 API), not `poolOptions`.
+- Alternatives considered: bump just `testTimeout`; force `singleFork: true` (too slow); move calculator tests to a separate config; mark the file with `.serial`.
+- Why this was chosen: static imports are the canonical approach when test bodies don't actually need module re-evaluation between tests. The transform cost is paid once per worker, then cached. Result: 392/392 in ~95s, no warnings.
+- Follow-up: keep an eye on full-suite duration as more JSX tests land; if it climbs past ~120s, consider a project split or `cacheDir`.
+
+### 2026-04-30 - Treat the launch-verification artifact as additive truth that never overwrites manual proofs (S81)
+
+- Status: accepted
+- Context: Adding a post-deploy ingester risks the temptation to auto-flip `LAUNCH_PROOFS.json` proofs to `complete` when CI passes. That would silently bypass the manual evidence requirements (real Stripe purchase, real friend beta) that the proof surface exists to enforce.
+- Decision: `scripts/ingest-launch-verification.mjs` writes only to `artifacts/launch-verification/post-deploy.{md,json}`. It never touches `context/LAUNCH_PROOFS.json`. Manual proofs flip only via the dedicated runners (`run-stripe-smoke.mjs`, `run-friend-beta-checklist.mjs`) with explicit `--record` and operator-supplied evidence.
+- Alternatives considered: have the ingester auto-mark `affiliateLinks` complete on green CI; allow `--apply` to flip proofs.
+- Why this was chosen: keeps the wall between automated and human-attested truth. The CI signal goes one place; human evidence goes another; both are surfaced separately at closeout.
+- Follow-up: if affiliate approvals come through, use `scripts/update-launch-proof.mjs --guide` to document evidence and flip status — never the ingester.
+
 ### 2026-04-23 - Canonicalize manual launch blockers in LAUNCH_PROOFS and fail on the exact required books
 
 - Status: accepted

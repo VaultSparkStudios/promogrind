@@ -45,6 +45,26 @@ Agents MUST NOT modify or remove existing entries.
 - Why it matters: (impact on product, canon, or brand)
 - Supersedes prior entry: (entry date if applicable, else "—")
 
+### 2026-04-30 — Public-launch quality bar: every feature/page must work and be cohesive
+
+- Category: Direction
+- Human input (verbatim or close paraphrase): "Is every single feature/page working and up to date and cohesive?" plus a follow-on instruction to make sure all features/tools/calculators work and there are no errors before public launch.
+- Area affected: scope / quality bar / launch gate
+- Previous state: launch hardening was already in progress with `LAUNCH_PROOFS.json`, automated UX route integrity, browser smoke, and bundle/sanitization gates, but cohesion was being asserted from automated gates alone — no founder-level requirement that every surface be manually verified before announce.
+- New required direction: before any public announcement, the project must satisfy three layers of confidence simultaneously — (1) automated gates green (tests, smoke:ux, smoke:browser, sanitization, doctor), (2) operator-attested manual proofs (Stripe smoke, friend beta) recorded as evidence in `LAUNCH_PROOFS.json` via the new scripted runners, and (3) explicit dashboard/runtime error capture from the deployed site (no console errors during normal user flows). Cohesion is treated as a composite of these three, not just (1).
+- Why it matters: it raises the launch bar from "automated gates pass" to "founder confidence + automated gates + recorded human evidence," matching the public-launch reputation cost. It also legitimizes the time spent on dashboard error diagnosis as in-scope launch work rather than extra polish.
+- Supersedes prior entry: —
+
+### 2026-04-30 — Honest blocker handling — never fabricate operator-side evidence
+
+- Category: Approval
+- Human input (verbatim or close paraphrase): Operator confirmed in-session "I did all the affiliate links I could" and asked the agent to implement the next-highest-impact items at quality bar in optimal order. Implicitly approved the agent's plan to leave the partner-approval gap intact rather than weaken the launch gate, while shipping scripted runners that record operator-supplied evidence for Stripe smoke and friend beta when those passes happen.
+- Area affected: scope / launch gate
+- Previous state: prior CDR + DECISIONS already required not fabricating affiliate URLs; was unstated whether automated runners could optimistically flip manual proofs.
+- New required direction: scripted operator runners (`run-stripe-smoke.mjs`, `run-friend-beta-checklist.mjs`) and the post-deploy ingester (`ingest-launch-verification.mjs`) all keep the wall between automated CI truth and operator-attested evidence. CI never auto-flips manual proofs; manual runners only flip status when the operator answers each step `y` and supplies real IDs/notes; the ingester writes only to its own additive artifact surface.
+- Why it matters: the moment an automated tool can mark a manual proof complete, the proof surface stops being a real gate. Keeping the wall intact is what lets the launch announcement carry honest weight.
+- Supersedes prior entry: —
+
 ### 2026-04-22 — Make PromoGrind more immersive, cohesive, and operator-grade
 
 - Category: Direction

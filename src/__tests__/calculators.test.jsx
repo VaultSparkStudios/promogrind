@@ -4,6 +4,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { AppDataCtx } from "../contexts.jsx";
+import BonusBet from "../calculators/BonusBet.jsx";
+import ProfitBoost from "../calculators/ProfitBoost.jsx";
+import FirstBet from "../calculators/FirstBet.jsx";
+import KellyCriterion from "../calculators/KellyCriterion.jsx";
+import Arb2Way from "../calculators/Arb2Way.jsx";
+import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
@@ -51,12 +57,8 @@ function wrap(ui, appData = appDataDefault) {
 // ── BonusBet ───────────────────────────────────────────────────────────────
 
 describe("BonusBet calculator", () => {
-  let BonusBet;
-
-  beforeEach(async () => {
-    // Reset localStorage between tests
+  beforeEach(() => {
     localStorage.clear();
-    ({ default: BonusBet } = await import("../calculators/BonusBet.jsx"));
   });
 
   it("renders the calculator title", () => {
@@ -114,11 +116,8 @@ describe("BonusBet calculator", () => {
 // ── ProfitBoost ────────────────────────────────────────────────────────────
 
 describe("ProfitBoost calculator", () => {
-  let ProfitBoost;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     localStorage.clear();
-    ({ default: ProfitBoost } = await import("../calculators/ProfitBoost.jsx"));
   });
 
   it("renders the calculator title", () => {
@@ -159,11 +158,8 @@ describe("ProfitBoost calculator", () => {
 // ── FirstBet ───────────────────────────────────────────────────────────────
 
 describe("FirstBet calculator", () => {
-  let FirstBet;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     localStorage.clear();
-    ({ default: FirstBet } = await import("../calculators/FirstBet.jsx"));
   });
 
   it("renders the calculator title", () => {
@@ -204,11 +200,8 @@ describe("FirstBet calculator", () => {
 // ── KellyCriterion ─────────────────────────────────────────────────────────
 
 describe("KellyCriterion calculator", () => {
-  let KellyCriterion;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     localStorage.clear();
-    ({ default: KellyCriterion } = await import("../calculators/KellyCriterion.jsx"));
   });
 
   it("renders the calculator title", () => {
@@ -259,11 +252,8 @@ describe("KellyCriterion calculator", () => {
 // ── CalculatorReceipt ─────────────────────────────────────────────────────
 
 describe("CalculatorReceipt component", () => {
-  let CalculatorReceipt;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     localStorage.clear();
-    ({ default: CalculatorReceipt } = await import("../components/CalculatorReceipt.jsx"));
   });
 
   const defaultProps = {
@@ -318,11 +308,8 @@ describe("CalculatorReceipt component", () => {
 // ── Receipt button integration ────────────────────────────────────────────
 
 describe("Receipt button in ProfitBoost", () => {
-  let ProfitBoost;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     localStorage.clear();
-    ({ default: ProfitBoost } = await import("../calculators/ProfitBoost.jsx"));
   });
 
   it("shows Receipt button in result section with default inputs", () => {
@@ -341,11 +328,8 @@ describe("Receipt button in ProfitBoost", () => {
 });
 
 describe("Receipt button in Arb2Way", () => {
-  let Arb2Way;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     localStorage.clear();
-    ({ default: Arb2Way } = await import("../calculators/Arb2Way.jsx"));
   });
 
   it("shows Receipt button when arb exists (both + odds)", () => {

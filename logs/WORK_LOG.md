@@ -10,6 +10,28 @@ Append chronological entries.
 - Risks created or removed:
 - Recommended next move:
 
+### 2026-04-30 - Session 81 launch-hardening pass: scripted operator runners, vitest stability, app.jsx seam, posthog hygiene, ingester, secret sync
+
+- Goal: Implement the 7-item next-highest-impact list at quality bar, then fix every external launch blocker reachable from the repo.
+- What changed:
+  - Vitest config: added `testTimeout`, `hookTimeout`, `pool: "forks"`, `maxWorkers: 4`, `isolate: true` to stabilize the parallel suite. Hoisted six per-`beforeEach` dynamic calculator imports in `src/__tests__/calculators.test.jsx` to top-level static imports. Result: `npm test` 392/392 passing in ~95s (was 380/382 with timeouts at ~274s).
+  - Analytics console hygiene: `src/analytics.js` PostHog init now sets `advanced_disable_feature_flags`, `advanced_disable_feature_flags_on_first_load`, `advanced_disable_toolbar_metrics`, `debug: !IS_PROD`, and forces `ph.debug(false)` in production via the `loaded` callback.
+  - Post-deploy ingester: `scripts/ingest-launch-verification.mjs` (`npm run ingest:launch`) pulls latest GitHub `launch-verification` artifact via `gh`, writes `artifacts/launch-verification/post-deploy.{md,json}`. Never modifies manual `LAUNCH_PROOFS.json`. First live run surfaced missing `SUPABASE_SERVICE_ROLE_KEY` in CI as a real launch-blocking signal.
+  - App.jsx decomposition: extracted `parseBetSlip` to `src/app/parseBetSlip.js` plus 10-case regression test in `src/__tests__/parseBetSlip.test.js`.
+  - Operator runners: `scripts/run-stripe-smoke.mjs` (`npm run smoke:stripe`) walks 8 steps, captures Stripe IDs, records to `LAUNCH_PROOFS.json[stripeSmoke]` with `--record`. `scripts/run-friend-beta-checklist.mjs` (`npm run beta:check`) walks 5 steps with friction notes, records to `LAUNCH_PROOFS.json[friendBeta]` with `--record`.
+  - Secret sync helper: `scripts/sync-github-secrets.mjs` (`npm run sync:secrets`) reads `.env.admin` and pushes selected keys to GitHub Actions secrets via `gh secret set`. Used to set `SUPABASE_SERVICE_ROLE_KEY` and trigger a redeploy via `gh workflow run deploy-pages.yml`.
+  - Writeback: TASK_BOARD Now/Next reorganized; CURRENT_STATE snapshot rewritten for S81; LATEST_HANDOFF rebuilt for S81.
+- Files or systems touched:
+  - `vitest.config.js`, `src/__tests__/calculators.test.jsx`, `src/__tests__/parseBetSlip.test.js`
+  - `src/analytics.js`, `src/App.jsx`, `src/app/parseBetSlip.js`
+  - `scripts/ingest-launch-verification.mjs`, `scripts/run-stripe-smoke.mjs`, `scripts/run-friend-beta-checklist.mjs`, `scripts/sync-github-secrets.mjs`
+  - `package.json` (added `ingest:launch`, `sync:secrets`, `smoke:stripe`, `beta:check` scripts)
+  - `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`
+- Risks created or removed:
+  - Removed: parallel-worker Vitest timeout flake on full suite. Removed: PostHog feature-flag polling chatter in production console. Removed: missing `SUPABASE_SERVICE_ROLE_KEY` in CI (set this session; redeploy triggered).
+  - Created: `gh` CLI auth dependency for `npm run sync:secrets` and `npm run ingest:launch` — documented in script preconditions; closeout-time founder action.
+- Recommended next move: capture the founder-reported dashboard console errors so they can be root-caused (changes from S81 are not yet deployed; the live errors predate this session). Then run `npm run smoke:stripe -- --record` once Stripe live keys are configured, and `npm run beta:check -- --record` with one trusted tester.
+
 ### 2026-04-23 - Session 73 closeout and final unblocked launch-hardening pass
 
 - Goal: finish the remaining unblocked `/go` items, refresh all repo-truth surfaces, and push a verified closeout to GitHub.

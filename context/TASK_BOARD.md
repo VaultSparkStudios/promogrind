@@ -2,19 +2,25 @@
 
 ## Now
 
-- finish monetization coverage with real approved affiliate/referral links for `BetMGM`, `bet365`, and `BetRivers`; there are still no operator-provided tracking URLs in repo/local context to wire in honestly
-- run one real Stripe smoke purchase and verify the post-checkout portal/subscription path
-- complete one friend-facing auth/calculator/pricing pass after deploy and record it in `context/LAUNCH_PROOFS.json`
-- inspect the next deploy's retained `launch-verification` artifact after this push
-- continue decomposing the remaining high-churn `src/App.jsx` seams now that checkout notification handling and the community-promos tab route are extracted
+- run one real Stripe smoke purchase and record evidence — now scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
+- complete one friend-facing auth/calculator/pricing pass — now scripted: `npm run beta:check` walks the tester and records evidence
+- **NEW**: production deploy is missing `SUPABASE_SERVICE_ROLE_KEY` secret in GitHub Actions — surfaced by `npm run ingest:launch` against latest deploy run; add the secret to repo settings, rerun deploy, re-ingest
+- finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers` — operator confirmed S81 they have applied for everything they can; remaining gap is partner-side approval, not a repo task
 
 ## Next
 
-- add a post-deploy artifact ingester that reads the GitHub `launch-verification` artifact into a local proof summary without overwriting manual proof status
-- keep decomposing the remaining high-churn `src/App.jsx` seams beyond `AppChrome`/`appText`/`AppNotifications`
-- clean up PostHog production remote-config/feature-flag noise so launch consoles stay signal-rich
+- continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos
+- monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the new ingester
 
 ## Shipped This Session
+
+- fix Vitest full-suite timeout (S81) — **DONE S81**: hoisted dynamic calculator imports in `src/__tests__/calculators.test.jsx` to top-level static imports, added explicit `testTimeout`/`hookTimeout` and forks pool config to `vitest.config.js`. Full `npm test` now passes 392/392 in ~95s with no timeouts (previously 274s with 2 failures).
+- silence PostHog production console noise (S81) — **DONE S81**: disabled feature flags / decide / toolbar metrics in PostHog init in `src/analytics.js`, set `debug: !IS_PROD`, and forced debug off in production via the loaded callback.
+- add post-deploy launch-verification ingester (S81) — **DONE S81**: `scripts/ingest-launch-verification.mjs` (npm run ingest:launch) downloads the latest `launch-verification` GitHub artifact via gh CLI, writes `artifacts/launch-verification/post-deploy.{md,json}`, and never modifies `context/LAUNCH_PROOFS.json` manual truth. First run surfaced missing `SUPABASE_SERVICE_ROLE_KEY` prod secret.
+- continue `src/App.jsx` decomposition (S81) — **DONE S81**: extracted `parseBetSlip` to `src/app/parseBetSlip.js` with regression test coverage in `src/__tests__/parseBetSlip.test.js` (10 cases).
+- scripted Stripe smoke runner (S81) — **DONE S81**: `scripts/run-stripe-smoke.mjs` (npm run smoke:stripe) walks the 8-step checklist interactively, captures session/customer/subscription IDs, and records evidence to `context/LAUNCH_PROOFS.json[stripeSmoke]` with `--record`.
+- scripted friend beta runner (S81) — **DONE S81**: `scripts/run-friend-beta-checklist.mjs` (npm run beta:check) walks tester through auth/calculator/CTA/pricing/trust steps with friction capture, records to `LAUNCH_PROOFS.json[friendBeta]` with `--record`.
+
 
 - refresh Protocol Oracle FAQ cache — **DONE S80**: added `docs/PROTOCOL_FAQ.md` with 10 public-safe session-protocol Q&A entries; `node scripts/ops.mjs ask --list` now returns cached protocol entries instead of an empty-cache message.
 - align public privacy/data-policy copy with actual analytics stack — **DONE S80**: replaced stale Plausible/no-cookie claims with PostHog/Sentry-aware language matching `src/analytics.js`; UX route integrity and strict public sanitization passed.

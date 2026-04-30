@@ -1,11 +1,11 @@
 # Current State
 
-Last updated: 2026-04-28 (S80)
+Last updated: 2026-04-30 (S81)
 
 ## Snapshot
 
-- Date: 2026-04-28
-- Overall status: deployed product with public trust copy aligned to the actual analytics stack, Protocol Oracle FAQ cache restored for public-safe session help, public-repo sanitization passing, and only external release-proof blockers still open
+- Date: 2026-04-30
+- Overall status: deployed product with hardened test infrastructure (392/392 passing, full suite stable), production-grade PostHog console hygiene, scripted Stripe smoke + friend beta runners that record evidence to canonical launch-proof surface, post-deploy launch-verification ingester live, `parseBetSlip` extracted from `src/App.jsx` monolith with regression coverage, `SUPABASE_SERVICE_ROLE_KEY` synced to GitHub Actions secrets, and only operator-side affiliate-approval blockers + the manual smoke/beta passes still open
 - Current phase: public-unveil launch hardening with external blocker cleanup
 - Canonical launch proof surface: `context/LAUNCH_PROOFS.json`
 
@@ -18,7 +18,10 @@ Last updated: 2026-04-28 (S80)
 - Cross-repo public marketing sync: `vaultsparkstudios.com/projects/promogrind/` now describes PromoGrind as deployed/FORGE/public-unlaunched with 53 calculators, beta-gated paid/AI surfaces, real `https://promogrind.bet/` CTAs, and no stale creator-dashboard claims
 - Gamification: settlement mastery ladder (8 promo types × 4 levels), 30-badge achievement system, daily missions (15-pool, LCG-seeded) with auto-completion and XP tracking
 - Systems: Supabase-backed auth/data flows, repaired Stripe checkout/customer-portal paths, AI edge functions (with AbortController + exponential-backoff retry), push/onboarding/community surfaces, Studio export/contract generation, shared AI gateway/workflow store layers, adaptive dashboard planning with `adaptiveRankingSnapshot`, deterministic scanner/community workflow suggestion IDs, conflict-aware workflow upserts, Pages push-alert env plumbing, a machine-readable launch proof surface with evidence requirements, post-deploy launch-verification artifacts, normalized CTA link metadata and analytics, `AppChrome`/`appText`/`AppNotifications` seams, restored `ParlayHedge` route coverage, and safer service-worker cache writes that avoid the consumed-response clone failure seen in production
-- Test coverage: targeted regression run 66/66 passing; isolated calculator suite 34/34 passing; production build, launch smoke, UX integrity, bundle budget, and strict public-repo sanitization passing. Full `npm test` hit a Vitest worker/import timeout in `calculators.test.jsx` during the parallel full-suite run, while that same file passed in isolation.
+- Test coverage: full `npm test` suite now 392/392 passing in ~95s (S81 fixed the previous Vitest worker timeout in `calculators.test.jsx` by hoisting per-test dynamic imports to top-level static imports + adding explicit pool/timeout config in `vitest.config.js`); production build, launch smoke, UX integrity, browser launch smoke, bundle budget, and strict public-repo sanitization all passing
+- Operator runners (S81): `npm run smoke:stripe` walks the 8-step Stripe smoke checklist with evidence capture; `npm run beta:check` walks the 5-step friend beta pass with friction notes; both record to `context/LAUNCH_PROOFS.json` with `--record`
+- Post-deploy ingester (S81): `npm run ingest:launch` pulls the latest GitHub `launch-verification` artifact via `gh` CLI and writes `artifacts/launch-verification/post-deploy.{md,json}` without ever modifying manual proof status
+- Secret sync (S81): `npm run sync:secrets` (`scripts/sync-github-secrets.mjs`) pushes admin secrets from `.env.admin` to GitHub Actions; used this session to flip `SUPABASE_SERVICE_ROLE_KEY` live
 - Security: strict public-repo sanitization scan 0 critical / 0 warning; scan respects public-repo protocol docs and git-tracked public files instead of false-failing on ignored local ops state
 - Public trust copy: `/privacy/` and `/data-policy/` now describe the actual PostHog/Sentry analytics and diagnostics posture instead of stale Plausible/no-cookie claims
 - Protocol FAQ cache: `docs/PROTOCOL_FAQ.md` contains 10 public-safe session-protocol Q&A entries, and `node scripts/ops.mjs ask --list` returns those cached entries without needing an AI key
