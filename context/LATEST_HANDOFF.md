@@ -1,22 +1,28 @@
 # Latest Handoff
 
-Last updated: 2026-04-30 (S81)
-Session: 81
-Session Intent: Implement the 7-item next-highest-impact list (Stripe smoke runner, friend beta runner, Vitest full-suite timeout fix, post-deploy launch-verification ingester, App.jsx decomposition, PostHog console hygiene, affiliate-link gate honesty), then fix external launch blockers we could reach from the repo, close out, write back all canonical surfaces, commit, and push.
-Intent Outcome: Achieved for repo-controllable work. All 7 items shipped at quality bar, full test suite went from 380/382 (with timeouts) to 392/392 in ~95s, `SUPABASE_SERVICE_ROLE_KEY` synced to GitHub Actions secrets and redeploy triggered, scripted runners are ready for the operator-side Stripe smoke + friend beta passes.
+Last updated: 2026-05-01 (S82)
+Session: 82
+Session Intent: Implement the next seven highest-impact PromoGrind improvements in optimal order, keep external proof blockers honest, update all context/memory/CDR/task-board surfaces, then close out, commit, and push.
+Intent Outcome: Achieved for repo-controllable work. Added production dashboard console smoke, captured and fixed the live dashboard `syncDiagnostics` crash source, added the one-command launch-status report, re-ingested deploy verification, extracted profit notifications from `src/App.jsx`, and verified the full local launch gate green.
 
-## Where We Left Off (Session 81)
+## Where We Left Off (Session 82)
 
-- Vitest config and `src/__tests__/calculators.test.jsx` hardened so `npm test` runs the full suite green (392/392) without parallel-worker import timeouts; calculator dynamic imports hoisted to static module-top imports.
-- `src/analytics.js` PostHog init now disables remote feature-flag polling, decide endpoint, and toolbar metrics, and forces `debug(false)` in production via the `loaded` callback so launch consoles stay signal-rich.
-- New post-deploy launch-verification ingester (`scripts/ingest-launch-verification.mjs`, `npm run ingest:launch`) pulls the latest GitHub artifact via `gh` CLI and writes `artifacts/launch-verification/post-deploy.{md,json}` without ever overwriting `context/LAUNCH_PROOFS.json` manual truth. First live run surfaced the missing `SUPABASE_SERVICE_ROLE_KEY` GitHub secret as a real launch-blocking signal.
-- `parseBetSlip` extracted from `src/App.jsx` to `src/app/parseBetSlip.js` with full regression coverage in `src/__tests__/parseBetSlip.test.js` (10 cases). App.jsx import added; inline definition replaced with a one-line pointer comment.
-- New scripted operator runners landed: `scripts/run-stripe-smoke.mjs` (`npm run smoke:stripe`, walks the 8-step Stripe smoke checklist and records to `LAUNCH_PROOFS.json[stripeSmoke]` with `--record`) and `scripts/run-friend-beta-checklist.mjs` (`npm run beta:check`, walks tester through auth/calculator/CTA/pricing/trust with friction capture, records to `LAUNCH_PROOFS.json[friendBeta]` with `--record`).
-- New secret-sync helper (`scripts/sync-github-secrets.mjs`, `npm run sync:secrets`) pushes admin keys from local `.env.admin` to GitHub Actions secrets via `gh secret set`; used this session to set `SUPABASE_SERVICE_ROLE_KEY` and trigger a deploy redeploy via `gh workflow run deploy-pages.yml`.
-- Verification this session: `npm test` (392/392), `npm run build` (clean ✓ built in ~17–37s), `npm run smoke:browser` (passed), `npm run smoke:ux` (60 routes / 98 public HTML files passed), `node scripts/check-public-repo-sanitization.mjs --strict` (0 critical / 0 warning), `node scripts/ingest-launch-verification.mjs --dry-run` (live-tested against deploy run 25092934446 and surfaced env gap).
-- Operator confirmed in-session: applied for everything affiliate-side that's possible. Remaining required-launch-monetization gap for `BetMGM`, `bet365`, `BetRivers` is partner-approval, not a repo task.
+- Added `scripts/validate-production-dashboard-smoke.mjs` (`npm run smoke:production-dashboard`), a dependency-free Chromium/CDP production smoke that captures console errors and runtime exceptions at `https://promogrind.bet/dashboard`.
+- The new production smoke captured the current live dashboard failure: `ReferenceError: syncDiagnostics is not defined` in the deployed bundle. Source fix is local: `DailyDashboard` now reads `syncDiagnostics`, `syncStatus`, and `isOnline` from `AppDataCtx`.
+- Added `scripts/launch-status.mjs` (`npm run launch:status`) as the single launch posture command. Full mode runs the local launch gate, production dashboard smoke, post-deploy artifact ingest, and manual proof guide; `--fast` prints proof state without expensive checks.
+- Extracted profit milestone/goal notification effects from `src/App.jsx` into `src/app/useProfitNotifications.js`, reducing app-shell responsibility while preserving behavior.
+- Re-ingested latest deploy verification artifact with `npm run ingest:launch`. Run `25181776729` confirms Supabase workflow/ledger/tracker/feature/push tables, VAPID env, signup, confirmed billing user, live checkout, and customer portal checks all pass.
+- Remaining deploy-verification failures are honest monetization blockers: `affiliate_coverage` and `required_launch_monetization` for `BetMGM`, `bet365`, and `BetRivers`.
+- Verification this session: `npm run verify:launch-local` passed end-to-end (`392/392` tests, launch smoke, UX route integrity, browser smoke, bundle budget, strict public-repo sanitization). Vitest may still print non-fatal worker termination warnings after the passing suite.
 
 ## What was completed
+
+- **Production dashboard smoke (S82)**: `scripts/validate-production-dashboard-smoke.mjs` uses Chrome DevTools Protocol to load the live dashboard and fail on runtime exceptions / console errors. This turns founder-reported dashboard errors into a repeatable launch gate.
+- **Live dashboard runtime source fix (S82)**: `DailyDashboard` now pulls `syncDiagnostics`, `syncStatus`, and `isOnline` from `AppDataCtx`, fixing the `syncDiagnostics is not defined` crash captured in the live bundle. Needs deploy before live smoke turns green.
+- **One-command launch posture (S82)**: `scripts/launch-status.mjs` (`npm run launch:status`) orchestrates launch checks and prints exact manual proof runners. Fast mode verified current proof state as `PARTIAL` with 3 blocking manual proofs still pending.
+- **App.jsx decomposition (S82)**: `src/app/useProfitNotifications.js` owns profit milestone and goal notifications; `App.jsx` now calls the hook instead of carrying both effects inline.
+- **Deploy artifact truth refresh (S82)**: `artifacts/launch-verification/post-deploy.json` refreshed from GitHub Actions run `25181776729`; only affiliate/required monetization checks are red.
+- **Repo truth writeback (S82)**: `context/TASK_BOARD.md`, `context/PROJECT_STATUS.json`, `docs/RELEASE_PLAN.md`, `context/CURRENT_STATE.md`, `context/LATEST_HANDOFF.md`, `context/TRUTH_AUDIT.md`, SIL, audit JSON, CDR, and memory updated for S82.
 
 - **Vitest full-suite timeout fixed (S81)**: `vitest.config.js` now sets `testTimeout: 20000`, `hookTimeout: 20000`, `pool: "forks"`, `maxWorkers: 4`, `isolate: true`. `src/__tests__/calculators.test.jsx` hoisted six per-`beforeEach` dynamic calculator imports to top-level static imports. Suite duration ~274s with 2 failures → ~95s with 392/392 passing.
 - **PostHog console hygiene (S81)**: `src/analytics.js` PostHog init now sets `advanced_disable_feature_flags`, `advanced_disable_feature_flags_on_first_load`, `advanced_disable_toolbar_metrics`, `debug: !IS_PROD`, and forces `ph.debug(false)` in production via the `loaded` callback.
@@ -30,20 +36,20 @@ Intent Outcome: Achieved for repo-controllable work. All 7 items shipped at qual
 
 ## What is mid-flight
 
+- Deploy S82 fix, then rerun `npm run smoke:production-dashboard` against live to confirm the `syncDiagnostics` crash is gone.
 - Real affiliate/referral tracking URLs for `BetMGM`, `bet365`, `BetRivers` remain operator/partner-blocked.
-- Real Stripe smoke purchase against deployed app — runner is ready (`npm run smoke:stripe`); pending operator + Stripe live key configuration in Supabase secrets.
-- Friend-facing auth/calculator/CTA/pricing pass — runner is ready (`npm run beta:check`); pending operator + one trusted tester.
-- Founder reported "errors on the dashboard" at the end of S81 — not yet diagnosed; my S81 changes are uncommitted at the time of that report so the live errors predate this session and need explicit error-text capture (DevTools console) or a headless scan to fix.
+- Real Stripe smoke purchase against deployed app — runner is ready (`npm run smoke:stripe -- --record`); pending operator completion.
+- Friend-facing auth/calculator/CTA/pricing pass — runner is ready (`npm run beta:check -- --record`); pending operator + one trusted tester.
 - Continued `src/App.jsx` decomposition beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos route is still worthwhile; App.jsx still ~4300 lines.
 
 ## What to do next
 
-1. Capture the founder-reported dashboard error text (DevTools console at `https://promogrind.bet/dashboard`) or wire a headless puppeteer/playwright scan, then root-cause + fix.
-2. After the next deploy lands, run `npm run ingest:launch` and confirm `post-deploy.json` shows `ok: true`.
+1. After this push/deploy, run `npm run smoke:production-dashboard`; live should stop reporting `ReferenceError: syncDiagnostics is not defined`.
+2. Run `npm run ingest:launch` after deploy and confirm the automated checks remain green except known monetization blockers.
 3. Run `npm run smoke:stripe -- --record` once Stripe live keys are in Supabase secrets and the operator can complete one real checkout.
 4. Run `npm run beta:check -- --record` with one trusted tester after deploy.
-5. Continue extracting another `src/App.jsx` seam (candidates: `EmailCapture`, `SessionModal`, `Glossary`, `PromoCalendar`).
-6. Monitor PostHog console in production after the redeploy lands to confirm noise reduction.
+5. Add real approved `BetMGM`, `bet365`, and `BetRivers` tracking URLs when partner approvals arrive, then rerun `npm run verify:production`.
+6. Continue extracting another `src/App.jsx` seam (candidates: `EmailCapture`, `SessionModal`, `Glossary`, `PromoCalendar`).
 
 ## Constraints
 

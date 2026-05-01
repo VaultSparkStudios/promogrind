@@ -128,3 +128,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: future work should compound toward a deeply personalized, trustworthy, AI-assisted promo operating system with rich feedback loops, measurable mastery, visible trust controls, faster operation, and disciplined AI/API spend.
 - Why it matters: the product should feel like an elite consumer co-pilot rather than a bundle of calculators and dashboards; every improvement should increase retention, trust, decision quality, or launch readiness.
 - Supersedes prior entry: —
+
+### 2026-05-01 — Closeout requires complete repo truth and GitHub push
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): "closeout and push & commit to GitHub - Update all memory/context/CDR/task board files and anything else that need updates"
+- Area affected: process / scope
+- Previous state: Session 82 implementation was complete locally with code, scripts, artifact ingest, and verification passing, but canonical closeout surfaces and GitHub push were still pending.
+- New required direction: perform full Studio OS closeout, refresh every affected repo-truth and memory surface, then commit and push the completed S82 state to GitHub.
+- Why it matters: the next session and deployment checks need a coherent handoff that distinguishes shipped repo work from still-external launch proofs and from live status that only turns green after deploy.
+- Supersedes prior entry: —

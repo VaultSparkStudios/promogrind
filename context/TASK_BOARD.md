@@ -4,15 +4,22 @@
 
 - run one real Stripe smoke purchase and record evidence — now scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/calculator/pricing pass — now scripted: `npm run beta:check` walks the tester and records evidence
-- **NEW**: production deploy is missing `SUPABASE_SERVICE_ROLE_KEY` secret in GitHub Actions — surfaced by `npm run ingest:launch` against latest deploy run; add the secret to repo settings, rerun deploy, re-ingest
+- deploy the local dashboard runtime fix and rerun `npm run smoke:production-dashboard` against live — S82 smoke captured deployed `ReferenceError: syncDiagnostics is not defined`; source fix is in `src/App.jsx`
 - finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers` — operator confirmed S81 they have applied for everything they can; remaining gap is partner-side approval, not a repo task
 
 ## Next
 
+- [SIL] Add `npm run smoke:production-dashboard` to the default post-deploy `launch-verification` workflow so live runtime console failures become retained deploy artifacts
 - continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the new ingester
+- use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- add production dashboard console smoke and fix captured live runtime error (S82) — **DONE S82**: added `scripts/validate-production-dashboard-smoke.mjs` (`npm run smoke:production-dashboard`) using Chrome DevTools Protocol; it captured the live `syncDiagnostics` dashboard crash, and `DailyDashboard` now reads `syncDiagnostics`, `syncStatus`, and `isOnline` from `AppDataCtx`.
+- add one-command launch posture report (S82) — **DONE S82**: added `scripts/launch-status.mjs` (`npm run launch:status`) to run the local launch gate, production dashboard smoke, deploy artifact ingest, and manual proof guide; `--fast --skip-prod-smoke --skip-ingest` prints current proof state without expensive checks.
+- continue `src/App.jsx` decomposition (S82) — **DONE S82**: moved profit milestone/goal notification effects into `src/app/useProfitNotifications.js` and kept the app shell behavior unchanged.
+- re-ingest current post-deploy launch verification artifact (S82) — **DONE S82**: `npm run ingest:launch` pulled run `25181776729`; Supabase tables, VAPID env, signup, confirmed billing user, checkout, and customer portal checks pass. Remaining automated deploy failures are affiliate coverage and required launch monetization for `BetMGM`, `bet365`, and `BetRivers`.
 
 - fix Vitest full-suite timeout (S81) — **DONE S81**: hoisted dynamic calculator imports in `src/__tests__/calculators.test.jsx` to top-level static imports, added explicit `testTimeout`/`hookTimeout` and forks pool config to `vitest.config.js`. Full `npm test` now passes 392/392 in ~95s with no timeouts (previously 274s with 2 failures).
 - silence PostHog production console noise (S81) — **DONE S81**: disabled feature flags / decide / toolbar metrics in PostHog init in `src/analytics.js`, set `debug: !IS_PROD`, and forced debug off in production via the loaded callback.

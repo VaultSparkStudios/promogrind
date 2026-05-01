@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S77:878 | S78:891 | S79:919 | S80:931 | S81:947
-Avgs - 3: 932.3 [N=3] | all: 756.5 [N=13]
-  └ 3-session (S79/S80/S81): Dev 96.3 | Align 98.0 | Momentum 84.0 | Engage 92.7 | Process 98.3 | Coher 91.3 | Sec 88.7 | Eco 93.3 | Cap 93.3 | Auto 100.0
+Sparkline (last 5 totals): S78:891 | S79:919 | S80:931 | S81:947 | S82:962
+Avgs - 3: 946.7 [N=3] | all: 770.2 [N=14]
+  └ 3-session (S80/S81/S82): Dev 98.0 | Align 98.3 | Momentum 85.0 | Engage 93.0 | Process 99.3 | Coher 94.3 | Sec 91.7 | Eco 95.7 | Cap 95.0 | Auto 96.7
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~3 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-04-30 | Session 81 | Total: 947/1000 | Velocity: 16 | protocolVelocity: 16
+Last session: 2026-05-01 | Session 82 | Total: 962/1000 | Velocity: 15 | protocolVelocity: 15
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,6 +93,38 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 1.
 2.
 3.
+
+## 2026-05-01 — Session 82 | Total: 962/1000 | Velocity: 15 | Debt: down
+Rolling avg (last 3): Dev 98.0 | Align 98.3 | Momentum 85.0 | Engage 93.0 | Process 99.3 | Coher 94.3 | Sec 91.7 | Eco 95.7 | Cap 95.0 | Auto 96.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | ↑ | Full local launch gate passed end-to-end: 392/392 tests, launch smoke, UX route integrity, browser smoke, bundle budget, and strict sanitization. Live dashboard crash source fixed locally. |
+| Creative Alignment | 99 | ↑ | Work directly followed founder direction to capture real dashboard errors, keep proof blockers honest, and raise the public-launch quality bar. |
+| Momentum | 85 | ↓ | High-impact launch-hardening shipped, but public launch still waits on deploy verification plus external proofs. |
+| Engagement | 93 | → | No new consumer-facing loop shipped; engagement confidence improved indirectly by protecting the dashboard and launch trust path. |
+| Process Quality | 100 | ↑ | Closeout surfaces, task board, release plan, handoff, truth audit, audit JSON, CDR, and memory were refreshed around one S82 truth. |
+| Cross-Repo Coherence | 99 | ↑ | Deploy artifact truth, release docs, launch status command, and project status now agree that infra/billing is green while monetization proofs remain red. |
+| Security Posture | 95 | ↑ | Strict public-repo sanitization remains clean; no new secrets added; deploy artifact ingestion preserved the automated/manual proof boundary. |
+| Ecosystem Integration | 99 | ↑ | `launch:status`, post-deploy ingest, and production dashboard smoke give Studio/ops surfaces a clearer launch posture chain. |
+| Capital Efficiency | 96 | ↑ | One launch-status command reduces repeated manual command selection; the CDP smoke avoids adding a browser automation dependency. |
+| Automation Coverage | 97 | ↓ | Automation improved materially, but real Stripe, friend beta, and partner affiliate approvals remain non-automatable manual proofs. |
+| **Total** | **962 / 1000** | | |
+
+**Top win:** founder-reported dashboard errors are no longer vague; the new production smoke captured the exact live runtime crash and the source fix is local.
+
+**Top gap:** live dashboard remains red until this fix deploys, and full launch still depends on real affiliate links, Stripe smoke evidence, and friend beta evidence.
+
+**Intent outcome:** Achieved. All repo-controllable S82 items shipped, launch proof blockers stayed honest, and the full local launch gate is green.
+
+**Brainstorm**
+
+1. Add `npm run smoke:production-dashboard` to the GitHub post-deploy `launch-verification` workflow so runtime console failures are retained as artifacts.
+2. Add a post-deploy diff in `launch:status` that compares local commit/build truth to the live asset hash before declaring dashboard smoke meaningful.
+3. Add a read-only launch command center card that renders `post-deploy.json`, production dashboard smoke status, and manual proof status inside the app.
+
+**Committed follow-up(s):**
+- Add production dashboard smoke to the default post-deploy launch-verification workflow. `[SIL]`
 
 ## 2026-04-23 — Session 74 | Total: 822/1000 | Velocity: 5 | Debt: down
 Rolling avg (last 3): Dev 95.3 | Align 96.0 | Momentum 82.7 | Engage 92.3 | Process 94.7 | Coher 49.3 | Sec 70.0 | Eco 70.0 | Cap 74.7 | Auto 66.3

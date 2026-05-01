@@ -13,6 +13,7 @@ import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_UI, SEARCH_UI } from "./app/appText.js";
 import { parseBetSlip } from "./app/parseBetSlip.js";
+import { useProfitNotifications } from "./app/useProfitNotifications.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
@@ -2050,7 +2051,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
 const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
   const navigate = navigateProp || navigateHook;
-  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
+  const { appData: data, syncAppData, syncDiagnostics = {}, syncStatus = "idle", isOnline = true } = React.useContext(AppDataCtx);
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
   const [showWT, setShowWT] = useState(false);
@@ -3582,43 +3583,7 @@ export default function App() {
     } catch(e) {}
   }, []);
 
-  // Feature 3: Milestone notifications
-  useEffect(()=>{
-    if(!appData.ledger) return;
-    const totalProfit=appData.ledger.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-    const milestones=[100,250,500,1000,2500,5000];
-    try {
-      const reached=JSON.parse(localStorage.getItem('pg_milestones_reached')||'[]');
-      let updated=false;
-      for(const m of milestones){
-        if(totalProfit>=m&&!reached.includes(m)){
-          reached.push(m);
-          updated=true;
-          try{if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(`PromoGrind: $${m} milestone reached! ðŸŽ‰`,{body:`You've extracted $${m}+ in total profit. Keep grinding!`,icon:'/promogrind/favicon.svg'});}catch(e){}
-        }
-      }
-      if(updated) localStorage.setItem('pg_milestones_reached',JSON.stringify(reached));
-    } catch(e){}
-  },[appData.ledger]);
-
-  // Feature 13: Profit goal notifications
-  useEffect(()=>{
-    if(!authReady||!appData.profitGoal) return;
-    const goal=parseFloat(appData.profitGoal)||0;
-    if(!goal) return;
-    const totalProfit=(appData.ledger||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-    if(totalProfit>=goal){
-      try{
-        const key=`pg_goal_notified_${goal}`;
-        if(!localStorage.getItem(key)){
-          localStorage.setItem(key,'1');
-          if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
-            new Notification('PromoGrind: Profit Goal Reached! ðŸŽ¯',{body:`You hit your $${f(goal)} profit goal! Time to set a new one.`,icon:'/promogrind/favicon.svg'});
-          }
-        }
-      }catch(e){}
-    }
-  },[appData.ledger,appData.profitGoal,authReady]);
+  useProfitNotifications({ appData, authReady });
 
   const [weeklyActive, setWeeklyActive] = useState(null);
   const [calcFavorites, setCalcFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem('pg_calc_favorites'))||[]; } catch { return []; } });

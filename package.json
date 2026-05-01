@@ -19,6 +19,8 @@
     "verify:launch-local": "npm test && npm run smoke:launch && npm run smoke:ux && npm run smoke:browser && node scripts/check-bundle-budget.mjs && node scripts/check-public-repo-sanitization.mjs --strict",
     "verify:production": "node scripts/verify-production-launch.mjs",
     "ingest:launch": "node scripts/ingest-launch-verification.mjs",
+    "launch:status": "node scripts/launch-status.mjs",
+    "smoke:production-dashboard": "node scripts/validate-production-dashboard-smoke.mjs",
     "sync:secrets": "node scripts/sync-github-secrets.mjs",
     "smoke:stripe": "node scripts/run-stripe-smoke.mjs",
     "beta:check": "node scripts/run-friend-beta-checklist.mjs",

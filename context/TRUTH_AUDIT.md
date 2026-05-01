@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-04-30 (S81)
+Last reviewed: 2026-05-01 (S82)
 Overall status: green
-Next action: capture and root-cause the founder-reported live dashboard console errors next session; once Stripe live keys land, run `npm run smoke:stripe -- --record`; with one trusted tester, run `npm run beta:check -- --record`; after the next deploy, run `npm run ingest:launch` and confirm `post-deploy.json` shows `ok: true`; keep affiliate-link truth honest until real partner approvals exist.
+Next action: deploy the S82 dashboard runtime fix, rerun `npm run smoke:production-dashboard`, then run `npm run ingest:launch`; complete the three external manual proofs only with real evidence (`BetMGM` / `bet365` / `BetRivers` tracked URLs, Stripe smoke, friend beta).
 
 ---
 
@@ -20,10 +20,10 @@ Next action: capture and root-cause the founder-reported live dashboard console 
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, and `PROJECT_STATUS.json` agree that S80 repo-owned work advanced while the remaining launch blockers are external affiliate/verification tasks. |
+| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, `PROJECT_STATUS.json`, and deploy artifact truth agree that S82 repo-owned work advanced while remaining launch blockers are external proof tasks plus deploy verification of the local dashboard fix. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Startup brief, task board, launch proof queue, and closeout surfaces now describe the same S80 posture. |
-| Handoff continuity | 5 | Session 80 handoff reflects shipped repo-local work, verification caveats, and the remaining external blockers. |
+| Derived-view freshness | 5 | Startup brief, task board, launch proof queue, release plan, post-deploy artifact, and closeout surfaces now describe the same S82 posture. |
+| Handoff continuity | 5 | Session 82 handoff reflects shipped repo-local work, deploy verification caveats, and the remaining external blockers. |
 | Contradiction density | 4 | The main contradiction left is operational/public-repo policy around generated private-shim files, not product launch truth. |
 | **Total** | **23 / 25** | Green-yellow: canonical truth surfaces are coherent; remaining yellow state is due to external launch proofs and public/private ops shim tension. |
 
@@ -33,12 +33,13 @@ Next action: capture and root-cause the founder-reported live dashboard console 
 
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
-| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-04-28 | PromoGrind status reflects `FORGE`, public-unlaunched, S80 public trust/protocol improvements, and unchanged external blockers. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-04-28 | S80 write-back aligns state, handoff, task board, work log, protocol FAQ docs, audit, and memory around the same proof-honest launch-hardening tranche. |
+| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-05-01 | PromoGrind status reflects `FORGE`, public-unlaunched, S82 dashboard/runtime launch-hardening, and unchanged external proof blockers. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-05-01 | S82 write-back aligns state, handoff, task board, work log, release plan, post-deploy artifact, audit, and memory around the same proof-honest launch-hardening tranche. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
-| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts | yellow | 2026-04-28 | Proof updates are evidence-gated and now have machine-readable next steps/evidence requirements, but required sportsbook monetization links, real Stripe smoke, and friend beta remain incomplete. |
+| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts, `launch:status` | yellow | 2026-05-01 | Proof updates remain evidence-gated; deploy artifact confirms infra/billing health, but required sportsbook monetization links, real Stripe smoke, and friend beta remain incomplete. |
+| Production dashboard runtime | `npm run smoke:production-dashboard` + `src/App.jsx` | task board, release plan, handoff | yellow | 2026-05-01 | Live bundle currently throws `ReferenceError: syncDiagnostics is not defined`; source fix is local and must be deployed before this row goes green. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-24 | Strict public-repo sanitization reports 0 critical / 0 warning and no longer false-flags public protocol/provenance docs or ignored local ops state. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
 | Public trust copy | `src/analytics.js` + public pages | `/privacy/`, `/data-policy/` | green | 2026-04-28 | Privacy/data-policy pages now describe the PostHog/Sentry analytics and diagnostics posture instead of stale Plausible/no-cookie claims. |
@@ -50,9 +51,18 @@ Next action: capture and root-cause the founder-reported live dashboard console 
 
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
-- The deploy-time verification artifact needs to be checked after this push/deploy cycle completes.
-- Full-suite `npm test` is not currently a clean signal because the parallel run timed out in `calculators.test.jsx`; the same suite passed in isolation and targeted regression/build/smoke gates passed.
+- The current live dashboard bundle is red by production smoke until the S82 source fix deploys.
+- Full-suite `npm test` passes, but Vitest can still emit non-fatal worker termination warnings after completion.
 - Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+
+## Resolved This Session (S82)
+
+- Added `npm run smoke:production-dashboard` to capture live dashboard console/runtime errors through Chrome DevTools Protocol.
+- Used the new smoke to capture the founder-reported live dashboard crash (`syncDiagnostics is not defined`) and fixed the source path in `DailyDashboard`.
+- Added `npm run launch:status` so local launch gate, production dashboard smoke, artifact ingest, and manual proof guide can be run from one command.
+- Extracted profit milestone/goal notifications from `src/App.jsx` into `src/app/useProfitNotifications.js`.
+- Re-ingested deploy artifact run `25181776729`; Supabase/VAPID/signup/billing/checkout/customer-portal checks pass, with only affiliate/required monetization checks red.
+- Verified `npm run verify:launch-local` green end-to-end (`392/392`, launch smoke, UX route integrity, browser smoke, bundle budget, strict public-repo sanitization).
 
 ## Resolved This Session (S80)
 

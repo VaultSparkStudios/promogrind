@@ -10,6 +10,28 @@ Append chronological entries.
 - Risks created or removed:
 - Recommended next move:
 
+### 2026-05-01 - Session 82 production dashboard smoke, launch status, runtime fix, closeout
+
+- Goal: Implement the seven highest-impact PromoGrind refinements in optimal order, especially live dashboard error capture, launch-proof orchestration, artifact ingestion, and `App.jsx` decomposition; then close out, update all repo truth/memory surfaces, commit, and push.
+- What changed:
+  - Added `scripts/validate-production-dashboard-smoke.mjs` (`npm run smoke:production-dashboard`), a Chrome DevTools Protocol smoke that loads `https://promogrind.bet/dashboard` and fails on console/runtime errors.
+  - Used the new smoke to capture the live dashboard crash: `ReferenceError: syncDiagnostics is not defined`. Fixed the source by reading `syncDiagnostics`, `syncStatus`, and `isOnline` from `AppDataCtx` inside `DailyDashboard`.
+  - Added `scripts/launch-status.mjs` (`npm run launch:status`) so one command can run launch gate, production dashboard smoke, artifact ingest, and manual proof guide; fast mode reports current proof state without expensive checks.
+  - Extracted profit milestone/goal notification effects from `src/App.jsx` into `src/app/useProfitNotifications.js`.
+  - Re-ingested deploy artifact run `25181776729`; Supabase/VAPID/signup/billing/checkout/customer-portal checks pass, with only affiliate/required monetization checks red.
+  - Refreshed task board, project status, release plan, current state, latest handoff, truth audit, SIL, audit JSON, CDR, and Codex memory for S82.
+- Files or systems touched:
+  - `scripts/validate-production-dashboard-smoke.mjs`, `scripts/launch-status.mjs`, `package.json`
+  - `src/App.jsx`, `src/app/useProfitNotifications.js`
+  - `artifacts/launch-verification/post-deploy.{json,summary.md}`
+  - `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`, `context/PROJECT_STATUS.json`, `context/TRUTH_AUDIT.md`, `context/SELF_IMPROVEMENT_LOOP.md`
+  - `docs/RELEASE_PLAN.md`, `docs/CREATIVE_DIRECTION_RECORD.md`, `audits/2026-05-01-s82.json`
+- Risks created or removed:
+  - Removed: the dashboard runtime crash is no longer undiagnosed; source fix is local and gated by the new production smoke.
+  - Removed: launch status no longer requires remembering multiple commands; `launch:status` prints the current repo/manual proof posture.
+  - Remaining: live dashboard stays red until this fix deploys; required `BetMGM` / `bet365` / `BetRivers` tracking URLs, real Stripe smoke, and friend beta remain external proof blockers.
+- Recommended next move: after push/deploy, run `npm run smoke:production-dashboard` and `npm run ingest:launch`; then complete affiliate URLs, Stripe smoke, and friend beta proofs.
+
 ### 2026-04-30 - Session 81 launch-hardening pass: scripted operator runners, vitest stability, app.jsx seam, posthog hygiene, ingester, secret sync
 
 - Goal: Implement the 7-item next-highest-impact list at quality bar, then fix every external launch blocker reachable from the repo.

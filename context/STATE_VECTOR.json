@@ -1,24 +1,25 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-04-30",
-  "generatedAtMs": 1777570993297,
-  "session": 80,
-  "vectorHash": "5353532e81de6d16",
-  "silTotal": 931,
-  "silAvg3": 914,
-  "velocity": 16,
+  "generatedAt": "2026-05-01",
+  "generatedAtMs": 1777661411995,
+  "session": 82,
+  "vectorHash": "da0fe7131793abb3",
+  "silTotal": 962,
+  "silAvg3": 947,
+  "velocity": 15,
   "debt": "down",
   "runway": "~3 sessions",
   "intentRate": "100% achieved (last 5)",
   "openNow": 4,
-  "openNext": 2,
+  "openNext": 4,
   "openBlocked": 2,
   "topNow": [
     "run one real Stripe smoke purchase and record evidence — now scripted: `npm run ",
     "complete one friend-facing auth/calculator/pricing pass — now scripted: `npm run",
-    "**NEW**: production deploy is missing `SUPABASE_SERVICE_ROLE_KEY` secret in GitH"
+    "deploy the local dashboard runtime fix and rerun `npm run smoke:production-dashb"
   ],
   "topNext": [
+    "[SIL] Add `npm run smoke:production-dashboard` to the default post-deploy `launc",
     "continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseB",
     "monitor `artifacts/launch-verification/post-deploy.json` after each deploy via t"
   ],
@@ -32,12 +33,12 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Replace real affiliate links for BetMGM/bet365/BetRivers, complete one real Stripe smoke purchase, complete one friend-facing auth/calculator/pricing pass, then rerun launch gates and deploy/announce.",
-  "currentFocus": "S80 protocol/trust refinement - project audit plan, Protocol Oracle FAQ cache refresh, public privacy/data-policy analytics truth alignment, and green UX/sanitization/doctor gates.",
+  "nextMilestone": "Deploy the local dashboard runtime fix, rerun npm run smoke:production-dashboard against live, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentFocus": "S82 launch-hardening: added production dashboard CDP smoke, captured the live syncDiagnostics dashboard crash, fixed the source path, added one-command launch status, re-ingested deploy verification, and extracted profit notifications from App.jsx.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
-    "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement.",
-    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path.",
-    "Complete one friend-facing auth/calculator/pricing pass after deploy."
+    "Deploy and verify the locally fixed dashboard runtime error (live bundle currently throws ReferenceError: syncDiagnostics is not defined until this fix ships).",
+    "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
+    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record)."
   ]
 }
