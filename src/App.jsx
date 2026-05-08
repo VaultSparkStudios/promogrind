@@ -3722,6 +3722,67 @@ export default function App() {
   const authHref = (mode) => getProjectAuthHref(mode, window.location.href);
   const closeAuthDialog = () => setAuthQueryMode(null);
 
+  // ── Route-derived values and route-scoped effects MUST run on every render path
+  // to keep React hook order stable. Don't move them below the early returns below
+  // (doing so caused React error #310 on cold deep-link loads — S83).
+  const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
+  const { gi = 0, ti = 0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];
+  const item = TABS[gi]?.items?.[ti];
+
+  const goTo = (newGi, newTi) => {
+    const resolvedTi = newTi !== undefined ? newTi : (tabMemory.current[newGi] ?? 0);
+    tabMemory.current[newGi] = resolvedTi;
+    navigate("/" + TABS[newGi].items[resolvedTi].slug);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Re-apply VaultSDK DOM gates whenever the active tool or pro status changes
+  useEffect(() => { window.VaultSDK?.applyGates(); }, [slug, proStatus]);
+
+  // Fire vault calc event on tab navigation (Convert + Calculate groups)
+  useEffect(() => {
+    if (!authReady || slug === prevSlugRef.current) return;
+    prevSlugRef.current = slug;
+    visitedSlugsRef.current.add(slug);
+    if (gi === 1 || gi === 2) onCalculation(slug);
+    trackPage(slug);
+    try {
+      const log = JSON.parse(localStorage.getItem('pg_usage_log')||'{}');
+      const wasEmpty = Object.keys(log).length === 0;
+      log[slug] = (log[slug]||0)+1;
+      localStorage.setItem('pg_usage_log', JSON.stringify(log));
+      flagCalcUsed(slug);
+      if(wasEmpty) trackEvent('first_calc_run');
+    } catch(e) {}
+    trackEvent('calculator_viewed', { slug, name: item?.n ?? slug });
+  }, [slug, authReady, gi]);
+
+  useEffect(() => {
+    const findAndOpen = (targetSlug) => {
+      if (!targetSlug) return false;
+      for (let groupIndex = 0; groupIndex < TABS.length; groupIndex += 1) {
+        const itemIndex = TABS[groupIndex].items.findIndex((item) => item.slug === targetSlug);
+        if (itemIndex >= 0) {
+          goTo(groupIndex, itemIndex);
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const handler = (event) => {
+      const detail = event?.detail || {};
+      if (findAndOpen(detail.calculatorSlug || detail.slug)) return;
+      findAndOpen(getQuickCalcFallbackSlug(detail.type));
+    };
+
+    window.addEventListener("pg:quick-calc", handler);
+    return () => window.removeEventListener("pg:quick-calc", handler);
+  }, [navigate]);
+
+  // Record current sub-tab in memory whenever it changes
+  useEffect(() => { tabMemory.current[gi] = ti; }, [gi, ti]);
+
   // Creator/referral landing pages — rendered outside the main nav shell
   if (pathname.startsWith("/land/")) {
     return (
@@ -3755,64 +3816,9 @@ export default function App() {
     );
   }
 
-  const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
-  const { gi=0, ti=0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];
   const g = TABS[gi];
-  const item = g.items[ti];
   const Comp = item?.c || (() => null);
   const isLiveTool = !!item?.pro;
-
-  // Re-apply VaultSDK DOM gates whenever the active tool or pro status changes
-  useEffect(() => { window.VaultSDK?.applyGates(); }, [slug, proStatus]);
-
-  // Fire vault calc event on tab navigation (Convert + Calculate groups)
-  useEffect(() => {
-    if (!authReady || slug === prevSlugRef.current) return;
-    prevSlugRef.current = slug;
-    visitedSlugsRef.current.add(slug);
-    if (gi === 1 || gi === 2) onCalculation(slug);
-    trackPage(slug);
-    try {
-      const log = JSON.parse(localStorage.getItem('pg_usage_log')||'{}');
-      const wasEmpty = Object.keys(log).length === 0;
-      log[slug] = (log[slug]||0)+1;
-      localStorage.setItem('pg_usage_log', JSON.stringify(log));
-      flagCalcUsed(slug);
-      if(wasEmpty) trackEvent('first_calc_run');
-    } catch(e) {}
-    trackEvent('calculator_viewed', { slug, name: item?.n ?? slug });
-  }, [slug, authReady, gi]);
-
-  const goTo = (newGi, newTi) => {
-    const resolvedTi = newTi !== undefined ? newTi : (tabMemory.current[newGi] ?? 0);
-    tabMemory.current[newGi] = resolvedTi;
-    navigate("/" + TABS[newGi].items[resolvedTi].slug);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    const findAndOpen = (targetSlug) => {
-      if (!targetSlug) return false;
-      for (let groupIndex = 0; groupIndex < TABS.length; groupIndex += 1) {
-        const itemIndex = TABS[groupIndex].items.findIndex((item) => item.slug === targetSlug);
-        if (itemIndex >= 0) {
-          goTo(groupIndex, itemIndex);
-          return true;
-        }
-      }
-      return false;
-    };
-
-    const handler = (event) => {
-      const detail = event?.detail || {};
-      if (findAndOpen(detail.calculatorSlug || detail.slug)) return;
-
-      findAndOpen(getQuickCalcFallbackSlug(detail.type));
-    };
-
-    window.addEventListener("pg:quick-calc", handler);
-    return () => window.removeEventListener("pg:quick-calc", handler);
-  }, [navigate]);
 
   const handleGroupTabKeyDown = (event, index) => {
     if (event.key === "ArrowRight") {
@@ -3846,9 +3852,6 @@ export default function App() {
       goTo(groupIndex, items.length - 1);
     }
   };
-
-  // Record current sub-tab in memory whenever it changes
-  useEffect(()=>{ tabMemory.current[gi] = ti; },[gi,ti]);
 
   const allCalcs = TABS.flatMap(g=>g.items.map(item=>({...item,group:g.group})));
   const handleCalcNavigate = (slug) => navigate('/'+slug);

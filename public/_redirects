@@ -1,0 +1,3 @@
+# Cloudflare Pages SPA fallback — every unmatched path serves the React shell
+# so deep links like /dashboard hydrate client-side instead of 404'ing.
+/*    /index.html   200

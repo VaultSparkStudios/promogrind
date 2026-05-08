@@ -22,7 +22,7 @@
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record)."
   ],
-  "lastUpdated": "2026-05-01",
+  "lastUpdated": "2026-05-08",
   "silScore": 962,
   "silAvg3": 947,
   "silVelocity": 15,
@@ -207,5 +207,5 @@
   "sessionMode": "founder",
   "sessionModeAutoShiftedAt": "2026-04-24T20:07:46.133Z",
   "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-04-30T01:22:26.069Z"
+  "planModeCheckedAt": "2026-05-08T21:29:01.257Z"
 }
