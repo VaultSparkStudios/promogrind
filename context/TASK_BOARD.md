@@ -2,19 +2,26 @@
 
 ## Now
 
-- run one real Stripe smoke purchase and record evidence — now scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
-- complete one friend-facing auth/calculator/pricing pass — now scripted: `npm run beta:check` walks the tester and records evidence
-- deploy the local dashboard runtime fix and rerun `npm run smoke:production-dashboard` against live — S82 smoke captured deployed `ReferenceError: syncDiagnostics is not defined`; source fix is in `src/App.jsx`
+- founder verification of S83 cold-load fix — open `https://promogrind.bet` in fresh incognito, confirm no React #310 in DevTools, click into `/dashboard` directly, refresh, confirm SPA hydrates first try
+- run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
+- complete one friend-facing auth/calculator/pricing pass — scripted: `npm run beta:check` walks the tester and records evidence
 - finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers` — operator confirmed S81 they have applied for everything they can; remaining gap is partner-side approval, not a repo task
 
 ## Next
 
+- [SIL] fix or downgrade the chronic `Deploy Pages` red — actual GH Pages deploy succeeds, but `Verify production launch` step has been failing 5+ runs on `workflow_state` and `workflow_history` checks; either fix the live endpoints or flip the final `Fail if launch verification failed` step to advisory
+- [SIL] fix the launch-gate browser smoke flake on Windows (`Preview server did not start at 127.0.0.1:NNNNN`) — preview server fails to bind on the auto-allocated port despite tests claiming a fresh allocation
+- [SIL] add an ESLint rule (`react-hooks/rules-of-hooks` if not already on) or a guard test that fails when any `useEffect` lives below an early `return` in `src/App.jsx` — would have caught the S83 React #310 root cause before deploy
 - [SIL] Add `npm run smoke:production-dashboard` to the default post-deploy `launch-verification` workflow so live runtime console failures become retained deploy artifacts
-- continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos
-- monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the new ingester
+- continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos/`useProfitNotifications` (App.jsx is still ~4300 lines)
+- monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- fix cold-load React #310 crash on deep-link routes (S83) — **DONE S83**: hoisted four route-scoped `useEffect`s (VaultSDK gates, calc-view tracking, `pg:quick-calc` event handler, `tabMemory` recorder) plus the `slug`/`gi`/`ti`/`item` derivation and `goTo` callback above the three early returns at `/`, `/land/*`, and `/feature-flags` in `src/App.jsx`. Live bundle hash flipped from `App-C8ZfyIiU.js` to `App-BJlXUHbf.js`. Inline comment marks the S83 root cause to prevent regression.
+- add SPA fallback forward-compat (S83) — **DONE S83**: created `public/_redirects` with `/* /index.html 200`. No-op on the current GitHub Pages host (already handled via `404.html` from `postbuild-pages.mjs`); keeps the SPA fallback declarative if the project ever migrates to Cloudflare Pages.
+- clarify production deploy host (S83) — **DONE S83**: confirmed via response headers + `public/CNAME` that `promogrind.bet` runs on **GitHub Pages**, with Cloudflare as DNS-only proxy. Updated agent memory `reference_infrastructure.md` so future sessions don't waste time investigating CF Pages config that doesn't exist.
 
 - add production dashboard console smoke and fix captured live runtime error (S82) — **DONE S82**: added `scripts/validate-production-dashboard-smoke.mjs` (`npm run smoke:production-dashboard`) using Chrome DevTools Protocol; it captured the live `syncDiagnostics` dashboard crash, and `DailyDashboard` now reads `syncDiagnostics`, `syncStatus`, and `isOnline` from `AppDataCtx`.
 - add one-command launch posture report (S82) — **DONE S82**: added `scripts/launch-status.mjs` (`npm run launch:status`) to run the local launch gate, production dashboard smoke, deploy artifact ingest, and manual proof guide; `--fast --skip-prod-smoke --skip-ingest` prints current proof state without expensive checks.

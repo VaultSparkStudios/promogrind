@@ -1,9 +1,10 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-05-01 (S82)
+Last reviewed: 2026-05-08 (S83)
 Overall status: green
-Next action: deploy the S82 dashboard runtime fix, rerun `npm run smoke:production-dashboard`, then run `npm run ingest:launch`; complete the three external manual proofs only with real evidence (`BetMGM` / `bet365` / `BetRivers` tracked URLs, Stripe smoke, friend beta).
+Next action: founder verifies S83 cold-load fix in incognito; then either fix the chronic Deploy Pages workflow red on `Verify production launch` or proceed with the three external manual proofs (`BetMGM` / `bet365` / `BetRivers` tracked URLs, Stripe smoke, friend beta).
+Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
 ---
 

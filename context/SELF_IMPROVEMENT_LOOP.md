@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S78:891 | S79:919 | S80:931 | S81:947 | S82:962
-Avgs - 3: 946.7 [N=3] | all: 770.2 [N=14]
-  └ 3-session (S80/S81/S82): Dev 98.0 | Align 98.3 | Momentum 85.0 | Engage 93.0 | Process 99.3 | Coher 94.3 | Sec 91.7 | Eco 95.7 | Cap 95.0 | Auto 96.7
+Sparkline (last 5 totals): S79:919 | S80:931 | S81:947 | S82:962 | S83:970
+Avgs - 3: 959.7 [N=3] | all: 783.5 [N=15]
+  └ 3-session (S81/S82/S83): Dev 99.0 | Align 99.0 | Momentum 88.3 | Engage 93.7 | Process 99.7 | Coher 99.0 | Sec 95.0 | Eco 99.0 | Cap 96.3 | Auto 97.3
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~3 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-05-01 | Session 82 | Total: 962/1000 | Velocity: 15 | protocolVelocity: 15
+Last session: 2026-05-08 | Session 83 | Total: 970/1000 | Velocity: 16 | protocolVelocity: 16
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,6 +93,39 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 1.
 2.
 3.
+
+## 2026-05-08 — Session 83 | Total: 970/1000 | Velocity: 16 | Debt: down
+Rolling avg (last 3): Dev 99.0 | Align 99.0 | Momentum 88.3 | Engage 93.7 | Process 99.7 | Coher 99.0 | Sec 95.0 | Eco 99.0 | Cap 96.3 | Auto 97.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Founder-reported cold-load crash root-caused and fixed in one pass. Hook-order violation in `src/App.jsx` resolved by hoisting four route-scoped `useEffect`s above the early returns. Build green, UX smoke green, workflow tests passing. |
+| Creative Alignment | 99 | → | Founder reported a launch-blocker bug; session pivoted from genius hit list to triage and ship the user-visible fix first, matching the operator's prioritization. |
+| Momentum | 88 | ↑ | One push closed the bug, verified the live bundle hash flip, and updated all closeout surfaces in the same session. No half-finished work. |
+| Engagement | 93 | → | Fix directly improves first-impression engagement (no manual refresh required on cold deep links), but no new consumer-facing surface shipped. |
+| Process Quality | 100 | → | Bug triage → root cause → fix → live verification → memory update → closeout, all in one tight loop. Memory captured the GH-Pages-not-CF-Pages clarification. |
+| Cross-Repo Coherence | 99 | → | Agent memory `reference_infrastructure.md` updated with the deploy host clarification so other VaultSpark sessions don't repeat the misdiagnosis. |
+| Security Posture | 95 | → | No new secrets touched; sanitization still clean. |
+| Ecosystem Integration | 99 | → | Live verification of the deployed bundle hash via curl confirms the deploy chain is observable end-to-end. |
+| Capital Efficiency | 97 | ↑ | One-session fix avoided the user creating a longer support thread. Memory update means next session won't waste tokens re-investigating the host. |
+| Automation Coverage | 97 | → | Closeout autopilot still does the commit/push; manual verification of the deployed bundle was a one-curl probe rather than a script. |
+| **Total** | **970 / 1000** | | |
+
+**Top win:** triaged a vague stack trace (minified `App-C8ZfyIiU.js:34:8203` + "useEffect") down to the exact React rule-of-hooks violation and fixed it in the right place, plus discovered the deploy host was misclassified in memory and corrected it.
+
+**Top gap:** no automated guard prevents the next person from re-introducing the same hook-order bug. ESLint `react-hooks/rules-of-hooks` should be enabled or a regression test added.
+
+**Intent outcome:** Achieved. Cold-load crash fixed and live-verified within one session. Founder-reported bug ranked above the genius hit list.
+
+**Brainstorm**
+
+1. Enable `react-hooks/rules-of-hooks` ESLint rule (or add a guard test) so any future `useEffect` after an early return in `src/App.jsx` fails CI before merge.
+2. Add a one-line `npm run verify:live-bundle` script that curls `promogrind.bet`, extracts the App bundle hash, and asserts it matches the latest committed dist build — closes the loop on "did my fix actually deploy?"
+3. Fix or downgrade the chronic `Deploy Pages` workflow red. The actual deploy step succeeds but `Verify production launch` has been failing 5+ runs on `workflow_state` / `workflow_history` — either fix those endpoints or make the gate advisory.
+
+**Committed follow-up(s):**
+- Add `react-hooks/rules-of-hooks` ESLint rule or regression test to prevent the S83 hook-order bug class. `[SIL]`
+- Fix or downgrade the chronic Deploy Pages workflow red. `[SIL]`
 
 ## 2026-05-01 — Session 82 | Total: 962/1000 | Velocity: 15 | Debt: down
 Rolling avg (last 3): Dev 98.0 | Align 98.3 | Momentum 85.0 | Engage 93.0 | Process 99.3 | Coher 94.3 | Sec 91.7 | Eco 95.7 | Cap 95.0 | Auto 96.7

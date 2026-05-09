@@ -22,7 +22,7 @@
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record)."
   ],
-  "lastUpdated": "2026-05-08",
+  "lastUpdated": "2026-05-09",
   "silScore": 962,
   "silAvg3": 947,
   "silVelocity": 15,
@@ -102,14 +102,14 @@
     "automationCoverage": 97
   },
   "doctorScore": {
-    "date": "2026-05-01",
-    "passing": 12,
-    "warning": 0,
-    "failing": 0,
+    "date": "2026-05-09",
+    "passing": 10,
+    "warning": 1,
+    "failing": 1,
     "blockingFailing": 0,
-    "advisoryFailing": 0,
+    "advisoryFailing": 1,
     "total": 12,
-    "score": 100,
+    "score": 83,
     "checks": [
       {
         "id": "manifest",
@@ -169,15 +169,15 @@
       },
       {
         "id": "revenue",
-        "pass": true,
+        "pass": false,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
       },
       {
         "id": "ignis",
-        "pass": true,
-        "warn": false,
+        "pass": false,
+        "warn": true,
         "driftClass": "derived-stale",
         "blocking": false
       },

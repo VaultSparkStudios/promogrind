@@ -10,6 +10,14 @@ Append chronological entries.
 - Risks created or removed:
 - Recommended next move:
 
+### 2026-05-08 - Session 83 cold-load deep-link crash fix (React #310 hook order)
+
+- Goal: Triage and fix the founder-reported cold-load dashboard crash that required a manual refresh on first hit; close out and push.
+- What changed: Hoisted four route-scoped `useEffect`s (`VaultSDK gates`, calc-view tracking, `pg:quick-calc` handler, `tabMemory` recorder) plus the `slug`/`gi`/`ti`/`item` derivation and `goTo` callback above the three early returns in `src/App.jsx`. Added inline S83-root-cause comment. Created `public/_redirects` (forward-compat no-op for current GH Pages host). Updated agent memory with the GH-Pages-not-CF-Pages clarification. New live App bundle confirmed (`App-BJlXUHbf.js`).
+- Files or systems touched: `src/App.jsx`, `public/_redirects` (new), `context/PROJECT_STATUS.json` (auto), `docs/STARTUP_BRIEF.md` (auto), agent memory `reference_infrastructure.md`.
+- Risks created or removed: REMOVED — React #310 cold-load crash on routes other than `/`, `/land/*`, `/feature-flags`. CREATED — none.
+- Recommended next move: Founder verifies fix in incognito, then either (a) fix the chronic Deploy Pages workflow red on `Verify production launch`, or (b) hit the genius hit-list IGNIS re-score + REVENUE_SIGNALS refresh via `vaultspark-studio-ops`.
+
 ### 2026-05-01 - Session 82 production dashboard smoke, launch status, runtime fix, closeout
 
 - Goal: Implement the seven highest-impact PromoGrind refinements in optimal order, especially live dashboard error capture, launch-proof orchestration, artifact ingestion, and `App.jsx` decomposition; then close out, update all repo truth/memory surfaces, commit, and push.

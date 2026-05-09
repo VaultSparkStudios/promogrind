@@ -1,9 +1,24 @@
 # Latest Handoff
 
-Last updated: 2026-05-01 (S82)
-Session: 82
-Session Intent: Implement the next seven highest-impact PromoGrind improvements in optimal order, keep external proof blockers honest, update all context/memory/CDR/task-board surfaces, then close out, commit, and push.
-Intent Outcome: Achieved for repo-controllable work. Added production dashboard console smoke, captured and fixed the live dashboard `syncDiagnostics` crash source, added the one-command launch-status report, re-ingested deploy verification, extracted profit notifications from `src/App.jsx`, and verified the full local launch gate green.
+Last updated: 2026-05-08 (S83)
+Session: 83
+Session Intent: Triage and fix the founder-reported cold-load dashboard crash (`SES Removing unpermitted intrinsics` + minified React error #310 in `App-C8ZfyIiU.js` + `dashboard:1 404`) so the live app stops requiring a manual refresh on first hit; then close out and push.
+Intent Outcome: Achieved. Root cause was a hook-order violation in `src/App.jsx` — four `useEffect` hooks lived AFTER the three early returns for `/`, `/land/*`, and `/feature-flags`, so navigating between those routes and any other route changed the hook count between renders, tripping React #310. Hoisted the offending hooks (and their `slug`/`gi`/`ti`/`goTo` deps) above the early returns. Build green, tests passing, new App bundle (`App-BJlXUHbf.js`) confirmed live on production. Also added forward-compat `public/_redirects` for any future Cloudflare Pages migration (no-op on GitHub Pages).
+
+## Where We Left Off (Session 83)
+
+- Fixed `src/App.jsx` hook-order violation that caused React error #310 on cold deep-link loads. Hoisted four route-scoped `useEffect`s, plus the `slug`/`gi`/`ti`/`item` derivation and `goTo` callback, above the three early returns. Inline comment marks the S83 root cause to prevent regression.
+- Discovered the actual deploy host is **GitHub Pages**, not Cloudflare Pages — Cloudflare is DNS-only proxy. SPA fallback already works via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. The `dashboard:1 Failed to load resource: 404` in DevTools is the response *status*; the body still hydrates the SPA.
+- Added `public/_redirects` with `/* /index.html 200`. Harmless no-op on GitHub Pages, forward-compat if the project ever moves to Cloudflare Pages.
+- Verified live: prod App bundle is now `App-BJlXUHbf.js` (was `App-C8ZfyIiU.js` pre-fix). Last-modified header confirms our commit shipped.
+- Updated agent memory `reference_infrastructure.md` with the GitHub Pages clarification so future sessions don't waste time re-discovering the host.
+
+## What was completed
+
+- **Hook-order fix (S83)**: `src/App.jsx` now mounts every `useEffect` before any conditional `return`. Specifically: hoisted the four post-return hooks (VaultSDK gates, calc-view tracking, `pg:quick-calc` event handler, `tabMemory` recorder) plus the `slug`/`gi`/`ti`/`item` derivation and `goTo` callback. Resolves React error #310 on cold deep-link loads.
+- **SPA fallback hardening (S83)**: added `public/_redirects` (`/* /index.html 200`). No effect on the current GH Pages host (already handled by `postbuild-pages.mjs` via `404.html`); kept as a forward-compat artifact.
+- **Infrastructure clarification (S83)**: confirmed via response headers (`x-github-request-id`, Fastly via Varnish, `public/CNAME`) that production is GitHub Pages, not Cloudflare Pages. Updated agent memory and inline notes accordingly.
+- **Production verification (S83)**: `npm run build` green; `npm run smoke:ux` green (60 routes / 98 public HTML); `workflowSuggestions.test.js` 4/4. Live bundle hash flipped from `App-C8ZfyIiU.js` to `App-BJlXUHbf.js` after deploy.
 
 ## Where We Left Off (Session 82)
 

@@ -2,6 +2,24 @@
 
 Append new entries. Do not erase historical reasoning unless it is wrong.
 
+### 2026-05-08 — Production deploy host is GitHub Pages, not Cloudflare Pages (S83)
+
+- Status: confirmed
+- Context: S83 triage of a cold-load deep-link crash initially assumed `promogrind.bet` was on Cloudflare Pages and that a missing `_redirects` SPA fallback was the cause. Live response headers told a different story.
+- Decision: Treat GitHub Pages as the canonical production host. Cloudflare is DNS-only proxy. SPA fallback is provided by `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html` (Jekyll-style). The `dashboard:1 Failed to load resource: 404` in DevTools is the response *status*, not a fatal error — the body still hydrates the SPA.
+- Alternatives considered: keep `_redirects` as the canonical SPA fallback (only useful if/when migrating to CF Pages). Migrate to CF Pages (out of scope this session).
+- Why this was chosen: the live deploy chain already works on GH Pages; switching hosts is a separate decision. `public/_redirects` was kept as a forward-compat artifact (no-op on GH Pages, ready for any future CF Pages migration).
+- Follow-up: agent memory `reference_infrastructure.md` updated. `context/TRUTH_AUDIT.md` and `context/CURRENT_STATE.md` now name GitHub Pages explicitly.
+
+### 2026-05-08 — Hoist all `useEffect`s above early returns in `src/App.jsx` (S83)
+
+- Status: shipped
+- Context: founder reported a cold-load React error #310 (`Rendered more hooks than during the previous render`) that required a manual refresh. Root cause: four `useEffect`s in the `App` component lived after three pathname-based early returns (`/`, `/land/*`, `/feature-flags`), so navigating between those routes and any other route changed the hook count between renders.
+- Decision: hoist the four route-scoped `useEffect`s — plus the `slug`/`gi`/`ti`/`item` derivation and `goTo` callback they depend on — above the early returns. Keep the early returns themselves intact. Keep the unrelated `g`/`Comp`/`isLiveTool` derivation in its original position because the JSX render uses it and it has no hook dependency.
+- Alternatives considered: rewrite the three early-return branches to render through the same shell so all hooks run on every path (larger blast radius, no immediate benefit). Add a top-level `<Routes>` switch with separate components per branch (large refactor, deferred).
+- Why this was chosen: minimal-diff fix that addresses the actual rule-of-hooks violation, ships in one commit, and is easy to verify.
+- Follow-up: enable `react-hooks/rules-of-hooks` ESLint rule (or add a regression test) so this bug class fails CI before merge — committed as `[SIL]` follow-up on `TASK_BOARD.md`.
+
 ## Entry template
 
 ### YYYY-MM-DD - Decision title

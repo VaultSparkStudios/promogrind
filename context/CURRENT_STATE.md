@@ -1,11 +1,11 @@
 # Current State
 
-Last updated: 2026-05-01 (S82)
+Last updated: 2026-05-08 (S83)
 
 ## Snapshot
 
-- Date: 2026-05-01
-- Overall status: deployed product with a green full local launch gate (`npm run verify:launch-local`: 392/392 tests, launch smoke, UX route integrity, browser smoke, bundle budget, strict public-repo sanitization), production dashboard console smoke added, live dashboard `syncDiagnostics` crash source fixed locally, post-deploy launch-verification ingester confirming Supabase/VAPID/signup/billing/checkout/customer-portal health, and only external launch proofs still open
+- Date: 2026-05-08
+- Overall status: deployed product with cold-load deep-link crash fixed (S83 hoisted four route-scoped `useEffect`s above `src/App.jsx` early returns to resolve React error #310). Live bundle is now `App-BJlXUHbf.js`. Local launch gate green (`npm run verify:launch-local`: 392/392 tests, launch smoke, UX route integrity, browser smoke, bundle budget, strict public-repo sanitization). Post-deploy launch-verification ingester confirming Supabase/VAPID/signup/billing/checkout/customer-portal health. Production host clarified as GitHub Pages (Cloudflare is DNS-only proxy).
 - Current phase: public-unveil launch hardening with external blocker cleanup
 - Canonical launch proof surface: `context/LAUNCH_PROOFS.json`
 
@@ -32,11 +32,11 @@ Last updated: 2026-05-01 (S82)
 
 ## In progress
 
-- Active work: deploy the local dashboard runtime fix and rerun `npm run smoke:production-dashboard` against live to confirm the old bundle's `syncDiagnostics` crash is gone
+- Active work: founder verification of the S83 cold-load fix in incognito (open `/` and `/dashboard` deep link, confirm no React #310 and no first-hit refresh requirement)
+- Active work: chronic Deploy Pages workflow red — actual deploy succeeds, but the `Verify production launch` step fails on `workflow_state` and `workflow_history` checks against the live API; needs either fixing those endpoints or relaxing the gate to advisory
 - Active work: finishing monetization coverage for sportsbook CTAs with real approved affiliate/referral links
 - Active work: completing one live Stripe smoke purchase and one friend-facing auth/calculator/pricing pass before public announcement
-- Active work: continuing to decompose the remaining high-churn `src/App.jsx` seams after routing the `Community Promos` tab to the extracted board component
-- Active work: inspect the next deploy artifact after this push and keep public/legal/trust pages synced with implementation truth
+- Active work: continuing to decompose the remaining high-churn `src/App.jsx` seams (still ~4300 lines)
 
 ## Blockers
 
