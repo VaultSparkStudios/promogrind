@@ -28,6 +28,7 @@ const CALCS: Record<string, (b: Record<string, unknown>) => unknown> = {
     const m = 1 / d1 + 1 / d2, s1 = t * (1 / d1) / m, s2 = t * (1 / d2) / m, p = s1 * d1;
     return { isArb: m < 1, marginPct: f((1 - m) * 100), stake1: f(s1), stake2: f(s2), payout: f(p), profit: f(p - t), roi: f((p - t) / t * 100) };
   },
+  "arb-2way": (b) => CALCS["arb"](b),
   "ev": (b) => {
     const yd = toD(String(b.yourOdds ?? "")), fd = toD(String(b.fairOdds ?? "")), s = Number(b.stake);
     if (yd <= 1 || fd <= 1 || !s) return null;
@@ -62,7 +63,8 @@ const DOCS = {
   attribution: "promogrind.bet — free sports betting calculator tools",
   endpoints: [
     { path: "/bonus-bet", params: { bonusBetSize: "number", bonusOdds: "string", hedgeOdds: "string" } },
-    { path: "/arb", params: { odds1: "string", odds2: "string", totalStake: "number" } },
+    { path: "/arb-2way", params: { odds1: "string", odds2: "string", totalStake: "number" } },
+    { path: "/arb", params: { odds1: "string", odds2: "string", totalStake: "number" }, aliasFor: "/arb-2way" },
     { path: "/ev", params: { yourOdds: "string", fairOdds: "string", stake: "number" } },
     { path: "/profit-boost", params: { stake: "number", odds: "string", boostPct: "number", maxExtra: "number", hedgeOdds: "string" } },
     { path: "/no-vig", params: { odds1: "string", odds2: "string" } },

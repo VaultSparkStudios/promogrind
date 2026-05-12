@@ -1,12 +1,12 @@
-import { spawn } from "node:child_process";
+import { createServer } from "node:http";
 import { once } from "node:events";
+import { existsSync, statSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import net from "node:net";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const PREVIEW_BIN = fileURLToPath(new URL("../node_modules/vite/bin/vite.js", import.meta.url));
 const PREVIEW_HOST = "127.0.0.1";
+const DIST_DIR = path.resolve(process.cwd(), "dist");
 
 async function getAvailablePort() {
   return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ async function getAvailablePort() {
       const address = server.address();
       const port = typeof address === "object" && address ? address.port : null;
       server.close(() => {
-        if (!port) reject(new Error("Could not allocate preview port"));
+        if (!port) reject(new Error("Could not allocate static smoke port"));
         else resolve(port);
       });
     });
@@ -37,6 +37,59 @@ async function waitForServer(url, retries = 40) {
     await sleep(500);
   }
   throw new Error(`Preview server did not start at ${url}`);
+}
+
+function contentType(filePath) {
+  if (filePath.endsWith(".html")) return "text/html; charset=utf-8";
+  if (filePath.endsWith(".js")) return "text/javascript; charset=utf-8";
+  if (filePath.endsWith(".css")) return "text/css; charset=utf-8";
+  if (filePath.endsWith(".json")) return "application/json; charset=utf-8";
+  if (filePath.endsWith(".svg")) return "image/svg+xml";
+  if (filePath.endsWith(".png")) return "image/png";
+  if (filePath.endsWith(".webp")) return "image/webp";
+  if (filePath.endsWith(".avif")) return "image/avif";
+  return "application/octet-stream";
+}
+
+async function startStaticServer() {
+  const port = await getAvailablePort();
+  const server = createServer(async (req, res) => {
+    try {
+      const url = new URL(req.url || "/", `http://${PREVIEW_HOST}:${port}`);
+      const cleanPath = decodeURIComponent(url.pathname).replace(/^\/+/, "");
+      const candidates = [];
+      if (!cleanPath) candidates.push(path.join(DIST_DIR, "index.html"));
+      else {
+        candidates.push(path.join(DIST_DIR, cleanPath));
+        candidates.push(path.join(DIST_DIR, cleanPath, "index.html"));
+        candidates.push(path.join(DIST_DIR, "index.html"));
+      }
+      const filePath = candidates.find((candidate) => {
+        const relative = path.relative(DIST_DIR, candidate);
+        return relative
+          && !relative.startsWith("..")
+          && !path.isAbsolute(relative)
+          && existsSync(candidate)
+          && statSync(candidate).isFile();
+      });
+      if (!filePath) {
+        res.writeHead(404);
+        res.end("Not found");
+        return;
+      }
+      const body = await readFile(filePath);
+      res.writeHead(200, { "Content-Type": contentType(filePath) });
+      res.end(body);
+    } catch (error) {
+      if (!res.headersSent) res.writeHead(500);
+      res.end(error instanceof Error ? error.message : String(error));
+    }
+  });
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(port, PREVIEW_HOST, resolve);
+  });
+  return { server, previewUrl: `http://${PREVIEW_HOST}:${port}` };
 }
 
 async function assertPath(previewUrl, pathname, checks) {
@@ -68,24 +121,12 @@ async function assertBuiltBundleMarkers(markers) {
   }
 }
 
-const previewPort = await getAvailablePort();
-const previewUrl = `http://${PREVIEW_HOST}:${previewPort}`;
-
-const preview = spawn(
-  process.execPath,
-  [PREVIEW_BIN, "preview", "--host", PREVIEW_HOST, "--port", String(previewPort), "--strictPort"],
-  {
-    cwd: process.cwd(),
-    stdio: ["ignore", "pipe", "pipe"],
-  }
-);
-
-let stderr = "";
-preview.stderr.on("data", (chunk) => {
-  stderr += chunk.toString();
-});
+let server;
 
 try {
+  const started = await startStaticServer();
+  server = started.server;
+  const previewUrl = started.previewUrl;
   await waitForServer(`${previewUrl}/`);
   await assertPath(previewUrl, "/", [["id=\"root\"", "app root"]]);
   await assertPath(previewUrl, "/landing/", [["PromoGrind account", "landing access copy"], ["beta rollout", "landing beta rollout copy"]]);
@@ -105,11 +146,10 @@ try {
 } catch (error) {
   console.error("Browser launch smoke failed.");
   console.error(error instanceof Error ? error.message : String(error));
-  if (stderr.trim()) console.error(stderr.trim());
   process.exitCode = 1;
 } finally {
-  preview.kill("SIGTERM");
-  try {
-    await once(preview, "exit");
-  } catch {}
+  if (server) {
+    server.close();
+    try { await once(server, "close"); } catch {}
+  }
 }

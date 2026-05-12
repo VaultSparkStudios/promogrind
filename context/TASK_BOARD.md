@@ -9,15 +9,19 @@
 
 ## Next
 
-- [SIL] fix or downgrade the chronic `Deploy Pages` red — actual GH Pages deploy succeeds, but `Verify production launch` step has been failing 5+ runs on `workflow_state` and `workflow_history` checks; either fix the live endpoints or flip the final `Fail if launch verification failed` step to advisory
-- [SIL] fix the launch-gate browser smoke flake on Windows (`Preview server did not start at 127.0.0.1:NNNNN`) — preview server fails to bind on the auto-allocated port despite tests claiming a fresh allocation
-- [SIL] add an ESLint rule (`react-hooks/rules-of-hooks` if not already on) or a guard test that fails when any `useEffect` lives below an early `return` in `src/App.jsx` — would have caught the S83 React #310 root cause before deploy
-- [SIL] Add `npm run smoke:production-dashboard` to the default post-deploy `launch-verification` workflow so live runtime console failures become retained deploy artifacts
+- rerun the GitHub Pages workflow after S84 launch-gate hardening lands; confirm `launch-verification` artifact separates deploy-health failures from advisory affiliate gaps and includes `production-dashboard-smoke.json`
 - continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos/`useProfitNotifications` (App.jsx is still ~4300 lines)
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- harden calculator/API contracts and first-bet result semantics (S84) — **DONE S84**: added `/arb-2way` to `supabase/functions/calc-api` while preserving `/arb` as a compatibility alias, updated the public calc-api page, fixed `deploy:functions` to deploy the real `calc-api` function instead of missing `odds`, and changed First Bet Safety Net output to distinguish hedge-only worst case from projected refund conversion.
+- fix Vitest shutdown/tooling timeout (S84) — **DONE S84**: moved Vitest from slow `forks` mode to `threads` with `fileParallelism: false`; full `npm test` now passes 392/392 in ~20s without the post-run Vite shutdown timeout.
+- add hook-order guard for the S83 React #310 failure mode (S84) — **DONE S84**: added `scripts/check-app-hook-order.mjs` and wired it into `verify:launch-local` so hooks cannot be added below the App route early returns.
+- harden local browser smoke on Windows (S84) — **DONE S84**: replaced Vite preview port probing in `scripts/validate-browser-launch-smoke.mjs` with an in-process static `dist` server; direct browser smoke now passes and no longer depends on Vite preview binding behavior.
+- split production verification into blocking deploy health vs advisory launch gaps (S84) — **DONE S84**: `verify-production-launch` now marks affiliate/monetization coverage as advisory while keeping schema/auth/runtime failures blocking; launch summary renders blocking failures, advisory gaps, and dashboard-smoke status separately.
+- add production dashboard smoke to post-deploy artifacts (S84) — **DONE S84**: Pages workflow now runs `npm run smoke:production-dashboard` after deploy, stores `production-dashboard-smoke.json`, and fails deploy health when live dashboard runtime smoke fails.
 
 - fix cold-load React #310 crash on deep-link routes (S83) — **DONE S83**: hoisted four route-scoped `useEffect`s (VaultSDK gates, calc-view tracking, `pg:quick-calc` event handler, `tabMemory` recorder) plus the `slug`/`gi`/`ti`/`item` derivation and `goTo` callback above the three early returns at `/`, `/land/*`, and `/feature-flags` in `src/App.jsx`. Live bundle hash flipped from `App-C8ZfyIiU.js` to `App-BJlXUHbf.js`. Inline comment marks the S83 root cause to prevent regression.
 - add SPA fallback forward-compat (S83) — **DONE S83**: created `public/_redirects` with `/* /index.html 200`. No-op on the current GitHub Pages host (already handled via `404.html` from `postbuild-pages.mjs`); keeps the SPA fallback declarative if the project ever migrates to Cloudflare Pages.

@@ -26,6 +26,10 @@ function report(name, ok, detail, extra = {}) {
   return { name, ok, detail, ...extra };
 }
 
+function advisoryReport(name, ok, detail, extra = {}) {
+  return report(name, ok, detail, { severity: "advisory", ...extra });
+}
+
 function readFlag(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : null;
@@ -156,7 +160,7 @@ async function main() {
 
   const launchMonetization = getRequiredLaunchMonetizationStatus();
 
-  results.push(report(
+  results.push(advisoryReport(
     "affiliate_coverage",
     getConfiguredAffiliateCount() > 0,
     `affiliate links configured for ${getConfiguredAffiliateCount()} books`,
@@ -164,7 +168,7 @@ async function main() {
       books: BOOKS.filter((book) => hasConfiguredAffiliateUrl(book)).map((book) => book.name),
     },
   ));
-  results.push(report(
+  results.push(advisoryReport(
     "monetization_coverage",
     getConfiguredMonetizationCount() > 0,
     `monetization links configured for ${getConfiguredMonetizationCount()} books`,
@@ -172,7 +176,7 @@ async function main() {
       books: BOOKS.filter((book) => hasConfiguredMonetizationUrl(book)).map((book) => book.name),
     },
   ));
-  results.push(report(
+  results.push(advisoryReport(
     "required_launch_monetization",
     launchMonetization.missingBooks.length === 0,
     launchMonetization.missingBooks.length === 0
@@ -186,15 +190,19 @@ async function main() {
   ));
 
   const failed = results.filter((item) => !item.ok);
+  const blockingFailed = failed.filter((item) => item.severity !== "advisory");
+  const advisoryFailed = failed.filter((item) => item.severity === "advisory");
   const payload = {
-    ok: failed.length === 0,
+    ok: blockingFailed.length === 0,
     failedCount: failed.length,
+    blockingFailedCount: blockingFailed.length,
+    advisoryFailedCount: advisoryFailed.length,
     results,
   };
 
   writePayload(outPath, payload);
 
-  if (failed.length) process.exit(1);
+  if (blockingFailed.length) process.exit(1);
 }
 
 main().catch((error) => {

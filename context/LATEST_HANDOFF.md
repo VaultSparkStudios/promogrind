@@ -1,9 +1,56 @@
 # Latest Handoff
 
-Last updated: 2026-05-08 (S83)
-Session: 83
-Session Intent: Triage and fix the founder-reported cold-load dashboard crash (`SES Removing unpermitted intrinsics` + minified React error #310 in `App-C8ZfyIiU.js` + `dashboard:1 404`) so the live app stops requiring a manual refresh on first hit; then close out and push.
-Intent Outcome: Achieved. Root cause was a hook-order violation in `src/App.jsx` — four `useEffect` hooks lived AFTER the three early returns for `/`, `/land/*`, and `/feature-flags`, so navigating between those routes and any other route changed the hook count between renders, tripping React #310. Hoisted the offending hooks (and their `slug`/`gi`/`ti`/`goTo` deps) above the early returns. Build green, tests passing, new App bundle (`App-BJlXUHbf.js`) confirmed live on production. Also added forward-compat `public/_redirects` for any future Cloudflare Pages migration (no-op on GitHub Pages).
+Last updated: 2026-05-12 (S84)
+Session: 84
+Session Intent: Implement the next seven highest-impact PromoGrind improvements in one optimal pass: commit-ready audit fixes, Vitest cleanup, launch verification split, Windows browser smoke hardening, React hook-order guard, production dashboard smoke artifact wiring, and honest launch-proof handling.
+Intent Outcome: Code-controllable items achieved. External/manual launch proofs remain honest blockers: approved BetMGM/bet365/BetRivers tracking URLs, one real Stripe smoke purchase, and one friend beta pass still require operator/tester action.
+
+## Where We Left Off (Session 84)
+
+- Fixed calculator/API contract drift: `supabase/functions/calc-api` now accepts canonical `/arb-2way` and keeps `/arb` as a compatibility alias; public calc-api docs match.
+- Fixed tool deployment script drift: `deploy:functions` now deploys real `calc-api` instead of missing `odds`.
+- Corrected First Bet Safety Net result semantics: UI now separates hedge-only worst case from projected bonus-refund conversion instead of implying hedge math alone is full guaranteed promo profit.
+- Fixed Vitest shutdown/tooling behavior: `vitest.config.js` uses `threads` with `fileParallelism: false`; full suite passes 392/392 in ~20s without the previous post-run shutdown timeout.
+- Added `scripts/check-app-hook-order.mjs` and wired it into `verify:launch-local` to prevent future React hooks below App route early returns.
+- Hardened `scripts/validate-browser-launch-smoke.mjs` by replacing Vite preview port probing with an in-process static `dist` server; direct browser smoke passes.
+- Split `verify-production-launch` into blocking deploy-health failures vs advisory launch gaps. Affiliate/monetization gaps stay visible in artifacts without failing a successful deploy.
+- Added `npm run smoke:production-dashboard` to the Pages workflow artifact path; it writes `production-dashboard-smoke.json` and remains a hard deploy-health signal for live runtime failures.
+
+## Verification (Session 84)
+
+- `npm test` — 392/392 passing.
+- `node scripts/check-app-hook-order.mjs` — passing.
+- `npm run smoke:launch` — passing.
+- `npm run smoke:ux` — passing, 60 app routes / 98 public HTML files.
+- `npm run smoke:browser` — passing outside sandbox; sandboxed Vite build cannot read config due local path restrictions.
+- `node scripts/check-bundle-budget.mjs` — passing.
+- `node scripts/check-public-repo-sanitization.mjs --strict --json` — passing, 0 critical / 0 warning.
+- `npm run smoke:production-dashboard` now exits with JSON locally; sandboxed live navigation produced `chrome-error://chromewebdata`, so final truth should come from the next GitHub Pages workflow artifact.
+
+## What is mid-flight
+
+- Rerun GitHub Pages deploy after S84 lands, then ingest the new `launch-verification` artifact and confirm `production-dashboard-smoke.json` is present.
+- Real affiliate/referral tracking URLs for `BetMGM`, `bet365`, `BetRivers` remain operator/partner-blocked.
+- Real Stripe smoke purchase remains pending (`npm run smoke:stripe -- --record`).
+- Friend-facing auth/calculator/CTA/pricing pass remains pending (`npm run beta:check -- --record`).
+- Continued `src/App.jsx` decomposition remains valuable; App.jsx still carries several large inline surfaces.
+
+## What to do next
+
+1. Commit and push S84 hardening.
+2. Let GitHub Pages deploy run, then `npm run ingest:launch`.
+3. Review `artifacts/launch-verification/summary.md` and `production-dashboard-smoke.json`.
+4. Complete `npm run smoke:stripe -- --record` with a real checkout when operator is ready.
+5. Complete `npm run beta:check -- --record` with a trusted tester.
+6. Add approved BetMGM/bet365/BetRivers tracking URLs when partner approvals arrive.
+
+## Constraints
+
+- Do not fabricate sportsbook affiliate links or manual proof evidence.
+- Production dashboard smoke is a real deploy-health signal, but local shell networking may not reflect GitHub Actions networking.
+- Public repo remains proprietary by default under CANON-008.
+
+---
 
 ## Where We Left Off (Session 83)
 

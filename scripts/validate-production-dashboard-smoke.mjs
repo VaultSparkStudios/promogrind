@@ -18,16 +18,10 @@ import path from "node:path";
 const DEFAULT_URL = "https://promogrind.bet/dashboard";
 const TARGET_URL = process.argv.find((arg) => arg.startsWith("--url="))?.slice("--url=".length) || DEFAULT_URL;
 const TIMEOUT_MS = Number(process.argv.find((arg) => arg.startsWith("--timeout="))?.slice("--timeout=".length) || 25000);
-const HARD_TIMEOUT_MS = TIMEOUT_MS + 20000;
 const ALLOWED_CONSOLE_PATTERNS = [
   /favicon/i,
   /Failed to load resource: the server responded with a status of 404.*favicon/i,
 ];
-
-const hardTimeout = setTimeout(() => {
-  console.error(`Production dashboard smoke exceeded hard timeout (${HARD_TIMEOUT_MS}ms).`);
-  process.exit(1);
-}, HARD_TIMEOUT_MS);
 
 function findBrowser() {
   const envPath = process.env.CHROME_PATH || process.env.EDGE_PATH;
@@ -189,13 +183,16 @@ async function run() {
   const devtoolsPort = await getAvailablePort();
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), "pg-prod-smoke-"));
   const stderrChunks = [];
+  const headlessMode = process.env.PG_CHROME_HEADLESS || "new";
   const proc = spawn(browser, [
-    "--headless=new",
+    `--headless=${headlessMode}`,
     "--disable-gpu",
     "--disable-dev-shm-usage",
+    "--no-sandbox",
     "--no-first-run",
     "--no-default-browser-check",
     "--remote-allow-origins=*",
+    "--remote-debugging-address=127.0.0.1",
     `--remote-debugging-port=${devtoolsPort}`,
     `--user-data-dir=${userDataDir}`,
     "about:blank",
@@ -208,7 +205,7 @@ async function run() {
   let browserCdp;
   let pageCdp;
   try {
-    const browserWs = await waitForDevTools(devtoolsPort, 10000);
+    const browserWs = await waitForDevTools(devtoolsPort, 20000);
     browserCdp = await connect(browserWs);
     const { targetId } = await browserCdp.send("Target.createTarget", { url: "about:blank" });
     const targets = await fetchJson(`http://127.0.0.1:${devtoolsPort}/json/list`, 3000);
@@ -280,6 +277,10 @@ async function run() {
 
     console.log(JSON.stringify(payload, null, 2));
     if (uniqueFailures.length) process.exitCode = 1;
+  } catch (error) {
+    const stderr = stderrChunks.join("").trim();
+    if (stderr) console.error(`Browser stderr:\n${stderr}`);
+    throw error;
   } finally {
     try { pageCdp?.close(); } catch {}
     try { browserCdp?.close(); } catch {}
@@ -287,7 +288,7 @@ async function run() {
     try { proc.kill("SIGTERM"); } catch {}
     if (process.platform === "win32" && proc.pid) {
       try {
-        execFileSync("taskkill.exe", ["/PID", String(proc.pid), "/T", "/F"], { stdio: "ignore" });
+        execFileSync("taskkill.exe", ["/PID", String(proc.pid), "/T", "/F"], { stdio: "ignore", timeout: 5000 });
       } catch {}
     }
     await wait(500);
@@ -296,9 +297,7 @@ async function run() {
 }
 
 run()
-  .then(() => clearTimeout(hardTimeout))
   .catch((error) => {
-    clearTimeout(hardTimeout);
     console.error("Production dashboard smoke failed.");
     console.error(error instanceof Error ? error.message : String(error));
     process.exit(1);

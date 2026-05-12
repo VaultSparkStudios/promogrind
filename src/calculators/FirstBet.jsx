@@ -16,6 +16,8 @@ export default function FirstBet() {
   const setO = (v) => setMem("o", v);
   const setHo = (v) => setMem("ho", v);
   const r = useMemo(() => calcFirst(parseFloat(s), o, ho), [s, o, ho]);
+  const refundValue = useMemo(() => f(parseFloat(s) * 0.7, 0), [s]);
+  const totalIfRefund = useMemo(() => r ? f(parseFloat(r.pHW) + parseFloat(refundValue)) : "0.00", [r, refundValue]);
   const sens = useMemo(() => sensitivityFirst(parseFloat(s), o, ho), [s, o, ho]);
   const [showHist, setShowHist] = useState(false);
   const [hist, setHist] = useState(() => { try { return JSON.parse(localStorage.getItem("pg_hist_first-bet") || "[]"); } catch { return []; } });
@@ -76,25 +78,26 @@ export default function FirstBet() {
           <div style={S.res(true)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>${r.g}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>from hedge math</span>
+              <span style={{ fontSize: 12, color: K.dm }}>hedge-only worst case</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
               <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b /><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW) >= 0 ? K.gn : K.rd} /><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW) >= 0 ? K.gn : K.rd} />
-            <Nt c={K.yl}>If your first bet LOSES → you get ${s} in bonus bets. Convert those at ~70% using the Bonus Bet tab = ~${f(parseFloat(s) * 0.7, 0)} more profit!</Nt>
+            <RR l="If Original Loses + Refund Converts" v={`$${totalIfRefund}`} c={parseFloat(totalIfRefund) >= 0 ? K.gn : K.yl} />
+            <Nt c={K.yl}>If your first bet loses, the sportsbook refund is usually bonus-credit value, not cash. At a rough 70% conversion, the refund adds about ${refundValue} after you run the Bonus Bet tab.</Nt>
             <BookCTA promoType="safety" />
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
               <CalculatorTrustBadge calculatorKey="first-bet" promoType="safety_net" />
               <SensitivityChip summary={sens} />
             </div>
-            <ResultFeedbackCard calculatorKey="first-bet" calculatorLabel="First Bet Safety Net Hedge" promoType="safety_net" expectedProfit={r.g} />
+            <ResultFeedbackCard calculatorKey="first-bet" calculatorLabel="First Bet Safety Net Hedge" promoType="safety_net" expectedProfit={totalIfRefund} />
             {parseFloat(r.g) > 0 && !showShareCard && (
               <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #60a5fa", color: "#60a5fa", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
                 🎉 Share your hedge
               </button>
             )}
             {showShareCard && parseFloat(r.g) > 0 && (
-              <ShareCard title="First Bet Safety Net Hedge" profit={`$${r.g} guaranteed`} onClose={() => setShowShareCard(false)} />
+              <ShareCard title="First Bet Safety Net Hedge" profit={`$${totalIfRefund} projected with refund`} onClose={() => setShowShareCard(false)} />
             )}
             {showReceipt && (
               <CalculatorReceipt
@@ -108,7 +111,8 @@ export default function FirstBet() {
                   { label: "Hedge Amount", value: `$${r.hs}` },
                   { label: "If Original Wins", value: `$${r.pOW}` },
                   { label: "If Hedge Wins", value: `$${r.pHW}` },
-                  { label: "Hedge Math Result", value: `$${r.g}`, highlight: true },
+                  { label: "Hedge-Only Worst Case", value: `$${r.g}` },
+                  { label: "Projected With Refund", value: `$${totalIfRefund}`, highlight: true },
                 ]}
                 onClose={() => setShowReceipt(false)}
               />

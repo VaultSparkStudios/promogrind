@@ -119,6 +119,16 @@ Agents MUST NOT modify or remove existing entries.
 - Why it matters: the next session and deployment checks need a truthful handoff that distinguishes shipped repo work from still-external launch proofs.
 - Supersedes prior entry: —
 
+### 2026-05-12 — Implement all next highest-impact launch-hardening items in one pass
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): "Implement all items at the highest/optimal quality in one pass (in optimal efficiency recommended order)" after asking for the next seven highest-impact PromoGrind improvements.
+- Area affected: feature / tooling / launch gate / scope
+- Previous state: the next-impact list mixed repo-controllable launch-hardening work with external proof items requiring operator/tester/partner action.
+- New required direction: implement every repo-controllable improvement in the optimal order, raise the launch-gate quality bar, and keep non-repo proof blockers honest rather than marking them complete without real evidence.
+- Why it matters: PromoGrind needs a deploy pipeline that catches runtime/math/tooling failures while still preserving truthful public-launch status around monetization, Stripe, friend beta, and affiliate approvals.
+- Supersedes prior entry: —
+
 ### 2026-04-28 — Make PromoGrind best-in-class across product, intelligence, and trust
 
 - Category: Direction

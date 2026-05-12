@@ -11,6 +11,7 @@ on:
       - "package.json"
       - "scripts/postbuild-pages.mjs"
       - "scripts/render-launch-verification-summary.mjs"
+      - "scripts/validate-production-dashboard-smoke.mjs"
       - "scripts/verify-production-launch.mjs"
       - "src/**"
       - "public/**"
@@ -89,6 +90,13 @@ jobs:
           mkdir -p artifacts/launch-verification
           npm run verify:production -- --out artifacts/launch-verification/launch-verification.json
 
+      - name: Smoke production dashboard
+        id: smoke_production_dashboard
+        continue-on-error: true
+        run: |
+          mkdir -p artifacts/launch-verification
+          npm run smoke:production-dashboard > artifacts/launch-verification/production-dashboard-smoke.json
+
       - name: Render verification summary
         if: always()
         run: |
@@ -106,7 +114,7 @@ jobs:
           path: artifacts/launch-verification
 
       - name: Fail if launch verification failed
-        if: steps.verify_launch.outcome == 'failure'
+        if: steps.verify_launch.outcome == 'failure' || steps.smoke_production_dashboard.outcome == 'failure'
         run: exit 1
 
 # One-time repo setup required:
