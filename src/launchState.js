@@ -43,7 +43,7 @@ export function getAbsoluteAppUrl(path = "") {
 }
 
 export const PROJECT_AUTH_QUERY_KEY = "auth";
-export const PROJECT_AUTH_MODES = ["signin", "signup"];
+export const PROJECT_AUTH_MODES = ["signin", "signup", "reset", "update-password"];
 export const VAULT_ACCOUNT_PORTAL_URL = "https://vaultsparkstudios.com/vault-member/";
 
 export function getProjectAuthMode(search = "") {

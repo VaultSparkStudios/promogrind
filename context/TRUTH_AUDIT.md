@@ -34,13 +34,14 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
+| Auth/recovery launch truth | `src/auth.js` + `src/components/AuthDialog.jsx` + `scripts/validate-auth-launch-smoke.mjs` | `verify:launch-local`, launch smoke, browser smoke, friend-beta proof guide | green | 2026-05-13 | S85 adds confirmation resend, forgot-password reset, recovery-link update-password, and release-gate smoke coverage; production email delivery still needs live manual proof after deploy. |
 | Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-05-01 | PromoGrind status reflects `FORGE`, public-unlaunched, S82 dashboard/runtime launch-hardening, and unchanged external proof blockers. |
 | Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-05-01 | S82 write-back aligns state, handoff, task board, work log, release plan, post-deploy artifact, audit, and memory around the same proof-honest launch-hardening tranche. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
-| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/RELEASE_PLAN.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts, `launch:status` | yellow | 2026-05-01 | Proof updates remain evidence-gated; deploy artifact confirms infra/billing health, but required sportsbook monetization links, real Stripe smoke, and friend beta remain incomplete. |
-| Production dashboard runtime | `npm run smoke:production-dashboard` + `src/App.jsx` | task board, release plan, handoff | yellow | 2026-05-01 | Live bundle currently throws `ReferenceError: syncDiagnostics is not defined`; source fix is local and must be deployed before this row goes green. |
+| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/LAUNCH_CHECKLIST.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts, `launch:status` | yellow | 2026-05-13 | Proof updates remain evidence-gated; required sportsbook monetization links, real Stripe smoke, and friend beta with account-recovery visibility remain incomplete. |
+| Production dashboard/runtime | `npm run smoke:production-dashboard` + `src/App.jsx` + deploy artifacts | task board, handoff, launch status | yellow | 2026-05-13 | Local S85 launch gate is green; next deploy artifact should be ingested to confirm production runtime/auth behavior after push. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-24 | Strict public-repo sanitization reports 0 critical / 0 warning and no longer false-flags public protocol/provenance docs or ignored local ops state. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
 | Public trust copy | `src/analytics.js` + public pages | `/privacy/`, `/data-policy/` | green | 2026-04-28 | Privacy/data-policy pages now describe the PostHog/Sentry analytics and diagnostics posture instead of stale Plausible/no-cookie claims. |
@@ -52,9 +53,19 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
-- The current live dashboard bundle is red by production smoke until the S82 source fix deploys.
-- Full-suite `npm test` passes, but Vitest can still emit non-fatal worker termination warnings after completion.
+- Production auth email delivery is unproven until S85 deploys and a real confirmation/reset email pass is recorded.
 - Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+
+## Resolved This Session (S85)
+
+- Added resend-confirmation, forgot-password, and update-password recovery flows to the PromoGrind auth modal.
+- Broadened Supabase hash-session handling so recovery/signup/magic-link flows can establish sessions.
+- Added auth regression tests for confirmation/reset redirect behavior and recovery-token session handling.
+- Added `npm run smoke:auth` and wired it into `verify:launch-local`.
+- Extended launch/browser smoke checks for auth recovery UI markers.
+- Updated friend-beta proof requirements to include account creation/sign-in plus confirmation-email or password-reset recovery visibility.
+- Softened over-prominent cross-Studio membership claims until live cross-project behavior is proven.
+- Verified `npm run verify:launch-local` green end-to-end with 396/396 tests.
 
 ## Resolved This Session (S82)
 

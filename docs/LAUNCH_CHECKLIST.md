@@ -16,8 +16,8 @@ Canonical machine-readable blocker/proof status lives in `context/LAUNCH_PROOFS.
 
 ## Must Have Before Soft Public Launch
 
-- Shared Vault membership flow rechecked after the website-agent rollout lands
-- Free Vault membership messaging consistent across app shell, landing page, and top-intent SEO pages
+- PromoGrind account creation, confirmation-email resend, sign-in, forgot-password, and recovery-link password update checked after deploy
+- Free PromoGrind account messaging consistent across app shell, landing page, and top-intent SEO pages
 - Beta messaging present anywhere AI, live scanning, push, or paid checkout are mentioned
 - Trust/compliance copy present on high-intent public surfaces:
   - 21+ where legal
@@ -59,14 +59,14 @@ Canonical machine-readable blocker/proof status lives in `context/LAUNCH_PROOFS.
 
 ## Stop-Ship Conditions
 
-- Shared Vault membership UX changes and PromoGrind copy no longer matches it
+- Auth UX changes and PromoGrind copy no longer matches the live account flow
 - Any beta-only feature is described publicly as live
-- Static marketing pages imply guest/no-account access instead of free Vault membership
+- Static marketing pages imply cross-Studio account sync before that behavior is proven live
 - Calculator math regressions or broken top-level redirects
 
 ## Recommended Order
 
-1. Recheck the website-agent auth rollout and align copy if needed.
+1. Recheck the production auth email flow and align copy if needed.
 2. Finish the trust/compliance pass on top-intent SEO and comparison pages.
 3. Run a soft-launch smoke test across landing, auth, calculators, and redirects.
 4. Soft launch with beta-gated premium surfaces still off.

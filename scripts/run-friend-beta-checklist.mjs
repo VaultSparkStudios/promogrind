@@ -4,8 +4,8 @@
  *
  * Walks a trusted tester through the friend-facing launch QA pass and writes
  * evidence to context/LAUNCH_PROOFS.json[friendBeta] when complete. The
- * checklist mirrors the evidenceRequired list — auth flow, top calculator,
- * sportsbook CTA review, and pricing/free-account messaging review.
+ * checklist mirrors the evidenceRequired list — auth flow, email recovery,
+ * top calculator, sportsbook CTA review, and pricing/free-account messaging review.
  *
  * Usage:
  *   node scripts/run-friend-beta-checklist.mjs                # interactive
@@ -25,7 +25,8 @@ const PRINT_ONLY = ARGS.includes("--print");
 const AUTO_RECORD = ARGS.includes("--record");
 
 const STEPS = [
-  { id: "auth", q: "Tester completed sign-up/login at https://promogrind.bet without confusion?" },
+  { id: "auth", q: "Tester completed account creation or sign-in at https://promogrind.bet without confusion?" },
+  { id: "auth_recovery", q: "Tester verified confirmation-email handling or forgot-password recovery was visible and understandable?" },
   { id: "calculator", q: "Tester completed at least one top calculator (BonusBet, ProfitBoost, FirstBet, or Kelly) end-to-end and got a sensible result?" },
   { id: "cta", q: "Tester reviewed sportsbook CTA behavior — link opens, label is honest, no broken book buttons?" },
   { id: "pricing", q: "Tester reviewed pricing/free-account messaging and understood what's free vs paid without help?" },
@@ -69,7 +70,7 @@ async function run() {
     date: sessionDate,
     type: "manual-friend-beta",
     detail: allYes
-      ? "Trusted tester completed friend-facing pass across auth, top calculator, CTA review, pricing, and trust copy."
+      ? "Trusted tester completed friend-facing pass across auth, account recovery, top calculator, CTA review, pricing, and trust copy."
       : "Friend-facing pass had at least one failing step — see steps[].note.",
     tester: testerName || null,
     allClear: allYes,

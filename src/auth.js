@@ -27,6 +27,15 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const SESSION_HASH_TYPES = new Set([
+  'vault_access',
+  'recovery',
+  'signup',
+  'magiclink',
+  'invite',
+  'email_change',
+]);
+
 function readCheckoutAttribution() {
   try {
     return {
@@ -45,6 +54,36 @@ function readCheckoutAttribution() {
   }
 }
 
+function getAuthRedirectUrl(mode = 'signin') {
+  try {
+    const current = typeof window !== 'undefined' ? window.location.href : CANONICAL_APP_URL;
+    return getProjectAuthHref(mode, current);
+  } catch {
+    return getProjectAuthHref(mode, CANONICAL_APP_URL);
+  }
+}
+
+async function applySessionFromHash({ redirectOnError = false } = {}) {
+  const hash = typeof window !== 'undefined' ? window.location.hash : '';
+  if (!hash.includes('access_token=')) return true;
+
+  const params = new URLSearchParams(hash.slice(1));
+  const access_token  = params.get('access_token');
+  const refresh_token = params.get('refresh_token');
+  const type          = params.get('type');
+
+  if (!access_token || !refresh_token || !SESSION_HASH_TYPES.has(type)) return true;
+
+  const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+  if (error) {
+    console.error('[VaultGate] setSession error:', error.message);
+    if (redirectOnError) redirectToLogin();
+    return false;
+  }
+  return true;
+}
+
 /**
  * Call once on app startup.
  *
@@ -60,24 +99,8 @@ export async function checkAuth() {
   if (import.meta.env.VITE_DEV_BYPASS_AUTH === 'true') return true;
 
   // ── Case A: Incoming token redirect ──────────────────────────
-  const hash = window.location.hash;
-  if (hash.includes('access_token=')) {
-    const params = new URLSearchParams(hash.slice(1));
-    const access_token  = params.get('access_token');
-    const refresh_token = params.get('refresh_token');
-    const type          = params.get('type');
-
-    if (access_token && refresh_token && type === 'vault_access') {
-      const { error } = await supabase.auth.setSession({ access_token, refresh_token });
-      // Strip tokens from URL regardless of outcome
-      history.replaceState(null, '', window.location.pathname + window.location.search);
-      if (error) {
-        console.error('[VaultGate] setSession error:', error.message);
-        redirectToLogin();
-        return false;
-      }
-    }
-  }
+  const applied = await applySessionFromHash({ redirectOnError: true });
+  if (!applied) return false;
 
   // ── Case B: Check existing session ───────────────────────────
   const { data: { session } } = await supabase.auth.getSession();
@@ -121,6 +144,7 @@ export async function createPromoGrindAccount({
     email: cleanEmail,
     password,
     options: {
+      emailRedirectTo: getAuthRedirectUrl('signin'),
       data: {
         display_name: cleanDisplayName,
         username: cleanDisplayName,
@@ -131,6 +155,34 @@ export async function createPromoGrindAccount({
       },
     },
   });
+  if (error) throw error;
+  return data;
+}
+
+export async function resendPromoGrindConfirmation(email) {
+  const cleanEmail = String(email || '').trim();
+  const { data, error } = await supabase.auth.resend({
+    type: 'signup',
+    email: cleanEmail,
+    options: {
+      emailRedirectTo: getAuthRedirectUrl('signin'),
+    },
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function resetPromoGrindPassword(email) {
+  const cleanEmail = String(email || '').trim();
+  const { data, error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
+    redirectTo: getAuthRedirectUrl('update-password'),
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function updatePromoGrindPassword(password) {
+  const { data, error } = await supabase.auth.updateUser({ password });
   if (error) throw error;
   return data;
 }
@@ -408,22 +460,8 @@ export async function tryAuth() {
   if (import.meta.env.VITE_DEV_BYPASS_AUTH === 'true') return true;
 
   // ── Case A: Incoming token redirect ──────────────────────────
-  const hash = window.location.hash;
-  if (hash.includes('access_token=')) {
-    const params = new URLSearchParams(hash.slice(1));
-    const access_token  = params.get('access_token');
-    const refresh_token = params.get('refresh_token');
-    const type          = params.get('type');
-
-    if (access_token && refresh_token && type === 'vault_access') {
-      const { error } = await supabase.auth.setSession({ access_token, refresh_token });
-      history.replaceState(null, '', window.location.pathname + window.location.search);
-      if (error) {
-        console.error('[VaultGate] setSession error:', error.message);
-        return false;
-      }
-    }
-  }
+  const applied = await applySessionFromHash();
+  if (!applied) return false;
 
   // ── Case B: Check existing session ───────────────────────────
   const { data: { session } } = await supabase.auth.getSession();

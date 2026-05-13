@@ -45,6 +45,26 @@ Agents MUST NOT modify or remove existing entries.
 - Why it matters: (impact on product, canon, or brand)
 - Supersedes prior entry: (entry date if applicable, else "—")
 
+### 2026-05-13 — Account access must be self-service and membership copy must not overpromise
+
+- Category: Direction
+- Human input (verbatim or close paraphrase): Confirmation email never arrived, there was no forgot/reset password area, and the single-sync VaultSpark membership may not be working so it may not deserve prominent mention.
+- Area affected: feature / trust / launch gate / copy
+- Previous state: PromoGrind had sign-up/sign-in UI, but no visible confirmation resend or password reset path, and some surfaces claimed one shared VaultSpark account worked across all Studio tools.
+- New required direction: account creation must include visible self-service recovery paths, production readiness must verify confirmation/reset behavior, and public/auth copy should promise only PromoGrind account sync/access unless cross-project VaultSpark membership is proven live.
+- Why it matters: missing auth recovery blocks real users at the first moment of trust. Overstated membership claims create avoidable credibility risk during public launch.
+- Supersedes prior entry: —
+
+### 2026-05-13 — Closeout and GitHub push required after production-readiness pass
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): "closeout and push & commit to GitHub - Update all memory/context/CDR/task board files and anything else that need updates"
+- Area affected: process / scope
+- Previous state: S85 auth and production-readiness changes were implemented locally and verified, but closeout write-back, memory refresh, commit, and push were still pending.
+- New required direction: perform the full Studio OS closeout, update all canonical repo-truth and memory surfaces, commit, and push to GitHub.
+- Why it matters: deploy and next-session truth need to reflect the new auth gate, while manual proof blockers remain clear and evidence-gated.
+- Supersedes prior entry: 2026-05-01 closeout assignment
+
 ### 2026-04-30 — Public-launch quality bar: every feature/page must work and be cohesive
 
 - Category: Direction

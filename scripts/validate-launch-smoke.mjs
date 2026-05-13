@@ -53,6 +53,10 @@ if (errors.length === 0) {
   assertIncludes("src/App.jsx", "MemberWelcomeCard", "member onboarding card", errors);
   assertIncludes("src/App.jsx", "Free PromoGrind account", "free account messaging", errors);
   assertIncludes("src/App.jsx", "Paid checkout stays off until the Studio billing rollout is fully live.", "paid checkout beta messaging", errors);
+  assertIncludes("src/components/AuthDialog.jsx", "Resend confirmation email", "auth confirmation resend action", errors);
+  assertIncludes("src/components/AuthDialog.jsx", "Forgot your password?", "auth password reset entrypoint", errors);
+  assertIncludes("src/components/AuthDialog.jsx", "Choose a new password", "auth recovery update-password mode", errors);
+  assertIncludes("src/auth.js", "resetPasswordForEmail", "Supabase password reset helper", errors);
 
   assertIncludes("docs/LAUNCH_CHECKLIST.md", "Must Have Before Soft Public Launch", "soft-launch checklist section", errors);
   assertIncludes("docs/FEATURE_FLAG_ACTIVATION_MATRIX.md", "VITE_PG_FEATURE_LIVE_SCANNER", "live scanner flag entry", errors);

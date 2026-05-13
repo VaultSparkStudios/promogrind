@@ -77,6 +77,19 @@ import BookCTA from "./components/BookCTA.jsx";
 import ShareCard from "./components/ShareCard.jsx";
 import { getQuickCalcFallbackSlug } from "./workflows/actionGraph.js";
 
+function getInitialAuthMode() {
+  if (hasRecoveryHash()) return "update-password";
+  return getProjectAuthMode(window.location.search);
+}
+
+function hasRecoveryHash() {
+  try {
+    const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    return params.get("type") === "recovery";
+  } catch {}
+  return false;
+}
+
 /*
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   PROMO ENGINE v3 â€” Complete Sportsbook Profit Extraction System
@@ -2017,7 +2030,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
           <div style={{fontSize:11,color:K.ac,fontWeight:700,letterSpacing:'1.4px',textTransform:'uppercase',marginBottom:6}}>Member Welcome</div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:6}}>How access works in PromoGrind</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:760}}>
-            A free PromoGrind account powers sync, referrals, and access across devices. The same account works across all VaultSpark Studio tools. Pro features unlock in stages as services come online.
+            A Free PromoGrind account powers sync, referrals, and access across devices. Connected VaultSpark access will appear only where it is enabled. Pro features unlock in stages as services come online.
           </div>
         </div>
         <button onClick={dismiss} style={{background:'none',border:'none',color:K.mt,cursor:'pointer',fontSize:18,lineHeight:1,padding:0}}>Ã—</button>
@@ -3499,7 +3512,7 @@ export default function App() {
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [user, setUser] = useState(null);
   const [proStatus, setProStatus] = useState(null);
-  const [authModalMode, setAuthModalMode] = useState(() => getProjectAuthMode(window.location.search));
+  const [authModalMode, setAuthModalMode] = useState(() => getInitialAuthMode());
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
   const {
     darkMode,
@@ -3622,7 +3635,8 @@ export default function App() {
   }, [authReady]);
 
   useEffect(() => {
-    setAuthModalMode(getProjectAuthMode(search));
+    const queryMode = getProjectAuthMode(search);
+    setAuthModalMode((current) => current === "update-password" && hasRecoveryHash() ? current : queryMode);
   }, [search]);
 
   // Auth + subscription load â€” app always shows; this just enriches the experience for
@@ -3865,12 +3879,12 @@ export default function App() {
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
-            Sign in with your Free PromoGrind account to access 29+ free calculators and keep your profits synced across devices. Takes 30 seconds â€” no credit card required.
+            Sign in with your free PromoGrind account to keep your profits synced across devices. Takes 30 seconds and no credit card is required.
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
               ["27 Free Calculators","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
-              ["Free PromoGrind Account","One free account, all 53 calculators â€” syncs across your devices."],
+              ["Free PromoGrind Account","One free account for calculator sync, tracker history, and ledger backups."],
               ["Live Arb + EV Scanner","Real-time opportunities across 40+ books. VaultSparked Pro."],
             ].map(([title,desc])=>(
               <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>

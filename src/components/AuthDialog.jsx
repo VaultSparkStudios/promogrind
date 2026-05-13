@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { createPromoGrindAccount, signInToPromoGrind } from "../auth.js";
+import {
+  createPromoGrindAccount,
+  resendPromoGrindConfirmation,
+  resetPromoGrindPassword,
+  signInToPromoGrind,
+  updatePromoGrindPassword,
+} from "../auth.js";
 import { useFocusTrap } from "../lib/focus-trap.js";
 import { K, font, fontD } from "../lib/shared.js";
 
@@ -34,6 +40,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [secondarySubmitting, setSecondarySubmitting] = useState(false);
   const panelRef = useRef(null);
   useFocusTrap(open, panelRef);
 
@@ -56,16 +63,37 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const isSignup = mode !== "signin";
-  const heading = isSignup ? "Create your PromoGrind account" : "Sign in to PromoGrind";
+  const isSignup = mode === "signup";
+  const isReset = mode === "reset";
+  const isUpdatePassword = mode === "update-password";
+  const isSignin = !isSignup && !isReset && !isUpdatePassword;
+  const heading = isSignup
+    ? "Create your PromoGrind account"
+    : isReset
+      ? "Reset your password"
+      : isUpdatePassword
+        ? "Choose a new password"
+        : "Sign in to PromoGrind";
   const subheading = isSignup
-    ? "Use one account for PromoGrind now, and the same identity will work across VaultSpark projects."
-    : "Your PromoGrind account is backed by the shared Vault identity system, so the same login works across projects.";
+    ? "Create a free account for PromoGrind sync, referrals, and access across devices."
+    : isReset
+      ? "Enter your account email and we'll send a secure reset link."
+      : isUpdatePassword
+        ? "Your reset link is active. Set a new password for this PromoGrind account."
+        : "Sign in to sync your calculators, tracker, ledger, and account settings.";
 
   const submitLabel = useMemo(() => {
-    if (submitting) return isSignup ? "Creating account..." : "Signing in...";
-    return isSignup ? "Create account" : "Sign in";
-  }, [isSignup, submitting]);
+    if (submitting) {
+      if (isSignup) return "Creating account...";
+      if (isReset) return "Sending reset link...";
+      if (isUpdatePassword) return "Saving password...";
+      return "Signing in...";
+    }
+    if (isSignup) return "Create account";
+    if (isReset) return "Send reset link";
+    if (isUpdatePassword) return "Save new password";
+    return "Sign in";
+  }, [isSignup, isReset, isUpdatePassword, submitting]);
 
   if (!open) return null;
 
@@ -81,8 +109,18 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
       }
     }
 
-    if (!email.trim() || !password) {
+    if (!email.trim() && !isUpdatePassword) {
+      setError("Email is required.");
+      return;
+    }
+
+    if (!password && !isReset) {
       setError("Email and password are required.");
+      return;
+    }
+
+    if ((isSignup || isUpdatePassword) && password.length < 8) {
+      setError("Use at least 8 characters for your password.");
       return;
     }
 
@@ -98,16 +136,47 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
         if (data?.session) {
           onClose?.();
         } else {
-          setInfo("Account created. Check your email to confirm the login if confirmation is enabled.");
+          setInfo("Account created. If your first sign-in asks for confirmation, check your inbox and spam folder, or resend the confirmation email here.");
         }
+      } else if (isReset) {
+        await resetPromoGrindPassword(email);
+        setInfo("Password reset email sent. Check your inbox and spam folder, then use the link to set a new password.");
+      } else if (isUpdatePassword) {
+        await updatePromoGrindPassword(password);
+        setInfo("Password updated. You can sign in with the new password now.");
+        setPassword("");
+        onModeChange?.("signin");
       } else {
         await signInToPromoGrind({ email, password });
         onClose?.();
       }
     } catch (err) {
-      setError(err?.message || "Authentication failed.");
+      const message = err?.message || "Authentication failed.";
+      if (/email.*not.*confirm/i.test(message)) {
+        setError("That email still needs confirmation. Check your inbox and spam folder, or resend the confirmation email below.");
+      } else {
+        setError(message);
+      }
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    setError("");
+    setInfo("");
+    if (!email.trim()) {
+      setError("Enter your email first so we know where to send the confirmation.");
+      return;
+    }
+    setSecondarySubmitting(true);
+    try {
+      await resendPromoGrindConfirmation(email);
+      setInfo("Confirmation email resent. Check your inbox and spam folder.");
+    } catch (err) {
+      setError(err?.message || "Could not resend the confirmation email.");
+    } finally {
+      setSecondarySubmitting(false);
     }
   };
 
@@ -176,9 +245,9 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   flex: 1,
                   padding: "10px 12px",
                   borderRadius: 10,
-                  border: `1px solid ${mode === value ? K.gn : K.bd}`,
-                  background: mode === value ? `${K.gn}18` : K.s2,
-                  color: mode === value ? K.gn : K.dm,
+                  border: `1px solid ${(mode === value || (isReset && value === "signin") || (isUpdatePassword && value === "signin")) ? K.gn : K.bd}`,
+                  background: (mode === value || (isReset && value === "signin") || (isUpdatePassword && value === "signin")) ? `${K.gn}18` : K.s2,
+                  color: (mode === value || (isReset && value === "signin") || (isUpdatePassword && value === "signin")) ? K.gn : K.dm,
                   fontSize: 12,
                   fontWeight: 700,
                   cursor: "pointer",
@@ -194,7 +263,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
             {isSignup && (
               <label style={{ display: "grid", gap: 6 }}>
                 <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
-                  Shared display name
+                  Display name
                 </span>
                 <input
                   value={displayName}
@@ -204,38 +273,42 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   style={inputStyle}
                 />
                 <span style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>
-                  This becomes your shared name across PromoGrind and future VaultSpark projects.
+                  This name appears inside PromoGrind and can be reused by connected VaultSpark tools when they are enabled.
                 </span>
               </label>
             )}
 
-            <label style={{ display: "grid", gap: 6 }}>
-              <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
-                Email
-              </span>
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com"
-                autoComplete="email"
-                style={inputStyle}
-              />
-            </label>
+            {!isUpdatePassword && (
+              <label style={{ display: "grid", gap: 6 }}>
+                <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
+                  Email
+                </span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  style={inputStyle}
+                />
+              </label>
+            )}
 
-            <label style={{ display: "grid", gap: 6 }}>
-              <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
-                Password
-              </span>
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder={isSignup ? "Create a password" : "Enter your password"}
-                autoComplete={isSignup ? "new-password" : "current-password"}
-                style={inputStyle}
-              />
-            </label>
+            {!isReset && (
+              <label style={{ display: "grid", gap: 6 }}>
+                <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
+                  {isUpdatePassword ? "New password" : "Password"}
+                </span>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder={isSignup || isUpdatePassword ? "At least 8 characters" : "Enter your password"}
+                  autoComplete={isSignup || isUpdatePassword ? "new-password" : "current-password"}
+                  style={inputStyle}
+                />
+              </label>
+            )}
           </div>
 
           {isSignup && (
@@ -247,7 +320,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                 style={{ marginTop: 2 }}
               />
               <span style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>
-                Keep me on the free Vault membership list for updates, launch notes, and relevant product offers.
+                Send me occasional PromoGrind updates, launch notes, and relevant product offers.
               </span>
             </label>
           )}
@@ -285,19 +358,55 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
             {submitLabel} →
           </button>
 
-          <div style={{ marginTop: 14, fontSize: 11, color: K.mt, lineHeight: 1.7, textAlign: "center" }}>
-            {isSignup ? "Already have a shared account?" : "Need a new PromoGrind account?"}{" "}
+          {(isSignup || isSignin) && (
             <button
               type="button"
-              onClick={() => onModeChange?.(isSignup ? "signin" : "signup")}
+              onClick={handleResendConfirmation}
+              disabled={secondarySubmitting}
+              style={{
+                width: "100%",
+                marginTop: 10,
+                padding: "10px 14px",
+                borderRadius: 10,
+                border: `1px solid ${K.bd2}`,
+                background: "transparent",
+                color: K.dm,
+                fontSize: 11,
+                fontWeight: 700,
+                cursor: secondarySubmitting ? "default" : "pointer",
+                fontFamily: font,
+                opacity: secondarySubmitting ? 0.7 : 1,
+              }}
+            >
+              {secondarySubmitting ? "Resending..." : "Resend confirmation email"}
+            </button>
+          )}
+
+          {isSignin && (
+            <div style={{ marginTop: 10, textAlign: "center" }}>
+              <button
+                type="button"
+                onClick={() => onModeChange?.("reset")}
+                style={{ background: "none", border: "none", padding: 0, color: K.ac, cursor: "pointer", fontSize: 11, fontFamily: font }}
+              >
+                Forgot your password?
+              </button>
+            </div>
+          )}
+
+          <div style={{ marginTop: 14, fontSize: 11, color: K.mt, lineHeight: 1.7, textAlign: "center" }}>
+            {isSignup ? "Already have an account?" : "Need a new PromoGrind account?"}{" "}
+            <button
+              type="button"
+              onClick={() => onModeChange?.(isSignup || isReset || isUpdatePassword ? "signin" : "signup")}
               style={{ background: "none", border: "none", padding: 0, color: K.ac, cursor: "pointer", font: "inherit" }}
             >
-              {isSignup ? "Sign in here." : "Create one here."}
+              {isSignup || isReset || isUpdatePassword ? "Sign in here." : "Create one here."}
             </button>
           </div>
 
           <div style={{ marginTop: 10, fontSize: 10, color: K.mt, lineHeight: 1.6, textAlign: "center" }}>
-            Account support and billing still route through the shared Vault membership backend when needed.
+            Account support and billing use PromoGrind's VaultSpark-backed account services.
           </div>
         </form>
       </div>

@@ -2,19 +2,25 @@
 
 ## Now
 
-- founder verification of S83 cold-load fix — open `https://promogrind.bet` in fresh incognito, confirm no React #310 in DevTools, click into `/dashboard` directly, refresh, confirm SPA hydrates first try
+- production auth email smoke after S85 deploy — create a real account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
-- complete one friend-facing auth/calculator/pricing pass — scripted: `npm run beta:check` walks the tester and records evidence
+- complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
 - finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers` — operator confirmed S81 they have applied for everything they can; remaining gap is partner-side approval, not a repo task
 
 ## Next
 
-- rerun the GitHub Pages workflow after S84 launch-gate hardening lands; confirm `launch-verification` artifact separates deploy-health failures from advisory affiliate gaps and includes `production-dashboard-smoke.json`
+- rerun/inspect the GitHub Pages workflow after S85 auth hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
 - continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos/`useProfitNotifications` (App.jsx is still ~4300 lines)
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- fix and harden PromoGrind account recovery (S85) — **DONE S85**: added confirmation-email resend, forgot-password reset email, recovery-link password update, broader Supabase hash-session handling, and regression coverage for redirects/recovery.
+- make account/membership copy more truthful (S85) — **DONE S85**: reduced over-prominent cross-Studio/Vault membership claims in the auth modal, app shell, landing page, and README; copy now promises PromoGrind sync/access and says connected VaultSpark access appears only where enabled.
+- add auth launch smoke and wire it into the release gate (S85) — **DONE S85**: added `scripts/validate-auth-launch-smoke.mjs` (`npm run smoke:auth`), wired it into `verify:launch-local`, and extended launch/browser smoke markers for confirmation resend, forgot password, and update-password UI.
+- tighten friend-beta proof around auth recovery (S85) — **DONE S85**: updated `run-friend-beta-checklist.mjs`, `context/LAUNCH_PROOFS.json`, and `docs/LAUNCH_CHECKLIST.md` so the trusted tester pass must include confirmation-email or password-reset recovery visibility.
+- verify S85 production-readiness gate (S85) — **DONE S85**: `npm run verify:launch-local` passed end-to-end with 396/396 tests, hook-order guard, auth smoke, launch smoke, UX route integrity, browser smoke, bundle budget, and strict public-repo sanitization.
 
 - harden calculator/API contracts and first-bet result semantics (S84) — **DONE S84**: added `/arb-2way` to `supabase/functions/calc-api` while preserving `/arb` as a compatibility alias, updated the public calc-api page, fixed `deploy:functions` to deploy the real `calc-api` function instead of missing `odds`, and changed First Bet Safety Net output to distinguish hedge-only worst case from projected refund conversion.
 - fix Vitest shutdown/tooling timeout (S84) — **DONE S84**: moved Vitest from slow `forks` mode to `threads` with `fileParallelism: false`; full `npm test` now passes 392/392 in ~20s without the post-run Vite shutdown timeout.
@@ -99,7 +105,7 @@
 
 ## Blocked
 
-- no local architecture blocker remains; the only unresolved launch-proof blocker still verified from this workspace is missing real approved affiliate tracking links for sportsbook CTAs, especially `BetMGM`, `bet365`, and `BetRivers`
+- no local architecture blocker remains; unresolved launch-proof blockers are external/manual evidence gates: missing real approved affiliate tracking links for `BetMGM`, `bet365`, and `BetRivers`, one real Stripe smoke purchase, and one production friend-beta pass with auth recovery visibility
 - Protocol Oracle FAQ cache refresh blocker cleared in S80: `docs/PROTOCOL_FAQ.md` now contains 10 cached protocol entries, so `node scripts/ops.mjs ask --list` returns a populated FAQ without requiring `ANTHROPIC_API_KEY`
 
 ## Later

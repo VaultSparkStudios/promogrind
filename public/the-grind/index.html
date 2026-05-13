@@ -144,13 +144,10 @@
 <div class="footer">
   <a href="https://promogrind.bet/">← Open PromoGrind — Free Calculator Suite</a>
   <p>PromoGrind · Educational tool · Not gambling advice · 21+ only · 1-800-GAMBLER</p>
-    <p class="footer-note">Core calculators are available now with a free Vault membership. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
   </div>
 
 <script>
-  const SUPABASE_URL = 'https://fjnpzjjyhnpmunfoycrp.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqbnB6amp5aG5wbXVuZm95Y3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwNzc5NDIsImV4cCI6MjA1NzY1Mzk0Mn0.rJb9bMKFaIYqt5XrOOflMwJ01sXVCjNGxFkSFWVRDbo';
-
   async function subscribe() {
     const emailEl = document.getElementById('email');
     const btn = document.getElementById('sub-btn');
@@ -168,29 +165,13 @@
     errorEl.style.display = 'none';
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/newsletter_subscribers`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'return=minimal',
-        },
-        body: JSON.stringify({
-          email,
-          source: 'the-grind-page',
-          subscribed_at: new Date().toISOString(),
-        }),
-      });
-
-      if (res.ok || res.status === 409) {
-        successEl.style.display = 'block';
-        emailEl.style.display = 'none';
-        btn.style.display = 'none';
-        if (typeof plausible !== 'undefined') plausible('newsletter_subscribe', { props: { source: 'the-grind' } });
-      } else {
-        throw new Error('Failed');
-      }
+      const subject = encodeURIComponent('PromoGrind newsletter signup');
+      const body = encodeURIComponent(`Please add ${email} to the PromoGrind newsletter list.\n\nSource: the-grind-page`);
+      window.location.href = `mailto:support@vaultsparkstudios.com?subject=${subject}&body=${body}`;
+      successEl.style.display = 'block';
+      emailEl.style.display = 'none';
+      btn.style.display = 'none';
+      if (typeof plausible !== 'undefined') plausible('newsletter_subscribe', { props: { source: 'the-grind' } });
     } catch {
       btn.disabled = false;
       btn.textContent = 'Get The Grind →';

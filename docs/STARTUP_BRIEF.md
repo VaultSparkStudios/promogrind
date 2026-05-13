@@ -1,10 +1,10 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-05-09 (Session 82 closeout) -->
+<!-- generated-at: 2026-05-13 (Session 85 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 82 closeout · 2026-05-09.
+> **Fast-boot brief** — generated at Session 85 closeout · 2026-05-13.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -13,14 +13,14 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 83 · 2026-05-09 · FOUNDER MODE                          ║
+║  Session 86 · 2026-05-13 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 
 
 ╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
-║  Unit tests    → npm test -- workflowSuggestions.test.js obs ·   ║
+║  Unit tests    → npm test ·                                      ║
 ║  launch-gate  → npm run verify:launch-local ·                    ║
 ║  ux-integrity → npm run smoke:ux ·                               ║
 ║  Local dev     → http://localhost:5173 ·                         ║
@@ -32,7 +32,7 @@
 ║                                                                  ║
 ║    970/1000   ███████████████████████░   97%                     ║
 ║    SIL v3.0  ·  Avg3: ?  ·  Velocity 16↑                         ║
-║    Last active: 20581d  ·  Last closeout: 1d  ·  (active = newe  ║
+║    Last active: 20585d  ·  Last closeout: 5d  ·  (active = newe  ║
 ║    Trend  ▆▄▄██  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -43,25 +43,25 @@
 ║    Engagement        93    █████████░  ▇▆▇▇▇▇▇▇ →                ║
 ║    Process Qual     100    ██████████  ▇▆▇▇▇▇██ →                ║
 ║    Coherence         99    ██████████  ········ →                ║
-║    Security          95    ██████████  ········ →                ║
+║    Security          96    ██████████  ········ →                ║
 ║    Ecosystem         99    ██████████  ········ →                ║
-║    Capital           96    ██████████  ········ →                ║
-║    Automation        97    ██████████  ········ →                ║
+║    Capital           97    ██████████  ········ →                ║
+║    Automation        98    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 82 ════════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 85 ════════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    392 passing  ·  Deploy: deployed-unannounced          ║
+║  Tests:    396 passing  ·  Deploy: deployed-unannounced          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         392/392 passing (2026-05-01)                   ║
+║  ✓  Tests         396/396 passing (2026-05-13)                   ║
 ║  ✓  Velocity      16 ↑  ·  Debt: →                               ║
 ║  ⚠  Runway        ~3 sessions                                    ║
-║  ✓  Headroom      82% remaining · ~1 large item(s) fit           ║
-║  ✓  Context age   1d                                             ║
-║  ⚠  IGNIS         46341 FORGE  ·  9d old                         ║
+║  ✓  Headroom      96% remaining · ~9 large item(s) fit           ║
+║  ✓  Context age   0d                                             ║
+║  ⚠  IGNIS         46341 FORGE  ·  13d old                        ║
 ║  ✓  Truth         green  ·  Genome: 23/25                        ║
 ║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
 ║  ✓  Genome dims   all stable  (23/25)                            ║
@@ -92,15 +92,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 82                                ║
+║  GENIUS HIT LIST  ·  Session 85                                ║
 ║  Founder portfolio scope · ranked by impact                    ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
-║  ⚡  1  [IGNIS]  IGNIS re-score overdue (9d stale)              ║
+║  ⚡  1  [IGNIS]  IGNIS re-score overdue (13d stale)             ║
 ║        Portfolio intelligence scores degrade with age. Re-sco  ║
 ║        ↳ npx tsx cli.ts score <project-path>                   ║
 ║                                                                ║
-║  💡  2  [IGNIS]  Refresh REVENUE_SIGNALS.md (11d stale)        ║
+║  💡  2  [IGNIS]  Refresh REVENUE_SIGNALS.md (15d stale)        ║
 ║        Revenue intelligence is time-sensitive. Regenerate to   ║
 ║        ↳ node scripts/ops.mjs revenue-signals                  ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -109,5 +109,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 82 closeout · 2026-05-09*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 85 closeout · 2026-05-13*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

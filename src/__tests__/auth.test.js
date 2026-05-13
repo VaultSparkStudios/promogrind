@@ -13,12 +13,24 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Expose mock handles so individual tests can change return values
-const { mockGetSession, mockSetSession, mockMaybySingle, mockInvoke, trackEventMock } = vi.hoisted(() => ({
-  mockGetSession:  vi.fn().mockResolvedValue({ data: { session: null } }),
-  mockSetSession:  vi.fn().mockResolvedValue({ error: null }),
-  mockMaybySingle: vi.fn().mockResolvedValue({ data: null, error: null }),
-  mockInvoke:      vi.fn().mockResolvedValue({ data: null, error: null }),
-  trackEventMock:  vi.fn(),
+const {
+  mockGetSession,
+  mockSetSession,
+  mockSignUp,
+  mockResend,
+  mockResetPasswordForEmail,
+  mockMaybySingle,
+  mockInvoke,
+  trackEventMock,
+} = vi.hoisted(() => ({
+  mockGetSession:            vi.fn().mockResolvedValue({ data: { session: null } }),
+  mockSetSession:            vi.fn().mockResolvedValue({ error: null }),
+  mockSignUp:                vi.fn().mockResolvedValue({ data: {}, error: null }),
+  mockResend:                vi.fn().mockResolvedValue({ data: {}, error: null }),
+  mockResetPasswordForEmail: vi.fn().mockResolvedValue({ data: {}, error: null }),
+  mockMaybySingle:           vi.fn().mockResolvedValue({ data: null, error: null }),
+  mockInvoke:                vi.fn().mockResolvedValue({ data: null, error: null }),
+  trackEventMock:            vi.fn(),
 }));
 
 vi.mock('@supabase/supabase-js', () => ({
@@ -26,6 +38,9 @@ vi.mock('@supabase/supabase-js', () => ({
     auth: {
       getSession:  mockGetSession,
       setSession:  mockSetSession,
+      signUp:      mockSignUp,
+      resend:      mockResend,
+      resetPasswordForEmail: mockResetPasswordForEmail,
       signOut:     vi.fn().mockResolvedValue({}),
       updateUser:  vi.fn().mockResolvedValue({ error: null }),
     },
@@ -47,6 +62,9 @@ import {
   isTrialActive,
   trialDaysLeft,
   tryAuth,
+  createPromoGrindAccount,
+  resendPromoGrindConfirmation,
+  resetPromoGrindPassword,
   getSubscription,
   isPro,
   isRunnerPlus,
@@ -202,11 +220,94 @@ describe('tryAuth — session and token scenarios', () => {
     expect(await tryAuth()).toBe(true);
   });
 
+  it('accepts Supabase recovery links and opens a session for password reset', async () => {
+    vi.stubGlobal('window', {
+      location: {
+        hash: '#access_token=recovery-token&refresh_token=recovery-refresh&type=recovery',
+        pathname: '/dashboard',
+        search: '?auth=update-password',
+        href: 'https://promogrind.bet/dashboard?auth=update-password#access_token=recovery-token&refresh_token=recovery-refresh&type=recovery',
+      },
+    });
+    vi.stubGlobal('history', { replaceState: vi.fn() });
+    mockSetSession.mockResolvedValueOnce({ error: null });
+    mockGetSession.mockResolvedValue(sessionFor({ id: 'u2', user_metadata: {} }));
+
+    expect(await tryAuth()).toBe(true);
+    expect(mockSetSession).toHaveBeenCalledWith({
+      access_token: 'recovery-token',
+      refresh_token: 'recovery-refresh',
+    });
+    expect(history.replaceState).toHaveBeenCalledWith(null, '', '/dashboard?auth=update-password');
+  });
+
   it('handles a revoked refresh token gracefully (session null after token exchange)', async () => {
     // Supabase revokes the refresh token server-side — setSession fails, getSession returns null
     mockSetSession.mockResolvedValueOnce({ error: { message: 'Refresh token revoked' } });
     mockGetSession.mockResolvedValue({ data: { session: null } });
     expect(await tryAuth()).toBe(false);
+  });
+});
+
+// ── Signup / recovery email redirects ────────────────────────────────────────
+
+describe('account email actions', () => {
+  beforeEach(() => {
+    vi.stubGlobal('window', {
+      location: {
+        hash: '',
+        pathname: '/dashboard',
+        search: '',
+        href: 'https://promogrind.bet/dashboard',
+      },
+    });
+    mockSignUp.mockReset();
+    mockResend.mockReset();
+    mockResetPasswordForEmail.mockReset();
+    mockSignUp.mockResolvedValue({ data: {}, error: null });
+    mockResend.mockResolvedValue({ data: {}, error: null });
+    mockResetPasswordForEmail.mockResolvedValue({ data: {}, error: null });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('creates accounts with a sign-in redirect for confirmation links', async () => {
+    await createPromoGrindAccount({
+      email: 'new@example.com',
+      password: 'password123',
+      displayName: 'SharpScout',
+      marketingOptIn: false,
+    });
+
+    expect(mockSignUp).toHaveBeenCalledWith(expect.objectContaining({
+      email: 'new@example.com',
+      password: 'password123',
+      options: expect.objectContaining({
+        emailRedirectTo: 'https://promogrind.bet/dashboard?auth=signin',
+      }),
+    }));
+  });
+
+  it('resends confirmation emails with the same app redirect', async () => {
+    await resendPromoGrindConfirmation('new@example.com');
+
+    expect(mockResend).toHaveBeenCalledWith({
+      type: 'signup',
+      email: 'new@example.com',
+      options: {
+        emailRedirectTo: 'https://promogrind.bet/dashboard?auth=signin',
+      },
+    });
+  });
+
+  it('sends password reset links to the update-password mode', async () => {
+    await resetPromoGrindPassword('new@example.com');
+
+    expect(mockResetPasswordForEmail).toHaveBeenCalledWith('new@example.com', {
+      redirectTo: 'https://promogrind.bet/dashboard?auth=update-password',
+    });
   });
 });
 

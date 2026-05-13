@@ -13,50 +13,49 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 84,
-  "currentFocus": "S84 launch-gate hardening: fixed calculator/API contract drift, corrected first-bet result semantics, repaired Vitest shutdown behavior, added App hook-order guard, replaced Vite preview browser smoke with a static dist smoke server, split deploy-health failures from advisory launch monetization gaps, and wired production dashboard smoke into Pages artifacts.",
-  "nextMilestone": "Push S84 hardening, rerun the GitHub Pages workflow to confirm launch-verification artifacts include production-dashboard-smoke.json, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentSession": 85,
+  "currentFocus": "S85 auth recovery and production-readiness hardening: added confirmation resend, forgot-password reset, recovery-link password update, cautious account/membership copy, auth launch smoke, recovery-aware friend beta proof requirements, and a green full local launch gate.",
+  "nextMilestone": "Push S85, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
   "blockers": [
     "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
-    "Complete one friend-facing auth/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
-    "Rerun Pages deploy after S84 hardening and ingest the new launch-verification artifact."
+    "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
+    "Run production auth email smoke after S85 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
-  "lastUpdated": "2026-05-12",
-  "silScore": 962,
-  "silAvg3": 947,
-  "silVelocity": 15,
+  "lastUpdated": "2026-05-13",
+  "silScore": 977,
+  "silAvg3": 962,
+  "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 82,
+  "silLastSession": 85,
   "silMax": 1000,
   "silSparkline": [
-    891,
-    919,
     931,
     947,
-    962
+    962,
+    977
   ],
   "ignisScore": 46341,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-04-30",
-  "testsPassing": 392,
-  "testsTotal": 392,
-  "testsLastRun": "2026-05-01",
+  "testsPassing": 396,
+  "testsTotal": 396,
+  "testsLastRun": "2026-05-13",
   "lastDeployStatus": "deployed-unannounced",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-04-28",
+  "truthAuditLastRun": "2026-05-13",
   "truthGenome": "23/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 392/392 in S84"
+      "status": "passing 396/396 in S85"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "component checks passing in S84; combined npm gate timed out in this shell without streaming output"
+      "status": "passing end-to-end in S85"
     },
     {
       "type": "ux-integrity",
@@ -92,17 +91,17 @@
   "silCategoriesV3": {
     "devHealth": 99,
     "creativeAlignment": 99,
-    "momentum": 85,
+    "momentum": 92,
     "engagement": 93,
     "processQuality": 100,
     "crossRepoCoherence": 99,
-    "securityPosture": 95,
+    "securityPosture": 96,
     "ecosystemIntegration": 99,
-    "capitalEfficiency": 96,
-    "automationCoverage": 97
+    "capitalEfficiency": 97,
+    "automationCoverage": 98
   },
   "doctorScore": {
-    "date": "2026-05-09",
+    "date": "2026-05-13",
     "passing": 10,
     "warning": 1,
     "failing": 1,

@@ -38,10 +38,11 @@
       "status": "pending",
       "blocking": true,
       "requiredFor": ["soft-launch", "marketing-push", "full-launch"],
-      "details": "One friend-facing pass through auth, calculator, CTA, and pricing still needs to be completed.",
-      "nextStep": "Have one trusted tester complete auth, a top calculator, a sportsbook CTA review, and pricing review after deploy.",
+      "details": "One friend-facing pass through auth, account recovery, calculator, CTA, and pricing still needs to be completed.",
+      "nextStep": "Have one trusted tester complete account creation/sign-in, confirmation or password recovery visibility, a top calculator, a sportsbook CTA review, and pricing review after deploy.",
       "evidenceRequired": [
-        "tester completed auth flow",
+        "tester completed account creation or sign-in",
+        "tester completed confirmation-email or password-reset recovery check",
         "tester completed at least one top calculator",
         "tester reviewed sportsbook CTA behavior",
         "tester reviewed pricing/free-account messaging"

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-05-13",
+  "session": 85,
+  "sessionIntent": "complete start protocol, fix login/create-account after missing confirmation email, add forgot/reset password support, reduce unproven VaultSpark membership claims, implement production-readiness hardening, then close out and push",
+  "intentOutcome": "achieved",
+  "testsPassingAtClose": 396,
+  "testsDelta": 4,
+  "buildPassing": true,
+  "sanitizationFindings": {
+    "critical": 0,
+    "warning": 0
+  },
+  "silTotal": 977,
+  "silDelta": 15,
+  "silVelocity": 5,
+  "silDebt": "down",
+  "silCategoriesV3": {
+    "devHealth": 99,
+    "creativeAlignment": 99,
+    "momentum": 92,
+    "engagement": 93,
+    "processQuality": 100,
+    "crossRepoCoherence": 99,
+    "securityPosture": 96,
+    "ecosystemIntegration": 99,
+    "capitalEfficiency": 97,
+    "automationCoverage": 98
+  },
+  "shipped": [
+    "auth-confirmation-resend-added",
+    "forgot-password-reset-and-update-password-flow-added",
+    "supabase-recovery-hash-session-handling-added",
+    "cross-studio-membership-copy-softened",
+    "auth-launch-smoke-added-and-wired-into-verify-launch-local",
+    "friend-beta-proof-requires-auth-recovery-visibility",
+    "full-local-launch-gate-green",
+    "static-the-grind-supabase-jwt-removed"
+  ],
+  "blockers": [
+    {
+      "id": "production-auth-email-smoke",
+      "label": "Real production confirmation/reset email delivery proof after deploy",
+      "owner": "operator",
+      "status": "tooling-ready-pending-deploy-and-manual-proof",
+      "unblock": "deploy S85, then create account, resend confirmation, request reset, follow recovery link, and sign in with new password"
+    },
+    {
+      "id": "affiliate-links",
+      "label": "BetMGM / bet365 / BetRivers approved tracking URLs",
+      "owner": "operator/partner-program-approvals",
+      "status": "pending-partner-side",
+      "unblock": "paste real approved tracked URLs into src/books.js, then rerun npm run verify:production"
+    },
+    {
+      "id": "stripe-smoke",
+      "label": "Real Stripe smoke purchase against deployed app",
+      "owner": "operator",
+      "status": "tooling-ready-pending-operator",
+      "unblock": "npm run smoke:stripe -- --record"
+    },
+    {
+      "id": "friend-beta",
+      "label": "Friend-facing auth/recovery/calculator/CTA/pricing/trust pass",
+      "owner": "operator + one trusted tester",
+      "status": "tooling-ready-pending-operator",
+      "unblock": "npm run beta:check -- --record"
+    }
+  ],
+  "verification": [
+    "npx vitest run src/__tests__/auth.test.js passed 38/38",
+    "npm run build passed",
+    "npm test passed 396/396",
+    "npm run smoke:auth passed",
+    "npm run smoke:launch passed",
+    "npm run beta:check -- --print printed the recovery-aware checklist",
+    "npm run verify:launch-local passed end-to-end",
+    "npm run launch:status -- --fast reported PARTIAL with 3 manual proofs pending",
+    "node scripts/scan-secrets.mjs --staged passed after removing static Supabase JWT from public/the-grind"
+  ]
+}

@@ -184,6 +184,24 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Why this was chosen: it unifies local behavior immediately, lowers future drift, and gives the post-migration remote reconciliation path one shared input contract instead of three divergent UI-specific payloads.
 - Follow-up: once live migrations are applied, add remote reconciliation coverage so scanner/community suggestions persist across devices and sessions.
 
+### 2026-05-13 - Treat account recovery as a launch-gate surface
+
+- Status: accepted
+- Context: founder reported that confirmation email never arrived and there was no forgot/reset-password area. Local auth code only offered sign-up/sign-in UI and only accepted a custom `vault_access` hash session type.
+- Decision: add first-class confirmation resend, forgot-password reset, recovery-link password update, explicit Supabase redirect URLs, and deterministic auth launch smoke coverage wired into `verify:launch-local`.
+- Alternatives considered: leave recovery as support-only/manual; rely on Supabase dashboard settings without app UI; add a reset helper but keep it outside the release gate.
+- Why this was chosen: production readiness depends on users being able to recover from missing confirmation emails and forgotten passwords without founder/operator intervention. Making it part of the launch gate prevents the same gap from returning.
+- Follow-up: after deploy, run a real production auth email smoke because local tests verify client calls and routing but cannot prove live SMTP/email delivery.
+
+### 2026-05-13 - Cross-Studio membership claims must be cautious until live behavior is proven
+
+- Status: accepted
+- Context: founder was unsure whether single-sync VaultSpark membership was working and asked whether it should be mentioned so prominently.
+- Decision: reduce prominent copy to the behavior proven in this repo: a free PromoGrind account supports login, sync, referrals, and access across devices. Connected VaultSpark access can be mentioned only as enabled where available, not as a universal promise.
+- Alternatives considered: keep the broad "same account across all Studio tools" copy; remove all VaultSpark account references; block launch until cross-project membership can be fully audited.
+- Why this was chosen: cautious copy preserves user trust while keeping the product positioned inside VaultSpark. It avoids overpromising a cross-project identity feature that this repo cannot independently prove.
+- Follow-up: if the VaultSpark membership layer is later verified end-to-end across projects, update copy and add an automated or manual proof gate before restoring broader claims.
+
 ### 2026-04-22 - Reconcile live sync schema with an idempotent catch-up migration
 
 - Status: accepted

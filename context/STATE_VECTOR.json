@@ -1,44 +1,44 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-05-09",
-  "generatedAtMs": 1778293161910,
-  "session": 82,
-  "vectorHash": "8f74931e1e5c5237",
-  "silTotal": 962,
-  "silAvg3": 947,
+  "generatedAt": "2026-05-13",
+  "generatedAtMs": 1778710085012,
+  "session": 85,
+  "vectorHash": "cb462294656bae91",
+  "silTotal": 977,
+  "silAvg3": 962,
   "velocity": 16,
   "debt": "down",
   "runway": "~3 sessions",
   "intentRate": "100% achieved (last 5)",
   "openNow": 4,
-  "openNext": 7,
+  "openNext": 4,
   "openBlocked": 2,
   "topNow": [
-    "founder verification of S83 cold-load fix — open `https://promogrind.bet` in fre",
+    "production auth email smoke after S85 deploy — create a real account, verify con",
     "run one real Stripe smoke purchase and record evidence — scripted: `npm run smok",
-    "complete one friend-facing auth/calculator/pricing pass — scripted: `npm run bet"
+    "complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `np"
   ],
   "topNext": [
-    "[SIL] fix or downgrade the chronic `Deploy Pages` red — actual GH Pages deploy s",
-    "[SIL] fix the launch-gate browser smoke flake on Windows (`Preview server did no",
-    "[SIL] add an ESLint rule (`react-hooks/rules-of-hooks` if not already on) or a g"
+    "rerun/inspect the GitHub Pages workflow after S85 auth hardening lands; confirm ",
+    "continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseB",
+    "monitor `artifacts/launch-verification/post-deploy.json` after each deploy via t"
   ],
   "health": "green",
   "truthStatus": "green",
   "genome": "23/25",
   "ignisScore": 46341,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 9,
+  "ignisAgeDays": 13,
   "name": "PromoGrind",
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Deploy the local dashboard runtime fix, rerun npm run smoke:production-dashboard against live, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
-  "currentFocus": "S82 launch-hardening: added production dashboard CDP smoke, captured the live syncDiagnostics dashboard crash, fixed the source path, added one-command launch status, re-ingested deploy verification, and extracted profit notifications from App.jsx.",
+  "nextMilestone": "Push S85, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentFocus": "S85 auth recovery and production-readiness hardening: added confirmation resend, forgot-password reset, recovery-link password update, cautious account/membership copy, auth launch smoke, recovery-aware friend beta proof requirements, and a green full local launch gate.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
-    "Deploy and verify the locally fixed dashboard runtime error (live bundle currently throws ReferenceError: syncDiagnostics is not defined until this fix ships).",
     "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
-    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record)."
+    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
+    "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record)."
   ]
 }

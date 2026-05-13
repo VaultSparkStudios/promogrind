@@ -450,6 +450,35 @@ Rolling avg (last 3): Dev 84.7 | Align 95.7 | Momentum 87.0 | Engage 80.0 | Proc
 2. Add a community "streak leaderboard" surface that uses mastery + streak data to show relative standing without exposing private P&L.
 3. Auto-route scanner and community findings into the shared workflow graph with remote reconciliation once live migrations are in place.
 
+## 2026-05-13 — Session 85 | Total: 977/1000 | Velocity: 5 | Debt: down
+Rolling avg (last 3): Dev 99.0 | Align 99.0 | Momentum 88.3 | Engage 93.0 | Process 100.0 | Coher 99.0 | Sec 96.0 | Eco 99.0 | Cap 97.0 | Auto 98.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Auth recovery implementation, regression tests, build, full suite, and full launch gate all pass; 396/396 tests green. |
+| Creative Alignment | 99 | → | Account copy is more honest and user-centered; it promises PromoGrind sync/access without overstating cross-Studio membership. |
+| Momentum | 92 | ↑ | Five repo-controllable production-readiness items shipped in one pass: auth recovery, copy cleanup, auth smoke, proof-runner hardening, and green launch gate. |
+| Engagement | 93 | → | No new retention loop shipped, but login/recovery friction is materially lower for first-time users. |
+| Process Quality | 100 | → | Start protocol, implementation pass, launch status, full verification, and closeout write-back completed with manual blockers preserved. |
+| Cross-Repo Coherence | 99 | → | VaultSpark membership language now matches what this repo can prove, reducing cross-project truth drift. |
+| Security Posture | 96 | ↑ | Recovery links are handled through Supabase session flow and password updates; no secrets or evidence were fabricated. |
+| Ecosystem Integration | 99 | → | Launch proof surface, friend-beta runner, checklist, and app auth flow now agree on recovery requirements. |
+| Capital Efficiency | 97 | ↑ | `smoke:auth` catches auth-readiness regressions cheaply before the expensive browser/full launch gate. |
+| Automation Coverage | 98 | ↑ | Auth launch smoke is now wired into `verify:launch-local`; browser/launch smokes check recovery UI markers. |
+| **Total** | **977 / 1000** | | |
+
+**Top win:** account recovery moved from a missing UX path into a tested launch-gate surface, covering confirmation resend, forgot password, and reset-link password update.
+
+**Top gap:** live email delivery and cross-project membership still require production/manual proof after deploy; local tests cannot prove Supabase SMTP behavior or partner-owned affiliate evidence.
+
+**Intent outcome:** Achieved for repo-controllable work. Full local launch gate is green, and remaining blockers are explicitly external/manual proofs.
+
+**Brainstorm**
+
+1. Add a production auth-email smoke guide or semi-automated runner that records confirmation/reset delivery evidence without storing email contents or secrets.
+2. Add a cross-project VaultSpark membership proof runner once the shared identity layer is ready to verify end-to-end.
+3. Continue shrinking `src/App.jsx` by extracting the auth/member welcome surfaces after S85 deploy proof lands.
+
 ## 2026-04-22 — Session 70 | Total: 611/1000 | Velocity: 2 | Debt: down
 Rolling avg (last 3): Dev 88.7 | Align 96.0 | Momentum 79.7 | Engage 84.7 | Process 87.3 | Coher 24.0 | Sec 44.7 | Eco 33.0 | Cap 31.3 | Auto 24.7
 

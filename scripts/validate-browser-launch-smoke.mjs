@@ -136,6 +136,9 @@ try {
   await assertBuiltBundleMarkers([
     ["PromoGrind is a free sportsbook promo calculator for adults.", "age gate copy"],
     ["Create your PromoGrind account", "project-local auth dialog"],
+    ["Resend confirmation email", "auth confirmation resend action"],
+    ["Forgot your password?", "auth password reset entrypoint"],
+    ["Choose a new password", "auth recovery update-password mode"],
     ["Choose your edge.", "pricing surface"],
     ["Don't have these books yet? Open accounts to use this promo:", "sportsbook CTA"],
     ["Manage billing", "auth menu billing action"],
