@@ -1,7 +1,7 @@
 import React from "react";
 import { AppDataCtx, useToast } from "../../contexts.jsx";
 import { K, S, f, font, fontD } from "../../lib/shared.js";
-import { getBankrollPosture, getUnfinishedWork } from "../../dashboard/today.js";
+import { getBankrollPosture, getNextBestAction, getUnfinishedWork } from "../../dashboard/today.js";
 import { getOnboardingProgress } from "../../onboarding.js";
 import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
 // matchPlaybooks is called here as a fallback when snapshot.topPlaybook is not pre-computed
@@ -9,6 +9,7 @@ import ObservabilityPanel from "./ObservabilityPanel.jsx";
 import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
 import PromoExpiryWidget from "./PromoExpiryWidget.jsx";
 import { appendWorkflows } from "../../workflows/store.js";
+import { getWorkflowActionSlug } from "../../workflows/actionGraph.js";
 
 const TONE = {
   healthy: K.gn,
@@ -40,6 +41,47 @@ function AdaptiveFocusCard({ title, body, badge, tone = K.ac }) {
   );
 }
 
+function OperatorAutopilotCard({ decision, topWorkflow, navigate }) {
+  const hasWorkflow = Boolean(topWorkflow);
+  const targetSlug = hasWorkflow ? getWorkflowActionSlug(topWorkflow) : decision.slug;
+  const targetPath = String(targetSlug || "dashboard").startsWith("/") ? targetSlug : `/${targetSlug || "dashboard"}`;
+  const tone = hasWorkflow ? K.gn : (TONE[decision.tone] || K.ac);
+  const completionCopy = hasWorkflow
+    ? "Run the workflow, then record placed, skipped, or settled so the ranking engine learns from the outcome."
+    : "Complete this action, then return to the dashboard so the next recommendation can update from the new state.";
+
+  return (
+    <div style={{ padding: "12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "flex-start" }}>
+        <div style={{ maxWidth: 780 }}>
+          <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6, fontWeight: 800 }}>Operator Autopilot</div>
+          <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>
+            {hasWorkflow ? topWorkflow.title : decision.title}
+          </div>
+          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.7, marginBottom: 8 }}>
+            {hasWorkflow ? topWorkflow.scoreSummary || topWorkflow.summary || "Your highest-ranked workflow is ready for execution." : decision.body}
+          </div>
+          <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>{completionCopy}</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 180 }}>
+          <button
+            onClick={() => navigate(targetPath)}
+            style={{ padding: "9px 12px", background: tone, border: "none", borderRadius: 8, color: K.bg, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
+          >
+            {hasWorkflow ? "Open workflow →" : `${decision.cta || "Open action"} →`}
+          </button>
+          <button
+            onClick={() => navigate(hasWorkflow ? "/edge-dashboard" : "/dashboard")}
+            style={{ padding: "8px 12px", background: "transparent", border: `1px solid ${tone}35`, borderRadius: 8, color: tone, fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: font }}
+          >
+            {hasWorkflow ? "Record outcome →" : "Refresh plan →"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, isProActive = false, syncDiagnostics = {}, usageLog = {} }) {
   const posture = getBankrollPosture(snapshot);
   const unfinished = getUnfinishedWork(snapshot);
@@ -57,6 +99,20 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
       : matchPlaybooks(appData, { bankroll: snapshot?.bankroll }),
     [snapshot?.topPlaybook, appData, snapshot?.bankroll],
   );
+  const nextAction = React.useMemo(() => getNextBestAction({
+    usageLog,
+    bankroll: snapshot?.bankroll ?? "",
+    totalProfit: snapshot?.totalProfit || 0,
+    openBets: snapshot?.openBets || [],
+    booksComplete: snapshot?.booksComplete || 0,
+    openWorkflowCount: snapshot?.openWorkflowCount || 0,
+    topWorkflow: snapshot?.topWorkflow || null,
+    userState: appData?.userState || "",
+    done: appData?.done || {},
+    bookStatus: appData?.bookStatus || {},
+    recommendedBooks: snapshot?.recommendedBooks || [],
+    topPlaybook: snapshot?.topPlaybook || null,
+  }), [usageLog, snapshot, appData]);
 
   const queuePlaybook = (playbook) => {
     if (!syncAppData) return;
@@ -89,6 +145,8 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
           </div>
         </div>
       </div>
+
+      <OperatorAutopilotCard decision={nextAction} topWorkflow={snapshot.topWorkflow} navigate={navigate} />
 
       <PromoExpiryWidget />
 

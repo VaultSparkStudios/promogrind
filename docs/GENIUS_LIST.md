@@ -1,6 +1,6 @@
-# Genius Hit List — Session 80
+# Genius Hit List — Session 86
 
-> Generated: 2026-04-29 | Scope: founder-portfolio | Pattern detectors: 0 signals evaluated | Top 12 shown
+> Generated: 2026-05-14 | Scope: founder-portfolio | Pattern detectors: 0 signals evaluated | Top 12 shown
 
 ---
 

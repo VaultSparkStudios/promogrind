@@ -1,3 +1,5 @@
+import { LAUNCH_PROOFS } from "./data/launchProofs.generated.js";
+
 const env = (typeof import.meta !== "undefined" && import.meta.env) ? import.meta.env : {};
 
 export function parseLaunchFlag(value, fallback = false) {
@@ -151,6 +153,74 @@ export const LAUNCH_BLOCKERS = [
   },
 ];
 
+export function normalizeLaunchProofs(payload = LAUNCH_PROOFS) {
+  const rawProofs = payload?.proofs && typeof payload.proofs === "object" ? payload.proofs : {};
+  return Object.entries(rawProofs).map(([key, proof]) => {
+    const status = String(proof?.status || "pending").trim().toLowerCase();
+    const evidence = Array.isArray(proof?.evidence) ? proof.evidence : [];
+    const evidenceRequired = Array.isArray(proof?.evidenceRequired) ? proof.evidenceRequired : [];
+    const requiredFor = Array.isArray(proof?.requiredFor) ? proof.requiredFor : [];
+    return {
+      key,
+      label: proof?.label || key,
+      status,
+      blocking: proof?.blocking !== false,
+      requiredFor,
+      detail: proof?.details || proof?.detail || "",
+      details: proof?.details || proof?.detail || "",
+      nextStep: proof?.nextStep || "",
+      evidenceRequired,
+      evidence,
+      requiredBooks: Array.isArray(proof?.requiredBooks) ? proof.requiredBooks : [],
+      isComplete: status === "complete",
+      isBlocking: proof?.blocking !== false && status !== "complete",
+      evidenceCount: evidence.length,
+      requiredEvidenceCount: evidenceRequired.length,
+    };
+  });
+}
+
+export function getLaunchProofSummary(payload = LAUNCH_PROOFS) {
+  const proofs = normalizeLaunchProofs(payload);
+  const blocking = proofs.filter((proof) => proof.isBlocking);
+  const complete = proofs.filter((proof) => proof.isComplete);
+  const evidenceCount = proofs.reduce((sum, proof) => sum + proof.evidenceCount, 0);
+  return {
+    schemaVersion: payload?.schemaVersion || "1.0",
+    lastUpdated: payload?.lastUpdated || null,
+    total: proofs.length,
+    complete: complete.length,
+    pending: proofs.length - complete.length,
+    blocking: blocking.length,
+    evidenceCount,
+    proofs,
+    blockingProofs: blocking,
+    completeProofs: complete,
+  };
+}
+
+export function getLaunchProofCommandItems(payload = LAUNCH_PROOFS) {
+  return getLaunchProofSummary(payload).proofs
+    .map((proof) => ({
+      key: proof.key,
+      label: proof.label,
+      status: proof.isComplete ? "cleared" : "manual",
+      detail: proof.detail,
+      details: proof.details,
+      nextStep: proof.nextStep,
+      evidenceRequired: proof.evidenceRequired,
+      evidence: proof.evidence,
+      evidenceCount: proof.evidenceCount,
+      requiredEvidenceCount: proof.requiredEvidenceCount,
+      requiredFor: proof.requiredFor,
+      requiredBooks: proof.requiredBooks,
+    }))
+    .sort((a, b) => {
+      if (a.status !== b.status) return a.status === "manual" ? -1 : 1;
+      return b.requiredEvidenceCount - a.requiredEvidenceCount;
+    });
+}
+
 export const FEATURE_INFO = {
   aiScan: {
     label: "Bet Slip Scan",
@@ -236,7 +306,7 @@ export function getLaunchCommandCenter(input = {}) {
     configuredAffiliateCount = 0,
     configuredMonetizationCount = 0,
     totalBooks = 0,
-    blockers = LAUNCH_BLOCKERS,
+    blockers = getLaunchProofCommandItems(),
     validation = resolveLaunchValidation(),
   } = input;
 

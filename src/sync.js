@@ -10,6 +10,7 @@
  */
 
 import { supabase } from './auth.js';
+import { recordTrustReceipt } from './lib/trustReceipts.js';
 import { normalizeWorkflowEntry, resolveWorkflowStatusConflict } from './promograph/index.js';
 import { enqueueWrite as _queueEnqueue, getQueueDepthSync, loadQueue as _queueLoad, saveQueue as _queueSave } from './lib/sync-queue.js';
 
@@ -114,8 +115,26 @@ export async function saveData(data) {
     try {
       await _saveRemote(session.user.id, stamped);
       await _flushQueue(session.user.id);
+      recordTrustReceipt({
+        type: "sync",
+        title: "Cloud sync updated",
+        summary: "PromoGrind saved your latest tracker, ledger, and workflow state for this account.",
+        stored: ["tracker state", "ledger state", "workflow state"],
+        notStored: ["sportsbook passwords", "payment card details"],
+        undo: "Clear local data or contact account help for remote deletion.",
+        dedupeKey: "sync:remote-save",
+      });
     } catch (error) {
       await _enqueueWrite(stamped);
+      recordTrustReceipt({
+        type: "sync",
+        title: "Offline sync queued",
+        summary: "PromoGrind saved changes locally and queued them for cloud sync when the connection recovers.",
+        stored: ["local tracker update", "offline sync queue"],
+        notStored: ["new remote write yet"],
+        undo: "Reconnect to flush the queue or clear local data before reconnecting.",
+        dedupeKey: "sync:queued",
+      });
       throw error;
     }
   }

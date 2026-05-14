@@ -70,9 +70,11 @@ export default function SmartPromoRecommender({ data }) {
           const isUrgent = expiringSoon.find((e) => e.book === p.book && e.promo === p.promo);
           const score = Number.isFinite(p.score) ? p.score : null;
           const reasons = Array.isArray(p.reasons) ? p.reasons : [];
+          const memorySignal = p.memorySignal || null;
+          const memoryColor = memorySignal?.direction === "up" ? K.gn : memorySignal?.direction === "down" ? K.yl : K.ac;
           return (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: K.s2, borderRadius: 6, border: `1px solid ${isUrgent ? K.rd + "60" : K.bd}` }}>
-              <div>
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "8px 12px", background: K.s2, borderRadius: 6, border: `1px solid ${isUrgent ? K.rd + "60" : K.bd}` }}>
+              <div style={{ minWidth: 0 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{p.book}</span>
                 <span style={{ fontSize: 11, color: K.dm, marginLeft: 8 }}>{p.promo}</span>
                 {p.complexity && <span style={{ ...S.tag(p.complexity === "Easy" ? K.gn : p.complexity === "Medium" ? K.yl : K.rd), marginLeft: 6, fontSize: 8 }}>{p.complexity}</span>}
@@ -82,6 +84,11 @@ export default function SmartPromoRecommender({ data }) {
                 {reasons.includes("cold lane") && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>COLD LANE</span>}
                 {reasons.includes("backlog pressure") && <span style={{ ...S.tag(K.ac), marginLeft: 6, fontSize: 8 }}>CLEAR BACKLOG</span>}
                 {reasons.includes("limit risk") && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 8 }}>LIMIT RISK</span>}
+                {memorySignal && (
+                  <div style={{ fontSize: 9, color: memoryColor, marginTop: 4, lineHeight: 1.35 }}>
+                    {memorySignal.label}: {memorySignal.detail}
+                  </div>
+                )}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: K.gn }}>{p.value}</span>

@@ -1,10 +1,10 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-05-14 (Session 86 closeout) -->
+<!-- generated-at: 2026-05-14 (Session 87 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 86 closeout · 2026-05-14.
+> **Fast-boot brief** — generated at Session 87 closeout · 2026-05-14.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -13,7 +13,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 87 · 2026-05-14 · FOUNDER MODE                          ║
+║  Session 88 · 2026-05-14 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -30,41 +30,41 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    970/1000   ███████████████████████░   97%                     ║
-║    SIL v3.0  ·  Avg3: ?  ·  Velocity 16↑                         ║
-║    Last active: 20586d  ·  Last closeout: 6d  ·  (active = newe  ║
-║    Trend  ▆▄▄██  ↑  (last 5 sessions)                            ║
+║    988/1000   ███████████████████████░   99%                     ║
+║    SIL v3.0  ·  Avg3: ?  ·  Velocity 6↑                          ║
+║    Last active: 20586d  ·  Last closeout: 0d  ·  (active = newe  ║
+║    Trend  ▄▄██▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health        99    ██████████  ▇▇▇▇▇▇▇▇ →                ║
-║    Alignment         99    ██████████  ▇▇▇▇▇▇▇▇ →                ║
-║    Momentum          88    █████████░  ▆▇▇▇▆▆▆▇ →                ║
-║    Engagement        93    █████████░  ▇▆▇▇▇▇▇▇ →                ║
-║    Process Qual     100    ██████████  ▇▆▇▇▇▇██ →                ║
+║    Alignment        100    ██████████  ▇▇▇▇▇▇▇█ →                ║
+║    Momentum          96    ██████████  ▇▇▇▆▆▆▇▇ →                ║
+║    Engagement        97    ██████████  ▆▇▇▇▇▇▇▇ →                ║
+║    Process Qual     100    ██████████  ▆▇▇▇▇███ →                ║
 ║    Coherence         99    ██████████  ········ →                ║
-║    Security          97    ██████████  ········ →                ║
+║    Security          98    ██████████  ········ →                ║
 ║    Ecosystem         99    ██████████  ········ →                ║
-║    Capital           99    ██████████  ········ →                ║
+║    Capital          100    ██████████  ········ →                ║
 ║    Automation       100    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 86 ════════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 87 ════════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    396 passing  ·  Deploy: deployed-unannounced          ║
+║  Tests:    402 passing  ·  Deploy: deployed-unannounced          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         396/396 passing (2026-05-13)                   ║
-║  ✓  Velocity      16 ↑  ·  Debt: →                               ║
-║  ⚠  Runway        ~3 sessions                                    ║
-║  ✓  Headroom      79% remaining · ~1 large item(s) fit           ║
-║  ✓  Context age   1d                                             ║
+║  ✓  Tests         402/402 passing (2026-05-14)                   ║
+║  ✓  Velocity      6 ↑  ·  Debt: →                                ║
+║  ⚠  Runway        ~2 sessions                                    ║
+║  ✓  Headroom      95% remaining · ~9 large item(s) fit           ║
+║  ✓  Context age   0d                                             ║
 ║  ✓  IGNIS         46140 FORGE  ·  0d old                         ║
-║  ✓  Truth         green  ·  Genome: 23/25                        ║
+║  ✓  Truth         green  ·  Genome: 24/25                        ║
 ║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
-║  ✓  Genome dims   all stable  (23/25)                            ║
+║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.063  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
@@ -86,13 +86,13 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▆▄▄██  16↑  (last 5 sessions)                       ║
+║  Velocity:   ▄▄██▆  6↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 86                                ║
+║  GENIUS HIT LIST  ·  Session 87                                ║
 ║  Founder portfolio scope · ranked by impact                    ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -102,5 +102,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 86 closeout · 2026-05-14*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 87 closeout · 2026-05-14*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

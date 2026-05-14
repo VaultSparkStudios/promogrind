@@ -1,5 +1,6 @@
 import { supabase } from "./auth.js";
 import { triggerQueueFlush } from "./sync.js";
+import { recordTrustReceipt } from "./lib/trustReceipts.js";
 
 export function registerSW() {
   if (!('serviceWorker' in navigator)) return;
@@ -126,6 +127,15 @@ export async function enableDailyBriefPush() {
 
   if (error) return { ok: false, reason: "save_failed", error };
   setDailyBriefEnabled(true);
+  recordTrustReceipt({
+    type: "push",
+    title: "Daily brief push enabled",
+    summary: "This browser subscribed to PromoGrind push notifications for account-linked daily briefs.",
+    stored: ["push endpoint", "browser public keys", "user agent"],
+    notStored: ["location", "sportsbook credentials"],
+    undo: "Disable Daily Brief push from the app.",
+    dedupeKey: "push:daily-brief-enabled",
+  });
   return { ok: true, subscription };
 }
 
@@ -140,5 +150,14 @@ export async function disableDailyBriefPush() {
     }
   } catch {}
   setDailyBriefEnabled(false);
+  recordTrustReceipt({
+    type: "push",
+    title: "Daily brief push disabled",
+    summary: "PromoGrind disabled this browser's daily brief subscription where possible.",
+    stored: ["disabled subscription state"],
+    notStored: ["new notification subscription"],
+    undo: "Enable Daily Brief push again from the app.",
+    dedupeKey: "push:daily-brief-disabled",
+  });
   return { ok: true };
 }

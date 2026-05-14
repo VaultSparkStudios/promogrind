@@ -18,6 +18,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { trackEvent } from './analytics.js';
 import { CANONICAL_APP_URL, getProjectAuthHref } from './launchState.js';
+import { recordTrustReceipt } from './lib/trustReceipts.js';
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -126,6 +127,15 @@ export async function signInToPromoGrind({ email, password }) {
     password,
   });
   if (error) throw error;
+  recordTrustReceipt({
+    type: "account",
+    title: "Signed in to PromoGrind",
+    summary: "Your browser received a Supabase session for this PromoGrind account.",
+    stored: ["session token in Supabase client storage"],
+    notStored: ["password"],
+    undo: "Sign out from the account menu.",
+    dedupeKey: "account:signin",
+  });
   return data;
 }
 
@@ -156,6 +166,15 @@ export async function createPromoGrindAccount({
     },
   });
   if (error) throw error;
+  recordTrustReceipt({
+    type: "account",
+    title: "PromoGrind account created",
+    summary: "The account request was sent to PromoGrind auth with project-only signup metadata.",
+    stored: ["email", "display name", "marketing preference", "PromoGrind signup source"],
+    notStored: ["Studio membership claim", "password in app storage"],
+    undo: "Use account help for deletion or sign out from the account menu.",
+    dedupeKey: `account:signup:${cleanEmail}`,
+  });
   return data;
 }
 
@@ -387,6 +406,15 @@ export async function startCheckout(planId = 'monthly') {
     });
     // Dispatch a custom event so the UI can show a friendly message without alert()
     window.dispatchEvent(new CustomEvent('pg:checkout-unavailable', { detail: { reason: 'test_mode' } }));
+    recordTrustReceipt({
+      type: "billing",
+      title: "Checkout unavailable",
+      summary: "PromoGrind did not create a live Stripe checkout because billing is still in test mode.",
+      stored: ["checkout intent analytics"],
+      notStored: ["payment method", "subscription"],
+      undo: "No billing action is required.",
+      dedupeKey: `billing:test:${planId}`,
+    });
     return;
   }
 
@@ -395,6 +423,15 @@ export async function startCheckout(planId = 'monthly') {
       plan: planId,
       mode: 'live',
       ...attribution,
+    });
+    recordTrustReceipt({
+      type: "billing",
+      title: "Stripe checkout started",
+      summary: "PromoGrind opened Stripe-hosted checkout for the selected plan.",
+      stored: ["plan id", "referral attribution when present"],
+      notStored: ["card number inside PromoGrind"],
+      undo: "Manage or cancel billing through the Stripe portal after purchase.",
+      dedupeKey: `billing:checkout:${planId}`,
     });
     window.location.href = data.checkout_url;
   } else {
@@ -422,9 +459,27 @@ export async function manageBilling() {
     const reason = data?.error ?? error?.message ?? 'unknown';
     console.error('[PromoGrind] Billing portal error:', reason);
     window.dispatchEvent(new CustomEvent('pg:billing-unavailable', { detail: { reason } }));
+    recordTrustReceipt({
+      type: "billing",
+      title: "Billing portal unavailable",
+      summary: "PromoGrind could not open a Stripe portal for this account.",
+      stored: ["portal error reason"],
+      notStored: ["new billing changes"],
+      undo: "Contact account help if the portal should exist.",
+      dedupeKey: `billing:portal:${reason}`,
+    });
     return;
   }
 
+  recordTrustReceipt({
+    type: "billing",
+    title: "Billing portal opened",
+    summary: "PromoGrind redirected you to Stripe-hosted billing management.",
+    stored: ["portal request"],
+    notStored: ["card number inside PromoGrind"],
+    undo: "Use Stripe portal controls for subscription changes.",
+    dedupeKey: "billing:portal-opened",
+  });
   window.location.href = data.portal_url;
 }
 

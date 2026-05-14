@@ -177,3 +177,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: PromoGrind create-account/sign-up must present as a PromoGrind-only account until Studio membership is fully integrated and verified across projects. Do not prominently advertise Studio membership from account creation.
 - Why it matters: users need truthful expectations at signup, and the product should not promise a cross-project identity/membership behavior that is not working end-to-end yet.
 - Supersedes prior entry: refines the 2026-05-12 launch-hardening direction by making account/membership separation a current product truth.
+
+### 2026-05-14 — Close out S87 with complete repo truth and GitHub push
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): "closeout and push & commit to GitHub - Update all memory/context/CDR/task board files and anything else that need updates"
+- Area affected: process / scope
+- Previous state: S87 audit/go implementation work was local, and repo-truth surfaces still needed to reflect the shipped launch-proof, operator-loop, trust, discipline, outcome-memory, and AI-usage improvements.
+- New required direction: perform full Studio OS closeout, refresh canonical context/memory/CDR/task-board/status surfaces, verify the repo, scan staged changes, commit, and push the completed S87 state to GitHub.
+- Why it matters: the next session and the GitHub Pages deploy need one coherent handoff that separates shipped repo work from still-external launch proof blockers.
+- Supersedes prior entry: continues the 2026-04-28 / 2026-05-01 closeout rule for the current S87 scope.

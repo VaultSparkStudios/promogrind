@@ -57,6 +57,55 @@ export function inferPromoTypeFromSchedule(promo = {}) {
   return "other";
 }
 
+function buildOutcomeMemorySignal({ promo = {}, promoType, insights = {}, hotLanes = {} } = {}) {
+  const promoRow = (insights.promoTypeRows || []).find((row) => row.key === promoType) || null;
+  const bookRow = (insights.bookRows || []).find((row) => row.book === promo.book || row.key === promo.book) || null;
+  const hotPromo = (hotLanes.hotPromoTypes || []).find((lane) => lane.key === promoType) || null;
+  const hotBook = (hotLanes.hotBooks || []).find((lane) => lane.key === promo.book) || null;
+  const coldAlert = (insights.topDriftAlerts || []).find((alert) =>
+    (alert.scope === "promo_type" && alert.key === promoType) ||
+    (alert.scope === "book" && alert.key === promo.book)
+  ) || null;
+
+  const settledCount = Math.max(Number(promoRow?.settled || 0), Number(bookRow?.settled || 0));
+  const repeatRate = promoRow?.repeatRate ?? null;
+  const averageExecutionMinutes = promoRow?.averageExecutionMinutes ?? null;
+  const averageDrift = promoRow?.averageDrift ?? bookRow?.averageDrift ?? null;
+
+  let direction = "neutral";
+  let label = "No outcome memory yet";
+  let detail = "Settle or skip workflows to teach PromoGrind how this lane performs for you.";
+  if (hotPromo || hotBook) {
+    direction = "up";
+    label = "Up-ranked by recent wins";
+    detail = hotPromo?.badge || hotBook?.badge || "Recent positive outcomes are lifting this recommendation.";
+  } else if (coldAlert) {
+    direction = "down";
+    label = "Down-ranked by outcomes";
+    detail = coldAlert.summary;
+  } else if (settledCount > 0 && averageDrift !== null) {
+    direction = averageDrift >= 0 ? "up" : "down";
+    label = averageDrift >= 0 ? "Beating expectation" : "Trailing expectation";
+    detail = `${settledCount} settled sample${settledCount === 1 ? "" : "s"} · ${averageDrift >= 0 ? "+" : ""}${averageDrift.toFixed(1)} average drift.`;
+  } else if (repeatRate !== null || averageExecutionMinutes !== null) {
+    label = "Calibrating from feedback";
+    detail = [
+      repeatRate !== null ? `${Math.round(repeatRate)}% repeat vote` : null,
+      averageExecutionMinutes !== null ? `~${Math.round(averageExecutionMinutes)}m execution` : null,
+    ].filter(Boolean).join(" · ");
+  }
+
+  return {
+    direction,
+    label,
+    detail,
+    settledCount,
+    averageDrift,
+    repeatRate,
+    averageExecutionMinutes,
+  };
+}
+
 export function buildAdaptivePromoPlan({
   data = {},
   snapshot = {},
@@ -133,7 +182,18 @@ export function buildAdaptivePromoPlan({
       if (feedbackCoverage < 45 && !promoIsHot && !bookIsHot) {
         score -= 1;
       }
-      return { ...promo, promoType, score, reasons };
+      return {
+        ...promo,
+        promoType,
+        score,
+        reasons,
+        memorySignal: buildOutcomeMemorySignal({
+          promo,
+          promoType,
+          insights: trackInsights,
+          hotLanes: heat,
+        }),
+      };
     })
     .sort((a, b) => b.score - a.score || (GRADE_SCORE[b.grade] || 0) - (GRADE_SCORE[a.grade] || 0))
     .slice(0, 5);

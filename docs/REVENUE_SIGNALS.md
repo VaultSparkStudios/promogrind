@@ -17,11 +17,11 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 | Project | Readiness | Stage | Lifecycle | Audience | Medium | Health | Next Milestone |
 |---|---:|---|---|---|---|---|---|
-| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Push S86, let GitHub Pages deploy, run real produ... |
+| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Push S87, let GitHub Pages deploy, run real produ... |
 
 ### Revenue-Ready Projects (score 7+)
 
-- **PromoGrind** (7/10) — S86 account-separation hardening: PromoGrind create-account/sign-up is now explicitly separate from Studio membership across auth/profile/app/legal/static trust surfaces, with auth smoke guarding against Vault account/membership and cross-Studio sync copy regressions.
+- **PromoGrind** (7/10) — S87 audit/go sprint: canonical launch proofs now feed the in-app command center, Operator Autopilot chooses the next action, trust receipts explain sensitive account/billing/AI/push/sync moments, discipline score rewards closed loops, recommendations explain outcome memory, and AI usage/cost avoidance is ledgered.
 
 ### Pre-Revenue Pipeline (score 4-6)
 

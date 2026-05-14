@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-05-08 (S83)
+Last reviewed: 2026-05-14 (S87)
 Overall status: green
-Next action: founder verifies S83 cold-load fix in incognito; then either fix the chronic Deploy Pages workflow red on `Verify production launch` or proceed with the three external manual proofs (`BetMGM` / `bet365` / `BetRivers` tracked URLs, Stripe smoke, friend beta).
+Next action: push S87, let GitHub Pages deploy, ingest the launch-verification artifact, run production auth email smoke, then proceed with the three external manual proofs (`BetMGM` / `bet365` / `BetRivers` tracked URLs, Stripe smoke, friend beta).
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
 ---
@@ -21,12 +21,12 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, `PROJECT_STATUS.json`, and deploy artifact truth agree that S82 repo-owned work advanced while remaining launch blockers are external proof tasks plus deploy verification of the local dashboard fix. |
+| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, `PROJECT_STATUS.json`, generated launch-proof mirror, and AI usage ledger agree that S87 repo-owned work advanced while remaining launch blockers are external proof tasks. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Startup brief, task board, launch proof queue, release plan, post-deploy artifact, and closeout surfaces now describe the same S82 posture. |
-| Handoff continuity | 5 | Session 82 handoff reflects shipped repo-local work, deploy verification caveats, and the remaining external blockers. |
-| Contradiction density | 4 | The main contradiction left is operational/public-repo policy around generated private-shim files, not product launch truth. |
-| **Total** | **23 / 25** | Green-yellow: canonical truth surfaces are coherent; remaining yellow state is due to external launch proofs and public/private ops shim tension. |
+| Derived-view freshness | 5 | Startup brief, task board, launch proof mirror, AI usage ledger, handoff, current state, SIL, and closeout surfaces describe the same S87 posture after closeout generation. |
+| Handoff continuity | 5 | Session 87 handoff reflects shipped repo-local work, verification status, and the remaining external blockers. |
+| Contradiction density | 5 | No current product-truth contradiction is known; the main gaps are explicit external evidence gates. |
+| **Total** | **24 / 25** | Green: canonical truth surfaces are coherent; remaining yellow posture is due to external launch proofs and public/private ops shim tension, not contradictory product claims. |
 
 ---
 
@@ -41,6 +41,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
 | Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/LAUNCH_CHECKLIST.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts, `launch:status` | yellow | 2026-05-13 | Proof updates remain evidence-gated; required sportsbook monetization links, real Stripe smoke, and friend beta with account-recovery visibility remain incomplete. |
+| In-app launch proof mirror | `context/LAUNCH_PROOFS.json` + `scripts/generate-launch-proof-mirror.mjs` | `src/data/launchProofs.generated.js`, Launch Command Center | green | 2026-05-14 | S87 generated a browser-safe proof mirror so command-center UI matches canonical evidence requirements without exposing private ops fields. |
+| Operator intelligence | `src/dashboard/today.js` + workflow store + feedback ledger | Dashboard hero, Smart Promo Recommender, Today dashboard | green | 2026-05-14 | S87 adds Operator Autopilot, discipline scoring, and outcome-memory recommendation explanations from settled samples/repeat behavior. |
+| AI usage/cost truth | `supabase/functions/promo-advisor/index.ts` + `scripts/render-ai-usage-ledger.mjs` | `docs/AI_USAGE_LEDGER.md`, `npm run ai:usage` | green | 2026-05-14 | S87 records rule-engine wins and token estimates; live query depends on Supabase admin env, offline render is deterministic. |
 | Production dashboard/runtime | `npm run smoke:production-dashboard` + `src/App.jsx` + deploy artifacts | task board, handoff, launch status | yellow | 2026-05-13 | Local S85 launch gate is green; next deploy artifact should be ingested to confirm production runtime/auth behavior after push. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-24 | Strict public-repo sanitization reports 0 critical / 0 warning and no longer false-flags public protocol/provenance docs or ignored local ops state. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
@@ -53,8 +56,19 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
-- Production auth email delivery is unproven until S86 deploys and a real confirmation/reset email pass is recorded.
+- Production auth email delivery is unproven until S87 deploys and a real confirmation/reset email pass is recorded.
 - Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+
+## Resolved This Session (S87)
+
+- Created `docs/AUDIT_2026-05-14.md` with one ranked improvement list across product depth, UI/UX, gamification, AI, security, speed/organization, and API/token consumption.
+- Generated a browser-safe launch-proof mirror from `context/LAUNCH_PROOFS.json` and wired Launch Command Center to proof statuses, evidence requirements, and next steps.
+- Added Operator Autopilot to the dashboard, preferring the top workflow and falling back to next-best dashboard action routing.
+- Added local trust receipts for sensitive auth, billing, AI, push, and sync events, with recent receipts visible in Profile.
+- Added discipline scoring to the dashboard hero so closed loops and lower unresolved exposure matter more than raw activity.
+- Added outcome-memory recommendation signals from hot lanes, cold drift, settled samples, repeat intent, and execution behavior.
+- Added `npm run ai:usage`, generated `docs/AI_USAGE_LEDGER.md`, and recorded promo-advisor rule-engine/token metadata for AI cost visibility.
+- Verified focused outcome-memory tests and AI ledger offline rendering; full closeout verification reruns before push.
 
 ## Resolved This Session (S86)
 

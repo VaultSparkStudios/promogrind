@@ -1,6 +1,6 @@
 import React from "react";
 import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, getRequiredLaunchMonetizationStatus, hasConfiguredMonetizationLinks } from "../../books.js";
-import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
+import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchProofSummary, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
 import { K, S, fontD } from "../../lib/shared.js";
 import { AppDataCtx } from "../../contexts.jsx";
 import { appendStudioContractHistory } from "../../studio/export.js";
@@ -18,6 +18,7 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
   const affiliateReady = hasConfiguredMonetizationLinks();
   const requiredLaunchMonetization = getRequiredLaunchMonetizationStatus();
   const validation = resolveLaunchValidation();
+  const launchProofSummary = getLaunchProofSummary();
   const { bankroll, studioSnapshot: snapshot, dashboardSnapshot, alertPlan } = buildOperatorSurfaceState({
     appData: appData || {},
     now: new Date(),
@@ -45,7 +46,7 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
   const latestPublished = Array.isArray(appData?.studioContractHistory) ? appData.studioContractHistory[0] : null;
   const queueLaunchBlocker = (blocker, index) => {
     if (!syncAppData) return;
-    const workflow = launchBlockerToWorkflow(blocker, { index, now: new Date() });
+    const workflow = launchBlockerToWorkflow(blocker, { index, nextStep: blocker.nextStep, now: new Date() });
     syncAppData(appendWorkflow(appData || {}, workflow));
   };
 
@@ -70,6 +71,10 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
             <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Readiness Score</div>
             <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: scoreColor }}>{commandCenter.readinessScore}/100</div>
           </div>
+          <div style={{ padding: "8px 10px", background: K.s2, border: `1px solid ${launchProofSummary.blocking ? K.yl : K.gn}45`, borderRadius: 8, minWidth: 118 }}>
+            <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Manual Proofs</div>
+            <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: launchProofSummary.blocking ? K.yl : K.gn }}>{launchProofSummary.complete}/{launchProofSummary.total}</div>
+          </div>
           <div style={{ padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, minWidth: 108 }}>
             <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Flags Live</div>
             <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: K.gn }}>{summary.enabledCount}/{summary.totalCount}</div>
@@ -82,6 +87,48 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
             <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Drift Alerts</div>
             <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 700, color: snapshot.intelligence.driftAlerts.length ? K.yl : K.gn }}>{snapshot.intelligence.driftAlerts.length}</div>
           </div>
+        </div>
+      </div>
+
+      <div style={{ padding: "12px", background: `${launchProofSummary.blocking ? K.yl : K.gn}08`, border: `1px solid ${launchProofSummary.blocking ? K.yl : K.gn}25`, borderRadius: 8, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 10 }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: launchProofSummary.blocking ? K.yl : K.gn, marginBottom: 5 }}>Canonical launch proofs</div>
+            <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, maxWidth: 760 }}>
+              This panel mirrors the canonical evidence requirements for affiliate coverage, Stripe smoke, and friend beta proof.
+            </div>
+          </div>
+          <div style={{ fontSize: 10, color: K.mt, textAlign: "right" }}>
+            {launchProofSummary.lastUpdated ? `Updated ${launchProofSummary.lastUpdated}` : "No update date"} · {launchProofSummary.evidenceCount} evidence item{launchProofSummary.evidenceCount === 1 ? "" : "s"}
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 8 }}>
+          {launchProofSummary.proofs.map((proof, index) => {
+            const tone = proof.isComplete ? K.gn : proof.isBlocking ? K.yl : K.ac;
+            return (
+              <div key={proof.key} style={{ padding: "10px 12px", background: K.s2, border: `1px solid ${tone}30`, borderRadius: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline", marginBottom: 5 }}>
+                  <div style={{ fontSize: 11, color: K.tx, fontWeight: 700 }}>{proof.label}</div>
+                  <span style={{ padding: "2px 7px", borderRadius: 999, background: `${tone}16`, color: tone, fontSize: 9, fontWeight: 800, textTransform: "uppercase" }}>{proof.status}</span>
+                </div>
+                <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 7 }}>{proof.details}</div>
+                {proof.nextStep && <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.5, marginBottom: 7 }}><strong style={{ color: tone }}>Next:</strong> {proof.nextStep}</div>}
+                {proof.evidenceRequired.length > 0 && (
+                  <div style={{ fontSize: 9, color: K.mt, lineHeight: 1.6, marginBottom: 7 }}>
+                    Evidence: {proof.evidenceCount}/{proof.evidenceRequired.length} · {proof.evidenceRequired.slice(0, 2).join(" · ")}
+                  </div>
+                )}
+                {!proof.isComplete && (
+                  <button
+                    onClick={() => queueLaunchBlocker(proof, index)}
+                    style={{ padding: "5px 8px", background: "transparent", border: `1px solid ${tone}35`, borderRadius: 6, color: tone, fontSize: 10, cursor: "pointer" }}
+                  >
+                    Queue proof work →
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { K, font, fontD } from "../lib/shared.js";
 import { FX, AppDataCtx } from "../contexts.jsx";
 import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
 import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
+import { readTrustReceipts, summarizeTrustReceipt } from "../lib/trustReceipts.js";
 
 const TIER_COLOR = (name) => ({
   Scout: '#06b6d4',
@@ -130,6 +131,48 @@ function MasterySection() {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function TrustReceiptsSection() {
+  const [expanded, setExpanded] = React.useState(false);
+  const receipts = useMemo(() => readTrustReceipts(), [expanded]);
+  const recent = receipts.slice(0, expanded ? 8 : 3);
+
+  return (
+    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
+      <div
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, cursor: 'pointer' }}
+        onClick={() => setExpanded(e => !e)}
+      >
+        <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+          Trust Receipts
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 10, color: receipts.length ? K.ac : K.mt, fontWeight: 700 }}>{receipts.length}</span>
+          <span style={{ fontSize: 10, color: K.mt }}>{expanded ? '▲' : '▼'}</span>
+        </div>
+      </div>
+
+      {recent.length === 0 && (
+        <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
+          Account, billing, AI, push, and sync activity will leave concise receipts here.
+        </div>
+      )}
+
+      {recent.map((receipt) => (
+        <div key={receipt.id} style={{ padding: '9px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, marginBottom: 7 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'baseline', marginBottom: 4 }}>
+            <div style={{ fontSize: 11, color: K.tx, fontWeight: 700 }}>{receipt.title}</div>
+            <span style={{ fontSize: 9, color: K.ac, textTransform: 'uppercase', fontWeight: 800 }}>{receipt.type}</span>
+          </div>
+          <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{summarizeTrustReceipt(receipt)}</div>
+          <div style={{ fontSize: 9, color: K.mt, marginTop: 5 }}>
+            {receipt.createdAt ? new Date(receipt.createdAt).toLocaleString() : ''}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -323,6 +366,9 @@ export default function ProfilePanel({
 
         {/* ── Mastery ──────────────────────────────────────────────── */}
         <MasterySection />
+
+        {/* ── Trust receipts ───────────────────────────────────────── */}
+        <TrustReceiptsSection />
 
         {/* ── Achievements ─────────────────────────────────────────── */}
         <AchievementsSection />

@@ -312,3 +312,32 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: keep the softer S85 copy that said connected VaultSpark access would appear where enabled; continue linking account management to the Vault member portal; leave generated SEO pages with the older "Free Vault membership" trust strip.
 - Why this was chosen: truthful signup expectations matter more than future integration ambition. Users should understand exactly what they are creating now, and launch copy should not promise a cross-project membership that the operator already knows is not fully integrated.
 - Follow-up: when Studio membership is ready across projects, add a proof runner and update copy only after end-to-end account reuse is verified.
+
+## 2026-05-14 — Session 87
+
+### Decision: Browser launch readiness should consume a generated public-safe proof mirror
+
+- Status: accepted
+- Context: `context/LAUNCH_PROOFS.json` is the canonical launch proof surface, but app code cannot directly depend on arbitrary context files at runtime or expose private ops state.
+- Decision: generate `src/data/launchProofs.generated.js` from the canonical proof JSON during prebuild, and have launch-state/dashboard UI consume that browser-safe module.
+- Alternatives considered: duplicate proof copy manually inside React; fetch raw context JSON at runtime; keep proof evidence visible only in scripts.
+- Why this was chosen: the app should show users/operators the same launch proof truth that scripts enforce, while keeping the browser bundle limited to safe fields.
+- Follow-up: add a `dist/` exposure gate that asserts generated bundles do not contain admin-only proof/context fields.
+
+### Decision: User trust moments should leave local receipts before adding heavier account infrastructure
+
+- Status: accepted
+- Context: PromoGrind now has sensitive auth, billing, AI, push, and sync flows, but cross-project Studio membership is intentionally not promised yet.
+- Decision: add a local trust receipt ledger for important actions and show recent receipts in Profile rather than waiting on a centralized membership/account activity service.
+- Alternatives considered: build a remote account activity feed now; keep all trust events invisible except console logs; only track analytics events.
+- Why this was chosen: local receipts improve user feedback and transparency without adding auth-scope promises or server cost.
+- Follow-up: later sync receipts remotely only after the account/membership boundary is fully proven.
+
+### Decision: AI cost control should be observable in product telemetry
+
+- Status: accepted
+- Context: Promo Advisor can often produce a deterministic rule-engine answer, but model-call avoidance was not visible in a durable ledger.
+- Decision: record rule-engine wins, token estimates, and AI call metadata into the existing AI usage surface, and add `npm run ai:usage` to render a local usage ledger.
+- Alternatives considered: rely on provider dashboards only; defer usage visibility until after launch; record only AI model calls and omit rule-engine savings.
+- Why this was chosen: showing avoided model calls is the clearest way to reduce API spend without reducing recommendation quality.
+- Follow-up: expand the rule-first router so deterministic EV/hedge cases avoid model calls more consistently.

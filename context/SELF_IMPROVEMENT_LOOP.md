@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S79:919 | S80:931 | S81:947 | S82:962 | S83:970
-Avgs - 3: 959.7 [N=3] | all: 783.5 [N=15]
-  └ 3-session (S81/S82/S83): Dev 99.0 | Align 99.0 | Momentum 88.3 | Engage 93.7 | Process 99.7 | Coher 99.0 | Sec 95.0 | Eco 99.0 | Cap 96.3 | Auto 97.3
+Sparkline (last 5 totals): S80:931 | S82:962 | S83:970 | S86:981 | S87:988
+Avgs - 3: 979.7 [N=3] | all: 796.3 [N=16]
+  └ 3-session (S83/S86/S87): Dev 99.3 | Align 99.7 | Momentum 92.3 | Engage 94.7 | Process 100.0 | Coher 99.0 | Sec 96.7 | Eco 99.0 | Cap 98.0 | Auto 98.7
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
-Momentum runway: ~3 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-05-08 | Session 83 | Total: 970/1000 | Velocity: 16 | protocolVelocity: 16
+Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
+Last session: 2026-05-14 | Session 87 | Total: 988/1000 | Velocity: 6 | protocolVelocity: 6
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,6 +93,40 @@ Rolling avg (last 3): Dev — | Align — | Momentum — | Engage — | Process 
 1.
 2.
 3.
+
+## 2026-05-14 — Session 87 | Total: 988/1000 | Velocity: 6 | Debt: down
+Rolling avg (last 3): Dev 99.3 | Align 99.7 | Momentum 92.3 | Engage 94.7 | Process 100.0 | Coher 99.0 | Sec 96.7 | Eco 99.0 | Cap 98.0 | Auto 98.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Six repo-owned improvements shipped with focused regression coverage and feature-batch verification at 402/402 tests plus build/launch/bundle checks. |
+| Creative Alignment | 100 | → | Work followed the founder's audit/go directive: make the app deeper, smarter, more engaging, more honest, and more efficient without weakening launch truth. |
+| Momentum | 96 | ↑ | S87 converted the audit into multiple production surfaces in one pass; remaining launch blockers are external proof gates, not local implementation drift. |
+| Engagement | 97 | ↑ | Operator Autopilot, discipline scoring, trust receipts, and outcome-memory labels make the app more habit-forming and more legible to real users. |
+| Process Quality | 100 | → | Audit, task board, handoff, current state, CDR, truth audit, work log, AI usage ledger, and project status are all refreshed for S87. |
+| Cross-Repo Coherence | 99 | → | Public repo continues to avoid private ops leakage; launch-proof mirroring keeps browser code aligned to canonical proof truth through a generated safe artifact. |
+| Security Posture | 98 | ↑ | Trust receipts improve user-facing security/account transparency; final staged secret scan remains part of closeout before push. |
+| Ecosystem Integration | 99 | → | S87 preserves GitHub Pages/launch artifact flow and adds AI-usage reporting without introducing a new external service dependency. |
+| Capital Efficiency | 100 | ↑ | Rule-engine wins now record estimated model-call avoidance, and the audit/go flow prioritized local deterministic intelligence before more token spend. |
+| Automation Coverage | 100 | → | Launch proof mirror generation, AI usage ledger rendering, and proof-aware command center reduce manual context reconstruction. |
+| **Total** | **988 / 1000** | | |
+
+**Top win:** turned PromoGrind's strongest loops into visible, user-facing intelligence: what to do next, why a promo is recommended, what the app did on behalf of the user, and whether the operator is building durable discipline.
+
+**Top gap:** S87 still cannot clear external proof gates: approved sportsbook URLs, a real Stripe smoke purchase, a trusted-tester pass, and production auth email delivery must be completed outside local code.
+
+**Intent outcome:** Achieved. Audit delivered, top implementation items shipped, and closeout/push protocol is being completed with honest external blockers preserved.
+
+**Brainstorm**
+
+1. Build a guided promo passport that turns first account → first calculator → first queued promo → first settlement → first discipline-score lift into one visible onboarding journey.
+2. Add a production `dist/` exposure gate that inspects built assets for forbidden context/admin/private strings before deploy.
+3. Expand the rule-first AI router so deterministic EV/hedge cases produce receipts and only ambiguous edge cases spend model tokens.
+4. Add shareable, privacy-safe trust receipts for resolved promos so users can export proof of process without leaking bankroll details.
+
+**Committed follow-up(s):**
+- Add guided promo-passport onboarding from account creation to first settled result. `[SIL]`
+- Add production `dist/` exposure gate for private/admin/context leakage. `[SIL]`
 
 ## 2026-05-08 — Session 83 | Total: 970/1000 | Velocity: 16 | Debt: down
 Rolling avg (last 3): Dev 99.0 | Align 99.0 | Momentum 88.3 | Engage 93.7 | Process 99.7 | Coher 99.0 | Sec 95.0 | Eco 99.0 | Cap 96.3 | Auto 97.3

@@ -13,49 +13,50 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 86,
-  "currentFocus": "S86 account-separation hardening: PromoGrind create-account/sign-up is now explicitly separate from Studio membership across auth/profile/app/legal/static trust surfaces, with auth smoke guarding against Vault account/membership and cross-Studio sync copy regressions.",
-  "nextMilestone": "Push S86, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentSession": 87,
+  "currentFocus": "S87 audit/go sprint: canonical launch proofs now feed the in-app command center, Operator Autopilot chooses the next action, trust receipts explain sensitive account/billing/AI/push/sync moments, discipline score rewards closed loops, recommendations explain outcome memory, and AI usage/cost avoidance is ledgered.",
+  "nextMilestone": "Push S87, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
   "blockers": [
     "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
-    "Run production auth email smoke after S86 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
+    "Run production auth email smoke after S87 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
-  "lastUpdated": "2026-05-13",
-  "silScore": 981,
-  "silAvg3": 970,
-  "silVelocity": 5,
+  "lastUpdated": "2026-05-14",
+  "silScore": 988,
+  "silAvg3": 980,
+  "silVelocity": 6,
   "silDebt": "down",
-  "silLastSession": 86,
+  "silLastSession": 87,
   "silMax": 1000,
   "silSparkline": [
     931,
     962,
     977,
-    981
+    981,
+    988
   ],
   "ignisScore": 46140,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-14",
-  "testsPassing": 396,
-  "testsTotal": 396,
-  "testsLastRun": "2026-05-13",
+  "testsPassing": 402,
+  "testsTotal": 402,
+  "testsLastRun": "2026-05-14",
   "lastDeployStatus": "deployed-unannounced",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-05-13",
-  "truthGenome": "23/25",
+  "truthAuditLastRun": "2026-05-14",
+  "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 396/396 in S86"
+      "status": "passing 402/402 in S87 closeout compact Vitest rerun"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "smoke:auth and smoke:launch passing in S86; full verify:launch-local last passed S85"
+      "status": "smoke:auth passing in S86, smoke:launch passing in S87 feature-batch verification; full verify:launch-local last passed S85"
     },
     {
       "type": "ux-integrity",
@@ -89,15 +90,15 @@
   "stripeProductionPriceIds": [],
   "silRubricVersion": "3.0",
   "silCategoriesV3": {
-    "devHealth": 100,
+    "devHealth": 99,
     "creativeAlignment": 100,
-    "momentum": 93,
-    "engagement": 94,
+    "momentum": 96,
+    "engagement": 97,
     "processQuality": 100,
     "crossRepoCoherence": 99,
-    "securityPosture": 97,
+    "securityPosture": 98,
     "ecosystemIntegration": 99,
-    "capitalEfficiency": 99,
+    "capitalEfficiency": 100,
     "automationCoverage": 100
   },
   "doctorScore": {
@@ -205,6 +206,7 @@
   "modelPlanModeSlash": "/model opusplan",
   "sessionMode": "founder",
   "sessionModeAutoShiftedAt": "2026-04-24T20:07:46.133Z",
-  "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-05-08T21:29:01.257Z"
+  "planModeDetected": "active",
+  "planModeCheckedAt": "2026-05-14T01:50:01.298Z",
+  "planModeLastActivatedAt": "2026-05-14T01:19:08.850Z"
 }

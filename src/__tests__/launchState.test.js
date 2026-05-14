@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getLaunchCommandCenter, getValidationSignal, resolveLaunchValidation } from "../launchState.js";
+import { getLaunchCommandCenter, getLaunchProofCommandItems, getLaunchProofSummary, getValidationSignal, resolveLaunchValidation } from "../launchState.js";
 
 describe("launch state helpers", () => {
   it("classifies validation strings into signals", () => {
@@ -35,5 +35,55 @@ describe("launch state helpers", () => {
     expect(center.validationPassingCount).toBe(4);
     expect(center.readinessScore).toBeGreaterThan(40);
     expect(center.nextActions.length).toBeGreaterThan(0);
+  });
+
+  it("normalizes canonical launch proofs into command-center blockers", () => {
+    const proofs = {
+      schemaVersion: "1.0",
+      lastUpdated: "2026-05-14",
+      proofs: {
+        affiliateLinks: {
+          label: "Affiliate links",
+          status: "pending",
+          blocking: true,
+          details: "Tracked links are missing.",
+          nextStep: "Add approved tracking URLs.",
+          evidenceRequired: ["approved URL", "production verification"],
+          evidence: [{ type: "operator-note" }],
+        },
+        friendBeta: {
+          label: "Friend beta",
+          status: "complete",
+          blocking: true,
+          details: "Tester completed the flow.",
+          evidenceRequired: ["tester pass"],
+          evidence: [{ type: "friend-beta" }],
+        },
+      },
+    };
+
+    const summary = getLaunchProofSummary(proofs);
+    const items = getLaunchProofCommandItems(proofs);
+    const center = getLaunchCommandCenter({
+      configuredAffiliateCount: 0,
+      configuredMonetizationCount: 0,
+      totalBooks: 12,
+      blockers: items,
+      validation: resolveLaunchValidation(),
+    });
+
+    expect(summary.total).toBe(2);
+    expect(summary.complete).toBe(1);
+    expect(summary.blocking).toBe(1);
+    expect(summary.evidenceCount).toBe(2);
+    expect(items[0]).toMatchObject({
+      key: "affiliateLinks",
+      status: "manual",
+      nextStep: "Add approved tracking URLs.",
+      evidenceCount: 1,
+      requiredEvidenceCount: 2,
+    });
+    expect(center.unresolvedBlockerCount).toBe(1);
+    expect(center.nextActions[0].key).toBe("affiliateLinks");
   });
 });

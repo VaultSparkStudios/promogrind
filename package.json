@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/optimize-images.mjs",
+    "prebuild": "node scripts/generate-launch-proof-mirror.mjs && node scripts/optimize-images.mjs",
     "build": "vite build",
     "build:pages": "vite build && node scripts/postbuild-pages.mjs",
     "optimize:images": "node scripts/optimize-images.mjs",
@@ -22,6 +22,7 @@
     "verify:production": "node scripts/verify-production-launch.mjs",
     "ingest:launch": "node scripts/ingest-launch-verification.mjs",
     "launch:status": "node scripts/launch-status.mjs",
+    "ai:usage": "node scripts/render-ai-usage-ledger.mjs",
     "smoke:production-dashboard": "node scripts/validate-production-dashboard-smoke.mjs",
     "sync:secrets": "node scripts/sync-github-secrets.mjs",
     "smoke:stripe": "node scripts/run-stripe-smoke.mjs",

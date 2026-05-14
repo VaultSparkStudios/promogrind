@@ -241,6 +241,9 @@ describe("dashboard helpers", () => {
     expect(plan.coldLane?.key).toBe("profit_boost");
     expect(plan.topPromos[0].book).toBe("DraftKings");
     expect(plan.topPromos[0].reasons.some((reason) => ["hot lane", "book running hot"].includes(reason))).toBe(true);
+    expect(plan.topPromos[0].memorySignal.direction).toBe("up");
+    expect(plan.topPromos[0].memorySignal.label).toMatch(/Up-ranked|Beating/);
+    expect(plan.topPromos.find((promo) => promo.book === "FanDuel")?.memorySignal.direction).toBe("down");
 
     const telemetry = buildAdaptiveRankingSnapshot({
       plan,

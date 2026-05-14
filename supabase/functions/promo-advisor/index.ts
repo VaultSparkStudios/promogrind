@@ -113,6 +113,12 @@ serve(async (req) => {
 
     if (heuristic.clearWinner && heuristic.confidence === "high") {
       const result = normalizeAdvisorResult(heuristic.result, String(heuristic.result.explanation || ""));
+      recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
+        chars: sanitizedPromoText.length,
+        tier: access.tier,
+        analysis_source: "rule_engine",
+        estimated_tokens_saved: 650,
+      }).catch(() => {});
       if (wantsStream) {
         return streamRuleEngineResult(req, corsHeaders, {
           result,
@@ -238,6 +244,9 @@ serve(async (req) => {
     await recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
       chars: sanitizedPromoText.length,
       tier: access.tier,
+      analysis_source: "ai",
+      input_tokens: anthropicData.usage?.input_tokens ?? 0,
+      output_tokens: anthropicData.usage?.output_tokens ?? 0,
     });
 
     return json(req, {

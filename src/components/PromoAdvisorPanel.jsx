@@ -11,6 +11,7 @@ import { normalizeRecommendation } from "../promograph/index.js";
 import { recommendationToWorkflow } from "../promograph/recommendations.js";
 import { appendWorkflow } from "../workflows/store.js";
 import { flagVisit } from "../lib/missions.js";
+import { recordTrustReceipt } from "../lib/trustReceipts.js";
 
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   useEffect(() => { flagVisit('advisor'); }, []);
@@ -77,6 +78,18 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             writeDailyUsage("pg_advisor_uses", newUses);
             setResult(data);
             writeTimedCache(cacheKey, data);
+            recordTrustReceipt({
+              type: "ai",
+              title: "Promo Advisor analyzed an offer",
+              summary: data?.analysisSource === "rule_engine"
+                ? "PromoGrind resolved this promo with local offer rules instead of spending a model call."
+                : "PromoGrind sent sanitized promo text to the AI analysis function and received a structured decision.",
+              stored: ["daily usage count", "cached analysis result"],
+              notStored: ["raw password", "payment data"],
+              undo: "Clear browser data to remove local cached analyses.",
+              dedupeKey: `ai:advisor:${cacheKey}`,
+              dedupeMs: 12 * 60 * 60 * 1000,
+            });
             setStreamingText("");
           },
         });
@@ -90,6 +103,18 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         writeDailyUsage("pg_advisor_uses", newUses);
         setResult(data);
         writeTimedCache(cacheKey, data);
+        recordTrustReceipt({
+          type: "ai",
+          title: "Promo Advisor analyzed an offer",
+          summary: data?.analysisSource === "rule_engine"
+            ? "PromoGrind resolved this promo with local offer rules instead of spending a model call."
+            : "PromoGrind sent sanitized promo text to the AI analysis function and received a structured decision.",
+          stored: ["daily usage count", "cached analysis result"],
+          notStored: ["raw password", "payment data"],
+          undo: "Clear browser data to remove local cached analyses.",
+          dedupeKey: `ai:advisor:${cacheKey}`,
+          dedupeMs: 12 * 60 * 60 * 1000,
+        });
       }
     } catch(e) {
       if (e?.name !== 'AbortError') {

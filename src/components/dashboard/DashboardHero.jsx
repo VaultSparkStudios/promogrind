@@ -4,6 +4,7 @@ import { f, K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
 import { streakEmoji, streakLabel, streakMilestone, computeStreak } from "../../lib/streaks.js";
 import { computeMastery, MASTERY_COLOR } from "../../lib/mastery.js";
+import { computeDisciplineScore } from "../../lib/discipline.js";
 import { AppDataCtx } from "../../contexts.jsx";
 
 function useCountUp(target, duration = 700) {
@@ -48,6 +49,7 @@ function MasteryBar({ label, level, levelPct, accuracy }) {
 export default function DashboardHero({ totalProfit, openBetsCount, booksComplete, navigate, streak = 0 }) {
   const ctx = useContext(AppDataCtx);
   const mastery = useMemo(() => ctx?.appData ? computeMastery(ctx.appData) : null, [ctx?.appData]);
+  const discipline = useMemo(() => computeDisciplineScore(ctx?.appData || {}), [ctx?.appData]);
 
   const percent = Math.min(100, Math.round((booksComplete / BOOKS.length) * 100));
   const emoji = streakEmoji(streak);
@@ -55,6 +57,7 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
   const milestone = streakMilestone(streak);
   const animatedProfit = useCountUp(totalProfit);
   const globalRank = mastery?.globalRank;
+  const disciplineColor = discipline.tone === "elite" ? K.gn : discipline.tone === "healthy" ? K.ac : discipline.tone === "watch" ? K.yl : K.rd;
 
   const streakData = useMemo(() => ctx?.appData ? computeStreak(ctx.appData) : null, [ctx?.appData]);
   const daysSinceActive = useMemo(() => {
@@ -119,9 +122,23 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
               <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Day Streak</div>
             </div>
           )}
+          <div style={{ padding: '10px 16px', background: `${disciplineColor}10`, border: `1px solid ${disciplineColor}30`, borderRadius: 8, textAlign: 'center', maxWidth: 132 }}>
+            <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: disciplineColor }}>{discipline.score}</div>
+            <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Discipline</div>
+          </div>
           <button onClick={() => navigate('/ledger')} style={{ padding: '10px 16px', background: `${K.ac}15`, border: `1px solid ${K.ac}30`, borderRadius: 8, color: K.ac, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: font, whiteSpace: 'nowrap' }}>
             Log Profit →
           </button>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, padding: '8px 12px', background: `${disciplineColor}0d`, border: `1px solid ${disciplineColor}25`, borderRadius: 7, display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div>
+          <div style={{ fontSize: 10, color: K.mt, marginBottom: 1 }}>Discipline Score · {discipline.band}</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: disciplineColor }}>{discipline.next}</div>
+        </div>
+        <div style={{ fontSize: 10, color: K.mt }}>
+          Feedback {discipline.feedbackCoverage}% · {discipline.exposurePct == null ? 'No bankroll anchor' : `${discipline.exposurePct}% exposed`}
         </div>
       </div>
 

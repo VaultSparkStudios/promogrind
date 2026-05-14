@@ -2,19 +2,28 @@
 
 ## Now
 
-- production auth email smoke after S86 deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
+- production auth email smoke after S87 deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
 - finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers` — operator confirmed S81 they have applied for everything they can; remaining gap is partner-side approval, not a repo task
 
 ## Next
 
-- rerun/inspect the GitHub Pages workflow after S86 auth/account-copy hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
+- rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
+- add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
+- add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
 - continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos/`useProfitNotifications` (App.jsx is still ~4300 lines)
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- mirror canonical launch proof evidence into the Launch Command Center (S87) — **DONE S87**: generated a browser-safe launch-proof mirror from `context/LAUNCH_PROOFS.json`, made `LaunchCommandCenterPanel` show proof status/evidence requirements/next steps, and added launch-state tests for proof normalization.
+- add Operator Autopilot to the dashboard (S87) — **DONE S87**: added a primary action card to `TodayDashboardPanel` that prefers the top workflow, falls back to `getNextBestAction`, and gives users an execution route plus an outcome-recording route.
+- add trust receipts for sensitive account/billing/AI/push/sync moments (S87) — **DONE S87**: added a local trust receipt ledger, records receipts from auth, checkout, billing portal, Promo Advisor, push subscriptions, and cloud sync, and surfaces recent receipts in Profile.
+- add discipline score that rewards closed loops over raw volume (S87) — **DONE S87**: added `computeDisciplineScore`, dashboard hero UI, and regression tests proving stale/high-exposure open bets are penalized and raw activity volume is not enough for an elite score.
+- add outcome-memory signals to recommendations (S87) — **DONE S87**: recommendations now explain whether a promo is elevated by hot-lane repeats, stable settled samples, repeat intent, execution speed, or demoted by cold drift.
+- add an AI usage/cost ledger (S87) — **DONE S87**: added `npm run ai:usage`, generated `docs/AI_USAGE_LEDGER.md`, and recorded rule-engine/token metadata from promo-advisor calls so AI spend avoidance is measurable.
 
 - separate PromoGrind account/signup from Studio membership (S86) — **DONE S86**: removed remaining user-facing Vault account/membership and cross-Studio sync promises from auth/profile/app/legal/static trust surfaces, replaced the Vault member portal link with PromoGrind account help, deleted the unused portal constant, and hardened `npm run smoke:auth` to prevent regressions.
 - verify S86 account-separation gate (S86) — **DONE S86**: `npm run smoke:auth`, `npm run smoke:launch`, `npm run build`, and `npm test` all passed; test suite remains 396/396.
