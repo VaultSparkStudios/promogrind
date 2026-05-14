@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.3",
+  "session": 86,
+  "date": "2026-05-13",
+  "project": "promogrind",
+  "intent": "Separate PromoGrind create-account/sign-up from Studio membership, then close out and push.",
+  "summary": "PromoGrind account creation is now explicitly standalone across account UI, profile/help links, legal/data pages, generated public trust copy, and auth smoke regression checks.",
+  "sil": {
+    "total": 981,
+    "max": 1000,
+    "rubricVersion": "3.0",
+    "categories": {
+      "devHealth": 100,
+      "creativeAlignment": 100,
+      "momentum": 93,
+      "engagement": 94,
+      "processQuality": 100,
+      "crossRepoCoherence": 99,
+      "securityPosture": 97,
+      "ecosystemIntegration": 99,
+      "capitalEfficiency": 99,
+      "automationCoverage": 100
+    }
+  },
+  "completed": [
+    "Removed user-facing Vault account/membership and cross-Studio sync promises from PromoGrind auth/account surfaces.",
+    "Replaced the Vault member portal account link with PromoGrind account help.",
+    "Updated generated public HTML trust/footer copy from Free Vault membership / Studio sync to Free PromoGrind account / device sync.",
+    "Replaced the Creator Program static-page Supabase submission path with a credential-free mailto application path after staged secret scan caught an embedded JWT.",
+    "Expanded auth smoke to guard account-separation copy."
+  ],
+  "verification": [
+    "npm run smoke:auth",
+    "npm run smoke:launch",
+    "npm run build",
+    "npm test"
+  ],
+  "remainingBlockers": [
+    "Production auth email delivery still requires post-deploy confirmation/reset proof.",
+    "Real Stripe smoke purchase still requires operator completion.",
+    "Friend beta pass still requires trusted tester completion.",
+    "BetMGM, bet365, and BetRivers still require approved tracking URLs."
+  ],
+  "nextRecommendedAction": "Let GitHub Pages deploy S86, run production auth email smoke, ingest the launch-verification artifact, then complete Stripe and friend-beta proof runners."
+}

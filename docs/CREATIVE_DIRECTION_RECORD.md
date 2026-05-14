@@ -168,3 +168,12 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: perform full Studio OS closeout, refresh every affected repo-truth and memory surface, then commit and push the completed S82 state to GitHub.
 - Why it matters: the next session and deployment checks need a coherent handoff that distinguishes shipped repo work from still-external launch proofs and from live status that only turns green after deploy.
 - Supersedes prior entry: —
+### 2026-05-13 — PromoGrind account signup must be separate from Studio membership
+
+- Category: Direction
+- Human input (verbatim or close paraphrase): "We should make the promogrind create account and sign up separate from the studio membership as I cannot get the studio membership fully integrated and working across all projects yet"
+- Area affected: feature / brand / scope / account UX
+- Previous state: S85 had softened cross-Studio membership claims but still left some account/profile/static copy implying Vault account services, connected VaultSpark tools, or broad Studio sync.
+- New required direction: PromoGrind create-account/sign-up must present as a PromoGrind-only account until Studio membership is fully integrated and verified across projects. Do not prominently advertise Studio membership from account creation.
+- Why it matters: users need truthful expectations at signup, and the product should not promise a cross-project identity/membership behavior that is not working end-to-end yet.
+- Supersedes prior entry: refines the 2026-05-12 launch-hardening direction by making account/membership separation a current product truth.

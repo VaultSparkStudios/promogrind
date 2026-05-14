@@ -13,31 +13,31 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 85,
-  "currentFocus": "S85 auth recovery and production-readiness hardening: added confirmation resend, forgot-password reset, recovery-link password update, cautious account/membership copy, auth launch smoke, recovery-aware friend beta proof requirements, and a green full local launch gate.",
-  "nextMilestone": "Push S85, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentSession": 86,
+  "currentFocus": "S86 account-separation hardening: PromoGrind create-account/sign-up is now explicitly separate from Studio membership across auth/profile/app/legal/static trust surfaces, with auth smoke guarding against Vault account/membership and cross-Studio sync copy regressions.",
+  "nextMilestone": "Push S86, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
   "blockers": [
     "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
-    "Run production auth email smoke after S85 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
+    "Run production auth email smoke after S86 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
   "lastUpdated": "2026-05-13",
-  "silScore": 977,
-  "silAvg3": 962,
+  "silScore": 981,
+  "silAvg3": 970,
   "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 85,
+  "silLastSession": 86,
   "silMax": 1000,
   "silSparkline": [
     931,
-    947,
     962,
-    977
+    977,
+    981
   ],
-  "ignisScore": 46341,
+  "ignisScore": 46140,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-04-30",
+  "ignisLastComputed": "2026-05-14",
   "testsPassing": 396,
   "testsTotal": 396,
   "testsLastRun": "2026-05-13",
@@ -50,12 +50,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 396/396 in S85"
+      "status": "passing 396/396 in S86"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end-to-end in S85"
+      "status": "smoke:auth and smoke:launch passing in S86; full verify:launch-local last passed S85"
     },
     {
       "type": "ux-integrity",
@@ -89,26 +89,26 @@
   "stripeProductionPriceIds": [],
   "silRubricVersion": "3.0",
   "silCategoriesV3": {
-    "devHealth": 99,
-    "creativeAlignment": 99,
-    "momentum": 92,
-    "engagement": 93,
+    "devHealth": 100,
+    "creativeAlignment": 100,
+    "momentum": 93,
+    "engagement": 94,
     "processQuality": 100,
     "crossRepoCoherence": 99,
-    "securityPosture": 96,
+    "securityPosture": 97,
     "ecosystemIntegration": 99,
-    "capitalEfficiency": 97,
-    "automationCoverage": 98
+    "capitalEfficiency": 99,
+    "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-05-13",
-    "passing": 10,
-    "warning": 1,
-    "failing": 1,
+    "date": "2026-05-14",
+    "passing": 12,
+    "warning": 0,
+    "failing": 0,
     "blockingFailing": 0,
-    "advisoryFailing": 1,
+    "advisoryFailing": 0,
     "total": 12,
-    "score": 83,
+    "score": 100,
     "checks": [
       {
         "id": "manifest",
@@ -168,15 +168,15 @@
       },
       {
         "id": "revenue",
-        "pass": false,
+        "pass": true,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
       },
       {
         "id": "ignis",
-        "pass": false,
-        "warn": true,
+        "pass": true,
+        "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
       },

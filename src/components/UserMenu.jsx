@@ -13,7 +13,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { signOut, startCheckout, manageBilling, getTierName, redeemBetaCode, saveSharedDisplayName } from '../auth.js';
 import { K, font, fontD } from '../lib/shared.js';
 import { FX } from '../contexts.jsx';
-import { getProjectAuthHref, VAULT_ACCOUNT_PORTAL_URL } from '../launchState.js';
+import { getProjectAuthHref } from '../launchState.js';
 
 // ── Avatar catalogue ──────────────────────────────────────────────────────────
 
@@ -682,7 +682,7 @@ export default function UserMenu({
             </button>
 
             <div style={{ display: 'flex', justifyContent: 'center', gap: 18 }}>
-              {[['Vault account', VAULT_ACCOUNT_PORTAL_URL], ['Compliance', '/compliance/'], ['Privacy', '/privacy/']].map(([label, href]) => (
+              {[['Account help', 'mailto:support@vaultsparkstudios.com?subject=PromoGrind%20account%20help'], ['Compliance', '/compliance/'], ['Privacy', '/privacy/']].map(([label, href]) => (
                 <a
                   key={label}
                   href={href}

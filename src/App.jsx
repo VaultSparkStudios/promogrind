@@ -2030,7 +2030,7 @@ function MemberWelcomeCard({ navigate, proStatus }) {
           <div style={{fontSize:11,color:K.ac,fontWeight:700,letterSpacing:'1.4px',textTransform:'uppercase',marginBottom:6}}>Member Welcome</div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:6}}>How access works in PromoGrind</div>
           <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:760}}>
-            A Free PromoGrind account powers sync, referrals, and access across devices. Connected VaultSpark access will appear only where it is enabled. Pro features unlock in stages as services come online.
+            A Free PromoGrind account powers sync, referrals, and access across devices. Studio membership is separate and is not required to create or use a PromoGrind account. Pro features unlock in stages as services come online.
           </div>
         </div>
         <button onClick={dismiss} style={{background:'none',border:'none',color:K.mt,cursor:'pointer',fontSize:18,lineHeight:1,padding:0}}>Ã—</button>

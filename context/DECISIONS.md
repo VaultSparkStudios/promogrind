@@ -302,3 +302,13 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Context: `node scripts/scan-secrets.mjs --staged` and `node scripts/closeout-autopilot.mjs --help` timed out on the large generated IGNIS closeout diff, and `git push origin main` left an orphaned push process. Equivalent scanner coverage over every staged touched directory (`context`, `docs`, `public`, `ignis/output`, `audits`, `logs`) returned 0 findings, strict public-repo sanitization returned 0 critical / 0 warning, and doctor returned 12/12.
 - Decision: use `git push --no-verify origin main` for this S80 closeout after logging the reason, because the blocking issue is hook/runtime behavior rather than a security finding.
 - Why: the safety intent of the hook was satisfied by clean targeted scans, and leaving the repo unpushed would preserve drift after the requested closeout.
+## 2026-05-13 — Session 86
+
+### Decision: PromoGrind account creation is separate from Studio membership until the shared membership layer is proven
+
+- Status: accepted
+- Context: the founder said PromoGrind create account/sign-up should be separate from Studio membership because the Studio membership integration is not fully working across projects yet.
+- Decision: treat PromoGrind account creation as a PromoGrind-only account surface. User-facing auth/profile/legal/static copy must not imply a Vault account, Studio membership, cross-Studio sync, or connected Studio-tool reuse until that behavior is implemented and verified.
+- Alternatives considered: keep the softer S85 copy that said connected VaultSpark access would appear where enabled; continue linking account management to the Vault member portal; leave generated SEO pages with the older "Free Vault membership" trust strip.
+- Why this was chosen: truthful signup expectations matter more than future integration ambition. Users should understand exactly what they are creating now, and launch copy should not promise a cross-project membership that the operator already knows is not fully integrated.
+- Follow-up: when Studio membership is ready across projects, add a proof runner and update copy only after end-to-end account reuse is verified.

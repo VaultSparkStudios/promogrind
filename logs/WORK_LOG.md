@@ -10,6 +10,15 @@ Append chronological entries.
 - Risks created or removed:
 - Recommended next move:
 
+### 2026-05-13 - Session 86 PromoGrind account/signup separation
+
+- Goal: Make PromoGrind create-account/sign-up separate from Studio membership, because Studio membership is not fully integrated across all projects yet, then close out and push.
+- What changed: Removed remaining user-facing Vault account/membership and cross-Studio sync claims from auth, profile/account help, app footer/member welcome, Terms, Privacy, Data Policy, and generated static public trust/footer copy. Removed the Vault member portal account link and the unused `VAULT_ACCOUNT_PORTAL_URL` export. Expanded auth launch smoke so account surfaces fail if Vault account/membership or cross-Studio claims return. Replaced the Creator Program's browser-embedded Supabase JWT submission path with a credential-free mailto application path after staged secret scan caught it.
+- Files or systems touched: `src/components/AuthDialog.jsx`, `src/components/UserMenu.jsx`, `src/components/ProfilePanel.jsx`, `src/App.jsx`, `src/app/appText.js`, `src/auth.js`, `src/launchState.js`, `scripts/validate-auth-launch-smoke.mjs`, public HTML trust/legal pages, and closeout truth surfaces.
+- Verification: `npm run smoke:auth`, `npm run smoke:launch`, `npm run build`, and `npm test` all passed; test suite remains 396/396.
+- Risks created or removed: REMOVED — misleading signup expectation that a PromoGrind account was also a working Studio membership or cross-Studio account; removed one public static-page Supabase JWT exposure from the staged diff. REMAINING — production auth email delivery still needs live post-deploy evidence, plus Stripe/friend-beta/affiliate proof blockers.
+- Recommended next move: Push/deploy S86, run production auth email smoke, ingest the launch-verification artifact, then complete `npm run beta:check -- --record` and `npm run smoke:stripe -- --record` when operator/tester are ready.
+
 ### 2026-05-08 - Session 83 cold-load deep-link crash fix (React #310 hook order)
 
 - Goal: Triage and fix the founder-reported cold-load dashboard crash that required a manual refresh on first hit; close out and push.

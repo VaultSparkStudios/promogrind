@@ -2,19 +2,22 @@
 
 ## Now
 
-- production auth email smoke after S85 deploy — create a real account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
+- production auth email smoke after S86 deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
 - finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers` — operator confirmed S81 they have applied for everything they can; remaining gap is partner-side approval, not a repo task
 
 ## Next
 
-- rerun/inspect the GitHub Pages workflow after S85 auth hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
+- rerun/inspect the GitHub Pages workflow after S86 auth/account-copy hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
 - continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos/`useProfitNotifications` (App.jsx is still ~4300 lines)
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- separate PromoGrind account/signup from Studio membership (S86) — **DONE S86**: removed remaining user-facing Vault account/membership and cross-Studio sync promises from auth/profile/app/legal/static trust surfaces, replaced the Vault member portal link with PromoGrind account help, deleted the unused portal constant, and hardened `npm run smoke:auth` to prevent regressions.
+- verify S86 account-separation gate (S86) — **DONE S86**: `npm run smoke:auth`, `npm run smoke:launch`, `npm run build`, and `npm test` all passed; test suite remains 396/396.
 
 - fix and harden PromoGrind account recovery (S85) — **DONE S85**: added confirmation-email resend, forgot-password reset email, recovery-link password update, broader Supabase hash-session handling, and regression coverage for redirects/recovery.
 - make account/membership copy more truthful (S85) — **DONE S85**: reduced over-prominent cross-Studio/Vault membership claims in the auth modal, app shell, landing page, and README; copy now promises PromoGrind sync/access and says connected VaultSpark access appears only where enabled.

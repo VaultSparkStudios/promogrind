@@ -594,3 +594,31 @@ Rolling avg (last 3): Dev 94.7 | Align 96.3 | Momentum 79.3 | Engage 92.7 | Proc
 1. Gate or disable PostHog remote-config/feature-flag calls until production credentials and endpoints are fully valid, so launch consoles stay signal-rich.
 2. Keep splitting `src/App.jsx` by route-level seams now that landing/app entry behavior is clearly separated.
 3. Add a tiny browser smoke that asserts `/` renders landing copy while `/dashboard` renders the app shell, so this routing truth does not regress.
+## 2026-05-13 — Session 86 | Total: 981/1000 | Velocity: 4 | Debt: down
+Rolling avg (last 3): Dev 99.3 | Align 99.0 | Momentum 91.7 | Engage 93.3 | Process 99.7 | Coher 99.0 | Sec 96.7 | Eco 99.0 | Cap 97.7 | Auto 99.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 100 | ↑ | Account/signup copy separation touched many generated public pages plus auth/profile surfaces; `npm test` remains 396/396, build and launch/auth smokes pass. |
+| Creative Alignment | 100 | ↑ | Founder direction is now explicit in product copy: PromoGrind account creation is standalone until Studio membership is truly integrated across projects. |
+| Momentum | 93 | ↑ | Follow-up was scoped but broad enough to clear the lingering account/membership ambiguity across app, legal, and public trust surfaces. |
+| Engagement | 94 | ↑ | Signup friction is lower because users are no longer asked to infer whether they are joining a broader Studio membership. |
+| Process Quality | 100 | → | Closeout surfaces updated after verification; account-separation assertions were added to the auth smoke gate. |
+| Cross-Repo Coherence | 99 | → | This deliberately avoids pretending cross-project Studio membership works before the shared integration is ready. |
+| Security Posture | 97 | ↑ | Removed misleading shared-account/portal assumptions and kept account help in a controlled support path; no secrets introduced. |
+| Ecosystem Integration | 99 | → | PromoGrind stays compatible with future Studio membership but no longer advertises it as live account behavior. |
+| Capital Efficiency | 99 | ↑ | Mechanical generated-page cleanup removed repeated drift in one pass without adding runtime complexity. |
+| Automation Coverage | 100 | ↑ | `npm run smoke:auth` now blocks reintroduction of Vault account/membership and cross-Studio sync claims on account surfaces. |
+| **Total** | **981 / 1000** | | |
+
+**Top win:** S86 made the founder's product boundary real in the UI and docs: PromoGrind sign-up is a PromoGrind account, not a Studio membership promise.
+
+**Top gap:** production email delivery still needs live evidence after deploy; local tests and smoke checks prove UI/client behavior, not Supabase/SMTP delivery.
+
+**Intent outcome:** Achieved. Account/signup separation shipped locally, verification is green, and closeout truth points to the remaining deploy/manual proof steps.
+
+**Brainstorm**
+
+1. Add a production-safe auth-email proof runner that records timestamps/status only, without storing email contents.
+2. Add a future Studio membership integration proof runner once the shared identity layer is actually ready across projects.
+3. Extract `AuthDialog`/member welcome copy into a dedicated account-access module so product/account language has one source.

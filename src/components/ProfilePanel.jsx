@@ -2,7 +2,6 @@ import React, { useMemo, useContext } from "react";
 import { signOut, startCheckout, getTierName } from "../auth.js";
 import { K, font, fontD } from "../lib/shared.js";
 import { FX, AppDataCtx } from "../contexts.jsx";
-import { VAULT_ACCOUNT_PORTAL_URL } from "../launchState.js";
 import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
 import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
 
@@ -269,11 +268,10 @@ export default function ProfilePanel({
           )}
 
           <a
-            href={VAULT_ACCOUNT_PORTAL_URL}
-            target="_blank" rel="noopener noreferrer"
+            href="mailto:support@vaultsparkstudios.com?subject=PromoGrind%20account%20help"
             style={{ display: 'block', marginTop: 10, fontSize: 10, color: K.ac, textDecoration: 'none' }}
           >
-            Manage account on VaultSpark →
+            PromoGrind account help →
           </a>
         </div>
 

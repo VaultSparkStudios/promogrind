@@ -1,30 +1,30 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-04-28 (Session 79 closeout) -->
+<!-- generated-at: 2026-05-14 (Session 86 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S79 ═════════════════════════╗
-║  Date: 2026-04-28  ·  SIL: 919/1000  ·  Velocity: 4 down         ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · PromoGrind · S86 ═════════════════════════╗
+║  Date: 2026-05-14  ·  SIL: 981/1000  ·  Velocity: 5 down         ║
+║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ PromoGrind now has stronger launch-proof execution guidance:  ║
-║  ✓ Scanner/community workflow reconciliation is safer: generate  ║
-║  ✓ Observability is deeper: activation-funnel completion and re  ║
-║  ✓ `src/App.jsx` is slightly lighter: the `Community Promos` ta  ║
-║  ✓ Verification completed: targeted regression run `66/66` pass  ║
+║  ✓ Separated PromoGrind account creation from Studio membership  ║
+║  ✓ Removed the user-facing Vault account portal path from profi  ║
+║  ✓ Removed the unused `VAULT_ACCOUNT_PORTAL_URL` export after d  ║
+║  ✓ Updated `src/auth.js` comments/log prefixes from shared Vaul  ║
+║  ✓ Expanded `scripts/validate-auth-launch-smoke.mjs` so auth/ac  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 919/1000 ═══════════════════════════════════════╗
-║    Dev Health         95   ██████████                            ║
-║    Alignment          97   ██████████                            ║
-║    Momentum           78   ████████░░                            ║
-║    Engagement         93   █████████░                            ║
-║    Process Qual       98   ██████████                            ║
-║    Coherence          90   █████████░                            ║
-║    Security           85   █████████░                            ║
-║    Ecosystem          92   █████████░                            ║
-║    Capital            91   █████████░                            ║
+╔══ SCORES · SIL 981/1000 ═══════════════════════════════════════╗
+║    Dev Health         100  ██████████                            ║
+║    Alignment          100  ██████████                            ║
+║    Momentum           93   █████████░                            ║
+║    Engagement         94   █████████░                            ║
+║    Process Qual       100  ██████████                            ║
+║    Coherence          99   ██████████                            ║
+║    Security           97   ██████████                            ║
+║    Ecosystem          99   ██████████                            ║
+║    Capital            99   ██████████                            ║
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
@@ -39,22 +39,22 @@
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 33 files  ·  M:28 A:0 D:0 ?:5                          ║
+║  Changes: 157 files  ·  M:156 A:1 D:0 ?:0                        ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         66/66                                            ║
-║  IGNIS:         6d ago                                           ║
-║  Truth:         yellow                                           ║
+║  Tests:         396/396                                          ║
+║  IGNIS:         0d ago                                           ║
+║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  #1: Run ops.mjs doctor — full studio health check before plann  ║
-║      One command runs all validators. Use at session start to c  ║
-║      ↳ node scripts/ops.mjs doctor                               ║
+║  #1: IGNIS re-score overdue (7d stale)                           ║
+║      Portfolio intelligence scores degrade with age. Re-score b  ║
+║      ↳ npx tsx cli.ts score <project-path>                       ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 

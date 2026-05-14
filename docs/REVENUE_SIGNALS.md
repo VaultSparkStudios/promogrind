@@ -5,7 +5,7 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ---
 
-## 2026-04-28 — Revenue Readiness Assessment
+## 2026-05-14 — Revenue Readiness Assessment
 
 ### Pipeline Summary
 
@@ -17,11 +17,11 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 | Project | Readiness | Stage | Lifecycle | Audience | Medium | Health | Next Milestone |
 |---|---:|---|---|---|---|---|---|
-| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Replace real affiliate links for BetMGM/bet365/Be... |
+| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Push S86, let GitHub Pages deploy, run real produ... |
 
 ### Revenue-Ready Projects (score 7+)
 
-- **PromoGrind** (7/10) — S79 launch-hardening refinement - launch proof guidance, deterministic scanner/community workflow reconciliation, activation/launch-link observability, community-promos route extraction, and green targeted/build/smoke gates.
+- **PromoGrind** (7/10) — S86 account-separation hardening: PromoGrind create-account/sign-up is now explicitly separate from Studio membership across auth/profile/app/legal/static trust surfaces, with auth smoke guarding against Vault account/membership and cross-Studio sync copy regressions.
 
 ### Pre-Revenue Pipeline (score 4-6)
 
@@ -43,4 +43,4 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ---
 
-*Generated: 2026-04-28 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*
+*Generated: 2026-05-14 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*

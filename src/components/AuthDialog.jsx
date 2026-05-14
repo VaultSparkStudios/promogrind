@@ -273,7 +273,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   style={inputStyle}
                 />
                 <span style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>
-                  This name appears inside PromoGrind and can be reused by connected VaultSpark tools when they are enabled.
+                  This name appears inside PromoGrind.
                 </span>
               </label>
             )}
@@ -406,7 +406,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
           </div>
 
           <div style={{ marginTop: 10, fontSize: 10, color: K.mt, lineHeight: 1.6, textAlign: "center" }}>
-            Account support and billing use PromoGrind's VaultSpark-backed account services.
+            This creates a PromoGrind account only. Studio membership is separate and not required.
           </div>
         </form>
       </div>

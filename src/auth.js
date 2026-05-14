@@ -1,8 +1,8 @@
 /**
- * PromoGrind — shared Vault identity auth
+ * PromoGrind — account auth
  *
- * Connects to the shared VaultSpark Supabase project.
- * Any Vault-gated tool follows the same three-step pattern:
+ * Connects to the PromoGrind Supabase auth project.
+ * The app follows the same three-step pattern:
  *
  *   1. Copy this file into the tool's src/
  *   2. Add VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY to .env
@@ -17,12 +17,12 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { trackEvent } from './analytics.js';
-import { CANONICAL_APP_URL, getProjectAuthHref, VAULT_ACCOUNT_PORTAL_URL } from './launchState.js';
+import { CANONICAL_APP_URL, getProjectAuthHref } from './launchState.js';
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.error('[VaultGate] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env');
+  console.error('[PromoGrindAuth] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env');
 }
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -77,7 +77,7 @@ async function applySessionFromHash({ redirectOnError = false } = {}) {
   const { error } = await supabase.auth.setSession({ access_token, refresh_token });
   history.replaceState(null, '', window.location.pathname + window.location.search);
   if (error) {
-    console.error('[VaultGate] setSession error:', error.message);
+    console.error('[PromoGrindAuth] setSession error:', error.message);
     if (redirectOnError) redirectToLogin();
     return false;
   }
@@ -88,7 +88,7 @@ async function applySessionFromHash({ redirectOnError = false } = {}) {
  * Call once on app startup.
  *
  * Handles two cases:
- *   A) Post-redirect from the shared Vault account layer: tokens are in the URL hash.
+ *   A) Post-redirect from a PromoGrind auth email or recovery link: tokens are in the URL hash.
  *      We call setSession(), store them locally, strip the hash.
  *   B) Returning visit: session already in localStorage — nothing to do.
  *

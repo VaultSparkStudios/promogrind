@@ -53,8 +53,17 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
-- Production auth email delivery is unproven until S85 deploys and a real confirmation/reset email pass is recorded.
+- Production auth email delivery is unproven until S86 deploys and a real confirmation/reset email pass is recorded.
 - Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+
+## Resolved This Session (S86)
+
+- PromoGrind create-account/sign-up copy is now explicitly separate from Studio membership across auth modal, member welcome, footer access, profile/account help, Terms, Privacy, Data Policy, and generated static public trust copy.
+- Removed the user-facing Vault member portal link from account/profile surfaces and deleted the now-unused `VAULT_ACCOUNT_PORTAL_URL` export.
+- Removed a staged secret-scan finding by replacing the static Creator Program's browser-embedded Supabase JWT submission path with a credential-free mailto application path.
+- Updated `src/auth.js` comments/log prefixes to describe PromoGrind account auth instead of shared Vault identity auth.
+- Expanded `npm run smoke:auth` so Vault account/membership, cross-Studio sync, and connected-VaultSpark-tool claims cannot return on account-facing surfaces.
+- Verified `npm run smoke:auth`, `npm run smoke:launch`, `npm run build`, and `npm test` (396/396) after the account-copy split.
 
 ## Resolved This Session (S85)
 

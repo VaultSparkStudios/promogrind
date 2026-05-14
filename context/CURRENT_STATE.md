@@ -1,11 +1,11 @@
 # Current State
 
-Last updated: 2026-05-13 (S85)
+Last updated: 2026-05-13 (S86)
 
 ## Snapshot
 
 - Date: 2026-05-13
-- Overall status: deployed product with repo-owned auth/recovery hardening complete and local launch gate green. S85 added confirmation-email resend, forgot-password reset, recovery-link password update support, cautious account/membership copy, deterministic auth launch smoke (`npm run smoke:auth`), and proof-runner/checklist updates so friend beta must verify account recovery. Local launch gate passed end-to-end (`npm run verify:launch-local`: 396/396 tests, hook-order guard, auth smoke, launch smoke, UX route integrity, browser smoke, bundle budget, strict public-repo sanitization). Production host remains GitHub Pages (Cloudflare is DNS-only proxy).
+- Overall status: deployed product with repo-owned auth/recovery hardening complete, PromoGrind account/signup now explicitly separated from Studio membership, and local launch checks green. S85 added confirmation-email resend, forgot-password reset, recovery-link password update support, deterministic auth launch smoke (`npm run smoke:auth`), and proof-runner/checklist updates so friend beta must verify account recovery. S86 removed remaining user-facing Vault/Studio membership coupling from account surfaces and generated public trust copy. Local checks in S86 passed: `npm run smoke:auth`, `npm run smoke:launch`, `npm run build`, and `npm test` (396/396). Production host remains GitHub Pages (Cloudflare is DNS-only proxy).
 - Current phase: public-unveil launch hardening with external blocker cleanup
 - Canonical launch proof surface: `context/LAUNCH_PROOFS.json`
 
@@ -14,8 +14,9 @@ Last updated: 2026-05-13 (S85)
 - Live product: `https://promogrind.bet` with 53 calculators, tracker, workflow surfaces, community board, daily brief, AI advisor/chat/action plan, subscriptions, launch/admin tooling, and production-queryable workflow/entity sync tables
 - Public entry routing: `/` now serves the landing experience first, while the app shell is reached intentionally via `/dashboard` and explicit app/signup CTAs
 - Launch validation: `npm run verify:launch-local` runs unit/component tests, hook-order guard, auth launch smoke, launch smoke, UX route integrity, browser smoke, bundle budget, and strict public-repo sanitization; last run on 2026-05-13 passed end-to-end with 396/396 tests
-- Auth/account recovery (S85): `AuthDialog` now exposes resend confirmation email, forgot-password reset email, and recovery-link password update flows; `src/auth.js` accepts Supabase recovery/signup/magic-link hash sessions and sets explicit confirmation/reset redirects
-- Static public-page credential hygiene (S85): `public/the-grind/` no longer embeds a Supabase JWT in browser HTML; the newsletter action now uses a credential-free support mailto path until a proper public-safe capture endpoint is available
+- Auth/account recovery (S85/S86): `AuthDialog` now exposes resend confirmation email, forgot-password reset email, and recovery-link password update flows; `src/auth.js` accepts Supabase recovery/signup/magic-link hash sessions and sets explicit confirmation/reset redirects; S86 copy now states that creating a PromoGrind account does not create or require Studio membership
+- Account/membership separation (S86): PromoGrind account surfaces, profile/account help links, terms/privacy/data-policy pages, and generated public trust strips now use PromoGrind account language instead of Vault account/membership or cross-Studio sync promises
+- Static public-page credential hygiene (S85/S86): `public/the-grind/` and `public/creator-program/` no longer embed Supabase JWTs in browser HTML; both use credential-free mailto paths until proper public-safe capture endpoints are available
 - Production dashboard smoke (S82): `npm run smoke:production-dashboard` launches a Chromium-family browser via Chrome DevTools Protocol and captures runtime exceptions / console errors against `https://promogrind.bet/dashboard`
 - Launch posture command (S82): `npm run launch:status` orchestrates the local launch gate, production dashboard smoke, post-deploy artifact ingestion, and manual proof guide; `--fast` can print proof-only status without expensive checks
 - UX route integrity: `scripts/validate-ux-route-integrity.mjs` checks 60 app routes, 98 public HTML files, required public pages, internal links, responsible-gambling copy, and free-account launch copy
@@ -34,7 +35,7 @@ Last updated: 2026-05-13 (S85)
 
 ## In progress
 
-- Active work: deploy S85 auth/recovery hardening and run a real production auth email pass: create account, confirmation delivery/resend, forgot-password email, recovery link to `?auth=update-password`, new-password sign-in
+- Active work: deploy S86 account-separation/auth-copy hardening and run a real production auth email pass: create account, confirmation delivery/resend, forgot-password email, recovery link to `?auth=update-password`, new-password sign-in
 - Active work: inspect the next GitHub Pages launch-verification artifact after this push and confirm production dashboard/auth surfaces are clean
 - Active work: finishing monetization coverage for sportsbook CTAs with real approved affiliate/referral links
 - Active work: completing one live Stripe smoke purchase and one friend-facing auth/calculator/pricing pass before public announcement
@@ -51,6 +52,6 @@ Last updated: 2026-05-13 (S85)
 
 ## Next 3 moves
 
-1. Push S85 to `main`, let GitHub Pages deploy, then run production auth email checks and `npm run ingest:launch`.
+1. Push S86 to `main`, let GitHub Pages deploy, then run production auth email checks and `npm run ingest:launch`.
 2. Complete `npm run beta:check -- --record` with the updated recovery-aware friend beta checklist and `npm run smoke:stripe -- --record` with one real checkout.
 3. Finish CTA monetization truth by adding real `BetMGM`, `bet365`, and `BetRivers` tracking links, using `node scripts/update-launch-proof.mjs --list --guide` for evidence requirements.

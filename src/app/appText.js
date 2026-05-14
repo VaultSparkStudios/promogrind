@@ -37,7 +37,7 @@ export const APP_CHROME_COPY = {
   footerAffiliate:
     "Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.",
   footerAccess:
-    "PromoGrind uses free accounts for login and sync. Connected VaultSpark access will appear only where it is enabled.",
+    "PromoGrind accounts are separate from Studio membership and are used here for login and sync.",
   footerDisclaimer:
     "Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call 1-800-GAMBLER.",
   footerLegal:

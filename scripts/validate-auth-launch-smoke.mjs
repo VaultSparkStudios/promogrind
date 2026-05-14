@@ -22,8 +22,13 @@ const dialog = read("src/components/AuthDialog.jsx");
 const app = read("src/App.jsx");
 const launchState = read("src/launchState.js");
 const appText = read("src/app/appText.js");
+const userMenu = read("src/components/UserMenu.jsx");
+const profilePanel = read("src/components/ProfilePanel.jsx");
 const landing = read("public/landing/index.html");
 const readme = read("README.md");
+const terms = read("public/terms/index.html");
+const privacy = read("public/privacy/index.html");
+const dataPolicy = read("public/data-policy/index.html");
 const proofs = JSON.parse(read("context/LAUNCH_PROOFS.json"));
 
 [
@@ -55,14 +60,42 @@ assertIncludes(launchState, '"update-password"', "update-password auth query mod
 
 [
   appText,
+  dialog,
+  app,
+  userMenu,
+  profilePanel,
   landing,
   readme,
+  terms,
+  privacy,
+  dataPolicy,
 ].forEach((text, index) => {
-  const surface = ["src/app/appText.js", "public/landing/index.html", "README.md"][index];
+  const surface = [
+    "src/app/appText.js",
+    "src/components/AuthDialog.jsx",
+    "src/App.jsx",
+    "src/components/UserMenu.jsx",
+    "src/components/ProfilePanel.jsx",
+    "public/landing/index.html",
+    "README.md",
+    "public/terms/index.html",
+    "public/privacy/index.html",
+    "public/data-policy/index.html",
+  ][index];
   assertNotIncludes(text, "The same account works across all VaultSpark Studio tools", `${surface} overpromised cross-Studio account copy`, errors);
   assertNotIncludes(text, "sync across Studio tools", `${surface} Studio-tools sync promise`, errors);
   assertNotIncludes(text, "sync across Studio projects", `${surface} Studio-projects sync promise`, errors);
+  assertNotIncludes(text, "Free Vault membership", `${surface} Vault membership claim`, errors);
+  assertNotIncludes(text, "free Vault membership", `${surface} Vault membership claim`, errors);
+  assertNotIncludes(text, "free Vault account", `${surface} Vault account claim`, errors);
+  assertNotIncludes(text, "Vault account", `${surface} Vault account label`, errors);
+  assertNotIncludes(text, "VaultSpark-backed account", `${surface} VaultSpark-backed account claim`, errors);
+  assertNotIncludes(text, "connected VaultSpark tools", `${surface} connected VaultSpark tools claim`, errors);
 });
+
+assertIncludes(dialog, "This creates a PromoGrind account only. Studio membership is separate and not required.", "explicit PromoGrind-only signup copy", errors);
+assertIncludes(appText, "PromoGrind accounts are separate from Studio membership", "footer account separation copy", errors);
+assertIncludes(app, "Studio membership is separate and is not required to create or use a PromoGrind account.", "member welcome separation copy", errors);
 
 const friendEvidence = proofs?.proofs?.friendBeta?.evidenceRequired || [];
 for (const required of [
