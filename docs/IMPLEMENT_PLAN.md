@@ -1,18 +1,28 @@
-# Implement Plan — PromoGrind Audit 2026-05-17
+<!-- generated-by: /implement skill v1.0 (S89) -->
+<!-- generated-at: 2026-05-17 -->
 
-Source: `docs/AUDIT_2026-05-17.md`
+# Implementation Plan — PromoGrind S89
 
-## Sequence
+> Optimal-efficiency sequencing of `docs/AUDIT_2026-05-17.md`.
+> Sequence ≠ raw priority — grouped by surface, foundation-first, token-cost last.
 
-1. `public-dist-exposure-gate` — foundational release/security gate before adding more browser surfaces.
-2. `self-serve-data-controls` — trust/control UI and helper tests.
-3. `operator-season-rail` — engagement loop built on existing mission/discipline data.
-4. `friend-beta-feedback-summary` — manual proof evidence becomes durable feedback signal.
-5. `ai-cost-contract-in-launch-gate` — launch command renders AI ledger after code changes settle.
+| Seq | Slug | Tier | Surface | Effort | Priority |
+|----:|------|:-:|---|---|:-:|
+| 1 | anti-tilt-circuit-breaker | 🔥 | dashboard/lib | 2h | 45.0 |
+| 2 | causal-promo-explainer | 🔥 | recommender | 2h | 32.0 |
+| 3 | edge-decay-radar | 🔥 | recommender/lib | 4h | 31.3 |
+| 4 | operator-twin | 🔥 | dashboard/ai | 4h | 38.7 |
+| 5 | adversarial-receipt-replay | 🔥 | profile/lib | 2h | 40.5 |
+| 6 | public-passport | ⚡ | profile/lib | 4h | 31.0 |
+| 7 | launch-proof-resilience-replay | ⚡ | scripts | 4h | 21.7 |
+| 8 | calculator-pre-warm | ⚡ | app/routing | 2h | 21.0 |
+| 9 | app-jsx-decomposition-finale | 💡 | app shell | 4h | 10.8 |
+| 10 | token-budget-self-binding | ⚡ | ai gateway | 1h | 30.9 |
+
+**Rationale:** items 1-4 share dashboard/recommender surface; 5-6 share Profile; 7 hardens launch gate before infra; 10 last to measure token impact.
 
 ## Verification
 
-- Focused Vitest files for new helpers.
-- `node scripts/check-public-dist-exposure.mjs` after build output exists.
-- `npm test` and `npm run build` when implementation is complete.
-
+- Per-item Vitest where applicable
+- `npm test` after each batch
+- `npm run verify:launch-local` at end

@@ -157,3 +157,42 @@ export async function streamProjectFunction(functionName, {
 export function hasStreamingGateway() {
   return Boolean(SUPABASE_URL);
 }
+
+const WEEKLY_BUDGET_USD = Number.parseFloat(import.meta.env.VITE_AI_WEEKLY_BUDGET_USD ?? "5") || 5;
+const SPEND_LEDGER_KEY = "pg_ai_spend_ledger";
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+function readSpendLedger() {
+  return readJsonCache(SPEND_LEDGER_KEY, []);
+}
+
+function writeSpendLedger(entries) {
+  const trimmed = entries.slice(-200);
+  writeJsonCache(SPEND_LEDGER_KEY, trimmed);
+}
+
+export function recordAiSpend(usd, opts = {}) {
+  if (!Number.isFinite(usd) || usd <= 0) return;
+  const entries = readSpendLedger();
+  entries.push({ at: opts.now instanceof Date ? opts.now.getTime() : Date.now(), usd });
+  writeSpendLedger(entries);
+}
+
+export function getBudgetState(opts = {}) {
+  const now = opts.now instanceof Date ? opts.now.getTime() : Number.isFinite(opts.now) ? opts.now : Date.now();
+  const cutoff = now - WEEK_MS;
+  const ledger = Array.isArray(opts.ledger) ? opts.ledger : readSpendLedger();
+  const window = ledger.filter((e) => Number(e?.at) >= cutoff);
+  const spent = window.reduce((sum, e) => sum + (Number(e?.usd) || 0), 0);
+  const budget = Number.isFinite(opts.budgetUsd) ? opts.budgetUsd : WEEKLY_BUDGET_USD;
+  const pct = budget > 0 ? Math.min(1, spent / budget) : 0;
+  const overBudget = spent >= budget;
+  return {
+    spent: Math.round(spent * 100) / 100,
+    budget,
+    pct: Math.round(pct * 100),
+    overBudget,
+    runningLean: overBudget,
+    badge: overBudget ? "running lean" : `$${spent.toFixed(2)} / $${budget.toFixed(2)} weekly`,
+  };
+}

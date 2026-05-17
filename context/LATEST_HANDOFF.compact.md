@@ -40,15 +40,3 @@ Intent Outcome: Achieved for repo-controllable work. S88 shipped a ranked audit 
 - Continue the remaining product roadmap from prior audits: promo-passport onboarding, rule-first AI routing depth, and route/app-shell decomposition.
 
 ## What to do next
-
-1. Push/deploy S88, then run production auth email checks and `npm run ingest:launch`.
-2. Complete `npm run beta:check -- --record` with a trusted tester and review `docs/BETA_FEEDBACK.md`.
-3. Complete `npm run smoke:stripe -- --record` with one real checkout when operator is ready.
-4. Add approved BetMGM/bet365/BetRivers tracking URLs when partner approvals arrive, then rerun `npm run verify:production`.
-5. Continue the next roadmap tranche with promo-passport onboarding or rule-first AI routing.
-
-## Constraints
-
-- Do not fabricate sportsbook affiliate links, Stripe evidence, friend-beta evidence, or production email-delivery evidence.
-- PromoGrind account creation is intentionally separate from Studio membership until the Studio membership layer is fully integrated across projects.
-- Public repo remains proprietary by default under CANON-008.

@@ -6,6 +6,32 @@ import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.j
 import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
 import { readTrustReceipts, summarizeTrustReceipt } from "../lib/trustReceipts.js";
 import { buildLocalDataExport, clearLocalPromoGrindData, describeDataControlState } from "../lib/dataControls.js";
+import { buildReplayInsights } from "../lib/replayLedger.js";
+
+function ReplayInsightSection() {
+  const ctx = useContext(AppDataCtx);
+  const replay = useMemo(() => buildReplayInsights(ctx?.appData || {}), [ctx?.appData]);
+  if (!replay.hasEnoughHistory) return null;
+  return (
+    <div style={{ padding: '14px 20px', borderTop: `1px solid ${K.bd}` }}>
+      <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8, fontWeight: 800 }}>
+        Replay insights (14-day lag)
+      </div>
+      {replay.insights.length === 0 && (
+        <div style={{ fontSize: 11, color: K.mt }}>Not enough closed loops in the last 14 days to surface a counterfactual.</div>
+      )}
+      {replay.insights.map((insight) => {
+        const tone = insight.tone === "watch" ? K.yl : K.gn;
+        return (
+          <div key={insight.key} style={{ marginBottom: 8, padding: "10px 12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 6 }}>
+            <div style={{ fontSize: 11, color: K.tx, fontWeight: 700, marginBottom: 3 }}>{insight.headline}</div>
+            <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{insight.detail}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 const TIER_COLOR = (name) => ({
   Scout: '#06b6d4',
@@ -438,6 +464,9 @@ export default function ProfilePanel({
 
         {/* ── Trust receipts ───────────────────────────────────────── */}
         <TrustReceiptsSection />
+
+        {/* ── Replay insights ──────────────────────────────────────── */}
+        <ReplayInsightSection />
 
         {/* ── Data controls ────────────────────────────────────────── */}
         <DataControlsSection />

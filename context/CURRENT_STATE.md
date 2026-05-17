@@ -1,11 +1,11 @@
 # Current State
 
-Last updated: 2026-05-17 (S88)
+Last updated: 2026-05-17 (S89)
 
 ## Snapshot
 
 - Date: 2026-05-17
-- Overall status: deployed product with S88 audit/implement/closeout sprint complete: added an Operator Season rail over daily missions, Profile local data export/clear controls, a public `dist/` exposure gate wired into `verify:launch-local`, friend-beta feedback summary generation, and a cleaner AI usage ledger renderer. The new dist gate caught and drove removal of the legacy public `vault-sdk.js` cross-project membership SDK/reference, preserving the S86 PromoGrind-only account boundary. S87 launch proof mirror, Operator Autopilot, trust receipts, discipline scoring, outcome-memory recommendations, and AI usage ledger remain intact. Closeout verification in S88 passed `npm run verify:launch-local` end to end with 409/409 tests. Production host remains GitHub Pages (Cloudflare is DNS-only proxy).
+- Overall status: deployed product with S89 audit/implement/closeout sprint complete — shipped 9 of 10 audit items focused on temporal intelligence, counterfactual learning, and anti-tilt safety: tilt circuit breaker, ablation-based promo explainer ("why ranked #N"), EV decay radar, operator twin drift forecast, 14-day adversarial receipt replay, HMAC-signed public operator passport, launch-proof resilience replay, calculator pre-warm, and weekly AI budget self-binding. Suite is now 430/430 (up from 409). S88 audit/implement/closeout sprint complete: added an Operator Season rail over daily missions, Profile local data export/clear controls, a public `dist/` exposure gate wired into `verify:launch-local`, friend-beta feedback summary generation, and a cleaner AI usage ledger renderer. The new dist gate caught and drove removal of the legacy public `vault-sdk.js` cross-project membership SDK/reference, preserving the S86 PromoGrind-only account boundary. S87 launch proof mirror, Operator Autopilot, trust receipts, discipline scoring, outcome-memory recommendations, and AI usage ledger remain intact. Closeout verification in S88 passed `npm run verify:launch-local` end to end with 409/409 tests. Production host remains GitHub Pages (Cloudflare is DNS-only proxy).
 - Current phase: public-unveil launch hardening with external blocker cleanup
 - Canonical launch proof surface: `context/LAUNCH_PROOFS.json`
 

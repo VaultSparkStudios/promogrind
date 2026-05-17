@@ -10,6 +10,37 @@ import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
 import PromoExpiryWidget from "./PromoExpiryWidget.jsx";
 import { appendWorkflows } from "../../workflows/store.js";
 import { getWorkflowActionSlug } from "../../workflows/actionGraph.js";
+import { computeTiltState } from "../../lib/tiltGuard.js";
+import { buildTwinForecast } from "../../ai/operatorTwin.js";
+
+function OperatorTwinCard({ forecast }) {
+  if (!forecast) return null;
+  const tone = forecast.tone === "elite" ? K.gn : forecast.tone === "watch" ? K.yl : K.ac;
+  return (
+    <div style={{ padding: "10px 12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>
+        Operator Twin · {forecast.recent}% recent / {forecast.baseline}% baseline
+      </div>
+      <div style={{ fontSize: 12, color: K.tx, fontWeight: 700, marginBottom: 2 }}>{forecast.headline}</div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>{forecast.detail}</div>
+    </div>
+  );
+}
+
+function TiltBreakerBanner({ state }) {
+  if (!state?.tripped) return null;
+  return (
+    <div style={{ padding: "10px 12px", background: `${K.yl}10`, border: `1px solid ${K.yl}55`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ fontSize: 10, color: K.yl, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>
+        Tilt circuit breaker · {state.cooldownMinutes}m
+      </div>
+      <div style={{ fontSize: 12, color: K.tx, fontWeight: 700, marginBottom: 4 }}>{state.nextAction}</div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
+        {state.signals.map((s) => s.label).join(" · ")}
+      </div>
+    </div>
+  );
+}
 
 const TONE = {
   healthy: K.gn,
@@ -145,6 +176,9 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
           </div>
         </div>
       </div>
+
+      <TiltBreakerBanner state={computeTiltState(appData)} />
+      <OperatorTwinCard forecast={buildTwinForecast(appData)} />
 
       <OperatorAutopilotCard decision={nextAction} topWorkflow={snapshot.topWorkflow} navigate={navigate} />
 

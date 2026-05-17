@@ -9,6 +9,7 @@
 
 ## Next
 
+- finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.
 - rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
 - add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
 - add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
@@ -17,6 +18,17 @@
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- anti-tilt-circuit-breaker (S89) — **DONE S89**: added `src/lib/tiltGuard.js` (rapid-fire + losing-streak + exposure detection, 30-min cooldown), banner in `TodayDashboardPanel`, 3 tests.
+- causal-promo-explainer (S89) — **DONE S89**: ablation-based `whyRanked` in `src/dashboard/today.js` + compact "Why #N" line in `SmartPromoRecommender`; zero net new AI cost.
+- edge-decay-radar (S89) — **DONE S89**: `src/lib/edgeDecay.js` deterministic decay model + sparkline embedded in `SmartPromoRecommender`; 4 tests.
+- operator-twin (S89) — **DONE S89**: `src/ai/operatorTwin.js` 28-day baseline drift forecast (rule-engine only, no AI call), `OperatorTwinCard` in `TodayDashboardPanel`; 3 tests.
+- adversarial-receipt-replay (S89) — **DONE S89**: `src/lib/replayLedger.js` 14-day-lagged counterfactual insights, `ReplayInsightSection` in `ProfilePanel`; 3 tests including no-shame invariant.
+- public-passport (S89) — **DONE S89**: `src/lib/operatorPassport.js` HMAC-SHA-256-signed zero-PII operator passport; 3 tests covering roundtrip, tamper, no-leak.
+- launch-proof-resilience-replay (S89) — **DONE S89**: `scripts/replay-launch-proofs.mjs` regression diff across last 5 artifacts, wired into `verify:launch-local`.
+- calculator-pre-warm (S89) — **DONE S89**: `src/app/calcPreWarm.js` predicts top-3 calculator routes from history and pre-warms via idle callback; device-memory gated.
+- token-budget-self-binding (S89) — **DONE S89**: `getBudgetState`/`recordAiSpend` in AI gateway with $5/week default cap; budget badge in `PromoAdvisorPanel`.
+- S89 verification: `npm test` passed 430/430 (up from 409); 21 net-new tests across 7 new modules.
 
 - add Operator Season rail over daily missions (S88) — **DONE S88**: added `src/lib/seasons.js`, surfaced a 14-day discipline season in `DailyMissionsPanel`, and added tests proving closed-loop behavior earns progress while raw open-bet volume does not.
 - add self-serve local data controls (S88) — **DONE S88**: added `src/lib/dataControls.js`, Profile export/clear-local controls, and tests for local inventory/export/clear behavior.

@@ -226,3 +226,15 @@ Append chronological entries.
 - Verification: `npm run verify:launch-local` passed end to end with 409/409 tests, AI usage render, hook-order guard, auth smoke, launch smoke, UX route integrity, browser smoke/build, public dist exposure gate, bundle budget, and strict public-repo sanitization.
 - Risks created or removed: removed a legacy cross-project membership SDK from the public build, added a hard gate against future public bundle exposure, and made local data controls visible to users. Remaining launch risks are unchanged external proof gates: production auth email delivery, real Stripe smoke, friend-beta evidence, and approved sportsbook tracking URLs.
 - Recommended next move: push/deploy S88, ingest the next launch-verification artifact, run production auth email proof, then complete `npm run beta:check -- --record` and `npm run smoke:stripe -- --record` when real tester/payment evidence is available.
+
+## Session 89 — 2026-05-17
+
+- Intent: run /start → /audit → /implement → /closeout with genius-level innovation to make PromoGrind the best operator-tool in its category in history.
+- What changed: archived prior S88 audit to `docs/AUDIT_2026-05-17-S88-shipped.md`; created a fresh S89 audit (10 items, Combined Priority 302.69) at `docs/AUDIT_2026-05-17.md`; shipped 9 of 10 items.
+- New modules: `src/lib/tiltGuard.js`, `src/lib/edgeDecay.js`, `src/lib/replayLedger.js`, `src/lib/operatorPassport.js`, `src/ai/operatorTwin.js`, `src/app/calcPreWarm.js`, `scripts/replay-launch-proofs.mjs`.
+- Modified surfaces: `src/components/dashboard/TodayDashboardPanel.jsx` (tilt breaker + twin forecast cards), `src/components/dashboard/SmartPromoRecommender.jsx` (decay sparkline + whyRanked), `src/dashboard/today.js` (ablation-based contributions/whyRanked), `src/components/ProfilePanel.jsx` (replay insights), `src/ai/gateway.js` (weekly budget API), `src/components/PromoAdvisorPanel.jsx` (budget badge), `package.json` (launch-replay gate).
+- Net test count: 409 → 430 (+21 across 7 new test files).
+- Deferred: `app-jsx-decomposition-finale` (audit-lowest priority; needs isolated session).
+- Verification: `npm test` 430/430; `npm run smoke:launch` green.
+- Risks: zero new AI-cost surfaces (operator-twin and replay ledger are rule-only); HMAC-signed passport uses Web Crypto; tilt guard requires `calcLaunchHistory` in appData — call-site instrumentation TODO. Budget meter has API in place but caller-side `recordAiSpend` hooks still TODO.
+- Next: push/deploy S89, validate replay gate against next post-deploy artifact, wire `recordAiSpend` at Advisor/Chat call sites, schedule App.jsx decomposition.

@@ -137,66 +137,63 @@ export function buildAdaptivePromoPlan({
     ? ((trackInsights.settledCount + trackInsights.skippedFeedback.length) / trackInsights.feedbackEntries.length) * 100
     : 0;
 
-  const topPromos = todayPromos
-    .map((promo) => {
-      const promoType = inferPromoTypeFromSchedule(promo);
-      const reasons = [];
-      let score = GRADE_SCORE[promo.grade] || 0;
-      const isExpiring = snapshot.expiringBooks?.some((book) => book.name === promo.book);
-      const promoIsHot = hotPromoKeys.has(promoType);
-      const bookIsHot = hotBookKeys.has(promo.book);
-      const promoIsCold = coldPromoKeys.has(promoType);
-      const bookIsCold = coldBookKeys.has(promo.book);
+  const scoredAll = todayPromos.map((promo) => {
+    const promoType = inferPromoTypeFromSchedule(promo);
+    const reasons = [];
+    const contributions = [];
+    const baseScore = GRADE_SCORE[promo.grade] || 0;
+    let score = baseScore;
+    if (baseScore) contributions.push({ key: "grade", label: `Grade ${promo.grade}`, delta: baseScore });
+    const isExpiring = snapshot.expiringBooks?.some((book) => book.name === promo.book);
+    const promoIsHot = hotPromoKeys.has(promoType);
+    const bookIsHot = hotBookKeys.has(promo.book);
+    const promoIsCold = coldPromoKeys.has(promoType);
+    const bookIsCold = coldBookKeys.has(promo.book);
 
-      if (isExpiring) {
-        score += workflowBacklog >= 3 ? 5 : 4;
-        reasons.push("expiring");
-      }
-      if (promoIsHot) {
-        score += 3;
-        reasons.push("hot lane");
-      }
-      if (bookIsHot) {
-        score += 2;
-        reasons.push("book running hot");
-      }
-      if (promoIsCold) {
-        score -= 4;
-        reasons.push("cold lane");
-      }
-      if (bookIsCold) {
-        score -= 3;
-        reasons.push("book underperforming");
-      }
-      if (limitedBooks.includes(promo.book)) {
-        score -= 4;
-        reasons.push("limit risk");
-      }
-      if (workflowBacklog >= 3 && !isExpiring) {
-        score -= 2;
-        reasons.push("backlog pressure");
-      }
-      if (workflowBacklog >= 5 && !promoIsHot && !bookIsHot) {
-        score -= 1;
-      }
-      if (feedbackCoverage < 45 && !promoIsHot && !bookIsHot) {
-        score -= 1;
-      }
-      return {
-        ...promo,
-        promoType,
-        score,
-        reasons,
-        memorySignal: buildOutcomeMemorySignal({
-          promo,
-          promoType,
-          insights: trackInsights,
-          hotLanes: heat,
-        }),
-      };
-    })
-    .sort((a, b) => b.score - a.score || (GRADE_SCORE[b.grade] || 0) - (GRADE_SCORE[a.grade] || 0))
-    .slice(0, 5);
+    if (isExpiring) {
+      const delta = workflowBacklog >= 3 ? 5 : 4;
+      score += delta; reasons.push("expiring");
+      contributions.push({ key: "expiring", label: "Expiring soon", delta });
+    }
+    if (promoIsHot) { score += 3; reasons.push("hot lane"); contributions.push({ key: "hotLane", label: "Hot lane (outcome memory)", delta: 3 }); }
+    if (bookIsHot) { score += 2; reasons.push("book running hot"); contributions.push({ key: "hotBook", label: "Book running hot", delta: 2 }); }
+    if (promoIsCold) { score -= 4; reasons.push("cold lane"); contributions.push({ key: "coldLane", label: "Cold lane drift", delta: -4 }); }
+    if (bookIsCold) { score -= 3; reasons.push("book underperforming"); contributions.push({ key: "coldBook", label: "Book underperforming", delta: -3 }); }
+    if (limitedBooks.includes(promo.book)) { score -= 4; reasons.push("limit risk"); contributions.push({ key: "limitRisk", label: "Limit/gub risk", delta: -4 }); }
+    if (workflowBacklog >= 3 && !isExpiring) { score -= 2; reasons.push("backlog pressure"); contributions.push({ key: "backlog", label: "Backlog pressure", delta: -2 }); }
+    if (workflowBacklog >= 5 && !promoIsHot && !bookIsHot) { score -= 1; contributions.push({ key: "deepBacklog", label: "Deep backlog", delta: -1 }); }
+    if (feedbackCoverage < 45 && !promoIsHot && !bookIsHot) { score -= 1; contributions.push({ key: "lowCoverage", label: "Low feedback coverage", delta: -1 }); }
+    return {
+      ...promo,
+      promoType,
+      score,
+      reasons,
+      contributions,
+      memorySignal: buildOutcomeMemorySignal({ promo, promoType, insights: trackInsights, hotLanes: heat }),
+    };
+  });
+
+  const sortedAll = scoredAll
+    .slice()
+    .sort((a, b) => b.score - a.score || (GRADE_SCORE[b.grade] || 0) - (GRADE_SCORE[a.grade] || 0));
+  const indexOf = (arr, item) => arr.findIndex((x) => x.book === item.book && x.promo === item.promo);
+
+  const topPromos = sortedAll.slice(0, 5).map((item) => {
+    const baselineRank = indexOf(sortedAll, item) + 1;
+    const whyRanked = (item.contributions || [])
+      .map((c) => {
+        const ablated = scoredAll.map((p) =>
+          p === item ? { ...p, score: p.score - c.delta } : p,
+        );
+        ablated.sort((a, b) => b.score - a.score || (GRADE_SCORE[b.grade] || 0) - (GRADE_SCORE[a.grade] || 0));
+        const newRank = indexOf(ablated, item) + 1;
+        const rankShift = newRank - baselineRank;
+        return { ...c, rankShift };
+      })
+      .sort((a, b) => Math.abs(b.rankShift) - Math.abs(a.rankShift) || Math.abs(b.delta) - Math.abs(a.delta))
+      .slice(0, 3);
+    return { ...item, baselineRank, whyRanked };
+  });
 
   const topLane = trackInsights.promoTypeRows?.find((row) => row.settled >= 2 && row.actualProfit > 0) || null;
   const coldLane = (trackInsights.topDriftAlerts || []).find((alert) => alert.direction === "negative") || null;

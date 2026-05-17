@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
-import { buildCacheKey, hasStreamingGateway, invokeProjectFunction, readDailyUsage, readTimedCache, streamProjectFunction, writeDailyUsage, writeTimedCache } from "../ai/gateway.js";
+import { buildCacheKey, getBudgetState, hasStreamingGateway, invokeProjectFunction, readDailyUsage, readTimedCache, streamProjectFunction, writeDailyUsage, writeTimedCache } from "../ai/gateway.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useFeatureFlag } from "../lib/featureFlags.js";
@@ -178,6 +178,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         <div>
           <div style={{fontSize:14,fontWeight:700,color:K.tx}}>💡 Promo Advisor</div>
           <div style={{fontSize:11,color:K.mt,marginTop:2}}>Paste any promo — get an instant plain-English verdict</div>
+          {(() => {
+            const b = getBudgetState();
+            const tone = b.overBudget ? K.yl : K.mt;
+            return (
+              <div style={{fontSize:9,color:tone,marginTop:3,letterSpacing:'0.6px'}}>
+                AI budget · {b.badge}{b.overBudget ? ' · cached/rule path' : ''}
+              </div>
+            );
+          })()}
         </div>
         <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',color:K.mt,fontSize:18,padding:4}}>×</button>
       </div>

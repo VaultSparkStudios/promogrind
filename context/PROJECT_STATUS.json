@@ -206,7 +206,7 @@
   "modelPlanModeSlash": "/model opusplan",
   "sessionMode": "founder",
   "sessionModeAutoShiftedAt": "2026-04-24T20:07:46.133Z",
-  "planModeDetected": "active",
-  "planModeCheckedAt": "2026-05-14T01:50:01.298Z",
+  "planModeDetected": "missing",
+  "planModeCheckedAt": "2026-05-17T17:46:49.052Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.850Z"
 }

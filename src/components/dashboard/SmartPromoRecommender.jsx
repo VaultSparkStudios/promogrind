@@ -3,6 +3,7 @@ import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { getDashboardSnapshot } from "../../dashboard/today.js";
 import { K } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
+import { buildDecayCurve, renderSparkline } from "../../lib/edgeDecay.js";
 
 export default function SmartPromoRecommender({ data }) {
   const today = new Date();
@@ -87,6 +88,25 @@ export default function SmartPromoRecommender({ data }) {
                 {memorySignal && (
                   <div style={{ fontSize: 9, color: memoryColor, marginTop: 4, lineHeight: 1.35 }}>
                     {memorySignal.label}: {memorySignal.detail}
+                  </div>
+                )}
+                {(() => {
+                  const curve = buildDecayCurve(p);
+                  const spark = renderSparkline(curve.samples);
+                  const tone = curve.expiresMs ? (curve.horizonHours < 24 ? K.rd : K.yl) : K.mt;
+                  return (
+                    <div style={{ fontSize: 9, color: tone, marginTop: 4, fontFamily: "monospace", letterSpacing: "1px" }}>
+                      EV decay {spark} {curve.expiresMs ? `${curve.horizonHours}h left` : "no hard expiry"}
+                    </div>
+                  );
+                })()}
+                {Array.isArray(p.whyRanked) && p.whyRanked.length > 0 && (
+                  <div style={{ fontSize: 9, color: K.mt, marginTop: 4, lineHeight: 1.4 }}>
+                    Why #{p.baselineRank || i + 1}: {p.whyRanked.map((c) => {
+                      const sign = c.delta >= 0 ? "+" : "";
+                      const shift = c.rankShift ? ` (would drop ${c.rankShift > 0 ? "+" : ""}${c.rankShift})` : "";
+                      return `${c.label} ${sign}${c.delta}${shift}`;
+                    }).join(" · ")}
                   </div>
                 )}
               </div>
