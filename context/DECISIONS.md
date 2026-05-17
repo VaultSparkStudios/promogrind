@@ -341,3 +341,14 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: rely on provider dashboards only; defer usage visibility until after launch; record only AI model calls and omit rule-engine savings.
 - Why this was chosen: showing avoided model calls is the clearest way to reduce API spend without reducing recommendation quality.
 - Follow-up: expand the rule-first router so deterministic EV/hedge cases avoid model calls more consistently.
+
+## 2026-05-17 — Session 88
+
+### Decision: Public builds must fail on private/membership-era exposure, even when the asset is legacy
+
+- Status: accepted
+- Context: the new public `dist/` exposure gate flagged the copied `vault-sdk.js` asset for a browser-bundled Supabase anon JWT and service-role marker text. The same SDK also represented legacy cross-project membership behavior that conflicts with the standing S86 decision to keep PromoGrind account creation separate from Studio membership until the shared layer is proven.
+- Decision: remove the `index.html` reference and delete `public/vault-sdk.js` instead of weakening the scanner or allowlisting the legacy asset.
+- Alternatives considered: allowlist Supabase anon JWTs in generated browser output; keep the SDK but only remove the service-role comment; defer cleanup until membership integration is revisited.
+- Why this was chosen: release gates should enforce the current product truth. A legacy membership SDK in the public build creates both exposure noise and account-boundary confusion.
+- Follow-up: if cross-Studio membership returns later, add a new proof runner and browser-safe SDK contract after end-to-end account reuse is verified.

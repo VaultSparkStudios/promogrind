@@ -656,3 +656,31 @@ Rolling avg (last 3): Dev 99.3 | Align 99.0 | Momentum 91.7 | Engage 93.3 | Proc
 1. Add a production-safe auth-email proof runner that records timestamps/status only, without storing email contents.
 2. Add a future Studio membership integration proof runner once the shared identity layer is actually ready across projects.
 3. Extract `AuthDialog`/member welcome copy into a dedicated account-access module so product/account language has one source.
+## 2026-05-17 — Session 88 | Total: 991/1000 | Velocity: 5 | Debt: down
+Rolling avg (last 3): Dev 99.7 | Align 100.0 | Momentum 94.7 | Engage 96.0 | Process 100.0 | Coher 99.0 | Sec 99.0 | Eco 99.0 | Cap 100.0 | Auto 100.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 100 | ↑ | Full `verify:launch-local` passed end to end with 409/409 tests, build/browser smoke, and all launch gates. |
+| Creative Alignment | 100 | → | Removed the legacy Vault membership SDK from the public build, preserving the PromoGrind-only account boundary. |
+| Momentum | 97 | ↑ | Five audit items shipped in one pass: season rail, data controls, dist gate, beta feedback summary, and AI usage launch-gate contract. |
+| Engagement | 97 | ↑ | Operator Season adds a 14-day discipline loop that rewards closed loops and cleanup instead of betting volume. |
+| Process Quality | 100 | → | `/start` fallback, `/audit`, `/implement`, full verification, and manual closeout write-back completed. |
+| Cross-Repo Coherence | 99 | → | Cross-Studio membership remains out of PromoGrind's public runtime until proven, matching S86. |
+| Security Posture | 100 | ↑ | Public `dist/` exposure gate found and removed legacy SDK exposure; strict public sanitization stayed clean. |
+| Ecosystem Integration | 99 | → | Friend-beta evidence now feeds a durable feedback summary without weakening manual proof requirements. |
+| Capital Efficiency | 100 | ↑ | AI ledger rendering is in the launch gate and now exits cleanly via direct PostgREST fetch. |
+| Automation Coverage | 100 | → | `verify:launch-local` now includes AI ledger rendering and public dist exposure scanning. |
+| **Total** | **991 / 1000** | | |
+
+**Top win:** the new dist exposure gate immediately found a legacy public membership SDK and turned a theoretical hardening item into a concrete public-build cleanup.
+
+**Top gap:** remaining launch blockers are still external/manual proof: production email delivery, real Stripe smoke, friend beta evidence, and partner-approved sportsbook tracking URLs.
+
+**Intent outcome:** Achieved for all repo-controllable work in the requested start/audit/implement/closeout sequence.
+
+**Brainstorm**
+
+1. Add promo-passport onboarding that uses the new season/data-control trust posture as the first-session contract.
+2. Add a `verify:production-artifact` command that compares the newest GitHub launch-verification artifact against local proof truth.
+3. Add rule-first AI fixtures for the top 10 promo terms so deterministic Advisor responses become measurable against the AI ledger.

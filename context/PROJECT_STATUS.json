@@ -13,50 +13,50 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 87,
-  "currentFocus": "S87 audit/go sprint: canonical launch proofs now feed the in-app command center, Operator Autopilot chooses the next action, trust receipts explain sensitive account/billing/AI/push/sync moments, discipline score rewards closed loops, recommendations explain outcome memory, and AI usage/cost avoidance is ledgered.",
-  "nextMilestone": "Push S87, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentSession": 88,
+  "currentFocus": "S88 audit/implement sprint: Operator Season rail, Profile local data controls, public dist exposure gate, friend-beta feedback summary, and AI usage launch-gate rendering are shipped; legacy public vault-sdk.js membership SDK/reference removed.",
+  "nextMilestone": "Push S88, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
   "blockers": [
     "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
-    "Run production auth email smoke after S87 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
+    "Run production auth email smoke after S88 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
-  "lastUpdated": "2026-05-14",
-  "silScore": 988,
-  "silAvg3": 980,
-  "silVelocity": 6,
+  "lastUpdated": "2026-05-17",
+  "silScore": 991,
+  "silAvg3": 987,
+  "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 87,
+  "silLastSession": 88,
   "silMax": 1000,
   "silSparkline": [
     931,
     962,
-    977,
     981,
-    988
+    988,
+    991
   ],
   "ignisScore": 46140,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-14",
-  "testsPassing": 402,
-  "testsTotal": 402,
-  "testsLastRun": "2026-05-14",
+  "testsPassing": 409,
+  "testsTotal": 409,
+  "testsLastRun": "2026-05-17",
   "lastDeployStatus": "deployed-unannounced",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-05-14",
+  "truthAuditLastRun": "2026-05-17",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 402/402 in S87 closeout compact Vitest rerun"
+      "status": "passing 409/409 in S88 verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "smoke:auth passing in S86, smoke:launch passing in S87 feature-batch verification; full verify:launch-local last passed S85"
+      "status": "passing end to end in S88, including AI usage, public dist exposure, bundle budget, and strict public sanitization"
     },
     {
       "type": "ux-integrity",
@@ -90,13 +90,13 @@
   "stripeProductionPriceIds": [],
   "silRubricVersion": "3.0",
   "silCategoriesV3": {
-    "devHealth": 99,
+    "devHealth": 100,
     "creativeAlignment": 100,
-    "momentum": 96,
+    "momentum": 97,
     "engagement": 97,
     "processQuality": 100,
     "crossRepoCoherence": 99,
-    "securityPosture": 98,
+    "securityPosture": 100,
     "ecosystemIntegration": 99,
     "capitalEfficiency": 100,
     "automationCoverage": 100

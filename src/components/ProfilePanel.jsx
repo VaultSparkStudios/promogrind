@@ -5,6 +5,7 @@ import { FX, AppDataCtx } from "../contexts.jsx";
 import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
 import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
 import { readTrustReceipts, summarizeTrustReceipt } from "../lib/trustReceipts.js";
+import { buildLocalDataExport, clearLocalPromoGrindData, describeDataControlState } from "../lib/dataControls.js";
 
 const TIER_COLOR = (name) => ({
   Scout: '#06b6d4',
@@ -173,6 +174,74 @@ function TrustReceiptsSection() {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function DataControlsSection() {
+  const [state, setState] = React.useState(() => describeDataControlState());
+  const [message, setMessage] = React.useState("");
+
+  const refresh = () => setState(describeDataControlState());
+
+  function handleExport() {
+    const payload = buildLocalDataExport();
+    try {
+      const text = JSON.stringify(payload, null, 2);
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(text);
+        setMessage(`Export copied: ${payload.summary.itemCount} item${payload.summary.itemCount === 1 ? "" : "s"}.`);
+      } else {
+        setMessage(`Export ready: ${payload.summary.itemCount} item${payload.summary.itemCount === 1 ? "" : "s"}.`);
+      }
+    } catch {
+      setMessage("Export unavailable in this browser.");
+    }
+  }
+
+  function handleClear() {
+    const confirmed = window.confirm("Clear local PromoGrind operator data on this device? Preferences stay in place.");
+    if (!confirmed) return;
+    const result = clearLocalPromoGrindData(undefined, { includePreferences: false });
+    refresh();
+    setMessage(`Cleared ${result.cleared.length} item${result.cleared.length === 1 ? "" : "s"}; kept preferences.`);
+  }
+
+  return (
+    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+        Data Controls
+      </div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
+        {state.label} · {state.totalBytes} bytes on this device
+      </div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button
+          onClick={handleExport}
+          disabled={!state.hasData}
+          style={{
+            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.hasData ? 'pointer' : 'not-allowed',
+            background: state.hasData ? `${K.ac}12` : K.s2,
+            border: `1px solid ${state.hasData ? K.ac + '40' : K.bd}`,
+            color: state.hasData ? K.ac : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
+          }}
+        >
+          Export
+        </button>
+        <button
+          onClick={handleClear}
+          disabled={!state.hasData}
+          style={{
+            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.hasData ? 'pointer' : 'not-allowed',
+            background: state.hasData ? `${K.rd}10` : K.s2,
+            border: `1px solid ${state.hasData ? K.rd + '35' : K.bd}`,
+            color: state.hasData ? K.rd : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
+          }}
+        >
+          Clear Local
+        </button>
+      </div>
+      {message && <div style={{ fontSize: 9, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
     </div>
   );
 }
@@ -369,6 +438,9 @@ export default function ProfilePanel({
 
         {/* ── Trust receipts ───────────────────────────────────────── */}
         <TrustReceiptsSection />
+
+        {/* ── Data controls ────────────────────────────────────────── */}
+        <DataControlsSection />
 
         {/* ── Achievements ─────────────────────────────────────────── */}
         <AchievementsSection />

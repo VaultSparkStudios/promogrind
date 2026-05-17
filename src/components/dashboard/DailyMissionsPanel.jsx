@@ -3,6 +3,7 @@ import { K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
 import { AppDataCtx } from "../../contexts.jsx";
 import { getDailyMissions, completeMission, getTodayXp } from "../../lib/missions.js";
+import { buildOperatorSeason } from "../../lib/seasons.js";
 
 export default function DailyMissionsPanel({ navigate }) {
   const ctx = useContext(AppDataCtx);
@@ -11,6 +12,7 @@ export default function DailyMissionsPanel({ navigate }) {
 
   const [tick, setTick] = useState(0);
   const missions = useMemo(() => getDailyMissions(appData, todayStr), [appData, todayStr, tick]);
+  const season = useMemo(() => buildOperatorSeason(appData), [appData, tick]);
   const xpToday = getTodayXp(todayStr);
   const maxXp = missions.reduce((s, m) => s + m.xp, 0);
   const doneCount = missions.filter(m => m.completed).length;
@@ -48,8 +50,43 @@ export default function DailyMissionsPanel({ navigate }) {
     if (navigate) navigate(mission.nav);
   }
 
+  const seasonRail = (
+    <div style={{ ...S.card, marginBottom: 12, padding: '14px 18px', border: `1px solid ${season.score >= 85 ? K.gn + '40' : K.bd}` }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <div>
+          <div style={{ fontFamily: fontD, fontSize: 11, fontWeight: 700, color: K.ac, textTransform: 'uppercase', letterSpacing: '2px' }}>
+            Operator Season
+          </div>
+          <div style={{ fontSize: 10, color: K.mt, marginTop: 2 }}>Day {season.day}/{season.lengthDays} · {season.band}</div>
+        </div>
+        <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 800, color: season.score >= 85 ? K.gn : K.yl }}>
+          {season.score}
+        </div>
+      </div>
+      <div style={{ height: 5, background: K.s3, borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
+        <div style={{ height: 5, background: season.score >= 85 ? K.gn : K.yl, borderRadius: 3, width: `${season.score}%`, transition: 'width 0.6s ease' }} />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 4, marginBottom: 8 }}>
+        {season.targets.map((target) => (
+          <div
+            key={target.id}
+            title={`${target.label}: ${target.value}/${target.goal}`}
+            style={{
+              height: 4, borderRadius: 2,
+              background: target.complete ? K.gn : target.pct > 0 ? K.yl : K.s3,
+              opacity: target.complete ? 1 : 0.75,
+            }}
+          />
+        ))}
+      </div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{season.next}</div>
+    </div>
+  );
+
   if (doneCount === 3) {
     return (
+      <>
+      {seasonRail}
       <div style={{ ...S.card, border: `1px solid ${K.gn}40`, background: `${K.gn}06`, marginBottom: 12, padding: '14px 18px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
@@ -59,10 +96,13 @@ export default function DailyMissionsPanel({ navigate }) {
           <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 800, color: K.gn }}>+{xpToday}</div>
         </div>
       </div>
+      </>
     );
   }
 
   return (
+    <>
+    {seasonRail}
     <div style={{ ...S.card, marginBottom: 12, padding: '14px 18px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -112,5 +152,6 @@ export default function DailyMissionsPanel({ navigate }) {
         ))}
       </div>
     </div>
+    </>
   );
 }

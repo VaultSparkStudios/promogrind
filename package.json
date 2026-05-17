@@ -18,7 +18,7 @@
     "smoke:ux": "node scripts/validate-ux-route-integrity.mjs",
     "check:hooks": "node scripts/check-app-hook-order.mjs",
     "smoke:browser": "npm run build && node scripts/validate-browser-launch-smoke.mjs",
-    "verify:launch-local": "npm test && node scripts/check-app-hook-order.mjs && npm run smoke:auth && npm run smoke:launch && npm run smoke:ux && npm run smoke:browser && node scripts/check-bundle-budget.mjs && node scripts/check-public-repo-sanitization.mjs --strict --json",
+    "verify:launch-local": "npm test && npm run ai:usage && node scripts/check-app-hook-order.mjs && npm run smoke:auth && npm run smoke:launch && npm run smoke:ux && npm run smoke:browser && node scripts/check-public-dist-exposure.mjs && node scripts/check-bundle-budget.mjs && node scripts/check-public-repo-sanitization.mjs --strict --json",
     "verify:production": "node scripts/verify-production-launch.mjs",
     "ingest:launch": "node scripts/ingest-launch-verification.mjs",
     "launch:status": "node scripts/launch-status.mjs",

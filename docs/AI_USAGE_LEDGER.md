@@ -1,9 +1,9 @@
 <!-- generated-by: scripts/render-ai-usage-ledger.mjs -->
-<!-- generated-at: 2026-05-14T02:17:15.224Z -->
+<!-- generated-at: 2026-05-17T06:32:17.514Z -->
 
 # AI Usage Ledger
 
-Source: offline verification mode; wrote empty local ledger
+Source: Supabase vault_events since 2026-05-03T06:32:15.605Z
 
 - Window: 14 days
 - Total AI feature events: 0

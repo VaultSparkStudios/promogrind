@@ -2,7 +2,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createClient } from "@supabase/supabase-js";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "docs", "AI_USAGE_LEDGER.md");
@@ -131,19 +130,24 @@ async function fetchEvents() {
   const key = adminEnv.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return { events: [], sourceNote: "no Supabase admin env found; wrote empty local ledger" };
 
-  const supabase = createClient(url, key, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
   const since = new Date(Date.now() - DAYS * 24 * 60 * 60 * 1000).toISOString();
-  const { data, error } = await supabase
-    .from("vault_events")
-    .select("event_type, created_at, metadata")
-    .gte("created_at", since)
-    .in("event_type", [...AI_FEATURES])
-    .order("created_at", { ascending: false })
-    .limit(2000);
-  if (error) throw error;
-  return { events: data || [], sourceNote: `Supabase vault_events since ${since}` };
+  const params = new URLSearchParams({
+    select: "event_type,created_at,metadata",
+    created_at: `gte.${since}`,
+    event_type: `in.(${[...AI_FEATURES].join(",")})`,
+    order: "created_at.desc",
+    limit: "2000",
+  });
+  const response = await fetch(`${url.replace(/\/$/, "")}/rest/v1/vault_events?${params}`, {
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`vault_events query failed: ${response.status} ${await response.text()}`);
+  }
+  return { events: await response.json(), sourceNote: `Supabase vault_events since ${since}` };
 }
 
 const { events, sourceNote } = await fetchEvents();

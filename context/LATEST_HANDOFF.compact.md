@@ -2,41 +2,71 @@
 
 # Latest Handoff
 
-Last updated: 2026-05-13 (S86)
-Session: 86
-Session Intent: Separate PromoGrind create-account/sign-up from Studio membership because cross-project Studio membership is not fully integrated yet, then close out, commit, and push with all repo truth surfaces updated.
-Intent Outcome: Achieved for repo-controllable work. PromoGrind account/signup is now explicit and standalone across app, auth, profile/account help, legal/data, smoke checks, and generated public trust copy. External/manual launch proofs remain honest blockers: approved BetMGM/bet365/BetRivers tracking URLs, one real Stripe smoke purchase, one friend beta pass with account-recovery visibility, and a production auth email pass after deploy.
+Last updated: 2026-05-17 (S88)
+Session: 88
+Session Intent: Run `/start`, `/audit`, `/implement`, and `/closeout` for the next highest-leverage repo-controllable PromoGrind improvements.
+Intent Outcome: Achieved for repo-controllable work. S88 shipped a ranked audit plan, Operator Season rail, Profile local data controls, public `dist/` exposure gate, friend-beta feedback summary generation, and a reliable AI usage launch-gate step. The new dist gate caught and removed the legacy public `vault-sdk.js` cross-project membership SDK/reference. External/manual launch proofs remain honest blockers: approved BetMGM/bet365/BetRivers tracking URLs, one real Stripe smoke purchase, one friend beta pass with account-recovery visibility, and a production auth email pass after deploy.
 
-## Where We Left Off (Session 86)
+## Where We Left Off (Session 88)
 
-- Separated PromoGrind account creation from Studio membership in the auth modal, member welcome copy, footer access copy, Terms, Privacy, Data Policy, and generated public HTML trust/footer copy.
-- Removed the user-facing Vault account portal path from profile/account surfaces; logged-in account help now routes to PromoGrind support instead of implying a shared Studio membership portal.
-- Removed the unused `VAULT_ACCOUNT_PORTAL_URL` export after decoupling the account UI from the Vault member portal.
-- Updated `src/auth.js` comments/log prefixes from shared Vault identity language to PromoGrind account auth language.
-- Expanded `scripts/validate-auth-launch-smoke.mjs` so auth/account surfaces fail if Vault account/membership, cross-Studio sync, or connected-VaultSpark-tool claims return.
-- Verification passed: `npm run smoke:auth`, `npm run smoke:launch`, `npm run build`, and `npm test` (396/396).
+- Created `docs/AUDIT_2026-05-17.md` and `docs/IMPLEMENT_PLAN.md`.
+- Added `src/lib/seasons.js` and surfaced a 14-day Operator Season rail above Daily Missions; it rewards closed loops, repeat feedback, bankroll context, and open-bet cleanup rather than raw bet volume.
+- Added `src/lib/dataControls.js` and Profile export/clear-local controls for browser-stored PromoGrind data.
+- Added `scripts/check-public-dist-exposure.mjs`, wired it into `verify:launch-local`, and verified rebuilt `dist` passes 0 critical / 0 warning.
+- Removed the legacy public `vault-sdk.js` asset and `index.html` script reference after the exposure gate flagged it.
+- Extended `scripts/run-friend-beta-checklist.mjs --record` so friend-beta evidence writes `docs/BETA_FEEDBACK.md` with friction tags.
+- Wired `npm run ai:usage` into `verify:launch-local` and replaced the lingering Supabase client query with direct PostgREST fetch.
 
-## Verification (Session 86)
+## Verification (Session 88)
 
-- `npm run smoke:auth` — passing.
-- `npm run smoke:launch` — passing.
-- `npm run build` — passing.
-- `npm test` — 396/396 passing.
+- `npm run verify:launch-local` — passed end to end with 409/409 tests, AI usage render, hook-order guard, auth/launch/UX/browser smokes, public dist exposure, bundle budget, and strict public-repo sanitization.
 
 ## What is mid-flight
 
-- Deploy S86 to production, then run a real auth email smoke: create account, confirmation delivery/resend, forgot-password email, recovery link to `?auth=update-password`, and new-password sign-in.
+- Deploy S88, then run production auth email proof and ingest the launch-verification artifact.
 - Real affiliate/referral tracking URLs for `BetMGM`, `bet365`, `BetRivers` remain operator/partner-blocked.
 - Real Stripe smoke purchase remains pending (`npm run smoke:stripe -- --record`).
-- Friend-facing auth/recovery/calculator/CTA/pricing pass remains pending (`npm run beta:check -- --record`).
-- Continued `src/App.jsx` decomposition remains valuable; App.jsx still carries several large inline surfaces.
+- Friend-facing pass remains pending (`npm run beta:check -- --record`); the runner now writes `docs/BETA_FEEDBACK.md`.
 
 ## What to do next
 
-1. Let GitHub Pages deploy S86, then run the production auth email smoke and ingest the deploy artifact with `npm run ingest:launch`.
-2. Complete `npm run beta:check -- --record` with a trusted tester after deploy.
-3. Complete `npm run smoke:stripe -- --record` with one real checkout when operator is ready.
+1. Push/deploy S88, then run production auth email checks and `npm run ingest:launch`.
+2. Complete `npm run beta:check -- --record` with a trusted tester.
+3. Complete `npm run smoke:stripe -- --record` with one real checkout.
 4. Add approved BetMGM/bet365/BetRivers tracking URLs when partner approvals arrive, then rerun `npm run verify:production`.
-5. Continue extracting another `src/App.jsx` seam once launch proof is no longer the active bottleneck.
 
-## Constraints
+---
+
+## Where We Left Off (Session 87)
+
+- Created `docs/AUDIT_2026-05-14.md`, a combined ranked plan across feature depth, UI/UX, gamification, AI, security, speed/organization, and token/API consumption.
+- Mirrored `context/LAUNCH_PROOFS.json` into a browser-safe generated module and made `LaunchCommandCenterPanel` show each proof's evidence requirements, status, and next step.
+- Added an Operator Autopilot card to `TodayDashboardPanel` that chooses the most actionable workflow or next-best dashboard action and routes the user to execution/outcome capture.
+- Added local trust receipts for auth, billing, Promo Advisor, push subscription, and cloud-sync events, surfaced in Profile.
+- Added a discipline score to `DashboardHero`, rewarding settled feedback loops, repeatable lanes, and lower unresolved exposure instead of raw bet volume.
+- Added outcome-memory signals to recommendations so users see when promos are elevated by hot lanes/repeat intent or cooled by drift.
+- Added `npm run ai:usage` and `docs/AI_USAGE_LEDGER.md`; promo-advisor now records rule-engine model-call avoidance and token estimates.
+
+## Verification (Session 87)
+
+- `npx vitest run --reporter=dot` — 30 files / 402 tests passing during closeout. Initial `npm test` returned non-zero without failure details in captured output; the compact Vitest rerun passed cleanly.
+- `npm run build` — passing during closeout.
+- `npm run smoke:launch` — passing during closeout.
+- `npm run check:bundle` — passing during closeout.
+- `node scripts/check-public-repo-sanitization.mjs --strict --json` — passing, 0 critical / 0 warning.
+- `npx vitest run src/__tests__/dashboard.test.js src/__tests__/observability.test.js` — passing after outcome-memory changes.
+- `node scripts/render-ai-usage-ledger.mjs --offline --json` / `--offline` — passing; `docs/AI_USAGE_LEDGER.md` generated.
+
+## What is mid-flight
+
+- Deploy S87 to production, then run a real auth email smoke: create account, confirmation delivery/resend, forgot-password email, recovery link to `?auth=update-password`, and new-password sign-in.
+- Real affiliate/referral tracking URLs for `BetMGM`, `bet365`, `BetRivers` remain operator/partner-blocked.
+- Real Stripe smoke purchase remains pending (`npm run smoke:stripe -- --record`).
+- Friend-facing auth/recovery/calculator/CTA/pricing pass remains pending (`npm run beta:check -- --record`).
+- Continue the audit roadmap from `docs/AUDIT_2026-05-14.md`: promo passport onboarding, richer proof telemetry, rule-first AI routing, and public bundle exposure gates.
+
+## What to do next
+
+1. Let GitHub Pages deploy S87, then run the production auth email smoke and ingest the deploy artifact with `npm run ingest:launch`.
+2. Complete `npm run beta:check -- --record` with a trusted tester.
+3. Complete `npm run smoke:stripe -- --record` with one real checkout when operator is ready.

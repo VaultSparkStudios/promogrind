@@ -59,6 +59,16 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Production auth email delivery is unproven until S87 deploys and a real confirmation/reset email pass is recorded.
 - Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
 
+## Resolved This Session (S88)
+
+- Created `docs/AUDIT_2026-05-17.md` with a compact ranked plan across gamification/UX, security/trust, release hardening, feedback loops, and token/API cost.
+- Added a 14-day Operator Season rail above daily missions, scored from closed loops, repeat feedback, bankroll context, and open-bet cleanup rather than bet volume.
+- Added Profile local data export and clear-local controls, with helper coverage for tracked browser storage inventory.
+- Added `scripts/check-public-dist-exposure.mjs` and wired it into `verify:launch-local`; the gate caught legacy `dist/vault-sdk.js` exposure, so the public `vault-sdk.js` asset and `index.html` reference were removed.
+- Extended friend-beta recorded evidence into `docs/BETA_FEEDBACK.md` with friction tags.
+- Added AI usage ledger rendering to `verify:launch-local` and replaced the lingering Supabase client process with direct PostgREST fetch.
+- Verified `npm run verify:launch-local` green end to end with 409/409 tests, AI ledger render, hook-order guard, auth/launch/UX/browser smokes, public dist exposure, bundle budget, and strict public-repo sanitization.
+
 ## Resolved This Session (S87)
 
 - Created `docs/AUDIT_2026-05-14.md` with one ranked improvement list across product depth, UI/UX, gamification, AI, security, speed/organization, and API/token consumption.

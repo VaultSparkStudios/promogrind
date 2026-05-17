@@ -18,6 +18,12 @@
 
 ## Shipped This Session
 
+- add Operator Season rail over daily missions (S88) — **DONE S88**: added `src/lib/seasons.js`, surfaced a 14-day discipline season in `DailyMissionsPanel`, and added tests proving closed-loop behavior earns progress while raw open-bet volume does not.
+- add self-serve local data controls (S88) — **DONE S88**: added `src/lib/dataControls.js`, Profile export/clear-local controls, and tests for local inventory/export/clear behavior.
+- add public `dist/` exposure gate (S88) — **DONE S88**: added `scripts/check-public-dist-exposure.mjs`, wired it into `verify:launch-local`, removed the legacy public `vault-sdk.js` membership SDK/reference after the new gate caught it in `dist`, and verified 0 critical / 0 warning.
+- turn friend-beta evidence into feedback summary (S88) — **DONE S88**: `run-friend-beta-checklist.mjs --record` now writes `docs/BETA_FEEDBACK.md` with public-safe friction tags.
+- add AI usage rendering to the local launch gate (S88) — **DONE S88**: `verify:launch-local` now runs `npm run ai:usage`, and the renderer uses direct PostgREST fetch so it exits cleanly on Windows.
+
 - mirror canonical launch proof evidence into the Launch Command Center (S87) — **DONE S87**: generated a browser-safe launch-proof mirror from `context/LAUNCH_PROOFS.json`, made `LaunchCommandCenterPanel` show proof status/evidence requirements/next steps, and added launch-state tests for proof normalization.
 - add Operator Autopilot to the dashboard (S87) — **DONE S87**: added a primary action card to `TodayDashboardPanel` that prefers the top workflow, falls back to `getNextBestAction`, and gives users an execution route plus an outcome-recording route.
 - add trust receipts for sensitive account/billing/AI/push/sync moments (S87) — **DONE S87**: added a local trust receipt ledger, records receipts from auth, checkout, billing portal, Promo Advisor, push subscriptions, and cloud sync, and surfaces recent receipts in Profile.
