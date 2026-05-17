@@ -5,7 +5,7 @@
 - production auth email smoke after S87 deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
-- finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers` — operator confirmed S81 they have applied for everything they can; remaining gap is partner-side approval, not a repo task
+- ~~finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers`~~ — **DECOUPLED S89**: partner programs rejected/waitlisted or do not offer individual referral codes. Per DECISIONS.md (S89), these 3 books are now advisory, not launch-blocking. PromoGrind monetizes via the 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics); the 3 advisory books still ship clean signup URLs so operators can use them
 
 ## Next
 

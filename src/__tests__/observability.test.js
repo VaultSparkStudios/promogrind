@@ -42,8 +42,10 @@ describe("observability snapshot", () => {
     expect(snapshot.latestMicroNps).toBe("mixed");
     expect(snapshot.activationScore).toBeGreaterThan(0);
     expect(snapshot.activationFunnel.completion).toBeGreaterThan(0);
-    expect(snapshot.launchProofSummary.affiliateLinksReady).toBe(false);
-    expect(snapshot.launchProofSummary.missingLaunchBooks).toEqual(expect.arrayContaining(["BetMGM", "bet365", "BetRivers"]));
+    // S89: affiliate links are advisory, not required for launch — partner programs
+    // rejected/waitlisted; 5 books with personal referral links ship today.
+    expect(snapshot.launchProofSummary.affiliateLinksReady).toBe(true);
+    expect(snapshot.launchProofSummary.missingLaunchBooks).toEqual([]);
     expect(snapshot.aiUsage.today).toBe(1);
     expect(snapshot.aiUsage.week).toBe(2);
     expect(snapshot.aiUsage.topFeature).toBe("promo_chat");

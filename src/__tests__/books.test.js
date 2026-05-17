@@ -92,7 +92,7 @@ describe("book affiliate helpers", () => {
       linkType: "signup",
       configuredAffiliate: false,
       configuredMonetization: false,
-      launchRequired: true,
+      launchRequired: false,
     });
   });
 
@@ -104,7 +104,7 @@ describe("book affiliate helpers", () => {
       linkType: "signup",
       configuredAffiliate: false,
       configuredMonetization: false,
-      launchRequired: true,
+      launchRequired: false,
     });
   });
 });

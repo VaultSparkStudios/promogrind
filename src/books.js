@@ -182,7 +182,12 @@ export const BOOKS = [
   },
 ];
 
-export const REQUIRED_LAUNCH_MONETIZATION_BOOKS = ["BetMGM", "bet365", "BetRivers"];
+// S89: BetMGM/bet365/BetRivers are advisory, not required for launch — partner programs
+// rejected/waitlisted or do not offer individual referral codes. Launch posture decoupled
+// from external partner approvals. These books still ship with clean untracked signup URLs.
+export const REQUIRED_LAUNCH_MONETIZATION_BOOKS = [];
+export const ADVISORY_LAUNCH_MONETIZATION_BOOKS = ["BetMGM", "bet365", "BetRivers"];
+export const ACTIVE_REFERRAL_BOOKS = ["DraftKings", "FanDuel", "Caesars", "ESPN BET", "Fanatics"];
 
 export const US_BOOK_STATES = {
   DraftKings: ["NJ", "PA", "CO", "MI", "VA", "OH", "IN", "AZ", "NY", "TN", "WV", "IA", "IL", "KS", "KY", "LA", "MD", "MA", "NC", "VT", "WY", "DC", "NV"],

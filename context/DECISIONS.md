@@ -352,3 +352,14 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: allowlist Supabase anon JWTs in generated browser output; keep the SDK but only remove the service-role comment; defer cleanup until membership integration is revisited.
 - Why this was chosen: release gates should enforce the current product truth. A legacy membership SDK in the public build creates both exposure noise and account-boundary confusion.
 - Follow-up: if cross-Studio membership returns later, add a new proof runner and browser-safe SDK contract after end-to-end account reuse is verified.
+
+
+### Decision (S89): Decouple launch readiness from external partner approvals
+
+- Status: accepted
+- Date: 2026-05-17
+- Context: PromoGrind has been blocking its own public launch on tracked monetization URLs for BetMGM, bet365, and BetRivers. Operator confirmed S89 that one partner program issued a rejection/waitlist and others do not offer individual referral codes at all. The remaining 5 books (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics) already have real personal referral links shipped in `src/books.js`.
+- Decision: reclassify the `affiliateLinks` launch proof from `blocking: true` to advisory/partial. Empty `REQUIRED_LAUNCH_MONETIZATION_BOOKS` so the production verifier no longer fails launch on the 3 partner-blocked books; track them as `ADVISORY_LAUNCH_MONETIZATION_BOOKS`. The 3 advisory books still ship with clean untracked signup URLs so operators can use them — PromoGrind just does not earn referral revenue on them until partner status changes.
+- Alternatives considered: keep blocking and wait indefinitely on partner approvals; remove the 3 books from the product entirely; ship a generic affiliate-network URL while waiting.
+- Why this was chosen: launch readiness should reflect what PromoGrind controls. Five active referral books is a real monetization base; blocking on someone else's approval calendar produces no upside and indefinitely delays shipping. Operators still benefit from the 3 advisory books via clean signup paths, which is the honest UX. If/when network or direct approvals arrive, paste the URLs into `src/books.js` and rerun `verify:production` — no proof-surface migration needed.
+- Follow-up: with affiliate no longer blocking, the two remaining external blockers are PromoGrind-controlled (Stripe smoke + friend beta). After those clear, launch posture is GO. Consider applying to affiliate networks (Income Access, FanCompass) as a separate non-blocking track.
