@@ -1,60 +1,58 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-14 (Session 86 closeout) -->
+<!-- generated-at: 2026-05-17 (Session 88 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S86 ═════════════════════════╗
-║  Date: 2026-05-14  ·  SIL: 981/1000  ·  Velocity: 5 down         ║
+╔══ SESSION CLOSEOUT · PromoGrind · S88 ═════════════════════════╗
+║  Date: 2026-05-17  ·  SIL: 991/1000  ·  Velocity: 5 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Separated PromoGrind account creation from Studio membership  ║
-║  ✓ Removed the user-facing Vault account portal path from profi  ║
-║  ✓ Removed the unused `VAULT_ACCOUNT_PORTAL_URL` export after d  ║
-║  ✓ Updated `src/auth.js` comments/log prefixes from shared Vaul  ║
-║  ✓ Expanded `scripts/validate-auth-launch-smoke.mjs` so auth/ac  ║
+║  ✓ Created `docs/AUDIT_2026-05-17.md`, a compact ranked plan ac  ║
+║  ✓ Added `src/lib/seasons.js` and surfaced a 14-day Operator Se  ║
+║  ✓ Added `src/lib/dataControls.js` and Profile export/clear-loc  ║
+║  ✓ Added `scripts/check-public-dist-exposure.mjs`, wired it int  ║
+║  ✓ Removed the legacy public `vault-sdk.js` asset and `index.ht  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 981/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 991/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           93   █████████░                            ║
-║    Engagement         94   █████████░                            ║
+║    Momentum           97   ██████████                            ║
+║    Engagement         97   ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          99   ██████████                            ║
-║    Security           97   ██████████                            ║
+║    Security           100  ██████████                            ║
 ║    Ecosystem          99   ██████████                            ║
-║    Capital            99   ██████████                            ║
+║    Capital            100  ██████████                            ║
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
+║  · context/DECISIONS.md                                          ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 157 files  ·  M:156 A:1 D:0 ?:0                        ║
+║  Changes: 4 files  ·  M:4 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         396/396                                          ║
-║  IGNIS:         0d ago                                           ║
+║  Tests:         409/409                                          ║
+║  IGNIS:         4d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  #1: IGNIS re-score overdue (7d stale)                           ║
-║      Portfolio intelligence scores degrade with age. Re-score b  ║
-║      ↳ npx tsx cli.ts score <project-path>                       ║
+║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 
