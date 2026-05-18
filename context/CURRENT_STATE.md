@@ -1,11 +1,11 @@
 # Current State
 
-Last updated: 2026-05-18 (S91)
+Last updated: 2026-05-18 (S92)
 
 ## Snapshot
 
 - Date: 2026-05-17
-- Overall status: deployed product with S91 thin-integration audit/implement/closeout sprint complete — the S90 operator-intelligence engines are now visible in product UI: Today shows a counterfactual P&L + decision-journal command ribbon with zero-PII share card generation, Smart Promo recommendations surface terms-drift and edge-floor deadlines, Tracker shows promo-conflict guardrails, and Profile includes the Kelly replay sandbox. `npm run verify:launch-local` passed end to end with 450/450 tests.
+- Overall status: deployed product with S91 thin-integration audit/implement/closeout sprint complete; S92 verified the `/start` -> `/audit` -> `/implement` artifacts were already complete and ran closeout without additional product-code changes. The S90 operator-intelligence engines are visible in product UI: Today shows a counterfactual P&L + decision-journal command ribbon with zero-PII share card generation, Smart Promo recommendations surface terms-drift and edge-floor deadlines, Tracker shows promo-conflict guardrails, and Profile includes the Kelly replay sandbox. `npm run verify:launch-local` passed end to end with 450/450 tests in the S91 implementation record.
 - Prior status (S90): deployed product with S90 audit/implement/closeout sprint complete — shipped 7 of 12 core modules layering on S89 infrastructure: counterfactual P&L ribbon, decision journal autogen, terms-drift detector, edge half-life scheduler, promo conflict detector, Kelly-fraction sandbox, and zero-PII share card. Suite is now 450/450 (up from 430). UI wiring deferred to S91 thin-integration pass. Below preserves S89 narrative.
 - Overall status (S89): deployed product with S89 audit/implement/closeout sprint complete — shipped 9 of 10 audit items focused on temporal intelligence, counterfactual learning, and anti-tilt safety: tilt circuit breaker, ablation-based promo explainer ("why ranked #N"), EV decay radar, operator twin drift forecast, 14-day adversarial receipt replay, HMAC-signed public operator passport, launch-proof resilience replay, calculator pre-warm, and weekly AI budget self-binding. Suite is now 430/430 (up from 409). S88 audit/implement/closeout sprint complete: added an Operator Season rail over daily missions, Profile local data export/clear controls, a public `dist/` exposure gate wired into `verify:launch-local`, friend-beta feedback summary generation, and a cleaner AI usage ledger renderer. The new dist gate caught and drove removal of the legacy public `vault-sdk.js` cross-project membership SDK/reference, preserving the S86 PromoGrind-only account boundary. S87 launch proof mirror, Operator Autopilot, trust receipts, discipline scoring, outcome-memory recommendations, and AI usage ledger remain intact. Closeout verification in S88 passed `npm run verify:launch-local` end to end with 409/409 tests. Production host remains GitHub Pages (Cloudflare is DNS-only proxy).
 - Current phase: public-unveil launch hardening with S90/S91 operator-intelligence now user-visible; external proof cleanup remains.
@@ -52,7 +52,7 @@ Last updated: 2026-05-18 (S91)
 - Active work: finishing monetization coverage for sportsbook CTAs with real approved affiliate/referral links
 - Active work: completing one live Stripe smoke purchase and one friend-facing auth/calculator/pricing pass before public announcement
 - Active work: continuing to decompose the remaining high-churn `src/App.jsx` seams (still ~4300 lines)
-- Active work: deploy S91 UI wiring and inspect the next launch-verification artifact for regressions.
+- Active work: deploy S91/S92 closeout state, then inspect the next launch-verification artifact for regressions.
 
 ## Blockers
 
@@ -65,6 +65,6 @@ Last updated: 2026-05-18 (S91)
 
 ## Next 3 moves
 
-1. Push S91 to `main`, let GitHub Pages deploy, then run production auth email checks and `npm run ingest:launch`.
+1. Push S91/S92 to `main`, let GitHub Pages deploy, then run production auth email checks and `npm run ingest:launch`.
 2. Complete `npm run beta:check -- --record` with the updated recovery-aware friend beta checklist and `npm run smoke:stripe -- --record` with one real checkout.
 3. Schedule the dedicated `app-jsx-decomposition-finale` session once the S91 UI wiring is deployed.
