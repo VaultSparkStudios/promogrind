@@ -2,6 +2,7 @@
 
 ## Now
 
+- deploy S91 operator-intelligence UI wiring, then inspect the next GitHub Pages launch-verification artifact
 - production auth email smoke after S87 deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
@@ -31,7 +32,16 @@
 
 ### S90 follow-up (Next)
 
-- Wire all 7 S90 core modules into UI surfaces (CounterfactualRibbon above TodayDashboardPanel; DecisionJournalCard collapsible in Today; TERMS CHANGED pill in SmartPromoRecommender; ExecutionDeadline inline in promo card; ConflictWarningChip in Tracker; KellySandbox in Profile; ShareBriefingButton on Today). Estimate: 3-4h thin-integration pass.
+- ~~Wire all 7 S90 core modules into UI surfaces (CounterfactualRibbon above TodayDashboardPanel; DecisionJournalCard collapsible in Today; TERMS CHANGED pill in SmartPromoRecommender; ExecutionDeadline inline in promo card; ConflictWarningChip in Tracker; KellySandbox in Profile; ShareBriefingButton on Today).~~ — **DONE S91**: shipped as a single thin-integration pass across Today, Smart Promo Recommender, Tracker, and Profile.
+
+## Shipped This Session (S91)
+
+- s90-command-ribbon (S91) — **DONE S91**: `TodayDashboardPanel` now surfaces S90 counterfactual P&L + decision-journal output in an Operator Briefing ribbon with sparse-history fallback.
+- terms-and-deadline-promos (S91) — **DONE S91**: `SmartPromoRecommender` now renders local `TERMS CHANGED` drift pills and edge-floor execution deadlines.
+- conflict-aware-tracker (S91) — **DONE S91**: `Tracker` now detects active promo collisions from open bets/workflows and displays a conflict guard panel plus per-book chips.
+- kelly-sandbox-profile (S91) — **DONE S91**: `ProfilePanel` now shows quarter/half/full Kelly replay from settled history.
+- share-briefing-button (S91) — **DONE S91**: Today briefing can generate a zero-PII canvas share card through the existing share-card safety model.
+- S91 verification: focused tests passed (`dashboard.test.js` 13/13, `promoConflict.test.js` 3/3); full `npm test` passed 450/450; `npm run build`, `npm run smoke:launch`, and `npm run check:bundle` passed.
 
 - anti-tilt-circuit-breaker (S89) — **DONE S89**: added `src/lib/tiltGuard.js` (rapid-fire + losing-streak + exposure detection, 30-min cooldown), banner in `TodayDashboardPanel`, 3 tests.
 - causal-promo-explainer (S89) — **DONE S89**: ablation-based `whyRanked` in `src/dashboard/today.js` + compact "Why #N" line in `SmartPromoRecommender`; zero net new AI cost.

@@ -771,3 +771,38 @@ Audit/implement pass executed against `docs/AUDIT_2026-05-17-S90.md` (12-item fr
 2. Build the CF Worker piece for swarm-confidence-badges (50-line aggregator).
 3. Run ai-cost-crash-diet after 7 days of post-S90 ledger data for measurable baseline.
 4. Stage calculator-lazy-route-split in its own dedicated structural-risk session.
+
+---
+
+## Session 91 sprint (2026-05-18)
+
+Audit/implement pass executed against `docs/AUDIT_2026-05-18.md` (6-item S91 thin-integration audit, Combined Priority 202.2).
+
+- Shipped 6 of 6 items: s90-command-ribbon, terms-and-deadline-promos, conflict-aware-tracker, kelly-sandbox-profile, share-briefing-button, execution-doc-noop-guard.
+- Net new UI wiring: Today Operator Briefing + share card action; Smart Promo terms/deadline signals; Tracker conflict guard; Profile Kelly Sandbox.
+- Test count remains 450/450; full `npm run verify:launch-local` passed end to end; no new AI cost and no new external dependencies.
+- Architectural shift: S90's pure operator-intelligence modules are now product surfaces rather than dormant libraries.
+
+---
+
+## SIL v3.0 — Session 91 (2026-05-18)
+
+| Category | Score | Δ | Note |
+|---|---|---|---|
+| Dev Health | 100 | → | Full `verify:launch-local` green with 450/450 tests. |
+| Creative Alignment | 100 | → | UI now reinforces disciplined decisions: counterfactual learning, terms drift, conflicts, and Kelly sizing. |
+| Momentum | 99 | ↑ | 6/6 fresh audit items shipped in one focused pass. |
+| Engagement | 100 | ↑ | S90 engines became visible retention loops instead of hidden libraries. |
+| Process Quality | 100 | → | `/start` gates run; fresh audit, implement plan, execution log, and closeout write-back completed. |
+| Cross-Repo Coherence | 99 | → | PromoGrind account boundary unchanged; no cross-Studio membership promises added. |
+| Security Posture | 100 | → | Share-card path uses existing zero-PII runtime assertion; no new secrets or network calls. |
+| Ecosystem Integration | 99 | → | Reused existing app data, tracker, profile, recommender, and S90 library contracts. |
+| Capital Efficiency | 100 | → | $0 AI/API spend added; all new surfaces are local/rule-engine. |
+| Automation Coverage | 100 | → | Focused + full test/build/smoke/bundle verification passed. |
+| **Total** | **997 / 1000** | | |
+
+**Top win:** S90's strongest intelligence primitives are now front-and-center in user workflows: users can see what history taught them, where terms changed, when edge decays, which promos conflict, and how sizing would have changed outcomes.
+
+**Top gap:** S91 still needs post-push production artifact inspection; local launch truth is green.
+
+**Intent outcome:** Achieved — fresh audit, full implementation, closeout write-back, and founder-facing summary ready.

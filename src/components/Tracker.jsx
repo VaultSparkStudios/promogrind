@@ -9,6 +9,7 @@ import { Tl, Nt, S } from "../ui.jsx";
 import { PROMO_SCHED } from "../data/promoSchedule.js";
 import { flagVisit } from "../lib/missions.js";
 import { useViewport } from "../app/responsive.js";
+import { detectPromoConflicts } from "../lib/promoConflict.js";
 
 const Tracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -27,6 +28,29 @@ const Tracker = () => {
   const setExpiry = (n, v) => syncAppData({...data, bookExpiry:{...expiry,[n]:v}});
   const todayStr = new Date().toISOString().split('T')[0];
   const in3Days = new Date(Date.now()+3*24*60*60*1000).toISOString().split('T')[0];
+  const activePromoCandidates = useMemo(() => {
+    const fromBets = (data.bets || [])
+      .filter((bet) => ["", "open", "pending", "placed"].includes(String(bet.status || "").toLowerCase()))
+      .map((bet, index) => ({
+        id: bet.promoId || bet.id || `bet-${index}`,
+        book: bet.book,
+        market: bet.market || bet.selection || bet.game || "general",
+        requirements: bet.requirements || [bet.requirement, bet.terms, bet.promoType].filter(Boolean),
+        maxPayout: Number.parseFloat(bet.maxPayout),
+      }));
+    const fromWorkflows = (data.workflowInbox || [])
+      .filter((workflow) => ["queued", "placed", "pending", "open"].includes(String(workflow.status || "").toLowerCase()))
+      .map((workflow, index) => ({
+        id: workflow.promoId || workflow.id || `workflow-${index}`,
+        book: workflow.book,
+        market: workflow.market || workflow.selection || workflow.title || "general",
+        requirements: workflow.requirements || [workflow.requirement, workflow.terms, workflow.promoType].filter(Boolean),
+        maxPayout: Number.parseFloat(workflow.maxPayout),
+      }));
+    return [...fromBets, ...fromWorkflows].filter((promo) => promo.book && promo.market);
+  }, [data.bets, data.workflowInbox]);
+  const promoConflicts = useMemo(() => detectPromoConflicts(activePromoCandidates), [activePromoCandidates]);
+  const conflictBooks = useMemo(() => new Set(promoConflicts.map((conflict) => conflict.book)), [promoConflicts]);
   const booksWithActivePromos = useMemo(()=>{
     const today=new Date();
     const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -104,6 +128,16 @@ const Tracker = () => {
       </div>
     </div>
     <Nt c={K.ac}>Your tracker syncs across all your devices. Data also saves locally as a backup.</Nt>
+    {promoConflicts.length > 0 && (
+      <div style={{marginBottom:12,padding:'12px 14px',background:`${K.rd}06`,border:`1px solid ${K.rd}30`,borderRadius:8}}>
+        <div style={{fontSize:10,color:K.rd,fontWeight:800,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>Promo conflict guard — {promoConflicts.length} collision{promoConflicts.length === 1 ? '' : 's'}</div>
+        {promoConflicts.slice(0, 3).map((conflict, index) => (
+          <div key={`${conflict.class}-${index}`} style={{fontSize:11,color:K.dm,lineHeight:1.5,marginBottom:4}}>
+            <strong style={{color:K.tx}}>{conflict.book}</strong>: {conflict.message}
+          </div>
+        ))}
+      </div>
+    )}
     {(()=>{
       try {
         const st = localStorage.getItem('pg_user_state');
@@ -183,7 +217,7 @@ const Tracker = () => {
           const roi=calcROI(bookProfit,bookWagered);
           return(<React.Fragment key={b.name}><tr style={{opacity:done[b.name]?0.4:1}}>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><div role="checkbox" aria-checked={!!done[b.name]} aria-label={`Mark ${b.name} as completed`} tabIndex={0} onClick={()=>toggle(b.name)} onKeyDown={e=>(e.key===" "||e.key==="Enter")&&toggle(b.name)} style={{width:16,height:16,borderRadius:3,border:`2px solid ${done[b.name]?K.gn:K.bd2}`,background:done[b.name]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",outline:"none"}} onFocus={e=>e.currentTarget.style.boxShadow=`0 0 0 2px ${K.gn}55`} onBlur={e=>e.currentTarget.style.boxShadow="none"}>{done[b.name]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>✓</span>}</div></td>
-          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}{es==='soon'&&<span style={{...S.tag(K.yl),marginLeft:4}}>⚠</span>}{es==='expired'&&<span style={{...S.tag(K.rd),marginLeft:4}}>EXPIRED</span>}{bookStatus[b.name]==="limited"&&<span style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>LIMITED</span>}{bookStatus[b.name]==="gubbed"&&<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>GUBBED</span>}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span>{booksWithActivePromos.has(b.name)&&<span title="Has active promos today" style={{...S.tag(K.gn),marginLeft:4,fontSize:8}}>PROMO TODAY</span>}</td>
+          <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{b.name}{es==='soon'&&<span style={{...S.tag(K.yl),marginLeft:4}}>⚠</span>}{es==='expired'&&<span style={{...S.tag(K.rd),marginLeft:4}}>EXPIRED</span>}{bookStatus[b.name]==="limited"&&<span style={{...S.tag(K.yl),marginLeft:4,fontSize:8}}>LIMITED</span>}{bookStatus[b.name]==="gubbed"&&<span style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>GUBBED</span>}{conflictBooks.has(b.name)&&<span title="Active promo conflict detected" style={{...S.tag(K.rd),marginLeft:4,fontSize:8}}>CONFLICT</span>}<span style={{...S.tag(K.ac),marginLeft:6}}>{b.type}</span>{booksWithActivePromos.has(b.name)&&<span title="Has active promos today" style={{...S.tag(K.gn),marginLeft:4,fontSize:8}}>PROMO TODAY</span>}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:200}}>{b.detail}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600,whiteSpace:"nowrap"}}>{b.value}</td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontSize:11,color:K.dm,maxWidth:180}}>{b.recurring}</td>

@@ -8,6 +8,7 @@ import { readTrustReceipts, summarizeTrustReceipt } from "../lib/trustReceipts.j
 import { buildLocalDataExport, clearLocalPromoGrindData, describeDataControlState } from "../lib/dataControls.js";
 import { buildReplayInsights } from "../lib/replayLedger.js";
 import { exportPassport } from "../lib/operatorPassport.js";
+import { compareKellyFractions } from "../lib/kellySim.js";
 
 function PassportExportSection() {
   const ctx = useContext(AppDataCtx);
@@ -327,6 +328,48 @@ function DataControlsSection() {
   );
 }
 
+function KellySandboxSection() {
+  const ctx = useContext(AppDataCtx);
+  const history = useMemo(() => {
+    const bets = Array.isArray(ctx?.appData?.bets) ? ctx.appData.bets : [];
+    const ledger = Array.isArray(ctx?.appData?.ledger) ? ctx.appData.ledger : [];
+    const fromBets = bets
+      .filter((bet) => ["settled", "won", "lost"].includes(String(bet.status || "").toLowerCase()))
+      .map((bet) => ({
+        stake: bet.stake,
+        odds: bet.odds || bet.line,
+        profit: bet.profit ?? bet.netProfit,
+        edge: bet.edge,
+      }));
+    const fromLedger = ledger.map((entry) => ({
+      stake: entry.stake || entry.hedge || entry.wager,
+      odds: entry.odds || entry.line || 100,
+      profit: entry.profit,
+      edge: entry.edge || 0.02,
+    }));
+    return [...fromBets, ...fromLedger].filter((entry) => Number.parseFloat(entry.stake) > 0);
+  }, [ctx?.appData]);
+  const rows = useMemo(() => compareKellyFractions(history, [0.25, 0.5, 1], { startingBankroll: Number.parseFloat(ctx?.appData?.bankroll) || 1000 }), [ctx?.appData?.bankroll, history]);
+  if (!history.length) return null;
+  return (
+    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+        Kelly Sandbox
+      </div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
+        Replay settled history against quarter, half, and full Kelly sizing.
+      </div>
+      {rows.map((row) => (
+        <div key={row.kFraction} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '8px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 6, marginBottom: 6 }}>
+          <span style={{ fontSize: 11, color: K.tx, fontWeight: 700 }}>{row.kFraction} Kelly</span>
+          <span style={{ fontSize: 10, color: row.netProfit >= 0 ? K.gn : K.rd, fontWeight: 700 }}>{row.netProfit >= 0 ? '+' : '-'}${Math.abs(row.netProfit).toFixed(2)}</span>
+          <span style={{ fontSize: 10, color: K.mt }}>{row.samples} samples · {row.roi.toFixed(1)}% ROI</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ProfilePanel({
   user, proStatus, darkMode, toggleTheme,
   compactMode, toggleCompact, currency, setCurrency, onClose,
@@ -528,6 +571,9 @@ export default function ProfilePanel({
 
         {/* ── Operator passport ────────────────────────────────────── */}
         <PassportExportSection />
+
+        {/* ── Kelly sandbox ────────────────────────────────────────── */}
+        <KellySandboxSection />
 
         {/* ── Achievements ─────────────────────────────────────────── */}
         <AchievementsSection />

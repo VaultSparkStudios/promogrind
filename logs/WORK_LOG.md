@@ -238,3 +238,12 @@ Append chronological entries.
 - Verification: `npm test` 430/430; `npm run smoke:launch` green.
 - Risks: zero new AI-cost surfaces (operator-twin and replay ledger are rule-only); HMAC-signed passport uses Web Crypto; tilt guard requires `calcLaunchHistory` in appData — call-site instrumentation TODO. Budget meter has API in place but caller-side `recordAiSpend` hooks still TODO.
 - Next: push/deploy S89, validate replay gate against next post-deploy artifact, wire `recordAiSpend` at Advisor/Chat call sites, schedule App.jsx decomposition.
+
+### 2026-05-18 - Session 91 audit/implement/closeout
+
+- Goal: run `/start`, `/audit`, `/implement`, and `/closeout`, with a short founder-facing summary, focused on making the S90 operator-intelligence stack user-visible.
+- What changed: created `docs/AUDIT_2026-05-18.md`, refreshed `docs/IMPLEMENT_PLAN.md`, wired Today Operator Briefing and zero-PII share-card action, surfaced terms-drift and edge-floor deadlines in Smart Promo recommendations, added Tracker promo-conflict guardrails, and added Profile Kelly Sandbox replay.
+- Files or systems touched: `src/components/dashboard/TodayDashboardPanel.jsx`, `src/components/dashboard/SmartPromoRecommender.jsx`, `src/components/Tracker.jsx`, `src/components/ProfilePanel.jsx`, `docs/AUDIT_2026-05-18.md`, `docs/IMPLEMENT_PLAN.md`, and closeout truth surfaces.
+- Verification: `npm test -- dashboard.test.js` passed 13/13; `npm test -- promoConflict.test.js` passed 3/3; full `npm run verify:launch-local` passed end to end with 450/450 tests, AI usage ledger, hook guard, auth/launch/UX/browser smokes, public dist exposure, replay proofs, bundle budget, and strict public sanitization.
+- Risks created or removed: removed the main S90 value gap by turning dormant engines into visible UI. No new AI/API cost, no new dependencies, and no new secret surface. Remaining launch risks are still external/manual proof gates.
+- Recommended next move: deploy S91, ingest/inspect the launch-verification artifact, then complete production auth email, Stripe smoke, and friend-beta proof recording.

@@ -3,7 +3,8 @@ import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { getDashboardSnapshot } from "../../dashboard/today.js";
 import { K } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
-import { buildDecayCurve, renderSparkline } from "../../lib/edgeDecay.js";
+import { buildDecayCurve, computeExecutionDeadline, renderSparkline } from "../../lib/edgeDecay.js";
+import { recordTermsSnapshot } from "../../lib/termsDrift.js";
 
 export default function SmartPromoRecommender({ data }) {
   const today = new Date();
@@ -73,6 +74,15 @@ export default function SmartPromoRecommender({ data }) {
           const reasons = Array.isArray(p.reasons) ? p.reasons : [];
           const memorySignal = p.memorySignal || null;
           const memoryColor = memorySignal?.direction === "up" ? K.gn : memorySignal?.direction === "down" ? K.yl : K.ac;
+          const terms = (() => {
+            try {
+              const promoId = `${p.book || "book"}:${p.promo || "promo"}`;
+              return recordTermsSnapshot({ promoId, termsText: p.terms || p.detail || p.promo, storage: window.localStorage });
+            } catch {
+              return { status: "new" };
+            }
+          })();
+          const deadline = computeExecutionDeadline(p, 0.35);
           return (
             <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "8px 12px", background: K.s2, borderRadius: 6, border: `1px solid ${isUrgent ? K.rd + "60" : K.bd}` }}>
               <div style={{ minWidth: 0 }}>
@@ -85,6 +95,7 @@ export default function SmartPromoRecommender({ data }) {
                 {reasons.includes("cold lane") && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>COLD LANE</span>}
                 {reasons.includes("backlog pressure") && <span style={{ ...S.tag(K.ac), marginLeft: 6, fontSize: 8 }}>CLEAR BACKLOG</span>}
                 {reasons.includes("limit risk") && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 8 }}>LIMIT RISK</span>}
+                {terms.status === "drift" && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>TERMS CHANGED</span>}
                 {memorySignal && (
                   <div style={{ fontSize: 9, color: memoryColor, marginTop: 4, lineHeight: 1.35 }}>
                     {memorySignal.label}: {memorySignal.detail}
@@ -100,6 +111,11 @@ export default function SmartPromoRecommender({ data }) {
                     </div>
                   );
                 })()}
+                {deadline && !deadline.expired && (
+                  <div style={{ fontSize: 9, color: deadline.hoursRemaining <= 8 ? K.rd : K.yl, marginTop: 4, lineHeight: 1.4 }}>
+                    Execute before edge floor: {Number.isFinite(deadline.hoursRemaining) ? `${deadline.hoursRemaining}h` : "stable"}
+                  </div>
+                )}
                 {Array.isArray(p.whyRanked) && p.whyRanked.length > 0 && (
                   <div style={{ fontSize: 9, color: K.mt, marginTop: 4, lineHeight: 1.4 }}>
                     Why #{p.baselineRank || i + 1}: {p.whyRanked.map((c) => {

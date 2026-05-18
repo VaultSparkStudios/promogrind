@@ -12,6 +12,10 @@ import { appendWorkflows } from "../../workflows/store.js";
 import { getWorkflowActionSlug } from "../../workflows/actionGraph.js";
 import { computeTiltState } from "../../lib/tiltGuard.js";
 import { buildTwinForecast } from "../../ai/operatorTwin.js";
+import { buildCounterfactualPnL } from "../../lib/counterfactualPnL.js";
+import { buildDecisionJournal } from "../../lib/decisionJournal.js";
+import { computeDisciplineScore } from "../../lib/discipline.js";
+import { assertShareCardPiiSafe, buildShareCardData, renderShareCardCanvas } from "../../lib/shareCard.js";
 
 function OperatorTwinCard({ forecast }) {
   if (!forecast) return null;
@@ -38,6 +42,43 @@ function TiltBreakerBanner({ state }) {
       <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
         {state.signals.map((s) => s.label).join(" · ")}
       </div>
+    </div>
+  );
+}
+
+function OperatorCommandRibbon({ counterfactual, journal, onShare }) {
+  const hasCounterfactual = counterfactual?.hasSignal;
+  const hasJournal = journal?.hasActivity;
+  if (!hasCounterfactual && !hasJournal) {
+    return (
+      <div style={{ padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, marginBottom: 12 }}>
+        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Operator Briefing</div>
+        <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>Log three settled outcomes to unlock the counterfactual P&L ribbon and yesterday recap.</div>
+      </div>
+    );
+  }
+  const aiTone = counterfactual.deltaAiTop >= 0 ? K.gn : K.yl;
+  const redTone = counterfactual.deltaSkipRed >= 0 ? K.gn : K.yl;
+  const money = (value) => `${value >= 0 ? "+" : "-"}$${Math.abs(value).toFixed(2)}`;
+  return (
+    <div style={{ padding: "12px", background: `${K.ac}08`, border: `1px solid ${K.ac}30`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", marginBottom: 8 }}>
+        <div>
+          <div style={{ fontSize: 10, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Operator Briefing</div>
+          {hasJournal ? <div style={{ fontSize: 12, color: K.tx, fontWeight: 800 }}>{journal.lines[0]}</div> : null}
+          {hasJournal ? <div style={{ fontSize: 10, color: K.mt, marginTop: 3 }}>{journal.lines[1]}</div> : null}
+        </div>
+        <button onClick={onShare} style={{ padding: "7px 10px", background: `${K.gn}12`, border: `1px solid ${K.gn}40`, borderRadius: 8, color: K.gn, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+          Share briefing
+        </button>
+      </div>
+      {hasCounterfactual ? (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 8 }}>
+          <InsightChip label="Actual 7d" value={money(counterfactual.actual)} tone={counterfactual.actual >= 0 ? K.gn : K.rd} />
+          <InsightChip label="AI #1 delta" value={money(counterfactual.deltaAiTop)} tone={aiTone} />
+          <InsightChip label="Skip red delta" value={money(counterfactual.deltaSkipRed)} tone={redTone} />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -124,6 +165,36 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const calibration = adaptivePlan.calibration || snapshot.trackInsights?.selfCalibration || {};
   const toast = useToast();
   const { syncAppData } = React.useContext(AppDataCtx) || {};
+  const counterfactual = React.useMemo(() => buildCounterfactualPnL(appData), [appData]);
+  const journal = React.useMemo(() => buildDecisionJournal(appData), [appData]);
+  const discipline = React.useMemo(() => computeDisciplineScore(appData), [appData]);
+  const shareBriefing = React.useCallback(() => {
+    try {
+      const card = buildShareCardData({
+        disciplineScore: discipline.score,
+        topLane: adaptivePlan.topLane?.key,
+        edgeDelta14d: journal.stats?.edgeDelta || 0,
+        headline: journal.lines?.[0] || counterfactual.summary,
+      });
+      assertShareCardPiiSafe(card);
+      const canvas = renderShareCardCanvas(card);
+      if (canvas?.toBlob && navigator?.clipboard?.write && typeof ClipboardItem !== "undefined") {
+        canvas.toBlob(async (blob) => {
+          if (!blob) return;
+          try {
+            await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+            if (toast) toast("Briefing card copied.", K.gn);
+          } catch {
+            if (toast) toast("Briefing card ready; clipboard image copy is unavailable in this browser.", K.yl);
+          }
+        });
+      } else if (toast) {
+        toast("Briefing card needs a browser canvas.", K.yl);
+      }
+    } catch {
+      if (toast) toast("Briefing card could not be generated.", K.rd);
+    }
+  }, [adaptivePlan.topLane?.key, counterfactual.summary, discipline.score, journal.lines, journal.stats?.edgeDelta, toast]);
   const playbookResults = React.useMemo(
     () => snapshot?.topPlaybook
       ? { top: [snapshot.topPlaybook], matches: [snapshot.topPlaybook] }
@@ -179,6 +250,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
 
       <TiltBreakerBanner state={computeTiltState(appData)} />
       <OperatorTwinCard forecast={buildTwinForecast(appData)} />
+      <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />
 
       <OperatorAutopilotCard decision={nextAction} topWorkflow={snapshot.topWorkflow} navigate={navigate} />
 

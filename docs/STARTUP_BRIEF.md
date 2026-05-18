@@ -13,7 +13,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 89 · 2026-05-18 · BUILDER MODE                          ║
+║  Session 89 · 2026-05-18 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -91,14 +91,8 @@
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 88                                ║
-║  Founder portfolio scope · ranked by impact                    ║
-║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
-║                                                                ║
-║  💡  1  [SPEED]  Run ops.mjs doctor — full studio health chec  ║
-║        One command runs all validators. Use at session start   ║
-║        ↳ node scripts/ops.mjs doctor                           ║
+╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
+║  Run `node scripts/ops.mjs genius-list` to generate fresh recom  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ```

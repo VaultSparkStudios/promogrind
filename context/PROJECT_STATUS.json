@@ -13,35 +13,35 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 88,
-  "currentFocus": "S88 audit/implement sprint: Operator Season rail, Profile local data controls, public dist exposure gate, friend-beta feedback summary, and AI usage launch-gate rendering are shipped; legacy public vault-sdk.js membership SDK/reference removed.",
-  "nextMilestone": "Push S88, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentSession": 91,
+  "currentFocus": "S91 thin-integration sprint complete: S90 counterfactual P&L, decision journal, terms drift, edge-floor deadlines, promo conflict detection, Kelly sandbox, and zero-PII share-card engines are now wired into Today, Smart Promo Recommender, Tracker, and Profile UI.",
+  "nextMilestone": "Push/deploy S91, ingest the launch-verification artifact, then complete external launch proofs: production auth email smoke, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
   "blockers": [
-    "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
-    "Run production auth email smoke after S88 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
+    "Run production auth email smoke after S91 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
   "lastUpdated": "2026-05-18",
-  "silScore": 991,
-  "silAvg3": 987,
-  "silVelocity": 5,
+  "silScore": 997,
+  "silAvg3": 996,
+  "silVelocity": 6,
   "silDebt": "down",
-  "silLastSession": 88,
+  "silLastSession": 91,
   "silMax": 1000,
   "silSparkline": [
     931,
     962,
-    981,
     988,
-    991
+    991,
+    995,
+    997
   ],
   "ignisScore": 46140,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-14",
-  "testsPassing": 409,
-  "testsTotal": 409,
-  "testsLastRun": "2026-05-17",
+  "testsPassing": 450,
+  "testsTotal": 450,
+  "testsLastRun": "2026-05-18",
   "lastDeployStatus": "deployed-unannounced",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-05-17",
@@ -51,12 +51,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 409/409 in S88 verify:launch-local"
+      "status": "passing 450/450 in S91"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S88, including AI usage, public dist exposure, bundle budget, and strict public sanitization"
+      "status": "passing end to end in S91 with 450/450 tests, AI usage, hook guard, auth/launch/UX/browser smokes, public dist exposure, replay proofs, bundle budget, and strict public sanitization"
     },
     {
       "type": "ux-integrity",
@@ -92,8 +92,8 @@
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
-    "momentum": 97,
-    "engagement": 97,
+    "momentum": 99,
+    "engagement": 100,
     "processQuality": 100,
     "crossRepoCoherence": 99,
     "securityPosture": 100,
@@ -102,7 +102,7 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-05-17",
+    "date": "2026-05-18",
     "passing": 12,
     "warning": 0,
     "failing": 0,
@@ -197,16 +197,16 @@
       }
     ]
   },
-  "entropyScore": 0.063,
-  "entropyLastComputed": "2026-04-28",
+  "entropyScore": 0.06,
+  "entropyLastComputed": "2026-05-18",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "builder",
-  "sessionModeAutoShiftedAt": "2026-05-18T02:04:15.702Z",
-  "planModeDetected": "active",
-  "planModeCheckedAt": "2026-05-18T02:05:25.866Z",
+  "sessionMode": "founder",
+  "sessionModeAutoShiftedAt": "2026-05-18T03:21:29.751Z",
+  "planModeDetected": "missing",
+  "planModeCheckedAt": "2026-05-18T03:21:38.298Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.850Z"
 }

@@ -1,9 +1,19 @@
 # Latest Handoff
 
-Last updated: 2026-05-17 (S90)
-Session: 90
-Session Intent: Run `/start` → `/audit` → `/implement` → `/closeout` with genius-level innovation, compounding on the S89 operator-intelligence stack.
-Intent Outcome: Achieved. S90 produced a 12-item fresh audit (Combined Priority 528.6) and shipped 7 core modules in one pass, deferring 5 with structural rationale. 20 net-new tests; suite 430→450 passing.
+Last updated: 2026-05-18 (S91)
+Session: 91
+Session Intent: Run `/start` → `/audit` → `/implement` → `/closeout` with genius-level innovation; make the S90 operator-intelligence stack user-visible and close out with founder-facing summary.
+Intent Outcome: Achieved. S91 produced a fresh 6-item audit and shipped all 6 items in one thin-integration pass. Test suite remains 450/450; build, launch smoke, and bundle budget passed.
+
+## Where We Left Off (Session 91)
+
+- Created `docs/AUDIT_2026-05-18.md` and refreshed `docs/IMPLEMENT_PLAN.md` for the S91 thin-integration sprint.
+- **s90-command-ribbon** — `TodayDashboardPanel` now renders an Operator Briefing ribbon from S90 `buildCounterfactualPnL` + `buildDecisionJournal`, with sparse-history fallback.
+- **share-briefing-button** — the same Today ribbon can generate a zero-PII canvas share card via `buildShareCardData`, `assertShareCardPiiSafe`, and `renderShareCardCanvas`.
+- **terms-and-deadline-promos** — `SmartPromoRecommender` now renders local `TERMS CHANGED` drift pills and edge-floor execution deadlines alongside existing EV-decay sparklines.
+- **conflict-aware-tracker** — `Tracker` derives active promo candidates from open bets/workflows, runs `detectPromoConflicts`, and renders a conflict guard panel plus per-book `CONFLICT` chips.
+- **kelly-sandbox-profile** — `ProfilePanel` now shows quarter/half/full Kelly replay against settled history.
+- Verification: `npm test -- dashboard.test.js` 13/13, `npm test -- promoConflict.test.js` 3/3, and full `npm run verify:launch-local` passed end to end with 450/450 tests, AI usage ledger, hook guard, auth/launch/UX/browser smokes, public dist exposure, replay proofs, bundle budget, and strict public sanitization.
 
 ## Where We Left Off (Session 90)
 

@@ -1,44 +1,44 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-05-17",
-  "generatedAtMs": 1779038714255,
-  "session": 88,
-  "vectorHash": "331c5fe250143e07",
-  "silTotal": 991,
-  "silAvg3": 987,
+  "generatedAt": "2026-05-18",
+  "generatedAtMs": 1779075900944,
+  "session": 91,
+  "vectorHash": "127f9419b81e00f6",
+  "silTotal": 997,
+  "silAvg3": 996,
   "velocity": 6,
   "debt": "down",
   "runway": "~2 sessions",
   "intentRate": "100% achieved (last 5)",
-  "openNow": 4,
-  "openNext": 6,
+  "openNow": 5,
+  "openNext": 7,
   "openBlocked": 2,
   "topNow": [
+    "deploy S91 operator-intelligence UI wiring, then inspect the next GitHub Pages l",
     "production auth email smoke after S87 deploy — create a real PromoGrind account,",
-    "run one real Stripe smoke purchase and record evidence — scripted: `npm run smok",
-    "complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `np"
+    "run one real Stripe smoke purchase and record evidence — scripted: `npm run smok"
   ],
   "topNext": [
+    "finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`",
     "rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage h",
-    "add a guided promo-passport onboarding path from first account to first settled ",
-    "add a production `dist/` exposure gate so generated bundles cannot accidentally "
+    "add a guided promo-passport onboarding path from first account to first settled "
   ],
   "health": "green",
   "truthStatus": "green",
   "genome": "24/25",
   "ignisScore": 46140,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 3,
+  "ignisAgeDays": 4,
   "name": "PromoGrind",
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Push S88, let GitHub Pages deploy, run real production auth email smoke, ingest the launch-verification artifact, then complete external launch proofs: real BetMGM/bet365/BetRivers tracked URLs, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
-  "currentFocus": "S88 audit/implement sprint: Operator Season rail, Profile local data controls, public dist exposure gate, friend-beta feedback summary, and AI usage launch-gate rendering are shipped; legacy public vault-sdk.js membership SDK/reference removed.",
+  "nextMilestone": "Push/deploy S91, ingest the launch-verification artifact, then complete external launch proofs: production auth email smoke, npm run smoke:stripe -- --record, and npm run beta:check -- --record.",
+  "currentFocus": "S91 thin-integration sprint complete: S90 counterfactual P&L, decision journal, terms drift, edge-floor deadlines, promo conflict detection, Kelly sandbox, and zero-PII share-card engines are now wired into Today, Smart Promo Recommender, Tracker, and Profile UI.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
-    "Replace remaining placeholder affiliate links for BetMGM, bet365, and BetRivers before public announcement (operator confirmed S81: applied for all possible; pending partner approval).",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
-    "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record)."
+    "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
+    "Run production auth email smoke after S91 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ]
 }

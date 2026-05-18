@@ -1,25 +1,25 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-17 (Session 88 closeout) -->
+<!-- generated-at: 2026-05-18 (Session 91 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S88 ═════════════════════════╗
-║  Date: 2026-05-17  ·  SIL: 991/1000  ·  Velocity: 5 down         ║
+╔══ SESSION CLOSEOUT · PromoGrind · S91 ═════════════════════════╗
+║  Date: 2026-05-18  ·  SIL: 997/1000  ·  Velocity: 6 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Created `docs/AUDIT_2026-05-17.md`, a compact ranked plan ac  ║
-║  ✓ Added `src/lib/seasons.js` and surfaced a 14-day Operator Se  ║
-║  ✓ Added `src/lib/dataControls.js` and Profile export/clear-loc  ║
-║  ✓ Added `scripts/check-public-dist-exposure.mjs`, wired it int  ║
-║  ✓ Removed the legacy public `vault-sdk.js` asset and `index.ht  ║
+║  ✓ Created `docs/AUDIT_2026-05-18.md` and refreshed `docs/IMPLE  ║
+║  ✓ **s90-command-ribbon** — `TodayDashboardPanel` now renders a  ║
+║  ✓ **share-briefing-button** — the same Today ribbon can genera  ║
+║  ✓ **terms-and-deadline-promos** — `SmartPromoRecommender` now   ║
+║  ✓ **conflict-aware-tracker** — `Tracker` derives active promo   ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 991/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           97   ██████████                            ║
-║    Engagement         97   ██████████                            ║
+║    Momentum           99   ██████████                            ║
+║    Engagement         100  ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          99   ██████████                            ║
 ║    Security           100  ██████████                            ║
@@ -28,25 +28,25 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 4 files  ·  M:4 A:0 D:0 ?:0                            ║
+║  Changes: 21 files  ·  M:19 A:0 D:0 ?:2                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         409/409                                          ║
+║  Tests:         450/450                                          ║
 ║  IGNIS:         4d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║

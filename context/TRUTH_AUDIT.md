@@ -109,6 +109,13 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Re-ingested deploy artifact run `25181776729`; Supabase/VAPID/signup/billing/checkout/customer-portal checks pass, with only affiliate/required monetization checks red.
 - Verified `npm run verify:launch-local` green end-to-end (`392/392`, launch smoke, UX route integrity, browser smoke, bundle budget, strict public-repo sanitization).
 
+## Resolved This Session (S91)
+
+- S90 operator-intelligence primitives are now wired into product UI: Today Operator Briefing, share briefing card, Smart Promo terms/deadline signals, Tracker conflict guard, and Profile Kelly Sandbox.
+- `docs/AUDIT_2026-05-18.md` and `docs/IMPLEMENT_PLAN.md` now record the S91 audit/implementation contract and execution evidence.
+- Verification truth: `npm run verify:launch-local` passed end to end with 450/450 tests, AI usage ledger, hook guard, auth/launch/UX/browser smokes, public dist exposure, replay proofs, bundle budget, and strict public-repo sanitization.
+- Remaining launch truth is unchanged and external/manual: real production auth email proof, Stripe smoke purchase, and friend-beta evidence still need recording before public announcement.
+
 ## Resolved This Session (S80)
 
 - Added `docs/PROTOCOL_FAQ.md` with 10 public-safe session-protocol Q&A entries.

@@ -187,3 +187,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: perform full Studio OS closeout, refresh canonical context/memory/CDR/task-board/status surfaces, verify the repo, scan staged changes, commit, and push the completed S87 state to GitHub.
 - Why it matters: the next session and the GitHub Pages deploy need one coherent handoff that separates shipped repo work from still-external launch proof blockers.
 - Supersedes prior entry: continues the 2026-04-28 / 2026-05-01 closeout rule for the current S87 scope.
+
+### 2026-05-18 — Run full start/audit/implement/closeout with founder-readable impact
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): "/start then /audit then /implement then /closeout — use genius-level, sophisticated thinking; be creative and innovative; provide a short founder-facing easy-to-understand summary of changes and impact after closeout."
+- Area affected: feature / process / scope / founder communication
+- Previous state: S90 had shipped strong operator-intelligence modules, but the product UI still needed a thin integration pass before users could benefit from them directly.
+- New required direction: complete the full Studio OS loop, implement the highest-leverage repo-controllable improvements, preserve strict launch truth, and end with a concise founder-facing impact summary.
+- Why it matters: PromoGrind should keep compounding toward a best-in-class operator system while making the result understandable enough for launch and prioritization decisions.
+- Supersedes prior entry: continues the 2026-04-28 direction to make PromoGrind best-in-class across product, intelligence, and trust.

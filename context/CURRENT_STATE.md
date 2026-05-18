@@ -1,13 +1,14 @@
 # Current State
 
-Last updated: 2026-05-17 (S90)
+Last updated: 2026-05-18 (S91)
 
 ## Snapshot
 
 - Date: 2026-05-17
-- Overall status: deployed product with S90 audit/implement/closeout sprint complete — shipped 7 of 12 core modules layering on S89 infrastructure: counterfactual P&L ribbon, decision journal autogen, terms-drift detector, edge half-life scheduler, promo conflict detector, Kelly-fraction sandbox, and zero-PII share card. Suite is now 450/450 (up from 430). UI wiring deferred to S91 thin-integration pass. Below preserves S89 narrative.
+- Overall status: deployed product with S91 thin-integration audit/implement/closeout sprint complete — the S90 operator-intelligence engines are now visible in product UI: Today shows a counterfactual P&L + decision-journal command ribbon with zero-PII share card generation, Smart Promo recommendations surface terms-drift and edge-floor deadlines, Tracker shows promo-conflict guardrails, and Profile includes the Kelly replay sandbox. `npm run verify:launch-local` passed end to end with 450/450 tests.
+- Prior status (S90): deployed product with S90 audit/implement/closeout sprint complete — shipped 7 of 12 core modules layering on S89 infrastructure: counterfactual P&L ribbon, decision journal autogen, terms-drift detector, edge half-life scheduler, promo conflict detector, Kelly-fraction sandbox, and zero-PII share card. Suite is now 450/450 (up from 430). UI wiring deferred to S91 thin-integration pass. Below preserves S89 narrative.
 - Overall status (S89): deployed product with S89 audit/implement/closeout sprint complete — shipped 9 of 10 audit items focused on temporal intelligence, counterfactual learning, and anti-tilt safety: tilt circuit breaker, ablation-based promo explainer ("why ranked #N"), EV decay radar, operator twin drift forecast, 14-day adversarial receipt replay, HMAC-signed public operator passport, launch-proof resilience replay, calculator pre-warm, and weekly AI budget self-binding. Suite is now 430/430 (up from 409). S88 audit/implement/closeout sprint complete: added an Operator Season rail over daily missions, Profile local data export/clear controls, a public `dist/` exposure gate wired into `verify:launch-local`, friend-beta feedback summary generation, and a cleaner AI usage ledger renderer. The new dist gate caught and drove removal of the legacy public `vault-sdk.js` cross-project membership SDK/reference, preserving the S86 PromoGrind-only account boundary. S87 launch proof mirror, Operator Autopilot, trust receipts, discipline scoring, outcome-memory recommendations, and AI usage ledger remain intact. Closeout verification in S88 passed `npm run verify:launch-local` end to end with 409/409 tests. Production host remains GitHub Pages (Cloudflare is DNS-only proxy).
-- Current phase: public-unveil launch hardening with external blocker cleanup
+- Current phase: public-unveil launch hardening with S90/S91 operator-intelligence now user-visible; external proof cleanup remains.
 - Canonical launch proof surface: `context/LAUNCH_PROOFS.json`
 
 ## What exists
@@ -25,12 +26,16 @@ Last updated: 2026-05-17 (S90)
 - Gamification: settlement mastery ladder (8 promo types × 4 levels), 30-badge achievement system, daily missions (15-pool, LCG-seeded) with auto-completion and XP tracking, plus S87 discipline scoring that rewards settled outcomes, repeatable lanes, and lower unresolved exposure
 - Operator season loop (S88): `src/lib/seasons.js` builds a 14-day discipline season from closed-loop settlements/skips, repeat feedback, bankroll context, and open-bet cleanup; `DailyMissionsPanel` now shows season score/progress above daily missions without rewarding raw bet volume
 - Operator loop (S87): `TodayDashboardPanel` now surfaces an Operator Autopilot card that routes the user to the best immediate action, while `SmartPromoRecommender` explains outcome-memory signals from hot lanes, cold drift, settled samples, and repeat/execution behavior
+- Operator intelligence UI (S91): `TodayDashboardPanel` now includes an Operator Briefing ribbon that combines the S90 counterfactual P&L engine and decision journal, plus a zero-PII "Share briefing" canvas-card action.
+- Promo safety UI (S91): `SmartPromoRecommender` now surfaces local `TERMS CHANGED` drift pills and edge-floor execution deadlines next to existing EV-decay sparklines and why-ranked explanations.
+- Tracker safety UI (S91): `Tracker` now derives active promo candidates from open bets/workflows and renders promo-conflict guardrails for rollover, qualifier, and max-payout collisions.
+- Profile learning UI (S91): `ProfilePanel` now includes a Kelly Sandbox section that replays settled history against quarter/half/full Kelly sizing.
 - Trust loop (S87): local trust receipts record sensitive account, billing, AI analysis, push subscription, and cloud-sync moments; Profile surfaces the latest receipts so users can see what the app did on their behalf
 - Data controls (S88): Profile includes local export and clear-local-data controls powered by `src/lib/dataControls.js`, giving users an immediate control path for browser-stored PromoGrind data while keeping preferences by default
 - Launch command center (S87): the browser reads `src/data/launchProofs.generated.js`, generated from `context/LAUNCH_PROOFS.json`, so proof statuses/evidence requirements/next steps stay aligned with repo truth without exposing private ops state
 - AI cost/usage (S87/S88): `npm run ai:usage` renders `docs/AI_USAGE_LEDGER.md`; S88 switched the renderer to direct PostgREST fetch so the command exits cleanly and added it to `verify:launch-local`
 - Systems: Supabase-backed auth/data flows, repaired Stripe checkout/customer-portal paths, AI edge functions (with AbortController + exponential-backoff retry), push/onboarding/community surfaces, Studio export/contract generation, shared AI gateway/workflow store layers, adaptive dashboard planning with `adaptiveRankingSnapshot`, deterministic scanner/community workflow suggestion IDs, conflict-aware workflow upserts, Pages push-alert env plumbing, a machine-readable launch proof surface with evidence requirements, post-deploy launch-verification artifacts, normalized CTA link metadata and analytics, production dashboard smoke, `launch:status`, `AppChrome`/`appText`/`AppNotifications`/`useProfitNotifications` seams, restored `ParlayHedge` route coverage, and safer service-worker cache writes that avoid the consumed-response clone failure seen in production
-- Test coverage: full test suite reached 409/409 passing during S88 verification; `npm run verify:launch-local` passed end to end including browser smoke, public dist exposure, bundle budget, and strict public-repo sanitization.
+- Test coverage: full S91 launch gate passed: `npm run verify:launch-local` completed 450/450 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, public dist exposure, replay proofs, bundle budget, and strict public-repo sanitization.
 - Operator runners: `npm run smoke:stripe` walks the Stripe smoke checklist with evidence capture; `npm run beta:check` now includes account creation/sign-in plus confirmation-email or password-reset recovery visibility before calculator/CTA/pricing/trust checks; both record to `context/LAUNCH_PROOFS.json` with `--record`
 - Post-deploy ingester (S81): `npm run ingest:launch` pulls the latest GitHub `launch-verification` artifact via `gh` CLI and writes `artifacts/launch-verification/post-deploy.{md,json}` without ever modifying manual proof status
 - Latest post-deploy ingest (S82): run `25181776729` shows Supabase tables, VAPID env, public signup, confirmed billing user, live checkout, and customer portal checks passing; remaining deploy-verification failures are `affiliate_coverage` and `required_launch_monetization` for `BetMGM`, `bet365`, and `BetRivers`
@@ -47,6 +52,7 @@ Last updated: 2026-05-17 (S90)
 - Active work: finishing monetization coverage for sportsbook CTAs with real approved affiliate/referral links
 - Active work: completing one live Stripe smoke purchase and one friend-facing auth/calculator/pricing pass before public announcement
 - Active work: continuing to decompose the remaining high-churn `src/App.jsx` seams (still ~4300 lines)
+- Active work: deploy S91 UI wiring and inspect the next launch-verification artifact for regressions.
 
 ## Blockers
 
@@ -59,6 +65,6 @@ Last updated: 2026-05-17 (S90)
 
 ## Next 3 moves
 
-1. Push S88 to `main`, let GitHub Pages deploy, then run production auth email checks and `npm run ingest:launch`.
+1. Push S91 to `main`, let GitHub Pages deploy, then run production auth email checks and `npm run ingest:launch`.
 2. Complete `npm run beta:check -- --record` with the updated recovery-aware friend beta checklist and `npm run smoke:stripe -- --record` with one real checkout.
-3. Finish CTA monetization truth by adding real `BetMGM`, `bet365`, and `BetRivers` tracking links, using `node scripts/update-launch-proof.mjs --list --guide` for evidence requirements.
+3. Schedule the dedicated `app-jsx-decomposition-finale` session once the S91 UI wiring is deployed.
