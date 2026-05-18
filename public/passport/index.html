@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator Passport — PromoGrind</title>
+  <meta name="description" content="View a verified PromoGrind operator passport. Discipline score, lane mastery, settled-loop ratio — zero-PII, signature-verified.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://promogrind.bet/passport/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
+    .container { max-width: 720px; margin: 0 auto; }
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid #1e293b; }
+    .logo { font-size: 1.25rem; font-weight: 700; color: #4ade80; text-decoration: none; }
+    .back { color: #60a5fa; text-decoration: none; font-size: 0.875rem; }
+    h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.6rem; color: #4ade80; }
+    p { margin-bottom: 0.75rem; color: #cbd5e1; }
+    .card { background: #101826; border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .badge.ok { background: #1e3a2f; color: #4ade80; border: 1px solid #4ade8055; }
+    .badge.warn { background: #3a2f1e; color: #facc15; border: 1px solid #facc1555; }
+    .badge.bad { background: #3a1e1e; color: #f87171; border: 1px solid #f8717155; }
+    .score-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+    .score-row .num { font-size: 3rem; font-weight: 700; color: #4ade80; line-height: 1; font-variant-numeric: tabular-nums; }
+    .score-row .of { font-size: 1rem; color: #64748b; }
+    .lane-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-top: 0.75rem; }
+    .lane { padding: 10px 12px; background: #0a0e17; border: 1px solid #1e293b; border-radius: 8px; }
+    .lane .label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .lane .level { font-size: 0.95rem; color: #e2e8f0; font-weight: 700; }
+    .lane .xp { font-size: 0.75rem; color: #94a3b8; }
+    code { background: #0a0e17; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #94a3b8; }
+    .empty { color: #64748b; font-style: italic; }
+    .footer { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #64748b; }
+    .footer a { color: #60a5fa; text-decoration: none; }
+    .meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 0.8rem; color: #94a3b8; }
+    .ratio-bar { height: 6px; background: #1e293b; border-radius: 999px; overflow: hidden; margin-top: 6px; }
+    .ratio-bar > div { height: 100%; background: #4ade80; }
+    button.cta { display: inline-block; margin-top: 10px; padding: 10px 18px; background: #4ade80; color: #0a0e17; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <a class="logo" href="/">PromoGrind</a>
+      <a class="back" href="/">← Back to app</a>
+    </div>
+
+    <h1>Operator Passport</h1>
+    <p style="color:#94a3b8">Verified discipline + mastery snapshot. Zero personally-identifying info.</p>
+
+    <div id="status" class="card" style="text-align:center">
+      <div class="empty">Loading passport from URL fragment…</div>
+    </div>
+
+    <div id="content" style="display:none">
+      <div class="card">
+        <div class="meta">
+          <div><span class="badge ok" id="verifyBadge">Signature verified</span></div>
+          <div>Issued <span id="issuedAt">—</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">Discipline</h2>
+        <div class="score-row">
+          <span class="num" id="disciplineScore">—</span>
+          <span class="of">/ 100</span>
+          <span class="badge ok" id="disciplineBand">—</span>
+        </div>
+        <div style="font-size:0.85rem; color:#94a3b8">Feedback coverage: <span id="feedbackCoverage">—</span>%</div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">Settled-loop ratio</h2>
+        <div class="score-row">
+          <span class="num" id="loopRatio">—</span>
+          <span class="of">%</span>
+        </div>
+        <div class="ratio-bar"><div id="loopBar" style="width:0"></div></div>
+        <div style="font-size:0.85rem; color:#94a3b8; margin-top:8px">
+          <span id="closedCount">0</span> closed of <span id="settledCount">0</span> settled
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">Lane mastery</h2>
+        <div style="font-size:0.85rem; color:#94a3b8; margin-bottom:6px">Global rank: <strong id="globalRank">—</strong></div>
+        <div class="lane-grid" id="lanes"></div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">Make your own</h2>
+        <p>Export your own operator passport from the PromoGrind Profile page. It's signed locally and contains no PII.</p>
+        <a href="/" class="cta" style="text-decoration:none">Open PromoGrind →</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Passports are signed with a deterministic key and verified in-browser. They contain only discipline score, lane mastery, and settled-loop ratio — no bet history, no stake amounts, no sportsbook account info. <a href="/privacy/">Privacy policy</a>.</p>
+    </div>
+  </div>
+
+  <script>
+    const PASSPORT_KEY_ID = "pg-passport-v1";
+
+    function b64urlDecode(str) {
+      const padded = str.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((str.length + 3) % 4);
+      const bin = atob(padded);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes;
+    }
+
+    async function importKey(secret) {
+      const enc = new TextEncoder();
+      return crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    }
+
+    async function verifyPassport(token, secret) {
+      if (typeof token !== "string" || !token.includes(".")) return { ok: false, reason: "format" };
+      const [payloadB64, sig] = token.split(".");
+      const key = await importKey(secret);
+      const enc = new TextEncoder();
+      const sigBytes = b64urlDecode(sig);
+      const valid = await crypto.subtle.verify("HMAC", key, sigBytes, enc.encode(payloadB64));
+      if (!valid) return { ok: false, reason: "signature" };
+      try {
+        const json = new TextDecoder().decode(b64urlDecode(payloadB64));
+        return { ok: true, payload: JSON.parse(json) };
+      } catch {
+        return { ok: false, reason: "decode" };
+      }
+    }
+
+    function setStatus(html, tone) {
+      const el = document.getElementById("status");
+      const color = tone === "bad" ? "#f87171" : tone === "warn" ? "#facc15" : "#94a3b8";
+      el.innerHTML = '<div style="color:' + color + '">' + html + '</div>';
+    }
+
+    function render(payload) {
+      const d = payload.discipline || {};
+      const o = payload.operator || {};
+      const m = payload.mastery || {};
+
+      document.getElementById("disciplineScore").textContent = d.score ?? "—";
+      const band = d.band || "—";
+      const badge = document.getElementById("disciplineBand");
+      badge.textContent = band;
+      badge.className = "badge " + (band === "Elite" || band === "Controlled" ? "ok" : band === "Building" ? "warn" : "bad");
+      document.getElementById("feedbackCoverage").textContent = d.feedbackCoverage ?? 0;
+
+      const ratio = o.settledLoopRatio ?? 0;
+      document.getElementById("loopRatio").textContent = ratio;
+      document.getElementById("loopBar").style.width = Math.max(0, Math.min(100, ratio)) + "%";
+      document.getElementById("closedCount").textContent = o.closedCount ?? 0;
+      document.getElementById("settledCount").textContent = o.settledCount ?? 0;
+
+      document.getElementById("globalRank").textContent = m.globalRank ?? "—";
+      const lanes = document.getElementById("lanes");
+      lanes.innerHTML = "";
+      const perType = m.perType || {};
+      const entries = Object.entries(perType);
+      if (!entries.length) {
+        lanes.innerHTML = '<div class="empty">No lane mastery recorded yet.</div>';
+      } else {
+        entries.sort((a, b) => (b[1].xp || 0) - (a[1].xp || 0));
+        for (const [key, info] of entries) {
+          const div = document.createElement("div");
+          div.className = "lane";
+          div.innerHTML = '<div class="label">' + key.replace(/_/g, " ") + '</div>' +
+            '<div class="level">' + (info.level || "—") + '</div>' +
+            '<div class="xp">' + (info.xp ?? 0) + ' XP</div>';
+          lanes.appendChild(div);
+        }
+      }
+
+      const issued = payload.issuedAt ? new Date(payload.issuedAt) : null;
+      document.getElementById("issuedAt").textContent = issued
+        ? issued.toISOString().slice(0, 10)
+        : "—";
+
+      document.getElementById("status").style.display = "none";
+      document.getElementById("content").style.display = "block";
+    }
+
+    async function bootstrap() {
+      const hash = window.location.hash.replace(/^#/, "");
+      const search = new URLSearchParams(window.location.search);
+      const token = hash || search.get("p") || "";
+      if (!token) {
+        setStatus("No passport token in URL. Append <code>#&lt;your-passport&gt;</code> or use <code>?p=&lt;your-passport&gt;</code>.", "warn");
+        return;
+      }
+      try {
+        const result = await verifyPassport(token, PASSPORT_KEY_ID);
+        if (!result.ok) {
+          setStatus("Passport could not be verified (" + result.reason + "). The token may be tampered or from a different key version.", "bad");
+          return;
+        }
+        render(result.payload);
+      } catch (err) {
+        setStatus("Passport verification error: " + (err.message || String(err)), "bad");
+      }
+    }
+
+    bootstrap();
+  </script>
+</body>
+</html>

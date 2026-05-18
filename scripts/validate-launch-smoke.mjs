@@ -51,8 +51,8 @@ for (const relPath of requiredFiles) {
 
 if (errors.length === 0) {
   assertIncludes("src/App.jsx", "MemberWelcomeCard", "member onboarding card", errors);
-  assertIncludes("src/App.jsx", "Free PromoGrind account", "free account messaging", errors);
-  assertIncludes("src/App.jsx", "Paid checkout stays off until the Studio billing rollout is fully live.", "paid checkout beta messaging", errors);
+  assertIncludes("src/app/AppSubcomponents.jsx", "Free PromoGrind Account", "free account messaging", errors);
+  assertIncludes("src/app/AppSubcomponents.jsx", "Paid checkout stays off until the Studio billing rollout is fully live.", "paid checkout beta messaging", errors);
   assertIncludes("src/components/AuthDialog.jsx", "Resend confirmation email", "auth confirmation resend action", errors);
   assertIncludes("src/components/AuthDialog.jsx", "Forgot your password?", "auth password reset entrypoint", errors);
   assertIncludes("src/components/AuthDialog.jsx", "Choose a new password", "auth recovery update-password mode", errors);

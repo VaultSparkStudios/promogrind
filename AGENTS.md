@@ -147,4 +147,20 @@ Project-type aware via `portfolio/PROJECT_REGISTRY.json` → `type`. Personal-sc
 
 ---
 
+## Studio Website Reference Scaffold (D-S119.3)
+
+Before scaffolding any public-facing website page (home, auth, dashboard, marketing, legal, etc), agent MUST consult the canonical catalog at:
+
+- `vaultspark-studio-ops/portfolio/STUDIO_WEBSITE_SCAFFOLD/catalog.json` — live catalog (auto-refreshed nightly)
+- `vaultspark-studio-ops/portfolio/STUDIO_WEBSITE_SCAFFOLD/patterns.json` — derived consensus patterns
+- `vaultspark-studio-ops/docs/STUDIO_WEBSITE_SCAFFOLD_PLAN.md` — architecture + rationale
+
+**Workflow.** (1) Read `catalog.json` — see how vaultsparkstudios.com, joinvorn.com, usemindframe.com (and others) handle menu, auth, footer, page list. (2) Read `patterns.json` — use the consensus pattern unless this project's `context/SOUL.md` justifies a deviation. (3) If deviating, log it in `context/DECISIONS.md` with rationale. (4) For ANY public signup flow, wire the **Vault SSO contract** (see `docs/VAULT_SSO_CONTRACT.md`). Free Studio membership is auto-granted on signup unless user opts out.
+
+**Enforcements (non-negotiable for public projects):** branding line per type (CANON-006), footer copyright `© 2026 VaultSpark Studios LLC. All rights reserved.`, required legal pages `/privacy` + `/terms`, Vault SSO call on signup-success when `vault.sso` capability is provisioned.
+
+Refresh manually: `node vaultspark-studio-ops/scripts/scrape-studio-websites.mjs`.
+
+---
+
 <!-- studio-os:universal-sections-end -->

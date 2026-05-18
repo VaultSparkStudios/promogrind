@@ -6,24 +6,29 @@ export const LAUNCH_PROOFS = {
   "notes": "Canonical machine-readable launch proof surface for PromoGrind. Use this instead of scattered prose when reporting external/manual launch blockers.",
   "proofs": {
     "affiliateLinks": {
-      "label": "Required sportsbook monetization links",
-      "status": "pending",
-      "blocking": true,
+      "label": "Sportsbook monetization coverage",
+      "status": "partial",
+      "blocking": false,
       "requiredFor": [
-        "full-launch",
         "marketing-push"
       ],
-      "details": "Real operator-approved tracking or referral URLs are still missing for BetMGM, bet365, and BetRivers.",
-      "requiredBooks": [
+      "details": "PromoGrind monetizes via 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics). BetMGM, bet365, and BetRivers are partner-blocked (one rejected/waitlisted; the others do not offer individual referral codes). These books still ship with clean untracked signup URLs so operators can use them, but PromoGrind does not earn referral revenue on them. Launch is no longer gated on these external partner approvals; if/when they arrive, paste the URLs into src/books.js and rerun npm run verify:production.",
+      "activeReferralBooks": [
+        "DraftKings",
+        "FanDuel",
+        "Caesars",
+        "ESPN BET",
+        "Fanatics"
+      ],
+      "advisoryBooks": [
         "BetMGM",
         "bet365",
         "BetRivers"
       ],
-      "nextStep": "Paste real approved tracking/referral URLs into src/books.js, then run npm run verify:production.",
+      "nextStep": "Optional: apply to affiliate networks (Income Access, FanCompass) for the 3 advisory books. Not required for launch.",
       "evidenceRequired": [
-        "operator-approved URL for each required book",
-        "npm run verify:production shows required_launch_monetization passing",
-        "live CTA opens the tracked URL after deploy"
+        "5 active referral URLs verified live after deploy",
+        "3 advisory books expose clean signup links with no fake tracking"
       ],
       "evidence": []
     },

@@ -20,6 +20,7 @@ const errors = [];
 const auth = read("src/auth.js");
 const dialog = read("src/components/AuthDialog.jsx");
 const app = read("src/App.jsx");
+const appSubcomponents = read("src/app/AppSubcomponents.jsx");
 const launchState = read("src/launchState.js");
 const appText = read("src/app/appText.js");
 const userMenu = read("src/components/UserMenu.jsx");
@@ -95,7 +96,7 @@ assertIncludes(launchState, '"update-password"', "update-password auth query mod
 
 assertIncludes(dialog, "This creates a PromoGrind account only. Studio membership is separate and not required.", "explicit PromoGrind-only signup copy", errors);
 assertIncludes(appText, "PromoGrind accounts are separate from Studio membership", "footer account separation copy", errors);
-assertIncludes(app, "Studio membership is separate and is not required to create or use a PromoGrind account.", "member welcome separation copy", errors);
+assertIncludes(appSubcomponents, "Studio membership is separate and is not required to create or use a PromoGrind account.", "member welcome separation copy", errors);
 
 const friendEvidence = proofs?.proofs?.friendBeta?.evidenceRequired || [];
 for (const required of [

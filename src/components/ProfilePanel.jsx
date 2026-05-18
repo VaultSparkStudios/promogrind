@@ -7,6 +7,61 @@ import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
 import { readTrustReceipts, summarizeTrustReceipt } from "../lib/trustReceipts.js";
 import { buildLocalDataExport, clearLocalPromoGrindData, describeDataControlState } from "../lib/dataControls.js";
 import { buildReplayInsights } from "../lib/replayLedger.js";
+import { exportPassport } from "../lib/operatorPassport.js";
+
+function PassportExportSection() {
+  const ctx = useContext(AppDataCtx);
+  const [shareUrl, setShareUrl] = React.useState("");
+  const [busy, setBusy] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+
+  async function handleExport() {
+    setBusy(true);
+    try {
+      const token = await exportPassport(ctx?.appData || {});
+      const url = `${window.location.origin}/passport/#${token}`;
+      setShareUrl(url);
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+        setMessage("Passport URL copied — paste it anywhere to share. Zero PII, signed locally.");
+      } else {
+        setMessage("Passport URL ready below.");
+      }
+    } catch (err) {
+      setMessage("Could not generate passport. WebCrypto required.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+        Operator Passport
+      </div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
+        Share a verifiable snapshot of your discipline score, lane mastery, and settled-loop ratio. Signed locally. No bet history, no stake amounts, no sportsbook account info — ever.
+      </div>
+      <button
+        onClick={handleExport}
+        disabled={busy}
+        style={{
+          padding: '8px 14px', borderRadius: 6, cursor: busy ? 'wait' : 'pointer',
+          background: `${K.gn}15`, border: `1px solid ${K.gn}40`,
+          color: K.gn, fontSize: 11, fontWeight: 700, fontFamily: font,
+        }}
+      >
+        {busy ? 'Generating…' : 'Export & copy passport URL'}
+      </button>
+      {message && <div style={{ fontSize: 10, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
+      {shareUrl && (
+        <div style={{ marginTop: 8, padding: '8px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 6, fontSize: 9, color: K.mt, wordBreak: 'break-all', fontFamily: 'monospace' }}>
+          {shareUrl}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function ReplayInsightSection() {
   const ctx = useContext(AppDataCtx);
@@ -470,6 +525,9 @@ export default function ProfilePanel({
 
         {/* ── Data controls ────────────────────────────────────────── */}
         <DataControlsSection />
+
+        {/* ── Operator passport ────────────────────────────────────── */}
+        <PassportExportSection />
 
         {/* ── Achievements ─────────────────────────────────────────── */}
         <AchievementsSection />
