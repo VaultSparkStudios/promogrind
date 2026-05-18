@@ -19,8 +19,9 @@ const asJson = args.has('--json');
 const codexBootstrap = args.has('--codex-bootstrap');
 const claudeDirect = args.has('--claude-direct');
 const nodeCommand = process.execPath;
+const studioOpsRoot = resolveStudioOpsRoot();
 const bootstrapServerPath = path.join(ROOT, 'scripts', 'studio-ops-mcp-bootstrap.mjs');
-const directServerPath = path.join(ROOT, 'ignis', 'mcp', 'studio-ops-server.mjs');
+const directServerPath = path.join(studioOpsRoot, 'ignis', 'mcp', 'studio-ops-server.mjs');
 const claudeServerPath = claudeDirect ? directServerPath : bootstrapServerPath;
 const codexServerPath = codexBootstrap ? bootstrapServerPath : directServerPath;
 const report = {
@@ -30,6 +31,7 @@ const report = {
     codex: codexBootstrap ? 'bootstrap' : 'direct-server',
   },
   nodeCommand,
+  studioOpsRoot,
   serverPath: {
     claude: claudeServerPath,
     codex: codexServerPath,
@@ -100,4 +102,21 @@ function normalize(value) {
 
 function normalizeConfigObject(value) {
   return normalize(JSON.stringify(value));
+}
+
+function resolveStudioOpsRoot() {
+  const candidates = [
+    process.env.STUDIO_OPS_ROOT,
+    path.resolve(ROOT, '..', 'vaultspark-studio-ops'),
+    ROOT,
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    const normalized = path.resolve(candidate);
+    if (fs.existsSync(path.join(normalized, 'ignis', 'mcp', 'studio-ops-server.mjs'))) {
+      return normalized;
+    }
+  }
+
+  return path.resolve(candidates[0]);
 }

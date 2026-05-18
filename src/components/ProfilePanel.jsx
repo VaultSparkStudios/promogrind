@@ -4,7 +4,7 @@ import { K, font, fontD } from "../lib/shared.js";
 import { FX, AppDataCtx } from "../contexts.jsx";
 import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
 import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
-import { readTrustReceipts, summarizeTrustReceipt } from "../lib/trustReceipts.js";
+import { readTrustReceipts, recordTrustReceipt, summarizeTrustReceipt } from "../lib/trustReceipts.js";
 import { buildLocalDataExport, clearLocalPromoGrindData, describeDataControlState } from "../lib/dataControls.js";
 import { buildReplayInsights } from "../lib/replayLedger.js";
 import { exportPassport } from "../lib/operatorPassport.js";
@@ -28,6 +28,16 @@ function PassportExportSection() {
       } else {
         setMessage("Passport URL ready below.");
       }
+      recordTrustReceipt({
+        type: "passport",
+        title: "Operator passport exported",
+        summary: "PromoGrind generated a zero-PII signed operator passport URL from local performance totals.",
+        stored: ["signed passport payload", "local discipline summary"],
+        notStored: ["email", "stake-level bet history", "sportsbook login data"],
+        undo: "Do not share the copied URL, or clear local browser data to remove the local export trace.",
+        dedupeKey: "passport:export",
+        dedupeMs: 10 * 60 * 1000,
+      });
     } catch (err) {
       setMessage("Could not generate passport. WebCrypto required.");
     } finally {

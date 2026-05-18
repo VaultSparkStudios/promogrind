@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { getOnboardingProgress, markOnboardingStepComplete, loadCompletedOnboardingSteps } from "../onboarding.js";
+import { getOnboardingProgress, getPromoPassportOnboardingPlan, markOnboardingStepComplete, loadCompletedOnboardingSteps } from "../onboarding.js";
 
 describe("onboarding helpers", () => {
   beforeEach(() => {
@@ -35,5 +35,40 @@ describe("onboarding helpers", () => {
     expect(progress.doneCount).toBe(5);
     expect(progress.pct).toBe(100);
     expect(progress.remaining).toHaveLength(0);
+  });
+
+  it("guides users from account to first settled result before passport export", () => {
+    localStorage.setItem("pg_usage_log", JSON.stringify({ "bonus-bet": 1 }));
+
+    const plan = getPromoPassportOnboardingPlan({
+      user: { id: "user-1" },
+      appData: {
+        done: { DraftKings: true },
+        bets: [{ id: 1, status: "open" }],
+      },
+      disciplineScore: 82,
+    });
+
+    expect(plan.doneCount).toBe(4);
+    expect(plan.next.id).toBe("settled");
+    expect(plan.complete).toBe(false);
+  });
+
+  it("marks passport complete after a settled result and passport trust receipt", () => {
+    localStorage.setItem("pg_usage_log", JSON.stringify({ "bonus-bet": 1 }));
+
+    const plan = getPromoPassportOnboardingPlan({
+      user: { id: "user-1" },
+      appData: {
+        done: { DraftKings: true },
+        bets: [{ id: 1, status: "won" }],
+      },
+      trustReceipts: [{ title: "Operator passport exported" }],
+      disciplineScore: 88,
+    });
+
+    expect(plan.doneCount).toBe(6);
+    expect(plan.next).toBeNull();
+    expect(plan.complete).toBe(true);
   });
 });

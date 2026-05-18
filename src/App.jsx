@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useEffect, useRef, Component, lazy, Suspense } from "react";
+﻿import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BOOKS } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
@@ -11,6 +11,9 @@ import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
+import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
+import { AppProviders, FeatureFlagProviders } from "./app/AppProviders.jsx";
+import { buildAppTabs, buildSlugMap, DEFAULT_SLUG, getAllCalcs, getCalcGroupIndex, SUBCATS } from "./app/appRoutes.js";
 import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_UI, SEARCH_UI } from "./app/appText.js";
 import { parseBetSlip } from "./app/parseBetSlip.js";
 import { GiftTrialBox, StarterPackModal, OnboardingChecklist, MemberWelcomeCard } from "./app/AppSubcomponents.jsx";
@@ -19,7 +22,7 @@ import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMod
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./app/responsive.js";
-import { ToastCtx, useToast, ToastProvider, AppDataCtx, CompactCtx, FX, CurrencyCtx } from "./contexts.jsx";
+import { ToastCtx, useToast, AppDataCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
 import { getDashboardSnapshot } from "./dashboard/today.js";
@@ -650,25 +653,6 @@ const Leaderboard = () => {
 
 // â•â•â• COMMUNITY PROMO BOARD â€” extracted to src/components/CommunityPromoBoard.jsx â•â•â•
 const PromoBoard = CommunityPromoBoard;
-
-class ErrorBoundary extends Component {
-  constructor(props) { super(props); this.state={error:null}; }
-  static getDerivedStateFromError(e) { return {error:e}; }
-  render() {
-    if(this.state.error) return (
-      <div style={{fontFamily:"'JetBrains Mono','SF Mono','Fira Code',monospace",padding:32,display:"flex",alignItems:"center",justifyContent:"center",minHeight:240}}>
-        <div style={{background:"#0f1520",border:"1px solid #1e293b",borderRadius:10,padding:32,maxWidth:440,textAlign:"center"}}>
-          <div style={{fontSize:28,marginBottom:8}}>âš </div>
-          <div style={{fontSize:14,fontWeight:700,color:"#f87171",marginBottom:8}}>This calculator hit an error</div>
-          <div style={{fontSize:12,color:"#94a3b8",marginBottom:16}}>Try refreshing, or use the navigation above to switch calculators.</div>
-          {import.meta.env.DEV && <div style={{fontSize:10,color:"#64748b",marginBottom:12,textAlign:"left",padding:"8px",background:"#0a0e17",borderRadius:4,wordBreak:"break-all"}}>{this.state.error.message}</div>}
-          <button onClick={()=>this.setState({error:null})} style={{padding:"8px 20px",background:"#60a5fa",border:"none",borderRadius:6,color:"#0a0e17",fontWeight:700,cursor:"pointer"}}>Try Again</button>
-        </div>
-      </div>
-    );
-    return this.props.children;
-  }
-}
 
 // â•â•â• DAILY STREAK â•â•â•
 const DailyStreak = () => {
@@ -3036,88 +3020,23 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
 // â•â•â• BET SLIP TEXT PARSER â•â•â•
 // parseBetSlip extracted to ./app/parseBetSlip.js
 
+const EmailCapture = () => null;
 
 // PromoChat â†’ ./components/PromoChat.jsx
 // â•â•â• MAIN APP â•â•â•
-const TABS = [
-  { group:"Home", items:[
-    {n:"Dashboard",slug:"dashboard",c:DailyDashboard},
-    {n:"Promo Intake",slug:"promo-intake",c:PromoIntakeRoute},
-    {n:"Daily Brief",slug:"daily-brief",c:DailyBriefPage},
-    {n:"Get Started",slug:"get-started",c:GetStartedRoute},
-    {n:"What's New",slug:"whats-new",c:WhatsNewRoute},
-    {n:"Pricing",slug:"pricing",c:PricingPage},
-    {n:"About",slug:"about",c:AboutRoute},
-  ]},
-  { group:"Convert", items:[
-    {n:"Bonus Bet",slug:"bonus-bet",c:BonusBet},
-    {n:"Profit Boost",slug:"profit-boost",c:ProfitBoost},
-    {n:"First Bet",slug:"first-bet",c:FirstBet},
-    {n:"Deposit Match",slug:"deposit-match",c:DepositMatch},
-    {n:"Insurance",slug:"insurance",c:InsurancePromo},
-  ]},
-  { group:"Calculate", items:[
-    {n:"No-Vig",slug:"no-vig",c:NoVig,subcat:"Value & EV"},
-    {n:"3-Way No-Vig",slug:"no-vig-3way",c:NoVig3Way,subcat:"Value & EV"},
-    {n:"+EV",slug:"ev",c:PlusEV,subcat:"Value & EV"},
-    {n:"Kelly",slug:"kelly",c:KellyCriterion,subcat:"Value & EV"},
-    {n:"2-Way Arb",slug:"arb-2way",c:Arb2Way,subcat:"Arbitrage"},
-    {n:"3-Way Arb",slug:"arb-3way",c:Arb3Way,subcat:"Arbitrage"},
-    {n:"Parlay Hedge",slug:"parlay-hedge",c:ParlayHedge,subcat:"Arbitrage"},
-    {n:"Middle",slug:"middle",c:MiddleBet,subcat:"Arbitrage"},
-    {n:"Odds Convert",slug:"odds-convert",c:OddsConvert,subcat:"Advanced"},
-    {n:"Line Shop",slug:"line-shop",c:LineShop,subcat:"Value & EV"},
-    {n:"Rollover",slug:"rollover",c:RolloverCalc,subcat:"Advanced"},
-    {n:"Teaser",slug:"teaser",c:TeaserCalc,subcat:"Value & EV"},
-    {n:"Round Robin",slug:"round-robin",c:RoundRobinCalc,subcat:"Arbitrage"},
-    {n:"Parlay Builder",slug:"parlay-builder",c:ParlayBuilder,subcat:"Value & EV"},
-    {n:"SGP Estimator",slug:"sgp-estimator",c:SGPEstimator,subcat:"Value & EV"},
-    {n:"Hold Calc",slug:"hold-calc",c:HoldCalc,subcat:"Value & EV"},
-    {n:"Bet Sizer",slug:"bet-sizer",c:BetSizingAdvisor,subcat:"Value & EV"},
-    {n:"Income Est.",slug:"income-estimator",c:IncomeEstimator,subcat:"Advanced"},
-    {n:"Deposit Optimizer",slug:"deposit-optimizer",c:DepositOptimizer,subcat:"Promo"},
-    {n:"Hedge Validator",slug:"hedge-validator",c:HedgeValidator,subcat:"Promo"},
-    {n:"Promo Guarantee",slug:"promo-guarantee",c:PromoGuarantee,subcat:"Promo"},
-    {n:"Gut Check",slug:"gut-check",c:GutCheck,subcat:"Promo"},
-    {n:"Promo Stacking",slug:"promo-stacking",c:PromoStacking,subcat:"Promo"},
-    {n:"Taxes Estimator",slug:"taxes-estimator",c:TaxesEstimatorWrapper,subcat:"Advanced",icon:"ðŸ§¾"},
-  ]},
-  { group:"Track", items:[
-    {n:"Edge",slug:"edge-dashboard",c:TrackInsights},
-    {n:"Sportsbooks",slug:"sportsbooks",c:Tracker},
-    {n:"Bet Tracker",slug:"bet-tracker",c:BetTracker},
-    {n:"P/L Ledger",slug:"ledger",c:Ledger},
-    {n:"Leaderboard",slug:"leaderboard",c:Leaderboard},
-    {n:"Free Bet Arb",slug:"free-bet-arb",c:FreeBetArbTracker},
-    {n:"Trade Journal",slug:"trade-journal",c:PromoJournal},
-    {n:"Odds Compare",slug:"odds-compare",c:OddsComparisonTable},
-    {n:"Profit Cert",slug:"profit-cert",c:ProfitCertificate},
-  ]},
-  { group:"Live", items:[
-    {n:"Arb Scanner",slug:"arb-scanner",c:LiveScanner,pro:true},
-    {n:"+EV Scanner",slug:"ev-scanner",c:LiveScanner,pro:true},
-    {n:"Action Plan",slug:"action-plan",c:AIActionPlan,pro:true},
-    {n:"Stack Builder",slug:"stack-builder",c:StackBuilder,pro:true},
-  ]},
-  { group:"Learn", items:[
-    {n:"Knowledge Base",slug:"knowledge-base",c:KB},
-    {n:"Promo Finder",slug:"promo-finder",c:PromoFinder},
-    {n:"Promo Calendar",slug:"promo-calendar",c:PromoCalendar},
-    {n:"Promo Board",slug:"promo-board",c:PromoBoard},
-    {n:"Glossary",slug:"glossary",c:Glossary},
-    {n:"Refer & Earn",slug:"refer-earn",c:ReferralHub},
-    {n:"Community Promos",slug:"community-promos",c:PromoBoard},
-    {n:"Upgrade",slug:"upgrade",c:PricingPage},
-    {n:"Team Accounts",slug:"team-accounts",c:TeamAccounts},
-    {n:"vs Competitors",slug:"vs-competitors",c:CompetitorComparison},
-    {n:"Promo Arb Finder",slug:"promo-arb-finder",c:PromoArbFinder},
-  ]},
-];
+const TABS = buildAppTabs({
+  DailyDashboard, PromoIntakeRoute, DailyBriefPage, GetStartedRoute, WhatsNewRoute, PricingPage, AboutRoute,
+  BonusBet, ProfitBoost, FirstBet, DepositMatch, InsurancePromo,
+  NoVig, NoVig3Way, PlusEV, KellyCriterion, Arb2Way, Arb3Way, ParlayHedge, MiddleBet, OddsConvert,
+  LineShop, RolloverCalc, TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc, BetSizingAdvisor,
+  IncomeEstimator, DepositOptimizer, HedgeValidator, PromoGuarantee, GutCheck, PromoStacking, TaxesEstimatorWrapper,
+  TrackInsights, Tracker, BetTracker, Ledger, Leaderboard, FreeBetArbTracker, PromoJournal, OddsComparisonTable,
+  ProfitCertificate, LiveScanner, AIActionPlan, StackBuilder, KB, PromoFinder, PromoCalendar, PromoBoard,
+  Glossary, ReferralHub, TeamAccounts, CompetitorComparison, PromoArbFinder,
+});
 TABS_REF = TABS;
 
-const DEFAULT_SLUG = "dashboard";
-const slugMap = {};
-TABS.forEach((g,gi)=>g.items.forEach((item,ti)=>{slugMap[item.slug]={gi,ti};}));
+const slugMap = buildSlugMap(TABS);
 
 
 export default function App() {
@@ -3432,20 +3351,17 @@ export default function App() {
   // Feature flag admin — hidden route, house tier only
   if (pathname === "/feature-flags") {
     return (
-      <ToastProvider>
-      <AppDataCtx.Provider value={{ appData, syncAppData, user, syncDiagnostics, syncStatus, isOnline }}>
+      <FeatureFlagProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline}>
       <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100vh", padding: 16 }}>
         <Suspense fallback={<div style={{ padding: 32 }}>Loading…</div>}>
           <FeatureFlagAdmin proStatus={proStatus} />
         </Suspense>
       </div>
-      </AppDataCtx.Provider>
-      </ToastProvider>
+      </FeatureFlagProviders>
     );
   }
 
   const g = TABS[gi];
-  const Comp = item?.c || (() => null);
   const isLiveTool = !!item?.pro;
 
   const handleGroupTabKeyDown = (event, index) => {
@@ -3481,10 +3397,9 @@ export default function App() {
     }
   };
 
-  const allCalcs = TABS.flatMap(g=>g.items.map(item=>({...item,group:g.group})));
+  const allCalcs = getAllCalcs(TABS);
   const handleCalcNavigate = (slug) => navigate('/'+slug);
-  const CALC_GI = TABS.findIndex(t=>t.group==="Calculate");
-  const SUBCATS = ["All","Promo","Arbitrage","Value & EV","Advanced"];
+  const CALC_GI = getCalcGroupIndex(TABS);
 
   if (!authReady) {
     return (
@@ -3526,34 +3441,21 @@ export default function App() {
 
   if (embedMode) {
     return (
-      <ToastProvider>
-      <AppDataCtx.Provider value={{ appData, syncAppData, user, syncDiagnostics, syncStatus, isOnline }}>
-      <CompactCtx.Provider value={compactMode}>
-      <CurrencyCtx.Provider value={currencyCtxVal}>
+      <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
       <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
-        <ErrorBoundary>
-          <Suspense fallback={<div style={{padding:32,textAlign:"center"}}><LoadingState/></div>}>
-            {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
-          </Suspense>
-        </ErrorBoundary>
+        <AppCalculatorRouter slug={slug} item={item} isLiveTool={isLiveTool} proStatus={proStatus} compareMode={false} calcGroupIndex={CALC_GI} groupIndex={gi} group={g} isDesktop={isDesktop} compareSlug={compareSlug} setCompareSlug={setCompareSlug} DailyDashboard={DailyDashboard} navigate={navigate} />
         {isEmbed && (
           <div style={{position:'fixed',bottom:8,right:12,fontSize:11,color:'#475569',opacity:0.7,zIndex:9999}}>
             Powered by <a href={CANONICAL_APP_URL} target="_blank" rel="noopener" style={{color:'#4ade80',textDecoration:'none'}}>PromoGrind</a>
           </div>
         )}
       </div>
-      </CurrencyCtx.Provider>
-      </CompactCtx.Provider>
-      </AppDataCtx.Provider>
-      </ToastProvider>
+      </AppProviders>
     );
   }
 
   return (
-    <ToastProvider>
-    <AppDataCtx.Provider value={{ appData, syncAppData, user, syncDiagnostics, syncStatus, isOnline }}>
-    <CompactCtx.Provider value={compactMode}>
-    <CurrencyCtx.Provider value={currencyCtxVal}>
+    <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
       <CheckoutListener/>
       <AuthDialog
@@ -3837,32 +3739,21 @@ export default function App() {
       </div>
       <div className="pg-main-content" style={{maxWidth:shellMaxWidth,margin:"0 auto",padding:`${contentPadding}px`}}>
         {!user && <MembershipBanner/>}
-        <ErrorBoundary>
-          <Suspense fallback={<div style={{padding:32,textAlign:"center"}}><LoadingState/></div>}>
-            {slug==='dashboard'
-              ? <DailyDashboard navigate={navigate} proStatus={proStatus}/>
-              : compareMode&&gi===CALC_GI
-                ? <div style={{display:"grid",gridTemplateColumns:isDesktop?"1fr 1fr":"1fr",gap:16}}>
-                    <div>
-                      <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:8,fontFamily:font}}>Primary â€” {item?.n}</div>
-                      {isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
-                    </div>
-                    <div>
-                      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                        <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",fontFamily:font}}>Compare â€”</span>
-                        <select value={compareSlug} onChange={e=>setCompareSlug(e.target.value)} style={{...S.input,width:"auto",padding:"3px 8px",fontSize:10}}>
-                          <option value="">Pick a calculatorâ€¦</option>
-                          {g.items.filter(it=>it.slug!==slug).map(it=><option key={it.slug} value={it.slug}>{it.n}</option>)}
-                        </select>
-                      </div>
-                      {compareSlug
-                        ? (() => { const cItem=g.items.find(it=>it.slug===compareSlug); const CC=cItem?.c; return CC?<Suspense fallback={null}><CC/></Suspense>:<div style={{color:K.mt,fontSize:11}}>Not found.</div>; })()
-                        : <div style={{...S.card,color:K.mt,fontSize:11,textAlign:"center",padding:"32px 16px"}}>Select a calculator above to compare side by side.</div>}
-                    </div>
-                  </div>
-                : isLiveTool ? <Comp proStatus={proStatus} mode={slug}/> : <Comp/>}
-          </Suspense>
-        </ErrorBoundary>
+        <AppCalculatorRouter
+          slug={slug}
+          item={item}
+          isLiveTool={isLiveTool}
+          proStatus={proStatus}
+          compareMode={compareMode}
+          calcGroupIndex={CALC_GI}
+          groupIndex={gi}
+          group={g}
+          isDesktop={isDesktop}
+          compareSlug={compareSlug}
+          setCompareSlug={setCompareSlug}
+          DailyDashboard={DailyDashboard}
+          navigate={navigate}
+        />
       </div>
       <EmailCapture/>
       <AppFooter/>
@@ -3874,9 +3765,6 @@ export default function App() {
       </Suspense>
       <QuickCalcPanel goTo={goTo}/>
     </div>
-    </CurrencyCtx.Provider>
-    </CompactCtx.Provider>
-    </AppDataCtx.Provider>
-    </ToastProvider>
+    </AppProviders>
   );
 }

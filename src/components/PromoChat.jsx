@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { buildCacheKey, hasStreamingGateway, incrementDailyUsage, readDailyUsage, readTimedCache, streamProjectFunction, writeTimedCache } from "../ai/gateway.js";
+import { buildCacheKey, estimateAiSpendUsd, hasStreamingGateway, incrementDailyUsage, readDailyUsage, readTimedCache, recordAiSpend, streamProjectFunction, writeTimedCache } from "../ai/gateway.js";
 import { K, font, fontD } from "../lib/shared.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
@@ -127,6 +127,7 @@ const PromoChat = ({ navigate }) => {
           const newRemaining = dailyLimit === Infinity ? Infinity : Math.max(0, dailyLimit - getUsesToday());
           setChatRemaining(newRemaining);
           writeTimedCache(cacheKey, { message: fullText || "No response.", suggestions: evt.suggestions || [] });
+          recordAiSpend(estimateAiSpendUsd(evt), { feature: "promo-chat", source: "ai" });
           setMessages((prev) => prev.map((message) =>
             message._id === streamingId
               ? { role: "assistant", content: fullText || "No response.", suggestions: evt.suggestions || [] }

@@ -174,8 +174,25 @@ function writeSpendLedger(entries) {
 export function recordAiSpend(usd, opts = {}) {
   if (!Number.isFinite(usd) || usd <= 0) return;
   const entries = readSpendLedger();
-  entries.push({ at: opts.now instanceof Date ? opts.now.getTime() : Date.now(), usd });
+  entries.push({
+    at: opts.now instanceof Date ? opts.now.getTime() : Date.now(),
+    usd: Math.round(usd * 10000) / 10000,
+    feature: opts.feature || "unknown",
+    source: opts.source || "client-estimate",
+  });
   writeSpendLedger(entries);
+}
+
+export function estimateAiSpendUsd(payload = {}, fallbackUsd = 0.002) {
+  if (payload?.analysisSource === "rule_engine" || payload?.cacheHit) return 0;
+  const usage = payload?.usage || payload?.result?.usage || {};
+  const input = Number(usage.input_tokens || usage.inputTokens || payload?.input_tokens || 0);
+  const output = Number(usage.output_tokens || usage.outputTokens || payload?.output_tokens || 0);
+  if (input > 0 || output > 0) {
+    // Conservative blended client estimate for small Claude Haiku/Sonnet edge calls.
+    return (input / 1_000_000) * 3 + (output / 1_000_000) * 15;
+  }
+  return fallbackUsd;
 }
 
 export function getBudgetState(opts = {}) {

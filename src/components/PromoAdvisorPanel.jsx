@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
-import { buildCacheKey, getBudgetState, hasStreamingGateway, invokeProjectFunction, readDailyUsage, readTimedCache, streamProjectFunction, writeDailyUsage, writeTimedCache } from "../ai/gateway.js";
+import { buildCacheKey, estimateAiSpendUsd, getBudgetState, hasStreamingGateway, invokeProjectFunction, readDailyUsage, readTimedCache, recordAiSpend, streamProjectFunction, writeDailyUsage, writeTimedCache } from "../ai/gateway.js";
 import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useFeatureFlag } from "../lib/featureFlags.js";
@@ -78,6 +78,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             writeDailyUsage("pg_advisor_uses", newUses);
             setResult(data);
             writeTimedCache(cacheKey, data);
+            recordAiSpend(estimateAiSpendUsd(evt), { feature: "promo-advisor", source: data?.analysisSource || "ai" });
             recordTrustReceipt({
               type: "ai",
               title: "Promo Advisor analyzed an offer",
@@ -103,6 +104,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         writeDailyUsage("pg_advisor_uses", newUses);
         setResult(data);
         writeTimedCache(cacheKey, data);
+        recordAiSpend(estimateAiSpendUsd(data), { feature: "promo-advisor", source: data?.analysisSource || "ai" });
         recordTrustReceipt({
           type: "ai",
           title: "Promo Advisor analyzed an offer",

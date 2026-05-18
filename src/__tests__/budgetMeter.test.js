@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { getBudgetState } from "../ai/gateway.js";
+import { estimateAiSpendUsd, getBudgetState } from "../ai/gateway.js";
 
 const now = new Date("2026-05-17T12:00:00Z").getTime();
 
@@ -38,5 +38,16 @@ describe("getBudgetState", () => {
     });
     expect(state.spent).toBe(0);
     expect(state.overBudget).toBe(false);
+  });
+});
+
+describe("estimateAiSpendUsd", () => {
+  it("returns zero for rule-engine and cache hits", () => {
+    expect(estimateAiSpendUsd({ analysisSource: "rule_engine" })).toBe(0);
+    expect(estimateAiSpendUsd({ cacheHit: true })).toBe(0);
+  });
+
+  it("estimates spend from token usage", () => {
+    expect(estimateAiSpendUsd({ usage: { input_tokens: 1000, output_tokens: 500 } })).toBeCloseTo(0.0105, 4);
   });
 });

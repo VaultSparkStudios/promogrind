@@ -18,9 +18,11 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+const STUDIO_OPS_ROOT = resolveStudioOpsRoot();
 
 const args = process.argv.slice(2);
 const CHECK_ONLY = args.includes('--check');
@@ -96,8 +98,15 @@ async function main() {
     process.exit(1);
   }
 
-  const mcp = spawn(process.execPath, [path.join(ROOT, 'studio-ops-mcp', 'server.mjs')], {
-    cwd: ROOT,
+  const serverPath = path.join(STUDIO_OPS_ROOT, 'studio-ops-mcp', 'server.mjs');
+  if (!fs.existsSync(serverPath)) {
+    process.stderr.write(`studio-ops-mcp-bootstrap: MCP server not found at ${serverPath}\n`);
+    process.stderr.write('Set STUDIO_OPS_ROOT to the private Studio Ops checkout, or place it beside this repo as ../vaultspark-studio-ops.\n');
+    process.exit(1);
+  }
+
+  const mcp = spawn(process.execPath, [serverPath], {
+    cwd: STUDIO_OPS_ROOT,
     stdio: 'inherit',
     env: { ...process.env, IGNIS_MCP_URL: result.url },
   });
@@ -128,3 +137,20 @@ async function main() {
 }
 
 await main();
+
+function resolveStudioOpsRoot() {
+  const candidates = [
+    process.env.STUDIO_OPS_ROOT,
+    path.resolve(ROOT, '..', 'vaultspark-studio-ops'),
+    ROOT,
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    const normalized = path.resolve(candidate);
+    if (fs.existsSync(path.join(normalized, 'studio-ops-mcp', 'server.mjs'))) {
+      return normalized;
+    }
+  }
+
+  return path.resolve(candidates[0]);
+}

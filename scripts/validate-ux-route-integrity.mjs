@@ -3,10 +3,13 @@ import path from "node:path";
 
 const root = process.cwd();
 const publicDir = path.join(root, "public");
-const appSource = fs.readFileSync(path.join(root, "src", "App.jsx"), "utf8");
+const appSources = [
+  path.join(root, "src", "App.jsx"),
+  path.join(root, "src", "app", "appRoutes.js"),
+].map((file) => fs.readFileSync(file, "utf8")).join("\n");
 
 const appSlugs = new Set(
-  [...appSource.matchAll(/slug:\s*["']([^"']+)["']/g)]
+  [...appSources.matchAll(/slug:\s*["']([^"']+)["']/g)]
     .map((match) => match[1])
     .filter((slug) => /^[a-z0-9][a-z0-9-]*$/.test(slug)),
 );
@@ -68,7 +71,7 @@ function isInternalPageRoute(href) {
 const errors = [];
 
 for (const slug of requiredAppSlugs) {
-  if (!appSlugs.has(slug)) errors.push(`src/App.jsx missing required app route slug: ${slug}`);
+  if (!appSlugs.has(slug)) errors.push(`app route metadata missing required slug: ${slug}`);
 }
 
 for (const page of requiredPublicPages) {

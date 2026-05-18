@@ -2,7 +2,7 @@ import React from "react";
 import { AppDataCtx, useToast } from "../../contexts.jsx";
 import { K, S, f, font, fontD } from "../../lib/shared.js";
 import { getBankrollPosture, getNextBestAction, getUnfinishedWork } from "../../dashboard/today.js";
-import { getOnboardingProgress } from "../../onboarding.js";
+import { getOnboardingProgress, getPromoPassportOnboardingPlan } from "../../onboarding.js";
 import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
 // matchPlaybooks is called here as a fallback when snapshot.topPlaybook is not pre-computed
 import ObservabilityPanel from "./ObservabilityPanel.jsx";
@@ -16,6 +16,7 @@ import { buildCounterfactualPnL } from "../../lib/counterfactualPnL.js";
 import { buildDecisionJournal } from "../../lib/decisionJournal.js";
 import { computeDisciplineScore } from "../../lib/discipline.js";
 import { assertShareCardPiiSafe, buildShareCardData, renderShareCardCanvas } from "../../lib/shareCard.js";
+import { readTrustReceipts } from "../../lib/trustReceipts.js";
 
 function OperatorTwinCard({ forecast }) {
   if (!forecast) return null;
@@ -154,6 +155,38 @@ function OperatorAutopilotCard({ decision, topWorkflow, navigate }) {
   );
 }
 
+function PromoPassportOnboardingCard({ plan, discipline, navigate }) {
+  const tone = plan.complete ? K.gn : K.ac;
+  return (
+    <div style={{ padding: "12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "flex-start", marginBottom: 10 }}>
+        <div>
+          <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Promo Passport Path</div>
+          <div style={{ fontFamily: fontD, fontSize: 16, fontWeight: 800, color: K.tx }}>
+            {plan.complete ? "First operating loop complete" : `Next: ${plan.next?.label || "Keep logging clean outcomes"}`}
+          </div>
+          <div style={{ fontSize: 10, color: K.mt, marginTop: 4 }}>
+            Discipline {discipline.score} · {plan.doneCount}/{plan.totalCount} proof steps complete
+          </div>
+        </div>
+        <button
+          onClick={() => navigate(plan.next?.slug || "/dashboard")}
+          style={{ padding: "8px 12px", background: tone, border: "none", borderRadius: 8, color: K.bg, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
+        >
+          {plan.complete ? "Review dashboard" : "Open next step"} →
+        </button>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 6 }}>
+        {plan.steps.map((step) => (
+          <div key={step.id} style={{ padding: "7px 8px", borderRadius: 8, background: step.done ? `${K.gn}12` : K.s1, border: `1px solid ${step.done ? K.gn : K.bd}30`, fontSize: 10, color: step.done ? K.gn : K.mt, fontWeight: 700 }}>
+            {step.done ? "Done" : "Next"} · {step.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, isProActive = false, syncDiagnostics = {}, usageLog = {} }) {
   const posture = getBankrollPosture(snapshot);
   const unfinished = getUnfinishedWork(snapshot);
@@ -164,10 +197,16 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const rankingSnapshot = snapshot.adaptiveRankingSnapshot || {};
   const calibration = adaptivePlan.calibration || snapshot.trackInsights?.selfCalibration || {};
   const toast = useToast();
-  const { syncAppData } = React.useContext(AppDataCtx) || {};
+  const { syncAppData, user } = React.useContext(AppDataCtx) || {};
   const counterfactual = React.useMemo(() => buildCounterfactualPnL(appData), [appData]);
   const journal = React.useMemo(() => buildDecisionJournal(appData), [appData]);
   const discipline = React.useMemo(() => computeDisciplineScore(appData), [appData]);
+  const passportPlan = React.useMemo(() => getPromoPassportOnboardingPlan({
+    appData,
+    user,
+    disciplineScore: discipline.score,
+    trustReceipts: readTrustReceipts(),
+  }), [appData, discipline.score, user]);
   const shareBriefing = React.useCallback(() => {
     try {
       const card = buildShareCardData({
@@ -253,6 +292,8 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
       <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />
 
       <OperatorAutopilotCard decision={nextAction} topWorkflow={snapshot.topWorkflow} navigate={navigate} />
+
+      <PromoPassportOnboardingCard plan={passportPlan} discipline={discipline} navigate={navigate} />
 
       <PromoExpiryWidget />
 
