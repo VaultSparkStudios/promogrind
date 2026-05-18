@@ -16,7 +16,7 @@ const RECEIPT_STYLE = `
   }
 `;
 
-export default function CalculatorReceipt({ calcName, inputs = [], outputs = [], disclaimer, onClose }) {
+export default function CalculatorReceipt({ calcName, inputs = [], outputs = [], disclaimer, onClose, onTrack }) {
   const ref = useRef(null);
   const ts = new Date().toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
@@ -111,7 +111,7 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
         </div>
 
         {/* Action buttons */}
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+        <div style={{ display: "flex", gap: 8, marginTop: 14, flexWrap: "wrap" }}>
           <button
             onClick={handleCopy}
             style={{ flex: 1, padding: "8px 0", background: "#1e293b", border: "none", borderRadius: 6, color: "#e2e8f0", fontSize: 11, fontWeight: 600, cursor: "pointer" }}
@@ -124,6 +124,15 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
           >
             🖨 Print / Save PDF
           </button>
+          {typeof onTrack === "function" && (
+            <button
+              data-testid="receipt-track-play"
+              onClick={onTrack}
+              style={{ flex: "1 0 100%", padding: "8px 0", background: "#0ea5e9", border: "none", borderRadius: 6, color: "#0a0e17", fontSize: 11, fontWeight: 700, cursor: "pointer", marginTop: 4 }}
+            >
+              📌 Track this play
+            </button>
+          )}
         </div>
       </div>
     </div>

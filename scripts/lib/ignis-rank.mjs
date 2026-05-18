@@ -1,35 +1,34 @@
 /**
- * ignis-rank.mjs — IGNIS ranking adapter (S79)
+ * ignis-rank.mjs — IGNIS ranking adapter (S79, live wiring 2026-05-18)
  *
  * Contract between the Studio Ops Unified Genius List and the IGNIS
- * intelligence platform. Once IGNIS Phase 3 ships its MCP server, this
- * adapter switches from deterministic fallback scoring to live IGNIS rank
- * calls. Until then, the deterministic fallback produces identical-shape
- * output so downstream code is stable.
+ * intelligence platform.
+ *
+ * Live path: spawns the IGNIS CLI (`cli.js export json`) to obtain
+ * current project-level IQ + pillar grades, then layers a pillar-aware
+ * boost over the deterministic per-item score. IGNIS does not yet
+ * expose a per-item rank tool (see NOTE_FROM_PROMOGRIND_2026-05-18.md
+ * in the vaultspark-ignis repo) — until it does, per-item ranking
+ * stays deterministic but is informed by live pillar context.
  *
  * Contract:
  *   rankItems(items: GeniusItem[]): Promise<RankedItem[]>
  *
  * GeniusItem = {
- *   id: string,
- *   title: string,
- *   category: string,        // e.g. "CLAUDE-API" | "SECURITY" | "INTEGRATION"
- *   status: string,          // "unblocked" | "human-blocked" | "cross-repo-locked"
- *   effortMin: number | null,
- *   sourceSurface: string,   // "TASK_BOARD" | "HUMAN_ACTION_PRESSURE" | "IGNIS_PROPOSALS" | ...
- *   signals: object,         // free-form per-source signals
+ *   id, title, category, status, effortMin, sourceSurface, signals
  * }
  *
  * RankedItem = GeniusItem & {
- *   ignisScore: number,       // 0–100, higher = higher leverage
- *   ignisTier: 'fire' | 'high' | 'medium' | 'low',
- *   ignisRationale: string,   // one-line why-this-rank
+ *   ignisScore, ignisTier, ignisRationale,
  *   ignisSource: 'live' | 'fallback',
  * }
  *
  * Environment:
- *   IGNIS_MCP_URL   — if set, call live IGNIS MCP rank tool
- *   IGNIS_MCP_TOKEN — auth for live calls
+ *   IGNIS_ROOT      — override path to vaultspark-ignis checkout
+ *                     (default: sibling repo ../vaultspark-ignis)
+ *   IGNIS_DISABLE   — set to "1" to force fallback (skip CLI)
+ *   IGNIS_MCP_URL   — legacy HTTP transport (kept for future server)
+ *   IGNIS_MCP_TOKEN — auth for legacy HTTP path
  *
  * Graceful degradation: any live-call error falls back to deterministic
  * scoring without raising.
@@ -37,6 +36,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -44,6 +44,12 @@ const ROOT = path.resolve(__dirname, '..', '..');
 
 const IGNIS_MCP_URL = process.env.IGNIS_MCP_URL || null;
 const IGNIS_MCP_TOKEN = process.env.IGNIS_MCP_TOKEN || null;
+const IGNIS_DISABLED = process.env.IGNIS_DISABLE === '1';
+const IGNIS_ROOT = process.env.IGNIS_ROOT
+  || path.resolve(ROOT, '..', 'vaultspark-ignis');
+const IGNIS_CLI = path.join(IGNIS_ROOT, 'dist', 'cli.js');
+const IGNIS_EXPORT_PATH = path.join(ROOT, 'json', 'ignis', 'output', 'export.json');
+const IGNIS_EXPORT_TTL_MS = 60 * 60 * 1000; // 1h
 
 function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 
@@ -131,12 +137,78 @@ function fallbackRank(item) {
   return { score, tier, rationale };
 }
 
-// ── Live IGNIS MCP call (activates when IGNIS_MCP_URL is set) ───────────────
-async function liveRank(items) {
-  if (!IGNIS_MCP_URL) throw new Error('IGNIS_MCP_URL not configured');
+// ── Live IGNIS context via CLI (2026-05-18) ────────────────────────────────
+// IGNIS only ships stdio MCP + CLI today — no HTTP server. We invoke the CLI
+// to get current pillar scores, then use them to inform per-item ranking.
 
-  // Placeholder: real implementation will use MCP stdio transport via
-  // @modelcontextprotocol/sdk. For now we guard behind explicit env opt-in.
+const CATEGORY_TO_PILLAR = {
+  'SECURITY':      'vitality',
+  'CLAUDE-API':    'cognition',
+  'INTELLIGENCE':  'cognition',
+  'INTEGRATION':   'synthesis',
+  'AUTOMATION':    'execution',
+  'PROTOCOL':      'execution',
+  'UX':            'expression',
+  'GOVERNANCE':    'trajectory',
+  'INFRA':         'vitality',
+  'LAUNCH':        'potential',
+  'REFACTOR':      'execution',
+};
+
+function exportIsFresh() {
+  try {
+    const st = fs.statSync(IGNIS_EXPORT_PATH);
+    return (Date.now() - st.mtimeMs) < IGNIS_EXPORT_TTL_MS;
+  } catch { return false; }
+}
+
+function runIgnisExport() {
+  if (!fs.existsSync(IGNIS_CLI)) {
+    throw new Error(`IGNIS CLI not found at ${IGNIS_CLI}`);
+  }
+  const res = spawnSync(process.execPath, [IGNIS_CLI, 'export', 'json', ROOT], {
+    cwd: ROOT,
+    timeout: 60_000,
+    encoding: 'utf8',
+  });
+  if (res.status !== 0) {
+    throw new Error(`IGNIS export exited ${res.status}: ${(res.stderr || '').slice(0, 200)}`);
+  }
+}
+
+function loadLiveContext() {
+  if (IGNIS_DISABLED) return null;
+  try {
+    if (!exportIsFresh()) runIgnisExport();
+    const data = readJson(IGNIS_EXPORT_PATH, null);
+    if (!data || !data.pillars) return null;
+    return {
+      iqScore: data.iqScore ?? 0,
+      tier: data.tier ?? 'unknown',
+      pillars: data.pillars,
+    };
+  } catch (err) {
+    process.stderr.write(`[ignis-rank] live context failed, using fallback: ${err.message}\n`);
+    return null;
+  }
+}
+
+// Pillar scores are roughly 0–10000. Weak pillars surface higher leverage
+// for items that touch them. boost ∈ roughly [-8, +12].
+function pillarBoost(category, pillars) {
+  const pillarName = CATEGORY_TO_PILLAR[category];
+  if (!pillarName) return { boost: 0, pillar: null, pillarScore: null };
+  const pillar = pillars[pillarName];
+  if (!pillar) return { boost: 0, pillar: pillarName, pillarScore: null };
+  const score = pillar.score ?? 5000;
+  const raw = (5000 - score) / 400;
+  const boost = Math.max(-8, Math.min(12, Math.round(raw)));
+  return { boost, pillar: pillarName, pillarScore: Math.round(score) };
+}
+
+// ── Legacy HTTP rank (kept for future IGNIS HTTP server) ───────────────────
+async function liveRankHttp(items) {
+  if (!IGNIS_MCP_URL) throw new Error('IGNIS_MCP_URL not configured');
   const res = await fetch(`${IGNIS_MCP_URL}/rank`, {
     method: 'POST',
     headers: {
@@ -145,7 +217,6 @@ async function liveRank(items) {
     },
     body: JSON.stringify({ items }),
   });
-
   if (!res.ok) throw new Error(`IGNIS rank call failed: ${res.status}`);
   const data = await res.json();
   if (!Array.isArray(data.ranked)) throw new Error('IGNIS rank returned invalid shape');
@@ -158,31 +229,51 @@ export async function rankItems(items) {
 
   if (IGNIS_MCP_URL) {
     try {
-      const live = await liveRank(items);
+      const live = await liveRankHttp(items);
       return live.map(r => ({ ...r, ignisSource: 'live' }));
     } catch (err) {
-      // Fall through to deterministic fallback — never throw upward.
-      process.stderr.write(`[ignis-rank] live call failed, using fallback: ${err.message}\n`);
+      process.stderr.write(`[ignis-rank] HTTP live call failed, falling through: ${err.message}\n`);
     }
   }
+
+  const ctx = loadLiveContext();
+  const source = ctx ? 'live' : 'fallback';
 
   return items
     .filter(it => it.status !== 'done')
     .map(it => {
       const { score, tier, rationale } = fallbackRank(it);
+      let finalScore = score;
+      let finalRationale = rationale;
+      let finalTier = tier;
+
+      if (ctx) {
+        const { boost, pillar, pillarScore } = pillarBoost(it.category, ctx.pillars);
+        finalScore = Math.max(0, Math.min(100, score + boost));
+        if (boost !== 0 && pillar) {
+          finalRationale = `${rationale} · pillar:${pillar}=${pillarScore}(${boost > 0 ? '+' : ''}${boost})`;
+        }
+        if (finalScore >= 75) finalTier = 'fire';
+        else if (finalScore >= 60) finalTier = 'high';
+        else if (finalScore >= 40) finalTier = 'medium';
+        else finalTier = 'low';
+      }
+
       return {
         ...it,
-        ignisScore: score,
-        ignisTier: tier,
-        ignisRationale: rationale,
-        ignisSource: 'fallback',
+        ignisScore: finalScore,
+        ignisTier: finalTier,
+        ignisRationale: finalRationale,
+        ignisSource: source,
       };
     })
     .sort((a, b) => b.ignisScore - a.ignisScore);
 }
 
 export function isLiveRankingAvailable() {
-  return Boolean(IGNIS_MCP_URL);
+  if (IGNIS_MCP_URL) return true;
+  if (IGNIS_DISABLED) return false;
+  return fs.existsSync(IGNIS_CLI);
 }
 
 export default { rankItems, isLiveRankingAvailable };

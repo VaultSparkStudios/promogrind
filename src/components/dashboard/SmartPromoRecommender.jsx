@@ -1,13 +1,95 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { getDashboardSnapshot } from "../../dashboard/today.js";
 import { K } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
 import { buildDecayCurve, computeExecutionDeadline, renderSparkline } from "../../lib/edgeDecay.js";
 import { recordTermsSnapshot } from "../../lib/termsDrift.js";
+import { summarizeNearestMistake } from "../../lib/mistakeMemory.js";
+
+function ExplainerDrawer({ promo, terms, deadline, decayCurve, memorySignal }) {
+  const rows = [
+    {
+      label: "Terms drift",
+      value:
+        terms?.status === "drift" ? "TERMS CHANGED — re-read before placing"
+        : terms?.status === "stable" ? "stable since last snapshot"
+        : "first time seen",
+      tone:
+        terms?.status === "drift" ? K.yl
+        : terms?.status === "stable" ? K.gn
+        : K.mt,
+    },
+    {
+      label: "Edge decay",
+      value:
+        decayCurve?.expiresMs
+          ? `${decayCurve.horizonHours}h to expiry · ${decayCurve.samples?.length || 0}-pt curve`
+          : "no hard expiry · stable EV",
+      tone: decayCurve?.expiresMs && decayCurve.horizonHours < 24 ? K.rd : K.mt,
+    },
+    {
+      label: "Execution deadline",
+      value:
+        deadline?.expired ? "edge floor passed"
+        : deadline ? `${Number.isFinite(deadline.hoursRemaining) ? deadline.hoursRemaining + "h" : "stable"} until edge floor`
+        : "no floor set",
+      tone:
+        deadline?.expired ? K.rd
+        : deadline && deadline.hoursRemaining <= 8 ? K.rd
+        : K.mt,
+    },
+    {
+      label: "Outcome memory",
+      value:
+        memorySignal
+          ? `${memorySignal.label}: ${memorySignal.detail}`
+          : "no settled-sample signal yet",
+      tone:
+        memorySignal?.direction === "up" ? K.gn
+        : memorySignal?.direction === "down" ? K.yl
+        : K.mt,
+    },
+    {
+      label: "Rank weights",
+      value:
+        Array.isArray(promo.whyRanked) && promo.whyRanked.length
+          ? promo.whyRanked.map((c) => `${c.label} ${c.delta >= 0 ? "+" : ""}${c.delta}`).join(" · ")
+          : "no ablation weights computed",
+      tone: K.mt,
+    },
+  ];
+  return (
+    <div
+      data-explainer="open"
+      style={{
+        marginTop: 6,
+        padding: "8px 10px",
+        background: K.s1,
+        border: `1px solid ${K.bd}`,
+        borderRadius: 6,
+        display: "grid",
+        gridTemplateColumns: "max-content 1fr",
+        columnGap: 10,
+        rowGap: 4,
+        fontSize: 10,
+      }}
+    >
+      {rows.map((r) => (
+        <React.Fragment key={r.label}>
+          <div style={{ color: K.mt, textTransform: "uppercase", letterSpacing: "0.5px", fontSize: 9 }}>
+            {r.label}
+          </div>
+          <div style={{ color: r.tone, lineHeight: 1.4 }}>{r.value}</div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
 
 export default function SmartPromoRecommender({ data }) {
   const today = new Date();
+  const [openExplainerIdx, setOpenExplainerIdx] = useState(null);
   const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const todayDay = DAY_NAMES[today.getDay()];
   const isWeekend = today.getDay() === 0 || today.getDay() === 6;
@@ -83,8 +165,22 @@ export default function SmartPromoRecommender({ data }) {
             }
           })();
           const deadline = computeExecutionDeadline(p, 0.35);
+          const decayCurve = buildDecayCurve(p);
+          const mistakeSummary = (() => {
+            try {
+              const ledger = Array.isArray(data?.resultFeedback) ? data.resultFeedback : Array.isArray(data?.bets) ? data.bets : [];
+              return summarizeNearestMistake(
+                { book: p.book, promoType: p.promo, rollover: p.rollover, qualifier: p.qualifier, stake: p.suggestedStake },
+                ledger,
+              );
+            } catch {
+              return null;
+            }
+          })();
+          const explainerOpen = openExplainerIdx === i;
           return (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "8px 12px", background: K.s2, borderRadius: 6, border: `1px solid ${isUrgent ? K.rd + "60" : K.bd}` }}>
+            <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6, padding: "8px 12px", background: K.s2, borderRadius: 6, border: `1px solid ${isUrgent ? K.rd + "60" : K.bd}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
               <div style={{ minWidth: 0 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{p.book}</span>
                 <span style={{ fontSize: 11, color: K.dm, marginLeft: 8 }}>{p.promo}</span>
@@ -96,6 +192,11 @@ export default function SmartPromoRecommender({ data }) {
                 {reasons.includes("backlog pressure") && <span style={{ ...S.tag(K.ac), marginLeft: 6, fontSize: 8 }}>CLEAR BACKLOG</span>}
                 {reasons.includes("limit risk") && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 8 }}>LIMIT RISK</span>}
                 {terms.status === "drift" && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>TERMS CHANGED</span>}
+                {mistakeSummary && (
+                  <span data-testid="mistake-chip" title={mistakeSummary.chipDetail} style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>
+                    ⚠ similar prior loss
+                  </span>
+                )}
                 {memorySignal && (
                   <div style={{ fontSize: 9, color: memoryColor, marginTop: 4, lineHeight: 1.35 }}>
                     {memorySignal.label}: {memorySignal.detail}
@@ -131,6 +232,37 @@ export default function SmartPromoRecommender({ data }) {
                 {score !== null && <span style={{ fontSize: 9, color: score >= 5 ? K.gn : score >= 3 ? K.ac : K.yl, fontWeight: 800 }}>S{score}</span>}
                 <span style={S.tag(p.grade === "A" ? K.gn : p.grade === "B" ? K.ac : K.mt)}>{p.grade}</span>
               </div>
+              </div>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <button
+                  type="button"
+                  data-testid={`explainer-toggle-${i}`}
+                  aria-expanded={explainerOpen}
+                  onClick={() => setOpenExplainerIdx(explainerOpen ? null : i)}
+                  style={{
+                    background: "transparent",
+                    border: `1px solid ${K.bd}`,
+                    color: K.mt,
+                    fontSize: 9,
+                    padding: "2px 8px",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                    letterSpacing: "0.5px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {explainerOpen ? "Hide details ▴" : "Details ▾"}
+                </button>
+              </div>
+              {explainerOpen && (
+                <ExplainerDrawer
+                  promo={p}
+                  terms={terms}
+                  deadline={deadline}
+                  decayCurve={decayCurve}
+                  memorySignal={memorySignal}
+                />
+              )}
             </div>
           );
         })}

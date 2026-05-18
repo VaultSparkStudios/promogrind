@@ -1,0 +1,811 @@
+{
+  "timestamp": "2026-05-18T08:57:36.332Z",
+  "iqScore": 30499,
+  "tier": "FLARE",
+  "tierProgress": 54.995499549955,
+  "baseScore": 29648.7,
+  "adaptiveTotal": 850,
+  "pillars": {
+    "perception": {
+      "score": 4708.84,
+      "grade": "C",
+      "clusters": [
+        {
+          "name": "Source Breadth",
+          "score": 395.16,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Event Volume",
+          "score": 214.62,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Signal Richness",
+          "score": 608.44,
+          "grade": "B",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Metadata Completeness",
+          "score": 273.87,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Temporal Coverage",
+          "score": 398.72,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Data Quality",
+          "score": 709.95,
+          "grade": "B",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Data Provenance",
+          "score": 636.41,
+          "grade": "B",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Noise Filtering",
+          "score": 770.1,
+          "grade": "A",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Coverage Gaps",
+          "score": 556.8,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Perception Depth",
+          "score": 205.05,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "trajectory": {
+      "score": 1860.62,
+      "grade": "F",
+      "clusters": [
+        {
+          "name": "Session Depth",
+          "score": 182.01,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Score Stability",
+          "score": 370.79,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Velocity Trajectory",
+          "score": 166.84,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Intent Coherence",
+          "score": 140.46,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Predictability Index",
+          "score": 322.47,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Session Type Distribution",
+          "score": 155.72,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Trend Decomposition",
+          "score": 122.83,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Inflection Detection",
+          "score": 190.24,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Goal Alignment",
+          "score": 124.32,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Trajectory Confidence",
+          "score": 129.27,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "execution": {
+      "score": 3375.41,
+      "grade": "D",
+      "clusters": [
+        {
+          "name": "Intent Resolution",
+          "score": 158.51,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Delivery Volume",
+          "score": 224.52,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Delivery Diversity",
+          "score": 166.15,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Commit Discipline",
+          "score": 387.46,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Test Investment",
+          "score": 337.27,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Debt Management",
+          "score": 435.34,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Brainstorm Conversion",
+          "score": 280.37,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Efficiency",
+          "score": 425.97,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Quality Assurance",
+          "score": 662.01,
+          "grade": "B",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Execution Rhythm",
+          "score": 299.34,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "vitality": {
+      "score": 3945.88,
+      "grade": "D",
+      "clusters": [
+        {
+          "name": "Event Recency",
+          "score": 585.11,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Session Recency",
+          "score": 202.84,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Cadence Alignment",
+          "score": 347.22,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Momentum Vector",
+          "score": 443.62,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "File Staleness",
+          "score": 180.54,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Recovery Responsiveness",
+          "score": 450.07,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Metabolic Rate",
+          "score": 354.22,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Health Indicators",
+          "score": 282.49,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Burnout Detection",
+          "score": 598.13,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Seasonal Patterns",
+          "score": 440.72,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "synthesis": {
+      "score": 2603.57,
+      "grade": "D",
+      "clusters": [
+        {
+          "name": "Portfolio Context",
+          "score": 614.04,
+          "grade": "B",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Pattern Propagation",
+          "score": 228.59,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Canon Authority",
+          "score": 158.4,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Decision Network",
+          "score": 338.33,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Genome Readiness",
+          "score": 195.46,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Prediction Ecosystem",
+          "score": 13.01,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Knowledge Graph",
+          "score": 465.5,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Insight Cross-Pollination",
+          "score": 250.03,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Ecosystem Integration",
+          "score": 162.26,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Collective Intelligence",
+          "score": 112.56,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "cognition": {
+      "score": 2617.06,
+      "grade": "D",
+      "clusters": [
+        {
+          "name": "Logical Consistency",
+          "score": 548.1,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Causal Reasoning",
+          "score": 126.06,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Abstraction Ability",
+          "score": 308.91,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Learning Rate",
+          "score": 341.57,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Decision Quality",
+          "score": 261.28,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Assumption Tracking",
+          "score": 150.15,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Inference Chains",
+          "score": 101.13,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Anomaly Detection",
+          "score": 160.27,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Meta-Reasoning",
+          "score": 91.88,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Cognitive Load",
+          "score": 427.92,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "foresight": {
+      "score": 2378.5,
+      "grade": "D",
+      "clusters": [
+        {
+          "name": "Trend Extrapolation",
+          "score": 248.61,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Risk Detection",
+          "score": 127.97,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Opportunity Mapping",
+          "score": 448.28,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Scenario Quality",
+          "score": 39.84,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Prediction Accuracy",
+          "score": 367.61,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Calibration",
+          "score": 461.63,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Horizon Coverage",
+          "score": 325.38,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Early Warning",
+          "score": 123.86,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Predictive Value",
+          "score": 88.46,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Anticipatory Action",
+          "score": 96.66,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "creativity": {
+      "score": 990.71,
+      "grade": "F",
+      "clusters": [
+        {
+          "name": "Novelty Assessment",
+          "score": 308.91,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Cross-Pollination",
+          "score": 15.62,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Brainstorm Fertility",
+          "score": 56.96,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Implementation Creativity",
+          "score": 11.34,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Pattern Breaking",
+          "score": 101.17,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Contrarian Analysis",
+          "score": 89.68,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Serendipity Detection",
+          "score": 157.16,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "What-If Generation",
+          "score": 82.08,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Innovation Pipeline",
+          "score": 101.61,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Creative Confidence",
+          "score": 56.52,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "expression": {
+      "score": 2354.15,
+      "grade": "D",
+      "clusters": [
+        {
+          "name": "Insight Density",
+          "score": 218.42,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Recommendation Quality",
+          "score": 98.37,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Narrative Coherence",
+          "score": 188.63,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Communication Effectiveness",
+          "score": 332.07,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Explanation Depth",
+          "score": 56.29,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Voice Consistency",
+          "score": 370.8,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Warning Accuracy",
+          "score": 293.63,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Evidence Quality",
+          "score": 428.71,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Audience Adaptation",
+          "score": 297.24,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Meta-Communication",
+          "score": 93.5,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    },
+    "potential": {
+      "score": 4118.28,
+      "grade": "C",
+      "clusters": [
+        {
+          "name": "Growth Trajectory",
+          "score": 216.7,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Capability Gaps",
+          "score": 619.46,
+          "grade": "B",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Resource Utilization",
+          "score": 149.8,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Ceiling Distance",
+          "score": 599.92,
+          "grade": "C",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Unlock Conditions",
+          "score": 709.39,
+          "grade": "B",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Scaling Readiness",
+          "score": 355.02,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Latent Patterns",
+          "score": 781.46,
+          "grade": "A",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Improvement Velocity",
+          "score": 163.67,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Architectural Capacity",
+          "score": 395.88,
+          "grade": "D",
+          "realFactors": 10,
+          "baselineFactors": 0
+        },
+        {
+          "name": "Genome Readiness",
+          "score": 190.95,
+          "grade": "F",
+          "realFactors": 10,
+          "baselineFactors": 0
+        }
+      ]
+    }
+  },
+  "decomposition": {
+    "strongestPillar": {
+      "id": "perception",
+      "name": "PERCEPTION",
+      "score": 4708.84,
+      "grade": "C"
+    },
+    "weakestPillar": {
+      "id": "creativity",
+      "name": "CREATIVITY",
+      "score": 990.71,
+      "grade": "F"
+    },
+    "biggestOpportunity": {
+      "pillar": "trajectory",
+      "currentScore": 1860.62,
+      "potentialGain": 6837,
+      "action": "Add sessionType to all audits and track intent outcomes"
+    },
+    "estimatedCeiling": 79150,
+    "nextTier": {
+      "tier": "FORGE",
+      "pointsNeeded": 4501
+    },
+    "recommendations": [
+      "Priority: Improve CREATIVITY (grade F, score 991/10,000)",
+      "Deepen cross-pillar synergy — strengthen weak pillars, build ecosystem connections",
+      "VITALITY needs attention (D) — Maintain regular cadence and reduce file staleness",
+      "EXECUTION needs attention (D) — Improve commit discipline and add test investment",
+      "COGNITION needs attention (D) — Develop pattern recognition through consistent session tagging"
+    ],
+    "intelligenceProfile": {
+      "archetype": "PIONEER",
+      "balance": 0.89,
+      "dominantAxis": "perception",
+      "blindSpot": "creativity",
+      "maturityStage": "INCEPTION"
+    }
+  },
+  "eventCount": 8,
+  "historyLength": 0
+}

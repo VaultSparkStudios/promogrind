@@ -34,6 +34,21 @@
 
 - ~~Wire all 7 S90 core modules into UI surfaces (CounterfactualRibbon above TodayDashboardPanel; DecisionJournalCard collapsible in Today; TERMS CHANGED pill in SmartPromoRecommender; ExecutionDeadline inline in promo card; ConflictWarningChip in Tracker; KellySandbox in Profile; ShareBriefingButton on Today).~~ — **DONE S91**: shipped as a single thin-integration pass across Today, Smart Promo Recommender, Tracker, and Profile.
 
+## Shipped This Session (S93)
+
+
+- recommender-explainer-drawer (S93) — **DONE S93**: `SmartPromoRecommender` collapsible `ExplainerDrawer` with 5 weight rows (terms drift, edge decay, deadline, outcome memory, rank weights). 3 new tests.
+- calc-to-tracker-lifecycle (S93) — **DONE S93**: `src/workflows/handoff.js` deterministic-id workflow builder + `sourceCalc` provenance; `CalculatorReceipt` optional `onTrack` action. 5 new tests.
+- cache-aware-advisor (S93) — **DONE S93**: `src/ai/promptCache.js` adds `withPromptCache` HOF with hit/miss/tokensSaved telemetry. Baseline target: ≥30% session-level hit rate for Promo Advisor. 4 new tests.
+- mistake-memory-loop (S93) — **DONE S93**: `src/lib/mistakeMemory.js` 5-dim cosine similarity over prior settled losses; sober chip in recommender; no-shame copy invariant enforced in tests. 5 new tests.
+- ai-calibration-tracker (S93) — **DONE S93**: `src/lib/aiCalibration.js` records→resolves→Brier per AI source with MIN_SAMPLE=10 gating. 5 new tests.
+- counterfactual-twin-battle (S93) — **DONE S93**: `src/lib/twinBattle.js` weekly you · twin · disciplineTwin scorecard with largest-gap review. 4 new tests.
+- bankroll-stress-test (S93) — **DONE S93**: `src/lib/bankrollStress.js` Mulberry32 Monte Carlo with P10/P50/P90, floor-breach, and 25% preview threshold. 6 new tests.
+- edge-decay-heatmap (S93) — **DONE S93**: `src/lib/edgeDecayHeatmap.js` book×promo grid with top-3 movers and tone-graded cells. 3 new tests.
+- provenance-receipts-v2 (S93) — **DONE S93**: `src/lib/promoProvenance.js` HMAC-signed hash-linked receipt chain, PII stripping at builder, `verifyChain` tamper detection, public verification export. 6 new tests.
+- pre-mortem-friction (S93) — **DONE S93**: `src/lib/preMortem.js` 10% bankroll threshold + top-3 prior-loss scenarios via mistake memory. 5 new tests.
+- S93 verification: `npm test` passed **500/500** (up from 450); `npm run verify:launch-local` exit 0 end-to-end with 0 critical sanitization findings; one pre-existing hygiene-band warning on `.mcp.json` path.
+
 ## Shipped This Session (S91)
 
 - s90-command-ribbon (S91) — **DONE S91**: `TodayDashboardPanel` now surfaces S90 counterfactual P&L + decision-journal output in an Operator Briefing ribbon with sparse-history fallback.
