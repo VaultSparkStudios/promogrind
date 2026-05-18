@@ -19,6 +19,20 @@
 
 ## Shipped This Session
 
+- counterfactual-pnl-ribbon (S90) — **DONE S90**: `src/lib/counterfactualPnL.js` 7-day "actual vs AI top-pick vs skip-red" delta engine reading replayLedger + outcome memory; 3 tests. Pure rule engine.
+- decision-journal-autogen (S90) — **DONE S90**: `src/lib/decisionJournal.js` deterministic 2-line yesterday recap + 7d edge delta; 3 tests.
+- terms-drift-detector (S90) — **DONE S90**: `src/lib/termsDrift.js` text-hash diff over promo T&Cs with versioned local history; 3 tests.
+- edge-half-life-scheduler (S90) — **DONE S90**: extended `src/lib/edgeDecay.js` with `computeExecutionDeadline(promo, userFloor)`; 3 new tests on top of existing 4.
+- promo-conflict-detector (S90) — **DONE S90**: `src/lib/promoConflict.js` rollover/qualifier/max-payout collision rules; 3 tests.
+- bankroll-kelly-sandbox (S90) — **DONE S90**: `src/lib/kellySim.js` simulateKellyFraction + compareKellyFractions; 3 tests.
+- operator-briefing-share-card (S90) — **DONE S90**: `src/lib/shareCard.js` zero-PII 1200x630 canvas data model with runtime PII assertion; 2 tests.
+- S90 verification: `npm test` passed 450/450 (up from 430); 20 net-new tests.
+- S90 deferred (5 items, structural rationale): swarm-confidence-badges (CF Worker), promo-recipe-synthesis (S91 cornerstone), ocr-settlement-paste (Tesseract bundle weight), calculator-lazy-route-split (53-import risk), ai-cost-crash-diet (S92 — needs post-S90 ledger baseline).
+
+### S90 follow-up (Next)
+
+- Wire all 7 S90 core modules into UI surfaces (CounterfactualRibbon above TodayDashboardPanel; DecisionJournalCard collapsible in Today; TERMS CHANGED pill in SmartPromoRecommender; ExecutionDeadline inline in promo card; ConflictWarningChip in Tracker; KellySandbox in Profile; ShareBriefingButton on Today). Estimate: 3-4h thin-integration pass.
+
 - anti-tilt-circuit-breaker (S89) — **DONE S89**: added `src/lib/tiltGuard.js` (rapid-fire + losing-streak + exposure detection, 30-min cooldown), banner in `TodayDashboardPanel`, 3 tests.
 - causal-promo-explainer (S89) — **DONE S89**: ablation-based `whyRanked` in `src/dashboard/today.js` + compact "Why #N" line in `SmartPromoRecommender`; zero net new AI cost.
 - edge-decay-radar (S89) — **DONE S89**: `src/lib/edgeDecay.js` deterministic decay model + sparkline embedded in `SmartPromoRecommender`; 4 tests.

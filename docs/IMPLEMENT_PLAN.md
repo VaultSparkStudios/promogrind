@@ -1,28 +1,32 @@
-<!-- generated-by: /implement skill v1.0 (S89) -->
+<!-- generated-by: /implement skill v1.0 (S90) -->
 <!-- generated-at: 2026-05-17 -->
+<!-- source: docs/AUDIT_2026-05-17-S90.md -->
 
-# Implementation Plan — PromoGrind S89
+# Implement Plan — PromoGrind S90
 
-> Optimal-efficiency sequencing of `docs/AUDIT_2026-05-17.md`.
-> Sequence ≠ raw priority — grouped by surface, foundation-first, token-cost last.
+Optimal-efficiency sequence (NOT raw priority order).
 
-| Seq | Slug | Tier | Surface | Effort | Priority |
-|----:|------|:-:|---|---|:-:|
-| 1 | anti-tilt-circuit-breaker | 🔥 | dashboard/lib | 2h | 45.0 |
-| 2 | causal-promo-explainer | 🔥 | recommender | 2h | 32.0 |
-| 3 | edge-decay-radar | 🔥 | recommender/lib | 4h | 31.3 |
-| 4 | operator-twin | 🔥 | dashboard/ai | 4h | 38.7 |
-| 5 | adversarial-receipt-replay | 🔥 | profile/lib | 2h | 40.5 |
-| 6 | public-passport | ⚡ | profile/lib | 4h | 31.0 |
-| 7 | launch-proof-resilience-replay | ⚡ | scripts | 4h | 21.7 |
-| 8 | calculator-pre-warm | ⚡ | app/routing | 2h | 21.0 |
-| 9 | app-jsx-decomposition-finale | 💡 | app shell | 4h | 10.8 |
-| 10 | token-budget-self-binding | ⚡ | ai gateway | 1h | 30.9 |
+## In-scope this sprint (7 items)
 
-**Rationale:** items 1-4 share dashboard/recommender surface; 5-6 share Profile; 7 hardens launch gate before infra; 10 last to measure token impact.
+1. **decision-journal-autogen** — 2h, small win, momentum starter
+2. **counterfactual-pnl-ribbon** — 4h, same data surface as #1 (groups well)
+3. **terms-drift-detector** — 6h, foundational trust primitive
+4. **edge-half-life-scheduler** — 4h, extends S89 edgeDecay (same file)
+5. **promo-conflict-detector** — 3h, Tracker surface
+6. **bankroll-kelly-sandbox** — 3h, Profile surface
+7. **operator-briefing-share-card** — 3h, canvas/share util
 
-## Verification
+## Deferred to S91
 
-- Per-item Vitest where applicable
-- `npm test` after each batch
-- `npm run verify:launch-local` at end
+- **swarm-confidence-badges** — needs CF Worker server piece for full value
+- **promo-recipe-synthesis** — depends on edge-half-life + conflict-detector landing first; clean S91 cornerstone
+- **ocr-settlement-paste** — large Tesseract.js dep, needs dedicated session for bundle measurement
+- **calculator-lazy-route-split** — touches 53 imports; risky for shared session
+- **ai-cost-crash-diet** — token axis last; should run AFTER S90 features land so 7-day ledger baseline includes them
+
+## Execution mode
+
+Core-first: ship deterministic `src/lib/*.js` modules + tests for all 7. UI wiring kept minimal/lightweight (focused integration points only). All modules side-effect-free, idempotent, ESM. No new AI cost on any item.
+
+---
+*Ready for sequential execution. /closeout after final test pass.*

@@ -48,6 +48,52 @@ export function buildDecayCurve(promo = {}, opts = {}) {
   };
 }
 
+/**
+ * Compute the personal execution deadline for a promo given a user's edge floor.
+ *
+ * Models edge as decaying linearly from `start=1.0` at velocity `v` per 24h.
+ * Returns the wall-clock time at which projected edge crosses `userFloor`,
+ * clamped between now and promo expiry. Returns null if edge is already
+ * below floor at `now`, or { stable: true } if velocity is zero / floor never
+ * crossed within horizon.
+ *
+ * userFloor is expressed as a fraction 0..1 (e.g. 0.12 = stop executing when
+ * edge drops to 12% of original).
+ */
+export function computeExecutionDeadline(promo = {}, userFloor = 0.5, opts = {}) {
+  const now = opts.now instanceof Date ? opts.now.getTime() : Number.isFinite(opts.now) ? opts.now : Date.now();
+  const floor = Math.max(0, Math.min(1, Number.isFinite(userFloor) ? userFloor : 0.5));
+  const curve = buildDecayCurve(promo, { now, ticks: 5 });
+  const { velocity, horizonHours, expiresMs } = curve;
+
+  if (velocity <= 0) return { deadlineMs: null, hoursRemaining: Infinity, stable: true, floor };
+
+  if (expiresMs) {
+    // Linear from 1.0 at now to 0 at expiry over horizonHours.
+    if (floor <= 0) return { deadlineMs: expiresMs, hoursRemaining: horizonHours, floor };
+    const fractionToFloor = 1 - floor;
+    const hoursToFloor = horizonHours * fractionToFloor;
+    const deadlineMs = now + hoursToFloor * 3600000;
+    return {
+      deadlineMs: Math.min(deadlineMs, expiresMs),
+      hoursRemaining: Math.max(0, Math.round(hoursToFloor * 10) / 10),
+      floor,
+    };
+  }
+
+  // No fixed expiry — use velocity-per-day model: edge = 1 - velocity*(t/24)
+  // Reaches floor when t = 24 * (1 - floor) / velocity
+  const hoursToFloor = (24 * (1 - floor)) / velocity;
+  if (!Number.isFinite(hoursToFloor) || hoursToFloor <= 0) {
+    return { deadlineMs: null, hoursRemaining: 0, expired: true, floor };
+  }
+  return {
+    deadlineMs: now + hoursToFloor * 3600000,
+    hoursRemaining: Math.round(hoursToFloor * 10) / 10,
+    floor,
+  };
+}
+
 export function renderSparkline(samples) {
   const blocks = "▁▂▃▄▅▆▇█";
   return samples

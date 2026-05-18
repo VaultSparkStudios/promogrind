@@ -204,9 +204,9 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "founder",
-  "sessionModeAutoShiftedAt": "2026-04-24T20:07:46.133Z",
-  "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-05-17T17:46:49.052Z",
+  "sessionMode": "builder",
+  "sessionModeAutoShiftedAt": "2026-05-18T02:04:15.702Z",
+  "planModeDetected": "active",
+  "planModeCheckedAt": "2026-05-18T02:05:25.866Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.850Z"
 }

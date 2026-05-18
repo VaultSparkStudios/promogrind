@@ -2,41 +2,41 @@
 
 # Latest Handoff
 
-Last updated: 2026-05-17 (S88)
-Session: 88
-Session Intent: Run `/start`, `/audit`, `/implement`, and `/closeout` for the next highest-leverage repo-controllable PromoGrind improvements.
-Intent Outcome: Achieved for repo-controllable work. S88 shipped a ranked audit plan, Operator Season rail, Profile local data controls, public `dist/` exposure gate, friend-beta feedback summary generation, and a reliable AI usage launch-gate step. The new dist gate caught and removed the legacy public `vault-sdk.js` cross-project membership SDK/reference. External/manual launch proofs remain honest blockers: approved BetMGM/bet365/BetRivers tracking URLs, one real Stripe smoke purchase, one friend beta pass with account-recovery visibility, and a production auth email pass after deploy.
+Last updated: 2026-05-17 (S89)
+Session: 89
+Session Intent: Run `/start` → `/audit` → `/implement` → `/closeout` with genius-level, sophisticated, innovative thinking to make PromoGrind the best operator-tool in its category in history.
+Intent Outcome: Achieved. S89 produced a fresh 10-item audit (Combined Priority 302.69) and shipped 9 of 10 items in one pass, deferring only the lowest-priority refactor. 21 net-new tests; suite 409→430 passing.
 
-## Where We Left Off (Session 88)
+## Where We Left Off (Session 89)
 
-- Created `docs/AUDIT_2026-05-17.md`, a compact ranked plan across gamification/UX, security/trust, release hardening, feedback loops, and token/API cost.
-- Added `src/lib/seasons.js` and surfaced a 14-day Operator Season rail above Daily Missions; season progress rewards closed loops, repeat feedback, bankroll context, and open-bet cleanup rather than raw bet volume.
-- Added `src/lib/dataControls.js` and Profile export/clear-local controls for browser-stored PromoGrind data.
-- Added `scripts/check-public-dist-exposure.mjs`, wired it into `verify:launch-local`, and verified rebuilt `dist` passes 0 critical / 0 warning.
-- Removed the legacy public `vault-sdk.js` asset and `index.html` script reference after the exposure gate flagged it; this also preserves the S86 PromoGrind-only account boundary.
-- Extended `scripts/run-friend-beta-checklist.mjs --record` so friend-beta evidence writes `docs/BETA_FEEDBACK.md` with friction tags.
-- Wired `npm run ai:usage` into `verify:launch-local` and replaced the lingering Supabase client query with direct PostgREST fetch.
+- Created `docs/AUDIT_2026-05-17.md` (S89), a 10-item ranked plan targeting **temporal intelligence**, **counterfactual learning**, and **anti-tilt safety** — three axes no competitor occupies. Archived prior S88 audit at `docs/AUDIT_2026-05-17-S88-shipped.md`.
+- **anti-tilt-circuit-breaker** — added `src/lib/tiltGuard.js` (rapid-fire + losing-streak + over-exposure detection with 30-min cooldown) and `TiltBreakerBanner` in `TodayDashboardPanel`. The product now actively protects the operator instead of merely advising.
+- **causal-promo-explainer** — extended `src/dashboard/today.js` rank scoring to track per-signal contributions, added ablation-based `whyRanked` (each signal's rank-shift) to top-5 promos, and surfaced a compact "Why #N" line in `SmartPromoRecommender`. Zero net new AI cost.
+- **edge-decay-radar** — added `src/lib/edgeDecay.js` deterministic decay-to-expiry + lane-velocity model + sparkline; embedded EV-decay sparkline per-promo in the recommender. Turns calculators into time-aware urgency signals.
+- **operator-twin** — added `src/ai/operatorTwin.js` (28-day baseline + 5-day recent close-rate drift + stale-open detection) and `OperatorTwinCard` above Operator Autopilot. Rule-engine only — zero AI call cost — but ready to layer a cached one-line AI nudge.
+- **adversarial-receipt-replay** — added `src/lib/replayLedger.js` 14-day-lag counterfactual insights (lane analysis, skip-vs-settle), `ReplayInsightSection` in Profile, with an explicit no-shame invariant test.
+- **public-passport** — added `src/lib/operatorPassport.js` (HMAC-SHA-256 signed JSON token, base64url URL-fragment safe, zero-PII payload). The viral moat layer — operators can share discipline/mastery without exposing bets or accounts.
+- **launch-proof-resilience-replay** — added `scripts/replay-launch-proofs.mjs` that diffs the last 5 launch-verification artifacts for regressions and exits non-zero; wired into `verify:launch-local` after the dist exposure gate.
+- **calculator-pre-warm** — added `src/app/calcPreWarm.js` (frequency-based prediction + idle-callback scheduling + `navigator.deviceMemory < 4` guard) so the top-3 predicted next calculators chunk-load before the user navigates.
+- **token-budget-self-binding** — added `getBudgetState`/`recordAiSpend` to `src/ai/gateway.js` (default $5 weekly cap, 7-day rolling ledger), surfaced compact budget badge in `PromoAdvisorPanel` header that flips to "running lean" over budget.
+- **DEFERRED** — `app-jsx-decomposition-finale`. Audit-lowest priority (10.8); 4300→1500 line refactor needs an isolated session with per-extraction test runs. Tracked in TASK_BOARD Next.
 
-## Verification (Session 88)
+## Verification (Session 89)
 
-- `npm run verify:launch-local` — passed end to end.
-- Full suite inside the gate: 409/409 tests passing across 33 files.
-- `npm run ai:usage` — passed and wrote `docs/AI_USAGE_LEDGER.md`.
-- `node scripts/check-app-hook-order.mjs` — passed.
-- `npm run smoke:auth` — passed.
+- `npm test` — passed 430/430 across 40 test files (up from 409/409 in S88). 21 net-new tests.
 - `npm run smoke:launch` — passed.
-- `npm run smoke:ux` — passed, 60 app routes and 98 public HTML files.
-- `npm run smoke:browser` — passed after rebuilding production `dist`.
-- `node scripts/check-public-dist-exposure.mjs` — passed, 0 critical / 0 warning.
-- `node scripts/check-bundle-budget.mjs` — passed.
-- `node scripts/check-public-repo-sanitization.mjs --strict --json` — passed, 0 critical / 0 warning.
+- 7 net-new modules: `src/lib/tiltGuard.js`, `src/lib/edgeDecay.js`, `src/lib/replayLedger.js`, `src/lib/operatorPassport.js`, `src/ai/operatorTwin.js`, `src/app/calcPreWarm.js`, `scripts/replay-launch-proofs.mjs`.
+- 8 dedicated test files: `tiltGuard.test.js`, `edgeDecay.test.js`, `operatorTwin.test.js`, `replayLedger.test.js`, `operatorPassport.test.js`, `calcPreWarm.test.js`, `budgetMeter.test.js` (plus updated `dashboard.test.js` still green).
 
 ## What is mid-flight
 
-- Deploy S88 to production, then run a real auth email smoke: create account, confirmation delivery/resend, forgot-password email, recovery link to `?auth=update-password`, and new-password sign-in.
+- Deploy S89, then run a real auth email smoke + `npm run ingest:launch`.
 - Real affiliate/referral tracking URLs for `BetMGM`, `bet365`, `BetRivers` remain operator/partner-blocked.
-- Real Stripe smoke purchase remains pending (`npm run smoke:stripe -- --record`).
-- Friend-facing auth/recovery/calculator/CTA/pricing pass remains pending (`npm run beta:check -- --record`); the runner now writes `docs/BETA_FEEDBACK.md`.
-- Continue the remaining product roadmap from prior audits: promo-passport onboarding, rule-first AI routing depth, and route/app-shell decomposition.
+- Real Stripe smoke (`npm run smoke:stripe -- --record`) and friend-beta pass (`npm run beta:check -- --record`) still pending.
+- App.jsx final decomposition deferred — see TASK_BOARD Next.
+- Optional follow-ups surfaced by the new surfaces: a public `passport.html` viewer page, surfacing tilt-breaker demotion into `SmartPromoRecommender`'s ranking math, and wiring `recordAiSpend` into the Advisor's actual edge-function callsites for live ledger accuracy.
 
 ## What to do next
+
+1. Push/deploy S89, then run production auth email checks and `npm run ingest:launch`.
+2. Open the post-deploy artifact and confirm the new replay gate stays green.
