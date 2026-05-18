@@ -22,7 +22,7 @@
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
     "Run production auth email smoke after S88 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
-  "lastUpdated": "2026-05-17",
+  "lastUpdated": "2026-05-18",
   "silScore": 991,
   "silAvg3": 987,
   "silVelocity": 5,
