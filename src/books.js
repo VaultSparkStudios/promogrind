@@ -56,7 +56,9 @@ export const BOOKS = [
     // ↓ Replace with your affiliate URL after approval at draftkings.com/partners
     affiliateLink: null,
     referral: "Up to $100 bonus bet per friend referred",
-    referralLink: "https://www.draftkings.com/r/REDACTED",
+    // Studio-domain edge redirect (Cloudflare Worker promogrind-go) — keeps the
+    // referral code out of the public repo per founder identity policy.
+    referralLink: "https://promogrind.bet/go/dk",
     affiliateProgram: "https://www.draftkings.com/partners",
     cpa: "$75+ per depositing user",
     color: "#53d769",
