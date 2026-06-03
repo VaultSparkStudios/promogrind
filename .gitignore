@@ -32,3 +32,6 @@ scripts/rotate-render-key.mjs
 scripts/soul-interview.mjs
 supabase/.temp/
 artifacts/launch-verification/
+
+# Private surfaces — never commit (sanitization 2026-06-03)
+ignis/output/
