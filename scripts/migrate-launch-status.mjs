@@ -48,8 +48,8 @@ const LAUNCH_STATUS = {
 
 // Corrected localPaths for entries with encoding bugs
 const LOCALPATH_FIXES = {
-  'vaultspark-ignis': 'C:\\Users\\p4cka\\documents\\development\\vaultspark-ignis',
-  'orva-eon':         'C:\\Users\\p4cka\\documents\\development\\Orva',
+  'vaultspark-ignis': '<dev-root>\\vaultspark-ignis',
+  'orva-eon':         '<dev-root>\\Orva',
 };
 
 let updated = 0;
