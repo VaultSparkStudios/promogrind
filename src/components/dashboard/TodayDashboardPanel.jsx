@@ -17,6 +17,7 @@ import { buildDecisionJournal } from "../../lib/decisionJournal.js";
 import { computeDisciplineScore } from "../../lib/discipline.js";
 import { assertShareCardPiiSafe, buildShareCardData, renderShareCardCanvas } from "../../lib/shareCard.js";
 import { readTrustReceipts } from "../../lib/trustReceipts.js";
+import { buildTwinBattle } from "../../lib/twinBattle.js";
 
 function OperatorTwinCard({ forecast }) {
   if (!forecast) return null;
@@ -28,6 +29,58 @@ function OperatorTwinCard({ forecast }) {
       </div>
       <div style={{ fontSize: 12, color: K.tx, fontWeight: 700, marginBottom: 2 }}>{forecast.headline}</div>
       <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>{forecast.detail}</div>
+    </div>
+  );
+}
+
+function TwinBattleCard({ battle }) {
+  if (!battle) return null;
+  if (battle.empty) {
+    return (
+      <div style={{ padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, marginBottom: 12 }}>
+        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Twin Battle · 7-Day P&amp;L</div>
+        <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>Settle outcomes over the next 7 days to unlock your personal P&amp;L leaderboard vs. your best-self twin and discipline twin.</div>
+      </div>
+    );
+  }
+  const LABELS = { you: "You", twin: "Best-Self Twin", disciplineTwin: "Discipline Twin" };
+  const top = battle.leaderboard[0]?.name;
+  return (
+    <div style={{ padding: "12px", background: `${K.pp}08`, border: `1px solid ${K.pp}30`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ fontSize: 10, color: K.pp, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 8 }}>
+        Twin Battle · 7-Day P&amp;L · {battle.sample} outcome{battle.sample !== 1 ? "s" : ""}
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: battle.review ? 10 : 0 }}>
+        {battle.leaderboard.map((row, i) => {
+          const isYou = row.name === "you";
+          const tone = row.pnl >= 0 ? K.gn : K.rd;
+          const rank = ["1st", "2nd", "3rd"][i] || `${i + 1}th`;
+          return (
+            <div key={row.name} style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "7px 10px",
+              background: isYou ? `${K.pp}12` : K.s1,
+              border: `1px solid ${isYou ? K.pp : K.bd}40`,
+              borderRadius: 6,
+            }}>
+              <span style={{ fontSize: 9, color: K.mt, width: 24, flexShrink: 0 }}>{rank}</span>
+              <span style={{ fontSize: 11, color: isYou ? K.tx : K.dm, fontWeight: isYou ? 700 : 400, flex: 1 }}>
+                {LABELS[row.name] || row.name}
+                {row.name === top && !isYou ? <span style={{ marginLeft: 6, fontSize: 9, color: K.pp }}>LEADING</span> : null}
+              </span>
+              <span style={{ fontFamily: fontD, fontSize: 14, fontWeight: 800, color: tone }}>
+                {row.pnl >= 0 ? "+" : "-"}${Math.abs(row.pnl).toFixed(2)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      {battle.review && (
+        <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6, borderTop: `1px solid ${K.bd}`, paddingTop: 8, marginTop: 4 }}>
+          <span style={{ color: K.yl, fontWeight: 700 }}>Biggest gap decision:</span>{" "}
+          {battle.review.book ? `${battle.review.book} · ` : ""}{battle.review.promo || "unknown promo"} · ${Math.abs(battle.review.profit).toFixed(2)} loss — review before next similar play.
+        </div>
+      )}
     </div>
   );
 }
@@ -200,6 +253,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const { syncAppData, user } = React.useContext(AppDataCtx) || {};
   const counterfactual = React.useMemo(() => buildCounterfactualPnL(appData), [appData]);
   const journal = React.useMemo(() => buildDecisionJournal(appData), [appData]);
+  const twinBattle = React.useMemo(() => buildTwinBattle(appData), [appData]);
   const discipline = React.useMemo(() => computeDisciplineScore(appData), [appData]);
   const passportPlan = React.useMemo(() => getPromoPassportOnboardingPlan({
     appData,
@@ -290,6 +344,8 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
       <TiltBreakerBanner state={computeTiltState(appData)} />
       <OperatorTwinCard forecast={buildTwinForecast(appData)} />
       <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />
+
+      <TwinBattleCard battle={twinBattle} />
 
       <OperatorAutopilotCard decision={nextAction} topWorkflow={snapshot.topWorkflow} navigate={navigate} />
 

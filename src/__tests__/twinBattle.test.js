@@ -54,4 +54,29 @@ describe("buildTwinBattle", () => {
     const result = buildTwinBattle({ resultFeedback: feedback }, { now: NOW });
     expect(result.review).toBeNull();
   });
+
+  it("leaderboard contains all three competitors sorted descending by P&L", () => {
+    const feedback = [
+      entry({ id: "1", profit: 10 }),
+      entry({ id: "2", profit: -5 }),
+    ];
+    const result = buildTwinBattle({ resultFeedback: feedback }, { now: NOW });
+    expect(result.empty).toBe(false);
+    expect(result.leaderboard).toHaveLength(3);
+    expect(result.leaderboard.map((r) => r.name)).toEqual(
+      expect.arrayContaining(["you", "twin", "disciplineTwin"]),
+    );
+    for (let i = 0; i < result.leaderboard.length - 1; i++) {
+      expect(result.leaderboard[i].pnl).toBeGreaterThanOrEqual(result.leaderboard[i + 1].pnl);
+    }
+  });
+
+  it("exposes delta fields required for gap indicators in the UI", () => {
+    const feedback = [entry({ id: "1", profit: 5 })];
+    const result = buildTwinBattle({ resultFeedback: feedback }, { now: NOW });
+    expect(result.empty).toBe(false);
+    expect(typeof result.delta.twinVsYou).toBe("number");
+    expect(typeof result.delta.disciplineVsYou).toBe("number");
+    expect(typeof result.windowDays).toBe("number");
+  });
 });
