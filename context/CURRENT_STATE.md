@@ -1,11 +1,11 @@
 # Current State
 
-Last updated: 2026-06-18 (S94)
+Last updated: 2026-06-18 (S95)
 
 ## Snapshot
 
 - Date: 2026-06-18
-- Overall status: deployed product with S94 Studio OS truth-surface sprint complete. The session ran `/start`, produced `docs/AUDIT_2026-06-18.{json,md}`, executed the highest-priority implement items, regenerated the startup brief, and verified the closeout board. Shipped fixes: SIL forecast parser now reads the repo's actual category-table format and predicts 995/1000 instead of a false 0/1000; closeout board now surfaces `https://promogrind.bet` from `PROJECT_STATUS.liveUrl`; brief validator coherence/budget gates and doctor provenance predicates were verified against live outputs. Script-level verification passed, but full `npm test` could not run because `node_modules` is absent and the public-repo package-trust script is missing, so dependencies were not installed during closeout. Prior S93 product state remains: 10 operator-intelligence improvements shipped, with last recorded full launch gate at 500/500 tests.
+- Overall status: deployed product with S95 security/dependency continuation complete. S95 cleared the S94 verification caveat by restoring dependencies, running `npm audit fix --package-lock-only`, confirming `npm audit` reports 0 vulnerabilities, regenerating the ignored `dist-cap` build after stale ignored JWT artifacts triggered the all-tree secret scan, and running `npm run verify:launch-local` end to end with 500/500 tests. Repo-local supply-chain tooling now exists: `scripts/package-trust.mjs` gates future package/download additions with npm metadata checks, and `scripts/scan-npm-supply-chain.mjs` scans the lockfile for non-registry tarballs, missing integrity, and lifecycle-script review items. Dependabot open alerts were checked through GitHub and are 0. Prior S94 truth-surface fixes remain: SIL forecast parser reads the actual category-table format, closeout board surfaces `https://promogrind.bet`, and startup/brief/doctor surfaces are verified.
 - Prior status (S93): deployed product with S93 audit/implement/closeout sprint complete. Audit produced a 10-item plan (Combined Priority 319.9); all 10 items shipped as new pure libs + minimal UI surfaces: recommender ExplainerDrawer, calculator→Tracker workflow handoff, prompt-cache layer with hit-rate telemetry, mistake-memory loop with no-shame chip, AI calibration tracker (Brier per source), 3-way counterfactual twin battle, deterministic bankroll stress test (Mulberry32 Monte Carlo), live edge-decay heatmap, hash-linked promo provenance receipts (HMAC + PII strip), and bankroll-threshold pre-mortem. Test suite was 500/500 (up from 450 — 50 net-new tests). `npm run verify:launch-local` passed end to end with one pre-existing hygiene-band path warning on `.mcp.json`.
 - Prior status (S90): deployed product with S90 audit/implement/closeout sprint complete — shipped 7 of 12 core modules layering on S89 infrastructure: counterfactual P&L ribbon, decision journal autogen, terms-drift detector, edge half-life scheduler, promo conflict detector, Kelly-fraction sandbox, and zero-PII share card. Suite is now 450/450 (up from 430). UI wiring deferred to S91 thin-integration pass. Below preserves S89 narrative.
 - Overall status (S89): deployed product with S89 audit/implement/closeout sprint complete — shipped 9 of 10 audit items focused on temporal intelligence, counterfactual learning, and anti-tilt safety: tilt circuit breaker, ablation-based promo explainer ("why ranked #N"), EV decay radar, operator twin drift forecast, 14-day adversarial receipt replay, HMAC-signed public operator passport, launch-proof resilience replay, calculator pre-warm, and weekly AI budget self-binding. Suite is now 430/430 (up from 409). S88 audit/implement/closeout sprint complete: added an Operator Season rail over daily missions, Profile local data export/clear controls, a public `dist/` exposure gate wired into `verify:launch-local`, friend-beta feedback summary generation, and a cleaner AI usage ledger renderer. The new dist gate caught and drove removal of the legacy public `vault-sdk.js` cross-project membership SDK/reference, preserving the S86 PromoGrind-only account boundary. S87 launch proof mirror, Operator Autopilot, trust receipts, discipline scoring, outcome-memory recommendations, and AI usage ledger remain intact. Closeout verification in S88 passed `npm run verify:launch-local` end to end with 409/409 tests. Production host remains GitHub Pages (Cloudflare is DNS-only proxy).
@@ -48,12 +48,11 @@ Last updated: 2026-06-18 (S94)
 
 ## In progress
 
-- Active work: deploy S88 season/data-control/dist-gate improvements and run a real production auth email pass: create account, confirmation delivery/resend, forgot-password email, recovery link to `?auth=update-password`, new-password sign-in
-- Active work: inspect the next GitHub Pages launch-verification artifact after this push and confirm production dashboard/auth surfaces are clean
-- Active work: finishing monetization coverage for sportsbook CTAs with real approved affiliate/referral links
-- Active work: completing one live Stripe smoke purchase and one friend-facing auth/calculator/pricing pass before public announcement
-- Active work: continuing to decompose the remaining high-churn `src/App.jsx` seams (still ~4300 lines)
-- Active work: deploy S91/S92 closeout state, then inspect the next launch-verification artifact for regressions.
+- Active work: complete one live Stripe smoke purchase and record evidence with `npm run smoke:stripe -- --record`.
+- Active work: complete one friend-facing auth/recovery/calculator/pricing pass and record evidence with `npm run beta:check -- --record`.
+- Active work: run production auth email smoke after the latest deploy: create account, confirmation delivery/resend, forgot-password email, recovery link to `?auth=update-password`, and new-password sign-in.
+- Active work: refresh stale revenue and IGNIS derived intelligence now that dependency/security verification is green again.
+- Active work: continue decomposing the remaining high-churn `src/App.jsx` seams.
 
 ## Blockers
 
@@ -66,6 +65,6 @@ Last updated: 2026-06-18 (S94)
 
 ## Next 3 moves
 
-1. Push S91/S92 to `main`, let GitHub Pages deploy, then run production auth email checks and `npm run ingest:launch`.
-2. Complete `npm run beta:check -- --record` with the updated recovery-aware friend beta checklist and `npm run smoke:stripe -- --record` with one real checkout.
-3. Schedule the dedicated `app-jsx-decomposition-finale` session once the S91 UI wiring is deployed.
+1. Inspect the GitHub Pages launch-verification artifact after the S95 pushes and run production auth email checks.
+2. Complete `npm run beta:check -- --record` and `npm run smoke:stripe -- --record` with real tester/payment evidence.
+3. Refresh revenue/IGNIS derived intelligence, then schedule the dedicated `app-jsx-decomposition-finale` session.

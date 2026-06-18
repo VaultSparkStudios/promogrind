@@ -1,9 +1,19 @@
 # Latest Handoff
 
-Last updated: 2026-06-18 (S94)
-Session: 94
-Session Intent: Run `/start` → `/audit` → `/implement` → `/closeout` with genius-level innovation, sophistication, and creativity; make the project best-in-category in history.
-Intent Outcome: Achieved for the S94 continuation scope. Ran `/start`, wrote a fresh S94 audit (`docs/AUDIT_2026-06-18.{json,md}`, Combined Priority 140.55), executed the truth-surface implement items, regenerated `docs/STARTUP_BRIEF.md`, and verified the brief/closeout/doctor surfaces. Full app tests could not run because `node_modules` is absent and package-trust automation is missing from this public repo, so dependencies were not installed.
+Last updated: 2026-06-18 (S95)
+Session: 95
+Session Intent: Continue the S94 closeout by adding absent repo-local gates, fixing vulnerabilities, updating all memory/context/CDR/task-board files, committing, and pushing to GitHub.
+Intent Outcome: Achieved. Cleared npm vulnerabilities, restored the full local launch gate, added repo-local package-trust and supply-chain scanners, updated closeout truth surfaces, and pushed the completed state.
+
+## Where We Left Off (Session 95)
+
+- Fixed vulnerabilities: `npm audit fix --package-lock-only` updated the lockfile; `npm audit --json` now reports 0 total vulnerabilities.
+- Restored verification: `npm install` restored local dependencies, `npm run verify:launch-local` passed end to end with 500/500 tests, and Dependabot open alerts checked through GitHub are 0.
+- Cleaned security scan caveat: `node scripts/scan-secrets.mjs --all` initially flagged stale ignored `dist-cap` JWT artifacts; `npm run build:cap` regenerated the ignored build output, and the all-tree scan then returned 0 findings.
+- Added repo-local package trust: `scripts/package-trust.mjs` now checks npm metadata before future package additions and blocks unsafe download URLs; `npm run package:trust -- --package vite@6.4.3` approved a normal npm package.
+- Added lockfile supply-chain scan: `scripts/scan-npm-supply-chain.mjs` reports 0 blocking issues on the current lockfile and review-only lifecycle-script findings for `core-js`, `esbuild`, `fsevents`, and `sharp`.
+- Pushed S95 commits through the documented Windows `--no-verify` path after clean secret/audit scans because the normal pre-push hook is known to hang on this machine.
+- Next move: inspect the latest GitHub Pages launch-verification artifact, run real production auth email checks, complete Stripe smoke and friend-beta proof recordings, then refresh stale revenue/IGNIS derived intelligence.
 
 ## Where We Left Off (Session 94)
 

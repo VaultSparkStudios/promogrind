@@ -10,6 +10,15 @@ Append chronological entries.
 - Risks created or removed:
 - Recommended next move:
 
+### 2026-06-18 - Session 95 dependency security and supply-chain closeout
+
+- Goal: Continue from S94 by adding absent repo-local supply-chain gates, fixing vulnerabilities, updating memory/context/CDR/task board surfaces, committing, and pushing to GitHub.
+- What changed: Cleared npm audit vulnerabilities, restored local dependencies, regenerated ignored `dist-cap` output after stale JWT-like artifacts tripped the all-tree scanner, added `scripts/package-trust.mjs`, added `scripts/scan-npm-supply-chain.mjs`, and wired `package:trust` / `scan:supply-chain` scripts into `package.json`.
+- Files or systems touched: `package-lock.json`, `package.json`, `scripts/scan-secrets.mjs`, `scripts/package-trust.mjs`, `scripts/scan-npm-supply-chain.mjs`, closeout context files, CDR, SIL, truth audit, state vector, project status, and closeout board.
+- Verification: `npm audit --json` returned 0 vulnerabilities; GitHub Dependabot open alerts are 0; `npm run verify:launch-local` passed with 500/500 tests; `node scripts/scan-secrets.mjs --all` and staged scan returned 0 findings; `npm run scan:supply-chain` returned 0 blocking findings; `npm run package:trust -- --package vite@6.4.3` approved.
+- Risks created or removed: removed the S94 missing-dependency verification caveat and restored local supply-chain gates for future installs. Remaining risks are external launch proofs plus stale revenue/IGNIS derived intelligence.
+- Recommended next move: inspect the post-push launch-verification artifact, run production auth email checks, complete Stripe smoke and friend beta evidence, then refresh revenue/IGNIS.
+
 ### 2026-05-13 - Session 86 PromoGrind account/signup separation
 
 - Goal: Make PromoGrind create-account/sign-up separate from Studio membership, because Studio membership is not fully integrated across all projects yet, then close out and push.

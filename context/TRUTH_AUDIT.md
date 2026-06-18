@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-05-14 (S87)
+Last reviewed: 2026-06-18 (S95)
 Overall status: green
-Next action: push S87, let GitHub Pages deploy, ingest the launch-verification artifact, run production auth email smoke, then proceed with the three external manual proofs (`BetMGM` / `bet365` / `BetRivers` tracked URLs, Stripe smoke, friend beta).
+Next action: inspect the latest GitHub Pages launch-verification artifact, run production auth email smoke, then complete the two remaining external manual proofs (Stripe smoke and friend beta). Refresh stale revenue and IGNIS derived intelligence after the proof pass.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
 ---
@@ -35,17 +35,18 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
 | Auth/recovery launch truth | `src/auth.js` + `src/components/AuthDialog.jsx` + `scripts/validate-auth-launch-smoke.mjs` | `verify:launch-local`, launch smoke, browser smoke, friend-beta proof guide | green | 2026-05-13 | S85 adds confirmation resend, forgot-password reset, recovery-link update-password, and release-gate smoke coverage; production email delivery still needs live manual proof after deploy. |
-| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-05-01 | PromoGrind status reflects `FORGE`, public-unlaunched, S82 dashboard/runtime launch-hardening, and unchanged external proof blockers. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-05-01 | S82 write-back aligns state, handoff, task board, work log, release plan, post-deploy artifact, audit, and memory around the same proof-honest launch-hardening tranche. |
+| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-06-18 | PromoGrind status reflects `FORGE`, public-unlaunched, S95 dependency/security verification, and unchanged external proof blockers. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-06-18 | S95 write-back aligns state, handoff, task board, work log, project status, SIL, and CDR around the same dependency/security continuation. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
-| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/LAUNCH_CHECKLIST.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts, `launch:status` | yellow | 2026-05-13 | Proof updates remain evidence-gated; required sportsbook monetization links, real Stripe smoke, and friend beta with account-recovery visibility remain incomplete. |
+| Launch-proof truth | `context/LAUNCH_PROOFS.json` + `scripts/update-launch-proof.mjs` + `scripts/verify-production-launch.mjs` + live Supabase/GitHub config | `docs/LAUNCH_CHECKLIST.md`, `context/TASK_BOARD.md`, handoff docs, deploy artifacts, `launch:status` | yellow | 2026-06-18 | Proof updates remain evidence-gated; S89 decoupled partner-blocked sportsbook tracking URLs from launch readiness, but real Stripe smoke and friend beta with account-recovery visibility remain incomplete. |
 | In-app launch proof mirror | `context/LAUNCH_PROOFS.json` + `scripts/generate-launch-proof-mirror.mjs` | `src/data/launchProofs.generated.js`, Launch Command Center | green | 2026-05-14 | S87 generated a browser-safe proof mirror so command-center UI matches canonical evidence requirements without exposing private ops fields. |
 | Operator intelligence | `src/dashboard/today.js` + workflow store + feedback ledger | Dashboard hero, Smart Promo Recommender, Today dashboard | green | 2026-05-14 | S87 adds Operator Autopilot, discipline scoring, and outcome-memory recommendation explanations from settled samples/repeat behavior. |
 | AI usage/cost truth | `supabase/functions/promo-advisor/index.ts` + `scripts/render-ai-usage-ledger.mjs` | `docs/AI_USAGE_LEDGER.md`, `npm run ai:usage` | green | 2026-05-14 | S87 records rule-engine wins and token estimates; live query depends on Supabase admin env, offline render is deterministic. |
 | Production dashboard/runtime | `npm run smoke:production-dashboard` + `src/App.jsx` + deploy artifacts | task board, handoff, launch status | yellow | 2026-05-13 | Local S85 launch gate is green; next deploy artifact should be ingested to confirm production runtime/auth behavior after push. |
-| Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-04-24 | Strict public-repo sanitization reports 0 critical / 0 warning and no longer false-flags public protocol/provenance docs or ignored local ops state. |
+| Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-06-18 | S95 all-tree and staged secret scans report 0 findings; `package-lock.json` SRI hashes are allowlisted as non-secret integrity metadata. |
+| Dependency and package trust | `package-lock.json` + `scripts/package-trust.mjs` + `scripts/scan-npm-supply-chain.mjs` | `npm audit`, Dependabot alerts, task board, handoff | green | 2026-06-18 | `npm audit` reports 0 vulnerabilities, GitHub Dependabot open alerts are 0, and lockfile supply-chain scan has 0 blocking findings. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
 | Public trust copy | `src/analytics.js` + public pages | `/privacy/`, `/data-policy/` | green | 2026-04-28 | Privacy/data-policy pages now describe the PostHog/Sentry analytics and diagnostics posture instead of stale Plausible/no-cookie claims. |
 | Protocol FAQ cache | `docs/SESSION_PROTOCOL.md` + `AGENTS.md` | `docs/PROTOCOL_FAQ.md`, `ops.mjs ask --list` | green | 2026-04-28 | Cached public-safe protocol Q&A exists and `node scripts/ops.mjs ask --list` returns populated entries. |
@@ -55,9 +56,18 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 ## Current Contradictions
 
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
-- `required_launch_monetization` is still red by design because no real approved tracking/referral URLs exist locally for `BetMGM`, `bet365`, and `BetRivers`; docs and verifier must keep saying that until the operator provides them.
-- Production auth email delivery is unproven until S87 deploys and a real confirmation/reset email pass is recorded.
+- Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+
+## Resolved This Session (S95)
+
+- Cleared npm dependency vulnerability truth: `npm audit --json` reports 0 total vulnerabilities after the lockfile update.
+- Restored full local verification truth: `npm run verify:launch-local` passed end to end with 500/500 tests.
+- Restored all-tree secret-scan truth: stale ignored `dist-cap` JWT-like artifacts were regenerated and `node scripts/scan-secrets.mjs --all` reports 0 findings.
+- Added package trust truth: `scripts/package-trust.mjs` is the repo-local public-safe fallback for npm package/download review before future installs.
+- Added lockfile supply-chain truth: `scripts/scan-npm-supply-chain.mjs` reports 0 blocking findings on the current lockfile and surfaces only review-level lifecycle-script packages.
+- Dependabot truth: GitHub reports 0 open Dependabot alerts.
+- S94 caveat resolved: dependencies are no longer absent and package-trust automation is no longer missing from this public repo.
 
 ## Resolved This Session (S88)
 

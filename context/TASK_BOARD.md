@@ -2,11 +2,12 @@
 
 ## Now
 
-- deploy S91 operator-intelligence UI wiring, then inspect the next GitHub Pages launch-verification artifact
-- production auth email smoke after S87 deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
+- inspect the GitHub Pages launch-verification artifact after the S95 security/tooling pushes and confirm production dashboard/auth surfaces are clean
+- production auth email smoke after the latest deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
 - ~~finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers`~~ — **DECOUPLED S89**: partner programs rejected/waitlisted or do not offer individual referral codes. Per DECISIONS.md (S89), these 3 books are now advisory, not launch-blocking. PromoGrind monetizes via the 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics); the 3 advisory books still ship clean signup URLs so operators can use them
+- refresh stale revenue and IGNIS derived intelligence now that local dependency/security verification is green again [SIL]
 
 ## Next
 
@@ -19,6 +20,12 @@
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+
+- vulnerability-clearance (S95) — **DONE S95**: `npm audit fix --package-lock-only` cleared the npm advisory set; `npm audit --json` reports 0 vulnerabilities and GitHub Dependabot open alerts are 0.
+- launch-gate-restored (S95) — **DONE S95**: restored dependencies with `npm install`; `npm run verify:launch-local` passed end to end with 500/500 tests.
+- secret-scan-dist-cap-cleanup (S95) — **DONE S95**: regenerated ignored `dist-cap` output after stale local JWT-like artifacts triggered `scan-secrets --all`; all-tree and staged secret scans are clean.
+- package-trust-fallback (S95) — **DONE S95**: added `scripts/package-trust.mjs` and `npm run package:trust` as the public-repo-safe pre-install trust gate.
+- lockfile-supply-chain-scan (S95) — **DONE S95**: added `scripts/scan-npm-supply-chain.mjs` and `npm run scan:supply-chain`; current lockfile has 0 blocking issues and 4 review-only lifecycle-script findings.
 
 - sil-forecast-parser-honesty (S94) — **DONE S94**: `scripts/lib/sil-forecaster.mjs` now parses the actual SIL category table format and emits a sane 995/1000 forecast instead of 0/1000; startup brief regenerated and validator passed.
 - closeout-live-url-truth (S94) — **DONE S94**: `scripts/render-closeout-board.mjs` now reads `PROJECT_STATUS.liveUrl`/`deployedUrl`, so closeout shows `https://promogrind.bet`.

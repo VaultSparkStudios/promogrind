@@ -13,9 +13,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 94,
-  "currentFocus": "S94 Studio OS truth-surface sprint complete: fresh audit/implement artifacts written, SIL forecast parser fixed, startup brief regenerated, closeout board live URL restored, validator/provenance/doctor surfaces verified. Full app tests pending dependency restoration because node_modules is absent and repo-local package-trust automation is missing.",
-  "nextMilestone": "Restore dependencies through an approved supply-chain path, rerun npm test and npm run verify:launch-local, refresh stale revenue and IGNIS derived intelligence, then finish external launch proofs.",
+  "currentSession": 95,
+  "currentFocus": "S95 dependency security and supply-chain continuation complete: npm audit vulnerabilities cleared, dependencies restored, full launch gate passed 500/500, all-tree/staged secret scans clean, Dependabot open alerts 0, and repo-local package-trust plus lockfile supply-chain scanners added.",
+  "nextMilestone": "Inspect the latest GitHub Pages launch-verification artifact, run production auth email smoke, complete Stripe smoke and friend-beta evidence, then refresh stale revenue and IGNIS derived intelligence.",
   "blockers": [
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
@@ -24,14 +24,14 @@
   "lastUpdated": "2026-06-18",
   "silScore": 998,
   "silAvg3": 995,
-  "silVelocity": 4,
+  "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 94,
+  "silLastSession": 95,
   "silMax": 1000,
   "silSparkline": [
-    970,
     981,
     988,
+    998,
     998,
     998
   ],
@@ -40,7 +40,7 @@
   "ignisLastComputed": "2026-06-03",
   "testsPassing": 500,
   "testsTotal": 500,
-  "testsLastRun": "2026-05-18",
+  "testsLastRun": "2026-06-18",
   "lastDeployStatus": "deployed-unannounced",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-05-17",
@@ -50,12 +50,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "last recorded passing 500/500 in S93; S94 full suite not run because node_modules is absent"
+      "status": "passing 500/500 in S95 via npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "last recorded passing end to end in S93 with 500/500 tests; S94 launch gate not run because dependencies are absent"
+      "status": "passing end to end in S95 with 500/500 tests, audit clean, supply-chain scan clean, and public sanitization clean"
     },
     {
       "type": "ux-integrity",

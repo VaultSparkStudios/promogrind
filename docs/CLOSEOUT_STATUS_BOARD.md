@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-18 (Session 94 closeout) -->
+<!-- generated-at: 2026-06-18 (Session 95 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S94 ═════════════════════════╗
-║  Date: 2026-06-18  ·  SIL: 998/1000  ·  Velocity: 4 down         ║
+╔══ SESSION CLOSEOUT · PromoGrind · S95 ═════════════════════════╗
+║  Date: 2026-06-18  ·  SIL: 998/1000  ·  Velocity: 5 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://promogrind.bet                       ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Ran `/start`: session lock written, mode detected as FOUNDER  ║
-║  ✓ Created `docs/AUDIT_2026-06-18.json` and `docs/AUDIT_2026-06  ║
-║  ✓ **sil-forecast-parser-honesty** — patched `scripts/lib/sil-f  ║
-║  ✓ **closeout-live-url-truth** — patched `scripts/render-closeo  ║
-║  ✓ Verified in-flight truth-surface work: `validate-brief-forma  ║
+║  ✓ Fixed vulnerabilities: `npm audit fix --package-lock-only` u  ║
+║  ✓ Restored verification: `npm install` restored local dependen  ║
+║  ✓ Cleaned security scan caveat: `node scripts/scan-secrets.mjs  ║
+║  ✓ Added repo-local package trust: `scripts/package-trust.mjs`   ║
+║  ✓ Added lockfile supply-chain scan: `scripts/scan-npm-supply-c  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,19 +29,19 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 15 files  ·  M:14 A:0 D:0 ?:1                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝

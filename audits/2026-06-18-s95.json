@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "session": 95,
+  "date": "2026-06-18",
+  "type": "closeout",
+  "summary": "Dependency security and supply-chain continuation closeout.",
+  "shipped": [
+    {
+      "id": "vulnerability-clearance",
+      "status": "done",
+      "evidence": "npm audit --json reports 0 vulnerabilities; GitHub Dependabot open alerts are 0."
+    },
+    {
+      "id": "launch-gate-restored",
+      "status": "done",
+      "evidence": "npm run verify:launch-local passed end to end with 500/500 tests."
+    },
+    {
+      "id": "package-trust-fallback",
+      "status": "done",
+      "evidence": "scripts/package-trust.mjs added and npm run package:trust -- --package vite@6.4.3 approves."
+    },
+    {
+      "id": "lockfile-supply-chain-scan",
+      "status": "done",
+      "evidence": "scripts/scan-npm-supply-chain.mjs added; current lockfile has 0 blocking findings."
+    },
+    {
+      "id": "secret-scan-cleanup",
+      "status": "done",
+      "evidence": "dist-cap regenerated and node scripts/scan-secrets.mjs --all reports 0 findings."
+    }
+  ],
+  "verification": {
+    "npmAudit": "0 vulnerabilities",
+    "dependabotOpenAlerts": 0,
+    "launchGate": "passed 500/500",
+    "secretScanAll": "0 findings",
+    "secretScanStaged": "0 findings",
+    "supplyChainScan": "0 blocking findings"
+  },
+  "deferred": [
+    "Inspect latest GitHub Pages launch-verification artifact.",
+    "Run production auth email smoke.",
+    "Complete Stripe smoke and friend-beta evidence.",
+    "Refresh stale revenue and IGNIS derived intelligence."
+  ],
+  "sil": {
+    "total": 998,
+    "max": 1000,
+    "velocity": 5,
+    "debt": "down"
+  }
+}

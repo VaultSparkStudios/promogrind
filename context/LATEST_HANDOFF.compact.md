@@ -1,28 +1,28 @@
-<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 75c07973f3d5 -->
-<!-- generated-at: 2026-06-18T20:14:26.172Z -->
+<!-- manual-compact: public-repo closeout fallback -->
+<!-- generated-at: 2026-06-18T00:00:00.000Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary (S93)
+# Handoff Summary (S95)
 
 ## Session
-- Session 93 (2026-05-18)
-- Intent: Run /start → /audit → /implement → /closeout; ship best-in-category innovation. Outcome: achieved.
+- Session 95 (2026-06-18)
+- Intent: continue from S94, add absent repo-local gates, fix vulnerabilities, close out, commit, and push. Outcome: achieved.
 
 ## Shipped This Session
-- Fixed IGNIS live-rank wiring: ignis-rank.mjs now invokes IGNIS CLI (dist/cli.js export json) with category→pillar boost; IGNIS_ROOT override; HTTP kept as future option.
-- Authored docs/AUDIT_2026-05-18-S93.md (10 items, Combined Priority 319.9); shipped all 10 in one pass.
-- New libs/modules: recommender explainer drawer, calc→tracker lifecycle workflow, prompt cache HOF (withPromptCache), mistake memory (5-dim cosine), AI calibration (Brier), counterfactual twin battle, bankroll stress (Monte Carlo Mulberry32), edge-decay heatmap, provenance receipts v2 (HMAC hash-chain), pre-mortem friction.
-- Tests: 500/500 (up from 450, +50 net-new). verify:launch-local exit 0.
+- Cleared npm audit vulnerabilities; `npm audit --json` reports 0 total vulnerabilities.
+- Restored dependencies and full local launch verification; `npm run verify:launch-local` passed end to end with 500/500 tests.
+- Regenerated ignored `dist-cap` output after stale JWT-like artifacts triggered all-tree secret scan; `scan-secrets --all` is clean.
+- Added `scripts/package-trust.mjs` and `npm run package:trust` for pre-install package/download review.
+- Added `scripts/scan-npm-supply-chain.mjs` and `npm run scan:supply-chain`; current lockfile has 0 blocking findings.
 
 ## Current Intent
-- Wire the 10 new libs into UI surfaces and instrument PromoAdvisor, then deploy and finish external launch proofs.
+- Inspect deploy artifact, run production auth email proof, complete Stripe smoke and friend beta evidence, then refresh stale revenue/IGNIS.
 
 ## Now Bucket (top 3)
-- Wire UI: TwinBattleCard (Today), BankrollStressPanel (Profile), LiveEdgeHeatmap (above Smart Promo Recommender), ProvenanceReceipts viewer (Profile), PreMortemModal (stake submit).
-- Instrument PromoAdvisor with withPromptCache + recordPrediction/resolvePrediction at call sites; target ≥30% session-level cache hit rate.
-- Push/deploy S91–S93 state; ingest next GitHub Pages launch-verification artifact.
+- Inspect the GitHub Pages launch-verification artifact after the S95 pushes.
+- Run production auth email smoke: confirmation, resend, forgot-password, recovery link, new-password sign-in.
+- Complete `npm run smoke:stripe -- --record` and `npm run beta:check -- --record` with real evidence.
 
 ## Blockers (top 3)
 - Production auth email not yet completed.
@@ -33,7 +33,7 @@
 - None open (blocker preflight at S92 found 0 Human Action Required items).
 
 ## Notes
-- Left dated note for IGNIS agent (vaultspark-ignis/NOTE_FROM_PROMOGRIND_2026-05-18.md) proposing optional ignis_rank_items MCP tool for true per-item ranking.
-- Pre-existing hygiene-band warning: .mcp.json (1, non-critical).
+- S95 used documented `--no-verify` push path after equivalent scans because the Windows pre-push hook is known to hang.
+- `scan:supply-chain` currently reports review-only lifecycle scripts for `core-js`, `esbuild`, `fsevents`, and `sharp`.
 
-Next session: wire the 10 new libs into UI, instrument PromoAdvisor, then deploy and complete external launch proofs (auth email, Stripe, beta recordings).
+Next session: inspect deploy artifact, run production auth email smoke, complete Stripe/beta evidence, and refresh revenue/IGNIS derived intelligence.
