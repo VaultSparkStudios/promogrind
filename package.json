@@ -31,6 +31,7 @@
     "smoke:stripe": "node scripts/run-stripe-smoke.mjs",
     "beta:check": "node scripts/run-friend-beta-checklist.mjs",
     "preview": "vite preview",
+    "deploy:function:checkout": "supabase functions deploy create-checkout --project-ref fjnpzjjyhnpmunfoycrp --no-verify-jwt",
     "deploy:functions": "supabase functions deploy calc-api && supabase functions deploy create-checkout && supabase functions deploy stripe-webhook && supabase functions deploy weekly-digest",
     "deploy:brief": "supabase functions deploy send-daily-brief",
     "test": "vitest run",

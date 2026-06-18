@@ -26,6 +26,7 @@ const ADMIN_ENV = path.join(ROOT, ".env.admin");
 
 const DEFAULT_KEYS = [
   "SUPABASE_SERVICE_ROLE_KEY",
+  "SUPABASE_ACCESS_TOKEN",
 ];
 
 const args = process.argv.slice(2);
