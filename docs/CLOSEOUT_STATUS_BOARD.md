@@ -1,21 +1,22 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-18 (Session 91 closeout) -->
+<!-- generated-at: 2026-06-18 (Session 94 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S91 ═════════════════════════╗
-║  Date: 2026-05-18  ·  SIL: 997/1000  ·  Velocity: 6 down         ║
+╔══ SESSION CLOSEOUT · PromoGrind · S94 ═════════════════════════╗
+║  Date: 2026-06-18  ·  SIL: 998/1000  ·  Velocity: 4 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
+║  Live:  preview  →  https://promogrind.bet                       ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Created `docs/AUDIT_2026-05-18.md` and refreshed `docs/IMPLE  ║
-║  ✓ **s90-command-ribbon** — `TodayDashboardPanel` now renders a  ║
-║  ✓ **share-briefing-button** — the same Today ribbon can genera  ║
-║  ✓ **terms-and-deadline-promos** — `SmartPromoRecommender` now   ║
-║  ✓ **conflict-aware-tracker** — `Tracker` derives active promo   ║
+║  ✓ Ran `/start`: session lock written, mode detected as FOUNDER  ║
+║  ✓ Created `docs/AUDIT_2026-06-18.json` and `docs/AUDIT_2026-06  ║
+║  ✓ **sil-forecast-parser-honesty** — patched `scripts/lib/sil-f  ║
+║  ✓ **closeout-live-url-truth** — patched `scripts/render-closeo  ║
+║  ✓ Verified in-flight truth-surface work: `validate-brief-forma  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           99   ██████████                            ║
@@ -23,7 +24,7 @@
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          99   ██████████                            ║
 ║    Security           100  ██████████                            ║
-║    Ecosystem          99   ██████████                            ║
+║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -34,20 +35,21 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 42 files  ·  M:26 A:0 D:0 ?:16                         ║
+║  Ahead: 2  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        12/12                                            ║
+║  Doctor:        10/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         450/450                                          ║
-║  IGNIS:         4d ago                                           ║
+║  Tests:         500/500                                          ║
+║  IGNIS:         16d ago                                          ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

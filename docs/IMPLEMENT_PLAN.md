@@ -1,26 +1,22 @@
-<!-- generated-by: /implement skill v1.0 -->
-<!-- generated-at: 2026-05-18 -->
+# Implement Plan — 2026-06-18
 
-# Implement Plan — PromoGrind S91
+Source: `docs/AUDIT_2026-06-18.json`
 
-## Optimal Order
+## Wave Plan
 
-| Order | Audit # | Slug | Reason |
-|---:|---:|---|---|
-| 1 | 6 | execution-doc-noop-guard | Establish idempotent run surface before code edits. |
-| 2 | 1 | s90-command-ribbon | Highest user-visible leverage; same Today surface as share action. |
-| 3 | 5 | share-briefing-button | Shares imports/state with the command ribbon and costs little. |
-| 4 | 2 | terms-and-deadline-promos | Same recommender card surface; zero new network/API cost. |
-| 5 | 3 | conflict-aware-tracker | Tracker-only safety wiring. |
-| 6 | 4 | kelly-sandbox-profile | Profile-only education loop; independent after tracker/dashboard work. |
+1. **sil-forecast-parser-honesty** — foundational startup truth bug; shipped first because it corrected a false `0/1000` forecast.
+2. **closeout-live-url-truth** — closeout UX truth bug; shipped while the board renderer was already in context.
+3. **brief-validator-budget-and-coherence-gate** — verified existing in-flight validator work after regenerating the corrected startup brief.
+4. **doctor-provenance-single-predicate** — verified existing in-flight doctor/provenance work against the live doctor path.
+5. **refresh-stale-revenue-and-ignis** — deferred to next cleanup because doctor marks both as advisory derived-surface staleness, not local implementation failure.
 
-## Verification Surface
+## Verification Bundle
 
-- `npm test -- dashboard.test.js`
-- `npm test -- promoConflict.test.js`
-- `npm test`
-
-## Execution Log
-
-- Shipped all 6 S91 audit items from `docs/AUDIT_2026-05-18.md`.
-- Verification passed: `npm test -- dashboard.test.js`, `npm test -- promoConflict.test.js`, and full `npm run verify:launch-local`.
+- `node scripts/lib/sil-forecaster.mjs --json`
+- `node scripts/render-startup-brief.mjs`
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md --json`
+- `node scripts/render-closeout-board.mjs --stdout`
+- `node scripts/test-validate-closeout-board-format.mjs`
+- `node scripts/test-validate-brief-format.mjs`
+- `node scripts/classify-warning-provenance.mjs --json`
+- `node scripts/ops.mjs doctor --update-json`

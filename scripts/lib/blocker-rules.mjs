@@ -32,32 +32,38 @@ const RULES = [
     category: 'Cloudflare',
     elevatedProbe: 'Check R2 credentials first, then attempt the backup/bootstrap command with elevated access if the sandbox blocks external access.',
     probeCommands: ['node scripts/ops.mjs check-secrets --for cloudflare.r2'],
-    humanAction: 'Only escalate if credentials are missing after the capability check.',
+    humanAction: 'Studio Owner must create the R2 bucket + generate access key in Cloudflare dashboard — API token alone cannot bootstrap a new bucket.',
     attemptable: true,
+    signupUiOnly: true,
   },
   {
     id: 'cloudflare-dns',
     test: /\bdns\b|cname|wildcard|staging/i,
-    capability: 'cloudflare.deploy',
+    // DNS edits require `Zone:DNS:Edit` scope, which is NOT granted by the
+    // standard cloudflare.deploy (Workers-scoped) token. S107 probe confirmed
+    // the existing CLOUDFLARE_API_TOKEN returns 10000 Authentication error
+    // on POST /zones/{id}/dns_records. Requires a separate scoped token.
+    capability: 'cloudflare.dns',
     category: 'DNS',
-    elevatedProbe: 'Check Cloudflare credentials, then do a read/admin probe or DNS verification before classifying this as human-only.',
+    elevatedProbe: 'Verify a Cloudflare token with Zone:DNS:Edit scope is present. The default cloudflare.deploy token is Workers-only and cannot edit DNS.',
     probeCommands: [
-      'node scripts/ops.mjs check-secrets --for cloudflare.deploy',
-      'node scripts/ops.mjs phantom-check',
+      'node scripts/ops.mjs check-secrets --for cloudflare.dns',
     ],
     humanAction:
-      'Escalate to the Studio Owner only if the token is missing or the required DNS change cannot be executed from available Cloudflare access.',
-    attemptable: true,
+      'Founder must create a Cloudflare API token with `Zone:DNS:Edit` permission for zone vaultsparkstudios.com. Drop into secrets/cloudflare.env as CLOUDFLARE_DNS_TOKEN.',
+    signupUiOnly: true,
+    attemptable: false,
   },
   {
     id: 'resend-email',
     test: /resend|smtp/i,
     capability: 'resend.email',
     category: 'Email',
-    elevatedProbe: 'Secrets discovery should happen before any human escalation; if present, proceed to configure SMTP/integration directly.',
+    elevatedProbe: 'If the API key is present, configure SMTP/integration directly. Initial signup at resend.com is UI-only.',
     probeCommands: ['node scripts/ops.mjs check-secrets --for resend.email'],
-    humanAction: 'Studio Owner action is only required if the Resend capability is missing.',
+    humanAction: 'Studio Owner must sign up at resend.com + verify domain before API key exists.',
     attemptable: true,
+    signupUiOnly: true,
   },
   {
     id: 'stripe',
@@ -82,8 +88,9 @@ const RULES = [
       'node scripts/ops.mjs announce-setup --status',
     ],
     humanAction:
-      'Studio Owner action is only required if one or both social capabilities are absent.',
+      'Studio Owner must register apps at reddit.com/prefs/apps + developer.twitter.com to obtain API keys — dashboard-only step before agent can proceed.',
     attemptable: true,
+    signupUiOnly: true,
   },
   {
     id: 'github-workflow',
@@ -106,8 +113,9 @@ const RULES = [
     category: 'Railway',
     elevatedProbe: 'Check Railway capability first, then attempt project/environment verification with elevated access if needed.',
     probeCommands: ['node scripts/ops.mjs check-secrets --for railway.deploy'],
-    humanAction: 'Only escalate if Railway access is missing or the action is billing/account ownership only.',
+    humanAction: 'Studio Owner must create Railway project + token in dashboard.',
     attemptable: true,
+    signupUiOnly: true,
   },
   {
     id: 'render',
@@ -116,8 +124,9 @@ const RULES = [
     category: 'Render',
     elevatedProbe: 'Check Render capability first, then attempt the API/deploy action if safe.',
     probeCommands: ['node scripts/ops.mjs check-secrets --for render.deploy'],
-    humanAction: 'Only escalate if Render access is missing.',
+    humanAction: 'Studio Owner must create Render account + generate API key in dashboard.',
     attemptable: true,
+    signupUiOnly: true,
   },
   {
     id: 'vercel',
@@ -126,8 +135,9 @@ const RULES = [
     category: 'Vercel',
     elevatedProbe: 'Check Vercel capability first, then attempt preview/deploy verification if the task is otherwise agent-resolvable.',
     probeCommands: ['node scripts/ops.mjs check-secrets --for vercel.deploy'],
-    humanAction: 'Only escalate if Vercel access is missing.',
+    humanAction: 'Studio Owner must link Vercel account + create token in dashboard.',
     attemptable: true,
+    signupUiOnly: true,
   },
   {
     id: 'supabase',
@@ -198,6 +208,24 @@ export function classifyBlocker(text) {
     ...rule,
     capabilities,
   };
+}
+
+/**
+ * Returns ALL matching rules — used by multi-capability blockers like
+ * "Social Dashboard: Railway + DNS + Supabase secrets" where the single-rule
+ * classifier under-reports the dependency surface. Callers that want a single
+ * primary classification should keep using classifyBlocker(); callers that
+ * want exhaustive capability coverage (phantom-sweep, dependency graphs) use
+ * this.
+ */
+export function classifyAll(text) {
+  const source = String(text || '');
+  const matches = RULES.filter((entry) => entry.test.test(source));
+  if (matches.length === 0) return [];
+  return matches.map((rule) => ({
+    ...rule,
+    capabilities: Array.isArray(rule.capability) ? rule.capability : rule.capability ? [rule.capability] : [],
+  }));
 }
 
 export function summarizeAttemptOrder(text) {

@@ -33,7 +33,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveCapability, getSecret, redact } from './lib/secrets.mjs';
-import { probeModelsEndpoint } from './lib/model-router.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -57,7 +56,7 @@ if (!ALL && !FILTER) {
 const PROBES = {
   'claude.api': async () => {
     const key = getSecret('ANTHROPIC_API_KEY', 'claude.api');
-    const r = await probeModelsEndpoint(key, (url, opts) => httpFetch(url, opts));
+    const r = await httpFetch('https://api.anthropic.com/v1/models', { headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' } });
     return interpret(r);
   },
   'stripe.checkout': async () => {
@@ -157,7 +156,19 @@ function interpret(r) {
 }
 
 // ── Main ────────────────────────────────────────────────────────────────
-const capMap = JSON.parse(fs.readFileSync(CAP_MAP_PATH, 'utf8'));
+// S157 #8 — the map is gitignored, so CI checkouts (and fresh machines) lack
+// it. Exit with an explicit honest skip instead of an ENOENT stack trace.
+let capMap;
+try {
+  capMap = JSON.parse(fs.readFileSync(CAP_MAP_PATH, 'utf8'));
+} catch (e) {
+  if (e.code === 'ENOENT') {
+    if (JSON_MODE) console.log('[]');
+    console.error('⚠ secrets/CAPABILITY_MAP.json missing — probe skipped (SKIPPED=no-capability-map)');
+    process.exit(0);
+  }
+  throw e;
+}
 const caps = FILTER ? [FILTER] : Object.keys(capMap.capabilities);
 
 const results = [];

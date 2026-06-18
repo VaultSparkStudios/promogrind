@@ -1,66 +1,84 @@
-import fs from 'fs';
-import path from 'path';
+/**
+ * human-action-ages.mjs — First-seen tracker for Human Action Required items.
+ *
+ * Founder unlocks brief box showed "new" for items that had no `~N sessions`
+ * notation, so aged-item escalation couldn't fire. This module maintains
+ * portfolio/HUMAN_ACTION_AGES.json mapping each canonical action title to its
+ * first-seen ISO date and session number.
+ *
+ * Usage:
+ *   import { ensureAges, daysSince } from './lib/human-action-ages.mjs';
+ *   const ages = ensureAges(taskBoardText, { root });
+ *   ages[title] -> { firstSeen: '2026-01-02', session: 45 }
+ */
 
-function normalizeTitle(line = '') {
-  return String(line)
-    .replace(/^- \[ \]\s*/, '')
-    .replace(/\*\*/g, '')
-    .split(/\s+—\s+/)[0]
-    .trim();
+import fs from 'node:fs';
+import path from 'node:path';
+
+const LEDGER_REL = 'portfolio/HUMAN_ACTION_AGES.json';
+
+function parseHumanItems(taskBoardText) {
+  const parts = taskBoardText.split(/^## /m);
+  const section = parts.find((p) => p.startsWith('Human Action Required'));
+  if (!section) return [];
+  const body = section.slice(section.indexOf('\n') + 1);
+  return body
+    .split(/\r?\n/)
+    .filter((l) => /^- \[ \]/.test(l))
+    .map((line) => {
+      const clean = line.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '');
+      const title = clean.split(/\s+—\s+/)[0].trim();
+      return { title, raw: line };
+    });
 }
 
-function readJson(filePath, fallback = {}) {
+function readLedger(root) {
+  const p = path.join(root, LEDGER_REL);
+  if (!fs.existsSync(p)) return {};
   try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    return JSON.parse(fs.readFileSync(p, 'utf8'));
   } catch {
-    return fallback;
+    return {};
   }
 }
 
-function writeJson(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(value, null, 2) + '\n', 'utf8');
+function writeLedger(root, ledger) {
+  const p = path.join(root, LEDGER_REL);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, JSON.stringify(ledger, null, 2));
 }
 
-export function daysSince(dateLike) {
-  if (!dateLike) return 0;
-  const then = new Date(dateLike);
-  if (Number.isNaN(then.getTime())) return 0;
-  return Math.max(0, Math.floor((Date.now() - then.getTime()) / 86400000));
-}
-
-export function ensureAges(taskBoard = '', { root = process.cwd() } = {}) {
-  const ledgerPath = path.join(root, '.cache', 'human-action-ages.json');
-  const ledger = readJson(ledgerPath, {});
+export function ensureAges(taskBoardText, opts = {}) {
+  const root = opts.root || process.cwd();
+  const ledger = readLedger(root);
+  const items = parseHumanItems(taskBoardText);
   const today = new Date().toISOString().slice(0, 10);
-  const lines = String(taskBoard).split(/\r?\n/);
+  const session = opts.currentSession || null;
+  let dirty = false;
 
-  const titles = [];
-  let inHumanSection = false;
-  for (const line of lines) {
-    if (/^##\s+Human Action Required\b/i.test(line)) {
-      inHumanSection = true;
-      continue;
-    }
-    if (inHumanSection && /^##\s+/.test(line)) break;
-    if (!inHumanSection || !/^- \[ \]/.test(line)) continue;
-    const title = normalizeTitle(line);
-    if (title) titles.push(title);
-  }
-
-  let changed = false;
-  for (const title of titles) {
-    if (!ledger[title]?.firstSeen) {
-      ledger[title] = { firstSeen: today, lastSeen: today };
-      changed = true;
-      continue;
-    }
-    if (ledger[title].lastSeen !== today) {
-      ledger[title] = { ...ledger[title], lastSeen: today };
-      changed = true;
+  // Add any new items with today's date.
+  for (const item of items) {
+    if (!ledger[item.title]) {
+      ledger[item.title] = { firstSeen: today, session };
+      dirty = true;
     }
   }
 
-  if (changed) writeJson(ledgerPath, ledger);
+  // Prune titles that no longer appear (they got resolved).
+  const activeTitles = new Set(items.map((i) => i.title));
+  for (const title of Object.keys(ledger)) {
+    if (!activeTitles.has(title)) {
+      delete ledger[title];
+      dirty = true;
+    }
+  }
+
+  if (dirty && !opts.readonly) writeLedger(root, ledger);
   return ledger;
+}
+
+export function daysSince(isoDate) {
+  const d = new Date(isoDate).getTime();
+  if (!Number.isFinite(d)) return null;
+  return Math.floor((Date.now() - d) / 86400000);
 }

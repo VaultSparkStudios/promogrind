@@ -26,17 +26,48 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
-import { FALLBACK_PRICE, PRICING_PER_MTOK, contextWindowForAgent, shortModelName } from './lib/model-router.mjs';
+// Inline context window sizes — keeps this script self-contained for propagation to all project repos.
+// Update here if new models are added to the studio fleet.
+function contextWindowForAgent(agent) {
+  if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
+  if (agent === 'codex') return 1_000_000;
+  if (agent === 'claude-code') return 1_000_000;
+  return 200_000;
+}
 
+// Price table per model — kept in sync with scripts/lib/model-router.mjs PRICING_PER_MTOK.
+// Per 1M tokens (list price, non-batch). Keyed first by exact model-ID prefix
+// (so a future Opus 4.8 with a different price shows up correctly), falling
+// back to tier substring match.
+const PRICING = {
+  opus:   { input: 15.00, cacheWrite: 18.75, cacheRead: 1.50, output: 75.00 },
+  sonnet: { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
+  haiku:  { input:  1.00, cacheWrite:  1.25, cacheRead: 0.10, output:  5.00 },
+};
+// Exact-prefix overrides for known model IDs. Add to this map when pricing
+// diverges for a specific generation; fallback below keeps the tier default.
+const PRICING_BY_ID = {
+  'claude-opus-4-8':         PRICING.opus,
+  'claude-opus-4-7':         PRICING.opus,
+  'claude-opus-4-6':         PRICING.opus,
+  'claude-sonnet-4-6':       PRICING.sonnet,
+  'claude-haiku-4-5':        PRICING.haiku,
+};
 function priceFor(modelId) {
-  if (!modelId) return FALLBACK_PRICE;
-  for (const [prefix, p] of Object.entries(PRICING_PER_MTOK)) {
+  if (!modelId) return PRICING.sonnet;
+  for (const [prefix, p] of Object.entries(PRICING_BY_ID)) {
     if (modelId.startsWith(prefix)) return p;
   }
-  return FALLBACK_PRICE;
+  if (modelId.includes('opus'))   return PRICING.opus;
+  if (modelId.includes('haiku'))  return PRICING.haiku;
+  return PRICING.sonnet;
 }
 function tierOf(modelId) {
-  return shortModelName(modelId);
+  if (!modelId) return 'unknown';
+  if (modelId.includes('opus'))   return 'opus';
+  if (modelId.includes('haiku'))  return 'haiku';
+  if (modelId.includes('sonnet')) return 'sonnet';
+  return modelId;
 }
 function costOfEntry(e) {
   const p = priceFor(e.model);
@@ -244,6 +275,18 @@ const freshBootstrap = Math.round(ctxBytes / BYTES_PER_TOKEN);
 // Turns until fresh session pays itself off:
 const breakEvenTurns = continueCostPerTurn > 0 ? Math.ceil(freshBootstrap / continueCostPerTurn) : Infinity;
 
+// --- Compaction predictor (audit #2 · S117)
+// Predict how many turns remain before auto-compaction is triggered. Compaction
+// fires near the model's context limit (Anthropic compacts at ~95% to make
+// room). We treat 0.92 as the proactive trigger so PreCompact-hook autosave
+// has runway. If current burn rate is unknown (no turns observed), null out.
+const compactTriggerPct = 0.92;
+const compactTriggerTokens = limit * compactTriggerPct;
+const tokensTilCompact = Math.max(0, compactTriggerTokens - usedTokens);
+const burnPerTurn = continueCostPerTurn > 0 ? continueCostPerTurn : null;
+const turnsToCompact = burnPerTurn ? Math.max(0, Math.floor(tokensTilCompact / burnPerTurn)) : null;
+const compactImminent = turnsToCompact !== null && turnsToCompact <= 2 && pctUsed < 0.95;
+
 // --- Sonnet context-breach guardrail
 // Sonnet 4.6 caps at 200K even if the session-lock declares a 1M limit (e.g.
 // opusplan mode plans on Opus 1M but executes on Sonnet 200K). Fire an
@@ -262,6 +305,9 @@ if (pctUsed >= 0.95) {
 } else if (isSonnetExecTier && sonnetBreachPct >= 0.80) {
   recommendation = 'CONSIDER_CLOSEOUT';
   reason = `Sonnet 200K guardrail — ${(sonnetBreachPct*100).toFixed(0)}% of execute-tier limit · switch to opus or /closeout`;
+} else if (compactImminent) {
+  recommendation = 'WARN_COMPACT_SOON';
+  reason = `compaction predicted in ~${turnsToCompact} turn(s) at current burn rate — proactive autosave recommended`;
 } else if (pctUsed >= WARN_AT) {
   recommendation = 'CONSIDER_CLOSEOUT';
   reason = `context ${(pctUsed * 100).toFixed(0)}% used — fresh session saves ~${continueCostPerTurn} tokens/turn after ${breakEvenTurns} turns`;
@@ -366,6 +412,9 @@ const out = {
   continueCostPerTurn,
   freshSessionBootstrap: freshBootstrap,
   breakEvenTurns: Number.isFinite(breakEvenTurns) ? breakEvenTurns : null,
+  turnsToCompact,
+  compactImminent,
+  compactTriggerPct,
   recommendation,
   reason,
   actions,

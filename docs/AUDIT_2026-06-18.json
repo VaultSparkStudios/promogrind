@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0 manual public-repo fallback",
+  "generatedAt": "2026-06-18",
+  "project": "promogrind",
+  "projectName": "PromoGrind",
+  "type": "app",
+  "headline": "PromoGrind's product layer is mature; the highest-leverage work is making Studio OS truth surfaces current, coherent, and impossible to misread.",
+  "items": [
+    {
+      "id": "A2026-06-18-01",
+      "slug": "sil-forecast-parser-honesty",
+      "title": "Fix SIL forecast parser so startup no longer predicts a false 0/1000",
+      "tier": "🔥",
+      "axis": "speed/organization/efficiency",
+      "effort": "30m",
+      "effortHours": 0.5,
+      "impact": 10,
+      "innovation": 7,
+      "priority": 44.17,
+      "why": "The startup brief is the sole source of session context, so a false SIL forecast can steer the whole session in the wrong direction. The live code parsed totals but missed the actual category-table shape, making a healthy project look like a collapse.",
+      "evidence": "Verified by `node scripts/lib/sil-forecaster.mjs --json`: forecast now returns category predictions and totalPredicted 995 instead of 0.",
+      "recipe": "Support both numbered and unnumbered SIL category table rows; normalize category aliases to the canonical SIL v3 names; ignore table headers and non-category rows.",
+      "status": "shipped",
+      "verification": [
+        "node --check scripts/lib/sil-forecaster.mjs",
+        "node scripts/lib/sil-forecaster.mjs --json",
+        "node scripts/render-startup-brief.mjs",
+        "node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md --json"
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Patch row regex to parse the current table." },
+        "L2": { "effortHours": 1, "recipe": "Patch regex plus canonical category alias filtering." },
+        "L3": { "effortHours": 3, "recipe": "Move SIL category names and parser fixtures into a shared test harness." }
+      }
+    },
+    {
+      "id": "A2026-06-18-02",
+      "slug": "closeout-live-url-truth",
+      "title": "Make closeout board show the canonical live PromoGrind URL",
+      "tier": "⚡",
+      "axis": "ui/ux",
+      "effort": "30m",
+      "effortHours": 0.5,
+      "impact": 8,
+      "innovation": 5,
+      "priority": 25.24,
+      "why": "The closeout board added a live-link surface but skipped `PROJECT_STATUS.liveUrl`, which is PromoGrind's authoritative URL in this public repo. A closeout surface that hides the live product slows launch verification and contradicts the public-facing project requirements.",
+      "evidence": "Verified by `node scripts/render-closeout-board.mjs --stdout`: SESSION CLOSEOUT now includes `Live: preview -> https://promogrind.bet`.",
+      "recipe": "Include `status.liveUrl` and `status.deployedUrl` in `canonicalLiveUrl()` before registry fallbacks.",
+      "status": "shipped",
+      "verification": [
+        "node --check scripts/render-closeout-board.mjs",
+        "node scripts/render-closeout-board.mjs --stdout",
+        "node scripts/test-validate-closeout-board-format.mjs"
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Add `status.liveUrl` to the URL candidate list." },
+        "L2": { "effortHours": 1, "recipe": "Also add `status.deployedUrl` and verify board output." },
+        "L3": { "effortHours": 2, "recipe": "Add a fixture-backed validator asserting every public-* project closeout board includes a URL when one exists." }
+      }
+    },
+    {
+      "id": "A2026-06-18-03",
+      "slug": "brief-validator-budget-and-coherence-gate",
+      "title": "Lock startup brief coherence and tile budgets into the validator",
+      "tier": "⚡",
+      "axis": "token/api consumption reduction",
+      "effort": "2h",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 28,
+      "why": "The brief is deliberately token-lean, but without per-tile attribution the next bloat regression becomes a generic size complaint instead of an actionable fix. Coherence stamping also prevents stale SIL/session disagreement from becoming a silent planning surface.",
+      "evidence": "Verified by `node scripts/test-validate-brief-format.mjs` and `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md --json`: canonical brief passes, size is 11102 bytes, budget status pass.",
+      "recipe": "Keep `brief-coherent` enforcement, per-tile budgets, and top-block reporting wired into `validate-brief-format.mjs`; regenerate the brief after parser fixes.",
+      "status": "shipped",
+      "verification": [
+        "node scripts/test-validate-brief-format.mjs",
+        "node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md --json"
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Fail validator on `brief-coherent: false`." },
+        "L2": { "effortHours": 2, "recipe": "Add tile budgets and `.cache/brief-size.json` telemetry." },
+        "L3": { "effortHours": 4, "recipe": "Add golden brief fixtures and budget trend graphing by tile." }
+      }
+    },
+    {
+      "id": "A2026-06-18-04",
+      "slug": "doctor-provenance-single-predicate",
+      "title": "Centralize doctor warning/failure predicates and provenance ownership",
+      "tier": "⚡",
+      "axis": "security",
+      "effort": "2h",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 8,
+      "priority": 28,
+      "why": "Doctor surfaces previously risked counting yellow warnings and red failures with divergent inline predicates. Canonical predicates plus provenance classification keep human-blocker pressure honest and prevent sibling-owned adoption work from being misread as local debt.",
+      "evidence": "Verified by `node scripts/classify-warning-provenance.mjs --json`: provenance map is healthy with no violations; doctor writes 10/12 with two advisory stale intelligence signals.",
+      "recipe": "Use `scripts/lib/doctor-predicates.mjs` wherever warning/failure status is tallied; keep `classify-warning-provenance.mjs` as the owner map validator.",
+      "status": "shipped",
+      "verification": [
+        "node --check scripts/lib/doctor-predicates.mjs",
+        "node scripts/classify-warning-provenance.mjs --json",
+        "node scripts/ops.mjs doctor --update-json"
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Extract status predicates." },
+        "L2": { "effortHours": 2, "recipe": "Wire provenance validation and startup ownership split." },
+        "L3": { "effortHours": 4, "recipe": "Add an automated drift scanner that rejects new inline doctor predicates." }
+      }
+    },
+    {
+      "id": "A2026-06-18-05",
+      "slug": "refresh-stale-revenue-and-ignis",
+      "title": "Refresh stale revenue and IGNIS intelligence after this truth-surface pass",
+      "tier": "💡",
+      "axis": "user feedback loop",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 6,
+      "innovation": 4,
+      "priority": 15.14,
+      "why": "Doctor now honestly reports only two remaining advisory drifts: revenue signals and IGNIS freshness. Those are derived intelligence surfaces, not implementation blockers, but closeout should preserve them as the next best cleanup task.",
+      "evidence": "`node scripts/ops.mjs doctor --update-json` reports 10/12 passing with stale revenue signals and stale IGNIS as advisory drift.",
+      "recipe": "Run the repo-local revenue and IGNIS refresh commands when credentials/tooling are available; if missing, log the exact script/tool absence and keep them advisory.",
+      "status": "deferred",
+      "verification": [
+        "node scripts/ops.mjs doctor --update-json"
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Document the stale advisory signals in closeout." },
+        "L2": { "effortHours": 1, "recipe": "Run `node scripts/ops.mjs revenue-signals` and the local IGNIS refresh path." },
+        "L3": { "effortHours": 3, "recipe": "Automate stale derived-surface refresh when doctor marks them advisory." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "new-product-feature-layer",
+      "reason": "Pre-verified current repo state shows an active automation truth-surface sprint; adding product UX now would not address the live doctor/startup failures."
+    }
+  ],
+  "summary": {
+    "totalItems": 5,
+    "shipped": 4,
+    "deferred": 1,
+    "combinedPriority": 140.55,
+    "top3": ["sil-forecast-parser-honesty", "brief-validator-budget-and-coherence-gate", "doctor-provenance-single-predicate"]
+  }
+}

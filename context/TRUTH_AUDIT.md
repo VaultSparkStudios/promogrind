@@ -114,6 +114,14 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - S90 operator-intelligence primitives are now wired into product UI: Today Operator Briefing, share briefing card, Smart Promo terms/deadline signals, Tracker conflict guard, and Profile Kelly Sandbox.
 - `docs/AUDIT_2026-05-18.md` and `docs/IMPLEMENT_PLAN.md` now record the S91 audit/implementation contract and execution evidence.
 
+## Resolved This Session (S94)
+
+- Startup brief truth changed: SIL forecast no longer predicts `0/1000`; `scripts/lib/sil-forecaster.mjs` now parses the actual category-table format and regenerated `docs/STARTUP_BRIEF.md` shows a stable/rising forecast.
+- Closeout board truth changed: `scripts/render-closeout-board.mjs` now includes `PROJECT_STATUS.liveUrl`, so the closeout board exposes `https://promogrind.bet` instead of hiding the live project URL.
+- Audit truth changed: `docs/AUDIT_2026-06-18.{json,md}` is the current S94 audit artifact; `docs/IMPLEMENT_PLAN.md` records the S94 wave plan and verification bundle.
+- Doctor truth: live doctor remains 10/12; remaining non-green signals are stale revenue and stale IGNIS derived surfaces, not local implementation blockers.
+- Verification caveat: full app tests were not run in S94 because `node_modules` is absent and the repo-local package-trust script is missing; installing dependencies was intentionally skipped.
+
 ## Resolved This Session (S92)
 
 - Verified the active `/start` -> `/audit` -> `/implement` -> `/closeout` objective against concrete repo artifacts instead of re-running completed implementation work.

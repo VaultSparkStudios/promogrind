@@ -1,41 +1,135 @@
-<!-- generated-by: ignis/startup-brief -->
-<!-- generated: 2026-05-21T04:25:33.696Z -->
+<!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
+<!-- generated-at: 2026-06-18 (Session 94 closeout) -->
+<!-- fast-boot-valid-until: next session if within 24h -->
+<!-- brief-coherent: true -->
 
+# Startup Brief — PromoGrind
+
+> **Fast-boot brief** — generated at Session 94 closeout · 2026-06-18.
+> Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
+
+---
+
+```
 ╔════════════════════════════════════════════════════════════════╗
-║  IGNIS — promogrind  ·  FORGE  ·  2026-05-21                   ║
-║  Internal intelligence infrastructure · v5.3 · Session 69      ║
+║  📱 PROMOGRIND                                                   ║
+║  app · deployed/public-unlaunched · FORGE                        ║
+║  Session 95 · 2026-06-18 · FOUNDER MODE                          ║
+║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF ═══════════════════════════════════════════╗
-║  Top action: Push dashboard and hub summaries onto the opera…  ║
-║  Arc: Confidence budget falling (46%); tightening toward dia…  ║
-║  Regime: Plateau (76%) — promogrind is moving, but not decis…  ║
-║  Queue: 0 approved, 9 pending  ·  Trust: 53%                   ║
+
+
+╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
+║  Unit tests    → npm test ·                                      ║
+║  launch-gate  → npm run verify:launch-local ·                    ║
+║  ux-integrity → npm run smoke:ux ·                               ║
+║  Local dev     → http://localhost:5173 ·                         ║
+║  Production    → https://promogrind.bet ·                        ║
+║  CF Pages      → https://promogrind.bet ·                        ║
 ╚════════════════════════════════════════════════════════════════╝
+
+
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
-║  Score: 506,031 / 1,000,000  [INFERNO]  50.6%                  ║
-║  Delta: -2,230 pts (-0.2%)  █▇▃▃▃▁▁ · Rank #1/1                ║
-║  → SUPERNOVA (65%) — growth stalled                            ║
-║  Eval: 51/100  ·  Signal coverage: 67% weighted trust          ║
-║  Strategy: conservative leads, but authority is still govern…  ║
-║  Posture: balanced / directive / advisor                       ║
-║  Acceptance: 82%  ·  Receipts/outcomes: 0/19                   ║
+║                                                                  ║
+║    998/1000   ███████████████████████░   100%                    ║
+║    SIL v3.0  ·  Avg3: ?  ·  Velocity 4↑                          ║
+║    Last active: 20621d  ·  Last closeout: 0d  ·  (active = newe  ║
+║    Trend  ▄██▆▄  ↑  (last 5 sessions)                            ║
+║                                                                  ║
+║    Category         Score  Bar        Spark   Δ                  ║
+║    ─────────────── ────── ────────── ──────── ─                  ║
+║    Dev Health       100    ██████████  ▇███████ →                ║
+║    Alignment        100    ██████████  ████████ →                ║
+║    Momentum          99    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Engagement       100    ██████████  ▇▇▇▇████ →                ║
+║    Process Qual     100    ██████████  ████████ →                ║
+║    Coherence         99    ██████████  ········ →                ║
+║    Security         100    ██████████  ········ →                ║
+║    Ecosystem        100    ██████████  ········ →                ║
+║    Capital          100    ██████████  ········ →                ║
+║    Automation       100    ██████████  ········ →                ║
+║                                                                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ WHERE WE LEFT OFF  ·  Session 94 ════════════════════════════╗
+║  Shipped:  see LATEST_HANDOFF.md                                 ║
+║  Tests:    500/500 passing  ·  Deploy: deployed-unannounced      ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ CONTEXT METER ═══════════════════════════════════════════════╗
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
+║     29,863 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~14,932 tok/turn  ·  cache 50%  ·  59 turns to compact       ║
+║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  🟡 Contradiction: weakest pillar: CREATIVITY (0.20)           ║
-║     Resolution: Raise CREATIVITY without weakening VITALITY.   ║
-║  🟡 Top signal gaps: proposals, registry                       ║
-║  📊 Trust shift: sessions down (-0.038) — Freshness degraded…  ║
-║  ⚡ Portfolio contagion: low                                    ║
-║  🔥 A controlled burn — efficient, but could you run hotter?   ║
+║  ✓  Tests         500/500 passing (2026-05-18)                   ║
+║  ✓  Velocity      4 ↑  ·  Debt: →                                ║
+║  ⚠  Runway        ~2 sessions                                    ║
+║  ✓  Context age   0d                                             ║
+║  ⛔  IGNIS         44064 FORGE  ·  15d old                        ║
+║  ✓  Truth         green  ·  Genome: 24/25                        ║
+║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
+║  ✓  Genome dims   all stable  (24/25)                            ║
+║  ✓  Entropy       0.060  (healthy)                               ║
+║  ✓  CDR           no gap detected                                ║
+║  ✓  Patterns      no recurring pressure detected                 ║
+║  ✓  Templates     v3.3 aligned                                   ║
+║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
+║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
+║  ⛔  Doctor        10/12 (83%)  ·  2 failing                      ║
+║  ✓  Cost          real $0.00/7d · real metered total $0.0074 <   ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ HUMAN PRESSURE ══════════════════════════════════════════════╗
-║  Shadow adapters: deploys, pr-reviews, social-dashboard, stu…  ║
+╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
+║  Workers: 0/? active · 0 stale · 0 conflicts                     ║
+║  Snapshot: snapshot unknown · next n/a                           ║
+║  Propagation: 0 queued · 0 lock-blocked                          ║
+║  Ark: 0 cargo in 24h · full view: node scripts/orchestrate.mjs   ║
+║  Untracked: 0 project-like · 0 scratch                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
-║    1. [IGNIS] Push dashboard and hub summaries onto the oper…  ║
+╔══ EXECUTION PLAN ══════════════════════════════════════════════╗
+║  Intent:        No current intent found in LATEST_HANDOFF.md     ║
+║  Repo touch:    studio-ops                                       ║
+║  Expected:      Low-confidence execution window; refine scope b  ║
 ╚════════════════════════════════════════════════════════════════╝
+
+╔══ MOMENTUM METER ══════════════════════════════════════════════╗
+║  Velocity:   ▄██▆▄  4↑  (last 5 sessions)                        ║
+║  Intent:     100% achieved last 5                                ║
+║  Streak:     — (last intent not achieved)                        ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SIL FORECAST (next session) ═════════════════════════════════╗
+║  Projected:  998/1000  (→0 vs current 998)                       ║
+║  All categories forecast stable or rising.                       ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════╗
+║  GENIUS HIT LIST  ·  Session 94                                ║
+║  Founder portfolio scope · ranked by impact                    ║
+║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
+║                                                                ║
+║  🔥  1  [IGNIS]  IGNIS re-score overdue (15d stale)            ║
+║        Portfolio intelligence scores degrade with age. Re-sco  ║
+║        ↳ npx tsx cli.ts score <project-path>                   ║
+║                                                                ║
+║  💡  2  [IGNIS]  Refresh REVENUE_SIGNALS.md (35d stale)        ║
+║        Revenue intelligence is time-sensitive. Regenerate to   ║
+║        ↳ node scripts/ops.mjs revenue-signals                  ║
+║                                                                ║
+║  🔧  3  [PROTO]  Protocol Oracle FAQ cache stale (51d)         ║
+║        Refresh the 10 Q&A pairs so agents self-serve current   ║
+║        ↳ node scripts/ops.mjs ask --list                       ║
+╚════════════════════════════════════════════════════════════════╝
+
+```
+
+---
+
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 94 closeout · 2026-06-18*
+*Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

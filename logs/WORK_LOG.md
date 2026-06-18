@@ -185,6 +185,15 @@ Append chronological entries.
 - Files or systems touched: `context/DECISIONS.md`, `.git/hooks/pre-push`, `context/LATEST_HANDOFF.md`, `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/SELF_IMPROVEMENT_LOOP.md`, `context/TRUTH_AUDIT.md`, `logs/WORK_LOG.md`, `audits/2026-04-22-s70.json`.
 - Risks created or removed: removed false-positive push-block risk when gitignored ops scripts remain locally after `git rm --cached`.
 - Recommended next move: extend shared workflow/AI contract into scanner/community surfaces, then apply live Supabase migrations and complete launch proof.
+### 2026-06-18 - Session 94 Studio OS truth-surface closeout
+
+- Goal: continue the active `/start` -> `/audit` -> `/implement` -> `/closeout` objective and make the repo's Studio OS surfaces more honest, current, and founder-readable.
+- What changed: ran the `/start` fallback protocol; created `docs/AUDIT_2026-06-18.{json,md}`; refreshed `docs/IMPLEMENT_PLAN.md`; fixed the SIL forecast parser; regenerated `docs/STARTUP_BRIEF.md`; fixed closeout-board live URL selection; verified brief validator, closeout board, warning provenance, and doctor outputs.
+- Files or systems touched: `scripts/lib/sil-forecaster.mjs`, `scripts/render-closeout-board.mjs`, `docs/AUDIT_2026-06-18.json`, `docs/AUDIT_2026-06-18.md`, `docs/IMPLEMENT_PLAN.md`, `docs/STARTUP_BRIEF.md`, context closeout surfaces, and derived doctor/project status.
+- Verification: script-level checks passed for SIL forecast, startup brief render/validation, closeout board render/validation, warning provenance, and doctor update. Full `npm test` did not run because `node_modules` is absent and the package-trust gate script is missing in this public repo.
+- Risks created or removed: removed a false `0/1000` SIL forecast and restored the live URL in closeout. Remaining risk is stale derived intelligence (`revenue`, `IGNIS`) plus the unchanged external launch-proof gates.
+- Recommended next move: restore dependencies through the approved supply-chain path, rerun full launch verification, then refresh revenue/IGNIS and finish Stripe/friend-beta/auth-email proof evidence.
+
 ### 2026-04-23 - Session 75 runtime/routing closeout
 
 - Goal: diagnose why the deployed site was failing in production, fix the actual runtime/entrypoint faults, and close out with the public root landing on a real marketing surface first.

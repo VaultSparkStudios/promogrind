@@ -13,32 +13,31 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 93,
-  "currentFocus": "S93 audit/implement/closeout sprint complete: 10-item audit shipped end-to-end (recommender ExplainerDrawer, calc→Tracker handoff, prompt-cache layer, mistake-memory loop, AI calibration tracker, twin battle, bankroll stress test, edge-decay heatmap, hash-linked provenance receipts, pre-mortem friction). IGNIS adapter rewired to live CLI. Tests 500/500.",
-  "nextMilestone": "Thin UI integration pass for the 5 unrendered new libs, instrument PromoAdvisor with withPromptCache + aiCalibration record/resolve at call sites, then push/deploy S93 and finish external launch proofs.",
+  "currentSession": 94,
+  "currentFocus": "S94 Studio OS truth-surface sprint complete: fresh audit/implement artifacts written, SIL forecast parser fixed, startup brief regenerated, closeout board live URL restored, validator/provenance/doctor surfaces verified. Full app tests pending dependency restoration because node_modules is absent and repo-local package-trust automation is missing.",
+  "nextMilestone": "Restore dependencies through an approved supply-chain path, rerun npm test and npm run verify:launch-local, refresh stale revenue and IGNIS derived intelligence, then finish external launch proofs.",
   "blockers": [
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
     "Run production auth email smoke after S91 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
-  "lastUpdated": "2026-05-18",
+  "lastUpdated": "2026-06-18",
   "silScore": 998,
-  "silAvg3": 997,
-  "silVelocity": 7,
+  "silAvg3": 995,
+  "silVelocity": 4,
   "silDebt": "down",
-  "silLastSession": 93,
+  "silLastSession": 94,
   "silMax": 1000,
   "silSparkline": [
-    962,
+    970,
+    981,
     988,
-    991,
-    995,
-    997,
+    998,
     998
   ],
-  "ignisScore": 45313,
+  "ignisScore": 44064,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-05-21",
+  "ignisLastComputed": "2026-06-03",
   "testsPassing": 500,
   "testsTotal": 500,
   "testsLastRun": "2026-05-18",
@@ -51,12 +50,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 450/450 in S91"
+      "status": "last recorded passing 500/500 in S93; S94 full suite not run because node_modules is absent"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S91 with 450/450 tests, AI usage, hook guard, auth/launch/UX/browser smokes, public dist exposure, replay proofs, bundle budget, and strict public sanitization"
+      "status": "last recorded passing end to end in S93 with 500/500 tests; S94 launch gate not run because dependencies are absent"
     },
     {
       "type": "ux-integrity",
@@ -102,14 +101,14 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-05-18",
-    "passing": 12,
+    "date": "2026-06-18",
+    "passing": 10,
     "warning": 0,
-    "failing": 0,
+    "failing": 2,
     "blockingFailing": 0,
-    "advisoryFailing": 0,
+    "advisoryFailing": 2,
     "total": 12,
-    "score": 100,
+    "score": 83,
     "checks": [
       {
         "id": "manifest",
@@ -169,14 +168,14 @@
       },
       {
         "id": "revenue",
-        "pass": true,
+        "pass": false,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
       },
       {
         "id": "ignis",
-        "pass": true,
+        "pass": false,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
@@ -207,6 +206,6 @@
   "sessionMode": "founder",
   "sessionModeAutoShiftedAt": "2026-05-18T03:21:29.751Z",
   "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-05-18T08:25:07.348Z",
+  "planModeCheckedAt": "2026-06-18T20:14:14.049Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.850Z"
 }

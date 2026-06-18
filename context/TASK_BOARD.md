@@ -20,6 +20,12 @@
 
 ## Shipped This Session
 
+- sil-forecast-parser-honesty (S94) — **DONE S94**: `scripts/lib/sil-forecaster.mjs` now parses the actual SIL category table format and emits a sane 995/1000 forecast instead of 0/1000; startup brief regenerated and validator passed.
+- closeout-live-url-truth (S94) — **DONE S94**: `scripts/render-closeout-board.mjs` now reads `PROJECT_STATUS.liveUrl`/`deployedUrl`, so closeout shows `https://promogrind.bet`.
+- brief-validator-budget-and-coherence-gate (S94) — **VERIFIED S94**: `node scripts/test-validate-brief-format.mjs` and `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md --json` pass; brief size is within budget.
+- doctor-provenance-single-predicate (S94) — **VERIFIED S94**: `node scripts/classify-warning-provenance.mjs --json` and `node scripts/ops.mjs doctor --update-json` pass; remaining stale revenue/IGNIS signals are advisory derived-surface drift.
+- S94 verification caveat: full `npm test` did not run because `node_modules` is absent and the repo-local package-trust script is missing, so dependency install was not attempted.
+
 - counterfactual-pnl-ribbon (S90) — **DONE S90**: `src/lib/counterfactualPnL.js` 7-day "actual vs AI top-pick vs skip-red" delta engine reading replayLedger + outcome memory; 3 tests. Pure rule engine.
 - decision-journal-autogen (S90) — **DONE S90**: `src/lib/decisionJournal.js` deterministic 2-line yesterday recap + 7d edge delta; 3 tests.
 - terms-drift-detector (S90) — **DONE S90**: `src/lib/termsDrift.js` text-hash diff over promo T&Cs with versioned local history; 3 tests.

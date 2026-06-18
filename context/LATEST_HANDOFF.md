@@ -1,9 +1,20 @@
 # Latest Handoff
 
-Last updated: 2026-05-18 (S93)
-Session: 93
+Last updated: 2026-06-18 (S94)
+Session: 94
 Session Intent: Run `/start` → `/audit` → `/implement` → `/closeout` with genius-level innovation, sophistication, and creativity; make the project best-in-category in history.
-Intent Outcome: Achieved. Fixed the IGNIS live-rank wiring (CLI-backed pillar boost replaces the never-implemented HTTP placeholder). Produced a fresh 10-item S93 audit (`docs/AUDIT_2026-05-18-S93.md`, Combined Priority 319.9) and shipped all 10 items in one pass. Test suite is now 500/500 (up from 450 — 50 net-new tests across 7 new modules + 1 component test); `npm run verify:launch-local` exit 0 end to end.
+Intent Outcome: Achieved for the S94 continuation scope. Ran `/start`, wrote a fresh S94 audit (`docs/AUDIT_2026-06-18.{json,md}`, Combined Priority 140.55), executed the truth-surface implement items, regenerated `docs/STARTUP_BRIEF.md`, and verified the brief/closeout/doctor surfaces. Full app tests could not run because `node_modules` is absent and package-trust automation is missing from this public repo, so dependencies were not installed.
+
+## Where We Left Off (Session 94)
+
+- Ran `/start`: session lock written, mode detected as FOUNDER/execution, context-meter returned `CONTINUE`, blocker preflight found 0 Human Action Required items, and public-repo shim fallbacks were used for missing `skill-profile`, `set-active-skill`, `credential-watch`, `ark`, and skill-cost scripts.
+- Created `docs/AUDIT_2026-06-18.json` and `docs/AUDIT_2026-06-18.md` focused on Studio OS truth surfaces rather than another product feature layer.
+- **sil-forecast-parser-honesty** — patched `scripts/lib/sil-forecaster.mjs` to parse the repo's actual `| Category | Score | ... |` SIL tables and normalize canonical SIL v3 category names. Verification now reports category forecasts and `totalPredicted: 995` instead of the prior false `0`.
+- **closeout-live-url-truth** — patched `scripts/render-closeout-board.mjs` so `canonicalLiveUrl()` includes `context/PROJECT_STATUS.json.liveUrl` and `deployedUrl`; closeout board now renders `Live: preview -> https://promogrind.bet`.
+- Verified in-flight truth-surface work: `validate-brief-format` coherence/tile-budget gate passes, `classify-warning-provenance` map health passes, and `node scripts/ops.mjs doctor --update-json` reports 10/12 with only stale revenue and IGNIS advisory drift.
+- Verification passed: `node --check scripts/lib/sil-forecaster.mjs`, `node scripts/lib/sil-forecaster.mjs --json`, `node scripts/render-startup-brief.mjs`, `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md --json`, `node --check scripts/render-closeout-board.mjs`, `node scripts/render-closeout-board.mjs --stdout`, `node scripts/test-validate-closeout-board-format.mjs`, `node scripts/test-validate-brief-format.mjs`, `node scripts/classify-warning-provenance.mjs --json`, `node scripts/ops.mjs doctor --update-json`.
+- Verification not run: full `npm test` and `npm run verify:launch-local` because `node_modules` is absent and the package-trust gate (`scripts/package-trust.mjs`) is missing from this public repo; no dependency install was performed.
+- Next move: install dependencies only after running the available package-trust equivalent, then rerun `npm test` / `npm run verify:launch-local`; refresh stale revenue and IGNIS derived intelligence; then continue external launch proofs (Stripe smoke, friend beta, production auth email).
 
 ## Where We Left Off (Session 93)
 
