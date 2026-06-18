@@ -95,7 +95,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p artifacts/launch-verification
-          npm run smoke:production-dashboard > artifacts/launch-verification/production-dashboard-smoke.json
+          npm run --silent smoke:production-dashboard > artifacts/launch-verification/production-dashboard-smoke.json
 
       - name: Render verification summary
         if: always()

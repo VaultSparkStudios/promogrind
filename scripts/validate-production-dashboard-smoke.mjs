@@ -21,6 +21,9 @@ const TIMEOUT_MS = Number(process.argv.find((arg) => arg.startsWith("--timeout="
 const ALLOWED_CONSOLE_PATTERNS = [
   /favicon/i,
   /Failed to load resource: the server responded with a status of 404.*favicon/i,
+  // GitHub Pages serves SPA fallback routes with a 404 status while still
+  // returning index.html. The dashboard smoke validates hydration separately.
+  /^Failed to load resource: the server responded with a status of 404 \(\)$/i,
 ];
 
 function findBrowser() {
