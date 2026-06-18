@@ -9,6 +9,8 @@
     "build": "vite build",
     "build:pages": "vite build && node scripts/postbuild-pages.mjs",
     "optimize:images": "node scripts/optimize-images.mjs",
+    "package:trust": "node scripts/package-trust.mjs",
+    "scan:supply-chain": "node scripts/scan-npm-supply-chain.mjs",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "build:cap": "vite build --outDir dist-cap",
     "cap:sync": "npm run build:cap && npx cap sync",
