@@ -97,9 +97,14 @@ function scanContent(relPath, content) {
   if (!content) return [];
   const findings = [];
   const lines = content.split(/\r?\n/);
+  const isPackageLock = /(^|\/)package-lock\.json$/.test(relPath);
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    // npm lockfiles store base64 Subresource Integrity hashes. These are high
+    // entropy by design and frequently match generic token heuristics, but they
+    // are not credentials.
+    if (isPackageLock && /^\s*"integrity":\s*"sha(256|384|512)-/.test(line)) continue;
     // Comment-based allowlist: check current line + prior line
     const allowComment = ALLOWLIST_COMMENT.test(line) ||
       (i > 0 && ALLOWLIST_COMMENT.test(lines[i - 1]));
