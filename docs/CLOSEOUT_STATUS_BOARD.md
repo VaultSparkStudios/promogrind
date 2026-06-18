@@ -64,5 +64,5 @@
 
 - CI and brief-format are green on `main` after the S95 pushes.
 - Deploy Pages dashboard-smoke artifact parsing is fixed: the workflow now uses `npm run --silent smoke:production-dashboard`, and local production dashboard smoke passes.
-- Deploy Pages remains red at the final production verification gate because the live Supabase `create-checkout` function is stale and rejects `scout_monthly`.
-- Unblock path: authenticate Supabase CLI (`supabase login` or `SUPABASE_ACCESS_TOKEN`), run `npm run deploy:function:checkout`, then rerun Deploy Pages.
+- Supabase `create-checkout` was redeployed to the correct PromoGrind project ref `fjnpzjjyhnpmunfoycrp`; production `scout_monthly` checkout now returns 200.
+- Manual Deploy Pages run `27791869430` passed with 0 blocking launch-verification failures.

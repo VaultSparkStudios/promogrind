@@ -3,7 +3,7 @@
 ## Now
 
 - inspect the GitHub Pages launch-verification artifact after the S95 security/tooling pushes and confirm production dashboard/auth surfaces are clean
-- deploy the current `create-checkout` Supabase function so production accepts `scout_monthly`; local source supports it, but the live function still returns `Unknown plan: scout_monthly`. Run `npm run deploy:function:checkout` after `supabase login` or `SUPABASE_ACCESS_TOKEN` is available
+- inspect the green GitHub Pages launch-verification artifact from manual Deploy Pages run `27791869430`
 - production auth email smoke after the latest deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
@@ -188,7 +188,7 @@
 
 ## Blocked
 
-- Production deploy-health blocker: live Supabase `create-checkout` function is stale and rejects `scout_monthly`; local deploy attempt failed because Supabase CLI has no access token. `node scripts/check-secrets.mjs --for supabase` reports missing. Unblock by running `supabase login` locally or adding `SUPABASE_ACCESS_TOKEN` to `.env.admin` / GitHub secrets, then run `npm run deploy:function:checkout`.
+- Production deploy-health blocker — **DONE S95 follow-up**: live Supabase `create-checkout` was stale and rejected `scout_monthly`; resolved by extracting the Studio Supabase PAT from `vaultspark-studio-ops/secrets`, explicitly deploying to PromoGrind project ref `fjnpzjjyhnpmunfoycrp` with `npm run deploy:function:checkout`, verifying `node scripts\verify-production-launch.mjs` returns `create-checkout` 200 and 0 blocking failures, and manually rerunning Deploy Pages as green run `27791869430`.
 - no local architecture blocker remains; unresolved launch-proof blockers are external/manual evidence gates: missing real approved affiliate tracking links for `BetMGM`, `bet365`, and `BetRivers`, one real Stripe smoke purchase, and one production friend-beta pass with auth recovery visibility
 - Protocol Oracle FAQ cache refresh blocker cleared in S80: `docs/PROTOCOL_FAQ.md` now contains 10 cached protocol entries, so `node scripts/ops.mjs ask --list` returns a populated FAQ without requiring `ANTHROPIC_API_KEY`
 

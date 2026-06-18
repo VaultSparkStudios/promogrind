@@ -3,20 +3,20 @@
   "generatedAt": "2026-06-18",
   "generatedAtMs": 1781827200000,
   "session": 95,
-  "vectorHash": "s95-security-supply-chain-deploy-truth",
+  "vectorHash": "s95-security-supply-chain-deploy-green",
   "silTotal": 998,
   "silAvg3": 998,
   "velocity": 5,
   "debt": "down",
   "runway": "~2 sessions",
   "intentRate": "100% achieved (last 5)",
-  "openNow": 7,
+  "openNow": 6,
   "openNext": 7,
   "openBlocked": 2,
   "topNow": [
-    "redeploy the Supabase create-checkout function after Supabase CLI auth is available",
-    "inspect the GitHub Pages launch-verification artifact after the S95 security/tooling pushes",
+    "inspect the green GitHub Pages launch-verification artifact from Deploy Pages run 27791869430",
     "production auth email smoke after the latest deploy — create a real PromoGrind account,",
+    "run one real Stripe smoke purchase and record evidence — scripted: `npm run smok"
   ],
   "topNext": [
     "finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`",
@@ -33,11 +33,10 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Redeploy create-checkout with Supabase CLI auth, rerun Deploy Pages, then run production auth email smoke, complete npm run smoke:stripe -- --record and npm run beta:check -- --record, then refresh revenue/IGNIS.",
-  "currentFocus": "S95 security/tooling continuation complete plus deploy-truth fixes: npm audit clean, full launch gate green at 500/500, repo-local package trust and lockfile supply-chain scanners added, dashboard-smoke artifact parsing fixed, Deploy Pages blocked only by stale create-checkout redeploy requiring Supabase auth.",
+  "nextMilestone": "Run production auth email smoke, complete npm run smoke:stripe -- --record and npm run beta:check -- --record, then refresh revenue/IGNIS.",
+  "currentFocus": "S95 security/tooling continuation complete plus deploy verification green: npm audit clean, full launch gate green at 500/500, repo-local package trust and lockfile supply-chain scanners added, dashboard-smoke artifact parsing fixed, create-checkout redeployed to PromoGrind Supabase project, and Deploy Pages run 27791869430 passed.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
-    "Deploy Pages final verification is red because live Supabase create-checkout rejects scout_monthly; run supabase login or provide SUPABASE_ACCESS_TOKEN, then npm run deploy:function:checkout.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
     "Run production auth email smoke after S91 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
