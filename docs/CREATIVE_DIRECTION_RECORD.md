@@ -216,3 +216,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: restore the missing dependency/security path, clear npm vulnerabilities, add public-repo-safe supply-chain tooling where absent, update all closeout memory/context/CDR/task-board files, commit, and push to GitHub.
 - Why it matters: PromoGrind should not carry a known verification caveat or missing supply-chain gate after closeout; future dependency work needs a local trust path that does not depend on private Studio OS tooling.
 - Supersedes prior entry: continues the 2026-06-18 Studio OS loop assignment with an explicit security/tooling closeout scope.
+
+### 2026-06-18 — Keep deploy truth strict after closeout
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): Continue after closeout and finish/push what remains.
+- Area affected: deployment / verification / process
+- Previous state: S95 closeout was pushed, but GitHub Deploy Pages still had a red final gate caused by a production artifact parser issue and a stale live Supabase `create-checkout` function.
+- New required direction: fix repo-controllable deploy verification defects, keep the dashboard smoke artifact parseable, document any remaining external-auth blocker precisely, and do not mark the production gate green until the live function is redeployed and verified.
+- Why it matters: launch status has to distinguish a repo bug from a stale deployed edge function; the next session needs an exact unblock path instead of a vague deployment failure.
+- Supersedes prior entry: extends the S95 closeout scope with the post-closeout GitHub deployment evidence.

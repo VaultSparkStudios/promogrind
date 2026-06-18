@@ -3,7 +3,7 @@
 Last updated: 2026-06-18 (S95)
 Session: 95
 Session Intent: Continue the S94 closeout by adding absent repo-local gates, fixing vulnerabilities, updating all memory/context/CDR/task-board files, committing, and pushing to GitHub.
-Intent Outcome: Achieved. Cleared npm vulnerabilities, restored the full local launch gate, added repo-local package-trust and supply-chain scanners, updated closeout truth surfaces, and pushed the completed state.
+Intent Outcome: Achieved for repo-controllable work. Cleared npm vulnerabilities, restored the full local launch gate, added repo-local package-trust and supply-chain scanners, updated closeout truth surfaces, pushed the completed state, then fixed the Deploy Pages dashboard-smoke artifact parser. Remaining red deploy gate is external-auth blocked: production Supabase `create-checkout` must be redeployed after Supabase CLI auth is available.
 
 ## Where We Left Off (Session 95)
 
@@ -12,8 +12,11 @@ Intent Outcome: Achieved. Cleared npm vulnerabilities, restored the full local l
 - Cleaned security scan caveat: `node scripts/scan-secrets.mjs --all` initially flagged stale ignored `dist-cap` JWT artifacts; `npm run build:cap` regenerated the ignored build output, and the all-tree scan then returned 0 findings.
 - Added repo-local package trust: `scripts/package-trust.mjs` now checks npm metadata before future package additions and blocks unsafe download URLs; `npm run package:trust -- --package vite@6.4.3` approved a normal npm package.
 - Added lockfile supply-chain scan: `scripts/scan-npm-supply-chain.mjs` reports 0 blocking issues on the current lockfile and review-only lifecycle-script findings for `core-js`, `esbuild`, `fsevents`, and `sharp`.
+- Fixed Deploy Pages artifact parsing after closeout: workflow now runs production dashboard smoke with `npm run --silent`, and the validator ignores only the exact generic GitHub Pages SPA fallback 404 console line. Local `npm run --silent smoke:production-dashboard` passes against production.
+- Documented the remaining deploy blocker: live Supabase `create-checkout` is stale and rejects `scout_monthly`; local source supports it, but `supabase functions deploy create-checkout` failed because no Supabase access token is available. Added `npm run deploy:function:checkout` and included `SUPABASE_ACCESS_TOKEN` in the GitHub secret sync allowlist.
 - Pushed S95 commits through the documented Windows `--no-verify` path after clean secret/audit scans because the normal pre-push hook is known to hang on this machine.
-- Next move: inspect the latest GitHub Pages launch-verification artifact, run real production auth email checks, complete Stripe smoke and friend-beta proof recordings, then refresh stale revenue/IGNIS derived intelligence.
+- Current GitHub status: CI and brief-format are green on `main`; Deploy Pages is red at the final verification gate until `create-checkout` is redeployed.
+- Next move: provide Supabase CLI auth (`supabase login` or `SUPABASE_ACCESS_TOKEN`), run `npm run deploy:function:checkout`, rerun Deploy Pages, then continue production auth email checks plus Stripe smoke/friend-beta proof recordings.
 
 ## Where We Left Off (Session 94)
 

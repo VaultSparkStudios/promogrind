@@ -5,9 +5,10 @@
 
 > Execution-first queue for this repo. Read this after the startup brief when you need the next concrete move.
 
-## Execute Now (4)
+## Execute Now (5)
 
-- Inspect the GitHub Pages launch-verification artifact after the S95 security/tooling pushes.
+- Provide Supabase CLI auth, run `npm run deploy:function:checkout`, and rerun/inspect Deploy Pages until the `scout_monthly` checkout gate clears.
+- Inspect the GitHub Pages launch-verification artifact after the S95 security/tooling pushes; dashboard-smoke parsing is fixed, but checkout remains blocked until the function redeploy lands.
 - Run production auth email smoke: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.
 - Record one live Stripe smoke purchase with `npm run smoke:stripe -- --record`.
 - Record one friend-facing auth/recovery/calculator/pricing pass with `npm run beta:check -- --record`.
@@ -16,9 +17,9 @@
 
 - No founder-approved automation items ready to run.
 
-## Try Before Escalating (0)
+## Try Before Escalating (1)
 
-- No open Human Action Required items.
+- Attempt `npm run deploy:function:checkout` after `supabase login` or `SUPABASE_ACCESS_TOKEN`; current agent attempt failed only because Supabase access token was missing.
 
 ## Advisory Drift (2)
 

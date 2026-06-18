@@ -14,9 +14,10 @@
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
   "currentSession": 95,
-  "currentFocus": "S95 dependency security and supply-chain continuation complete: npm audit vulnerabilities cleared, dependencies restored, full launch gate passed 500/500, all-tree/staged secret scans clean, Dependabot open alerts 0, and repo-local package-trust plus lockfile supply-chain scanners added.",
-  "nextMilestone": "Inspect the latest GitHub Pages launch-verification artifact, run production auth email smoke, complete Stripe smoke and friend-beta evidence, then refresh stale revenue and IGNIS derived intelligence.",
+  "currentFocus": "S95 dependency security and supply-chain continuation complete, with post-closeout deploy-truth fixes pushed: npm audit vulnerabilities cleared, dependencies restored, full launch gate passed 500/500, all-tree/staged secret scans clean, Dependabot open alerts 0, repo-local package-trust plus lockfile supply-chain scanners added, and dashboard-smoke deploy artifacts now parse cleanly.",
+  "nextMilestone": "Redeploy the Supabase create-checkout function with CLI auth so production accepts scout_monthly, rerun Deploy Pages, then run production auth email smoke and complete Stripe smoke/friend-beta evidence.",
   "blockers": [
+    "Deploy Pages final verification is red because live Supabase create-checkout is stale and rejects scout_monthly; run supabase login or provide SUPABASE_ACCESS_TOKEN, then npm run deploy:function:checkout.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
     "Run production auth email smoke after S91 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
@@ -71,7 +72,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live; production dashboard smoke wired into deploy artifacts, local browser navigation limited by shell/network environment"
+      "status": "live; production dashboard smoke passes and deploy artifact parsing is fixed; Deploy Pages final gate remains red until stale create-checkout edge function is redeployed"
     },
     {
       "type": "cloudflare",
