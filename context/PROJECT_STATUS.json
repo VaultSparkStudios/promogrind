@@ -13,8 +13,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 95,
-  "currentFocus": "S95 dependency security and supply-chain continuation complete, with post-closeout deploy-truth fixes verified green: npm audit vulnerabilities cleared, dependencies restored, full launch gate passed 500/500, all-tree/staged secret scans clean, Dependabot open alerts 0, repo-local package-trust plus lockfile supply-chain scanners added, dashboard-smoke deploy artifacts parse cleanly, and production create-checkout now accepts scout_monthly.",
+  "currentSession": 96,
+  "currentFocus": "S96 closeout complete after verifying the correct Studio Supabase token/project: production create-checkout was redeployed to PromoGrind project fjnpzjjyhnpmunfoycrp, scout_monthly checkout returns 200, manual Deploy Pages run 27791869430 passed, and the S95 security/supply-chain gates remain green.",
   "nextMilestone": "Run production auth email smoke, complete Stripe smoke/friend-beta evidence, then refresh stale revenue and IGNIS derived intelligence.",
   "blockers": [
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
@@ -26,7 +26,7 @@
   "silAvg3": 995,
   "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 95,
+  "silLastSession": 96,
   "silMax": 1000,
   "silSparkline": [
     981,

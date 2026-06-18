@@ -1,9 +1,18 @@
 # Latest Handoff
 
-Last updated: 2026-06-18 (S95)
-Session: 95
-Session Intent: Continue the S94 closeout by adding absent repo-local gates, fixing vulnerabilities, updating all memory/context/CDR/task-board files, committing, and pushing to GitHub.
-Intent Outcome: Achieved. Cleared npm vulnerabilities, restored the full local launch gate, added repo-local package-trust and supply-chain scanners, updated closeout truth surfaces, pushed the completed state, fixed the Deploy Pages dashboard-smoke artifact parser, redeployed the production Supabase `create-checkout` function to the correct PromoGrind project, and verified Deploy Pages green.
+Last updated: 2026-06-18 (S96)
+Session: 96
+Session Intent: Close out after the founder pointed to the shared Studio secrets path, verify the correct Supabase auth token/project, update all memory/context/CDR/task-board files, commit, and push.
+Intent Outcome: Achieved. Extracted the correct Studio Supabase PAT without printing secrets, explicitly targeted PromoGrind project `fjnpzjjyhnpmunfoycrp` instead of the other shared Studio Supabase project, redeployed production `create-checkout`, verified `scout_monthly` checkout returns 200, reran Deploy Pages successfully, refreshed closeout truth surfaces, and pushed the completed state.
+
+## Where We Left Off (Session 96)
+
+- Corrected the Supabase auth path: `node ..\vaultspark-studio-ops\scripts\check-secrets.mjs --for supabase.admin` and `--for supabase.client` are ready; the generic `--for supabase` alias is not the right capability check.
+- Confirmed the two shared Studio Supabase projects before deploying: PromoGrind uses project ref `fjnpzjjyhnpmunfoycrp`; the other shared project reference is `ckwtolofoqzrqouqkmvs`.
+- Redeployed `create-checkout` to `fjnpzjjyhnpmunfoycrp` with `npm run deploy:function:checkout`, using only the token-shaped `sbp_...` substring from `vaultspark-studio-ops/secrets/supabase-pat.txt`.
+- Verified production: `node scripts\verify-production-launch.mjs` reports `create-checkout` 200 for `scout_monthly`, 0 blocking failures, and only the existing advisory affiliate coverage item.
+- Verified GitHub: manual Deploy Pages run `27791869430` passed; latest CI and brief-format are green on pushed commit `f9a98c9`.
+- Next move: run production auth email checks, then continue Stripe smoke/friend-beta proof recordings and refresh revenue/IGNIS derived intelligence.
 
 ## Where We Left Off (Session 95)
 

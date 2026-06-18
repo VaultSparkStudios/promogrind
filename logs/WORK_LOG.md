@@ -292,3 +292,12 @@ Append chronological entries.
 - Verification: `npm audit --json` reports 0 vulnerabilities; `npm run verify:launch-local` passed with 500/500 tests; `npm run scan:supply-chain` has 0 blocking findings; all-tree and staged secret scans are clean; CI and brief-format are green on `main`; local `npm run --silent smoke:production-dashboard` passes against production.
 - Risks created or removed: removed dependency vulnerabilities and the missing public-repo package-trust fallback; removed a false failing dashboard-smoke artifact parser; removed the stale production checkout-function failure by redeploying `create-checkout` to PromoGrind project ref `fjnpzjjyhnpmunfoycrp` and verifying `scout_monthly` returns 200. Remaining launch risks are external/manual proof evidence and affiliate coverage advisory inventory.
 - Recommended next move: inspect the green Deploy Pages launch-verification artifact, then continue production auth email, Stripe smoke, and friend-beta proof recording.
+
+### 2026-06-18 - Session 96 Supabase deploy verification closeout
+
+- Goal: close out after founder pointed to `vaultspark-studio-ops/secrets`, verify the correct Supabase token/project among the shared Studio projects, update canonical context/memory/CDR/task-board surfaces, commit, and push.
+- What changed: verified `supabase.admin` / `supabase.client` readiness from Studio secrets, identified PromoGrind project ref `fjnpzjjyhnpmunfoycrp` versus the other shared Studio Supabase project `ckwtolofoqzrqouqkmvs`, extracted only the `sbp_...` PAT substring without printing it, redeployed `create-checkout`, verified production `scout_monthly` checkout returns 200, and reran Deploy Pages successfully as run `27791869430`.
+- Files or systems touched: production Supabase Edge Function `create-checkout`, GitHub Actions Deploy Pages run, and closeout truth surfaces.
+- Verification: `node scripts\verify-production-launch.mjs` reports 0 blocking failures with `create-checkout` 200; `npm run --silent smoke:production-dashboard` passes; Deploy Pages run `27791869430` passed; staged/all-tree secret scans remained clean.
+- Risks created or removed: removed the stale production checkout deploy-health blocker and confirmed the right shared Studio Supabase project was targeted. Remaining risks are external/manual: production auth email proof, one real Stripe smoke, one friend-beta pass, and advisory affiliate inventory.
+- Recommended next move: run production auth email smoke, then record Stripe and friend-beta evidence.

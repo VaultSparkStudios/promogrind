@@ -1,22 +1,22 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-06-18",
-  "generatedAtMs": 1781827200000,
-  "session": 95,
-  "vectorHash": "s95-security-supply-chain-deploy-green",
+  "generatedAtMs": 1781820749419,
+  "session": 96,
+  "vectorHash": "fa9f624a481b0357",
   "silTotal": 998,
-  "silAvg3": 998,
+  "silAvg3": 995,
   "velocity": 5,
   "debt": "down",
   "runway": "~2 sessions",
   "intentRate": "100% achieved (last 5)",
   "openNow": 6,
-  "openNext": 7,
-  "openBlocked": 2,
+  "openNext": 8,
+  "openBlocked": 3,
   "topNow": [
-    "inspect the green GitHub Pages launch-verification artifact from Deploy Pages run 27791869430",
-    "production auth email smoke after the latest deploy — create a real PromoGrind account,",
-    "run one real Stripe smoke purchase and record evidence — scripted: `npm run smok"
+    "production auth email smoke after the latest deploy — create a real PromoGrind a",
+    "run one real Stripe smoke purchase and record evidence — scripted: `npm run smok",
+    "complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `np"
   ],
   "topNext": [
     "finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`",
@@ -33,8 +33,8 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Run production auth email smoke, complete npm run smoke:stripe -- --record and npm run beta:check -- --record, then refresh revenue/IGNIS.",
-  "currentFocus": "S95 security/tooling continuation complete plus deploy verification green: npm audit clean, full launch gate green at 500/500, repo-local package trust and lockfile supply-chain scanners added, dashboard-smoke artifact parsing fixed, create-checkout redeployed to PromoGrind Supabase project, and Deploy Pages run 27791869430 passed.",
+  "nextMilestone": "Run production auth email smoke, complete Stripe smoke/friend-beta evidence, then refresh stale revenue and IGNIS derived intelligence.",
+  "currentFocus": "S96 closeout complete after verifying the correct Studio Supabase token/project: production create-checkout was redeployed to PromoGrind project fjnpzjjyhnpmunfoycrp, scout_monthly checkout returns 200, manual Deploy Pages run 27791869430 passed, and the S95 security/supply-chain gates remain green.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",

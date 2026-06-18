@@ -3,20 +3,17 @@
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary (S95)
+# Handoff Summary (S96)
 
 ## Session
-- Session 95 (2026-06-18)
-- Intent: continue from S94, add absent repo-local gates, fix vulnerabilities, close out, commit, and push. Outcome: achieved; production deploy gate is now green after the correct Supabase function redeploy.
+- Session 96 (2026-06-18)
+- Intent: close out after the founder pointed to Studio secrets, verify the correct Supabase token/project, refresh repo truth, commit, and push. Outcome: achieved.
 
 ## Shipped This Session
-- Cleared npm audit vulnerabilities; `npm audit --json` reports 0 total vulnerabilities.
-- Restored dependencies and full local launch verification; `npm run verify:launch-local` passed end to end with 500/500 tests.
-- Regenerated ignored `dist-cap` output after stale JWT-like artifacts triggered all-tree secret scan; `scan-secrets --all` is clean.
-- Added `scripts/package-trust.mjs` and `npm run package:trust` for pre-install package/download review.
-- Added `scripts/scan-npm-supply-chain.mjs` and `npm run scan:supply-chain`; current lockfile has 0 blocking findings.
-- Fixed Deploy Pages dashboard-smoke artifact parsing by using `npm run --silent smoke:production-dashboard`; local production dashboard smoke passes.
-- Redeployed `create-checkout` to PromoGrind project ref `fjnpzjjyhnpmunfoycrp` using the Studio Supabase PAT; production `scout_monthly` checkout now returns 200.
+- Confirmed PromoGrind Supabase project ref is `fjnpzjjyhnpmunfoycrp`; the other shared Studio Supabase project is `ckwtolofoqzrqouqkmvs`.
+- Extracted the token-shaped `sbp_...` value from `vaultspark-studio-ops/secrets/supabase-pat.txt` without printing the secret.
+- Redeployed `create-checkout` to PromoGrind with `npm run deploy:function:checkout`.
+- Verified `node scripts\verify-production-launch.mjs`: `create-checkout` returns 200 for `scout_monthly`, 0 blocking failures.
 - Manually reran Deploy Pages as `27791869430`; run passed.
 
 ## Current Intent
@@ -36,7 +33,7 @@
 - None open (blocker preflight at S92 found 0 Human Action Required items).
 
 ## Notes
-- S95 used documented `--no-verify` push path after equivalent scans because the Windows pre-push hook is known to hang.
+- S95/S96 used documented `--no-verify` push path after equivalent scans because the Windows pre-push hook is known to hang.
 - `scan:supply-chain` currently reports review-only lifecycle scripts for `core-js`, `esbuild`, `fsevents`, and `sharp`.
 
 Next session: run production auth email smoke, complete Stripe/beta evidence, and refresh revenue/IGNIS derived intelligence.

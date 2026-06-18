@@ -18,5 +18,5 @@ Use this file to capture the best current strategic intelligence of the project.
 ## Current strategic beliefs
 
 - belief: S95 removed the main local verification caveat and the post-closeout Supabase checkout deploy blocker; the next launch blockers are external/manual proof evidence plus stale revenue/IGNIS derived intelligence.
-- evidence: `npm audit` is clean, Dependabot open alerts are 0, `npm run verify:launch-local` passed 500/500, all-tree/staged secret scans are clean, and repo-local package-trust/supply-chain scripts now exist.
+- evidence: `npm audit` is clean, Dependabot open alerts are 0, `npm run verify:launch-local` passed 500/500, all-tree/staged secret scans are clean, repo-local package-trust/supply-chain scripts now exist, production `create-checkout` returns 200 for `scout_monthly`, and Deploy Pages run `27791869430` passed.
 - confidence: high

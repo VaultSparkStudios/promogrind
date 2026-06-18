@@ -226,3 +226,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: fix repo-controllable deploy verification defects, keep the dashboard smoke artifact parseable, document any remaining external-auth blocker precisely, and do not mark the production gate green until the live function is redeployed and verified.
 - Why it matters: launch status has to distinguish a repo bug from a stale deployed edge function; the next session needs an exact unblock path instead of a vague deployment failure.
 - Supersedes prior entry: extends the S95 closeout scope with the post-closeout GitHub deployment evidence.
+
+### 2026-06-18 — Use Studio Supabase secrets and verify the project ref before deploy
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): "there is a supabase auth token check in there and make sure you have the right one as there are 2 shared studio supabase projects" plus "vaultspark-studio-ops/secrets".
+- Area affected: deployment / security / process
+- Previous state: The deploy blocker was documented as missing Supabase CLI auth, but the correct token source existed in the private Studio secrets directory and there were multiple shared Supabase projects that could be confused.
+- New required direction: before deploying Supabase functions, use the Studio secrets gateway/files, do not print raw tokens, verify the target project ref, and explicitly distinguish PromoGrind's `fjnpzjjyhnpmunfoycrp` project from the other shared Studio Supabase project.
+- Why it matters: a valid token is not enough; deploying to the wrong shared Supabase project would create false green status and leave production stale.
+- Supersedes prior entry: refines the S95 deploy-truth direction with the credential/project-selection rule that cleared the blocker.

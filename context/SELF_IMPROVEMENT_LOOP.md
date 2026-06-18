@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S86:981 | S87:988 | S93:998 | S94:998 | S95:998
-Avgs - 3: 998.0 [N=3] | all: 817.2 [N=18]
-  └ 3-session (S93/S94/S95): Dev 100.0 | Align 100.0 | Momentum 99.0 | Engage 100.0 | Process 100.0 | Coher 99.7 | Sec 100.0 | Eco 99.3 | Cap 100.0 | Auto 100.0
+Sparkline (last 5 totals): S87:988 | S93:998 | S94:998 | S95:998 | S96:998
+Avgs - 3: 998.0 [N=3] | all: 826.7 [N=19]
+  └ 3-session (S94/S95/S96): Dev 100.0 | Align 100.0 | Momentum 99.0 | Engage 100.0 | Process 100.0 | Coher 99.7 | Sec 100.0 | Eco 99.7 | Cap 100.0 | Auto 100.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-06-18 | Session 95 | Total: 998/1000 | Velocity: 5 | protocolVelocity: 5
+Last session: 2026-06-18 | Session 96 | Total: 998/1000 | Velocity: 5 | protocolVelocity: 5
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -159,6 +159,39 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 99.0 | Engage 100.0 | P
 **Committed follow-up(s):**
 - Refresh stale revenue and IGNIS derived intelligence. `[SIL]`
 - Repair the Windows pre-push hook wrapper so clean pushes no longer require documented `--no-verify`. `[SIL]`
+
+## 2026-06-18 — Session 96 | Total: 998/1000 | Velocity: 5 | Debt: down
+Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 99.0 | Engage 100.0 | Process 100.0 | Coher 99.7 | Sec 100.0 | Eco 99.7 | Cap 100.0 | Auto 100.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 100 | → | Production checkout deploy gate is verified green; no product-code changes required a new full local suite. |
+| Creative Alignment | 100 | → | Followed founder direction to use Studio Supabase secrets, verify the correct project, then close out and push. |
+| Momentum | 99 | → | Cleared the live `create-checkout` deploy-health blocker and moved the project back to external proof work. |
+| Engagement | 100 | → | User-facing product remains stable; launch proof accuracy improved for the operator. |
+| Process Quality | 100 | → | Handoff, current state, task board, truth audit, decisions, CDR, work log, status, and startup/closeout surfaces were refreshed. |
+| Cross-Repo Coherence | 100 | → | Correctly distinguished PromoGrind's Supabase project from the other shared Studio Supabase project. |
+| Security Posture | 100 | → | Supabase PAT was extracted only in-process and never printed; all-tree/staged secret scans remained clean. |
+| Ecosystem Integration | 100 | ↑ | Deploy Pages run `27791869430` is green and production `scout_monthly` checkout returns 200. |
+| Capital Efficiency | 100 | → | Used existing Studio secrets and repo deploy script rather than adding new tooling. |
+| Automation Coverage | 99 | ↓ | Manual dispatch was needed for Deploy Pages because the final closeout commit was docs-only and path-filtered. |
+| **Total** | **998 / 1000** | | |
+
+**Top win:** removed the last repo-controllable production deploy-health blocker by redeploying `create-checkout` to the correct PromoGrind Supabase project and verifying GitHub Deploy Pages green.
+
+**Top gap:** production auth email proof, Stripe smoke, friend beta, and stale revenue/IGNIS derived intelligence still need follow-through.
+
+**Intent outcome:** Achieved. The requested closeout write-back, CDR/task-board/context updates, commit, and GitHub push were completed after the Supabase deploy gate turned green.
+
+**Brainstorm**
+
+1. Add a project-specific `promogrind.supabase.deploy` capability check so future agents do not try the generic `supabase` alias first.
+2. Add a small deploy-artifact ingester that records the latest green Deploy Pages run ID into context automatically.
+3. Convert the production auth email smoke into a guided runner with evidence redaction, matching the Stripe/friend-beta proof pattern.
+
+**Committed follow-up(s):**
+- Add a project-specific Supabase deploy capability mapping for PromoGrind. `[SIL]`
+- Add a production auth email smoke evidence runner. `[SIL]`
 
 ## 2026-05-14 — Session 87 | Total: 988/1000 | Velocity: 6 | Debt: down
 Rolling avg (last 3): Dev 99.3 | Align 99.7 | Momentum 92.3 | Engage 94.7 | Process 100.0 | Coher 99.0 | Sec 96.7 | Eco 99.0 | Cap 98.0 | Auto 98.7

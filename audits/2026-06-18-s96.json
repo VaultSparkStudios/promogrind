@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "session": 96,
+  "date": "2026-06-18",
+  "type": "closeout",
+  "summary": "Supabase deploy verification and closeout truth refresh.",
+  "shipped": [
+    {
+      "id": "supabase-project-disambiguation",
+      "status": "done",
+      "evidence": "Confirmed PromoGrind deploy target is fjnpzjjyhnpmunfoycrp, distinct from shared Studio project ckwtolofoqzrqouqkmvs."
+    },
+    {
+      "id": "create-checkout-redeploy",
+      "status": "done",
+      "evidence": "npm run deploy:function:checkout deployed create-checkout to fjnpzjjyhnpmunfoycrp using the Studio Supabase PAT."
+    },
+    {
+      "id": "production-checkout-verification",
+      "status": "done",
+      "evidence": "node scripts\\verify-production-launch.mjs reports create-checkout 200 for scout_monthly and 0 blocking failures."
+    },
+    {
+      "id": "deploy-pages-green",
+      "status": "done",
+      "evidence": "Manual Deploy Pages workflow_dispatch run 27791869430 passed."
+    },
+    {
+      "id": "closeout-truth-refresh",
+      "status": "done",
+      "evidence": "Current state, handoff, compact handoff, task board, decisions, CDR, truth audit, SIL, project status, state vector, closeout board, work log, and startup brief refreshed."
+    }
+  ],
+  "verification": {
+    "productionLaunch": "0 blocking failures; create-checkout 200 for scout_monthly",
+    "productionDashboardSmoke": "passed",
+    "deployPagesRun": "27791869430 success",
+    "secretScanAll": "0 findings",
+    "secretScanStaged": "0 findings"
+  },
+  "deferred": [
+    "Run production auth email smoke.",
+    "Complete Stripe smoke evidence.",
+    "Complete friend-beta evidence.",
+    "Refresh stale revenue and IGNIS derived intelligence.",
+    "Repair Windows pre-push hook wrapper."
+  ],
+  "sil": {
+    "total": 998,
+    "max": 1000,
+    "velocity": 5,
+    "debt": "down"
+  }
+}

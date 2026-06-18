@@ -1,7 +1,7 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-06-18 (S95)
+Last reviewed: 2026-06-18 (S96)
 Overall status: green
 Next action: inspect the green GitHub Pages launch-verification artifact from run `27791869430`, run production auth email smoke, then complete the two remaining external manual proofs (Stripe smoke and friend beta). Refresh stale revenue and IGNIS derived intelligence after the proof pass.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
@@ -35,8 +35,8 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 | Area | Canonical source | Derived surfaces | Status | Last checked | Action |
 |---|---|---|---|---|---|
 | Auth/recovery launch truth | `src/auth.js` + `src/components/AuthDialog.jsx` + `scripts/validate-auth-launch-smoke.mjs` | `verify:launch-local`, launch smoke, browser smoke, friend-beta proof guide | green | 2026-05-13 | S85 adds confirmation resend, forgot-password reset, recovery-link update-password, and release-gate smoke coverage; production email delivery still needs live manual proof after deploy. |
-| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-06-18 | PromoGrind status reflects `FORGE`, public-unlaunched, S95 dependency/security verification, and unchanged external proof blockers. |
-| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-06-18 | S95 write-back aligns state, handoff, task board, work log, project status, SIL, and CDR around the same dependency/security continuation. |
+| Project identity | `context/PROJECT_STATUS.json` | startup brief, contracts, runtime pack | green | 2026-06-18 | PromoGrind status reflects `FORGE`, public-unlaunched, S96 deploy verification green, S95 dependency/security verification, and unchanged external proof blockers. |
+| Session continuity | `context/LATEST_HANDOFF.md` + `context/CURRENT_STATE.md` | startup brief, audit JSON, compact handoff | green | 2026-06-18 | S96 write-back aligns state, handoff, task board, work log, project status, SIL, and CDR around the same Supabase deploy-green continuation. |
 | Capability truth | `context/STUDIO_MANIFEST.json` | contracts, runtime pack | green | 2026-04-23 | Manifest remains the source of capability truth; contract generation now reads status via the shared helper. |
 | IGNIS truth | `context/PROJECT_STATUS.json` + local IGNIS history | `context/contracts/ignis.json`, startup brief | green | 2026-04-23 | Derived IGNIS surfaces still agree on `47857 FORGE` pending the next refresh cycle. |
 | Startup reliability | `scripts/render-startup-brief.mjs` + `scripts/lib/context-parsing.mjs` | `docs/STARTUP_BRIEF.md` | green | 2026-04-24 | Launch gate and UX smoke now give next-session startup a clearer readiness baseline. |
@@ -58,6 +58,12 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+
+## Resolved This Session (S96)
+
+- Verified the Studio Supabase secrets path and avoided the wrong shared project: PromoGrind deploys to `fjnpzjjyhnpmunfoycrp`, not `ckwtolofoqzrqouqkmvs`.
+- Redeployed production `create-checkout`; `node scripts\verify-production-launch.mjs` now reports `create-checkout` 200 for `scout_monthly` and 0 blocking failures.
+- Manual Deploy Pages run `27791869430` passed, so the prior deploy-health blocker is cleared.
 
 ## Resolved This Session (S95)
 
