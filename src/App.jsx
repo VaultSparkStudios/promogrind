@@ -1128,18 +1128,30 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
 };
 
 // â•â•â• MOBILE BOTTOM NAV â•â•â•
+const NAV_ICONS = [
+  <svg key="home" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9.5L10 3l7 6.5"/><path d="M5 8.5V16a1 1 0 001 1h3v-3.5h2V17h3a1 1 0 001-1V8.5"/></svg>,
+  <svg key="convert" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M11.5 2L5 11h6l-2.5 7L17 9h-6l.5-7z"/></svg>,
+  <svg key="calc" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="5.5" height="5.5" rx="1"/><rect x="11.5" y="3" width="5.5" height="5.5" rx="1"/><rect x="3" y="11.5" width="5.5" height="5.5" rx="1"/><rect x="11.5" y="11.5" width="5.5" height="5.5" rx="1"/></svg>,
+  <svg key="track" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="3,14 7,9 11,12 17,6"/><polyline points="14,6 17,6 17,9"/></svg>,
+  <svg key="live" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="2.5" fill="currentColor" stroke="none"/><path d="M5.5 14.5a6.5 6.5 0 009 0"/><path d="M14.5 5.5a6.5 6.5 0 00-9 0"/></svg>,
+  <svg key="learn" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M10 5.5C8.5 4.2 6 4 3.5 4.5V16c2.5-.5 5-.3 6.5 1 1.5-1.3 4-1.5 6.5-1V4.5C13.5 4 11.5 4.2 10 5.5z"/><line x1="10" y1="5.5" x2="10" y2="17"/></svg>,
+];
+const NAV_LABELS = ["Home","Convert","Calc","Track","Live","Learn"];
+
 const MobileBottomNav = ({ gi, goTo }) => {
-  const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
-  const labels = ["Home","Convert","Calc","Track","Live","Learn"];
   return (
-    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
+    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1} 0%,${K.s2} 100%)`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:`8px 0 env(safe-area-inset-bottom,4px)`,boxShadow:"0 -8px 32px rgba(0,0,0,0.28)"}}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-          <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
-          <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
-        </button>
-      ))}
+      {TABS.map((t,i)=>{
+        const active = gi===i;
+        return (
+          <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"4px 2px 2px",background:"none",border:"none",color:active?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.6px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:4,position:"relative",WebkitTapHighlightColor:"transparent"}}>
+            {active && <span style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:28,height:3,borderRadius:"0 0 3px 3px",background:K.gn}}/>}
+            <span style={{color:active?K.gn:K.mt,display:"flex",alignItems:"center",opacity:active?1:0.6}}>{NAV_ICONS[i]}</span>
+            <span style={{fontWeight:active?700:400,letterSpacing:active?"0.8px":"0.5px"}}>{NAV_LABELS[i]}</span>
+          </button>
+        );
+      })}
     </div>
   );
 };
@@ -3456,7 +3468,7 @@ export default function App() {
 
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh"}}>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
@@ -3640,8 +3652,8 @@ export default function App() {
         )}
       </header>
 
-      {/* â”€â”€ Main nav tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <div style={{
+      {/* â”€â”€ Main nav tabs (desktop + tablet only; hidden on mobile via .pg-top-tabs CSS) â”€â”€â”€â”€â”€â”€ */}
+      <div className="pg-top-tabs" style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',
