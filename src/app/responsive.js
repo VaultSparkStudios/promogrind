@@ -11,6 +11,8 @@ export const BREAKPOINTS = {
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
+  // dvh: dynamic viewport height avoids iOS address-bar layout shift
+  "#root { min-height: 100vh; min-height: 100dvh; }",
 ].join(" ");
 
 export function getViewportState(width = 1280) {
