@@ -1127,20 +1127,169 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
   );
 };
 
-// â•â•â• MOBILE BOTTOM NAV â•â•â•
-const MobileBottomNav = ({ gi, goTo }) => {
-  const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
-  const labels = ["Home","Convert","Calc","Track","Live","Learn"];
+// === MOBILE NAV DRAWER + BOTTOM NAV ===
+const DRAWER_NAV_CSS = `
+  @keyframes pg-drawer-up {
+    from { transform: translateY(100%); opacity: 0.85; }
+    to   { transform: translateY(0);    opacity: 1;    }
+  }
+  .pg-drawer-scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    max-height: 85vh;
+    max-height: 85dvh;
+  }
+  @media (max-height: 600px) {
+    .pg-drawer-scroll { max-height: 78vh; max-height: 78dvh; }
+  }
+`;
+
+const MOBILE_NAV_ICONS = {
+  Home: "\u{1F3E0}", Convert: "⚡", Calculate: "\u{1F4CA}",
+  Track: "\u{1F4C8}", Live: "\u{1F4E1}", Learn: "\u{1F4DA}",
+};
+
+const MobileNavDrawer = ({ open, onClose, gi, goTo }) => {
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
+  if (!open) return null;
   return (
-    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-          <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
-          <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
+    <>
+      <div
+        onClick={onClose}
+        style={{
+          position:"fixed", inset:0, zIndex:498,
+          background:"rgba(0,0,0,0.55)",
+          backdropFilter:"blur(4px)", WebkitBackdropFilter:"blur(4px)",
+        }}
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="All navigation"
+        style={{
+          position:"fixed", bottom:0, left:0, right:0, zIndex:499,
+          background:K.s1,
+          borderTop:`1px solid ${K.bd2}`,
+          borderRadius:"20px 20px 0 0",
+          display:"flex", flexDirection:"column",
+          boxShadow:"0 -24px 80px rgba(0,0,0,0.55)",
+          animation:"pg-drawer-up 0.3s cubic-bezier(0.32,0.72,0,1) both",
+        }}
+      >
+        <style>{DRAWER_NAV_CSS}</style>
+        <div style={{padding:"12px 0 4px", display:"flex", justifyContent:"center", flexShrink:0}}>
+          <div style={{width:36, height:4, borderRadius:99, background:K.bd2}}/>
+        </div>
+        <div style={{
+          padding:"8px 20px 12px",
+          display:"flex", alignItems:"center", justifyContent:"space-between",
+          borderBottom:`1px solid ${K.bd}40`, flexShrink:0,
+        }}>
+          <span style={{fontFamily:fontD, fontSize:16, fontWeight:800, color:K.gn, letterSpacing:"-0.5px"}}>
+            All Tools
+          </span>
+          <button
+            onClick={onClose}
+            aria-label="Close navigation"
+            style={{
+              background:"none", border:`1px solid ${K.bd2}`,
+              borderRadius:8, color:K.dm, cursor:"pointer",
+              fontSize:12, padding:"5px 12px", fontFamily:font,
+            }}
+          >Done</button>
+        </div>
+        <div className="pg-drawer-scroll">
+          {TABS.map((group, groupIndex) => (
+            <div key={group.group}>
+              <div style={{
+                padding:"13px 20px 5px",
+                fontSize:9, color:K.mt, fontFamily:font,
+                textTransform:"uppercase", letterSpacing:"2px", fontWeight:700,
+                display:"flex", alignItems:"center", gap:8,
+              }}>
+                <span style={{fontSize:13}}>{MOBILE_NAV_ICONS[group.group] || "▸"}</span>
+                {group.group}
+              </div>
+              {group.items.map((item, itemIndex) => {
+                const isSection = gi === groupIndex;
+                return (
+                  <button
+                    key={item.slug}
+                    onClick={() => { goTo(groupIndex, itemIndex); onClose(); }}
+                    style={{
+                      display:"flex", alignItems:"center", justifyContent:"space-between",
+                      width:"100%", padding:"11px 20px",
+                      background: isSection ? `${K.ac}08` : "none",
+                      border:"none", borderBottom:`1px solid ${K.bd}20`,
+                      color: isSection ? K.ac : K.tx,
+                      fontFamily:font, fontSize:13, cursor:"pointer", textAlign:"left",
+                      fontWeight: isSection ? 600 : 400,
+                      boxSizing:"border-box",
+                    }}
+                  >
+                    <span>{item.n}</span>
+                    {item.pro && (
+                      <span style={{
+                        fontSize:8, padding:"2px 6px", borderRadius:99,
+                        background:`${K.pp}20`, color:K.pp, fontWeight:700,
+                        letterSpacing:"1px", textTransform:"uppercase", flexShrink:0,
+                      }}>PRO</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+          <div style={{height:"env(safe-area-inset-bottom, 20px)", minHeight:20}}/>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const BOTTOM_NAV_ITEMS = [
+  { group: "Home",      label: "Home",    icon: "\u{1F3E0}" },
+  { group: "Convert",   label: "Convert", icon: "⚡"    },
+  { group: "Calculate", label: "Calc",    icon: "\u{1F4CA}" },
+  { group: "Track",     label: "Track",   icon: "\u{1F4C8}" },
+];
+
+const MobileBottomNav = ({ gi, goTo }) => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const liveIdx  = TABS.findIndex(t => t.group === "Live");
+  const learnIdx = TABS.findIndex(t => t.group === "Learn");
+  const moreActive = gi === liveIdx || gi === learnIdx;
+  return (
+    <>
+      <MobileNavDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} gi={gi} goTo={goTo} />
+      <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
+        <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
+        {BOTTOM_NAV_ITEMS.map(t => {
+          const tabGi = TABS.findIndex(tab => tab.group === t.group);
+          const isActive = gi === tabGi;
+          return (
+            <button key={t.group} onClick={() => goTo(tabGi, 0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:isActive?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+              <span style={{fontSize:18, lineHeight:1}}>{t.icon}</span>
+              <span style={{fontWeight:isActive?700:400}}>{t.label}</span>
+            </button>
+          );
+        })}
+        <button
+          onClick={() => setDrawerOpen(true)}
+          aria-label="More navigation"
+          style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:moreActive?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}
+        >
+          <span style={{fontSize:18, lineHeight:1}}>{"☰"}</span>
+          <span style={{fontWeight:moreActive?700:400}}>More</span>
         </button>
-      ))}
-    </div>
+      </div>
+    </>
   );
 };
 
