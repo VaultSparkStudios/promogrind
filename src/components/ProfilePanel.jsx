@@ -9,6 +9,7 @@ import { buildLocalDataExport, clearLocalPromoGrindData, describeDataControlStat
 import { buildReplayInsights } from "../lib/replayLedger.js";
 import { exportPassport } from "../lib/operatorPassport.js";
 import { compareKellyFractions } from "../lib/kellySim.js";
+import { runBankrollStress } from "../lib/bankrollStress.js";
 
 function PassportExportSection() {
   const ctx = useContext(AppDataCtx);
@@ -380,6 +381,94 @@ function KellySandboxSection() {
   );
 }
 
+// Converts American odds to implied win probability (vig-inclusive).
+function americanToWinProb(odds) {
+  const o = Number.parseFloat(odds);
+  if (!Number.isFinite(o)) return 0.5;
+  return o >= 0 ? 100 / (o + 100) : Math.abs(o) / (Math.abs(o) + 100);
+}
+
+// Converts American odds + stake to expected payout on a win.
+function americanToPayoutOnWin(stake, odds) {
+  const s = Number.parseFloat(stake);
+  const o = Number.parseFloat(odds);
+  if (!Number.isFinite(s) || s <= 0) return 0;
+  if (!Number.isFinite(o)) return s;
+  return o >= 0 ? s * (o / 100) : s * (100 / Math.abs(o));
+}
+
+function BankrollStressSection() {
+  const ctx = useContext(AppDataCtx);
+
+  const { stress, exposurePct } = useMemo(() => {
+    const bets = Array.isArray(ctx?.appData?.bets) ? ctx.appData.bets : [];
+    const bankroll = Number.parseFloat(ctx?.appData?.bankroll);
+    if (!(bankroll > 0)) return { stress: null, exposurePct: 0 };
+
+    const openBets = bets.filter((b) => {
+      const s = String(b.status || '').toLowerCase();
+      return !['won', 'lost', 'settled', 'cancelled'].includes(s);
+    });
+    if (!openBets.length) return { stress: null, exposurePct: 0 };
+
+    const positions = openBets
+      .map((b) => {
+        const stake = Number.parseFloat(b.stake);
+        if (!(stake > 0)) return null;
+        const odds = b.odds ?? b.line ?? 0;
+        return {
+          stake,
+          winProb: americanToWinProb(odds),
+          payoutOnWin: americanToPayoutOnWin(stake, odds),
+        };
+      })
+      .filter(Boolean);
+
+    if (!positions.length) return { stress: null, exposurePct: 0 };
+
+    const totalStake = positions.reduce((s, p) => s + p.stake, 0);
+    const stress = runBankrollStress({ bankroll, positions, floor: 0 }, { iterations: 500, seed: 42 });
+    return { stress, exposurePct: Math.round((totalStake / bankroll) * 100) };
+  }, [ctx?.appData]);
+
+  if (!stress || stress.empty) return null;
+
+  const bankroll = Number.parseFloat(ctx?.appData?.bankroll) || 1;
+  const { p10, p50, p90 } = stress.results;
+  const isHighExposure = exposurePct >= 25;
+  const pColor = (v) => v >= bankroll ? K.gn : v >= bankroll * 0.85 ? K.yl : K.rd;
+
+  return (
+    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
+        Bankroll Stress Test
+        {isHighExposure && (
+          <span style={{ padding: '1px 6px', background: `${K.yl}20`, border: `1px solid ${K.yl}50`, borderRadius: 4, color: K.yl, fontSize: 9, fontWeight: 700, letterSpacing: '0.5px' }}>
+            {exposurePct}% exposed
+          </span>
+        )}
+      </div>
+      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
+        {stress.iterations} Monte Carlo runs across {stress.positions} open bet{stress.positions !== 1 ? 's' : ''} — P10 is the pessimistic case.
+      </div>
+      <div style={{ display: 'flex', gap: 6, marginBottom: stress.floorBreachRate > 0 ? 8 : 0 }}>
+        {[['P10', p10, 'pessimistic'], ['P50', p50, 'median'], ['P90', p90, 'optimistic']].map(([label, val, hint]) => (
+          <div key={label} style={{ flex: 1, padding: '8px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 6, textAlign: 'center' }}>
+            <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 3 }}>{label}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: pColor(val), fontFamily: font }}>${val.toFixed(0)}</div>
+            <div style={{ fontSize: 8, color: K.mt, marginTop: 2 }}>{hint}</div>
+          </div>
+        ))}
+      </div>
+      {stress.floorBreachRate > 0 && (
+        <div style={{ fontSize: 10, color: K.rd, padding: '6px 10px', background: `${K.rd}10`, border: `1px solid ${K.rd}25`, borderRadius: 6 }}>
+          Ruin risk: {Math.round(stress.floorBreachRate * 100)}% of simulations ended below floor — consider closing exposure before adding more.
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ProfilePanel({
   user, proStatus, darkMode, toggleTheme,
   compactMode, toggleCompact, currency, setCurrency, onClose,
@@ -584,6 +673,9 @@ export default function ProfilePanel({
 
         {/* ── Kelly sandbox ────────────────────────────────────────── */}
         <KellySandboxSection />
+
+        {/* ── Bankroll stress test ─────────────────────────────────── */}
+        <BankrollStressSection />
 
         {/* ── Achievements ─────────────────────────────────────────── */}
         <AchievementsSection />
