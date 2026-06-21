@@ -1127,20 +1127,230 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
   );
 };
 
-// â•â•â• MOBILE BOTTOM NAV â•â•â•
-const MobileBottomNav = ({ gi, goTo }) => {
-  const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
-  const labels = ["Home","Convert","Calc","Track","Live","Learn"];
+// MOBILE NAV SHEET + BOTTOM NAV
+const SHEET_ANIM_CSS = `
+  @keyframes pgSheetSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes pgSheetBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .pg-nav-sheet { animation: pgSheetSlideUp 0.28s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .pg-nav-backdrop { animation: pgSheetBackdrop 0.18s ease forwards; }
+  .pg-nav-item:active { opacity: 0.7; transform: scale(0.97); }
+  .pg-nav-sheet-scroll::-webkit-scrollbar { display: none; }
+  @media (min-width: 769px) { .pg-mobile-nav, .pg-nav-sheet, .pg-nav-backdrop { display: none !important; } }
+`;
+
+const SHEET_GROUP_ICONS = ["H","C","X","T","L","K"];
+const SHEET_GROUP_LABELS = ["Home","Convert","Calc","Track","Live","Learn"];
+
+const MobileNavSheet = ({ groupIndex, currentGi, currentSlug, onSelect, onClose }) => {
+  const group = TABS[groupIndex];
+  if (!group) return null;
+  const isCalc = group.group === "Calculate";
+
+  const subcatOrder = ["Promo","Arbitrage","Value & EV","Advanced"];
+  const grouped = isCalc
+    ? subcatOrder.reduce((acc, sc) => {
+        const items = group.items.filter(it => it.subcat === sc);
+        if (items.length) acc.push({ sc, items });
+        return acc;
+      }, [])
+    : null;
+
   return (
-    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-          <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
-          <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
-        </button>
-      ))}
-    </div>
+    <>
+      <div
+        className="pg-nav-backdrop"
+        onClick={onClose}
+        style={{
+          position:"fixed", inset:0, zIndex:410,
+          background:"rgba(0,0,0,0.52)",
+          backdropFilter:"blur(5px)", WebkitBackdropFilter:"blur(5px)",
+        }}
+      />
+      <div
+        className="pg-nav-sheet"
+        style={{
+          position:"fixed", left:0, right:0, bottom:0,
+          height:"min(100dvh, 72vh)",
+          maxHeight:"100dvh",
+          background:`linear-gradient(172deg,${K.s1} 0%,${K.bg} 100%)`,
+          borderRadius:"18px 18px 0 0",
+          border:`1px solid ${K.bd2}`,
+          borderBottom:"none",
+          zIndex:415,
+          display:"flex", flexDirection:"column",
+          overflow:"hidden",
+          boxShadow:`0 -16px 64px rgba(0,0,0,0.55), inset 0 1px 0 ${K.gn}25`,
+        }}
+      >
+        <style>{SHEET_ANIM_CSS}</style>
+        {/* Drag handle */}
+        <div style={{display:"flex",justifyContent:"center",paddingTop:10,paddingBottom:2,flexShrink:0}}>
+          <div style={{width:36,height:4,borderRadius:4,background:K.bd2,opacity:0.7}}/>
+        </div>
+        {/* Header */}
+        <div style={{
+          display:"flex", alignItems:"center", justifyContent:"space-between",
+          padding:"8px 18px 10px", flexShrink:0,
+          borderBottom:`1px solid ${K.bd}40`,
+        }}>
+          <div>
+            <div style={{fontFamily:fontD,fontSize:17,fontWeight:800,color:K.tx,letterSpacing:"-0.4px",lineHeight:1}}>
+              {group.group}
+            </div>
+            <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.6px",marginTop:3}}>
+              {group.items.length} tools
+            </div>
+          </div>
+          <button onClick={onClose} style={{
+            background:`${K.bd}30`, border:`1px solid ${K.bd2}`,
+            borderRadius:8, width:30, height:30, cursor:"pointer",
+            color:K.mt, fontSize:13, display:"flex", alignItems:"center", justifyContent:"center",
+            fontFamily:font,
+          }}>x</button>
+        </div>
+        {/* Scrollable items */}
+        <div
+          className="pg-nav-sheet-scroll"
+          style={{
+            flex:1, overflowY:"auto", overflowX:"hidden",
+            padding:"8px 12px",
+            paddingBottom:"calc(20px + env(safe-area-inset-bottom,0px))",
+            WebkitOverflowScrolling:"touch",
+          }}
+        >
+          {isCalc ? grouped.map(({ sc, items }) => (
+            <div key={sc} style={{marginBottom:8}}>
+              <div style={{
+                fontSize:9, fontWeight:700, color:K.ac,
+                textTransform:"uppercase", letterSpacing:"1.6px",
+                padding:"10px 6px 6px",
+              }}>{sc}</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:5}}>
+                {items.map(item => {
+                  const tiIdx = group.items.indexOf(item);
+                  const isActive = currentGi === groupIndex && currentSlug === item.slug;
+                  return (
+                    <button
+                      key={item.slug}
+                      className="pg-nav-item"
+                      onClick={() => onSelect(groupIndex, tiIdx)}
+                      style={{
+                        padding:"11px 12px",
+                        background: isActive ? `${K.gn}18` : `${K.s1}70`,
+                        border:`1px solid ${isActive ? K.gn+"60" : K.bd}`,
+                        borderRadius:10, cursor:"pointer", textAlign:"left",
+                        color: isActive ? K.gn : K.tx,
+                        fontFamily:font, fontSize:13, fontWeight: isActive ? 600 : 400,
+                        minHeight:44, display:"flex", alignItems:"center",
+                        WebkitTapHighlightColor:"transparent",
+                        transition:"background 0.1s",
+                      }}
+                    >
+                      {item.pro && <span style={{color:K.pp,fontSize:8,marginRight:5,fontWeight:700}}>PRO </span>}
+                      {item.n}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )) : group.items.map((item, tiIdx) => {
+            const isActive = currentGi === groupIndex && currentSlug === item.slug;
+            return (
+              <button
+                key={item.slug}
+                className="pg-nav-item"
+                onClick={() => onSelect(groupIndex, tiIdx)}
+                style={{
+                  display:"flex", alignItems:"center", width:"100%",
+                  padding:"13px 16px", marginBottom:3,
+                  background: isActive ? `${K.gn}12` : "transparent",
+                  border:`1px solid ${isActive ? K.gn+"40" : "transparent"}`,
+                  borderRadius:12, cursor:"pointer", textAlign:"left",
+                  color: isActive ? K.gn : K.tx,
+                  fontFamily:font, fontSize:15, fontWeight: isActive ? 600 : 400,
+                  minHeight:48, letterSpacing:"-0.2px",
+                  WebkitTapHighlightColor:"transparent",
+                  transition:"background 0.1s",
+                }}
+              >
+                {item.pro && <span style={{
+                  fontSize:8, fontWeight:700, color:K.pp,
+                  textTransform:"uppercase", letterSpacing:"0.8px",
+                  background:`${K.pp}15`, padding:"2px 6px", borderRadius:4, marginRight:8,
+                }}>PRO</span>}
+                <span style={{flex:1}}>{item.n}</span>
+                {isActive && <span style={{color:K.gn,fontSize:8,marginLeft:8,opacity:0.7}}>active</span>}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+};
+
+const MobileBottomNav = ({ gi, goTo, slug }) => {
+  const [sheetGi, setSheetGi] = useState(null);
+  const labels = SHEET_GROUP_LABELS;
+  const icons = SHEET_GROUP_ICONS;
+
+  const handleTap = (i) => {
+    if (gi === i) {
+      setSheetGi(prev => prev === i ? null : i);
+    } else {
+      setSheetGi(null);
+      goTo(i, 0);
+    }
+  };
+
+  return (
+    <>
+      {sheetGi !== null && (
+        <MobileNavSheet
+          groupIndex={sheetGi}
+          currentGi={gi}
+          currentSlug={slug}
+          onSelect={(gIdx, tIdx) => { setSheetGi(null); goTo(gIdx, tIdx); }}
+          onClose={() => setSheetGi(null)}
+        />
+      )}
+      <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:420,padding:"5px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 30px rgba(0,0,0,0.28)"}}>
+        <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
+        {TABS.map((t,i) => (
+          <button key={t.group} onClick={() => handleTap(i)} style={{
+            flex:1, padding:"6px 2px 5px",
+            background: sheetGi === i ? `${K.gn}10` : "none",
+            border:"none",
+            borderTop: gi===i ? `2px solid ${K.gn}` : "2px solid transparent",
+            color: gi===i ? K.gn : K.mt,
+            cursor:"pointer", fontSize:9,
+            textTransform:"uppercase", letterSpacing:"0.5px",
+            fontFamily:font, display:"flex", flexDirection:"column", alignItems:"center", gap:3,
+            WebkitTapHighlightColor:"transparent",
+            transition:"color 0.12s",
+          }}>
+            <span style={{
+              fontSize:10, fontWeight:800, letterSpacing:"1px",
+              color: gi===i ? K.gn : K.mt,
+              fontFamily:fontD,
+            }}>{icons[i]}</span>
+            <span style={{fontWeight:gi===i?700:400,fontSize:8.5}}>{labels[i]}</span>
+            {gi === i && (
+              <span style={{
+                fontSize:7, color:K.gn, opacity:0.6, lineHeight:1,
+                marginTop:-2, letterSpacing:"0.5px",
+              }}>tap</span>
+            )}
+          </button>
+        ))}
+      </div>
+    </>
   );
 };
 
@@ -3758,7 +3968,7 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo}/>
+      <MobileBottomNav gi={gi} goTo={goTo} slug={slug}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate}/>
