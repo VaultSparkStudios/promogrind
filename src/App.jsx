@@ -22,6 +22,7 @@ import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMod
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./app/responsive.js";
+import { MobileNavDrawer } from "./app/MobileNavDrawer.jsx";
 import { ToastCtx, useToast, AppDataCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
@@ -1128,7 +1129,7 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
 };
 
 // â•â•â• MOBILE BOTTOM NAV â•â•â•
-const MobileBottomNav = ({ gi, goTo }) => {
+const MobileBottomNav = ({ gi, goTo, onOpenDrawer }) => {
   const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
   const labels = ["Home","Convert","Calc","Track","Live","Learn"];
   return (
@@ -1140,6 +1141,10 @@ const MobileBottomNav = ({ gi, goTo }) => {
           <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
         </button>
       ))}
+      <button onClick={onOpenDrawer} aria-label="Browse all tools" style={{flex:0.8,padding:"7px 4px",background:"none",border:"none",borderLeft:`1px solid ${K.bd}`,color:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+        <span style={{fontSize:18,lineHeight:1}}>☰</span>
+        <span>All</span>
+      </button>
     </div>
   );
 };
@@ -3047,6 +3052,7 @@ export default function App() {
   const [proStatus, setProStatus] = useState(null);
   const [authModalMode, setAuthModalMode] = useState(() => getInitialAuthMode());
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
+  const [showMobileNavDrawer, setShowMobileNavDrawer] = useState(false);
   const {
     darkMode,
     toggleTheme,
@@ -3758,7 +3764,10 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo}/>
+      <MobileBottomNav gi={gi} goTo={goTo} onOpenDrawer={() => setShowMobileNavDrawer(true)}/>
+      {showMobileNavDrawer && isMobile && (
+        <MobileNavDrawer tabs={TABS} gi={gi} ti={ti} navigate={navigate} onClose={() => setShowMobileNavDrawer(false)} />
+      )}
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate}/>
