@@ -21,7 +21,7 @@ import { useProfitNotifications } from "./app/useProfitNotifications.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
-import { MOBILE_NAV_RESPONSIVE_CSS } from "./app/responsive.js";
+import { MOBILE_NAV_RESPONSIVE_CSS, APP_SHELL_CSS } from "./app/responsive.js";
 import { ToastCtx, useToast, AppDataCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
@@ -1135,8 +1135,9 @@ const MobileBottomNav = ({ gi, goTo }) => {
     <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
       {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-          <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
+        <button key={t.group} className="pg-mobile-nav-btn" onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3,position:"relative"}}>
+          {gi===i && <span aria-hidden style={{position:"absolute",top:0,left:"22%",right:"22%",height:2,borderRadius:"0 0 2px 2px",background:K.gn,boxShadow:`0 1px 8px ${K.gn}80`}}/>}
+          <span style={{fontSize:gi===i?20:18,lineHeight:1}}>{icons[i]}</span>
           <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
         </button>
       ))}
@@ -3352,7 +3353,8 @@ export default function App() {
   if (pathname === "/feature-flags") {
     return (
       <FeatureFlagProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline}>
-      <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100vh", padding: 16 }}>
+      <div className="pg-app-shell" style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, padding: 16 }}>
+        <style>{APP_SHELL_CSS}</style>
         <Suspense fallback={<div style={{ padding: 32 }}>Loading…</div>}>
           <FeatureFlagAdmin proStatus={proStatus} />
         </Suspense>
@@ -3403,7 +3405,7 @@ export default function App() {
 
   if (!authReady) {
     return (
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+      <div className="pg-app-shell" style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}><style>{APP_SHELL_CSS}</style>
         <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
@@ -3442,7 +3444,8 @@ export default function App() {
   if (embedMode) {
     return (
       <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
+      <div className="pg-app-shell" style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,padding:16}}>
+        <style>{APP_SHELL_CSS}</style>
         <AppCalculatorRouter slug={slug} item={item} isLiveTool={isLiveTool} proStatus={proStatus} compareMode={false} calcGroupIndex={CALC_GI} groupIndex={gi} group={g} isDesktop={isDesktop} compareSlug={compareSlug} setCompareSlug={setCompareSlug} DailyDashboard={DailyDashboard} navigate={navigate} />
         {isEmbed && (
           <div style={{position:'fixed',bottom:8,right:12,fontSize:11,color:'#475569',opacity:0.7,zIndex:9999}}>
@@ -3456,7 +3459,8 @@ export default function App() {
 
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div className="pg-app-shell" style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg}}>
+      <style>{APP_SHELL_CSS}</style>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
@@ -3651,7 +3655,7 @@ export default function App() {
         <style>{`
           .pg-tabs::-webkit-scrollbar { display: none; }
           .pg-tab-btn { -webkit-tap-highlight-color: transparent; }
-          .pg-tab-btn:active { opacity: 0.7; }
+          .pg-tab-btn:active { opacity: 0.75; }
         `}</style>
         <div className="pg-tabs pg-scroll-x" role="tablist" aria-label="Primary navigation" style={{display:'flex',maxWidth:shellMaxWidth,width:'100%'}}>
           {TABS.map((t,i)=>(
