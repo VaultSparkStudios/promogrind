@@ -11,6 +11,15 @@ export const BREAKPOINTS = {
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
+  "@media (max-width: 768px) { .pg-tabs { scroll-snap-type: x mandatory; } .pg-tab-btn { scroll-snap-align: start; } }",
+].join(" ");
+
+export const APP_SHELL_CSS = [
+  ".pg-app-shell { min-height: 100vh; min-height: 100dvh; }",
+  ".pg-tab-btn { transition: color 0.15s, background 0.15s, border-color 0.15s; }",
+  ".pg-tab-btn:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; border-radius: 4px; }",
+  ".pg-mobile-nav-btn { transition: color 0.15s, transform 0.12s; }",
+  ".pg-mobile-nav-btn:active { transform: scale(0.88); }",
 ].join(" ");
 
 export function getViewportState(width = 1280) {
