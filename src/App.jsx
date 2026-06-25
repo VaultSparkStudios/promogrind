@@ -79,6 +79,7 @@ import UserMenu from "./components/UserMenu.jsx";
 import AuthDialog from "./components/AuthDialog.jsx";
 import BookCTA from "./components/BookCTA.jsx";
 import ShareCard from "./components/ShareCard.jsx";
+import { MobileNavDrawer } from "./components/MobileNavDrawer.jsx";
 import { getQuickCalcFallbackSlug } from "./workflows/actionGraph.js";
 
 function getInitialAuthMode() {
@@ -1128,18 +1129,26 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
 };
 
 // â•â•â• MOBILE BOTTOM NAV â•â•â•
-const MobileBottomNav = ({ gi, goTo }) => {
+const MobileBottomNav = ({ gi, goTo, onOpenMenu }) => {
   const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
   const labels = ["Home","Convert","Calc","Track","Live","Learn"];
   return (
     <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
       {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3,WebkitTapHighlightColor:"transparent"}}>
           <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
           <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
         </button>
       ))}
+      <button
+        onClick={onOpenMenu}
+        style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3,WebkitTapHighlightColor:"transparent"}}
+        aria-label="Open navigation menu"
+      >
+        <span style={{fontSize:18,lineHeight:1}}>&#9776;</span>
+        <span>Menu</span>
+      </button>
     </div>
   );
 };
@@ -3104,6 +3113,7 @@ export default function App() {
   const isEmbed = embedMode;
   const visitedSlugsRef = useRef(new Set());
   const [showSessionModal, setShowSessionModal] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
 
   // Keyboard ? shortcut for calc search
   useEffect(()=>{
@@ -3758,7 +3768,16 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo}/>
+      <MobileBottomNav gi={gi} goTo={goTo} onOpenMenu={()=>setShowMobileNav(true)}/>
+      {showMobileNav && (
+        <MobileNavDrawer
+          tabs={TABS}
+          gi={gi}
+          ti={ti}
+          goTo={goTo}
+          onClose={()=>setShowMobileNav(false)}
+        />
+      )}
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate}/>

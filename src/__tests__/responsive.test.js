@@ -15,3 +15,22 @@ describe("responsive launch contract", () => {
     expect(getViewportState(1024).navMode).toBe("top-tabs");
   });
 });
+
+describe("MobileNavDrawer contract", () => {
+  it("drawer file exports MobileNavDrawer", async () => {
+    const mod = await import("../components/MobileNavDrawer.jsx");
+    expect(typeof mod.MobileNavDrawer).toBe("function");
+  });
+
+  it("phone viewport is the target for mobile nav drawer", () => {
+    const phone = getViewportState(390);
+    expect(phone.isPhone).toBe(true);
+    expect(phone.isMobile).toBe(true);
+    expect(phone.navMode).toBe("bottom-tabs");
+  });
+
+  it("tablet and desktop viewports do not use bottom-tabs mode", () => {
+    expect(getViewportState(900).navMode).not.toBe("bottom-tabs");
+    expect(getViewportState(1280).navMode).not.toBe("bottom-tabs");
+  });
+});
