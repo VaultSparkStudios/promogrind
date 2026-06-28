@@ -21,7 +21,8 @@ import { useProfitNotifications } from "./app/useProfitNotifications.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
-import { MOBILE_NAV_RESPONSIVE_CSS } from "./app/responsive.js";
+import { MOBILE_NAV_RESPONSIVE_CSS, APP_DVH_CSS } from "./app/responsive.js";
+import { MobileBottomNav } from "./app/MobileNav.jsx";
 import { ToastCtx, useToast, AppDataCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
@@ -1127,22 +1128,7 @@ const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
   );
 };
 
-// â•â•â• MOBILE BOTTOM NAV â•â•â•
-const MobileBottomNav = ({ gi, goTo }) => {
-  const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
-  const labels = ["Home","Convert","Calc","Track","Live","Learn"];
-  return (
-    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-          <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
-          <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
-        </button>
-      ))}
-    </div>
-  );
-};
+// MobileBottomNav → src/app/MobileNav.jsx (CANON-041: SVG icons, glass, scrollable 100dvh)
 
 // â•â•â• CSV IMPORT MODAL â•â•â•
 const CSVImportModal = ({ onImport, onClose }) => {
@@ -3352,7 +3338,7 @@ export default function App() {
   if (pathname === "/feature-flags") {
     return (
       <FeatureFlagProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline}>
-      <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100vh", padding: 16 }}>
+      <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100dvh", padding: 16 }}>
         <Suspense fallback={<div style={{ padding: 32 }}>Loading…</div>}>
           <FeatureFlagAdmin proStatus={proStatus} />
         </Suspense>
@@ -3403,7 +3389,7 @@ export default function App() {
 
   if (!authReady) {
     return (
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
         <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
@@ -3442,7 +3428,7 @@ export default function App() {
   if (embedMode) {
     return (
       <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh",padding:16}}>
         <AppCalculatorRouter slug={slug} item={item} isLiveTool={isLiveTool} proStatus={proStatus} compareMode={false} calcGroupIndex={CALC_GI} groupIndex={gi} group={g} isDesktop={isDesktop} compareSlug={compareSlug} setCompareSlug={setCompareSlug} DailyDashboard={DailyDashboard} navigate={navigate} />
         {isEmbed && (
           <div style={{position:'fixed',bottom:8,right:12,fontSize:11,color:'#475569',opacity:0.7,zIndex:9999}}>
@@ -3456,7 +3442,8 @@ export default function App() {
 
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div className="pg-app-root" style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh"}}>
+      <style>{APP_DVH_CSS}</style>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
