@@ -11,7 +11,12 @@ export const BREAKPOINTS = {
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
+  ".pg-mobile-nav::-webkit-scrollbar { display: none; }",
 ].join(" ");
+
+// Two-declaration dvh rule: 100vh as legacy fallback, 100dvh for iOS Safari 15.4+
+// (dynamic viewport height excludes the collapsible browser toolbar on mobile)
+export const APP_DVH_CSS = ".pg-app-root { min-height: 100vh; min-height: 100dvh; }";
 
 export function getViewportState(width = 1280) {
   const w = Number(width || 1280);
