@@ -11,7 +11,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync } from './lib/safe-spawn.mjs';
 
 const ROOT = process.cwd();
 const args = new Set(process.argv.slice(2));

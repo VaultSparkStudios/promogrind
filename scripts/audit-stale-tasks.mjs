@@ -4,7 +4,7 @@
 // Usage: node scripts/audit-stale-tasks.mjs [--apply]
 
 import { readFileSync, existsSync, writeFileSync } from 'fs';
-import { execSync } from 'child_process';
+import { execSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 

@@ -21,7 +21,7 @@
     "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
     "Run production auth email smoke after S91 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
   ],
-  "lastUpdated": "2026-06-18",
+  "lastUpdated": "2026-06-29",
   "silScore": 998,
   "silAvg3": 995,
   "silVelocity": 5,
@@ -35,9 +35,9 @@
     998,
     998
   ],
-  "ignisScore": 44064,
+  "ignisScore": 43431,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-06-03",
+  "ignisLastComputed": "2026-06-29",
   "testsPassing": 500,
   "testsTotal": 500,
   "testsLastRun": "2026-06-18",
@@ -101,14 +101,14 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-06-18",
-    "passing": 10,
+    "date": "2026-06-29",
+    "passing": 12,
     "warning": 0,
-    "failing": 2,
+    "failing": 0,
     "blockingFailing": 0,
-    "advisoryFailing": 2,
+    "advisoryFailing": 0,
     "total": 12,
-    "score": 83,
+    "score": 100,
     "checks": [
       {
         "id": "manifest",
@@ -168,14 +168,14 @@
       },
       {
         "id": "revenue",
-        "pass": false,
+        "pass": true,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
       },
       {
         "id": "ignis",
-        "pass": false,
+        "pass": true,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false

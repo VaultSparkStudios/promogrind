@@ -24,7 +24,7 @@
  *   node scripts/ops.mjs ignis-rank-selftest
  */
 
-import { spawn } from 'child_process';
+import { spawn } from './lib/safe-spawn.mjs';
 import http from 'http';
 import net from 'net';
 import path from 'path';

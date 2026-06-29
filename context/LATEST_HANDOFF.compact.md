@@ -1,39 +1,40 @@
-<!-- manual-compact: public-repo closeout fallback -->
-<!-- generated-at: 2026-06-18T00:00:00.000Z -->
+<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
+<!-- source-hash: 8564e2a274ab -->
+<!-- generated-at: 2026-06-29T06:34:24.159Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary (S96)
+# Handoff Summary
 
-## Session
-- Session 96 (2026-06-18)
-- Intent: close out after the founder pointed to Studio secrets, verify the correct Supabase token/project, refresh repo truth, commit, and push. Outcome: achieved.
+Session: 96 (continuity/closeout)
 
-## Shipped This Session
-- Confirmed PromoGrind Supabase project ref is `fjnpzjjyhnpmunfoycrp`; the other shared Studio Supabase project is `ckwtolofoqzrqouqkmvs`.
-- Extracted the token-shaped `sbp_...` value from `vaultspark-studio-ops/secrets/supabase-pat.txt` without printing the secret.
-- Redeployed `create-checkout` to PromoGrind with `npm run deploy:function:checkout`.
-- Verified `node scripts\verify-production-launch.mjs`: `create-checkout` returns 200 for `scout_monthly`, 0 blocking failures.
-- Manually reran Deploy Pages as `27791869430`; run passed.
+Status: Intent achieved
 
-## Current Intent
-- Run production auth email proof, complete Stripe smoke and friend beta evidence, and refresh stale revenue/IGNIS.
+What Shipped (S96)
+- Corrected Supabase auth path: use `--for supabase.admin` / `--for supabase.client`; generic `--for supabase` alias is wrong capability check.
+- Redeployed production `create-checkout` to correct PromoGrind project ref `fjnpzjjyhnpmunfoycrp` (other shared Studio project is `ckwtolofoqzrqouqkmvs`); used token-shaped `sbp_...` substring only.
+- Verified production: `create-checkout` returns 200 for `scout_monthly`, 0 blocking failures.
+- Verified GitHub: Deploy Pages run `27791869430` passed; CI and brief-format green on commit `f9a98c9`.
+- Refreshed truth surfaces and pushed completed state.
 
-## Now Bucket (top 3)
-- Run production auth email smoke: confirmation, resend, forgot-password, recovery link, new-password sign-in.
-- Complete `npm run smoke:stripe -- --record` and `npm run beta:check -- --record` with real evidence.
-- Refresh stale revenue/IGNIS derived intelligence.
+Current Intent
+- Move from launch verification into external launch proofs and refresh derived intelligence.
 
-## Blockers (top 3)
-- Production auth email not yet completed.
-- Stripe smoke test pending.
-- Friend-beta proof recordings outstanding.
+Now Bucket (Top 3)
+- Run production auth email checks.
+- Continue Stripe smoke and friend-beta proof recordings.
+- Refresh stale revenue and IGNIS derived intelligence (advisory drift noted in ops doctor 10/12).
 
-## Human-Blocked Items
-- None open (blocker preflight at S92 found 0 Human Action Required items).
+Blockers (Top 3)
+- Advisory affiliate coverage item outstanding (non-blocking).
+- Pre-push hook hangs on this Windows machine; documented workaround is `--no-verify` push only after clean secret/audit scans.
+- Public-repo shim fallbacks in use for missing scripts (`package-trust`, `skill-profile`, etc.); install deps only after package-trust equivalent runs.
 
-## Notes
-- S95/S96 used documented `--no-verify` push path after equivalent scans because the Windows pre-push hook is known to hang.
-- `scan:supply-chain` currently reports review-only lifecycle scripts for `core-js`, `esbuild`, `fsevents`, and `sharp`.
+Human-Blocked Items
+- None open (blocker preflight: 0 Human Action Required as of S94).
 
-Next session: run production auth email smoke, complete Stripe/beta evidence, and refresh revenue/IGNIS derived intelligence.
+Reference Health
+- Last full verify (S95/S93): `npm test` 500/500, `verify:launch-local` exit 0, 0 vulnerabilities, 0 Dependabot alerts, secret scan clean.
+
+Next Session Pointer
+- Start with production auth email checks, then run Stripe smoke and friend-beta proof recordings.

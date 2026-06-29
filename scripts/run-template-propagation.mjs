@@ -10,7 +10,7 @@
  *   node scripts/run-template-propagation.mjs --apply --commit --push
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';

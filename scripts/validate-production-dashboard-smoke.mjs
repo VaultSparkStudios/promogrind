@@ -7,8 +7,8 @@
  * without adding a Playwright/Puppeteer dependency.
  */
 
-import { spawn } from "node:child_process";
-import { execFileSync } from "node:child_process";
+import { spawn } from "./lib/safe-spawn.mjs";
+import { execFileSync } from "./lib/safe-spawn.mjs";
 import fs from "node:fs";
 import http from "node:http";
 import net from "node:net";

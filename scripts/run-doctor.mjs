@@ -12,7 +12,7 @@
  *   node scripts/ops.mjs doctor
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';

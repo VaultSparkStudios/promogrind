@@ -17,7 +17,7 @@
  * Run: node scripts/render-all-surfaces.mjs
  */
 
-import { execFileSync } from 'child_process';
+import { execFileSync } from './lib/safe-spawn.mjs';
 import path from 'path';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');

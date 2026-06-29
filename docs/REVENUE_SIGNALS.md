@@ -5,7 +5,7 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ---
 
-## 2026-05-14 — Revenue Readiness Assessment
+## 2026-06-29 — Revenue Readiness Assessment
 
 ### Pipeline Summary
 
@@ -17,11 +17,11 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 | Project | Readiness | Stage | Lifecycle | Audience | Medium | Health | Next Milestone |
 |---|---:|---|---|---|---|---|---|
-| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Push S87, let GitHub Pages deploy, run real produ... |
+| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Run production auth email smoke, complete Stripe ... |
 
 ### Revenue-Ready Projects (score 7+)
 
-- **PromoGrind** (7/10) — S87 audit/go sprint: canonical launch proofs now feed the in-app command center, Operator Autopilot chooses the next action, trust receipts explain sensitive account/billing/AI/push/sync moments, discipline score rewards closed loops, recommendations explain outcome memory, and AI usage/cost avoidance is ledgered.
+- **PromoGrind** (7/10) — S96 closeout complete after verifying the correct Studio Supabase token/project: production create-checkout was redeployed to PromoGrind project fjnpzjjyhnpmunfoycrp, scout_monthly checkout returns 200, manual Deploy Pages run 27791869430 passed, and the S95 security/supply-chain gates remain green.
 
 ### Pre-Revenue Pipeline (score 4-6)
 
@@ -43,4 +43,4 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ---
 
-*Generated: 2026-05-14 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*
+*Generated: 2026-06-29 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*

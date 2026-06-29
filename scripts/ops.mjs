@@ -6,7 +6,7 @@
  * This file is now a thin dispatcher only.
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { COMMANDS, CATEGORIES, helpText } from './ops/index.mjs';

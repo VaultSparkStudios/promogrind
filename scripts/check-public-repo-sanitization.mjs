@@ -14,7 +14,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { execFileSync } from 'child_process';
+import { execFileSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import { loadProjectRegistry } from './lib/project-registry.mjs';
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // propagate-hooks.mjs — Add .claude/settings.json to all Studio OS repos that don't have it
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { execSync } from 'child_process';
+import { execSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 

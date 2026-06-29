@@ -17,7 +17,7 @@
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawn } from 'child_process';
+import { spawn } from './lib/safe-spawn.mjs';
 import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

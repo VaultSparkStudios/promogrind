@@ -14,7 +14,7 @@
  *   node scripts/ops.mjs history-scan [--since <date>] [--repo <path>] [--json]
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';

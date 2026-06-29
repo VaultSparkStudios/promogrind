@@ -11,7 +11,7 @@
  *   node scripts/ops-watch.mjs --interval 60   (custom interval in seconds)
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import readline from 'readline';
 import path from 'path';

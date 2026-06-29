@@ -20,7 +20,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync } from './lib/safe-spawn.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).map((a) => {

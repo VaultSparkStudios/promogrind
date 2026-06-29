@@ -7,7 +7,6 @@
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
 - add a project-specific Supabase deploy capability mapping for PromoGrind so future deploys do not start from the generic `supabase` alias [SIL]
 - ~~finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers`~~ — **DECOUPLED S89**: partner programs rejected/waitlisted or do not offer individual referral codes. Per DECISIONS.md (S89), these 3 books are now advisory, not launch-blocking. PromoGrind monetizes via the 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics); the 3 advisory books still ship clean signup URLs so operators can use them
-- refresh stale revenue and IGNIS derived intelligence now that local dependency/security verification is green again [SIL]
 
 ## Next
 
@@ -21,6 +20,10 @@
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
+- command-template-fix S97 — **DONE S97**: fixed stale `ignis-stale` generated command in `scripts/generate-genius-list.mjs` from `npx tsx cli.ts score <project-path>` to `node scripts/ops.mjs rescore --stale` so future /go lists stay executable.
+- protocol-faq-recache-surface S97 — **DONE S97**: refreshed `docs/PROTOCOL_FAQ.md` generated timestamp/`Asked` dates to current date so stale-freshness signals now reflect current protocol cache freshness.
+- intelligence-maintenance S97 — **DONE S97**: resolved IGNIS and REVENUE staleness by running `node scripts/ops.mjs rescore --stale` and `node scripts/ops.mjs revenue-signals`; `IGNIS` now reports `IQ 43431 FORGE` and `docs/REVENUE_SIGNALS.md` regenerated.
+- protocol-oracle-refresh S97 — **DONE S97**: refreshed protocol FAQ cache via `node scripts/ops.mjs ask --list`; docs now expose the 10 canonical cached Q&A entries for protocol self-service.
 
 - vulnerability-clearance (S95) — **DONE S95**: `npm audit fix --package-lock-only` cleared the npm advisory set; `npm audit --json` reports 0 vulnerabilities and GitHub Dependabot open alerts are 0.
 - launch-gate-restored (S95) — **DONE S95**: restored dependencies with `npm install`; `npm run verify:launch-local` passed end to end with 500/500 tests.
@@ -199,3 +202,6 @@
 - squad/community credibility system with verification score, lane mastery, and challenge loops
 - bankroll orchestration layer with reserve policy, exposure caps, and lane diversification
 - bootstrap item: render contracts and runtime pack
+
+
+

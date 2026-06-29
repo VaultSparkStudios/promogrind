@@ -11,7 +11,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { execFileSync, execSync } from 'child_process';
+import { execFileSync, execSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import { validateSlug, validateDate } from './lib/validate.mjs';
 

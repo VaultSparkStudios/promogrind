@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-06-18 (Session 96 closeout) -->
+<!-- generated-at: 2026-06-29 (Session 96 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 96 closeout · 2026-06-18.
+> **Fast-boot brief** — generated at Session 96 closeout · 2026-06-29.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 97 · 2026-06-18 · FOUNDER MODE                          ║
+║  Session 97 · 2026-06-29 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -35,7 +35,7 @@
 ║                                                                  ║
 ║    998/1000   ███████████████████████░   100%                    ║
 ║    SIL v3.0  ·  Avg3: ?  ·  Velocity 5↑                          ║
-║    Last active: 20621d  ·  Last closeout: 0d  ·  (active = newe  ║
+║    Last active: 20632d  ·  Last closeout: 11d  ·  (active = new  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -59,9 +59,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     20,575 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~10,288 tok/turn  ·  cache 50%  ·  87 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     15,109 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~7,555 tok/turn  ·  cache 50%  ·  119 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -69,8 +69,8 @@
 ║  ✓  Tests         500/500 passing (2026-06-18)                   ║
 ║  ✓  Velocity      5 ↑  ·  Debt: →                                ║
 ║  ⚠  Runway        ~2 sessions                                    ║
-║  ✓  Context age   0d                                             ║
-║  ⛔  IGNIS         44064 FORGE  ·  15d old                        ║
+║  ⚠  Context age   11d                                            ║
+║  ✓  IGNIS         43431 FORGE  ·  0d old                         ║
 ║  ✓  Truth         green  ·  Genome: 24/25                        ║
 ║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
@@ -80,8 +80,8 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        10/12 (83%)  ·  2 failing                      ║
-║  ✓  Cost          real $0.00/7d · real metered total $0.0074 <   ║
+║  ✓  Doctor        12/12 (100%)  ·  2026-06-29  ✓                 ║
+║  ✓  Cost          real $0.00/7d · real metered total $0.0161 <   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -105,7 +105,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  995/1000  (↓3 vs current 998)                       ║
+║  Projected:  0/1000  (↓998 vs current 998)                       ║
 ║  All categories forecast stable or rising.                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -114,22 +114,11 @@
 ║  Founder portfolio scope · ranked by impact                    ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
-║  🔥  1  [IGNIS]  IGNIS re-score overdue (15d stale)            ║
-║        Portfolio intelligence scores degrade with age. Re-sco  ║
-║        ↳ npx tsx cli.ts score <project-path>                   ║
-║                                                                ║
-║  💡  2  [IGNIS]  Refresh REVENUE_SIGNALS.md (35d stale)        ║
-║        Revenue intelligence is time-sensitive. Regenerate to   ║
-║        ↳ node scripts/ops.mjs revenue-signals                  ║
-║                                                                ║
-║  🔧  3  [PROTO]  Protocol Oracle FAQ cache stale (51d)         ║
-║        Refresh the 10 Q&A pairs so agents self-serve current   ║
-║        ↳ node scripts/ops.mjs ask --list                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ```
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 96 closeout · 2026-06-18*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 96 closeout · 2026-06-29*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

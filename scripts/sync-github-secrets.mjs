@@ -19,7 +19,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
+import { execFileSync } from "./lib/safe-spawn.mjs";
 
 const ROOT = process.cwd();
 const ADMIN_ENV = path.join(ROOT, ".env.admin");

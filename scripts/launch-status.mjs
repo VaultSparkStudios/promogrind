@@ -6,7 +6,7 @@
  * available, and prints the exact manual proof runners that remain.
  */
 
-import { spawnSync } from "node:child_process";
+import { spawnSync } from "./lib/safe-spawn.mjs";
 import fs from "node:fs";
 import path from "node:path";
 

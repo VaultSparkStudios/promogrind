@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { execSync } from './lib/safe-spawn.mjs';
 
 const registry = JSON.parse(fs.readFileSync('portfolio/PROJECT_REGISTRY.json', 'utf8'));
 const results = [];

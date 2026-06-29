@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import path from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { execSync, spawnSync } from './lib/safe-spawn.mjs';
 
 const batch = JSON.parse(fs.readFileSync('portfolio/compiled/BATCH_ONBOARD_RESULT.json', 'utf8'));
 const registry = JSON.parse(fs.readFileSync('portfolio/PROJECT_REGISTRY.json', 'utf8'));

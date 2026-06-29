@@ -10,15 +10,15 @@ import path from 'node:path';
 
 const CATEGORIES = [
   'Dev Health', 'Creative Alignment', 'Momentum',
-  'Engagement', 'Process Quality', 'Cross-Repo Coherence',
-  'Security Posture', 'Ecosystem Integration', 'Capital Efficiency',
-  'Automation Coverage'
+  'Engagement', 'Process Quality', 'Cross-Repo Coher',
+  'Security Posture', 'Ecosystem Integ', 'Capital Efficiency',
+  'Automation Cover'
 ];
 
 const CATEGORY_ALIASES = {
-  'Cross-Repo Coher': 'Cross-Repo Coherence',
-  'Ecosystem Integ': 'Ecosystem Integration',
-  'Automation Cover': 'Automation Coverage',
+  'Cross-Repo Coherence': 'Cross-Repo Coher',
+  'Ecosystem Integration': 'Ecosystem Integ',
+  'Automation Coverage': 'Automation Cover',
   'Engagement (infra)': 'Engagement'
 };
 
@@ -36,16 +36,12 @@ export function parseSilHistory(silText, maxSessions = 5) {
     const end = i + 1 < sessions.length ? sessions[i + 1].idx : silText.length;
     const block = silText.slice(start, end);
     const cats = {};
-    // Supported table rows:
-    //   | N | Category Name | score | Δ | notes |
-    //   | Category Name | score | vs Last | notes |
-    const rowRe = /^\|\s*(?:(?:\d+)\s*\|\s*)?([A-Za-z][^|]+?)\s*\|\s*(\d+)\s*\|/gm;
+    // table rows: | N | Category Name | score | Δ | notes |
+    const rowRe = /^\|\s*\d+\s*\|\s*([A-Za-z][^|]+?)\s*\|\s*(\d+)\s*\|/gm;
     let rm;
     while ((rm = rowRe.exec(block)) !== null) {
       const raw = rm[1].trim();
-      if (raw.toLowerCase() === 'category') continue;
       const canonical = CATEGORY_ALIASES[raw] || raw;
-      if (!CATEGORIES.includes(canonical)) continue;
       cats[canonical] = Number(rm[2]);
     }
     sessions[i].categories = cats;

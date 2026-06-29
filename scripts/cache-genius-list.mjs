@@ -17,7 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { spawnSync } from 'node:child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 
 const ROOT = process.cwd();
 const CACHE_DIR = path.join(ROOT, '.cache');

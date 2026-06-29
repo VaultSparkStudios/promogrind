@@ -3,7 +3,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { readJson, readText } from './lib/context-parsing.mjs';

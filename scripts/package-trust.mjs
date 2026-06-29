@@ -11,7 +11,7 @@
  *   node scripts/package-trust.mjs --download-url https://example.com/file.zip
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 
 const args = process.argv.slice(2);
 const MODE_JSON = args.includes('--json');

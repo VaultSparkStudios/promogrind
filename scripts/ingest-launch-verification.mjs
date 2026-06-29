@@ -20,7 +20,7 @@
  * Requires the `gh` CLI authenticated against the repo.
  */
 
-import { execFileSync } from "node:child_process";
+import { execFileSync } from "./lib/safe-spawn.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";

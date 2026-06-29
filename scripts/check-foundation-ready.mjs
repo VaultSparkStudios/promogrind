@@ -5,7 +5,7 @@
 //   node scripts/check-foundation-ready.mjs --project <slug>
 
 import { readFileSync, existsSync, readdirSync } from 'fs';
-import { execFileSync } from 'child_process';
+import { execFileSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 

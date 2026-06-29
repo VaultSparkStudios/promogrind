@@ -15,7 +15,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import { appendEvent } from './lib/studio-events.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

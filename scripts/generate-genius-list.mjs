@@ -441,7 +441,7 @@ if (ignisAge >= 7) {
   add('ignis-stale', urgency, 'intelligence', urgency === 'critical' ? '🔥' : '⚡',
     `IGNIS re-score overdue (${ignisAge}d stale)`,
     'Portfolio intelligence scores degrade with age. Re-score before CI auto-flags it.',
-    'npx tsx cli.ts score <project-path>', Math.min(20, ignisAge));
+    'node scripts/ops.mjs rescore --stale', Math.min(20, ignisAge));
 }
 
 // ── Genome dimension drop ─────────────────────────────────────────────────────
@@ -861,3 +861,4 @@ ranked.forEach(({ icon, tier, title, ignisScore }, i) => {
   console.log(`  ${String(i + 1).padStart(2)}. ${icon} [${tier.toUpperCase()}]  IGNIS ${String(ignisScore).padStart(3)}  ${title.slice(0, 58)}`);
 });
 console.log(`  IGNIS source: ${ignisSource}${isLiveRankingAvailable() ? ' (MCP configured)' : ' (fallback — set IGNIS_MCP_URL for live)'}`);
+

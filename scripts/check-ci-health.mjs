@@ -22,7 +22,7 @@
  *   - With --json: machine-readable JSON report
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

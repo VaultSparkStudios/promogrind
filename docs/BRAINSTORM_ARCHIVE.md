@@ -1,6 +1,6 @@
 # Brainstorm Archive
 
-> Generated: 2026-04-22 · Total ideas parsed: 0 · Deduplicated: 0 · Committed: 0 · Orphaned: 0
+> Generated: 2026-06-29 · Total ideas parsed: 71 · Deduplicated: 69 · Committed: 69 · Orphaned: 0
 
 ---
 
@@ -17,10 +17,40 @@ Sorted by recurrence. High-recurrence = strong signal of persistent need.
 
 ---
 
-## Committed Ideas (0 total)
+## Committed Ideas (69 total)
 
 | Idea | Last Session | Prob |
 |---|---|---|
+| Add adaptive-ranking telemetry snapshots so hot/cold lane tuning can g | S73 | unknown |
+| Auto-route scanner and community findings into the shared workflow gra | S69 | unknown |
+| Add a public-repo-safe package-trust fallback that validates lockfile- | S94 | unknown |
+| Add fixture tests for SIL history parsing so forecast regressions cann | S94 | unknown |
+| Add a closeout-board invariant that every public project with `liveUrl | S94 | unknown |
+| Add `scan:supply-chain` into the pre-push hook once the Windows hook w | S95 | unknown |
+| Add a small fixture suite for `package-trust.mjs` so Windows npm shim  | S95 | unknown |
+| Add an artifact ingester step that prints dependency/security posture  | S95 | unknown |
+| Add a project-specific `promogrind.supabase.deploy` capability check s | S96 | unknown |
+| Add a small deploy-artifact ingester that records the latest green Dep | S96 | unknown |
+| Convert the production auth email smoke into a guided runner with evid | S96 | unknown |
+| Build a guided promo passport that turns first account → first calcula | S87 | unknown |
+| Add a production `dist/` exposure gate that inspects built assets for  | S87 | unknown |
+| Expand the rule-first AI router so deterministic EV/hedge cases produc | S87 | unknown |
+| Add shareable, privacy-safe trust receipts for resolved promos so user | S87 | unknown |
+| Enable `react-hooks/rules-of-hooks` ESLint rule (or add a guard test)  | S83 | unknown |
+| Add a one-line `npm run verify:live-bundle` script that curls `promogr | S83 | unknown |
+| Fix or downgrade the chronic `Deploy Pages` workflow red. The actual d | S83 | unknown |
+| Add `npm run smoke:production-dashboard` to the GitHub post-deploy `la | S82 | unknown |
+| Add a post-deploy diff in `launch:status` that compares local commit/b | S82 | unknown |
+| Add a read-only launch command center card that renders `post-deploy.j | S82 | unknown |
+| Pull the latest deploy verification artifact into the launch dashboard | S74 | unknown |
+| Keep extracting `src/App.jsx` by moving the next public-facing panel c | S74 | unknown |
+| Add adaptive-ranking telemetry snapshots so recommendation weighting c | S74 | unknown |
+| Add a post-deploy production verification artifact/job around `scripts | S73 | unknown |
+| Add affiliate-link validation so missing or placeholder sportsbook mon | S73 | unknown |
+| Add a post-deploy GitHub Actions smoke job that runs `scripts/verify-p | S72 | unknown |
+| Move affiliate coverage into a small structured config validator so mi | S72 | unknown |
+| Add a launch-readiness diagnostic that reads one canonical source and  | S71 | unknown |
+| Add remote reconciliation tests for workflow suggestions once the live | S71 | unknown |
 
 ---
 

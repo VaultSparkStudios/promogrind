@@ -23,7 +23,7 @@
  *   2 — usage error
  */
 
-import { spawnSync } from 'child_process';
+import { spawnSync } from './lib/safe-spawn.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { VIEWS, viewsReading } from './lib/view-registry.mjs';
