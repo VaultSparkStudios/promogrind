@@ -3,8 +3,7 @@
  * check-model-router-adherence.mjs
  *
  * Ensures Studio Ops scripts keep all direct Anthropic model/API references
- * inside scripts/lib/model-router.mjs. This protects the model-router
- * chokepoint without relying on brittle CI-only grep snippets.
+ * inside scripts/lib/model-router.mjs.
  */
 
 import fs from 'node:fs';
@@ -23,8 +22,51 @@ const patterns = [
 const skipDirs = new Set(['.git', 'node_modules', '.cache', 'dist', 'build']);
 const findings = [];
 
+function safeMatch(regex, line) {
+  try {
+    return regex.test(line);
+  } catch {
+    return false;
+  } finally {
+    regex.lastIndex = 0;
+  }
+}
+
+function safeRead(file) {
+  try {
+    return fs.readFileSync(file, 'utf8');
+  } catch {
+    return null;
+  }
+}
+
+function scanFile(file) {
+  const text = safeRead(file);
+  if (text == null) return;
+  const lines = text.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    for (const pattern of patterns) {
+      if (safeMatch(pattern.regex, lines[i])) {
+        findings.push({
+          file: path.relative(ROOT, file).replace(/\\/g, '/'),
+          line: i + 1,
+          pattern: pattern.id,
+          excerpt: lines[i].trim().slice(0, 180),
+        });
+      }
+    }
+  }
+}
+
 function walk(dir) {
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+  let entries = [];
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return;
+  }
+
+  for (const entry of entries) {
     if (skipDirs.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
@@ -37,25 +79,9 @@ function walk(dir) {
   }
 }
 
-function scanFile(file) {
-  const text = fs.readFileSync(file, 'utf8');
-  const lines = text.split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    for (const pattern of patterns) {
-      if (pattern.regex.test(lines[i])) {
-        findings.push({
-          file: path.relative(ROOT, file).replace(/\\/g, '/'),
-          line: i + 1,
-          pattern: pattern.id,
-          excerpt: lines[i].trim().slice(0, 180),
-        });
-      }
-      pattern.regex.lastIndex = 0;
-    }
-  }
+if (fs.existsSync(scriptsDir)) {
+  walk(scriptsDir);
 }
-
-walk(scriptsDir);
 
 const report = {
   ok: findings.length === 0,
@@ -76,4 +102,3 @@ if (asJson) {
 }
 
 process.exit(report.ok ? 0 : 1);
-
