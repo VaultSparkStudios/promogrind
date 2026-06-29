@@ -1,4 +1,4 @@
-# Genius Hit List — Session 97
+# Genius Hit List — Session 98
 
 > Generated: 2026-06-29 | Scope: founder-portfolio | Pattern detectors: 0 signals evaluated | Top 12 shown
 

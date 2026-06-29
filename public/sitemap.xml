@@ -89,6 +89,7 @@
   <!-- Company / compliance pages -->
   <url><loc>https://promogrind.bet/about/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://promogrind.bet/compliance/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://promogrind.bet/contact/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 
   <!-- Marketing & legal pages -->
   <url><loc>https://promogrind.bet/promogrind-verified/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -100,6 +101,8 @@
   <url><loc>https://promogrind.bet/disclaimer/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://promogrind.bet/dmca/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://promogrind.bet/data-policy/</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://promogrind.bet/agents.json</loc><changefreq>monthly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://promogrind.bet/.well-known/llms.txt</loc><changefreq>monthly</changefreq><priority>0.2</priority></url>
 
   <!-- Additional keyword SEO pages -->
   <url><loc>https://promogrind.bet/free-bet-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>

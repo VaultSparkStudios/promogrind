@@ -1,12 +1,12 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-06-29",
-  "generatedAtMs": 1782764502320,
-  "session": 98,
-  "vectorHash": "09eb37f33bb35d6a",
+  "generatedAtMs": 1782768470186,
+  "session": 99,
+  "vectorHash": "a334f232ac4aeaf8",
   "silTotal": 1000,
   "silMax": 1000,
-  "silAvg3": 999,
+  "silAvg3": 1000,
   "velocity": 3,
   "debt": "down",
   "runway": "~2 sessions",
@@ -34,12 +34,12 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Record real production auth email proof, then complete Stripe smoke and friend-beta evidence; optionally link Advisor calibration predictions to settled workflow outcomes.",
-  "currentFocus": "S98 shipped Risk Radar in Today Dashboard, AI cache/calibration telemetry wiring, and canonical launch-proof blockers in Launch Command Center; local launch gate is green at 502/502 tests.",
+  "nextMilestone": "Verify Brevo forwarding for contact@promogrind.bet via Studio Ops Ark reply, then record real production auth email proof, Stripe smoke, and friend-beta evidence; schedule app-jsx-decomposition-finale.",
+  "currentFocus": "S99 shipped dual-audience public surfaces (/agents.json and /.well-known/llms.txt), exposed /contact/ in footer/sitemap, hardened UX route integrity to require those public files, wrote canon adoption posture, and kept Brevo contact forwarding as an honest Ark follow-up; local launch gate remains green at 502/502 tests.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
+    "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
-    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
-    "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record)."
+    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record)."
   ]
 }

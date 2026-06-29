@@ -41,6 +41,7 @@ export const AppFooter = () => (
         <a href="/data-policy/" style={{ color: K.mt, textDecoration: "none" }}>Data Policy</a>
         <a href="/about/" style={{ color: K.mt, textDecoration: "none" }}>About</a>
         <a href="/compliance/" style={{ color: K.mt, textDecoration: "none" }}>Compliance</a>
+        <a href="/contact/" style={{ color: K.mt, textDecoration: "none" }}>Contact</a>
       </p>
     </div>
   </div>

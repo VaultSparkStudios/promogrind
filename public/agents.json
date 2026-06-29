@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "name": "PromoGrind",
+  "url": "https://promogrind.bet/",
+  "description": "PromoGrind is a sportsbook promo calculator, tracking, and operator-decision system from VaultSpark Studios LLC.",
+  "owner": {
+    "name": "VaultSpark Studios LLC",
+    "url": "https://vaultsparkstudios.com/"
+  },
+  "contact": {
+    "email": "contact@promogrind.bet",
+    "url": "https://promogrind.bet/contact/"
+  },
+  "audience": [
+    "sportsbook promo operators",
+    "matched betting users",
+    "responsible sports betting analysts",
+    "AI agents evaluating public product and compliance surfaces"
+  ],
+  "allowed_agent_use": {
+    "indexing": true,
+    "summarization": true,
+    "citation": true,
+    "training": false,
+    "automated_account_creation": false,
+    "automated_betting": false
+  },
+  "primary_surfaces": [
+    "https://promogrind.bet/",
+    "https://promogrind.bet/about/",
+    "https://promogrind.bet/compliance/",
+    "https://promogrind.bet/privacy/",
+    "https://promogrind.bet/terms/",
+    "https://promogrind.bet/contact/"
+  ],
+  "policy_surfaces": {
+    "privacy": "https://promogrind.bet/privacy/",
+    "terms": "https://promogrind.bet/terms/",
+    "affiliate_disclosure": "https://promogrind.bet/affiliate-disclosure/",
+    "responsible_gambling": "https://promogrind.bet/responsible-gambling/",
+    "dmca": "https://promogrind.bet/dmca/",
+    "llms": "https://promogrind.bet/.well-known/llms.txt"
+  },
+  "product_boundaries": [
+    "PromoGrind is not a sportsbook and does not place wagers.",
+    "Calculator output is educational and should be independently verified before a user takes action.",
+    "Users must comply with local laws and sportsbook terms.",
+    "Must be 21+ where required by law."
+  ],
+  "rights": {
+    "license": "Proprietary - All Rights Reserved, VaultSpark Studios LLC",
+    "reuse": "Do not reproduce full pages, private app data, account data, or proprietary calculations beyond ordinary search snippets and citation."
+  },
+  "last_updated": "2026-06-29"
+}

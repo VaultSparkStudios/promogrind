@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "session": 99,
+  "date": "2026-06-29",
+  "rubric": "product",
+  "items": [
+    {
+      "id": "dual-audience-public-files",
+      "tier": "Fire",
+      "axis": "public-launch-canon",
+      "effort": "45m",
+      "impact": 9,
+      "innovation": 5,
+      "priority": 31.5,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "public/agents.json and public/.well-known/llms.txt were absent before S99 and exist after S99."
+    },
+    {
+      "id": "contact-surface-hardening",
+      "tier": "Fire",
+      "axis": "reachability-compliance",
+      "effort": "45m",
+      "impact": 9,
+      "innovation": 4,
+      "priority": 29.7,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Footer and sitemap now expose /contact/ plus agent-facing public files."
+    },
+    {
+      "id": "public-surface-route-guard",
+      "tier": "High",
+      "axis": "regression-prevention",
+      "effort": "30m",
+      "impact": 8,
+      "innovation": 5,
+      "priority": 28,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "validate-ux-route-integrity now requires contact and dual-audience files; smoke passed."
+    },
+    {
+      "id": "brevo-contact-forwarding-proof",
+      "tier": "High",
+      "axis": "email-delivery-proof",
+      "effort": "external",
+      "impact": 9,
+      "innovation": 3,
+      "priority": 0,
+      "premiseVerified": true,
+      "status": "honest-deferral",
+      "evidence": "check-secrets --for brevo reports missing locally; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to studio-ops."
+    }
+  ],
+  "verification": {
+    "uxRouteIntegrity": "passed",
+    "agentsJsonParse": "passed",
+    "launchLocal": "passed 502/502",
+    "doctor": "passed 12/12 blockingFailing 0"
+  }
+}

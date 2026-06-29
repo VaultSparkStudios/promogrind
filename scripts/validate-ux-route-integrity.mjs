@@ -30,6 +30,7 @@ const requiredPublicPages = [
   "bonus-bet",
   "arb-calculator",
   "promogrind-vs-profitduel",
+  "contact",
   "privacy",
   "terms",
   "responsible-gambling",
@@ -39,6 +40,11 @@ const requiredPublicPages = [
   "data-policy",
   "about",
   "compliance",
+];
+
+const requiredPublicFiles = [
+  "agents.json",
+  ".well-known/llms.txt",
 ];
 
 function walkHtml(dir, files = []) {
@@ -76,6 +82,10 @@ for (const slug of requiredAppSlugs) {
 
 for (const page of requiredPublicPages) {
   if (!publicPathExists(`/${page}/`)) errors.push(`public page missing: /${page}/`);
+}
+
+for (const file of requiredPublicFiles) {
+  if (!fs.existsSync(path.join(publicDir, file))) errors.push(`public file missing: /${file}`);
 }
 
 const htmlFiles = walkHtml(publicDir);

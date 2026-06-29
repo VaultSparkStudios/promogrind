@@ -213,3 +213,14 @@
 - ai-cache-calibration-wiring S98 — **DONE S98**: Advisor/Chat cache paths now record prompt-cache hit/miss stats, and saved Advisor workflows record AI calibration predictions keyed to workflow id.
 - canonical-launch-proof-command-center S98 — **DONE S98**: Launch Command Center now consumes canonical launch-proof blockers and treats nonblocking partial affiliate coverage as advisory instead of a manual launch blocker.
 - external-proof-evidence S98 — **HONEST DEFERRAL S98**: production auth email, Stripe smoke, and friend-beta proof remain pending because they require real mailbox/payment/tester evidence; no fabricated proof recorded.
+
+## Shipped This Session (S99)
+
+- dual-audience-public-files S99 - **DONE S99**: added `public/agents.json` and `public/.well-known/llms.txt` so humans and AI agents can inspect PromoGrind product boundaries, rights, policies, and contact path.
+- contact-surface-hardening S99 - **DONE S99**: app footer and `public/sitemap.xml` now expose `/contact/`; sitemap also lists `/agents.json` and `/.well-known/llms.txt`.
+- public-surface-route-guard S99 - **DONE S99**: `scripts/validate-ux-route-integrity.mjs` now requires `/contact/`, `/agents.json`, and `/.well-known/llms.txt`; full launch gate passed 502/502.
+- brevo-contact-forwarding-proof S99 - **ARK SHIPPED S99**: local `brevo` capability is missing, so delivery is not claimed; shipped Ark cargo `01JSAJMBF321A097D8CE8E12B9` to Studio Ops to configure/verify Brevo forwarding for `contact@promogrind.bet` -> `founder@vaultsparkstudios.com`.
+
+## S99 Follow-up
+
+- [SIL] Continue `app-jsx-decomposition-finale`: `src/App.jsx` remains ~3592 lines despite existing provider/router extraction; next pass should extract another cohesive shell slice with focused tests.

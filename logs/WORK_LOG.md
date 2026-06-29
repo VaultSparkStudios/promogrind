@@ -320,3 +320,14 @@ Append chronological entries.
 - Fixed launch truth: Launch Command Center now uses canonical proof-derived blockers and treats nonblocking partial affiliate coverage as advisory.
 - Verification: `npm test` passed 502/502; `npm run verify:launch-local` passed end to end with 0 public-sanitization findings.
 - Honest deferrals: production auth email, Stripe smoke, and friend-beta proof remain pending real-world evidence tasks; no proof was fabricated.
+
+## 2026-06-29 - Session 99 Codex goal arc
+
+- Ran `/goal` as a continuous `/arc` mission: `/start` -> `/audit` -> `/implement` -> `/closeout`.
+- Startup: `git pull --rebase origin main` was already up to date, context meter said CONTINUE, doctor passed 12/12, blocker preflight showed 0 Human Action Required items, and canon adoption was missing then written to `context/CANON_ADOPTION.md`.
+- Audit: generated `docs/AUDIT_2026-06-29-S99.{md,json}` after the live genius list returned 0 items and `ops.mjs innovation-pack` was unavailable.
+- Shipped public dual-audience surfaces: `public/agents.json` and `public/.well-known/llms.txt`.
+- Hardened reachability and regression coverage: app footer and sitemap expose `/contact/`; sitemap includes the new agent files; UX route integrity now requires `/contact/`, `/agents.json`, and `/.well-known/llms.txt`.
+- Honest deferral: local `brevo` capability is missing, so delivery for `contact@promogrind.bet` was not claimed. Ark cargo `01JSAJMBF321A097D8CE8E12B9` asks Studio Ops to configure/verify forwarding to `founder@vaultsparkstudios.com`.
+- Verification: `npm run verify:launch-local` passed end to end with 502/502 tests; `node scripts/ops.mjs doctor --update-json` passed 12/12 with `blockingFailing: 0`.
+- Remaining proof blockers: real production auth email smoke, Stripe smoke purchase, friend-beta pass, and Brevo forwarding evidence.

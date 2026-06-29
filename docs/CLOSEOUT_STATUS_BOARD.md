@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-29 (Session 98 closeout) -->
+<!-- generated-at: 2026-06-29 (Session 99 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S98 ═════════════════════════╗
+╔══ SESSION CLOSEOUT · PromoGrind · S99 ═════════════════════════╗
 ║  Date: 2026-06-29  ·  SIL: 1000/1000  ·  Velocity: 3 down        ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Added `docs/AUDIT_2026-06-29.json` and refreshed `docs/AUDIT  ║
-║  ✓ Added `buildRiskRadarSummary` and a Today Dashboard Risk Rad  ║
-║  ✓ Wired prompt-cache accounting into Promo Advisor and Promo C  ║
-║  ✓ Recorded Advisor calibration predictions when an AI recommen  ║
-║  ✓ Moved Launch Command Center blocker truth onto canonical lau  ║
+║  ✓ Added `docs/AUDIT_2026-06-29-S99.{md,json}` with the live-co  ║
+║  ✓ Added `public/agents.json` with product boundaries, policy l  ║
+║  ✓ Added `public/.well-known/llms.txt` with AI-agent guidance a  ║
+║  ✓ Exposed `/contact/` from the app footer and `public/sitemap.  ║
+║  ✓ Added `/agents.json` and `/.well-known/llms.txt` to `public/  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -32,7 +32,7 @@
 ║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
+║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
@@ -40,8 +40,8 @@
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 27 files  ·  M:25 A:0 D:0 ?:2                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 23 files  ·  M:18 A:0 D:0 ?:5                          ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -53,7 +53,7 @@
 ║  Compliance:    —                                                ║
 ║  Tests:         502/502                                          ║
 ║  IGNIS:         1d ago                                           ║
-║  Truth:         green                                            ║
+║  Truth:         green-with-email-proof-follow-up                 ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗

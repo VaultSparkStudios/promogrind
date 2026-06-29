@@ -433,3 +433,12 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Decision: add `npm run smoke:auth-email` and canonical `authEmailSmoke` launch proof fields, while keeping status `pending` until a real deployed email pass records redacted evidence.
 - Why this was chosen: launch truth must be source-of-truth evidence, not a checklist claim. The runner makes the blocker executable without storing email bodies, passwords, tokens, full auth links, or unmasked addresses.
 - Cross-repo note: the PromoGrind-specific Supabase deploy capability map is Studio Ops-owned. Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` requests `promogrind.supabase.deploy`; PromoGrind did not edit the sibling repo tree.
+
+### 2026-06-29 - S99 contact surface is shippable before delivery proof, but delivery is not claimed
+
+- Status: accepted
+- Context: Public-site canon requires a `/contact` page and a working on-domain email. PromoGrind already had a tracked `/contact/` page, but footer/sitemap/agent discovery did not expose the surface, and `/agents.json` plus `/.well-known/llms.txt` were absent. Local `node scripts/check-secrets.mjs --for brevo` reports the Brevo capability missing.
+- Decision: ship the repo-owned public contact and agent-discovery surfaces now, make the route validator enforce them, and ship Ark cargo `01JSAJMBF321A097D8CE8E12B9` to Studio Ops for Brevo inbound forwarding/copy verification. Do not mark email delivery complete until real Brevo evidence exists.
+- Alternatives considered: leave the public surface absent until Brevo is configured; mass-rewrite every legacy VaultSpark support mailbox; claim delivery from code alone.
+- Why this was chosen: users and AI agents need a canonical contact and policy contract immediately, but observability honesty forbids pretending that DNS/mail forwarding is proven by HTML alone.
+- Follow-up: once Studio Ops replies with delivery proof, update `context/PROJECT_STATUS.json`, `context/TASK_BOARD.md`, and the launch proof surface if a dedicated proof key is added.

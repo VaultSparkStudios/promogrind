@@ -87,3 +87,13 @@ Last updated: 2026-06-18 (S96)
 - Fixed launch observability truth: Launch Command Center now uses canonical `context/LAUNCH_PROOFS.json` blockers via `getLaunchProofCommandItems`; nonblocking partial affiliate coverage is advisory instead of a manual blocker.
 - Verification: `npm test` passed 502/502, and `npm run verify:launch-local` passed end to end with 0 public-sanitization findings.
 - Honest pending proof gates remain unchanged: real production auth email smoke, real Stripe smoke purchase, and trusted friend beta pass still require real evidence and were not faked.
+
+### Session 99 closeout update - 2026-06-29
+
+- Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`; the generated genius list was empty, so the protocol fallback audit used live public-surface and launch-canon checks.
+- Added dual-audience public files: `public/agents.json` and `public/.well-known/llms.txt` now publish PromoGrind's product boundaries, policy links, rights posture, and agent-use constraints.
+- Strengthened public reachability: app footer and `public/sitemap.xml` now expose `/contact/`; the sitemap also lists `/agents.json` and `/.well-known/llms.txt`.
+- Hardened regression coverage: `scripts/validate-ux-route-integrity.mjs` now fails if `/contact/`, `/agents.json`, or `/.well-known/llms.txt` disappear.
+- Canon adoption posture now exists at `context/CANON_ADOPTION.md` after the startup canon-adoption check found it missing.
+- Honest external follow-up: Brevo delivery for `contact@promogrind.bet` is not proven locally; Ark cargo `01JSAJMBF321A097D8CE8E12B9` asks Studio Ops to configure/verify forwarding/copy to `founder@vaultsparkstudios.com`.
+- Verification: `npm run verify:launch-local` passed end to end with 502/502 tests; `node scripts/ops.mjs doctor --update-json` passed 12/12 with `blockingFailing: 0`.

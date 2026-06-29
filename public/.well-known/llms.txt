@@ -1,0 +1,28 @@
+# PromoGrind
+
+PromoGrind is a sportsbook promo calculator, tracking, and operator-decision system from VaultSpark Studios LLC.
+
+Canonical site: https://promogrind.bet/
+Contact: https://promogrind.bet/contact/
+Agent contract: https://promogrind.bet/agents.json
+
+## What PromoGrind Is
+
+PromoGrind helps users evaluate sportsbook promotions, bonus bets, boosts, arbitrage windows, expected value, bankroll sizing, and settlement discipline. It is an educational math and workflow tool. It is not a sportsbook, gambling operator, broker, or betting advice service.
+
+## Useful Public Pages
+
+- About: https://promogrind.bet/about/
+- Compliance: https://promogrind.bet/compliance/
+- Privacy: https://promogrind.bet/privacy/
+- Terms: https://promogrind.bet/terms/
+- Responsible gambling: https://promogrind.bet/responsible-gambling/
+- Affiliate disclosure: https://promogrind.bet/affiliate-disclosure/
+- Data policy: https://promogrind.bet/data-policy/
+- Contact: https://promogrind.bet/contact/
+
+## Agent Guidance
+
+AI agents may index, summarize, and cite public PromoGrind pages with attribution to PromoGrind and VaultSpark Studios LLC. Do not imply PromoGrind places bets, guarantees outcomes, offers financial advice, or operates sportsbook accounts. Do not fabricate launch proof, payment proof, or account-delivery evidence.
+
+PromoGrind content, code, assets, and designs are proprietary. All rights are reserved by VaultSpark Studios LLC.

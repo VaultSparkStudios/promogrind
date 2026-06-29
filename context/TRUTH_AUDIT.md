@@ -232,3 +232,11 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - AI cost/calibration truth improved: Advisor/Chat cache hit/miss paths now update prompt-cache stats, and saved Advisor workflows create calibration predictions instead of leaving the calibration module decorative.
 - Operator risk truth improved: Today Dashboard now renders real bankroll stress/pre-mortem/twin-battle signals from source data rather than leaving those engines library-only.
 - Verification truth: `npm test` passed 502/502 and `npm run verify:launch-local` passed end to end on 2026-06-29.
+
+## Session 99 Truth Update - 2026-06-29
+
+- Public reachability truth improved: `/contact/` is exposed from the app footer and `public/sitemap.xml`.
+- Dual-audience truth improved: `public/agents.json` and `public/.well-known/llms.txt` now exist and are required by `scripts/validate-ux-route-integrity.mjs`.
+- Canon adoption truth improved: `context/CANON_ADOPTION.md` now exists after the startup adoption check reported it missing.
+- Email delivery truth remains yellow: `contact@promogrind.bet` is visible in public surfaces, but Brevo forwarding/copy is not proven locally. Ark cargo `01JSAJMBF321A097D8CE8E12B9` requests Studio Ops verification.
+- Verification truth: `npm run verify:launch-local` passed end to end with 502/502 tests, and doctor passed 12/12 with `blockingFailing: 0` on 2026-06-29.
