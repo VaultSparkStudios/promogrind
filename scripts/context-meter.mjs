@@ -27,33 +27,18 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from './lib/safe-spawn.mjs';
 import { VERDICT_EXITS } from './lib/context-verdicts.mjs';
-// Inline context window sizes — keeps this script self-contained for propagation to all project repos.
-// Update here if new models are added to the studio fleet.
-function contextWindowForAgent(agent) {
-  if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
-  if (agent === 'codex') return 1_000_000;
-  if (agent === 'claude-code') return 1_000_000;
-  return 200_000;
-}
+import { PRICING_PER_MTOK, MODELS, contextWindowForAgent, shortModelName } from './lib/model-router.mjs';
 
-// Price table per model — kept in sync with scripts/lib/model-router.mjs PRICING_PER_MTOK.
-// Per 1M tokens (list price, non-batch). Keyed first by exact model-ID prefix
-// (so a future Opus 4.8 with a different price shows up correctly), falling
-// back to tier substring match.
+// Price table per model (imported from the model-router chokepoint).
 const PRICING = {
-  opus:   { input: 15.00, cacheWrite: 18.75, cacheRead: 1.50, output: 75.00 },
-  sonnet: { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
-  haiku:  { input:  1.00, cacheWrite:  1.25, cacheRead: 0.10, output:  5.00 },
+  [shortModelName(MODELS.opus)]:   PRICING_PER_MTOK[MODELS.opus],
+  [shortModelName(MODELS.sonnet)]: PRICING_PER_MTOK[MODELS.sonnet],
+  [shortModelName(MODELS.haiku)]:  PRICING_PER_MTOK[MODELS.haiku],
 };
-// Exact-prefix overrides for known model IDs. Add to this map when pricing
-// diverges for a specific generation; fallback below keeps the tier default.
-const PRICING_BY_ID = {
-  'claude-opus-4-8':         PRICING.opus,
-  'claude-opus-4-7':         PRICING.opus,
-  'claude-opus-4-6':         PRICING.opus,
-  'claude-sonnet-4-6':       PRICING.sonnet,
-  'claude-haiku-4-5':        PRICING.haiku,
-};
+// Build prefix map from canonical model IDs while avoiding hardcoded model-id literals.
+const PRICING_BY_ID = Object.fromEntries(
+  Object.entries(PRICING_PER_MTOK).map(([modelId, pricing]) => [modelId, pricing])
+);
 function priceFor(modelId) {
   if (!modelId) return PRICING.sonnet;
   for (const [prefix, p] of Object.entries(PRICING_BY_ID)) {
