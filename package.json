@@ -36,7 +36,8 @@
     "deploy:brief": "supabase functions deploy send-daily-brief",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "smoke:auth-email": "node scripts/run-auth-email-smoke.mjs"
   },
   "dependencies": {
     "@sentry/react": "^10.62.0",

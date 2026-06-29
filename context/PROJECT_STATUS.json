@@ -13,35 +13,36 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 96,
-  "currentFocus": "S96 closeout complete after verifying the correct Studio Supabase token/project: production create-checkout was redeployed to PromoGrind project fjnpzjjyhnpmunfoycrp, scout_monthly checkout returns 200, manual Deploy Pages run 27791869430 passed, and the S95 security/supply-chain gates remain green.",
-  "nextMilestone": "Run production auth email smoke, complete Stripe smoke/friend-beta evidence, then refresh stale revenue and IGNIS derived intelligence.",
+  "currentSession": 97,
+  "currentFocus": "S97 shipped the production auth email smoke runner, canonical authEmailSmoke launch proof, generated app mirror, and Launch Command Center priority ordering; local launch gate is green at 501/501 tests.",
+  "nextMilestone": "Record real production auth email proof, then complete Stripe smoke and friend-beta evidence; Studio Ops should consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 for promogrind.supabase.deploy capability mapping.",
   "blockers": [
+    "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
-    "Complete one friend-facing auth/recovery/calculator/pricing pass after deploy (runner ready: npm run beta:check -- --record).",
-    "Run production auth email smoke after S91 deploy: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in."
+    "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
+    "Studio Ops capability follow-up: consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 and add promogrind.supabase.deploy for project ref fjnpzjjyhnpmunfoycrp."
   ],
   "lastUpdated": "2026-06-29",
-  "silScore": 998,
-  "silAvg3": 995,
-  "silVelocity": 5,
+  "silScore": 1000,
+  "silAvg3": 999,
+  "silVelocity": 3,
   "silDebt": "down",
-  "silLastSession": 96,
+  "silLastSession": 97,
   "silMax": 1000,
   "silSparkline": [
-    981,
     988,
     998,
     998,
-    998
+    998,
+    1000
   ],
   "ignisScore": 43431,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-29",
-  "testsPassing": 500,
-  "testsTotal": 500,
-  "testsLastRun": "2026-06-18",
-  "lastDeployStatus": "deployed-unannounced",
+  "testsPassing": 501,
+  "testsTotal": 501,
+  "testsLastRun": "2026-06-29",
+  "lastDeployStatus": "deployed-unannounced; local launch gate green",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-05-17",
   "truthGenome": "24/25",
@@ -50,12 +51,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 500/500 in S95 via npm run verify:launch-local"
+      "status": "passing 501/501 in S97 via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S95 with 500/500 tests, audit clean, supply-chain scan clean, and public sanitization clean"
+      "status": "passing end to end in S97 with 501/501 tests, auth proof contract, browser smoke, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -91,10 +92,10 @@
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
-    "momentum": 99,
+    "momentum": 100,
     "engagement": 100,
     "processQuality": 100,
-    "crossRepoCoherence": 99,
+    "crossRepoCoherence": 100,
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
@@ -203,9 +204,10 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "founder",
-  "sessionModeAutoShiftedAt": "2026-05-18T03:21:29.751Z",
+  "sessionMode": "builder",
+  "sessionModeAutoShiftedAt": "2026-06-29T07:44:39.152Z",
   "planModeDetected": "missing",
   "planModeCheckedAt": "2026-06-18T20:14:14.049Z",
-  "planModeLastActivatedAt": "2026-05-14T01:19:08.850Z"
+  "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
+  "lastAgent": "codex"
 }

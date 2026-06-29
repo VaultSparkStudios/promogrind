@@ -86,4 +86,43 @@ describe("launch state helpers", () => {
     expect(center.unresolvedBlockerCount).toBe(1);
     expect(center.nextActions[0].key).toBe("affiliateLinks");
   });
-});
+
+  it("prioritizes auth email proof before other manual launch blockers", () => {
+    const proofs = {
+      schemaVersion: "1.0",
+      proofs: {
+        affiliateLinks: {
+          label: "Affiliate links",
+          status: "partial",
+          blocking: false,
+          evidenceRequired: ["verified links"],
+          evidence: [],
+        },
+        authEmailSmoke: {
+          label: "Production auth email smoke",
+          status: "pending",
+          blocking: true,
+          details: "Production email delivery is unproven.",
+          nextStep: "Run the auth email smoke runner.",
+          evidenceRequired: ["confirmation delivered", "reset delivered", "new password sign-in"],
+          evidence: [],
+        },
+        stripeSmoke: {
+          label: "Stripe smoke",
+          status: "pending",
+          blocking: true,
+          details: "Checkout proof is pending.",
+          evidenceRequired: ["checkout", "portal"],
+          evidence: [],
+        },
+      },
+    };
+
+    const center = getLaunchCommandCenter({
+      blockers: getLaunchProofCommandItems(proofs),
+      validation: resolveLaunchValidation(),
+    });
+
+    expect(center.nextActions.map((item) => item.key).slice(0, 2)).toEqual(["authEmailSmoke", "stripeSmoke"]);
+  });});
+

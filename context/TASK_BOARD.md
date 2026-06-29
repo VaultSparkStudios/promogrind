@@ -5,7 +5,6 @@
 - production auth email smoke after the latest deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
-- add a project-specific Supabase deploy capability mapping for PromoGrind so future deploys do not start from the generic `supabase` alias [SIL]
 - ~~finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers`~~ — **DECOUPLED S89**: partner programs rejected/waitlisted or do not offer individual referral codes. Per DECISIONS.md (S89), these 3 books are now advisory, not launch-blocking. PromoGrind monetizes via the 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics); the 3 advisory books still ship clean signup URLs so operators can use them
 
 ## Next
@@ -14,13 +13,14 @@
 - rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
 - add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
 - add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
-- add a production auth email smoke evidence runner with redacted proof capture, matching the Stripe/friend-beta proof pattern [SIL]
 - continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos/`useProfitNotifications` (App.jsx is still ~4300 lines)
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
 ## Shipped This Session
-- command-template-fix S97 — **DONE S97**: fixed stale `ignis-stale` generated command in `scripts/generate-genius-list.mjs` from `npx tsx cli.ts score <project-path>` to `node scripts/ops.mjs rescore --stale` so future /go lists stay executable.
+- production-auth-email-smoke-runner S97 — **DONE S97**: added `npm run smoke:auth-email` with redacted evidence capture for production account confirmation, resend, forgot-password, recovery-link, and new-password sign-in; wired `authEmailSmoke` into canonical launch proofs and browser-safe mirror.
+- launch-proof-priority-order S97 — **DONE S97**: updated Launch Command Center prioritization so auth-email proof ranks before Stripe and friend-beta manual launch blockers; added regression coverage in `launchState.test.js`.
+- promogrind-supabase-capability-cargo S97 — **ARK SHIPPED S97**: local repo has no `secrets/CAPABILITY_MAP.json`; shipped Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` to Studio Ops requesting `promogrind.supabase.deploy` mapping to the Studio PAT plus explicit project ref `fjnpzjjyhnpmunfoycrp`.- command-template-fix S97 — **DONE S97**: fixed stale `ignis-stale` generated command in `scripts/generate-genius-list.mjs` from `npx tsx cli.ts score <project-path>` to `node scripts/ops.mjs rescore --stale` so future /go lists stay executable.
 - protocol-faq-recache-surface S97 — **DONE S97**: refreshed `docs/PROTOCOL_FAQ.md` generated timestamp/`Asked` dates to current date so stale-freshness signals now reflect current protocol cache freshness.
 - intelligence-maintenance S97 — **DONE S97**: resolved IGNIS and REVENUE staleness by running `node scripts/ops.mjs rescore --stale` and `node scripts/ops.mjs revenue-signals`; `IGNIS` now reports `IQ 43431 FORGE` and `docs/REVENUE_SIGNALS.md` regenerated.
 - protocol-oracle-refresh S97 — **DONE S97**: refreshed protocol FAQ cache via `node scripts/ops.mjs ask --list`; docs now expose the 10 canonical cached Q&A entries for protocol self-service.
@@ -202,6 +202,7 @@
 - squad/community credibility system with verification score, lane mastery, and challenge loops
 - bankroll orchestration layer with reserve policy, exposure caps, and lane diversification
 - bootstrap item: render contracts and runtime pack
+
 
 
 

@@ -217,3 +217,10 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Runtime truth changed: the missing `ParlayHedge` route was a real boot blocker and is now restored with a concrete calculator module.
 - Service-worker truth changed: `public/sw.js` now guards cache writes against consumed/opaque responses, matching the production console failure that previously occurred.
 - Remaining noise is honestly classified as non-blocking: browser-extension messages and PostHog remote-config/feature-flag failures are still visible in production but were not the cause of the app failing to boot.
+
+## Session 97 Truth Update - 2026-06-29
+
+- Auth/recovery launch truth is stronger but still honest: `authEmailSmoke` is now a canonical launch proof with an executable redacted runner; status remains pending until real production email delivery is recorded.
+- Launch Command Center truth now prioritizes the proof sequence from canonical launch proofs instead of stale hardcoded blocker keys.
+- Supabase deploy capability mapping is not complete in this repo; Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` asks Studio Ops to add the capability in the correct control plane.
+- Verification truth: `npm test` passed 501/501 and `npm run verify:launch-local` passed end to end on 2026-06-29.

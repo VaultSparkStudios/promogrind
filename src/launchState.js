@@ -337,12 +337,19 @@ export function getLaunchCommandCenter(input = {}) {
     readinessScore >= 45 ? "blocked" :
     "fragile";
 
-    const nextActions = [
-    unresolvedBlockers.find((item) => item.key === "pushConfig"),
-    unresolvedBlockers.find((item) => item.key === "stripeSmoke"),
-    unresolvedBlockers.find((item) => item.key === "affiliateLinks"),
-    unresolvedBlockers.find((item) => item.key === "friendPass"),
-  ].filter(Boolean).slice(0, 4);
+  const priorityOrder = ["authEmailSmoke", "stripeSmoke", "friendBeta", "affiliateLinks", "pushConfig"];
+  const nextActions = unresolvedBlockers
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => {
+      const ap = priorityOrder.indexOf(a.item.key);
+      const bp = priorityOrder.indexOf(b.item.key);
+      const ar = ap === -1 ? priorityOrder.length : ap;
+      const br = bp === -1 ? priorityOrder.length : bp;
+      if (ar !== br) return ar - br;
+      return b.item.requiredEvidenceCount - a.item.requiredEvidenceCount || a.index - b.index;
+    })
+    .map(({ item }) => item)
+    .slice(0, 4);
 
   return {
     readinessScore,
@@ -358,3 +365,4 @@ export function getLaunchCommandCenter(input = {}) {
     validation,
   };
 }
+

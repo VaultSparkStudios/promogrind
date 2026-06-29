@@ -32,6 +32,27 @@ export const LAUNCH_PROOFS = {
       ],
       "evidence": []
     },
+    "authEmailSmoke": {
+      "label": "Production auth email smoke",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": [
+        "soft-launch",
+        "full-launch",
+        "marketing-push"
+      ],
+      "details": "Production account confirmation, confirmation resend, forgot-password delivery, recovery-link routing, and new-password sign-in still need a real email-delivery proof against the deployed app.",
+      "nextStep": "Run `npm run smoke:auth-email -- --record` after creating a fresh production account and completing the confirmation/resend/reset flow. Record only masked email and provider IDs; never paste email bodies, tokens, passwords, or full auth links.",
+      "evidenceRequired": [
+        "fresh production account created",
+        "confirmation email delivered",
+        "confirmation resend verified",
+        "forgot-password email delivered",
+        "recovery link opens update-password UI",
+        "new password sign-in succeeds"
+      ],
+      "evidence": []
+    },
     "stripeSmoke": {
       "label": "Real Stripe smoke",
       "status": "pending",

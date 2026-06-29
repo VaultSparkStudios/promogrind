@@ -1,40 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 8564e2a274ab -->
-<!-- generated-at: 2026-06-29T06:34:24.159Z -->
+<!-- source-hash: 886e3918349a -->
+<!-- generated-at: 2026-06-29T07:44:56.679Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary
+SESSION HANDOFF SUMMARY
 
-Session: 96 (continuity/closeout)
+Session
+- Current: S97
+- Status: /arc mission complete (start, audit, implement, closeout)
 
-Status: Intent achieved
-
-What Shipped (S96)
-- Corrected Supabase auth path: use `--for supabase.admin` / `--for supabase.client`; generic `--for supabase` alias is wrong capability check.
-- Redeployed production `create-checkout` to correct PromoGrind project ref `fjnpzjjyhnpmunfoycrp` (other shared Studio project is `ckwtolofoqzrqouqkmvs`); used token-shaped `sbp_...` substring only.
-- Verified production: `create-checkout` returns 200 for `scout_monthly`, 0 blocking failures.
-- Verified GitHub: Deploy Pages run `27791869430` passed; CI and brief-format green on commit `f9a98c9`.
-- Refreshed truth surfaces and pushed completed state.
+Shipped This Session
+- Re-scored IGNIS, regenerated REVENUE_SIGNALS, refreshed protocol FAQ cache freshness
+- Fixed stale generated-command text in scripts/generate-genius-list.mjs (second-order refinement)
+- Updated context/TASK_BOARD.md; generated docs/AUDIT_2026-06-29.md and docs/IMPLEMENT_PLAN.md
+- Regenerated starter state via /start; context meter CONTINUE
 
 Current Intent
-- Move from launch verification into external launch proofs and refresh derived intelligence.
+- Maintain freshness of derived intelligence and complete remaining production verification carried from S96
 
 Now Bucket (Top 3)
-- Run production auth email checks.
-- Continue Stripe smoke and friend-beta proof recordings.
-- Refresh stale revenue and IGNIS derived intelligence (advisory drift noted in ops doctor 10/12).
+- Run production auth email checks
+- Continue Stripe smoke / friend-beta proof recordings
+- Refresh revenue/IGNIS derived intelligence on next cycle
 
 Blockers (Top 3)
-- Advisory affiliate coverage item outstanding (non-blocking).
-- Pre-push hook hangs on this Windows machine; documented workaround is `--no-verify` push only after clean secret/audit scans.
-- Public-repo shim fallbacks in use for missing scripts (`package-trust`, `skill-profile`, etc.); install deps only after package-trust equivalent runs.
+- Advisory: affiliate coverage item still open (non-blocking)
+- Supabase auth requires correct capability check (supabase.admin / supabase.client, not generic supabase alias)
+- Two shared Studio Supabase projects; must target PromoGrind ref fjnpzjjyhnpmunfoycrp (not ckwtolofoqzrqouqkmvs)
 
-Human-Blocked Items
-- None open (blocker preflight: 0 Human Action Required as of S94).
+Human-Blocked
+- None recorded
 
-Reference Health
-- Last full verify (S95/S93): `npm test` 500/500, `verify:launch-local` exit 0, 0 vulnerabilities, 0 Dependabot alerts, secret scan clean.
+Key Operational Notes
+- Deploy checkout: npm run deploy:function:checkout to project fjnpzjjyhnpmunfoycrp
+- Use only sbp_... token substring from vaultspark-studio-ops/secrets/supabase-pat.txt
+- Verify production: node scripts\verify-production-launch.mjs (expects create-checkout 200 for scout_monthly)
+- Secret checks: node ..\vaultspark-studio-ops\scripts\check-secrets.mjs --for supabase.admin / --for supabase.client
 
-Next Session Pointer
-- Start with production auth email checks, then run Stripe smoke and friend-beta proof recordings.
+Next Session
+- Start with production auth email checks, then resume Stripe smoke and friend-beta proof recordings.

@@ -69,3 +69,11 @@ Last updated: 2026-06-18 (S96)
 1. Run production auth email checks now that Deploy Pages is green.
 2. Complete `npm run beta:check -- --record` and `npm run smoke:stripe -- --record` with real tester/payment evidence.
 3. Refresh revenue/IGNIS derived intelligence, then schedule the dedicated `app-jsx-decomposition-finale` session.
+
+### Session 97 closeout update - 2026-06-29
+
+- Shipped a production auth email smoke runner: `npm run smoke:auth-email` now captures real deployed-account confirmation, resend, forgot-password, recovery-link, and new-password sign-in evidence with masking and token/password guards.
+- Canonical launch proofs now include `authEmailSmoke`; `src/data/launchProofs.generated.js` mirrors it into the app, so the Launch Command Center shows the auth-email proof gate alongside Stripe and friend-beta.
+- Launch Command Center now prioritizes auth-email proof before Stripe and friend-beta manual blockers, matching the current launch sequence.
+- Supabase deploy capability mapping remains Studio Ops-owned; Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` requests `promogrind.supabase.deploy` for project ref `fjnpzjjyhnpmunfoycrp` rather than editing the sibling repo.
+- Verification: `npm test` passed 501/501 and `npm run verify:launch-local` passed end to end.

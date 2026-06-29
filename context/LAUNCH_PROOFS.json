@@ -7,10 +7,22 @@
       "label": "Sportsbook monetization coverage",
       "status": "partial",
       "blocking": false,
-      "requiredFor": ["marketing-push"],
+      "requiredFor": [
+        "marketing-push"
+      ],
       "details": "PromoGrind monetizes via 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics). BetMGM, bet365, and BetRivers are partner-blocked (one rejected/waitlisted; the others do not offer individual referral codes). These books still ship with clean untracked signup URLs so operators can use them, but PromoGrind does not earn referral revenue on them. Launch is no longer gated on these external partner approvals; if/when they arrive, paste the URLs into src/books.js and rerun npm run verify:production.",
-      "activeReferralBooks": ["DraftKings", "FanDuel", "Caesars", "ESPN BET", "Fanatics"],
-      "advisoryBooks": ["BetMGM", "bet365", "BetRivers"],
+      "activeReferralBooks": [
+        "DraftKings",
+        "FanDuel",
+        "Caesars",
+        "ESPN BET",
+        "Fanatics"
+      ],
+      "advisoryBooks": [
+        "BetMGM",
+        "bet365",
+        "BetRivers"
+      ],
       "nextStep": "Optional: apply to affiliate networks (Income Access, FanCompass) for the 3 advisory books. Not required for launch.",
       "evidenceRequired": [
         "5 active referral URLs verified live after deploy",
@@ -18,11 +30,35 @@
       ],
       "evidence": []
     },
+    "authEmailSmoke": {
+      "label": "Production auth email smoke",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": [
+        "soft-launch",
+        "full-launch",
+        "marketing-push"
+      ],
+      "details": "Production account confirmation, confirmation resend, forgot-password delivery, recovery-link routing, and new-password sign-in still need a real email-delivery proof against the deployed app.",
+      "nextStep": "Run `npm run smoke:auth-email -- --record` after creating a fresh production account and completing the confirmation/resend/reset flow. Record only masked email and provider IDs; never paste email bodies, tokens, passwords, or full auth links.",
+      "evidenceRequired": [
+        "fresh production account created",
+        "confirmation email delivered",
+        "confirmation resend verified",
+        "forgot-password email delivered",
+        "recovery link opens update-password UI",
+        "new password sign-in succeeds"
+      ],
+      "evidence": []
+    },
     "stripeSmoke": {
       "label": "Real Stripe smoke",
       "status": "pending",
       "blocking": true,
-      "requiredFor": ["full-launch", "marketing-push"],
+      "requiredFor": [
+        "full-launch",
+        "marketing-push"
+      ],
       "details": "A real checkout, webhook, and customer-portal lifecycle pass still needs to be completed against the deployed app.",
       "nextStep": "Run docs/STRIPE_SMOKE_TEST.md against the deployed app with a real checkout, then record the checkout/session/subscription/customer-portal evidence.",
       "evidenceRequired": [
@@ -37,7 +73,11 @@
       "label": "Friend-facing beta pass",
       "status": "pending",
       "blocking": true,
-      "requiredFor": ["soft-launch", "marketing-push", "full-launch"],
+      "requiredFor": [
+        "soft-launch",
+        "marketing-push",
+        "full-launch"
+      ],
       "details": "One friend-facing pass through auth, account recovery, calculator, CTA, and pricing still needs to be completed.",
       "nextStep": "Have one trusted tester complete account creation/sign-in, confirmation or password recovery visibility, a top calculator, a sportsbook CTA review, and pricing review after deploy.",
       "evidenceRequired": [

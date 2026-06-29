@@ -426,3 +426,10 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: normal `git push`, which risks hanging and leaving closeout drift; repair the hook mid-closeout, which is unrelated to the requested closeout.
 - Why this was chosen: the hook's safety intent was satisfied by explicit scans, and closeout needed to land on GitHub.
 - Follow-up: repair the Windows pre-push hook wrapper as a dedicated task.
+
+### 2026-06-29 - S97 auth email proof is executable but not self-certifying
+
+- Context: production auth email delivery remained a launch blocker, but no repo-owned runner existed to capture confirmation/resend/reset evidence the way Stripe and friend-beta already do.
+- Decision: add `npm run smoke:auth-email` and canonical `authEmailSmoke` launch proof fields, while keeping status `pending` until a real deployed email pass records redacted evidence.
+- Why this was chosen: launch truth must be source-of-truth evidence, not a checklist claim. The runner makes the blocker executable without storing email bodies, passwords, tokens, full auth links, or unmasked addresses.
+- Cross-repo note: the PromoGrind-specific Supabase deploy capability map is Studio Ops-owned. Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` requests `promogrind.supabase.deploy`; PromoGrind did not edit the sibling repo tree.

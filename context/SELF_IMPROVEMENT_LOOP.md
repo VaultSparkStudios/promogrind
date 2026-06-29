@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S87:988 | S93:998 | S94:998 | S95:998 | S96:998
-Avgs - 3: 998.0 [N=3] | all: 826.7 [N=19]
-  └ 3-session (S94/S95/S96): Dev 100.0 | Align 100.0 | Momentum 99.0 | Engage 100.0 | Process 100.0 | Coher 99.7 | Sec 100.0 | Eco 99.7 | Cap 100.0 | Auto 100.0
+Sparkline (last 5 totals): S93:998 | S94:998 | S95:998 | S96:998 | S97:1000
+Avgs - 3: 998.7 [N=3] | all: 826.7 [N=19]
+  └ 3-session (S95/S96/S97): Dev 100.0 | Align 100.0 | Momentum 99.0 | Engage 100.0 | Process 100.0 | Coher 99.7 | Sec 100.0 | Eco 99.7 | Cap 100.0 | Auto 100.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-06-18 | Session 96 | Total: 998/1000 | Velocity: 5 | protocolVelocity: 5
+Last session: 2026-06-29 | Session 97 | Total: 1000/1000 | Velocity: 3 | protocolVelocity: 3
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -964,3 +964,30 @@ Protocol verification pass against the active `/start` -> `/audit` -> `/implemen
 **Top gap:** New libs aren't yet wired into UI surfaces (TwinBattleCard, LiveEdgeHeatmap, BankrollStressPanel, ProvenanceReceipts viewer, PreMortemModal). All have library tests but no operator-facing rendering yet — that's the natural next session's thin-integration pass.
 
 **Intent outcome:** Achieved — `/start`, `/audit`, `/implement`, and `/closeout` ran end-to-end with genius-level innovation and zero test regressions.
+
+## 2026-06-29 — Session 97 | Total: 1000/1000 | Velocity: 3 | Debt: down
+
+| Category | Score | Delta | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | -> | `npm test` passes 501/501 and `npm run verify:launch-local` passes end to end. |
+| Creative Alignment | 100 | -> | Auth proof workflow preserves PromoGrind's disciplined operator-system tone and avoids gambling-hype or fabricated launch claims. |
+| Momentum | 100 | +1 | Converted the repeated auth-email launch blocker into an executable runner and proof contract. |
+| Engagement | 100 | -> | Launch Command Center now prioritizes the next real operator proof in the right sequence. |
+| Process Quality | 100 | -> | Audit, implementation, verification, Ark cargo, and write-back were reconciled in one continuous arc. |
+| Cross-Repo Coherence | 100 | +1 | Studio Ops-owned Supabase capability mapping was shipped as Ark cargo instead of a sibling tree edit. |
+| Security Posture | 100 | -> | Runner redacts email evidence and rejects token/password/auth-link shaped payloads. |
+| Ecosystem Integration | 100 | -> | Canonical launch proofs, generated app mirror, command center, and launch validator now agree. |
+| Capital Efficiency | 100 | -> | No new paid dependency or variable-cost service added; proof runner uses existing Node tooling. |
+| Automation Coverage | 100 | -> | `smoke:auth` now validates the proof contract and runner guard; launch gate remains green. |
+
+**Total:** 1000/1000
+
+**Top win:** the last repo-controllable auth-email proof gap is now executable and validated without laundering manual evidence.
+
+**Top gap:** real-world proof remains pending: production auth email, Stripe smoke, and friend beta must still be completed by actual mailbox/payment/tester flows.
+
+**Committed to TASK_BOARD:**
+- Complete the real production auth email smoke with `npm run smoke:auth-email -- --record`.
+- Complete Stripe smoke and friend-beta proof recordings.
+
+

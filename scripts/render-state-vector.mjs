@@ -80,6 +80,7 @@ const vector = {
   vectorHash,
   // SIL & velocity
   silTotal: status.silScore ?? null,
+  silMax: status.silMax ?? (status.silCategoriesV3 ? 1000 : 500),
   silAvg3: status.silAvg3 ?? null,
   velocity,
   debt: status.silDebt ?? null,
@@ -119,4 +120,6 @@ fs.writeFileSync(outPath, JSON.stringify(vector, null, 2) + '\n', 'utf8');
 const rel = path.relative(ROOT, outPath);
 console.log(`✓ State vector → ${rel}`);
 console.log(`  Session ${vector.session} · hash ${vectorHash} · Now ${openNow.length} / Next ${openNext.length} / Blocked ${openBlocked.length}`);
-console.log(`  SIL ${vector.silTotal}/500 · velocity ${vector.velocity} · truth ${vector.truthStatus} · genome ${vector.genome}`);
+console.log(`  SIL ${vector.silTotal}/${vector.silMax} · velocity ${vector.velocity} · truth ${vector.truthStatus} · genome ${vector.genome}`);
+
+

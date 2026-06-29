@@ -31,6 +31,7 @@ const terms = read("public/terms/index.html");
 const privacy = read("public/privacy/index.html");
 const dataPolicy = read("public/data-policy/index.html");
 const proofs = JSON.parse(read("context/LAUNCH_PROOFS.json"));
+const packageJson = JSON.parse(read("package.json"));
 
 [
   ["resendPromoGrindConfirmation", "confirmation resend helper"],
@@ -108,6 +109,32 @@ for (const required of [
   }
 }
 
+
+const authEmailProof = proofs?.proofs?.authEmailSmoke;
+if (!authEmailProof) {
+  errors.push("context/LAUNCH_PROOFS.json missing authEmailSmoke proof");
+} else {
+  if (authEmailProof.status !== "pending" && authEmailProof.status !== "complete") {
+    errors.push("context/LAUNCH_PROOFS.json authEmailSmoke status must be pending or complete");
+  }
+  for (const required of [
+    "confirmation email delivered",
+    "confirmation resend verified",
+    "forgot-password email delivered",
+    "recovery link opens update-password UI",
+    "new password sign-in succeeds",
+  ]) {
+    if (!(authEmailProof.evidenceRequired || []).includes(required)) {
+      errors.push(`context/LAUNCH_PROOFS.json authEmailSmoke evidence missing: ${required}`);
+    }
+  }
+}
+
+if (packageJson?.scripts?.["smoke:auth-email"] !== "node scripts/run-auth-email-smoke.mjs") {
+  errors.push("package.json missing smoke:auth-email runner script");
+}
+
+assertIncludes(read("scripts/run-auth-email-smoke.mjs"), "assertSafeEvidence", "auth email evidence safety guard", errors);
 if (errors.length) {
   console.error("Auth launch smoke failed:\n");
   for (const error of errors) console.error(`- ${error}`);
@@ -115,3 +142,5 @@ if (errors.length) {
 }
 
 console.log("Auth launch smoke passed.");
+
+

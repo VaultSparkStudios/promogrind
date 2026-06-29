@@ -301,3 +301,12 @@ Append chronological entries.
 - Verification: `node scripts\verify-production-launch.mjs` reports 0 blocking failures with `create-checkout` 200; `npm run --silent smoke:production-dashboard` passes; Deploy Pages run `27791869430` passed; staged/all-tree secret scans remained clean.
 - Risks created or removed: removed the stale production checkout deploy-health blocker and confirmed the right shared Studio Supabase project was targeted. Remaining risks are external/manual: production auth email proof, one real Stripe smoke, one friend-beta pass, and advisory affiliate inventory.
 - Recommended next move: run production auth email smoke, then record Stripe and friend-beta evidence.
+
+## 2026-06-29 - Session 97 Codex arc
+
+- Ran `/start` -> `/audit` -> `/implement` -> `/closeout` as one continuous mission.
+- Added production auth email smoke runner and canonical `authEmailSmoke` proof surface.
+- Regenerated launch proof mirror and updated Launch Command Center blocker prioritization.
+- Shipped Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` to Studio Ops for the project-specific PromoGrind Supabase deploy capability mapping.
+- Verification: `npm test` 501/501; `npm run verify:launch-local` passed end to end.
+- External proof blockers remain honest: production auth email evidence, Stripe smoke purchase, and friend-beta pass still need real-world execution.

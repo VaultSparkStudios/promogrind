@@ -1,28 +1,27 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-18 (Session 96 closeout) -->
+<!-- generated-at: 2026-06-29 (Session 97 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S96 ═════════════════════════╗
-║  Date: 2026-06-18  ·  SIL: 998/1000  ·  Velocity: 5 down         ║
-║  Mode: FOUNDER  ·  Agent: claude-code                            ║
-║  Live:  preview  →  https://promogrind.bet                       ║
+╔══ SESSION CLOSEOUT · PromoGrind · S97 ═════════════════════════╗
+║  Date: 2026-06-29  ·  SIL: 1000/1000  ·  Velocity: 3 down        ║
+║  Mode: BUILDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Corrected the Supabase auth path: `node ..\vaultspark-studio  ║
-║  ✓ Confirmed the two shared Studio Supabase projects before dep  ║
-║  ✓ Redeployed `create-checkout` to `fjnpzjjyhnpmunfoycrp` with   ║
-║  ✓ Verified production: `node scripts\verify-production-launch.  ║
-║  ✓ Verified GitHub: manual Deploy Pages run `27791869430` passe  ║
+║  ✓ Added `scripts/run-auth-email-smoke.mjs` and `npm run smoke:  ║
+║  ✓ Added canonical `authEmailSmoke` launch proof and regenerate  ║
+║  ✓ Extended `npm run smoke:auth` to validate the auth-email pro  ║
+║  ✓ Updated Launch Command Center priority logic so auth-email p  ║
+║  ✓ Added launch-state regression coverage; full suite is now 50  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           99   ██████████                            ║
+║    Momentum           100  ██████████                            ║
 ║    Engagement         100  ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
-║    Coherence          99   ██████████                            ║
+║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
@@ -35,21 +34,25 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
+║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 15 files  ·  M:14 A:0 D:0 ?:1                          ║
+║  Changes: 28 files  ·  M:26 A:0 D:0 ?:2                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
+╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
+║  Staging:  not configured  ·  type: local                        ║
+║  Live:     https://promogrind.bet  ·  preview/FORGE (not yet SP  ║
+╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        10/12                                            ║
+║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         500/500                                          ║
-║  IGNIS:         16d ago                                          ║
+║  Tests:         501/501                                          ║
+║  IGNIS:         1d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

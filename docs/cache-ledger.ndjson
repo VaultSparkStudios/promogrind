@@ -2,3 +2,5 @@
 {"ts":"2026-06-18T20:14:26.172Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":2833,"output":919,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-06-29T06:34:24.155Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":5080,"output":715,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-06-29T06:34:24.158Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":5080,"output":715,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-06-29T07:44:56.675Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":1312,"output":706,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-06-29T07:44:56.678Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":1312,"output":706,"cache_read":0,"cache_create":0,"skill":null}

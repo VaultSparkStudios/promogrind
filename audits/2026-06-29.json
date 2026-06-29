@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-06-29",
+  "session": 97,
+  "project": "promogrind",
+  "agent": "codex",
+  "arc": ["start", "audit", "implement", "closeout"],
+  "shipped": [
+    "production auth email smoke runner",
+    "canonical authEmailSmoke launch proof",
+    "browser-safe launch proof mirror update",
+    "Launch Command Center proof priority ordering",
+    "Studio Ops Ark cargo for promogrind.supabase.deploy capability mapping"
+  ],
+  "deferredHonest": [
+    "real production auth email evidence still requires real mailbox flow",
+    "real Stripe smoke still requires real checkout flow",
+    "friend beta proof still requires trusted tester flow",
+    "Supabase capability mapping is Studio Ops-owned and was shipped as Ark cargo"
+  ],
+  "verification": {
+    "npm run smoke:auth": "pass",
+    "node --check src/launchState.js": "pass",
+    "node --check scripts/run-auth-email-smoke.mjs": "pass",
+    "npx vitest run src/__tests__/launchState.test.js": "5/5 pass",
+    "npm test": "501/501 pass",
+    "npm run verify:launch-local": "pass"
+  },
+  "arkCargo": ["01JSAF1R02AEA5B6F3FE74C3B4"],
+  "sil": {
+    "total": 1000,
+    "max": 1000
+  }
+}

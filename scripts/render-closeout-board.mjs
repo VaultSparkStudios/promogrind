@@ -61,6 +61,13 @@ function readJson(p) {
   try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return null; }
 }
 
+function readSessionLockAgent() {
+  try {
+    const lock = fs.readFileSync(path.join(PROJECT_ROOT, 'context', '.session-lock'), 'utf8');
+    return lock.match(/^agent:\s*(.+)$/m)?.[1]?.trim() || null;
+  } catch { return null; }
+}
+
 function readText(p) {
   try { return fs.readFileSync(p, 'utf8'); } catch { return ''; }
 }
@@ -104,7 +111,7 @@ function canonicalLiveUrl() {
   ].filter(Boolean);
   if (candidates.length > 0) {
     const url = candidates[0];
-    const vs = (entry?.vaultStatus || '').toUpperCase();
+    const vs = (entry?.vaultStatus || status?.vaultStatus || '').toUpperCase();
     const isLive = vs === 'SPARKED';
     return { url, badge: isLive ? '🌐 LIVE' : 'preview', type: 'production' };
   }
@@ -131,8 +138,8 @@ function deploymentRows() {
   ) || {};
   const stagingType = status?.stagingType ?? entry?.stagingType;
   const stagingUrl = status?.stagingUrl ?? entry?.stagingUrl;
-  const liveUrl = status?.runtimeUrl || entry?.runtimeUrl || entry?.liveUrl || entry?.deployedUrl;
-  const vs = (entry?.vaultStatus || '').toUpperCase();
+  const liveUrl = status?.runtimeUrl || status?.liveUrl || status?.deployedUrl || entry?.runtimeUrl || entry?.liveUrl || entry?.deployedUrl;
+  const vs = (entry?.vaultStatus || status?.vaultStatus || '').toUpperCase();
 
   // Staging row
   let staging;
@@ -145,6 +152,7 @@ function deploymentRows() {
   if (liveUrl && vs === 'SPARKED') live = `${liveUrl}  ·  🌐 LIVE (SPARKED)`;
   else if (liveUrl) live = `${liveUrl}  ·  preview/${vs || 'FORGE'} (not yet SPARKED)`;
   else if (vs === 'VAULTED') live = 'N/A — VAULTED (paused)';
+  else if (status?.liveUrl) live = `${status.liveUrl}  ·  preview/${vs || 'FORGE'} (not yet SPARKED)`;
   else live = 'N/A — pre-deploy (FORGE)';
 
   return { staging, live };
@@ -230,27 +238,29 @@ function gitChangeSummary() {
 }
 
 function agentMemoryRecentlyTouched() {
-  // Check whether agent memory (~/.claude/projects/<slug>/memory) has files
-  // modified within the last 24h. Best-effort — cross-platform path resolution
-  // varies; absence is reported as "·" rather than failing.
   const home = os?.homedir?.() || process.env.HOME || process.env.USERPROFILE;
   if (!home) return false;
   const slug = path.basename(ROOT);
-  // Project memory dirs use a prefix-encoded form; fall back to a glob scan.
-  const projectsDir = path.join(home, '.claude', 'projects');
-  if (!fs.existsSync(projectsDir)) return false;
+  const cutoff = Date.now() - 24 * 3600_000;
+  const candidateDirs = [
+    path.join(home, '.codex', 'memories', slug.toLowerCase()),
+    path.join(home, '.codex', 'memories', slug),
+  ];
+  const claudeProjectsDir = path.join(home, '.claude', 'projects');
   try {
-    const cutoff = Date.now() - 24 * 3600_000;
-    for (const entry of fs.readdirSync(projectsDir)) {
-      if (!entry.includes(slug)) continue;
-      const memDir = path.join(projectsDir, entry, 'memory');
+    if (fs.existsSync(claudeProjectsDir)) {
+      for (const entry of fs.readdirSync(claudeProjectsDir)) {
+        if (entry.includes(slug)) candidateDirs.push(path.join(claudeProjectsDir, entry, 'memory'));
+      }
+    }
+    for (const memDir of candidateDirs) {
       if (!fs.existsSync(memDir)) continue;
       for (const f of fs.readdirSync(memDir)) {
         const stat = fs.statSync(path.join(memDir, f));
-        if (stat.mtimeMs > cutoff) return true;
+        if (stat.mtimeMs >= cutoff) return true;
       }
     }
-  } catch { /* best-effort */ }
+  } catch { return false; }
   return false;
 }
 
@@ -279,7 +289,7 @@ function writeBackCoverage() {
   const result = TARGETS.map((t) => ({ file: t, touched: touched.has(t) }));
   // 10th item (per closeout spec): agent memory at ~/.claude/projects/<slug>/memory/
   result.push({
-    file: 'agent memory (~/.claude/projects/<slug>/memory/)',
+    file: 'agent memory (~/.codex or ~/.claude)',
     touched: agentMemoryRecentlyTouched(),
   });
   return result;
@@ -354,7 +364,7 @@ function render() {
   const vel = status.silVelocity ?? status.velocity;
   const velLabel = vel != null ? `${vel}${status.silDebt ? ' ' + status.silDebt : ''}` : '—';
   lines.push(row(`Date: ${date}  ·  SIL: ${sil}/${silMax}  ·  Velocity: ${velLabel}`));
-  lines.push(row(`Mode: ${(status.sessionMode || 'FOUNDER').toUpperCase()}  ·  Agent: ${status.lastAgent || 'claude-code'}`));
+  lines.push(row(`Mode: ${(status.sessionMode || 'FOUNDER').toUpperCase()}  ·  Agent: ${status.lastAgent || readSessionLockAgent() || 'claude-code'}`));
   const live = canonicalLiveUrl();
   if (live) {
     lines.push(row(`Live:  ${live.badge}  →  ${live.url}`));
@@ -440,3 +450,9 @@ if (STDOUT_MODE) {
   const sessionTag = (readJson(STATUS_PATH) || {}).currentSession ?? '?';
   console.log(`✓ Closeout board → docs/CLOSEOUT_STATUS_BOARD.md  (Session ${sessionTag})`);
 }
+
+
+
+
+
+
