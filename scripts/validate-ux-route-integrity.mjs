@@ -39,6 +39,7 @@ const requiredPublicPages = [
   "data-policy",
   "about",
   "compliance",
+  "contact",
 ];
 
 function walkHtml(dir, files = []) {

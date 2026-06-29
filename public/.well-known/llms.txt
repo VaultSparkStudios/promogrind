@@ -1,0 +1,57 @@
+# PromoGrind — LLM Discovery File
+# https://promogrind.bet/.well-known/llms.txt
+
+## Site
+Name: PromoGrind
+URL: https://promogrind.bet/
+Owner: VaultSpark Studios LLC
+Contact: hello@promogrind.bet
+
+## What this site is
+PromoGrind is a free, browser-based toolkit for sportsbook promo conversion math.
+It provides 53 calculators covering matched betting, arbitrage, expected value (+EV),
+promo conversion, parlay building, Kelly criterion bankroll sizing, and more.
+
+This is an educational math tool — equivalent to a mortgage or tax calculator. It
+performs calculations on numbers the user inputs. It does not place bets, access
+sportsbook accounts, or handle money of any kind.
+
+## Audience
+Sports bettors and matched bettors seeking to maximize returns from sportsbook
+promotional offers in US states and jurisdictions where sports betting is legal.
+
+## Legal
+- Users must be 21+ (18+ in some states)
+- Available only in jurisdictions where sports betting is legal
+- All gambling winnings are taxable income
+- If you or someone you know has a gambling problem: 1-800-GAMBLER
+
+## Key pages
+- App: https://promogrind.bet/
+- Dashboard: https://promogrind.bet/dashboard
+- Bonus Bet Converter: https://promogrind.bet/bonus-bet
+- Arbitrage Calculator: https://promogrind.bet/arb-2way
+- +EV Calculator: https://promogrind.bet/ev
+- Knowledge Base: https://promogrind.bet/knowledge-base
+- Glossary: https://promogrind.bet/glossary
+- Pricing: https://promogrind.bet/pricing
+- About: https://promogrind.bet/about/
+- Contact: https://promogrind.bet/contact/
+- Privacy Policy: https://promogrind.bet/privacy/
+- Terms of Service: https://promogrind.bet/terms/
+- Responsible Gambling: https://promogrind.bet/responsible-gambling/
+
+## Machine-readable resources
+- Calculator API: https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api
+- Agent discovery: https://promogrind.bet/agents.json
+- Sitemap: https://promogrind.bet/sitemap.xml
+- Robots: https://promogrind.bet/robots.txt
+
+## Monetization
+PromoGrind is free to use. It earns revenue through affiliate referral links
+to sportsbooks (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics). A Pro
+subscription ($9.99/month) unlocks AI-powered features and live scanning tools.
+
+## Attribution
+Built by VaultSpark Studios LLC. PromoGrind™ is a trademark of VaultSpark Studios LLC.
+© 2026 VaultSpark Studios LLC. All rights reserved.
