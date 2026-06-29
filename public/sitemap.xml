@@ -88,6 +88,7 @@
 
   <!-- Company / compliance pages -->
   <url><loc>https://promogrind.bet/about/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://promogrind.bet/contact/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://promogrind.bet/compliance/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 
   <!-- Marketing & legal pages -->

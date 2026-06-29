@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "name": "PromoGrind",
+  "description": "Free sportsbook promo conversion toolkit — 53 calculators for matched betting, arbitrage, EV, promo conversion, and bankroll management.",
+  "url": "https://promogrind.bet/",
+  "contact": "hello@promogrind.bet",
+  "owner": "VaultSpark Studios LLC",
+  "audience": ["sports bettors", "matched bettors", "promo hunters"],
+  "capabilities": [
+    {
+      "id": "calc-api",
+      "type": "http-api",
+      "description": "Server-side calculator API for bonus bet conversion, arbitrage, EV, and more.",
+      "endpoint": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api",
+      "methods": ["POST"],
+      "auth": "none",
+      "routes": [
+        { "path": "/bonus-bet", "description": "Convert bonus bet to cash value given back-bet odds and stake." },
+        { "path": "/profit-boost", "description": "Calculate profit boost hedge amounts and guaranteed profit." },
+        { "path": "/first-bet", "description": "First bet safety net: hedge worst-case and refund conversion." },
+        { "path": "/arb-2way", "description": "Two-way arbitrage stakes and guaranteed profit." },
+        { "path": "/arb", "description": "Alias for /arb-2way." }
+      ]
+    }
+  ],
+  "tools": [
+    { "slug": "bonus-bet",        "name": "Bonus Bet Converter",    "group": "Convert",   "url": "https://promogrind.bet/bonus-bet" },
+    { "slug": "profit-boost",     "name": "Profit Boost Calc",      "group": "Convert",   "url": "https://promogrind.bet/profit-boost" },
+    { "slug": "first-bet",        "name": "First Bet Safety Net",   "group": "Convert",   "url": "https://promogrind.bet/first-bet" },
+    { "slug": "deposit-match",    "name": "Deposit Match Calc",     "group": "Convert",   "url": "https://promogrind.bet/deposit-match" },
+    { "slug": "insurance",        "name": "Insurance Promo Calc",   "group": "Convert",   "url": "https://promogrind.bet/insurance" },
+    { "slug": "no-vig",           "name": "No-Vig Fair Odds",       "group": "Calculate", "url": "https://promogrind.bet/no-vig" },
+    { "slug": "no-vig-3way",      "name": "3-Way No-Vig",          "group": "Calculate", "url": "https://promogrind.bet/no-vig-3way" },
+    { "slug": "ev",               "name": "+EV Calculator",         "group": "Calculate", "url": "https://promogrind.bet/ev" },
+    { "slug": "kelly",            "name": "Kelly Criterion",         "group": "Calculate", "url": "https://promogrind.bet/kelly" },
+    { "slug": "arb-2way",         "name": "2-Way Arbitrage",        "group": "Calculate", "url": "https://promogrind.bet/arb-2way" },
+    { "slug": "arb-3way",         "name": "3-Way Arbitrage",        "group": "Calculate", "url": "https://promogrind.bet/arb-3way" },
+    { "slug": "parlay-hedge",     "name": "Parlay Hedge",           "group": "Calculate", "url": "https://promogrind.bet/parlay-hedge" },
+    { "slug": "middle",           "name": "Middle Bet",             "group": "Calculate", "url": "https://promogrind.bet/middle" },
+    { "slug": "odds-convert",     "name": "Odds Converter",         "group": "Calculate", "url": "https://promogrind.bet/odds-convert" },
+    { "slug": "line-shop",        "name": "Line Shop",              "group": "Calculate", "url": "https://promogrind.bet/line-shop" },
+    { "slug": "rollover",         "name": "Rollover Calculator",    "group": "Calculate", "url": "https://promogrind.bet/rollover" },
+    { "slug": "teaser",           "name": "Teaser Calculator",      "group": "Calculate", "url": "https://promogrind.bet/teaser" },
+    { "slug": "round-robin",      "name": "Round Robin",            "group": "Calculate", "url": "https://promogrind.bet/round-robin" },
+    { "slug": "parlay-builder",   "name": "Parlay Builder",         "group": "Calculate", "url": "https://promogrind.bet/parlay-builder" },
+    { "slug": "sgp-estimator",    "name": "SGP Estimator",          "group": "Calculate", "url": "https://promogrind.bet/sgp-estimator" },
+    { "slug": "hold-calc",        "name": "Hold Calculator",        "group": "Calculate", "url": "https://promogrind.bet/hold-calc" },
+    { "slug": "bet-sizer",        "name": "Bet Sizer",              "group": "Calculate", "url": "https://promogrind.bet/bet-sizer" },
+    { "slug": "income-estimator", "name": "Income Estimator",       "group": "Calculate", "url": "https://promogrind.bet/income-estimator" },
+    { "slug": "deposit-optimizer","name": "Deposit Optimizer",      "group": "Calculate", "url": "https://promogrind.bet/deposit-optimizer" },
+    { "slug": "hedge-validator",  "name": "Hedge Validator",        "group": "Calculate", "url": "https://promogrind.bet/hedge-validator" },
+    { "slug": "promo-guarantee",  "name": "Promo Guarantee",        "group": "Calculate", "url": "https://promogrind.bet/promo-guarantee" },
+    { "slug": "gut-check",        "name": "Gut Check",              "group": "Calculate", "url": "https://promogrind.bet/gut-check" },
+    { "slug": "promo-stacking",   "name": "Promo Stacking",         "group": "Calculate", "url": "https://promogrind.bet/promo-stacking" },
+    { "slug": "taxes-estimator",  "name": "Taxes Estimator",        "group": "Calculate", "url": "https://promogrind.bet/taxes-estimator" },
+    { "slug": "edge-dashboard",   "name": "Edge Analytics",         "group": "Track",     "url": "https://promogrind.bet/edge-dashboard" },
+    { "slug": "sportsbooks",      "name": "Sportsbook Tracker",     "group": "Track",     "url": "https://promogrind.bet/sportsbooks" },
+    { "slug": "bet-tracker",      "name": "Bet Tracker",            "group": "Track",     "url": "https://promogrind.bet/bet-tracker" },
+    { "slug": "ledger",           "name": "P/L Ledger",             "group": "Track",     "url": "https://promogrind.bet/ledger" },
+    { "slug": "trade-journal",    "name": "Trade Journal",          "group": "Track",     "url": "https://promogrind.bet/trade-journal" },
+    { "slug": "knowledge-base",   "name": "Knowledge Base",         "group": "Learn",     "url": "https://promogrind.bet/knowledge-base" },
+    { "slug": "glossary",         "name": "Betting Glossary",       "group": "Learn",     "url": "https://promogrind.bet/glossary" }
+  ],
+  "legal": {
+    "terms": "https://promogrind.bet/terms/",
+    "privacy": "https://promogrind.bet/privacy/",
+    "affiliate_disclosure": "https://promogrind.bet/affiliate-disclosure/",
+    "responsible_gambling": "https://promogrind.bet/responsible-gambling/"
+  },
+  "constraints": {
+    "age_requirement": "21+ (18+ in some jurisdictions)",
+    "jurisdiction": "Legal sports betting jurisdictions only",
+    "disclaimer": "Educational math tool only. Does not place bets, access sportsbook accounts, or handle money."
+  }
+}
