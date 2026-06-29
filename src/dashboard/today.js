@@ -5,7 +5,9 @@ import { getWorkflowActionSlug } from "../workflows/actionGraph.js";
 import { matchPlaybooks } from "../playbooks/index.js";
 import { buildPortfolioAllocation } from "../lib/portfolio.js";
 import { buildHotLanes, buildTrackInsights } from "../track/insights.js";
-
+import { runBankrollStress, shouldShowStressPreview, totalExposure } from "../lib/bankrollStress.js";
+import { buildPreMortem } from "../lib/preMortem.js";
+import { buildTwinBattle } from "../lib/twinBattle.js";
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const GRADE_SCORE = { A: 3, B: 2, C: 1 };
 const PROMO_KEYWORDS = {
@@ -25,6 +27,76 @@ function dateOnly(value) {
   return date.toISOString().split("T")[0];
 }
 
+function americanToDecimal(odds) {
+  const value = Number.parseFloat(String(odds || "").replace("+", ""));
+  if (!Number.isFinite(value) || value === 0) return 2;
+  if (value > 0) return 1 + value / 100;
+  return 1 + 100 / Math.abs(value);
+}
+
+function impliedWinProb(odds) {
+  const decimal = americanToDecimal(odds);
+  if (!Number.isFinite(decimal) || decimal <= 1) return 0.5;
+  return Math.max(0.05, Math.min(0.95, 1 / decimal));
+}
+
+function normalizeOpenPosition(bet = {}) {
+  const stake = Number.parseFloat(bet.stake || bet.risk || bet.wager || 0);
+  if (!Number.isFinite(stake) || stake <= 0) return null;
+  const decimal = americanToDecimal(bet.odds);
+  const toWin = Number.parseFloat(bet.toWin || bet.payoutOnWin || "");
+  return {
+    id: bet.id || null,
+    book: bet.book || null,
+    promoType: bet.promoType || bet.type || bet.promo || null,
+    stake,
+    winProb: impliedWinProb(bet.odds),
+    payoutOnWin: Number.isFinite(toWin) && toWin > 0 ? toWin : stake * Math.max(0, decimal - 1),
+  };
+}
+
+export function buildRiskRadarSummary(data = {}, snapshot = {}, opts = {}) {
+  const bankroll = Number.parseFloat(snapshot.bankroll ?? data.bankroll ?? "");
+  const openBets = Array.isArray(snapshot.openBets) ? snapshot.openBets : [];
+  const positions = openBets.map(normalizeOpenPosition).filter(Boolean);
+  const exposure = totalExposure(positions);
+  const stress = runBankrollStress({
+    bankroll: Number.isFinite(bankroll) ? bankroll : 0,
+    positions,
+    floor: Number.isFinite(bankroll) ? bankroll * 0.5 : 0,
+  }, {
+    iterations: opts.iterations || 500,
+    seed: opts.seed || 98,
+  });
+  const largestPosition = positions.slice().sort((a, b) => b.stake - a.stake)[0] || null;
+  const preMortem = largestPosition
+    ? buildPreMortem(
+        { ...largestPosition, bankroll },
+        Array.isArray(data.resultFeedback) ? data.resultFeedback : data.bets || [],
+      )
+    : null;
+  const twinBattle = buildTwinBattle(data, opts);
+  const stressPreview = shouldShowStressPreview({ bankroll, positions });
+  const show = positions.length > 0 || !twinBattle.empty || stressPreview || Boolean(preMortem?.triggered);
+
+  return {
+    show,
+    positions,
+    exposure,
+    exposurePct: Number.isFinite(bankroll) && bankroll > 0 ? Math.round((exposure / bankroll) * 1000) / 10 : null,
+    stress,
+    stressPreview,
+    preMortem,
+    twinBattle,
+    headline: stressPreview
+      ? "Exposure deserves a forward look"
+      : preMortem?.triggered
+        ? "Largest stake needs a pause"
+        : !twinBattle.empty
+          ? "Review this week's execution gap"
+          : "No risk radar signal yet",
+  };
+}
 export function getTodayContext(now = new Date()) {
   const today = now instanceof Date ? now : new Date(now);
   const todayStr = dateOnly(today);

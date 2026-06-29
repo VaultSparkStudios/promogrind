@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/arc codex /audit",
+  "generatedAt": "2026-06-29",
+  "project": "PromoGrind",
+  "type": "app/infrastructure",
+  "rubric": "infrastructure",
+  "summary": "Live-code audit found an empty genius cache, absent innovation-pack command, and three repo-owned gaps: dormant risk engines not surfaced, AI cache/calibration telemetry not connected, and Launch Command Center reading stale blocker constants instead of canonical launch proofs.",
+  "items": [
+    {
+      "id": "risk-radar-dashboard",
+      "tier": "fire",
+      "axis": "feature-depth",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 37.8,
+      "evidence": ["src/lib/bankrollStress.js", "src/lib/preMortem.js", "src/lib/twinBattle.js", "src/components/dashboard/TodayDashboardPanel.jsx"],
+      "recipe": "Create a pure buildRiskRadarSummary helper and render a Risk Radar card in TodayDashboardPanel using open exposure, forward bankroll stress, pre-mortem memory, and twin-battle review.",
+      "outcome": "shipped",
+      "verification": ["npx vitest run src/__tests__/dashboard.test.js", "npm run build"]
+    },
+    {
+      "id": "ai-cache-calibration-wiring",
+      "tier": "high",
+      "axis": "ai-intelligence",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 28.0,
+      "evidence": ["src/ai/promptCache.js", "src/lib/aiCalibration.js", "src/components/PromoAdvisorPanel.jsx", "src/components/PromoChat.jsx"],
+      "recipe": "Connect prompt-cache hit/miss accounting to Advisor/Chat cache paths and record an advisor prediction when a user saves an AI recommendation into the workflow inbox.",
+      "outcome": "shipped",
+      "verification": ["npx vitest run src/__tests__/aiCalibration.test.js src/__tests__/promptCache.test.js", "npm run build"]
+    },
+    {
+      "id": "canonical-launch-proof-command-center",
+      "tier": "high",
+      "axis": "observability",
+      "effortHours": 1,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 27.0,
+      "evidence": ["context/LAUNCH_PROOFS.json", "src/launchState.js", "src/components/dashboard/LaunchCommandCenterPanel.jsx"],
+      "recipe": "Drive Launch Command Center blockers from getLaunchProofCommandItems and treat nonblocking partial proofs as advisory so stale legacy constants cannot create false launch blockers.",
+      "outcome": "shipped",
+      "verification": ["npx vitest run src/__tests__/launchState.test.js", "npm run build"]
+    },
+    {
+      "id": "external-proof-evidence",
+      "tier": "high",
+      "axis": "launch-proof",
+      "effortHours": 0,
+      "impact": 10,
+      "innovation": 3,
+      "priority": 0,
+      "evidence": ["context/LAUNCH_PROOFS.json"],
+      "recipe": "Real production auth email, Stripe smoke, and friend-beta evidence remain external proof tasks. Do not fabricate evidence.",
+      "outcome": "honest-deferral",
+      "verification": ["No repo-side proof was fabricated"]
+    }
+  ],
+  "honestyLedger": [
+    "No phantom genius items: docs/GENIUS_LIST.md regenerated to 0 items.",
+    "No innovation-pack command exists in this public repo; used protocol fallback TODO/stale-code scan.",
+    "External proof gates remain pending because they require real mailbox/payment/tester actions."
+  ]
+}

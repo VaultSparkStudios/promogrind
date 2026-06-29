@@ -1,6 +1,6 @@
 import React from "react";
 import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, getRequiredLaunchMonetizationStatus, hasConfiguredMonetizationLinks } from "../../books.js";
-import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchProofSummary, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
+import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchProofCommandItems, getLaunchProofSummary, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
 import { K, S, fontD } from "../../lib/shared.js";
 import { AppDataCtx } from "../../contexts.jsx";
 import { appendStudioContractHistory } from "../../studio/export.js";
@@ -19,6 +19,7 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
   const requiredLaunchMonetization = getRequiredLaunchMonetizationStatus();
   const validation = resolveLaunchValidation();
   const launchProofSummary = getLaunchProofSummary();
+  const launchProofBlockers = getLaunchProofCommandItems();
   const { bankroll, studioSnapshot: snapshot, dashboardSnapshot, alertPlan } = buildOperatorSurfaceState({
     appData: appData || {},
     now: new Date(),
@@ -28,6 +29,7 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
     configuredMonetizationCount: configuredMonetization,
     totalBooks: BOOKS.length,
     validation,
+    blockers: launchProofBlockers,
   });
   const scoreColor =
     commandCenter.posture === "ready" ? K.gn :

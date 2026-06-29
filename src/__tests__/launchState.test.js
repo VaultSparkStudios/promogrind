@@ -118,11 +118,13 @@ describe("launch state helpers", () => {
       },
     };
 
+    const items = getLaunchProofCommandItems(proofs);
     const center = getLaunchCommandCenter({
-      blockers: getLaunchProofCommandItems(proofs),
+      blockers: items,
       validation: resolveLaunchValidation(),
     });
 
+    expect(items.find((item) => item.key === "affiliateLinks")?.status).toBe("advisory");
     expect(center.nextActions.map((item) => item.key).slice(0, 2)).toEqual(["authEmailSmoke", "stripeSmoke"]);
   });});
 

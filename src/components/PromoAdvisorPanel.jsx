@@ -12,7 +12,22 @@ import { recommendationToWorkflow } from "../promograph/recommendations.js";
 import { appendWorkflow } from "../workflows/store.js";
 import { flagVisit } from "../lib/missions.js";
 import { recordTrustReceipt } from "../lib/trustReceipts.js";
+import { recordPrediction } from "../lib/aiCalibration.js";
+import { noteCacheHit, noteCacheMiss } from "../ai/promptCache.js";
 
+function predictedProbabilityFromAdvisor(result = {}) {
+  const score = Number.parseFloat(result.opportunityScore);
+  if (Number.isFinite(score)) return Math.max(0.05, Math.min(0.95, score / 100));
+  const confidence = String(result.confidence || "").toLowerCase();
+  if (confidence === "high") return 0.75;
+  if (confidence === "medium") return 0.6;
+  if (confidence === "low") return 0.4;
+  const rating = String(result.rating || "").toLowerCase();
+  if (rating === "excellent") return 0.8;
+  if (rating === "good") return 0.65;
+  if (rating === "poor") return 0.25;
+  return null;
+}
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   useEffect(() => { flagVisit('advisor'); }, []);
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -60,11 +75,13 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       const cacheKey = buildCacheKey("promo-advisor", body);
       const cached = readTimedCache(cacheKey, 12 * 60 * 60 * 1000, null);
       if (cached) {
+        noteCacheHit(cached?.usage?.input_tokens || cached?.usage?.inputTokens || 0);
         setResult({ ...cached, cacheHit: true });
         setLoading(false);
         return;
       }
 
+      noteCacheMiss();
       if (hasStreamingGateway()) {
         await streamProjectFunction("promo-advisor", {
           session,
@@ -170,6 +187,22 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       note: result?.hedge || "",
     });
     syncAppData(appendWorkflow(appData || {}, workflow));
+    const predicted = predictedProbabilityFromAdvisor(result || {});
+    if (predicted !== null) {
+      recordPrediction({
+        id: `advisor:${workflow.id}`,
+        source: "promo-advisor",
+        feature: "promo-advisor",
+        predicted,
+        payload: {
+          workflowId: workflow.id,
+          promoType: workflow.promoType,
+          calculatorSlug: workflow.calculatorSlug,
+          confidence: workflow.confidence,
+          opportunityScore: workflow.opportunityScore,
+        },
+      });
+    }
     if (toast) toast("Saved to workflow inbox.", K.gn);
   };
 

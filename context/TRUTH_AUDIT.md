@@ -224,3 +224,11 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Launch Command Center truth now prioritizes the proof sequence from canonical launch proofs instead of stale hardcoded blocker keys.
 - Supabase deploy capability mapping is not complete in this repo; Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` asks Studio Ops to add the capability in the correct control plane.
 - Verification truth: `npm test` passed 501/501 and `npm run verify:launch-local` passed end to end on 2026-06-29.
+
+## Session 98 Truth Update - 2026-06-29
+
+- Launch Command Center blocker truth now derives from canonical `context/LAUNCH_PROOFS.json` through `getLaunchProofCommandItems`; legacy `LAUNCH_BLOCKERS` no longer overrides proof status in the dashboard panel.
+- Affiliate coverage truth is advisory when `blocking: false`; the command center no longer presents partner-blocked nonblocking coverage as a manual launch blocker.
+- AI cost/calibration truth improved: Advisor/Chat cache hit/miss paths now update prompt-cache stats, and saved Advisor workflows create calibration predictions instead of leaving the calibration module decorative.
+- Operator risk truth improved: Today Dashboard now renders real bankroll stress/pre-mortem/twin-battle signals from source data rather than leaving those engines library-only.
+- Verification truth: `npm test` passed 502/502 and `npm run verify:launch-local` passed end to end on 2026-06-29.

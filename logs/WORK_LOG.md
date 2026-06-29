@@ -310,3 +310,13 @@ Append chronological entries.
 - Shipped Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` to Studio Ops for the project-specific PromoGrind Supabase deploy capability mapping.
 - Verification: `npm test` 501/501; `npm run verify:launch-local` passed end to end.
 - External proof blockers remain honest: production auth email evidence, Stripe smoke purchase, and friend-beta pass still need real-world execution.
+
+## 2026-06-29 - Session 98 Codex arc
+
+- Ran `/start` -> `/audit` -> `/implement` -> `/closeout` as one continuous mission.
+- Replaced stale/empty audit posture with `docs/AUDIT_2026-06-29.{json,md}` and `docs/IMPLEMENT_PLAN.md` based on live code.
+- Shipped Risk Radar: `src/dashboard/today.js` now builds a combined open-exposure, bankroll-stress, pre-mortem, and twin-battle summary; `TodayDashboardPanel` renders it.
+- Wired AI observability: Advisor/Chat cache paths update prompt-cache stats; Advisor workflow saves record calibration predictions.
+- Fixed launch truth: Launch Command Center now uses canonical proof-derived blockers and treats nonblocking partial affiliate coverage as advisory.
+- Verification: `npm test` passed 502/502; `npm run verify:launch-local` passed end to end with 0 public-sanitization findings.
+- Honest deferrals: production auth email, Stripe smoke, and friend-beta proof remain pending real-world evidence tasks; no proof was fabricated.

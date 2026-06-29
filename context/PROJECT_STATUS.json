@@ -13,9 +13,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 97,
-  "currentFocus": "S97 shipped the production auth email smoke runner, canonical authEmailSmoke launch proof, generated app mirror, and Launch Command Center priority ordering; local launch gate is green at 501/501 tests.",
-  "nextMilestone": "Record real production auth email proof, then complete Stripe smoke and friend-beta evidence; Studio Ops should consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 for promogrind.supabase.deploy capability mapping.",
+  "currentSession": 98,
+  "currentFocus": "S98 shipped Risk Radar in Today Dashboard, AI cache/calibration telemetry wiring, and canonical launch-proof blockers in Launch Command Center; local launch gate is green at 502/502 tests.",
+  "nextMilestone": "Record real production auth email proof, then complete Stripe smoke and friend-beta evidence; optionally link Advisor calibration predictions to settled workflow outcomes.",
   "blockers": [
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
@@ -27,7 +27,7 @@
   "silAvg3": 999,
   "silVelocity": 3,
   "silDebt": "down",
-  "silLastSession": 97,
+  "silLastSession": 98,
   "silMax": 1000,
   "silSparkline": [
     988,
@@ -39,24 +39,24 @@
   "ignisScore": 43431,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-29",
-  "testsPassing": 501,
-  "testsTotal": 501,
+  "testsPassing": 502,
+  "testsTotal": 502,
   "testsLastRun": "2026-06-29",
   "lastDeployStatus": "deployed-unannounced; local launch gate green",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-05-17",
+  "truthAuditLastRun": "2026-06-29",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 501/501 in S97 via npm test and npm run verify:launch-local"
+      "status": "passing 502/502 in S98 via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S97 with 501/501 tests, auth proof contract, browser smoke, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S98 with 502/502 tests, auth proof contract, browser smoke, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -197,17 +197,17 @@
       }
     ]
   },
-  "entropyScore": 0.06,
-  "entropyLastComputed": "2026-05-18",
+  "entropyScore": 0.14,
+  "entropyLastComputed": "2026-06-29",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "builder",
-  "sessionModeAutoShiftedAt": "2026-06-29T07:44:39.152Z",
+  "sessionMode": "founder",
+  "sessionModeAutoShiftedAt": "2026-06-29T20:08:10.479Z",
   "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-06-18T20:14:14.049Z",
+  "planModeCheckedAt": "2026-06-29T20:08:10.912Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex"
 }

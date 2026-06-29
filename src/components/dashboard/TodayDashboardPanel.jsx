@@ -1,7 +1,7 @@
 import React from "react";
 import { AppDataCtx, useToast } from "../../contexts.jsx";
 import { K, S, f, font, fontD } from "../../lib/shared.js";
-import { getBankrollPosture, getNextBestAction, getUnfinishedWork } from "../../dashboard/today.js";
+import { buildRiskRadarSummary, getBankrollPosture, getNextBestAction, getUnfinishedWork } from "../../dashboard/today.js";
 import { getOnboardingProgress, getPromoPassportOnboardingPlan } from "../../onboarding.js";
 import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
 // matchPlaybooks is called here as a fallback when snapshot.topPlaybook is not pre-computed
@@ -32,6 +32,37 @@ function OperatorTwinCard({ forecast }) {
   );
 }
 
+function RiskRadarCard({ radar, navigate }) {
+  if (!radar?.show) return null;
+  const tone = radar.stressPreview || radar.preMortem?.triggered ? K.yl : K.ac;
+  const exposureCopy = radar.exposurePct === null ? `$${f(radar.exposure)} open exposure` : `$${f(radar.exposure)} open · ${radar.exposurePct}% bankroll`;
+  const leader = radar.twinBattle?.leaderboard?.[0];
+  return (
+    <div style={{ padding: "12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 10 }}>
+        <div>
+          <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Risk Radar</div>
+          <div style={{ fontFamily: fontD, fontSize: 16, fontWeight: 800, color: K.tx }}>{radar.headline}</div>
+          <div style={{ fontSize: 10, color: K.mt, marginTop: 4 }}>{exposureCopy}</div>
+        </div>
+        <button onClick={() => navigate("/bet-tracker")} style={{ padding: "8px 12px", background: "transparent", border: `1px solid ${tone}45`, borderRadius: 8, color: tone, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+          Review exposure →
+        </button>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 8 }}>
+        <InsightChip label="Stress P10" value={`$${f(radar.stress?.results?.p10 || 0)}`} tone={radar.stressPreview ? K.yl : K.ac} />
+        <InsightChip label="Stress P50" value={`$${f(radar.stress?.results?.p50 || 0)}`} tone={K.ac} />
+        <InsightChip label="Worst case" value={`$${f(radar.stress?.worstCase || 0)}`} tone={radar.stress?.worstCase < 0 ? K.rd : K.yl} />
+        <InsightChip label="Twin leader" value={leader ? `${leader.name} $${f(Math.abs(leader.pnl))}` : "No sample"} tone={leader?.name === "you" ? K.gn : K.yl} />
+      </div>
+      {radar.preMortem?.triggered && (
+        <div style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: `${K.yl}10`, border: `1px solid ${K.yl}35`, fontSize: 10, color: K.dm, lineHeight: 1.6 }}>
+          {radar.preMortem.copy.body} {radar.preMortem.scenarios?.[0]?.detail || "No similar prior loss is recorded yet, so keep the stake intentional."}
+        </div>
+      )}
+    </div>
+  );
+}
 function TiltBreakerBanner({ state }) {
   if (!state?.tripped) return null;
   return (
@@ -201,6 +232,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const counterfactual = React.useMemo(() => buildCounterfactualPnL(appData), [appData]);
   const journal = React.useMemo(() => buildDecisionJournal(appData), [appData]);
   const discipline = React.useMemo(() => computeDisciplineScore(appData), [appData]);
+  const riskRadar = React.useMemo(() => buildRiskRadarSummary(appData, snapshot), [appData, snapshot]);
   const passportPlan = React.useMemo(() => getPromoPassportOnboardingPlan({
     appData,
     user,
@@ -289,6 +321,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
 
       <TiltBreakerBanner state={computeTiltState(appData)} />
       <OperatorTwinCard forecast={buildTwinForecast(appData)} />
+      <RiskRadarCard radar={riskRadar} navigate={navigate} />
       <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />
 
       <OperatorAutopilotCard decision={nextAction} topWorkflow={snapshot.topWorkflow} navigate={navigate} />

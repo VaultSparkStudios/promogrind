@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-29 (Session 97 closeout) -->
+<!-- generated-at: 2026-06-29 (Session 98 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S97 ═════════════════════════╗
+╔══ SESSION CLOSEOUT · PromoGrind · S98 ═════════════════════════╗
 ║  Date: 2026-06-29  ·  SIL: 1000/1000  ·  Velocity: 3 down        ║
-║  Mode: BUILDER  ·  Agent: codex                                  ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Added `scripts/run-auth-email-smoke.mjs` and `npm run smoke:  ║
-║  ✓ Added canonical `authEmailSmoke` launch proof and regenerate  ║
-║  ✓ Extended `npm run smoke:auth` to validate the auth-email pro  ║
-║  ✓ Updated Launch Command Center priority logic so auth-email p  ║
-║  ✓ Added launch-state regression coverage; full suite is now 50  ║
+║  ✓ Added `docs/AUDIT_2026-06-29.json` and refreshed `docs/AUDIT  ║
+║  ✓ Added `buildRiskRadarSummary` and a Today Dashboard Risk Rad  ║
+║  ✓ Wired prompt-cache accounting into Promo Advisor and Promo C  ║
+║  ✓ Recorded Advisor calibration predictions when an AI recommen  ║
+║  ✓ Moved Launch Command Center blocker truth onto canonical lau  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -32,7 +32,7 @@
 ║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
+║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
@@ -40,7 +40,7 @@
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 28 files  ·  M:26 A:0 D:0 ?:2                          ║
+║  Changes: 27 files  ·  M:25 A:0 D:0 ?:2                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,7 +51,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         501/501                                          ║
+║  Tests:         502/502                                          ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║

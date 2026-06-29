@@ -5,6 +5,7 @@ import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { LoadingState } from "../ui.jsx";
+import { noteCacheHit, noteCacheMiss } from "../ai/promptCache.js";
 import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
 
 // Daily message limits per tier
@@ -99,6 +100,7 @@ const PromoChat = ({ navigate }) => {
       const cacheKey = buildCacheKey("promo-chat", requestBody);
       const cached = readTimedCache(cacheKey, 6 * 60 * 60 * 1000, null);
       if (cached) {
+        noteCacheHit(cached?.usage?.input_tokens || cached?.usage?.inputTokens || 0);
         setMessages((prev) => prev.map((message) =>
           message._id === streamingId
             ? { role: "assistant", content: cached.message || "No response.", suggestions: cached.suggestions || [], cacheHit: true }
@@ -107,6 +109,7 @@ const PromoChat = ({ navigate }) => {
         return;
       }
 
+      noteCacheMiss();
       if (!hasStreamingGateway()) throw new Error("Streaming gateway unavailable");
       abortRef.current?.abort();
       const controller = new AbortController();

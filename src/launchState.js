@@ -204,7 +204,7 @@ export function getLaunchProofCommandItems(payload = LAUNCH_PROOFS) {
     .map((proof) => ({
       key: proof.key,
       label: proof.label,
-      status: proof.isComplete ? "cleared" : "manual",
+      status: proof.isComplete ? "cleared" : proof.blocking ? "manual" : "advisory",
       detail: proof.detail,
       details: proof.details,
       nextStep: proof.nextStep,
@@ -216,7 +216,10 @@ export function getLaunchProofCommandItems(payload = LAUNCH_PROOFS) {
       requiredBooks: proof.requiredBooks,
     }))
     .sort((a, b) => {
-      if (a.status !== b.status) return a.status === "manual" ? -1 : 1;
+      if (a.status !== b.status) {
+        const rank = { manual: 0, advisory: 1, cleared: 2 };
+        return (rank[a.status] ?? 3) - (rank[b.status] ?? 3);
+      }
       return b.requiredEvidenceCount - a.requiredEvidenceCount;
     });
 }

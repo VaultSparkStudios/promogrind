@@ -206,3 +206,10 @@
 
 
 
+
+## Shipped This Session (S98)
+
+- risk-radar-dashboard S98 — **DONE S98**: surfaced bankroll stress, anti-tilt pre-mortem, and twin-battle review in Today Dashboard via `buildRiskRadarSummary` and `RiskRadarCard`; added deterministic dashboard coverage.
+- ai-cache-calibration-wiring S98 — **DONE S98**: Advisor/Chat cache paths now record prompt-cache hit/miss stats, and saved Advisor workflows record AI calibration predictions keyed to workflow id.
+- canonical-launch-proof-command-center S98 — **DONE S98**: Launch Command Center now consumes canonical launch-proof blockers and treats nonblocking partial affiliate coverage as advisory instead of a manual launch blocker.
+- external-proof-evidence S98 — **HONEST DEFERRAL S98**: production auth email, Stripe smoke, and friend-beta proof remain pending because they require real mailbox/payment/tester evidence; no fabricated proof recorded.

@@ -77,3 +77,13 @@ Last updated: 2026-06-18 (S96)
 - Launch Command Center now prioritizes auth-email proof before Stripe and friend-beta manual blockers, matching the current launch sequence.
 - Supabase deploy capability mapping remains Studio Ops-owned; Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` requests `promogrind.supabase.deploy` for project ref `fjnpzjjyhnpmunfoycrp` rather than editing the sibling repo.
 - Verification: `npm test` passed 501/501 and `npm run verify:launch-local` passed end to end.
+
+### Session 98 closeout update - 2026-06-29
+
+- Ran the requested continuous `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout` without stopping on the empty generated genius cache.
+- Fresh audit replaced the prior Session 97 execution note with `docs/AUDIT_2026-06-29.{json,md}` and `docs/IMPLEMENT_PLAN.md`; the audit records 3 shipped repo-owned items and 1 honest external-proof deferral.
+- Shipped Risk Radar in Today Dashboard: dormant bankroll stress, pre-mortem, and twin-battle engines now feed a live operator-facing card through `buildRiskRadarSummary`.
+- Wired AI telemetry: Promo Advisor and Promo Chat cache paths now update prompt-cache hit/miss stats, and saved Advisor recommendations record calibration predictions keyed to workflow id.
+- Fixed launch observability truth: Launch Command Center now uses canonical `context/LAUNCH_PROOFS.json` blockers via `getLaunchProofCommandItems`; nonblocking partial affiliate coverage is advisory instead of a manual blocker.
+- Verification: `npm test` passed 502/502, and `npm run verify:launch-local` passed end to end with 0 public-sanitization findings.
+- Honest pending proof gates remain unchanged: real production auth email smoke, real Stripe smoke purchase, and trusted friend beta pass still require real evidence and were not faked.

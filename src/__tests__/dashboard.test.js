@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildAdaptivePromoPlan, buildAdaptiveRankingSnapshot, getBankrollPosture, getDashboardSnapshot, getNextBestAction, getTodayPromos, getUnfinishedWork, inferPromoTypeFromSchedule } from "../dashboard/today.js";
+import { buildAdaptivePromoPlan, buildAdaptiveRankingSnapshot, buildRiskRadarSummary, getBankrollPosture, getDashboardSnapshot, getNextBestAction, getTodayPromos, getUnfinishedWork, inferPromoTypeFromSchedule } from "../dashboard/today.js";
 
 const schedule = [
   { book: "DraftKings", promo: "Daily Boost", day: "Daily", value: "+$9" },
@@ -296,5 +296,31 @@ describe("dashboard helpers", () => {
     expect(plan.topPromos[0].book).toBe("DraftKings");
     expect(plan.topPromos[0].reasons).toContain("expiring");
     expect(plan.topPromos[1].reasons).toContain("backlog pressure");
+  });
+  it("builds a risk radar from open exposure and prior loss memory", () => {
+    const now = new Date("2026-04-14T13:00:00Z");
+    const snapshot = {
+      bankroll: 500,
+      openBets: [
+        { id: "open-1", book: "DraftKings", type: "bonus_bet", stake: "150", odds: "+120", status: "open" },
+        { id: "open-2", book: "FanDuel", type: "profit_boost", stake: "40", odds: "-110", status: "pending" },
+      ],
+    };
+    const radar = buildRiskRadarSummary({
+      resultFeedback: [
+        { id: "loss-1", status: "settled", book: "DraftKings", promoType: "bonus_bet", stake: 150, profit: -150, lossAmount: 150, settledAt: "2026-04-13T10:00:00Z" },
+        { id: "win-1", status: "settled", book: "FanDuel", promoType: "profit_boost", profit: 25, settledAt: "2026-04-12T10:00:00Z" },
+      ],
+      redFlags: { "loss-1": true },
+    }, snapshot, { now, iterations: 100, seed: 7 });
+
+    expect(radar.show).toBe(true);
+    expect(radar.exposure).toBe(190);
+    expect(radar.exposurePct).toBe(38);
+    expect(radar.stressPreview).toBe(true);
+    expect(radar.preMortem.triggered).toBe(true);
+    expect(radar.preMortem.scenarios[0].headline).toMatch(/DraftKings/);
+    expect(radar.twinBattle.empty).toBe(false);
+    expect(radar.headline).toMatch(/Exposure/);
   });
 });

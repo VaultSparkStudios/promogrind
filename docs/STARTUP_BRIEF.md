@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-06-29 (Session 97 closeout) -->
+<!-- generated-at: 2026-06-29 (Session 98 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 97 closeout · 2026-06-29.
+> **Fast-boot brief** — generated at Session 98 closeout · 2026-06-29.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 98 · 2026-06-29 · BUILDER MODE                          ║
+║  Session 99 · 2026-06-29 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -42,8 +42,8 @@
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health       100    ██████████  ████████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum         100    ██████████  ▇▇▇▇▇▇▇█ →                ║
-║    Engagement       100    ██████████  ▇███████ →                ║
+║    Momentum         100    ██████████  ▇▇▇▇▇▇██ →                ║
+║    Engagement       100    ██████████  ████████ →                ║
 ║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -53,20 +53,20 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 97 ════════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 98 ════════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    501/501 passing  ·  Deploy: deployed-unannounced; lo  ║
+║  Tests:    502/502 passing  ·  Deploy: deployed-unannounced; lo  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
-║     26,535 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~13,268 tok/turn  ·  cache 50%  ·  67 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     24,375 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~12,188 tok/turn  ·  cache 50%  ·  73 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         501/501 passing (2026-06-29)                   ║
+║  ✓  Tests         502/502 passing (2026-06-29)                   ║
 ║  ✓  Velocity      3 ↑  ·  Debt: →                                ║
 ║  ⚠  Runway        ~2 sessions                                    ║
 ║  ⚠  Context age   11d                                            ║
@@ -74,14 +74,14 @@
 ║  ✓  Truth         green  ·  Genome: 24/25                        ║
 ║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
-║  ✓  Entropy       0.060  (healthy)                               ║
+║  ✓  Entropy       0.140  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
 ║  ✓  Doctor        12/12 (100%)  ·  2026-06-29  ✓                 ║
-║  ✓  Cost          real $0.00/7d · real metered total $0.0209 <   ║
+║  ✓  Cost          real $0.00/7d · real metered total $0.0248 <   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -110,7 +110,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 97                                ║
+║  GENIUS HIT LIST  ·  Session 98                                ║
 ║  Founder portfolio scope · ranked by impact                    ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -120,5 +120,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 97 closeout · 2026-06-29*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 98 closeout · 2026-06-29*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

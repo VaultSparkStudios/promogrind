@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-06-29",
-  "generatedAtMs": 1782763202759,
-  "session": 97,
-  "vectorHash": "ba4727be8a207deb",
+  "generatedAtMs": 1782764502320,
+  "session": 98,
+  "vectorHash": "09eb37f33bb35d6a",
   "silTotal": 1000,
   "silMax": 1000,
   "silAvg3": 999,
@@ -34,8 +34,8 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Record real production auth email proof, then complete Stripe smoke and friend-beta evidence; Studio Ops should consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 for promogrind.supabase.deploy capability mapping.",
-  "currentFocus": "S97 shipped the production auth email smoke runner, canonical authEmailSmoke launch proof, generated app mirror, and Launch Command Center priority ordering; local launch gate is green at 501/501 tests.",
+  "nextMilestone": "Record real production auth email proof, then complete Stripe smoke and friend-beta evidence; optionally link Advisor calibration predictions to settled workflow outcomes.",
+  "currentFocus": "S98 shipped Risk Radar in Today Dashboard, AI cache/calibration telemetry wiring, and canonical launch-proof blockers in Launch Command Center; local launch gate is green at 502/502 tests.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
