@@ -387,3 +387,14 @@ Append chronological entries.
 - App composition guard now enforces extracted ownership and a <1500 App shell ceiling.
 - Verification: focused composition Vitest 2/2; `npm run check:hooks`; `npm test` 508/508; `npm run verify:launch-local` passed end to end.
 - Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action; no proof was fabricated.
+
+## 2026-06-30 - Session 105 Codex goal arc
+
+- Ran `/goal` as a continuous `/arc` mission: `/start` -> `/audit` -> `/implement` -> `/closeout`.
+- Startup: `git pull --rebase origin main` was already up to date; context meter said CONTINUE; blocker preflight reported 0 Human Action Required items; no cut-off recovery was required.
+- Audit: generated `docs/AUDIT_2026-06-30-S105.{md,json}` after the live genius list returned 0 items; S105 used verified App ownership, launch-smoke, and capture-truth evidence for second-order work.
+- Shipped promo decision tool extraction: Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, and Promo Arb Finder now live in `src/calculators/PromoDecisionCalculators.jsx`.
+- Shipped dashboard ownership extraction: `DailyDashboard` and its achievement hook now live in `src/components/dashboard/DailyDashboard.jsx`; `src/App.jsx` is 821 lines and guarded below <900.
+- Shipped capture honesty: browser signup cannot silently post with a placeholder Supabase anon key; launch smoke rejects placeholder capture config.
+- Verification: focused Vitest 4/4; launch smoke; `npm test` 508/508; `npm run verify:launch-local` passed end to end.
+- Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action; no proof was fabricated.

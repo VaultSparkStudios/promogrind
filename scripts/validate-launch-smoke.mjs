@@ -98,6 +98,9 @@ if (errors.length === 0) {
   assertIncludes("public/landing/index.html", "beta rollout", "landing beta rollout messaging", errors);
   assertIncludes("public/landing/index.html", "PromoGrind account", "landing access model copy", errors);
   assertIncludes("docs/SEO_TRUST_STRIP_TEMPLATE.md", "Free PromoGrind account", "trust strip template copy", errors);
+  assertIncludes("public/js/pg-capture.js", "PG_SUPABASE_ANON_KEY", "browser-provided capture key lookup", errors);
+  assertIncludes("public/js/pg-capture.js", "Email signup unavailable", "honest unavailable capture state", errors);
+  assertNotIncludes("public/js/pg-capture.js", ".placeholder", "placeholder Supabase capture key", errors);
 }
 
 if (errors.length) {

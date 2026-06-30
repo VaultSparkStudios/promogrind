@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0",
+  "date": "2026-06-30",
+  "session": 105,
+  "project": "PromoGrind",
+  "primaryPremise": "Live genius list returned 0 items; S105 ran the required second-order innovation pass against live code, launch-proof blockers, module ownership, and browser-safe observability.",
+  "items": [
+    {
+      "id": "promo-decision-tool-ownership",
+      "tier": "high",
+      "axis": "speed/organization/automation",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 5,
+      "priority": 19.1,
+      "status": "shipped",
+      "premiseEvidence": "src/App.jsx still defined DepositOptimizer, HedgeValidator, PromoGuarantee, GutCheck, and PromoArbFinder inline while appRoutes.js treated them as route-owned calculator surfaces.",
+      "recipe": "Moved the five promo decision tools into src/calculators/PromoDecisionCalculators.jsx, wired App imports, and extended appComposition.test.js so they cannot drift back into the shell."
+    },
+    {
+      "id": "lead-capture-honesty-gate",
+      "tier": "high",
+      "axis": "truth/security/feedback-loop",
+      "effort": "30m",
+      "impact": 7,
+      "innovation": 6,
+      "priority": 17.7,
+      "status": "shipped",
+      "premiseEvidence": "public/js/pg-capture.js hard-coded an anon key ending in .placeholder and still rendered Subscribe & Continue as if newsletter capture were live.",
+      "recipe": "Capture now reads a browser-provided public anon key, disables subscribe when missing, and launch smoke rejects placeholder capture keys."
+    },
+    {
+      "id": "daily-dashboard-ownership-next",
+      "tier": "medium",
+      "axis": "speed/organization",
+      "effort": "2h",
+      "impact": 7,
+      "innovation": 4,
+      "priority": 10.8,
+      "status": "shipped",
+      "premiseEvidence": "src/App.jsx still owned DailyDashboard and AppData orchestration after S104.",
+      "recipe": "Moved DailyDashboard and useAchievements into src/components/dashboard/DailyDashboard.jsx, leaving App.jsx as a route shell under the <900-line boundary."
+    },
+    {
+      "id": "external-proof-evidence",
+      "tier": "external",
+      "axis": "launch-proof",
+      "effort": "external",
+      "impact": 10,
+      "innovation": 1,
+      "priority": 0,
+      "status": "honest-deferral",
+      "premiseEvidence": "PROJECT_STATUS lists production auth email, Stripe smoke purchase, friend-beta pass, Brevo forwarding, and Studio Ops Supabase capability proof as real-world evidence blockers.",
+      "recipe": "Do not fabricate proof. Keep these as explicit blockers until real external evidence exists."
+    }
+  ],
+  "verification": [
+    "npx vitest run src/__tests__/appComposition.test.js src/__tests__/distExposure.test.js passed 4/4",
+    "node scripts/validate-launch-smoke.mjs passed",
+    "npm test passed 59 files / 508 tests",
+    "npm run verify:launch-local passed end to end"
+  ],
+  "skipped": [
+    {
+      "id": "fabricate-launch-proof",
+      "reason": "Rejected by CANON-031 and founder direction; no fake mailbox, payment, or tester proof was created."
+    }
+  ]
+}

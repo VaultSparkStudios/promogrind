@@ -280,3 +280,15 @@
 ## S104 Follow-up
 
 - [SIL] Keep future App.jsx growth under the <1500 guard; add new route ownership to dedicated modules or lazy chunks instead of the App shell.
+
+## Shipped This Session (S105)
+
+- promo-decision-tool-ownership S105 - **DONE S105**: moved Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, and Promo Arb Finder from `src/App.jsx` into `src/calculators/PromoDecisionCalculators.jsx`.
+- lead-capture-honesty-gate S105 - **DONE S105**: removed the hard-coded placeholder Supabase anon key from `public/js/pg-capture.js`; signup now requires browser-provided public config and launch smoke blocks placeholder keys.
+- daily-dashboard-ownership-next S105 - **DONE S105**: moved the dashboard route and achievement hook into `src/components/dashboard/DailyDashboard.jsx`; `src/App.jsx` is now 821 lines with a <900 composition guard.
+- external-proof-evidence S105 - **HONEST DEFERRAL S105**: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action.
+
+## S105 Follow-up
+
+- [SIL] Keep future App.jsx growth under the <900 guard; new route/tool ownership belongs in dedicated modules or lazy chunks.
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, and Studio Ops Supabase capability evidence before any public launch announcement.

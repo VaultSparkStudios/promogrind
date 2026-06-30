@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { toD, f, downloadFile, K, font } from "../lib/shared.js";
+import { BOOKS } from "../books.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
-import { S, In, Tl, Nt } from "../ui.jsx";
+import { S, In, Tl, Nt, Help } from "../ui.jsx";
 
 const FreeBetArbTracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -273,4 +274,4 @@ const OddsComparisonTable = () => {
 
 // â•â•â• PROMO ARB FINDER â•â•â•
 
-export { FreeBetArbTracker, PromoJournal, OddsComparisonTable };
+export { FreeBetArbTracker, PromoJournal, PromoStacking, OddsComparisonTable };

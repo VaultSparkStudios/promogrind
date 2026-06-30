@@ -139,3 +139,13 @@ Last updated: 2026-06-18 (S96)
 - App composition guard now blocks all S104 surfaces from returning inline and enforces the <1500 line ceiling with normalized line endings.
 - Verification: focused composition test passed 2/2; `npm run check:hooks` passed; `npm test` passed 508/508; `npm run verify:launch-local` passed end to end.
 - External proof blockers remain unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real evidence/action.
+
+### Session 105 closeout update - 2026-06-30
+
+- Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`; the live genius list returned 0 items, so S105 used verified second-order candidates from live App ownership, launch-smoke, and capture-truth evidence.
+- Added `docs/AUDIT_2026-06-30-S105.{md,json}` and `docs/IMPLEMENT_PLAN_S105.md` with shipped statuses for all repo-owned items and an honest external-proof deferral.
+- Extracted the remaining promo decision tools into `src/calculators/PromoDecisionCalculators.jsx`: Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, and Promo Arb Finder no longer live inline in `src/App.jsx`.
+- Extracted the dashboard route into `src/components/dashboard/DailyDashboard.jsx`, including the achievement hook; `src/App.jsx` is now 821 lines and guarded below <900.
+- Fixed lead-capture truth: `public/js/pg-capture.js` no longer ships a placeholder Supabase anon key and disables signup when no browser-provided public key exists; `scripts/validate-launch-smoke.mjs` now rejects placeholder capture keys.
+- Verification: focused Vitest passed 4/4; `node scripts/validate-launch-smoke.mjs` passed; `npm test` passed 508/508; `npm run verify:launch-local` passed end to end.
+- External proof blockers remain unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action.

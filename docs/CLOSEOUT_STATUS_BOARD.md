@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-30 (Session 104 closeout) -->
+<!-- generated-at: 2026-06-30 (Session 105 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S104 ════════════════════════╗
+╔══ SESSION CLOSEOUT · PromoGrind · S105 ════════════════════════╗
 ║  Date: 2026-06-30  ·  SIL: 1000/1000  ·  Velocity: 4 down        ║
-║  Mode: BUILDER  ·  Agent: codex                                  ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Added `docs/AUDIT_2026-06-30-S104.{md,json}` and refreshed `  ║
-║  ✓ Extracted Promo Calendar into `src/components/PromoCalendar.  ║
-║  ✓ Extracted Referral Hub, Team Accounts, and Competitor Compar  ║
-║  ✓ Extracted Push Enable, Quick Add Bet, Weekly Grind Report, B  ║
-║  ✓ Extracted the onboarding wizard into `src/app/OnboardingWiza  ║
+║  ✓ Added `docs/AUDIT_2026-06-30-S105.{md,json}` and `docs/IMPLE  ║
+║  ✓ Extracted Deposit Optimizer, Hedge Validator, Promo Guarante  ║
+║  ✓ Extracted Daily Dashboard and its achievement hook into `src  ║
+║  ✓ Removed placeholder Supabase capture config from `public/js/  ║
+║  ✓ Extended `scripts/validate-launch-smoke.mjs` and `src/__test  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,19 +28,19 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 27 files  ·  M:22 A:0 D:0 ?:5                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -52,7 +52,7 @@
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
 ║  Tests:         508/508                                          ║
-║  IGNIS:         1d ago                                           ║
+║  IGNIS:         2d ago                                           ║
 ║  Truth:         green-with-external-proof-follow-ups             ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

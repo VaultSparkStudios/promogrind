@@ -12,6 +12,8 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const MobileBottomNav\s*=/);
     expect(appSource).not.toMatch(/const CSVImportModal\s*=/);
     expect(appSource).not.toMatch(/const StateLegalAlert\s*=/);
+    expect(appSource).not.toMatch(/const DailyDashboard\s*=\s*\(\{/);
+    expect(appSource).toContain("./components/dashboard/DailyDashboard.jsx");
     expect(appSource).not.toMatch(/const IncomeEstimator\s*=/);
     expect(appSource).not.toMatch(/const RolloverCalc\s*=/);
     expect(appSource).not.toMatch(/const OddsConvert\s*=/);
@@ -45,13 +47,15 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const CopyMySetup\s*=/);
     expect(appSource).not.toMatch(/const PushEnableBtn\s*=/);
     expect(appSource).not.toMatch(/const OnboardingWizard\s*=/);
+    expect(appSource).not.toMatch(/const DepositOptimizer\s*=/);
+    expect(appSource).not.toMatch(/const HedgeValidator\s*=/);
+    expect(appSource).not.toMatch(/const PromoGuarantee\s*=/);
+    expect(appSource).not.toMatch(/const GutCheck\s*=/);
+    expect(appSource).not.toMatch(/const PromoArbFinder\s*=/);
+    expect(appSource).toContain("./calculators/PromoDecisionCalculators.jsx");
   });
 
   it("keeps the App monolith under the current decomposition ceiling", () => {
-    expect(appSource.split(/\r\n|\n|\r/).length).toBeLessThan(1500);
+    expect(appSource.split(/\r\n|\n|\r/).length).toBeLessThan(900);
   });
 });
-
-
-
-

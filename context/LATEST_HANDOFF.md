@@ -1,7 +1,40 @@
 # Latest Handoff - PromoGrind
 
-Session Intent: Run Session 103 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
+Session Intent: Run Session 105 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
 
+## Where We Left Off - Session 105 (2026-06-30)
+
+Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items, so S105 implemented verified second-order App ownership and capture-honesty candidates from live code evidence.
+
+Shipped:
+- Added `docs/AUDIT_2026-06-30-S105.{md,json}` and `docs/IMPLEMENT_PLAN_S105.md` with the S105 execution log.
+- Extracted Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, and Promo Arb Finder into `src/calculators/PromoDecisionCalculators.jsx`.
+- Extracted Daily Dashboard and its achievement hook into `src/components/dashboard/DailyDashboard.jsx`.
+- Removed placeholder Supabase capture config from `public/js/pg-capture.js`; signup now requires browser-provided public config and fails closed when absent.
+- Extended `scripts/validate-launch-smoke.mjs` and `src/__tests__/appComposition.test.js` so capture truth and App ownership cannot silently regress.
+- `src/App.jsx` is now 821 lines and guarded below <900.
+
+Verification:
+- Focused Vitest passed: 4/4.
+- `node scripts/validate-launch-smoke.mjs` passed.
+- `npm test` passed: 59 files, 508 tests.
+- `npm run verify:launch-local` passed end to end with tests, AI usage ledger, hook-order, auth/launch/UX/browser smokes, public dist exposure, proof replay, bundle budget, and strict public sanitization.
+
+Still Pending / Honest External Proofs:
+- Brevo delivery for `contact@promogrind.bet` remains unproven locally; Studio Ops Ark cargo `01JSAJMBF321A097D8CE8E12B9` is still the follow-up.
+- Run a real production auth email pass with `npm run smoke:auth-email -- --record`.
+- Run a real Stripe smoke purchase with `npm run smoke:stripe -- --record`.
+- Run one trusted friend beta pass with `npm run beta:check -- --record`.
+- Studio Ops should still consume Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` for the PromoGrind Supabase deploy capability mapping.
+- Wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness.
+
+Next Move:
+1. Complete the real production auth email smoke and record redacted evidence.
+2. Complete Stripe smoke and friend-beta evidence.
+3. Verify Brevo forwarding/copy once Studio Ops replies to Ark cargo `01JSAJMBF321A097D8CE8E12B9`.
+4. Keep App.jsx under the <900 composition guard; any future route/tool growth should land in dedicated modules or lazy chunks.
+
+---
 ## Where We Left Off - Session 104 (2026-06-30)
 
 Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items and `ops.mjs innovation-pack` is unavailable in this public repo, so S104 implemented verified second-order App decomposition and route-chunk candidates from live code evidence.

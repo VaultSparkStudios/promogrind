@@ -5,7 +5,12 @@
   'use strict';
 
   const SUPABASE_URL = 'https://fjnpzjjyhnpmunfoycrp.supabase.co';
-  const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqbnB6amppaG5wbXVuZm95Y3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk5MDk5MDAsImV4cCI6MjA1NTQ4NTkwMH0.placeholder';
+  function getSupabaseAnonKey() {
+    var meta = document.querySelector('meta[name="pg-supabase-anon-key"]');
+    var key = window.PG_SUPABASE_ANON_KEY || (meta && meta.content) || '';
+    return key && !/placeholder/i.test(key) ? key : '';
+  }
+  const ANON_KEY = getSupabaseAnonKey();
   const REDIRECT_URL = window.PG_REDIRECT_URL || 'https://promogrind.bet/';
 
   // Skip on return visits
@@ -57,6 +62,7 @@
   }
 
   function subscribe() {
+    if (!ANON_KEY) { redirect(); return; }
     var email = document.getElementById('pg-inp').value.trim();
     if (!email.includes('@')) return;
     var btn = document.getElementById('pg-btn');
@@ -75,6 +81,12 @@
     var box = document.getElementById('pg-box');
     box.innerHTML = '<div id="pg-ok">\u2713 You\'re in! Taking you to PromoGrind\u2026</div>';
     setTimeout(redirect, 1200);
+  }
+
+  if (!ANON_KEY) {
+    var disabledBtn = document.getElementById('pg-btn');
+    disabledBtn.textContent = 'Email signup unavailable';
+    disabledBtn.disabled = true;
   }
 
   document.getElementById('pg-btn').addEventListener('click', subscribe);

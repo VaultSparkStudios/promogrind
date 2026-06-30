@@ -448,3 +448,21 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Context: `arc-profile.mjs` did not match the registry and classified PromoGrind as `infrastructure/internal`, while repo-local `context/PROJECT_STATUS.json` and the startup brief classify it as an app/public-unlaunched surface.
 - Decision: during S104, local project status was treated as source of truth for audit lens, staging expectations, public launch gates, and closeout language.
 - Reason: session protocol says repo truth and `PROJECT_STATUS.json` beat derived Markdown or unmatched registry fallbacks.
+
+### 2026-06-30 - S105 capture config must fail closed when public key is absent
+
+- Status: accepted
+- Context: `public/js/pg-capture.js` shipped a `.placeholder` Supabase anon key and redirected after failed capture. That preserved UX flow, but it created misleading observability because the public signup path could appear configured when it was not.
+- Decision: remove the placeholder key from the script, read a browser-provided public key from `window.PG_SUPABASE_ANON_KEY` or `<meta name="pg-supabase-anon-key">`, disable signup when absent, and make launch smoke reject placeholder capture keys.
+- Alternatives considered: keep redirect-only fallback; hard-code a real anon key in the public script; allowlist `.placeholder` as harmless.
+- Why this was chosen: a missing public capture key should be visible and test-failing locally instead of producing false signup readiness. The anon key is public-safe when configured, but it still needs an explicit deployment source.
+- Follow-up: wire the real browser-safe anon key into the production page/deploy config before claiming email capture readiness.
+
+### 2026-06-30 - S105 App shell is route orchestration, not route ownership
+
+- Status: accepted
+- Context: recent sessions had decomposed most large route surfaces, but promo decision tools and Daily Dashboard still lived inline in `src/App.jsx`.
+- Decision: `src/App.jsx` should stay under the <900 composition guard and own orchestration only. Promo decision tools live in `src/calculators/PromoDecisionCalculators.jsx`; Daily Dashboard lives in `src/components/dashboard/DailyDashboard.jsx`.
+- Alternatives considered: leave the remaining surfaces inline because the app was already under the prior <1500 guard; split only the dashboard and leave calculators inline.
+- Why this was chosen: route ownership boundaries reduce future context cost and make regression coverage precise. The full launch gate stayed green after the split.
+- Follow-up: any new route/tool growth should land in dedicated modules or lazy chunks, with `appComposition.test.js` extended when a new boundary matters.

@@ -283,3 +283,11 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Regression truth improved: `appComposition.test.js` blocks all S104 surfaces from returning to the App monolith and enforces a <1500 App shell ceiling with normalized line endings.
 - Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
 - External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real evidence/action.
+
+## Session 105 Truth Update - 2026-06-30
+
+- App composition truth improved: `src/App.jsx` no longer owns Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, Promo Arb Finder, Daily Dashboard, or the dashboard achievement hook.
+- Regression truth improved: `appComposition.test.js` blocks S105 surfaces from returning to the App monolith and enforces a <900 App shell ceiling. Current App.jsx line count is 821.
+- Capture readiness truth improved: `public/js/pg-capture.js` no longer contains a `.placeholder` Supabase anon key. Email signup is disabled when no browser-provided public key exists, and launch smoke rejects placeholder capture config.
+- Verification truth: focused Vitest passed 4/4, `node scripts/validate-launch-smoke.mjs` passed, `npm test` passed 508/508, and `npm run verify:launch-local` passed end to end on 2026-06-30.
+- External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action.
