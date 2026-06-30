@@ -107,3 +107,10 @@ Last updated: 2026-06-18 (S96)
 - Added focused regression coverage: CSV parser tests, state-legal truth tests, and an App composition guard that keeps extracted component definitions out of `src/App.jsx` and enforces the 3500-line ceiling.
 - Verification: focused Vitest passed 8/8; `npm test` passed 508/508 across 59 files; `npm run verify:launch-local` passed end to end.
 - Honest pending proof gates remain unchanged: real production auth email smoke, Stripe smoke purchase, friend-beta pass, and Brevo forwarding evidence still require real external proof and were not faked.
+
+### Session 101 closeout update - 2026-06-30
+
+- Shipped another App.jsx decomposition slice: `Glossary` and `GLOSSARY_TERMS` now live in `src/components/Glossary.jsx`, and `src/App.jsx` imports the component instead of owning glossary reference content inline.
+- App composition truth improved: `appComposition.test.js` now prevents the glossary component and term list from drifting back into the monolith; `src/App.jsx` is down from 3404 to 3363 lines and remains below the 3500-line ceiling.
+- Verification: focused composition Vitest passed 2/2, `npm test` passed 508/508, and `npm run verify:launch-local` passed end to end with 508/508 tests, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization.
+- External proof truth remains yellow: auth email, Stripe smoke, friend beta, and Brevo forwarding still require real evidence.

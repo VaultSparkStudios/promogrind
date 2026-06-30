@@ -80,6 +80,7 @@ import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 import UserMenu from "./components/UserMenu.jsx";
 import AuthDialog from "./components/AuthDialog.jsx";
 import BookCTA from "./components/BookCTA.jsx";
+import Glossary from "./components/Glossary.jsx";
 import ShareCard from "./components/ShareCard.jsx";
 import { getQuickCalcFallbackSlug } from "./workflows/actionGraph.js";
 import { StateLegalAlert, US_STATES } from "./lib/stateLegal.jsx";
@@ -733,48 +734,6 @@ function useAchievements(data, streak) {
     } catch {}
   }, [data, streak]);
 }
-
-// â•â•â• GLOSSARY â•â•â•
-const GLOSSARY_TERMS = [
-  ["Vig / Juice","The sportsbook's built-in profit margin on every bet. Standard vig is ~4.5% (both sides at -110)."],
-  ["Moneyline","Bet on who wins outright. +200 = underdog, -200 = favorite."],
-  ["Spread","Bet on margin of victory. -3.5 means team must win by 4+."],
-  ["Total / Over-Under","Bet on combined score of both teams."],
-  ["Parlay","Multiple bets combined â€” all must win. Higher payout, higher risk."],
-  ["Arbitrage","Betting both sides at different books where combined odds guarantee profit."],
-  ["+EV","Positive expected value â€” the bet profits over many repetitions."],
-  ["Closing Line Value (CLV)","Whether your odds were better than the closing odds. Consistently beating the close = long-term edge."],
-  ["Hedge","Placing a second bet on the opposite outcome to lock in profit."],
-  ["Bonus Bet","A bet credit â€” only the profit is returned, not the stake."],
-  ["Profit Boost","Percentage increase added to your winnings if the bet wins."],
-  ["First Bet Insurance","Refund of first bet as bonus bets if it loses."],
-  ["Rollover / Playthrough","Must wager XÃ— the bonus before withdrawing."],
-  ["Devig / No-Vig","Removing the sportsbook's margin to find true probabilities."],
-  ["Kelly Criterion","Formula for optimal bet sizing based on your edge."],
-  ["Middle","Betting opposite sides at different lines where both can win."],
-  ["Round Robin","Creating all possible sub-parlays from a pool of picks."],
-  ["Teaser","Parlay where you move lines in your favor for reduced payout."],
-  ["Hold","The total percentage a book profits from both sides of a bet."],
-  ["Sharp Book","Sportsbook with low vig and sharp (accurate) lines â€” e.g. Pinnacle."],
-  ["Getting Limited","When a book reduces your max bet size due to consistent profiting."],
-  ["SGP","Same-Game Parlay â€” all legs must be from the same game."],
-];
-
-const Glossary = () => {
-  const [search, setSearch] = useState('');
-  const filtered = GLOSSARY_TERMS.filter(([t])=>t.toLowerCase().includes(search.toLowerCase()));
-  return (<div style={S.card}>
-    <Tl t="Betting Glossary" badge="QUICK REF" bc={K.ac}/>
-    <div style={{marginBottom:12}}><input style={S.input} value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search terms..."/></div>
-    {filtered.map(([term,def])=>(
-      <div key={term} style={{padding:"10px 0",borderBottom:`1px solid ${K.bd}`}}>
-        <div style={{fontSize:13,fontWeight:600,color:K.ac,marginBottom:3}}>{term}</div>
-        <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{def}</div>
-      </div>
-    ))}
-    {!filtered.length&&<div style={{textAlign:"center",padding:24,color:K.mt,fontSize:12}}>No terms found.</div>}
-  </div>);
-};
 
 // â•â•â• ONBOARDING WIZARD â•â•â•
 const ONBOARDING_KEY = 'pg_onboarded_v1';

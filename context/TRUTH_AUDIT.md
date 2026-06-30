@@ -248,3 +248,10 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Runtime truth improved: `App.jsx` now explicitly imports `US_BOOK_STATES` from `src/books.js` before using it in Deposit Optimizer and Promo Guarantee filters.
 - Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
 - External proof truth remains yellow: auth email, Stripe smoke, friend beta, and Brevo forwarding still require real evidence.
+
+## Session 101 Truth Update - 2026-06-30
+
+- App composition truth improved: `src/App.jsx` no longer owns the glossary route component or term list; `src/components/Glossary.jsx` is the source for that surface.
+- Regression truth improved: `appComposition.test.js` now blocks `Glossary` and `GLOSSARY_TERMS` from returning to the App monolith.
+- Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
+- External proof truth remains yellow: auth email, Stripe smoke, friend beta, and Brevo forwarding still require real evidence.

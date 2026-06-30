@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "session": 101,
+  "date": "2026-06-30",
+  "rubric": "product",
+  "premise": {
+    "geniusList": "node scripts/ops.mjs genius-list returned 0 items after cache refresh.",
+    "innovationPack": "node scripts/ops.mjs innovation-pack is unavailable in this public repo.",
+    "fallback": "Live-code audit used TASK_BOARD S100 follow-up and App.jsx ownership survey."
+  },
+  "items": [
+    {
+      "id": "glossary-component-extraction",
+      "tier": "High",
+      "axis": "speed-organization-efficiency",
+      "effort": "30m",
+      "impact": 7,
+      "innovation": 3,
+      "priority": 16.2,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Extracted Glossary and GLOSSARY_TERMS from src/App.jsx into src/components/Glossary.jsx; appComposition.test.js now guards both symbols from returning to the monolith.",
+      "recipe": "Move the glossary component out of App.jsx and add a composition regression gate.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Extract only Glossary and its term list." },
+        "L2": { "effortHours": 0.75, "recipe": "Extract Glossary and add App composition tests for the ownership boundary." },
+        "L3": { "effortHours": 2, "recipe": "Extract Glossary plus the full Knowledge Base surface into a dedicated route module." }
+      }
+    },
+    {
+      "id": "external-proof-evidence",
+      "tier": "High",
+      "axis": "launch-proof",
+      "effort": "external",
+      "impact": 9,
+      "innovation": 2,
+      "priority": 0,
+      "premiseVerified": true,
+      "status": "honest-deferral",
+      "evidence": "Production auth email, Stripe smoke, friend beta, and Brevo forwarding still require real-world mailbox/payment/tester/email-routing evidence. No proof was fabricated.",
+      "recipe": "Keep the proof gates pending until actual external evidence exists."
+    }
+  ]
+}

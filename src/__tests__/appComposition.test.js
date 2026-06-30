@@ -17,6 +17,8 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const DailyBriefingBtn\s*=/);
     expect(appSource).not.toMatch(/const OpenExposurePanel\s*=/);
     expect(appSource).not.toMatch(/const TopToolsPanel\s*=/);
+    expect(appSource).not.toMatch(/const Glossary\s*=/);
+    expect(appSource).not.toMatch(/const GLOSSARY_TERMS\s*=/);
   });
 
   it("keeps the App monolith under the current decomposition ceiling", () => {

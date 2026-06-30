@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-30 (Session 100 closeout) -->
+<!-- generated-at: 2026-06-30 (Session 101 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S100 ════════════════════════╗
-║  Date: 2026-06-30  ·  SIL: 1000/1000  ·  Velocity: 4 down        ║
+╔══ SESSION CLOSEOUT · PromoGrind · S101 ════════════════════════╗
+║  Date: 2026-06-30  ·  SIL: 1000/1000  ·  Velocity: 1 down        ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Added `docs/AUDIT_2026-06-30.{md,json}` and `docs/IMPLEMENT_  ║
-║  ✓ Extracted `QuickCalcPanel`, `CalcSearch`, and `MobileBottomN  ║
-║  ✓ Extracted `CSVImportModal` and pure `parseBetCsvRows` into `  ║
-║  ✓ Extracted daily dashboard widgets into `src/app/DashboardWid  ║
-║  ✓ Extracted state-legal alert data/component into `src/lib/sta  ║
+║  ✓ Added `docs/AUDIT_2026-06-30-S101.{md,json}` and refreshed `  ║
+║  ✓ Extracted `Glossary` and `GLOSSARY_TERMS` into `src/componen  ║
+║  ✓ Updated `src/App.jsx` to import the glossary component; App.  ║
+║  ✓ Extended `appComposition.test.js` to keep glossary ownership  ║
+║  ✓ Focused Vitest passed: 2/2.                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -40,7 +40,7 @@
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 28 files  ·  M:18 A:0 D:0 ?:10                         ║
+║  Changes: 21 files  ·  M:17 A:0 D:0 ?:4                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝

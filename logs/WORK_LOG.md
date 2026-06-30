@@ -342,3 +342,11 @@ Append chronological entries.
 - Added regression coverage for CSV parsing, state-legal truth, and App composition boundaries.
 - Verification: focused Vitest passed 8/8; `npm test` passed 508/508; `npm run verify:launch-local` passed end to end.
 - Remaining proof blockers: real production auth email smoke, Stripe smoke purchase, friend-beta pass, and Brevo forwarding evidence.
+
+## 2026-06-30 - Session 101 Codex goal arc
+
+- Continued the active `/arc` goal as a normal S101 arc; startup preflight was green, sync was 0 ahead / 0 behind, and no prior cut-off recovery was required.
+- Audit: generated `docs/AUDIT_2026-06-30-S101.{md,json}` after the live genius list returned 0 items and `ops.mjs innovation-pack` was unavailable.
+- Shipped App decomposition: extracted `Glossary` and `GLOSSARY_TERMS` to `src/components/Glossary.jsx` and extended App composition coverage to prevent regression.
+- Verification: focused Vitest 2/2, `npm run check:hooks`, `npm test` 508/508, and `npm run verify:launch-local` passed end to end.
+- Honest deferral: production auth email, Stripe smoke, friend beta, and Brevo forwarding still require real-world evidence; no proof was fabricated.

@@ -232,3 +232,12 @@
 - state-legal-source-truth S100 - **DONE S100**: moved state legal alert truth to `src/lib/stateLegal.jsx`, marked Missouri launched on `2025-12-01`, removed `MO` from coming-soon states, and imported `US_BOOK_STATES` explicitly.
 - app-composition-regression-gate S100 - **DONE S100**: added `appComposition.test.js` to enforce extracted component ownership and the App.jsx line-count ceiling.
 - external-proof-evidence S100 - **HONEST DEFERRAL S100**: production auth email, Stripe smoke, friend beta, and Brevo forwarding still require real-world proof.
+
+## Shipped This Session (S101)
+
+- glossary-component-extraction S101 - **DONE S101**: moved `Glossary` and `GLOSSARY_TERMS` from `src/App.jsx` to `src/components/Glossary.jsx`; App composition coverage now guards the ownership boundary.
+- external-proof-evidence S101 - **HONEST DEFERRAL S101**: production auth email, Stripe smoke, friend beta, and Brevo forwarding still require real-world proof; no proof was fabricated.
+
+## S101 Follow-up
+
+- [SIL] When proof gates advance or the App composition ceiling approaches again, extract the remaining full Knowledge Base surface into a dedicated route module.

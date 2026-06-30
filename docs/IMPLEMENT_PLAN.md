@@ -1,15 +1,15 @@
-# Implementation Plan - 2026-06-30 S100
+# Implementation Plan - 2026-06-30 S101
 
 ## Sequenced Wave
 
-1. app-navigation-extraction - shipped; extracted mobile/search/quick-calc shell widgets from `src/App.jsx` into `src/app/AppNavigation.jsx`.
-2. csv-import-parser-extraction - shipped; extracted `CSVImportModal` and pure `parseBetCsvRows` with focused tests.
-3. state-legal-source-truth - shipped; moved state-legal alert truth to `src/lib/stateLegal.jsx`, fixed Missouri launched status, and imported `US_BOOK_STATES` explicitly.
-4. app-composition-regression-gate - shipped; added App composition ownership and line-count guard.
-5. external-proof-evidence - honest deferral; real mailbox/payment/tester/Brevo evidence still required.
+1. glossary-component-extraction - shipped; extracted `Glossary` and `GLOSSARY_TERMS` from `src/App.jsx` into `src/components/Glossary.jsx`.
+2. app-composition-regression-gate - shipped; extended `appComposition.test.js` to keep glossary ownership out of the App monolith.
+3. external-proof-evidence - honest deferral; real mailbox/payment/tester/Brevo evidence still required.
 
 ## Validation
 
-- Focused Vitest: passed 8/8.
+- Focused Vitest: passed 2/2.
+- Hook-order guard: passed.
 - Full `npm test`: passed 508/508.
-- `npm run verify:launch-local`: passed end to end.
+
+- `npm run verify:launch-local` passed end to end: 508/508 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, public dist exposure, proof replay, bundle budget, and strict public sanitization.
