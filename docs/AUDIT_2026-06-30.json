@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "session": 100,
+  "date": "2026-06-30",
+  "rubric": "product",
+  "premise": {
+    "geniusList": "node scripts/ops.mjs genius-list returned 0 items.",
+    "innovationPack": "node scripts/ops.mjs innovation-pack is unavailable in this public repo.",
+    "fallback": "Live-code audit used TASK_BOARD S99 follow-up, App.jsx component survey, state-legal drift search, and existing launch-proof constraints."
+  },
+  "items": [
+    {
+      "id": "app-navigation-extraction",
+      "tier": "Fire",
+      "axis": "speed-organization-efficiency",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 4,
+      "priority": 30.4,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Extracted QuickCalcPanel, CalcSearch, and MobileBottomNav to src/app/AppNavigation.jsx; App.jsx imports them and focused composition test confirms ownership stays out of the monolith.",
+      "recipe": "Move the three navigation/search components into src/app/AppNavigation.jsx and import them back without behavior changes.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Extract only MobileBottomNav."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Extract MobileBottomNav, QuickCalcPanel, and CalcSearch."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Extract navigation components and add an App composition gate."
+        }
+      }
+    },
+    {
+      "id": "csv-import-parser-extraction",
+      "tier": "High",
+      "axis": "testability-feedback-loop",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 5,
+      "priority": 29.7,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Extracted CSVImportModal and parseBetCsvRows to src/app/CSVImportModal.jsx; csvImportModal.test.js covers mapped sportsbook CSV rows and header-only rejection.",
+      "recipe": "Move CSVImportModal plus a pure parseBetCsvRows helper to src/app/CSVImportModal.jsx and add tests covering valid rows and malformed input.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Extract the modal only."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Extract modal and parser helper with tests."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Extract modal/parser, add duplicate-row reconciliation and tests."
+        }
+      }
+    },
+    {
+      "id": "state-legal-source-truth",
+      "tier": "Fire",
+      "axis": "observability-truth-security",
+      "effort": "45m",
+      "impact": 9,
+      "innovation": 3,
+      "priority": 28.1,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Extracted stateLegal helpers/component to src/lib/stateLegal.jsx, added Missouri as recently launched on 2025-12-01, removed MO from coming-soon states, and imported US_BOOK_STATES explicitly in App.jsx.",
+      "recipe": "Move state legal alert data into src/lib/stateLegal.js, mark Missouri recently launched, remove MO from coming-soon states, import US_BOOK_STATES explicitly, and add tests.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Remove MO from coming-soon states."
+        },
+        "L2": {
+          "effortHours": 0.75,
+          "recipe": "Extract state-legal helpers and add tests."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "Extract helpers, add tests, and expose a freshness timestamp for future legal review."
+        }
+      }
+    },
+    {
+      "id": "app-composition-regression-gate",
+      "tier": "High",
+      "axis": "automation-coverage",
+      "effort": "45m",
+      "impact": 8,
+      "innovation": 4,
+      "priority": 26.0,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Added appComposition.test.js ownership and line-count guard; App.jsx is below the 3500-line ceiling after dashboard-widget extraction.",
+      "recipe": "Add a focused test that asserts App.jsx no longer owns extracted navigation/import/state-legal components and stays below a decomposition ceiling.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add ownership-marker tests for extracted components."
+        },
+        "L2": {
+          "effortHours": 0.75,
+          "recipe": "Add ownership-marker tests plus a line-count ceiling."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "Add ownership tests, line ceiling, and per-module public export checks."
+        }
+      }
+    },
+    {
+      "id": "external-proof-evidence",
+      "tier": "High",
+      "axis": "launch-proof",
+      "effort": "external",
+      "impact": 9,
+      "innovation": 2,
+      "priority": 0,
+      "premiseVerified": true,
+      "status": "honest-deferral",
+      "evidence": "Production auth email, Stripe smoke, friend beta, and Brevo forwarding still require real-world evidence. No proof was fabricated.",
+      "recipe": "Keep the proof gates pending until the actual mailbox/payment/tester/Brevo evidence exists."
+    }
+  ]
+}

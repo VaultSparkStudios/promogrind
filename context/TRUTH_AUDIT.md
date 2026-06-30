@@ -240,3 +240,11 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Canon adoption truth improved: `context/CANON_ADOPTION.md` now exists after the startup adoption check reported it missing.
 - Email delivery truth remains yellow: `contact@promogrind.bet` is visible in public surfaces, but Brevo forwarding/copy is not proven locally. Ark cargo `01JSAJMBF321A097D8CE8E12B9` requests Studio Ops verification.
 - Verification truth: `npm run verify:launch-local` passed end to end with 502/502 tests, and doctor passed 12/12 with `blockingFailing: 0` on 2026-06-29.
+
+## Session 100 Truth Update - 2026-06-30
+
+- App composition truth improved: `src/App.jsx` no longer owns navigation/search, CSV import, dashboard widget, or state-legal alert component definitions; `appComposition.test.js` enforces those boundaries and the <3500-line ceiling.
+- State-legal truth improved: Missouri is treated as launched on `2025-12-01`, matching the Missouri public page, not as a coming-soon state.
+- Runtime truth improved: `App.jsx` now explicitly imports `US_BOOK_STATES` from `src/books.js` before using it in Deposit Optimizer and Promo Guarantee filters.
+- Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
+- External proof truth remains yellow: auth email, Stripe smoke, friend beta, and Brevo forwarding still require real evidence.

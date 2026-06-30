@@ -1,34 +1,33 @@
 # Latest Handoff - PromoGrind
 
-## Where We Left Off - Session 99 (2026-06-29)
+## Where We Left Off - Session 100 (2026-06-30)
 
-Intent Outcome: Achieved for repo-controllable work. Ran `/goal` as a continuous `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The generated genius list was empty and `ops.mjs innovation-pack` is not implemented in this public repo, so the audit used live public-surface canon checks and second-order launch-hardening candidates.
+Intent Outcome: Achieved for repo-controllable work. Ran `/goal` as a continuous `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The generated genius list was empty and `ops.mjs innovation-pack` is unavailable in this public repo, so the expansion pass used live App.jsx decomposition, state-legal truth, and launch-proof evidence checks.
 
 Shipped:
-- Added `docs/AUDIT_2026-06-29-S99.{md,json}` with the live-code audit and execution record.
-- Added `public/agents.json` with product boundaries, policy links, rights posture, contact URL, and agent-use constraints.
-- Added `public/.well-known/llms.txt` with AI-agent guidance and public page map.
-- Exposed `/contact/` from the app footer and `public/sitemap.xml`.
-- Added `/agents.json` and `/.well-known/llms.txt` to `public/sitemap.xml`.
-- Hardened `scripts/validate-ux-route-integrity.mjs` so `/contact/`, `/agents.json`, and `/.well-known/llms.txt` are required launch surfaces.
-- Wrote `context/CANON_ADOPTION.md` after the startup canon-adoption check found it missing.
-- Shipped Ark cargo `01JSAJMBF321A097D8CE8E12B9` to Studio Ops to configure/verify Brevo forwarding for `contact@promogrind.bet` to `founder@vaultsparkstudios.com`.
+- Added `docs/AUDIT_2026-06-30.{md,json}` and `docs/IMPLEMENT_PLAN.md` with four repo-owned items shipped and one honest external-proof deferral.
+- Extracted `QuickCalcPanel`, `CalcSearch`, and `MobileBottomNav` into `src/app/AppNavigation.jsx`.
+- Extracted `CSVImportModal` and pure `parseBetCsvRows` into `src/app/CSVImportModal.jsx`.
+- Extracted daily dashboard widgets into `src/app/DashboardWidgets.jsx`.
+- Extracted state-legal alert data/component into `src/lib/stateLegal.jsx`, fixed Missouri to recently launched on `2025-12-01`, and removed `MO` from coming-soon states.
+- Fixed a latent runtime bug by importing `US_BOOK_STATES` explicitly where App availability filters use it.
+- Added tests for CSV parsing, state-legal truth, and App composition ownership/line-count regression.
 
 Verification:
-- `node scripts/validate-ux-route-integrity.mjs` passed: 60 app routes, 100 public HTML files.
-- `node -e "JSON.parse(require('fs').readFileSync('public/agents.json','utf8')); console.log('agents.json ok')"` passed.
-- `npm run verify:launch-local` passed end to end: 56 test files, 502 tests, AI usage ledger, hook guard, auth smoke, launch smoke, UX smoke, browser smoke, public dist exposure, proof replay, bundle budget, strict public sanitization.
-- `node scripts/ops.mjs doctor --update-json` passed 12/12 with `blockingFailing: 0`.
+- Focused Vitest passed: 8/8.
+- `npm test` passed: 59 files, 508 tests.
+- `npm run verify:launch-local` passed end to end: 508/508 tests, AI usage ledger, hook guard, auth smoke, launch smoke, UX smoke, browser smoke, public dist exposure, proof replay, bundle budget, strict public sanitization.
 
 Still Pending / Honest External Proofs:
-- Brevo delivery for `contact@promogrind.bet` is not proven locally because `node scripts/check-secrets.mjs --for brevo` reports missing capability; Studio Ops cargo is the follow-up.
+- Brevo delivery for `contact@promogrind.bet` remains unproven locally; Studio Ops Ark cargo `01JSAJMBF321A097D8CE8E12B9` is still the follow-up.
 - Run a real production auth email pass with `npm run smoke:auth-email -- --record`.
 - Run a real Stripe smoke purchase with `npm run smoke:stripe -- --record`.
 - Run one trusted friend beta pass with `npm run beta:check -- --record`.
 - Studio Ops should still consume Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` for the PromoGrind Supabase deploy capability mapping.
 
 Next Move:
-1. Verify Brevo forwarding/copy for `contact@promogrind.bet` once Studio Ops replies to Ark cargo `01JSAJMBF321A097D8CE8E12B9`.
-2. Complete the real production auth email smoke and record redacted evidence.
-3. Complete Stripe smoke and friend-beta evidence.
-4. Schedule the dedicated `app-jsx-decomposition-finale` pass; `src/App.jsx` is still ~3592 lines.
+1. Complete the real production auth email smoke and record redacted evidence.
+2. Complete Stripe smoke and friend-beta evidence.
+3. Verify Brevo forwarding/copy once Studio Ops replies to Ark cargo `01JSAJMBF321A097D8CE8E12B9`.
+4. Continue App.jsx decomposition only after proof gates or newly verified launch blockers are addressed; current App composition gate is green.
+

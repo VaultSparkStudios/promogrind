@@ -223,4 +223,12 @@
 
 ## S99 Follow-up
 
-- [SIL] Continue `app-jsx-decomposition-finale`: `src/App.jsx` remains ~3592 lines despite existing provider/router extraction; next pass should extract another cohesive shell slice with focused tests.
+- [SIL] Continue `app-jsx-decomposition-finale`: `src/App.jsx` remains ~3592 lines despite existing provider/router extraction; next pass should extract another cohesive shell slice with focused tests. — **DONE S100**: extracted navigation/search, CSV import, dashboard widgets, and state-legal alert helpers; App composition test now enforces extracted ownership and a <3500-line ceiling.
+
+## Shipped This Session (S100)
+
+- app-navigation-extraction S100 - **DONE S100**: moved `QuickCalcPanel`, `CalcSearch`, and `MobileBottomNav` from `src/App.jsx` to `src/app/AppNavigation.jsx`.
+- csv-import-parser-extraction S100 - **DONE S100**: moved `CSVImportModal` and pure `parseBetCsvRows` to `src/app/CSVImportModal.jsx`; added focused parser tests.
+- state-legal-source-truth S100 - **DONE S100**: moved state legal alert truth to `src/lib/stateLegal.jsx`, marked Missouri launched on `2025-12-01`, removed `MO` from coming-soon states, and imported `US_BOOK_STATES` explicitly.
+- app-composition-regression-gate S100 - **DONE S100**: added `appComposition.test.js` to enforce extracted component ownership and the App.jsx line-count ceiling.
+- external-proof-evidence S100 - **HONEST DEFERRAL S100**: production auth email, Stripe smoke, friend beta, and Brevo forwarding still require real-world proof.

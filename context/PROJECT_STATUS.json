@@ -13,9 +13,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 99,
-  "currentFocus": "S99 shipped dual-audience public surfaces (/agents.json and /.well-known/llms.txt), exposed /contact/ in footer/sitemap, hardened UX route integrity to require those public files, wrote canon adoption posture, and kept Brevo contact forwarding as an honest Ark follow-up; local launch gate remains green at 502/502 tests.",
-  "nextMilestone": "Verify Brevo forwarding for contact@promogrind.bet via Studio Ops Ark reply, then record real production auth email proof, Stripe smoke, and friend-beta evidence; schedule app-jsx-decomposition-finale.",
+  "currentSession": 100,
+  "currentFocus": "S100 continued app-jsx-decomposition-finale: extracted navigation/search, CSV import/parsing, dashboard widgets, and state-legal alert truth; fixed Missouri launch-state drift and explicit US_BOOK_STATES import; launch-local gate is green at 508/508 tests.",
+  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding once Studio Ops replies; continue App.jsx decomposition only if the composition gate approaches its ceiling.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
@@ -23,16 +23,16 @@
     "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
     "Studio Ops capability follow-up: consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 and add promogrind.supabase.deploy for project ref fjnpzjjyhnpmunfoycrp."
   ],
-  "lastUpdated": "2026-06-29",
+  "lastUpdated": "2026-06-30",
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 3,
+  "silVelocity": 4,
   "silDebt": "down",
-  "silLastSession": 99,
+  "silLastSession": 100,
   "silMax": 1000,
   "silSparkline": [
-    998,
-    998,
+    1000,
+    1000,
     1000,
     1000,
     1000
@@ -40,24 +40,24 @@
   "ignisScore": 43431,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-29",
-  "testsPassing": 502,
-  "testsTotal": 502,
-  "testsLastRun": "2026-06-29",
-  "lastDeployStatus": "deployed-unannounced; local launch gate green; S99 public contact/agent surfaces verified locally",
-  "truthAuditStatus": "green-with-email-proof-follow-up",
-  "truthAuditLastRun": "2026-06-29",
+  "testsPassing": 508,
+  "testsTotal": 508,
+  "testsLastRun": "2026-06-30",
+  "lastDeployStatus": "deployed-unannounced; local launch gate green; S100 App composition/state-legal truth verified locally",
+  "truthAuditStatus": "green-with-external-proof-follow-ups",
+  "truthAuditLastRun": "2026-06-30",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 502/502 in S98 via npm test and npm run verify:launch-local"
+      "status": "passing 508/508 in S100 via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S98 with 502/502 tests, auth proof contract, browser smoke, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S100 with 508/508 tests, auth proof contract, browser smoke, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -103,7 +103,7 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-06-29",
+    "date": "2026-06-30",
     "passing": 12,
     "warning": 0,
     "failing": 0,

@@ -1,13 +1,15 @@
-# Implement Plan - 2026-06-29
+# Implementation Plan - 2026-06-30 S100
 
-1. **risk-radar-dashboard** - shipped. Pure helper in `src/dashboard/today.js`, dashboard card in `TodayDashboardPanel`, focused test coverage.
-2. **ai-cache-calibration-wiring** - shipped. Prompt-cache hit/miss accounting wired to Advisor/Chat, advisor workflow saves record AI prediction.
-3. **canonical-launch-proof-command-center** - shipped. Launch Command Center now consumes canonical proof-derived blockers and treats nonblocking partial proof as advisory.
-4. **external-proof-evidence** - honestly deferred. Real production auth email, Stripe smoke, and friend-beta proof still require real-world execution.
+## Sequenced Wave
 
-## Session 99 - 2026-06-29
+1. app-navigation-extraction - shipped; extracted mobile/search/quick-calc shell widgets from `src/App.jsx` into `src/app/AppNavigation.jsx`.
+2. csv-import-parser-extraction - shipped; extracted `CSVImportModal` and pure `parseBetCsvRows` with focused tests.
+3. state-legal-source-truth - shipped; moved state-legal alert truth to `src/lib/stateLegal.jsx`, fixed Missouri launched status, and imported `US_BOOK_STATES` explicitly.
+4. app-composition-regression-gate - shipped; added App composition ownership and line-count guard.
+5. external-proof-evidence - honest deferral; real mailbox/payment/tester/Brevo evidence still required.
 
-1. **dual-audience-public-files** - shipped. Added `public/agents.json` and `public/.well-known/llms.txt` with product boundaries, rights, policy links, and agent guidance.
-2. **contact-surface-hardening** - shipped. App footer and sitemap now expose `/contact/`; sitemap also lists the two agent-facing files.
-3. **public-surface-route-guard** - shipped. `scripts/validate-ux-route-integrity.mjs` now requires `/contact/`, `/agents.json`, and `/.well-known/llms.txt`.
-4. **brevo-contact-forwarding-proof** - honestly deferred to Studio Ops via Ark cargo `01JSAJMBF321A097D8CE8E12B9`; local `check-secrets --for brevo` is missing, so delivery is not claimed.
+## Validation
+
+- Focused Vitest: passed 8/8.
+- Full `npm test`: passed 508/508.
+- `npm run verify:launch-local`: passed end to end.

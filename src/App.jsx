@@ -1,27 +1,29 @@
-﻿import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
+import React, { useState, useMemo, useEffect, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BOOKS } from "./books.js";
+import { BOOKS, US_BOOK_STATES } from "./books.js";
 import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
 import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
 import { flagCalcUsed } from "./lib/missions.js";
-import { subscribeToPush, enableDailyBriefPush, disableDailyBriefPush, isDailyBriefEnabled } from "./sw-register.js";
+import { subscribeToPush } from "./sw-register.js";
 import { toD, toA, toP, toF, f, calcROI, downloadFile, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import { computeStreak } from "./lib/streaks.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
+import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { DailyBriefingBtn, DailyRoutinePanel, OpenExposurePanel, ProfitGoalTracker, TopToolsPanel } from "./app/DashboardWidgets.jsx";
+import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
 import { AppProviders, FeatureFlagProviders } from "./app/AppProviders.jsx";
 import { buildAppTabs, buildSlugMap, DEFAULT_SLUG, getAllCalcs, getCalcGroupIndex, SUBCATS } from "./app/appRoutes.js";
-import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_UI, SEARCH_UI } from "./app/appText.js";
+import { APP_CHROME_COPY, BET_TRACKER_UI, DAILY_STREAK_COPY, GUT_CHECK_UI, PUSH_UI } from "./app/appText.js";
 import { parseBetSlip } from "./app/parseBetSlip.js";
 import { GiftTrialBox, StarterPackModal, OnboardingChecklist, MemberWelcomeCard } from "./app/AppSubcomponents.jsx";
 import { useProfitNotifications } from "./app/useProfitNotifications.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
 import { trackEvent, trackPage, identifyUser } from "./analytics.js";
-import { MOBILE_NAV_RESPONSIVE_CSS } from "./app/responsive.js";
 import { ToastCtx, useToast, AppDataCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import { PROMO_SCHED, DAYS_ORDER } from "./data/promoSchedule.js";
@@ -80,6 +82,7 @@ import AuthDialog from "./components/AuthDialog.jsx";
 import BookCTA from "./components/BookCTA.jsx";
 import ShareCard from "./components/ShareCard.jsx";
 import { getQuickCalcFallbackSlug } from "./workflows/actionGraph.js";
+import { StateLegalAlert, US_STATES } from "./lib/stateLegal.jsx";
 
 function getInitialAuthMode() {
   if (hasRecoveryHash()) return "update-password";
@@ -1070,159 +1073,6 @@ const PromoFinder = () => {
   </div>);
 };
 
-// â•â•â• QUICK CALC PANEL â•â•â•
-const QuickCalcPanel = ({ goTo }) => {
-  const [open, setOpen] = useState(false);
-  const quickItems = [
-    {n:"Bonus Bet",gi:1,ti:0},
-    {n:"Profit Boost",gi:1,ti:1},
-    {n:"No-Vig",gi:2,ti:0},
-    {n:"+EV",gi:2,ti:2},
-    {n:"2-Way Arb",gi:2,ti:4},
-  ];
-  return (
-    <div className="pg-quick-calc" style={{position:"fixed",bottom:84,left:14,zIndex:200}}>
-      <style>{`@media (min-width: 640px) { .pg-quick-calc { display: none !important; } }`}</style>
-      {open&&<div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:14,padding:10,marginBottom:8,boxShadow:"0 16px 36px rgba(0,0,0,0.38)",minWidth:180}}>
-        {quickItems.map(item=>(
-          <button key={item.n} onClick={()=>{goTo(item.gi,item.ti);setOpen(false);}} style={{display:"block",width:"100%",padding:"10px 12px",background:"transparent",border:"none",color:K.tx,cursor:"pointer",textAlign:"left",fontSize:12,fontFamily:font,borderBottom:`1px solid ${K.bd}`,borderRadius:0}}>
-            {item.n}
-          </button>
-        ))}
-      </div>}
-      <button onClick={()=>setOpen(o=>!o)} style={{padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:999,color:K.ac,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:700,boxShadow:"0 10px 24px rgba(0,0,0,0.3)"}}>
-        {open?"âœ• Close":"âš¡ Quick"}
-      </button>
-    </div>
-  );
-};
-
-// â•â•â• CALC SEARCH (keyboard ?) â•â•â•
-const CalcSearch = ({ allCalcs, onNavigate, onClose }) => {
-  const [q, setQ] = useState('');
-  const inputRef = useRef(null);
-  useEffect(()=>{ inputRef.current?.focus(); },[]);
-  useEffect(()=>{
-    const handler = e => { if(e.key==='Escape') onClose(); };
-    window.addEventListener('keydown',handler);
-    return ()=>window.removeEventListener('keydown',handler);
-  },[onClose]);
-  const filtered = q.trim() ? allCalcs.filter(c=>c.n.toLowerCase().includes(q.toLowerCase())||c.group.toLowerCase().includes(q.toLowerCase())) : allCalcs;
-  return (
-    <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",zIndex:2000,display:"flex",alignItems:"flex-start",justifyContent:"center",paddingTop:80,padding:"80px 16px 16px"}}>
-      <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,padding:20,width:"100%",maxWidth:480,maxHeight:"70vh",display:"flex",flexDirection:"column",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
-        <input ref={inputRef} value={q} onChange={e=>setQ(e.target.value)} placeholder={SEARCH_UI.calculatorPlaceholder} style={{...S.input,fontSize:14,marginBottom:12}}/>
-        <div style={{overflowY:"auto",flex:1}}>
-          {filtered.map(c=>(
-            <button key={c.slug} onClick={()=>{onNavigate(c.slug);onClose();}} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"10px 12px",background:"transparent",border:"none",borderBottom:`1px solid ${K.bd}`,color:K.tx,cursor:"pointer",textAlign:"left",fontFamily:font}}>
-              <span style={{fontSize:13,fontWeight:500}}>{c.n}</span>
-              <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>{c.group}</span>
-            </button>
-          ))}
-          {!filtered.length&&<div style={{textAlign:"center",padding:24,color:K.mt,fontSize:12}}>No matches</div>}
-        </div>
-        <div style={{fontSize:10,color:K.mt,marginTop:8,textAlign:"center"}}>Press Esc to close Â· Press ? anywhere to reopen</div>
-      </div>
-    </div>
-  );
-};
-
-// â•â•â• MOBILE BOTTOM NAV â•â•â•
-const MobileBottomNav = ({ gi, goTo }) => {
-  const icons = ["ðŸ ","âš¡","ðŸ“Š","ðŸ“ˆ","ðŸ”´","ðŸ“š"];
-  const labels = ["Home","Convert","Calc","Track","Live","Learn"];
-  return (
-    <div className="pg-mobile-nav" style={{position:"fixed",bottom:0,left:0,right:0,background:`linear-gradient(180deg,${K.s1},${K.s2})`,borderTop:`1px solid ${K.bd}`,display:"flex",zIndex:100,padding:"6px 0 env(safe-area-inset-bottom,0px)",boxShadow:"0 -10px 24px rgba(0,0,0,0.22)"}}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {TABS.map((t,i)=>(
-        <button key={t.group} onClick={()=>goTo(i,0)} style={{flex:1,padding:"7px 4px",background:"none",border:"none",color:gi===i?K.gn:K.mt,cursor:"pointer",fontSize:9,textTransform:"uppercase",letterSpacing:"0.5px",fontFamily:font,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-          <span style={{fontSize:18, lineHeight:1}}>{icons[i]}</span>
-          <span style={{fontWeight:gi===i?700:400}}>{labels[i]}</span>
-        </button>
-      ))}
-    </div>
-  );
-};
-
-// â•â•â• CSV IMPORT MODAL â•â•â•
-const CSVImportModal = ({ onImport, onClose }) => {
-  const [raw, setRaw] = useState('');
-  const [preview, setPreview] = useState([]);
-  const [error, setError] = useState(null);
-  const parse = () => {
-    try {
-      const lines = raw.trim().split('\n').filter(Boolean);
-      if(lines.length<2) { setError('Need at least a header row and one data row'); return; }
-      const headers = lines[0].split(',').map(h=>h.replace(/"/g,'').trim().toLowerCase());
-      const rows = lines.slice(1).map(line=>{
-        const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g)||[];
-        const obj = {};
-        headers.forEach((h,i)=>{ obj[h]=(cols[i]||'').replace(/"/g,'').trim(); });
-        return obj;
-      });
-      const mapped = rows.map((r,i)=>({
-        id: Date.now()+i,
-        date: r.date||r['settled date']||r['place date']||new Date().toISOString().split('T')[0],
-        book: r.book||r.sportsbook||'Imported',
-        type: r.type||r['bet type']||'Moneyline',
-        odds: r.odds||r.price||r['bet odds']||'+100',
-        stake: (r.stake||r['risk']||r['wager']||'0').replace('$',''),
-        toWin: (r['to win']||r.towin||r.profit||'0').replace('$',''),
-        status: (r.status||r.result||'open').toLowerCase().replace('win','won').replace('loss','lost'),
-        notes: r.description||r.notes||r.event||'',
-      }));
-      setPreview(mapped.slice(0,5));
-      setError(null);
-    } catch(e) { setError('Parse error: '+e.message); }
-  };
-  const confirm = () => {
-    try {
-      const lines = raw.trim().split('\n').filter(Boolean);
-      const headers = lines[0].split(',').map(h=>h.replace(/"/g,'').trim().toLowerCase());
-      const rows = lines.slice(1).map((line,i)=>{
-        const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g)||[];
-        const obj={};
-        headers.forEach((h,j)=>{ obj[h]=(cols[j]||'').replace(/"/g,'').trim(); });
-        return {
-          id:Date.now()+i,
-          date:obj.date||obj['settled date']||obj['place date']||new Date().toISOString().split('T')[0],
-          book:obj.book||obj.sportsbook||'Imported',
-          type:obj.type||obj['bet type']||'Moneyline',
-          odds:obj.odds||obj.price||obj['bet odds']||'+100',
-          stake:(obj.stake||obj['risk']||obj['wager']||'0').replace('$',''),
-          toWin:(obj['to win']||obj.towin||obj.profit||'0').replace('$',''),
-          status:(obj.status||obj.result||'open').toLowerCase().replace('win','won').replace('loss','lost'),
-          notes:obj.description||obj.notes||obj.event||'',
-        };
-      });
-      onImport(rows);
-      onClose();
-    } catch(e) { setError('Import failed: '+e.message); }
-  };
-  return (
-    <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",zIndex:2000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
-      <div style={{background:K.s1,border:`1px solid ${K.bd2}`,borderRadius:12,padding:24,width:"100%",maxWidth:560,maxHeight:"80vh",overflow:"auto",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}>
-        <div style={{fontSize:16,fontWeight:700,color:K.tx,marginBottom:4,fontFamily:fontD}}>Import Bets from CSV</div>
-        <div style={{fontSize:11,color:K.dm,marginBottom:16}}>Paste your DraftKings, FanDuel, or any sportsbook CSV export below. Headers are auto-detected.</div>
-        <textarea value={raw} onChange={e=>setRaw(e.target.value)} placeholder={"date,book,odds,stake,status\n2026-03-01,DraftKings,+150,50,won"} style={{...S.input,height:120,resize:"vertical",marginBottom:8,fontFamily:"monospace",fontSize:11}}/>
-        {error&&<div style={{fontSize:11,color:K.rd,marginBottom:8}}>{error}</div>}
-        {preview.length>0&&<div style={{marginBottom:12}}>
-          <div style={{fontSize:10,color:K.mt,marginBottom:6,textTransform:"uppercase",letterSpacing:"1.5px"}}>Preview ({preview.length} of {raw.trim().split('\n').length-1} rows)</div>
-          {preview.map((r,i)=><div key={i} style={{fontSize:11,color:K.dm,padding:"4px 0",borderBottom:`1px solid ${K.bd}`}}>{r.date} Â· {r.book} Â· {r.odds} Â· ${r.stake} Â· <span style={{color:r.status==="won"?K.gn:r.status==="lost"?K.rd:K.yl}}>{r.status}</span></div>)}
-        </div>}
-        <div style={{display:"flex",gap:8,marginTop:12}}>
-          <button onClick={parse} style={{flex:1,padding:"9px",background:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font}}>Parse CSV</button>
-          {preview.length>0&&<button onClick={confirm} style={{flex:1,padding:"9px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font}}>Import {raw.trim().split('\n').length-1} Bets</button>}
-          <button onClick={onClose} style={{padding:"9px 16px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,cursor:"pointer",fontFamily:font}}>Cancel</button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// US_BOOK_STATES â†’ ./components/Tracker.jsx
-const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DC","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
-
 // PROMO_SCHED + DAYS_ORDER â†’ ./data/promoSchedule.js
 const PromoAlertPrefs = () => {
   const [alertEmail,setAlertEmail]=useState("");
@@ -2066,7 +1916,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       )}
       <QuickAddBet/>
       <OpenExposurePanel bets={bets}/>
-      <TopToolsPanel navigate={navigate}/>
+      <TopToolsPanel navigate={navigate} tabs={TABS}/>
       <WeeklyGrindReport/>
       <BankrollWizard/>
       <CopyMySetup appData={data} syncAppData={syncAppData}/>
@@ -2616,42 +2466,6 @@ const PromoArbFinder = () => {
   </div>);
 };
 
-// â•â•â• STATE LEGAL ALERT â•â•â•
-const RECENTLY_LEGALIZED = [
-  {state:"North Carolina",abbr:"NC",date:"2024-03-11",note:"Mobile betting went live March 11, 2024"},
-  {state:"Vermont",abbr:"VT",date:"2024-01-11",note:"Mobile betting live January 11, 2024"},
-  {state:"Kentucky",abbr:"KY",date:"2023-09-28",note:"Mobile betting live September 2023"},
-  {state:"Maine",abbr:"ME",date:"2023-11-03",note:"Mobile betting live November 2023"},
-];
-const COMING_SOON_STATES = ["MO","GA","TX","FL","AL","OK"];
-
-const StateLegalAlert = ({ userState }) => {
-  const [dismissed, setDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_state_alert_dismissed');}catch{return false;} });
-  if(dismissed||!userState) return null;
-  const recent = RECENTLY_LEGALIZED.find(s=>s.abbr===userState||s.state===userState);
-  const comingSoon = COMING_SOON_STATES.includes(userState);
-  if(!recent&&!comingSoon) return null;
-  const dismiss = () => { try{localStorage.setItem('pg_state_alert_dismissed','1');}catch{} setDismissed(true); };
-  return (
-    <div style={{...S.card,background:recent?`${K.gn}08`:`${K.yl}08`,border:`1px solid ${recent?K.gn:K.yl}30`,marginBottom:12}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
-        <div style={{flex:1}}>
-          {recent&&<>
-            <div style={{fontSize:13,fontWeight:700,color:K.gn,marginBottom:4}}>ðŸŽ‰ Your state [{userState}] recently launched sports betting!</div>
-            <div style={{fontSize:12,color:K.dm,marginBottom:4}}>{recent.note}</div>
-            <div style={{fontSize:11,color:K.dm}}>DraftKings, FanDuel, BetMGM, and Caesars are all available. Check the Sportsbooks tab to start tracking.</div>
-          </>}
-          {comingSoon&&!recent&&<>
-            <div style={{fontSize:13,fontWeight:700,color:K.yl,marginBottom:4}}>â³ Sports betting is not yet available in your state ({userState})</div>
-            <div style={{fontSize:11,color:K.dm}}>We'll keep the tools ready for when it launches. Set your state in the Sportsbooks tab to get updates.</div>
-          </>}
-        </div>
-        <button onClick={dismiss} style={{background:"transparent",border:"none",color:K.mt,cursor:"pointer",fontSize:14,padding:"0 4px",flexShrink:0}}>âœ•</button>
-      </div>
-    </div>
-  );
-};
-
 // â•â•â• WEEKLY GRIND REPORT â•â•â•
 const WeeklyGrindReport = () => {
   const { appData: data } = React.useContext(AppDataCtx);
@@ -2763,185 +2577,6 @@ const BankrollWizard = () => {
 // FX, CurrencyCtx â†’ ./contexts.jsx
 const useCurrency = () => React.useContext(CurrencyCtx);
 
-// â•â•â• DAILY ROUTINE PANEL â•â•â•
-const DailyRoutinePanel = ({ openBetsCount, expiringCount }) => {
-  const hour = new Date().getHours();
-  const [checks, setChecks] = useState({});
-  let tasks = [];
-  if(hour < 12) {
-    tasks = ["Check DK/FD daily profit boosts","Run No-Vig on today's best line","Log yesterday's settled bets"];
-  } else if(hour < 17) {
-    tasks = ["Check live scanner for +EV","Review open parlay exposure","Update book health statuses"];
-  } else {
-    tasks = ["Settle today's open bets","Log profits to ledger","Check tomorrow's promos"];
-  }
-  const alerts = [];
-  if(openBetsCount>3) alerts.push(`âš  ${openBetsCount} open bets need attention`);
-  if(expiringCount>0) alerts.push(`ðŸ”¥ ${expiringCount} promos expiring soon`);
-  return (
-    <div style={{...S.card,marginBottom:12}}>
-      <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:10,fontFamily:fontD}}>Today's Grind</div>
-      {alerts.map((a,i)=><div key={i} style={{fontSize:11,color:K.yl,fontWeight:600,marginBottom:6}}>{a}</div>)}
-      {tasks.map((task,i)=>(
-        <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:`1px solid ${K.bd}`}}>
-          <div role="checkbox" aria-checked={!!checks[i]} onClick={()=>setChecks(c=>({...c,[i]:!c[i]}))} style={{width:16,height:16,borderRadius:3,border:`2px solid ${checks[i]?K.gn:K.bd2}`,background:checks[i]?K.gn:"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-            {checks[i]&&<span style={{color:K.bg,fontSize:10,fontWeight:700}}>âœ“</span>}
-          </div>
-          <span style={{fontSize:12,color:checks[i]?K.mt:K.tx,textDecoration:checks[i]?"line-through":"none"}}>{i+1}. {task}</span>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-// â•â•â• PROFIT GOAL MILESTONE â•â•â•
-const ProfitGoalTracker = ({ totalProfit }) => {
-  const { appData: data, syncAppData } = React.useContext(AppDataCtx);
-  const [showInput, setShowInput] = useState(false);
-  const [inputVal, setInputVal] = useState("");
-  const goal = parseFloat(data.profitGoal)||0;
-  const pct = goal>0 ? Math.min(100, totalProfit/goal*100) : 0;
-  const remaining = goal>0 ? Math.max(0, goal-totalProfit) : 0;
-  const barColor = pct>=100?K.gn:pct>=60?K.yl:K.ac;
-  const setGoal = () => {
-    const g = parseFloat(inputVal);
-    if(!isNaN(g)&&g>0) { syncAppData({...data,profitGoal:g}); setShowInput(false); setInputVal(""); }
-  };
-  return (
-    <div style={{...S.card,marginBottom:12}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-        <div style={{fontSize:12,fontWeight:700,color:K.tx,fontFamily:fontD}}>Profit Goal</div>
-        <button onClick={()=>setShowInput(s=>!s)} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>{showInput?"Cancel":"Set Goal"}</button>
-      </div>
-      {showInput&&<div style={{display:"flex",gap:8,marginBottom:8}}>
-        <input style={{...S.input,flex:1}} value={inputVal} onChange={e=>setInputVal(e.target.value)} placeholder="Enter goal $"/>
-        <button onClick={setGoal} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Save</button>
-      </div>}
-      {goal>0&&<>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:K.mt,marginBottom:6}}>
-          <span>Progress: {f(pct,1)}% of ${f(goal,0)} goal</span>
-          {pct<100&&<span>Remaining: ${f(remaining)}</span>}
-        </div>
-        <div style={{height:8,background:K.s3,borderRadius:4,overflow:"hidden",marginBottom:8}}>
-          <div style={{height:8,borderRadius:4,background:barColor,width:`${pct}%`,transition:"width 0.5s"}}/>
-        </div>
-        {pct>=100&&<div style={{textAlign:"center",padding:"10px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,fontSize:14,fontWeight:700,color:K.gn,animation:"pulse 1s infinite alternate"}}>
-          ðŸŽ‰ðŸŽ‰ðŸŽ‰ GOAL REACHED! ðŸŽ‰ðŸŽ‰ðŸŽ‰
-          <style>{`@keyframes pulse{from{opacity:0.7}to{opacity:1}}`}</style>
-        </div>}
-      </>}
-      {!goal&&!showInput&&<div style={{fontSize:11,color:K.mt}}>Set a profit goal to track your progress.</div>}
-    </div>
-  );
-};
-
-// â•â•â• DAILY BRIEFING â•â•â•
-const useDailyBriefing = (openBets, todayPromos) => {
-  useEffect(()=>{
-    try {
-      const enabled = isDailyBriefEnabled();
-      if(!enabled) return;
-      const now = new Date();
-      const hour = now.getHours(), min = now.getMinutes();
-      if(hour!==9||(min>15)) return;
-      const todayStr = now.toISOString().split('T')[0];
-      if(localStorage.getItem('pg_brief_shown_today')===todayStr) return;
-      if(typeof Notification!=='undefined'&&Notification.permission==='granted') {
-        const openCount = openBets?.length||0;
-        const body = `${openCount} open bet${openCount!==1?"s":""} pending. ${todayPromos?.length||0} promos available today.`;
-        new Notification('PromoGrind Daily Briefing',{body, icon:'/favicon.svg'});
-        localStorage.setItem('pg_brief_shown_today', todayStr);
-      }
-    } catch(e) {}
-  },[]);
-};
-
-const DailyBriefingBtn = ({ openBets, todayPromos }) => {
-  useDailyBriefing(openBets, todayPromos);
-  const [enabled, setEnabled] = useState(() => isDailyBriefEnabled());
-  const isPro = ()=>{ try{return ['vault_sparked','pro'].includes(localStorage.getItem('pg_pro_status')||'');}catch{return false;} };
-  if(!isPro()&&!enabled) return null;
-  const toggle = async () => {
-    if(!enabled) {
-      const result = await enableDailyBriefPush();
-      if(result.ok) setEnabled(true);
-    } else {
-      await disableDailyBriefPush();
-      setEnabled(false);
-    }
-  };
-  return (
-    <button onClick={toggle} style={{padding:"5px 12px",background:enabled?`${K.gn}15`:"transparent",border:`1px solid ${enabled?K.gn:K.bd2}`,borderRadius:6,color:enabled?K.gn:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
-      {enabled?"ðŸ”” 9am Briefing ON":"ðŸ”• Enable 9am Briefing"}
-    </button>
-  );
-};
-
-// â•â•â• MULTI-BOOK EXPOSURE DASHBOARD â•â•â•
-const OpenExposurePanel = ({ bets }) => {
-  const openBets = (bets||[]).filter(b=>b.status==='open');
-  if(!openBets.length) return null;
-  const byBook = {};
-  openBets.forEach(b=>{
-    if(!byBook[b.book]) byBook[b.book]={bets:0,atRisk:0,potWin:0};
-    byBook[b.book].bets++;
-    byBook[b.book].atRisk+=parseFloat(b.stake)||0;
-    byBook[b.book].potWin+=parseFloat(b.toWin)||0;
-  });
-  const books = Object.entries(byBook);
-  const totRisk = books.reduce((s,[,v])=>s+v.atRisk,0);
-  const totWin = books.reduce((s,[,v])=>s+v.potWin,0);
-  return (
-    <div style={{...S.card,marginBottom:12}}>
-      <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:10,fontFamily:fontD}}>Open Exposure</div>
-      <div style={{overflowX:"auto"}}>
-        <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-          <thead><tr>{["Book","Bets","At Risk","Potential Win"].map(h=><th key={h} style={{textAlign:"left",padding:"5px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
-          <tbody>
-            {books.map(([book,v])=>(
-              <tr key={book}>
-                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600,color:K.tx}}>{book}</td>
-                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.ac}}>{v.bets}</td>
-                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.rd,fontWeight:600}}>${f(v.atRisk)}</td>
-                <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>${f(v.potWin)}</td>
-              </tr>
-            ))}
-            <tr style={{background:K.s3}}>
-              <td style={{padding:"6px 8px",fontWeight:700,color:K.tx}}>TOTAL</td>
-              <td style={{padding:"6px 8px",color:K.ac,fontWeight:700}}>{openBets.length}</td>
-              <td style={{padding:"6px 8px",color:K.rd,fontWeight:700}}>${f(totRisk)}</td>
-              <td style={{padding:"6px 8px",color:K.gn,fontWeight:700}}>${f(totWin)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-
-// â•â•â• TOP TOOLS PANEL â•â•â•
-let TABS_REF = [];
-const TopToolsPanel = ({ navigate }) => {
-  const usage = useMemo(()=>{ try{return JSON.parse(localStorage.getItem('pg_usage_log')||'{}');}catch{return {};} },[]);
-  const top5 = Object.entries(usage).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  if(!top5.length) return null;
-  const nameMap = {};
-  TABS_REF.forEach(g=>g.items.forEach(item=>{ nameMap[item.slug]=item.n; }));
-  return (
-    <div style={{...S.card,marginBottom:12}}>
-      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Your Top Tools</div>
-      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-        {top5.map(([slug,count])=>(
-          <button key={slug} onClick={()=>navigate('/'+slug)} style={{padding:"5px 12px",background:K.s2,border:`1px solid ${K.bd2}`,borderRadius:50,color:K.ac,fontSize:11,cursor:"pointer",fontFamily:font,display:"flex",alignItems:"center",gap:6}}>
-            <span>{nameMap[slug]||slug}</span>
-            <span style={{fontSize:9,color:K.mt,background:K.s3,padding:"1px 5px",borderRadius:10}}>{count}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 // â•â•â• COPY MY SETUP â•â•â•
 const CopyMySetup = ({ appData: data, syncAppData }) => {
   const [bankroll, setBankroll] = useState(()=>{ try{return localStorage.getItem('pg_bankroll')||'';}catch{return '';} });
@@ -3034,7 +2669,6 @@ const TABS = buildAppTabs({
   ProfitCertificate, LiveScanner, AIActionPlan, StackBuilder, KB, PromoFinder, PromoCalendar, PromoBoard,
   Glossary, ReferralHub, TeamAccounts, CompetitorComparison, PromoArbFinder,
 });
-TABS_REF = TABS;
 
 const slugMap = buildSlugMap(TABS);
 
@@ -3758,7 +3392,7 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo}/>
+      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate}/>

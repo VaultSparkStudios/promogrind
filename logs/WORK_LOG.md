@@ -331,3 +331,14 @@ Append chronological entries.
 - Honest deferral: local `brevo` capability is missing, so delivery for `contact@promogrind.bet` was not claimed. Ark cargo `01JSAJMBF321A097D8CE8E12B9` asks Studio Ops to configure/verify forwarding to `founder@vaultsparkstudios.com`.
 - Verification: `npm run verify:launch-local` passed end to end with 502/502 tests; `node scripts/ops.mjs doctor --update-json` passed 12/12 with `blockingFailing: 0`.
 - Remaining proof blockers: real production auth email smoke, Stripe smoke purchase, friend-beta pass, and Brevo forwarding evidence.
+
+## 2026-06-30 - Session 100 Codex goal arc
+
+- Ran `/goal` as a continuous `/arc` mission: `/start` -> `/audit` -> `/implement` -> `/closeout`.
+- Startup: `git pull --rebase origin main` was already up to date, context meter said CONTINUE, doctor passed 12/12, blocker preflight showed 0 Human Action Required items, and canon adoption was actively checked via the studio-ops fallback script because the local shim is absent.
+- Audit: generated `docs/AUDIT_2026-06-30.{md,json}` after the live genius list returned 0 items and `ops.mjs innovation-pack` was unavailable.
+- Shipped App decomposition: extracted navigation/search shell widgets, CSV import/parsing, dashboard widgets, and state-legal alert truth out of `src/App.jsx`.
+- Fixed truth/runtime drift: Missouri is no longer treated as coming soon, and App availability filters now explicitly import `US_BOOK_STATES`.
+- Added regression coverage for CSV parsing, state-legal truth, and App composition boundaries.
+- Verification: focused Vitest passed 8/8; `npm test` passed 508/508; `npm run verify:launch-local` passed end to end.
+- Remaining proof blockers: real production auth email smoke, Stripe smoke purchase, friend-beta pass, and Brevo forwarding evidence.
