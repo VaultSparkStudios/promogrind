@@ -268,3 +268,10 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Regression truth improved: `appComposition.test.js` now blocks those surfaces from returning to the App monolith and enforces a <3100-line ceiling. Current App.jsx line count is 2807.
 - Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
 - External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real evidence/action.
+
+## Session 103 Truth Update - 2026-06-30
+
+- App composition truth improved: `src/App.jsx` no longer owns Pending Bet Tracker, Middle/Odds Convert/Rollover/Income Estimator, Free Bet Arb Tracker, Promo Trade Journal, Odds Comparison Table, or Promo Finder implementation logic; each surface now has a dedicated module.
+- Regression truth improved: `appComposition.test.js` now blocks those surfaces from returning to the App monolith and enforces a <2400-line ceiling. Current App.jsx line count is 2365.
+- Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
+- External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real evidence/action.

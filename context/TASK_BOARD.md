@@ -13,7 +13,7 @@
 - rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
 - add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
 - add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
-- continue decomposing the remaining high-churn `src/App.jsx` seams beyond `parseBetSlip`/`AppChrome`/`appText`/`AppNotifications`/community-promos/`useProfitNotifications` (App.jsx is still ~4300 lines)
+- continue decomposing the remaining high-churn `src/App.jsx` seams beyond the extracted shell, route, tracker, utility-calculator, and promo-finder modules (App.jsx is now 2365 lines)
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
@@ -253,4 +253,18 @@
 
 ## S102 Follow-up
 
-- [SIL] Keep App.jsx under the <3100 composition ceiling; only extract another route seam when the guard approaches the ceiling or proof-gate work creates a real repo-owned change.
+- [SIL] Keep App.jsx under the <3100 composition ceiling; only extract another route seam when the guard approaches the ceiling or proof-gate work creates a real repo-owned change. — **DONE S103**: extracted BetTracker, utility calculators, tracking tools, and PromoFinder; App.jsx is now 2365 lines with a <2400 ceiling.
+
+
+## Shipped This Session (S103)
+
+- bet-tracker-route-extraction S103 - **DONE S103**: moved Pending Bet Tracker from `src/App.jsx` into `src/components/BetTracker.jsx` while preserving CSV import/export, bet-slip parsing, undo delete, and portfolio EV display.
+- utility-calculator-pack-extraction S103 - **DONE S103**: moved Middle, Odds Convert, Rollover, and Income Estimator into `src/calculators/UtilityCalculators.jsx` while preserving calculator memory, help panels, and conversion math.
+- tracking-tools-pack-extraction S103 - **DONE S103**: moved Free Bet Arb Tracker, Promo Trade Journal, and Odds Comparison Table into `src/components/TrackingTools.jsx` while preserving persistence, export, filtering, and line-move badges.
+- promo-finder-route-extraction S103 - **DONE S103**: moved Promo Finder into `src/components/PromoFinder.jsx` while preserving wizard routing and calculator handoff.
+- app-composition-regression-gate S103 - **DONE S103**: extended `appComposition.test.js` to guard the new ownership boundaries and lowered the App.jsx ceiling to <2400 lines; App.jsx is now 2365 lines.
+- external-proof-evidence S103 - **HONEST DEFERRAL S103**: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action; no proof was fabricated.
+
+## S103 Follow-up
+
+- [SIL] Continue the App.jsx decomposition finale toward <2000 lines by extracting Promo Calendar or the referral/team/account surfaces only after a focused route smoke identifies the safest next seam.

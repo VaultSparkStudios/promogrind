@@ -12,6 +12,15 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const MobileBottomNav\s*=/);
     expect(appSource).not.toMatch(/const CSVImportModal\s*=/);
     expect(appSource).not.toMatch(/const StateLegalAlert\s*=/);
+    expect(appSource).not.toMatch(/const IncomeEstimator\s*=/);
+    expect(appSource).not.toMatch(/const RolloverCalc\s*=/);
+    expect(appSource).not.toMatch(/const OddsConvert\s*=/);
+    expect(appSource).not.toMatch(/const MiddleBet\s*=/);
+    expect(appSource).not.toMatch(/const BetTracker\s*=/);
+    expect(appSource).not.toMatch(/const PromoFinder\s*=/);
+    expect(appSource).not.toMatch(/const OddsComparisonTable\s*=/);
+    expect(appSource).not.toMatch(/const PromoJournal\s*=/);
+    expect(appSource).not.toMatch(/const FreeBetArbTracker\s*=/);
     expect(appSource).not.toMatch(/const DailyRoutinePanel\s*=/);
     expect(appSource).not.toMatch(/const ProfitGoalTracker\s*=/);
     expect(appSource).not.toMatch(/const DailyBriefingBtn\s*=/);
@@ -27,7 +36,7 @@ describe("App.jsx composition boundary", () => {
   });
 
   it("keeps the App monolith under the current decomposition ceiling", () => {
-    expect(appSource.split(/\r?\n/).length).toBeLessThan(3100);
+    expect(appSource.split(/\r?\n/).length).toBeLessThan(2400);
   });
 });
 

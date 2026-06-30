@@ -1,39 +1,36 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: bc9e653335c1 -->
-<!-- generated-at: 2026-06-30T04:26:36.993Z -->
+<!-- source-hash: 3df51a34d268 -->
+<!-- generated-at: 2026-06-30T05:06:51.634Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary - PromoGrind
+SESSION: 103 (2026-06-30)
 
-## Session
-- Latest: S101 (2026-06-30)
-- Intent: Achieved for repo-controllable work; genius list empty and ops.mjs innovation-pack unavailable in public repo, so continued App.jsx decomposition.
+SHIPPED
+- AUDIT_2026-06-30-S103.{md,json} + refreshed IMPLEMENT_PLAN.md.
+- Extracted BetTracker.jsx, UtilityCalculators.jsx (Middle, Odds Convert, Rollover, Income Estimator), TrackingTools.jsx (Free Bet Arb, Promo Trade Journal, Odds Comparison), PromoFinder.jsx.
+- Tightened appComposition.test.js; lowered App.jsx ceiling to <2400; App.jsx now 2365 lines.
 
-## Shipped (S101)
-- Added docs/AUDIT_2026-06-30-S101.{md,json}; refreshed docs/IMPLEMENT_PLAN.md.
-- Extracted Glossary and GLOSSARY_TERMS into src/components/Glossary.jsx.
-- App.jsx reduced 3404 to 3363 lines; added useRef import to fix dashboard smoke failure.
-- Extended appComposition.test.js to enforce glossary ownership.
+VERIFICATION
+- Composition Vitest 2/2; check:hooks pass; npm test 59 files/508 tests pass.
+- verify:launch-local pass end to end (smokes, proof replay, bundle, sanitization).
+- ops.mjs doctor 12/12, blockingFailing 0.
 
-## Verification
-- Focused Vitest 2/2 passed; check:hooks passed.
-- npm test passed: 59 files, 508 tests.
-- npm run verify:launch-local passed end to end (508/508, browser smoke, bundle budget, proof replay, strict public sanitization).
+CURRENT INTENT
+- Continuous /goal + /arc through start/audit/implement/closeout; exhaust genius list and second-order innovation, validate honestly, commit/push to main. Live genius list returns 0; innovation-pack unavailable in public repo, so using verified second-order route-ownership decomposition.
 
-## Now (Top 3)
-1. Complete real production auth email smoke: npm run smoke:auth-email -- --record; record redacted evidence.
-2. Complete Stripe smoke (npm run smoke:stripe -- --record) and friend-beta (npm run beta:check -- --record).
-3. Extract full Knowledge Base surface only after proof gates move or composition ceiling nears guard.
+NOW (top 3)
+1. Production auth email smoke: npm run smoke:auth-email -- --record (redacted evidence).
+2. Stripe smoke (smoke:stripe -- --record) and friend-beta (beta:check -- --record).
+3. Continue App.jsx decomposition toward <2000 via verified route seams.
 
-## Blockers (Top 3)
+BLOCKERS (top 3)
 1. Brevo delivery for contact@promogrind.bet unproven locally.
-2. Production auth email, Stripe purchase, and friend-beta smokes all unrun (external proofs).
-3. Supabase deploy capability mapping pending Studio Ops cargo consumption.
+2. External proofs (auth email, Stripe, friend beta) not yet recorded.
+3. Genius list empty / innovation-pack unavailable in public repo.
 
-## Human/External-Blocked (with age)
-- Brevo forwarding verification, Ark cargo 01JSAJMBF321A097D8CE8E12B9 (Studio Ops reply): open since S100, ~1 session.
-- Supabase deploy mapping, Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 (Studio Ops): open since S100, ~1 session.
+HUMAN-BLOCKED (since S100, ~3 sessions / same day 2026-06-30)
+- Studio Ops Ark cargo 01JSAJMBF321A097D8CE8E12B9: Brevo forwarding/copy verification.
+- Studio Ops Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4: PromoGrind Supabase deploy capability mapping.
 
-## Next Session Pointer
-Run and record the production auth email smoke first, then Stripe and friend-beta evidence.
+NEXT SESSION: Record production auth email + Stripe + friend-beta evidence, then resume App.jsx decomposition toward <2000 lines.

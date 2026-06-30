@@ -123,3 +123,10 @@ Last updated: 2026-06-18 (S96)
 - App composition truth improved: `src/App.jsx` dropped from 3363 lines after S101 to 2807 lines, and `appComposition.test.js` now enforces the extracted surfaces plus a <3100-line ceiling.
 - Verification: focused composition test passed 2/2, `npm test` passed 508/508, and `npm run verify:launch-local` passed end to end.
 - External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and the Studio Ops Supabase capability follow-up still require real evidence/control-plane action.
+
+### Session 103 closeout update - 2026-06-30
+
+- Shipped another route-ownership decomposition pass: Pending Bet Tracker now lives in `src/components/BetTracker.jsx`; Middle/Odds Convert/Rollover/Income Estimator live in `src/calculators/UtilityCalculators.jsx`; Free Bet Arb Tracker/Promo Trade Journal/Odds Comparison Table live in `src/components/TrackingTools.jsx`; Promo Finder lives in `src/components/PromoFinder.jsx`.
+- App composition guard now blocks those surfaces from returning inline and enforces a <2400-line ceiling; `src/App.jsx` is 2365 lines.
+- Verification: focused composition Vitest passed 2/2; `npm run check:hooks` passed; `npm test` passed 508/508; `npm run verify:launch-local` passed end to end.
+- External proof blockers are unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real evidence/action.
