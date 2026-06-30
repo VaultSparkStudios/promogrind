@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { supabase } from "../auth.js";
 import { BOOKS } from "../books.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
 import { PUSH_UI } from "./appText.js";
 import { subscribeToPush } from "../sw-register.js";
-import { CANONICAL_APP_URL } from "../launchState.js";
+import { CANONICAL_APP_URL, FEATURE_FLAGS } from "../launchState.js";
 import { K, f, font, fontD } from "../lib/shared.js";
 import { S } from "../ui.jsx";
 
 const PushEnableBtn = ({ proStatus }) => {
+  const toast = useToast();
   const [state, setState] = useState(() => {
     try {
       if(typeof Notification === 'undefined') return 'unsupported';
@@ -25,7 +27,6 @@ const PushEnableBtn = ({ proStatus }) => {
       </div>
     );
   }
-  const toast = useToast();
   if(state === 'unsupported') return null;
   if(state === 'enabled') return (
     <div style={{fontSize:10,color:K.gn,fontWeight:600,padding:"4px 10px",background:`${K.gn}10`,border:`1px solid ${K.gn}30`,borderRadius:6}}>{PUSH_UI.onLabel}</div>
