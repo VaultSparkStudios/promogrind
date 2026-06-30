@@ -59,9 +59,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     23,821 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~11,911 tok/turn  ·  cache 50%  ·  75 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     19,316 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~9,658 tok/turn  ·  cache 50%  ·  93 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -74,7 +74,7 @@
 ║  ✓  Truth         green  ·  Genome: 24/25                        ║
 ║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
-║  ✓  Entropy       0.140  (healthy)                               ║
+║  ✓  Entropy       0.050  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
