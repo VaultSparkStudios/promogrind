@@ -275,3 +275,11 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Regression truth improved: `appComposition.test.js` now blocks those surfaces from returning to the App monolith and enforces a <2400-line ceiling. Current App.jsx line count is 2365.
 - Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
 - External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real evidence/action.
+
+## Session 104 Truth Update - 2026-06-30
+
+- App composition truth improved: `src/App.jsx` no longer owns Promo Calendar, Referral Hub, Team Accounts, Competitor Comparison, onboarding, push enablement, quick-add, weekly report, bankroll wizard, or setup sharing implementation logic.
+- Chunking truth improved: Promo Calendar, Referral Hub, Team Accounts, and Competitor Comparison now build as dedicated lazy route chunks.
+- Regression truth improved: `appComposition.test.js` blocks all S104 surfaces from returning to the App monolith and enforces a <1500 App shell ceiling with normalized line endings.
+- Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
+- External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real evidence/action.

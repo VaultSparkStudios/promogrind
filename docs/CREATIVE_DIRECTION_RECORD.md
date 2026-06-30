@@ -236,3 +236,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: before deploying Supabase functions, use the Studio secrets gateway/files, do not print raw tokens, verify the target project ref, and explicitly distinguish PromoGrind's `fjnpzjjyhnpmunfoycrp` project from the other shared Studio Supabase project.
 - Why it matters: a valid token is not enough; deploying to the wrong shared Supabase project would create false green status and leave production stale.
 - Supersedes prior entry: refines the S95 deploy-truth direction with the credential/project-selection rule that cleared the blocker.
+
+### 2026-06-30 — Saturated /arc quality bar and honesty constraints
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): Run the complete /arc as one continuous mission; saturate until the Unified Genius List and second-order innovation candidates are exhausted; quality must be genius-level, sophisticated, maximally creative and innovative; observability must not lie; no fabricated data to pass a gate; honest deferral is a win to record.
+- Area affected: process / quality bar / verification / founder communication
+- Previous state: Recent PromoGrind sessions already ran full /arc loops, but the live genius list was often empty and expansion relied on verified App.jsx decomposition candidates.
+- New required direction: continue through start/audit/implement/closeout without stopping after one objective, gate continuation on context-meter, and explicitly record external-proof deferrals instead of inventing launch evidence.
+- Why it matters: PromoGrind launch posture depends on a clean distinction between repo-owned code quality and real-world evidence that only live mailbox/payment/tester/control-plane checks can prove.
+- Supersedes prior entry: reinforces the 2026-06-18 full Studio OS loop quality-bar direction with explicit saturation and observability-honesty constraints.

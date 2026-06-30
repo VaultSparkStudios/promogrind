@@ -442,3 +442,9 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: leave the public surface absent until Brevo is configured; mass-rewrite every legacy VaultSpark support mailbox; claim delivery from code alone.
 - Why this was chosen: users and AI agents need a canonical contact and policy contract immediately, but observability honesty forbids pretending that DNS/mail forwarding is proven by HTML alone.
 - Follow-up: once Studio Ops replies with delivery proof, update `context/PROJECT_STATUS.json`, `context/TASK_BOARD.md`, and the launch proof surface if a dedicated proof key is added.
+
+### 2026-06-30 — Trust local project status over unmatched external arc profile (S104)
+
+- Context: `arc-profile.mjs` did not match the registry and classified PromoGrind as `infrastructure/internal`, while repo-local `context/PROJECT_STATUS.json` and the startup brief classify it as an app/public-unlaunched surface.
+- Decision: during S104, local project status was treated as source of truth for audit lens, staging expectations, public launch gates, and closeout language.
+- Reason: session protocol says repo truth and `PROJECT_STATUS.json` beat derived Markdown or unmatched registry fallbacks.

@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-06-30",
-  "generatedAtMs": 1782795946780,
-  "session": 103,
-  "vectorHash": "82252f2e6cafde49",
+  "generatedAtMs": 1782803979405,
+  "session": 104,
+  "vectorHash": "f17861d09869e3dd",
   "silTotal": 1000,
   "silMax": 1000,
   "silAvg3": 1000,
@@ -20,7 +20,7 @@
     "complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `np"
   ],
   "topNext": [
-    "finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`",
+    "~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.js",
     "rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage h",
     "add a guided promo-passport onboarding path from first account to first settled "
   ],
@@ -34,8 +34,8 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding once Studio Ops replies; continue App.jsx decomposition toward <2000 lines only through focused route smokes.",
-  "currentFocus": "S103 extracted Pending Bet Tracker, utility calculators, tracking tools, and Promo Finder from src/App.jsx into dedicated modules; App.jsx is now 2365 lines and local launch gate is green at 508/508 tests.",
+  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding once Studio Ops replies; keep future route growth in dedicated modules/lazy chunks under the <1500 App shell guard.",
+  "currentFocus": "S104 completed the App.jsx decomposition finale: Promo Calendar, Referral Hub, Team Accounts, Competitor Comparison, onboarding, push enablement, quick-add, weekly report, bankroll wizard, and setup sharing now live in dedicated modules; App composition guard enforces <1500 lines and launch-local is green at 508/508 tests.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",

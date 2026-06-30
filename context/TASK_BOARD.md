@@ -9,11 +9,11 @@
 
 ## Next
 
-- finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.
+- ~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.~~ — **DONE S104**: completed the remaining App shell finale with focused route/widget extraction; `appComposition.test.js` now enforces a <1500 App shell ceiling.
 - rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
 - add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
 - add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
-- continue decomposing the remaining high-churn `src/App.jsx` seams beyond the extracted shell, route, tracker, utility-calculator, and promo-finder modules (App.jsx is now 2365 lines)
+- ~~continue decomposing the remaining high-churn `src/App.jsx` seams beyond the extracted shell, route, tracker, utility-calculator, and promo-finder modules (App.jsx is now 2365 lines)~~ — **DONE S104**: extracted Promo Calendar, referral/team/account, onboarding, and dashboard action widgets; future App growth is guarded below <1500 lines.
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
@@ -267,4 +267,16 @@
 
 ## S103 Follow-up
 
-- [SIL] Continue the App.jsx decomposition finale toward <2000 lines by extracting Promo Calendar or the referral/team/account surfaces only after a focused route smoke identifies the safest next seam.
+- [SIL] Continue the App.jsx decomposition finale toward <2000 lines by extracting Promo Calendar or the referral/team/account surfaces only after a focused route smoke identifies the safest next seam. — **DONE S104**: extracted those surfaces and tightened the guard to <1500 lines.
+
+
+## Shipped This Session (S104)
+
+- app-jsx-decomposition-finale S104 - **DONE S104**: extracted Promo Calendar, Referral Hub, Team Accounts, Competitor Comparison, onboarding, push enablement, quick-add, weekly report, bankroll wizard, and setup sharing out of `src/App.jsx`.
+- lazy-route-split-refinement S104 - **DONE S104**: Promo Calendar, Referral Hub, Team Accounts, and Competitor Comparison now lazy-load as dedicated chunks.
+- app-composition-regression-gate S104 - **DONE S104**: `appComposition.test.js` blocks S104 surfaces from returning inline and enforces a <1500 App shell ceiling.
+- external-proof-evidence S104 - **HONEST DEFERRAL S104**: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action.
+
+## S104 Follow-up
+
+- [SIL] Keep future App.jsx growth under the <1500 guard; add new route ownership to dedicated modules or lazy chunks instead of the App shell.

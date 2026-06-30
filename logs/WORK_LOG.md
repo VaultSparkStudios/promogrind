@@ -376,3 +376,14 @@ Append chronological entries.
 - App composition guard now blocks those surfaces from returning inline and enforces a <2400-line ceiling; `src/App.jsx` is 2365 lines.
 - Verification: focused composition Vitest 2/2; `npm run check:hooks`; `npm test` 508/508; `npm run verify:launch-local` passed end to end.
 - Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action; no proof was fabricated.
+
+## 2026-06-30 - Session 104 Codex goal arc
+
+- Ran `/goal` as a continuous `/arc` mission: `/start` -> `/audit` -> `/implement` -> `/closeout`.
+- Startup: `git pull --rebase origin main` was already up to date; context meter said CONTINUE; blocker preflight reported 0 Human Action Required items; no cut-off recovery was required.
+- Audit: generated `docs/AUDIT_2026-06-30-S104.{md,json}` after the live genius list returned 0 items and local `ops.mjs innovation-pack` was unavailable.
+- Shipped App decomposition finale: extracted Promo Calendar, Referral Hub, Team Accounts, Competitor Comparison, onboarding, push enablement, quick-add, weekly report, bankroll wizard, and setup sharing out of `src/App.jsx`.
+- Added lazy route chunks for Promo Calendar, Referral Hub, Team Accounts, and Competitor Comparison.
+- App composition guard now enforces extracted ownership and a <1500 App shell ceiling.
+- Verification: focused composition Vitest 2/2; `npm run check:hooks`; `npm test` 508/508; `npm run verify:launch-local` passed end to end.
+- Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action; no proof was fabricated.

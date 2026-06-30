@@ -33,10 +33,22 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const ProfitCertificate\s*=\s*\(\)\s*=>\s*\{/);
     expect(appSource).not.toMatch(/const Leaderboard\s*=\s*\(\)\s*=>\s*\{/);
     expect(appSource).not.toMatch(/const DailyStreak\s*=\s*\(\)\s*=>\s*\{/);
+    expect(appSource).not.toMatch(/const PromoAlertPrefs\s*=/);
+    expect(appSource).not.toMatch(/const PromoROITable\s*=/);
+    expect(appSource).not.toMatch(/const PromoCalendar\s*=\s*\(\)\s*=>/);
+    expect(appSource).not.toMatch(/const ReferralHub\s*=\s*\(\)\s*=>/);
+    expect(appSource).not.toMatch(/const CompetitorComparison\s*=\s*\(\)\s*=>/);
+    expect(appSource).not.toMatch(/const TeamAccounts\s*=\s*\(\)\s*=>/);
+    expect(appSource).not.toMatch(/const QuickAddBet\s*=/);
+    expect(appSource).not.toMatch(/const WeeklyGrindReport\s*=/);
+    expect(appSource).not.toMatch(/const BankrollWizard\s*=/);
+    expect(appSource).not.toMatch(/const CopyMySetup\s*=/);
+    expect(appSource).not.toMatch(/const PushEnableBtn\s*=/);
+    expect(appSource).not.toMatch(/const OnboardingWizard\s*=/);
   });
 
   it("keeps the App monolith under the current decomposition ceiling", () => {
-    expect(appSource.split(/\r?\n/).length).toBeLessThan(2400);
+    expect(appSource.split(/\r\n|\n|\r/).length).toBeLessThan(1500);
   });
 });
 

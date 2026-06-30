@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-06-30",
+  "session": 104,
+  "project": "PromoGrind",
+  "primaryPremise": "Live genius list returned 0 items; public shim lacks ops.mjs innovation-pack, so S104 used live App.jsx decomposition and chunking evidence for second-order candidates.",
+  "items": [
+    {
+      "id": "app-jsx-decomposition-finale",
+      "priority": "High",
+      "category": "speed/organization",
+      "status": "shipped",
+      "evidence": "src/App.jsx no longer owns Promo Calendar, Referral Hub, Team Accounts, Competitor Comparison, onboarding, or dashboard action widgets; composition guard enforces <1500 lines."
+    },
+    {
+      "id": "lazy-route-split-refinement",
+      "priority": "High",
+      "category": "speed/ux",
+      "status": "shipped",
+      "evidence": "Promo Calendar, Referral Hub, Team Accounts, and Competitor Comparison build as separate lazy chunks."
+    },
+    {
+      "id": "composition-boundary-hardening",
+      "priority": "Medium",
+      "category": "automation",
+      "status": "shipped",
+      "evidence": "src/__tests__/appComposition.test.js blocks S104 surfaces from returning inline and normalizes line endings for the <1500 guard."
+    },
+    {
+      "id": "external-proof-evidence",
+      "priority": "External",
+      "category": "launch-proof",
+      "status": "deferred",
+      "evidence": "Requires real mailbox/payment/tester/Brevo/control-plane evidence; no fabricated proof recorded."
+    }
+  ],
+  "verification": [
+    "npx vitest run src/__tests__/appComposition.test.js passed 2/2",
+    "npm run check:hooks passed",
+    "npm test passed 59 files / 508 tests",
+    "npm run verify:launch-local passed end to end",
+    "node scripts/ops.mjs doctor --update-json passed 12/12 with blockingFailing 0"
+  ],
+  "generatedAt": "2026-06-30T07:20:02.639Z"
+}
