@@ -255,3 +255,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Regression truth improved: `appComposition.test.js` now blocks `Glossary` and `GLOSSARY_TERMS` from returning to the App monolith.
 - Verification truth: `npm test` passed 508/508 and `npm run verify:launch-local` passed end to end on 2026-06-30.
 - External proof truth remains yellow: auth email, Stripe smoke, friend beta, and Brevo forwarding still require real evidence.
+
+## Session 101 Deploy-Fix Truth Update - 2026-06-30
+
+- Production dashboard smoke truth changed from red to fixed locally: GitHub Pages run 28415945042 exposed `ReferenceError: useRef is not defined` on `/dashboard`.
+- Source truth: `src/App.jsx` uses `useRef` in App-owned surfaces and now imports it from React.
+- Verification truth: `npm run verify:launch-local` passed end to end after the import fix on 2026-06-30.

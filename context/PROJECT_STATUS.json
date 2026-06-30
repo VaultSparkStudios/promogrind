@@ -14,7 +14,7 @@
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
   "currentSession": 101,
-  "currentFocus": "S101 continued App.jsx decomposition: extracted Glossary/GLOSSARY_TERMS into src/components/Glossary.jsx; App composition guard updated; launch-local gate remains green at 508/508 tests.",
+  "currentFocus": "S101 extracted Glossary/GLOSSARY_TERMS into src/components/Glossary.jsx and fixed the post-deploy dashboard smoke regression by importing useRef in src/App.jsx; local launch gate is green at 508/508 tests.",
   "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding once Studio Ops replies; extract the full Knowledge Base route only if App.jsx approaches its composition ceiling again.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
@@ -43,7 +43,7 @@
   "testsPassing": 508,
   "testsTotal": 508,
   "testsLastRun": "2026-06-30",
-  "lastDeployStatus": "deployed-unannounced; S101 local launch gate green; awaiting post-push GitHub Pages deploy verification",
+  "lastDeployStatus": "S101 first Pages deploy exposed missing useRef in production dashboard smoke; local fix verified and awaiting follow-up Pages deploy verification",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-06-30",
   "truthGenome": "24/25",

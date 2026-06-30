@@ -350,3 +350,9 @@ Append chronological entries.
 - Shipped App decomposition: extracted `Glossary` and `GLOSSARY_TERMS` to `src/components/Glossary.jsx` and extended App composition coverage to prevent regression.
 - Verification: focused Vitest 2/2, `npm run check:hooks`, `npm test` 508/508, and `npm run verify:launch-local` passed end to end.
 - Honest deferral: production auth email, Stripe smoke, friend beta, and Brevo forwarding still require real-world evidence; no proof was fabricated.
+
+## 2026-06-30 - Session 101 deploy-fix follow-up
+
+- GitHub Pages run 28415945042 deployed the S101 bundle but failed the production dashboard smoke on `ReferenceError: useRef is not defined`.
+- Fixed `src/App.jsx` to import `useRef` from React for existing refs used in App-owned surfaces.
+- Verification: `npm run verify:launch-local` passed end to end again with 508/508 tests.

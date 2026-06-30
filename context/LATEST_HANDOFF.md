@@ -11,6 +11,7 @@ Shipped:
 - Extended `appComposition.test.js` to keep glossary ownership out of the monolith.
 
 Verification:
+- Deploy-fix follow-up: GitHub Pages run 28415945042 deployed but failed dashboard smoke on missing `useRef`; `src/App.jsx` now imports `useRef`, and `npm run verify:launch-local` passed again.
 - Focused Vitest passed: 2/2.
 - `npm run check:hooks` passed.
 - `npm test` passed: 59 files, 508 tests.
