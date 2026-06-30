@@ -241,3 +241,16 @@
 ## S101 Follow-up
 
 - [SIL] When proof gates advance or the App composition ceiling approaches again, extract the remaining full Knowledge Base surface into a dedicated route module.
+
+## Shipped This Session (S102)
+
+- knowledge-base-route-extraction S102 - **DONE S102**: moved Knowledge Base + FAQ from `src/App.jsx` into `src/components/KnowledgeBase.jsx`; `App.jsx` now aliases the imported route.
+- profit-certificate-route-extraction S102 - **DONE S102**: moved Profit Certificate into `src/components/ProfitCertificate.jsx` while preserving local fallback, share/copy behavior, Supabase Wins Wall upsert, and launch telemetry.
+- leaderboard-route-extraction S102 - **DONE S102**: moved Vault Points Leaderboard into `src/components/Leaderboard.jsx` while preserving Supabase reads, fallback aggregation, privacy toggle, and CLV stats.
+- daily-streak-widget-extraction S102 - **DONE S102**: moved Daily Streak into `src/components/DailyStreak.jsx` while preserving daily-login event writes, milestone awards, and toast copy.
+- app-composition-regression-gate S102 - **DONE S102**: extended `appComposition.test.js` to guard the new ownership boundaries and lowered the App.jsx ceiling to <3100 lines; App.jsx is now 2807 lines.
+- external-proof-evidence S102 - **HONEST DEFERRAL S102**: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action; no proof was fabricated.
+
+## S102 Follow-up
+
+- [SIL] Keep App.jsx under the <3100 composition ceiling; only extract another route seam when the guard approaches the ceiling or proof-gate work creates a real repo-owned change.

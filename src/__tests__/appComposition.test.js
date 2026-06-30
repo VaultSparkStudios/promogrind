@@ -19,9 +19,18 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const TopToolsPanel\s*=/);
     expect(appSource).not.toMatch(/const Glossary\s*=/);
     expect(appSource).not.toMatch(/const GLOSSARY_TERMS\s*=/);
+    expect(appSource).not.toMatch(/const FaqAccordion\s*=/);
+    expect(appSource).not.toMatch(/const KB\s*=\s*\(\)/);
+    expect(appSource).not.toMatch(/const ProfitCertificate\s*=\s*\(\)\s*=>\s*\{/);
+    expect(appSource).not.toMatch(/const Leaderboard\s*=\s*\(\)\s*=>\s*\{/);
+    expect(appSource).not.toMatch(/const DailyStreak\s*=\s*\(\)\s*=>\s*\{/);
   });
 
   it("keeps the App monolith under the current decomposition ceiling", () => {
-    expect(appSource.split(/\r?\n/).length).toBeLessThan(3500);
+    expect(appSource.split(/\r?\n/).length).toBeLessThan(3100);
   });
 });
+
+
+
+

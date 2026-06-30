@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.3",
+  "project": "promogrind",
+  "session": 102,
+  "date": "2026-06-30",
+  "rubric": "product",
+  "premise": {
+    "geniusList": "node scripts/ops.mjs genius-list returned 0 items after refresh.",
+    "innovationPack": "node scripts/ops.mjs innovation-pack is unavailable in this public repo.",
+    "fallback": "Live-code audit used TASK_BOARD decomposition follow-up, App.jsx ownership survey, launch-readiness probe, and route-component verification."
+  },
+  "items": [
+    {
+      "id": "knowledge-base-route-extraction",
+      "tier": "High",
+      "axis": "speed-organization-efficiency",
+      "effort": "45m",
+      "impact": 8,
+      "innovation": 4,
+      "priority": 19.6,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Moved Knowledge Base and FAQ route ownership from src/App.jsx into src/components/KnowledgeBase.jsx; appComposition.test.js guards the boundary.",
+      "recipe": "Extract the full reference-content route from the app shell and preserve route behavior through an imported component alias.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Extract FAQ and Knowledge Base component." },
+        "L2": { "effortHours": 0.75, "recipe": "Extract component plus tighten composition guard." },
+        "L3": { "effortHours": 2, "recipe": "Normalize the knowledge copy into a maintainable dedicated route component." }
+      }
+    },
+    {
+      "id": "profit-certificate-route-extraction",
+      "tier": "High",
+      "axis": "speed-organization-efficiency",
+      "effort": "30m",
+      "impact": 7,
+      "innovation": 3,
+      "priority": 16.2,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Moved Profit Certificate into src/components/ProfitCertificate.jsx with local fallback, Supabase upsert, share text, and launch telemetry preserved.",
+      "recipe": "Extract the shareable profit route from App.jsx while letting the new component own app-context reads."
+    },
+    {
+      "id": "leaderboard-route-extraction",
+      "tier": "High",
+      "axis": "speed-organization-efficiency",
+      "effort": "30m",
+      "impact": 7,
+      "innovation": 3,
+      "priority": 16.2,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Moved Vault Points Leaderboard into src/components/Leaderboard.jsx with Supabase leaderboard reads, fallback event aggregation, privacy toggle, and local CLV stats preserved.",
+      "recipe": "Extract the leaderboard route so Supabase leaderboard logic is no longer embedded in the app shell."
+    },
+    {
+      "id": "daily-streak-widget-extraction",
+      "tier": "Medium",
+      "axis": "speed-organization-efficiency",
+      "effort": "20m",
+      "impact": 6,
+      "innovation": 3,
+      "priority": 13.9,
+      "premiseVerified": true,
+      "status": "shipped",
+      "evidence": "Moved Daily Streak login/milestone widget into src/components/DailyStreak.jsx and removed DAILY_STREAK_COPY from App.jsx imports.",
+      "recipe": "Extract the shell widget that writes daily login events and awards milestone points."
+    },
+    {
+      "id": "external-proof-evidence",
+      "tier": "High",
+      "axis": "launch-proof",
+      "effort": "external",
+      "impact": 9,
+      "innovation": 2,
+      "priority": 0,
+      "premiseVerified": true,
+      "status": "honest-deferral",
+      "evidence": "Launch readiness remains PARTIAL only for real production auth email, Stripe smoke, friend beta, and Brevo forwarding evidence. No proof was fabricated.",
+      "recipe": "Keep proof gates pending until actual mailbox/payment/tester/email-routing evidence exists."
+    }
+  ],
+  "verification": [
+    "npx vitest run src/__tests__/appComposition.test.js passed 2/2",
+    "npm run check:hooks passed",
+    "npm test passed 508/508",
+    "npm run smoke:ux passed across 60 app routes and 100 public HTML files",
+    "npm run verify:launch-local passed end to end"
+  ]
+}
