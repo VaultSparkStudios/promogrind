@@ -149,3 +149,11 @@ Last updated: 2026-06-18 (S96)
 - Fixed lead-capture truth: `public/js/pg-capture.js` no longer ships a placeholder Supabase anon key and disables signup when no browser-provided public key exists; `scripts/validate-launch-smoke.mjs` now rejects placeholder capture keys.
 - Verification: focused Vitest passed 4/4; `node scripts/validate-launch-smoke.mjs` passed; `npm test` passed 508/508; `npm run verify:launch-local` passed end to end.
 - External proof blockers remain unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action.
+
+### Session 106 closeout update - 2026-06-30
+
+- Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`; the live genius list returned 0 items, so S106 used verified second-order live-code evidence from the newly extracted dashboard action widgets.
+- Fixed Pro push-control runtime integrity: `src/app/DashboardActionWidgets.jsx` now imports `FEATURE_FLAGS` and `supabase` explicitly and calls `useToast` before conditional returns.
+- Added focused regression coverage in `src/__tests__/dashboardActionWidgets.test.jsx`; the Pro push beta render path now runs in happy-dom without real push globals.
+- Verification: focused Vitest passed 4/4, `npm test` passed 60 files / 510 tests, and `npm run verify:launch-local` passed end to end with 0 public sanitization findings.
+- External proof blockers remain unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key wiring still require real external evidence/action.

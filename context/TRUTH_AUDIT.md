@@ -291,3 +291,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Capture readiness truth improved: `public/js/pg-capture.js` no longer contains a `.placeholder` Supabase anon key. Email signup is disabled when no browser-provided public key exists, and launch smoke rejects placeholder capture config.
 - Verification truth: focused Vitest passed 4/4, `node scripts/validate-launch-smoke.mjs` passed, `npm test` passed 508/508, and `npm run verify:launch-local` passed end to end on 2026-06-30.
 - External proof truth remains yellow: auth email, Stripe smoke, friend beta, Brevo forwarding, and Studio Ops Supabase capability proof still require real external evidence/action.
+
+### Session 106 truth update - 2026-06-30
+
+- Runtime truth improved: `PushEnableBtn` no longer depends on implicit globals for `FEATURE_FLAGS` or `supabase`, and its hook order no longer changes behind feature-gated early returns.
+- Verification truth: focused render coverage passed for the Pro push beta path, full unit suite passed 510/510, and `npm run verify:launch-local` passed with 0 strict public-sanitization findings.
+- Launch-proof truth unchanged: real production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence remain pending; no fabricated proof was recorded.

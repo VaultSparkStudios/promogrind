@@ -1,23 +1,20 @@
 # Latest Handoff - PromoGrind
 
-Session Intent: Run Session 105 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
+Session Intent: Run Session 106 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
 
-## Where We Left Off - Session 105 (2026-06-30)
+## Where We Left Off - Session 106 (2026-06-30)
 
-Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items, so S105 implemented verified second-order App ownership and capture-honesty candidates from live code evidence.
+Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items and `ops.mjs innovation-pack` is unavailable in this public repo, so S106 implemented a verified second-order dashboard action-widget runtime fix from live code evidence.
 
 Shipped:
-- Added `docs/AUDIT_2026-06-30-S105.{md,json}` and `docs/IMPLEMENT_PLAN_S105.md` with the S105 execution log.
-- Extracted Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, and Promo Arb Finder into `src/calculators/PromoDecisionCalculators.jsx`.
-- Extracted Daily Dashboard and its achievement hook into `src/components/dashboard/DailyDashboard.jsx`.
-- Removed placeholder Supabase capture config from `public/js/pg-capture.js`; signup now requires browser-provided public config and fails closed when absent.
-- Extended `scripts/validate-launch-smoke.mjs` and `src/__tests__/appComposition.test.js` so capture truth and App ownership cannot silently regress.
-- `src/App.jsx` is now 821 lines and guarded below <900.
+- Added `docs/AUDIT_2026-06-30-S106.{md,json}` and `docs/IMPLEMENT_PLAN_S106.md` with the S106 execution log.
+- Fixed `PushEnableBtn` by importing `FEATURE_FLAGS` and `supabase` from their source modules.
+- Stabilized `PushEnableBtn` hook order by calling `useToast` before conditional returns.
+- Added `src/__tests__/dashboardActionWidgets.test.jsx` to render the Pro push beta path and prove free users stay hidden.
 
 Verification:
-- Focused Vitest passed: 4/4.
-- `node scripts/validate-launch-smoke.mjs` passed.
-- `npm test` passed: 59 files, 508 tests.
+- Focused Vitest passed: 2 files, 4 tests.
+- `npm test` passed: 60 files, 510 tests.
 - `npm run verify:launch-local` passed end to end with tests, AI usage ledger, hook-order, auth/launch/UX/browser smokes, public dist exposure, proof replay, bundle budget, and strict public sanitization.
 
 Still Pending / Honest External Proofs:
@@ -32,10 +29,9 @@ Next Move:
 1. Complete the real production auth email smoke and record redacted evidence.
 2. Complete Stripe smoke and friend-beta evidence.
 3. Verify Brevo forwarding/copy once Studio Ops replies to Ark cargo `01JSAJMBF321A097D8CE8E12B9`.
-4. Keep App.jsx under the <900 composition guard; any future route/tool growth should land in dedicated modules or lazy chunks.
+4. Keep extracted dashboard widgets covered by focused render tests when adding feature-gated account controls.
 
----
-## Where We Left Off - Session 104 (2026-06-30)
+---## Where We Left Off - Session 104 (2026-06-30)
 
 Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items and `ops.mjs innovation-pack` is unavailable in this public repo, so S104 implemented verified second-order App decomposition and route-chunk candidates from live code evidence.
 

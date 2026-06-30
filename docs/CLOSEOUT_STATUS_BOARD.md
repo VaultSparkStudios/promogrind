@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-30 (Session 105 closeout) -->
+<!-- generated-at: 2026-06-30 (Session 106 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S105 ════════════════════════╗
-║  Date: 2026-06-30  ·  SIL: 1000/1000  ·  Velocity: 4 down        ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · PromoGrind · S106 ════════════════════════╗
+║  Date: 2026-06-30  ·  SIL: 1000/1000  ·  Velocity: 5 down        ║
+║  Mode: BUILDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Added `docs/AUDIT_2026-06-30-S105.{md,json}` and `docs/IMPLE  ║
-║  ✓ Extracted Deposit Optimizer, Hedge Validator, Promo Guarante  ║
-║  ✓ Extracted Daily Dashboard and its achievement hook into `src  ║
-║  ✓ Removed placeholder Supabase capture config from `public/js/  ║
-║  ✓ Extended `scripts/validate-launch-smoke.mjs` and `src/__test  ║
+║  ✓ Added `docs/AUDIT_2026-06-30-S106.{md,json}` and `docs/IMPLE  ║
+║  ✓ Fixed `PushEnableBtn` by importing `FEATURE_FLAGS` and `supa  ║
+║  ✓ Stabilized `PushEnableBtn` hook order by calling `useToast`   ║
+║  ✓ Added `src/__tests__/dashboardActionWidgets.test.jsx` to ren  ║
+║  ✓ Focused Vitest passed: 2 files, 4 tests.                      ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -32,7 +32,7 @@
 ║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
+║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
@@ -40,8 +40,8 @@
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 27 files  ·  M:22 A:0 D:0 ?:5                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 18 files  ·  M:15 A:0 D:0 ?:3                          ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -51,7 +51,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         508/508                                          ║
+║  Tests:         510/510                                          ║
 ║  IGNIS:         2d ago                                           ║
 ║  Truth:         green-with-external-proof-follow-ups             ║
 ║  Sanitization:  —                                                ║

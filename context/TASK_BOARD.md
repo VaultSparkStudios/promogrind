@@ -292,3 +292,13 @@
 
 - [SIL] Keep future App.jsx growth under the <900 guard; new route/tool ownership belongs in dedicated modules or lazy chunks.
 - [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, and Studio Ops Supabase capability evidence before any public launch announcement.
+
+## Shipped This Session (S106)
+
+- push-control-runtime-integrity S106 - **DONE S106**: fixed `PushEnableBtn` runtime integrity after the S104/S105 extraction by importing `FEATURE_FLAGS` and `supabase`, moving `useToast` ahead of conditional returns, and adding happy-dom render coverage for the Pro push beta path.
+- external-proof-evidence S106 - **HONEST DEFERRAL S106**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture public-key wiring still require real evidence/action; no proof was fabricated.
+
+## S106 Follow-up
+
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+- [SIL] Keep extracted dashboard widgets covered by focused render tests when adding feature-gated account controls.

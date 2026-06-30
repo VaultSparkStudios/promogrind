@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0",
+  "date": "2026-06-30",
+  "session": 106,
+  "project": "PromoGrind",
+  "primaryPremise": "The primary genius list regenerated to 0 items, so S106 ran the required second-order live-code scan over recently extracted dashboard surfaces, launch-proof blockers, and TODO/placeholder signals. Only verified repo-owned issues were accepted; real-world launch proofs remain honest external deferrals.",
+  "items": [
+    {
+      "id": "push-control-runtime-integrity",
+      "tier": "high",
+      "axis": "dev-health / UX / launch-hardening",
+      "effort": "30m",
+      "impact": 8,
+      "innovation": 4,
+      "priority": 16.0,
+      "status": "shipped",
+      "premiseEvidence": "src/app/DashboardActionWidgets.jsx used FEATURE_FLAGS and supabase inside PushEnableBtn without importing either symbol, and called useToast after early returns. The path is reachable for trial/active users on DailyDashboard when push controls render.",
+      "recipe": "Import FEATURE_FLAGS and supabase from their source modules, move useToast above conditional returns, and add a happy-dom regression test that renders the Pro push beta path without real push runtime globals."
+    },
+    {
+      "id": "external-proof-evidence",
+      "tier": "external",
+      "axis": "launch-proof / truth",
+      "effort": "external",
+      "impact": 10,
+      "innovation": 1,
+      "priority": 0,
+      "status": "honest-deferral",
+      "premiseEvidence": "context/PROJECT_STATUS.json and context/TASK_BOARD.md still list production auth email proof, Stripe smoke purchase, friend-beta evidence, Brevo forwarding, Studio Ops Supabase capability mapping, and production capture public-key wiring as real-world proof gates.",
+      "recipe": "Do not fabricate proof. Keep each blocker explicit until real mailbox, payment, tester, DNS/email, capability, or deploy-config evidence exists."
+    }
+  ],
+  "verification": [
+    "npx vitest run src/__tests__/dashboardActionWidgets.test.jsx src/__tests__/appComposition.test.js passed 2 files / 4 tests"
+  ],
+  "skipped": [
+    {
+      "id": "ops-innovation-pack-command",
+      "reason": "node scripts/ops.mjs innovation-pack is not implemented in this public repo; used documented live-code fallback scan instead."
+    },
+    {
+      "id": "fabricate-launch-proof",
+      "reason": "Rejected by CANON-031 and founder direction; no fake mailbox, payment, tester, Brevo, or Supabase deployment proof was created."
+    }
+  ]
+}

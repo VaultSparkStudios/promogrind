@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-06-30",
-  "generatedAtMs": 1782849797514,
-  "session": 105,
-  "vectorHash": "0a988f34da357818",
+  "generatedAtMs": 1782850963503,
+  "session": 106,
+  "vectorHash": "50fede598a9ed400",
   "silTotal": 1000,
   "silMax": 1000,
   "silAvg3": 1000,
@@ -34,8 +34,8 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding and Studio Ops Supabase capability; wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness; keep future route growth in dedicated modules/lazy chunks under the <900 App shell guard.",
-  "currentFocus": "S105 extracted remaining promo decision tools and Daily Dashboard out of App.jsx, removed placeholder public capture config, and kept launch-local green at 508/508 tests with App.jsx at 821 lines under the <900 guard.",
+  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding and Studio Ops Supabase capability; wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness; keep extracted dashboard/account controls covered by focused render tests.",
+  "currentFocus": "S106 fixed the extracted Pro push-control runtime path by importing FEATURE_FLAGS and supabase, stabilizing PushEnableBtn hook order, and adding focused happy-dom coverage; launch-local is green at 510/510 tests.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",

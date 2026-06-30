@@ -13,9 +13,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 105,
-  "currentFocus": "S105 extracted remaining promo decision tools and Daily Dashboard out of App.jsx, removed placeholder public capture config, and kept launch-local green at 508/508 tests with App.jsx at 821 lines under the <900 guard.",
-  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding and Studio Ops Supabase capability; wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness; keep future route growth in dedicated modules/lazy chunks under the <900 App shell guard.",
+  "currentSession": 106,
+  "currentFocus": "S106 fixed the extracted Pro push-control runtime path by importing FEATURE_FLAGS and supabase, stabilizing PushEnableBtn hook order, and adding focused happy-dom coverage; launch-local is green at 510/510 tests.",
+  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding and Studio Ops Supabase capability; wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness; keep extracted dashboard/account controls covered by focused render tests.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
@@ -27,9 +27,9 @@
   "lastUpdated": "2026-06-30",
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 4,
+  "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 105,
+  "silLastSession": 106,
   "silMax": 1000,
   "silSparkline": [
     1000,
@@ -41,10 +41,10 @@
   "ignisScore": 43431,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-29",
-  "testsPassing": 508,
-  "testsTotal": 508,
+  "testsPassing": 510,
+  "testsTotal": 510,
   "testsLastRun": "2026-06-30",
-  "lastDeployStatus": "S105 local launch gate passed end to end after App ownership extraction and capture-honesty fix; production deploy verification awaits the next Pages run and real capture public-key wiring.",
+  "lastDeployStatus": "S106 local launch gate passed end to end after push-control runtime integrity fix; production deploy verification still awaits the next Pages run and real capture public-key wiring.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-06-30",
   "truthGenome": "24/25",
@@ -53,12 +53,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 508/508 in S105 via npm test and npm run verify:launch-local"
+      "status": "passing 510/510 in S106 via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S105 with 508/508 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S106 with 510/510 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -206,8 +206,8 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "founder",
-  "sessionModeAutoShiftedAt": "2026-06-30T07:31:12.356Z",
+  "sessionMode": "builder",
+  "sessionModeAutoShiftedAt": "2026-06-30T20:14:33.454Z",
   "planModeDetected": "missing",
   "planModeCheckedAt": "2026-06-30T07:31:13.255Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
