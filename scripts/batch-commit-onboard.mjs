@@ -27,7 +27,7 @@ for (const r of batch.results) {
     continue;
   }
   const cwd = p.localPath.replace(/\\/g, '/');
-  const sh = (cmd) => spawnSync(cmd, { cwd, shell: true, encoding: 'utf8' });
+  const sh = (cmd) => spawnSync(cmd, { cwd, shell: true, windowsHide: true, encoding: 'utf8' });
 
   const status = sh('git status --porcelain');
   if (!status.stdout.trim()) {

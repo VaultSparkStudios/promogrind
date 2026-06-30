@@ -54,7 +54,7 @@ const LOCK_PATH = path.join(PROJECT_ROOT, 'context', '.session-lock');
 const BEACON_PATH = path.join(PROJECT_ROOT, '.claude', 'beacon.env');
 
 function sh(cmd, opts = {}) {
-  const r = spawnSync(cmd, { shell: true, cwd: PROJECT_ROOT, encoding: 'utf8', ...opts });
+  const r = spawnSync(cmd, { shell: true, windowsHide: true, cwd: PROJECT_ROOT, encoding: 'utf8', ...opts });
   return { out: r.stdout || '', err: r.stderr || '', code: r.status ?? -1 };
 }
 

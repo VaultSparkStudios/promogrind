@@ -13,9 +13,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 106,
-  "currentFocus": "S106 fixed the extracted Pro push-control runtime path by importing FEATURE_FLAGS and supabase, stabilizing PushEnableBtn hook order, and adding focused happy-dom coverage; launch-local is green at 510/510 tests.",
-  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding and Studio Ops Supabase capability; wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness; keep extracted dashboard/account controls covered by focused render tests.",
+  "currentSession": 107,
+  "currentFocus": "S107 shipped process automation hardening: remaining shell:true child spawns now set windowsHide:true and local ops.mjs innovation-pack renders deterministic second-order candidates; launch-local is green at 510/510 tests.",
+  "nextMilestone": "Record real production auth email proof, Stripe smoke, and friend-beta evidence; verify Brevo forwarding and Studio Ops Supabase capability; wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness; use ops.mjs innovation-pack for the next empty-genius expansion pass.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
@@ -29,7 +29,7 @@
   "silAvg3": 1000,
   "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 106,
+  "silLastSession": 107,
   "silMax": 1000,
   "silSparkline": [
     1000,
@@ -44,7 +44,7 @@
   "testsPassing": 510,
   "testsTotal": 510,
   "testsLastRun": "2026-06-30",
-  "lastDeployStatus": "S106 local launch gate passed end to end after push-control runtime integrity fix; production deploy verification still awaits the next Pages run and real capture public-key wiring.",
+  "lastDeployStatus": "S107 local launch gate passed end to end after windowsHide automation hardening and innovation-pack command addition; production deploy verification still awaits the next Pages run and real capture public-key wiring.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-06-30",
   "truthGenome": "24/25",
@@ -53,12 +53,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 510/510 in S106 via npm test and npm run verify:launch-local"
+      "status": "passing 510/510 in S107 via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S106 with 510/510 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S107 with 510/510 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -199,15 +199,15 @@
       }
     ]
   },
-  "entropyScore": 0.14,
-  "entropyLastComputed": "2026-06-29",
+  "entropyScore": 0.05,
+  "entropyLastComputed": "2026-06-30",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "builder",
-  "sessionModeAutoShiftedAt": "2026-06-30T20:14:33.454Z",
+  "sessionMode": "founder",
+  "sessionModeAutoShiftedAt": "2026-06-30T20:29:17.233Z",
   "planModeDetected": "missing",
   "planModeCheckedAt": "2026-06-30T07:31:13.255Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",

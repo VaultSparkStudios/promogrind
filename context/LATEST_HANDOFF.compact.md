@@ -1,42 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: da798a93029a -->
-<!-- generated-at: 2026-06-30T20:14:45.081Z -->
+<!-- source-hash: 8f1f30aa619e -->
+<!-- generated-at: 2026-06-30T20:29:28.536Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 105 Handoff Summary
+# PromoGrind Handoff Summary
 
-Status
-- Intent achieved for repo-controllable work. Continuous /goal + /arc through /start, /audit, /implement, /closeout. Live genius list returned 0 items; shipped verified second-order App ownership and capture-honesty work.
+## Session
+- Latest: 106 (2026-06-30)
+- Continuous /goal + /arc mission through /start, /audit, /implement, /closeout. Live genius list empty and innovation-pack unavailable in public repo; implemented verified second-order fixes from live code evidence.
 
-Shipped (S105)
-- Added S105 audit + implement-plan docs.
-- Extracted Deposit Optimizer, Hedge Validator, Promo Guarantee, Gut Check, Promo Arb Finder into PromoDecisionCalculators.jsx.
-- Extracted Daily Dashboard + achievement hook into DailyDashboard.jsx.
-- Removed placeholder Supabase capture config; signup now requires browser-provided public config and fails closed.
-- Extended smoke validator and appComposition test to lock capture truth and App ownership.
-- App.jsx now 821 lines, guarded below <900.
+## Shipped (S106)
+- Added docs/AUDIT_2026-06-30-S106.{md,json} and docs/IMPLEMENT_PLAN_S106.md.
+- Fixed PushEnableBtn: imported FEATURE_FLAGS and supabase from source modules.
+- Stabilized PushEnableBtn hook order (useToast before conditional returns).
+- Added dashboardActionWidgets.test.jsx proving Pro push beta path renders, free users stay hidden.
 
-Verification
-- Focused Vitest 4/4; npm test 59 files / 508 tests pass.
-- validate-launch-smoke.mjs pass.
-- verify:launch-local pass end to end (tests, AI ledger, hook-order, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, strict sanitization).
+## Verification
+- Focused Vitest: 2 files, 4 tests passed.
+- npm test: 60 files, 510 tests passed.
+- npm run verify:launch-local passed end to end (tests, AI ledger, hook-order, smokes, dist exposure, proof replay, bundle budget, sanitization).
 
-Now (top 3)
-1. Run real production auth email smoke: npm run smoke:auth-email -- --record.
+## Current Intent
+- Close out remaining honest external proofs (auth email, Stripe, friend beta, Brevo) that cannot be validated locally.
+
+## Now Bucket (top 3)
+1. Run production auth email smoke: npm run smoke:auth-email -- --record (record redacted evidence).
 2. Run Stripe smoke purchase: npm run smoke:stripe -- --record.
 3. Run trusted friend beta pass: npm run beta:check -- --record.
 
-Blockers (top 3)
+## Blockers (top 3)
 1. Brevo delivery for contact@promogrind.bet unproven locally.
-2. Real browser-safe Supabase anon key not yet wired into production capture config; email capture readiness cannot be claimed.
-3. External proof smokes (auth email, Stripe, beta) all unrecorded.
+2. Production browser-safe Supabase anon key not wired into capture config (blocks email capture readiness claim).
+3. External smokes (auth email, Stripe, beta) require live production runs, unverifiable in repo.
 
-Human/External-Blocked (age)
-- Studio Ops reply on Ark cargo 01JSAJMBF321A097D8CE8E12B9 (Brevo forwarding/copy verification): pending since S100 (~6 sessions).
-- Studio Ops to consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 (Supabase deploy capability mapping): pending since S100 (~6 sessions).
+## Human/External-Blocked (with age)
+- Studio Ops consume Ark cargo 01JSAJMBF321A097D8CE8E12B9 (Brevo forwarding verify): open since S100, 7 sessions.
+- Studio Ops consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 (Supabase deploy capability mapping): open since S100, 7 sessions.
 
-Guardrail
-- Keep App.jsx under <900 composition guard; route/tool growth goes to dedicated modules or lazy chunks.
-
-Next session: record the three external proof smokes and chase Studio Ops Brevo/Supabase cargo replies.
+## Next Session Pointer
+Run the three recorded external smokes (auth email, Stripe, friend beta) and confirm Brevo once Studio Ops replies to Ark cargo 01JSAJMBF321A097D8CE8E12B9.

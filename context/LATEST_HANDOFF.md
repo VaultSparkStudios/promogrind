@@ -1,8 +1,40 @@
 # Latest Handoff - PromoGrind
 
-Session Intent: Run Session 106 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
+Session Intent: Run Session 107 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
 
-## Where We Left Off - Session 106 (2026-06-30)
+## Where We Left Off - Session 107 (2026-06-30)
+
+Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items, so S107 implemented verified second-order automation/process hardening and added the missing deterministic innovation-pack command for future saturation passes.
+
+Shipped:
+- Added `docs/AUDIT_2026-06-30-S107.{md,json}` and `docs/IMPLEMENT_PLAN_S107.md` with the S107 execution log.
+- Fixed the remaining `shell:true` child-process call sites missing `windowsHide:true`: `scripts/batch-commit-onboard.mjs`, `scripts/closeout-autopilot.mjs`, and `scripts/rescore-ignis.mjs`.
+- Added `scripts/render-innovation-pack.mjs`, wired `node scripts/ops.mjs innovation-pack`, and generated `docs/INNOVATION_PACK.{md,json}`.
+- Refined the innovation-pack scan so it reports true repo-owned TODO/stub signals and keeps external launch proof as honest deferral.
+
+Verification:
+- `node scripts/check-windows-hide.mjs` passed.
+- `node --check scripts/render-innovation-pack.mjs` passed.
+- `node scripts/ops.mjs innovation-pack --json` passed and wrote `docs/INNOVATION_PACK.{md,json}`.
+- `npm test` passed: 60 files, 510 tests.
+- `npm run verify:launch-local` passed end to end with tests, AI usage ledger, hook-order, auth/launch/UX/browser smokes, public dist exposure, proof replay, bundle budget, and strict public sanitization.
+- Caveat: `node scripts/test-innovation-pack.mjs` repeatedly failed before stdout with a Windows sandbox `CryptUnprotectData` error; syntax and command-level smoke passed.
+
+Still Pending / Honest External Proofs:
+- Brevo delivery for `contact@promogrind.bet` remains unproven locally; Studio Ops Ark cargo `01JSAJMBF321A097D8CE8E12B9` is still the follow-up.
+- Run a real production auth email pass with `npm run smoke:auth-email -- --record`.
+- Run a real Stripe smoke purchase with `npm run smoke:stripe -- --record`.
+- Run one trusted friend beta pass with `npm run beta:check -- --record`.
+- Studio Ops should still consume Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` for the PromoGrind Supabase deploy capability mapping.
+- Wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness.
+
+Next Move:
+1. Complete the real production auth email smoke and record redacted evidence.
+2. Complete Stripe smoke and friend-beta evidence.
+3. Verify Brevo forwarding/copy once Studio Ops replies to Ark cargo `01JSAJMBF321A097D8CE8E12B9`.
+4. Run `node scripts/ops.mjs innovation-pack` before the next empty-genius expansion pass; triage the two true stub signals before large-file decomposition.
+
+---## Where We Left Off - Session 106 (2026-06-30)
 
 Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items and `ops.mjs innovation-pack` is unavailable in this public repo, so S106 implemented a verified second-order dashboard action-widget runtime fix from live code evidence.
 

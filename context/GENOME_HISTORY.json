@@ -647,6 +647,23 @@
       },
       "delta": 0,
       "cause": "S106 fixed the extracted Pro push-control runtime path by importing FEATURE_FLAGS and supabase, stabilizing PushEnableBt"
+    },
+    {
+      "date": "2026-06-30",
+      "session": 107,
+      "total": 24,
+      "maxTotal": 25,
+      "overallStatus": "green",
+      "lastReviewed": "2026-06-18 (S96)",
+      "dimensions": {
+        "schema_alignment": 5,
+        "prompt_template_alignment": 4,
+        "derived_view_freshness": 5,
+        "handoff_continuity": 5,
+        "contradiction_density": 5
+      },
+      "delta": 0,
+      "cause": "S107 shipped process automation hardening: remaining shell:true child spawns now set windowsHide:true and local ops.mjs "
     }
   ]
 }

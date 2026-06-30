@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0",
+  "date": "2026-06-30",
+  "session": 107,
+  "project": "PromoGrind",
+  "primaryPremise": "The live genius list regenerated to 0 items again. S107 used app/public-unlaunched repo truth from context/PROJECT_STATUS.json, the app-release lens, the window-storm guard, prior handoff deferrals, and a live second-order scan to accept only repo-owned work. External launch proofs remain honest deferrals.",
+  "items": [
+    {
+      "id": "windows-hide-window-storm-hardening",
+      "tier": "high",
+      "axis": "automation / developer-experience / security",
+      "effort": "30m",
+      "impact": 9,
+      "innovation": 4,
+      "priority": 22.8,
+      "status": "shipped",
+      "premiseEvidence": "node scripts/check-windows-hide.mjs reported three shell:true spawn call sites missing windowsHide:true: scripts/batch-commit-onboard.mjs, scripts/closeout-autopilot.mjs, and scripts/rescore-ignis.mjs.",
+      "recipe": "Add windowsHide:true at each failing shell:true spawn site and rerun the guard until it exits 0.",
+      "verification": "node scripts/check-windows-hide.mjs exits 0 and reports all spawns route through safe-spawn or set windowsHide:true."
+    },
+    {
+      "id": "local-innovation-pack-command",
+      "tier": "high",
+      "axis": "process / automation / feedback loop",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 30.3,
+      "status": "shipped",
+      "premiseEvidence": "docs/SESSION_PROTOCOL.md requires node scripts/ops.mjs innovation-pack, and S101-S106 repeatedly recorded that the command was unavailable in this public repo.",
+      "recipe": "Add scripts/render-innovation-pack.mjs, wire ops.mjs innovation-pack, generate docs/INNOVATION_PACK.{md,json}, and verify syntax plus command output.",
+      "verification": "node --check scripts/render-innovation-pack.mjs exits 0; node scripts/ops.mjs innovation-pack --json exits 0 and writes ranked repo-owned candidates plus honest external deferrals."
+    },
+    {
+      "id": "external-launch-proof-ledger",
+      "tier": "external",
+      "axis": "truth / launch-readiness",
+      "effort": "external",
+      "impact": 10,
+      "innovation": 1,
+      "priority": 0,
+      "status": "honest-deferral",
+      "premiseEvidence": "context/PROJECT_STATUS.json still lists production auth email proof, Stripe smoke, friend-beta pass, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key wiring as real-world proof gates.",
+      "recipe": "Do not fabricate proof. Keep these explicit until real mailbox, payment, tester, DNS/email, capability, or deploy-config evidence exists."
+    }
+  ],
+  "innovationPack": "docs/INNOVATION_PACK.json generated with 2 true TODO/stub signals, 5 large-file candidates, and 6 honest external launch deferrals after the shipped fixes.",
+  "verification": [
+    "node scripts/check-windows-hide.mjs passed",
+    "node --check scripts/render-innovation-pack.mjs passed",
+    "node scripts/ops.mjs innovation-pack --json passed and wrote docs/INNOVATION_PACK.{md,json}"
+  ],
+  "skipped": [
+    {
+      "id": "node scripts/test-innovation-pack.mjs",
+      "reason": "The targeted test runner repeatedly failed before stdout with Windows sandbox CryptUnprotectData error; syntax and command-level smoke passed."
+    },
+    {
+      "id": "next-god-file-decomposition",
+      "reason": "Recorded in docs/INNOVATION_PACK.json as the next larger candidate; not mixed into the current root-fix after shipping the missing pack command and guard failure."
+    }
+  ]
+}

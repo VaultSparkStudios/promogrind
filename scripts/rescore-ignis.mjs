@@ -189,6 +189,7 @@ for (const r of toScore) {
     timeout: 60000,
     cwd: ignisPath,
     shell: true,
+    windowsHide: true,
   });
   if (res.status === 0) {
     // Parse score from CLI output: format is "31,811/100,000" and "Tier: FLARE"

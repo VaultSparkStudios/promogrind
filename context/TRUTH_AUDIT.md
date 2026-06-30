@@ -297,3 +297,11 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Runtime truth improved: `PushEnableBtn` no longer depends on implicit globals for `FEATURE_FLAGS` or `supabase`, and its hook order no longer changes behind feature-gated early returns.
 - Verification truth: focused render coverage passed for the Pro push beta path, full unit suite passed 510/510, and `npm run verify:launch-local` passed with 0 strict public-sanitization findings.
 - Launch-proof truth unchanged: real production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence remain pending; no fabricated proof was recorded.
+
+### Session 107 truth update - 2026-06-30
+
+- Automation truth improved: `scripts/batch-commit-onboard.mjs`, `scripts/closeout-autopilot.mjs`, and `scripts/rescore-ignis.mjs` now satisfy the Windows no-window-storm invariant, and `node scripts/check-windows-hide.mjs` exits 0.
+- Process truth improved: `node scripts/ops.mjs innovation-pack` now exists and writes `docs/INNOVATION_PACK.{md,json}` from live repo signals, replacing the repeated manual fallback recorded in prior handoffs.
+- Profile truth clarified: repo-local `context/PROJECT_STATUS.json` says PromoGrind is an `app` / `public-unlaunched` project; unmatched external profiler metadata must not override local project truth.
+- Verification truth: `npm test` passed 510/510 and `npm run verify:launch-local` passed end to end on 2026-06-30.
+- Launch-proof truth unchanged: real production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence remain pending; no fabricated proof was recorded.

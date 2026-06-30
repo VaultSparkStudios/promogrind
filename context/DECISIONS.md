@@ -466,3 +466,10 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Alternatives considered: leave the remaining surfaces inline because the app was already under the prior <1500 guard; split only the dashboard and leave calculators inline.
 - Why this was chosen: route ownership boundaries reduce future context cost and make regression coverage precise. The full launch gate stayed green after the split.
 - Follow-up: any new route/tool growth should land in dedicated modules or lazy chunks, with `appComposition.test.js` extended when a new boundary matters.
+
+### 2026-06-30 — Prefer repo-local project truth when external profiler metadata disagrees (S107)
+
+- Context: `arc-profile.mjs` reported PromoGrind as `infrastructure/internal` with `registryMatched:false`, while `context/PROJECT_STATUS.json` identifies the repo as `app`, `public-unlaunched`, with local staging.
+- Decision: for this session and future local audits, repo-local `context/PROJECT_STATUS.json` wins over unmatched external registry/profiler inference. The audit lens is app/public launch hardening unless the local status changes.
+- Alternatives considered: follow the unmatched profiler classification and run only infrastructure debt rubric; edit the sibling registry directly from this repo. Both were rejected because they would either mis-scope the product or violate cross-repo ownership.
+- Consequence: S107 app-release truth and external launch proof deferrals remain visible while the shipped automation hardening stays scoped to repo-owned code.

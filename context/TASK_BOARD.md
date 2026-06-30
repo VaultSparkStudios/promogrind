@@ -302,3 +302,14 @@
 
 - [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
 - [SIL] Keep extracted dashboard widgets covered by focused render tests when adding feature-gated account controls.
+
+## Shipped This Session (S107)
+
+- windows-hide-window-storm-hardening S107 - **DONE S107**: added `windowsHide:true` to the remaining `shell:true` spawns in `batch-commit-onboard`, `closeout-autopilot`, and `rescore-ignis`; `node scripts/check-windows-hide.mjs` is green.
+- local-innovation-pack-command S107 - **DONE S107**: added `scripts/render-innovation-pack.mjs`, wired `node scripts/ops.mjs innovation-pack`, and generated `docs/INNOVATION_PACK.{md,json}` so empty-genius sessions have deterministic second-order candidates.
+- external-launch-proof-ledger S107 - **HONEST DEFERRAL S107**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key wiring still require real evidence/action; no proof was fabricated.
+
+## S107 Follow-up
+
+- [SIL] Use `node scripts/ops.mjs innovation-pack` at the start of the next empty-genius expansion pass; triage the two true stub signals before large-file decomposition.
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.

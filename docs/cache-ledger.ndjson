@@ -26,3 +26,5 @@
 {"ts":"2026-06-30T07:31:33.941Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":5516,"output":818,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-06-30T20:14:45.077Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":6564,"output":866,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-06-30T20:14:45.080Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":6564,"output":866,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-06-30T20:29:28.517Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":6431,"output":878,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-06-30T20:29:28.535Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":6431,"output":878,"cache_read":0,"cache_create":0,"skill":null}

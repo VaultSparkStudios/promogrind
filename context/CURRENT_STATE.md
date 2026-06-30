@@ -1,6 +1,6 @@
 # Current State
 
-Last updated: 2026-06-18 (S96)
+Last updated: 2026-06-30 (S107)
 
 ## Snapshot
 
@@ -157,3 +157,11 @@ Last updated: 2026-06-18 (S96)
 - Added focused regression coverage in `src/__tests__/dashboardActionWidgets.test.jsx`; the Pro push beta render path now runs in happy-dom without real push globals.
 - Verification: focused Vitest passed 4/4, `npm test` passed 60 files / 510 tests, and `npm run verify:launch-local` passed end to end with 0 public sanitization findings.
 - External proof blockers remain unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key wiring still require real external evidence/action.
+### Session 107 closeout update - 2026-06-30
+
+- Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`; the live genius list returned 0 items, so S107 shipped verified second-order automation/process hardening from live repo evidence.
+- Fixed the Windows no-window-storm guard: `scripts/batch-commit-onboard.mjs`, `scripts/closeout-autopilot.mjs`, and `scripts/rescore-ignis.mjs` now set `windowsHide:true` on the remaining `shell:true` child-process spawns.
+- Added the missing local innovation-pack surface: `node scripts/ops.mjs innovation-pack` now renders `docs/INNOVATION_PACK.{md,json}` from repo-local signals instead of forcing future sessions into manual fallback.
+- Added `docs/AUDIT_2026-06-30-S107.{md,json}` and `docs/IMPLEMENT_PLAN_S107.md` with shipped statuses and honest external-proof deferrals.
+- Verification: `node scripts/check-windows-hide.mjs` passed; `node --check scripts/render-innovation-pack.mjs` passed; `node scripts/ops.mjs innovation-pack --json` passed; `npm test` passed 60 files / 510 tests; `npm run verify:launch-local` passed end to end.
+- External proof blockers remain unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence still require real external evidence/action.

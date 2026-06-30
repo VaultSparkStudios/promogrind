@@ -55,5 +55,10 @@ export default {
       script: 'plan-next-session.mjs',
       desc: 'Predicted SIL range + scope cap + risk flags',
     },
+    'innovation-pack': {
+      script: 'render-innovation-pack.mjs',
+      desc: 'Generate second-order work after the primary genius list is exhausted',
+      args: '[--json] [--dry-run] [--top <n>]',
+    },
   },
 };
