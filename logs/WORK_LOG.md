@@ -482,3 +482,11 @@ Append chronological entries.
 - Shipped UserMenu threshold cleanup: `UserMenu.jsx` is below threshold without behavior changes.
 - Verification: doctor 12/12 blockingFailing 0; focused script/app/sync tests green; `npm test` passed 511/511; `npm run verify:launch-local` passed end to end with strict sanitization clean.
 - Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture public-key proof still require real external evidence/action.
+
+## 2026-07-01 - Session 112 post-deploy repair and verification
+
+- Pushed S112 closeout direct to `main` in commit `540c1af`, then repaired two production dashboard regressions caught by GitHub Pages smoke: missing calculator favorites state (`c8cfbf9`) and missing calculator comparison state (`a075614`).
+- Latest `main`/`origin/main` is `a075614`.
+- Remote verification: GitHub Actions CI run `28535934342` succeeded, and Deploy Pages run `28535934286` succeeded including production dashboard smoke.
+- Local verification after repairs: `npm run verify:launch-local` passed end to end with 511/511 tests; local preview dashboard hydrated with expected dashboard text, with only Cloudflare RUM CORS noise on localhost.
+- Honest deferral remains unchanged: production auth email, Stripe smoke purchase, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture public-key proof still require real external evidence/action.
