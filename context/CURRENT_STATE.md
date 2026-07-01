@@ -1,8 +1,9 @@
 # Current State
 
-Last updated: 2026-07-01 (S110)
+Last updated: 2026-07-01 (S111)
 
 ## Snapshot
+- S111 implementation status: launch-local green after extracting context-meter tile rendering from `scripts/render-startup-brief.mjs` into `scripts/lib/startup-context-meter-block.mjs`; focused script regressions now cover live payload normalization, fallback shaping, and rendered tile output. External launch proof gates remain honest and unchanged.
 
 - S110 status: production deploy verified via manual GitHub Pages run `28498310043` for head `fbfd037`; deploy health PASS, production dashboard smoke PASS, 0 blocking launch failures, and 1 advisory affiliate-coverage gap.
 - S110 implementation status: launch-local green after automation integrity and startup-renderer refinement. Closeout helper scripts now route spawns through `scripts/lib/safe-spawn.mjs`; `scripts/render-startup-brief.mjs` delegates live/fallback context-meter loading to `scripts/lib/startup-context-meter-block.mjs`; S110 audit/implement artifacts are recorded. External launch proof gates remain honest and unchanged.
@@ -183,3 +184,4 @@ Last updated: 2026-07-01 (S110)
 - GitHub Pages `Deploy Pages` run `28487322797` completed successfully for commit `1c14824`.
 - Production launch verification passed with 15 checks, 0 blocking failures, and 1 advisory affiliate-coverage gap.
 - Production dashboard smoke passed in the workflow artifact and again locally against `https://promogrind.bet/dashboard` with `failures: []`; the prior `SmartPromoRecommender` reference error is no longer present in production.
+

@@ -23,7 +23,7 @@ import { renderStartupScoreBlock } from './lib/startup-score-block.mjs';
 import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
-import { loadStartupContextMeter } from './lib/startup-context-meter-block.mjs';
+import { loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
 import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
@@ -199,12 +199,6 @@ const meter = loadStartupContextMeter({
 });
 const meterUsed = meter.usedTokens;
 const meterRemaining = Math.max(0, meter.limit - meterUsed);
-const meterRemainingPct = Math.round((meterRemaining / meter.limit) * 100);
-// context-meter returns pctUsed in percentage form (0-100), not 0-1. Normalize.
-const meterUsedPctRaw = meter.pctUsed > 1 ? meter.pctUsed : meter.pctUsed * 100;
-const meterUsedPct = Math.max(0, Math.min(100, Math.round(meterUsedPctRaw)));
-// pctUsedFraction is 0-1 for bar rendering math
-const meterUsedFrac = meterUsedPctRaw / 100;
 const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
 
 // ── Parse Rolling Status ──────────────────────────────────────────────────────
@@ -1091,30 +1085,7 @@ const lines = [
   bot(),
   ``,
   // ── CONTEXT METER (S119 founder directive — was buried, now first-class) ──
-  top('CONTEXT METER'),
-  ...(() => {
-    // Progress bar — 24 chars filled per used%.
-    const fillN = Math.min(24, Math.max(0, Math.round(meterUsedFrac * 24)));
-    const bar = '█'.repeat(fillN) + '░'.repeat(24 - fillN);
-    const tagIcon = meter.recommendation === 'CLOSEOUT' ? '⛔'
-      : meter.recommendation === 'CONSIDER_CLOSEOUT' ? '⚠'
-      : '✓';
-    const liveTag = meter.confidence || (meter.live ? 'live' : 'heuristic');
-    const usedStr = meterUsed.toLocaleString();
-    const limitStr = meter.limit.toLocaleString();
-    const lines = [
-      row(`${tagIcon}  ${bar}  ${String(meterUsedPct).padStart(3)}% used`),
-      row(`   ${usedStr} / ${limitStr} tok  ·  ${meter.agent}${meter.model ? '/' + meter.model : ''}  ·  ${liveTag}`),
-    ];
-    if (meter.continueCostPerTurn != null) {
-      const cacheLabel = meter.cacheHitRate != null ? `cache ${Math.round(meter.cacheHitRate * 100)}%` : 'cache n/a';
-      const turnsLabel = meter.turnsToCompact != null && meter.turnsToCompact < 999 ? `${meter.turnsToCompact} turns to compact` : 'compact distant';
-      lines.push(row(`   ~${meter.continueCostPerTurn.toLocaleString()} tok/turn  ·  ${cacheLabel}  ·  ${turnsLabel}`));
-    }
-    lines.push(row(`   Verdict: ${meter.recommendation}${meter.recommendation === 'CONTINUE' ? '' : '  ← act now'}`));
-    return lines;
-  })(),
-  bot(),
+  ...renderStartupContextMeterBlock(meter, { row, top, bot }).split('\\n'),
   ``,
   // ── SIGNALS ────────────────────────────────────────────────────────────────
   top('SIGNALS'),
@@ -1309,3 +1280,5 @@ if (v5Mode !== 'off') {
     process.stderr.write(`  ⚠ v5 dual-render skipped: ${err.message}\n`);
   }
 }
+
+

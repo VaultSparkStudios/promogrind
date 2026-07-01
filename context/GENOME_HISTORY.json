@@ -715,6 +715,23 @@
       },
       "delta": 0,
       "cause": "S110 shipped automation integrity and startup-renderer refinement: closeout helper scripts route through safe-spawn, sta"
+    },
+    {
+      "date": "2026-07-01",
+      "session": 111,
+      "total": 24,
+      "maxTotal": 25,
+      "overallStatus": "green-with-external-proof-follow-ups",
+      "lastReviewed": "2026-07-01 (S111)",
+      "dimensions": {
+        "schema_alignment": 5,
+        "prompt_template_alignment": 4,
+        "derived_view_freshness": 5,
+        "handoff_continuity": 5,
+        "contradiction_density": 5
+      },
+      "delta": 0,
+      "cause": "S111 shipped startup context-meter render extraction: context-meter tile rendering now lives in scripts/lib/startup-cont"
     }
   ]
 }

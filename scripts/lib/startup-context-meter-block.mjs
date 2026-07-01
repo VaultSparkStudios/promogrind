@@ -88,3 +88,31 @@ export function loadStartupContextMeter({
   }
   return buildHeuristicContextMeter({ root, limit, agent });
 }
+export function renderStartupContextMeterBlock(meter, { row, top, bot }) {
+  const limit = meter.limit || 1;
+  const usedTokens = meter.usedTokens || 0;
+  const pctUsedRaw = meter.pctUsed > 1 ? meter.pctUsed : meter.pctUsed * 100;
+  const pctUsed = Math.max(0, Math.min(100, Math.round(pctUsedRaw)));
+  const usedFraction = Math.max(0, Math.min(1, pctUsedRaw / 100));
+  const fillN = Math.min(24, Math.max(0, Math.round(usedFraction * 24)));
+  const bar = '█'.repeat(fillN) + '░'.repeat(24 - fillN);
+  const tagIcon = meter.recommendation === 'CLOSEOUT' ? '⛔'
+    : meter.recommendation === 'CONSIDER_CLOSEOUT' ? '⚠'
+    : '✓';
+  const liveTag = meter.confidence || (meter.live ? 'live' : 'heuristic');
+  const lines = [
+    top('CONTEXT METER'),
+    row(`${tagIcon}  ${bar}  ${String(pctUsed).padStart(3)}% used`),
+    row(`   ${usedTokens.toLocaleString()} / ${limit.toLocaleString()} tok  ·  ${meter.agent}${meter.model ? '/' + meter.model : ''}  ·  ${liveTag}`),
+  ];
+
+  if (meter.continueCostPerTurn != null) {
+    const cacheLabel = meter.cacheHitRate != null ? `cache ${Math.round(meter.cacheHitRate * 100)}%` : 'cache n/a';
+    const turnsLabel = meter.turnsToCompact != null && meter.turnsToCompact < 999 ? `${meter.turnsToCompact} turns to compact` : 'compact distant';
+    lines.push(row(`   ~${meter.continueCostPerTurn.toLocaleString()} tok/turn  ·  ${cacheLabel}  ·  ${turnsLabel}`));
+  }
+
+  lines.push(row(`   Verdict: ${meter.recommendation}${meter.recommendation === 'CONTINUE' ? '' : '  ← act now'}`));
+  lines.push(bot());
+  return lines.join('\n');
+}

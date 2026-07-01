@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { scanShellNodeSpawns } from './check-windows-hide.mjs';
-import { buildHeuristicContextMeter, loadStartupContextMeter } from './lib/startup-context-meter-block.mjs';
+import { buildHeuristicContextMeter, loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const json = process.argv.includes('--json');
@@ -99,6 +99,32 @@ run('startup context meter fallback is deterministic', () => {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+run('startup context meter block renders normalized live payload', () => {
+  const rows = renderStartupContextMeterBlock({
+    live: true,
+    usedTokens: 12345,
+    limit: 1000000,
+    pctUsed: 1.2,
+    turnsToCompact: 88,
+    continueCostPerTurn: 456,
+    cacheHitRate: 0.5,
+    recommendation: 'CONTINUE',
+    confidence: 'measured',
+    agent: 'codex',
+    model: 'codex-1m',
+  }, {
+    top: (title) => `[${title}]`,
+    row: (line) => line,
+    bot: () => '[/]',
+  }).split('\n');
+
+  assert.equal(rows[0], '[CONTEXT METER]');
+  assert.ok(rows.some((line) => line.includes('  1% used')));
+  assert.ok(rows.some((line) => line.includes('12,345 / 1,000,000 tok')));
+  assert.ok(rows.some((line) => line.includes('cache 50%')));
+  assert.ok(rows.some((line) => line.includes('Verdict: CONTINUE')));
+});
 const summary = {
   ok: results.every(r => r.pass),
   passing: results.filter(r => r.pass).length,
@@ -123,3 +149,4 @@ function run(name, fn) {
     results.push({ name, pass: false, detail: error.message });
   }
 }
+

@@ -1,6 +1,43 @@
 # Latest Handoff - PromoGrind
 
-Session Intent: Run the complete `/goal` + `/arc` mission for S110: `/start` -> `/audit` -> `/implement` -> `/closeout`, exhaust the empty genius list via second-order innovation work, validate honestly, and push directly to main.## Where We Left Off - Session 110 (2026-07-01)
+Session Intent: Run the complete `/goal` + `/arc` mission for S111: `/start` -> `/audit` -> `/implement` -> `/closeout`, use the empty genius-list fallback, validate honestly, and push directly to main.
+
+## Where We Left Off - Session 111 (2026-07-01)
+
+Intent Outcome: Achieved for repo-controllable work. Primary genius cache was empty, so S111 used live innovation-pack evidence to ship the next startup-renderer decomposition slice while keeping external proof gates honest.
+
+Shipped:
+- Added `docs/AUDIT_2026-07-01-S111.{md,json}` plus `docs/IMPLEMENT_PLAN_S111.md` and refreshed `docs/IMPLEMENT_PLAN.md` with execution outcomes.
+- Added `renderStartupContextMeterBlock` to `scripts/lib/startup-context-meter-block.mjs` so context-meter loading, fallback shaping, and tile rendering share one focused helper.
+- Rewired `scripts/render-startup-brief.mjs` to consume the extracted context-meter tile renderer instead of owning the rows inline.
+- Extended `scripts/test-studio-script-regressions.mjs` with coverage for normalized rendered percentage, token totals, cache line, and CONTINUE verdict output.
+
+Verification:
+- `node --check scripts/lib/startup-context-meter-block.mjs` passed.
+- `node --check scripts/render-startup-brief.mjs` passed.
+- `node --check scripts/test-studio-script-regressions.mjs` passed.
+- `node scripts/test-studio-script-regressions.mjs` passed 6/6 after approved rerun outside the sandbox; the sandbox attempt hit `CryptUnprotectData` before execution.
+- `node scripts/render-startup-brief.mjs` passed and regenerated `docs/STARTUP_BRIEF.md`.
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` passed required canonical checks with the pre-existing recommended HUMAN PRESSURE warning.
+- `node scripts/check-windows-hide.mjs` passed.
+- `npm test` passed: 61 files, 511 tests.
+- `npm run verify:launch-local` passed end to end.
+- `node scripts/ops.mjs doctor --update-json --json` passed 12/12 with `blockingFailing: 0`.
+
+Still Pending / Honest External Proofs:
+- Run real production auth email proof with `npm run smoke:auth-email -- --record`.
+- Run real Stripe smoke purchase with `npm run smoke:stripe -- --record`.
+- Run one trusted friend beta pass with `npm run beta:check -- --record`.
+- Verify Brevo forwarding/copy for `contact@promogrind.bet` after Studio Ops capability work.
+- Studio Ops should still consume Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` for PromoGrind Supabase deploy capability mapping.
+- Wire/verify the real browser-safe Supabase anon key in production capture config before claiming email capture readiness.
+
+Next Move:
+1. Complete real auth email, Stripe, and friend-beta proof recordings.
+2. Verify Brevo forwarding/copy and Studio Ops Supabase capability follow-up through the control plane.
+3. Continue startup brief decomposition only in pure helper slices with brief validation around each step.
+
+---Session Intent: Run the complete `/goal` + `/arc` mission for S110: `/start` -> `/audit` -> `/implement` -> `/closeout`, exhaust the empty genius list via second-order innovation work, validate honestly, and push directly to main.## Where We Left Off - Session 110 (2026-07-01)
 
 Intent Outcome: Achieved for repo-controllable work. Primary genius cache was empty, so S110 used the live innovation pack and code inspection to ship two verified automation/renderer refinements while keeping external proof gates honest.
 

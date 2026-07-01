@@ -13,9 +13,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 110,
-  "currentFocus": "S110 shipped automation integrity and startup-renderer refinement: closeout helper scripts route through safe-spawn, startup context-meter loading is extracted into a focused helper with regression coverage, innovation-pack surfaces are refreshed, and launch-local remains green.",
-  "nextMilestone": "Continue real production auth email, Stripe, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key proof gates before any public launch announcement; continue startup brief decomposition only through pure helper slices with validation.",
+  "currentSession": 111,
+  "currentFocus": "S111 shipped startup context-meter render extraction: context-meter tile rendering now lives in scripts/lib/startup-context-meter-block.mjs with focused regression coverage, startup brief validation remains canonical, and launch-local remains green.",
+  "nextMilestone": "Record real production auth email, Stripe, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key proof gates before any public launch announcement; continue startup brief decomposition only through pure helper slices with validation.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
@@ -29,7 +29,7 @@
   "silAvg3": 1000,
   "silVelocity": 2,
   "silDebt": "stable",
-  "silLastSession": 110,
+  "silLastSession": 111,
   "silMax": 1000,
   "silSparkline": [
     1000,
@@ -44,7 +44,7 @@
   "testsPassing": 511,
   "testsTotal": 511,
   "testsLastRun": "2026-07-01",
-  "lastDeployStatus": "S110 production deployment verified via manual GitHub Pages run 28498310043 for head fbfd037: deploy health PASS, production dashboard smoke PASS, 0 blocking launch failures, 1 advisory affiliate-coverage gap.",
+  "lastDeployStatus": "S111 local launch gate passed end to end; production deploy verification remains S110 run 28498310043 until this commit is pushed and GitHub Pages deploys it.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-07-01",
   "truthGenome": "24/25",
@@ -53,12 +53,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 510/510 in S107 via npm test and npm run verify:launch-local"
+      "status": "passing 511/511 in S111 via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S107 with 510/510 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S111 with 511/511 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -206,8 +206,8 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "founder",
-  "sessionModeAutoShiftedAt": "2026-06-30T20:29:17.233Z",
+  "sessionMode": "builder",
+  "sessionModeAutoShiftedAt": "2026-07-01T06:44:47.44Z",
   "planModeDetected": "missing",
   "planModeCheckedAt": "2026-06-30T07:31:13.255Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
