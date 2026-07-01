@@ -340,3 +340,14 @@
 
 - [Deploy] Confirm the next `Deploy Pages` run for the S109 commit is green and that production dashboard smoke no longer reports `SmartPromoRecommender` or other runtime reference errors.
 - [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+
+## Shipped This Session (S110)
+
+- safe-spawn-helper-convergence S110 - **DONE S110**: `scripts/closeout-step-3-7-parallel.mjs`, `scripts/record-skill-cost.mjs`, and `scripts/session-floor.mjs` now import `spawnSync` from `scripts/lib/safe-spawn.mjs`; `node scripts/check-windows-hide.mjs` is green.
+- startup-context-meter-extraction S110 - **DONE S110**: extracted live/fallback startup context-meter loading into `scripts/lib/startup-context-meter-block.mjs`, rewired `scripts/render-startup-brief.mjs`, and added focused regression coverage.
+- external-proof-evidence S110 - **HONEST DEFERRAL S110**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence still require real external proof; no proof was fabricated.
+
+## S110 Follow-up
+
+- [SIL] Continue `scripts/render-startup-brief.mjs` decomposition only through pure helper slices with brief validation around each extraction.
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.

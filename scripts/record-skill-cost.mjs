@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
+import { spawnSync } from "./lib/safe-spawn.mjs";
 
 function arg(name, fallback = null) {
   const idx = process.argv.indexOf(name);

@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { scanShellNodeSpawns } from './check-windows-hide.mjs';
+import { buildHeuristicContextMeter, loadStartupContextMeter } from './lib/startup-context-meter-block.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const json = process.argv.includes('--json');
@@ -53,6 +54,51 @@ run('genius cache refresh keeps JSON and Markdown surfaces coherent', () => {
   assert.ok(doc.includes(`IGNIS source: **${list.ignisSource || 'fallback'}**`), 'Markdown source matches cached list');
 });
 
+run('startup context meter normalizes live ledger payload', () => {
+  const meter = loadStartupContextMeter({
+    root: ROOT,
+    scriptsDir: path.join(ROOT, 'scripts'),
+    agent: 'codex',
+    limit: 1000000,
+    runContextMeter: () => ({
+      status: 0,
+      stdout: JSON.stringify({
+        usedTokens: 12345,
+        limit: 1000000,
+        pctUsed: 1.2,
+        turnsToCompact: 88,
+        continueCostPerTurn: 456,
+        cacheHitRate: 0.5,
+        recommendation: 'CONTINUE',
+        confidence: 'measured',
+        model: 'codex-1m',
+      }),
+    }),
+  });
+  assert.equal(meter.live, true);
+  assert.equal(meter.agent, 'codex');
+  assert.equal(meter.usedTokens, 12345);
+  assert.equal(meter.model, 'codex-1m');
+});
+
+run('startup context meter fallback is deterministic', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'startup-meter-'));
+  try {
+    fs.writeFileSync(path.join(dir, 'AGENTS.md'), 'a'.repeat(400), 'utf8');
+    const meter = buildHeuristicContextMeter({
+      root: dir,
+      limit: 1000,
+      agent: 'codex',
+      files: ['AGENTS.md'],
+    });
+    assert.equal(meter.live, false);
+    assert.equal(meter.usedTokens, 100);
+    assert.equal(meter.pctUsed, 0.1);
+    assert.equal(meter.recommendation, 'CONTINUE');
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
 const summary = {
   ok: results.every(r => r.pass),
   passing: results.filter(r => r.pass).length,

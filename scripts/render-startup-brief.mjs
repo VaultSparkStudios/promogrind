@@ -23,7 +23,7 @@ import { renderStartupScoreBlock } from './lib/startup-score-block.mjs';
 import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
-import { contextWindowForAgent } from './lib/model-router.mjs';
+import { loadStartupContextMeter } from './lib/startup-context-meter-block.mjs';
 import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
@@ -83,7 +83,6 @@ function renderProfileLensHeader() {
 function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 function daysBetween(a, b) { try { return Math.floor((new Date(b) - new Date(a)) / 86400000); } catch { return 999; } }
-function bytesOf(rel) { try { return fs.statSync(path.join(root, rel)).size; } catch { return 0; } }
 function lockValue(key) {
   const lock = readText(path.join(root, 'context', '.session-lock'));
   return lock.match(new RegExp(`^${key}:\\s*(\\S+)`, 'm'))?.[1] ?? '';
@@ -188,57 +187,16 @@ const intentPlan  = readText(path.join(root, 'context', 'SESSION_INTENT_PLAN.md'
 const humanPressure = readJson(path.join(root, 'portfolio', 'compiled', 'HUMAN_ACTION_PRESSURE.json'), { items: [] });
 
 const meterAgent = lockValue('agent') || 'unknown';
-const meterLimit = contextWindowForAgent(meterAgent);
 
-// ── S119 founder directive: live context meter (replaces static byte-count) ─
-// Calls scripts/context-meter.mjs for real ledger-backed measurements instead
-// of a stale on-disk byte estimate that didn't reflect actual session burn.
-function loadLiveContextMeter() {
-  try {
-    const res = spawnSync(node, [path.join(__dirname, 'context-meter.mjs'), '--json'], {
-      cwd: root, encoding: 'utf8', timeout: 5000,
-    });
-    if (res.status === 0 && res.stdout) {
-      const meter = JSON.parse(res.stdout);
-      return {
-        live: true,
-        usedTokens: meter.usedTokens,
-        limit: meter.limit,
-        pctUsed: meter.pctUsed,
-        turnsToCompact: meter.turnsToCompact,
-        continueCostPerTurn: meter.continueCostPerTurn,
-        cacheHitRate: meter.cacheHitRate,
-        recommendation: meter.recommendation,
-        confidence: meter.confidence,
-        agent: meter.agent || meterAgent,
-        model: meter.model || '',
-      };
-    }
-  } catch { /* fall through */ }
-  // Heuristic fallback — old behavior
-  const bytes = [
-    'AGENTS.md', 'CLAUDE.md', 'context/PROJECT_BRIEF.md', 'context/SOUL.md',
-    'context/BRAIN.md', 'context/CURRENT_STATE.md', 'context/DECISIONS.md',
-    'context/TASK_BOARD.md', 'context/LATEST_HANDOFF.md',
-    'context/SELF_IMPROVEMENT_LOOP.md', 'context/TRUTH_AUDIT.md',
-  ].reduce((sum, file) => sum + bytesOf(file), 0);
-  const usedTokens = Math.round(bytes / 4);
-  return {
-    live: false,
-    usedTokens,
-    limit: meterLimit,
-    pctUsed: usedTokens / meterLimit,
-    turnsToCompact: null,
-    continueCostPerTurn: null,
-    cacheHitRate: null,
-    recommendation: usedTokens / meterLimit > 0.75 ? 'CONSIDER_CLOSEOUT' : 'CONTINUE',
-    confidence: 'heuristic-stale',
-    agent: meterAgent,
-    model: '',
-  };
-}
-
-const meter = loadLiveContextMeter();
+// S119 founder directive: live context meter. The loader lives in a focused helper
+// so the brief renderer stays display-oriented and the fallback is unit-testable.
+const meter = loadStartupContextMeter({
+  root,
+  scriptsDir: __dirname,
+  node,
+  agent: meterAgent,
+  limit: status.modelTierCtxLimit || 1000000,
+});
 const meterUsed = meter.usedTokens;
 const meterRemaining = Math.max(0, meter.limit - meterUsed);
 const meterRemainingPct = Math.round((meterRemaining / meter.limit) * 100);

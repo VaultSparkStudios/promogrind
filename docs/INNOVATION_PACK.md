@@ -1,6 +1,6 @@
 # Innovation Pack
 
-> Generated: 2026-07-01 | Project: PromoGrind | Session: 109
+> Generated: 2026-07-01 | Project: PromoGrind | Session: 110
 
 Second-order work generated after the primary genius list is empty. Items are live-code verified where repo-owned; external proof gates stay explicit deferrals.
 
@@ -8,13 +8,13 @@ Second-order work generated after the primary genius list is empty. Items are li
 
 | # | Tier | Axis | Status | Effort | Impact | Innov. | Priority | Item |
 |---|---|---|---|---|---:|---:|---:|---|
-| 1 | medium | speed / organization | unblocked | 2h | 7 | 3 | 10.5 | **next-god-file-decomposition** - scripts/render-startup-brief.mjs is 1354 lines (threshold 900); 5 files exceed local maintainability thresholds. **Recipe:** Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate. |
+| 1 | medium | speed / organization | unblocked | 2h | 7 | 3 | 10.5 | **next-god-file-decomposition** - scripts/render-startup-brief.mjs is 1312 lines (threshold 900); 5 files exceed local maintainability thresholds. **Recipe:** Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate. |
 | 2 | external | truth / launch-readiness | honest-deferral | external | 10 | 1 | 3 | **external-launch-proof-ledger** - 6 real-world proof gates remain in PROJECT_STATUS.blockers. **Recipe:** Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists. |
 
 ## Source Signals
 
 - geniusListEmpty: true
-- taskBoardBytes: 53105
+- taskBoardBytes: 54596
 - windowsHideShellViolations: 0
 - directChildProcessImports: 0
 - todoSignals: 0

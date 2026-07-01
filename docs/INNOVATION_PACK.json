@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-07-01T01:18:30.104Z",
+  "generatedAt": "2026-07-01T06:06:35.472Z",
   "project": "PromoGrind",
-  "session": 109,
+  "session": 110,
   "sourceSignals": {
     "geniusListEmpty": true,
-    "taskBoardBytes": 53105,
+    "taskBoardBytes": 54596,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
@@ -23,7 +23,7 @@
       "axis": "speed / organization",
       "impact": 7,
       "innovation": 3,
-      "evidence": "scripts/render-startup-brief.mjs is 1354 lines (threshold 900); 5 files exceed local maintainability thresholds.",
+      "evidence": "scripts/render-startup-brief.mjs is 1312 lines (threshold 900); 5 files exceed local maintainability thresholds.",
       "recipe": "Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate."
     },
     {
@@ -47,7 +47,7 @@
     "largeFiles": [
       {
         "file": "scripts/render-startup-brief.mjs",
-        "lines": 1354,
+        "lines": 1312,
         "limit": 900
       },
       {

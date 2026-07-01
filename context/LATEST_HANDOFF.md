@@ -1,7 +1,44 @@
 # Latest Handoff - PromoGrind
 
-Session Intent: Continue the active `/goal` + `/arc` objective, finish deploy-fix work from current evidence, add missing public-safe scripts, run `/closeout`, push directly to main, and fully deploy/verify GitHub Pages.
-## Where We Left Off - Session 109 (2026-07-01)
+Session Intent: Run the complete `/goal` + `/arc` mission for S110: `/start` -> `/audit` -> `/implement` -> `/closeout`, exhaust the empty genius list via second-order innovation work, validate honestly, and push directly to main.
+## Where We Left Off - Session 110 (2026-07-01)
+
+Intent Outcome: Achieved for repo-controllable work. Primary genius cache was empty, so S110 used the live innovation pack and code inspection to ship two verified automation/renderer refinements while keeping external proof gates honest.
+
+Shipped:
+- Added `docs/AUDIT_2026-07-01-S110.{md,json}` plus `docs/IMPLEMENT_PLAN_S110.md` and refreshed `docs/IMPLEMENT_PLAN.md` with execution outcomes.
+- Converged public-safe closeout helper scripts on `scripts/lib/safe-spawn.mjs`: `closeout-step-3-7-parallel`, `record-skill-cost`, and `session-floor` no longer import `node:child_process` directly.
+- Extracted startup context-meter loading into `scripts/lib/startup-context-meter-block.mjs` and rewired `scripts/render-startup-brief.mjs` to keep display composition separate from live/fallback meter logic.
+- Added focused regression coverage for live context-meter payload normalization and deterministic heuristic fallback in `scripts/test-studio-script-regressions.mjs`.
+- Refreshed `docs/INNOVATION_PACK.{json,md}` after implementation; it now reports 0 direct child-process imports and `render-startup-brief.mjs` reduced to 1312 lines.
+
+Verification:
+- `node scripts/check-windows-hide.mjs` passed with 0 violations.
+- `node scripts/record-skill-cost.mjs --skill audit --phase smoke` passed.
+- `node scripts/session-floor.mjs --json` and `node scripts/session-floor.mjs --shipped 2 --json` passed with CONTINUE.
+- `node scripts/closeout-step-3-7-parallel.mjs` passed all four bundled checks.
+- `node scripts/render-startup-brief.mjs` passed and `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` was conformant with only the existing recommended HUMAN PRESSURE warning.
+- `npm test` passed: 61 files, 511 tests.
+- `npm run verify:launch-local` passed end to end.
+- Release readiness stayed PARTIAL at 71% because real Stripe, friend-beta, and auth-email proofs remain pending.
+
+Verification caveat:
+- `node scripts/test-studio-script-regressions.mjs`, `node scripts/test-brief-golden.mjs`, `node scripts/check-branding-compliance.mjs`, and `node scripts/check-public-dist-exposure.mjs` each hit the Windows sandbox `CryptUnprotectData` failure in at least one attempt before execution. Escalated reruns were not approved for the first two, so their real exit codes remain unverified this session; `check-public-repo-sanitization --strict --json` and the full `verify:launch-local` public checks passed.
+
+Still Pending / Honest External Proofs:
+- Run real production auth email proof with `npm run smoke:auth-email -- --record`.
+- Run real Stripe smoke purchase with `npm run smoke:stripe -- --record`.
+- Run one trusted friend beta pass with `npm run beta:check -- --record`.
+- Verify Brevo forwarding/copy for `contact@promogrind.bet` after Studio Ops capability work.
+- Studio Ops should still consume Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` for PromoGrind Supabase deploy capability mapping.
+- Wire/verify the real browser-safe Supabase anon key in production capture config before claiming email capture readiness.
+
+Next Move:
+1. Complete real auth email, Stripe, and friend-beta proof recordings.
+2. Verify Brevo forwarding/copy and Studio Ops Supabase capability follow-up through the control plane.
+3. Continue startup brief decomposition only in pure helper slices with brief validation around each step.
+
+---## Where We Left Off - Session 109 (2026-07-01)
 
 Intent Outcome: Achieved for repo-controllable work and deployment. S109 was committed to `main`, pushed, GitHub Pages run `28487322797` passed, and production dashboard smoke is green.
 

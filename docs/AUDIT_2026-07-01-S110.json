@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "1.0",
+  "session": 110,
+  "date": "2026-07-01",
+  "project": "PromoGrind",
+  "type": "app",
+  "title": "Automation Integrity and Startup Renderer Refinement",
+  "premise": "The primary genius cache is empty, so this audit expands through the live innovation pack and code inspection. Repo-owned work exists in public-safe automation helpers and the startup brief renderer; real launch proof gates remain external and must not be faked.",
+  "items": [
+    {
+      "id": "safe-spawn-helper-convergence",
+      "slug": "safe-spawn-helper-convergence",
+      "tier": "high",
+      "axis": "security / automation / developer-experience",
+      "effort": "30m",
+      "effortHours": 0.5,
+      "impact": 9,
+      "innovation": 4,
+      "priority": 27.2,
+      "status": "shipped",
+      "why": "Session 109 added public-safe closeout helper scripts that correctly set windowsHide, but three of them import child_process directly. PromoGrind already owns a hardened safe-spawn wrapper; using it everywhere keeps the window-storm/Defender guard enforceable instead of relying on each helper to remember options.",
+      "evidence": "docs/INNOVATION_PACK.json reports 3 direct child_process imports: scripts/closeout-step-3-7-parallel.mjs, scripts/record-skill-cost.mjs, and scripts/session-floor.mjs. Live reads confirm all three import spawnSync from node:child_process.",
+      "recipe": "Switch those helper scripts to import spawnSync from scripts/lib/safe-spawn.mjs, then run node scripts/check-windows-hide.mjs and the closeout helper smoke commands.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Replace direct imports in the three helper files and run node scripts/check-windows-hide.mjs."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Replace imports, run node scripts/check-windows-hide.mjs, node scripts/record-skill-cost.mjs --skill audit --phase smoke, node scripts/session-floor.mjs --json, and node scripts/closeout-step-3-7-parallel.mjs."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Complete L2 and add/extend a regression assertion so future public-safe helper scripts cannot reintroduce raw child_process imports."
+        }
+      }
+    },
+    {
+      "id": "startup-context-meter-extraction",
+      "slug": "startup-context-meter-extraction",
+      "tier": "medium",
+      "axis": "speed / organization / observability",
+      "effort": "2h",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 3,
+      "priority": 10.5,
+      "status": "shipped",
+      "why": "The startup brief renderer is still a 1354-line god file even after the SCORE extraction. The context-meter block is a good next slice because it is pure, testable, and observability-sensitive; moving it out reduces renderer risk without changing product behavior.",
+      "evidence": "docs/INNOVATION_PACK.json lists scripts/render-startup-brief.mjs at 1354 lines against a 900-line threshold. Live inspection shows loadLiveContextMeter and its fallback logic are local to the renderer and can be extracted behind a stable function.",
+      "recipe": "Create scripts/lib/startup-context-meter-block.mjs for live meter loading/fallback shaping, update render-startup-brief.mjs to import it, and verify brief format plus golden/regression tests.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Extract loadLiveContextMeter into a helper and preserve current renderer output."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Extract the helper, add focused tests for live JSON and fallback behavior, and run node scripts/test-brief-golden.mjs plus node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Complete L2 and extract the context-meter visual rows into the same helper with snapshot-like coverage."
+        }
+      }
+    },
+    {
+      "id": "external-launch-proof-ledger",
+      "slug": "external-launch-proof-ledger",
+      "tier": "external",
+      "axis": "truth / launch-readiness",
+      "effort": "external",
+      "effortHours": 8,
+      "impact": 10,
+      "innovation": 1,
+      "priority": 3,
+      "status": "honest-deferral",
+      "why": "Six launch-proof gates still require real-world evidence: mailbox delivery, Stripe purchase flow, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture-key wiring. A good session keeps them visible while refusing fabricated evidence.",
+      "evidence": "context/PROJECT_STATUS.json blockers enumerate the six gates, and blocker-preflight reports 0 locally actionable Human Action Required items.",
+      "recipe": "Leave the gates as explicit launch blockers; do not mark them done until the corresponding real runner or provider evidence records proof.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Record the honest deferral in the execution log and closeout brief."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Also ensure TASK_BOARD and PROJECT_STATUS keep the proof gates explicit and non-fabricated."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Add automation only if a real credential/proof path becomes available through the secrets gateway."
+        }
+      }
+    }
+  ],
+  "verificationPlan": [
+    "node scripts/check-windows-hide.mjs",
+    "node scripts/record-skill-cost.mjs --skill audit --phase smoke",
+    "node scripts/session-floor.mjs --json",
+    "node scripts/test-studio-script-regressions.mjs",
+    "node scripts/test-brief-golden.mjs",
+    "node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md",
+    "npm test",
+    "npm run verify:launch-local"
+  ],
+  "honestDeferrals": [
+    "No production auth email proof without a real mailbox flow.",
+    "No Stripe proof without a real purchase/portal/subscription smoke.",
+    "No friend-beta proof without a real tester pass.",
+    "No Brevo or Studio Ops Supabase capability proof without the corresponding Studio Ops/provider action.",
+    "No capture readiness claim until the browser-safe Supabase anon key is actually wired into production config."
+  ],
+  "executionLog": [
+    {
+      "item": "safe-spawn-helper-convergence",
+      "outcome": "shipped",
+      "evidence": "Closeout helper scripts import spawnSync from scripts/lib/safe-spawn.mjs; windows-hide guard and helper smokes passed."
+    },
+    {
+      "item": "startup-context-meter-extraction",
+      "outcome": "shipped",
+      "evidence": "Added scripts/lib/startup-context-meter-block.mjs, rewired render-startup-brief.mjs, added focused regression coverage, and verified render/brief/local launch gates."
+    },
+    {
+      "item": "external-launch-proof-ledger",
+      "outcome": "honest-deferral",
+      "evidence": "External launch proof gates still require real mailbox/payment/tester/provider/deploy-config evidence; no proof fabricated."
+    }
+  ]
+}
