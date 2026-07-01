@@ -44,7 +44,7 @@
   "testsPassing": 511,
   "testsTotal": 511,
   "testsLastRun": "2026-07-01",
-  "lastDeployStatus": "S110 local launch gate passed end to end; production deployment pending this commit push. S109 production deploy remains green via GitHub Pages run 28487322797.",
+  "lastDeployStatus": "S110 production deployment verified via manual GitHub Pages run 28498310043 for head fbfd037: deploy health PASS, production dashboard smoke PASS, 0 blocking launch failures, 1 advisory affiliate-coverage gap.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-07-01",
   "truthGenome": "24/25",

@@ -454,3 +454,10 @@ Append chronological entries.
 - Verification: `node scripts/check-windows-hide.mjs`, helper smokes, `node scripts/closeout-step-3-7-parallel.mjs`, `node scripts/render-startup-brief.mjs`, brief validation, `npm test` 511/511, and `npm run verify:launch-local` passed.
 - Caveat: selected Node checks hit sandbox `CryptUnprotectData` before execution; no green was fabricated for those commands.
 - Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture public-key wiring still require real evidence/action.
+
+## 2026-07-01 - Session 110 post-deploy verification
+
+- Manually dispatched GitHub Pages deploy run `28498310043` on `main` for head `fbfd037`.
+- GitHub Actions deploy result: `success`; Pages build, artifact upload, deploy, production launch verification, and production dashboard smoke all passed.
+- Deploy artifact summary: deploy health `PASS`, 15 checks passed, 0 blocking failures, 1 advisory affiliate-coverage gap.
+- Direct local production smoke: `npm run --silent smoke:production-dashboard` passed against `https://promogrind.bet/dashboard` with `failures: []`.
