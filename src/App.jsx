@@ -332,7 +332,7 @@ export default function App() {
   }
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh"}}>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
@@ -623,7 +623,7 @@ export default function App() {
       </div>
       <EmailCapture/>
       <AppFooter/>
-      {isMobile && <div style={{height:82}}/>}
+      {isMobile && <div style={{height:88}}/>}
       <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}

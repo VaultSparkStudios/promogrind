@@ -66,19 +66,110 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_ICONS = [
+  // Home — house
+  (active, color) => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={active ? 2.2 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z"/>
+      <path d="M9 21V13h6v8"/>
+    </svg>
+  ),
+  // Convert — exchange arrows
+  (active, color) => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={active ? 2.2 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M7 16V4m0 0L3 8m4-4l4 4"/>
+      <path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
+    </svg>
+  ),
+  // Calc — calculator grid
+  (active, color) => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={active ? 2.2 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="4" y="2" width="16" height="20" rx="2"/>
+      <line x1="8" y1="7" x2="16" y2="7"/>
+      <line x1="8" y1="11" x2="10" y2="11"/>
+      <line x1="14" y1="11" x2="16" y2="11"/>
+      <line x1="8" y1="15" x2="10" y2="15"/>
+      <line x1="14" y1="15" x2="16" y2="15"/>
+      <line x1="8" y1="19" x2="10" y2="19"/>
+      <line x1="14" y1="19" x2="16" y2="19"/>
+    </svg>
+  ),
+  // Track — activity pulse
+  (active, color) => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={active ? 2.2 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+  ),
+  // Live — lightning bolt (filled when active)
+  (active, color) => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? color : "none"} stroke={color} strokeWidth={active ? 2 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+  ),
+  // Learn — open book
+  (active, color) => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={active ? 2.2 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+    </svg>
+  ),
+];
 
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+
+export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+    <div className="pg-mobile-nav" style={{
+      position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
+      background: `rgba(15,21,32,0.82)`,
+      backdropFilter: "blur(18px) saturate(160%)",
+      WebkitBackdropFilter: "blur(18px) saturate(160%)",
+      borderTop: `1px solid rgba(96,165,250,0.10)`,
+      display: "flex",
+      paddingBottom: "env(safe-area-inset-bottom, 0px)",
+      boxShadow: "0 -1px 0 rgba(96,165,250,0.08), 0 -16px 40px rgba(0,0,0,0.36)",
+    }}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+      <style>{`
+        .pg-mobile-nav-btn { -webkit-tap-highlight-color: transparent; transition: opacity 0.12s; }
+        .pg-mobile-nav-btn:active { opacity: 0.6; }
+      `}</style>
+      {tabs.map((tab, index) => {
+        const active = gi === index;
+        const color = active ? K.gn : K.mt;
+        const iconRenderer = NAV_ICONS[index];
+        return (
+          <button
+            key={tab.group}
+            className="pg-mobile-nav-btn"
+            onClick={() => goTo(index, 0)}
+            aria-label={NAV_LABELS[index] || tab.group}
+            aria-current={active ? "page" : undefined}
+            style={{
+              flex: 1, minHeight: 54, padding: "8px 4px 6px",
+              background: "none", border: "none", cursor: "pointer",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+              position: "relative",
+            }}
+          >
+            {active && (
+              <span style={{
+                position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+                width: 36, height: 2, borderRadius: 2,
+                background: `linear-gradient(90deg, ${K.gn}88, ${K.gn}, ${K.gn}88)`,
+                boxShadow: `0 0 8px ${K.gn}88`,
+              }} />
+            )}
+            {iconRenderer ? iconRenderer(active, color) : null}
+            <span style={{
+              fontFamily: font, fontSize: 9, fontWeight: active ? 700 : 400,
+              color, textTransform: "uppercase", letterSpacing: "0.6px", lineHeight: 1,
+            }}>
+              {NAV_LABELS[index] || tab.group}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
