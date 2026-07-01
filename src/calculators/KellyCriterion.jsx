@@ -26,7 +26,7 @@ export default function KellyCriterion() {
         <Tl t="Kelly Criterion Bet Sizer" badge="+EV SIZING" bc={K.gn} shareable />
         <div style={S.row}><In l="Win Probability %" v={wp} set={setWp} ph="55" /><In l="Odds" v={odds} set={setOdds} ph="+110" /><In l="Bankroll" v={br} set={setBr} pre="$" ph="1000" /><In l="Kelly Fraction %" v={frac} set={setFrac} ph="25" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.bet}</span>
               <span style={{ fontSize: 12, color: K.dm }}>recommended bet size</span>

@@ -47,7 +47,7 @@ export default function ParlayBuilder() {
         </div>
         <div style={S.row}><In l="Stake" v={stake} set={setStake} pre="$" ph="100" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.profit}</span>
               <span style={{ fontSize: 12, color: K.dm }}>profit if hits</span>

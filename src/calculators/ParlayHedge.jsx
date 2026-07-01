@@ -27,7 +27,7 @@ export default function ParlayHedge() {
           <In l="Original Stake" v={originalStake} set={(value) => setField("originalStake", value)} pre="$" />
         </div>
         {result && (
-          <div style={S.res(true)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <span style={S.big(K.gn)}>Guaranteed Profit: +${result.g}</span>
             <RR l="Recommended Hedge Stake" v={`$${result.hs}`} c={K.ac} b />
             <RR l="Profit If Parlay Wins" v={`+$${result.pPW}`} c={K.gn} />

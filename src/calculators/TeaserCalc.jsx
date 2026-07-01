@@ -44,7 +44,7 @@ export default function TeaserCalc() {
           </div>
         </div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? "+" : ""}{r.ev}%</span>
               <span style={{ fontSize: 12, color: K.dm }}>expected value per $100</span>

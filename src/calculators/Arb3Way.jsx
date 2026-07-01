@@ -22,7 +22,7 @@ export default function Arb3Way() {
         <Tl t="3-Way Arbitrage" badge="SOCCER / HOCKEY" bc={K.pp} shareable />
         <div style={S.row}><In l="Home Win (Book A)" v={o1} set={setO1} /><In l="Draw (Book B)" v={o2} set={setO2} /><In l="Away Win (Book C)" v={o3} set={setO3} /><In l="Total Stake" v={t} set={setT} pre="$" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? `ARB: +$${r.pr}` : "NO ARB"}</span>
               {r.ok && <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>}

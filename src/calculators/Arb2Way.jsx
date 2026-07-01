@@ -45,7 +45,7 @@ export default function Arb2Way() {
         )}
         <div style={S.row}><In l="Outcome 1 (Book A)" v={o1} set={setO1} /><In l="Outcome 2 (Book B)" v={o2} set={setO2} /><In l="Total Stake" v={t} set={setT} pre="$" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? `ARB: +$${r.pr}` : "NO ARB"}</span>
               {r.ok && <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>}

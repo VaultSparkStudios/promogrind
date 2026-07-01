@@ -178,7 +178,7 @@ export default function BonusBet() {
           </div>
         )}
         {r && (
-          <div style={S.res(parseFloat(r.g) > 0)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(parseFloat(r.g) > 0)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(parseFloat(r.g) > 0 ? K.gn : K.rd)}>${r.g}</span>
               <span style={{ fontSize: 12, color: K.dm }}>guaranteed profit</span>

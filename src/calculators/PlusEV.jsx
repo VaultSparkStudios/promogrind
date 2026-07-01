@@ -18,7 +18,7 @@ export default function PlusEV() {
         <Tl t="Expected Value Calculator" badge="+EV" bc={K.gn} shareable />
         <div style={S.row}><In l="Sportsbook's Odds" v={yo} set={setYo} ph="+120" /><In l="Fair (No-Vig) Odds" v={fo} set={setFo} ph="+105" /><In l="Bet Size" v={s} set={setS} pre="$" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? "+" : ""}${r.ev}</span>
               <span style={{ fontSize: 12, color: K.dm }}>expected value per bet</span>

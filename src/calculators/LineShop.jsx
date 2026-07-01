@@ -19,8 +19,8 @@ export default function LineShop() {
         <Tl t="Line Shopping" badge="BEST ODDS FINDER" bc={K.gn} shareable />
         <div style={S.row}>
           <div style={{ flex: 2, minWidth: 200 }}>
-            <label style={S.label}>Game / Event (optional)</label>
-            <input style={S.input} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="e.g. Chiefs vs Bills — Moneyline Chiefs" />
+            <label htmlFor="pg-lineshop-event" style={S.label}>Game / Event (optional)</label>
+            <input id="pg-lineshop-event" style={S.input} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="e.g. Chiefs vs Bills — Moneyline Chiefs" />
           </div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 8, marginBottom: 12 }}>
@@ -29,13 +29,13 @@ export default function LineShop() {
             return (
               <div key={n} style={{ padding: "10px", background: isBest ? `${K.gn}10` : K.s2, border: `1px solid ${isBest ? K.gn : K.bd2}`, borderRadius: 6 }}>
                 <div style={{ fontSize: 10, color: isBest ? K.gn : K.mt, fontWeight: isBest ? 700 : 400, marginBottom: 4, textTransform: "uppercase", letterSpacing: "1px" }}>{n}{isBest && " ★"}</div>
-                <input style={{ ...S.input, padding: "5px 8px", fontSize: 12 }} value={odds[n]} onChange={(e) => setOdds((o) => ({ ...o, [n]: e.target.value }))} placeholder="e.g. -110" />
+                <input aria-label={`${n} odds`} inputMode="decimal" style={{ ...S.input, padding: "5px 8px", fontSize: 12 }} value={odds[n]} onChange={(e) => setOdds((o) => ({ ...o, [n]: e.target.value }))} placeholder="e.g. -110" />
               </div>
             );
           })}
         </div>
         {entries.length >= 2 && (
-          <div style={S.res(true)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             {best && (
               <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                 <span style={S.big(K.gn)}>{best.odds}</span>

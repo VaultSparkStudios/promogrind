@@ -338,3 +338,32 @@ describe("Receipt button in Arb2Way", () => {
     expect(screen.getByText("📄 Receipt")).toBeDefined();
   });
 });
+
+// ── Accessibility (S113 calculator-a11y-pass) ──────────────────────────────
+
+describe("calculator accessibility", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it("announces BonusBet results through a polite live region", () => {
+    wrap(<BonusBet />);
+    const regions = screen.getAllByRole("status");
+    const resultRegion = regions.find((el) => /guaranteed profit|Hedge Bet Amount/i.test(el.textContent));
+    expect(resultRegion).toBeDefined();
+    expect(resultRegion.getAttribute("aria-live")).toBe("polite");
+  });
+
+  it("associates BonusBet inputs with their labels via the In atom", () => {
+    wrap(<BonusBet />);
+    const input = screen.getByLabelText(/Bonus Bet Size/i);
+    expect(input).toBeDefined();
+    expect(input.tagName).toBe("INPUT");
+  });
+
+  it("announces ProfitBoost results through a polite live region", () => {
+    wrap(<ProfitBoost />);
+    const regions = screen.getAllByRole("status");
+    expect(regions.some((el) => el.getAttribute("aria-live") === "polite")).toBe(true);
+  });
+});

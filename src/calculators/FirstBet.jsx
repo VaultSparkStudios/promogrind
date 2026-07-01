@@ -75,7 +75,7 @@ export default function FirstBet() {
           </div>
         )}
         {r && (
-          <div style={S.res(true)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>${r.g}</span>
               <span style={{ fontSize: 12, color: K.dm }}>hedge-only worst case</span>

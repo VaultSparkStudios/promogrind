@@ -20,7 +20,7 @@ export default function InsurancePromo() {
         <Tl t="Promo Insurance Calculator" badge="SGP / PARLAY" bc={K.pp} shareable />
         <div style={S.row}><In l="Your Stake" v={stake} set={setStake} pre="$" ph="100" /><In l="Insurance % of Stake" v={insPct} set={setInsPct} ph="100" /><In l="Max Insurance $" v={insMax} set={setInsMax} pre="$" ph="100" /><In l="Bonus Conversion %" v={conv} set={setConv} ph="70" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.gn)}>${r.insVal}</span>
               <span style={{ fontSize: 12, color: K.dm }}>insurance value (real cash)</span>
