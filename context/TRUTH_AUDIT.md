@@ -322,3 +322,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Protocol truth improved: public-safe local closeout helper scripts now exist for the closeout skill paths that were absent in this public repo.
 - Verification truth: focused Vitest passed 3/3; full suite passed 511/511; `npm run verify:launch-local` passed end to end; doctor passed 12/12 with `blockingFailing: 0`.
 - Production proof remains unclaimed until the S109 commit deploys and the GitHub Pages production dashboard smoke passes.
+
+### Session 109 post-deploy truth update - 2026-07-01
+
+- Production deployment truth is green for S109: `Deploy Pages` run `28487322797` passed after deploying commit `1c14824`.
+- Production dashboard smoke truth is green: workflow artifact `production-dashboard-smoke.json` reports `ok: true` and `failures: []`; local `npm run --silent smoke:production-dashboard` also reports `ok: true` against `https://promogrind.bet/dashboard`.
+- Advisory launch truth remains: `affiliate_coverage` reports 0 configured affiliate links, while monetization coverage remains configured for 5 books. This is advisory, not a blocking deploy failure.

@@ -333,7 +333,7 @@
 - production-dashboard-chunk-owned-deps S109 - **DONE S109**: fixed the deploy-blocking `SmartPromoRecommender` runtime leak by making `DailyDashboard.jsx` own all extracted chunk dependencies and local top-tool route labels.
 - daily-dashboard-render-coverage S109 - **DONE S109**: added focused happy-dom coverage for the extracted dashboard route chunk through router and app-data context.
 - public-closeout-helper-scripts S109 - **DONE S109**: added public-safe local closeout helper scripts referenced by `studio-closeout` so this repo no longer relies on absent private helpers for closeout markers/brief/freshness/trace surfaces.
-- production-deploy-verification S109 - **IN PROGRESS S109**: local launch gate is green; GitHub Pages deploy and production dashboard smoke must be verified after the S109 commit is pushed.
+- production-deploy-verification S109 - **DONE S109**: GitHub Pages run `28487322797` passed and production dashboard smoke is green in both workflow artifact and local smoke.
 - external-proof-evidence S109 - **HONEST DEFERRAL S109**: real production auth email, Stripe purchase, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence still require real proof.
 
 ## S109 Follow-up

@@ -1299,9 +1299,9 @@ Protocol verification pass against the active `/start` -> `/audit` -> `/implemen
 
 **Top win:** turned a red production dashboard smoke into a local root fix with focused regression coverage.
 
-**Top gap:** production deployment proof is pending until the S109 commit is pushed and GitHub Pages verifies the fixed bundle.
+**Top gap:** external launch proofs still need real mailbox/payment/tester/Brevo/control-plane/capture-key evidence before any public launch announcement.
 
-**Intent outcome:** Partial at write-back time: repo-controllable work is complete and locally green; full objective still requires push plus deploy verification.
+**Intent outcome:** Achieved for repo-controllable work and deployment. S109 was pushed to `main`; CI, brief-format, and GitHub Pages Deploy Pages passed; production dashboard smoke is green.
 
 **Committed SIL follow-ups:**
 1. Confirm the S109 `Deploy Pages` workflow is green and production dashboard smoke passes.

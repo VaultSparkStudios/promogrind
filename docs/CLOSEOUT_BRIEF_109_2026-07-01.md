@@ -14,7 +14,7 @@ Headline: Fixed the red production dashboard deploy gate and added the missing p
   Evidence: src/__tests__/dailyDashboard.test.jsx passes with appComposition coverage.
 
 ## Honesty Ledger
-- Deployment not claimed before proof: S108 was pushed and CI-green, but Deploy Pages was still red; full deployment remains unproven until the S109 Pages run passes.
+- Deployment not claimed before proof: S108 was pushed and CI-green, but Deploy Pages was still red; S109 did not claim deployment until Pages run 28487322797 and direct production smoke passed.
 - External launch proofs remain evidence-gated: No mailbox, payment, tester, Brevo, Supabase capability, or capture-key proof was fabricated.
 
 ## Follow Ups
@@ -23,6 +23,6 @@ Headline: Fixed the red production dashboard deploy gate and added the missing p
 - Complete real auth email, Stripe, friend-beta, Brevo, Supabase capability, and capture-key proof gates before launch announcement.
 
 ## Blockers
-- Production deploy proof is pending until the S109 commit is pushed and Pages completes.
+- None for repo-owned deployment; external launch proofs remain evidence-gated.
 
 SIL delta: structural 1000 -> 1000

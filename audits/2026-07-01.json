@@ -4,7 +4,7 @@
   "session": 109,
   "project": "PromoGrind",
   "intent": "Continue /arc through deploy-fix closeout, add missing scripts, commit directly to main, and verify deployment.",
-  "outcome": "Repo-controllable work complete and locally verified; production deployment proof pending until S109 commit deploys.",
+  "outcome": "Repo-controllable work complete, pushed to main, and deployed; GitHub Pages run 28487322797 passed production launch verification and dashboard smoke.",
   "writebackComplete": true,
   "silScore": 1000,
   "velocity": 4,
@@ -26,9 +26,6 @@
     "public-closeout-helper-scripts"
   ],
   "pending": [
-    "push S109 commit to main",
-    "verify GitHub Pages Deploy Pages green",
-    "verify production dashboard smoke green",
     "real production auth email proof",
     "real Stripe smoke purchase",
     "trusted friend beta proof",

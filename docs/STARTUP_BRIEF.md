@@ -55,13 +55,13 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 109 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    511/511 passing  ·  Deploy: S109 local launch gate p  ║
+║  Tests:    511/511 passing  ·  Deploy: S109 deployed successful  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     23,910 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~11,955 tok/turn  ·  cache 50%  ·  74 turns to compact       ║
+║     22,308 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~11,154 tok/turn  ·  cache 50%  ·  80 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
