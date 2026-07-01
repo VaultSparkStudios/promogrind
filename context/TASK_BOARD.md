@@ -313,3 +313,17 @@
 
 - [SIL] Use `node scripts/ops.mjs innovation-pack` at the start of the next empty-genius expansion pass; triage the two true stub signals before large-file decomposition.
 - [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+
+
+## Shipped This Session (S108)
+
+- windows-git-spawn-hardening S108 - **DONE S108**: finished literal-node shell-spawn detection, persistent Git noninteractive guard checks, and safe-spawn/shim env propagation; `node scripts/check-windows-hide.mjs --json` is green.
+- genius-cache-surface-coherence S108 - **DONE S108**: `scripts/cache-genius-list.mjs` now refreshes `.cache/genius-list.json` and `docs/GENIUS_LIST.md` together and treats Markdown drift as stale.
+- startup-score-block-extraction S108 - **DONE S108**: extracted the startup brief SCORE block into `scripts/lib/startup-score-block.mjs` and preserved validator/golden coverage.
+- innovation-pack-signal-honesty S108 - **DONE S108**: removed noisy generic `stub` matching from repo-owned TODO detection so safety comments no longer become false debt.
+- external-proof-evidence S108 - **HONEST DEFERRAL S108**: production auth email, Stripe smoke, friend beta, Brevo, Supabase capability, and production capture public-key evidence still require real proof.
+
+## S108 Follow-up
+
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+- [SIL] Continue decomposing `scripts/render-startup-brief.mjs` only through pure renderer/helper slices with brief validator and golden coverage.

@@ -1,6 +1,42 @@
 # Latest Handoff - PromoGrind
 
-Session Intent: Run Session 107 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
+Session Intent: Run Session 108 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
+## Where We Left Off - Session 108 (2026-07-01)
+
+Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission. The primary genius item was the full doctor pass; the expansion pass shipped second-order automation and generated-surface fixes while keeping external launch proof gates honest.
+
+Shipped:
+- Finished Windows/Git spawn hardening: literal `node` shell-spawn detection, persistent Git noninteractive guard, and safe-spawn/shim env propagation.
+- Fixed genius-list observability: cache refresh now updates both `.cache/genius-list.json` and `docs/GENIUS_LIST.md`, and freshness fails if either surface drifts.
+- Added `scripts/test-studio-script-regressions.mjs` plus an `ops.mjs` command for script-level regression checks.
+- Extracted the startup brief SCORE box into `scripts/lib/startup-score-block.mjs` while preserving canonical brief format.
+- Tightened innovation-pack TODO detection so explanatory `stub` comments no longer become false debt signals.
+- Updated stale golden tests to the current `template-version: 3.3` prompt contract.
+
+Verification:
+- `node scripts/check-windows-hide.mjs --json` passed with 0 violations.
+- `node scripts/test-studio-script-regressions.mjs` passed 3/3.
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` passed required format checks.
+- `node scripts/test-validate-brief-format.mjs` passed 4/4.
+- `node scripts/test-brief-golden.mjs` passed 7/7.
+- `node scripts/ops.mjs doctor --update-json` passed 12/12 with blockingFailing 0.
+- `npm test` passed 510/510.
+- `npm run verify:launch-local` passed end to end.
+
+Still Pending / Honest External Proofs:
+- Brevo delivery for `contact@promogrind.bet` remains unproven locally; Studio Ops Ark cargo `01JSAJMBF321A097D8CE8E12B9` is still the follow-up.
+- Run real production auth email proof with `npm run smoke:auth-email -- --record`.
+- Run real Stripe smoke purchase with `npm run smoke:stripe -- --record`.
+- Run one trusted friend beta pass with `npm run beta:check -- --record`.
+- Studio Ops should still consume Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` for PromoGrind Supabase deploy capability mapping.
+- Wire the real browser-safe Supabase anon key into production capture config before claiming email capture readiness.
+
+Next Move:
+1. Complete real auth email, Stripe, and friend-beta proof recordings.
+2. Verify Brevo forwarding/copy once Studio Ops replies to Ark cargo.
+3. Continue startup brief decomposition only in pure rendering slices with format tests around each step.
+
+---
 ## Where We Left Off - Session 107 (2026-06-30)
 
 Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission through `/start`, `/audit`, `/implement`, and `/closeout`. The live genius list returned 0 items, so S107 implemented verified second-order automation/process hardening and added the missing deterministic innovation-pack command for future saturation passes.

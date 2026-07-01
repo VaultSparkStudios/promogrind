@@ -13,12 +13,12 @@ function read(relPath) {
 }
 
 const checks = [
-  ['prompts/start.md', /template-version:\s*3\.2/, 'start prompt template version pinned'],
-  ['prompts/closeout.md', /template-version:\s*3\.2/, 'closeout prompt template version pinned'],
-  ['docs/templates/project-system/START_PROMPT.template.md', /template-version:\s*3\.2/, 'start template version pinned'],
-  ['docs/templates/project-system/CLOSEOUT_PROMPT.template.md', /template-version:\s*3\.2/, 'closeout template version pinned'],
+  ['prompts/start.md', /template-version:\s*3\.3/, 'start prompt template version pinned'],
+  ['prompts/closeout.md', /template-version:\s*3\.3/, 'closeout prompt template version pinned'],
+  ['docs/templates/project-system/START_PROMPT.template.md', /template-version:\s*3\.3/, 'start template version pinned'],
+  ['docs/templates/project-system/CLOSEOUT_PROMPT.template.md', /template-version:\s*3\.3/, 'closeout template version pinned'],
   ['docs/STARTUP_BRIEF.md', /STARTUP BRIEF|STUDIO OPS/i, 'startup brief rendered'],
-  ['prompts/start.md', /Execution-first workflow/i, 'start prompt includes execution-first rule'],
+  ['prompts/start.md', /Execution-first:/i, 'start prompt includes execution-first rule'],
   ['prompts/closeout.md', /Run closeout autopilot/i, 'closeout prompt includes autopilot rule'],
 ];
 

@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-30 (Session 106 closeout) -->
+<!-- generated-at: 2026-07-01 (Session 108 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S106 ════════════════════════╗
-║  Date: 2026-06-30  ·  SIL: 1000/1000  ·  Velocity: 5 down        ║
-║  Mode: BUILDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · PromoGrind · S108 ════════════════════════╗
+║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 5 down        ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Added `docs/AUDIT_2026-06-30-S106.{md,json}` and `docs/IMPLE  ║
-║  ✓ Fixed `PushEnableBtn` by importing `FEATURE_FLAGS` and `supa  ║
-║  ✓ Stabilized `PushEnableBtn` hook order by calling `useToast`   ║
-║  ✓ Added `src/__tests__/dashboardActionWidgets.test.jsx` to ren  ║
-║  ✓ Focused Vitest passed: 2 files, 4 tests.                      ║
+║  ✓ Finished Windows/Git spawn hardening: literal `node` shell-s  ║
+║  ✓ Fixed genius-list observability: cache refresh now updates b  ║
+║  ✓ Added `scripts/test-studio-script-regressions.mjs` plus an `  ║
+║  ✓ Extracted the startup brief SCORE box into `scripts/lib/star  ║
+║  ✓ Tightened innovation-pack TODO detection so explanatory `stu  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -40,8 +40,8 @@
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 18 files  ·  M:15 A:0 D:0 ?:3                          ║
-║  Ahead: 1  ·  Behind: 0                                          ║
+║  Changes: 40 files  ·  M:34 A:0 D:0 ?:6                          ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗

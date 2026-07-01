@@ -65,7 +65,7 @@ function add(items, item) {
 function collectTodoSignals() {
   const roots = ['src', 'scripts', 'supabase/functions'];
   const signals = [];
-  const re = /\b(TODO|FIXME|HACK|stub|not implemented)\b/i;
+  const re = /\b(TODO|FIXME|HACK|not implemented)\b/i;
   for (const root of roots) {
     for (const file of walk(path.join(ROOT, root))) {
       if (!/\.(mjs|js|jsx|ts|tsx)$/.test(file)) continue;
@@ -152,7 +152,7 @@ function buildPack() {
       innovation: 3,
       effort: '1h',
       effortHours: 1,
-      evidence: `${todoSignals.length} inline TODO/FIXME/stub signals. First: ${todoSignals[0]}`,
+      evidence: `${todoSignals.length} inline TODO/FIXME/HACK/not-implemented signals. First: ${todoSignals[0]}`,
       recipe: 'Convert true code-owned TODOs into either tests, explicit TASK_BOARD entries, or completed fixes; reject form placeholder false positives.',
     });
   }

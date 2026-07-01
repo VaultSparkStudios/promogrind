@@ -130,6 +130,11 @@ export default {
       desc: 'Regression harness for timestamp-stripping meaningful diff checks',
       args: '[--json]',
     },
+    'test-studio-script-regressions': {
+      script: 'test-studio-script-regressions.mjs',
+      desc: 'Regression harness for Studio script generated-surface and Windows spawn guards',
+      args: '[--json]',
+    },
     'studio-status': {
       script: 'studio-conductor.mjs',
       desc: 'Multi-session portfolio status (S79)',

@@ -61,13 +61,6 @@ function readJson(p) {
   try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return null; }
 }
 
-function readSessionLockAgent() {
-  try {
-    const lock = fs.readFileSync(path.join(PROJECT_ROOT, 'context', '.session-lock'), 'utf8');
-    return lock.match(/^agent:\s*(.+)$/m)?.[1]?.trim() || null;
-  } catch { return null; }
-}
-
 function readText(p) {
   try { return fs.readFileSync(p, 'utf8'); } catch { return ''; }
 }
@@ -152,7 +145,6 @@ function deploymentRows() {
   if (liveUrl && vs === 'SPARKED') live = `${liveUrl}  ·  🌐 LIVE (SPARKED)`;
   else if (liveUrl) live = `${liveUrl}  ·  preview/${vs || 'FORGE'} (not yet SPARKED)`;
   else if (vs === 'VAULTED') live = 'N/A — VAULTED (paused)';
-  else if (status?.liveUrl) live = `${status.liveUrl}  ·  preview/${vs || 'FORGE'} (not yet SPARKED)`;
   else live = 'N/A — pre-deploy (FORGE)';
 
   return { staging, live };
@@ -250,7 +242,7 @@ function agentMemoryRecentlyTouched() {
   try {
     if (fs.existsSync(claudeProjectsDir)) {
       for (const entry of fs.readdirSync(claudeProjectsDir)) {
-        if (entry.includes(slug)) candidateDirs.push(path.join(claudeProjectsDir, entry, 'memory'));
+        if (entry.toLowerCase().includes(slug.toLowerCase())) candidateDirs.push(path.join(claudeProjectsDir, entry, 'memory'));
       }
     }
     for (const memDir of candidateDirs) {
@@ -260,7 +252,7 @@ function agentMemoryRecentlyTouched() {
         if (stat.mtimeMs >= cutoff) return true;
       }
     }
-  } catch { return false; }
+  } catch { /* best-effort */ }
   return false;
 }
 
@@ -364,7 +356,7 @@ function render() {
   const vel = status.silVelocity ?? status.velocity;
   const velLabel = vel != null ? `${vel}${status.silDebt ? ' ' + status.silDebt : ''}` : '—';
   lines.push(row(`Date: ${date}  ·  SIL: ${sil}/${silMax}  ·  Velocity: ${velLabel}`));
-  lines.push(row(`Mode: ${(status.sessionMode || 'FOUNDER').toUpperCase()}  ·  Agent: ${status.lastAgent || readSessionLockAgent() || 'claude-code'}`));
+  lines.push(row(`Mode: ${(status.sessionMode || 'FOUNDER').toUpperCase()}  ·  Agent: ${status.lastAgent || 'claude-code'}`));
   const live = canonicalLiveUrl();
   if (live) {
     lines.push(row(`Live:  ${live.badge}  →  ${live.url}`));
@@ -450,9 +442,3 @@ if (STDOUT_MODE) {
   const sessionTag = (readJson(STATUS_PATH) || {}).currentSession ?? '?';
   console.log(`✓ Closeout board → docs/CLOSEOUT_STATUS_BOARD.md  (Session ${sessionTag})`);
 }
-
-
-
-
-
-

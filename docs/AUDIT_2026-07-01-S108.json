@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "date": "2026-07-01",
+  "session": 108,
+  "project": "PromoGrind",
+  "items": [
+    {
+      "rank": 1,
+      "id": "windows-git-spawn-hardening",
+      "status": "shipped"
+    },
+    {
+      "rank": 2,
+      "id": "genius-cache-observability-drift",
+      "status": "shipped"
+    },
+    {
+      "rank": 3,
+      "id": "startup-score-block-extraction",
+      "status": "shipped"
+    },
+    {
+      "rank": 4,
+      "id": "innovation-pack-todo-signal-honesty",
+      "status": "shipped"
+    },
+    {
+      "rank": 5,
+      "id": "external-launch-proof-ledger",
+      "status": "honest-deferral"
+    }
+  ],
+  "verification": {
+    "doctor": "12/12 blockingFailing 0",
+    "tests": "510/510",
+    "launchLocal": "passed"
+  }
+}

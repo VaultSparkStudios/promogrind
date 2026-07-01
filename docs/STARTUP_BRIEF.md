@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-06-30 (Session 107 closeout) -->
+<!-- generated-at: 2026-07-01 (Session 108 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 107 closeout · 2026-06-30.
+> **Fast-boot brief** — generated at Session 108 closeout · 2026-07-01.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 108 · 2026-06-30 · FOUNDER MODE                         ║
+║  Session 109 · 2026-07-01 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -35,43 +35,43 @@
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
 ║    SIL v3.0  ·  Avg3: ?  ·  Velocity 3↑                          ║
-║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  ████████ →                ║
-║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement       100    ██████████  ████████ →                ║
-║    Process Qual     100    ██████████  ████████ →                ║
-║    Coherence        100    ██████████  ········ →                ║
-║    Security         100    ██████████  ········ →                ║
-║    Ecosystem        100    ██████████  ········ →                ║
-║    Capital          100    ██████████  ········ →                ║
-║    Automation       100    ██████████  ········ →                ║
+║    Dev Health      100    ██████████  ████████ →                 ║
+║    Alignment       100    ██████████  ████████ →                 ║
+║    Momentum        100    ██████████  ████████ →                 ║
+║    Engagement      100    ██████████  ████████ →                 ║
+║    Process Qual    100    ██████████  ████████ →                 ║
+║    Coherence       100    ██████████  ········ →                 ║
+║    Security        100    ██████████  ········ →                 ║
+║    Ecosystem       100    ██████████  ········ →                 ║
+║    Capital         100    ██████████  ········ →                 ║
+║    Automation      100    ██████████  ········ →                 ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 107 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 108 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    510/510 passing  ·  Deploy: S107 local launch gate p  ║
+║  Tests:    510/510 passing  ·  Deploy: S108 local launch gate p  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     19,316 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~9,658 tok/turn  ·  cache 50%  ·  93 turns to compact        ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
+║     28,591 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~14,296 tok/turn  ·  cache 50%  ·  62 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         510/510 passing (2026-06-30)                   ║
+║  ✓  Tests         510/510 passing (2026-07-01)                   ║
 ║  ✓  Velocity      3 ↑  ·  Debt: →                                ║
 ║  ⚠  Runway        ~2 sessions                                    ║
 ║  ✓  Context age   0d                                             ║
-║  ✓  IGNIS         43431 FORGE  ·  1d old                         ║
-║  ✓  Truth         green  ·  Genome: 24/25                        ║
+║  ✓  IGNIS         43431 FORGE  ·  2d old                         ║
+║  ⛔  Truth         green-with-external-proof-follow-ups  ·  Geno  ║
 ║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.050  (healthy)                               ║
@@ -80,8 +80,8 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ✓  Doctor        12/12 (100%)  ·  2026-06-30  ✓                 ║
-║  ✓  Cost          real $0.02/7d · 7d notional $0.35 (flat-rate   ║
+║  ✓  Doctor        12/12 (100%)  ·  2026-07-01  ✓                 ║
+║  ✓  Cost          real $0.10/7d · 7d notional $1.64 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -110,7 +110,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 107                               ║
+║  GENIUS HIT LIST  ·  Session 108                               ║
 ║  Founder portfolio scope · ranked by impact                    ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -120,5 +120,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 107 closeout · 2026-06-30*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 108 closeout · 2026-07-01*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

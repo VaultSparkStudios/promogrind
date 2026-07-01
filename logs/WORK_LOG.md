@@ -417,3 +417,13 @@ Append chronological entries.
 - Shipped the missing innovation-pack command: `node scripts/ops.mjs innovation-pack` now renders `docs/INNOVATION_PACK.{md,json}` from live repo signals and honest external deferrals.
 - Verification: `node scripts/check-windows-hide.mjs`; `node --check scripts/render-innovation-pack.mjs`; `node scripts/ops.mjs innovation-pack --json`; `npm test` 510/510; `npm run verify:launch-local` passed end to end.
 - Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture config still require real external evidence/action; no proof was fabricated.
+
+
+## 2026-07-01 - Session 108 Codex goal arc
+
+- Ran `/goal` as a continuous `/arc` mission: `/start` -> `/audit` -> `/implement` -> `/closeout`.
+- Startup: attempted `git pull --rebase origin main`; Git refused due to pre-existing unstaged changes, and `origin/main...HEAD` was `0 0`, so work continued with the in-flight tree preserved.
+- Audit: generated `docs/AUDIT_2026-07-01-S108.{md,json}`; verified the stale external profiler against local `PROJECT_STATUS.json` and used the public app launch-hardening lens.
+- Shipped Windows/Git spawn hardening, genius-list cache/Markdown coherence, startup SCORE renderer extraction, innovation-pack TODO signal honesty, and updated prompt golden tests.
+- Verification: doctor 12/12 blockingFailing 0; script regressions 3/3; brief validator/golden tests green; `npm test` 510/510; `npm run verify:launch-local` passed end to end.
+- Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture config still require real external evidence/action; no proof was fabricated.

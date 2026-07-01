@@ -1,8 +1,8 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-06-18 (S96)
-Overall status: green
+Last reviewed: 2026-07-01 (S108)
+Overall status: green-with-external-proof-follow-ups
 Next action: inspect the green GitHub Pages launch-verification artifact from run `27791869430`, run production auth email smoke, then complete the two remaining external manual proofs (Stripe smoke and friend beta). Refresh stale revenue and IGNIS derived intelligence after the proof pass.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
@@ -57,7 +57,7 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
-- Genius List cache can become stale after closeout because status/context files are updated; refresh it at the next `/start` or `/go`.
+- Genius List cache now treats Markdown/JSON coherence as part of freshness; remaining launch gaps are real external proof gates.
 
 ## Resolved This Session (S96)
 
@@ -305,3 +305,11 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Profile truth clarified: repo-local `context/PROJECT_STATUS.json` says PromoGrind is an `app` / `public-unlaunched` project; unmatched external profiler metadata must not override local project truth.
 - Verification truth: `npm test` passed 510/510 and `npm run verify:launch-local` passed end to end on 2026-06-30.
 - Launch-proof truth unchanged: real production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence remain pending; no fabricated proof was recorded.
+
+
+## Resolved This Session (S108)
+
+- Fixed genius-list generated-surface truth: `.cache/genius-list.json` and `docs/GENIUS_LIST.md` refresh together, and cache freshness fails when Markdown drifts.
+- Finished Windows/Git spawn truth: window-hide guard now catches shell-resolved literal `node`, and persistent Git noninteractive environment checks are covered.
+- Extracted startup SCORE rendering into a pure helper while keeping `docs/STARTUP_BRIEF.md` validator/golden coverage green.
+- Kept external launch proof blockers explicit; no auth email, Stripe, friend-beta, Brevo, Supabase capability, or capture-key proof was fabricated.

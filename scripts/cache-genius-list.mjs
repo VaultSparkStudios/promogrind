@@ -70,15 +70,40 @@ function readCache() {
   try { return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8')); } catch { return null; }
 }
 
-function regenerate() {
-  const result = spawnSync(process.execPath, ['scripts/generate-genius-list.mjs', '--json'], {
+function runGenerate(args, opts = {}) {
+  const result = spawnSync(process.execPath, ['scripts/generate-genius-list.mjs', ...args], {
     cwd: ROOT,
     encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'inherit'],
+    stdio: opts.stdio ?? ['ignore', 'pipe', 'pipe'],
   });
   if (result.error) throw result.error;
-  if ((result.status ?? 1) !== 0) throw new Error(`generate-genius-list exited ${result.status}`);
+  if ((result.status ?? 1) !== 0) {
+    const details = [result.stderr, result.stdout].filter(Boolean).join('\n').trim();
+    throw new Error(`generate-genius-list exited ${result.status}${details ? `\n${details}` : ''}`);
+  }
+  return result;
+}
+
+function regenerate() {
+  const result = runGenerate(['--json']);
   return JSON.parse(result.stdout || '{}');
+}
+
+function writeMarkdownSurface() {
+  const result = runGenerate([]);
+  return result.stdout || '';
+}
+
+function reportMarkdownWrite(output, toStdout = true) {
+  if (!output.trim()) return;
+  const target = toStdout ? process.stdout : process.stderr;
+  target.write(output.endsWith('\n') ? output : `${output}\n`);
+}
+
+function regenerateAll() {
+  const list = regenerate();
+  const markdownOutput = writeMarkdownSurface();
+  return { list, markdownOutput };
 }
 
 function writeCache(list) {
@@ -97,9 +122,29 @@ function writeCache(list) {
   );
 }
 
+function markdownSurfaceFresh(cache) {
+  const docPath = path.join(ROOT, 'docs', 'GENIUS_LIST.md');
+  if (!cache?.list || !fs.existsSync(docPath)) return false;
+  const doc = fs.readFileSync(docPath, 'utf8');
+  const list = cache.list;
+  const expectedScope = list.projectScoped
+    ? `Scope: project:${list.project?.slug || ''}`
+    : 'Scope: founder-portfolio';
+  const expectedSource = `IGNIS source: **${list.ignisSource || 'fallback'}**`;
+  const expectedIdentity = list.projectScoped
+    ? (list.project?.name || list.project?.slug || '')
+    : `Session ${list.session}`;
+  return doc.startsWith('# Genius Hit List')
+    && doc.includes(expectedIdentity)
+    && doc.includes(`Generated: ${list.date}`)
+    && doc.includes(expectedScope)
+    && doc.includes(expectedSource);
+}
+
+
 const current = readCache();
 const sig = signature();
-const isFresh = current && current.signature === sig;
+const isFresh = current && current.signature === sig && markdownSurfaceFresh(current);
 
 if (args.has('--check')) {
   process.exit(isFresh ? 0 : 1);
@@ -115,10 +160,15 @@ if (args.has('--write') || args.has('--read') || args.has('--force')) {
     if (!args.has('--quiet')) console.log(`cache-genius-list: FRESH (sig=${sig}, age=${ageLabel(current.generatedAt)})`);
     process.exit(0);
   }
-  const list = regenerate();
+  const { list, markdownOutput } = regenerateAll();
   writeCache(list);
-  if (args.has('--read')) console.log(JSON.stringify({ signature: sig, generatedAt: new Date().toISOString(), list }, null, 2));
-  else console.log(`cache-genius-list: REFRESHED (sig=${sig})`);
+  if (args.has('--read')) {
+    reportMarkdownWrite(markdownOutput, false);
+    console.log(JSON.stringify({ signature: signature(), generatedAt: new Date().toISOString(), list }, null, 2));
+  } else {
+    reportMarkdownWrite(markdownOutput, true);
+    console.log(`cache-genius-list: REFRESHED (sig=${signature()})`);
+  }
   process.exit(0);
 }
 

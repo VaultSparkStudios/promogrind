@@ -29,13 +29,11 @@ import { execSync } from './lib/safe-spawn.mjs';
 import { VERDICT_EXITS } from './lib/context-verdicts.mjs';
 import { PRICING_PER_MTOK, MODELS, contextWindowForAgent, shortModelName } from './lib/model-router.mjs';
 
-// Price table per model (imported from the model-router chokepoint).
 const PRICING = {
   [shortModelName(MODELS.opus)]:   PRICING_PER_MTOK[MODELS.opus],
   [shortModelName(MODELS.sonnet)]: PRICING_PER_MTOK[MODELS.sonnet],
   [shortModelName(MODELS.haiku)]:  PRICING_PER_MTOK[MODELS.haiku],
 };
-// Build prefix map from canonical model IDs while avoiding hardcoded model-id literals.
 const PRICING_BY_ID = Object.fromEntries(
   Object.entries(PRICING_PER_MTOK).map(([modelId, pricing]) => [modelId, pricing])
 );

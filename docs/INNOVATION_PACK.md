@@ -1,6 +1,6 @@
 # Innovation Pack
 
-> Generated: 2026-06-30 | Project: PromoGrind | Session: 107
+> Generated: 2026-07-01 | Project: PromoGrind | Session: 108
 
 Second-order work generated after the primary genius list is empty. Items are live-code verified where repo-owned; external proof gates stay explicit deferrals.
 
@@ -8,17 +8,16 @@ Second-order work generated after the primary genius list is empty. Items are li
 
 | # | Tier | Axis | Status | Effort | Impact | Innov. | Priority | Item |
 |---|---|---|---|---|---:|---:|---:|---|
-| 1 | medium | maintainability | unblocked | 1h | 6 | 3 | 11.4 | **inline-debt-triage** - 2 inline TODO/FIXME/stub signals. First: scripts/agent-budget-warden.mjs:46 // Stub — wire to ant CLI or Anthropic billing endpoint once the API **Recipe:** Convert true code-owned TODOs into either tests, explicit TASK_BOARD entries, or completed fixes; reject form placeholder false positives. |
-| 2 | medium | speed / organization | unblocked | 2h | 7 | 3 | 10.5 | **next-god-file-decomposition** - scripts/render-startup-brief.mjs is 1321 lines (threshold 900); 5 files exceed local maintainability thresholds. **Recipe:** Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate. |
-| 3 | external | truth / launch-readiness | honest-deferral | external | 10 | 1 | 3 | **external-launch-proof-ledger** - 6 real-world proof gates remain in PROJECT_STATUS.blockers. **Recipe:** Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists. |
+| 1 | medium | speed / organization | unblocked | 2h | 7 | 3 | 10.5 | **next-god-file-decomposition** - scripts/render-startup-brief.mjs is 1354 lines (threshold 900); 5 files exceed local maintainability thresholds. **Recipe:** Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate. |
+| 2 | external | truth / launch-readiness | honest-deferral | external | 10 | 1 | 3 | **external-launch-proof-ledger** - 6 real-world proof gates remain in PROJECT_STATUS.blockers. **Recipe:** Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists. |
 
 ## Source Signals
 
-- geniusListEmpty: true
-- taskBoardBytes: 50409
+- geniusListEmpty: false
+- taskBoardBytes: 51600
 - windowsHideShellViolations: 0
 - directChildProcessImports: 0
-- todoSignals: 2
+- todoSignals: 0
 - largeFiles: 5
 - launchDeferrals: 6
 
