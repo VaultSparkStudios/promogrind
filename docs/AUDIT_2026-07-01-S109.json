@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "session": 109,
+  "date": "2026-07-01",
+  "title": "Deploy Gate Runtime Fix",
+  "premise": "S108 was pushed, but the latest Deploy Pages gate was red because production dashboard smoke found SmartPromoRecommender undefined in the DailyDashboard chunk.",
+  "items": [
+    {
+      "id": "production-dashboard-chunk-owned-deps",
+      "status": "shipped",
+      "evidence": "Deploy run 28473540744 production-dashboard-smoke.json reported ReferenceError: SmartPromoRecommender is not defined; DailyDashboard.jsx used multiple App-scope symbols.",
+      "result": "DailyDashboard.jsx now imports SmartPromoRecommender, f, fontD, and StateLegalAlert directly and uses a local TOP_TOOL_TABS map."
+    },
+    {
+      "id": "closeout-helper-scripts",
+      "status": "shipped",
+      "evidence": "studio-closeout skill references local helper scripts that were absent in this public repo.",
+      "result": "Added public-safe helper scripts for closeout markers, cost/trace, session floor, closeout brief, impact summary, intelligence freshness, founder-direction detection, touched IGNIS fallback, and parallel closeout bundle."
+    },
+    {
+      "id": "daily-dashboard-render-coverage",
+      "status": "shipped",
+      "evidence": "No focused render coverage existed for the extracted DailyDashboard route chunk.",
+      "result": "Added dailyDashboard.test.jsx and verified it with appComposition coverage."
+    },
+    {
+      "id": "production-deploy-proof",
+      "status": "pending-deploy",
+      "evidence": "Local launch gate is green; production still needs a new Pages deployment after commit.",
+      "result": "Commit and Pages deployment verification are the remaining S109 closeout steps."
+    }
+  ],
+  "verification": [
+    "npx vitest run src/__tests__/dailyDashboard.test.jsx src/__tests__/appComposition.test.js passed 3/3",
+    "npm test passed 61 files / 511 tests",
+    "npm run build:pages passed",
+    "npm run verify:launch-local passed end to end",
+    "node scripts/ops.mjs doctor --update-json --json passed 12/12 with blockingFailing 0"
+  ],
+  "honestDeferrals": [
+    "Production dashboard smoke must be verified after the S109 commit deploys.",
+    "Real production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture-key evidence remain external proof gates."
+  ]
+}

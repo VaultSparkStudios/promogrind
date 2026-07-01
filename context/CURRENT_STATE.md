@@ -166,3 +166,12 @@ Last updated: 2026-07-01 (S108)
 - Added `docs/AUDIT_2026-06-30-S107.{md,json}` and `docs/IMPLEMENT_PLAN_S107.md` with shipped statuses and honest external-proof deferrals.
 - Verification: `node scripts/check-windows-hide.mjs` passed; `node --check scripts/render-innovation-pack.mjs` passed; `node scripts/ops.mjs innovation-pack --json` passed; `npm test` passed 60 files / 510 tests; `npm run verify:launch-local` passed end to end.
 - External proof blockers remain unchanged and honest: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence still require real external evidence/action.
+### Session 109 closeout update - 2026-07-01
+
+- Continued the active `/goal` + `/arc` objective after S108 by verifying deploy truth instead of assuming the pushed commit was fully deployed.
+- Found the latest `Deploy Pages` red gate in run `28473540744`: production verification passed, but production dashboard smoke failed on `ReferenceError: SmartPromoRecommender is not defined` inside the extracted Daily Dashboard chunk.
+- Fixed the dashboard route ownership leak: `src/components/dashboard/DailyDashboard.jsx` now imports `SmartPromoRecommender`, `f`, `fontD`, and `StateLegalAlert` directly, uses a local `TOP_TOOL_TABS` route-name map instead of implicit `TABS`, and routes trial upgrade buttons through the resolved `navigate` function.
+- Added focused dashboard route coverage in `src/__tests__/dailyDashboard.test.jsx` so the extracted chunk renders through router and app-data context.
+- Added public-safe closeout helper scripts that were missing from this repo but referenced by the Studio closeout skill: active-skill, cost, session-floor, closeout brief, impact summary, founder-direction detector, intelligence freshness, touched-IGNIS fallback, parallel closeout bundle, and trace emitter.
+- Verification: focused Vitest passed 3/3; `npm test` passed 61 files / 511 tests; `npm run build:pages` passed; `npm run verify:launch-local` passed end to end; doctor passed 12/12 with `blockingFailing: 0`.
+- Production proof is still pending until the S109 commit is pushed and the GitHub Pages workflow deploys the fixed bundle; external auth email, Stripe purchase, friend-beta, Brevo, Supabase capability, and production capture-key proofs remain honest external gates.

@@ -246,3 +246,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: continue through start/audit/implement/closeout without stopping after one objective, gate continuation on context-meter, and explicitly record external-proof deferrals instead of inventing launch evidence.
 - Why it matters: PromoGrind launch posture depends on a clean distinction between repo-owned code quality and real-world evidence that only live mailbox/payment/tester/control-plane checks can prove.
 - Supersedes prior entry: reinforces the 2026-06-18 full Studio OS loop quality-bar direction with explicit saturation and observability-honesty constraints.
+
+### 2026-07-01 — Complete arc closeout with direct main push, deployment, and missing scripts
+
+- Category: Assignment
+- Human input (verbatim or close paraphrase): `/arc then run /closeout and direct push & commit to main (GitHub) & fully deploy also add any missing scripts`.
+- Area affected: process / deployment / tooling / verification
+- Previous state: S108 had committed repo-controllable automation hardening, but deployment proof was not established and the public repo still lacked several closeout helper scripts referenced by the Studio closeout skill.
+- New required direction: finish the active arc against current evidence, add missing public-safe scripts, run closeout, commit directly to `main`, push to GitHub, and verify deployment rather than relying on local green status.
+- Why it matters: PromoGrind's launch posture must distinguish CI/local verification from a genuinely deployed, production-smoke-passing build.
+- Supersedes prior entry: extends the 2026-06-30 saturated `/arc` direction with explicit direct-push and full-deploy requirements.

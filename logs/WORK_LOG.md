@@ -427,3 +427,13 @@ Append chronological entries.
 - Shipped Windows/Git spawn hardening, genius-list cache/Markdown coherence, startup SCORE renderer extraction, innovation-pack TODO signal honesty, and updated prompt golden tests.
 - Verification: doctor 12/12 blockingFailing 0; script regressions 3/3; brief validator/golden tests green; `npm test` 510/510; `npm run verify:launch-local` passed end to end.
 - Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture config still require real external evidence/action; no proof was fabricated.
+
+## 2026-07-01 - Session 109 Codex deploy-fix arc
+
+- Continued the active `/goal` + `/arc` objective from repo evidence instead of treating S108 as fully deployed.
+- Deployment audit: `gh run list` showed CI green for S108 but `Deploy Pages` last red; downloaded run `28473540744` artifact and found production dashboard smoke failing on `ReferenceError: SmartPromoRecommender is not defined`.
+- Shipped dashboard chunk ownership fix in `src/components/dashboard/DailyDashboard.jsx`, including direct imports for leaked dependencies and a local top-tools route-label map.
+- Added `src/__tests__/dailyDashboard.test.jsx` to render the extracted dashboard route through router/app-data context.
+- Added public-safe missing closeout helpers: `set-active-skill`, `record-skill-cost`, `session-floor`, `render-closeout-brief`, `closeout-step-3-7-parallel`, `detect-founder-direction`, `render-impact-summary`, `check-intelligence-doc-freshness`, `ignis-rescore-touched`, and `skill-trace-emit`.
+- Verification: focused Vitest 3/3, `npm test` 511/511, `npm run build:pages`, `npm run verify:launch-local`, and doctor 12/12 blockingFailing 0 passed.
+- Honest deferral: production deploy proof remains pending until this commit is pushed and the Pages workflow verifies the fixed bundle; external auth email, Stripe, friend-beta, Brevo, Supabase capability, and capture-key proofs remain real-world gates.

@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-07-01T01:05:14.722Z",
+  "generatedAt": "2026-07-01T01:18:30.104Z",
   "project": "PromoGrind",
-  "session": 108,
+  "session": 109,
   "sourceSignals": {
-    "geniusListEmpty": false,
-    "taskBoardBytes": 51600,
+    "geniusListEmpty": true,
+    "taskBoardBytes": 53105,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,

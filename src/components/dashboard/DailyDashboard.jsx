@@ -5,9 +5,10 @@ import { FEATURE_FLAGS } from "../../launchState.js";
 import { computeStreak } from "../../lib/streaks.js";
 import { evaluateAchievements, loadEarned, saveEarned, getNewlyUnlocked, ACHIEVEMENT_MAP } from "../../lib/achievements.js";
 import { computeMastery } from "../../lib/mastery.js";
-import { K, S, font } from "../../lib/shared.js";
+import { K, S, f, font, fontD } from "../../lib/shared.js";
 import { AppDataCtx, useToast } from "../../contexts.jsx";
 import { LoadingState } from "../../ui.jsx";
+import { StateLegalAlert } from "../../lib/stateLegal.jsx";
 import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { getDashboardSnapshot } from "../../dashboard/today.js";
 import PromoWalkthrough from "../PromoWalkthrough.jsx";
@@ -20,6 +21,36 @@ import DailyMissionsPanel from "./DailyMissionsPanel.jsx";
 import LaunchCommandCenterPanel from "./LaunchCommandCenterPanel.jsx";
 import CommunityWinsWall from "./CommunityWinsWall.jsx";
 import TodayDashboardPanel from "./TodayDashboardPanel.jsx";
+import SmartPromoRecommender from "./SmartPromoRecommender.jsx";
+
+const TOP_TOOL_TABS = [
+  { items: [
+    { n: "Dashboard", slug: "dashboard" },
+    { n: "Promo Intake", slug: "promo-intake" },
+    { n: "Daily Brief", slug: "daily-brief" },
+    { n: "Pricing", slug: "pricing" },
+  ] },
+  { items: [
+    { n: "Bonus Bet", slug: "bonus-bet" },
+    { n: "Profit Boost", slug: "profit-boost" },
+    { n: "First Bet", slug: "first-bet" },
+    { n: "Deposit Match", slug: "deposit-match" },
+  ] },
+  { items: [
+    { n: "No-Vig", slug: "no-vig" },
+    { n: "+EV", slug: "ev" },
+    { n: "Kelly", slug: "kelly" },
+    { n: "2-Way Arb", slug: "arb-2way" },
+    { n: "Promo Guarantee", slug: "promo-guarantee" },
+    { n: "Gut Check", slug: "gut-check" },
+  ] },
+  { items: [
+    { n: "Sportsbooks", slug: "sportsbooks" },
+    { n: "Bet Tracker", slug: "bet-tracker" },
+    { n: "P/L Ledger", slug: "ledger" },
+    { n: "Promo Finder", slug: "promo-finder" },
+  ] },
+];
 function useAchievements(data, streak) {
   const toast = useToast();
   useEffect(() => {
@@ -200,7 +231,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
               </div>
               <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
             </div>
-            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
           </div>
         ):proStatus.trial_days_left>1?(
           <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
@@ -209,7 +240,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
                 â³ Trial ending soon â€” {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
               </div>
             </div>
-            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
           </div>
         ):(
           <div style={{...S.card,border:`1px solid ${K.rd}40`,background:`${K.rd}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
@@ -218,7 +249,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
                 ðŸš¨ Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
               </div>
             </div>
-            <button onClick={()=>navigateProp('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
           </div>
         )
       )}
@@ -283,7 +314,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       )}
       <QuickAddBet/>
       <OpenExposurePanel bets={bets}/>
-      <TopToolsPanel navigate={navigate} tabs={TABS}/>
+      <TopToolsPanel navigate={navigate} tabs={TOP_TOOL_TABS}/>
       <WeeklyGrindReport/>
       <BankrollWizard/>
       <CopyMySetup appData={data} syncAppData={syncAppData}/>

@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-01 (Session 108 closeout) -->
+<!-- generated-at: 2026-07-01 (Session 109 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S108 ════════════════════════╗
-║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 5 down        ║
+╔══ SESSION CLOSEOUT · PromoGrind · S109 ════════════════════════╗
+║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 4 down        ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Finished Windows/Git spawn hardening: literal `node` shell-s  ║
-║  ✓ Fixed genius-list observability: cache refresh now updates b  ║
-║  ✓ Added `scripts/test-studio-script-regressions.mjs` plus an `  ║
-║  ✓ Extracted the startup brief SCORE box into `scripts/lib/star  ║
-║  ✓ Tightened innovation-pack TODO detection so explanatory `stu  ║
+║  ✓ Audited deploy truth and found S108 CI was green but `Deploy  ║
+║  ✓ Fixed the extracted Daily Dashboard route chunk so it owns `  ║
+║  ✓ Added focused `dailyDashboard.test.jsx` coverage for the ext  ║
+║  ✓ Added public-safe local closeout helper scripts referenced b  ║
+║  ✓ Added `docs/AUDIT_2026-07-01-S109.{md,json}` and `docs/IMPLE  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -34,13 +34,13 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 40 files  ·  M:34 A:0 D:0 ?:6                          ║
+║  Changes: 30 files  ·  M:14 A:0 D:0 ?:16                         ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,9 +51,9 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         510/510                                          ║
+║  Tests:         511/511                                          ║
 ║  IGNIS:         2d ago                                           ║
-║  Truth:         green-with-external-proof-follow-ups             ║
+║  Truth:         green-with-pending-production-deploy-proof       ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗

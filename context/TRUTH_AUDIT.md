@@ -313,3 +313,12 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Finished Windows/Git spawn truth: window-hide guard now catches shell-resolved literal `node`, and persistent Git noninteractive environment checks are covered.
 - Extracted startup SCORE rendering into a pure helper while keeping `docs/STARTUP_BRIEF.md` validator/golden coverage green.
 - Kept external launch proof blockers explicit; no auth email, Stripe, friend-beta, Brevo, Supabase capability, or capture-key proof was fabricated.
+
+### Session 109 truth update - 2026-07-01
+
+- Deployment truth corrected: S108 was committed and CI-green, but `Deploy Pages` was still red; run `28473540744` failed the production dashboard smoke on `SmartPromoRecommender is not defined`.
+- Runtime truth improved: `DailyDashboard.jsx` no longer depends on App.jsx-scope symbols for `SmartPromoRecommender`, `fontD`, `f`, `StateLegalAlert`, or `TABS`.
+- Regression truth improved: `dailyDashboard.test.jsx` renders the extracted route chunk through router and app-data context so leaked symbols fail locally before production smoke.
+- Protocol truth improved: public-safe local closeout helper scripts now exist for the closeout skill paths that were absent in this public repo.
+- Verification truth: focused Vitest passed 3/3; full suite passed 511/511; `npm run verify:launch-local` passed end to end; doctor passed 12/12 with `blockingFailing: 0`.
+- Production proof remains unclaimed until the S109 commit deploys and the GitHub Pages production dashboard smoke passes.

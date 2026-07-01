@@ -473,3 +473,11 @@ Append new entries. Do not erase historical reasoning unless it is wrong.
 - Decision: for this session and future local audits, repo-local `context/PROJECT_STATUS.json` wins over unmatched external registry/profiler inference. The audit lens is app/public launch hardening unless the local status changes.
 - Alternatives considered: follow the unmatched profiler classification and run only infrastructure debt rubric; edit the sibling registry directly from this repo. Both were rejected because they would either mis-scope the product or violate cross-repo ownership.
 - Consequence: S107 app-release truth and external launch proof deferrals remain visible while the shipped automation hardening stays scoped to repo-owned code.
+
+## 2026-07-01 - S109 Public-safe closeout helper scripts
+
+Decision: Add bounded local implementations for closeout helper scripts referenced by the `studio-closeout` skill instead of importing or inventing private Studio Ops control-plane behavior inside this public repo.
+
+Reason: The user explicitly asked to add missing scripts while `AGENTS.md` says this public repo intentionally lacks private Studio OS tooling. The safe compromise is to make the local closeout paths executable, deterministic, and honest: local scripts write cache/brief/freshness/trace artifacts and clearly report no-op fallback where private IGNIS/control-plane context is unavailable.
+
+Impact: Future closeouts can call the expected script names without failing on missing files, while production/launch proof remains evidence-gated and private ops responsibilities stay outside this repo.

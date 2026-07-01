@@ -1,6 +1,39 @@
 # Latest Handoff - PromoGrind
 
-Session Intent: Run Session 108 as one continuous /goal + /arc mission through /start, /audit, /implement, and /closeout; exhaust the live genius list plus second-order innovation candidates, validate honestly, then commit and push directly to main.
+Session Intent: Continue the active `/goal` + `/arc` objective, finish deploy-fix work from current evidence, add missing public-safe scripts, run `/closeout`, push directly to main, and fully deploy/verify GitHub Pages.
+## Where We Left Off - Session 109 (2026-07-01)
+
+Intent Outcome: Partial until production Pages verification completes. Repo-controllable work is complete and locally verified; the S109 commit still needs to be pushed and the GitHub Pages `Deploy Pages` workflow must go green before full deployment is proven.
+
+Shipped:
+- Audited deploy truth and found S108 CI was green but `Deploy Pages` remained red; run `28473540744` failed production dashboard smoke on `ReferenceError: SmartPromoRecommender is not defined`.
+- Fixed the extracted Daily Dashboard route chunk so it owns `SmartPromoRecommender`, `f`, `fontD`, `StateLegalAlert`, and top-tool route labels locally.
+- Added focused `dailyDashboard.test.jsx` coverage for the extracted dashboard route through router and app-data context.
+- Added public-safe local closeout helper scripts referenced by `studio-closeout`: active-skill, cost, session-floor, closeout brief, impact summary, founder-direction/freshness checks, touched-IGNIS fallback, parallel closeout bundle, and trace emission.
+- Added `docs/AUDIT_2026-07-01-S109.{md,json}` and `docs/IMPLEMENT_PLAN_S109.md`.
+
+Verification:
+- Focused Vitest passed: 2 files, 3 tests.
+- `npm test` passed: 61 files, 511 tests.
+- `npm run build:pages` passed.
+- `npm run verify:launch-local` passed end to end.
+- `node scripts/ops.mjs doctor --update-json --json` passed 12/12 with `blockingFailing: 0`.
+
+Still Pending / Honest External Proofs:
+- Push S109 to `main`, trigger/observe `Deploy Pages`, and verify production dashboard smoke is green.
+- Run real production auth email proof with `npm run smoke:auth-email -- --record`.
+- Run real Stripe smoke purchase with `npm run smoke:stripe -- --record`.
+- Run one trusted friend beta pass with `npm run beta:check -- --record`.
+- Verify Brevo forwarding/copy for `contact@promogrind.bet` after Studio Ops capability work.
+- Studio Ops should still consume Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` for PromoGrind Supabase deploy capability mapping.
+- Wire/verify the real browser-safe Supabase anon key in production capture config before claiming email capture readiness.
+
+Next Move:
+1. Commit and push S109 directly to `main`.
+2. Trigger/observe `Deploy Pages` and confirm production dashboard smoke no longer reports the dashboard chunk reference error.
+3. Update closeout status with final deploy evidence.
+
+---
 ## Where We Left Off - Session 108 (2026-07-01)
 
 Intent Outcome: Achieved for repo-controllable work. Ran the requested continuous `/goal` + `/arc` mission. The primary genius item was the full doctor pass; the expansion pass shipped second-order automation and generated-surface fixes while keeping external launch proof gates honest.
