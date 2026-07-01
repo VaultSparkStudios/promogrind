@@ -117,6 +117,8 @@ export default function App() {
   const [calcFavorites, setCalcFavorites] = useState(() => {
     try { return JSON.parse(localStorage.getItem("pg_calc_favorites")) || []; } catch { return []; }
   });
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareSlug, setCompareSlug] = useState("");
   useEffect(() => {
     try {
       if(!sessionStorage.getItem('pg_session_start')) {
