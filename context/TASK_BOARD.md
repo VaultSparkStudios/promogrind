@@ -360,3 +360,11 @@
 
 - [SIL] Continue `scripts/render-startup-brief.mjs` decomposition only through pure helper slices with brief validation around each extraction.
 - [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+
+## Shipped This Session (S112)
+
+- startup-brief-renderer-decomposition S112 - **DONE S112**: extracted startup orchestration, summary, and output helpers; `scripts/render-startup-brief.mjs` is now below the innovation-pack threshold with focused regression coverage.
+- app-shell-ownership-decomposition S112 - **DONE S112**: extracted auth/session handling and lazy route declarations from `src/App.jsx`; App shell is now below the maintainability threshold and composition tests pass.
+- sync-ownership-decomposition S112 - **DONE S112**: split `loadData` tests and moved workflow persistence helpers out of `src/sync.js`; sync tests pass with 62 total test files.
+- usermenu-threshold-trim S112 - **DONE S112**: removed stale non-executable bulk from `UserMenu.jsx`; innovation pack reports 0 large files.
+- external-proof-evidence S112 - **HONEST DEFERRAL S112**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof still require real external evidence; no proof was fabricated.

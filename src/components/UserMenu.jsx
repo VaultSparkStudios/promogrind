@@ -1,22 +1,8 @@
-/**
- * UserMenu — PromoGrind
- *
- * Auth-aware header widget.
- * Logged out → Sign In + Create Free Account buttons.
- * Logged in  → Avatar + display name + tier badge + animated dropdown.
- *
- * Dropdown includes: avatar picker, editable display name, theme,
- * compact mode, currency, subscription/upgrade, session summary, sign out.
- */
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { signOut, startCheckout, manageBilling, getTierName, redeemBetaCode, saveSharedDisplayName } from '../auth.js';
 import { K, font, fontD } from '../lib/shared.js';
 import { FX } from '../contexts.jsx';
 import { getProjectAuthHref } from '../launchState.js';
-
-// ── Avatar catalogue ──────────────────────────────────────────────────────────
-
 const AVATARS = [
   { emoji: '🎯', label: 'Sharpshooter' },
   { emoji: '🎲', label: 'High Roller'  },
@@ -31,34 +17,25 @@ const AVATARS = [
   { emoji: '🐂', label: 'Bull Run'     },
   { emoji: '🎳', label: 'Striker'      },
 ];
-
-// ── Tier helpers ──────────────────────────────────────────────────────────────
-
 const TIER_COLOR = (name) => ({
   Scout:       '#06b6d4',
   Runner:      '#f59e0b',
   Closer:      '#a855f7',
   'The House': '#eab308',
 }[name] ?? '#60a5fa');
-
 const UPGRADE_NEXT = {
   'Free Agent': { planId: 'scout_monthly',  label: 'Upgrade to Scout',  price: '$9.99/mo',  desc: 'Cloud sync · PromoChat 20/day'    },
   Scout:        { planId: 'runner_monthly', label: 'Upgrade to Runner', price: '$19.99/mo', desc: 'Unlimited AI · Action Plan'        },
   Runner:       { planId: 'closer_monthly', label: 'Upgrade to Closer', price: '$34.99/mo', desc: 'Live Scanner · Stack Builder'      },
 };
-
-// ── Shared micro-styles ───────────────────────────────────────────────────────
-
 const sectionLabel = {
   fontSize: 9, fontWeight: 700, color: '#64748b',
   textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10,
 };
-
 const prefRow = {
   display: 'flex', alignItems: 'center',
   justifyContent: 'space-between', marginBottom: 10,
 };
-
 const pillBtn = (active, color) => ({
   padding: '5px 14px', borderRadius: 6, cursor: 'pointer',
   fontFamily: font, fontSize: 11, fontWeight: 600,
@@ -67,9 +44,6 @@ const pillBtn = (active, color) => ({
   color: active ? color : K.dm,
   transition: 'all 0.15s',
 });
-
-// ── Main component ────────────────────────────────────────────────────────────
-
 export default function UserMenu({
   user, proStatus, darkMode, toggleTheme,
   compactMode, toggleCompact, currency, setCurrency,
@@ -91,11 +65,8 @@ export default function UserMenu({
   const [betaCodeInput, setBetaCodeInput] = useState('');
   const [betaCodeState, setBetaCodeState] = useState(null); // null | 'loading' | 'success' | 'error'
   const [betaCodeMsg,   setBetaCodeMsg]   = useState('');
-
   const triggerRef = useRef(null);
   const dropRef    = useRef(null);
-
-  // Compute dropdown position from trigger bounding rect
   const calcPos = useCallback(() => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
@@ -108,17 +79,12 @@ export default function UserMenu({
       setDropWidth(308);
     }
   }, []);
-
   const openMenu = () => { calcPos(); setOpen(true); };
-
-  // Reposition on resize while open
   useEffect(() => {
     if (!open) return;
     window.addEventListener('resize', calcPos, { passive: true });
     return () => window.removeEventListener('resize', calcPos);
   }, [open, calcPos]);
-
-  // Close on outside interaction
   useEffect(() => {
     if (!open) return;
     const handler = (e) => {
@@ -137,36 +103,28 @@ export default function UserMenu({
       document.removeEventListener('touchstart', handler, true);
     };
   }, [open]);
-
-  // Close on scroll (prevents stale positioning)
   useEffect(() => {
     if (!open) return;
     const handler = () => { setOpen(false); setAvatarPicking(false); };
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
   }, [open]);
-
-  // ── Handlers ───────────────────────────────────────────────────────────────
-
   const saveAvatar = (emoji) => {
     setAvatar(emoji);
     try { localStorage.setItem('pg_avatar', emoji); } catch {}
     setAvatarPicking(false);
   };
-
   useEffect(() => {
     const sharedName = user?.user_metadata?.display_name || user?.user_metadata?.username || '';
     if (!sharedName) return;
     setDisplayName(sharedName);
     try { localStorage.setItem('pg_display_name', sharedName); } catch {}
   }, [user?.id, user?.user_metadata?.display_name, user?.user_metadata?.username]);
-
   const startEditName = () => {
     const base = displayName || (user?.email ? user.email.split('@')[0] : '');
     setNameInput(base);
     setEditingName(true);
   };
-
   const saveName = async () => {
     const name = nameInput.trim().slice(0, 24);
     setDisplayName(name);
@@ -174,7 +132,6 @@ export default function UserMenu({
     try { await saveSharedDisplayName(name); } catch {}
     setEditingName(false);
   };
-
   const submitBetaCode = async () => {
     const code = betaCodeInput.trim().toUpperCase();
     if (!code) return;
@@ -184,16 +141,12 @@ export default function UserMenu({
       setBetaCodeState('success');
       setBetaCodeMsg(result.message ?? 'Beta access activated!');
       setBetaCodeInput('');
-      // Reload page after brief delay so proStatus refreshes
       setTimeout(() => window.location.reload(), 1800);
     } else {
       setBetaCodeState('error');
       setBetaCodeMsg(result?.error ?? 'Invalid code');
     }
   };
-
-  // ── Derived values ─────────────────────────────────────────────────────────
-
   const derivedName   = displayName || (user?.email ? user.email.split('@')[0] : 'Grinder');
   const tierName      = getTierName(proStatus?.plan ?? null);
   const tc            = TIER_COLOR(tierName);
@@ -203,12 +156,8 @@ export default function UserMenu({
   const renewalDate   = proStatus?.current_period_end
     ? new Date(proStatus.current_period_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
-
   const signInHref = getProjectAuthHref('signin');
   const signUpHref = getProjectAuthHref('signup');
-
-  // ── LOGGED OUT ─────────────────────────────────────────────────────────────
-
   if (!user) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -246,9 +195,6 @@ export default function UserMenu({
       </div>
     );
   }
-
-  // ── LOGGED IN — trigger button ─────────────────────────────────────────────
-
   return (
     <div style={{ position: 'relative' }}>
       {/* CSS animation — injected once */}
@@ -259,7 +205,6 @@ export default function UserMenu({
         }
         .pg-drop-item:hover { background: rgba(96,165,250,0.08) !important; }
       `}</style>
-
       <button
         ref={triggerRef}
         onClick={() => open ? (setOpen(false), setAvatarPicking(false)) : openMenu()}
@@ -296,7 +241,6 @@ export default function UserMenu({
             }}/>
           )}
         </div>
-
         {/* Name + tier */}
         <div style={{ textAlign: 'left', lineHeight: 1.3, minWidth: 0 }}>
           <div style={{
@@ -309,7 +253,6 @@ export default function UserMenu({
             {tierName}{isOnTrial ? ` · ${trialDaysLeft}d trial` : ''}
           </div>
         </div>
-
         {/* Chevron */}
         <span style={{
           fontSize: 9, color: K.dm, marginLeft: 2, flexShrink: 0,
@@ -318,7 +261,6 @@ export default function UserMenu({
           transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
         }}>▾</span>
       </button>
-
       {/* ── DROPDOWN ─────────────────────────────────────────────────────── */}
       {open && (
         <div
@@ -338,7 +280,6 @@ export default function UserMenu({
             animation: 'pgDropIn 0.2s cubic-bezier(0.22, 1, 0.36, 1)',
           }}
         >
-
           {/* ── Identity header ──────────────────────────────────────── */}
           <div style={{
             padding: '16px 18px 14px',
@@ -346,7 +287,6 @@ export default function UserMenu({
             borderBottom: `1px solid ${K.bd}`,
           }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
-
               {/* Avatar — click to pick */}
               <button
                 onClick={() => setAvatarPicking(v => !v)}
@@ -371,7 +311,6 @@ export default function UserMenu({
                   color: K.dm,
                 }}>✎</span>
               </button>
-
               {/* Name + email + tier */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 {editingName ? (
@@ -420,14 +359,12 @@ export default function UserMenu({
                     <span style={{ fontSize: 9, color: K.dm }}>✎</span>
                   </button>
                 )}
-
                 <div style={{
                   fontSize: 10, color: K.dm, marginBottom: 7,
                   overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                 }}>
                   {user.email}
                 </div>
-
                 <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
                   <span style={{
                     fontSize: 10, fontWeight: 700, color: tc,
@@ -445,7 +382,6 @@ export default function UserMenu({
                 </div>
               </div>
             </div>
-
             {/* Avatar picker grid */}
             {avatarPicking && (
               <div style={{
@@ -489,17 +425,14 @@ export default function UserMenu({
               </div>
             )}
           </div>
-
           {/* ── Subscription ─────────────────────────────────────────── */}
           <div style={{ padding: '13px 18px', borderBottom: `1px solid ${K.bd}` }}>
             <div style={sectionLabel}>Subscription</div>
-
             {renewalDate && (
               <div style={{ fontSize: 11, color: K.dm, marginBottom: 9 }}>
                 Renews <span style={{ color: K.tx, fontWeight: 600 }}>{renewalDate}</span>
               </div>
             )}
-
             {upgrade ? (
               <button
                 onClick={() => { setOpen(false); startCheckout(upgrade.planId); }}
@@ -525,7 +458,6 @@ export default function UserMenu({
             ) : (
               <div style={{ fontSize: 11, color: K.gn }}>✓ Top tier — all features unlocked</div>
             )}
-
             {/* Beta invite code — only shown to Free Agent */}
             {tierName === 'Free Agent' && (
               <div style={{ marginTop: 10 }}>
@@ -582,7 +514,6 @@ export default function UserMenu({
                 )}
               </div>
             )}
-
             <button
               onClick={() => { setOpen(false); manageBilling(); }}
               style={{
@@ -596,11 +527,9 @@ export default function UserMenu({
               Manage billing →
             </button>
           </div>
-
           {/* ── Preferences ──────────────────────────────────────────── */}
           <div style={{ padding: '13px 18px', borderBottom: `1px solid ${K.bd}` }}>
             <div style={sectionLabel}>Preferences</div>
-
             {/* Theme */}
             <div style={prefRow}>
               <span style={{ fontSize: 12, color: K.tx }}>Theme</span>
@@ -608,7 +537,6 @@ export default function UserMenu({
                 {darkMode ? '☀ Light' : '🌙 Dark'}
               </button>
             </div>
-
             {/* Compact */}
             <div style={prefRow}>
               <div>
@@ -619,7 +547,6 @@ export default function UserMenu({
                 {compactMode ? 'On' : 'Off'}
               </button>
             </div>
-
             {/* Currency */}
             <div style={{ ...prefRow, marginBottom: 0 }}>
               <div>
@@ -644,7 +571,6 @@ export default function UserMenu({
               </select>
             </div>
           </div>
-
           {/* ── Tools ────────────────────────────────────────────────── */}
           <div style={{ padding: '10px 18px', borderBottom: `1px solid ${K.bd}` }}>
             <button
@@ -663,7 +589,6 @@ export default function UserMenu({
               <span>Session Summary</span>
             </button>
           </div>
-
           {/* ── Footer ───────────────────────────────────────────────── */}
           <div style={{ padding: '13px 18px' }}>
             <button
@@ -680,7 +605,6 @@ export default function UserMenu({
             >
               Sign Out
             </button>
-
             <div style={{ display: 'flex', justifyContent: 'center', gap: 18 }}>
               {[['Account help', 'mailto:support@vaultsparkstudios.com?subject=PromoGrind%20account%20help'], ['Compliance', '/compliance/'], ['Privacy', '/privacy/']].map(([label, href]) => (
                 <a

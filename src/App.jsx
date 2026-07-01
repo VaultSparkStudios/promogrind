@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
+import React, { useState, useMemo, useEffect, useRef, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { tryAuth, getSubscription, startCheckout, startTrial, supabase } from "./auth.js";
-import { loadData, saveData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
+import { startCheckout, startTrial } from "./auth.js";
+import { loadData, saveData, onCalculation, onLedgerEntry, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
 import { flagCalcUsed } from "./lib/missions.js";
 import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
@@ -18,57 +18,23 @@ import { parseBetSlip } from "./app/parseBetSlip.js";
 import { StarterPackModal, OnboardingChecklist, MemberWelcomeCard } from "./app/AppSubcomponents.jsx";
 import OnboardingWizard, { ONBOARDING_KEY } from "./app/OnboardingWizard.jsx";
 import { useProfitNotifications } from "./app/useProfitNotifications.js";
+import { usePromoAuthSession } from "./app/usePromoAuthSession.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
-import { trackEvent, trackPage, identifyUser } from "./analytics.js";
+import { trackEvent, trackPage } from "./analytics.js";
 import { ToastCtx, useToast, AppDataCtx, FX, CurrencyCtx } from "./contexts.jsx";
 import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTrigger, dismissTrigger, Help, LoadingState } from "./ui.jsx";
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
-// Heavy tab components â€” lazy loaded so they don't block initial render
-const Tracker = lazy(() => import("./components/Tracker.jsx"));
-const Ledger = lazy(() => import("./components/Ledger.jsx"));
-const LiveScanner = lazy(() => import("./components/LiveScanner.jsx"));
-const TaxesEstimatorWrapper = lazy(() => import("./components/TaxesEstimator.jsx"));
-const AIActionPlan = lazy(() => import("./components/AIActionPlan.jsx").then(m => ({ default: m.AIActionPlan })));
-const StackBuilder = lazy(() => import("./components/StackBuilder.jsx").then(m => ({ default: m.StackBuilder })));
-const PricingPage = lazy(() => import("./components/PricingPage.jsx").then(m => ({ default: m.PricingPage })));
-const PromoChat = lazy(() => import("./components/PromoChat.jsx"));
-const PromoAdvisorPanel = lazy(() => import("./components/PromoAdvisorPanel.jsx").then(m => ({ default: m.PromoAdvisorPanel })));
-const PromoIntakeRoute = lazy(() => import("./routes/PromoIntakeRoute.jsx"));
-const LandingRoute = lazy(() => import("./routes/LandingRoute.jsx"));
-const FeatureFlagAdmin = lazy(() => import("./components/FeatureFlagAdmin.jsx"));
-const TrackInsights = lazy(() => import("./components/TrackInsights.jsx"));
-const DailyBriefPage = lazy(() => import("./components/dashboard/DailyBriefPage.jsx"));
-const DailyDashboard = lazy(() => import("./components/dashboard/DailyDashboard.jsx"));
-const CommunityPromoBoard = lazy(() => import("./components/CommunityPromoBoard.jsx"));
-const SmartPromoRecommender = lazy(() => import("./components/dashboard/SmartPromoRecommender.jsx"));
-const PromoCalendar = lazy(() => import("./components/PromoCalendar.jsx"));
-const ReferralHub = lazy(() => import("./components/ReferralHub.jsx"));
-const CompetitorComparison = lazy(() => import("./components/CompetitorComparison.jsx"));
-const TeamAccounts = lazy(() => import("./components/TeamAccounts.jsx"));
-const BonusBet = lazy(() => import("./calculators/BonusBet.jsx"));
-const ProfitBoost = lazy(() => import("./calculators/ProfitBoost.jsx"));
-const FirstBet = lazy(() => import("./calculators/FirstBet.jsx"));
-const DepositMatch = lazy(() => import("./calculators/DepositMatch.jsx"));
-const NoVig = lazy(() => import("./calculators/NoVig.jsx"));
-const NoVig3Way = lazy(() => import("./calculators/NoVig3Way.jsx"));
-const PlusEV = lazy(() => import("./calculators/PlusEV.jsx"));
-const Arb2Way = lazy(() => import("./calculators/Arb2Way.jsx"));
-const Arb3Way = lazy(() => import("./calculators/Arb3Way.jsx"));
-const ParlayHedge = lazy(() => import("./calculators/ParlayHedge.jsx"));
-const KellyCriterion = lazy(() => import("./calculators/KellyCriterion.jsx"));
-const InsurancePromo = lazy(() => import("./calculators/InsurancePromo.jsx"));
-const TeaserCalc = lazy(() => import("./calculators/TeaserCalc.jsx"));
-const RoundRobinCalc = lazy(() => import("./calculators/RoundRobinCalc.jsx"));
-const ParlayBuilder = lazy(() => import("./calculators/ParlayBuilder.jsx"));
-const SGPEstimator = lazy(() => import("./calculators/SGPEstimator.jsx"));
-const HoldCalc = lazy(() => import("./calculators/HoldCalc.jsx"));
-const BetSizingAdvisor = lazy(() => import("./calculators/BetSizingAdvisor.jsx"));
-const LineShop = lazy(() => import("./calculators/LineShop.jsx"));
-const GetStartedRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.GetStartedRoute })));
-const WhatsNewRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.WhatsNewRoute })));
-const AboutRoute = lazy(() => import("./routes/HomeRoutes.jsx").then(m => ({ default: m.AboutRoute })));
+import {
+  AboutRoute, AIActionPlan, Arb2Way, Arb3Way, BetSizingAdvisor, BonusBet, CommunityPromoBoard,
+  CompetitorComparison, DailyBriefPage, DailyDashboard, DepositMatch, FeatureFlagAdmin, FirstBet,
+  GetStartedRoute, HoldCalc, InsurancePromo, KellyCriterion, LandingRoute, Ledger, LineShop,
+  LiveScanner, NoVig, NoVig3Way, ParlayBuilder, ParlayHedge, PlusEV, PricingPage, ProfitBoost,
+  PromoAdvisorPanel, PromoCalendar, PromoChat, PromoIntakeRoute, ReferralHub, RoundRobinCalc,
+  SGPEstimator, SmartPromoRecommender, StackBuilder, TaxesEstimatorWrapper, TeamAccounts,
+  TeaserCalc, TrackInsights, Tracker, WhatsNewRoute,
+} from "./app/appLazyComponents.js";
 import AgeGate, { isAgeVerified } from "./components/AgeGate.jsx";
 import UserMenu from "./components/UserMenu.jsx";
 import AuthDialog from "./components/AuthDialog.jsx";
@@ -86,12 +52,10 @@ import { FreeBetArbTracker, PromoJournal, OddsComparisonTable, PromoStacking } f
 import { DepositOptimizer, GutCheck, HedgeValidator, PromoArbFinder, PromoGuarantee } from "./calculators/PromoDecisionCalculators.jsx";
 import { getQuickCalcFallbackSlug } from "./workflows/actionGraph.js";
 import { StateLegalAlert } from "./lib/stateLegal.jsx";
-
 function getInitialAuthMode() {
   if (hasRecoveryHash()) return "update-password";
   return getProjectAuthMode(window.location.search);
 }
-
 function hasRecoveryHash() {
   try {
     const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
@@ -99,54 +63,12 @@ function hasRecoveryHash() {
   } catch {}
   return false;
 }
-
-// Math, colors, styles from ./lib/shared.js â€” S (with JSX meter) from ./ui.jsx
-
-// Toast, contexts, UI atoms, useCalcMemory, FeatureUnavailableCard â†’ ./contexts.jsx + ./ui.jsx
-
-// â•â•â• BOOK CTA (shown at profitable calc results) â•â•â•
-// promoType: "bonus"|"boost"|"safety"|"arb"|null â€” sorts most relevant books first
-// FeatureUnavailableCard â†’ ./ui.jsx
-
-// CommunityWinsWall, SmartPromoRecommender extracted to src/components/dashboard/
-
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// TOOL COMPONENTS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-
-// BonusBet, ProfitBoost, FirstBet extracted to src/calculators/ (lazy-loaded above)
-// BookCTA, ShareCard extracted to src/components/ (imported above)
-
-// TeaserCalc, RoundRobinCalc, ParlayBuilder, SGPEstimator, HoldCalc, BetSizingAdvisor, LineShop extracted to src/calculators/
-
-// BetTracker -> ./components/BetTracker.jsx
-// Tracker â†’ ./components/Tracker.jsx
-// Ledger (+ ShareWeekBtn, ReportCard, BetHeatmap) â†’ ./components/Ledger.jsx
 const KB = KnowledgeBase;
-
 const ProfitCertificate = ProfitCertificateRoute;
-
-// TAB SYSTEM â•â•â•
-// LiveScanner (+ SPORTS_LIST, PROP_MARKETS, detectArbs, detectEV) â†’ ./components/LiveScanner.jsx
 const Leaderboard = LeaderboardRoute;
-
-// COMMUNITY PROMO BOARD â€” extracted to src/components/CommunityPromoBoard.jsx â•â•â•
 const PromoBoard = CommunityPromoBoard;
-
-// Achievement evaluation moved to src/lib/achievements.js
-
-// Promo decision calculators -> ./calculators/PromoDecisionCalculators.jsx
 const useCurrency = () => React.useContext(CurrencyCtx);
-
-// â•â•â• COPY MY SETUP â•â•â•
-// TaxTimingAdvisor â†’ ./components/Ledger.jsx
-// â•â•â• BET SLIP TEXT PARSER â•â•â•
-// parseBetSlip extracted to ./app/parseBetSlip.js
-
 const EmailCapture = () => null;
-
-// PromoChat â†’ ./components/PromoChat.jsx
-// â•â•â• MAIN APP â•â•â•
 const TABS = buildAppTabs({
   DailyDashboard, PromoIntakeRoute, DailyBriefPage, GetStartedRoute, WhatsNewRoute, PricingPage, AboutRoute,
   BonusBet, ProfitBoost, FirstBet, DepositMatch, InsurancePromo,
@@ -157,16 +79,9 @@ const TABS = buildAppTabs({
   ProfitCertificate, LiveScanner, AIActionPlan, StackBuilder, KB, PromoFinder, PromoCalendar, PromoBoard,
   Glossary, ReferralHub, TeamAccounts, CompetitorComparison, PromoArbFinder,
 });
-
 const slugMap = buildSlugMap(TABS);
-
-
 export default function App() {
-  // Calculators are public â€” always load immediately. Auth resolves silently in background.
-  const [authReady] = useState(true);
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
-  const [user, setUser] = useState(null);
-  const [proStatus, setProStatus] = useState(null);
   const [authModalMode, setAuthModalMode] = useState(() => getInitialAuthMode());
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
   const {
@@ -193,6 +108,7 @@ export default function App() {
     showOnboarding,
     dismissOnboarding,
   } = usePromoAppShell({ onboardingKey: ONBOARDING_KEY });
+  const { authReady, user, proStatus, weeklyActive } = usePromoAuthSession({ appData });
   const shellMaxWidth = viewport.contentMaxWidth;
   const shellPadding = viewport.shellPadding;
   const contentPadding = viewport.contentPadding;
@@ -226,8 +142,6 @@ export default function App() {
   const isEmbed = embedMode;
   const visitedSlugsRef = useRef(new Set());
   const [showSessionModal, setShowSessionModal] = useState(false);
-
-  // Keyboard ? shortcut for calc search
   useEffect(()=>{
     const handler = e => {
       if(e.key==='?' && e.target.tagName!=='INPUT' && e.target.tagName!=='TEXTAREA' && e.target.tagName!=='SELECT') {
@@ -242,144 +156,7 @@ export default function App() {
     window.addEventListener('keydown',handler);
     return ()=>window.removeEventListener('keydown',handler);
   },[]);
-
-  // Capture ?ref= referral code from URL on first load
-  useEffect(() => {
-    try {
-      const ref = new URLSearchParams(window.location.search).get('ref');
-      if (ref) localStorage.setItem('pg_ref', ref);
-    } catch(e) {}
-  }, []);
-
   useProfitNotifications({ appData, authReady });
-
-  const [weeklyActive, setWeeklyActive] = useState(null);
-  const [calcFavorites, setCalcFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem('pg_calc_favorites'))||[]; } catch { return []; } });
-  const [compareMode, setCompareMode] = useState(false);
-  const [compareSlug, setCompareSlug] = useState('');
-
-  // Push notification check for promo alerts
-  useEffect(() => {
-    if (!authReady) return;
-    try {
-      if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-      const prefs = JSON.parse(localStorage.getItem('pg_alert_prefs')||'{}');
-      Object.entries(prefs).forEach(([name, pref]) => {
-        if (!pref.alert || !pref.targetDate || pref.notified) return;
-        const target = new Date(pref.targetDate);
-        const hoursUntil = (target - Date.now()) / 3600000;
-        if (hoursUntil > 0 && hoursUntil <= 24) {
-          new Notification(`PromoGrind: ${name} expires soon!`, {
-            body: `This promo expires in ${Math.round(hoursUntil)} hours. Open the calculator now.`,
-            icon: '/promogrind/favicon.svg',
-          });
-          pref.notified = true;
-          localStorage.setItem('pg_alert_prefs', JSON.stringify(prefs));
-        }
-      });
-    } catch(e) {}
-  }, [authReady]);
-
-  // Weekly active users count (social proof)
-  useEffect(() => {
-    if (!authReady) return;
-    supabase.from('vault_events').select('id', { count: 'exact', head: true })
-      .gte('created_at', new Date(Date.now()-7*24*60*60*1000).toISOString())
-      .then(({ count }) => { if (typeof count === 'number') setWeeklyActive(count); })
-      .catch(() => {});
-  }, [authReady]);
-
-  useEffect(() => {
-    const queryMode = getProjectAuthMode(search);
-    setAuthModalMode((current) => current === "update-password" && hasRecoveryHash() ? current : queryMode);
-  }, [search]);
-
-  // Auth + subscription load â€” app always shows; this just enriches the experience for
-  // signed-in users (sync, points, pro features). Guests continue in calculator-only mode.
-  useEffect(() => {
-    let alive = true;
-
-    const writePlanKey = (sub) => {
-      try {
-        const planKey = sub?.status === 'trial' ? 'trial'
-          : sub?.plan === 'vault_sparked' ? 'vault_sparked'
-          : sub?.plan === 'pro' ? 'pro'
-          : 'free';
-        localStorage.setItem('pg_pro_status', planKey);
-      } catch {}
-    };
-
-    const syncAuthenticatedState = async (session, options = {}) => {
-      if (!alive) return;
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-
-      if (!currentUser) {
-        setProStatus(null);
-        writePlanKey(null);
-        return;
-      }
-
-      if (options.trackLogin) {
-        trackEvent('vault_member_login');
-        trackEvent('promogrind_account_login');
-      }
-
-      onDailyLogin();
-      window.VSSupabase = supabase;
-      window.VaultSDK?.init('promogrind', {
-        onReady: () => window.VaultSDK?.applyGates(),
-      });
-
-      const sub = await getSubscription();
-      if (!alive) return;
-      setProStatus(sub);
-      identifyUser(currentUser, sub);
-      writePlanKey(sub);
-
-      try {
-        const refCode = localStorage.getItem('pg_ref');
-        if (refCode && refCode !== currentUser.id) {
-          await supabase.from('referrals').insert({
-            referrer_id: refCode,
-            referred_user_id: currentUser.id,
-          });
-          localStorage.removeItem('pg_ref');
-        }
-      } catch (e) {}
-    };
-
-    tryAuth().then(async (ok) => {
-      if (!ok) {
-        setUser(null);
-        setProStatus(null);
-        writePlanKey(null);
-        return;
-      }
-
-      const { data: { session } } = await supabase.auth.getSession();
-      await syncAuthenticatedState(session, { trackLogin: true });
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_OUT') {
-        setUser(null);
-        setProStatus(null);
-        writePlanKey(null);
-        return;
-      }
-
-      await syncAuthenticatedState(session, {
-        trackLogin: event === 'SIGNED_IN',
-      });
-    });
-
-    return () => {
-      alive = false;
-      listener?.subscription?.unsubscribe();
-    };
-  }, []);
-
   const setAuthQueryMode = (mode) => {
     const params = new URLSearchParams(search);
     if (mode) params.set('auth', mode);
@@ -387,28 +164,18 @@ export default function App() {
     const nextSearch = params.toString();
     navigate(`${pathname}${nextSearch ? `?${nextSearch}` : ''}`, { replace: true });
   };
-
   const authHref = (mode) => getProjectAuthHref(mode, window.location.href);
   const closeAuthDialog = () => setAuthQueryMode(null);
-
-  // ── Route-derived values and route-scoped effects MUST run on every render path
-  // to keep React hook order stable. Don't move them below the early returns below
-  // (doing so caused React error #310 on cold deep-link loads — S83).
   const slug = pathname.replace(/^\/+/, "") || DEFAULT_SLUG;
   const { gi = 0, ti = 0 } = slugMap[slug] || slugMap[DEFAULT_SLUG];
   const item = TABS[gi]?.items?.[ti];
-
   const goTo = (newGi, newTi) => {
     const resolvedTi = newTi !== undefined ? newTi : (tabMemory.current[newGi] ?? 0);
     tabMemory.current[newGi] = resolvedTi;
     navigate("/" + TABS[newGi].items[resolvedTi].slug);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  // Re-apply VaultSDK DOM gates whenever the active tool or pro status changes
   useEffect(() => { window.VaultSDK?.applyGates(); }, [slug, proStatus]);
-
-  // Fire vault calc event on tab navigation (Convert + Calculate groups)
   useEffect(() => {
     if (!authReady || slug === prevSlugRef.current) return;
     prevSlugRef.current = slug;
@@ -425,7 +192,6 @@ export default function App() {
     } catch(e) {}
     trackEvent('calculator_viewed', { slug, name: item?.n ?? slug });
   }, [slug, authReady, gi]);
-
   useEffect(() => {
     const findAndOpen = (targetSlug) => {
       if (!targetSlug) return false;
@@ -438,21 +204,15 @@ export default function App() {
       }
       return false;
     };
-
     const handler = (event) => {
       const detail = event?.detail || {};
       if (findAndOpen(detail.calculatorSlug || detail.slug)) return;
       findAndOpen(getQuickCalcFallbackSlug(detail.type));
     };
-
     window.addEventListener("pg:quick-calc", handler);
     return () => window.removeEventListener("pg:quick-calc", handler);
   }, [navigate]);
-
-  // Record current sub-tab in memory whenever it changes
   useEffect(() => { tabMemory.current[gi] = ti; }, [gi, ti]);
-
-  // Creator/referral landing pages — rendered outside the main nav shell
   if (pathname.startsWith("/land/")) {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
@@ -460,8 +220,6 @@ export default function App() {
       </Suspense>
     );
   }
-
-  // Public root should be a landing page, not an immediate drop into the app shell.
   if (pathname === "/") {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
@@ -469,8 +227,6 @@ export default function App() {
       </Suspense>
     );
   }
-
-  // Feature flag admin — hidden route, house tier only
   if (pathname === "/feature-flags") {
     return (
       <FeatureFlagProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline}>
@@ -482,10 +238,8 @@ export default function App() {
       </FeatureFlagProviders>
     );
   }
-
   const g = TABS[gi];
   const isLiveTool = !!item?.pro;
-
   const handleGroupTabKeyDown = (event, index) => {
     if (event.key === "ArrowRight") {
       event.preventDefault();
@@ -501,7 +255,6 @@ export default function App() {
       goTo(TABS.length - 1);
     }
   };
-
   const handleSubTabKeyDown = (event, groupIndex, itemIndex) => {
     const items = TABS[groupIndex].items;
     if (event.key === "ArrowRight") {
@@ -518,11 +271,9 @@ export default function App() {
       goTo(groupIndex, items.length - 1);
     }
   };
-
   const allCalcs = getAllCalcs(TABS);
   const handleCalcNavigate = (slug) => navigate('/'+slug);
   const CALC_GI = getCalcGroupIndex(TABS);
-
   if (!authReady) {
     return (
       <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
@@ -560,7 +311,6 @@ export default function App() {
       </div>
     );
   }
-
   if (embedMode) {
     return (
       <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
@@ -575,7 +325,6 @@ export default function App() {
       </AppProviders>
     );
   }
-
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
     <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
@@ -607,7 +356,6 @@ export default function App() {
         boxShadow:'0 10px 24px rgba(0,0,0,0.12)',
       }}>
         <div style={{maxWidth:shellMaxWidth,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
-
           {/* â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <div style={{cursor:'pointer',flexShrink:0,minWidth:0}} onClick={()=>navigate('/'+DEFAULT_SLUG)}>
             <div style={{fontFamily:fontD,fontSize:isMobile?18:21,fontWeight:800,color:K.gn,letterSpacing:'-0.5px',lineHeight:1}}>
@@ -634,13 +382,10 @@ export default function App() {
               </div>
             )}
           </div>
-
           {/* â”€â”€ Right controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <div style={{display:'flex',alignItems:'center',gap:isMobile?6:10,flexShrink:0}}>
-
             {/* Streak â€” hide on mobile (shown in mobile strip below) */}
             {!isMobile && <DailyStreak/>}
-
             {/* Advisor */}
             {FEATURE_FLAGS.promoAdvisor && !isMobile && (
               <button
@@ -656,7 +401,6 @@ export default function App() {
                 Advisor
               </button>
             )}
-
             {!isMobile && (
               <button
                 onClick={()=>setShowCalcSearch(true)}
@@ -676,7 +420,6 @@ export default function App() {
                 Search
               </button>
             )}
-
             {/* Theme toggle â€” always visible as icon */}
             <button
               onClick={toggleTheme}
@@ -692,7 +435,6 @@ export default function App() {
             >
               {darkMode ? "☀" : "☾"}
             </button>
-
             {/* UserMenu â€” auth widget */}
             <UserMenu
               user={user}
@@ -708,7 +450,6 @@ export default function App() {
             />
           </div>
         </div>
-
         {/* â”€â”€ Mobile utility strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {isMobile && (
           <div style={{
@@ -751,7 +492,6 @@ export default function App() {
             </div>
           </div>
         )}
-
         {/* â”€â”€ Desktop compliance line â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {!isMobile && (
           <div style={{maxWidth:shellMaxWidth,margin:'4px auto 0',textAlign:'right'}}>
@@ -761,7 +501,6 @@ export default function App() {
           </div>
         )}
       </header>
-
       {/* â”€â”€ Main nav tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
@@ -890,8 +629,3 @@ export default function App() {
     </AppProviders>
   );
 }
-
-
-
-
-

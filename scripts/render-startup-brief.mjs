@@ -21,13 +21,14 @@ import { spawnSync } from './lib/safe-spawn.mjs';
 import { renderTitleHeader, renderLastCompleted, renderTestItNow } from './lib/brief-blocks.mjs';
 import { renderStartupScoreBlock } from './lib/startup-score-block.mjs';
 import { parseUnifiedItems } from './lib/task-board.mjs';
-import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
 import { loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
+import { loadPortfolioTaskBoardBlock, renderFounderUnlocksBlock, renderOrchestratorBlock } from './lib/startup-orchestrator-blocks.mjs';
+import { renderExecutionPlanBlock, renderExternalSignalsBlock, renderHumanPressureBlock, renderIgnisInsightBlock, renderMomentumMeterBlock, renderSilForecastBlock } from './lib/startup-summary-blocks.mjs';
+import { writeStartupBriefWithTelemetry } from './lib/startup-brief-output.mjs';
 import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
-import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -35,28 +36,14 @@ const root = path.resolve(__dirname, '..');
 const outputPath = path.join(root, 'docs', 'STARTUP_BRIEF.md');
 const node = process.execPath;
 
-// S120 #1 — brief-v5 promote opt-in. Set BRIEF_V5=1 or pass --v5 to delegate
-// to render-startup-brief-v5.mjs (71% token reduction, validated S117). Default
-// remains v3.1 until 3-session hash-stability monitoring completes.
 if (process.argv.includes('--v5') || process.env.BRIEF_V5 === '1') {
   const { spawnSync } = await import('node:child_process');
   const r = spawnSync(node, [path.join(__dirname, 'render-startup-brief-v5.mjs'), ...process.argv.slice(2).filter(a => a !== '--v5')], { stdio: 'inherit', cwd: root });
   process.exit(r.status ?? 0);
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────────
 const W  = 62; // inner box width (content between ║  and  ║)
-const BW = W + 4; // total line width including ║  prefix/suffix
 
-// ── Preflight: doctor --fix --update-json (S120 audit #2 — clear stable warns) ─
-// S173 [audit #1 · CANON-031 observability honesty]: the preflight already runs
-// a full doctor pass, but historically WITHOUT --update-json, so the brief read
-// `status.doctorScore` as last written at the PRIOR session's closeout. When a
-// probe self-healed between sessions (e.g. propagation-adoption fail→warn) the
-// brief kept surfacing a PHANTOM ⛔ "N failing" the live doctor no longer agreed
-// with. Adding --update-json persists the freshly-computed score (spawnSync is
-// synchronous and completes before loadAllFiles reads PROJECT_STATUS.json), so
-// the SIGNALS box always reflects the doctor run the brief itself just triggered.
 if (!process.env.STUDIO_BRIEF_NO_DOCTOR_FIX) {
   try {
     spawnSync(process.execPath, [path.join(__dirname, 'ops.mjs'), 'doctor', '--fix', '--update-json', '--quiet'], {
@@ -65,8 +52,6 @@ if (!process.env.STUDIO_BRIEF_NO_DOCTOR_FIX) {
   } catch { /* non-fatal */ }
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-// S126 audit #28: PROJECT_PROFILE lens — one-line header above SCORE
 function renderProfileLensHeader() {
   try {
     const p = readJson(path.join(root, '.cache', 'project-profile.json'), null);
@@ -88,7 +73,6 @@ function lockValue(key) {
   return lock.match(new RegExp(`^${key}:\\s*(\\S+)`, 'm'))?.[1] ?? '';
 }
 
-// ── Parallel file loader (performance: all reads in one Promise.all tick) ─────
 async function loadAllFiles(filePaths) {
   return Promise.all(
     filePaths.map(({ key, path: p, json: isJson }) =>
@@ -123,7 +107,6 @@ const FILE_MANIFEST = [
   { key: 'doctorOut', path: path.join(root, 'context', 'PROJECT_STATUS.json'),       json: true  }, // same as status, reuse
 ];
 
-// Load all files in parallel
 const startMs = Date.now();
 const loaded = await loadAllFiles(FILE_MANIFEST);
 const fileCache = Object.fromEntries(loaded.map(({ key, value }) => [key, value]));
@@ -142,7 +125,6 @@ function extractSection(content, heading) {
   return nl === -1 ? '' : match.slice(nl + 1);
 }
 
-// ── Box-drawing helpers ───────────────────────────────────────────────────────
 function pad(s, w) { const str = String(s ?? ''); return str.length >= w ? str.slice(0, w) : str + ' '.repeat(w - str.length); }
 function row(content) { return `║  ${pad(content, W)}  ║`; }
 function blank() { return `║  ${' '.repeat(W)}  ║`; }
@@ -150,29 +132,17 @@ function top(title) {
   const t = title ? `══ ${title} ` : '';
   return '╔' + t + '═'.repeat(Math.max(1, W + 2 - t.length)) + '╗';
 }
-function mid(title) {
-  const t = title ? `══ ${title} ` : '';
-  return '╠' + t + '═'.repeat(Math.max(1, W + 2 - t.length)) + '╣';
-}
 function bot() { return '╚' + '═'.repeat(W + 2) + '╝'; }
 
-// Progress bar: score /100 → 20 chars  █░
-function bar20(score) {
-  const n = Math.min(20, Math.max(0, Math.round(score / 5)));
-  return '█'.repeat(n) + '░'.repeat(20 - n);
-}
-// 10-char proportional bar for category rows (score 0-100 → 0-10 blocks).
 function bar10(score) {
   const n = Math.min(10, Math.max(0, Math.round((score ?? 0) / 10)));
   return '█'.repeat(n) + '░'.repeat(10 - n);
 }
-// Progress bar: total / silMax → 24 chars  █░  (SIL v3.0 default 1000)
 function bar24(total, max = 1000) {
   const n = Math.min(24, Math.max(0, Math.floor((total ?? 0) / max * 24)));
   return '█'.repeat(n) + '░'.repeat(24 - n);
 }
 
-// ── Load source files ─────────────────────────────────────────────────────────
 const status      = readJson(path.join(root, 'context', 'PROJECT_STATUS.json'), {});
 const taskBoard   = readText(path.join(root, 'context', 'TASK_BOARD.md'));
 const handoff     = readText(path.join(root, 'context', 'LATEST_HANDOFF.md'));
@@ -188,8 +158,6 @@ const humanPressure = readJson(path.join(root, 'portfolio', 'compiled', 'HUMAN_A
 
 const meterAgent = lockValue('agent') || 'unknown';
 
-// S119 founder directive: live context meter. The loader lives in a focused helper
-// so the brief renderer stays display-oriented and the fallback is unit-testable.
 const meter = loadStartupContextMeter({
   root,
   scriptsDir: __dirname,
@@ -201,12 +169,9 @@ const meterUsed = meter.usedTokens;
 const meterRemaining = Math.max(0, meter.limit - meterUsed);
 const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
 
-// ── Parse Rolling Status ──────────────────────────────────────────────────────
 const silHeader = extractBetween(sil, '<!-- rolling-status-start -->', '<!-- rolling-status-end -->');
 
 const silTotalMatch = silHeader.match(/Total:\s*(\d+)\/(\d+)/);
-// Headline metrics: prefer the latest scored SIL entry (set below, after the
-// robust session parser) over the rolling-status block, which can lag closeouts.
 let silTotal        = parseInt(silTotalMatch?.[1] ?? '') || 0;
 let silMax          = parseInt(silTotalMatch?.[2] ?? '') || status.silMax || 1000;
 let velocity        = parseInt(silHeader.match(/Velocity:\s*(\d+)/)?.[1] ?? '') || 0;
@@ -220,7 +185,6 @@ const lastSessionStr = silHeader.match(/Last session:\s*(.+)/)?.[1]?.trim() ?? '
 const debtRaw       = silHeader.match(/Debt:\s*([↑↓→])/)?.[1] ?? '→';
 const velTrend      = silHeader.match(/Velocity trend:\s*([↑↓→])/)?.[1] ?? '';
 
-// Per-category 3-session avgs
 const cat3 = {};
 const cat3Match = silHeader.match(/3-session:\s*Dev ([\d.]+)\s*\|\s*Align ([\d.]+)\s*\|\s*Momentum ([\d.]+)\s*\|\s*Engage ([\d.]+)\s*\|\s*Process ([\d.]+)/);
 if (cat3Match) {
@@ -231,27 +195,15 @@ if (cat3Match) {
   cat3.process = parseFloat(cat3Match[5]);
 }
 
-// ── Robust SIL session parsing (S142 audit item 1) ───────────────────────────
-// SELF_IMPROVEMENT_LOOP.md carries TWO header formats and they are NOT in a
-// reliable document order:
-//   A) `## DATE — Session N | Total: X/Y | Velocity: V`   (inline metrics)
-//   B) `## Session N — DATE`                              (Total in a later **Total: X/Y** line)
-// The old parser only matched format A and assumed first-document-order =
-// most-recent, so it locked onto a stale block (brief rendered S135/928 while
-// real state was S141/996). We now scan EVERY `## …Session N…` header in either
-// format, capture each body, and select the latest by session NUMBER.
 const allSilEntries = [...sil.matchAll(/##[^\n]*?\bSession\s+(\d+)\b[^\n]*\n([\s\S]*?)(?=\n##\s|$)/g)]
   .map(m => ({ session: parseInt(m[1], 10), header: m[0].split('\n')[0], body: m[2] ?? '' }))
   .sort((a, b) => b.session - a.session);
 
-// Highest session number present in the SIL log (source of truth for "what session are we on").
 const silMaxSession = allSilEntries.length ? allSilEntries[0].session : null;
 
-// Latest entry that actually carries category scores (for the per-category bars).
 const lastEntry = (allSilEntries.find(e => /\|\s*Dev Health\s*\|/i.test(e.body))?.body)
                ?? (allSilEntries[0]?.body ?? '');
 
-// Latest entry that carries a Total — header-inline (format A) OR a **Total: X/Y** body line (format B).
 function entryTotal(e) {
   const inline = e.header.match(/Total:\s*(\d+)\/(\d+)/);
   const body   = e.body.match(/Total:\s*(\d+)\/(\d+)/);
@@ -264,9 +216,6 @@ function entryVelocity(e) {
 }
 const latestScored = allSilEntries.find(e => entryTotal(e) !== null) ?? null;
 
-// Override headline metrics from the latest scored entry when it is fresher than
-// the rolling-status block (compared by session number). Falls back to the
-// rolling-status values, then PROJECT_STATUS.json.
 if (latestScored) {
   const t = entryTotal(latestScored);
   if (t) { silTotal = t.total; silMax = t.max; }
@@ -276,8 +225,6 @@ if (latestScored) {
 if (!silTotal && status.silScore) { silTotal = status.silScore; silMax = status.silMax || 1000; }
 const silStreak = status.silStreak ?? 0;  // S202: consecutive max-score sessions
 function parseScore(label) {
-  // Tolerate suffixes like "Engagement (infra)" — match label followed by optional
-  // whitespace + parenthesized note before the column separator.
   const m = lastEntry.match(new RegExp(`\\|\\s*${label}(?:\\s*\\([^)]*\\))?\\s*\\|\\s*(\\d+)`, 'i'));
   return m ? parseInt(m[1]) : null;
 }
@@ -287,28 +234,20 @@ const lastMomentum = parseScore('Momentum') ?? cat3.momentum ?? 0;
 const lastEngage   = parseScore('Engagement') ?? cat3.engage ?? 0;
 const lastProcess  = parseScore('Process Quality') ?? cat3.process ?? 0;
 
-// Trend arrows per category (compare last to avg3)
 function trend(last, avg) {
   if (!last || !avg) return '→';
   const delta = last - avg;
   return delta >= 2 ? '↑' : delta <= -2 ? '↓' : '→';
 }
 
-// ── v4.0: Per-category sparkline history (last N sessions) ────────────────────
-// Parse all SIL entries for each of the 5 v2 categories. v3 categories come from
-// PROJECT_STATUS.json silCategoriesV3 (single snapshot) + any future append-only history.
 function parseCategoryHistory(label) {
   const series = [];
-  // allSilEntries is sorted newest→oldest by session number; reverse at the end
-  // to render oldest→newest sparklines.
   for (const entry of allSilEntries) {
     const m = entry.body.match(new RegExp(`\\|\\s*${label}(?:\\s*\\([^)]*\\))?\\s*\\|\\s*(\\d+)`, 'i'));
     if (m) series.push(parseInt(m[1], 10));
   }
   return series.reverse().slice(-8);  // oldest → newest, last 8
 }
-// Migrated to scripts/lib/visual-blocks.mjs (S114 compound refinement).
-// Library uses min=0,max=100 by default → mathematically identical output.
 const spark = (values, max = 100) => _sparkline(values, { max, min: 0 });
 const catHistory = {
   dev:      parseCategoryHistory('Dev Health'),
@@ -317,7 +256,6 @@ const catHistory = {
   engage:   parseCategoryHistory('Engagement'),
   process:  parseCategoryHistory('Process Quality'),
 };
-// v3 categories — single-point snapshot (will grow as new sessions score v3)
 const v3Cats = status.silCategoriesV3 || {};
 const lastCoherence  = v3Cats.crossRepoCoherence ?? 0;
 const lastSecurity   = v3Cats.securityPosture ?? 0;
@@ -325,100 +263,14 @@ const lastEcosystem  = v3Cats.ecosystemIntegration ?? 0;
 const lastCapital    = v3Cats.capitalEfficiency ?? 0;
 const lastAutomation = v3Cats.automationCoverage ?? 0;
 
-// ── v4.0: Session voice — pull a distinctive line from SOUL.md (or BRAIN.md) ──
-function extractSessionVoice() {
-  const candidates = [
-    path.join(root, 'context', 'SOUL.md'),
-    path.join(root, 'context', 'BRAIN.md'),
-    path.join(root, 'context', 'PROJECT_BRIEF.md'),
-    path.join(root, 'context', 'CURRENT_STATE.md'),
-  ];
-  // Reject boilerplate template lines: they all describe the template itself or have placeholder syntax.
-  const TEMPLATE_MARKERS = [
-    /describe the (emotional|creative|mission|promise)/i,
-    /must always be true/i, /audience should feel/i, /quality bar/i,
-    /must never drift/i, /cheap imitation/i, /tonal failure mode/i,
-    /how this project wins/i, /^<.*>$/, /^\[.*\]$/,
-    /template|placeholder|fill in|TODO/i,
-  ];
-  // Require real content: a verb or structural word that indicates lived description.
-  const SUBSTANTIVE = /\b(is|are|ships?|builds?|must|always|every|never|powered|operates?|tracks?|runs?|orchestrat|manag|serves?|coordinat|enforces?|protocol|canon|rubric|audit|pipeline|portfolio)\b/i;
-
-  for (const p of candidates) {
-    if (!fs.existsSync(p)) continue;
-    const src = fs.readFileSync(p, 'utf8');
-    const lines = src.split('\n');
-    for (const line of lines) {
-      if (/^#/.test(line) || !line.trim()) continue;
-      const bulletMatch = line.match(/^\s*[-*]\s+(.{25,140}?)(?:\s*\.|$)/);
-      const proseMatch = line.match(/^(?!\s*[-*#])(.{40,140}?)\.\s*$/);
-      let text = (bulletMatch?.[1] || proseMatch?.[1] || '').trim();
-      // Strip markdown artifacts: bold/italic, backticks, link brackets.
-      text = text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/`/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim();
-      if (!text || text.endsWith(':')) continue;
-      if (TEMPLATE_MARKERS.some(re => re.test(text))) continue;
-      if (!SUBSTANTIVE.test(text)) continue;
-      return { text, source: path.basename(p) };
-    }
-  }
-  return null;
-}
-const sessionVoice = extractSessionVoice();
-
-// ── v4.0: Momentum meter — velocity streak + intent + cost ────────────────────
-function momentumStreak() {
-  // Parse last 8 SIL entries; count consecutive sessions where intent was "achieved"
-  let streak = 0;
-  for (const match of allSilEntries.slice(0, 10)) {
-    const body = match[1] ?? '';
-    if (/Classification:.*(Achieved|achieved)|Intent outcome:.*(Achieved|achieved|✓)/i.test(body)) streak++;
-    else break;
-  }
-  return streak;
-}
-const streak = momentumStreak();
-const intentPct = parseFloat(intentRate.match(/(\d+)%/)?.[1] ?? '0');
-const cacheLedger = readJson(path.join(root, 'portfolio', 'compiled', 'CACHE_HIT_LEDGER.json'), {});
-const cacheHitPct = typeof cacheLedger.avgHitRate === 'number' ? Math.round(cacheLedger.avgHitRate * 100) : null;
-const weeklyCost = cacheLedger.weeklyCostUsd ?? null;
-
-// ── v4.0: Genius-list autonomy cue (agent-owned vs human-blocked) ─────────────
-function autonomyCue(item) {
-  if (!item) return '  ';
-  const status = (item.status || '').toLowerCase();
-  if (status.includes('human') || status.includes('founder')) return '🔒';
-  if (status.includes('blocked') || status.includes('locked')) return '⏳';
-  return '⚡';
-}
-
-// ── Parse TASK_BOARD ──────────────────────────────────────────────────────────
-const unifiedItems   = parseUnifiedItems(taskBoard);
-const openNow        = unifiedItems.filter((item) => item.status === 'unblocked');
-const openNext       = openNow.slice(3);
-const openBlocked    = unifiedItems.filter((item) =>
-  BLOCKED_STATUSES_CORE.includes(item.status)
-);
-
-function taskLabel(item, maxLen = 54) {
-  const text = typeof item === 'string'
-    ? item
-    : `${item.rank} · ${item.category} · ${item.title}`;
-  return text.replace(/\*\*/g, '').replace(/`[^`]+`/g, m => m.replace(/`/g, '')).slice(0, maxLen);
-}
-
-// ── Derived values ─────────────────────────────────────────────────────────────
-const today          = new Date().toISOString().slice(0, 10);
-// Next session = (latest session in the SIL log) + 1. The SIL log is the source
-// of truth; PROJECT_STATUS.currentSession is only a fallback when the log can't
-// be parsed (it has lagged real state before — see S142 audit item 1).
+const today = new Date().toISOString().slice(0, 10);
 const currentSession = (silMaxSession ?? status.currentSession ?? 62) + 1;
+const intentPct = parseInt(String(intentRate).match(/\\d+/)?.[0] ?? '', 10) || null;
+const streak = 0;
 const ctxUpdated     = csmd.match(/^Last updated:\s*(\d{4}-\d{2}-\d{2})/m)?.[1] ?? null;
 const ctxAge         = ctxUpdated ? daysBetween(ctxUpdated, today) : '?';
 const scopeCap       = velocity > 0 ? Math.floor(velocity * 1.5) : null;
 
-// ── Last active (freshest of: SIL closeout, lastUpdated, lastHandoffDate) ────
-// "Days since last" was previously SIL-only, which lied when sessions shipped without
-// running /closeout. Now takes the newest signal across all three sources.
 const lastSilDateMatch = lastSessionStr.match(/(\d{4}-\d{2}-\d{2})/);
 const lastSilDate = lastSilDateMatch?.[1] || null;
 const candidateDates = [
@@ -432,13 +284,10 @@ const freshestDate = candidateDates.length > 0
   : null;
 const daysSinceActive = freshestDate ? daysBetween(freshestDate, today) : '?';
 const daysSinceClosedOut = lastSilDate ? daysBetween(lastSilDate, today) : '?';
-// Keep daysSinceLast alias for any downstream reader, but prefer the new honest value.
 const daysSinceLast = daysSinceActive;
 
-// IGNIS freshness
 const ignisAge = status.ignisLastComputed ? daysBetween(status.ignisLastComputed, today) : '?';
 
-// ── SESSION_PLAN prediction ───────────────────────────────────────────────────
 const planGenAt  = sessionPlan.match(/<!-- generated-at: (\d{4}-\d{2}-\d{2})/)?.[1] ?? null;
 const planAge    = planGenAt ? daysBetween(planGenAt, today) : null;
 const planFresh  = planAge !== null && planAge < 2;
@@ -450,14 +299,12 @@ const repoTouchLine = intentPlan.match(/- \*\*Repo touch set:\*\* (.+)/)?.[1] ??
 const yieldLine = intentPlan.match(/- \*\*Expected yield:\*\* (.+)/)?.[1] ?? null;
 const topPressure = Array.isArray(humanPressure.items) && humanPressure.items.length > 0 ? humanPressure.items[0] : null;
 
-// ── CDR gap detection ─────────────────────────────────────────────────────────
 const cdrEntryDates  = [...cdr.matchAll(/\*\*(2\d{3}-\d{2}-\d{2})\*\*/g)].map(m => m[1]);
 const lastCdrDate    = cdrEntryDates.length > 0 ? cdrEntryDates[cdrEntryDates.length - 1] : null;
 const handoffDate    = handoff.match(/Last updated:\s*(\d{4}-\d{2}-\d{2})/)?.[1] ?? null;
 const cdrGapDays     = lastCdrDate && handoffDate ? daysBetween(lastCdrDate, handoffDate) : 0;
 const cdrGap         = cdrGapDays > 0;
 
-// ── Protocol version drift ────────────────────────────────────────────────────
 function extractVersion(p) { return readText(path.join(root, p)).match(/template-version: ([\d.]+)/)?.[1] ?? null; }
 const startVer    = extractVersion('prompts/start.md');
 const startTplVer = extractVersion('docs/templates/project-system/START_PROMPT.template.md');
@@ -466,18 +313,11 @@ const closTplVer  = extractVersion('docs/templates/project-system/CLOSEOUT_PROMP
 const versionDrift = (startVer && startTplVer && startVer !== startTplVer) ||
                      (closVer  && closTplVer  && closVer  !== closTplVer);
 
-// ── Revenue signals freshness ─────────────────────────────────────────────────
 const revGenDate  = revSig.match(/Generated:\s*(\d{4}-\d{2}-\d{2})/)?.[1] ?? null;
 const revAge      = revGenDate ? daysBetween(revGenDate, today) : 999;
 
-// ── Truth status ──────────────────────────────────────────────────────────────
 const truthStatus = truth.match(/^Overall status:\s*(.+)$/m)?.[1] ?? status.truthAuditStatus ?? 'unknown';
 
-// ── Pattern-memory (S85 pattern-memory auto-writer surfacing) ─────────────────
-// Reads `project_pattern_*.md` entries from the Studio Ops Claude memory root
-// and surfaces recurring genius-list categories (e.g. "PROTOCOL top-5 × 3").
-// Falls back to reading portfolio/compiled/GENIUS_HISTORY.json when the memory
-// root isn't present (CI, fresh clone, different user).
 function loadPatternMemory() {
   const patterns = [];
   const memoryRoot = path.join(
@@ -509,9 +349,6 @@ function loadPatternMemory() {
   } catch { /* fall through to history fallback */ }
 
   if (patterns.length === 0) {
-    // Fallback: recompute from GENIUS_HISTORY.json (same logic as pattern-memory.mjs).
-    // Skip if the most recent history entry is older than 14 days — a frozen history
-    // would otherwise produce phantom carry-forward pressure long after the pattern cleared.
     const hist = readJson(path.join(root, 'portfolio', 'compiled', 'GENIUS_HISTORY.json'), null);
     const entries = Array.isArray(hist?.entries) ? hist.entries : [];
     const latest = entries[entries.length - 1];
@@ -553,7 +390,6 @@ const patternsDetail = patternMemory.length === 0
     ? `${patternMemory[0].category} top-5 × ${patternMemory[0].sessions} sessions — carry-forward`
     : `${patternMemory[0].category} × ${patternMemory[0].sessions} · +${patternMemory.length - 1} more — carry-forward`;
 
-// ── Genome history (dimension alert) ─────────────────────────────────────────
 const genomeData   = readJson(path.join(root, 'context', 'GENOME_HISTORY.json'), { snapshots: [] });
 const genSnaps     = genomeData.snapshots ?? [];
 const genLast      = genSnaps.length > 0 ? (genSnaps[genSnaps.length - 1]?.dimensions ?? {}) : {};
@@ -566,7 +402,6 @@ const genomeDetail = droppedDims.length > 0
   ? `drop: ${droppedDims.map(d => `${d.dim} ${d.from}→${d.to}`).join(' · ')}`
   : `all stable  (${genSnaps.length > 0 ? genSnaps[genSnaps.length - 1].total : '?'}/25)`;
 
-// ── Deploy gaps ──────────────────────────────────────────────────────────────
 let sigDeploy = '✓';
 let deployLabel = 'no gaps (run: ops deploy-gaps)';
 try {
@@ -583,12 +418,6 @@ try {
   }
 } catch { /* keep defaults */ }
 
-// ── Cost anomaly signal — SHARED evaluator (S181 [audit #1]) ─────────────────
-// Previously an inline rolling-window check on NOTIONAL list-price (entryCost),
-// which double-counted flat-rate Max-Plan interactive tokens as metered API spend
-// → a phantom ⛔ "$916 4.4× spike". It also diverged from check-cost-anomaly.mjs
-// (the S153 two-implementations class). Now both surfaces call ONE evaluator that
-// runs the alarm on REAL metered cost and reports notional separately.
 let sigCost = '✓', costDetail = 'no ledger data';
 try {
   const { readEntries, evaluateCostAnomaly } = await import('./cache-ledger-rollup.mjs');
@@ -604,25 +433,11 @@ try {
   }
 } catch { /* best-effort */ }
 
-// ── Doctor score ─────────────────────────────────────────────────────────────
 const doctorScore  = status.doctorScore ?? null;
 const sigDoctor    = !doctorScore ? '⚠' : doctorScore.failing === 0 ? (doctorScore.warning > 0 ? '⚠' : '✓') : '⛔';
-// S171 [audit #4] — aggregate-honesty: a bare "9 warning" reads as 9 studio-ops
-// problems. Append the ownership split (self vs sibling-rollout) so the founder
-// sees that ~all of them are portfolio-rollout trackers studio-ops surfaces but
-// does not own. Reuses the warning-provenance classifier (no recompute) and
-// degrades gracefully to the bare count if checks/map are unavailable.
-// Compact ownership split (box inner width is 62; date is dropped when warnings
-// exist so the split fits — ownership is the load-bearing signal, not the date).
 let ownershipSplit = '';
 try {
   if (doctorScore?.checks && doctorScore.warning > 0) {
-    // Classify exactly the set the doctor TALLIES as warnings (the canonical
-    // isWarning predicate — shared with run-doctor.mjs via doctor-predicates.mjs,
-    // S172 [audit #4]) so the split always sums to the displayed count. (The
-    // provenance classifier walks the BROADER isNonGreen set on purpose — naming
-    // both predicates is what kills the silent divergence the old inline copies
-    // carried.)
     const map = loadProvenanceMap();
     const byOwner = { self: 0, sibling: 0, chronic: 0 };
     for (const c of doctorScore.checks) {
@@ -645,32 +460,25 @@ const doctorDetail = !doctorScore
       ? `${doctorScore.passing}/${doctorScore.total} (${doctorScore.score}%)  ·  ${doctorScore.warning} warn${ownershipSplit}`
       : `${doctorScore.passing}/${doctorScore.total} (${doctorScore.score}%)  ·  ${doctorScore.date}  ✓`;
 
-// ── Entropy ───────────────────────────────────────────────────────────────────
 const entropy      = status.entropyScore ?? null;
 const sigEntropy   = entropy === null ? '⚠' : entropy < 0.3 ? '✓' : entropy < 0.6 ? '⚠' : '⛔';
 const entropyLabel = entropy !== null
   ? `${entropy.toFixed(3)}  ${entropy < 0.3 ? '(healthy)' : entropy < 0.6 ? '(elevated)' : '(high)'}`
   : 'not computed';
 
-// ── Velocity history (last 5 session velocities from SIL entries) ──────────
-// Velocity history from inline-metric session headers (format A), newest→oldest → reverse to chronological.
 const velEntries  = [...sil.matchAll(/##[^\n]*?\bSession\s+\d+\b[^\n]*Velocity:\s*(\d+)/g)].map(m => parseInt(m[1])).reverse();
 const velLast5    = velEntries.slice(-5);
 const velBar      = v => v === 0 ? '▁' : v <= 2 ? '▂' : v <= 5 ? '▄' : v <= 8 ? '▆' : v <= 12 ? '▇' : '█';
 const velHistBar  = velLast5.length > 0 ? velLast5.map(velBar).join('') : sparkline;
 
-// ── Handoff "shipped" line ────────────────────────────────────────────────────
 const handoffBlock = handoff.match(/^## Where We Left Off \([^)]+\)\n([\s\S]*?)(?=\n---|\n## )/m)?.[1]?.trim() ?? '';
 const shippedLine  = handoffBlock.match(/^- Shipped:\s*(.+)$/m)?.[1] ?? 'see LATEST_HANDOFF.md';
 
-// ── Signal thresholds ─────────────────────────────────────────────────────────
 function sig(val, green, warn) {
-  // green fn, warn fn — if green(val) → ✓, if warn(val) → ⚠, else ⛔
   if (green(val)) return '✓';
   if (warn(val))  return '⚠';
   return '⛔';
 }
-// Runway is qualitative ("strong"/"healthy") OR quantitative ("~3 sessions"). Never match embedded version numbers like "v1.3".
 const runwayQualitative = /\b(strong|healthy|robust)\b/i.test(runwayRaw);
 const runwayWeak = /\b(weak|low|critical|depleted|empty)\b/i.test(runwayRaw);
 const runwayNumMatch = runwayRaw.match(/~\s*([\d.]+)\s*(?:session|sprint|run)/i);
@@ -678,11 +486,6 @@ const runwayNum = runwayNumMatch ? parseFloat(runwayNumMatch[1])
                 : runwayQualitative ? 9
                 : runwayWeak ? 1
                 : 5;
-// G1 S121 — prefer fresh .cache/test-count.json (from refresh-test-count.mjs) over PROJECT_STATUS values.
-// S181 [audit #2] — freshness guard: the cache silently went stale (179 files cached
-// while the live suite had 225), so the brief reported a confident-but-wrong count.
-// Flag the count stale when the cache is >24h old OR predates the newest test file
-// — a stale count is surfaced as such, never as fresh truth (CANON-031).
 let testsStale = false;
 try {
   const tcPath = path.join(root, '.cache', 'test-count.json');
@@ -718,7 +521,6 @@ function compactFileList(files, max = 2) {
   return names.join(', ') + (extra ? ` +${extra}` : '');
 }
 
-// Prefer explicit pass/total from run-tests; fall back to testsTotal only; then exempt; else warn.
 const testsExempt = !status.testsTotal && (status.audience === 'internal' || status.type === 'infrastructure' || status.type === 'internal-ops') && !status.testsPassing;
 let sigTests, testsLabel;
 if (typeof status.testsPassing === 'number' && typeof status.testsTotal === 'number' && status.testsTotal > 0) {
@@ -780,9 +582,6 @@ function buildGeniusBoxFromMarkdown(markdown) {
   if (entries.length === 0) return '';
 
   const out = [top('GENIUS HIT LIST')];
-  // S211 [SIL S209 #2]: surface the IGNIS rank source so a fallback-degraded list
-  // (D-S209.4 — once ~2mo stale on fallback while live was reachable) is never
-  // silent. Parsed from the GENIUS_LIST.md header (`**Rank source:** live`).
   const rankMatch = markdown.match(/\*\*Rank source:\*\*\s*(\w+)/i);
   if (rankMatch) {
     const src = rankMatch[1].toLowerCase();
@@ -806,174 +605,16 @@ function buildGeniusBoxFromMarkdown(markdown) {
   return out.join('\n');
 }
 
-// ── Cross-repo TASK_BOARD aggregation ─────────────────────────────────────────
-let portfolioTasks = null;
-try { portfolioTasks = loadPortfolioTaskBoards({ studioRoot: root, currentRepoPath: root }); } catch { /* best-effort */ }
+const portfolioTaskBoardBlock = loadPortfolioTaskBoardBlock({ root });
+const founderUnlocksBlock = renderFounderUnlocksBlock({ root, taskBoard });
 
-function buildPortfolioBoxLines() {
-  if (!portfolioTasks?.byProject?.length) return null;
-  const t = portfolioTasks.totals;
-  const out = [top('PORTFOLIO TASK BOARDS')];
-  out.push(row(`Total: ${t.remaining} open · ${t.unblocked} unblocked · ${t.blocked} blocked`));
-  out.push(row(`Crit ${t.critical} · High ${t.high} · ${portfolioTasks.projectsWithWork}/${portfolioTasks.projectsScanned} repos active`));
-  out.push(blank());
-  // Top-2 pattern keeps the founder-mode brief under the 15KB hard cap even
-  // when the orchestrator and human-pressure tiles are present. The long tail
-  // is one ops command away via cross-repo-tasks.mjs.
-  const allActive = portfolioTasks.byProject.filter(p => p.present && p.remaining > 0);
-  const active = allActive.slice(0, 1);
-  for (const p of active) {
-    const marker = p.isCurrent ? '>' : ' ';
-    const nm = (p.name || p.slug || '').slice(0, 24).padEnd(24);
-    const line = `${marker} ${nm} ${String(p.remaining).padStart(3)} open · ${String(p.unblocked).padStart(2)} unblk · C${String(p.critical).padStart(2)} H${String(p.high).padStart(2)}`;
-    out.push(row(line.slice(0, W)));
-  }
-  const hidden = allActive.length - active.length;
-  if (hidden > 0) out.push(row(`  … +${hidden} more — run: node scripts/lib/cross-repo-tasks.mjs`));
-  out.push(bot());
-  return out.join('\n');
-}
-
-function buildOrchestratorBox() {
-  const active = readJson(path.join(root, 'portfolio', 'ACTIVE_SESSIONS.json'), null);
-  const pending = readJson(path.join(root, 'portfolio', 'PENDING_PROPAGATION.json'), null);
-  const activeSessions = Array.isArray(active?.activeSessions) ? active.activeSessions : [];
-  const staleLocks = Array.isArray(active?.staleLocks) ? active.staleLocks : [];
-  const conflicts = Array.isArray(active?.conflicts) ? active.conflicts : [];
-  const generatedAt = active?._generatedAt ? new Date(active._generatedAt).getTime() : null;
-  const snapshotAgeMin = generatedAt ? Math.max(0, Math.round((Date.now() - generatedAt) / 60000)) : null;
-  const snapshotLabel = snapshotAgeMin == null
-    ? 'snapshot unknown'
-    : snapshotAgeMin < 60
-      ? `${snapshotAgeMin}m old`
-      : `${Math.round(snapshotAgeMin / 60)}h old`;
-
-  const pendingItems = (() => {
-    if (!pending) return [];
-    const raw = Array.isArray(pending) ? pending : (pending.pending || pending.queue || Object.values(pending));
-    return Array.isArray(raw) ? raw.filter(Boolean) : [];
-  })();
-  const locked = new Set(activeSessions.map(s => s.slug));
-  const lockedPending = pendingItems.filter(item => locked.has(item.slug)).length;
-
-  const arkCount = (() => {
-    const cutoff = Date.now() - 24 * 3600 * 1000;
-    const dir = path.join(root, 'portfolio', 'ark', 'log');
-    try {
-      return fs.readdirSync(dir)
-        .filter(f => f.endsWith('.ndjson'))
-        .flatMap(f => readText(path.join(dir, f)).split(/\r?\n/).filter(Boolean))
-        .reduce((count, line) => {
-          try {
-            const item = JSON.parse(line);
-            const ts = new Date(item.ts || item.timestamp || item.shippedAt || 0).getTime();
-            return ts >= cutoff ? count + 1 : count;
-          } catch {
-            return count;
-          }
-        }, 0);
-    } catch {
-      return 0;
-    }
-  })();
-
-  const untracked = (() => {
-    const detector = path.join(root, 'scripts', 'detect-new-dev-folders.mjs');
-    if (!fs.existsSync(detector)) return null;
-    try {
-      const res = spawnSync(node, [detector, '--json'], { cwd: root, encoding: 'utf8', timeout: 5000 });
-      return res.status === 0 && res.stdout ? JSON.parse(res.stdout) : null;
-    } catch {
-      return null;
-    }
-  })();
-  const projectLike = untracked?.categories?.projectLike?.length ?? 0;
-  const scratch = untracked?.categories?.scratch?.length ?? 0;
-
-  const out = [top('ORCHESTRATOR')];
-  out.push(row(`Workers: ${activeSessions.length}/${active?.portfolio?.totalProjects ?? '?'} active · ${staleLocks.length} stale · ${conflicts.length} conflicts`));
-  out.push(row(`Snapshot: ${snapshotLabel} · next ${active?.recommendedNextRepo?.slug || 'n/a'}`.slice(0, W)));
-  out.push(row(`Propagation: ${pendingItems.length} queued · ${lockedPending} lock-blocked`));
-  out.push(row(`Ark: ${arkCount} cargo in 24h · full view: node scripts/orchestrate.mjs`));
-  out.push(row(`Untracked: ${projectLike} project-like · ${scratch} scratch`));
-  out.push(bot());
-  return out.join('\n');
-}
-
-// ── FOUNDER UNLOCKS — outstanding human actions that reopen sprint surface ───
-import { ensureAges, daysSince } from './lib/human-action-ages.mjs';
-function buildFounderUnlocksBox() {
-  const humanSection = (() => {
-    const parts = taskBoard.split(/^## /m);
-    const m = parts.find(p => p.startsWith('Human Action Required'));
-    if (!m) return '';
-    const nl = m.indexOf('\n');
-    return nl === -1 ? '' : m.slice(nl + 1);
-  })();
-  const items = humanSection.split(/\r?\n/).filter(l => /^- \[ \]/.test(l)).slice(0, 2);
-  if (items.length === 0) return null;
-  // Backfill first-seen dates so items without ~N sessions notation still age.
-  const ledger = ensureAges(taskBoard, { root });
-  const out = [top('FOUNDER UNLOCKS')];
-  out.push(row('Single founder actions that reopen sprint surface:'));
-  for (const line of items) {
-    const clean = line.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '');
-    const ageMatch = clean.match(/~?(\d+)\s*sessions/);
-    const title = clean.split(/\s+—\s+/)[0];
-    let age;
-    if (ageMatch) {
-      age = `${ageMatch[1]}s`;
-    } else if (ledger[title]?.firstSeen) {
-      const d = daysSince(ledger[title].firstSeen);
-      age = d === 0 ? 'today' : `${d}d`;
-    } else {
-      age = 'new';
-    }
-    out.push(row(`${age.padStart(5)} · ${title.slice(0, W - 12)}`));
-  }
-  out.push(bot());
-  return out.join('\n');
-}
-
-// ── IGNIS INSIGHT summary ─────────────────────────────────────────────────────
 const ignisInsight = (() => { try { return loadIgnisInsight({ studioRoot: root }); } catch { return { present: false }; } })();
 
-function buildIgnisInsightBox() {
-  if (!ignisInsight?.present) return null;
-  const out = [top('IGNIS INSIGHT')];
-  if (ignisInsight.generated) out.push(row(`Synth:    ${ignisInsight.generated} (${ignisInsight.daysSinceSynth}d old) · ${ignisInsight.phase || ''}`.slice(0, W)));
-  if (ignisInsight.avgIq) out.push(row(`Avg IQ:   ${ignisInsight.avgIq}`.slice(0, W)));
-  if (ignisInsight.coverage) out.push(row(`Coverage: ${ignisInsight.coverage}`.slice(0, W)));
-  if (ignisInsight.topProject) out.push(row(`Top:      ${ignisInsight.topProject}`.slice(0, W)));
-  if (ignisInsight.topRisk) out.push(row(`Top risk: ${ignisInsight.topRisk}`.slice(0, W)));
-  if (ignisInsight.truthMix) out.push(row(`Truth:    ${ignisInsight.truthMix}`.slice(0, W)));
-  if (ignisInsight.firstAction) out.push(row(`Do next:  ${ignisInsight.firstAction}`.slice(0, W)));
-  if (ignisInsight.summaryLead) out.push(row(`Summary:  ${ignisInsight.summaryLead}`.slice(0, W)));
-  out.push(bot());
-  return out.join('\n');
-}
+const ignisInsightBlock = renderIgnisInsightBlock(ignisInsight);
+const externalSignalsBlock = renderExternalSignalsBlock({ root });
 
-// ── External signal summary ──────────────────────────────────────────────────
-function buildExternalSignalsBox() {
-  const log = readText(path.join(root, 'portfolio', 'EXTERNAL_SIGNAL_LOG.md'));
-  if (!log) return null;
-  const entries = log.split(/^### /m).slice(1);
-  if (entries.length === 0) return null;
-  const latest = entries[entries.length - 1];
-  const title = latest.split(/\r?\n/)[0]?.trim() || 'latest signal';
-  const body = latest.split(/\r?\n/).slice(1).join(' ').replace(/\s+/g, ' ').trim();
-  const out = [top('EXTERNAL SIGNALS')];
-  out.push(row(`${entries.length} logged · latest: ${title}`.slice(0, W)));
-  if (body) out.push(row(body.slice(0, W)));
-  out.push(bot());
-  return out.join('\n');
-}
-
-// ── Genius list: call generate-genius-list.mjs --brief ────────────────────────
 let geniusBlock = '';
 try {
-  // --top 8: the brief is a fast-boot surface and must stay under the 15KB hard
-  // budget (validate-brief-format). Full ranked list lives in docs/GENIUS_LIST.md.
   const res = spawnSync(node, [path.join(root, 'scripts', 'generate-genius-list.mjs'), '--brief', '--top', '8'], {
     cwd: root,
     encoding: 'utf8',
@@ -988,12 +629,6 @@ if (!geniusBlock) {
   geniusBlock = [top('GENIUS HIT LIST'), row('Run `node scripts/ops.mjs genius-list` to generate fresh recommendations.'), bot()].join('\n');
 }
 
-// ── Brief integrity self-assertion (S142 audit item 2) ──────────────────────
-// The brief is the SOLE context source for every session. A three-way coherence
-// check makes silent staleness impossible: the SIL log, PROJECT_STATUS.json, and
-// the rendered headline must agree on the latest session. On divergence we either
-// self-heal (PROJECT_STATUS lag) or render a ⛔ STALE BRIEF banner that the
-// validator turns into a hard /start stop.
 const statusLatest = (typeof status.currentSession === 'number') ? status.currentSession : null;
 let briefCoherent = true;
 let staleReason = '';
@@ -1004,13 +639,9 @@ if (silMaxSession == null) {
   briefCoherent = false;
   staleReason = `SIL session S${silMaxSession} has no parseable Total — headline score is untrustworthy.`;
 } else if (statusLatest != null && statusLatest !== silMaxSession) {
-  // PROJECT_STATUS.json lagged the SIL log (the historical failure mode). Self-heal it.
   try {
     const statusPath = path.join(root, 'context', 'PROJECT_STATUS.json');
     const live = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
-    // Sync ONLY the session number. silScore/silCategoriesV3 are owned by the
-    // closeout SIL scorer — writing silScore here would desync it from the
-    // category breakdown (tier1-sil-migration invariant: score == sum(categories)).
     live.currentSession = silMaxSession;
     fs.writeFileSync(statusPath, JSON.stringify(live, null, 2) + '\n', 'utf8');
     console.log(`  ↻ self-heal: PROJECT_STATUS.currentSession ${statusLatest} → ${silMaxSession} (synced from SIL log)`);
@@ -1025,7 +656,6 @@ const staleBanner = briefCoherent ? null : [
   bot(),
 ].join('\n');
 
-// ── Build the brief ───────────────────────────────────────────────────────────
 const pct = silTotal > 0 ? `${Math.round(silTotal / silMax * 100)}%` : '?%';
 
 const lines = [
@@ -1063,10 +693,8 @@ const lines = [
   ...(Array.isArray(status.testingSurfaces) && status.testingSurfaces.length
     ? [renderTestItNow({ name: status.name || 'Studio Ops', testingSurfaces: status.testingSurfaces }), ``]
     : []),
-  // S126 audit #28: PROJECT_PROFILE lens header
   renderProfileLensHeader(),
   ``,
-  // ── SCORE box (v4.0 — 10-category breakdown + sparklines) ──────────────────
   ...renderStartupScoreBlock({
     silTotal, silMax, bar24, pct, avg3Raw, velocity, velTrend, silStreak,
     daysSinceActive, daysSinceClosedOut, velHistBar, sparkline, velLast5,
@@ -1075,24 +703,17 @@ const lines = [
     lastCoherence, lastSecurity, lastEcosystem, lastCapital, lastAutomation,
   }).split('\n'),
   ``,
-  // ── WHERE WE LEFT OFF ──────────────────────────────────────────────────────
   top(`WHERE WE LEFT OFF  ·  Session ${currentSession - 1}`),
   row(`Shipped:  ${shippedLine.slice(0, W - 10)}`),
-  // S181 [audit #2] — was `${testsTotal} passing`, which labelled the TOTAL as
-  // PASSING (179 "passing" while 10 failed) — a CANON-031 lying surface that
-  // contradicted the SIGNALS block. Show passing/total, matching testsLabel.
   row(`Tests:    ${typeof status.testsPassing === 'number' ? `${status.testsPassing}/${status.testsTotal ?? '?'}` : (status.testsTotal ?? '?')} passing  ·  Deploy: ${status.lastDeployStatus || 'N/A'}`),
   bot(),
   ``,
-  // ── CONTEXT METER (S119 founder directive — was buried, now first-class) ──
   ...renderStartupContextMeterBlock(meter, { row, top, bot }).split('\\n'),
   ``,
-  // ── SIGNALS ────────────────────────────────────────────────────────────────
   top('SIGNALS'),
   row(`${sigTests}  Tests         ${testsLabel}`),
   row(`${sigVel}  Velocity      ${velocity} ${velTrend}  ·  Debt: ${debtRaw}`),
   row(`${sigRun}  Runway        ${runwayRaw}`),
-  // Headroom moved to dedicated CONTEXT METER block above (S119).
   row(`${sigCtx}  Context age   ${ctxAge}d`),
   row(`${sigIgnis}  IGNIS         ${status.ignisScore ?? '?'} ${status.ignisGrade || ''}  ·  ${ignisAge}d old`),
   row(`${sigTruth}  Truth         ${truthStatus}  ·  Genome: ${status.truthGenome || '?'}`),
@@ -1108,18 +729,12 @@ const lines = [
   row(`${sigCost}  Cost          ${costDetail}`),
   bot(),
   ``,
-  // ── IGNIS INSIGHT ──────────────────────────────────────────────────────────
-  ...(buildIgnisInsightBox() ? [buildIgnisInsightBox(), ``] : []),
-  // ── EXTERNAL SIGNALS ───────────────────────────────────────────────────────
-  ...(buildExternalSignalsBox() ? [buildExternalSignalsBox(), ``] : []),
-  // ── FOUNDER UNLOCKS ────────────────────────────────────────────────────────
-  ...(buildFounderUnlocksBox() ? [buildFounderUnlocksBox(), ``] : []),
-  // ── PORTFOLIO TASK BOARDS ──────────────────────────────────────────────────
-  ...(buildPortfolioBoxLines() ? [buildPortfolioBoxLines(), ``] : []),
-  // ── ORCHESTRATOR ───────────────────────────────────────────────────────────
-  buildOrchestratorBox(),
+  ...(ignisInsightBlock ? [ignisInsightBlock, ``] : []),
+  ...(externalSignalsBlock ? [externalSignalsBlock, ``] : []),
+  ...(founderUnlocksBlock ? [founderUnlocksBlock, ``] : []),
+  ...(portfolioTaskBoardBlock ? [portfolioTaskBoardBlock, ``] : []),
+  renderOrchestratorBlock({ root, node }),
   ``,
-  // ── PREDICTION ─────────────────────────────────────────────────────────────
   ...(planFresh && planPredSIL ? [
     top('PREDICTION  ·  SESSION_PLAN.md'),
     row(`Next session:  ${planPredSIL}${planTrend ? `  ·  ${planTrend}` : ''}`),
@@ -1127,74 +742,11 @@ const lines = [
     bot(),
     ``,
   ] : []),
-  ...(intentLine ? [
-    top('EXECUTION PLAN'),
-    row(`Intent:        ${intentLine.slice(0, W - 15)}`),
-    ...(repoTouchLine ? [row(`Repo touch:    ${repoTouchLine.slice(0, W - 15)}`)] : []),
-    ...(yieldLine ? [row(`Expected:      ${yieldLine.slice(0, W - 15)}`)] : []),
-    bot(),
-    ``,
-  ] : []),
-  // Now/Next/Blocked buckets removed — Unified Genius List is the single
-  // recommendation surface. Blocked count surfaces in SIGNALS + GENIUS LIST.
-  ...(topPressure ? [
-    top('HUMAN PRESSURE'),
-    row(`Top item:      ${topPressure.title.slice(0, W - 15)}`),
-    row(`Pressure:      ${topPressure.pressureScore} · ${topPressure.pressureBand}`),
-    row(`Next action:   ${topPressure.nextAgentAction.slice(0, W - 15)}`),
-    bot(),
-    ``,
-  ] : []),
-  // ── v4.0: SESSION VOICE (personable cue) ────────────────────────────────────
-  // Suppressed S116 #623 — low-signal flavor block was pushing brief over the
-  // 15KB brief-golden cap. v4.1 spec already drops this. Re-enable behind a
-  // flag if needed, but keep brief lean for token-cost reasons.
+  ...renderExecutionPlanBlock({ intentLine, repoTouchLine, yieldLine }),
+  ...renderHumanPressureBlock(topPressure),
   ...[],
-  // ── v4.0: MOMENTUM METER (velocity + intent + streak + cost) ────────────────
-  top('MOMENTUM METER'),
-  row(`Velocity:   ${velHistBar || '—'}  ${velocity}${velTrend || '→'}  (last 5 sessions)`),
-  row(`Intent:     ${intentPct || '?'}% achieved last 5`),
-  row(`Streak:     ${streak > 0 ? `✓ ${streak} consecutive achieved-intent session${streak > 1 ? 's' : ''}` : '— (last intent not achieved)'}`),
-  ...(cacheHitPct !== null ? [row(`Cache hit:  ${cacheHitPct}%  ${cacheHitPct >= 60 ? '✓ meeting target' : '⚠ below 60% target'}`)] : []),
-  ...(weeklyCost !== null ? [row(`Weekly spend: $${weeklyCost.toFixed(2)}`)] : []),
-  bot(),
-  ``,
-  // ── SIL FORECAST (S114 audit #3) ──────────────────────────────────────────
-  ...(() => {
-    try {
-      const silTxt = fs.readFileSync(path.join(root, 'context', 'SELF_IMPROVEMENT_LOOP.md'), 'utf8');
-      const sessions = parseSilHistory(silTxt);
-      if (!sessions.length) return [];
-      const f = forecastNext(sessions, { velocity, blockerPressure: 87, contextAge: 0 });
-      if (!f) return [];
-      const diff = f.totalPredicted - sessions[0].total;
-      const arrow = diff > 0 ? '↑' : diff < 0 ? '↓' : '→';
-      const risky = Object.entries(f.categories)
-        .filter(([, x]) => x.delta != null && x.delta <= -3)
-        .sort((a, b) => a[1].delta - b[1].delta).slice(0, 3);
-      // S124 #10 — actionable mitigations from portfolio/SIL_MITIGATIONS.json
-      let mitigationRow = null;
-      if (risky.length) {
-        try {
-          const mit = JSON.parse(fs.readFileSync(path.join(root, 'portfolio', 'SIL_MITIGATIONS.json'), 'utf8'));
-          const [topRiskCat] = risky[0];
-          const m = mit.mitigations?.[topRiskCat];
-          if (m?.hint) mitigationRow = row(`Mitigation: ${m.hint.slice(0, 56)}`);
-        } catch {}
-      }
-      return [
-        top('SIL FORECAST (next session)'),
-        row(`Projected:  ${f.totalPredicted}/1000  (${arrow}${Math.abs(diff)} vs current ${sessions[0].total})`),
-        ...(risky.length
-          ? [row(`At-risk:    ${risky.map(([c, x]) => `${c} Δ${x.delta}`).join(' · ')}`)]
-          : [row(`All categories forecast stable or rising.`)]),
-        ...(mitigationRow ? [mitigationRow] : []),
-        bot(),
-        ``
-      ];
-    } catch { return []; }
-  })(),
-  // ── GENIUS HIT LIST ────────────────────────────────────────────────────────
+  ...renderMomentumMeterBlock({ velHistBar, velocity, velTrend, intentPct, streak, cacheHitPct: null, weeklyCost: null }),
+  ...renderSilForecastBlock({ root, velocity, currentTotal: silTotal }),
   geniusBlock,
   ``,
   `\`\`\``,
@@ -1205,80 +757,32 @@ const lines = [
   `*Run \`node scripts/ops.mjs doctor\` for live health check · \`node scripts/ops.mjs genius-list\` to refresh hit list*`,
 ];
 
-// S154 audit #4 — enforce per-tile byte budgets at the source. Overflowing
-// tiles are trimmed with an explicit marker (never silently — CANON-031).
-let briefBody = lines.join('\n');
-try {
-  const { enforceTileBudgets } = await import('./validate-brief-format.mjs');
-  const r = enforceTileBudgets(briefBody);
-  briefBody = r.body;
-  for (const t of r.trimmed) console.log(`  ✂ tile trimmed to budget: ${t.title} (−${t.dropped} lines, cap ${(t.budget / 1024).toFixed(1)}KB)`);
-} catch { /* budget enforcement is advisory at render time */ }
-fs.writeFileSync(outputPath, briefBody, 'utf8');
-console.log(`✓ Startup brief → docs/STARTUP_BRIEF.md  (v3.2)`);
-console.log(`  Session ${currentSession} · SIL ${silTotal}/${silMax} · ${pct} · Unblocked ${openNow.length} / Blocked ${openBlocked.length}`);
-console.log(`  Signals: tests ${sigTests}  velocity ${sigVel}  runway ${sigRun}  genome ${sigGenome}  entropy ${sigEntropy}  cdr ${sigCdr}  patterns ${sigPatterns}  templates ${sigVer}  revenue ${sigRev}`);
-
-// ── R-H15 (S118 G4): record skill cost telemetry on every /start render ──────
-try {
-  const { recordSkillCost } = await import('./lib/skill-cost-ledger.mjs');
-  const briefBytes = Buffer.byteLength(lines.join('\n'), 'utf8');
-  const actualTokens = Math.ceil(briefBytes / 4);
-  recordSkillCost(root, {
-    skill: 'start',
-    sessionId: `S${currentSession}`,
-    actualTokens,
-    status: 'completed',
-  });
-} catch (err) {
-  // non-fatal — telemetry is advisory
-  process.stderr.write(`  ⚠ skill-cost-ledger record skipped: ${err.message}\n`);
-}
-
-// ── Audit S119 #11: dual-render mode for measured v5 savings ────────────────
-// Set STUDIO_BRIEF_V5=compare to also emit v5 and log size delta. Use
-// STUDIO_BRIEF_V5=1 (or --v5) to promote v5 as the source of /start. Default
-// (no flag) keeps v3.1 — full cutover blocked on measured-comparable session.
-// S120 audit #12 — v5 now default when `.cache/brief-v5-canonical` flag file
-// exists (set once at promotion). Env override still honored.
-const v5FlagFile = path.join(root, '.cache', 'brief-v5-canonical');
-const v5Mode = process.env.STUDIO_BRIEF_V5
-  || (process.argv.includes('--v5') ? '1' : null)
-  || (fs.existsSync(v5FlagFile) ? '1' : 'off');
-if (v5Mode !== 'off') {
-  try {
-    const v5Path = path.resolve(__dirname, 'render-startup-brief-v5.mjs');
-    if (fs.existsSync(v5Path)) {
-      const res = spawnSync(node, [v5Path], { cwd: root, stdio: 'inherit' });
-      if (res.status === 0) {
-        const v3Bytes = Buffer.byteLength(lines.join('\n'), 'utf8');
-        const v5File = path.join(root, 'docs', 'STARTUP_BRIEF_V5.md');
-        if (fs.existsSync(v5File)) {
-          const v5Bytes = fs.statSync(v5File).size;
-          const reductionPct = Math.round(((v3Bytes - v5Bytes) / v3Bytes) * 100);
-          console.log(`  ◆ brief-v5 compare: v3=${v3Bytes}b v5=${v5Bytes}b  (${reductionPct}% reduction)`);
-          if (v5Mode === '1' || v5Mode === 'promote') {
-            // S209 [audit #2] — promotion guard. v5 must not overwrite the
-            // canonical brief unless it passes the same validator /start uses AND
-            // carries no unresolved computed-block stub. This is the safety net
-            // that stops a half-built v5 (e.g. an unwired SIGNALS/HUMAN PRESSURE
-            // resolver) from silently becoming the founder's primary surface.
-            const v5Text = fs.readFileSync(v5File, 'utf8');
-            const hasStub = /\{"script":\s*"/.test(v5Text);
-            const valid = spawnSync(node, [path.join(__dirname, 'validate-brief-format.mjs'), v5File], { cwd: root });
-            if (hasStub || valid.status !== 0) {
-              console.error(`  ⚠ brief-v5 promotion BLOCKED — ${hasStub ? 'unresolved computed-block stub' : 'failed validate-brief-format'}; keeping v3.1 canonical.`);
-            } else {
-              fs.copyFileSync(v5File, outputPath);
-              console.log(`  ◆ brief-v5 promoted → docs/STARTUP_BRIEF.md`);
-            }
-          }
-        }
-      }
-    }
-  } catch (err) {
-    process.stderr.write(`  ⚠ v5 dual-render skipped: ${err.message}\n`);
-  }
-}
-
-
+const summaryItems = parseUnifiedItems(taskBoard);
+const openNow = summaryItems.filter(item => item.status === 'unblocked');
+const openBlocked = summaryItems.filter(item => BLOCKED_STATUSES_CORE.includes(item.status));
+const signals = [
+  sigTests + '  Tests',
+  sigVel + '  velocity',
+  sigRun + '  runway',
+  sigGenome + '  genome',
+  sigEntropy + '  entropy',
+  sigCdr + '  cdr',
+  sigPatterns + '  patterns',
+  sigVer + '  templates',
+  sigRev + '  revenue',
+];
+await writeStartupBriefWithTelemetry({
+  root,
+  scriptsDir: __dirname,
+  node,
+  outputPath,
+  briefBody: lines.join('\n'),
+  currentSession,
+  silTotal,
+  silMax,
+  pct,
+  openNow,
+  openBlocked,
+  signals,
+  today,
+});

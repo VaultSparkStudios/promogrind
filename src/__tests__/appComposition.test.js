@@ -4,6 +4,8 @@ import path from "node:path";
 
 const appPath = path.join(process.cwd(), "src", "App.jsx");
 const appSource = fs.readFileSync(appPath, "utf8");
+const appLazyPath = path.join(process.cwd(), "src", "app", "appLazyComponents.js");
+const ownershipSource = appSource + "\n" + fs.readFileSync(appLazyPath, "utf8");
 
 describe("App.jsx composition boundary", () => {
   it("keeps extracted shell helpers out of the monolith", () => {
@@ -13,7 +15,7 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const CSVImportModal\s*=/);
     expect(appSource).not.toMatch(/const StateLegalAlert\s*=/);
     expect(appSource).not.toMatch(/const DailyDashboard\s*=\s*\(\{/);
-    expect(appSource).toContain("./components/dashboard/DailyDashboard.jsx");
+    expect(ownershipSource).toContain("../components/dashboard/DailyDashboard.jsx");
     expect(appSource).not.toMatch(/const IncomeEstimator\s*=/);
     expect(appSource).not.toMatch(/const RolloverCalc\s*=/);
     expect(appSource).not.toMatch(/const OddsConvert\s*=/);

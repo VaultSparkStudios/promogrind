@@ -7,6 +7,8 @@ import path from 'node:path';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { scanShellNodeSpawns } from './check-windows-hide.mjs';
 import { buildHeuristicContextMeter, loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
+import { renderOrchestratorBlock, renderPortfolioTaskBoardsBlock } from './lib/startup-orchestrator-blocks.mjs';
+import { renderExecutionPlanBlock, renderMomentumMeterBlock } from './lib/startup-summary-blocks.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const json = process.argv.includes('--json');
@@ -124,6 +126,79 @@ run('startup context meter block renders normalized live payload', () => {
   assert.ok(rows.some((line) => line.includes('12,345 / 1,000,000 tok')));
   assert.ok(rows.some((line) => line.includes('cache 50%')));
   assert.ok(rows.some((line) => line.includes('Verdict: CONTINUE')));
+});
+
+run('startup orchestrator block summarizes live coordination state', () => {
+  const block = renderOrchestratorBlock({
+    root: ROOT,
+    active: {
+      _generatedAt: '2026-07-01T12:00:00.000Z',
+      activeSessions: [{ slug: 'promogrind' }],
+      staleLocks: [{}],
+      conflicts: [{ slug: 'other' }],
+      portfolio: { totalProjects: 27 },
+      recommendedNextRepo: { slug: 'promogrind' },
+    },
+    pending: { pending: [{ slug: 'promogrind' }, { slug: 'studio-ops' }] },
+    now: Date.parse('2026-07-01T12:30:00.000Z'),
+    runDetector: () => ({
+      status: 0,
+      stdout: JSON.stringify({ categories: { projectLike: ['new-app'], scratch: ['tmp-note'] } }),
+    }),
+  });
+
+  assert.ok(block.includes('ORCHESTRATOR'));
+  assert.ok(block.includes('Workers: 1/27 active · 1 stale · 1 conflicts'));
+  assert.ok(block.includes('Snapshot: 30m old · next promogrind'));
+  assert.ok(block.includes('Propagation: 2 queued · 1 lock-blocked'));
+  assert.ok(block.includes('Untracked: 1 project-like · 1 scratch'));
+});
+
+run('startup portfolio task-board block keeps top active repo compact', () => {
+  const block = renderPortfolioTaskBoardsBlock({
+    totals: { remaining: 7, unblocked: 3, blocked: 2, critical: 1, high: 4 },
+    projectsWithWork: 2,
+    projectsScanned: 5,
+    byProject: [
+      { present: true, isCurrent: true, name: 'PromoGrind', remaining: 3, unblocked: 2, critical: 1, high: 2 },
+      { present: true, isCurrent: false, name: 'Studio Ops', remaining: 4, unblocked: 1, critical: 0, high: 2 },
+    ],
+  });
+
+  assert.ok(block.includes('PORTFOLIO TASK BOARDS'));
+  assert.ok(block.includes('Total: 7 open · 3 unblocked · 2 blocked'));
+  assert.ok(block.includes('Crit 1 · High 4 · 2/5 repos active'));
+  assert.ok(block.includes('> PromoGrind'));
+  assert.ok(block.includes('+1 more'));
+});
+
+run('startup execution plan block is compact and optional', () => {
+  assert.deepEqual(renderExecutionPlanBlock({ intentLine: '' }), []);
+  const lines = renderExecutionPlanBlock({
+    intentLine: 'Ship the next startup renderer extraction safely',
+    repoTouchLine: 'promogrind',
+    yieldLine: 'validated helper extraction',
+  });
+  assert.equal(lines[0].includes('EXECUTION PLAN'), true);
+  assert.ok(lines.some((line) => line.includes('Ship the next startup renderer')));
+  assert.ok(lines.some((line) => line.includes('Repo touch:')));
+});
+
+run('startup momentum block preserves velocity and cache signals', () => {
+  const block = renderMomentumMeterBlock({
+    velHistBar: '█▆▄▄▄',
+    velocity: 2,
+    velTrend: '↑',
+    intentPct: 100,
+    streak: 3,
+    cacheHitPct: 75,
+    weeklyCost: 0.1,
+  }).join('\n');
+  assert.ok(block.includes('MOMENTUM METER'));
+  assert.ok(block.includes('Velocity:'));
+  assert.ok(block.includes('100% achieved'));
+  assert.ok(block.includes('Cache hit:  75%'));
+  assert.ok(block.includes('Weekly spend: $0.10'));
 });
 const summary = {
   ok: results.every(r => r.pass),

@@ -470,3 +470,15 @@ Append chronological entries.
 - Added focused regression coverage for normalized context-meter tile output in `scripts/test-studio-script-regressions.mjs`.
 - Verification: syntax checks passed; script regressions passed 6/6 after approved sandbox bypass; startup brief render/validation passed; windows-hide passed; `npm test` passed 511/511; `npm run verify:launch-local` passed end to end; doctor passed 12/12 with `blockingFailing: 0`.
 - Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key evidence still require real external proof; no proof was fabricated.
+
+## 2026-07-01 - Session 112 Codex goal arc
+
+- Ran the requested continuous `/goal` + `/arc` mission: `/start` -> `/audit` -> `/implement` -> `/closeout`.
+- Startup: `git pull --rebase origin main` was already up to date; context meter said CONTINUE; blocker preflight reported 0 Human Action Required items; clean-tree triage meant no recovery was needed.
+- Audit: primary genius list was empty; generated/refreshed innovation-pack evidence until all repo-owned large-file maintainability items were exhausted.
+- Shipped startup brief decomposition: `render-startup-brief.mjs` now delegates orchestration, summary, and output responsibilities to focused helpers and is below threshold.
+- Shipped app shell decomposition: auth/session behavior moved to `usePromoAuthSession`, lazy route declarations moved to `appLazyComponents`, and `App.jsx` is below threshold.
+- Shipped sync decomposition: `loadData` tests split into `sync.loadData.test.js`, workflow persistence moved to `sync-workflows.js`, and `sync.js` is below threshold.
+- Shipped UserMenu threshold cleanup: `UserMenu.jsx` is below threshold without behavior changes.
+- Verification: doctor 12/12 blockingFailing 0; focused script/app/sync tests green; `npm test` passed 511/511; `npm run verify:launch-local` passed end to end with strict sanitization clean.
+- Honest deferral: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture public-key proof still require real external evidence/action.
