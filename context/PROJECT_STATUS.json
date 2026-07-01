@@ -44,7 +44,7 @@
   "testsPassing": 511,
   "testsTotal": 511,
   "testsLastRun": "2026-07-01",
-  "lastDeployStatus": "S112 pushed to main through a075614; GitHub Actions CI run 28535934342 and Deploy Pages run 28535934286 both completed successfully, including production dashboard smoke.",
+  "lastDeployStatus": "Latest main is fully deployed through GitHub Pages after manual workflow_dispatch when closeout-only files change; production launch verification and dashboard smoke pass with 0 blocking failures.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-07-01",
   "truthGenome": "24/25",
@@ -74,7 +74,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live; latest main a075614 has green GitHub Actions CI 28535934342 and Deploy Pages 28535934286, including production dashboard smoke"
+      "status": "live; latest main is deployed via GitHub Pages workflow_dispatch after closeout-only commits, with production launch verification and dashboard smoke passing with 0 blocking failures"
     },
     {
       "type": "cloudflare",

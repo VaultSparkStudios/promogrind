@@ -490,3 +490,10 @@ Append chronological entries.
 - Remote verification: GitHub Actions CI run `28535934342` succeeded, and Deploy Pages run `28535934286` succeeded including production dashboard smoke.
 - Local verification after repairs: `npm run verify:launch-local` passed end to end with 511/511 tests; local preview dashboard hydrated with expected dashboard text, with only Cloudflare RUM CORS noise on localhost.
 - Honest deferral remains unchanged: production auth email, Stripe smoke purchase, friend beta, Brevo forwarding, Studio Ops Supabase capability proof, and production capture public-key proof still require real external evidence/action.
+
+## 2026-07-01 - Session 112 full deploy confirmation
+
+- Manual GitHub Pages deployment was required because the final closeout commit touched only docs/context/log files, which are outside the deploy workflow's push path filter.
+- Dispatched Deploy Pages run `28537523792` on `main`; it deployed head `01a4f85` successfully.
+- Deploy artifact: deploy health PASS, 15 checks passed, 0 blocking failures, production dashboard smoke PASS with `failures: []`.
+- Remaining advisory gap is affiliate coverage (`affiliate_coverage`: 0 books), which is non-blocking and still requires real external monetization/affiliate evidence.
