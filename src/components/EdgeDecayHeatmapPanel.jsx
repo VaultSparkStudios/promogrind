@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { K, font } from "../lib/shared.js";
-import { PROMO_SCHED } from "../data/promoSchedule.js";
-import { buildEdgeDecayHeatmap } from "../lib/edgeDecayHeatmap.js";
+import { buildEdgeDecayHeatmap, buildHeatmapPromoRows } from "../lib/edgeDecayHeatmap.js";
+
+export { buildHeatmapPromoRows };
 
 const TONE_META = {
   stable: { label: "Stable", color: () => K.gn },
@@ -12,26 +13,6 @@ const TONE_META = {
 };
 
 const TONE_ORDER = ["critical", "warm", "fresh", "stable", "expired"];
-
-// Derive the operator's live promo rows from the same sources the
-// recommender uses: the schedule scoped to active books, with the
-// user-entered per-book expiry from the Sportsbooks tracker as the
-// hard-expiry signal.
-export function buildHeatmapPromoRows(data = {}) {
-  const bookStatus = data.bookStatus || {};
-  const activeBooks = Object.entries(bookStatus)
-    .filter(([, v]) => v === "active" || v === "Active")
-    .map(([k]) => k);
-  const expiry = data.bookExpiry || {};
-  return PROMO_SCHED
-    .filter((p) => (activeBooks.length ? activeBooks.includes(p.book) : p.grade === "A"))
-    .map((p) => ({
-      book: p.book,
-      promo: p.promo,
-      promoType: p.type,
-      expires: expiry[p.book] || null,
-    }));
-}
 
 function horizonLabel(cell) {
   if (cell.expired) return "expired";

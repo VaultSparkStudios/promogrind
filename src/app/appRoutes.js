@@ -47,6 +47,7 @@ export function buildAppTabs(c) {
     ] },
     { group: "Track", items: [
       { n: "Edge", slug: "edge-dashboard", c: c.TrackInsights },
+      { n: "Command Deck", slug: "command-deck", c: c.CommandDeck },
       { n: "Sportsbooks", slug: "sportsbooks", c: c.Tracker },
       { n: "Bet Tracker", slug: "bet-tracker", c: c.BetTracker },
       { n: "P/L Ledger", slug: "ledger", c: c.Ledger },
