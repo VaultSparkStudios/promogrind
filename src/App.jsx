@@ -114,6 +114,9 @@ export default function App() {
   const contentPadding = viewport.contentPadding;
   const stickyTop = isMobile ? 74 : isTablet ? 92 : 104;
   const [calcSubcat, setCalcSubcat] = useState("All");
+  const [calcFavorites, setCalcFavorites] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("pg_calc_favorites")) || []; } catch { return []; }
+  });
   useEffect(() => {
     try {
       if(!sessionStorage.getItem('pg_session_start')) {
