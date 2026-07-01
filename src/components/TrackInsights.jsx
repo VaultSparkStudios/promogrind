@@ -7,6 +7,7 @@ import { patchWorkflowState } from "../workflows/store.js";
 import { flagVisit } from "../lib/missions.js";
 import { useViewport } from "../app/responsive.js";
 import BetHistoryCharts from "./BetHistoryCharts.jsx";
+import EdgeDecayHeatmapPanel from "./EdgeDecayHeatmapPanel.jsx";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -119,6 +120,8 @@ export default function TrackInsights() {
         {metricCard("Calc Accuracy", insights.accuracyRate === null ? "—" : `${f(insights.accuracyRate, 0)}%`, insights.accuracyRate === null ? "Mark settled outcomes first" : "Yes + close responses", insights.accuracyRate !== null && insights.accuracyRate >= 75 ? K.gn : K.yl)}
         {metricCard("Execution Rate", insights.executionRate === null ? "—" : `${f(insights.executionRate, 0)}%`, `${insights.attemptedCount} attempted · ${insights.skippedFeedback.length} skipped`, insights.executionRate !== null && insights.executionRate >= 70 ? K.gn : K.yl)}
       </div>
+
+      <EdgeDecayHeatmapPanel appData={appData} />
 
       <div style={{ display: "grid", gridTemplateColumns: pairColumns, gap: 12, alignItems: "start", marginBottom: 14 }}>
         <div style={{ padding: 12, background: `${K.ac}06`, border: `1px solid ${K.ac}25`, borderRadius: 10 }}>
