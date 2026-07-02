@@ -74,26 +74,31 @@ const BetHeatmap = ({ entries }) => {
     entries.forEach(e=>{ if(!e.date) return; const k=e.date; if(!m[k]) m[k]=0; m[k]+=(parseFloat(e.profit)||0); });
     return m;
   },[entries]);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const start = new Date(today); start.setDate(today.getDate()-90);
-  const cells = [];
-  const d = new Date(start);
-  const dow = d.getDay();
-  const mondayOffset = dow===0?-6:1-dow;
-  d.setDate(d.getDate()+mondayOffset);
-  for(let w=0;w<13;w++) {
-    const week = [];
-    for(let day=0;day<7;day++) {
-      const key = d.toISOString().split('T')[0];
-      const pl = dayMap[key];
-      let color = K.s3;
-      if(pl!==undefined){ if(pl>50) color=K.gn; else if(pl>0) color='#22c55e80'; else if(pl===0) color=K.bd2; else color=`${K.rd}99`; }
-      week.push({key,pl,color,isFuture:d>today});
-      d.setDate(d.getDate()+1);
+  // 91-day grid (365 cell objects + styles) — build only on data change,
+  // not on every parent re-render.
+  const {cells, monthLabels} = useMemo(()=>{
+    const today = new Date(); today.setHours(0,0,0,0);
+    const start = new Date(today); start.setDate(today.getDate()-90);
+    const grid = [];
+    const d = new Date(start);
+    const dow = d.getDay();
+    const mondayOffset = dow===0?-6:1-dow;
+    d.setDate(d.getDate()+mondayOffset);
+    for(let w=0;w<13;w++) {
+      const week = [];
+      for(let day=0;day<7;day++) {
+        const key = d.toISOString().split('T')[0];
+        const pl = dayMap[key];
+        let color = K.s3;
+        if(pl!==undefined){ if(pl>50) color=K.gn; else if(pl>0) color='#22c55e80'; else if(pl===0) color=K.bd2; else color=`${K.rd}99`; }
+        week.push({key,pl,color,isFuture:d>today});
+        d.setDate(d.getDate()+1);
+      }
+      grid.push(week);
     }
-    cells.push(week);
-  }
-  const monthLabels = cells.map((week,wi)=>{ const mon=week[0].key; const prev=wi>0?cells[wi-1][0].key:null; if(!prev||mon.slice(0,7)!==prev.slice(0,7)){ const dt=new Date(mon+'T12:00:00'); return dt.toLocaleString('default',{month:'short'}); } return ''; });
+    const labels = grid.map((week,wi)=>{ const mon=week[0].key; const prev=wi>0?grid[wi-1][0].key:null; if(!prev||mon.slice(0,7)!==prev.slice(0,7)){ const dt=new Date(mon+'T12:00:00'); return dt.toLocaleString('default',{month:'short'}); } return ''; });
+    return {cells:grid, monthLabels:labels};
+  },[dayMap]);
   return (
     <div style={{marginBottom:12}}>
       <button onClick={()=>setShow(s=>!s)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,marginBottom:show?8:0}}>

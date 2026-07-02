@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BOOKS } from "../../books.js";
 import { FEATURE_FLAGS } from "../../launchState.js";
@@ -130,7 +130,9 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
   const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
-  const snapshot = getDashboardSnapshot(data, PROMO_SCHED, today, bankroll);
+  // The snapshot composes most of dashboard/today.js — memoize on the data
+  // revision + calendar day so re-renders from local UI state stay cheap.
+  const snapshot = useMemo(() => getDashboardSnapshot(data, PROMO_SCHED, today, bankroll), [data, todayStr, bankroll]); // eslint-disable-line react-hooks/exhaustive-deps
   const bets = data.bets || [];
   const ledger = data.ledger || [];
   const done = data.done || {};
