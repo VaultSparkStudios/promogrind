@@ -351,3 +351,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Added `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md` as a generated honesty surface for the six remaining external proof gates. It merges `context/PROJECT_STATUS.json` blockers with `context/LAUNCH_PROOFS.json` without marking any proof complete.
 - Added `node scripts/ops.mjs launch-proof-ledger --check` so ledger freshness can be verified mechanically.
 - Launch truth remains partial, not green: production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof are still evidence-gated. No external proof was fabricated.
+
+## 2026-07-02 — Session 114 Deploy Proof
+
+- Commit `81e6858` reached `origin/main`; CI run `28620695607` and brief-format-check run `28620695606` passed.
+- GitHub Pages workflow_dispatch run `28620744679` deployed `81e6858`; production launch verification and dashboard smoke passed.
+- Local production dashboard smoke also passed against `https://promogrind.bet/dashboard` with no failures.

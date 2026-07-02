@@ -44,7 +44,7 @@
   "testsPassing": 549,
   "testsTotal": 549,
   "testsLastRun": "2026-07-02",
-  "lastDeployStatus": "S114 local launch gate is green; GitHub Pages deployment verification pending until the S114 commit is pushed and workflow/deploy run is confirmed.",
+  "lastDeployStatus": "S114 implementation commit 81e6858 deployed through GitHub Pages workflow_dispatch run 28620744679; production launch verification and production dashboard smoke passed with 0 failures. Final closeout proof commit should be deployed by the post-closeout dispatch.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-07-02",
   "truthGenome": "24/25",
@@ -74,7 +74,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live; S114 deployment verification pending until commit is pushed and GitHub Pages run completes"
+      "status": "live; S114 implementation commit 81e6858 deployed via GitHub Pages run 28620744679 with production launch verification and dashboard smoke passing; final closeout proof commit pending post-closeout dispatch"
     },
     {
       "type": "cloudflare",

@@ -515,3 +515,11 @@ Append chronological entries.
 - Shipped: deterministic external launch proof ledger renderer/checker, ops release command, generated `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md`, S114 audit/implement artifacts, and regression coverage.
 - Verification: `launch-proof-ledger --check` fresh, script regressions 11/11, syntax check green, `npm test` 549/549, `npm run verify:launch-local` green with directly captured exit 0, doctor 12/12 blockingFailing 0, windows-hide green.
 - Release truth: `node scripts/ops.mjs launch-ready --project promogrind --json` remains `PARTIAL` because Stripe/auth/friend-beta proofs are external; no proof was fabricated.
+
+## 2026-07-02 - Session 114 deploy verification
+
+- Pushed S114 implementation/closeout commit `81e6858` to `origin/main`.
+- GitHub Actions: `brief-format-check` run `28620695606` succeeded; `CI` run `28620695607` succeeded.
+- Manually dispatched `Deploy Pages` run `28620744679` on `main`; it deployed head `81e6858` successfully with production launch verification and production dashboard smoke passing.
+- Local production dashboard smoke against `https://promogrind.bet/dashboard` returned `ok: true` with `failures: []`.
+- Final closeout proof commit will be pushed and manually dispatched so latest `main` is deployed as requested.

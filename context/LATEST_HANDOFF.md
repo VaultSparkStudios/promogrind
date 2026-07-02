@@ -3,7 +3,7 @@
 Date: 2026-07-02
 Session: 114
 Agent: Codex
-Status: closeout in progress; commit/push/deploy pending at write-back time
+Status: closeout complete; S114 implementation commit pushed and deployed
 
 ## Where We Left Off (Session 114)
 
@@ -37,5 +37,5 @@ Production auth email smoke, Stripe smoke purchase, friend beta pass, Brevo forw
 
 ## Next session
 
-- Verify the S114 commit is pushed to `origin/main`, dispatch/confirm GitHub Pages deployment if the workflow path filter does not auto-run, then run production verification/dashboard smoke.
+- S114 implementation commit `81e6858` was pushed to `origin/main` and deployed by GitHub Pages run `28620744679`; production launch verification and dashboard smoke passed. Final closeout proof commit should be deployed by the post-closeout dispatch.
 - Run the external proof gates when the founder can supply real evidence (runners ready: `smoke:auth-email`, `smoke:stripe`, `beta:check`).
