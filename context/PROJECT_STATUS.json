@@ -13,8 +13,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 112,
-  "currentFocus": "S112 exhausted repo-owned innovation-pack maintainability items: startup brief renderer is under threshold via focused helper extraction; App shell auth/lazy ownership is extracted; sync workflow persistence and loadData tests are split; UserMenu is below threshold; innovation pack now has 0 large files and only honest external proof deferrals.",
+  "currentSession": 113,
+  "currentFocus": "S113 ran a full fresh-audit arc: Operator Command Deck (13 intelligence modules, attention-ranked), operator data vault (versioned envelope, integrity digest, fail-closed restore with undo, root-fixed phantom-key export omission), S93 edge-decay heatmap finally wired into the Edge dashboard, calculator live-region a11y, verified dashboard memoization, and render tests for the four largest components. Suite 549/549; launch-local gate green; only external proof deferrals remain.",
   "nextMilestone": "Record real production auth email, Stripe, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key proof gates before any public launch announcement.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
@@ -24,12 +24,12 @@
     "Studio Ops capability follow-up: consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 and add promogrind.supabase.deploy for project ref fjnpzjjyhnpmunfoycrp.",
     "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness."
   ],
-  "lastUpdated": "2026-07-01",
+  "lastUpdated": "2026-07-02",
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 5,
+  "silVelocity": 10,
   "silDebt": "stable",
-  "silLastSession": 112,
+  "silLastSession": 113,
   "silMax": 1000,
   "silSparkline": [
     1000,
@@ -41,8 +41,8 @@
   "ignisScore": 43431,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-29",
-  "testsPassing": 511,
-  "testsTotal": 511,
+  "testsPassing": 549,
+  "testsTotal": 549,
   "testsLastRun": "2026-07-01",
   "lastDeployStatus": "Latest main is fully deployed through GitHub Pages after manual workflow_dispatch when closeout-only files change; production launch verification and dashboard smoke pass with 0 blocking failures.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
@@ -53,17 +53,17 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 511/511 in S112 via npm test and npm run verify:launch-local"
+      "status": "passing 549/549 in S113 via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S112 with 511/511 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S113 (exit code captured directly: 0) with 549/549 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
       "command": "npm run smoke:ux",
-      "status": "passing in S105 across 60 app routes and 100 public HTML files"
+      "status": "passing in S113 across 61 app routes and 100 public HTML files"
     },
     {
       "type": "local",
@@ -104,7 +104,7 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-07-01",
+    "date": "2026-07-02",
     "passing": 12,
     "warning": 0,
     "failing": 0,
@@ -206,10 +206,10 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "builder",
-  "sessionModeAutoShiftedAt": "2026-07-01T06:44:47.44Z",
+  "sessionMode": "founder",
+  "sessionModeAutoShiftedAt": "2026-07-01T23:13:06.827Z",
   "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-06-30T07:31:13.255Z",
+  "planModeCheckedAt": "2026-07-01T23:13:09.140Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex"
 }

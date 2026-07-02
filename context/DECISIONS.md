@@ -481,3 +481,22 @@ Decision: Add bounded local implementations for closeout helper scripts referenc
 Reason: The user explicitly asked to add missing scripts while `AGENTS.md` says this public repo intentionally lacks private Studio OS tooling. The safe compromise is to make the local closeout paths executable, deterministic, and honest: local scripts write cache/brief/freshness/trace artifacts and clearly report no-op fallback where private IGNIS/control-plane context is unavailable.
 
 Impact: Future closeouts can call the expected script names without failing on missing files, while production/launch proof remains evidence-gated and private ops responsibilities stay outside this repo.
+
+### 2026-07-01 — S113 vault tracks the real key surface and excludes non-operator keys
+
+- Status: accepted
+- Context: `src/lib/dataControls.js` tracked phantom keys (`pg_app_data`, `pg_compact_mode`) so local exports silently omitted the core `promo_engine_v3` blob — the export surface lied about covering "Operator data".
+- Decision: the vault inventory now enumerates the keys the app actually writes, and deliberately excludes `pg_pro_status` (entitlement must come from auth/sync, never restore), `pg_ref`/`pg_utm_*` (attribution, not operator memory), `pg_sync_queue`/`pg_sync_pending` (restoring a stale queue could replay old writes), and one-off dismissal flags.
+- Consequence: exports are complete and honest; restore cannot be used to forge entitlements or replay stale sync state. The safety-snapshot slot `pg_vault_backup` is likewise never exported and rejected on import.
+
+### 2026-07-01 — S113 destructive restore must be undoable
+
+- Status: accepted
+- Context: replace-mode restore clears all tracked operator data before writing; a bad paste would be unrecoverable.
+- Decision: replace-restore snapshots current data into `pg_vault_backup` first and the UI offers one-click undo; if the snapshot cannot be saved the restore proceeds but the message says so honestly rather than implying a safety net that does not exist.
+
+### 2026-07-01 — S113 audit premises are demoted with evidence, not silently reshaped
+
+- Status: accepted
+- Context: the calculator a11y candidate claimed unlabelled inputs; live verification showed the shared `In` atom already labels inputs, and the real gap was result announcement plus one raw-input file (LineShop).
+- Decision: the item shipped at its true scope (live regions + LineShop) with the demotion recorded in the audit execution log, consistent with the S173/S175 reject-on-verification-is-a-win pattern.

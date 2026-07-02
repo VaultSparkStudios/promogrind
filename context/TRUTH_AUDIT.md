@@ -340,3 +340,8 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Startup observability truth improved: context-meter tile rendering now comes from `scripts/lib/startup-context-meter-block.mjs`, the same helper that normalizes live/fallback meter payloads.
 - Regression truth improved: `scripts/test-studio-script-regressions.mjs` now checks the rendered context-meter block, and the suite passed 6/6 after an approved rerun outside the Windows sandbox.
 - Launch truth remains partial, not green: production auth email, Stripe, friend-beta, Brevo, Studio Ops Supabase capability, and capture public-key proof are still evidence-gated. No external proof was fabricated.
+### Session 113 — 2026-07-01
+
+- Data-portability truth repaired: exports previously claimed to cover "Operator data" while the phantom `pg_app_data` key meant the real `promo_engine_v3` blob was silently omitted. The inventory now derives from the real key surface and round-trips are covered by 18 vault tests including corruption, alien-key, and legacy-envelope cases.
+- Intelligence surfacing truth improved: the Command Deck derives every module's status from that module's own lib output (no synthesized copy), and the S93 edge-decay heatmap that had zero component importers is now genuinely user-reachable in the Edge dashboard.
+- Launch truth remains partial, not green: production auth email, Stripe, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and capture public-key proof are still evidence-gated. No external proof was fabricated.

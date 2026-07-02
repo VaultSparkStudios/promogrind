@@ -497,3 +497,12 @@ Append chronological entries.
 - Dispatched Deploy Pages run `28537523792` on `main`; it deployed head `01a4f85` successfully.
 - Deploy artifact: deploy health PASS, 15 checks passed, 0 blocking failures, production dashboard smoke PASS with `failures: []`.
 - Remaining advisory gap is affiliate coverage (`affiliate_coverage`: 0 books), which is non-blocking and still requires real external monetization/affiliate evidence.
+
+## 2026-07-01 - Session 113 full arc (fresh audit + saturation)
+
+- Ran /arc as one continuous mission with the genius list empty at start: profiled the repo (app · public-unlaunched · product rubric · direct-to-main with local staging verify), triaged NOT-cut-off, generated a fresh 7-item audit with every premise verified against live code.
+- Shipped all 7 audit items: public-repo hygiene (`7a0d755`), edge-decay heatmap wiring (`36a5d48`), operator data vault (`b7784ef`), Operator Command Deck (`86dd486`), calculator a11y pass (`0c87b41`), dashboard memoization (`6af89c6`), component render tests (`35d1f96`).
+- Second-order wave: ProfilePanel decomposition + export file download (`1059df2`), vault L3 pre-restore safety snapshot + undo (`a0b4221`).
+- Root-fixed a real observability lie: data exports silently omitted `promo_engine_v3` because the inventory tracked phantom keys; the vault now mirrors the real key surface with entitlement/attribution/queue keys deliberately excluded.
+- Honest rejections recorded: command palette (already exists at App.jsx:156), enable-feature-flags (deliberate launch gating). Calculator a11y premise demoted with evidence.
+- Verification: 549/549 tests across 66 files; `verify:launch-local` green with directly captured exit 0; innovation pack clean (0 large files / 0 TODO / 0 shell violations); external proof gates remain honest deferrals.

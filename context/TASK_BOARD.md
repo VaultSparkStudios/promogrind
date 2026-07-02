@@ -368,3 +368,22 @@
 - sync-ownership-decomposition S112 - **DONE S112**: split `loadData` tests and moved workflow persistence helpers out of `src/sync.js`; sync tests pass with 62 total test files.
 - usermenu-threshold-trim S112 - **DONE S112**: removed stale non-executable bulk from `UserMenu.jsx`; innovation pack reports 0 large files.
 - external-proof-evidence S112 - **HONEST DEFERRAL S112**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof still require real external evidence; no proof was fabricated.
+
+## Shipped This Session (S113)
+
+- public-repo-hygiene S113 - **DONE S113**: removed dead `src/theme.js` (zero importers) and the git-tracked root screenshot; deleted untracked duplicate root deploy guides (docs/ copies canonical).
+- edge-decay-heatmap-wiring S113 - **DONE S113**: the orphaned S93 `edgeDecayHeatmap` lib now renders in the Edge dashboard (TrackInsights) with tone summary, top movers, aria grid, and 5 component tests.
+- operator-data-vault S113 - **DONE S113**: root-fixed phantom inventory keys (`pg_app_data`, `pg_compact_mode`) that silently omitted the core `promo_engine_v3` blob from exports; versioned envelope + fnv1a32 integrity digest + fail-closed import (merge/replace/dry-run) + ProfilePanel Restore UI; export also downloads a real .json file; L3 climb added pre-restore safety snapshot + one-click undo.
+- intelligence-index S113 - **DONE S113**: Operator Command Deck route under Track — 13 intelligence modules attention-ranked (act>live>idle) with the decision each helps, live status from each module's own lib, coach copy, and deep links.
+- calculator-a11y-pass S113 - **DONE S113**: all 21 calculator result panels announce via role=status aria-live=polite; LineShop raw inputs labelled. Premise honestly demoted — the shared In atom already labelled inputs.
+- dashboard-memoization S113 - **DONE S113**: three verified hotspots fixed — DailyDashboard unmemoized full snapshot, SmartPromoRecommender memo defeated by fresh Date dep, Ledger 91-day grid rebuilt per render.
+- component-render-tests S113 - **DONE S113**: smoke render/interaction tests for TodayDashboardPanel, ProfilePanel (full restore flow), UserMenu, Ledger.
+- profilepanel-decomposition S113 - **DONE S113**: extracted `profile/DataControlsSection.jsx`; ProfilePanel back under the 650-line threshold; innovation pack reports 0 large files.
+- command-palette S113 - **REJECTED ON VERIFICATION S113 (win)**: Ctrl+K/Cmd+K calc search already exists at src/App.jsx:156.
+- external-proof-evidence S113 - **HONEST DEFERRAL S113**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof still require real external evidence; no proof was fabricated.
+
+## S113 Follow-up
+
+- [Vault] Consider per-domain selective restore (calculators/tracker/gamification) as a future vault L3+ slice.
+- [Command Deck] Consider surfacing the deck's act-count as a dashboard chip once real user data exists.
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
