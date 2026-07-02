@@ -5,7 +5,9 @@ import {
   clearLocalPromoGrindData,
   computeExportDigest,
   describeDataControlState,
+  getSafetySnapshot,
   importLocalDataExport,
+  undoLastRestore,
   validateLocalDataExport,
 } from "../lib/dataControls.js";
 
@@ -177,5 +179,55 @@ describe("importLocalDataExport", () => {
     expect(validateLocalDataExport("not json").valid).toBe(false);
     expect(validateLocalDataExport(null).valid).toBe(false);
     expect(validateLocalDataExport({ type: "local-data-export", product: "PromoGrind" }).valid).toBe(false);
+  });
+});
+
+describe("safety snapshot + undo (vault L3)", () => {
+  function exportFrom(seed) {
+    return buildLocalDataExport(makeStorage(seed));
+  }
+
+  it("replace-restore snapshots current data first and undo brings it back", () => {
+    const target = makeStorage({ promo_engine_v3: JSON.stringify({ original: true }), pg_missions: "{}" });
+    const incoming = exportFrom({ promo_engine_v3: JSON.stringify({ incoming: true }) });
+
+    const result = importLocalDataExport(incoming, { storage: target, mode: "replace" });
+    expect(result.valid).toBe(true);
+    expect(result.undoAvailable).toBe(true);
+    expect(target.getItem("promo_engine_v3")).toContain("incoming");
+    expect(target.has("pg_missions")).toBe(false);
+
+    const undo = undoLastRestore(target);
+    expect(undo.valid).toBe(true);
+    expect(target.getItem("promo_engine_v3")).toContain("original");
+    expect(target.has("pg_missions")).toBe(true);
+  });
+
+  it("the snapshot slot never leaks into exports and cannot be imported", () => {
+    const target = makeStorage({ promo_engine_v3: "{}" });
+    importLocalDataExport(exportFrom({ promo_engine_v3: "{}" }), { storage: target, mode: "replace" });
+    expect(target.has("pg_vault_backup")).toBe(true);
+    const exported = buildLocalDataExport(target);
+    expect(Object.keys(exported.data)).not.toContain("pg_vault_backup");
+
+    const evil = exportFrom({ pg_currency: "USD" });
+    evil.data.pg_vault_backup = "payload";
+    delete evil.integrity;
+    const attempt = importLocalDataExport(evil, { storage: makeStorage() });
+    expect(attempt.valid).toBe(false);
+  });
+
+  it("merge mode does not create a snapshot; undo without one fails closed", () => {
+    const target = makeStorage({ pg_missions: "{}" });
+    importLocalDataExport(exportFrom({ pg_currency: "EUR" }), { storage: target, mode: "merge" });
+    expect(target.has("pg_vault_backup")).toBe(false);
+    const undo = undoLastRestore(target);
+    expect(undo.valid).toBe(false);
+    expect(undo.errors[0]).toMatch(/no safety snapshot/i);
+  });
+
+  it("getSafetySnapshot rejects a corrupted slot", () => {
+    const target = makeStorage({ pg_vault_backup: "not json" });
+    expect(getSafetySnapshot(target)).toBeNull();
   });
 });

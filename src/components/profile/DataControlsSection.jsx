@@ -4,7 +4,9 @@ import {
   buildLocalDataExport,
   clearLocalPromoGrindData,
   describeDataControlState,
+  getSafetySnapshot,
   importLocalDataExport,
+  undoLastRestore,
 } from "../../lib/dataControls.js";
 
 export default function DataControlsSection() {
@@ -19,15 +21,29 @@ export default function DataControlsSection() {
     [restoreText],
   );
 
+  const [undoReady, setUndoReady] = React.useState(() => Boolean(getSafetySnapshot()));
+
   function handleRestore(mode) {
     const result = importLocalDataExport(restoreText, { mode });
     refresh();
+    setUndoReady(Boolean(getSafetySnapshot()));
     if (result.valid) {
-      setMessage(`Restored ${result.restored.length} item${result.restored.length === 1 ? "" : "s"}${mode === "replace" ? ` (replaced ${result.cleared.length})` : ""}. Reload to apply everywhere.`);
+      const undoNote = mode === "replace" ? (result.undoAvailable ? " Undo available below." : " Safety snapshot could not be saved — no undo.") : "";
+      setMessage(`Restored ${result.restored.length} item${result.restored.length === 1 ? "" : "s"}${mode === "replace" ? ` (replaced ${result.cleared.length})` : ""}. Reload to apply everywhere.${undoNote}`);
       setRestoreOpen(false);
       setRestoreText("");
     } else {
       setMessage(result.errors[0] || "Restore failed.");
+    }
+  }
+
+  function handleUndo() {
+    const result = undoLastRestore();
+    refresh();
+    if (result.valid) {
+      setMessage(`Undo complete: ${result.restored.length} item${result.restored.length === 1 ? "" : "s"} back from the pre-restore snapshot. Reload to apply everywhere.`);
+    } else {
+      setMessage(result.errors[0] || "Undo failed.");
     }
   }
 
@@ -150,6 +166,18 @@ export default function DataControlsSection() {
             </div>
           )}
         </div>
+      )}
+      {undoReady && (
+        <button
+          onClick={handleUndo}
+          style={{
+            marginTop: 8, padding: '6px 10px', borderRadius: 6, cursor: 'pointer',
+            background: 'transparent', border: `1px dashed ${K.bd2}`,
+            color: K.mt, fontSize: 9, fontWeight: 700, fontFamily: font,
+          }}
+        >
+          ⟲ Undo last replace (pre-restore snapshot)
+        </button>
       )}
       {message && <div style={{ fontSize: 9, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
     </div>
