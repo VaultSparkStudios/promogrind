@@ -35,7 +35,7 @@
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
 ║    SIL v3.0  ·  Avg3: ?  ·  Velocity 10↑                         ║
-║    Last active: 1d  ·  Last closeout: 2d  ·  (active = newest o  ║
+║    Last active: 0d  ·  Last closeout: 2d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -59,9 +59,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     20,033 / 1,000,000 tok  ·  claude-code/opus-4-8-1m  ·  meas  ║
-║     ~10,017 tok/turn  ·  cache 50%  ·  89 turns to compact       ║
+║  ✓  ████████████░░░░░░░░░░░░   50% used                          ║
+║     4,673 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heuri  ║
+║     ~2,337 tok/turn  ·  cache 50%  ·  391 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 

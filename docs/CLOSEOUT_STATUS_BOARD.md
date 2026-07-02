@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-01 (Session 112 closeout) -->
+<!-- generated-at: 2026-07-02 (Session 113 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S112 ════════════════════════╗
-║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 5 stable      ║
-║  Mode: BUILDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · PromoGrind · S113 ════════════════════════╗
+║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 10 stable     ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Production auth email smoke proof.                            ║
-║  ✓ Stripe smoke purchase proof.                                  ║
-║  ✓ Friend beta pass proof.                                       ║
-║  ✓ Brevo forwarding proof for contact@promogrind.bet.            ║
-║  ✓ Studio Ops Supabase capability proof.                         ║
+╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore(S113): closeout write-back for full arc session         ║
+║  ✓ feat(operator-data-vault): L3 ladder climb — pre-restore saf  ║
+║  ✓ refactor(profile-decomposition): extract DataControlsSection  ║
+║  ✓ test(component-render-tests): smoke render/interaction cover  ║
+║  ✓ perf(dashboard-memoization): stop full-snapshot recompute on  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,20 +28,20 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  · context/TRUTH_AUDIT.md                                        ║
-║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 30 files  ·  M:21 A:0 D:0 ?:9                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 7 files  ·  M:7 A:0 D:0 ?:0                            ║
+║  Ahead: 10  ·  Behind: 0                                         ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -51,7 +51,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         511/511                                          ║
+║  Tests:         549/549                                          ║
 ║  IGNIS:         3d ago                                           ║
 ║  Truth:         green-with-external-proof-follow-ups             ║
 ║  Sanitization:  —                                                ║

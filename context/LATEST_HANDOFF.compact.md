@@ -1,45 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 036d772f1af0 -->
-<!-- generated-at: 2026-07-01T23:13:16.302Z -->
+<!-- source-hash: 19c3abb4ad56 -->
+<!-- generated-at: 2026-07-02T08:39:25.801Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Session 112 — PromoGrind
+SESSION 113 — PromoGrind Handoff Summary
 
-Session: 112 | Agent: Codex | Status: closeout complete, pending push
+Status
+- Closeout complete. Full /arc saturation achieved: genius list regenerated and exhausted; innovation pack exhausted to external-only deferrals; vault ladder at L3.
 
-## What Shipped
-- Startup brief renderer extracted; auth/lazy ownership extracted from App shell
-- Sync workflow persistence and loadData tests split
-- UserMenu refactored below threshold
-- Innovation pack: 0 large files, only honest external deferrals remain
+Shipped
+- Operator Command Deck: Track route indexing 13 operator-intelligence modules, attention-ranked (act > live > idle), live status, coach copy, deep links.
+- Operator data vault: versioned export envelope (schemaVersion + fnv1a32 digest), fail-closed import with merge/replace + dry-run preview, Restore UI, .json download, pre-restore snapshot with undo. Root-fixed phantom inventory keys omitting core promo_engine_v3 blob.
+- Edge-decay heatmap now rendered in Edge dashboard (S93 lib finally reaches users).
+- Calculator a11y: 21 result panels role=status live regions; LineShop inputs labelled.
+- Dashboard memoization: DailyDashboard snapshot, SmartPromoRecommender, Ledger 91-day grid.
+- Render tests added; dead theme.js/screenshot removed; ProfilePanel decomposed under threshold.
 
-## Verification Status
-- ops.mjs doctor: 12/12 passing
-- npm test: 511/511 passing across 62 files
-- verify:launch-local: end-to-end passed (auth, UX, smoke, bundle budget, sanitization)
+Verification
+- npm test: 549/549 passing across 66 files (+38 tests).
+- verify:launch-local: full gate green, exit 0.
+- ops innovation-pack: 0 large files, 0 TODO, 0 windowsHide violations.
 
-## Now Bucket (Top 3)
-1. Obtain production auth email smoke proof
-2. Obtain Stripe smoke purchase proof
-3. Obtain Friend beta pass proof
+Current Intent
+- Ready to run external proof gates once founder supplies real evidence.
 
-## Blockers (Top 3)
-1. Production auth email proof — external dependency
-2. Stripe purchase flow proof — external dependency
-3. Brevo forwarding proof (contact@promogrind.bet) — external dependency
+Now Bucket (top items)
+- Run smoke:auth-email when production auth email evidence available.
+- Run smoke:stripe for purchase proof.
+- Run beta:check for friend beta pass.
 
-## Human-Blocked Items
-None currently blocking.
+Human-Blocked (external evidence required, unchanged this session)
+- Production auth email smoke.
+- Stripe smoke purchase.
+- Friend beta pass; also Brevo forwarding, Studio Ops Supabase capability, production capture public-key proof.
 
-## External Deferrals (Honest, recorded-proof required)
-- Production auth email smoke
-- Stripe smoke purchase
-- Friend beta pass
-- Brevo forwarding (contact@promogrind.bet)
-- Studio Ops Supabase capability
-- Production capture public-key
+Optional Depth
+- Vault per-domain selective restore.
+- Command Deck act-count chip on dashboard.
 
-Do not claim external proofs complete without recorded evidence. Only real evidence remains before launch announcement.
-
-Next: collect external proofs systematically; do not fabricate.
+Next: Execute external proof gates (auth-email, stripe, beta) when founder provides real evidence; runners ready.
