@@ -345,3 +345,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Data-portability truth repaired: exports previously claimed to cover "Operator data" while the phantom `pg_app_data` key meant the real `promo_engine_v3` blob was silently omitted. The inventory now derives from the real key surface and round-trips are covered by 18 vault tests including corruption, alien-key, and legacy-envelope cases.
 - Intelligence surfacing truth improved: the Command Deck derives every module's status from that module's own lib output (no synthesized copy), and the S93 edge-decay heatmap that had zero component importers is now genuinely user-reachable in the Edge dashboard.
 - Launch truth remains partial, not green: production auth email, Stripe, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and capture public-key proof are still evidence-gated. No external proof was fabricated.
+
+## 2026-07-02 — Session 114 Truth Update
+
+- Added `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md` as a generated honesty surface for the six remaining external proof gates. It merges `context/PROJECT_STATUS.json` blockers with `context/LAUNCH_PROOFS.json` without marking any proof complete.
+- Added `node scripts/ops.mjs launch-proof-ledger --check` so ledger freshness can be verified mechanically.
+- Launch truth remains partial, not green: production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof are still evidence-gated. No external proof was fabricated.

@@ -387,3 +387,13 @@
 - [Vault] Consider per-domain selective restore (calculators/tracker/gamification) as a future vault L3+ slice.
 - [Command Deck] Consider surfacing the deck's act-count as a dashboard chip once real user data exists.
 - [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+
+## Shipped This Session (S114)
+
+- external-launch-proof-ledger S114 - **DONE S114**: added `scripts/render-external-launch-proof-ledger.mjs`, wired `node scripts/ops.mjs launch-proof-ledger --check`, generated `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md`, and added regression coverage so real-world proof blockers stay explicit without being marked complete.
+- external-proof-evidence S114 - **HONEST DEFERRAL S114**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof still require real external evidence; no proof was fabricated.
+
+## S114 Follow-up
+
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+- [SIL] Keep the external launch-proof ledger fresh at closeout whenever PROJECT_STATUS blockers or LAUNCH_PROOFS change.

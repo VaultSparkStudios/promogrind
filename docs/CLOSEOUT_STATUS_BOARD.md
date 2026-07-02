@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-02 (Session 113 closeout) -->
+<!-- generated-at: 2026-07-02 (Session 114 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S113 ════════════════════════╗
-║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 10 stable     ║
+╔══ SESSION CLOSEOUT · PromoGrind · S114 ════════════════════════╗
+║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 1 stable      ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore(S114): render closeout artifacts post mission           ║
 ║  ✓ chore(S113): S113 ran a full fresh-audit arc: Operator Comma  ║
 ║  ✓ chore(deps): bump the production-minor-patch group with 3 up  ║
 ║  ✓ chore(deps-dev): bump sharp in the dev-dependencies group (#  ║
 ║  ✓ chore(S113): finalize arc closeout surfaces                   ║
-║  ✓ chore(S113): closeout write-back for full arc session         ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,19 +28,19 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 1 files  ·  M:1 A:0 D:0 ?:0                            ║
+║  Changes: 22 files  ·  M:15 A:0 D:0 ?:7                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝

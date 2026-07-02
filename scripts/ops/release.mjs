@@ -9,6 +9,10 @@ export default {
       script: 'check-launch-ready.mjs',
       desc: 'Go/no-go release readiness check',
     },
+    'launch-proof-ledger': {
+      script: 'render-external-launch-proof-ledger.mjs',
+      desc: 'Render/check the external launch-proof honesty ledger',
+    },
     'announce-setup': {
       script: 'announce-setup.mjs',
       desc: 'Configure social credentials for announce workflow',

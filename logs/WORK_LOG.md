@@ -506,3 +506,12 @@ Append chronological entries.
 - Root-fixed a real observability lie: data exports silently omitted `promo_engine_v3` because the inventory tracked phantom keys; the vault now mirrors the real key surface with entitlement/attribution/queue keys deliberately excluded.
 - Honest rejections recorded: command palette (already exists at App.jsx:156), enable-feature-flags (deliberate launch gating). Calculator a11y premise demoted with evidence.
 - Verification: 549/549 tests across 66 files; `verify:launch-local` green with directly captured exit 0; innovation pack clean (0 large files / 0 TODO / 0 shell violations); external proof gates remain honest deferrals.
+
+## 2026-07-02 - Session 114 Codex arc + proof-ledger closeout
+
+- Ran the requested `/arc` continuation through startup, audit, implementation, verification, and closeout write-back preparation.
+- Startup/cutoff triage: no lock, clean tree, `origin/main...HEAD` was `0 0`; repo-local `PROJECT_STATUS.json` was used over the registry mismatch, so PromoGrind was treated as a public-unlaunched app with local staging verification.
+- Audit: primary genius list regenerated to 0 items; innovation pack produced one repo-owned item, `external-launch-proof-ledger`, from six real-world proof deferrals.
+- Shipped: deterministic external launch proof ledger renderer/checker, ops release command, generated `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md`, S114 audit/implement artifacts, and regression coverage.
+- Verification: `launch-proof-ledger --check` fresh, script regressions 11/11, syntax check green, `npm test` 549/549, `npm run verify:launch-local` green with directly captured exit 0, doctor 12/12 blockingFailing 0, windows-hide green.
+- Release truth: `node scripts/ops.mjs launch-ready --project promogrind --json` remains `PARTIAL` because Stripe/auth/friend-beta proofs are external; no proof was fabricated.

@@ -9,6 +9,7 @@ import { scanShellNodeSpawns } from './check-windows-hide.mjs';
 import { buildHeuristicContextMeter, loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
 import { renderOrchestratorBlock, renderPortfolioTaskBoardsBlock } from './lib/startup-orchestrator-blocks.mjs';
 import { renderExecutionPlanBlock, renderMomentumMeterBlock } from './lib/startup-summary-blocks.mjs';
+import { buildExternalLaunchProofLedger, renderLedgerMd } from './render-external-launch-proof-ledger.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const json = process.argv.includes('--json');
@@ -200,6 +201,40 @@ run('startup momentum block preserves velocity and cache signals', () => {
   assert.ok(block.includes('Cache hit:  75%'));
   assert.ok(block.includes('Weekly spend: $0.10'));
 });
+run('external launch proof ledger preserves pending proof blockers', () => {
+  const ledger = buildExternalLaunchProofLedger({
+    status: {
+      name: 'PromoGrind',
+      currentSession: 113,
+      liveUrl: 'https://promogrind.bet',
+      blockers: [
+        'Run real production auth email smoke with npm run smoke:auth-email -- --record.',
+        'Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path.',
+        'Wire the real browser-safe Supabase anon key into the production capture page/deploy config.',
+      ],
+    },
+    launchProofs: {
+      proofs: {
+        authEmailSmoke: {
+          label: 'Production auth email smoke',
+          status: 'pending',
+          blocking: true,
+          requiredFor: ['soft-launch'],
+          evidenceRequired: ['confirmation email delivered'],
+          evidence: [],
+          nextStep: 'Run auth email smoke.',
+        },
+      },
+    },
+  });
+
+  assert.equal(ledger.blockersOpen, 3);
+  assert.equal(ledger.launchProofsBlocking, 1);
+  assert.equal(ledger.blockerRows[0].category, 'auth-email');
+  const md = renderLedgerMd(ledger);
+  assert.ok(md.includes('Production auth email smoke'));
+  assert.ok(md.includes('Do not paste secrets'));
+});
 const summary = {
   ok: results.every(r => r.pass),
   passing: results.filter(r => r.pass).length,
@@ -224,4 +259,3 @@ function run(name, fn) {
     results.push({ name, pass: false, detail: error.message });
   }
 }
-
