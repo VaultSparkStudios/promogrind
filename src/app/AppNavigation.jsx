@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { K, S, font } from "../lib/shared.js";
+import { K, S, font, fontD } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
@@ -66,19 +66,180 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_ICONS = ["⌂", "⇄", "≡", "◈", "⚡", "◎"];
+
+const DRAWER_ANIM = `
+  @keyframes pgNavDrawerIn {
+    from { transform: translateY(100%); opacity: 0.6; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+`;
+
+function MobileNavDrawer({ drawerGi, tabs, gi, goTo, onClose }) {
+  const group = tabs[drawerGi];
+  if (!group) return null;
 
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+    <div
+      className="pg-mobile-nav-drawer-overlay"
+      onClick={onClose}
+      style={{ position: "fixed", inset: 0, zIndex: 98, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
+    >
+      <style>{DRAWER_ANIM}</style>
+      <div
+        role="dialog"
+        aria-label={`${group.group} navigation`}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "absolute",
+          bottom: 64,
+          left: 0,
+          right: 0,
+          maxHeight: "calc(100dvh - 64px)",
+          minHeight: "30dvh",
+          background: `linear-gradient(160deg, ${K.s1}, ${K.s2})`,
+          borderTop: `1px solid ${K.bd2}`,
+          borderRadius: "20px 20px 0 0",
+          boxShadow: "0 -24px 56px rgba(0,0,0,0.38)",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          animation: "pgNavDrawerIn 0.22s cubic-bezier(0.32,0.72,0,1)",
+        }}
+      >
+        {/* Drag handle */}
+        <div style={{ display: "flex", justifyContent: "center", padding: "10px 0 4px" }}>
+          <div style={{ width: 36, height: 4, borderRadius: 2, background: K.bd2 }} />
+        </div>
+        {/* Drawer header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 20px 10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 18, lineHeight: 1 }} aria-hidden="true">{NAV_ICONS[drawerGi] || ""}</span>
+            <span style={{ fontFamily: fontD, fontSize: 16, fontWeight: 700, color: K.tx, letterSpacing: "-0.3px" }}>{group.group}</span>
+            <span style={{ fontSize: 10, color: K.mt, background: K.s3, border: `1px solid ${K.bd}`, borderRadius: 50, padding: "2px 7px" }}>{group.items.length}</span>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close navigation drawer"
+            style={{ background: "none", border: `1px solid ${K.bd2}`, borderRadius: 8, color: K.mt, fontSize: 14, cursor: "pointer", padding: "4px 10px", fontFamily: font }}
+          >
+            ✕
+          </button>
+        </div>
+        {/* Scrollable item grid */}
+        <div
+          className="pg-mobile-nav-drawer-grid"
+          style={{ overflowY: "auto", flex: 1, padding: "4px 14px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, alignContent: "start" }}
+        >
+          {group.items.map((item, itemIndex) => {
+            const isCurrent = gi === drawerGi && itemIndex === tabs[gi]?.items?.findIndex((x) => x.slug === item.slug);
+            return (
+              <button
+                key={item.slug}
+                onClick={() => { goTo(drawerGi, itemIndex); onClose(); }}
+                aria-current={isCurrent ? "page" : undefined}
+                style={{
+                  padding: "12px 14px",
+                  background: isCurrent ? `${K.gn}10` : K.s3,
+                  border: `1px solid ${isCurrent ? K.gn + "50" : K.bd}`,
+                  borderRadius: 12,
+                  color: isCurrent ? K.gn : K.tx,
+                  cursor: "pointer",
+                  textAlign: "left",
+                  fontFamily: font,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                  minHeight: 56,
+                  transition: "background 0.12s, border-color 0.12s",
+                }}
+              >
+                <span style={{ fontSize: 12, fontWeight: isCurrent ? 700 : 600, lineHeight: 1.3 }}>{item.n}</span>
+                {item.pro && (
+                  <span style={{ fontSize: 8, color: K.yl, background: `${K.yl}15`, border: `1px solid ${K.yl}40`, borderRadius: 4, padding: "1px 5px", letterSpacing: "0.5px", textTransform: "uppercase", alignSelf: "flex-start" }}>
+                    PRO
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
+  );
+}
+
+export function MobileNavCSS() {
+  return <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>;
+}
+
+export function MobileBottomNav({ gi, goTo, tabs }) {
+  const [drawerGi, setDrawerGi] = useState(null);
+
+  const handleTabTap = (index) => {
+    if (drawerGi === index) {
+      setDrawerGi(null);
+    } else {
+      setDrawerGi(index);
+    }
+  };
+
+  const closeDrawer = () => setDrawerGi(null);
+
+  return (
+    <>
+      {drawerGi !== null && (
+        <MobileNavDrawer
+          drawerGi={drawerGi}
+          tabs={tabs}
+          gi={gi}
+          goTo={goTo}
+          onClose={closeDrawer}
+        />
+      )}
+      <div
+        className="pg-mobile-nav"
+        style={{
+          position: "fixed", bottom: 0, left: 0, right: 0,
+          background: `linear-gradient(180deg,${K.s1},${K.s2})`,
+          borderTop: `1px solid ${drawerGi !== null ? K.bd2 : K.bd}`,
+          display: "flex", zIndex: 100,
+          padding: "6px 0 env(safe-area-inset-bottom,0px)",
+          boxShadow: "0 -10px 24px rgba(0,0,0,0.22)",
+        }}
+      >
+        {tabs.map((tab, index) => {
+          const isGroupActive = gi === index;
+          const isDrawerOpen = drawerGi === index;
+          return (
+            <button
+              key={tab.group}
+              onClick={() => handleTabTap(index)}
+              aria-expanded={isDrawerOpen}
+              aria-label={`${tab.group} — ${tab.items.length} tools`}
+              style={{
+                flex: 1, padding: "7px 4px", background: "none", border: "none",
+                color: isGroupActive ? K.gn : isDrawerOpen ? K.ac : K.mt,
+                cursor: "pointer", fontSize: 9, textTransform: "uppercase",
+                letterSpacing: "0.5px", fontFamily: font,
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+                transition: "color 0.15s",
+              }}
+            >
+              <span
+                aria-hidden="true"
+                style={{ fontSize: 14, lineHeight: 1, fontWeight: 700, transition: "transform 0.15s", transform: isDrawerOpen ? "scale(1.15)" : "scale(1)" }}
+              >
+                {NAV_ICONS[index] || tab.group[0]}
+              </span>
+              <span style={{ fontWeight: isGroupActive || isDrawerOpen ? 700 : 400 }}>{tab.group}</span>
+              {isGroupActive && !isDrawerOpen && (
+                <span style={{ width: 4, height: 4, borderRadius: "50%", background: K.gn, display: "block" }} />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </>
   );
 }

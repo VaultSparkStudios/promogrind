@@ -7,7 +7,7 @@ import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoo
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav, MobileNavCSS, QuickCalcPanel } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -624,6 +624,7 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
+      <MobileNavCSS/>
       <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
