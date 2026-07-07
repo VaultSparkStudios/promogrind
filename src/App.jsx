@@ -7,7 +7,7 @@ import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoo
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav, MobileNavDrawer, QuickCalcPanel } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -84,6 +84,7 @@ export default function App() {
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [authModalMode, setAuthModalMode] = useState(() => getInitialAuthMode());
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
   const {
     darkMode,
     toggleTheme,
@@ -624,7 +625,8 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
+      <MobileNavDrawer open={showMobileNav} onClose={() => setShowMobileNav(false)} tabs={TABS} gi={gi} ti={ti} goTo={goTo} />
+      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS} onOpenDrawer={() => setShowMobileNav(true)} />
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate}/>
