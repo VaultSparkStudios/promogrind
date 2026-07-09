@@ -40,9 +40,9 @@
     "smoke:auth-email": "node scripts/run-auth-email-smoke.mjs"
   },
   "dependencies": {
-    "@sentry/react": "^10.63.0",
-    "@supabase/supabase-js": "^2.110.0",
-    "posthog-js": "^1.396.4",
+    "@sentry/react": "^10.64.0",
+    "@supabase/supabase-js": "^2.110.2",
+    "posthog-js": "^1.399.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0"
