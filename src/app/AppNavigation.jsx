@@ -66,19 +66,61 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_SVG_ICONS = [
+  // Home: peaked house
+  <svg key="home" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M10 2.5L2.5 9v8.5H7.5V14a2.5 2.5 0 015 0v3.5H17.5V9L10 2.5z"/>
+  </svg>,
+  // Convert: swap arrows
+  <svg key="convert" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3.5 7h13M14 4.5l2.5 2.5-2.5 2.5M16.5 13h-13M6 10.5L3.5 13 6 15.5"/>
+  </svg>,
+  // Calculate: calculator body + keys
+  <svg key="calc" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3.5" y="2" width="13" height="16" rx="1.5"/>
+    <path d="M6.5 6.5h7M6.5 10h7M6.5 13.5h4"/>
+  </svg>,
+  // Track: trending-up chart with baseline
+  <svg key="track" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="2,15 6,9.5 10,12 14,6 18,9"/>
+    <line x1="2" y1="17.5" x2="18" y2="17.5"/>
+  </svg>,
+  // Live: ECG pulse wave
+  <svg key="live" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="1,10 4,10 6,5.5 9,15 12,8.5 14.5,10 17,10 19,10"/>
+  </svg>,
+  // Learn: open book with spine
+  <svg key="learn" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M10 4.5C8 3 5 3 3 4.5v11c2-1.5 5-1.5 7 0 2-1.5 5-1.5 7 0v-11c-2-1.5-5-1.5-7 0z"/>
+    <line x1="10" y1="4.5" x2="10" y2="15.5"/>
+  </svg>,
+];
 
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+
+export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 28px rgba(0,0,0,0.28)" }}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+      {tabs.map((tab, index) => {
+        const active = gi === index;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => goTo(index, 0)}
+            aria-label={tab.group}
+            aria-current={active ? "page" : undefined}
+            style={{ flex: 1, padding: "5px 2px 4px", background: "none", border: "none", color: active ? K.gn : K.mt, cursor: "pointer", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, transition: "color 0.15s", WebkitTapHighlightColor: "transparent" }}
+          >
+            <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 28, borderRadius: 10, background: active ? `${K.gn}12` : "transparent", transition: "background 0.15s" }}>
+              {NAV_SVG_ICONS[index] || null}
+            </span>
+            <span style={{ fontSize: 9, letterSpacing: "0.5px", textTransform: "uppercase", fontWeight: active ? 700 : 400, lineHeight: 1 }}>
+              {NAV_LABELS[index] || tab.group}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
