@@ -12,7 +12,7 @@ import { StateLegalAlert } from "../../lib/stateLegal.jsx";
 import { PROMO_SCHED } from "../../data/promoSchedule.js";
 import { getDashboardSnapshot } from "../../dashboard/today.js";
 import PromoWalkthrough from "../PromoWalkthrough.jsx";
-import { StarterPackModal, OnboardingChecklist, MemberWelcomeCard } from "../../app/AppSubcomponents.jsx";
+import { StarterPackModal, OnboardingChecklist, MemberWelcomeCard, PromoPassportJourneyCard } from "../../app/AppSubcomponents.jsx";
 import { DailyBriefingBtn, DailyRoutinePanel, OpenExposurePanel, ProfitGoalTracker, TopToolsPanel } from "../../app/DashboardWidgets.jsx";
 import { BankrollWizard, CopyMySetup, PushEnableBtn, QuickAddBet, WeeklyGrindReport } from "../../app/DashboardActionWidgets.jsx";
 import DashboardHero from "./DashboardHero.jsx";
@@ -166,6 +166,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       </Suspense>
       <Suspense fallback={null}><CommunityWinsWall /></Suspense>
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
+      <PromoPassportJourneyCard appData={data} user={true} navigate={navigate} />
       <Suspense fallback={<LoadingState label="Loading today dashboardâ€¦" />}>
         <TodayDashboardPanel
           snapshot={snapshot}
