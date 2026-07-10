@@ -1,6 +1,9 @@
 import React from "react";
 import { supabase } from "../auth.js";
 import { S, K, font, fontD } from "../lib/shared.js";
+import { getPromoPassportOnboardingPlan } from "../onboarding.js";
+import { computeDisciplineScore } from "../lib/discipline.js";
+import { readTrustReceipts, recordTrustReceipt } from "../lib/trustReceipts.js";
 
 export function GiftTrialBox() {
   const [email, setEmail] = React.useState('');
@@ -206,6 +209,104 @@ export function MemberWelcomeCard({ navigate, proStatus }) {
         <button onClick={() => navigate('/upgrade')} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>See Pro status</button>
         <button onClick={dismiss} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:'pointer',fontFamily:font}}>Dismiss</button>
       </div>
+    </div>
+  );
+}
+
+const BAND_COLORS = { Elite: "#4ade80", Controlled: "#60a5fa", Building: "#fbbf24", Loose: "#f87171" };
+
+export function PromoPassportJourneyCard({ appData, user, navigate }) {
+  const doneKey = "pg_passport_journey_done";
+  const [journeyDone, setJourneyDone] = React.useState(() => {
+    try { return !!localStorage.getItem(doneKey); } catch { return false; }
+  });
+
+  if (journeyDone || !user) return null;
+
+  const trustReceipts = readTrustReceipts();
+  const scoreResult = computeDisciplineScore(appData || {});
+  const plan = getPromoPassportOnboardingPlan({
+    appData: appData || {},
+    user,
+    trustReceipts,
+    disciplineScore: scoreResult.score,
+  });
+
+  React.useEffect(() => {
+    if (!plan.complete) return;
+    recordTrustReceipt({
+      type: "milestone",
+      title: "Operator passport journey complete",
+      summary: `Discipline band: ${scoreResult.band}. All ${plan.totalCount} steps finished.`,
+      stored: ["First settled result", "Discipline score", "Operator passport"],
+      dedupeKey: "passport-journey-complete",
+      dedupeMs: 365 * 24 * 60 * 60 * 1000,
+    });
+    try { localStorage.setItem(doneKey, "1"); } catch {}
+    setJourneyDone(true);
+  }, [plan.complete]);
+
+  if (plan.pct === 0) return null;
+
+  const bandColor = BAND_COLORS[scoreResult.band] || K.mt;
+
+  return (
+    <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 10, padding: 16, marginBottom: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+        <div>
+          <span style={{ fontFamily: fontD, fontWeight: 700, color: K.tx, fontSize: 13 }}>Operator Passport</span>
+          <span style={{ marginLeft: 8, color: K.mt, fontSize: 11 }}>{plan.doneCount}/{plan.totalCount} steps</span>
+        </div>
+        <span style={{ fontSize: 10, fontWeight: 700, color: bandColor, textTransform: "uppercase", letterSpacing: "0.8px" }}>
+          {scoreResult.band}
+        </span>
+      </div>
+      <div style={{ height: 3, background: K.s3, borderRadius: 2, marginBottom: 12 }}>
+        <div style={{ height: 3, background: K.gn, borderRadius: 2, width: `${plan.pct}%`, transition: "width 0.3s" }} />
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+        {plan.steps.map((step) => {
+          const isNext = plan.next?.id === step.id;
+          return (
+            <div key={step.id} style={{ display: "flex", alignItems: "center", gap: 8, opacity: step.done ? 0.45 : 1 }}>
+              <span style={{
+                width: 14, height: 14, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                background: step.done ? `${K.gn}20` : K.s3, border: `1px solid ${step.done ? K.gn : K.bd2}`,
+                fontSize: 9, color: K.gn,
+              }}>
+                {step.done ? "✓" : ""}
+              </span>
+              <button
+                onClick={() => step.slug && navigate && navigate(step.slug)}
+                style={{
+                  background: "none", border: "none", padding: 0, cursor: step.slug ? "pointer" : "default",
+                  color: step.done ? K.mt : isNext ? K.tx : K.dm,
+                  fontSize: 12, textAlign: "left", fontFamily: font,
+                  textDecoration: step.done ? "line-through" : "none",
+                  fontWeight: isNext ? 600 : 400,
+                }}
+              >
+                {step.label}
+              </button>
+              {isNext && (
+                <span style={{ marginLeft: "auto", fontSize: 10, color: K.gn, fontWeight: 700 }}>Next →</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {plan.next && (
+        <button
+          onClick={() => plan.next.slug && navigate && navigate(plan.next.slug)}
+          style={{
+            marginTop: 12, width: "100%", padding: "8px", background: `${K.gn}12`,
+            border: `1px solid ${K.gn}35`, borderRadius: 6,
+            color: K.gn, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: font,
+          }}
+        >
+          {plan.next.label} →
+        </button>
+      )}
     </div>
   );
 }
