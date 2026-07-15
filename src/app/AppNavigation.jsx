@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { K, S, font } from "../lib/shared.js";
+import { K, S, font, fontD } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
@@ -66,19 +66,149 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_ICONS = ["⌂", "⇄", "⊞", "◎", "⚡", "✦"];
 
+export function MobileBottomNav({ gi, goTo, tabs, onDrawerOpen }) {
   return (
     <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+      {tabs.map((tab, index) => {
+        const isActive = gi === index;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => isActive ? onDrawerOpen?.() : goTo(index, 0)}
+            aria-label={isActive ? `Browse ${tab.group} tools` : tab.group}
+            style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: isActive ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, transition: "color 0.15s" }}
+          >
+            <span aria-hidden="true" style={{ fontSize: 14, lineHeight: 1, opacity: isActive ? 1 : 0.7 }}>{NAV_ICONS[index] || "○"}</span>
+            <span style={{ fontWeight: isActive ? 700 : 400 }}>{tab.group}</span>
+          </button>
+        );
+      })}
     </div>
+  );
+}
+
+export function MobileNavDrawer({ tabs, gi, currentTi, goTo, isOpen, onClose }) {
+  const g = tabs?.[gi];
+  const hasSubcats = g?.items?.some((item) => item.subcat);
+
+  const grouped = React.useMemo(() => {
+    if (!g) return [];
+    if (!hasSubcats) return [{ label: null, items: g.items.map((item, ti) => ({ item, ti })) }];
+    const map = new Map();
+    g.items.forEach((item, ti) => {
+      const key = item.subcat || "Other";
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push({ item, ti });
+    });
+    return Array.from(map.entries()).map(([label, items]) => ({ label, items }));
+  }, [g, hasSubcats]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
+  if (!g) return null;
+
+  return (
+    <>
+      <div
+        aria-hidden="true"
+        onClick={onClose}
+        style={{
+          position: "fixed", inset: 0,
+          background: isOpen ? "rgba(0,0,0,0.55)" : "transparent",
+          backdropFilter: isOpen ? "blur(3px)" : "none",
+          WebkitBackdropFilter: isOpen ? "blur(3px)" : "none",
+          zIndex: 310,
+          pointerEvents: isOpen ? "auto" : "none",
+          transition: "background 0.22s, backdrop-filter 0.22s",
+        }}
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${g.group} — all tools`}
+        style={{
+          position: "fixed", bottom: 0, left: 0, right: 0,
+          height: "100dvh",
+          background: K.s1,
+          borderRadius: "20px 20px 0 0",
+          border: `1px solid ${K.bd2}`,
+          zIndex: 320,
+          transform: isOpen ? "translateY(0)" : "translateY(100%)",
+          transition: "transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)",
+          display: "flex", flexDirection: "column",
+          boxShadow: "0 -20px 60px rgba(0,0,0,0.55)",
+          willChange: "transform",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 0", flexShrink: 0 }}>
+          <div style={{ width: 40, height: 4, borderRadius: 999, background: K.bd2 }} />
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 20px 14px", borderBottom: `1px solid ${K.bd}`, flexShrink: 0 }}>
+          <div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: K.tx, fontFamily: fontD, letterSpacing: "-0.3px" }}>
+              {g.group}
+            </div>
+            <div style={{ fontSize: 11, color: K.mt, marginTop: 2, textTransform: "uppercase", letterSpacing: "1.2px" }}>
+              {g.items.length} tool{g.items.length !== 1 ? "s" : ""}
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{ padding: "8px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 8, color: K.dm, cursor: "pointer", fontSize: 13, fontFamily: font, lineHeight: 1 }}
+          >
+            ✕
+          </button>
+        </div>
+
+        <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)" }}>
+          {grouped.map(({ label, items }) => (
+            <div key={label || "_all"}>
+              {label && (
+                <div style={{ padding: "14px 20px 6px", fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.4px", fontWeight: 700, fontFamily: font }}>
+                  {label}
+                </div>
+              )}
+              {items.map(({ item, ti }) => {
+                const isCurrentItem = ti === currentTi;
+                return (
+                  <button
+                    key={item.slug}
+                    onClick={() => { goTo(gi, ti); onClose(); }}
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      width: "100%", padding: "15px 20px",
+                      background: isCurrentItem ? `${K.gn}08` : "transparent",
+                      border: "none",
+                      borderLeft: isCurrentItem ? `3px solid ${K.gn}` : "3px solid transparent",
+                      borderBottom: `1px solid ${K.bd}`,
+                      color: isCurrentItem ? K.gn : K.tx,
+                      cursor: "pointer", textAlign: "left", fontFamily: font,
+                      transition: "background 0.1s, color 0.1s",
+                    }}
+                  >
+                    <span style={{ fontSize: 14, fontWeight: isCurrentItem ? 700 : 500 }}>{item.n}</span>
+                    {item.pro && (
+                      <span style={{ fontSize: 10, color: K.pp, background: `${K.pp}15`, padding: "2px 8px", borderRadius: 50, fontFamily: font, flexShrink: 0 }}>
+                        Pro
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }

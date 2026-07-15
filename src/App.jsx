@@ -7,7 +7,7 @@ import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoo
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav, MobileNavDrawer, QuickCalcPanel } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -84,6 +84,7 @@ export default function App() {
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [authModalMode, setAuthModalMode] = useState(() => getInitialAuthMode());
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
+  const [showNavDrawer, setShowNavDrawer] = useState(false);
   const {
     darkMode,
     toggleTheme,
@@ -179,6 +180,7 @@ export default function App() {
     tabMemory.current[newGi] = resolvedTi;
     navigate("/" + TABS[newGi].items[resolvedTi].slug);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setShowNavDrawer(false);
   };
   useEffect(() => { window.VaultSDK?.applyGates(); }, [slug, proStatus]);
   useEffect(() => {
@@ -585,23 +587,34 @@ export default function App() {
               {compareMode?"âœ• Exit Compare":"âŠž Compare"}
             </button>
           </div>}
-          <div
-            id={`pg-subtabs-${g.group.toLowerCase().replace(/\s+/g,"-")}`}
-            role="tablist"
-            aria-label={`${g.group} navigation`}
-            className="pg-scroll-x"
-            style={{display:"flex",maxWidth:shellMaxWidth,width:"100%",gap:2,margin:"0 auto",overflowX:"auto"}}
-          >{g.items.map((t,i)=>{
-            const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
-            const isFav = calcFavorites.includes(t.slug);
-            return (<button key={t.n} onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
-              {t.n}
-              {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>â˜…</span>}
-              {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
-            </button>);
-          })}</div>
+          <div style={{display:"flex",alignItems:"stretch",maxWidth:shellMaxWidth,width:"100%",margin:"0 auto",position:"relative"}}>
+            <div
+              id={`pg-subtabs-${g.group.toLowerCase().replace(/\s+/g,"-")}`}
+              role="tablist"
+              aria-label={`${g.group} navigation`}
+              className="pg-scroll-x"
+              style={{display:"flex",flex:1,gap:2,overflowX:"auto",minWidth:0}}
+            >{g.items.map((t,i)=>{
+              const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
+              const isFav = calcFavorites.includes(t.slug);
+              return (<button key={t.n} onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
+                {t.n}
+                {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</span>}
+                {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
+              </button>);
+            })}</div>
+            {isMobile && g.items.length > 4 && (
+              <button
+                onClick={() => setShowNavDrawer((v) => !v)}
+                aria-label={`Browse all ${g.group} tools`}
+                style={{flexShrink:0,padding:"8px 12px",background:`${K.ac}10`,border:"none",borderLeft:`1px solid ${K.bd}`,borderBottom:`2px solid ${showNavDrawer?K.ac:"transparent"}`,color:showNavDrawer?K.ac:K.dm,cursor:"pointer",fontSize:11,fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:4,transition:"color 0.15s,border-color 0.15s"}}
+              >
+                All {showNavDrawer ? "▼" : "▲"}
+              </button>
+            )}
+          </div>
         </div>
-        {!isDesktop && <div style={{position:"absolute",right:0,top:0,bottom:0,width:42,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>}
+        {!isDesktop && !(isMobile && g.items.length > 4) && <div style={{position:"absolute",right:0,top:0,bottom:0,width:42,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>}
       </div>
       <div className="pg-main-content" style={{maxWidth:shellMaxWidth,margin:"0 auto",padding:`${contentPadding}px`}}>
         {!user && <MembershipBanner/>}
@@ -624,7 +637,8 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
+      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS} onDrawerOpen={() => setShowNavDrawer((v) => !v)}/>
+      <MobileNavDrawer tabs={TABS} gi={gi} currentTi={ti} goTo={goTo} isOpen={showNavDrawer} onClose={() => setShowNavDrawer(false)}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate}/>
