@@ -3,6 +3,38 @@ import { K, S, font } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
+export const NAV_TAB_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+
+const NAV_SVG_ICONS = [
+  // Home: peaked house
+  <svg key="home" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M10 2.5L2.5 9v8.5H7.5V14a2.5 2.5 0 015 0v3.5H17.5V9L10 2.5z"/>
+  </svg>,
+  // Convert: swap arrows
+  <svg key="convert" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3.5 7h13M14 4.5l2.5 2.5-2.5 2.5M16.5 13h-13M6 10.5L3.5 13 6 15.5"/>
+  </svg>,
+  // Calculate: calculator body + keys
+  <svg key="calc" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3.5" y="2" width="13" height="16" rx="1.5"/>
+    <path d="M6.5 6.5h7M6.5 10h7M6.5 13.5h4"/>
+  </svg>,
+  // Track: trending-up chart with baseline
+  <svg key="track" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="2,15 6,9.5 10,12 14,6 18,9"/>
+    <line x1="2" y1="17.5" x2="18" y2="17.5"/>
+  </svg>,
+  // Live: ECG pulse wave
+  <svg key="live" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="1,10 4,10 6,5.5 9,15 12,8.5 14.5,10 17,10 19,10"/>
+  </svg>,
+  // Learn: open book with spine
+  <svg key="learn" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M10 4.5C8 3 5 3 3 4.5v11c2-1.5 5-1.5 7 0 2-1.5 5-1.5 7 0v-11c-2-1.5-5-1.5-7 0z"/>
+    <line x1="10" y1="4.5" x2="10" y2="15.5"/>
+  </svg>,
+];
+
 export function QuickCalcPanel({ goTo }) {
   const [open, setOpen] = useState(false);
   const quickItems = [
@@ -25,8 +57,10 @@ export function QuickCalcPanel({ goTo }) {
           ))}
         </div>
       )}
-      <button onClick={() => setOpen((value) => !value)} style={{ padding: "10px 14px", background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 999, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font, fontWeight: 700, boxShadow: "0 10px 24px rgba(0,0,0,0.3)" }}>
-        {open ? "Close" : "Quick"}
+      <button onClick={() => setOpen((value) => !value)} aria-label={open ? "Close quick calc" : "Quick calculator"} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: open ? K.s2 : K.ac, border: `1px solid ${open ? K.bd2 : K.ac}`, borderRadius: 999, color: open ? K.mt : K.s1, cursor: "pointer", boxShadow: "0 10px 24px rgba(0,0,0,0.3)", transition: "background 0.15s" }}>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          {open ? <><line x1="4" y1="4" x2="14" y2="14"/><line x1="14" y1="4" x2="4" y2="14"/></> : <><line x1="9" y1="3" x2="9" y2="15"/><line x1="3" y1="9" x2="15" y2="9"/></>}
+        </svg>
       </button>
     </div>
   );
@@ -66,38 +100,6 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-const NAV_SVG_ICONS = [
-  // Home: peaked house
-  <svg key="home" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M10 2.5L2.5 9v8.5H7.5V14a2.5 2.5 0 015 0v3.5H17.5V9L10 2.5z"/>
-  </svg>,
-  // Convert: swap arrows
-  <svg key="convert" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M3.5 7h13M14 4.5l2.5 2.5-2.5 2.5M16.5 13h-13M6 10.5L3.5 13 6 15.5"/>
-  </svg>,
-  // Calculate: calculator body + keys
-  <svg key="calc" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <rect x="3.5" y="2" width="13" height="16" rx="1.5"/>
-    <path d="M6.5 6.5h7M6.5 10h7M6.5 13.5h4"/>
-  </svg>,
-  // Track: trending-up chart with baseline
-  <svg key="track" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="2,15 6,9.5 10,12 14,6 18,9"/>
-    <line x1="2" y1="17.5" x2="18" y2="17.5"/>
-  </svg>,
-  // Live: ECG pulse wave
-  <svg key="live" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="1,10 4,10 6,5.5 9,15 12,8.5 14.5,10 17,10 19,10"/>
-  </svg>,
-  // Learn: open book with spine
-  <svg key="learn" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M10 4.5C8 3 5 3 3 4.5v11c2-1.5 5-1.5 7 0 2-1.5 5-1.5 7 0v-11c-2-1.5-5-1.5-7 0z"/>
-    <line x1="10" y1="4.5" x2="10" y2="15.5"/>
-  </svg>,
-];
-
-const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-
 export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
     <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 28px rgba(0,0,0,0.28)" }}>
@@ -110,13 +112,14 @@ export function MobileBottomNav({ gi, goTo, tabs }) {
             onClick={() => goTo(index, 0)}
             aria-label={tab.group}
             aria-current={active ? "page" : undefined}
-            style={{ flex: 1, padding: "5px 2px 4px", background: "none", border: "none", color: active ? K.gn : K.mt, cursor: "pointer", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, transition: "color 0.15s", WebkitTapHighlightColor: "transparent" }}
+            style={{ flex: 1, padding: "5px 2px 4px", background: "none", border: "none", color: active ? K.gn : K.mt, cursor: "pointer", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, position: "relative", transition: "color 0.15s", WebkitTapHighlightColor: "transparent" }}
           >
+            {active && <span aria-hidden="true" style={{ position: "absolute", top: 0, left: "20%", right: "20%", height: 2, background: K.gn, borderRadius: "0 0 2px 2px" }} />}
             <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 28, borderRadius: 10, background: active ? `${K.gn}12` : "transparent", transition: "background 0.15s" }}>
               {NAV_SVG_ICONS[index] || null}
             </span>
             <span style={{ fontSize: 9, letterSpacing: "0.5px", textTransform: "uppercase", fontWeight: active ? 700 : 400, lineHeight: 1 }}>
-              {NAV_LABELS[index] || tab.group}
+              {NAV_TAB_LABELS[index] || tab.group}
             </span>
           </button>
         );
