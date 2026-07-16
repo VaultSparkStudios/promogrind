@@ -44,13 +44,13 @@
     "@supabase/supabase-js": "^2.110.7",
     "posthog-js": "^1.402.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.2.7",
     "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",
     "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/ui": "^4.1.10",
     "happy-dom": "^20.10.6",
