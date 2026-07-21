@@ -3,14 +3,59 @@ import { K, S, font, fontD } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
-const TAB_ICONS = {
-  Home: "⌂",
-  Convert: "⇌",
-  Calculate: "≡",
-  Track: "◉",
-  Live: "⚡",
-  Learn: "✦",
-};
+// Inline SVG icons — one per nav group, no external deps
+function SvgHome({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M3 10.5L10 4l7 6.5" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M5 9v7h3.5v-4.5h3V16H15V9" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function SvgConvert({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M5 5h10M13 3l2 2-2 2" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M15 15H5M7 13l-2 2 2 2" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function SvgCalc({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <rect x="4" y="3" width="12" height="14" rx="2" stroke={color} strokeWidth="1.65"/>
+      <path d="M7 7h6M7 10.5h2M11 10.5h2M7 14h2M11 14h2" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function SvgTrack({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M3 14l4-4 3 3 3-5 4 3" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3 17h14" stroke={color} strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/>
+    </svg>
+  );
+}
+function SvgLive({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="2.2" fill={color}/>
+      <path d="M6.5 6.5a5 5 0 017 7M13.5 6.5a5 5 0 01-7 7" stroke={color} strokeWidth="1.65" strokeLinecap="round"/>
+      <path d="M4 4a9 9 0 0112 12M16 4a9 9 0 01-12 12" stroke={color} strokeWidth="1.2" strokeLinecap="round" opacity="0.35"/>
+    </svg>
+  );
+}
+function SvgLearn({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M4 5h12v10a1 1 0 01-1 1H5a1 1 0 01-1-1V5z" stroke={color} strokeWidth="1.65"/>
+      <path d="M4 5a2 2 0 012-2h8a2 2 0 012 2" stroke={color} strokeWidth="1.65"/>
+      <path d="M10 5v11M7 9h3M7 12.5h6" stroke={color} strokeWidth="1.3" strokeLinecap="round" opacity="0.55"/>
+    </svg>
+  );
+}
+
+const TAB_ICONS_SVG = [SvgHome, SvgConvert, SvgCalc, SvgTrack, SvgLive, SvgLearn];
 
 export function QuickCalcPanel({ goTo }) {
   const [open, setOpen] = useState(false);
@@ -76,6 +121,12 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
 }
 
 export function MobileNavDrawer({ open, onClose, tabs, gi, ti, goTo }) {
+  useEffect(() => {
+    if (open) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const handler = (e) => { if (e.key === "Escape") onClose(); };
@@ -147,9 +198,7 @@ export function MobileNavDrawer({ open, onClose, tabs, gi, ti, goTo }) {
                 display: "flex", alignItems: "center", gap: 10,
                 padding: "14px 20px 6px",
               }}>
-                <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1, color: gi === groupIndex ? K.gn : K.mt }}>
-                  {TAB_ICONS[tab.group] || "•"}
-                </span>
+                {(() => { const Icon = TAB_ICONS_SVG[groupIndex]; return Icon ? <Icon size={16} color={gi === groupIndex ? K.gn : K.mt} /> : null; })()}
                 <span style={{
                   fontFamily: fontD, fontSize: 11, fontWeight: 700,
                   color: gi === groupIndex ? K.gn : K.mt,
@@ -213,7 +262,8 @@ export function MobileBottomNav({ gi, goTo, tabs, onOpenDrawer }) {
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
       {tabs.map((tab, index) => {
         const isActive = gi === index;
-        const icon = TAB_ICONS[tab.group] || "•";
+        const Icon = TAB_ICONS_SVG[index];
+        const color = isActive ? K.gn : K.mt;
         return (
           <button
             key={tab.group}
@@ -229,16 +279,14 @@ export function MobileBottomNav({ gi, goTo, tabs, onOpenDrawer }) {
             style={{
               flex: 1, padding: "5px 2px 6px",
               background: "none", border: "none",
-              color: isActive ? K.gn : K.mt,
+              color,
               cursor: "pointer",
               fontFamily: font,
               display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
               transition: "color 0.15s",
             }}
           >
-            <span aria-hidden="true" style={{ fontSize: 17, lineHeight: 1, fontWeight: isActive ? 700 : 400 }}>
-              {icon}
-            </span>
+            {Icon && <Icon size={20} color={color} />}
             <span style={{ fontSize: 8, textTransform: "uppercase", letterSpacing: "0.6px", fontWeight: isActive ? 700 : 400, lineHeight: 1 }}>
               {tab.group}
             </span>

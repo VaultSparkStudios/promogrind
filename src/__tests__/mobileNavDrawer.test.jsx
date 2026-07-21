@@ -80,6 +80,12 @@ describe("MobileBottomNav", () => {
     expect(screen.getByLabelText("Live")).toBeTruthy();
   });
 
+  it("renders SVG icons instead of text characters for each tab", () => {
+    const { container } = render(<MobileBottomNav gi={0} goTo={vi.fn()} tabs={TABS} onOpenDrawer={vi.fn()} />);
+    const svgs = container.querySelectorAll("svg[aria-hidden='true']");
+    expect(svgs.length).toBeGreaterThanOrEqual(TABS.length);
+  });
+
   it("calls goTo when an inactive tab is tapped", () => {
     const goTo = vi.fn();
     render(<MobileBottomNav gi={0} goTo={goTo} tabs={TABS} onOpenDrawer={vi.fn()} />);
@@ -94,5 +100,39 @@ describe("MobileBottomNav", () => {
     fireEvent.click(screen.getByLabelText("Home"));
     expect(onOpenDrawer).toHaveBeenCalledTimes(1);
     expect(goTo).not.toHaveBeenCalled();
+  });
+});
+
+describe("MobileNavDrawer body-scroll lock", () => {
+  it("locks body scroll when open and restores it on close", () => {
+    const { rerender } = render(
+      <MobileNavDrawer open={false} onClose={vi.fn()} tabs={TABS} gi={0} ti={0} goTo={vi.fn()} />
+    );
+    expect(document.body.style.overflow).toBe("");
+    rerender(
+      <MobileNavDrawer open={true} onClose={vi.fn()} tabs={TABS} gi={0} ti={0} goTo={vi.fn()} />
+    );
+    expect(document.body.style.overflow).toBe("hidden");
+    rerender(
+      <MobileNavDrawer open={false} onClose={vi.fn()} tabs={TABS} gi={0} ti={0} goTo={vi.fn()} />
+    );
+    expect(document.body.style.overflow).toBe("");
+  });
+
+  it("renders SVG icons next to group headers in the drawer", () => {
+    const { container } = render(
+      <MobileNavDrawer open={true} onClose={vi.fn()} tabs={TABS} gi={0} ti={0} goTo={vi.fn()} />
+    );
+    const svgs = container.querySelectorAll("svg[aria-hidden='true']");
+    expect(svgs.length).toBeGreaterThanOrEqual(TABS.length);
+  });
+
+  it("calls onClose when Escape is pressed while open", () => {
+    const onClose = vi.fn();
+    render(
+      <MobileNavDrawer open={true} onClose={onClose} tabs={TABS} gi={0} ti={0} goTo={vi.fn()} />
+    );
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 });
