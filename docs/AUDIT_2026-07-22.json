@@ -136,8 +136,8 @@
       "rank": 4,
       "slug": "zero-known-vulnerability-lock",
       "status": "shipped",
-      "premise": "Exact-lockfile closeout verification found one fixable low-severity DOMPurify advisory through PostHog.",
-      "implementation": "DOMPurify 3.4.12 passed Obelisk review plus live registry provenance/integrity checks; the lockfile was updated, npm audit returned zero vulnerabilities, and the full launch gate reran green."
+      "premise": "Exact-lockfile closeout verification found a DOMPurify advisory and then a newly published React Router advisory wave.",
+      "implementation": "DOMPurify 3.4.12 and React Router 7.18.0 passed package-trust plus registry provenance/integrity checks; npm audit returned zero vulnerabilities and the full 559-test launch gate reran green."
     }
   ],
   "executionLog": [
@@ -147,6 +147,6 @@
     { "slug": "studio-scope-honesty", "status": "complete", "evidence": "Percentage, local genius scope, intent scope, and project brief fixed; script regressions green." },
     { "slug": "browser-launch-truth-mirror", "status": "complete", "evidence": "Launch validation now consumes a freshness-checked browser-safe PROJECT_STATUS mirror; focused UI/state tests green." },
     { "slug": "intelligence-refresh", "status": "complete", "evidence": "IGNIS refreshed to 44,184; revenue signals refreshed; scoped genius list regenerated to zero items." },
-    { "slug": "second-order-innovation", "status": "complete", "evidence": "Four compound drift/security candidates generated and implemented; entitlement discovery contract green; five edge functions Deno-check green; npm audit zero." }
+    { "slug": "second-order-innovation", "status": "complete", "evidence": "Four planned compound candidates plus two post-push emergent candidates implemented; entitlement discovery green; five edge functions Deno-check green; non-destructive production probe verified; npm audit zero." }
   ]
 }

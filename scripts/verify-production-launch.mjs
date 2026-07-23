@@ -82,6 +82,16 @@ export function describeFunctionResponse(name, status, rawBody) {
   return `function request failed with HTTP ${status}`;
 }
 
+export function describeRequiredLaunchMonetization(status) {
+  if (status.missingBooks.length > 0) {
+    return `missing tracked monetization links for ${status.missingBooks.join(", ")}`;
+  }
+  if (status.requiredBooks.length === 0) {
+    return "no books are currently designated as required launch monetization";
+  }
+  return `required launch monetization links configured for ${status.configuredBooks.join(", ")}`;
+}
+
 function readFlag(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : null;
@@ -160,53 +170,55 @@ async function main() {
   ));
 
   if (!created.error) {
-    // Exercise the public signup endpoint with an already-confirmed disposable
-    // identity. Supabase's enumeration protection accepts this without sending
-    // confirmation mail, so the monitor cannot consume the shared email quota.
-    const signUp = await pub.auth.signUp({ email: billingEmail, password });
-    results.push(report(
-      "public_signup",
-      !signUp.error,
-      signUp.error ? describeAuthError(signUp.error) : "public sign-up endpoint accepted the request without sending mail",
-    ));
+    try {
+      // Exercise the public signup endpoint with an already-confirmed disposable
+      // identity. Supabase's enumeration protection accepts this without sending
+      // confirmation mail, so the monitor cannot consume the shared email quota.
+      const signUp = await pub.auth.signUp({ email: billingEmail, password });
+      results.push(report(
+        "public_signup",
+        !signUp.error,
+        signUp.error ? describeAuthError(signUp.error) : "public sign-up endpoint accepted the request without sending mail",
+      ));
 
-    const billingSignIn = await pub.auth.signInWithPassword({ email: billingEmail, password });
-    results.push(report(
-      "confirmed_signin",
-      !billingSignIn.error,
-      billingSignIn.error ? describeAuthError(billingSignIn.error) : "confirmed user sign-in succeeded",
-    ));
+      const billingSignIn = await pub.auth.signInWithPassword({ email: billingEmail, password });
+      results.push(report(
+        "confirmed_signin",
+        !billingSignIn.error,
+        billingSignIn.error ? describeAuthError(billingSignIn.error) : "confirmed user sign-in succeeded",
+      ));
 
-    const accessToken = billingSignIn.data?.session?.access_token;
-    if (accessToken) {
-      const invoke = async (name, body = {}) => {
-        const res = await fetch(`${adminEnv.SUPABASE_URL}/functions/v1/${name}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(body),
-        });
-        const rawBody = await res.text();
-        return report(
-          name,
-          res.ok || (name === "customer-portal" && res.status === 404),
-          describeFunctionResponse(name, res.status, rawBody),
-          { status: res.status },
-        );
-      };
+      const accessToken = billingSignIn.data?.session?.access_token;
+      if (accessToken) {
+        const invoke = async (name, body = {}) => {
+          const res = await fetch(`${adminEnv.SUPABASE_URL}/functions/v1/${name}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(body),
+          });
+          const rawBody = await res.text();
+          return report(
+            name,
+            res.ok || (name === "customer-portal" && res.status === 404),
+            describeFunctionResponse(name, res.status, rawBody),
+            { status: res.status },
+          );
+        };
 
-      results.push(await invoke("create-checkout", { plan: "scout_monthly", attribution: { referral_source: "launch-check" } }));
-      results.push(await invoke("customer-portal", {}));
+        results.push(await invoke("create-checkout", { plan: "scout_monthly", attribution: { referral_source: "launch-check" } }));
+        results.push(await invoke("customer-portal", {}));
+      }
+    } finally {
+      const removed = await admin.auth.admin.deleteUser(created.data.user.id);
+      results.push(report(
+        "probe_user_cleanup",
+        !removed.error,
+        removed.error ? describeAuthError(removed.error) : "disposable probe user removed",
+      ));
     }
-
-    const removed = await admin.auth.admin.deleteUser(created.data.user.id);
-    results.push(report(
-      "probe_user_cleanup",
-      !removed.error,
-      removed.error ? describeAuthError(removed.error) : "disposable probe user removed",
-    ));
   } else {
     results.push(report(
       "public_signup",
@@ -236,9 +248,7 @@ async function main() {
   results.push(advisoryReport(
     "required_launch_monetization",
     launchMonetization.missingBooks.length === 0,
-    launchMonetization.missingBooks.length === 0
-      ? `required launch monetization links configured for ${launchMonetization.configuredBooks.join(", ")}`
-      : `missing tracked monetization links for ${launchMonetization.missingBooks.join(", ")}`,
+    describeRequiredLaunchMonetization(launchMonetization),
     {
       requiredBooks: launchMonetization.requiredBooks,
       configuredBooks: launchMonetization.configuredBooks,

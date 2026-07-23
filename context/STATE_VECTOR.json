@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-07-23",
-  "generatedAtMs": 1784834000924,
+  "generatedAtMs": 1784849468749,
   "session": 115,
-  "vectorHash": "ebdf698582aa71b1",
+  "vectorHash": "84f7ff997cda15f4",
   "silTotal": 1000,
   "silMax": 1000,
   "silAvg3": 1000,
@@ -22,7 +22,7 @@
   "topNext": [
     "run the deferred desktop/mobile dark/light screenshot matrix when a package-trus",
     "~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.js",
-    "rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage h"
+    "~~rerun/inspect the GitHub Pages workflow and confirm the retained launch artifa"
   ],
   "health": "green",
   "truthStatus": "green-with-external-proof-follow-ups",
@@ -34,8 +34,8 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Push/deploy S115 frontend changes, then map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
-  "currentFocus": "S115 saturated six live-code audit items plus four second-order innovations: authenticated atomic lifetime AI quotas, centralized/discovered provider entitlements, UTF-8 and sober-claims release contracts, truthful repo/context scope, a generated browser launch-status mirror, current IGNIS/revenue intelligence, and a zero-known-vulnerability lock. Exact-lockfile suite 555/555; launch-local direct exit 0; scoped genius list 0.",
+  "nextMilestone": "Map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
+  "currentFocus": "S115 saturated all verified primary and second-order work, then root-fixed the production signup monitor so it cannot consume confirmation-email quota or leak provider URLs. Exact-lockfile suite 559/559; launch-local direct exit 0; CI 30041235301 green; Deploy Pages 30041234889 green with 0 blocking artifact failures; scoped genius list 0.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",

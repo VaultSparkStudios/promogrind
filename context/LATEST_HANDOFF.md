@@ -1,11 +1,11 @@
 # Latest Handoff — PromoGrind
 
-Session Intent (S115, codex): Run the complete `/arc` continuously through start, audit, implementation saturation, second-order innovation, and canonical closeout; commit and push directly to main only after every truthful local gate is green — achieved for repo-owned work; remote push/deploy verification follows this write-back.
+Session Intent (S115, codex): Run the complete `/arc` continuously through start, audit, implementation saturation, second-order innovation, canonical closeout, direct-main push, and verified production deployment — achieved.
 
 Date: 2026-07-23
 Session: 115
 Agent: Codex
-Status: implementation saturated and local closeout gates green; direct-main commit/push pending
+Status: implementation saturated; local, CI, production deploy, artifact, and dashboard-smoke gates green
 
 ## Where We Left Off (Session 115)
 
@@ -22,13 +22,15 @@ S115 ran `/start → /audit → /implement → /closeout` as one mission. Six ve
 
 ## Verification
 
-- `npm test` on the exact package-lock tree — 67 files, 555/555 passing.
+- `npm test` on the exact package-lock tree — 68 files, 559/559 passing.
 - `npm run verify:launch-local` — full chain green; exit captured directly as 0.
 - `node scripts/test-studio-script-regressions.mjs` — 14/14 passing.
 - `deno check` — all five modified provider functions green.
-- source integrity — 345 files green; public claims — 345 files / 9 rules green; AI entitlement contract — 5/5 green.
-- supply-chain scan — 235 packages after the final `origin/main` rebase, 0 blocks, 0 missing integrity, 0 non-registry sources.
-- `npm audit --json` — 0 known vulnerabilities after the trust-reviewed DOMPurify 3.4.12 lock update.
+- source integrity — 346 files green; public claims — 346 files / 9 rules green; AI entitlement contract — 5/5 green.
+- supply-chain scan — 236 packages on the final exact lock, 0 blocks, 0 missing integrity, 0 non-registry sources.
+- `npm audit --json` — 0 known vulnerabilities after trust-reviewed DOMPurify 3.4.12 and React Router 7.18.0 security updates.
+- post-push root fix — the launch monitor no longer consumes confirmation-email quota, always removes its disposable confirmed identity, emits bounded Auth diagnostics, and cannot upload live checkout URLs/session IDs.
+- exact remote proof — CI `30041235301` passed; Deploy Pages `30041234889` passed; downloaded artifact has 0 blocking failures and production dashboard smoke has `failures: []`.
 
 ## Honest deferrals (unchanged, external evidence required)
 

@@ -21,10 +21,10 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, `PROJECT_STATUS.json`, generated launch-proof mirror, and AI usage ledger agree that S87 repo-owned work advanced while remaining launch blockers are external proof tasks. |
+| Schema alignment | 5 | Canonical S115 status, handoff, task, audit, generated mirror, and work-log surfaces agree on shipped repo work, verified production deployment, and explicit external evidence gates. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Startup brief, task board, launch proof mirror, AI usage ledger, handoff, current state, SIL, and closeout surfaces describe the same S87 posture after closeout generation. |
-| Handoff continuity | 5 | Session 87 handoff reflects shipped repo-local work, verification status, and the remaining external blockers. |
+| Derived-view freshness | 5 | Startup brief, task board, status mirror, handoff, current state, SIL, audit, and closeout surfaces describe the same S115 posture after final regeneration. |
+| Handoff continuity | 5 | Session 115 handoff records saturated implementation, exact local/remote proof, the production-probe root fix, and remaining external gates. |
 | Contradiction density | 5 | No current product-truth contradiction is known; the main gaps are explicit external evidence gates. |
 | **Total** | **24 / 25** | Green: canonical truth surfaces are coherent; remaining yellow posture is due to external launch proofs and public/private ops shim tension, not contradictory product claims. |
 
@@ -44,7 +44,7 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 | In-app launch proof mirror | `context/LAUNCH_PROOFS.json` + `scripts/generate-launch-proof-mirror.mjs` | `src/data/launchProofs.generated.js`, Launch Command Center | green | 2026-05-14 | S87 generated a browser-safe proof mirror so command-center UI matches canonical evidence requirements without exposing private ops fields. |
 | Operator intelligence | `src/dashboard/today.js` + workflow store + feedback ledger | Dashboard hero, Smart Promo Recommender, Today dashboard | green | 2026-05-14 | S87 adds Operator Autopilot, discipline scoring, and outcome-memory recommendation explanations from settled samples/repeat behavior. |
 | AI usage/cost truth | `supabase/functions/promo-advisor/index.ts` + `scripts/render-ai-usage-ledger.mjs` | `docs/AI_USAGE_LEDGER.md`, `npm run ai:usage` | green | 2026-05-14 | S87 records rule-engine wins and token estimates; live query depends on Supabase admin env, offline render is deterministic. |
-| Production dashboard/runtime | `npm run smoke:production-dashboard` + `src/App.jsx` + deploy artifacts | task board, handoff, launch status | yellow | 2026-05-13 | Local S85 launch gate is green; next deploy artifact should be ingested to confirm production runtime/auth behavior after push. |
+| Production dashboard/runtime | `npm run smoke:production-dashboard` + `src/App.jsx` + deploy artifacts | task board, handoff, launch status | green | 2026-07-23 | Deploy Pages run `30041234889` and its downloaded dashboard artifact passed with `failures: []`. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-06-18 | S95 all-tree and staged secret scans report 0 findings; `package-lock.json` SRI hashes are allowlisted as non-secret integrity metadata. |
 | Dependency and package trust | `package-lock.json` + `scripts/package-trust.mjs` + `scripts/scan-npm-supply-chain.mjs` | `npm audit`, Dependabot alerts, task board, handoff | green | 2026-06-18 | `npm audit` reports 0 vulnerabilities, GitHub Dependabot open alerts are 0, and lockfile supply-chain scan has 0 blocking findings. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
@@ -67,6 +67,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Five Anthropic functions share one typed entitlement contract and are discovered automatically for authentication, atomic quota, usage-event, and SDK-pin enforcement.
 - User-facing source is free of detected mojibake, and public copy clears nine calm-operator trust rules.
 - IGNIS and revenue intelligence are current; the project-scoped genius list reports zero remaining items.
+- Production monitor truth is non-destructive: it no longer sends signup mail, deletes its disposable identity in `finally`, reports bounded provider errors, and redacts checkout credentials from retained artifacts.
+- S115 remote proof is green: CI `30041235301` and Deploy Pages `30041234889` passed; the downloaded launch artifact has 0 blocking failures and dashboard smoke has no failures.
+- A newly published React Router advisory wave was caught at final closeout; trust-approved 7.18.0 replaced affected 6.30.4, the full launch gate stayed green, and the exact 236-package lock returns 0 vulnerabilities / 0 supply-chain blocks.
 
 ## Explicit Evidence Gaps (S115)
 

@@ -55,18 +55,18 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 115 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    555/555 passing  ·  Deploy: S114 commit 81e6858 rema  ║
+║  Tests:    559/559 passing  ·  Deploy: S115 commit 520efd7 depl  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    4% used                          ║
-║     41,025 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~20,513 tok/turn  ·  cache 50%  ·  42 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
+║     30,482 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~15,241 tok/turn  ·  cache 50%  ·  58 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         555/555 passing (2026-07-23)                   ║
+║  ✓  Tests         559/559 passing (2026-07-23)                   ║
 ║  ✓  Velocity      10 ↑  ·  Debt: →                               ║
 ║  ⚠  Runway        ~2 sessions                                    ║
 ║  ✓  Context age   0d                                             ║
@@ -81,7 +81,7 @@
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
 ║  ✓  Doctor        12/12 (100%)  ·  2026-07-23  ✓                 ║
-║  ✓  Cost          real $0.00/7d · real metered total $0.1966 <   ║
+║  ✓  Cost          real $0.00/7d · real metered total $0.2216 <   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗

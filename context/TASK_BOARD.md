@@ -11,7 +11,7 @@
 
 - run the deferred desktop/mobile dark/light screenshot matrix when a package-trusted browser runtime is available; visual verification remains SKIPPED rather than inferred from source
 - ~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.~~ — **DONE S104**: completed the remaining App shell finale with focused route/widget extraction; `appComposition.test.js` now enforces a <1500 App shell ceiling.
-- rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
+- ~~rerun/inspect the GitHub Pages workflow and confirm the retained launch artifact remains clean~~ — **DONE S115**: run `30041234889` passed with 0 blocking failures, dashboard smoke green, non-mailing signup probe green, and disposable-user cleanup green.
 - add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
 - add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
 - ~~continue decomposing the remaining high-churn `src/App.jsx` seams beyond the extracted shell, route, tracker, utility-calculator, and promo-finder modules (App.jsx is now 2365 lines)~~ — **DONE S104**: extracted Promo Calendar, referral/team/account, onboarding, and dashboard action widgets; future App growth is guarded below <1500 lines.
@@ -29,7 +29,8 @@
 - central AI entitlement registry — **DONE (second-order)**: all five provider features consume one typed server policy.
 - provider discovery guard — **DONE (second-order)**: future provider functions fail integrity checks if auth, registry, atomic quota, usage events, or SDK pinning are missing.
 - pinned Deno contract — **DONE (second-order)**: trust-approved Anthropic SDK pinned at 0.113.0; all five edge functions type-check.
-- zero-known-vulnerability lock — **DONE (second-order)**: reviewed DOMPurify 3.4.12 provenance/integrity, cleared the low advisory, and reran the full launch gate with `npm audit` at 0.
+- zero-known-vulnerability lock — **DONE (second-order + final ratchet)**: reviewed DOMPurify 3.4.12 and React Router 7.18.0 provenance/integrity, cleared both advisory waves, and reran the 559-test full launch gate with `npm audit` at 0.
+- non-destructive production launch probe — **DONE (second-order)**: eliminated confirmation-email quota consumption, guaranteed disposable-user cleanup, bounded provider diagnostics, redacted checkout artifacts, and verified CI/Pages production green.
 
 ## Shipped This Session (S97 and earlier retained history)
 - production-auth-email-smoke-runner S97 — **DONE S97**: added `npm run smoke:auth-email` with redacted evidence capture for production account confirmation, resend, forgot-password, recovery-link, and new-password sign-in; wired `authEmailSmoke` into canonical launch proofs and browser-safe mirror.

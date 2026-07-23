@@ -5,9 +5,13 @@
 - Ran the complete continuous `/start → /audit → /implement → /closeout` mission; verified six primary premises against live code, rejected four phantom/duplicate ideas as wins, and shipped all six valid items.
 - Shipped authenticated atomic lifetime-aware AI quotas, UTF-8 repair/gating, sober-claims enforcement, truthful repo/context scope, a canonical browser launch-status mirror, and current IGNIS/revenue intelligence.
 - Generated and shipped four second-order improvements: central AI entitlements, provider-perimeter auto-discovery, a trust-approved pinned SDK/Deno contract, and a zero-known-vulnerability lock.
-- Verification: exact-lockfile Vitest 555/555 across 67 files; script regressions 14/14; five edge functions Deno-check; full launch-local direct exit 0; supply-chain scan 0 blocks; npm audit 0.
+- Verification: exact-lockfile Vitest 559/559 across 68 files after the production-probe regressions; script regressions 14/14; five edge functions Deno-check; full launch-local direct exit 0; supply-chain scan 0 blocks; npm audit 0.
 - Honest deferrals: Supabase deploy capability remains missing; production email/Stripe/friend/Brevo/capture proofs and visual screenshot matrix remain unclaimed.
 - Ark: shipped `01JU85UQ71086118EE17EF4AF2` for the Studio-owned cost registry/Supabase capability and `01JU85UQC49A8695ED64145316` for upstream CANON-044 propagation; no sibling tree was edited.
+- Pushed S115 direct to `main` (`82b7572`), then diagnosed Deploy Pages run `30037388087`: deployment/dashboard smoke succeeded but the synthetic signup probe had exhausted shared confirmation-email quota and serialized its Auth error as `{}`.
+- Root-fixed the monitor in `520efd7`: public signup now uses an admin-confirmed disposable identity without sending mail, cleanup runs in `finally`, provider diagnostics are bounded, and Stripe checkout URLs/session IDs cannot enter CI artifacts; four regression tests cover the safety contract.
+- Remote verification: CI `30041235301` passed and Deploy Pages `30041234889` passed. Downloaded artifact: 0 blocking failures, signup/sign-in/checkout/portal/cleanup green; production dashboard smoke green with no failures. Affiliate coverage remains one explicit non-blocking advisory.
+- Final audit caught newly published React Router open-redirect/SSR findings after the earlier zero-vulnerability scan. `react-router-dom@7.18.0` passed package trust plus registry provenance/integrity/engine/peer checks; the major migration retained 559/559 tests and the full launch gate, and the final 236-package lock reports 0 vulnerabilities and 0 supply-chain blocks.
 
 Append chronological entries.
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   describeAuthError,
   describeFunctionResponse,
+  describeRequiredLaunchMonetization,
 } from "../../scripts/verify-production-launch.mjs";
 
 describe("production launch verification safety", () => {
@@ -32,5 +33,13 @@ describe("production launch verification safety", () => {
       404,
       JSON.stringify({ error: "No billing profile for user secret-id" }),
     )).toBe("no billing record for disposable probe user (expected)");
+  });
+
+  it("describes an empty required-book set without emitting an empty claim", () => {
+    expect(describeRequiredLaunchMonetization({
+      requiredBooks: [],
+      configuredBooks: [],
+      missingBooks: [],
+    })).toBe("no books are currently designated as required launch monetization");
   });
 });

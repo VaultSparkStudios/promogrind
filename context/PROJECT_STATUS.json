@@ -14,8 +14,8 @@
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
   "currentSession": 115,
-  "currentFocus": "S115 saturated six live-code audit items plus four second-order innovations: authenticated atomic lifetime AI quotas, centralized/discovered provider entitlements, UTF-8 and sober-claims release contracts, truthful repo/context scope, a generated browser launch-status mirror, current IGNIS/revenue intelligence, and a zero-known-vulnerability lock. Exact-lockfile suite 555/555; launch-local direct exit 0; scoped genius list 0.",
-  "nextMilestone": "Push/deploy S115 frontend changes, then map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
+  "currentFocus": "S115 saturated all verified primary and second-order work, then root-fixed the production signup monitor so it cannot consume confirmation-email quota or leak provider URLs. Exact-lockfile suite 559/559; launch-local direct exit 0; CI 30041235301 green; Deploy Pages 30041234889 green with 0 blocking artifact failures; scoped genius list 0.",
+  "nextMilestone": "Map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
@@ -41,10 +41,10 @@
   "ignisScore": 44184,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-23",
-  "testsPassing": 555,
-  "testsTotal": 555,
+  "testsPassing": 559,
+  "testsTotal": 559,
   "testsLastRun": "2026-07-23",
-  "lastDeployStatus": "S114 commit 81e6858 remains the last verified production deploy. S115 local launch gate is green with direct exit 0; direct-main push and Pages deploy verification are pending closeout.",
+  "lastDeployStatus": "S115 commit 520efd7 deployed successfully via GitHub Pages run 30041234889. Downloaded launch artifact: 0 blocking failures; public signup/sign-in, checkout, expected portal state, disposable-user cleanup, and production dashboard smoke all pass. CI run 30041235301 also passed.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-07-23",
   "truthGenome": "24/25",
@@ -53,12 +53,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 555/555 in S115 on the exact package-lock tree via npm test and npm run verify:launch-local"
+      "status": "passing 559/559 across 68 files in S115 on the exact package-lock tree"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S115 (exit code captured directly: 0) with 555/555 tests, encoding/claims/AI-entitlement integrity, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S115 (exit code captured directly: 0) with 559/559 tests, encoding/claims/AI-entitlement integrity, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -74,7 +74,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live; S114 implementation commit 81e6858 deployed via GitHub Pages run 28620744679 with production launch verification and dashboard smoke passing; final closeout proof commit pending post-closeout dispatch"
+      "status": "live; S115 commit 520efd7 deployed via GitHub Pages run 30041234889 with 0 blocking launch-verification failures and production dashboard smoke passing"
     },
     {
       "type": "cloudflare",
