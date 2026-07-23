@@ -426,6 +426,24 @@ export default function App() {
                 Search
               </button>
             )}
+            {/* Hamburger — opens the mobile nav drawer; mobile only */}
+            {isMobile && (
+              <button
+                onClick={() => setShowMobileNav(v => !v)}
+                aria-label=”Open navigation menu”
+                aria-expanded={showMobileNav}
+                style={{
+                  width: 36, height: 36, borderRadius: 8, cursor: 'pointer',
+                  background: showMobileNav ? `${K.ac}20` : 'transparent',
+                  border: `1px solid ${showMobileNav ? K.ac : K.bd2}`,
+                  color: showMobileNav ? K.ac : K.dm, fontSize: 17,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                ☰
+              </button>
+            )}
             {/* Theme toggle — always visible as icon */}
             <button
               onClick={toggleTheme}
@@ -507,10 +525,10 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
+      {/* ── Main nav tabs (hidden on mobile — drawer + bottom nav own group switching) ── */}
       <div style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
-        display:'flex', justifyContent:'center',
+        display: isMobile ? 'none' : 'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',
         WebkitOverflowScrolling:'touch',
         position:'sticky', top: stickyTop, zIndex:190,

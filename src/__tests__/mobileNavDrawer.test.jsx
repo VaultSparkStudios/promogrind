@@ -1,5 +1,7 @@
 /** @vitest-environment happy-dom */
 import React from "react";
+import fs from "node:fs";
+import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MobileBottomNav, MobileNavDrawer } from "../app/AppNavigation.jsx";
@@ -134,5 +136,18 @@ describe("MobileNavDrawer body-scroll lock", () => {
     );
     fireEvent.keyDown(window, { key: "Escape" });
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("CANON-041 mobile parity — App shell source contracts", () => {
+  const appSrc = fs.readFileSync(path.join(process.cwd(), "src", "App.jsx"), "utf8");
+
+  it("exposes a hamburger (☰) button to open the mobile nav drawer from the header", () => {
+    expect(appSrc).toContain("☰");
+    expect(appSrc).toContain("Open navigation menu");
+  });
+
+  it("hides the redundant top group-tab row on mobile so bottom nav + drawer own group switching", () => {
+    expect(appSrc).toMatch(/isMobile\s*\?\s*['"]none['"]/);
   });
 });
