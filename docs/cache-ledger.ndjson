@@ -62,3 +62,5 @@
 {"ts":"2026-07-23T22:41:15.744Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":1500,"output":956,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-07-23T23:31:08.571Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":1505,"output":947,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-07-23T23:31:08.574Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":1505,"output":947,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-23T23:34:08.623Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":1523,"output":937,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-23T23:34:08.626Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":1523,"output":937,"cache_read":0,"cache_create":0,"skill":null}

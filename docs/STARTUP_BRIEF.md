@@ -55,13 +55,13 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 115 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    559/559 passing  ·  Deploy: S115 commit 520efd7 depl  ║
+║  Tests:    559/559 passing  ·  Deploy: S115 final implementatio  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
-║     30,482 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~15,241 tok/turn  ·  cache 50%  ·  58 turns to compact       ║
+║     24,634 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~12,317 tok/turn  ·  cache 50%  ·  72 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -81,7 +81,7 @@
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
 ║  ✓  Doctor        12/12 (100%)  ·  2026-07-23  ✓                 ║
-║  ✓  Cost          real $0.00/7d · real metered total $0.2216 <   ║
+║  ✓  Cost          real $0.00/7d · real metered total $0.2278 <   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗

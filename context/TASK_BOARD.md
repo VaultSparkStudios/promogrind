@@ -11,7 +11,7 @@
 
 - run the deferred desktop/mobile dark/light screenshot matrix when a package-trusted browser runtime is available; visual verification remains SKIPPED rather than inferred from source
 - ~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.~~ — **DONE S104**: completed the remaining App shell finale with focused route/widget extraction; `appComposition.test.js` now enforces a <1500 App shell ceiling.
-- ~~rerun/inspect the GitHub Pages workflow and confirm the retained launch artifact remains clean~~ — **DONE S115**: run `30041234889` passed with 0 blocking failures, dashboard smoke green, non-mailing signup probe green, and disposable-user cleanup green.
+- ~~rerun/inspect the GitHub Pages workflow and confirm the retained launch artifact remains clean~~ — **DONE S115**: final implementation run `30053484335` passed with 0 blocking failures, dashboard smoke green, non-mailing signup probe green, and disposable-user cleanup green.
 - add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
 - add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
 - ~~continue decomposing the remaining high-churn `src/App.jsx` seams beyond the extracted shell, route, tracker, utility-calculator, and promo-finder modules (App.jsx is now 2365 lines)~~ — **DONE S104**: extracted Promo Calendar, referral/team/account, onboarding, and dashboard action widgets; future App growth is guarded below <1500 lines.

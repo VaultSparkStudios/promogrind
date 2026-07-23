@@ -14,7 +14,7 @@
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
   "currentSession": 115,
-  "currentFocus": "S115 saturated all verified primary and second-order work, then root-fixed the production signup monitor so it cannot consume confirmation-email quota or leak provider URLs. Exact-lockfile suite 559/559; launch-local direct exit 0; CI 30041235301 green; Deploy Pages 30041234889 green with 0 blocking artifact failures; scoped genius list 0.",
+  "currentFocus": "S115 saturated all verified primary and second-order work, root-fixed the production signup monitor, and migrated to trust-approved React Router 7.18.0 after a newly published advisory. Exact-lockfile suite 559/559; launch-local direct exit 0; final implementation CI 30053484341 green; Deploy Pages 30053484335 green with 0 blocking artifact failures; scoped genius list 0.",
   "nextMilestone": "Map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
@@ -44,7 +44,7 @@
   "testsPassing": 559,
   "testsTotal": 559,
   "testsLastRun": "2026-07-23",
-  "lastDeployStatus": "S115 commit 520efd7 deployed successfully via GitHub Pages run 30041234889. Downloaded launch artifact: 0 blocking failures; public signup/sign-in, checkout, expected portal state, disposable-user cleanup, and production dashboard smoke all pass. CI run 30041235301 also passed.",
+  "lastDeployStatus": "S115 final implementation commit be58dfe deployed successfully via GitHub Pages run 30053484335. Downloaded launch artifact: 0 blocking failures; public signup/sign-in, checkout, expected portal state, disposable-user cleanup, and production dashboard smoke all pass. Brief 30053484333 and CI 30053484341 also passed.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-07-23",
   "truthGenome": "24/25",
@@ -74,7 +74,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live; S115 commit 520efd7 deployed via GitHub Pages run 30041234889 with 0 blocking launch-verification failures and production dashboard smoke passing"
+      "status": "live; S115 final implementation commit be58dfe deployed via GitHub Pages run 30053484335 with 0 blocking launch-verification failures and production dashboard smoke passing"
     },
     {
       "type": "cloudflare",
