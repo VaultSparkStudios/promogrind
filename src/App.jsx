@@ -430,7 +430,7 @@ export default function App() {
             {isMobile && (
               <button
                 onClick={() => setShowMobileNav(v => !v)}
-                aria-label=”Open navigation menu”
+                aria-label="Open navigation menu"
                 aria-expanded={showMobileNav}
                 style={{
                   width: 36, height: 36, borderRadius: 8, cursor: 'pointer',
