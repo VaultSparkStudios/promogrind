@@ -9,11 +9,11 @@
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ fix(S115): make closeout genius status truthful               ║
 ║  ✓ chore(S115): record final deployment proof                    ║
 ║  ✓ fix(S115): finalize production verification and security      ║
 ║  ✓ fix(S115): make production signup probe non-destructive       ║
 ║  ✓ feat(S115): harden AI spend and launch truth                  ║
-║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,19 +29,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  · context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
+║  · context/TASK_BOARD.md                                         ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  · context/TRUTH_AUDIT.md                                        ║
 ║  · context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 16 files  ·  M:15 A:0 D:0 ?:1                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
