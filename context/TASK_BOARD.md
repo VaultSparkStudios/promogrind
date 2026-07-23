@@ -2,13 +2,14 @@
 
 ## Now
 
+- deploy `20260723021000_ai_quota_claim.sql` plus the five modified provider edge functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; Ark cargo `01JU85UQ71086118EE17EF4AF2` requests the Studio-owned mapping/registry update; rerun the gateway and never infer deployment from repo code
 - production auth email smoke after the latest deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
 - run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
 - complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
-- ~~finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers`~~ — **DECOUPLED S89**: partner programs rejected/waitlisted or do not offer individual referral codes. Per DECISIONS.md (S89), these 3 books are now advisory, not launch-blocking. PromoGrind monetizes via the 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics); the 3 advisory books still ship clean signup URLs so operators can use them
 
 ## Next
 
+- run the deferred desktop/mobile dark/light screenshot matrix when a package-trusted browser runtime is available; visual verification remains SKIPPED rather than inferred from source
 - ~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.~~ — **DONE S104**: completed the remaining App shell finale with focused route/widget extraction; `appComposition.test.js` now enforces a <1500 App shell ceiling.
 - rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
 - add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
@@ -17,7 +18,20 @@
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 - use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
-## Shipped This Session
+## Shipped This Session (S115)
+
+- AI cost/auth perimeter — **DONE**: authenticated vision, direct-upload/MIME/size limits, non-renewing free/trial ceilings, atomic database quota reservation, and fail-closed provider access.
+- UTF-8 integrity ratchet — **DONE**: repaired eleven user-facing source files and launch-gated a 345-file encoding scanner.
+- sober public-claims contract — **DONE**: replaced hype/certainty/income copy and launch-gated nine deterministic trust rules.
+- Studio scope honesty — **DONE**: corrected sub-1% context readings, repo-local genius scope, intent repo scope, and the blank project brief.
+- browser launch truth mirror — **DONE**: Launch Command Center now consumes a freshness-checked browser-safe mirror of canonical project status.
+- intelligence refresh — **DONE**: IGNIS 44,184 FORGE; revenue signals current; scoped genius list 0.
+- central AI entitlement registry — **DONE (second-order)**: all five provider features consume one typed server policy.
+- provider discovery guard — **DONE (second-order)**: future provider functions fail integrity checks if auth, registry, atomic quota, usage events, or SDK pinning are missing.
+- pinned Deno contract — **DONE (second-order)**: trust-approved Anthropic SDK pinned at 0.113.0; all five edge functions type-check.
+- zero-known-vulnerability lock — **DONE (second-order)**: reviewed DOMPurify 3.4.12 provenance/integrity, cleared the low advisory, and reran the full launch gate with `npm audit` at 0.
+
+## Shipped This Session (S97 and earlier retained history)
 - production-auth-email-smoke-runner S97 — **DONE S97**: added `npm run smoke:auth-email` with redacted evidence capture for production account confirmation, resend, forgot-password, recovery-link, and new-password sign-in; wired `authEmailSmoke` into canonical launch proofs and browser-safe mirror.
 - launch-proof-priority-order S97 — **DONE S97**: updated Launch Command Center prioritization so auth-email proof ranks before Stripe and friend-beta manual launch blockers; added regression coverage in `launchState.test.js`.
 - promogrind-supabase-capability-cargo S97 — **ARK SHIPPED S97**: local repo has no `secrets/CAPABILITY_MAP.json`; shipped Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` to Studio Ops requesting `promogrind.supabase.deploy` mapping to the Studio PAT plus explicit project ref `fjnpzjjyhnpmunfoycrp`.- command-template-fix S97 — **DONE S97**: fixed stale `ignis-stale` generated command in `scripts/generate-genius-list.mjs` from `npx tsx cli.ts score <project-path>` to `node scripts/ops.mjs rescore --stale` so future /go lists stay executable.

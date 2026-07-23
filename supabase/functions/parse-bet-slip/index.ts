@@ -12,7 +12,10 @@
  *   supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
  */
 
-import Anthropic from 'npm:@anthropic-ai/sdk';
+import Anthropic from 'npm:@anthropic-ai/sdk@0.113.0';
+import { recordAiUsage, requireAiAccess } from '../_shared/ai-access.ts';
+import { AI_ENTITLEMENTS } from '../_shared/ai-entitlements.ts';
+import { clientKey, inMemoryRateLimit, rateLimitResponse } from '../_shared/http.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -69,43 +72,63 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const burst = inMemoryRateLimit(clientKey(req, 'parse_bet_slip'), 2, 30_000);
+    if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, corsHeaders);
+
+    const access = await requireAiAccess(req, {
+      ...AI_ENTITLEMENTS.parseBetSlip,
+      corsHeaders,
+    });
+    if (access.error) return access.error;
+
     const apiKey = Deno.env.get('ANTHROPIC_API_KEY');
     if (!apiKey) {
       return new Response(
         JSON.stringify({ error: 'ANTHROPIC_API_KEY not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     const body = await req.json();
     const { imageBase64, mimeType, imageUrl } = body;
 
-    if (!imageBase64 && !imageUrl) {
+    if (imageUrl) {
       return new Response(
-        JSON.stringify({ error: 'imageBase64 or imageUrl required' }),
+        JSON.stringify({ error: 'Remote image URLs are not accepted; upload the image directly.' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    if (typeof imageBase64 !== 'string' || imageBase64.length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'imageBase64 is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    if (imageBase64.length > 8_000_000) {
+      return new Response(
+        JSON.stringify({ error: 'Image exceeds the 6 MB upload limit' }),
+        { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    const normalizedMime = String(mimeType || 'image/jpeg').toLowerCase();
+    const allowedMimes = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+    if (!allowedMimes.has(normalizedMime)) {
+      return new Response(
+        JSON.stringify({ error: 'Unsupported image type' }),
+        { status: 415, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     const client = new Anthropic({ apiKey });
 
-    // Build the image content block
-    const imageContent = imageBase64
-      ? {
-          type: 'image' as const,
-          source: {
-            type: 'base64' as const,
-            media_type: (mimeType || 'image/jpeg') as 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp',
-            data: imageBase64,
-          },
-        }
-      : {
-          type: 'image' as const,
-          source: {
-            type: 'url' as const,
-            url: imageUrl,
-          },
-        };
+    const imageContent = {
+      type: 'image' as const,
+      source: {
+        type: 'base64' as const,
+        media_type: normalizedMime as 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp',
+        data: imageBase64,
+      },
+    };
 
     const message = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
@@ -148,7 +171,19 @@ Deno.serve(async (req) => {
       };
     }
 
-    return new Response(JSON.stringify(result), {
+    await recordAiUsage(access.supabase, access.user.id, 'parse_bet_slip', {
+      tier: access.tier,
+      trial: access.isTrial,
+      quota_window: access.quotaWindow,
+      image_chars: imageBase64.length,
+      confidence: result.confidence,
+    });
+
+    return new Response(JSON.stringify({
+      ...result,
+      remaining: access.remaining,
+      quotaWindow: access.quotaWindow,
+    }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

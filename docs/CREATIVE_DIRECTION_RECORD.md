@@ -260,3 +260,13 @@ Agents MUST NOT modify or remove existing entries.
 ## 2026-07-01 — Session 110 CDR Review
 
 - Reviewed founder direction for this session. The `/goal` prompt gave process/quality/phase discipline, but no new PromoGrind product creative direction, brand direction, feature feeling, or audience pact beyond existing SOUL constraints. No creative canon change recorded.
+
+### 2026-07-23 — Saturated excellence and observability honesty (S115)
+
+- Category: Direction
+- Human input (close paraphrase): Run the entire arc continuously; exhaust primary and second-order innovation work; ship at a genius-level, best-in-history bar; observability must derive from source truth and self-validate; never fabricate gate data; treat honest rejection/deferral as a win; do not alarm on notional flat-rate Max Plan cost.
+- Area affected: quality bar / trust / AI cost posture / process
+- Previous state: PromoGrind had strong local launch gates, but renewable/copy-scattered AI allowances, stale browser test claims, broken copy encoding, and risky earnings language could still contradict those principles.
+- New required direction: prefer structural, self-discovering contracts over checkbox fixes; keep AI cost posture bounded and calm; preserve explicit proof gaps rather than manufacturing screenshots, credentials, or deployment claims.
+- Why it matters: PromoGrind's “quietly elite operator desk” identity depends as much on truthful limits and calm claims as on feature depth.
+- Supersedes prior entry: reinforces the 2026-06-30 saturated `/arc` direction with explicit source-derived observability and non-alarmist cost treatment.

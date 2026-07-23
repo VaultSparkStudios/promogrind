@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
+import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
 import { parsePromoTextHeuristic } from "../_shared/promo-parse.ts";
 import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL, validateCalculatorSlug, validateConfidence, validatePromoType, validateRating } from "../_shared/validate.ts";
@@ -89,9 +90,7 @@ serve(async (req) => {
     if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, corsHeaders);
 
     const access = await requireAiAccess(req, {
-      feature: "promo_advisor",
-      minTier: "free",
-      dailyLimits: { free: 3, scout: 10, runner: Infinity, closer: Infinity, house: Infinity },
+      ...AI_ENTITLEMENTS.promoAdvisor,
       corsHeaders,
     });
     if (access.error) return access.error;

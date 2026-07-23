@@ -30,6 +30,7 @@ export function normalizeContextMeterPayload(payload, { agent = 'unknown', fallb
     usedTokens: payload.usedTokens,
     limit: payload.limit,
     pctUsed: payload.pctUsed,
+    pctUnit: 'percent',
     turnsToCompact: payload.turnsToCompact,
     continueCostPerTurn: payload.continueCostPerTurn,
     cacheHitRate: payload.cacheHitRate,
@@ -48,16 +49,17 @@ export function buildHeuristicContextMeter({
 }) {
   const bytes = files.reduce((sum, file) => sum + bytesOf(root, file), 0);
   const usedTokens = Math.round(bytes / 4);
-  const pctUsed = limit > 0 ? usedTokens / limit : 0;
+  const pctUsed = limit > 0 ? (usedTokens / limit) * 100 : 0;
   return {
     live: false,
     usedTokens,
     limit,
     pctUsed,
+    pctUnit: 'percent',
     turnsToCompact: null,
     continueCostPerTurn: null,
     cacheHitRate: null,
-    recommendation: pctUsed > 0.75 ? 'CONSIDER_CLOSEOUT' : 'CONTINUE',
+    recommendation: pctUsed > 75 ? 'CONSIDER_CLOSEOUT' : 'CONTINUE',
     confidence: 'heuristic-stale',
     agent,
     model: '',
@@ -91,7 +93,7 @@ export function loadStartupContextMeter({
 export function renderStartupContextMeterBlock(meter, { row, top, bot }) {
   const limit = meter.limit || 1;
   const usedTokens = meter.usedTokens || 0;
-  const pctUsedRaw = meter.pctUsed > 1 ? meter.pctUsed : meter.pctUsed * 100;
+  const pctUsedRaw = Number(meter.pctUsed) || 0;
   const pctUsed = Math.max(0, Math.min(100, Math.round(pctUsedRaw)));
   const usedFraction = Math.max(0, Math.min(1, pctUsedRaw / 100));
   const fillN = Math.min(24, Math.max(0, Math.round(usedFraction * 24)));

@@ -1,13 +1,19 @@
 <!-- generated-by: /implement skill v1.0 -->
-<!-- generated-at: 2026-07-02 · session 114 -->
-<!-- source: docs/AUDIT_2026-07-02-S114.json -->
+<!-- generated-at: 2026-07-22 · session 115 -->
+<!-- source: docs/AUDIT_2026-07-22.json -->
 
-# Implement Plan — S114
+# Implement Plan — S115
 
-Primary genius list was empty; implementation followed the single innovation-pack item.
+The complete ranked audit is being executed in dependency order, followed by a fresh innovation pass.
 
-| Seq | Slug | Tier | Rung | Rationale |
-|---|---|:-:|:-:|---|
-| 1 | external-launch-proof-ledger | external | L2 | Truth/launch-readiness item with repo-owned automation value: keep real-world proof blockers visible without weakening evidence gates. |
+| Seq | Slug | Tier | Rationale |
+|---:|---|---|---|
+| 1 | ai-cost-and-auth-perimeter | primary | Security and atomic quota foundations precede every AI consumer. |
+| 2 | unicode-integrity-ratchet | primary | Repair user-visible corruption and prevent recurrence. |
+| 3 | sober-claims-contract | primary | Mechanize the project's calm-operator trust boundary. |
+| 4 | studio-scope-honesty | primary | Make every generated scope and context measurement truthful. |
+| 5 | browser-launch-truth-mirror | primary | Replace stale browser claims with one generated source of truth. |
+| 6 | intelligence-refresh | primary | Refresh derived intelligence only after its sources are correct. |
+| 7 | second-order-innovation | innovation | Re-audit the shipped system, rank new compound opportunities, and implement all sound candidates. |
 
-Per item: implement -> focused verification -> full launch-local gate before closeout.
+Per item: root fix → focused regression → direct exit-code verification → execution-log update. Full launch and doctor gates run after saturation.

@@ -1,5 +1,14 @@
 # Work Log
 
+## 2026-07-23 - Session 115 saturated Codex arc
+
+- Ran the complete continuous `/start → /audit → /implement → /closeout` mission; verified six primary premises against live code, rejected four phantom/duplicate ideas as wins, and shipped all six valid items.
+- Shipped authenticated atomic lifetime-aware AI quotas, UTF-8 repair/gating, sober-claims enforcement, truthful repo/context scope, a canonical browser launch-status mirror, and current IGNIS/revenue intelligence.
+- Generated and shipped four second-order improvements: central AI entitlements, provider-perimeter auto-discovery, a trust-approved pinned SDK/Deno contract, and a zero-known-vulnerability lock.
+- Verification: exact-lockfile Vitest 555/555 across 67 files; script regressions 14/14; five edge functions Deno-check; full launch-local direct exit 0; supply-chain scan 0 blocks; npm audit 0.
+- Honest deferrals: Supabase deploy capability remains missing; production email/Stripe/friend/Brevo/capture proofs and visual screenshot matrix remain unclaimed.
+- Ark: shipped `01JU85UQ71086118EE17EF4AF2` for the Studio-owned cost registry/Supabase capability and `01JU85UQC49A8695ED64145316` for upstream CANON-044 propagation; no sibling tree was edited.
+
 Append chronological entries.
 
 ### YYYY-MM-DD - Session title

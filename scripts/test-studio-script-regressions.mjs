@@ -57,6 +57,19 @@ run('genius cache refresh keeps JSON and Markdown surfaces coherent', () => {
   assert.ok(doc.includes(`IGNIS source: **${list.ignisSource || 'fallback'}**`), 'Markdown source matches cached list');
 });
 
+run('browser launch validation mirror matches canonical project status', () => {
+  const mirror = spawnSync(process.execPath, ['scripts/generate-project-status-mirror.mjs', '--check'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  assert.equal(mirror.status, 0, mirror.stderr || mirror.stdout);
+  const source = JSON.parse(fs.readFileSync(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), 'utf8'));
+  const generated = fs.readFileSync(path.join(ROOT, 'src', 'data', 'projectStatus.generated.js'), 'utf8');
+  assert.ok(generated.includes(`${source.testsPassing}/${source.testsTotal} passing`));
+  assert.ok(!generated.includes('380/380 passing'));
+});
+
 run('startup context meter normalizes live ledger payload', () => {
   const meter = loadStartupContextMeter({
     root: ROOT,
@@ -96,7 +109,7 @@ run('startup context meter fallback is deterministic', () => {
     });
     assert.equal(meter.live, false);
     assert.equal(meter.usedTokens, 100);
-    assert.equal(meter.pctUsed, 0.1);
+    assert.equal(meter.pctUsed, 10);
     assert.equal(meter.recommendation, 'CONTINUE');
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -127,6 +140,45 @@ run('startup context meter block renders normalized live payload', () => {
   assert.ok(rows.some((line) => line.includes('12,345 / 1,000,000 tok')));
   assert.ok(rows.some((line) => line.includes('cache 50%')));
   assert.ok(rows.some((line) => line.includes('Verdict: CONTINUE')));
+});
+
+run('startup context meter preserves sub-one-percent live readings', () => {
+  const block = renderStartupContextMeterBlock({
+    live: true,
+    usedTokens: 5000,
+    limit: 1000000,
+    pctUsed: 0.5,
+    recommendation: 'CONTINUE',
+    confidence: 'measured',
+    agent: 'codex',
+  }, {
+    top: (title) => `[${title}]`,
+    row: (line) => line,
+    bot: () => '[/]',
+  });
+  assert.match(block, /\s1% used/);
+  assert.doesNotMatch(block, /50% used/);
+});
+
+run('repo-local generators preserve PromoGrind scope without a private registry', () => {
+  const genius = spawnSync(process.execPath, ['scripts/generate-genius-list.mjs', '--json', '--local-only', '--no-cross-repo'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  assert.equal(genius.status, 0, genius.stderr || genius.stdout);
+  const geniusPayload = JSON.parse(genius.stdout);
+  assert.equal(geniusPayload.projectScoped, true);
+  assert.equal(geniusPayload.project?.slug, 'promogrind');
+
+  const intent = spawnSync(process.execPath, ['scripts/render-session-intent-plan.mjs', '--json', '--intent', 'Improve PromoGrind launch truth'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  assert.equal(intent.status, 0, intent.stderr || intent.stdout);
+  const intentPayload = JSON.parse(intent.stdout);
+  assert.deepEqual(intentPayload.repos, ['promogrind']);
 });
 
 run('startup orchestrator block summarizes live coordination state', () => {

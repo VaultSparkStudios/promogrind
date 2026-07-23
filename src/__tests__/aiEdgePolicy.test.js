@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { resolveAiQuotaPolicy } from "../../supabase/functions/_shared/ai-policy.ts";
+import { AI_ENTITLEMENTS } from "../../supabase/functions/_shared/ai-entitlements.ts";
 
 const root = process.cwd();
 const read = (relativePath) => fs.readFileSync(path.join(root, relativePath), "utf8");
@@ -68,21 +69,17 @@ describe("AI edge perimeter", () => {
   it("requires authenticated, quota-checked direct uploads for vision", () => {
     const vision = read("supabase/functions/parse-bet-slip/index.ts");
     expect(vision).toContain("requireAiAccess(req");
-    expect(vision).toContain("trialLifetimeLimit: 3");
+    expect(vision).toContain("AI_ENTITLEMENTS.parseBetSlip");
     expect(vision).toContain("Remote image URLs are not accepted");
     expect(vision).toContain("imageBase64.length > 8_000_000");
     expect(vision).toContain("recordAiUsage(access.supabase");
   });
 
-  it("declares a lifetime trial ceiling at every model call site", () => {
-    for (const relativePath of [
-      "supabase/functions/promo-advisor/index.ts",
-      "supabase/functions/promo-chat/index.ts",
-      "supabase/functions/ai-action-plan/index.ts",
-      "supabase/functions/stack-builder/index.ts",
-      "supabase/functions/parse-bet-slip/index.ts",
-    ]) {
-      expect(read(relativePath), relativePath).toMatch(/trialLifetimeLimit:\s*\d+/);
+  it("centralizes a non-renewing trial ceiling for every provider feature", () => {
+    expect(Object.values(AI_ENTITLEMENTS)).toHaveLength(5);
+    for (const entitlement of Object.values(AI_ENTITLEMENTS)) {
+      expect(entitlement.trialLifetimeLimit).toBeGreaterThan(0);
+      expect(Number.isFinite(entitlement.trialLifetimeLimit)).toBe(true);
     }
   });
 });

@@ -13,23 +13,23 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 114,
-  "currentFocus": "S114 shipped a deterministic external launch-proof ledger after the primary genius list regenerated to 0 items: docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md now merges PROJECT_STATUS blockers and LAUNCH_PROOFS, node scripts/ops.mjs launch-proof-ledger --check verifies freshness, and script regressions cover pending proof classification. Suite 549/549; launch-local gate green; launch-ready remains PARTIAL only because external proof gates are still real.",
-  "nextMilestone": "Push/deploy S114, verify the GitHub Pages deployment and production dashboard smoke, then record real production auth email, Stripe, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key proof gates before any public launch announcement.",
+  "currentSession": 115,
+  "currentFocus": "S115 saturated six live-code audit items plus four second-order innovations: authenticated atomic lifetime AI quotas, centralized/discovered provider entitlements, UTF-8 and sober-claims release contracts, truthful repo/context scope, a generated browser launch-status mirror, current IGNIS/revenue intelligence, and a zero-known-vulnerability lock. Exact-lockfile suite 555/555; launch-local direct exit 0; scoped genius list 0.",
+  "nextMilestone": "Push/deploy S115 frontend changes, then map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
-    "Studio Ops capability follow-up: consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 and add promogrind.supabase.deploy for project ref fjnpzjjyhnpmunfoycrp.",
+    "Studio Ops capability follow-up: promogrind.supabase.deploy remains MISSING after S115 discovery; Ark cargo 01JU85UQ71086118EE17EF4AF2 requests registry trial-ceiling truth plus capability mapping for project ref fjnpzjjyhnpmunfoycrp, then deploy 20260723021000_ai_quota_claim.sql and the five modified provider functions.",
     "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness."
   ],
-  "lastUpdated": "2026-07-02",
+  "lastUpdated": "2026-07-23",
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 1,
+  "silVelocity": 10,
   "silDebt": "stable",
-  "silLastSession": 114,
+  "silLastSession": 115,
   "silMax": 1000,
   "silSparkline": [
     1000,
@@ -38,32 +38,32 @@
     1000,
     1000
   ],
-  "ignisScore": 43431,
+  "ignisScore": 44184,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-06-29",
-  "testsPassing": 549,
-  "testsTotal": 549,
-  "testsLastRun": "2026-07-02",
-  "lastDeployStatus": "S114 implementation commit 81e6858 deployed through GitHub Pages workflow_dispatch run 28620744679; production launch verification and production dashboard smoke passed with 0 failures. Final closeout proof commit should be deployed by the post-closeout dispatch.",
+  "ignisLastComputed": "2026-07-23",
+  "testsPassing": 555,
+  "testsTotal": 555,
+  "testsLastRun": "2026-07-23",
+  "lastDeployStatus": "S114 commit 81e6858 remains the last verified production deploy. S115 local launch gate is green with direct exit 0; direct-main push and Pages deploy verification are pending closeout.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-07-02",
+  "truthAuditLastRun": "2026-07-23",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 549/549 in S114 via npm test and npm run verify:launch-local"
+      "status": "passing 555/555 in S115 on the exact package-lock tree via npm test and npm run verify:launch-local"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S114 (exit code captured directly: 0) with 549/549 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S115 (exit code captured directly: 0) with 555/555 tests, encoding/claims/AI-entitlement integrity, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
       "command": "npm run smoke:ux",
-      "status": "passing in S114 across 61 app routes and 100 public HTML files"
+      "status": "passing in S115 across 61 app routes and 100 public HTML files"
     },
     {
       "type": "local",
@@ -87,6 +87,10 @@
   "brandingRequired": true,
   "brandingCompliant": true,
   "revenueModel": "affiliate-plus-subscription",
+  "freeTierCostStatus": "trial-ceiling",
+  "freeTierAuditDate": "2026-07-23",
+  "freeTierAuditDoc": "docs/AUDIT_2026-07-22.md",
+  "freeTierAuditNote": "Server-owned lifetime free/trial ceilings are reserved atomically before provider calls; paid tiers keep explicit daily or unlimited contracts. No recurring-cost alarm is inferred from notional flat-rate plan usage.",
   "stripeReady": false,
   "stripeLiveKeyConfigured": false,
   "stripeProductionPriceIds": [],
@@ -104,7 +108,7 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-07-02",
+    "date": "2026-07-23",
     "passing": 12,
     "warning": 0,
     "failing": 0,

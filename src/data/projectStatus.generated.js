@@ -2,30 +2,30 @@
 // Browser-safe allowlist only. Update context/PROJECT_STATUS.json, then regenerate.
 export const PROJECT_STATUS_MIRROR = {
   "source": "context/PROJECT_STATUS.json",
-  "sourceLastUpdated": "2026-07-02",
-  "testsPassing": 549,
-  "testsTotal": 549,
-  "testsLastRun": "2026-07-02",
+  "sourceLastUpdated": "2026-07-23",
+  "testsPassing": 555,
+  "testsTotal": 555,
+  "testsLastRun": "2026-07-23",
   "validation": {
     "smokeCommand": {
       "label": "Repo launch smoke",
       "command": "npm run smoke:launch",
-      "lastKnown": "passing · verified 2026-07-02"
+      "lastKnown": "passing · verified 2026-07-23"
     },
     "browserSmoke": {
       "label": "Browser smoke",
       "command": "npm run smoke:browser",
-      "lastKnown": "passing · verified 2026-07-02"
+      "lastKnown": "passing · verified 2026-07-23"
     },
     "tests": {
       "label": "Vitest",
       "command": "npm test",
-      "lastKnown": "549/549 passing · verified 2026-07-02"
+      "lastKnown": "555/555 passing · verified 2026-07-23"
     },
     "build": {
       "label": "Build",
       "command": "npm run build",
-      "lastKnown": "passing · verified 2026-07-02"
+      "lastKnown": "passing · verified 2026-07-23"
     }
   }
 };

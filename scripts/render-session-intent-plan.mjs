@@ -56,9 +56,10 @@ function tokenize(text) {
     .filter((token) => token.length >= 3);
 }
 
-function repoHintsFor(text) {
+function repoHintsFor(text, defaultSlug = 'studio-ops') {
   const source = String(text || '').toLowerCase();
-  const repos = ['studio-ops'];
+  const repos = [defaultSlug];
+  if (/studio[- ]ops|studio canon|ark cargo/.test(source)) repos.push('studio-ops');
   if (/studio hub|hub\b/.test(source)) repos.push('studio-hub');
   if (/website|vaultsparkstudios\.com/.test(source)) repos.push('vaultsparkstudios-website');
   if (/social dashboard/.test(source)) repos.push('vaultspark-studios-social-dashboard');
@@ -134,7 +135,7 @@ const likelyBlockers = humanItems
   .sort((a, b) => (b.overlap - a.overlap) || ((b.ageSessions || 0) - (a.ageSessions || 0)))
   .slice(0, 3);
 
-const repos = repoHintsFor(intent);
+const repos = repoHintsFor(intent, status.slug || 'studio-ops');
 const payload = {
   generatedAt: new Date().toISOString().slice(0, 10),
   session: (status.currentSession || 0) + 1,

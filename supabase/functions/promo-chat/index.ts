@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
+import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
@@ -37,9 +38,7 @@ serve(async (req: Request) => {
     if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, corsHeaders);
 
     const access = await requireAiAccess(req, {
-      feature: "promo_chat",
-      minTier: "scout",
-      dailyLimits: { scout: 20, runner: 50, closer: Infinity, house: Infinity },
+      ...AI_ENTITLEMENTS.promoChat,
       corsHeaders,
     });
     if (access.error) return access.error;

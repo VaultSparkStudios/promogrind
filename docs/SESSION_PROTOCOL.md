@@ -7,6 +7,8 @@
 
 > **TRANSITIONAL NOTICE (2026-04-23, S110):** This document is the canonical session protocol **today**. It will be thinned to a pointer once the Studio Brain kernel (`studio` CLI) ships and agent skills collapse to 15-line kernel wrappers — see `docs/STUDIO_BRAIN_ARCHITECTURE.md` §7 for the target state and §6 for the migration stages. Until Stage 6 lands, follow the procedures in this file as-is. Any agent reading this file now executes the current protocol; any changes to session behavior between now and kernel go-live should land in **this** file to preserve the canonical-source rule. Canon decision: `context/DECISIONS.md` → **S110 — IGNIS elevated into the broader Studio Brain**.
 
+> **CANON-044 task scaffolding:** Every multi-step session MUST keep a visible, project-specific Wave list (`Wave 1`, `Wave 2`, …) while work is in flight and reconcile every Wave item during closeout.
+
 This is the **single canonical source** for every Studio OS session protocol. Both Claude Code and Codex (and any future CLI agent) read this file and execute the same flows. Per-agent shims — `~/.claude/skills/*/SKILL.md` for Claude Code, `AGENTS.md` Session-Protocol section for Codex — are thin pointers into this document.
 
 **Rule:** if you are an agent in a VaultSpark Studio OS repo and the user says a command listed below, find the matching section in this file and execute it step by step. Do not invent alternate flows.

@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-07-01 (S111)
+Last reviewed: 2026-07-23 (S115)
 Overall status: green-with-external-proof-follow-ups
-Next action: inspect the green GitHub Pages launch-verification artifact from run `27791869430`, run production auth email smoke, then complete the two remaining external manual proofs (Stripe smoke and friend beta). Refresh stale revenue and IGNIS derived intelligence after the proof pass.
+Next action: map `promogrind.supabase.deploy`, deploy the atomic quota migration plus five provider functions to `fjnpzjjyhnpmunfoycrp`, then record real auth-email, Stripe, friend-beta, Brevo, capture-key, and visual evidence.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
 ---
@@ -58,6 +58,21 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache now treats Markdown/JSON coherence as part of freshness; remaining launch gaps are real external proof gates.
+
+## Resolved This Session (S115)
+
+- Browser launch validation no longer contains an independent hard-coded test count; it is a public-safe generated view of `PROJECT_STATUS.json` with a freshness gate.
+- Context-meter readings use one percentage unit, so live `0.5` renders near 1%, never 50%.
+- Public-repo genius and session-intent generators derive PromoGrind scope from local project status when the private registry is absent.
+- Five Anthropic functions share one typed entitlement contract and are discovered automatically for authentication, atomic quota, usage-event, and SDK-pin enforcement.
+- User-facing source is free of detected mojibake, and public copy clears nine calm-operator trust rules.
+- IGNIS and revenue intelligence are current; the project-scoped genius list reports zero remaining items.
+
+## Explicit Evidence Gaps (S115)
+
+- The quota migration and function changes are not live evidence: the secrets gateway reports `promogrind.supabase.deploy` missing.
+- Desktop/mobile dark/light screenshot verification remains SKIPPED because available browser paths did not clear runtime/package-trust requirements.
+- Production auth email, Stripe, friend-beta, Brevo forwarding, and capture public-key proof remain external and unclaimed.
 
 ## Resolved This Session (S96)
 

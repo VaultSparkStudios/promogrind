@@ -89,7 +89,17 @@ function resolveActiveProject(projects) {
 // ── Load state ────────────────────────────────────────────────────────────────
 const today    = new Date().toISOString().slice(0, 10);
 const registry = readJson(path.join(ROOT, 'portfolio', 'PROJECT_REGISTRY.json'), { projects: [] });
-const activeProject = resolveActiveProject(registry.projects ?? []);
+const registeredProject = resolveActiveProject(registry.projects ?? []);
+const localStatus = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), {});
+const localProject = !registeredProject && localStatus.slug && localStatus.slug !== 'studio-ops'
+  ? {
+      slug: localStatus.slug,
+      name: localStatus.name || localStatus.slug,
+      localPath: ROOT,
+      isCurrent: true,
+    }
+  : null;
+const activeProject = registeredProject || localProject;
 const PROJECT_ROOT = activeProject?.localPath ? path.resolve(activeProject.localPath) : ROOT;
 const projectScoped = Boolean(activeProject);
 const status   = readJson(path.join(PROJECT_ROOT, 'context', 'PROJECT_STATUS.json'), readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), {}));

@@ -1,5 +1,25 @@
 # Decisions
 
+## 2026-07-23 — Session 115
+
+### Decision: provider spend policy is one server-owned entitlement contract
+
+- Context: lifetime trial ceilings fixed renewable model spend, but five copied call-site policies could diverge and a future provider function could bypass the perimeter.
+- Decision: every Anthropic function must consume `AI_ENTITLEMENTS`, pass authenticated `requireAiAccess`, reserve finite quota atomically before the provider call, and record usage. `check-ai-entitlement-contract.mjs` discovers provider functions rather than trusting a fixed allowlist.
+- Consequence: free/trial ceilings are non-renewing and fail closed; paid daily/unlimited policy remains explicit; new AI functions cannot silently skip the contract.
+
+### Decision: browser launch validation is derived, allowlisted project truth
+
+- Context: `launchState.js` advertised 380/380 while canonical project status and direct verification were 549/549, proving hand-maintained browser claims drift.
+- Decision: prebuild generates a narrow public-safe mirror from `context/PROJECT_STATUS.json`, and integrity checks reject staleness. No private status fields cross into the bundle.
+- Consequence: Launch Command Center and Studio export can no longer maintain an independent test/build truth.
+
+### Decision: visual evidence and deployment evidence remain explicit skips until executable
+
+- Context: browser tooling failed the available runtime/trust paths, and `promogrind.supabase.deploy` remains absent after secrets discovery and blocker preflight.
+- Decision: record visual verification as SKIPPED and the migration/functions as repo-complete but not live; never turn source presence into screenshot or production-deploy evidence.
+- Consequence: local quality is green without weakening external release proof.
+
 Append new entries. Do not erase historical reasoning unless it is wrong.
 
 ### 2026-05-08 — Production deploy host is GitHub Pages, not Cloudflare Pages (S83)
