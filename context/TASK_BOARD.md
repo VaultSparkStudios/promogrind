@@ -31,6 +31,8 @@
 - pinned Deno contract — **DONE (second-order)**: trust-approved Anthropic SDK pinned at 0.113.0; all five edge functions type-check.
 - zero-known-vulnerability lock — **DONE (second-order + final ratchet)**: reviewed DOMPurify 3.4.12 and React Router 7.18.0 provenance/integrity, cleared both advisory waves, and reran the 559-test full launch gate with `npm audit` at 0.
 - non-destructive production launch probe — **DONE (second-order)**: eliminated confirmation-email quota consumption, guaranteed disposable-user cleanup, bounded provider diagnostics, redacted checkout artifacts, and verified CI/Pages production green.
+- closeout genius-cache truth — **DONE (second-order)**: the canonical board now distinguishes an exhausted ranked list from a missing cache; a regression locks the source-derived wording.
+- closeout genius-cache truth — **DONE (second-order)**: the canonical board now distinguishes an exhausted ranked list from a missing cache; a regression locks the source-derived wording.
 
 ## Shipped This Session (S97 and earlier retained history)
 - production-auth-email-smoke-runner S97 — **DONE S97**: added `npm run smoke:auth-email` with redacted evidence capture for production account confirmation, resend, forgot-password, recovery-link, and new-password sign-in; wired `authEmailSmoke` into canonical launch proofs and browser-safe mirror.

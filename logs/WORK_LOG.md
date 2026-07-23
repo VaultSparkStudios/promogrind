@@ -13,6 +13,7 @@
 - Remote verification: CI `30041235301` passed and Deploy Pages `30041234889` passed. Downloaded artifact: 0 blocking failures, signup/sign-in/checkout/portal/cleanup green; production dashboard smoke green with no failures. Affiliate coverage remains one explicit non-blocking advisory.
 - Final audit caught newly published React Router open-redirect/SSR findings after the earlier zero-vulnerability scan. `react-router-dom@7.18.0` passed package trust plus registry provenance/integrity/engine/peer checks; the major migration retained 559/559 tests and the full launch gate, and the final 236-package lock reports 0 vulnerabilities and 0 supply-chain blocks.
 - Final implementation proof: commit `be58dfe` reached `origin/main`; brief `30053484333`, CI `30053484341`, and Deploy Pages `30053484335` passed. Its downloaded artifact reports 0 blocking failures, corrected required-monetization wording, successful disposable-user cleanup, and production dashboard `failures: []`.
+- Closeout-board truth ratchet: fixed the renderer so a fresh `ranked: []` genius cache reports “Unified Genius List exhausted” instead of the false “no genius cache”; Studio script regressions now pass 15/15.
 
 Append chronological entries.
 

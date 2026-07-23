@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-02 (Session 114 closeout) -->
+<!-- generated-at: 2026-07-23 (Session 115 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S114 ════════════════════════╗
-║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 1 stable      ║
+╔══ SESSION CLOSEOUT · PromoGrind · S115 ════════════════════════╗
+║  Date: 2026-07-23  ·  SIL: 1000/1000  ·  Velocity: 10 stable     ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ chore(S114): add external launch proof ledger                 ║
-║  ✓ chore(S114): render closeout artifacts post mission           ║
-║  ✓ chore(S113): S113 ran a full fresh-audit arc: Operator Comma  ║
-║  ✓ chore(deps): bump the production-minor-patch group with 3 up  ║
-║  ✓ chore(deps-dev): bump sharp in the dev-dependencies group (#  ║
+║  ✓ chore(S115): record final deployment proof                    ║
+║  ✓ fix(S115): finalize production verification and security      ║
+║  ✓ fix(S115): make production signup probe non-destructive       ║
+║  ✓ feat(S115): harden AI spend and launch truth                  ║
+║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,18 +29,18 @@
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
+║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
-║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (~/.codex or ~/.claude)                          ║
+║  · context/PROJECT_STATUS.json                                   ║
+║  · agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 4 files  ·  M:4 A:0 D:0 ?:0                            ║
+║  Changes: 16 files  ·  M:15 A:0 D:0 ?:1                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,13 +51,13 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         549/549                                          ║
-║  IGNIS:         4d ago                                           ║
+║  Tests:         559/559                                          ║
+║  IGNIS:         1d ago                                           ║
 ║  Truth:         green-with-external-proof-follow-ups             ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
+║  ✓ Unified Genius List exhausted · regenerate from live code     ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 

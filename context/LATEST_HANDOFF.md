@@ -24,7 +24,7 @@ S115 ran `/start → /audit → /implement → /closeout` as one mission. Six ve
 
 - `npm test` on the exact package-lock tree — 68 files, 559/559 passing.
 - `npm run verify:launch-local` — full chain green; exit captured directly as 0.
-- `node scripts/test-studio-script-regressions.mjs` — 14/14 passing.
+- `node scripts/test-studio-script-regressions.mjs` — 15/15 passing, including missing-vs-exhausted genius-cache truth.
 - `deno check` — all five modified provider functions green.
 - source integrity — 346 files green; public claims — 346 files / 9 rules green; AI entitlement contract — 5/5 green.
 - supply-chain scan — 236 packages on the final exact lock, 0 blocks, 0 missing integrity, 0 non-registry sources.

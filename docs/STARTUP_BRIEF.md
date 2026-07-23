@@ -59,9 +59,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
-║     24,634 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~12,317 tok/turn  ·  cache 50%  ·  72 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
+║     2,578 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
+║     ~1,289 tok/turn  ·  cache 50%  ·  140 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -81,7 +81,7 @@
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
 ║  ✓  Doctor        12/12 (100%)  ·  2026-07-23  ✓                 ║
-║  ✓  Cost          real $0.00/7d · real metered total $0.2278 <   ║
+║  ✓  Cost          real $0.00/7d · real metered total $0.2344 <   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗

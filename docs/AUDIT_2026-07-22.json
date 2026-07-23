@@ -147,6 +147,6 @@
     { "slug": "studio-scope-honesty", "status": "complete", "evidence": "Percentage, local genius scope, intent scope, and project brief fixed; script regressions green." },
     { "slug": "browser-launch-truth-mirror", "status": "complete", "evidence": "Launch validation now consumes a freshness-checked browser-safe PROJECT_STATUS mirror; focused UI/state tests green." },
     { "slug": "intelligence-refresh", "status": "complete", "evidence": "IGNIS refreshed to 44,184; revenue signals refreshed; scoped genius list regenerated to zero items." },
-    { "slug": "second-order-innovation", "status": "complete", "evidence": "Four planned compound candidates plus two post-push emergent candidates implemented; entitlement discovery green; five edge functions Deno-check green; non-destructive production probe verified; npm audit zero." }
+    { "slug": "second-order-innovation", "status": "complete", "evidence": "Four planned compound candidates plus three post-push emergent candidates implemented; entitlement discovery green; five edge functions Deno-check green; non-destructive production probe verified; closeout exhausted-list truth regression-tested; npm audit zero." }
   ]
 }

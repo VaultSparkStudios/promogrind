@@ -10,6 +10,7 @@ import { buildHeuristicContextMeter, loadStartupContextMeter, renderStartupConte
 import { renderOrchestratorBlock, renderPortfolioTaskBoardsBlock } from './lib/startup-orchestrator-blocks.mjs';
 import { renderExecutionPlanBlock, renderMomentumMeterBlock } from './lib/startup-summary-blocks.mjs';
 import { buildExternalLaunchProofLedger, renderLedgerMd } from './render-external-launch-proof-ledger.mjs';
+import { buildCloseoutGeniusHint } from './lib/closeout-genius-hint.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const json = process.argv.includes('--json');
@@ -55,6 +56,15 @@ run('genius cache refresh keeps JSON and Markdown surfaces coherent', () => {
   assert.ok(doc.includes(title), 'Markdown title matches cached list scope');
   assert.ok(doc.includes(`Generated: ${list.date}`), 'Markdown date matches cached list');
   assert.ok(doc.includes(`IGNIS source: **${list.ignisSource || 'fallback'}**`), 'Markdown source matches cached list');
+});
+
+run('closeout board distinguishes exhausted genius work from a missing cache', () => {
+  assert.deepEqual(buildCloseoutGeniusHint(null), { state: 'missing' });
+  assert.deepEqual(buildCloseoutGeniusHint({ list: { ranked: [] } }), { state: 'exhausted' });
+  assert.deepEqual(
+    buildCloseoutGeniusHint({ list: { ranked: [{ id: 'next-root-fix', title: 'Next root fix' }] } }),
+    { state: 'item', title: 'Next root fix', rationale: '', cmd: null },
+  );
 });
 
 run('browser launch validation mirror matches canonical project status', () => {

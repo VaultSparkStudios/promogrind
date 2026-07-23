@@ -1,38 +1,40 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 464cd4b4bd98 -->
-<!-- generated-at: 2026-07-23T23:34:08.627Z -->
+<!-- source-hash: 2ad7e073e0fa -->
+<!-- generated-at: 2026-07-23T23:39:05.337Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session: 115 (Codex)
-Date: 2026-07-23
+SESSION HANDOFF — PromoGrind
 
-Status
-- Implementation saturated; local, CI, production deploy, artifact, and dashboard-smoke gates green.
-- Genius/second-order list regenerated to zero (PromoGrind-scoped).
+Session
+- S115, Codex. Full /arc run: start, audit, implement, closeout, direct-main push, verified prod deploy. Implementation saturated.
 
-Shipped (S115)
-- AI spend/auth root fix: authenticated direct-upload vision, atomic lifetime/daily quota claim migration, fail-closed access.
-- AI/security compounding: typed entitlement registry, provider perimeter discovery, pinned SDK, Deno checks, vuln-cleared exact lockfile.
-- Trust/UX: mojibake repaired (11 files); source-encoding + sober-public-claims launch gates.
-- Observability: corrected context %, repo scoping, intent targeting, browser launch validation from PROJECT_STATUS.json.
-- Intelligence refresh: IGNIS 44,184; revenue signals refreshed.
-- Canonical evidence recorded in docs/AUDIT_2026-07-22.{md,json} and docs/IMPLEMENT_PLAN.md.
+Shipped
+- AI spend/auth root fix: authenticated direct-upload vision, atomic lifetime/daily quota claim migration, fail-closed access, quota metadata.
+- AI/security compounding: typed entitlement registry, auto provider perimeter discovery, pinned trust-approved SDK, five-function Deno check, vuln-cleared exact lockfile.
+- Trust/UX: repaired mojibake in 11 files; added source-encoding and sober-public-claims launch gates.
+- Observability: corrected context %, local repo scoping, session intent targeting, project brief truth, browser launch validation from PROJECT_STATUS.json.
+- Current intelligence: IGNIS at 44,184; revenue signals refreshed; genius list regenerated to zero.
+- Canonical evidence in docs/AUDIT_2026-07-22.{md,json} and docs/IMPLEMENT_PLAN.md.
 
-Verification (green)
-- npm test 559/559; verify:launch-local exit 0; studio regressions 14/14; deno check 5/5.
-- Source integrity 346 files; public claims 346/9 rules; entitlement contract 5/5.
-- Supply-chain: 236 pkgs, 0 blocks; npm audit 0 vulns (DOMPurify 3.4.12, React Router 7.18.0).
-- Final proof for be58dfe: brief 30053484333, CI 30053484341, Deploy Pages 30053484335; artifact 0 blocking; dashboard smoke failures: [].
+State
+- Genius list empty (PromoGrind-scoped). Session-floor reports saturated, exit 0.
+- Gates green: local, CI, production deploy, artifact, dashboard-smoke.
+
+Verification (key)
+- npm test 559/559; verify:launch-local exit 0; studio regressions 15/15; deno check 5/5.
+- source integrity 346 files; public claims 346/9 rules; entitlement 5/5.
+- supply-chain 236 pkgs, 0 blocks; npm audit 0 vulns (DOMPurify 3.4.12, React Router 7.18.0).
+- exact proof for be58dfe: brief 30053484333, CI 30053484341, Deploy Pages 30053484335 passed; artifact 0 blocking; prod dashboard smoke failures:[].
 
 Now (top 3)
-1. Rerun secrets discovery for promogrind.supabase.deploy; when READY, deploy only to fjnpzjjyhnpmunfoycrp and record real migration/function evidence.
-2. Run external proof runners without fabrication: smoke:auth-email, smoke:stripe, beta:check.
-3. Track Ark receipts: 01JU85UQ71086118EE17EF4AF2 (cost registry + Supabase capability), 01JU85UQC49A8695ED64145316 (CANON-044 marker).
+- Rerun secrets discovery for promogrind.supabase.deploy; when READY, deploy only to fjnpzjjyhnpmunfoycrp, record real migration/function evidence.
+- Run external proof runners without fabricating: smoke:auth-email, smoke:stripe, beta:check.
+- Track Ark receipts: 01JU85UQ71086118EE17EF4AF2 (cost registry + Supabase capability), 01JU85UQC49A8695ED64145316 (upstream CANON-044 marker).
 
-Blockers / Human-blocked deferrals (external evidence required)
+Blockers / human-blocked (deferred, external evidence required; age S115-open)
 - Supabase migration/function deployment — capability missing.
-- Production auth email smoke; Stripe smoke purchase; friend beta pass.
-- Brevo forwarding proof; production capture public-key proof; visual theme/device screenshots (tooling SKIP).
+- Production auth email smoke, Stripe smoke purchase, friend beta pass.
+- Brevo forwarding proof, production capture public-key proof, visual theme/device screenshots (tooling SKIP).
 
-Next session: Resolve promogrind.supabase.deploy secrets, deploy to fjnpzjjyhnpmunfoycrp, then run external proof runners to close deferrals.
+Next session: Recheck Supabase deploy capability, then deploy and capture real migration/function + external smoke evidence.

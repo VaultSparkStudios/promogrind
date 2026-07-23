@@ -70,6 +70,8 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Production monitor truth is non-destructive: it no longer sends signup mail, deletes its disposable identity in `finally`, reports bounded provider errors, and redacts checkout credentials from retained artifacts.
 - S115 final implementation proof is green: brief `30053484333`, CI `30053484341`, and Deploy Pages `30053484335` passed for `be58dfe`; the downloaded launch artifact has 0 blocking failures and dashboard smoke has no failures.
 - A newly published React Router advisory wave was caught at final closeout; trust-approved 7.18.0 replaced affected 6.30.4, the full launch gate stayed green, and the exact 236-package lock returns 0 vulnerabilities / 0 supply-chain blocks.
+- The closeout board no longer calls an existing empty genius cache “missing”; `ranked: []` now renders as exhausted and the missing/exhausted distinction is regression-tested.
+- The closeout board no longer calls an existing empty genius cache “missing”; `ranked: []` now renders as exhausted and the missing/exhausted distinction is regression-tested.
 
 ## Explicit Evidence Gaps (S115)
 
