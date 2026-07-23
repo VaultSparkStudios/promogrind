@@ -1,4 +1,5 @@
 import { LAUNCH_PROOFS } from "./data/launchProofs.generated.js";
+import { PROJECT_STATUS_MIRROR } from "./data/projectStatus.generated.js";
 
 const env = (typeof import.meta !== "undefined" && import.meta.env) ? import.meta.env : {};
 
@@ -91,28 +92,7 @@ export const FEATURE_FLAGS = {
   paidCheckout: parseLaunchFlag(env.VITE_PG_FEATURE_PAID_CHECKOUT, false),
 };
 
-export const LAUNCH_VALIDATION = {
-  smokeCommand: {
-    label: "Repo launch smoke",
-    command: "npm run smoke:launch",
-    lastKnown: "passing",
-  },
-  browserSmoke: {
-    label: "Browser smoke",
-    command: "npm run smoke:browser",
-    lastKnown: "passing",
-  },
-  tests: {
-    label: "Vitest",
-    command: "npm test",
-    lastKnown: "380/380 passing",
-  },
-  build: {
-    label: "Build",
-    command: "npm run build",
-    lastKnown: "passing",
-  },
-};
+export const LAUNCH_VALIDATION = PROJECT_STATUS_MIRROR.validation;
 
 export const LAUNCH_BLOCKERS = [
   {

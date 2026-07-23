@@ -295,7 +295,7 @@ export default function App() {
               ["Live Arb + EV Scanner","Real-time opportunities across 40+ books. VaultSparked Pro."],
             ].map(([title,desc])=>(
               <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>
-                <span style={{color:K.gn,fontWeight:700,marginTop:1}}>âœ“</span>
+                <span style={{color:K.gn,fontWeight:700,marginTop:1}}>✓</span>
                 <div>
                   <div style={{fontSize:12,fontWeight:700,color:K.tx}}>{title}</div>
                   <div style={{fontSize:11,color:K.mt,marginTop:2}}>{desc}</div>
@@ -305,13 +305,13 @@ export default function App() {
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
             <a href={authHref('signup')} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color:"#0a0e17",fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
-              Create Free Account â†’
+              Create Free Account →
             </a>
             <a href={authHref('signin')} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,textDecoration:"none"}}>
-              Already have an account? Sign in â†’
+              Already have an account? Sign in →
             </a>
           </div>
-          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your accountâ€¦</div>
+          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your account…</div>
         </div>
       </div>
     );
@@ -344,13 +344,13 @@ export default function App() {
       <TrustStrip/>
       {!isOnline && (
         <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
-          OFFLINE MODE â€” Changes will sync when connection is restored
+          OFFLINE MODE — Changes will sync when connection is restored
         </div>
       )}
       {showSessionModal&&<SessionModal appData={appData} visitedSlugsRef={visitedSlugsRef} onClose={()=>setShowSessionModal(false)}/>}
       {showOnboarding && <OnboardingWizard onDone={dismissOnboarding}/>}
       {showCalcSearch && <CalcSearch allCalcs={allCalcs} onNavigate={handleCalcNavigate} onClose={()=>setShowCalcSearch(false)}/>}
-      {/* â”€â”€ Site Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Site Header ────────────────────────────────────────────────────── */}
       <header style={{
         background:`linear-gradient(180deg,${K.s1},${K.s2})`,
         borderBottom:`1px solid ${K.bd}`,
@@ -361,7 +361,7 @@ export default function App() {
         boxShadow:'0 10px 24px rgba(0,0,0,0.12)',
       }}>
         <div style={{maxWidth:shellMaxWidth,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
-          {/* â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Logo ─────────────────────────────────────────────────── */}
           <div style={{cursor:'pointer',flexShrink:0,minWidth:0}} onClick={()=>navigate('/'+DEFAULT_SLUG)}>
             <div style={{fontFamily:fontD,fontSize:isMobile?18:21,fontWeight:800,color:K.gn,letterSpacing:'-0.5px',lineHeight:1}}>
               PROMOGRIND
@@ -387,9 +387,9 @@ export default function App() {
               </div>
             )}
           </div>
-          {/* â”€â”€ Right controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Right controls ───────────────────────────────────────── */}
           <div style={{display:'flex',alignItems:'center',gap:isMobile?6:10,flexShrink:0}}>
-            {/* Streak â€” hide on mobile (shown in mobile strip below) */}
+            {/* Streak — hide on mobile (shown in mobile strip below) */}
             {!isMobile && <DailyStreak/>}
             {/* Advisor */}
             {FEATURE_FLAGS.promoAdvisor && !isMobile && (
@@ -425,7 +425,7 @@ export default function App() {
                 Search
               </button>
             )}
-            {/* Theme toggle â€” always visible as icon */}
+            {/* Theme toggle — always visible as icon */}
             <button
               onClick={toggleTheme}
               title={darkMode?'Switch to light mode':'Switch to dark mode'}
@@ -440,7 +440,7 @@ export default function App() {
             >
               {darkMode ? "☀" : "☾"}
             </button>
-            {/* UserMenu â€” auth widget */}
+            {/* UserMenu — auth widget */}
             <UserMenu
               user={user}
               proStatus={proStatus}
@@ -455,7 +455,7 @@ export default function App() {
             />
           </div>
         </div>
-        {/* â”€â”€ Mobile utility strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Mobile utility strip ─────────────────────────────────── */}
         {isMobile && (
           <div style={{
             display:'flex', alignItems:'center', justifyContent:'space-between',
@@ -497,7 +497,7 @@ export default function App() {
             </div>
           </div>
         )}
-        {/* â”€â”€ Desktop compliance line â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Desktop compliance line ──────────────────────────────── */}
         {!isMobile && (
           <div style={{maxWidth:shellMaxWidth,margin:'4px auto 0',textAlign:'right'}}>
             <span style={{fontSize:11,color:K.dm}}>
@@ -506,7 +506,7 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* â”€â”€ Main nav tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
       <div style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
@@ -562,8 +562,8 @@ export default function App() {
               return (
                 <button key={favSlug} onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }}
                   style={{padding:"2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:4}}>
-                  â˜… {favItem.n}
-                  <span onClick={e=>{e.stopPropagation();const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",marginLeft:2}}>âœ•</span>
+                  ★ {favItem.n}
+                  <span onClick={e=>{e.stopPropagation();const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",marginLeft:2}}>✕</span>
                 </button>
               );
             })}
@@ -582,7 +582,7 @@ export default function App() {
             ))}
             <div style={{flex:1}}/>
             <button onClick={()=>{setCompareMode(m=>!m);if(!compareMode)setCompareSlug('');}} style={{padding:"3px 10px",background:compareMode?`${K.ac}20`:"transparent",border:`1px solid ${compareMode?K.ac:K.bd2}`,borderRadius:50,color:compareMode?K.ac:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
-              {compareMode?"âœ• Exit Compare":"âŠž Compare"}
+              {compareMode?"✕ Exit Compare":"⊞ Compare"}
             </button>
           </div>}
           <div
@@ -596,7 +596,7 @@ export default function App() {
             const isFav = calcFavorites.includes(t.slug);
             return (<button key={t.n} onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
               {t.n}
-              {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>â˜…</span>}
+              {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</span>}
               {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
             </button>);
           })}</div>

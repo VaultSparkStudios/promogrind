@@ -19,7 +19,7 @@ const PromoFinder = () => {
     <div style={{padding:"16px",background:`${K.gn}08`,border:`1px solid ${K.gn}30`,borderRadius:8}}>
       <div style={{fontSize:14,fontWeight:700,color:K.gn,marginBottom:6}}>{title}</div>
       <div style={{fontSize:12,color:K.dm,marginBottom:12,lineHeight:1.6}}>{desc}</div>
-      <button onClick={()=>go(slug)} style={{padding:"9px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Open Calculator â†’</button>
+      <button onClick={()=>go(slug)} style={{padding:"9px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Open Calculator →</button>
       <button onClick={reset} style={{marginLeft:10,padding:"9px 16px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Start Over</button>
     </div>
   );
@@ -41,23 +41,23 @@ const PromoFinder = () => {
     </>}
     {step===2&&<>
       <div style={{fontSize:12,color:K.dm,marginBottom:14}}>If your bet using this credit wins, do you get your stake back?</div>
-      <Opt label="No â€” I only get the profit, not the credit back" sub="The stake is NOT returned" onClick={()=>{setAnswer('bonus');setStep(10);}}/>
-      <Opt label="Yes â€” I get everything back if it wins" sub="Acts like a real cash bet" onClick={()=>{setAnswer('firstbet');setStep(10);}}/>
+      <Opt label="No — I only get the profit, not the credit back" sub="The stake is NOT returned" onClick={()=>{setAnswer('bonus');setStep(10);}}/>
+      <Opt label="Yes — I get everything back if it wins" sub="Acts like a real cash bet" onClick={()=>{setAnswer('firstbet');setStep(10);}}/>
     </>}
     {step===10&&(()=>{
       const m = {
         bonus: {title:"Use: Bonus Bet Converter",desc:"Enter your bonus bet size, the odds you're placing it at, and the hedge odds. The calculator tells you exactly how much to hedge to lock in profit.",slug:"bonus-bet"},
         boost: {title:"Use: Profit Boost Converter",desc:"Enter your stake, the original odds, the boost percentage, and the max extra winnings. The calculator shows your effective odds and the hedge amount.",slug:"profit-boost"},
-        firstbet: {title:"Use: First Bet Safety Net Hedge",desc:"Enter your first bet amount, the odds, and hedge odds. This locks in a small profit if your bet wins â€” and if it loses, you get bonus bets to convert.",slug:"first-bet"},
+        firstbet: {title:"Use: First Bet Safety Net Hedge",desc:"Enter your first bet amount, the odds, and hedge odds. This locks in a small profit if your bet wins — and if it loses, you get bonus bets to convert.",slug:"first-bet"},
         deposit: {title:"Use: Deposit Match Calculator",desc:"Enter your deposit amount, match percentage, rollover, and average vig to find the true net value of the bonus.",slug:"deposit-match"},
         insurance: {title:"Use: Promo Insurance Calculator",desc:"Enter your stake, insurance percentage, and bonus conversion rate to find your effective net cost if the bet loses.",slug:"insurance"},
       };
       const res = m[answer];
-      return res?<Result {...res}/>:<div style={{color:K.mt,fontSize:12}}>Not sure â€” try the Knowledge Base for a full overview.</div>;
+      return res?<Result {...res}/>:<div style={{color:K.mt,fontSize:12}}>Not sure — try the Knowledge Base for a full overview.</div>;
     })()}
   </div>);
 };
 
-// PROMO_SCHED + DAYS_ORDER â†’ ./data/promoSchedule.js
+// PROMO_SCHED + DAYS_ORDER → ./data/promoSchedule.js
 
 export default PromoFinder;

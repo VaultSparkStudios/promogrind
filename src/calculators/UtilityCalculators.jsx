@@ -125,21 +125,21 @@ const IncomeEstimator = () => {
       </div>
       <div style={{height:1,background:K.bd,marginBottom:16}}/>
       <RR l="Welcome promo season (first 2-4 weeks)" v={`$${Math.round(welcomePromos).toLocaleString()}`} c={K.yl}/>
-      <RR l={`Daily boost income (${boostsPerDay} boosts Ã— ~$${boostPerConversion} each Ã— 22 days)`} v={`$${Math.round(monthlyBoosts).toLocaleString()}/month`} c={K.ac}/>
-      <RR l="Year 1 estimate (conservative)" v={`$${Math.round(annualTotal * 0.8).toLocaleString()} â€“ $${Math.round(annualTotal * 1.1).toLocaleString()}`} c={K.gn} b/>
+      <RR l={`Daily boost income (${boostsPerDay} boosts × ~$${boostPerConversion} each × 22 days)`} v={`$${Math.round(monthlyBoosts).toLocaleString()}/month`} c={K.ac}/>
+      <RR l="Year 1 estimate (conservative)" v={`$${Math.round(annualTotal * 0.8).toLocaleString()} – $${Math.round(annualTotal * 1.1).toLocaleString()}`} c={K.gn} b/>
       <RR l="Effective hourly rate" v={`~$${Math.round(hourlyRate)}/hr`} c={K.pp}/>
       <Nt c={K.yl}>These are estimates based on current sportsbook promo values (2026). Welcome promos assume 70% conversion rate. Boost income varies by available lines and sportsbook generosity. Your actual results may be higher or lower.</Nt>
-      <Nt c={K.ac}>Year 2+ income is mostly recurring boosts â€” welcome promos are one-time. This is a long-term side hustle, not a one-off.</Nt>
+      <Nt c={K.ac}>Later-period estimates depend mostly on recurring boosts because welcome promos are one-time. Treat the output as scenario planning, not expected income.</Nt>
     </div>
   </div>
   <Help entries={[
     ["Welcome promo estimates","Based on current sportsbook offers: DraftKings ~$200 effective, FanDuel ~$200, BetMGM ~$180, Caesars ~$150, bet365 ~$125, ESPN BET ~$100, Fanatics ~$90, BetRivers ~$80. Assumes 70% conversion rate on bonus bets."],
     ["Boost income","Profit boosts appear daily across most sportsbooks. At 5 boosts per day averaging $9 each, that's $45/day, ~$990/month. More active grinders running all 8 books can see $200+/day on peak event days."],
-    ["Hourly rate","Based on your selected hours per week. Note: most of that time is during games â€” you're watching sports and clicking buttons, not at a desk. Many grinders consider this 'free money on top of entertainment.'"],
+    ["Hourly rate","Based on your selected hours per week. Include research, account management, line movement, voids, limits, and settlement time when judging whether the workflow is worthwhile."],
     ["State matters","More legal sportsbooks in your state = more promos = more income. NJ, PA, CO, MI have the most books. Some states only have 2-3."],
   ]}/></div>);
 };
 
-// â•â•â• PROMO FINDER WIZARD â•â•â•
+// ═══ PROMO FINDER WIZARD ═══
 
 export { MiddleBet, OddsConvert, RolloverCalc, IncomeEstimator };

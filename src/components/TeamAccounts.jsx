@@ -42,7 +42,7 @@ const TeamAccounts = () => {
   };
   return (<div><div style={S.card}><Tl t="Team Accounts" badge="BETA" bc={K.pp}/>
     {loadingTeam ? (
-      <div style={{textAlign:'center',padding:32}}><LoadingState label="Loading teamâ€¦"/></div>
+      <div style={{textAlign:'center',padding:32}}><LoadingState label="Loading team…"/></div>
     ) : !team ? (
       <div>
         <div style={{fontWeight:700,color:K.tx,fontSize:18,marginBottom:8}}>Create Your Team Vault</div>
@@ -63,8 +63,8 @@ const TeamAccounts = () => {
         <div style={{padding:16,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
           <div style={{fontWeight:600,color:K.gn,marginBottom:8}}>Included with Team ($49.99/mo)</div>
           <ul style={{color:K.dm,fontSize:13,paddingLeft:20,lineHeight:2}}>
-            <li>Shared P/L Ledger â€” see combined profits across all members</li>
-            <li>Team leaderboard â€” who&apos;s grinding hardest</li>
+            <li>Shared P/L Ledger — see combined profits across all members</li>
+            <li>Team leaderboard — who&apos;s grinding hardest</li>
             <li>All VaultSparked features for every member</li>
             <li>Up to 5 team members</li>
           </ul>
@@ -75,7 +75,7 @@ const TeamAccounts = () => {
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
           <div>
             <div style={{fontSize:20,fontWeight:700,color:K.tx}}>{team.name}</div>
-            <div style={{fontSize:12,color:K.mt}}>Team Vault Â· {members.length} member{members.length !== 1 ? 's' : ''}</div>
+            <div style={{fontSize:12,color:K.mt}}>Team Vault · {members.length} member{members.length !== 1 ? 's' : ''}</div>
           </div>
           <span style={{padding:'4px 12px',background:`${K.gn}15`,border:`1px solid ${K.gn}`,borderRadius:999,fontSize:12,color:K.gn}}>TEAM</span>
         </div>
@@ -99,7 +99,7 @@ const TeamAccounts = () => {
           <div key={m.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,marginBottom:6}}>
             <div>
               <div style={{color:K.tx,fontSize:13}}>{m.invited_email || m.user_id}</div>
-              <div style={{color:K.mt,fontSize:11}}>{m.role} Â· {m.status}</div>
+              <div style={{color:K.mt,fontSize:11}}>{m.role} · {m.status}</div>
             </div>
             <span style={{padding:'2px 10px',background:m.status==='active'?`${K.gn}15`:`${K.s3}`,border:`1px solid ${m.status==='active'?K.gn:K.bd2}`,borderRadius:999,fontSize:11,color:m.status==='active'?K.gn:K.mt}}>
               {m.status}
@@ -107,7 +107,7 @@ const TeamAccounts = () => {
           </div>
         ))}
         {members.length === 0 && (
-          <div style={{color:K.mt,fontSize:13,textAlign:'center',padding:16}}>No members yet â€” invite your first teammate above</div>
+          <div style={{color:K.mt,fontSize:13,textAlign:'center',padding:16}}>No members yet — invite your first teammate above</div>
         )}
       </div>
     )}

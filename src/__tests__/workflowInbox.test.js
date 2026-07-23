@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildWorkflowInbox } from "../workflows/inbox.js";
 import { buildStudioSnapshot } from "../studio/export.js";
+import { LAUNCH_VALIDATION } from "../launchState.js";
 
 describe("workflow inbox", () => {
   it("scores and orders open workflows from workflow inbox and feedback data", () => {
@@ -197,6 +198,7 @@ describe("workflow inbox", () => {
     expect(snapshot.project).toBe("promogrind");
     expect(snapshot.workflows.openCount).toBe(1);
     expect(snapshot.growth.totalProfit).toBe(10);
-    expect(snapshot.launch.validation.tests.lastKnown).toBe("380/380 passing");
+    expect(snapshot.launch.validation.tests.lastKnown).toBe(LAUNCH_VALIDATION.tests.lastKnown);
+    expect(snapshot.launch.validation.tests.lastKnown).toMatch(/^\d+\/\d+ passing · verified \d{4}-\d{2}-\d{2}$/);
   });
 });

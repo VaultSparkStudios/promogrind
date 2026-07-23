@@ -35,8 +35,8 @@ const PromoAlertPrefs = () => {
       </div>
     </div>
     <button onClick={saveAlertPrefs} style={{padding:"7px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Save Alert Preferences</button>
-    {alertSaved&&<div style={{fontSize:11,color:K.gn,marginTop:8}}>âœ“ Alerts configured â€” you&apos;ll be notified when high-value promos are available</div>}
-    <Nt c={K.mt}>Email alerts coming soon â€” your preferences are saved and will activate when the feature launches.</Nt>
+    {alertSaved&&<div style={{fontSize:11,color:K.gn,marginTop:8}}>✓ Alerts configured — you&apos;ll be notified when high-value promos are available</div>}
+    <Nt c={K.mt}>Email alerts coming soon — your preferences are saved and will activate when the feature launches.</Nt>
   </div>);
 };
 const PromoROITable = ({ promoValueHistory }) => {
@@ -55,11 +55,11 @@ const PromoROITable = ({ promoValueHistory }) => {
   return (
     <div style={{...S.card,marginTop:12}}>
       <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
-        Promo Performance Table <span style={{color:K.mt,fontSize:10}}>{open?"â–²":"â–¼"}</span>
+        Promo Performance Table <span style={{color:K.mt,fontSize:10}}>{open?"▲":"▼"}</span>
       </button>
       {open&&<div style={{marginTop:12}}>
         {rows.length===0
-          ?<div style={{fontSize:11,color:K.mt}}>Click <strong style={{color:K.ac}}>ðŸ“ˆ Track Value</strong> on any promo in the calendar to start building this table.</div>
+          ?<div style={{fontSize:11,color:K.mt}}>Click <strong style={{color:K.ac}}>📈 Track Value</strong> on any promo in the calendar to start building this table.</div>
           :<table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
             <thead><tr>{["Rank","Promo","Avg Value","Reports","Best"].map(h=><th key={h} style={{textAlign:"left",padding:"5px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
             <tbody>{rows.map((r,i)=>(
@@ -133,16 +133,16 @@ const PromoCalendar = () => {
     downloadFile(lines.join("\r\n"), "promogrind-calendar.ics", "text/calendar");
   };
   return (<div><div style={S.card}><Tl t="Promo Calendar" badge="RECURRING $$$" bc={K.gn} shareable/>
-    <div style={{...S.note(K.ac),marginBottom:12}}>These are the predictable recurring promos across all major books. Stack them daily for $150â€“450/mo in passive profit on top of welcome bonuses.</div>
+    <div style={{...S.note(K.ac),marginBottom:12}}>These recurring promo patterns are planning leads, not promised returns. Verify current terms and odds, then record realized value so the calendar learns what is actually repeatable.</div>
     <div style={{display:"flex",gap:6,marginBottom:10,alignItems:"center",flexWrap:"wrap"}}>
       <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",whiteSpace:"nowrap"}}>Market:</span>
       {["All","US","UK"].map(m=>(
         <button key={m} onClick={()=>{setMarketFilter(m);setFilterBook("All");}} style={{padding:"4px 12px",background:marketFilter===m?K.ac:"transparent",border:`1px solid ${marketFilter===m?K.ac:K.bd2}`,borderRadius:50,color:marketFilter===m?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600,whiteSpace:"nowrap"}}>
-          {m==="UK"?"ðŸ‡¬ðŸ‡§ UK":m==="US"?"ðŸ‡ºðŸ‡¸ US":"ðŸŒŽ All"}
+          {m==="UK"?"🇬🇧 UK":m==="US"?"🇺🇸 US":"🌎 All"}
         </button>
       ))}
-      {marketFilter==="UK"&&<span style={{fontSize:9,color:K.pp,marginLeft:4}}>bet365 Â· Betway Â· William Hill Â· Paddy Power Â· Sky Bet</span>}
-      {marketFilter==="US"&&<span style={{fontSize:9,color:K.ac,marginLeft:4}}>DraftKings Â· FanDuel Â· BetMGM Â· Caesars Â· ESPN BET Â· Fanatics Â· BetRivers</span>}
+      {marketFilter==="UK"&&<span style={{fontSize:9,color:K.pp,marginLeft:4}}>bet365 · Betway · William Hill · Paddy Power · Sky Bet</span>}
+      {marketFilter==="US"&&<span style={{fontSize:9,color:K.ac,marginLeft:4}}>DraftKings · FanDuel · BetMGM · Caesars · ESPN BET · Fanatics · BetRivers</span>}
     </div>
     <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,alignItems:"center"}}>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
@@ -155,9 +155,9 @@ const PromoCalendar = () => {
       </select>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterGrade||"All"} onChange={e=>setFilterGrade(e.target.value)}>
         <option value="All">All Grades</option>
-        <option value="A">A â€” Best Value</option>
-        <option value="B">B â€” Good Value</option>
-        <option value="C">C â€” Situational</option>
+        <option value="A">A — Best Value</option>
+        <option value="B">B — Good Value</option>
+        <option value="C">C — Situational</option>
       </select>
       <select style={{...S.input,width:"auto",padding:"5px 10px",fontSize:11}} value={filterComplexity} onChange={e=>setFilterComplexity(e.target.value)}>
         <option value="All">All Complexity</option>
@@ -165,11 +165,11 @@ const PromoCalendar = () => {
         <option value="Medium">Medium</option>
         <option value="Hard">Hard</option>
       </select>
-      <button onClick={exportICS} style={{padding:"5px 12px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",fontWeight:600}}>ðŸ“… Export to Calendar</button>
+      <button onClick={exportICS} style={{padding:"5px 12px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",fontWeight:600}}>📅 Export to Calendar</button>
     </div>
     <div style={{overflowX:"auto"}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Time","Track","ðŸ””",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        <thead><tr>{["Book","Day","Promo","Est. Value","Type","Grade","Complexity","Time","Track","🔔",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
         <tbody>{filtered.map((p,i)=>{
           const key=`${p.book}-${p.promo}`;
           const hist=(data.promoValueHistory||{})[key]||[];
@@ -188,15 +188,15 @@ const PromoCalendar = () => {
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
                 <span style={S.tag(complexityColor[p.complexity]||K.mt)}>{p.complexity||"Easy"}</span>
               </td>
-              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.mt,fontSize:11,whiteSpace:"nowrap"}}>{p.timeMin?`~${p.timeMin}m`:"â€”"}</td>
+              <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.mt,fontSize:11,whiteSpace:"nowrap"}}>{p.timeMin?`~${p.timeMin}m`:"—"}</td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
                 <button onClick={()=>{const val=prompt(`Enter value realized for ${p.promo} (e.g. 12.50):`);if(val&&!isNaN(parseFloat(val)))trackValue(p,parseFloat(val));}} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.gn}`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Track Value</button>
               </td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-                {typeof Notification!=='undefined'&&<button onClick={()=>toggleAlert(p)} style={{padding:"2px 6px",background:alertOn?`${K.yl}15`:"transparent",border:`1px solid ${alertOn?K.yl:K.bd2}`,borderRadius:4,color:alertOn?K.yl:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{alertOn?"ðŸ”” On":"ðŸ”” Off"}</button>}
+                {typeof Notification!=='undefined'&&<button onClick={()=>toggleAlert(p)} style={{padding:"2px 6px",background:alertOn?`${K.yl}15`:"transparent",border:`1px solid ${alertOn?K.yl:K.bd2}`,borderRadius:4,color:alertOn?K.yl:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{alertOn?"🔔 On":"🔔 Off"}</button>}
               </td>
               <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-                {hist.length>0&&<button onClick={()=>setHistoryOpen(h=>({...h,[key]:!h[key]}))} style={{padding:"2px 6px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{showHist?"â–²":"History"}</button>}
+                {hist.length>0&&<button onClick={()=>setHistoryOpen(h=>({...h,[key]:!h[key]}))} style={{padding:"2px 6px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:9,cursor:"pointer",fontFamily:font}}>{showHist?"▲":"History"}</button>}
               </td>
             </tr>
             {showHist&&hist.length>0&&<tr><td colSpan={10} style={{padding:"8px 12px",borderBottom:`1px solid ${K.bd}`,background:K.s2}}>
@@ -210,7 +210,7 @@ const PromoCalendar = () => {
                   </div>);
                 })}
               </div>
-              <div style={{fontSize:9,color:K.mt}}>Last {hist.length} tracked values Â· Latest: ${hist[hist.length-1].value} on {hist[hist.length-1].date}</div>
+              <div style={{fontSize:9,color:K.mt}}>Last {hist.length} tracked values · Latest: ${hist[hist.length-1].value} on {hist[hist.length-1].date}</div>
             </td></tr>}
           </React.Fragment>);
         })}</tbody>
@@ -222,7 +222,7 @@ const PromoCalendar = () => {
   <Help entries={[
     ["Why track recurring promos","Welcome bonuses are one-time. Recurring promos are the engine of long-term profit. A serious matched bettor extracts $150-450/mo just from daily boosts across 5-6 books."],
     ["How to use this","Every morning, open each sportsbook app and check for available boosts. Cross-reference this calendar so you know what to look for. Use the Profit Boost converter to calculate each one."],
-    ["Profit boosts are the best","They come daily, they require no outcome risk when hedged, and they compound. At $10 profit per boost Ã— 3 boosts/day Ã— 30 days = $900/mo."],
+    ["Profit boosts are the best","They come daily, they require no outcome risk when hedged, and they compound. At $10 profit per boost × 3 boosts/day × 30 days = $900/mo."],
   ]}/></div>);
 };
 
