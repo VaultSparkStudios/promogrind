@@ -47,7 +47,7 @@
   "testsPassing": 582,
   "testsTotal": 582,
   "testsLastRun": "2026-07-24",
-  "lastDeployStatus": "S115 final implementation commit be58dfe deployed successfully via GitHub Pages run 30053484335. Downloaded launch artifact: 0 blocking failures; public signup/sign-in, checkout, expected portal state, disposable-user cleanup, and production dashboard smoke all pass. Brief 30053484333 and CI 30053484341 also passed.",
+  "lastDeployStatus": "S117 implementation commit 551f256 deployed successfully via brief run 30082118132, CI run 30082118152, and GitHub Pages run 30082118153. Production launch verification and dashboard smoke passed; all six standard files return 200. Live edge contract remains NO-GO because six required response headers are absent.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
   "truthAuditLastRun": "2026-07-24",
   "truthGenome": "24/25",
@@ -77,7 +77,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live; S115 final implementation commit be58dfe deployed via GitHub Pages run 30053484335 with 0 blocking launch-verification failures and production dashboard smoke passing"
+      "status": "live; S117 implementation commit 551f256 deployed via GitHub Pages run 30082118153; production launch verification and dashboard smoke passed; standard files 6/6 return 200; six required security headers remain absent"
     },
     {
       "type": "cloudflare",

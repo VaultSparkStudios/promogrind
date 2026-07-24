@@ -549,3 +549,5 @@ Append chronological entries.
 - Honest deferral: six typed external proofs remain pending; no email, purchase, tester, Brevo, deployment, capture, or sibling-registry evidence was invented.
 
 - 2026-07-24 · S117 · Full /arc shipped 6/6 audit items; 582/582 tests and launch-local green; live edge headers/manual theme evidence remain explicitly pending.
+
+- 2026-07-24 · S117 deploy proof · 551f256: brief 30082118132, CI 30082118152, Pages 30082118153 green; standard files 6/6 live, six edge headers still absent.

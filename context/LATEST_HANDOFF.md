@@ -30,10 +30,11 @@ S117 shipped all six ranked audit items and exhausted the repo-owned implementat
 - Production browser smoke — green; UX inventory covers 61 routes and 100 public HTML surfaces.
 - Bundle graph — 179.1KB raw / 60.0KB gzip initial; largest async Sentry chunk 482.1KB raw / 159.2KB gzip.
 - `git diff --check` — clean.
+- Remote S117 evidence — brief-format 30082118132, CI 30082118152, and Deploy Pages 30082118153 passed for implementation commit 551f256; production launch verification and dashboard smoke passed.
 
 ## Honest deferrals
 
-- `npm run verify:web-live -- --url https://promogrind.bet` remains red for six missing live headers: Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. New standard files await deployment.
+- `npm run verify:web-live -- --url https://promogrind.bet` remains red for six missing live headers: Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. All six standard files now return 200 after deployment; the header failure remains edge-owned.
 - The required desktop/mobile dark/light screenshot matrix was SKIPPED, not passed: the connected browser runtime failed before launch with a Windows DPAPI error.
 - Rotate the exposed webhook credential referenced by Ark cargo `01JU98MC5M8FC5EDBEE214F795`.
 - Deploy the pending Supabase migration/functions once `promogrind.supabase.deploy` resolves to the explicit project ref.

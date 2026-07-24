@@ -396,3 +396,9 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Multilingual public-claim verification passed 282 files against 10 English/Spanish/Portuguese rules with zero findings. The release surface now includes the expected manifest, security contact, favicon, rollback runbook, and proprietary footer contract.
 - Repo-owned verification is green: 582/582 Vitest checks, 3/3 Deno privacy checks, Deno type-check, production browser smoke, source integrity, public-dist exposure, proof replay, and launch-local direct exit 0.
 - Release truth remains NO-GO for SPARKED: production lacks six required security headers, the manual desktop/mobile dark/light matrix was skipped after the browser runtime failed before launch, and the existing external production proofs remain pending.
+
+## 2026-07-24 — Session 117 Deploy Proof
+
+- Implementation commit `551f256` reached `origin/main`; brief-format run `30082118132`, CI run `30082118152`, and Deploy Pages run `30082118153` all passed.
+- The Pages workflow's production launch verification and dashboard smoke passed. Post-deploy live probing confirms the root and all six standard files return 200, including `/.well-known/security.txt` and `/favicon.ico`.
+- Release-state promotion remains NO-GO: production still omits CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. This is recorded as a hosting-edge blocker, not a code-pass claim.

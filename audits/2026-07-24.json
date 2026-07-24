@@ -32,7 +32,8 @@
     "integrity": "356 files, 0 repairs; public dist 0 findings; proof replay 0 regressions",
     "ux": "production browser smoke pass; 61 routes and 100 public HTML surfaces",
     "bundle": "179.1KB raw / 60.0KB gzip initial; 482.1KB raw / 159.2KB gzip largest async",
-    "live": "NO-GO: six required security headers absent before S117 deployment"
+    "live": "NO-GO: six required security headers absent before S117 deployment",
+    "remote": "551f256: brief 30082118132 pass; CI 30082118152 pass; Deploy Pages 30082118153 pass; production launch verification and dashboard smoke pass; standard files 6/6 live; six edge headers absent"
   },
   "honestDeferrals": [
     "webhook credential rotation",
