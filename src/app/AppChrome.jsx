@@ -31,7 +31,11 @@ export const AppFooter = () => (
         <span style={{ color: K.rd, fontWeight: 600 }}>1-800-GAMBLER</span>.
       </p>
       <p style={{ fontSize: 10, color: K.bd2, marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", lineHeight: 1.8 }}>
-        <span>&copy; {new Date().getFullYear()} | <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ color: "inherit", textDecoration: "none" }}>VaultSpark Studios</a> | {APP_CHROME_COPY.footerLegal}</span>
+        <span>© 2026 <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ color: "inherit", textDecoration: "none" }}>VaultSpark Studios LLC</a>. All rights reserved.</span>
+        <a href="/" style={{ color: K.mt, textDecoration: "none" }}>Home</a>
+        <a href="/#/knowledge-base" style={{ color: K.mt, textDecoration: "none" }}>Learn</a>
+        <a href="/#/upgrade" style={{ color: K.mt, textDecoration: "none" }}>Pricing</a>
+        <a href="/dashboard" style={{ color: K.mt, textDecoration: "none" }}>Open App</a>
         <a href="/privacy/" style={{ color: K.mt, textDecoration: "none" }}>Privacy</a>
         <a href="/terms/" style={{ color: K.mt, textDecoration: "none" }}>Terms</a>
         <a href="/responsible-gambling/" style={{ color: K.mt, textDecoration: "none" }}>Responsible Gambling</a>

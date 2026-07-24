@@ -386,3 +386,13 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - AI decision truth improved: Promo Advisor receipts expose assumptions, missing inputs, sensitivity triggers, evidence grade, source, and contract version across rule/model paths and saved workflows. Old cache entries cannot masquerade as v2 receipts.
 - Error observability repaired: exceptions thrown before idle analytics initialization are buffered in memory and flushed to Sentry when ready instead of being silently discarded.
 - Verification truth: 568/568 Vitest checks, 10/10 Deno Advisor tests, Deno type-check, and the full launch-local chain passed with direct exit 0. Production deployment remains S115 until remote S116 evidence exists.
+
+## 2026-07-24 — Session 117 Truth Update
+
+- Removed a tracked staging helper that exposed a real webhook credential and private deployment topology. The scanner now detects unquoted shell secret assignments, regression coverage is present, all-tree scanning reports zero findings, and a redacted rotation request was shipped through Ark as `01JU98MC5M8FC5EDBEE214F795`. Rotation itself is not claimed complete.
+- Browser-only passport and provenance checks are now explicitly SHA-256 self-attestations, not independent signatures. Strict schemas, bounds, and DOM-safe public rendering prevent the verifier from becoming an authenticity or injection theater surface.
+- Promo Advisor sends profile context only after explicit opt-in, with supported identifier redaction on client and server, bounded server input, and an inspectable privacy receipt. Default behavior sends no stored profile context.
+- Promo Calendar recurring rows are historical observations with market/jurisdiction evidence, freshness, confidence, and local Seen/Not seen state. They are not represented as current operator offers or email alerts.
+- Multilingual public-claim verification passed 282 files against 10 English/Spanish/Portuguese rules with zero findings. The release surface now includes the expected manifest, security contact, favicon, rollback runbook, and proprietary footer contract.
+- Repo-owned verification is green: 582/582 Vitest checks, 3/3 Deno privacy checks, Deno type-check, production browser smoke, source integrity, public-dist exposure, proof replay, and launch-local direct exit 0.
+- Release truth remains NO-GO for SPARKED: production lacks six required security headers, the manual desktop/mobile dark/light matrix was skipped after the browser runtime failed before launch, and the existing external production proofs remain pending.

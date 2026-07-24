@@ -1,28 +1,28 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-07-24",
-  "generatedAtMs": 1784858400299,
-  "session": 116,
-  "vectorHash": "30dfd4054a8cc806",
-  "silTotal": 1000,
+  "generatedAtMs": 1784884223500,
+  "session": 117,
+  "vectorHash": "3e8ec92ad0e607cc",
+  "silTotal": 999,
   "silMax": 1000,
-  "silAvg3": 1000,
+  "silAvg3": 999.7,
   "velocity": 6,
   "debt": "stable",
   "runway": "~2 sessions",
   "intentRate": "100% achieved (last 5)",
   "openNow": 4,
-  "openNext": 8,
+  "openNext": 3,
   "openBlocked": 3,
   "topNow": [
-    "deploy `20260723021000_ai_quota_claim.sql` plus the five modified provider edge ",
-    "production auth email smoke after the latest deploy — create a real PromoGrind a",
-    "run one real Stripe smoke purchase and record evidence — scripted: `npm run smok"
+    "configure a header-capable production edge for `promogrind.bet`, add Content-Sec",
+    "rotate the exposed webhook credential through the Studio secrets gateway; redact",
+    "deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions "
   ],
   "topNext": [
-    "run the deferred desktop/mobile dark/light screenshot matrix when a package-trus",
-    "~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.js",
-    "~~rerun/inspect the GitHub Pages workflow and confirm the retained launch artifa"
+    "run the desktop/mobile dark/light screenshot matrix when the connected browser r",
+    "inspect S117 CI/deployment and refresh the live web probe against the deployed c",
+    "monitor `artifacts/launch-verification/post-deploy.json` after each deploy via t"
   ],
   "health": "green",
   "truthStatus": "green-with-external-proof-follow-ups",
@@ -34,8 +34,8 @@
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
-  "currentFocus": "S116 saturated four verified primary items and two second-order refinements: truthful SIL forecasting, total typed launch-proof coverage, manifest-derived bundle budgets, counterfactual Advisor receipts, pre-init error buffering, and receipt-cache versioning. Exact-lockfile suite 568/568; Advisor Deno 10/10 plus type-check; launch-local direct exit 0; scoped genius list 0.",
+  "nextMilestone": "Deploy S117, configure and verify six production security headers, rotate the exposed webhook credential via Ark request 01JU98MC5M8FC5EDBEE214F795, deploy the pending Supabase migration/functions to fjnpzjjyhnpmunfoycrp, and complete the remaining external proof ledger plus manual theme/device matrix.",
+  "currentFocus": "S117 shipped all six ranked audit items: public secret/topology cleanup, self-attested passport/provenance, consent-gated Advisor context, evidence-aware promo observations, multilingual claim enforcement, and the universal release surface. Repo-owned verification: 582/582 Vitest, 3/3 Deno privacy tests, Deno type-check, browser smoke, and launch-local direct exit 0.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",

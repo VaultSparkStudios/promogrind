@@ -47,6 +47,7 @@ const PATTERNS = [
   { name: 'Slack Bot Token',      regex: /\bxox[baprs]-[0-9a-zA-Z-]{10,}\b/,                        confidence: 'high',   type: 'slack' },
   { name: 'Supabase Service Role',regex: /\beyJhbGciOiJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{100,}\.[A-Za-z0-9_-]{20,}\b/, confidence: 'high', type: 'jwt-supabase' },
   { name: 'Generic Token Field',  regex: /(password|secret|token|api[_-]?key)\s*[:=]\s*["'][A-Za-z0-9+/=_-]{32,}["']/i, confidence: 'medium', type: 'generic', needsEntropy: true },
+  { name: 'Generic Shell Secret', regex: /\b(?:[A-Za-z_][A-Za-z0-9_]*_)?(?:password|secret|token|api[_-]?key)\s*=\s*([A-Za-z0-9+/=_-]{32,})/i, confidence: 'high', type: 'generic-shell', needsEntropy: true, secretGroup: 1 },
   { name: 'Cloudflare API Token', regex: /\b[A-Za-z0-9_-]{40}\b/,                                   confidence: 'low',    type: 'cf-maybe', needsEntropy: true },
 ];
 
@@ -118,7 +119,7 @@ function scanContent(relPath, content) {
 
       // Entropy gate for low-confidence patterns
       if (pat.needsEntropy) {
-        const candidate = matched.replace(/^[^A-Za-z0-9]*/, '').replace(/[^A-Za-z0-9]*$/, '');
+        const candidate = pat.secretGroup ? match[pat.secretGroup] : matched.replace(/^[^A-Za-z0-9]*/, '').replace(/[^A-Za-z0-9]*$/, '');
         if (candidate.length < 32) continue;
         const e = shannonEntropy(candidate);
         if (e < ENTROPY_THRESHOLD) continue;
@@ -131,11 +132,15 @@ function scanContent(relPath, content) {
         type: pat.type,
         confidence: pat.confidence,
         redactedMatch: redact(matched),
-        snippet: line.length > 120 ? line.slice(0, 60) + '…' + line.slice(-40) : line,
+        snippet: (() => {
+          const safeLine = line.replace(matched, redact(matched));
+          return safeLine.length > 120 ? safeLine.slice(0, 60) + '…' + safeLine.slice(-40) : safeLine;
+        })(),
       });
     }
   }
-  return findings;
+  const decisiveLines = new Set(findings.filter((finding) => finding.confidence === "high").map((finding) => `${finding.file}:${finding.line}`));
+  return findings.filter((finding) => finding.confidence !== "low" || !decisiveLines.has(`${finding.file}:${finding.line}`));
 }
 
 // ── Git-based staged scan ──────────────────────────────────────────────────

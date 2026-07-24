@@ -8,7 +8,7 @@ const GLOSSARY_TERMS = [
   ["Spread", "Bet on margin of victory. -3.5 means the team must win by 4 or more."],
   ["Total / Over-Under", "Bet on the combined score of both teams."],
   ["Parlay", "Multiple bets combined into one ticket. Every leg must win."],
-  ["Arbitrage", "Betting both sides at different books where combined odds guarantee profit."],
+  ["Arbitrage", "Betting both sides at different books where combined odds model a return."],
   ["+EV", "Positive expected value. The bet is expected to profit over many repetitions."],
   ["Closing Line Value (CLV)", "Whether your odds were better than the closing odds. Consistently beating the close is a long-term edge signal."],
   ["Hedge", "Placing a second bet on the opposite outcome to lock in profit or limit loss."],

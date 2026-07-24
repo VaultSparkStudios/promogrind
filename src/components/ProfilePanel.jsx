@@ -24,15 +24,15 @@ function PassportExportSection() {
       setShareUrl(url);
       if (navigator?.clipboard?.writeText) {
         await navigator.clipboard.writeText(url);
-        setMessage("Passport URL copied — paste it anywhere to share. Zero PII, signed locally.");
+        setMessage("Passport URL copied — paste it anywhere to share. Zero PII; checksum-verified and explicitly self-attested.");
       } else {
         setMessage("Passport URL ready below.");
       }
       recordTrustReceipt({
         type: "passport",
         title: "Operator passport exported",
-        summary: "PromoGrind generated a zero-PII signed operator passport URL from local performance totals.",
-        stored: ["signed passport payload", "local discipline summary"],
+        summary: "PromoGrind generated a zero-PII self-attested operator passport URL from local performance totals.",
+        stored: ["self-attested passport payload", "local discipline summary"],
         notStored: ["email", "stake-level bet history", "sportsbook login data"],
         undo: "Do not share the copied URL, or clear local browser data to remove the local export trace.",
         dedupeKey: "passport:export",
@@ -51,7 +51,7 @@ function PassportExportSection() {
         Operator Passport
       </div>
       <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
-        Share a verifiable snapshot of your discipline score, lane mastery, and settled-loop ratio. Signed locally. No bet history, no stake amounts, no sportsbook account info — ever.
+        Share a self-attested snapshot of your discipline score, lane mastery, and settled-loop ratio. A checksum catches copy corruption; it does not prove identity. No bet history, stake amounts, or sportsbook account information — ever.
       </div>
       <button
         onClick={handleExport}

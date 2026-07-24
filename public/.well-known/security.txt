@@ -1,0 +1,6 @@
+Contact: mailto:contact@promogrind.bet
+Expires: 2027-07-24T23:59:59Z
+Canonical: https://promogrind.bet/.well-known/security.txt
+Policy: https://promogrind.bet/data-policy/
+Preferred-Languages: en, es, pt
+Hiring: https://vaultsparkstudios.com/

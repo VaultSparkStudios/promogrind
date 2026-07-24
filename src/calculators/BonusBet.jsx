@@ -137,7 +137,7 @@ export default function BonusBet() {
             <div>Step 1: You received a $200 bonus bet.</div>
             <div>Step 2: We found Warriors +330 vs Lakers tonight.</div>
             <div>Step 3: Hedge ${r ? r.hs : "~"} at -380 on FanDuel.</div>
-            <div>Step 4: Collect ~${r ? r.g : "~"} guaranteed.</div>
+            <div>Step 4: Collect ~${r ? r.g : "~"} modeled.</div>
             <button onClick={() => setDemoMode(false)} style={{ marginTop: 6, background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 10, padding: 0, textDecoration: "underline" }}>✕ Exit Demo</button>
           </div>
         )}
@@ -181,7 +181,7 @@ export default function BonusBet() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(parseFloat(r.g) > 0)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(parseFloat(r.g) > 0 ? K.gn : K.rd)}>${r.g}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>guaranteed profit</span>
+              <span style={{ fontSize: 12, color: K.dm }}>modeled profit</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
               <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
@@ -225,7 +225,7 @@ export default function BonusBet() {
                   { label: "If Bonus Wins", value: `+$${r.pBW}` },
                   { label: "If Hedge Wins", value: `+$${r.pHW}` },
                   { label: "Conversion Rate", value: `${r.r}%` },
-                  { label: "Guaranteed Profit", value: `$${r.g}`, highlight: true },
+                  { label: "modeled Profit", value: `$${r.g}`, highlight: true },
                 ]}
                 onClose={() => setShowReceipt(false)}
               />
@@ -237,7 +237,7 @@ export default function BonusBet() {
       <Help entries={[
         ["Bonus Bet", "A free bet credit given by a sportsbook. If it wins, you only get the PROFIT — the original bonus amount is NOT returned. For example, a $200 bonus bet at +300 odds that wins pays you $600 in profit, but the $200 credit disappears."],
         ["Underdog / Favorite", "The underdog is the team expected to lose (shown with + odds like +300). The favorite is expected to win (shown with - odds like -350). For conversions, you always place your bonus on the underdog and hedge with cash on the favorite."],
-        ["Hedge", "A second bet on the opposite outcome at a DIFFERENT sportsbook. By betting both sides, you guarantee profit regardless of who wins."],
+        ["Hedge", "A second bet on the opposite outcome at a DIFFERENT sportsbook. By betting both sides, you model a return regardless of who wins."],
         ["Conversion Rate", "The percentage of the bonus you extract as real cash. 70%+ is considered excellent — meaning a $200 bonus bet becomes $140+ in your pocket. The wider the odds gap, the better the conversion."],
         ["Why +250 to +400 odds?", "Higher + odds on the bonus side means more potential profit to hedge against. Below +200, conversion rates drop below 60%. Above +500, finding close hedge lines becomes harder."],
         ["Step-by-Step", "1) Get your bonus bets from a sportsbook promo. 2) Find a game with an underdog at +250 to +400. 3) Place your bonus bet on the underdog at Book A. 4) Use this calculator to find the hedge amount. 5) Place a CASH bet for that amount on the favorite at Book B. 6) No matter who wins, you profit."],

@@ -543,3 +543,26 @@ Impact: Future closeouts can call the expected script names without failing on m
 - Context: Promo Advisor confidence was visible, but its model prompt omitted assumptions and neither path said which missing facts or term changes would alter the verdict.
 - Decision: version and persist an inspectable decision receipt containing assumptions, missing inputs, sensitivity triggers, evidence grade, and analysis source.
 - Why this was chosen: this advances PromoGrind's calm operator-desk SOUL—AI should improve decisions and feedback quality, not issue opaque scores.
+
+## 2026-07-24 — Session 117
+
+### Decision: browser-only cryptography is self-attestation
+
+- Status: accepted
+- Context: browser-generated checksums can detect local mutation but cannot prove who created a payload because the verifier has no independent secret or trusted signer.
+- Decision: label the v2 passport and provenance contracts as SHA-256 self-attestation. Independent authenticity requires a server-held signing key or another separately trusted authority.
+- Why this was chosen: truthful integrity evidence is useful; overstating it as authenticity would weaken the trust surface it is meant to support.
+
+### Decision: Advisor profile context stays local unless explicitly opted in
+
+- Status: accepted
+- Context: bankroll, preferences, and betting behavior can be sensitive even when a prompt does not contain obvious account identifiers.
+- Decision: keep profile context client-local by default, require an unchecked explicit consent control before transmission, redact supported identifiers on both sides, bound server context, and emit a privacy receipt.
+- Why this was chosen: personalization should be inspectable and voluntary, with a narrow data boundary that survives client mistakes.
+
+### Decision: recurring promo schedules are observations, not offers
+
+- Status: accepted
+- Context: recurring sportsbook patterns can age, vary by jurisdiction, or disappear without notice; static calendar rows cannot establish current availability.
+- Decision: model every recurring row as a historical-pattern observation with market, jurisdiction, evidence state, freshness, confidence, and user-observed Seen/Not seen state.
+- Why this was chosen: the calendar remains operationally useful without turning remembered timing into a live-offer claim.

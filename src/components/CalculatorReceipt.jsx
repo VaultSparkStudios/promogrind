@@ -104,7 +104,7 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
 
           {/* Disclaimer */}
           <div style={{ borderTop: "1px dashed #ccc", paddingTop: 8, fontSize: 8, color: "#94a3b8", lineHeight: 1.5, textAlign: "center" }}>
-            {disclaimer || "Estimates only. Verify all odds before placing bets. Results do not guarantee profit."}
+            {disclaimer || "Estimates only. Verify all odds before placing bets. Results do not model a return."}
             <br />
             {CANONICAL_APP_URL.replace(/^https?:\/\//, "")} — free sportsbook promo tools
           </div>

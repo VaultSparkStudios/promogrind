@@ -82,7 +82,7 @@ export function StackBuilder({ proStatus }) {
       <div style={S.card}>
         <Tl t="Stack Builder" badge="AI · VAULTSPARKED" bc={K.pp}/>
         <p style={{fontSize:12,color:K.dm,marginBottom:16,lineHeight:1.6}}>
-          Enter your bankroll and available books. Claude analyzes current promos and returns your optimal 3-book extraction sequence with guaranteed profit amounts.
+          Enter your bankroll and available books. Claude analyzes current promos and returns your optimal 3-book extraction sequence with modeled profit amounts.
         </p>
 
         {!isActive && (
@@ -132,7 +132,7 @@ export function StackBuilder({ proStatus }) {
               <div style={{fontSize:10,color:K.pp,textTransform:'uppercase',letterSpacing:'1.5px',fontWeight:700}}>Your Optimal Stack</div>
               <div style={{display:'flex',gap:6,alignItems:'center'}}>
                 {plan.estimatedTotal && (
-                  <span style={{fontSize:11,color:K.gn,fontWeight:700}}>Est. ${plan.estimatedTotal} guaranteed</span>
+                  <span style={{fontSize:11,color:K.gn,fontWeight:700}}>Est. ${plan.estimatedTotal} modeled</span>
                 )}
                 <button onClick={copyPlan} style={{padding:'3px 10px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:'pointer',fontFamily:font}}>
                   📋 {copied ? 'Copied!' : 'Copy'}
@@ -191,8 +191,8 @@ export function StackBuilder({ proStatus }) {
         )}
       </div>
       <Help entries={[
-        ["What is a promo stack?","A sequence of sportsbook promos executed in the optimal order to maximize guaranteed profit extraction. Order matters — welcome bonuses must come before recurring promos, and bankroll must cover hedge amounts at each step."],
-        ["How does Claude generate the stack?","Claude analyzes your bankroll against available promo types, calculates expected guaranteed extraction for each (after hedge), and sequences them for maximum yield without over-committing capital."],
+        ["What is a promo stack?","A sequence of sportsbook promos executed in the optimal order to maximize modeled profit extraction. Order matters — welcome bonuses must come before recurring promos, and bankroll must cover hedge amounts at each step."],
+        ["How does Claude generate the stack?","Claude analyzes your bankroll against available promo types, calculates expected modeled extraction for each (after hedge), and sequences them for maximum yield without over-committing capital."],
         ["Do I need all these books?","No — the more books you have, the more opportunities. But even 2-3 books generate meaningful stacks. Select only the books where you have accounts open."],
       ]}/>
     </div>

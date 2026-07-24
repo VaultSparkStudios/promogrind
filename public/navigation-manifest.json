@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "headerSources": [
+    "public/landing/index.html"
+  ],
+  "footerSources": [
+    "public/landing/index.html",
+    "src/app/AppChrome.jsx"
+  ],
+  "headerLinks": [
+    {
+      "href": "/",
+      "label": "PromoGrind"
+    },
+    {
+      "href": "/#/knowledge-base",
+      "label": "Learn"
+    },
+    {
+      "href": "/#/upgrade",
+      "label": "Pricing"
+    },
+    {
+      "href": "/dashboard",
+      "label": "Open App"
+    }
+  ],
+  "footerLinks": [
+    "/",
+    "/#/knowledge-base",
+    "/#/upgrade",
+    "/dashboard",
+    "/privacy/",
+    "/terms/",
+    "/responsible-gambling/",
+    "/affiliate-disclosure/",
+    "/disclaimer/",
+    "/dmca/",
+    "/data-policy/",
+    "/about/",
+    "/compliance/",
+    "/contact/"
+  ],
+  "footerOnly": [
+    "/responsible-gambling/",
+    "/affiliate-disclosure/",
+    "/disclaimer/",
+    "/dmca/",
+    "/data-policy/",
+    "/about/",
+    "/compliance/",
+    "/contact/"
+  ],
+  "legalPages": [
+    "/privacy/",
+    "/terms/"
+  ],
+  "standardFiles": [
+    "public/.well-known/security.txt",
+    "public/favicon.ico",
+    "public/robots.txt",
+    "public/sitemap.xml",
+    "public/agents.json",
+    "public/.well-known/llms.txt"
+  ],
+  "rollbackDocument": "docs/ROLLBACK.md",
+  "requiredFooterTokens": [
+    "© 2026",
+    "VaultSpark Studios LLC",
+    "All rights reserved."
+  ]
+}

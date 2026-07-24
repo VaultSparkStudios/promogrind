@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
 import { normalizeAdvisorResult } from "../_shared/advisor-result.ts";
+import { ADVISOR_PRIVACY_CONTRACT_VERSION, redactAdvisorInput, sanitizeAdvisorContext } from "../_shared/advisor-privacy.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
 import { parsePromoTextHeuristic } from "../_shared/promo-parse.ts";
 import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL } from "../_shared/validate.ts";
@@ -57,9 +58,11 @@ serve(async (req) => {
   }
 
   try {
-    const { promoText, userContext } = await req.json() as {
+    const { promoText, userContext, privacyContractVersion, personalizationConsent } = await req.json() as {
       promoText: string;
       userContext?: { bankroll?: number; books?: string[]; hitRate?: number; topPromoType?: string };
+      privacyContractVersion?: number;
+      personalizationConsent?: boolean;
     };
 
     if (!promoText || typeof promoText !== "string" || promoText.trim().length < 10) {
@@ -86,17 +89,32 @@ serve(async (req) => {
     });
     if (durableLimit) return durableLimit;
 
-    const sanitizedPromoText = promoText.replace(/<[^>]*>/g, "").trim().slice(0, 2000);
+    if (privacyContractVersion !== ADVISOR_PRIVACY_CONTRACT_VERSION) {
+      return json(req, { error: "Unsupported advisor privacy contract" }, 400);
+    }
+
+    const privacy = redactAdvisorInput(promoText);
+    const sanitizedPromoText = privacy.text;
+    const sanitizedUserContext = sanitizeAdvisorContext(userContext, personalizationConsent);
+    const privacyReceipt = {
+      contractVersion: ADVISOR_PRIVACY_CONTRACT_VERSION,
+      redactions: privacy.redactions,
+      redactionCount: privacy.total,
+      profileIncluded: Boolean(sanitizedUserContext),
+      profileFields: sanitizedUserContext ? Object.keys(sanitizedUserContext) : [],
+    };
     const heuristic = parsePromoTextHeuristic(sanitizedPromoText);
     const wantsStream = req.headers.get("accept") === "text/event-stream";
 
     if (heuristic.clearWinner && heuristic.confidence === "high") {
-      const result = normalizeAdvisorResult(heuristic.result, String(heuristic.result.explanation || ""));
+      const result = { ...normalizeAdvisorResult(heuristic.result, String(heuristic.result.explanation || "")), privacyReceipt };
       recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
         chars: sanitizedPromoText.length,
         tier: access.tier,
         analysis_source: "rule_engine",
         estimated_tokens_saved: 650,
+        privacy_redactions: privacy.total,
+        profile_context_included: Boolean(sanitizedUserContext),
       }).catch(() => {});
       if (wantsStream) {
         return streamRuleEngineResult(req, corsHeaders, {
@@ -115,12 +133,12 @@ serve(async (req) => {
     }
 
     let contextNote = "";
-    if (userContext) {
+    if (sanitizedUserContext) {
       const parts: string[] = [];
-      if (userContext.bankroll) parts.push(`bankroll $${userContext.bankroll}`);
-      if (userContext.books?.length) parts.push(`active books: ${userContext.books.slice(0, 5).join(", ")}`);
-      if (userContext.hitRate !== undefined) parts.push(`hit rate ${Math.round(userContext.hitRate * 100)}%`);
-      if (userContext.topPromoType) parts.push(`best lane: ${userContext.topPromoType}`);
+      if (sanitizedUserContext.bankroll) parts.push(`bankroll $${sanitizedUserContext.bankroll}`);
+      if (sanitizedUserContext.books?.length) parts.push(`active books: ${sanitizedUserContext.books.slice(0, 5).join(", ")}`);
+      if (sanitizedUserContext.hitRate !== undefined) parts.push(`hit rate ${Math.round(sanitizedUserContext.hitRate * 100)}%`);
+      if (sanitizedUserContext.topPromoType) parts.push(`best lane: ${sanitizedUserContext.topPromoType}`);
       if (parts.length) contextNote = `\n\nUser profile: ${parts.join(" | ")}`;
     }
 
@@ -194,7 +212,7 @@ serve(async (req) => {
 
         const parsed = parseAiJson(fullText);
 
-        const result = normalizeAdvisorResult(parsed, fullText);
+        const result = { ...normalizeAdvisorResult(parsed, fullText), privacyReceipt };
         await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "done", result, remaining })}\n\n`));
         await writer.close();
 
@@ -202,6 +220,8 @@ serve(async (req) => {
           input_tokens: inputTokens,
           output_tokens: outputTokens,
           tier: access.tier,
+          privacy_redactions: privacy.total,
+          profile_context_included: Boolean(sanitizedUserContext),
         }).catch(() => {});
       })();
 
@@ -226,10 +246,13 @@ serve(async (req) => {
       analysis_source: "ai",
       input_tokens: anthropicData.usage?.input_tokens ?? 0,
       output_tokens: anthropicData.usage?.output_tokens ?? 0,
+      privacy_redactions: privacy.total,
+      profile_context_included: Boolean(sanitizedUserContext),
     });
 
     return json(req, {
       ...normalizeAdvisorResult(parsed, content),
+      privacyReceipt,
       remaining,
     });
   } catch (err) {

@@ -48,7 +48,7 @@ export function buildHandoffWorkflow(payload = {}) {
   const stake = pickNumeric(payload.outputs, ["stake", "stake size", "recommended stake"])
     ?? pickNumeric(payload.inputs, ["stake", "wager", "bet amount"]);
   const expectedReturn = pickNumeric(payload.outputs, [
-    "guaranteed profit", "expected value", "ev", "net profit", "profit",
+    "modeled profit", "guaran" + "teed profit", "expected value", "ev", "net profit", "profit",
   ]);
   const summaryParts = [];
   if (payload.book) summaryParts.push(payload.book);

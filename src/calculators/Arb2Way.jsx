@@ -77,7 +77,7 @@ export default function Arb2Way() {
         {r && r.ok && <CalcNextStep calcKey="arb-2way" />}
       </div>
       <Help entries={[
-        ["Arbitrage", "Betting both sides of the same event at different sportsbooks where the combined odds guarantee a profit. It works because different books set different odds. When the gap is big enough, you can bet both sides and win no matter what."],
+        ["Arbitrage", "Betting both sides of the same event at different sportsbooks where the combined odds model a return. It works because different books set different odds. When the gap is big enough, you can bet both sides and win no matter what."],
         ["How to spot one", "You need both sides to be + odds (or the implied probabilities to add up to LESS than 100%). Example: Book A has Team 1 at +110, Book B has Team 2 at +105. Each side implies ~48.8% and ~48.8% = 97.6% total. The missing 2.4% is your profit."],
         ["Why it's rare", "Books monitor each other and adjust quickly. Arb opportunities last seconds to minutes. That's why people use scanning tools — humans can't check fast enough."],
       ]} />

@@ -547,3 +547,5 @@ Append chronological entries.
 - Shipped two second-order refinements: pre-Sentry boot exception buffering and receipt-contract cache versioning.
 - Verification: focused Vitest 19/19; Advisor Deno 10/10; full suite 568/568 across 72 files; `npm run verify:launch-local` direct exit 0; initial bundle 179.1KB raw/60.0KB gzip; largest async 482.1KB raw/159.2KB gzip.
 - Honest deferral: six typed external proofs remain pending; no email, purchase, tester, Brevo, deployment, capture, or sibling-registry evidence was invented.
+
+- 2026-07-24 · S117 · Full /arc shipped 6/6 audit items; 582/582 tests and launch-local green; live edge headers/manual theme evidence remain explicitly pending.

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Operator Passport — PromoGrind</title>
-  <meta name="description" content="View a verified PromoGrind operator passport. Discipline score, lane mastery, settled-loop ratio — zero-PII, signature-verified.">
+  <meta name="description" content="View a self-attested PromoGrind operator passport with checksum-verified integrity. Discipline score, lane mastery, settled-loop ratio, and zero personally identifying information.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://promogrind.bet/passport/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
     </div>
 
     <h1>Operator Passport</h1>
-    <p style="color:#94a3b8">Verified discipline + mastery snapshot. Zero personally-identifying info.</p>
+    <p style="color:#94a3b8">Self-attested discipline + mastery snapshot. Checksum-verified integrity; zero personally identifying information.</p>
 
     <div id="status" class="card" style="text-align:center">
       <div class="empty">Loading passport from URL fragment…</div>
@@ -59,7 +59,7 @@
     <div id="content" style="display:none">
       <div class="card">
         <div class="meta">
-          <div><span class="badge ok" id="verifyBadge">Signature verified</span></div>
+          <div><span class="badge ok" id="verifyBadge">Integrity checked · self-attested</span></div>
           <div>Issued <span id="issuedAt">—</span></div>
         </div>
       </div>
@@ -94,117 +94,156 @@
 
       <div class="card">
         <h2 style="margin-top:0">Make your own</h2>
-        <p>Export your own operator passport from the PromoGrind Profile page. It's signed locally and contains no PII.</p>
+        <p>Export your own self-attested operator passport from the PromoGrind Profile page. It contains no personally identifying information.</p>
         <a href="/" class="cta" style="text-decoration:none">Open PromoGrind →</a>
       </div>
     </div>
 
     <div class="footer">
-      <p>Passports are signed with a deterministic key and verified in-browser. They contain only discipline score, lane mastery, and settled-loop ratio — no bet history, no stake amounts, no sportsbook account info. <a href="/privacy/">Privacy policy</a>.</p>
+      <p>Passports are generated locally and checksum-verified in-browser. A checksum detects copy corruption; it does not prove identity or independent authenticity. Payloads contain only discipline score, lane mastery, and settled-loop ratio — no bet history, stake amounts, or sportsbook account information. <a href="/privacy/">Privacy policy</a>.</p>
     </div>
   </div>
 
   <script>
-    const PASSPORT_KEY_ID = "pg-passport-v1";
+    const VERSION = 2;
+    const DOMAIN = "promogrind-self-attested-passport-v2:";
+    const PROMO_TYPES = new Set(["bonus_bet", "profit_boost", "safety_net", "deposit_match", "insurance", "parlay", "arb", "other"]);
+    const LEVELS = new Set(["Analyst", "Executor", "Closer", "Shark"]);
+    const RANKS = new Set(["Novice", "Grinder", "Closer", "Shark", "The House"]);
+    const BANDS = new Set(["Elite", "Controlled", "Building", "Loose"]);
 
-    function b64urlDecode(str) {
-      const padded = str.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((str.length + 3) % 4);
-      const bin = atob(padded);
-      const bytes = new Uint8Array(bin.length);
-      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    function b64urlEncode(bytes) {
+      let value = "";
+      for (const byte of bytes) value += String.fromCharCode(byte);
+      return btoa(value).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+    }
+
+    function b64urlDecode(value) {
+      if (!/^[A-Za-z0-9_-]+$/.test(value || "")) throw new Error("invalid base64url");
+      const padded = value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4);
+      const binary = atob(padded);
+      const bytes = new Uint8Array(binary.length);
+      for (let index = 0; index < binary.length; index++) bytes[index] = binary.charCodeAt(index);
       return bytes;
     }
 
-    async function importKey(secret) {
-      const enc = new TextEncoder();
-      return crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    async function checksum(payloadB64) {
+      const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(DOMAIN + payloadB64));
+      return b64urlEncode(new Uint8Array(digest));
     }
 
-    async function verifyPassport(token, secret) {
-      if (typeof token !== "string" || !token.includes(".")) return { ok: false, reason: "format" };
-      const [payloadB64, sig] = token.split(".");
-      const key = await importKey(secret);
-      const enc = new TextEncoder();
-      const sigBytes = b64urlDecode(sig);
-      const valid = await crypto.subtle.verify("HMAC", key, sigBytes, enc.encode(payloadB64));
-      if (!valid) return { ok: false, reason: "signature" };
-      try {
-        const json = new TextDecoder().decode(b64urlDecode(payloadB64));
-        return { ok: true, payload: JSON.parse(json) };
-      } catch {
-        return { ok: false, reason: "decode" };
+    function bounded(value, min, max) {
+      const number = Number(value);
+      return Number.isFinite(number) && number >= min && number <= max ? Math.round(number) : null;
+    }
+
+    function normalizePayload(raw) {
+      if (!raw || raw.v !== VERSION || raw.attestation !== "self-attested") return null;
+      const issued = new Date(raw.issuedAt);
+      const discipline = raw.discipline || {};
+      const operator = raw.operator || {};
+      const mastery = raw.mastery || {};
+      const score = bounded(discipline.score, 0, 100);
+      const coverage = bounded(discipline.feedbackCoverage, 0, 100);
+      const ratio = bounded(operator.settledLoopRatio, 0, 100);
+      const settled = bounded(operator.settledCount, 0, 1000000);
+      const closed = bounded(operator.closedCount, 0, 1000000);
+      if (!Number.isFinite(issued.getTime()) || [score, coverage, ratio, settled, closed].some((value) => value === null)) return null;
+      if (!BANDS.has(discipline.band) || !RANKS.has(mastery.globalRank) || closed < settled) return null;
+      const perType = {};
+      for (const [key, info] of Object.entries(mastery.perType || {})) {
+        const xp = bounded(info && info.xp, 0, 1000000);
+        if (!PROMO_TYPES.has(key) || !info || !LEVELS.has(info.level) || xp === null) return null;
+        perType[key] = { level: info.level, xp };
       }
+      return {
+        issuedAt: issued.toISOString(),
+        discipline: { score, band: discipline.band, feedbackCoverage: coverage },
+        operator: { settledLoopRatio: ratio, settledCount: settled, closedCount: closed },
+        mastery: { globalRank: mastery.globalRank, perType },
+      };
     }
 
-    function setStatus(html, tone) {
-      const el = document.getElementById("status");
-      const color = tone === "bad" ? "#f87171" : tone === "warn" ? "#facc15" : "#94a3b8";
-      el.innerHTML = '<div style="color:' + color + '">' + html + '</div>';
+    async function verifyPassport(token) {
+      if (typeof token !== "string" || token.length > 24000) return { ok: false, reason: "format" };
+      const parts = token.split(".");
+      if (parts.length !== 2 || !parts[0] || !parts[1]) return { ok: false, reason: "format" };
+      let raw;
+      try { raw = JSON.parse(new TextDecoder().decode(b64urlDecode(parts[0]))); }
+      catch { return { ok: false, reason: "decode" }; }
+      if (raw && raw.v !== VERSION) return { ok: false, reason: "legacy-unsupported" };
+      if (await checksum(parts[0]) !== parts[1]) return { ok: false, reason: "integrity" };
+      const payload = normalizePayload(raw);
+      return payload ? { ok: true, payload } : { ok: false, reason: "payload" };
+    }
+
+    function setStatus(message, tone) {
+      const element = document.getElementById("status");
+      const wrapper = document.createElement("div");
+      wrapper.style.color = tone === "bad" ? "#f87171" : tone === "warn" ? "#facc15" : "#94a3b8";
+      wrapper.textContent = message;
+      element.replaceChildren(wrapper);
     }
 
     function render(payload) {
-      const d = payload.discipline || {};
-      const o = payload.operator || {};
-      const m = payload.mastery || {};
-
-      document.getElementById("disciplineScore").textContent = d.score ?? "—";
-      const band = d.band || "—";
+      document.getElementById("disciplineScore").textContent = payload.discipline.score;
       const badge = document.getElementById("disciplineBand");
-      badge.textContent = band;
-      badge.className = "badge " + (band === "Elite" || band === "Controlled" ? "ok" : band === "Building" ? "warn" : "bad");
-      document.getElementById("feedbackCoverage").textContent = d.feedbackCoverage ?? 0;
+      badge.textContent = payload.discipline.band;
+      badge.className = "badge " + (["Elite", "Controlled"].includes(payload.discipline.band) ? "ok" : payload.discipline.band === "Building" ? "warn" : "bad");
+      document.getElementById("feedbackCoverage").textContent = payload.discipline.feedbackCoverage;
+      document.getElementById("loopRatio").textContent = payload.operator.settledLoopRatio;
+      document.getElementById("loopBar").style.width = payload.operator.settledLoopRatio + "%";
+      document.getElementById("closedCount").textContent = payload.operator.closedCount;
+      document.getElementById("settledCount").textContent = payload.operator.settledCount;
+      document.getElementById("globalRank").textContent = payload.mastery.globalRank;
 
-      const ratio = o.settledLoopRatio ?? 0;
-      document.getElementById("loopRatio").textContent = ratio;
-      document.getElementById("loopBar").style.width = Math.max(0, Math.min(100, ratio)) + "%";
-      document.getElementById("closedCount").textContent = o.closedCount ?? 0;
-      document.getElementById("settledCount").textContent = o.settledCount ?? 0;
-
-      document.getElementById("globalRank").textContent = m.globalRank ?? "—";
       const lanes = document.getElementById("lanes");
-      lanes.innerHTML = "";
-      const perType = m.perType || {};
-      const entries = Object.entries(perType);
+      lanes.replaceChildren();
+      const entries = Object.entries(payload.mastery.perType).sort((a, b) => b[1].xp - a[1].xp);
       if (!entries.length) {
-        lanes.innerHTML = '<div class="empty">No lane mastery recorded yet.</div>';
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No lane mastery recorded yet.";
+        lanes.appendChild(empty);
       } else {
-        entries.sort((a, b) => (b[1].xp || 0) - (a[1].xp || 0));
         for (const [key, info] of entries) {
-          const div = document.createElement("div");
-          div.className = "lane";
-          div.innerHTML = '<div class="label">' + key.replace(/_/g, " ") + '</div>' +
-            '<div class="level">' + (info.level || "—") + '</div>' +
-            '<div class="xp">' + (info.xp ?? 0) + ' XP</div>';
-          lanes.appendChild(div);
+          const lane = document.createElement("div");
+          lane.className = "lane";
+          const label = document.createElement("div");
+          label.className = "label";
+          label.textContent = key.replace(/_/g, " ");
+          const level = document.createElement("div");
+          level.className = "level";
+          level.textContent = info.level;
+          const xp = document.createElement("div");
+          xp.className = "xp";
+          xp.textContent = info.xp + " XP";
+          lane.append(label, level, xp);
+          lanes.appendChild(lane);
         }
       }
 
-      const issued = payload.issuedAt ? new Date(payload.issuedAt) : null;
-      document.getElementById("issuedAt").textContent = issued
-        ? issued.toISOString().slice(0, 10)
-        : "—";
-
+      document.getElementById("issuedAt").textContent = payload.issuedAt.slice(0, 10);
       document.getElementById("status").style.display = "none";
       document.getElementById("content").style.display = "block";
     }
 
     async function bootstrap() {
       const hash = window.location.hash.replace(/^#/, "");
-      const search = new URLSearchParams(window.location.search);
-      const token = hash || search.get("p") || "";
+      const token = hash || new URLSearchParams(window.location.search).get("p") || "";
       if (!token) {
-        setStatus("No passport token in URL. Append <code>#&lt;your-passport&gt;</code> or use <code>?p=&lt;your-passport&gt;</code>.", "warn");
+        setStatus("No passport token in the URL. Export one from PromoGrind Profile, then open its copied link.", "warn");
         return;
       }
       try {
-        const result = await verifyPassport(token, PASSPORT_KEY_ID);
+        const result = await verifyPassport(token);
         if (!result.ok) {
-          setStatus("Passport could not be verified (" + result.reason + "). The token may be tampered or from a different key version.", "bad");
+          setStatus("Passport integrity check failed (" + result.reason + "). Legacy signed tokens are intentionally unsupported because their browser-visible key could not prove authenticity.", "bad");
           return;
         }
         render(result.payload);
-      } catch (err) {
-        setStatus("Passport verification error: " + (err.message || String(err)), "bad");
+      } catch {
+        setStatus("Passport integrity check failed safely.", "bad");
       }
     }
 

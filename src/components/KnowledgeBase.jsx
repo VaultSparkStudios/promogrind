@@ -53,7 +53,7 @@ export default function KnowledgeBase() {
         <p>Matched betting and promo conversion are legal in US states where online sports betting is legal. PromoGrind does not place bets, access sportsbook accounts, or handle money. It is closer to a spreadsheet or tax calculator than a sportsbook.</p>
 
         <div style={S.helpH}>How Much Can I Make?</div>
-        <p>Welcome offers can create meaningful one-time value, while daily boosts can create recurring smaller opportunities. Treat these ranges as planning assumptions, not guaranteed income. Your state, available books, limits, bankroll, timing, and execution quality all matter.</p>
+        <p>Welcome offers can create meaningful one-time value, while daily boosts can create recurring smaller opportunities. Treat these ranges as planning assumptions, not modeled income. Your state, available books, limits, bankroll, timing, and execution quality all matter.</p>
 
         <FaqAccordion />
 
@@ -81,7 +81,7 @@ export default function KnowledgeBase() {
 
         <div style={S.helpH}>Strategy Terms</div>
         <p><span style={S.helpTerm}>Hedge</span> - A second bet on the opposite outcome to lock or limit the result.</p>
-        <p><span style={S.helpTerm}>Arbitrage</span> - Betting all sides of an event across books when pricing guarantees profit.</p>
+        <p><span style={S.helpTerm}>Arbitrage</span> - Betting all sides of an event across books when pricing models a return.</p>
         <p><span style={S.helpTerm}>Positive Expected Value (+EV)</span> - A bet where your estimated true probability is better than the offered odds. Individual outcomes can still lose.</p>
         <p><span style={S.helpTerm}>Conversion Rate</span> - The percentage of a promo's face value you extract as real value.</p>
         <p><span style={S.helpTerm}>Middle</span> - Betting opposite sides at different lines where both bets can win if the result lands in the gap.</p>

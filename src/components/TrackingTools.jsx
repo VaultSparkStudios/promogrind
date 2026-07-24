@@ -76,7 +76,7 @@ const FreeBetArbTracker = () => {
       <div style={{fontSize:11,color:K.mt}}>Log your free bet arb plays above to track performance.</div>
     </div>}
     <Help entries={[
-      ["Free Bet Arb","Using a free bet or bonus bet on one side of a market, and a real cash bet on the other side at a different book to guarantee profit."],
+      ["Free Bet Arb","Using a free bet or bonus bet on one side of a market, and a real cash bet on the other side at a different book to model a return."],
       ["Same-Game Arb","Two bets within the same game at different books where combined implied probability is under 100%."],
     ]}/>
   </div>);

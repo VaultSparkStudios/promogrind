@@ -1480,3 +1480,32 @@ Protocol verification pass against the active `/start` -> `/audit` -> `/implemen
 **SIL items committed:**
 1. Treat any unmirrored external blocker or incomplete SIL category set as a failing observability contract, never a warning-only cosmetic issue.
 2. Reassess the async Sentry ceiling against measured field value before enabling heavier replay behavior or increasing its budget.
+
+## 2026-07-24 — Session 117
+
+**Intent:** Run the complete agent-neutral `/arc` continuously through start, audit, implementation, verification, and canonical closeout while preserving honest external-proof boundaries.
+
+**Total: 999/1000 | Velocity: 6 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 582/582 Vitest checks, 3/3 Deno privacy checks, Deno type-check, build, launch-local, and production browser smoke are green. |
+| Creative Alignment | 100 | ↑ | Multilingual public copy now pairs practical utility with sober, jurisdiction-aware execution-risk language. |
+| Momentum | 100 | ↑ | All six ranked audit items shipped in one continuous arc; no verified repo-owned audit item remains. |
+| Engagement | 100 | ↑ | Advisor consent receipts and calendar Seen/Not seen controls turn trust and freshness into visible user actions. |
+| Process Quality | 100 | ↑ | Premises, execution evidence, local gates, and external red states are recorded without inferring deployment or authenticity. |
+| Cross-Repo Coherence | 100 | → | Secret rotation was sent through Ark; the accidentally refreshed sibling generated checklist was restored with no lasting sibling mutation. |
+| Security Posture | 100 | ↑ | Exposed tracked credential/topology removed, scanner strengthened, browser trust claims narrowed, and Advisor data minimized. |
+| Ecosystem Integration | 100 | ↑ | Human-facing trust surfaces, agent navigation metadata, release checks, and provenance contracts now align. |
+| Capital Efficiency | 100 | → | No dependency, paid service, or additional model-spend surface was added; implementation reused existing primitives. |
+| Automation Coverage | 99 | ↓ | Deterministic gates cover code and public surfaces; the manual dark/light desktop/mobile screenshot matrix could not run because browser control failed before launch. |
+
+**Top win:** replaced four kinds of persuasive ambiguity—exposed operational secrets, browser-signature theater, silent AI profile transmission, and static schedule certainty—with bounded, test-backed evidence contracts.
+
+**Top gap:** production edge headers and the required manual theme/device evidence remain unresolved; local green does not promote the project to SPARKED.
+
+**Intent outcome:** Achieved for every repo-owned phase; release-state promotion remains honestly deferred.
+
+**SIL items committed:**
+1. Treat browser-only cryptographic evidence as self-attestation unless verification depends on an independently controlled signer.
+2. Require explicit, inspectable consent and dual-boundary redaction before any stored user profile context enters an AI request.

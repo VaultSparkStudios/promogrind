@@ -46,7 +46,7 @@ export function GiftTrialBox() {
 export function StarterPackModal({ onClose, syncAppData, appData }) {
   const PACKS = [
     { id:'casual', label:'Casual Bettor', icon:'🎲', bankroll:'500', goal:200, hrs:'2 hrs/week', desc:'A few books, occasional promos. Perfect for weekends.' },
-    { id:'hunter', label:'Promo Hunter', icon:'🎯', bankroll:'2000', goal:800, hrs:'5 hrs/week', desc:'Hit every welcome offer. Build a steady side income.' },
+    { id:'hunter', label:'Promo Hunter', icon:'🎯', bankroll:'2000', goal:800, hrs:'5 hrs/week', desc:'Hit every welcome offer. Build a steady tracked promo value.' },
     { id:'grinder', label:'Full Grinder', icon:'⚡', bankroll:'5000', goal:2500, hrs:'Daily', desc:'All books, recurring promos, live scanner. Maximum extraction.' },
   ];
   const [selected, setSelected] = React.useState(null);

@@ -1,40 +1,37 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 2ad7e073e0fa -->
-<!-- generated-at: 2026-07-23T23:39:05.337Z -->
+<!-- source-hash: bd9c87bd731c -->
+<!-- generated-at: 2026-07-24T08:28:21.851Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION HANDOFF — PromoGrind
+# Handoff Summary — PromoGrind S117
 
-Session
-- S115, Codex. Full /arc run: start, audit, implement, closeout, direct-main push, verified prod deploy. Implementation saturated.
+Session: 117 (Codex)
+Status: implementation saturated; repo-owned gates green; release promotion NO-GO
 
 Shipped
-- AI spend/auth root fix: authenticated direct-upload vision, atomic lifetime/daily quota claim migration, fail-closed access, quota metadata.
-- AI/security compounding: typed entitlement registry, auto provider perimeter discovery, pinned trust-approved SDK, five-function Deno check, vuln-cleared exact lockfile.
-- Trust/UX: repaired mojibake in 11 files; added source-encoding and sober-public-claims launch gates.
-- Observability: corrected context %, local repo scoping, session intent targeting, project brief truth, browser launch validation from PROJECT_STATUS.json.
-- Current intelligence: IGNIS at 44,184; revenue signals refreshed; genius list regenerated to zero.
-- Canonical evidence in docs/AUDIT_2026-07-22.{md,json} and docs/IMPLEMENT_PLAN.md.
+- Purged tracked staging script with exposed webhook credential/topology; expanded scanner + regressions; rotation request via Ark 01JU98MC5M8FC5EDBEE214F795.
+- Passport/provenance: SHA-256 self-attestation, strict schemas, DOM-safe verification, local receipt chains.
+- Advisor privacy: local-default, opt-in, client+server redaction, bounded context, privacy receipts/telemetry.
+- Promo calendar reframed as historical patterns (freshness/confidence/Seen controls), not live offers.
+- Multilingual (EN/ES/PT) execution-risk caveats with deterministic checks across 69 static pages.
+- Release surface: nav manifest, security contact, favicon, rollback runbook, proprietary footer, local/live checks.
 
-State
-- Genius list empty (PromoGrind-scoped). Session-floor reports saturated, exit 0.
-- Gates green: local, CI, production deploy, artifact, dashboard-smoke.
-
-Verification (key)
-- npm test 559/559; verify:launch-local exit 0; studio regressions 15/15; deno check 5/5.
-- source integrity 346 files; public claims 346/9 rules; entitlement 5/5.
-- supply-chain 236 pkgs, 0 blocks; npm audit 0 vulns (DOMPurify 3.4.12, React Router 7.18.0).
-- exact proof for be58dfe: brief 30053484333, CI 30053484341, Deploy Pages 30053484335 passed; artifact 0 blocking; prod dashboard smoke failures:[].
+Verification (green)
+- verify:launch-local exit 0; Vitest 582/582; Advisor Deno 3/3; public claims 0 findings; source integrity 0 repairs; git diff clean.
 
 Now (top 3)
-- Rerun secrets discovery for promogrind.supabase.deploy; when READY, deploy only to fjnpzjjyhnpmunfoycrp, record real migration/function evidence.
-- Run external proof runners without fabricating: smoke:auth-email, smoke:stripe, beta:check.
-- Track Ark receipts: 01JU85UQ71086118EE17EF4AF2 (cost registry + Supabase capability), 01JU85UQC49A8695ED64145316 (upstream CANON-044 marker).
+1. Observe S117 CI/deploy, then rerun live web contract.
+2. Configure six missing security headers at edge and verify live: CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, Permissions-Policy.
+3. Complete webhook rotation and Supabase deployment via mapped capabilities.
 
-Blockers / human-blocked (deferred, external evidence required; age S115-open)
-- Supabase migration/function deployment — capability missing.
-- Production auth email smoke, Stripe smoke purchase, friend beta pass.
-- Brevo forwarding proof, production capture public-key proof, visual theme/device screenshots (tooling SKIP).
+Blockers (top 3)
+1. verify:web-live red — six security headers missing on https://promogrind.bet (files await deployment).
+2. Dark/light desktop/mobile screenshot matrix SKIPPED — browser runtime failed on Windows DPAPI error.
+3. Supabase migration/functions pending until promogrind.supabase.deploy resolves explicit project ref.
 
-Next session: Recheck Supabase deploy capability, then deploy and capture real migration/function + external smoke evidence.
+Human-blocked / external proofs (age: since S117)
+- Rotate exposed webhook credential (Ark 01JU98MC5M8FC5EDBEE214F795).
+- Production auth email, Stripe purchase, friend-beta, Brevo forwarding, capture public-key proofs — external evidence gates.
+
+Next session: rerun live web contract after CI/deploy and configure the six edge security headers.

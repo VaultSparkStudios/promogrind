@@ -1,39 +1,49 @@
 # Latest Handoff — PromoGrind
 
-Session Intent (S116, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through startup, fresh live-code audit, full implementation, second-order expansion, canonical closeout, and direct-main push — achieved for all repo-owned work; push evidence is finalized by closeout.
+Session Intent (S117, Codex): Run the complete agent-neutral `/arc` as one continuous mission through `/start → /audit → /implement → /closeout`; exhaust verified repo-owned and second-order work, preserve honest external-proof boundaries, run the public-app release gates, and finish with canonical write-back plus direct-main push.
 
-Date: 2026-07-23
-Session: 116
+Date: 2026-07-24
+Session: 117
 Agent: Codex
-Status: implementation saturated; local staging/launch gates green; external proofs remain pending
+Status: implementation saturated; repo-owned gates green; release-state promotion remains NO-GO
 
-## Where We Left Off (Session 116)
+## Where We Left Off (Session 117)
 
-S116 shipped all four verified audit items and two compound second-order refinements. The project-scoped Genius List is empty. The generated innovation pack contains only the honest external-proof deferral.
+S117 shipped all six ranked audit items and exhausted the repo-owned implementation plan. The public trust contracts now distinguish local/self-attested evidence from independent verification, Advisor profile context is consent-gated and redacted, recurring promo schedules are explicitly historical observations, multilingual claims are mechanically checked, and the universal release surface is complete.
 
 ## What shipped
 
-1. **Forecast truth** — current and legacy SIL ledgers parse correctly, newest sessions win, incomplete category sets fail closed, and the startup forecast is source-backed at 1000/1000.
-2. **Launch-proof totality** — Brevo delivery, Supabase deployment, and capture configuration now join auth email, Stripe, and friend beta as typed proof contracts; coverage is 6/6 and unmapped blockers fail the check.
-3. **Real bundle budgets** — Vite manifest traversal measures the static import graph and largest async chunk with raw+gzip ceilings.
-4. **Counterfactual Advisor** — every rule/model result can expose assumptions, missing inputs, sensitivity triggers, evidence grade, source, and receipt version; the receipt persists in saved workflows.
-5. **Second-order reliability** — pre-init boot errors queue until Sentry is ready, and Advisor cache v2 prevents old payloads from bypassing the receipt contract.
+1. **Public secret and topology purge** — removed the tracked staging script containing an exposed webhook credential/topology, expanded the scanner to catch unquoted shell assignments, added regressions, and shipped a redacted rotation request through Ark (`01JU98MC5M8FC5EDBEE214F795`).
+2. **Passport and provenance honesty** — replaced browser-only authenticity language with versioned SHA-256 self-attestation, strict schemas and bounds, DOM-safe verification, and self-attested local receipt chains.
+3. **Advisor privacy boundary** — profile context is local by default, requires explicit opt-in, redacts supported identifiers on client and server, bounds server context, and emits privacy receipts/telemetry.
+4. **Promo observation truth** — every calendar row is a historical pattern with market/evidence metadata; freshness, confidence, and Seen/Not seen controls avoid presenting schedules as live offers.
+5. **Multilingual claims contract** — English, Spanish, and Portuguese public copy now carries sober execution-risk caveats, with context-aware deterministic checks across source, metadata, JSON-LD, and 69 static pages.
+6. **Release surface completion** — added navigation manifest, security contact, favicon, rollback runbook, exact proprietary footer enforcement, local/live release checks, and regression coverage.
 
 ## Verification
 
-- `npm test` — 72 files, 568/568 passing.
-- `npm run verify:launch-local` — full chain green, direct exit 0.
-- Promo Advisor Deno tests — 10/10; `deno check` green.
-- External proof ledger — fresh; 6/6 blockers mirrored; 0 unmirrored.
-- SIL forecast — 1000/1000 from five newest complete sessions.
+- `npm run verify:launch-local` — green, direct exit 0.
+- Vitest — 74 files, 582/582 passing.
+- Advisor privacy Deno tests — 3/3; Promo Advisor Deno type-check green.
+- Public claims — 282 files, 10 rules, 0 findings.
+- Source integrity — 356 files, 0 repairs; public `dist/` exposure — 0 findings; proof replay — 0 regressions.
+- Production browser smoke — green; UX inventory covers 61 routes and 100 public HTML surfaces.
 - Bundle graph — 179.1KB raw / 60.0KB gzip initial; largest async Sentry chunk 482.1KB raw / 159.2KB gzip.
+- `git diff --check` — clean.
 
 ## Honest deferrals
 
-The Studio Ops registry still needs to consume the existing Ark request for trial-ceiling/capability truth. Real Supabase deployment, auth email, Stripe purchase, friend beta, Brevo delivery, and production capture configuration remain pending. No sibling tree or external evidence was fabricated.
+- `npm run verify:web-live -- --url https://promogrind.bet` remains red for six missing live headers: Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. New standard files await deployment.
+- The required desktop/mobile dark/light screenshot matrix was SKIPPED, not passed: the connected browser runtime failed before launch with a Windows DPAPI error.
+- Rotate the exposed webhook credential referenced by Ark cargo `01JU98MC5M8FC5EDBEE214F795`.
+- Deploy the pending Supabase migration/functions once `promogrind.supabase.deploy` resolves to the explicit project ref.
+- Production auth email, Stripe purchase, friend-beta, Brevo forwarding, and capture public-key proofs remain external evidence gates.
 
-## Next session
+## Next actions
 
-- Re-run secrets discovery for `promogrind.supabase.deploy`; if READY, deploy only to `fjnpzjjyhnpmunfoycrp` and record redacted proof through the typed contract.
-- Execute auth-email, Stripe, friend-beta, Brevo, and capture proof paths only when their real systems/testers are available.
-- Review field value before expanding Sentry replay or raising the 525KB/180KB async budget.
+1. Observe S117 CI and deployment, then rerun the live web contract.
+2. Configure the six security headers at the header-capable edge and verify them live.
+3. Complete the webhook rotation and Supabase deployment through their mapped capabilities.
+4. Record the remaining external proofs; run the dark/light desktop/mobile matrix once browser control reconnects.
+
+Intent Outcome: Achieved for every repo-owned phase; release-state promotion remains honestly deferred.

@@ -1,152 +1,82 @@
-# Promo Engine v3
+# PromoGrind
 
-Free sportsbook promo conversion tool suite with knowledge base, profit tracking, AI-assisted beta surfaces, and affiliate/subscription monetization built in. PromoGrind uses a free account for login, cloud sync, and access across devices.
+PromoGrind is a sportsbook-promotion decision workspace from VaultSpark Studios LLC. It combines calculators, offer tracking, workflow tools, a profit-and-loss ledger, educational material, and beta-gated artificial-intelligence helpers. Outputs are models based on user inputs; execution, eligibility, limits, voids, taxes, and changing odds can alter real results.
 
-## What This Is
+## Product posture
 
-A complete web app that helps people convert sportsbook promotions into guaranteed cash using math (matched betting / promo conversion). Includes 53 calculators, a sportsbook tracker, P/L ledger, beta-gated AI helpers, and a comprehensive knowledge base for beginners.
+- Public app, currently pre-launch.
+- React and Vite client with Supabase authentication, data, and edge functions.
+- Browser-local operation remains available for core calculators and planning surfaces.
+- Artificial-intelligence, billing, scanner, email, and notification surfaces stay hidden or beta-labeled until their dependencies have current proof.
+- Must be used only by eligible adults where sports betting is legal. PromoGrind is educational software, not gambling, financial, tax, or legal advice.
 
-## Launch-State Flags
+## Local development
 
-Frontend feature exposure is controlled by public `VITE_PG_FEATURE_*` flags in `.env.example`. Keep AI, live scanner, push, and billing surfaces beta-labeled or hidden until their backend dependencies are actually deployed.
+Requirements: a current Node.js release and npm.
 
-## Deploy in 2 Minutes
+```powershell
+npm ci
+npm run dev
+```
 
-### Option A: Vercel (Recommended — Free)
+Public browser configuration is documented in `.env.example`. Never commit private credentials. Studio credentials are resolved through the private Studio OS secrets gateway; this public repository intentionally contains no private staging bootstrap.
 
-1. Push this folder to a GitHub repo
-2. Go to [vercel.com](https://vercel.com) and sign in with GitHub
-3. Click "New Project" → Import your repo
-4. Framework: **Vite** (auto-detected)
-5. Click Deploy
-6. Your app is live at `your-project.vercel.app`
-7. (Optional) Add a custom domain in Vercel settings
+## Verification
 
-### Option B: Netlify (Free)
+Run the complete local release contract:
 
-1. Push to GitHub
-2. Go to [netlify.com](https://netlify.com) → "Add new site" → Import from Git
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Click Deploy
-6. Live at `your-project.netlify.app`
+```powershell
+npm run verify:launch-local
+```
 
-### Option C: Manual
+Run the focused source-backed release-surface contract:
 
-```bash
-npm install
+```powershell
+npm run check:release-surface
+```
+
+Inspect a deployed origin with the live web contract. The `--url` option selects the origin to probe:
+
+```powershell
+npm run verify:web-live -- --url https://promogrind.bet
+```
+
+Run the public claims gate directly:
+
+```powershell
+node scripts/check-public-claims.mjs
+```
+
+A failed live probe is release evidence. Static source files such as `public/_headers` do not prove that a hosting edge delivered those headers.
+
+## Build and preview
+
+```powershell
 npm run build
-# Upload the 'dist' folder to any static host
+npm run preview
 ```
 
-## Monetization Setup (Path A)
+`npm run build:pages` creates the GitHub Pages artifact and performs its post-build routing step. Deployment is controlled by repository workflows; do not treat an arbitrary local upload as a supported production release. See `docs/ROLLBACK.md` for the forward-revert rollback procedure.
 
-### Step 1: Affiliate Links (Biggest Money)
+## Architecture
 
-Edit `src/books.js` and replace each sportsbook's `link` value with your affiliate tracking URL.
+- `src/` — React application, calculator math, local state, workflow and trust contracts.
+- `supabase/functions/` — authenticated edge functions and shared server validation.
+- `public/` — static education, legal, agent-readable, localization, and standard-file surfaces.
+- `scripts/` — deterministic build, test, security, claims, launch, and evidence checks.
+- `context/` — public-safe project state and decision records.
+- `docs/` — public-safe product, release, rights, and audit documentation.
 
-**How to get affiliate links:**
+## Privacy and trust boundaries
 
-| Sportsbook | Program URL | Commission |
-|-----------|------------|------------|
-| DraftKings | draftkings.com/partners | $75+ CPA per user |
-| FanDuel | fanduel.com/partners | $25-$35 CPA or 35% RevShare |
-| BetMGM | betmgmpartners.com | $50+ CPA per user |
-| Caesars | (Apply via partner page) | RevShare |
-| bet365 | bet365partners.com | 30% RevShare |
+Promo Advisor redacts supported direct identifiers before analysis. Bankroll and active-book personalization are off by default and leave the browser only after explicit consent. Portable Passport and provenance reports are self-attested integrity summaries; they are not independent identity verification. See `/privacy/`, `/data-policy/`, and `/disclaimer/` for the public contracts.
 
-**Simpler alternative:** Use your personal "Refer a Friend" links from each app. No licensing needed. You both get $25-$100 per book.
+## Contributing and release discipline
 
-### Step 2: SEO Traffic
+Keep changes narrow, add regression coverage, and run `npm run verify:launch-local` before release. Never weaken a gate to make an external dependency appear ready. Production release remains gated by current staging, security-header, email, payment, authentication, and tester evidence.
 
-The Knowledge Base content is designed to rank for long-tail keywords:
-- "what is vig in sports betting"
-- "how to convert bonus bets to cash"
-- "profit boost calculator free"
-- "sportsbook promo conversion"
-- "matched betting legal US"
+## Rights
 
-The index.html has meta tags pre-configured for these terms. To improve SEO further:
-- Write blog posts on a connected blog
-- Share the knowledge base articles on social media
-- Answer questions on Reddit/Quora linking to the tool
+Copyright © 2026 VaultSpark Studios LLC. All rights reserved.
 
-### Step 3: Referral Bonuses
-
-When friends use your tool and sign up at sportsbooks through the links, you earn:
-- DraftKings: Up to $100 per friend
-- BetMGM: $100 per friend (up to 20/month = $2,000/month cap)
-- FanDuel: Up to $75 per friend
-- BetRivers: $100 per friend
-
-If 10 friends each sign up at 5 books: $2,500-$5,000 in referral bonuses.
-
-## Revenue Projections
-
-| Source | Month 1 | Month 3 | Month 6 |
-|--------|---------|---------|---------|
-| Your own promo extraction | $1,000-$2,500 | +$300-$1,000/mo | +$300-$1,000/mo |
-| Friend referrals (10 friends) | $2,000-$4,000 | — | — |
-| Affiliate commissions (SEO) | $0-$200 | $200-$800 | $500-$2,000 |
-| **Total** | **$3,000-$6,700** | **$500-$1,800/mo** | **$800-$3,000/mo** |
-
-## Legal
-
-- This is a math calculator / educational tool
-- Matched betting is legal in all US states with legal sports betting (30+)
-- Similar tools operate commercially (ProfitDuel $99/mo, OddsJam $199/mo)
-- This tool is free and contains no paywalls
-- Affiliate disclosure: Include a note that links may be affiliate links
-- Add your state's required responsible gambling notice
-- Must be 21+ in most states
-- All gambling winnings are taxable
-
-### Affiliate Licensing Note
-
-Some states require a license to operate as a sportsbook affiliate. Check:
-- Your state's gaming commission website
-- Or join an affiliate network (Income Access, Gambling.com Group) that handles compliance
-
-Personal "Refer a Friend" links do NOT require licensing — they're a standard sportsbook feature available to all users.
-
-## File Structure
-
-```
-promo-engine/
-├── index.html          ← SEO-optimized HTML with meta tags
-├── package.json        ← Dependencies
-├── vite.config.js      ← Build config
-├── vercel.json         ← Vercel routing
-├── netlify.toml        ← Netlify routing
-├── public/
-│   ├── favicon.svg     ← App icon
-│   ├── robots.txt      ← SEO
-│   └── sitemap.xml     ← SEO
-└── src/
-    ├── main.jsx        ← Entry point
-    ├── App.jsx         ← Complete app (all tools, KB, tracking)
-    ├── math.js         ← Calculator functions
-    ├── storage.js      ← LocalStorage persistence
-    ├── books.js        ← Sportsbook data + affiliate links
-    └── theme.js        ← Color/font constants
-```
-
-## Future Upgrade Path (Path B)
-
-When ready to add a live odds scanner (premium tier):
-
-1. Sign up for The Odds API (free: 500 credits/month) at the-odds-api.com
-2. Build a scanner component that fetches live odds
-3. Auto-detect arb opportunities and +EV bets
-4. This becomes the paid tier ($29-$79/month)
-5. Free calculators remain free (traffic driver)
-6. Paid scanner is the subscription product
-
-## Tech Stack
-
-- React 18
-- Vite 6
-- Vanilla CSS (no framework — fast loading)
-- LocalStorage for persistence
-- Zero backend required
-- Static hosting (free on Vercel/Netlify)
+PromoGrind code, content, assets, and designs are proprietary unless an approved file explicitly states otherwise. No open-source license is granted by this repository.

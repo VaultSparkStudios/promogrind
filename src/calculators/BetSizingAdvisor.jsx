@@ -71,7 +71,7 @@ export default function BetSizingAdvisor() {
                   { label: "Total Risk", value: `$${f(totalRisk)} (${riskPct}%)` },
                   { label: `Per Bet (${style})`, value: `$${f(current)}`, highlight: true },
                 ]}
-                disclaimer="Sizing recommendations only. Bankroll management does not guarantee profit."
+                disclaimer="Sizing recommendations only. Bankroll management does not model a return."
                 onClose={() => setShowReceipt(false)}
               />
             )}

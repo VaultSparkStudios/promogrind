@@ -41,7 +41,7 @@ const TOP_TOOL_TABS = [
     { n: "+EV", slug: "ev" },
     { n: "Kelly", slug: "kelly" },
     { n: "2-Way Arb", slug: "arb-2way" },
-    { n: "Promo Guarantee", slug: "promo-guarantee" },
+    { n: "Promo Return Model", slug: "promo-guarantee" },
     { n: "Gut Check", slug: "gut-check" },
   ] },
   { items: [

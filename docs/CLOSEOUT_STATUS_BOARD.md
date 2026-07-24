@@ -1,21 +1,21 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-24 (Session 116 closeout) -->
+<!-- generated-at: 2026-07-24 (Session 117 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S116 ════════════════════════╗
-║  Date: 2026-07-24  ·  SIL: 1000/1000  ·  Velocity: 6 stable      ║
+╔══ SESSION CLOSEOUT · PromoGrind · S117 ════════════════════════╗
+║  Date: 2026-07-24  ·  SIL: 999/1000  ·  Velocity: 6 stable       ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore(S116): reconcile closeout-generated state               ║
+║  ✓ feat(S116): make decision and launch truth self-validating    ║
 ║  ✓ chore(S115): freeze canonical closeout board                  ║
 ║  ✓ fix(S115): make closeout genius status truthful               ║
 ║  ✓ chore(S115): record final deployment proof                    ║
-║  ✓ fix(S115): finalize production verification and security      ║
-║  ✓ fix(S115): make production signup probe non-destructive       ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
+╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
@@ -25,7 +25,7 @@
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -34,13 +34,13 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 48 files  ·  M:36 A:0 D:0 ?:12                         ║
+║  Changes: 168 files  ·  M:139 A:0 D:6 ?:23                       ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,7 +51,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         568/568                                          ║
+║  Tests:         582/582                                          ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         green-with-external-proof-follow-ups             ║
 ║  Sanitization:  —                                                ║

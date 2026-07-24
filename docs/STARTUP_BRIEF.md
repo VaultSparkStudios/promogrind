@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-24 (Session 116 closeout) -->
+<!-- generated-at: 2026-07-24 (Session 117 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 116 closeout · 2026-07-24.
+> **Fast-boot brief** — generated at Session 117 closeout · 2026-07-24.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 117 · 2026-07-24 · FOUNDER MODE                         ║
+║  Session 118 · 2026-07-24 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -29,13 +29,15 @@
 ║  CF Pages      → https://promogrind.bet ·                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
-
+╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
+║  Profile · tool · launch-hardening · arch=— · top-axis=—         ║
+╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    1000/1000   ████████████████████████   100%                   ║
+║    999/1000   ███████████████████████░   100%                    ║
 ║    SIL v3.0  ·  Avg3: ?  ·  Velocity 6↓                          ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  ↓  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -49,27 +51,27 @@
 ║    Security        100    ██████████  ········ →                 ║
 ║    Ecosystem       100    ██████████  ········ →                 ║
 ║    Capital         100    ██████████  ········ →                 ║
-║    Automation      100    ██████████  ········ →                 ║
+║    Automation       99    ██████████  ········ →                 ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 116 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 117 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    568/568 passing  ·  Deploy: S115 final implementatio  ║
+║  Tests:    582/582 passing  ·  Deploy: S115 final implementatio  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     22,487 / 1,000,000 tok  ·  codex/codex-1m  ·  heuristic      ║
-║     ~11,244 tok/turn  ·  cache 50%  ·  79 turns to compact       ║
+║  ✓  ██░░░░░░░░░░░░░░░░░░░░░░    7% used                          ║
+║     73,714 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~36,857 tok/turn  ·  cache 50%  ·  22 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         568/568 passing (2026-07-23)                   ║
+║  ✓  Tests         582/582 passing (2026-07-24)                   ║
 ║  ✓  Velocity      6 ↓  ·  Debt: →                                ║
 ║  ⚠  Runway        ~2 sessions                                    ║
-║  ✓  Context age   1d                                             ║
+║  ✓  Context age   0d                                             ║
 ║  ✓  IGNIS         44184 FORGE  ·  1d old                         ║
 ║  ⛔  Truth         green-with-external-proof-follow-ups  ·  Geno  ║
 ║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
@@ -105,12 +107,12 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  1000/1000  (→0 vs current 1000)                     ║
+║  Projected:  998/1000  (↓1 vs current 999)                       ║
 ║  All categories forecast stable or rising.                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 116                               ║
+║  GENIUS HIT LIST  ·  Session 117                               ║
 ║  Project: PromoGrind · ranked by impact                        ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -120,5 +122,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 116 closeout · 2026-07-24*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 117 closeout · 2026-07-24*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

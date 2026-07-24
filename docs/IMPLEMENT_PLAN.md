@@ -1,19 +1,14 @@
-<!-- generated-by: /implement skill v2.0 -->
-<!-- generated-at: 2026-07-23 · session 116 -->
-<!-- source: docs/AUDIT_2026-07-23.json -->
+# Implementation Plan — S117 Audit
 
-# Implement Plan — S116
+Source of truth: `docs/AUDIT_2026-07-24.json`.
 
-All verified items executed in dependency-efficient order, followed by the mandatory innovation and compound-refinement pass.
+| Order | Audit item | Target depth | Why this order | Verification |
+|---:|---|---|---|---|
+| 1 | public-repo-secret-and-ops-purge | L3 | Immediate containment; scanner foundation protects every later edit | fixture rejection + all-tree/staged scans + Ark receipt |
+| 2 | release-surface-contract | L3 | Establishes navigation, standard-file, rollback, and delivered-header gates before product changes | checker tests + launch-local + live probe |
+| 3 | self-attestation-trust-boundary | L3 | Closes active forgeability/injection risk before trust UX expands | adversarial Passport/provenance tests + public verifier smoke |
+| 4 | advisor-privacy-envelope | L3 | Establishes AI data boundary before copy and telemetry settle | UI/server privacy-contract tests + disclosure scan |
+| 5 | multilingual-claims-totality | L3 | Remediates all locales after shared trust language is final | three-locale fixtures + full public claims scan |
+| 6 | promo-observation-freshness-loop | L3 | Product façade builds on the corrected trust/claims primitives; token measurement runs last | freshness/feedback/UI tests + token-savings check |
 
-| Seq | Slug | Wave | Outcome |
-|---:|---|---|---|
-| 1 | sil-forecast-format-tolerance | truth foundation | SHIPPED L3 |
-| 2 | external-proof-contract-completeness | launch truth | SHIPPED L3 |
-| 3 | bundle-graph-budget | performance truth | SHIPPED L3 |
-| 4 | counterfactual-advisor-receipts | product intelligence | SHIPPED L3 |
-| 5 | boot-error-telemetry-buffer | second-order | SHIPPED |
-| 6 | advisor-receipt-cache-version | second-order | SHIPPED |
-| 7 | external-launch-proof-ledger | generated innovation pack | HONEST DEFERRAL — real-world evidence only |
-
-Verification: focused Vitest 19/19; Deno 10/10; full Vitest 568/568; launch-local direct exit 0. See the audit Execution Log for per-item evidence.
+Every item must reduce or protect time-to-first-value. Partial work is not shipped; real external proof remains deferred with explicit evidence.

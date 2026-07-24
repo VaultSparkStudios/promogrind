@@ -14,7 +14,7 @@ const OnboardingWizard = ({ onDone }) => {
   const steps = [
     {
       title: "Welcome to PromoGrind",
-      sub: "Turn sportsbook promos into guaranteed cash. No gambling knowledge needed.",
+      sub: "Turn sportsbook promos into modeled cash. No gambling knowledge needed.",
       content: (
         <div style={{textAlign:"center"}}>
           <div style={{fontSize:32,marginBottom:16}}>🤑</div>
@@ -68,7 +68,7 @@ const OnboardingWizard = ({ onDone }) => {
             {[
               ["1","Get a bonus bet promo","DraftKings, FanDuel, Fanatics, ESPN BET — all offer bonus bets after a small qualifying wager"],
               ["2","Open Bonus Bet Converter","Enter your bonus bet size and odds — the calculator tells you exactly what hedge to place"],
-              ["3","Place both bets","Bonus bet at Book A, hedge at Book B. Profit guaranteed no matter the result"],
+              ["3","Place both bets","Bonus bet at Book A, hedge at Book B. Profit modeled no matter the result"],
             ].map(([n,t,d])=>(
               <div key={n} style={{display:"flex",gap:12,padding:"10px 12px",background:"#161d2a",borderRadius:8,border:"1px solid #1e293b"}}>
                 <div style={{fontSize:16,fontWeight:700,color:"#4ade80",minWidth:20}}>{n}</div>

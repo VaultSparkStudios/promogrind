@@ -2,22 +2,25 @@
 
 ## Now
 
-- deploy `20260723021000_ai_quota_claim.sql` plus the five modified provider edge functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; Ark cargo `01JU85UQ71086118EE17EF4AF2` requests the Studio-owned mapping/registry update; rerun the gateway and never infer deployment from repo code
-- production auth email smoke after the latest deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
-- run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
-- complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
+- configure a header-capable production edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
+- rotate the exposed webhook credential through the Studio secrets gateway; redacted Ark request `01JU98MC5M8FC5EDBEE214F795` records the required action without reproducing the secret
+- deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; never infer deployment from repo code
+- record real production auth-email, Stripe purchase, friend-beta, Brevo forwarding, and capture public-key proofs in the canonical proof ledger
 
 ## Next
 
-- run the deferred desktop/mobile dark/light screenshot matrix when a package-trusted browser runtime is available; visual verification remains SKIPPED rather than inferred from source
-- ~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.~~ — **DONE S104**: completed the remaining App shell finale with focused route/widget extraction; `appComposition.test.js` now enforces a <1500 App shell ceiling.
-- ~~rerun/inspect the GitHub Pages workflow and confirm the retained launch artifact remains clean~~ — **DONE S115**: final implementation run `30053484335` passed with 0 blocking failures, dashboard smoke green, non-mailing signup probe green, and disposable-user cleanup green.
-- add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
-- add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
-- ~~continue decomposing the remaining high-churn `src/App.jsx` seams beyond the extracted shell, route, tracker, utility-calculator, and promo-finder modules (App.jsx is now 2365 lines)~~ — **DONE S104**: extracted Promo Calendar, referral/team/account, onboarding, and dashboard action widgets; future App growth is guarded below <1500 lines.
+- run the desktop/mobile dark/light screenshot matrix when the connected browser runtime is available; S117 visual verification is explicitly SKIPPED after the runtime failed before launch
+- inspect S117 CI/deployment and refresh the live web probe against the deployed commit
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
-- use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
+## Shipped This Session (S117)
+
+- public secret/topology purge — **DONE**: removed the exposed tracked staging script, expanded shell-secret detection, added scanner regressions, and shipped a redacted rotation request through Ark
+- passport/provenance trust boundary — **DONE**: browser-only SHA-256 receipts are versioned self-attestations with strict schemas, safe rendering, and no independent-authenticity claim
+- Advisor privacy boundary — **DONE**: local-by-default profile context, explicit opt-in, client/server identifier redaction, bounded context, privacy receipts, and tests
+- promo observation truth — **DONE**: historical-pattern evidence states, market/jurisdiction metadata, freshness and confidence, local Seen/Not seen controls, and honest local-only reminders/ICS
+- multilingual claims contract — **DONE**: context-aware English/Spanish/Portuguese checks pass across 282 files and all localized static surfaces carry execution-risk caveats
+- release surface — **DONE**: navigation manifest, security contact, favicon, rollback runbook, exact proprietary footer, release gates, and live contract probe
 ## Shipped This Session (S115)
 
 - AI cost/auth perimeter — **DONE**: authenticated vision, direct-upload/MIME/size limits, non-renewing free/trial ceilings, atomic database quota reservation, and fail-closed provider access.

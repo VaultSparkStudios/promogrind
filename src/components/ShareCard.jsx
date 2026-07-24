@@ -3,8 +3,8 @@ import { CANONICAL_APP_URL } from "../launchState.js";
 
 export default function ShareCard({ title, profit, onClose }) {
   const appUrl = CANONICAL_APP_URL;
-  const text = `🎉 Just locked in ${profit} in guaranteed profit using ${title} on PromoGrind.\n\nFree account, free calculator suite:\n${appUrl}`;
-  const tweetText = `🎉 Just locked in ${profit} guaranteed profit from a sportsbook promo using @PromoGrind — free account, free calculator suite\n${appUrl}`;
+  const text = `🎉 Just locked in ${profit} in modeled profit using ${title} on PromoGrind.\n\nFree account, free calculator suite:\n${appUrl}`;
+  const tweetText = `🎉 Just locked in ${profit} modeled profit from a sportsbook promo using @PromoGrind — free account, free calculator suite\n${appUrl}`;
   const [copyLabel, setCopyLabel] = useState("📋 Copy text");
 
   const handleCopy = () => {
@@ -22,14 +22,14 @@ export default function ShareCard({ title, profit, onClose }) {
   };
 
   const handleReddit = () => {
-    const body = encodeURIComponent(`Used the free PromoGrind calculator and locked in ${profit} in guaranteed profit from ${title}. No subscription, no BS — it's completely free.\n\n${appUrl}`);
-    window.open(`https://www.reddit.com/submit?title=${encodeURIComponent(`Locked in ${profit} guaranteed profit using PromoGrind`)}&text=${body}`, "_blank");
+    const body = encodeURIComponent(`Used the free PromoGrind calculator and locked in ${profit} in modeled profit from ${title}. No subscription, no BS — it's completely free.\n\n${appUrl}`);
+    window.open(`https://www.reddit.com/submit?title=${encodeURIComponent(`Locked in ${profit} modeled profit using PromoGrind`)}&text=${body}`, "_blank");
   };
 
   return (
     <div style={{ marginTop: 12, padding: 16, background: "linear-gradient(135deg,#0f2a1e,#0a0e17)", border: "2px solid #4ade80", borderRadius: 10, position: "relative" }}>
       <button onClick={onClose} style={{ position: "absolute", top: 8, right: 10, background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 18, lineHeight: 1 }}>×</button>
-      <div style={{ fontSize: 9, color: "#64748b", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 6 }}>Guaranteed Profit Locked In</div>
+      <div style={{ fontSize: 9, color: "#64748b", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 6 }}>modeled Profit Locked In</div>
       <div style={{ fontSize: 32, fontWeight: 800, color: "#4ade80", marginBottom: 2, fontFamily: "'Space Grotesk',sans-serif" }}>{profit}</div>
       <div style={{ fontSize: 12, color: "#94a3b8", marginBottom: 14 }}>from {title} · PromoGrind</div>
       <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>

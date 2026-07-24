@@ -5,7 +5,7 @@ import { K, font } from "../lib/shared.js";
 // Static routing map: calcKey → [{ label, slug, reason }]
 const CHAIN = {
   "bonus-bet": [
-    { label: "2-Way Arb", slug: "arb-2way", reason: "Lock guaranteed profit across books" },
+    { label: "2-Way Arb", slug: "arb-2way", reason: "Lock modeled profit across books" },
     { label: "Kelly Criterion", slug: "kelly", reason: "Size your edge bets optimally" },
   ],
   "arb-2way": [
@@ -22,7 +22,7 @@ const CHAIN = {
   ],
   "ev": [
     { label: "Kelly Criterion", slug: "kelly", reason: "Size this +EV bet by your bankroll" },
-    { label: "2-Way Arb", slug: "arb-2way", reason: "Lock guaranteed profit on this line" },
+    { label: "2-Way Arb", slug: "arb-2way", reason: "Lock modeled profit on this line" },
   ],
   "deposit-match": [
     { label: "Bonus Bet Converter", slug: "bonus-bet", reason: "Convert bonus bets earned from the match" },
@@ -54,7 +54,7 @@ const CHAIN = {
   ],
   "kelly": [
     { label: "+EV Calculator", slug: "ev", reason: "Find the next +EV edge to size into" },
-    { label: "2-Way Arb", slug: "arb-2way", reason: "Lock guaranteed profit on your next play" },
+    { label: "2-Way Arb", slug: "arb-2way", reason: "Lock modeled profit on your next play" },
   ],
 };
 

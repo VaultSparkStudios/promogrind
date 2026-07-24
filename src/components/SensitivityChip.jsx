@@ -3,7 +3,7 @@ import { K, font } from "../lib/shared.js";
 
 /**
  * Render a compact inline chip next to a calculator result showing how much
- * the guaranteed profit moves if the hedge line shifts ±10%.
+ * the modeled profit moves if the hedge line shifts ±10%.
  *
  * Pass the sensitivity summary object from `sensitivityBonus/Boost/First` in
  * `src/lib/shared.js`. If `summary` is falsy the chip renders nothing, so
@@ -14,7 +14,7 @@ export default function SensitivityChip({ summary, label = "±10% odds shift", c
   const tone = summary.stable ? K.gn : K.yl;
   return (
     <div
-      title="How much the guaranteed profit moves if the hedge line drifts 10% in either direction."
+      title="How much the modeled profit moves if the hedge line drifts 10% in either direction."
       aria-label={`Sensitivity band: $${summary.bandLow} to $${summary.bandHigh} with ±10% odds shift`}
       style={{
         display: "inline-flex",

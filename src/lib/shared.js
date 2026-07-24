@@ -257,7 +257,7 @@ export const calcHold = (o1, o2) => {
 };
 
 // ─── Confidence / Sensitivity helpers ────────────────────────────────────────
-// Each returns a band showing how much the guaranteed profit moves when the
+// Each returns a band showing how much the modeled profit moves when the
 // hedge line shifts ±10% in decimal odds terms. Output is for the Confidence
 // layer chips next to result rows; consumers render `${bandLow} → ${bandHigh}`
 // and optionally show `deltaPer10pct` for a single directional read.

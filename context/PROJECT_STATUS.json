@@ -13,57 +13,60 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 116,
-  "currentFocus": "S116 saturated four verified primary items and two second-order refinements: truthful SIL forecasting, total typed launch-proof coverage, manifest-derived bundle budgets, counterfactual Advisor receipts, pre-init error buffering, and receipt-cache versioning. Exact-lockfile suite 568/568; Advisor Deno 10/10 plus type-check; launch-local direct exit 0; scoped genius list 0.",
-  "nextMilestone": "Map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
+  "currentSession": 117,
+  "currentFocus": "S117 shipped all six ranked audit items: public secret/topology cleanup, self-attested passport/provenance, consent-gated Advisor context, evidence-aware promo observations, multilingual claim enforcement, and the universal release surface. Repo-owned verification: 582/582 Vitest, 3/3 Deno privacy tests, Deno type-check, browser smoke, and launch-local direct exit 0.",
+  "nextMilestone": "Deploy S117, configure and verify six production security headers, rotate the exposed webhook credential via Ark request 01JU98MC5M8FC5EDBEE214F795, deploy the pending Supabase migration/functions to fjnpzjjyhnpmunfoycrp, and complete the remaining external proof ledger plus manual theme/device matrix.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
     "Studio Ops capability follow-up: promogrind.supabase.deploy remains MISSING after S115 discovery; Ark cargo 01JU85UQ71086118EE17EF4AF2 requests registry trial-ceiling truth plus capability mapping for project ref fjnpzjjyhnpmunfoycrp, then deploy 20260723021000_ai_quota_claim.sql and the five modified provider functions.",
-    "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness."
+    "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness.",
+    "Rotate the exposed webhook credential through the Studio secrets gateway; redacted Ark request 01JU98MC5M8FC5EDBEE214F795 is pending.",
+    "Production edge is missing Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy.",
+    "Manual desktop/mobile dark/light screenshot matrix remains unavailable because the connected browser runtime failed before launch."
   ],
   "lastUpdated": "2026-07-24",
-  "silScore": 1000,
-  "silAvg3": 1000,
+  "silScore": 999,
+  "silAvg3": 999.7,
   "silVelocity": 6,
   "silDebt": "stable",
-  "silLastSession": 116,
+  "silLastSession": 117,
   "silMax": 1000,
   "silSparkline": [
     1000,
     1000,
     1000,
     1000,
-    1000
+    999
   ],
   "ignisScore": 44184,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-23",
-  "testsPassing": 568,
-  "testsTotal": 568,
-  "testsLastRun": "2026-07-23",
+  "testsPassing": 582,
+  "testsTotal": 582,
+  "testsLastRun": "2026-07-24",
   "lastDeployStatus": "S115 final implementation commit be58dfe deployed successfully via GitHub Pages run 30053484335. Downloaded launch artifact: 0 blocking failures; public signup/sign-in, checkout, expected portal state, disposable-user cleanup, and production dashboard smoke all pass. Brief 30053484333 and CI 30053484341 also passed.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-07-23",
+  "truthAuditLastRun": "2026-07-24",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 568/568 across 72 files in S116 on the exact package-lock tree"
+      "status": "passing 582/582 across 74 files in S117 on the exact package-lock tree"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S116 (exit code captured directly: 0) with 568/568 tests, encoding/claims/AI-entitlement integrity, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, manifest-derived bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S117 (direct exit 0) with 582/582 tests, source/claims/AI-entitlement integrity, auth/launch/UX/browser smokes, dist exposure, proof replay, release surface, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
       "command": "npm run smoke:ux",
-      "status": "passing in S115 across 61 app routes and 100 public HTML files"
+      "status": "passing in S117 across 61 app routes and 100 public HTML files"
     },
     {
       "type": "local",
@@ -88,8 +91,8 @@
   "brandingCompliant": true,
   "revenueModel": "affiliate-plus-subscription",
   "freeTierCostStatus": "trial-ceiling",
-  "freeTierAuditDate": "2026-07-23",
-  "freeTierAuditDoc": "docs/AUDIT_2026-07-22.md",
+  "freeTierAuditDate": "2026-07-24",
+  "freeTierAuditDoc": "docs/AUDIT_2026-07-24.md",
   "freeTierAuditNote": "Server-owned lifetime free/trial ceilings are reserved atomically before provider calls; paid tiers keep explicit daily or unlimited contracts. No recurring-cost alarm is inferred from notional flat-rate plan usage.",
   "stripeReady": false,
   "stripeLiveKeyConfigured": false,
@@ -105,7 +108,7 @@
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "automationCoverage": 99
   },
   "doctorScore": {
     "date": "2026-07-24",
@@ -213,7 +216,7 @@
   "sessionMode": "founder",
   "sessionModeAutoShiftedAt": "2026-07-01T23:13:06.827Z",
   "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-07-01T23:13:09.140Z",
+  "planModeCheckedAt": "2026-07-01T23:13:09.14Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex"
 }

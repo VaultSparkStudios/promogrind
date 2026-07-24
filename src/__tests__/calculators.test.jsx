@@ -66,10 +66,10 @@ describe("BonusBet calculator", () => {
     expect(screen.getByText("Bonus Bet Converter")).toBeDefined();
   });
 
-  it("shows guaranteed profit result with valid default inputs", () => {
+  it("shows modeled profit result with valid default inputs", () => {
     wrap(<BonusBet />);
     // Default: sz=200, bo=+300, ho=-350 → calcBonus should yield positive profit
-    const profitEl = screen.getByText("guaranteed profit");
+    const profitEl = screen.getByText("modeled profit");
     expect(profitEl).toBeDefined();
     // The profit dollar amount should be present as a sibling span
     const card = profitEl.closest("div");
@@ -96,7 +96,7 @@ describe("BonusBet calculator", () => {
     expect(exBtn).toBeDefined();
     fireEvent.click(exBtn);
     // After clicking, inputs update — result should still show
-    expect(screen.getByText("guaranteed profit")).toBeDefined();
+    expect(screen.getByText("modeled profit")).toBeDefined();
   });
 
   it("renders NL parse button and applies detected values", () => {
@@ -125,9 +125,9 @@ describe("ProfitBoost calculator", () => {
     expect(screen.getByText("Profit Boost Converter")).toBeDefined();
   });
 
-  it("shows guaranteed profit result with default inputs", () => {
+  it("shows modeled profit result with default inputs", () => {
     wrap(<ProfitBoost />);
-    expect(screen.getByText("guaranteed profit")).toBeDefined();
+    expect(screen.getByText("modeled profit")).toBeDefined();
   });
 
   it("shows demo step-by-step block when Demo button is clicked", () => {
@@ -146,7 +146,7 @@ describe("ProfitBoost calculator", () => {
   it("Example button presets inputs and shows result", () => {
     wrap(<ProfitBoost />);
     fireEvent.click(screen.getByText("★ Show Example"));
-    expect(screen.getByText("guaranteed profit")).toBeDefined();
+    expect(screen.getByText("modeled profit")).toBeDefined();
   });
 
   it("shows help section with Profit Boost term", () => {
@@ -349,7 +349,7 @@ describe("calculator accessibility", () => {
   it("announces BonusBet results through a polite live region", () => {
     wrap(<BonusBet />);
     const regions = screen.getAllByRole("status");
-    const resultRegion = regions.find((el) => /guaranteed profit|Hedge Bet Amount/i.test(el.textContent));
+    const resultRegion = regions.find((el) => /modeled profit|Hedge Bet Amount/i.test(el.textContent));
     expect(resultRegion).toBeDefined();
     expect(resultRegion.getAttribute("aria-live")).toBe("polite");
   });

@@ -57,7 +57,7 @@ export default function FirstBet() {
             <div>Step 1: BetMGM offers $200 first bet insurance.</div>
             <div>Step 2: Bet $200 on a near-even moneyline.</div>
             <div>Step 3: If it loses, you get $200 in bonus bets.</div>
-            <div>Step 4: Convert those for ~${f(parseFloat(s) * 0.7, 0)} guaranteed.</div>
+            <div>Step 4: Convert those for ~${f(parseFloat(s) * 0.7, 0)} modeled.</div>
             <button onClick={() => setDemoMode(false)} style={{ marginTop: 6, background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 10, padding: 0, textDecoration: "underline" }}>✕ Exit Demo</button>
           </div>
         )}

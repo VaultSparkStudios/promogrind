@@ -79,7 +79,7 @@ export default function ProfitBoost() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(parseFloat(r.g) > 0)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(parseFloat(r.g) > 0 ? K.gn : K.rd)}>${r.g}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>guaranteed profit</span>
+              <span style={{ fontSize: 12, color: K.dm }}>modeled profit</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
               <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
@@ -117,7 +117,7 @@ export default function ProfitBoost() {
                   { label: "Hedge Amount", value: `$${r.hs}` },
                   { label: "If Boosted Wins", value: `+$${r.pBW}` },
                   { label: "If Hedge Wins", value: `+$${r.pHW}` },
-                  { label: "Guaranteed Profit", value: `$${r.g}`, highlight: true },
+                  { label: "modeled Profit", value: `$${r.g}`, highlight: true },
                 ]}
                 onClose={() => setShowReceipt(false)}
               />
