@@ -538,3 +538,12 @@ Append chronological entries.
 - Manually dispatched `Deploy Pages` run `28620744679` on `main`; it deployed head `81e6858` successfully with production launch verification and production dashboard smoke passing.
 - Local production dashboard smoke against `https://promogrind.bet/dashboard` returned `ok: true` with `failures: []`.
 - Final closeout proof commit will be pushed and manually dispatched so latest `main` is deployed as requested.
+
+## 2026-07-23 — Session 116 Codex saturated goal arc
+
+- Ran `/goal` + `/arc` continuously through `/start → /audit → /implement → second-order expansion → /closeout`; initial pull was current, context meter remained CONTINUE, and prior-session triage found no interrupted work.
+- Rejected the apparent cost-bleeder premise at repo scope: S115 code and direct integrity checks prove trial-ceiling/auth/quota work is shipped; the remaining Studio Ops registry mismatch stays Ark-owned.
+- Shipped four audit items: SIL forecast format tolerance/completeness, total external-proof mapping, manifest-derived bundle graph budgets, and persisted counterfactual Advisor receipts.
+- Shipped two second-order refinements: pre-Sentry boot exception buffering and receipt-contract cache versioning.
+- Verification: focused Vitest 19/19; Advisor Deno 10/10; full suite 568/568 across 72 files; `npm run verify:launch-local` direct exit 0; initial bundle 179.1KB raw/60.0KB gzip; largest async 482.1KB raw/159.2KB gzip.
+- Honest deferral: six typed external proofs remain pending; no email, purchase, tester, Brevo, deployment, capture, or sibling-registry evidence was invented.

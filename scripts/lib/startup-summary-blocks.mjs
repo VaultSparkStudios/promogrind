@@ -91,7 +91,7 @@ export function renderMomentumMeterBlock({
   ];
 }
 
-export function renderSilForecastBlock({ root, velocity, currentTotal, blockerPressure = 87, contextAge = 0 }) {
+export function renderSilForecastBlock({ root, velocity, currentTotal, blockerPressure = 0, contextAge = 0 }) {
   try {
     const silTxt = fs.readFileSync(path.join(root, 'context', 'SELF_IMPROVEMENT_LOOP.md'), 'utf8');
     const sessions = parseSilHistory(silTxt);

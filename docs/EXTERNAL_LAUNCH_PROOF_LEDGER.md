@@ -1,6 +1,6 @@
 # External Launch Proof Ledger
 
-> Generated: 2026-07-02 | Project: PromoGrind | Session: 114
+> Generated: 2026-07-24 | Project: PromoGrind | Session: 116
 
 This ledger is an honesty surface. It records proof gates that require real-world evidence and must not be marked complete from local code alone.
 
@@ -8,7 +8,9 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 
 - Live URL: https://promogrind.bet
 - Project-status external blockers: 6
-- Blocking canonical launch proofs: 3
+- Proof-contract coverage: 6/6 blockers mirrored
+- Unmirrored blockers: 0
+- Blocking canonical launch proofs: 6
 
 ## Canonical Launch Proofs
 
@@ -18,17 +20,20 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 | Real Stripe smoke | pending | yes | full-launch, marketing-push | 0/4 | Run docs/STRIPE_SMOKE_TEST.md against the deployed app with a real checkout, then record the checkout/session/subscription/customer-portal evidence. |
 | Friend-facing beta pass | pending | yes | soft-launch, marketing-push, full-launch | 1/5 | Have one trusted tester complete account creation/sign-in, confirmation or password recovery visibility, a top calculator, a sportsbook CTA review, and pricing review after deploy. |
 | Production auth email smoke | pending | yes | soft-launch, full-launch, marketing-push | 0/6 | Run `npm run smoke:auth-email -- --record` after creating a fresh production account and completing the confirmation/resend/reset flow. Record only masked email and provider IDs; never paste email bodies, tokens, passwords, or full auth links. |
+| On-domain contact email delivery | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Use the Studio Ops Brevo capability to verify SPF/DKIM and deliver a redacted test message through contact@promogrind.bet to founder@vaultsparkstudios.com. |
+| AI quota migration and provider deployment | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Resolve promogrind.supabase.deploy through the secrets gateway, deploy migration 20260723021000_ai_quota_claim.sql and the five provider functions to fjnpzjjyhnpmunfoycrp, then record redacted deployment IDs. |
+| Production capture public-key configuration | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Provide the browser-safe anon key through the production deploy configuration and run a real capture submission without committing the key to this repository. |
 
 ## Project Status Blockers
 
 | Category | Mirrored In Launch Proofs | Blocker |
 |---|---:|---|
-| brevo | no | Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing. |
+| brevo | yes | Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing. |
 | auth-email | yes | Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in. |
 | stripe | yes | Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record). |
 | friend-beta | yes | Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record). |
-| supabase-capability | no | Studio Ops capability follow-up: consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 and add promogrind.supabase.deploy for project ref fjnpzjjyhnpmunfoycrp. |
-| capture-config | no | Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness. |
+| supabase-capability | yes | Studio Ops capability follow-up: promogrind.supabase.deploy remains MISSING after S115 discovery; Ark cargo 01JU85UQ71086118EE17EF4AF2 requests registry trial-ceiling truth plus capability mapping for project ref fjnpzjjyhnpmunfoycrp, then deploy 20260723021000_ai_quota_claim.sql and the five modified provider functions. |
+| capture-config | yes | Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness. |
 
 ## Completion Rule
 

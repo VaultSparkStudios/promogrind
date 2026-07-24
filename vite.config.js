@@ -11,6 +11,7 @@ export default defineConfig({
   base: process.env.VITE_APP_BASE_PATH || '/',
   build: {
     outDir: 'dist',
+    manifest: true,
     sourcemap: false,
     chunkSizeWarningLimit: 600,
     rollupOptions: {

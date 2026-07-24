@@ -13,8 +13,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 115,
-  "currentFocus": "S115 saturated all verified primary and second-order work, root-fixed the production signup monitor, and migrated to trust-approved React Router 7.18.0 after a newly published advisory. Exact-lockfile suite 559/559; launch-local direct exit 0; final implementation CI 30053484341 green; Deploy Pages 30053484335 green with 0 blocking artifact failures; scoped genius list 0.",
+  "currentSession": 116,
+  "currentFocus": "S116 saturated four verified primary items and two second-order refinements: truthful SIL forecasting, total typed launch-proof coverage, manifest-derived bundle budgets, counterfactual Advisor receipts, pre-init error buffering, and receipt-cache versioning. Exact-lockfile suite 568/568; Advisor Deno 10/10 plus type-check; launch-local direct exit 0; scoped genius list 0.",
   "nextMilestone": "Map promogrind.supabase.deploy and deploy the quota migration plus five provider functions to fjnpzjjyhnpmunfoycrp before recording real production auth email, Stripe, friend-beta, Brevo, capture-key, and visual proof.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
@@ -27,9 +27,9 @@
   "lastUpdated": "2026-07-23",
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 10,
+  "silVelocity": 6,
   "silDebt": "stable",
-  "silLastSession": 115,
+  "silLastSession": 116,
   "silMax": 1000,
   "silSparkline": [
     1000,
@@ -41,8 +41,8 @@
   "ignisScore": 44184,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-23",
-  "testsPassing": 559,
-  "testsTotal": 559,
+  "testsPassing": 568,
+  "testsTotal": 568,
   "testsLastRun": "2026-07-23",
   "lastDeployStatus": "S115 final implementation commit be58dfe deployed successfully via GitHub Pages run 30053484335. Downloaded launch artifact: 0 blocking failures; public signup/sign-in, checkout, expected portal state, disposable-user cleanup, and production dashboard smoke all pass. Brief 30053484333 and CI 30053484341 also passed.",
   "truthAuditStatus": "green-with-external-proof-follow-ups",
@@ -53,12 +53,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 559/559 across 68 files in S115 on the exact package-lock tree"
+      "status": "passing 568/568 across 72 files in S116 on the exact package-lock tree"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S115 (exit code captured directly: 0) with 559/559 tests, encoding/claims/AI-entitlement integrity, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S116 (exit code captured directly: 0) with 568/568 tests, encoding/claims/AI-entitlement integrity, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, manifest-derived bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -108,7 +108,7 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-07-23",
+    "date": "2026-07-24",
     "passing": 12,
     "warning": 0,
     "failing": 0,

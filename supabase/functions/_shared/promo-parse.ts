@@ -209,6 +209,19 @@ export function parsePromoTextHeuristic(text = "") {
         percentage ? `Boost appears to be about ${percentage}%.` : null,
         book ? `Offer appears to be from ${book}.` : null,
       ]).slice(0, 3),
+      missingInputs: unique([
+        !amount ? "Maximum eligible stake or reward value was not found." : null,
+        !expiryDays ? "Offer expiry was not found." : null,
+        !/min(?:imum)? odds/.test(normalized) ? "Minimum qualifying odds were not found." : null,
+      ]).slice(0, 3),
+      sensitivityTriggers: unique([
+        "Re-run if the eligible stake, reward cap, or conversion odds change.",
+        "Re-run if rollover, minimum-odds, or expiry terms differ from the pasted text.",
+        ["bonus_bet", "profit_boost", "safety_net", "insurance"].includes(topType)
+          ? "Re-price if the best opposing hedge line moves materially."
+          : null,
+      ]).slice(0, 3),
+      evidenceGrade: amount && expiryDays ? "complete" : "partial",
       analysisSource: "rule_engine",
     },
   };

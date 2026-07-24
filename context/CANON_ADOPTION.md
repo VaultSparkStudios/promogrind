@@ -5,7 +5,7 @@
 > Suggest: `node ../vaultspark-studio-ops/scripts/check-canon-adoption.mjs --project . --suggest` uses conformance evidence to pre-fill safe suggestions.
 > Mark each: **adopted** · **pending** · **review** · **exempt (reason)**. This file is maintained, not auto-trusted.
 
-Audience: public-unlaunched · Live ACTIVE canons: 51 · Pending review: 45
+Audience: public-unlaunched · Live ACTIVE canons: 51 · Pending review: 44
 
 | Canon | Title | Status | Evidence / note |
 |---|---|---|---|
@@ -51,7 +51,7 @@ Audience: public-unlaunched · Live ACTIVE canons: 51 · Pending review: 45
 | CANON-041 | Website Mobile Parity + Elite Visual Craft (full desktop↔mob | review |  |
 | CANON-042 | Studio Branding System: approved usages, DBA rule, and the e | review |  |
 | CANON-043 | Baseline repository security hygiene (free-tier: Dependabot  | review |  |
-| CANON-044 | In-session task scaffolding (Phase/Wave lists), reconciled a | review |  |
+| CANON-044 | In-session task scaffolding (Phase/Wave lists), reconciled a | adopted (suggested) | Conformance checker passed: } |
 | CANON-045 | Obelisk is the unified studio identity + auth plane (one stu | review |  |
 | CANON-046 | Canon weighting: tiers + autonomy-first conflict resolution  | adopted (suggested) | Conformance checker passed: matrix integrity ok — no orphan rows, all tiers valid |
 | CANON-047 | Theme system + AI-verified human readability (no unreadable  | review |  |

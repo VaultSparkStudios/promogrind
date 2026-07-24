@@ -520,3 +520,26 @@ Impact: Future closeouts can call the expected script names without failing on m
 - Status: accepted
 - Context: the calculator a11y candidate claimed unlabelled inputs; live verification showed the shared `In` atom already labels inputs, and the real gap was result announcement plus one raw-input file (LineShop).
 - Decision: the item shipped at its true scope (live regions + LineShop) with the demotion recorded in the audit execution log, consistent with the S173/S175 reject-on-verification-is-a-win pattern.
+
+## 2026-07-23 — Session 116
+
+### Decision: launch blockers and launch proofs must be a total mapping
+
+- Status: accepted
+- Context: PROJECT_STATUS carried six external blockers, while LAUNCH_PROOFS modeled only three of them plus advisory affiliates. The generated ledger exposed false `mirroredInLaunchProofs` rows but did not fail.
+- Decision: every external blocker category must map to a typed proof contract, and ledger freshness fails when coverage is below 100%. A typed proof does not complete its real-world evidence.
+- Why this was chosen: canonical launch truth cannot be canonical if some gates exist only as prose; mechanically complete pending truth is better than an incomplete green surface.
+
+### Decision: performance budgets follow the module graph, not filename folklore
+
+- Status: accepted
+- Context: the old gate celebrated a 5.4KB `index` leaf while ignoring its static imports and a 493.6KB Sentry chunk.
+- Decision: emit the Vite manifest, traverse static imports from the real entry, and enforce separate initial raw/gzip and async raw/gzip ceilings.
+- Why this was chosen: cache boundaries matter, but they do not make bytes free; the gate now reports what a browser actually loads at each phase.
+
+### Decision: AI recommendations must state their counterfactuals
+
+- Status: accepted
+- Context: Promo Advisor confidence was visible, but its model prompt omitted assumptions and neither path said which missing facts or term changes would alter the verdict.
+- Decision: version and persist an inspectable decision receipt containing assumptions, missing inputs, sensitivity triggers, evidence grade, and analysis source.
+- Why this was chosen: this advances PromoGrind's calm operator-desk SOUL—AI should improve decisions and feedback quality, not issue opaque scores.

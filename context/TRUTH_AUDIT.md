@@ -377,3 +377,12 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Commit `81e6858` reached `origin/main`; CI run `28620695607` and brief-format-check run `28620695606` passed.
 - GitHub Pages workflow_dispatch run `28620744679` deployed `81e6858`; production launch verification and dashboard smoke passed.
 - Local production dashboard smoke also passed against `https://promogrind.bet/dashboard` with no failures.
+
+## 2026-07-23 — Session 116 Truth Update
+
+- Forecast truth repaired: `scripts/lib/sil-forecaster.mjs` now parses the live S108-S115 SIL ledger format, selects newest sessions by session number, and refuses incomplete category sets. The generated startup brief reports 1000/1000 rather than the prior false 0/1000.
+- Launch-proof truth completed structurally, not evidentially: all six PROJECT_STATUS external blockers map to typed `LAUNCH_PROOFS.json` contracts; the ledger self-validates 6/6 coverage and fails closed if wording introduces an unknown blocker. All six proofs remain pending.
+- Bundle observability repaired: the gate derives the transitive static graph from Vite's manifest and separately measures the largest async chunk. Current measured truth is 179.1KB raw / 60.0KB gzip initial JavaScript and 482.1KB raw / 159.2KB gzip for the largest async chunk.
+- AI decision truth improved: Promo Advisor receipts expose assumptions, missing inputs, sensitivity triggers, evidence grade, source, and contract version across rule/model paths and saved workflows. Old cache entries cannot masquerade as v2 receipts.
+- Error observability repaired: exceptions thrown before idle analytics initialization are buffered in memory and flushed to Sentry when ready instead of being silently discarded.
+- Verification truth: 568/568 Vitest checks, 10/10 Deno Advisor tests, Deno type-check, and the full launch-local chain passed with direct exit 0. Production deployment remains S115 until remote S116 evidence exists.

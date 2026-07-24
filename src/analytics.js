@@ -5,6 +5,7 @@
  * main app bundle does not pay their parse cost on first paint. Libraries are
  * loaded only when analytics is actually initialised.
  */
+import { createTelemetryBuffer } from "./lib/telemetryBuffer.js";
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY;
 const POSTHOG_ENABLED = import.meta.env.VITE_POSTHOG_ENABLED === "true";
@@ -16,6 +17,7 @@ let sentryReady = false;
 let initPromise = null;
 let posthogClient = null;
 let sentryModule = null;
+const pendingExceptions = createTelemetryBuffer(10);
 
 function readUtmAttribution() {
   try {
@@ -84,6 +86,7 @@ export function initAnalytics() {
           });
           sentryModule = module;
           sentryReady = true;
+          pendingExceptions.drain((error, context) => module.captureException(error, { extra: context }));
         }),
       );
     }
@@ -143,5 +146,6 @@ export function trackPage(slug) {
 export function captureException(error, context = {}) {
   try {
     if (sentryReady && sentryModule) sentryModule.captureException(error, { extra: context });
+    else pendingExceptions.push(error, context);
   } catch {}
 }

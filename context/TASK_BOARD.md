@@ -414,3 +414,18 @@
 
 - [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
 - [SIL] Keep the external launch-proof ledger fresh at closeout whenever PROJECT_STATUS blockers or LAUNCH_PROOFS change.
+
+## Shipped This Session (S116)
+
+- sil-forecast-format-tolerance S116 — **DONE S116**: format-tolerant, recency-correct v3 parsing plus completeness gating repaired the false 0/1000 startup forecast; live source now forecasts 1000/1000.
+- external-proof-contract-completeness S116 — **DONE S116**: Brevo, Supabase deployment, and capture configuration are typed launch proofs; the generated ledger proves 6/6 blocker coverage and fails on unmapped blockers.
+- bundle-graph-budget S116 — **DONE S116**: Vite manifest traversal now budgets the true static import graph and largest async chunk with raw+gzip ceilings and deterministic diagnostics.
+- counterfactual-advisor-receipts S116 — **DONE S116**: model and rule paths emit bounded assumptions, missing inputs, sensitivity triggers, and evidence grade; the accessible receipt persists into workflows.
+- boot-error-telemetry-buffer S116 — **DONE S116 (second-order)**: a bounded in-memory FIFO retains boot exceptions until idle-loaded Sentry is ready and retries failed delivery without persistence.
+- advisor-receipt-cache-version S116 — **DONE S116 (second-order)**: receipt contract v2 versions cached Advisor results so legacy payloads cannot silently suppress counterfactual evidence.
+- external-proof-evidence S116 — **HONEST DEFERRAL S116**: production auth email, Stripe purchase, friend beta, Brevo forwarding, Supabase deployment, and capture configuration still require real external evidence; no proof was fabricated.
+
+## S116 Follow-up
+
+- [SIL] Keep bundle thresholds evidence-based; optimize the 482.1KB async Sentry payload only when field telemetry proves its replay value or mobile cost warrants a narrower integration.
+- [Launch Proof] Execute the six typed proof contracts only through the existing redacted runners/secrets gateway; do not infer production readiness from local code.

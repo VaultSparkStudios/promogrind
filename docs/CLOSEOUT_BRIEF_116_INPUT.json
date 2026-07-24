@@ -1,0 +1,19 @@
+{
+  "session": 116,
+  "date": "2026-07-23",
+  "headline": "Three persuasive observability lies replaced by source-derived contracts; Advisor intelligence now explains its counterfactuals.",
+  "items": [
+    { "title": "Forecast truth", "projectImpact": 10, "ecosystemImpact": 8, "insight": "SIL forecasting accepts live v3 formats, sorts by true recency, and refuses incomplete category evidence.", "evidence": "Five newest complete sessions forecast 1000/1000; startup brief validates." },
+    { "title": "Total launch-proof contracts", "projectImpact": 10, "ecosystemImpact": 9, "insight": "Every external blocker is typed without pretending its real-world evidence exists.", "evidence": "6/6 blockers mirrored; unmirrored count 0; freshness check exits 0." },
+    { "title": "Manifest-derived performance budget", "projectImpact": 9, "ecosystemImpact": 7, "insight": "The gate measures browser loading phases instead of celebrating a tiny filename leaf.", "evidence": "179.1KB raw/60.0KB gzip initial; 482.1KB raw/159.2KB gzip largest async." },
+    { "title": "Counterfactual Advisor receipts", "projectImpact": 10, "ecosystemImpact": 7, "insight": "Recommendations expose assumptions, missing facts, sensitivity triggers, evidence grade, and source through saved workflows.", "evidence": "10/10 Deno tests; Deno check; Promograph persistence tests." },
+    { "title": "Second-order reliability", "projectImpact": 8, "ecosystemImpact": 6, "insight": "Boot exceptions survive idle telemetry startup and receipt-v2 caches cannot reuse incomplete legacy payloads.", "evidence": "Telemetry FIFO/retry tests; full suite 568/568 and launch-local exit 0." }
+  ],
+  "honestyLedger": [
+    { "title": "Stale cost-bleeder premise rejected", "why": "Repo source proves S115 trial ceilings/authentication are shipped; only Studio Ops registry drift remains." },
+    { "title": "Six external proofs remain pending", "why": "No delivery, payment, tester, deployment, capture, or sibling-registry evidence was fabricated." }
+  ],
+  "followUps": ["Use the secrets gateway and typed proof contracts to record real external evidence when available.", "Reassess the Sentry async ceiling against measured field value before expanding replay."],
+  "blockers": ["External production evidence and Studio Ops registry/capability synchronization remain outside repo-local proof."],
+  "silDelta": { "kind": "numeric", "from": 1000, "to": 1000 }
+}

@@ -118,6 +118,7 @@ export function isWorkflowOpen(status) {
 
 export function normalizeRecommendation(input = {}) {
   const parsedScore = Number.parseInt(input.opportunityScore, 10);
+  const list = (value, limit = 3) => Array.isArray(value) ? value.map((item) => String(item || "").trim()).filter(Boolean).slice(0, limit) : [];
   return {
     title: String(input.title || input.verdict || "").trim() || null,
     summary: String(input.summary || input.explanation || input.action || "").trim() || null,
@@ -127,6 +128,10 @@ export function normalizeRecommendation(input = {}) {
     opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : null,
     confidence: String(input.confidence || "").trim().toLowerCase() || null,
     opsTags: Array.isArray(input.opsTags) ? input.opsTags.map((tag) => String(tag || "").trim()).filter(Boolean) : [],
+    assumptions: list(input.assumptions),
+    missingInputs: list(input.missingInputs),
+    sensitivityTriggers: list(input.sensitivityTriggers),
+    evidenceGrade: ["complete", "partial", "estimate"].includes(input.evidenceGrade) ? input.evidenceGrade : null,
   };
 }
 
@@ -155,6 +160,10 @@ export function normalizeWorkflowEntry(entry = {}) {
     confidence: recommendation.confidence,
     opportunityScore: recommendation.opportunityScore,
     opsTags: recommendation.opsTags,
+    assumptions: recommendation.assumptions,
+    missingInputs: recommendation.missingInputs,
+    sensitivityTriggers: recommendation.sensitivityTriggers,
+    evidenceGrade: recommendation.evidenceGrade,
     actionability: Number.isFinite(parsedActionability)
       ? Math.max(0, Math.min(parsedActionability, 100))
       : recommendation.opportunityScore,

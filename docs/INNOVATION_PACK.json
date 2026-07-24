@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-07-02T19:28:27.724Z",
+  "generatedAt": "2026-07-24T01:27:42.469Z",
   "project": "PromoGrind",
-  "session": 114,
+  "session": 116,
   "sourceSignals": {
     "geniusListEmpty": true,
-    "taskBoardBytes": 60438,
+    "taskBoardBytes": 63378,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
@@ -37,7 +37,7 @@
       "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
       "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
       "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
-      "Studio Ops capability follow-up: consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 and add promogrind.supabase.deploy for project ref fjnpzjjyhnpmunfoycrp.",
+      "Studio Ops capability follow-up: promogrind.supabase.deploy remains MISSING after S115 discovery; Ark cargo 01JU85UQ71086118EE17EF4AF2 requests registry trial-ceiling truth plus capability mapping for project ref fjnpzjjyhnpmunfoycrp, then deploy 20260723021000_ai_quota_claim.sql and the five modified provider functions.",
       "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness."
     ]
   }

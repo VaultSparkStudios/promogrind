@@ -15,6 +15,8 @@ import { recordTrustReceipt } from "../lib/trustReceipts.js";
 import { recordPrediction } from "../lib/aiCalibration.js";
 import { noteCacheHit, noteCacheMiss } from "../ai/promptCache.js";
 
+const ADVISOR_RECEIPT_CONTRACT_VERSION = 2;
+
 function predictedProbabilityFromAdvisor(result = {}) {
   const score = Number.parseFloat(result.opportunityScore);
   if (Number.isFinite(score)) return Math.max(0.05, Math.min(0.95, score / 100));
@@ -72,7 +74,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         : undefined;
 
       const body = { promoText: sanitized, ...(userContext && { userContext }) };
-      const cacheKey = buildCacheKey("promo-advisor", body);
+      const cacheKey = buildCacheKey(`promo-advisor:v${ADVISOR_RECEIPT_CONTRACT_VERSION}`, body);
       const cached = readTimedCache(cacheKey, 12 * 60 * 60 * 1000, null);
       if (cached) {
         noteCacheHit(cached?.usage?.input_tokens || cached?.usage?.inputTokens || 0);
@@ -433,15 +435,18 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               </div>
             )}
 
-            {Array.isArray(result?.assumptions) && result.assumptions.length > 0 && (
+            {([...(result?.assumptions || []), ...(result?.missingInputs || []), ...(result?.sensitivityTriggers || [])].length > 0) && (
               <details style={{marginTop:4}}>
-                <summary style={{fontSize:10,color:K.mt,cursor:'pointer',userSelect:'none',listStyle:'none',display:'flex',alignItems:'center',gap:4}}>
-                  <span>▸</span><span style={{textDecoration:'underline',textDecorationStyle:'dotted'}}>Assumptions ({result.assumptions.length})</span>
+                <summary aria-label="Open decision receipt" style={{fontSize:10,color:K.mt,cursor:'pointer',userSelect:'none',listStyle:'none',display:'flex',alignItems:'center',gap:4}}>
+                  <span>▸</span><span style={{textDecoration:'underline',textDecorationStyle:'dotted'}}>Decision Receipt · {result.evidenceGrade || 'estimate'}</span>
                 </summary>
                 <div style={{marginTop:6,paddingLeft:12,borderLeft:`2px solid ${K.bd2}`}}>
-                  {result.assumptions.map((a, i) => (
-                    <div key={i} style={{fontSize:10,color:K.dm,lineHeight:1.6}}>• {a}</div>
-                  ))}
+                  {result.assumptions?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginBottom:2}}>Assumptions</div>}
+                  {result.assumptions?.map((item, i) => <div key={`a-${i}`} style={{fontSize:10,color:K.dm,lineHeight:1.6}}>• {item}</div>)}
+                  {result.missingInputs?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>Missing inputs</div>}
+                  {result.missingInputs?.map((item, i) => <div key={`m-${i}`} style={{fontSize:10,color:K.yl,lineHeight:1.6}}>• {item}</div>)}
+                  {result.sensitivityTriggers?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>What would change this</div>}
+                  {result.sensitivityTriggers?.map((item, i) => <div key={`s-${i}`} style={{fontSize:10,color:K.ac,lineHeight:1.6}}>• {item}</div>)}
                 </div>
               </details>
             )}

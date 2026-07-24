@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-07-23",
+  "session": 116,
+  "project": "PromoGrind",
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "product",
+  "axisWeights": {
+    "featureDepth": 2,
+    "innovation": 1,
+    "ux": 2,
+    "feedbackLoop": 1,
+    "engagement": 1,
+    "aiIntegration": 1,
+    "security": 1,
+    "speedOrganization": 1.5,
+    "tokenApiReduction": 1.5
+  },
+  "premiseVerification": {
+    "costBleeder": "rejected-at-repo-scope",
+    "evidence": "context/PROJECT_STATUS.json and all five provider functions already implement the S115 trial-ceiling contract; npm run check:integrity reports centralized + authenticated + metered. The red CANON-029 result is Studio Ops registry drift and remains Ark-owned.",
+    "liveValidation": "doctor 12/12; npm test 559/559; npm run verify:launch-local exit 0"
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "sil-forecast-format-tolerance",
+      "title": "Make SIL forecasting parse the live v3 ledger and fail closed on incomplete category coverage",
+      "tier": "fire",
+      "axis": "feedback loop / observability honesty / automation",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 7,
+      "effortHours": 2,
+      "priority": 50.0,
+      "evidence": "The freshly rendered startup brief reports Projected 0/1000 while the source ledger and PROJECT_STATUS are 1000/1000. parseSilHistory only accepts Total on the heading line and numbered category rows, but S108-S115 use a separate Total line and unnumbered rows.",
+      "recipe": "Parse both canonical heading/total layouts and both category-table layouts; normalize legacy/current labels; only emit a forecast when all ten categories are present; add fixtures spanning old and current formats plus a regression asserting S115 forecasts 1000 rather than zero.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Support the current S115 format." },
+        "L2": { "effortHours": 2, "recipe": "Format-tolerant parser, completeness invariant, and focused tests." },
+        "L3": { "effortHours": 3, "recipe": "L2 plus renderer self-validation against PROJECT_STATUS." }
+      }
+    },
+    {
+      "rank": 2,
+      "slug": "external-proof-contract-completeness",
+      "title": "Turn every external launch blocker into a typed, mechanically mirrored proof contract",
+      "tier": "fire",
+      "axis": "launch truth / security / cross-surface coherence",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 3,
+      "priority": 40.0,
+      "evidence": "PROJECT_STATUS has six external blockers, while LAUNCH_PROOFS defines only auth email, Stripe, friend beta, and affiliate coverage. Brevo delivery, Supabase deployment, and production capture configuration are not canonical proof objects; the ledger records mirroredInLaunchProofs=false but still passes --check.",
+      "recipe": "Add typed proof entries for Brevo delivery, Supabase quota/function deployment, and capture public-key configuration; make ledger --check fail when a blocker is unmirrored; expose deterministic coverage counts and regression-test classification/mirroring without completing any real-world proof.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add the three missing proof entries." },
+        "L2": { "effortHours": 2, "recipe": "Add completeness validation and focused tests." },
+        "L3": { "effortHours": 3, "recipe": "L2 plus deterministic coverage metrics and launch-gate wiring." }
+      }
+    },
+    {
+      "rank": 3,
+      "slug": "bundle-graph-budget",
+      "title": "Budget the real initial dependency graph and async-chunk ceiling, not a tiny filename heuristic",
+      "tier": "high",
+      "axis": "performance / mobile UX / observability honesty",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 8,
+      "effortHours": 3,
+      "priority": 36.0,
+      "evidence": "The launch gate prints main chunk index=5.4KB while the build also emits App=203.7KB, vendor=177.3KB, Supabase=215.7KB, and Sentry=493.6KB. The current checker explicitly ignores vendor/analytics chunks and cannot distinguish static initial imports from lazy chunks.",
+      "recipe": "Emit a Vite manifest; traverse static imports from the application entry; enforce raw initial-graph, per-chunk, and lazy-chunk ceilings with explicit largest-chunk diagnostics; export pure graph helpers and add synthetic-manifest regression tests.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Enforce a largest-chunk ceiling." },
+        "L2": { "effortHours": 2, "recipe": "Manifest-based initial graph plus async ceiling and tests." },
+        "L3": { "effortHours": 3, "recipe": "L2 plus deterministic diagnostics and environment overrides." }
+      }
+    },
+    {
+      "rank": 4,
+      "slug": "counterfactual-advisor-receipts",
+      "title": "Give every Promo Advisor verdict an inspectable counterfactual decision receipt",
+      "tier": "high",
+      "axis": "AI integration / decision UX / responsible engagement",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 9,
+      "effortHours": 4,
+      "priority": 30.0,
+      "evidence": "normalizeAdvisorResult accepts assumptions and the UI can display them, but SYSTEM_PROMPT does not request assumptions. Neither rule nor AI results identify missing inputs or concrete conditions that would change the verdict, leaving confidence non-actionable.",
+      "recipe": "Extract a shared pure result normalizer; require bounded assumptions, missingInputs, and sensitivityTriggers from the AI; derive honest rule-engine receipts from parsed terms; render a compact accessible Decision Receipt; preserve these fields when saving a workflow; add Deno normalization tests and React interaction coverage.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Request and render assumptions." },
+        "L2": { "effortHours": 3, "recipe": "Shared receipt normalizer, AI/rule parity, and tests." },
+        "L3": { "effortHours": 4, "recipe": "L2 plus workflow persistence and accessible counterfactual interaction." }
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "title": "Re-implement the S115 AI cost perimeter",
+      "reason": "False premise at repo scope; source and direct gates prove it is already shipped. Only the sibling registry remains stale."
+    },
+    {
+      "title": "Complete production launch proofs locally",
+      "reason": "Would fabricate real email, payment, human-test, deployment, or DNS evidence. Honest deferral is the correct outcome."
+    }
+  ]
+}

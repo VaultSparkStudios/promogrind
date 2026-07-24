@@ -3,8 +3,8 @@
 export const PROJECT_STATUS_MIRROR = {
   "source": "context/PROJECT_STATUS.json",
   "sourceLastUpdated": "2026-07-23",
-  "testsPassing": 559,
-  "testsTotal": 559,
+  "testsPassing": 568,
+  "testsTotal": 568,
   "testsLastRun": "2026-07-23",
   "validation": {
     "smokeCommand": {
@@ -20,7 +20,7 @@ export const PROJECT_STATUS_MIRROR = {
     "tests": {
       "label": "Vitest",
       "command": "npm test",
-      "lastKnown": "559/559 passing · verified 2026-07-23"
+      "lastKnown": "568/568 passing · verified 2026-07-23"
     },
     "build": {
       "label": "Build",

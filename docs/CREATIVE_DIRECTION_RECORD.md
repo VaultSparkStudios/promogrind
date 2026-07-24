@@ -270,3 +270,12 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: prefer structural, self-discovering contracts over checkbox fixes; keep AI cost posture bounded and calm; preserve explicit proof gaps rather than manufacturing screenshots, credentials, or deployment claims.
 - Why it matters: PromoGrind's “quietly elite operator desk” identity depends as much on truthful limits and calm claims as on feature depth.
 - Supersedes prior entry: reinforces the 2026-06-30 saturated `/arc` direction with explicit source-derived observability and non-alarmist cost treatment.
+
+### 2026-07-23 — Continuous best-in-history arc discipline (S116 reinforcement)
+
+- Category: Direction
+- Human input (close paraphrase): Run the complete arc without phase handback; exhaust the Unified Genius List and implement second-order innovation; quality must be genius-level and maximally creative; observability must derive from source truth and self-validate; flat-rate Max Plan cost is notional; honest rejection or deferral is a win.
+- Area affected: product quality / AI decision design / observability / verification / process
+- New required direction: keep pushing beyond an empty primary list into compound product refinements, prefer inspectable decision contracts over opaque AI output, and never manufacture external proof or sibling state to produce a green gate.
+- Why it matters: PromoGrind's quietly elite operator identity depends on disciplined, evidence-bound intelligence and on its system surfaces saying exactly what reality says.
+- Supersedes prior entry: reinforces S115 with explicit continuous-mission and second-order implementation discipline; no SOUL anti-goal changed.

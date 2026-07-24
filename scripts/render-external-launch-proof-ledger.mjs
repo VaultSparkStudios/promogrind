@@ -88,6 +88,8 @@ export function buildExternalLaunchProofLedger({ status, launchProofs }) {
     session: Number(status.currentSession) || 0,
     liveUrl: status.liveUrl || '',
     blockersOpen: blockerRows.length,
+    blockersMirrored: blockerRows.filter((row) => row.mirroredInLaunchProofs).length,
+    unmirroredBlockers: blockerRows.filter((row) => !row.mirroredInLaunchProofs).length,
     launchProofsBlocking: proofRows.filter((proof) => proof.blocking && proof.status !== 'complete').length,
     proofRows,
     blockerRows,
@@ -106,6 +108,8 @@ export function renderLedgerMd(ledger) {
     '',
     `- Live URL: ${ledger.liveUrl || 'not set'}`,
     `- Project-status external blockers: ${ledger.blockersOpen}`,
+    `- Proof-contract coverage: ${ledger.blockersMirrored}/${ledger.blockersOpen} blockers mirrored`,
+    `- Unmirrored blockers: ${ledger.unmirroredBlockers}`,
     `- Blocking canonical launch proofs: ${ledger.launchProofsBlocking}`,
     '',
     '## Canonical Launch Proofs',
@@ -146,6 +150,10 @@ function main() {
   }
 
   if (CHECK) {
+    if (ledger.unmirroredBlockers > 0) {
+      console.error(`external-launch-proof-ledger: ${ledger.unmirroredBlockers} blocker(s) are not mirrored by typed launch proofs.`);
+      process.exit(1);
+    }
     const current = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
     if (current !== rendered) {
       console.error('external-launch-proof-ledger: docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md is stale. Run node scripts/render-external-launch-proof-ledger.mjs');

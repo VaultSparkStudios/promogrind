@@ -94,6 +94,36 @@
           "detail": "Added and passed npm run smoke:ux for app-route/public-page integrity and top launch-page trust copy. Human friend-facing pass remains pending."
         }
       ]
+    },
+    "brevoDelivery": {
+      "label": "On-domain contact email delivery",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "details": "contact@promogrind.bet is published, but forwarding/copy delivery through Brevo has not been proven end to end.",
+      "nextStep": "Use the Studio Ops Brevo capability to verify SPF/DKIM and deliver a redacted test message through contact@promogrind.bet to founder@vaultsparkstudios.com.",
+      "evidenceRequired": ["Brevo inbound or forwarding route is active", "SPF and DKIM are verified", "redacted test message reaches the destination mailbox"],
+      "evidence": []
+    },
+    "supabaseDeployment": {
+      "label": "AI quota migration and provider deployment",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "details": "The quota migration and five authenticated provider functions are verified locally but are not claimed live until deployed to the explicit PromoGrind Supabase project.",
+      "nextStep": "Resolve promogrind.supabase.deploy through the secrets gateway, deploy migration 20260723021000_ai_quota_claim.sql and the five provider functions to fjnpzjjyhnpmunfoycrp, then record redacted deployment IDs.",
+      "evidenceRequired": ["quota migration applied to fjnpzjjyhnpmunfoycrp", "five provider functions deployed", "authenticated quota exhaustion smoke returns a hard 429"],
+      "evidence": []
+    },
+    "captureConfig": {
+      "label": "Production capture public-key configuration",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "details": "The capture page fails closed when its browser-safe Supabase anon key is absent; production configuration has not yet been evidenced.",
+      "nextStep": "Provide the browser-safe anon key through the production deploy configuration and run a real capture submission without committing the key to this repository.",
+      "evidenceRequired": ["production page exposes non-placeholder browser-safe configuration", "capture submission succeeds", "lead row is observable without exposing private credentials"],
+      "evidence": []
     }
   }
 }

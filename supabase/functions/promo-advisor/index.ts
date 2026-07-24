@@ -1,9 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
+import { normalizeAdvisorResult } from "../_shared/advisor-result.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
 import { parsePromoTextHeuristic } from "../_shared/promo-parse.ts";
-import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL, validateCalculatorSlug, validateConfidence, validatePromoType, validateRating } from "../_shared/validate.ts";
+import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL } from "../_shared/validate.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -21,36 +22,15 @@ const SYSTEM_PROMPT = `You are a sports betting promo analyst for PromoGrind. A 
 - "riskFlags": array of short risk strings (0-3 items)
 - "opportunityScore": integer 0-100
 - "opsTags": array of 1-4 short machine-friendly tags
+- "assumptions": array of 0-3 concrete assumptions used in the verdict
+- "missingInputs": array of 0-3 offer facts that were absent and would improve confidence
+- "sensitivityTriggers": array of 1-3 specific changes that would materially change the verdict
+- "evidenceGrade": one of "complete" | "partial" | "estimate"
 
 Be concise, practical, and product-native. Focus on real cash value after optimal hedging and route the user to the best next PromoGrind calculator when possible.
 
 ${SLUG_GUARDRAIL}
 ${PROMO_TYPE_GUARDRAIL}`;
-
-function normalizeAdvisorResult(input: Record<string, unknown>, fallbackText = "") {
-  const riskFlags = Array.isArray(input.riskFlags) ? input.riskFlags.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 3) : [];
-  const opsTags = Array.isArray(input.opsTags) ? input.opsTags.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean).slice(0, 4) : [];
-  const parsedScore = Number.parseInt(String(input.opportunityScore ?? ""), 10);
-  const assumptions = Array.isArray(input.assumptions) ? input.assumptions.map((a) => String(a || "").trim()).filter(Boolean).slice(0, 3) : [];
-
-  return {
-    verdict: String(input.verdict || "Analysis Complete").trim(),
-    rating: validateRating(input.rating),
-    confidence: validateConfidence(input.confidence),
-    promoType: validatePromoType(input.promoType),
-    calculatorSlug: validateCalculatorSlug(input.calculatorSlug),
-    explanation: String(input.explanation || fallbackText || "Analysis complete.").trim(),
-    ev: input.ev ?? null,
-    action: input.action ? String(input.action).trim() : null,
-    hedge: input.hedge ? String(input.hedge).trim() : null,
-    nextStep: input.nextStep ? String(input.nextStep).trim() : null,
-    riskFlags,
-    opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : 50,
-    opsTags,
-    assumptions,
-    analysisSource: input.analysisSource ? String(input.analysisSource).trim() : "ai",
-  };
-}
 
 function streamRuleEngineResult(req: Request, corsHeaders: HeadersInit, payload: Record<string, unknown>) {
   const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
