@@ -566,3 +566,26 @@ Impact: Future closeouts can call the expected script names without failing on m
 - Context: recurring sportsbook patterns can age, vary by jurisdiction, or disappear without notice; static calendar rows cannot establish current availability.
 - Decision: model every recurring row as a historical-pattern observation with market, jurisdiction, evidence state, freshness, confidence, and user-observed Seen/Not seen state.
 - Why this was chosen: the calendar remains operationally useful without turning remembered timing into a live-offer claim.
+
+## 2026-07-24 — Session 118
+
+### Decision: current evidence gates bankroll allocation
+
+- Status: accepted
+- Context: the Today surface carried honest freshness labels, but the adaptive plan still scored unverified historical cadence rows as actionable recommendations.
+- Decision: only promos with current operator observations may enter `topPromos`; stale, rejected, and unverified rows enter a separate verification queue and can switch the command plane into verification-first mode.
+- Why this was chosen: evidence labels must change system behavior, not merely decorate an otherwise unchanged recommendation.
+
+### Decision: semantic accent fills require semantic ink
+
+- Status: accepted
+- Context: 68 accent-filled controls reused the page background as foreground text. That happened to work in dark mode but failed light-theme contrast on a visible call to action.
+- Decision: each theme owns an explicit `ink` role for text on semantic fills, and a deterministic palette audit checks 37 meaningful foreground/background pairs per theme.
+- Why this was chosen: theme correctness belongs in semantic roles and executable contracts, not in a one-theme color coincidence.
+
+### Decision: release blockers have one generated source
+
+- Status: accepted
+- Context: `launchState.js` retained an unused handwritten blocker array alongside the generated launch-proof ledger.
+- Decision: delete the parallel prose ledger and regression-test that launch state derives from `launchProofs.generated.js`.
+- Why this was chosen: unused observability sources still create future contradiction risk; one mechanically generated source is safer and easier to audit.

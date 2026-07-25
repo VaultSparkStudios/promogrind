@@ -402,3 +402,13 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Implementation commit `551f256` reached `origin/main`; brief-format run `30082118132`, CI run `30082118152`, and Deploy Pages run `30082118153` all passed.
 - The Pages workflow's production launch verification and dashboard smoke passed. Post-deploy live probing confirms the root and all six standard files return 200, including `/.well-known/security.txt` and `/favicon.ico`.
 - Release-state promotion remains NO-GO: production still omits CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. This is recorded as a hosting-edge blocker, not a code-pass claim.
+
+## 2026-07-24 — Session 118 Truth Update
+
+- Promo decision truth improved: Today, Brief, and Dashboard no longer allow unverified historical cadence patterns to masquerade as actionable bankroll allocations. Current observations populate the action plan; other rows populate a verification queue with explicit reasons.
+- Theme truth improved: colored controls no longer infer foreground text from the page background. Dark and light themes own explicit semantic ink, and 37 meaningful contrast pairs per theme are mechanically checked.
+- Launch truth simplified: the unused handwritten `LAUNCH_BLOCKERS` ledger was removed; runtime blockers derive from the generated launch-proof source and regression coverage enforces that ownership.
+- Innovation-ledger truth repaired: refreshing the pack preserves shipped same-session second-order outcomes and reports the empty primary Genius List from the current generated surface.
+- Verification truth: 588/588 Vitest checks across 75 files and the full launch-local chain passed with direct exit 0. Four viewport/theme screenshots were captured and hashed; live computed-style inspection found zero contrast failures in both themes.
+- Visual caveat remains honest: AI pixel inspection is PARTIAL because the connected image viewer failed. Browser evidence and deterministic contrast gates are green, but the unavailable review step is not claimed.
+- Release truth remains NO-GO for SPARKED: production still omits six required security headers and the established external production proofs remain pending.

@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-24 (Session 117 closeout) -->
+<!-- generated-at: 2026-07-25 (Session 118 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S117 ════════════════════════╗
-║  Date: 2026-07-24  ·  SIL: 999/1000  ·  Velocity: 6 stable       ║
+╔══ SESSION CLOSEOUT · PromoGrind · S118 ════════════════════════╗
+║  Date: 2026-07-25  ·  SIL: 999/1000  ·  Velocity: 6 stable       ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
+║  ✓ chore(S117): record deployment proof                          ║
+║  ✓ feat(S117): harden public trust and evidence contracts        ║
 ║  ✓ chore(S116): reconcile closeout-generated state               ║
 ║  ✓ feat(S116): make decision and launch truth self-validating    ║
-║  ✓ chore(S115): freeze canonical closeout board                  ║
-║  ✓ fix(S115): make closeout genius status truthful               ║
-║  ✓ chore(S115): record final deployment proof                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -34,14 +34,14 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 168 files  ·  M:139 A:0 D:6 ?:23                       ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 26 files  ·  M:24 A:0 D:0 ?:2                          ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -51,9 +51,9 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         582/582                                          ║
-║  IGNIS:         1d ago                                           ║
-║  Truth:         green-with-external-proof-follow-ups             ║
+║  Tests:         588/588                                          ║
+║  IGNIS:         3d ago                                           ║
+║  Truth:         green-with-external-proof-and-partial-pixel-rev  ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗

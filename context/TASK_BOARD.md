@@ -9,9 +9,19 @@
 
 ## Next
 
-- run the desktop/mobile dark/light screenshot matrix when the connected browser runtime is available; S117 visual verification is explicitly SKIPPED after the runtime failed before launch
-- inspect S117 CI/deployment and refresh the live web probe against the deployed commit
+- repeat AI pixel inspection when the connected image viewer is healthy; S118 captured and hashed the complete desktop/mobile dark/light matrix and found zero live computed-style contrast failures, but does not claim the unavailable pixel-review step
+- inspect S118 CI/deployment and refresh the live web probe against the deployed commit
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
+
+## Shipped This Session (S118)
+
+- evidence-aware-promo-command-plane — **DONE**: current operator observations drive actionable bankroll allocation; unverified historical cadence rows enter an explicit verification queue across Today, Brief, and Dashboard.
+- semantic-theme-contrast-contract — **DONE**: separated accent ink from page backgrounds, repaired 68 accent-filled controls, and launch-tested 37 semantic foreground/background pairs per theme.
+- single-source-launch-blockers — **DONE**: deleted the unused handwritten blocker ledger and locked generated launch-proof ownership with regression coverage.
+- verification-first-operating-mode — **DONE (second-order)**: the adaptive plan enters verify mode when historical patterns exist without current evidence.
+- semantic-accent-ink — **DONE (second-order)**: each theme exposes a human-best semantic foreground for colored fills.
+- self-preserving-innovation-ledger — **DONE (second-order)**: regeneration retains same-session shipped outcomes and reports the exhausted primary list truthfully.
+- release-parity-evidence — **PARTIAL / HONEST**: four viewport/theme screenshots captured and hashed; browser/runtime contrast passed, while OS-level AI pixel inspection remained unavailable and is not claimed.
 
 ## Shipped This Session (S117)
 

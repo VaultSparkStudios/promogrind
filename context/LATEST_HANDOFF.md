@@ -1,50 +1,51 @@
 # Latest Handoff — PromoGrind
 
-Session Intent (S117, Codex): Run the complete agent-neutral `/arc` as one continuous mission through `/start → /audit → /implement → /closeout`; exhaust verified repo-owned and second-order work, preserve honest external-proof boundaries, run the public-app release gates, and finish with canonical write-back plus direct-main push.
+Session Intent (S118, Codex): Run the complete agent-neutral `/arc` as one continuous mission through `/start → /audit → /implement → /closeout`; exhaust verified repo-owned and second-order work, preserve honest external-proof boundaries, run the public-app release gates, and finish with canonical write-back plus direct-main push.
 
 Date: 2026-07-24
-Session: 117
+Session: 118
 Agent: Codex
 Status: implementation saturated; repo-owned gates green; release-state promotion remains NO-GO
 
-## Where We Left Off (Session 117)
+## Where We Left Off (Session 118)
 
-S117 shipped all six ranked audit items and exhausted the repo-owned implementation plan. The public trust contracts now distinguish local/self-attested evidence from independent verification, Advisor profile context is consent-gated and redacted, recurring promo schedules are explicitly historical observations, multilingual claims are mechanically checked, and the universal release surface is complete.
+S118 exhausted the repo-owned plan and shipped three ranked audit items plus three second-order innovations. Promo decisions now require fresh operator evidence before entering the bankroll allocation plan, theme contrast is governed by semantic foreground roles instead of background-color reuse, and launch blockers have one generated source of truth.
 
 ## What shipped
 
-1. **Public secret and topology purge** — removed the tracked staging script containing an exposed webhook credential/topology, expanded the scanner to catch unquoted shell assignments, added regressions, and shipped a redacted rotation request through Ark (`01JU98MC5M8FC5EDBEE214F795`).
-2. **Passport and provenance honesty** — replaced browser-only authenticity language with versioned SHA-256 self-attestation, strict schemas and bounds, DOM-safe verification, and self-attested local receipt chains.
-3. **Advisor privacy boundary** — profile context is local by default, requires explicit opt-in, redacts supported identifiers on client and server, bounds server context, and emits privacy receipts/telemetry.
-4. **Promo observation truth** — every calendar row is a historical pattern with market/evidence metadata; freshness, confidence, and Seen/Not seen controls avoid presenting schedules as live offers.
-5. **Multilingual claims contract** — English, Spanish, and Portuguese public copy now carries sober execution-risk caveats, with context-aware deterministic checks across source, metadata, JSON-LD, and 69 static pages.
-6. **Release surface completion** — added navigation manifest, security contact, favicon, rollback runbook, exact proprietary footer enforcement, local/live release checks, and regression coverage.
+1. **Evidence-aware promo command plane** — Today, Brief, and Dashboard surfaces distinguish current observations from historical cadence patterns; unverified rows enter a verification queue rather than actionable bankroll allocation.
+2. **Semantic theme contrast contract** — introduced explicit accent ink, repaired 68 accent-filled controls, and added deterministic Web Content Accessibility Guidelines contrast checks across 37 semantic pairs per theme.
+3. **Single-source launch blockers** — removed the unused handwritten blocker ledger and added a regression proving runtime blockers derive from `launchProofs.generated.js`.
+4. **Verification-first operating mode** — when no current observations exist, the adaptive plan explicitly asks the operator to verify the board before allocating bankroll.
+5. **Semantic accent ink** — dark and light themes independently choose the foreground used on semantic accent fills rather than treating the page background as text ink.
+6. **Self-preserving innovation ledger** — regeneration now preserves same-session shipped second-order outcomes and exposes the true empty-primary-list signal.
 
 ## Verification
 
 - `npm run verify:launch-local` — green, direct exit 0.
-- Vitest — 74 files, 582/582 passing.
-- Advisor privacy Deno tests — 3/3; Promo Advisor Deno type-check green.
-- Public claims — 282 files, 10 rules, 0 findings.
-- Source integrity — 356 files, 0 repairs; public `dist/` exposure — 0 findings; proof replay — 0 regressions.
-- Production browser smoke — green; UX inventory covers 61 routes and 100 public HTML surfaces.
+- Vitest — 75 files, 588/588 passing.
+- Public claims — 283 files, 10 rules, 0 findings.
+- Source integrity — 358 files, 0 repairs; public `dist/` exposure — 0 findings; proof replay — 0 regressions.
+- UX inventory — 61 app routes and 100 public HTML surfaces.
 - Bundle graph — 179.1KB raw / 60.0KB gzip initial; largest async Sentry chunk 482.1KB raw / 159.2KB gzip.
+- Theme/device evidence — four desktop/mobile dark/light screenshots captured and hashed in `docs/RELEASE_PARITY.md`; live computed-style audit found 0 failing visible text nodes in each theme.
 - `git diff --check` — clean.
-- Remote S117 evidence — brief-format 30082118132, CI 30082118152, and Deploy Pages 30082118153 passed for implementation commit 551f256; production launch verification and dashboard smoke passed.
+- Doctor — 12/12 passing with `blockingFailing: 0` before final publication.
+- Ark — impact broadcast `01JUDI3T9K3C970BE1CCD58752`; shared lock-writer defect request `01JUDI42TL8FD77A64F740A2A4`.
 
 ## Honest deferrals
 
-- `npm run verify:web-live -- --url https://promogrind.bet` remains red for six missing live headers: Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. All six standard files now return 200 after deployment; the header failure remains edge-owned.
-- The required desktop/mobile dark/light screenshot matrix was SKIPPED, not passed: the connected browser runtime failed before launch with a Windows DPAPI error.
+- `npm run verify:web-live -- --url https://promogrind.bet` remains red for six missing live headers: Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. The Cloudflare zone probe confirmed active zones and TLS/HTTPS settings, but the available credential path did not authenticate for the response-header ruleset API; no unsafe or unverified edge mutation was attempted.
+- AI pixel inspection is PARTIAL, not passed: browser screenshots and runtime contrast checks succeeded, but the connected image viewer failed with a Windows credential-protection error.
 - Rotate the exposed webhook credential referenced by Ark cargo `01JU98MC5M8FC5EDBEE214F795`.
 - Deploy the pending Supabase migration/functions once `promogrind.supabase.deploy` resolves to the explicit project ref.
 - Production auth email, Stripe purchase, friend-beta, Brevo forwarding, and capture public-key proofs remain external evidence gates.
 
 ## Next actions
 
-1. Observe S117 CI and deployment, then rerun the live web contract.
-2. Configure the six security headers at the header-capable edge and verify them live.
-3. Complete the webhook rotation and Supabase deployment through their mapped capabilities.
-4. Record the remaining external proofs; run the dark/light desktop/mobile matrix once browser control reconnects.
+1. Configure the six response headers through a verified Cloudflare Transform Rules credential and rerun the live contract.
+2. Complete the webhook rotation and Supabase deployment through their mapped capabilities.
+3. Record the remaining external production proofs without inferring evidence.
+4. Repeat AI pixel inspection when the connected viewer is healthy; retain the deterministic contrast contract as the continuous gate.
 
-Intent Outcome: Achieved for every repo-owned phase; release-state promotion remains honestly deferred.
+Intent Outcome: Achieved for every repo-owned phase and saturation gate; release-state promotion remains honestly deferred.

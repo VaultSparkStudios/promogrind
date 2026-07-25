@@ -279,3 +279,13 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: keep pushing beyond an empty primary list into compound product refinements, prefer inspectable decision contracts over opaque AI output, and never manufacture external proof or sibling state to produce a green gate.
 - Why it matters: PromoGrind's quietly elite operator identity depends on disciplined, evidence-bound intelligence and on its system surfaces saying exactly what reality says.
 - Supersedes prior entry: reinforces S115 with explicit continuous-mission and second-order implementation discipline; no SOUL anti-goal changed.
+
+### 2026-07-24 — Verification must change behavior, not decorate it (S118 reinforcement)
+
+- Category: Direction
+- Human input (close paraphrase): Run the entire arc continuously; exhaust primary and second-order innovation; ship at a genius-level, best-in-history bar; derive observability from source truth; never fabricate gate data; treat honest deferral as a win.
+- Area affected: product quality / evidence design / theme craft / verification / process
+- Previous state: Promo freshness appeared in user-facing labels, but did not fully constrain the adaptive plan; theme foreground behavior relied on dark-mode coincidence; a second handwritten launch-blocker source remained.
+- New required direction: make evidence change product decisions, encode visual quality in semantic contracts, and eliminate parallel observability sources before they drift.
+- Why it matters: PromoGrind's quietly elite operator identity requires the system to act as soberly as it speaks and remain legible in every human-best theme.
+- Supersedes prior entry: reinforces S115–S117 saturated excellence with an explicit behavior-over-label and semantic-theme standard; no SOUL anti-goal changed.

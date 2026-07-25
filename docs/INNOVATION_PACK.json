@@ -1,18 +1,58 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-07-24T01:27:42.469Z",
+  "generatedAt": "2026-07-25T21:06:57.891Z",
   "project": "PromoGrind",
-  "session": 116,
+  "session": 118,
   "sourceSignals": {
     "geniusListEmpty": true,
-    "taskBoardBytes": 63378,
+    "taskBoardBytes": 66110,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
     "largeFiles": 0,
-    "launchDeferrals": 6
+    "launchDeferrals": 7,
+    "secondOrderShipped": 3
   },
   "ranked": [
+    {
+      "status": "shipped",
+      "effort": "medium",
+      "effortHours": 2,
+      "priority": 30,
+      "id": "verification-first-operating-mode",
+      "tier": "fire",
+      "axis": "responsible engagement / decision intelligence",
+      "impact": 10,
+      "innovation": 9,
+      "evidence": "Primary evidence-boundary implementation left a no-actionable state that needed an explicit operating posture.",
+      "recipe": "Enter verify mode when cadence patterns match but no recent observations exist; explain why and route the operator to evidence collection."
+    },
+    {
+      "status": "shipped",
+      "effort": "medium",
+      "effortHours": 2,
+      "priority": 28,
+      "id": "semantic-accent-ink",
+      "tier": "fire",
+      "axis": "accessibility / design system",
+      "impact": 9,
+      "innovation": 8,
+      "evidence": "Live computed-style audit found accent-filled controls at 2.71:1 after semantic foreground colors were darkened.",
+      "recipe": "Separate accent ink from page background by theme and migrate all semantic-filled controls; verify live computed contrast."
+    },
+    {
+      "status": "shipped",
+      "effort": "low",
+      "effortHours": 0.5,
+      "priority": 24,
+      "id": "self-preserving-innovation-ledger",
+      "tier": "fire",
+      "axis": "observability / process automation",
+      "impact": 8,
+      "innovation": 8,
+      "evidence": "Final saturation refresh exposed JSON/Markdown drift: regeneration could erase already-shipped same-session outcomes.",
+      "recipe": "Preserve same-session shipped outcomes during deterministic regeneration, expose an explicit session override, and validate the empty primary-list signal."
+    },
     {
       "status": "honest-deferral",
       "effort": "external",
@@ -23,7 +63,7 @@
       "axis": "truth / launch-readiness",
       "impact": 10,
       "innovation": 1,
-      "evidence": "6 real-world proof gates remain in PROJECT_STATUS.blockers.",
+      "evidence": "7 real-world proof gates remain in PROJECT_STATUS.blockers.",
       "recipe": "Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists."
     }
   ],
@@ -38,7 +78,8 @@
       "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
       "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
       "Studio Ops capability follow-up: promogrind.supabase.deploy remains MISSING after S115 discovery; Ark cargo 01JU85UQ71086118EE17EF4AF2 requests registry trial-ceiling truth plus capability mapping for project ref fjnpzjjyhnpmunfoycrp, then deploy 20260723021000_ai_quota_claim.sql and the five modified provider functions.",
-      "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness."
+      "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness.",
+      "AI pixel inspection remains partial: S118 captured and hashed desktop/mobile dark/light screenshots and found zero live computed-style contrast failures, but the connected image viewer failed before pixel review."
     ]
   }
 }

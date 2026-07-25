@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.3",
   "date": "2026-07-24",
-  "session": 117,
+  "session": 118,
   "project": "PromoGrind",
   "intentOutcome": "achieved-saturated-local-verified",
   "writeback": [
@@ -11,29 +11,30 @@
     "WORK_LOG",
     "DECISIONS",
     "SELF_IMPROVEMENT_LOOP",
-    "CREATIVE_DIRECTION_RECORD-reviewed-no-change",
+    "CREATIVE_DIRECTION_RECORD",
     "TRUTH_AUDIT",
     "PROJECT_STATUS",
-    "audit-artifacts"
+    "audit-artifacts",
+    "RELEASE_PARITY"
   ],
   "shipped": [
-    "public-secret-topology-purge",
-    "passport-provenance-self-attestation",
-    "advisor-privacy-boundary",
-    "promo-observation-truth",
-    "multilingual-claims-contract",
-    "release-surface-completion"
+    "evidence-aware-promo-command-plane",
+    "semantic-theme-contrast-contract",
+    "single-source-launch-blockers",
+    "verification-first-operating-mode",
+    "semantic-accent-ink",
+    "self-preserving-innovation-ledger"
   ],
   "verification": {
-    "tests": "582/582 passing across 74 files",
+    "tests": "588/588 passing across 75 files",
     "launchLocal": "pass; direct exit 0",
-    "deno": "3/3 Advisor privacy tests plus promo-advisor type-check",
-    "claims": "282 files, 10 rules, 0 findings",
-    "integrity": "356 files, 0 repairs; public dist 0 findings; proof replay 0 regressions",
-    "ux": "production browser smoke pass; 61 routes and 100 public HTML surfaces",
+    "claims": "283 files, 10 rules, 0 findings",
+    "integrity": "358 files, 0 repairs; public dist 0 findings; proof replay 0 regressions",
+    "ux": "61 app routes and 100 public HTML surfaces; four desktop/mobile dark/light renders captured",
+    "contrast": "37 semantic pairs per theme plus live computed-style scan; 0 failures in dark and light",
     "bundle": "179.1KB raw / 60.0KB gzip initial; 482.1KB raw / 159.2KB gzip largest async",
-    "live": "NO-GO: six required security headers absent before S117 deployment",
-    "remote": "551f256: brief 30082118132 pass; CI 30082118152 pass; Deploy Pages 30082118153 pass; production launch verification and dashboard smoke pass; standard files 6/6 live; six edge headers absent"
+    "live": "NO-GO: six required security headers absent",
+    "remote": "pending direct-main publication; S117 remains latest verified deployment"
   },
   "honestDeferrals": [
     "webhook credential rotation",
@@ -44,6 +45,6 @@
     "friend beta",
     "Brevo forwarding",
     "production capture public-key proof",
-    "manual dark/light desktop/mobile screenshot matrix"
+    "AI pixel inspection after connected viewer recovery"
   ]
 }

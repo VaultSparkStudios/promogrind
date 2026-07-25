@@ -13,9 +13,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 117,
-  "currentFocus": "S117 shipped all six ranked audit items: public secret/topology cleanup, self-attested passport/provenance, consent-gated Advisor context, evidence-aware promo observations, multilingual claim enforcement, and the universal release surface. Repo-owned verification: 582/582 Vitest, 3/3 Deno privacy tests, Deno type-check, browser smoke, and launch-local direct exit 0.",
-  "nextMilestone": "Deploy S117, configure and verify six production security headers, rotate the exposed webhook credential via Ark request 01JU98MC5M8FC5EDBEE214F795, deploy the pending Supabase migration/functions to fjnpzjjyhnpmunfoycrp, and complete the remaining external proof ledger plus manual theme/device matrix.",
+  "currentSession": 118,
+  "currentFocus": "S118 exhausted the repo-owned Genius List and shipped evidence-gated promo allocation, semantic theme ink with deterministic contrast contracts, and single-source generated launch blockers. Second-order verification-first mode, accent ink, and self-preserving innovation-ledger regeneration are live. Repo-owned verification: 588/588 Vitest and launch-local direct exit 0.",
+  "nextMilestone": "Publish S118, configure and verify six production security headers through an authenticated Cloudflare Transform Rules capability, rotate the exposed webhook credential, deploy the pending Supabase migration/functions, and complete the remaining external proof ledger plus AI pixel inspection.",
   "blockers": [
     "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
@@ -25,30 +25,30 @@
     "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness.",
     "Rotate the exposed webhook credential through the Studio secrets gateway; redacted Ark request 01JU98MC5M8FC5EDBEE214F795 is pending.",
     "Production edge is missing Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy.",
-    "Manual desktop/mobile dark/light screenshot matrix remains unavailable because the connected browser runtime failed before launch."
+    "AI pixel inspection remains partial: S118 captured and hashed desktop/mobile dark/light screenshots and found zero live computed-style contrast failures, but the connected image viewer failed before pixel review."
   ],
   "lastUpdated": "2026-07-24",
   "silScore": 999,
-  "silAvg3": 999.7,
+  "silAvg3": 999.3,
   "silVelocity": 6,
   "silDebt": "stable",
-  "silLastSession": 117,
+  "silLastSession": 118,
   "silMax": 1000,
   "silSparkline": [
     1000,
     1000,
     1000,
-    1000,
+    999,
     999
   ],
   "ignisScore": 44184,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-23",
-  "testsPassing": 582,
-  "testsTotal": 582,
+  "testsPassing": 588,
+  "testsTotal": 588,
   "testsLastRun": "2026-07-24",
-  "lastDeployStatus": "S117 implementation commit 551f256 deployed successfully via brief run 30082118132, CI run 30082118152, and GitHub Pages run 30082118153. Production launch verification and dashboard smoke passed; all six standard files return 200. Live edge contract remains NO-GO because six required response headers are absent.",
-  "truthAuditStatus": "green-with-external-proof-follow-ups",
+  "lastDeployStatus": "S118 repo-owned gates are green locally; publication and remote deployment evidence pending. S117 remains the latest verified production deployment. Live edge contract remains NO-GO because six required response headers are absent.",
+  "truthAuditStatus": "green-with-external-proof-and-partial-pixel-review-follow-ups",
   "truthAuditLastRun": "2026-07-24",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
@@ -56,12 +56,12 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 582/582 across 74 files in S117 on the exact package-lock tree"
+      "status": "passing 588/588 across 75 files in S118 on the exact package-lock tree"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S117 (direct exit 0) with 582/582 tests, source/claims/AI-entitlement integrity, auth/launch/UX/browser smokes, dist exposure, proof replay, release surface, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S118 (direct exit 0) with 588/588 tests, source/claims/AI-entitlement integrity, auth/launch/UX/browser smokes, dist exposure, proof replay, release surface, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
@@ -111,7 +111,7 @@
     "automationCoverage": 99
   },
   "doctorScore": {
-    "date": "2026-07-24",
+    "date": "2026-07-25",
     "passing": 12,
     "warning": 0,
     "failing": 0,
