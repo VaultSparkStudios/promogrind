@@ -182,7 +182,7 @@ export default function UserMenu({
             display: 'inline-flex', alignItems: 'center',
             padding: '8px 18px', borderRadius: 8, minHeight: 36,
             background: K.gn, border: 'none',
-            color: '#0a0e17', fontSize: 12, fontWeight: 700, fontFamily: font,
+            color: K.ink, fontSize: 12, fontWeight: 700, fontFamily: font,
             textDecoration: 'none', whiteSpace: 'nowrap',
             boxShadow: `0 0 20px ${K.gn}35`,
             transition: 'opacity 0.15s, box-shadow 0.15s',
@@ -332,7 +332,7 @@ export default function UserMenu({
                       onClick={saveName}
                       style={{
                         padding: '5px 10px', background: K.gn, border: 'none',
-                        borderRadius: 7, color: '#0a0e17', fontSize: 11,
+                        borderRadius: 7, color: K.ink, fontSize: 11,
                         fontWeight: 700, cursor: 'pointer', fontFamily: font,
                       }}
                     >✓</button>

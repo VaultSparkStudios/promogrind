@@ -139,7 +139,7 @@ export default function DailyMissionsPanel({ navigate }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all 0.25s',
             }}>
-              {m.completed && <span style={{ fontSize: 10, color: K.bg, fontWeight: 700 }}>✓</span>}
+              {m.completed && <span style={{ fontSize: 10, color: K.ink, fontWeight: 700 }}>✓</span>}
             </span>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: m.completed ? K.mt : K.tx, textDecoration: m.completed ? 'line-through' : 'none' }}>

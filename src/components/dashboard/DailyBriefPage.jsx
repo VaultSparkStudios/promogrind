@@ -82,9 +82,10 @@ export default function DailyBriefPage() {
         </div>
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 12 }}>Today&apos;s Promos</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 4 }}>Patterns to verify today</div>
+          <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 12 }}>Historical cadence only. Confirm the offer in your sportsbook before acting.</div>
           {dashboardSnapshot.todayPromos.length === 0 ? (
-            <div style={{ fontSize: 12, color: K.mt }}>No recurring promos found for today.</div>
+            <div style={{ fontSize: 12, color: K.mt }}>No historical cadence patterns match today.</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {dashboardSnapshot.todayPromos.slice(0, 8).map((promo, index) => (
@@ -93,7 +94,7 @@ export default function DailyBriefPage() {
                     <span style={{ fontSize: 12, fontWeight: 600, color: K.tx }}>{promo.promo}</span>
                     <span style={{ fontSize: 11, color: K.dm, marginLeft: 6 }}>{promo.book}</span>
                   </div>
-                  <span style={{ fontSize: 11, color: K.gn, fontFamily: font }}>{promo.value}</span>
+                  <div style={{ textAlign: "right" }}><div style={{ fontSize: 11, color: K.dm, fontFamily: font }}>Modeled {promo.value}</div><div style={{ fontSize: 9, color: promo.freshness?.state === "current" ? K.gn : K.yl }}>{promo.evidenceLabel || "Historical pattern · verify"}</div></div>
                 </div>
               ))}
             </div>

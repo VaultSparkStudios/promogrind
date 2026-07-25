@@ -245,7 +245,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             href={signUpHref}
             style={{
               display:'block',padding:'10px 0',borderRadius:8,
-              background:K.gn,color:'#0a0e17',fontSize:12,fontWeight:700,
+              background:K.gn,color: K.ink,fontSize:12,fontWeight:700,
               textDecoration:'none',fontFamily:font,
             }}
           >

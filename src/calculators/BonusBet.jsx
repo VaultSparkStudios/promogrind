@@ -199,7 +199,7 @@ export default function BonusBet() {
               <div style={{ marginTop: 14, padding: 12, background: `${K.pp}08`, border: `1px solid ${K.pp}30`, borderRadius: 8, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                 <div><div style={{ fontSize: 11, fontWeight: 700, color: K.pp }}>⚡ Track this win + get live arb alerts</div><div style={{ fontSize: 10, color: K.mt }}>VaultSparked — $24.99/mo · First 7 days free</div></div>
                 <div style={{ display: "flex", gap: 6 }}>
-                  <button onClick={() => { window.location.hash = "#/upgrade"; }} style={{ padding: "4px 10px", background: K.pp, border: "none", borderRadius: 4, color: K.bg, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>Upgrade →</button>
+                  <button onClick={() => { window.location.hash = "#/upgrade"; }} style={{ padding: "4px 10px", background: K.pp, border: "none", borderRadius: 4, color: K.ink, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>Upgrade →</button>
                   <button onClick={() => { try { localStorage.setItem("pg_upsell_bb_dismissed", "1"); } catch {} setBbUpsellDismissed(true); }} style={{ padding: "4px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 10, cursor: "pointer", fontFamily: font }}>Dismiss</button>
                 </div>
               </div>

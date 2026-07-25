@@ -91,7 +91,7 @@ export function StackBuilder({ proStatus }) {
               <div style={{fontSize:12,fontWeight:700,color:K.pp}}>⚡ VaultSparked Feature</div>
               <div style={{fontSize:11,color:K.mt}}>Start your free 7-day trial — no credit card required</div>
             </div>
-            <button onClick={()=>startTrial && startTrial()} style={{padding:'6px 14px',background:K.pp,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:'pointer',fontFamily:font}}>Try Free →</button>
+            <button onClick={()=>startTrial && startTrial()} style={{padding:'6px 14px',background:K.pp,border:'none',borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:'pointer',fontFamily:font}}>Try Free →</button>
           </div>
         )}
 

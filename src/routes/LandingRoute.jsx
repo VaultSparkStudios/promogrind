@@ -157,7 +157,7 @@ export default function LandingRoute() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 20 }}>
                 <button
                   onClick={() => navigate("/dashboard")}
-                  style={{ padding: "14px 18px", background: K.gn, border: "none", borderRadius: 12, color: "#0a0e17", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: font, minWidth: viewport.isPhone ? "100%" : 210 }}
+                  style={{ padding: "14px 18px", background: K.gn, border: "none", borderRadius: 12, color: K.ink, fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: font, minWidth: viewport.isPhone ? "100%" : 210 }}
                 >
                   Open PromoGrind App →
                 </button>

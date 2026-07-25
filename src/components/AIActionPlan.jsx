@@ -98,7 +98,7 @@ export function AIActionPlan({ proStatus }) {
           </div>
         ))}
       </div>
-      <button onClick={()=>{window.location.hash='#/upgrade';}} style={{width:'100%',padding:'10px',background:K.pp,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>
+      <button onClick={()=>{window.location.hash='#/upgrade';}} style={{width:'100%',padding:'10px',background:K.pp,border:'none',borderRadius:6,color: K.ink,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>
         Unlock AI Action Plan — VaultSparked →
       </button>
     </div></div>
@@ -116,7 +116,7 @@ export function AIActionPlan({ proStatus }) {
       {!plan&&!loading&&(
         <div>
           <div style={{fontSize:12,color:K.mt,marginBottom:16,lineHeight:1.7}}>Claude AI will analyze your book roster, bankroll, and recent P/L to create a personalized action plan for the week.</div>
-          <button onClick={generate} style={{width:'100%',padding:'12px',background:K.gn,border:'none',borderRadius:6,color:K.bg,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>Generate My Plan →</button>
+          <button onClick={generate} style={{width:'100%',padding:'12px',background:K.gn,border:'none',borderRadius:6,color: K.ink,fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:font}}>Generate My Plan →</button>
         </div>
       )}
       {loading&&<div style={{textAlign:'center',padding:'24px 0',color:K.mt,fontSize:12}}><div style={{fontSize:20,marginBottom:8}}>⚡</div>Analyzing your book roster and recent P/L…</div>}

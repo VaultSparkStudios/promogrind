@@ -93,7 +93,7 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
               trackEvent("next_best_action_clicked", { key: action.key, playbookId: playbook.id });
               navigate(normalizeAppRoute(playbook.steps[0]?.calculatorSlug || "dashboard"));
             }}
-            style={{ padding: "9px 14px", background: K.gn, border: "none", borderRadius: 8, color: K.bg, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
+            style={{ padding: "9px 14px", background: K.gn, border: "none", borderRadius: 8, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
           >
             Run playbook →
           </button>
@@ -113,7 +113,7 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
           </div>
           <button
             onClick={() => { trackEvent("next_best_action_clicked", { key: action.key }); navigate(normalizeAppRoute(action.slug)); }}
-            style={{ padding: "9px 14px", background: actionColor, border: "none", borderRadius: 8, color: K.bg, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
+            style={{ padding: "9px 14px", background: actionColor, border: "none", borderRadius: 8, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
           >
             {action.cta} →
           </button>

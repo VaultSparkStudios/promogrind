@@ -56,7 +56,7 @@ const TeamAccounts = () => {
             onChange={e => setTeamName(e.target.value)}
             style={{...S.input,flex:1,padding:'10px 14px',fontSize:14}}
           />
-          <button onClick={createTeam} style={{padding:'10px 20px',background:K.pp,color:K.bg,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontFamily:font}}>
+          <button onClick={createTeam} style={{padding:'10px 20px',background:K.pp,color: K.ink,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontFamily:font}}>
             Create Team
           </button>
         </div>
@@ -89,7 +89,7 @@ const TeamAccounts = () => {
               onChange={e => setInviteEmail(e.target.value)}
               style={{...S.input,flex:1}}
             />
-            <button onClick={inviteMember} style={{padding:'8px 16px',background:K.pp,color:K.bg,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13,fontFamily:font}}>
+            <button onClick={inviteMember} style={{padding:'8px 16px',background:K.pp,color: K.ink,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13,fontFamily:font}}>
               Invite
             </button>
           </div>

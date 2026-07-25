@@ -261,7 +261,7 @@ const LiveScanner = ({ proStatus, mode }) => {
           ))}
         </div>
         <div style={{marginBottom:8}}>
-          <button onClick={handleUpgrade} disabled={upgrading} style={{padding:"12px 28px",background:K.yl,border:"none",borderRadius:8,color:K.bg,fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:fontD,opacity:upgrading?0.7:1}}>
+          <button onClick={handleUpgrade} disabled={upgrading} style={{padding:"12px 28px",background:K.yl,border:"none",borderRadius:8,color: K.ink,fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:fontD,opacity:upgrading?0.7:1}}>
             {upgrading?"Redirecting to checkout…":"Start 7-Day Free Trial →"}
           </button>
         </div>

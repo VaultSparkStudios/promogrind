@@ -202,7 +202,7 @@ export function MemberWelcomeCard({ navigate, proStatus }) {
       </div>
 
       <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-        <button onClick={() => navigate('/bonus-bet')} style={{padding:'7px 12px',background:K.gn,border:'none',borderRadius:6,color:K.bg,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>Start with free tools →</button>
+        <button onClick={() => navigate('/bonus-bet')} style={{padding:'7px 12px',background:K.gn,border:'none',borderRadius:6,color: K.ink,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>Start with free tools →</button>
         <button onClick={() => navigate('/upgrade')} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>See Pro status</button>
         <button onClick={dismiss} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:'pointer',fontFamily:font}}>Dismiss</button>
       </div>

@@ -578,7 +578,7 @@ export const PricingPage = () => {
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="#/dashboard" style={{
             padding: '12px 28px', background: K.gn, borderRadius: 8,
-            color: '#0a0e17', fontWeight: 800, fontSize: 13,
+            color: K.ink, fontWeight: 800, fontSize: 13,
             textDecoration: 'none', fontFamily: font,
           }}>
             Start Free →

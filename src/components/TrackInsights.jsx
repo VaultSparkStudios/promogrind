@@ -235,7 +235,7 @@ export default function TrackInsights() {
                       <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Actual profit</div>
                       <input value={draft.actualProfit || ""} onChange={(event) => saveDraft(entry.id, "actualProfit", event.target.value)} placeholder="$11.25" style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }} />
                     </div>
-                    <button onClick={() => settle(entry)} style={{ padding: "9px 14px", background: K.ac, border: "none", borderRadius: 8, color: K.bg, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+                    <button onClick={() => settle(entry)} style={{ padding: "9px 14px", background: K.ac, border: "none", borderRadius: 8, color: K.ink, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
                       Settle
                     </button>
                   </div>

@@ -50,7 +50,7 @@ const ReferralHub = () => {
       <div style={S.label}>Your Referral Link</div>
       <div style={{display:"flex",gap:8,alignItems:"center"}}>
         <div style={{...S.input,flex:1,color:K.dm,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",cursor:"default"}}>{refLink}</div>
-        <button onClick={copy} style={{padding:"8px 16px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Link"}</button>
+        <button onClick={copy} style={{padding:"8px 16px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Link"}</button>
       </div>
     </div>
     <div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
@@ -85,7 +85,7 @@ const ReferralHub = () => {
           />
           <button
             onClick={saveInfluencerCode}
-            style={{padding:'8px 16px',background:'#4ade80',color:'#0a0e17',border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13}}
+            style={{padding:'8px 16px',background:'#4ade80',color: K.ink,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13}}
           >Save Code</button>
         </div>
         {savedInfluencerCode && (

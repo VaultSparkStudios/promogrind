@@ -25,7 +25,7 @@ export function DailyRoutinePanel({ openBetsCount, expiringCount }) {
       {tasks.map((task, index) => (
         <div key={index} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
           <div role="checkbox" aria-checked={!!checks[index]} onClick={() => setChecks((current) => ({ ...current, [index]: !current[index] }))} style={{ width: 16, height: 16, borderRadius: 3, border: `2px solid ${checks[index] ? K.gn : K.bd2}`, background: checks[index] ? K.gn : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            {checks[index] && <span style={{ color: K.bg, fontSize: 10, fontWeight: 700 }}>✓</span>}
+            {checks[index] && <span style={{ color: K.ink, fontSize: 10, fontWeight: 700 }}>✓</span>}
           </div>
           <span style={{ fontSize: 12, color: checks[index] ? K.mt : K.tx, textDecoration: checks[index] ? "line-through" : "none" }}>{index + 1}. {task}</span>
         </div>
@@ -60,7 +60,7 @@ export function ProfitGoalTracker({ totalProfit }) {
       {showInput && (
         <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
           <input style={{ ...S.input, flex: 1 }} value={inputVal} onChange={(event) => setInputVal(event.target.value)} placeholder="Enter goal $" />
-          <button onClick={setGoal} style={{ padding: "6px 14px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, cursor: "pointer", fontFamily: font, fontSize: 11 }}>Save</button>
+          <button onClick={setGoal} style={{ padding: "6px 14px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, cursor: "pointer", fontFamily: font, fontSize: 11 }}>Save</button>
         </div>
       )}
       {goal > 0 && (

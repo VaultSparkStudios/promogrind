@@ -71,7 +71,7 @@ export default function PromoWalkthrough({ navigate, onClose }) {
               ))}
             </div>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 20 }}>
-              <div style={{ width: 32, height: 32, borderRadius: "50%", background: K.ac, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: K.bg, fontSize: 14, flexShrink: 0 }}>{wtStep + 1}</div>
+              <div style={{ width: 32, height: 32, borderRadius: "50%", background: K.ac, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: K.ink, fontSize: 14, flexShrink: 0 }}>{wtStep + 1}</div>
               <div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 6, fontFamily: fontD }}>{step.n}</div>
                 <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7 }}>{step.body}</div>
@@ -79,7 +79,7 @@ export default function PromoWalkthrough({ navigate, onClose }) {
             </div>
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               {wtStep > 0 && <button onClick={() => setWtStep((s) => s - 1)} style={{ padding: "7px 16px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontSize: 11, cursor: "pointer", fontFamily: font }}>← Prev</button>}
-              {wtStep < wt.steps.length - 1 && <button onClick={() => setWtStep((s) => s + 1)} style={{ padding: "7px 16px", background: K.ac, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Next →</button>}
+              {wtStep < wt.steps.length - 1 && <button onClick={() => setWtStep((s) => s + 1)} style={{ padding: "7px 16px", background: K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Next →</button>}
               {isCalcStep && <button onClick={() => { navigate(`/${wt.calcSlug}`); onClose(); }} style={{ padding: "7px 16px", background: `${K.gn}15`, border: `1px solid ${K.gn}30`, borderRadius: 6, color: K.gn, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Open Calculator →</button>}
             </div>
           </div>

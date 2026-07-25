@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
+import fs from "node:fs";
+import path from "node:path";
 import { getLaunchCommandCenter, getLaunchProofCommandItems, getLaunchProofSummary, getValidationSignal, resolveLaunchValidation } from "../launchState.js";
+
+describe("launch truth source", () => {
+  it("derives blocker state only from the generated proof ledger", () => {
+    const source = fs.readFileSync(path.resolve("src/launchState.js"), "utf8");
+    expect(source).not.toMatch(/LAUNCH_BLOCKERS/);
+    expect(source).toContain('from "./data/launchProofs.generated.js"');
+    expect(source).toContain("getLaunchProofCommandItems");
+  });
+});
 
 describe("launch state helpers", () => {
   it("classifies validation strings into signals", () => {

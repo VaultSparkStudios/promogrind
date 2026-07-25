@@ -45,6 +45,18 @@ describe("promo observation freshness", () => {
     expect(derivePromoValueConfidence([{ value: 5 }, { value: 7 }, { value: 6 }], { state: "current" }).level).toBe("high");
   });
 
+  it("keeps every dashboard consumer inside the historical-pattern evidence boundary", () => {
+    const surfaces = [
+      "src/components/dashboard/TodayDashboardPanel.jsx",
+      "src/components/dashboard/DailyBriefPage.jsx",
+      "src/components/dashboard/DailyDashboard.jsx",
+    ].map((file) => fs.readFileSync(path.resolve(file), "utf8")).join("\n");
+    expect(surfaces).not.toMatch(/Today(?:&apos;|’)s Promos|Recurring promos match today|No recurring promos found for today/i);
+    expect(surfaces).toContain("Historical cadence only");
+    expect(surfaces).toContain("Patterns to Verify");
+    expect(surfaces).toContain("need verification");
+  });
+
   it("removes dormant email and false notification behavior", () => {
     const source = fs.readFileSync(path.resolve("src/components/PromoCalendar.jsx"), "utf8");
     expect(source).not.toMatch(/type="email"|Notification\.requestPermission|you.ll be notified/i);

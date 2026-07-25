@@ -60,7 +60,9 @@ describe("dashboard helpers", () => {
     expect(snapshot.topWorkflow?.title).toBe("Highest value workflow");
     expect(["BetRivers", "bet365", "FanDuel", "ESPN BET", "Fanatics"]).toContain(snapshot.recommendedBooks[0]?.book.name);
     expect(snapshot.adaptivePlan).toBeTruthy();
-    expect(snapshot.adaptiveRankingSnapshot.rankedCount).toBeGreaterThan(0);
+    expect(snapshot.adaptiveRankingSnapshot.rankedCount).toBe(0);
+    expect(snapshot.adaptivePlan.verificationPromos.length).toBeGreaterThan(0);
+    expect(snapshot.adaptivePlan.evidenceCoverage.pct).toBe(0);
     expect(snapshot.adaptivePlan.mode).toBe("capture");
   });
 
@@ -205,6 +207,10 @@ describe("dashboard helpers", () => {
           { book: "DraftKings", profit: "12", date: "2026-04-13" },
           { book: "DraftKings", profit: "10", date: "2026-04-12" },
         ],
+        promoObservations: {
+          "draftkings-daily-bonus-bet": { status: "confirmed", observedAt: "2026-04-14T12:00:00Z", market: "US" },
+          "fanduel-daily-profit-boost": { status: "confirmed", observedAt: "2026-04-14T12:00:00Z", market: "US" },
+        },
         resultFeedback: [
           { id: "a", calculatorKey: "bonus-bet", promoType: "bonus_bet", status: "settled", expectedProfit: "10", actualProfit: "14", calculatorAccurate: "yes", book: "DraftKings", updatedAt: "2026-04-14T09:00:00Z" },
           { id: "b", calculatorKey: "bonus-bet", promoType: "bonus_bet", status: "settled", expectedProfit: "9", actualProfit: "13", calculatorAccurate: "yes", book: "DraftKings", updatedAt: "2026-04-13T09:00:00Z" },
@@ -258,12 +264,35 @@ describe("dashboard helpers", () => {
     expect(telemetry.coldSignal.key).toBe("profit_boost");
   });
 
+  it("keeps unverified and rejected cadence patterns out of the adaptive action queue", () => {
+    const now = new Date("2026-04-14T13:00:00Z");
+    const plan = buildAdaptivePromoPlan({
+      data: {},
+      snapshot: {
+        todayPromos: [
+          { id: "dk-daily", book: "DraftKings", promo: "Daily Boost", day: "Daily", grade: "A", freshness: { state: "unverified", label: "Historical pattern · verify" } },
+          { id: "fd-daily", book: "FanDuel", promo: "Daily Boost", day: "Daily", grade: "A", freshness: { state: "not-seen", label: "Not seen · 0d ago" } },
+        ],
+        expiringBooks: [], openWorkflowCount: 0, waitingWorkflowCount: 0, openBets: [], bankroll: 500, openStake: 0,
+      },
+      now,
+      insights: { feedbackEntries: [], settledCount: 0, skippedFeedback: [], promoTypeRows: [], topDriftAlerts: [], selfCalibration: {} },
+      hotLanes: { hotPromoTypes: [], hotBooks: [] },
+    });
+    expect(plan.topPromos).toEqual([]);
+    expect(plan.verificationPromos).toHaveLength(2);
+    expect(plan.verificationPromos.every((promo) => promo.reasons.includes("verify first"))).toBe(true);
+    expect(plan.evidenceCoverage).toEqual({ actionable: 0, verify: 2, total: 2, pct: 0 });
+    expect(plan.mode).toBe("verify");
+    expect(plan.headline).toMatch(/Verify the board/);
+  });
+
   it("prioritizes expiring value over backlog and demotes non-urgent promos when workflows are stacked", () => {
     const now = new Date("2026-04-14T13:00:00Z");
     const snapshot = {
       todayPromos: [
-        { book: "FanDuel", promo: "Daily Profit Boost", day: "Daily", grade: "A", value: "+$14" },
-        { book: "DraftKings", promo: "Daily Bonus Bet", day: "Daily", grade: "B", value: "+$10" },
+        { book: "FanDuel", promo: "Daily Profit Boost", day: "Daily", grade: "A", value: "+$14", freshness: { state: "current", label: "Seen today" } },
+        { book: "DraftKings", promo: "Daily Bonus Bet", day: "Daily", grade: "B", value: "+$10", freshness: { state: "current", label: "Seen today" } },
       ],
       expiringBooks: [{ name: "DraftKings", bonus: 200 }],
       openWorkflowCount: 4,

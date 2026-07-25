@@ -219,7 +219,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
             <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:2}}>🔥 {streakCount}-day streak! Unlock live arb alerts &amp; daily briefings with VaultSparked</div>
           </div>
           <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
+            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
             <button onClick={()=>{try{localStorage.setItem('pg_upsell_streak_dismissed','1');}catch{}setUpsellStreakDismissed(true);}} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Not now</button>
           </div>
         </div>
@@ -233,7 +233,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
               </div>
               <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         ):proStatus.trial_days_left>1?(
           <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
@@ -242,7 +242,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
                 ⏳ Trial ending soon — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
               </div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         ):(
           <div style={{...S.card,border:`1px solid ${K.rd}40`,background:`${K.rd}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
@@ -251,7 +251,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
                 🚨 Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
               </div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         )
       )}
@@ -296,7 +296,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       )}
       {todayPromos.length>0&&(
         <div style={{...S.card,marginBottom:12}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today&apos;s Promos — {todayDay}</div>
+          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Patterns to Verify — {todayDay}</div>
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {todayPromos.slice(0,6).map((p,i)=>(
               <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
@@ -305,7 +305,8 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
                   <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
-                  <span style={{fontSize:11,fontWeight:600,color:K.gn}}>{p.value}</span>
+                  <span style={{fontSize:11,fontWeight:600,color:K.dm}}>Modeled {p.value}</span>
+                  <span style={{fontSize:9,color:p.freshness?.state==="current"?K.gn:K.yl}}>{p.evidenceLabel||"Historical pattern · verify"}</span>
                   <span style={S.tag((p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)||K.ac)}>{p.grade||"B"}</span>
                 </div>
               </div>

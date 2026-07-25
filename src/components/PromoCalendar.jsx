@@ -33,7 +33,7 @@ const LocalCalendarPrefs = ({ prefs, setPrefs }) => {
           Include patterns marked not seen
         </label>
       </div>
-      <button onClick={save} style={{ padding: "7px 16px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Save local preferences</button>
+      <button onClick={save} style={{ padding: "7px 16px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Save local preferences</button>
       {saved && <div style={{ fontSize: 11, color: K.gn, marginTop: 8 }}>Saved on this device.</div>}
       <Nt c={K.mt}>No email or push delivery is configured. Exporting the calendar creates a local calendar file; queued rows are only a checklist in this browser.</Nt>
     </div>

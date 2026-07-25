@@ -304,7 +304,7 @@ export default function App() {
             ))}
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
-            <a href={authHref('signup')} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color:"#0a0e17",fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
+            <a href={authHref('signup')} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color: K.ink,fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
               Create Free Account →
             </a>
             <a href={authHref('signin')} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,textDecoration:"none"}}>

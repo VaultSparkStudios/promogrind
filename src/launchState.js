@@ -94,45 +94,8 @@ export const FEATURE_FLAGS = {
 
 export const LAUNCH_VALIDATION = PROJECT_STATUS_MIRROR.validation;
 
-export const LAUNCH_BLOCKERS = [
-  {
-    key: "affiliateLinks",
-    label: "Affiliate links",
-    status: "manual",
-    detail: "Real affiliate-approved links still need to replace placeholders in src/books.js.",
-  },
-  {
-    key: "edgeDeploy",
-    label: "Edge hardening deploy",
-    status: "cleared",
-    detail: "Core auth-backed edge functions were redeployed on 2026-04-15 so production now matches the repo for checkout, portal, AI, gift, and beta flows.",
-  },
-  {
-    key: "pushConfig",
-    label: "Push config",
-    status: "manual",
-    detail: "Set VITE_VAPID_PUBLIC_KEY in the live frontend before exposing Daily Brief push publicly.",
-  },
-  {
-    key: "edgeAuth",
-    label: "Edge auth compatibility",
-    status: "cleared",
-    detail: "Resolved on 2026-04-15 by deploying Edge Functions with per-function verify_jwt=false config for publishable-key browser calls.",
-  },
-  {
-    key: "stripeSmoke",
-    label: "Stripe smoke test",
-    status: "manual",
-    detail: "Run one real checkout and customer-portal pass against the deployed app before launch.",
-  },
-  {
-    key: "friendPass",
-    label: "Friend beta pass",
-    status: "manual",
-    detail: "Have a friend create an account and run the core calculator flow to confirm the launch experience feels ready.",
-  },
-];
-
+// Launch blockers are derived exclusively from launchProofs.generated.js.
+// FEATURE_INFO below is setup guidance, not evidence or release state.
 export function normalizeLaunchProofs(payload = LAUNCH_PROOFS) {
   const rawProofs = payload?.proofs && typeof payload.proofs === "object" ? payload.proofs : {};
   return Object.entries(rawProofs).map(([key, proof]) => {

@@ -38,7 +38,7 @@ export default function Arb2Way() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", background: "linear-gradient(90deg,#1e3a2f,#0f1724)", border: "1px solid #4ade80", borderRadius: 8, marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
             <div style={{ fontSize: 13, color: "#cbd5e1" }}>⚡ <strong style={{ color: "#4ade80" }}>The Live Scanner</strong> finds these arb opportunities automatically in real time.</div>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <a href="#/upgrade" style={{ padding: "5px 12px", background: "#4ade80", color: "#0a0e17", borderRadius: 5, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Try Free →</a>
+              <a href="#/upgrade" style={{ padding: "5px 12px", background: "#4ade80", color: K.ink, borderRadius: 5, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Try Free →</a>
               <button onClick={() => dismissTrigger("arb_upsell", setShowArbTrigger)} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 16 }}>×</button>
             </div>
           </div>
