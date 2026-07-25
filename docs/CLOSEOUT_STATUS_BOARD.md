@@ -9,11 +9,11 @@
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore(S118): record deployment proof                          ║
 ║  ✓ chore(S118): reconcile saturated arc closeout                 ║
 ║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
 ║  ✓ chore(S117): record deployment proof                          ║
 ║  ✓ feat(S117): harden public trust and evidence contracts        ║
-║  ✓ chore(S116): reconcile closeout-generated state               ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -30,17 +30,17 @@
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  · context/CURRENT_STATE.md                                      ║
 ║  · context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
-║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · context/TRUTH_AUDIT.md                                        ║
+║  · context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 7 files  ·  M:7 A:0 D:0 ?:0                            ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -55,6 +55,7 @@
 ║  IGNIS:         3d ago                                           ║
 ║  Truth:         green-with-external-proof-and-partial-pixel-rev  ║
 ║  Sanitization:  —                                                ║
+║  Shell hygiene: 0 session browsers · 0 preview listeners          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  ✓ Unified Genius List exhausted · regenerate from live code     ║
