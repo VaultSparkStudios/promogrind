@@ -153,6 +153,8 @@ export function MobileNavDrawer({ open, onClose, tabs, gi, ti, goTo }) {
         role="dialog"
         aria-modal="true"
         aria-label="Full navigation"
+        aria-hidden={!open}
+        {...(!open ? { inert: "" } : {})}
         style={{
           position: "fixed", bottom: 0, left: 0, right: 0,
           height: "100dvh",

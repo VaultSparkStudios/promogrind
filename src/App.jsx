@@ -219,6 +219,7 @@ export default function App() {
     return () => window.removeEventListener("pg:quick-calc", handler);
   }, [navigate]);
   useEffect(() => { tabMemory.current[gi] = ti; }, [gi, ti]);
+  useEffect(() => { if (!isMobile && showMobileNav) setShowMobileNav(false); }, [isMobile]);
   if (pathname.startsWith("/land/")) {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
