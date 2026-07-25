@@ -9,11 +9,11 @@
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore(S118): reconcile saturated arc closeout                 ║
 ║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
 ║  ✓ chore(S117): record deployment proof                          ║
 ║  ✓ feat(S117): harden public trust and evidence contracts        ║
 ║  ✓ chore(S116): reconcile closeout-generated state               ║
-║  ✓ feat(S116): make decision and launch truth self-validating    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,20 +28,20 @@
 ║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · context/DECISIONS.md                                          ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 26 files  ·  M:24 A:0 D:0 ?:2                          ║
-║  Ahead: 1  ·  Behind: 0                                          ║
+║  Changes: 7 files  ·  M:7 A:0 D:0 ?:0                            ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗

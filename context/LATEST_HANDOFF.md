@@ -30,7 +30,8 @@ S118 exhausted the repo-owned plan and shipped three ranked audit items plus thr
 - Bundle graph — 179.1KB raw / 60.0KB gzip initial; largest async Sentry chunk 482.1KB raw / 159.2KB gzip.
 - Theme/device evidence — four desktop/mobile dark/light screenshots captured and hashed in `docs/RELEASE_PARITY.md`; live computed-style audit found 0 failing visible text nodes in each theme.
 - `git diff --check` — clean.
-- Doctor — 12/12 passing with `blockingFailing: 0` before final publication.
+- Doctor — 12/12 passing with `blockingFailing: 0`.
+- Remote S118 evidence — commit `1914e24`; brief-format `30175588383`, CI `30175588392`, and Deploy Pages `30175588407` passed; production launch verification and dashboard smoke passed.
 - Ark — impact broadcast `01JUDI3T9K3C970BE1CCD58752`; shared lock-writer defect request `01JUDI42TL8FD77A64F740A2A4`.
 
 ## Honest deferrals

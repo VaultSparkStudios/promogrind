@@ -34,7 +34,7 @@
     "contrast": "37 semantic pairs per theme plus live computed-style scan; 0 failures in dark and light",
     "bundle": "179.1KB raw / 60.0KB gzip initial; 482.1KB raw / 159.2KB gzip largest async",
     "live": "NO-GO: six required security headers absent",
-    "remote": "pending direct-main publication; S117 remains latest verified deployment"
+    "remote": "1914e24: brief-format 30175588383 pass; CI 30175588392 pass; Deploy Pages 30175588407 pass; production launch verification and dashboard smoke pass"
   },
   "honestDeferrals": [
     "webhook credential rotation",
