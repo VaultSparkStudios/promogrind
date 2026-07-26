@@ -29,4 +29,11 @@ describe("external launch-proof ledger", () => {
     const ledger = buildExternalLaunchProofLedger({ status: { blockers: ["Production email vendor proof pending."] }, launchProofs: { proofs: {} } });
     expect(ledger.unmirroredBlockers).toBe(1);
   });
+
+  it("does not trust an expired capability receipt", () => {
+    const receipt = { checkedAt: "2026-07-24T00:00:00.000Z", summary: { ready: 5, total: 5 }, capabilities: [] };
+    const ledger = buildExternalLaunchProofLedger({ status: { blockers: [] }, launchProofs: { proofs: {} }, capabilityReceipt: receipt, now: Date.parse("2026-07-25T00:00:00.000Z") });
+    expect(ledger.capabilityAssessment.fresh).toBe(false);
+    expect(ledger.capabilityAssessment.trustedReady).toBe(0);
+  });
 });

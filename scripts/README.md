@@ -115,15 +115,13 @@ These surfaces turn the autonomy roadmap into a real control plane: release safe
 
 ---
 
-## Claude API chokepoint
+## Model-provider chokepoint
 
-`scripts/lib/model-router.mjs` is the **single allowed file** in `scripts/` that may reference the Anthropic API, the `@anthropic-ai/sdk` package, or hardcoded `claude-*` model IDs. All other scripts must route through its exports (`callClaude`, `selectModel`, `withCache`, `buildThinkingConfig`, `logMetrics`, `submitBatch`, `pollBatch`, `PRICING_PER_MTOK`).
+`scripts/lib/model-router.mjs` is the **single allowed file** in `scripts/` that may reference provider endpoints, provider SDK package names, or hardcoded provider model IDs. All other scripts must route through its exports (`callClaude`, `selectModel`, `withCache`, `buildThinkingConfig`, `logMetrics`, `submitBatch`, `pollBatch`, `PRICING_PER_MTOK`).
 
 A CI step in `.github/workflows/studio-os-enforcer.yml` greps `scripts/` on every run for these patterns and fails the build on any violation outside the chokepoint:
 
-```
-api\.anthropic\.com | @anthropic-ai/sdk | claude-(opus|sonnet|haiku)-[0-9]
-```
+The enforcement expressions intentionally live in the hook and router rather than being duplicated in this documentation, which is itself inside the scanned `scripts/` tree.
 
 To add a new Claude-using script:
 
@@ -147,3 +145,40 @@ Pre-push hook: `node scripts/ops.mjs install-hooks` installs `scripts/git-hooks/
 ---
 
 Project-specific cleanup belongs in each project repo unless the Studio Owner explicitly asks Studio Ops to perform a cross-repo rollout. Run `scripts/check-repo-lock.sh <repo-path>` before any cross-repo write.
+# Security history scan
+
+Run a bounded full-history scan with stable JSON output:
+
+```bash
+node scripts/scan-git-history.mjs --since 2026-07-01 --timeout-ms 30000 --json
+```
+
+# Launch proof quorum
+
+Migrate or verify the criterion-level launch-proof contract:
+
+```bash
+node scripts/migrate-launch-proof-quorum.mjs --apply --rebuild-criteria
+```
+
+Record one redacted criterion receipt (status is always derived):
+
+```bash
+node scripts/update-launch-proof.mjs --proof authEmailSmoke --criterion confirmation-email-delivered --source human-observation --target https://promogrind.bet --verifier operator --evidence "Confirmation delivered"
+```
+
+# Target-bound launch capabilities
+
+Probe provider identity and required scope through the secrets gateway without mutation or key output:
+
+```bash
+node scripts/check-launch-capabilities.mjs --write
+node scripts/check-launch-capabilities.mjs --offline --json
+```
+
+Plan Brevo sender-domain authentication, then apply only provider-returned DNS records when approved:
+
+```bash
+node scripts/configure-brevo-domain.mjs
+node scripts/configure-brevo-domain.mjs --apply
+```

@@ -74,3 +74,9 @@
 {"ts":"2026-07-24T08:28:21.850Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":1687,"output":796,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-07-24T09:20:50.769Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":1778,"output":904,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-07-24T09:20:50.772Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":1778,"output":904,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-25T21:35:11.476Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":1888,"output":950,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-25T21:35:11.480Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":1888,"output":950,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-26T07:00:09.603Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":3226,"output":867,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-26T07:00:09.605Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":3226,"output":867,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-26T07:04:50.274Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":3249,"output":869,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-26T07:04:50.276Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":3249,"output":869,"cache_read":0,"cache_create":0,"skill":null}

@@ -16,6 +16,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
+import { appendReceipts, receiptsFromSteps } from './lib/launch-proof-quorum.mjs';
 
 const ROOT = process.cwd();
 const PROOFS_PATH = path.join(ROOT, "context", "LAUNCH_PROOFS.json");
@@ -25,14 +26,14 @@ const PRINT_ONLY = ARGS.includes("--print");
 const AUTO_RECORD = ARGS.includes("--record");
 
 const STEPS = [
-  { id: "auth", q: "Signed in with a real test PromoGrind account?" },
-  { id: "checkout-open", q: "Opened Pricing and started checkout for Scout monthly?" },
-  { id: "payment", q: "Completed payment in Stripe Checkout (test card or low-risk live)?" },
-  { id: "redirect", q: "Redirected back to https://promogrind.bet/?checkout=success?" },
-  { id: "subscription-row", q: "Verified `subscriptions` row exists in Supabase with plan=scout, status=active, stripe_customer_id, stripe_subscription_id, current_period_end?" },
-  { id: "portal-open", q: "Opened User Menu → Manage billing and confirmed Stripe Customer Portal loaded for the same customer?" },
-  { id: "portal-action", q: "Performed at least one portal action (cancel / update card / view invoices)?" },
-  { id: "webhook-update", q: "Confirmed webhook updated the `subscriptions` row after the portal action (no errors in stripe-webhook logs)?" },
+  { id: "auth", criterionId: null, q: "Signed in with a real test PromoGrind account?" },
+  { id: "checkout-open", criterionId: null, q: "Opened Pricing and started checkout for Scout monthly?" },
+  { id: "payment", criterionId: 'completed-checkout-session', q: "Completed payment in Stripe Checkout (test card or low-risk live)?" },
+  { id: "redirect", criterionId: null, q: "Redirected back to https://promogrind.bet/?checkout=success?" },
+  { id: "subscription-row", criterionId: 'subscription-row-created-or-updated', q: "Verified `subscriptions` row exists in Supabase with plan=scout, status=active, stripe_customer_id, stripe_subscription_id, current_period_end?" },
+  { id: "portal-open", criterionId: 'customer-portal-opens-for-the-purchaser', q: "Opened User Menu → Manage billing and confirmed Stripe Customer Portal loaded for the same customer?" },
+  { id: "portal-action", criterionId: null, q: "Performed at least one portal action (cancel / update card / view invoices)?" },
+  { id: "webhook-update", criterionId: 'webhook-lifecycle-observed-without-errors', q: "Confirmed webhook updated the `subscriptions` row after the portal action (no errors in stripe-webhook logs)?" },
 ];
 
 function printChecklist() {
@@ -61,7 +62,7 @@ async function run() {
 
   for (const step of STEPS) {
     const ans = (await ask(rl, `→ ${step.q} [y/n]: `)).trim().toLowerCase();
-    answers.push({ id: step.id, q: step.q, answer: ans });
+    answers.push({ id: step.id, criterionId: step.criterionId, q: step.q, answer: ans });
     if (ans !== "y") {
       allYes = false;
       console.log(`  ✗ Marked NOT-DONE for "${step.id}". Aborting smoke pass.`);
@@ -100,15 +101,15 @@ async function run() {
   }
 
   const proofs = JSON.parse(fs.readFileSync(PROOFS_PATH, "utf8"));
-  proofs.proofs.stripeSmoke ??= {};
-  proofs.proofs.stripeSmoke.status = "complete";
   proofs.proofs.stripeSmoke.evidence ??= [];
-  proofs.proofs.stripeSmoke.evidence.push(evidence);
-  proofs.lastUpdated = new Date().toISOString().split("T")[0];
+  proofs.proofs.stripeSmoke.evidence.push({ ...evidence, authority: 'narrative-only; criteria receipts derive status' });
+  appendReceipts(proofs, 'stripeSmoke', receiptsFromSteps(answers, {
+    source: 'human-observation', target: 'https://promogrind.bet', verifier: 'runner:stripe-smoke',
+  }));
 
   fs.writeFileSync(PROOFS_PATH, JSON.stringify(proofs, null, 2) + "\n");
   console.log(`\n✓ Recorded evidence to ${path.relative(ROOT, PROOFS_PATH)}`);
-  console.log("✓ stripeSmoke.status = complete");
+  console.log(`✓ stripeSmoke.status = ${proofs.proofs.stripeSmoke.status} (derived from criterion receipts)`);
 }
 
 run().catch((err) => {

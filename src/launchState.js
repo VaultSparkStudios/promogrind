@@ -99,9 +99,21 @@ export const LAUNCH_VALIDATION = PROJECT_STATUS_MIRROR.validation;
 export function normalizeLaunchProofs(payload = LAUNCH_PROOFS) {
   const rawProofs = payload?.proofs && typeof payload.proofs === "object" ? payload.proofs : {};
   return Object.entries(rawProofs).map(([key, proof]) => {
-    const status = String(proof?.status || "pending").trim().toLowerCase();
-    const evidence = Array.isArray(proof?.evidence) ? proof.evidence : [];
-    const evidenceRequired = Array.isArray(proof?.evidenceRequired) ? proof.evidenceRequired : [];
+    const evidence = Array.isArray(proof?.receipts) ? proof.receipts : Array.isArray(proof?.evidence) ? proof.evidence : [];
+    const hasCriteria = Array.isArray(proof?.criteria);
+    const criteria = hasCriteria
+      ? proof.criteria.filter((criterion) => criterion?.id && criterion?.label)
+      : (Array.isArray(proof?.evidenceRequired) ? proof.evidenceRequired : []).map((label, index) => ({ id: `legacy-${index + 1}`, label }));
+    const covered = new Set(evidence.map((receipt) => receipt?.criterionId).filter(Boolean));
+    const evidenceRequired = criteria.map((criterion) => criterion.label);
+    const evidenceCount = hasCriteria
+      ? criteria.filter((criterion) => covered.has(criterion.id)).length
+      : evidence.length;
+    const missingEvidence = criteria.filter((criterion) => !covered.has(criterion.id)).map((criterion) => criterion.label);
+    const persistedStatus = String(proof?.status || "pending").trim().toLowerCase();
+    const status = hasCriteria && criteria.length > 0
+      ? evidenceCount === criteria.length ? "complete" : evidenceCount > 0 ? "partial" : "pending"
+      : persistedStatus;
     const requiredFor = Array.isArray(proof?.requiredFor) ? proof.requiredFor : [];
     return {
       key,
@@ -117,7 +129,8 @@ export function normalizeLaunchProofs(payload = LAUNCH_PROOFS) {
       requiredBooks: Array.isArray(proof?.requiredBooks) ? proof.requiredBooks : [],
       isComplete: status === "complete",
       isBlocking: proof?.blocking !== false && status !== "complete",
-      evidenceCount: evidence.length,
+      evidenceCount,
+      missingEvidence,
       requiredEvidenceCount: evidenceRequired.length,
     };
   });
@@ -154,6 +167,7 @@ export function getLaunchProofCommandItems(payload = LAUNCH_PROOFS) {
       evidenceRequired: proof.evidenceRequired,
       evidence: proof.evidence,
       evidenceCount: proof.evidenceCount,
+      missingEvidence: proof.missingEvidence,
       requiredEvidenceCount: proof.requiredEvidenceCount,
       requiredFor: proof.requiredFor,
       requiredBooks: proof.requiredBooks,
@@ -311,4 +325,3 @@ export function getLaunchCommandCenter(input = {}) {
     validation,
   };
 }
-

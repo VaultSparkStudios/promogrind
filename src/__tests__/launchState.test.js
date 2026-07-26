@@ -137,5 +137,18 @@ describe("launch state helpers", () => {
 
     expect(items.find((item) => item.key === "affiliateLinks")?.status).toBe("advisory");
     expect(center.nextActions.map((item) => item.key).slice(0, 2)).toEqual(["authEmailSmoke", "stripeSmoke"]);
-  });});
+  });
+
+  it("fails a typed proof closed when persisted status contradicts its receipt quorum", () => {
+    const summary = getLaunchProofSummary({ proofs: { unsafe: {
+      label: "Unsafe persisted completion", status: "complete", blocking: true,
+      criteria: [{ id: "a", label: "A" }, { id: "b", label: "B" }],
+      receipts: [{ criterionId: "a" }],
+    } } });
+    expect(summary.complete).toBe(0);
+    expect(summary.blocking).toBe(1);
+    expect(summary.proofs[0].status).toBe("partial");
+    expect(summary.proofs[0].missingEvidence).toEqual(["B"]);
+  });
+});
 

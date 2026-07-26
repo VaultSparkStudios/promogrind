@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { escapeHtmlAttribute, injectCaptureMeta } from './lib/capture-config.mjs';
+const page = '<html><head></head><body><script src="/js/pg-capture.js"></script></body></html>';
+const injected = injectCaptureMeta(page, 'anon&"<key>');
+assert.match(injected, /name="pg-supabase-anon-key"/);
+assert.match(injected, /anon&amp;&quot;&lt;key&gt;/);
+assert.equal((injectCaptureMeta(injected, 'replacement').match(/pg-supabase-anon-key/g) || []).length, 1);
+assert.match(injectCaptureMeta(injected, 'replacement'), /content="replacement"/);
+assert.equal(injectCaptureMeta('<html><head></head></html>', 'key'), '<html><head></head></html>');
+assert.equal(escapeHtmlAttribute('a&b'), 'a&amp;b');
+console.log('capture config injection: 6 assertions passing');

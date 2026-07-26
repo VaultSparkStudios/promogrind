@@ -1,68 +1,71 @@
-import fs from "node:fs";
+import fs from 'node:fs';
+import { appendReceipts, criteriaForProof } from './lib/launch-proof-quorum.mjs';
 
-function readFlag(name) {
-  const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] : null;
+const args = process.argv.slice(2);
+const flag = (name) => {
+  const index = args.indexOf(name);
+  return index >= 0 ? args[index + 1] : null;
+};
+
+if (args.includes('--help')) {
+  console.log(`Usage: node scripts/update-launch-proof.mjs [--list [--guide]]
+       node scripts/update-launch-proof.mjs --proof <key> --criterion <id> --source <type> --target <target> --verifier <id> --evidence <redacted detail>
+
+Options:
+  --list                 List proofs and derived criterion coverage
+  --guide                Include criterion IDs and next steps with --list
+  --proof <key>          Canonical proof key
+  --criterion <id>       Stable criterion ID from --list --guide
+  --source <type>        provider-api|deployment|automated-smoke|human-observation
+  --target <target>      Exact domain, URL, or provider target (defaults to proof target)
+  --verifier <id>        Non-secret verifier/runner identifier
+  --evidence <detail>    Redacted observation; secrets and tokens are rejected
+  --observed-at <iso>    Observation timestamp (defaults to now)
+  --help                 Show this help
+
+Example:
+  node scripts/update-launch-proof.mjs --proof authEmailSmoke --criterion confirmation-email-delivered --source human-observation --target https://promogrind.bet --verifier operator --evidence "Confirmation delivered"`);
+  process.exit(0);
 }
 
-const proofKey = readFlag("--proof");
-const status = readFlag("--status");
-const evidence = readFlag("--evidence");
-const list = process.argv.includes("--list");
-const guide = process.argv.includes("--guide");
+const proofPath = 'context/LAUNCH_PROOFS.json';
+const payload = JSON.parse(fs.readFileSync(proofPath, 'utf8'));
 
-const proofPath = "context/LAUNCH_PROOFS.json";
-const payload = JSON.parse(fs.readFileSync(proofPath, "utf8"));
-
-if (list) {
+if (args.includes('--list')) {
   for (const [key, proof] of Object.entries(payload?.proofs || {})) {
-    const marker = proof.status === "complete" ? "complete" : proof.blocking ? "blocking" : "pending";
-    console.log(`${key}: ${marker} - ${proof.label}`);
-    if (guide) {
-      if (proof.details) console.log(`  details: ${proof.details}`);
+    const criteria = criteriaForProof(proof);
+    const covered = new Set((proof.receipts || []).map((receipt) => receipt.criterionId));
+    console.log(`${key}: ${proof.status || 'pending'} · ${criteria.filter((criterion) => covered.has(criterion.id)).length}/${criteria.length} criteria · target=${proof.target || 'unset'}`);
+    if (args.includes('--guide')) {
+      for (const criterion of criteria) console.log(`  ${covered.has(criterion.id) ? '✓' : '·'} ${criterion.id}: ${criterion.label}`);
       if (proof.nextStep) console.log(`  next: ${proof.nextStep}`);
-      if (Array.isArray(proof.evidenceRequired) && proof.evidenceRequired.length) {
-        console.log("  evidence:");
-        for (const item of proof.evidenceRequired) console.log(`    - ${item}`);
-      }
     }
   }
   process.exit(0);
 }
 
-if (!proofKey || !status) {
-  console.error("Usage: node scripts/update-launch-proof.mjs --proof <key> --status <pending|complete> --evidence \"note\"");
-  console.error("       node scripts/update-launch-proof.mjs --list [--guide]");
+if (flag('--status')) {
+  console.error('Direct status writes are forbidden. Record criterion-level receipts; status is derived.');
   process.exit(1);
 }
 
+const proofKey = flag('--proof');
+const criterionId = flag('--criterion');
 const proof = payload?.proofs?.[proofKey];
-
-if (!proof) {
-  console.error(`Unknown proof key: ${proofKey}`);
+if (!proof || !criterionId || !flag('--verifier') || !flag('--evidence')) {
+  console.error('Missing required receipt fields. Run with --help or --list --guide.');
   process.exit(1);
 }
 
-if (!["pending", "complete"].includes(status)) {
-  console.error(`Unsupported proof status: ${status}`);
-  process.exit(1);
-}
+const receipt = {
+  criterionId,
+  source: flag('--source') || 'human-observation',
+  target: flag('--target') || proof.target,
+  observedAt: flag('--observed-at') || new Date().toISOString(),
+  verifier: flag('--verifier'),
+  detail: flag('--evidence'),
+};
 
-if (status === "complete" && !evidence?.trim()) {
-  console.error(`Evidence is required before marking ${proofKey} complete.`);
-  process.exit(1);
-}
-
-proof.status = status;
-proof.lastUpdated = new Date().toISOString().slice(0, 10);
-if (evidence) {
-  proof.evidence = Array.isArray(proof.evidence) ? proof.evidence : [];
-  proof.evidence.unshift({
-    notedAt: new Date().toISOString(),
-    note: evidence,
-  });
-}
-
-payload.lastUpdated = new Date().toISOString().slice(0, 10);
-fs.writeFileSync(proofPath, JSON.stringify(payload, null, 2) + "\n");
-console.log(`Updated ${proofKey} -> ${status}`);
+const result = appendReceipts(payload, proofKey, [receipt]);
+fs.writeFileSync(proofPath, `${JSON.stringify(payload, null, 2)}\n`);
+console.log(`launch proof receipt: ${proofKey}.${criterionId} recorded · ${result.coveredCount}/${result.requiredCount} · status=${result.status}`);

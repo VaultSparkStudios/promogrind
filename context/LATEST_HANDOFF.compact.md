@@ -1,41 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 0494fc88881c -->
-<!-- generated-at: 2026-07-24T09:20:50.774Z -->
+<!-- source-hash: a9aceb73485d -->
+<!-- generated-at: 2026-07-26T07:04:50.277Z -->
 
 # LATEST_HANDOFF (compact)
 
-# PromoGrind Handoff Summary (S117)
+# Handoff Summary — PromoGrind
 
-Session: 117 (Codex)
-Status: implementation saturated; repo-owned gates green; release promotion NO-GO
+Session: 119 (Codex)
+Status: saturated; repo-owned gates green; release promotion NO-GO
 
-Intent
-- Ran full agent-neutral /arc; exhausted repo-owned + second-order work; preserved external-proof boundaries; release-state promotion honestly deferred.
+Shipped (S119)
+- Startup signal provenance lattice with 169-item Ark drain evidence.
+- Bounded full-history secret scanner; one classified real residual.
+- Criterion-level launch-proof quorums with typed receipts and browser-side derivation.
+- Five-target capability truth plane with redacted six-hour receipts.
+- Brevo domain creation, four DNS auth records, authentication 200, 1/3 proof.
+- CI fail-closed Supabase config injection; browser quorum self-validation.
 
-What Shipped
-- Public secret/topology purge: removed tracked staging script with exposed webhook cred; expanded scanner; rotation request via Ark (01JU98MC5M8FC5EDBEE214F795).
-- Passport/provenance honesty: versioned SHA-256 self-attestation, strict schemas, DOM-safe verification, local receipt chains.
-- Advisor privacy: local-by-default profile context, opt-in, client/server redaction, bounded context, privacy receipts.
-- Promo observations: calendar rows recast as historical patterns with freshness/confidence/Seen controls.
-- Multilingual claims contract: EN/ES/PT caveats with deterministic checks across 69 static pages.
-- Release surface: nav manifest, security contact, favicon, rollback runbook, footer enforcement, local/live checks.
+Current Intent
+- Close remaining external evidence gates and unblock live security/deploy scopes. Primary Genius List exhausted.
 
-Verification (green)
-- verify:launch-local exit 0; Vitest 582/582; Advisor Deno 3/3; public claims 0 findings; source integrity 0 repairs; prod browser smoke green; git diff --check clean.
-- Remote evidence passed for commit 551f256 (CI, Deploy Pages, prod launch verification).
+Verification snapshot
+- verify:launch-local green; Vitest 590/590; history 314 commits, 1 finding.
+- Live capabilities 3/5 READY (Brevo, Supabase REST, Stripe); Cloudflare 403; capture awaits deploy.
 
-Now Bucket (top 3)
-1. Observe S117 CI/deploy, then rerun live web contract.
-2. Configure six security headers at header-capable edge; verify live.
-3. Complete webhook rotation + Supabase deployment via mapped capabilities.
+Now (top 3)
+1. Grant two Cloudflare scopes, configure six security headers, verify forwarding rule, rerun live checks.
+2. Rotate isolated historical Supabase credential; provide target-bound deploy token for pending migration/functions.
+3. Confirm S119 Pages deployment injected capture config, then complete human/payment/mailbox proofs.
 
 Blockers (top 3)
-1. verify:web-live red: six missing live headers (CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, Permissions-Policy); edge-owned.
-2. Dark/light desktop/mobile screenshot matrix SKIPPED — browser runtime Windows DPAPI error.
-3. Supabase migration/functions pending until promogrind.supabase.deploy resolves explicit project ref.
+1. Cloudflare Transform Rules scope returns 403 — six live security headers cannot be set.
+2. Historical privileged Supabase token needs rotation (control-plane); Ark cargo 01JUE23NQ1EEF6010874B09F97.
+3. Capture live proof blocked pending GitHub Pages deployment.
 
-Human/External-Blocked (age: since S117)
-- Webhook credential rotation (Ark 01JU98MC5M8FC5EDBEE214F795) — pending.
-- External evidence gates: production auth email, Stripe purchase, friend-beta, Brevo forwarding, capture public-key proofs.
+Human-blocked items (with age)
+- Cloudflare scope grant / header config — open since S118 (~1 day).
+- Supabase credential rotation + deploy token — open since S118 (~1 day; webhook variant S118 cargo 01JU98MC5M8FC5EDBEE214F795).
+- Cloudflare Email Routing 403 — forwarding unverifiable (S119).
+- AI pixel inspection PARTIAL — Windows credential protection blocks image viewer (since S118).
+- External proofs: production auth email, real purchase/portal, friend beta, forwarding delivery, capture submission — all pending (S119).
 
-Next: Reconnect browser control, then configure/verify the six live security headers to advance release-state.
+Next session: Obtain human-granted Cloudflare scopes and deploy/rotation tokens, then rerun live checks and record external proofs.

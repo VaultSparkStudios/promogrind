@@ -80,19 +80,45 @@ export function renderOrchestratorBlock({
   const locked = new Set(activeSessions.map(s => s.slug));
   const lockedPending = pendingItems.filter(item => locked.has(item.slug)).length;
 
-  const arkCount = countRecentArkCargo({ root, now });
+  const activeAvailable = Boolean(active && Array.isArray(active.activeSessions));
+  const pendingAvailable = Boolean(pending);
+  const ark = loadArkDrainState({ root, now });
   const untracked = loadUntrackedDevFolders({ root, node, runDetector });
   const projectLike = untracked?.categories?.projectLike?.length ?? 0;
   const scratch = untracked?.categories?.scratch?.length ?? 0;
 
   const out = [top('ORCHESTRATOR')];
-  out.push(row(`Workers: ${activeSessions.length}/${active?.portfolio?.totalProjects ?? '?'} active · ${staleLocks.length} stale · ${conflicts.length} conflicts`));
-  out.push(row(`Snapshot: ${snapshotLabel} · next ${active?.recommendedNextRepo?.slug || 'n/a'}`.slice(0, W)));
-  out.push(row(`Propagation: ${pendingItems.length} queued · ${lockedPending} lock-blocked`));
-  out.push(row(`Ark: ${arkCount} cargo in 24h · full view: node scripts/orchestrate.mjs`));
-  out.push(row(`Untracked: ${projectLike} project-like · ${scratch} scratch`));
+  out.push(row(activeAvailable
+    ? `Workers: ${activeSessions.length}/${active?.portfolio?.totalProjects ?? '?'} active · ${staleLocks.length} stale · ${conflicts.length} conflicts`
+    : 'Workers: unavailable · public-repo shim has no portfolio snapshot'));
+  out.push(row(activeAvailable
+    ? `Snapshot: ${snapshotLabel} · next ${active?.recommendedNextRepo?.slug || 'n/a'}`.slice(0, W)
+    : 'Snapshot: unavailable · portfolio/ACTIVE_SESSIONS.json absent'));
+  out.push(row(pendingAvailable
+    ? `Propagation: ${pendingItems.length} queued · ${lockedPending} lock-blocked`
+    : 'Propagation: unavailable · portfolio queue absent'));
+  out.push(row(ark.available
+    ? `Ark: ${ark.count} drained · ${ark.ageLabel} · sig failures ${ark.sigFailures}`
+    : 'Ark: unavailable · no local drain receipt'));
+  out.push(row(untracked
+    ? `Untracked: ${projectLike} project-like · ${scratch} scratch`
+    : 'Untracked: unavailable · detector absent'));
   out.push(bot());
   return out.join('\n');
+}
+
+export function loadArkDrainState({ root, now = Date.now() }) {
+  const summary = readJson(path.join(root, '.cache', 'ark-drain-summary.json'), null);
+  const drainedAt = summary?.drainedAt ? new Date(summary.drainedAt).getTime() : NaN;
+  if (!summary || !Number.isFinite(drainedAt)) return { available: false };
+  const ageMinutes = Math.max(0, Math.round((now - drainedAt) / 60000));
+  return {
+    available: true,
+    count: Number(summary.count) || 0,
+    sigFailures: Array.isArray(summary.sigFailures) ? summary.sigFailures.length : 0,
+    ageMinutes,
+    ageLabel: ageMinutes < 60 ? `${ageMinutes}m old` : `${Math.round(ageMinutes / 60)}h old`,
+  };
 }
 
 function countRecentArkCargo({ root, now }) {

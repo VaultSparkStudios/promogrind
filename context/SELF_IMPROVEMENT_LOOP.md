@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S112:1000 | S113:1000 | S114:1000 | S115:1000 | S116:1000
-Avgs - 3: 1000.0 [N=3] | 5: 1000.0 [N=5] | all: 1000.0 [recent closeout series]
-  └ 3-session (S114/S115/S116): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
-Velocity trend: ↓  |  Protocol velocity: →  |  Debt: stable
+Sparkline (last 5 totals): S115:1000 | S116:1000 | S117:999 | S118:999 | S119:999
+Avgs - 3: 999.0 [N=3] | 5: 999.4 [N=5] | all: 999.7 [recent closeout series]
+  └ 3-session (S117/S118/S119): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.0
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-07-23 | Session 116 | Total: 1000/1000 | Velocity: 6 | protocolVelocity: 6
+Last session: 2026-07-25 | Session 119 | Total: 999/1000 | Velocity: 8 | protocolVelocity: 8
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1538,3 +1538,32 @@ Protocol verification pass against the active `/start` -> `/audit` -> `/implemen
 **SIL items committed:**
 1. Any evidence state shown to users must affect ranking, eligibility, or workflow—not remain a decorative label.
 2. Any foreground placed on semantic fills must use an explicit ink role covered by deterministic contrast tests.
+
+## 2026-07-25 — Session 119
+
+**Intent:** Run the complete agent-neutral `/arc` continuously, exhaust a premise-verified infrastructure audit and second-order work, then close out directly to main with honest external evidence boundaries.
+
+**Total: 999/1000 | Velocity: 8 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 590/590 Vitest, 47 focused invariant assertions, and the full launch-local gate pass directly. |
+| Creative Alignment | 100 | → | Launch operations now match PromoGrind's calm operator voice: exact remaining criteria replace vague green/red theater. |
+| Momentum | 100 | ↑ | Four ranked infrastructure items, four second-order innovations, and bounded Brevo configuration shipped in one mission. |
+| Engagement | 100 | → | The command center shows the next missing proof criterion, making operator action precise and inspectable. |
+| Process Quality | 100 | → | Audit premises, provider targets, freshness, direct exits, and rejected phantom work are recorded explicitly. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited; exact control-plane gaps were shipped through Ark cargo `01JUE23NQ1EEF6010874B09F97`. |
+| Security Posture | 100 | → | History scanning is fast and precise, redaction is preserved, and one true residual is routed for rotation. |
+| Ecosystem Integration | 100 | ↑ | Brevo, Supabase, Stripe, Cloudflare, GitHub Pages, launch proofs, and project truth now meet through typed contracts. |
+| Capital Efficiency | 100 | → | No dependency or recurring-cost surface was added; all provider checks are read-only or bounded configuration on existing plans. |
+| Automation Coverage | 99 | → | Provider/build/proof gates advanced materially; connected AI pixel inspection and real human/mailbox/payment proofs remain external. |
+
+**Top win:** replaced four recurring classes of observability fiction—stale status, generic READY, false zero, and noisy scans—with self-validating evidence contracts.
+
+**Top gap:** exact Cloudflare rules scopes and real human/mailbox/payment evidence remain outside current authority; local green still cannot promote SPARKED.
+
+**Intent outcome:** Achieved for all repo-owned and executable external work; every inaccessible or human-evidence criterion remains openly deferred.
+
+**SIL items committed:**
+1. Any provider readiness signal must bind target, permission, checked time, and evidence source before it can clear a blocker.
+2. Any proof shown in the browser must be independently derivable from the same criterion receipts as its canonical writer.

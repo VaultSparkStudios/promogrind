@@ -289,3 +289,8 @@ Agents MUST NOT modify or remove existing entries.
 - New required direction: make evidence change product decisions, encode visual quality in semantic contracts, and eliminate parallel observability sources before they drift.
 - Why it matters: PromoGrind's quietly elite operator identity requires the system to act as soberly as it speaks and remain legible in every human-best theme.
 - Supersedes prior entry: reinforces S115–S117 saturated excellence with an explicit behavior-over-label and semantic-theme standard; no SOUL anti-goal changed.
+### 2026-07-25 — Sophistication means self-disproving truth surfaces (S119)
+
+- **Direction:** The founder required genius-level, maximally sophisticated work rather than checkbox completion, with observability that cannot lie and honest deferral treated as a win.
+- **Application:** launch proof, startup, capability, and security-history surfaces now carry enough structure to disprove stale or fabricated green states; provider work proceeds to the exact permission boundary and stops with evidence.
+- **Durable rule:** a polished status surface is not sophisticated unless its source, target, freshness, and failure semantics are mechanically inspectable.

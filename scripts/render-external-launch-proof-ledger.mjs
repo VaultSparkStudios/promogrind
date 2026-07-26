@@ -10,6 +10,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadLaunchProofs } from './lib/launch-proofs.mjs';
+import { evaluateProof } from './lib/launch-proof-quorum.mjs';
+import { assessCapabilityReceipt } from './lib/launch-capabilities.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -43,9 +45,10 @@ function classifyBlocker(text) {
 
 function statusLabel(proof) {
   if (!proof) return 'pending';
-  if (proof.status === 'complete') return 'complete';
+  const status = evaluateProof(proof).status;
+  if (status === 'complete') return 'complete';
   if (proof.blocking === false) return `${proof.status || 'partial'} / advisory`;
-  return proof.status || 'pending';
+  return status;
 }
 
 function proofMirrorsCategory(proof, category) {
@@ -57,18 +60,19 @@ function proofMirrorsCategory(proof, category) {
     (category === 'supabase-capability' && haystack.includes('supabase'));
 }
 
-export function buildExternalLaunchProofLedger({ status, launchProofs }) {
+export function buildExternalLaunchProofLedger({ status, launchProofs, capabilityReceipt = null, now = Date.now() }) {
   const blockers = Array.isArray(status.blockers) ? status.blockers : [];
   const proofs = launchProofs.proofs || {};
   const proofRows = Object.entries(proofs).map(([key, proof]) => ({
+    evaluation: evaluateProof(proof),
     key,
     label: proof.label || key,
     status: statusLabel(proof),
     blocking: proof.blocking !== false,
     requiredFor: Array.isArray(proof.requiredFor) ? proof.requiredFor.join(', ') : '',
     nextStep: normalize(proof.nextStep || proof.details || ''),
-    evidenceRequired: Array.isArray(proof.evidenceRequired) ? proof.evidenceRequired : [],
-    evidenceCount: Array.isArray(proof.evidence) ? proof.evidence.length : 0,
+    evidenceRequired: evaluateProof(proof).criteria.map((criterion) => criterion.label),
+    evidenceCount: evaluateProof(proof).coveredCount,
   }));
 
   const blockerRows = blockers
@@ -82,6 +86,7 @@ export function buildExternalLaunchProofLedger({ status, launchProofs }) {
       };
     });
 
+  const capabilityAssessment = assessCapabilityReceipt(capabilityReceipt, now);
   return {
     generatedAt: new Date().toISOString(),
     project: status.name || status.slug || 'PromoGrind',
@@ -93,6 +98,8 @@ export function buildExternalLaunchProofLedger({ status, launchProofs }) {
     launchProofsBlocking: proofRows.filter((proof) => proof.blocking && proof.status !== 'complete').length,
     proofRows,
     blockerRows,
+    capabilityReceipt: capabilityReceipt?.capabilities ? capabilityReceipt : null,
+    capabilityAssessment,
   };
 }
 
@@ -111,6 +118,7 @@ export function renderLedgerMd(ledger) {
     `- Proof-contract coverage: ${ledger.blockersMirrored}/${ledger.blockersOpen} blockers mirrored`,
     `- Unmirrored blockers: ${ledger.unmirroredBlockers}`,
     `- Blocking canonical launch proofs: ${ledger.launchProofsBlocking}`,
+    `- Target-authorized launch capabilities: ${ledger.capabilityReceipt ? `${ledger.capabilityAssessment.trustedReady}/${ledger.capabilityReceipt.summary.total} (${ledger.capabilityAssessment.fresh ? 'fresh' : 'stale — not trusted'})` : 'not probed'}`,
     '',
     '## Canonical Launch Proofs',
     '',
@@ -128,6 +136,16 @@ export function renderLedgerMd(ledger) {
       `| ${row.category} | ${row.mirroredInLaunchProofs ? 'yes' : 'no'} | ${row.blocker} |`
     ),
     '',
+    '## Target-Bound Capability Receipt',
+    '',
+    ...(ledger.capabilityReceipt ? [
+      `> Checked: ${ledger.capabilityReceipt.checkedAt}`,
+      '',
+      '| Capability | Target | State | Ready | Reason |',
+      '|---|---|---|---:|---|',
+      ...ledger.capabilityReceipt.capabilities.map((row) => `| ${row.label} | ${row.target} | ${row.state} | ${row.ready ? 'yes' : 'no'} | ${row.reason} |`),
+    ] : ['No redacted receipt is available. Run `node scripts/check-launch-capabilities.mjs --write`.']),
+    '',
     '## Completion Rule',
     '',
     'Only record completion through the existing proof-specific runners or `scripts/update-launch-proof.mjs` with redacted evidence. Do not paste secrets, tokens, passwords, full email bodies, or full auth links into this repo.',
@@ -141,7 +159,8 @@ export function renderLedgerMd(ledger) {
 function main() {
   const status = readJson('context/PROJECT_STATUS.json', {});
   const launchProofs = loadLaunchProofs(ROOT);
-  const ledger = buildExternalLaunchProofLedger({ status, launchProofs });
+  const capabilityReceipt = readJson('.cache/launch-capabilities.json', null);
+  const ledger = buildExternalLaunchProofLedger({ status, launchProofs, capabilityReceipt });
   const rendered = renderLedgerMd(ledger);
 
   if (JSON_MODE) {

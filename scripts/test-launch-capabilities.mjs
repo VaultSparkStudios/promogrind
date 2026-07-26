@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { assessCapabilityReceipt, buildCapabilityReceipt, capabilityResult, summarizeCapabilities } from './lib/launch-capabilities.mjs';
+const rows = [capabilityResult('cloudflareHeaders', { state: 'authenticated', targetMatch: true, httpStatus: 403 }), capabilityResult('brevoDomain', { state: 'authorized', targetMatch: true }), capabilityResult('supabaseProject', { state: 'present', targetMatch: false }), capabilityResult('stripeAccount', { state: 'authorized', targetMatch: false }), capabilityResult('captureConfig', { state: 'missing' })];
+assert.equal(rows[0].ready, false); assert.equal(rows[1].ready, true); assert.equal(rows[2].ready, false); assert.equal(rows[3].ready, false);
+assert.equal(summarizeCapabilities(rows).ready, 1); assert.equal(summarizeCapabilities(rows).unauthorized, 3);
+const receipt = buildCapabilityReceipt(rows, '2026-07-25T00:00:00.000Z');
+assert.equal(receipt.capabilities.length, 5); assert.equal(receipt.summary.missing, 1); assert.equal(receipt.capabilities.every((row) => !('secret' in row) && !('key' in row)), true);
+assert.equal(assessCapabilityReceipt(receipt, Date.parse('2026-07-25T01:00:00.000Z')).fresh, true);
+assert.equal(assessCapabilityReceipt(receipt, Date.parse('2026-07-26T00:00:00.000Z')).trustedReady, 0);
+console.log('launch capability truth plane: 11 assertions passing');

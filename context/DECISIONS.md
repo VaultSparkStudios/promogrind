@@ -1,5 +1,36 @@
 # Decisions
 
+## 2026-07-25 — Session 119
+
+### Decision: launch completion is a criterion quorum, never a status write
+
+- Status: accepted
+- Context: one generic evidence note could mark a multi-step launch proof complete while the ledger displayed only 1/N evidence.
+- Decision: stable criterion IDs and validated typed receipts are authoritative; status is derived independently in Node and the browser.
+- Why this was chosen: a release truth surface must be able to disprove its own stale or fabricated completion claim.
+
+### Decision: credentials are target-and-scope claims
+
+- Status: accepted
+- Context: generic READY labels contradicted live 401/403 responses and stale blocker prose.
+- Decision: report missing, present, authenticated, and authorized separately for an exact domain/project/account, with bounded redacted receipts.
+- Why this was chosen: presence answers “do we have bytes”; launch work needs “can this credential perform this exact action here.”
+
+### Decision: static capture configuration belongs at the Pages build boundary
+
+- Status: accepted
+- Context: Vite received the browser-safe Supabase key, but copied static capture pages never did and silently disabled signup.
+- Decision: postbuild injects escaped meta configuration into every capture page and CI fails if the production key is absent.
+- Why this was chosen: one source-backed build contract fixes every static surface without committing a key or duplicating configuration.
+
+### Decision: real external state earns partial proof
+
+- Status: accepted
+- Context: Brevo domain authentication became executable, but forwarding inspection and mailbox receipt did not.
+- Decision: create/authenticate the exact domain and record only the SPF/DKIM criterion; keep forwarding and delivery open after the Cloudflare rule probe returns 403.
+- Why this was chosen: partial verified progress is more useful—and more honest—than either a phantom blocker or a fabricated green proof.
+
+
 ## 2026-07-23 — Session 115
 
 ### Decision: provider spend policy is one server-owned entitlement contract

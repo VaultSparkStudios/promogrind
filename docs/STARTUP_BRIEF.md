@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-25 (Session 118 closeout) -->
+<!-- generated-at: 2026-07-26 (Session 119 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 118 closeout · 2026-07-25.
+> **Fast-boot brief** — generated at Session 119 closeout · 2026-07-26.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 119 · 2026-07-25 · FOUNDER MODE                         ║
+║  Session 120 · 2026-07-26 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -30,15 +30,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
-║  Profile · tool · launch-hardening · arch=— · top-axis=—         ║
+║  Profile · app · launch-hardening · source=context/PROJECT_STAT  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    999/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: ?  ·  Velocity 5↓                          ║
-║    Last active: 1d  ·  Last closeout: 2d  ·  (active = newest o  ║
-║    Trend  █▆▄▄▄  ↓  (last 5 sessions)                            ║
+║    SIL v3.0  ·  Avg3: ?  ·  Velocity 8↑                          ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
@@ -55,26 +55,26 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 118 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 119 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    588/588 passing  ·  Deploy: S118 implementation/clos  ║
+║  Tests:    590/590 passing  ·  Deploy: S119 local implementatio  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
-║     24,861 / 1,000,000 tok  ·  codex/codex-1m  ·  heuristic      ║
-║     ~12,431 tok/turn  ·  cache 50%  ·  72 turns to compact       ║
+║     25,373 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~12,687 tok/turn  ·  cache 50%  ·  70 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         588/588 passing (2026-07-24)                   ║
-║  ✓  Velocity      5 ↓  ·  Debt: →                                ║
+║  ✓  Tests         590/590 passing (2026-07-25)                   ║
+║  ✓  Velocity      8 ↑  ·  Debt: →                                ║
 ║  ⚠  Runway        ~2 sessions                                    ║
 ║  ✓  Context age   1d                                             ║
-║  ✓  IGNIS         44184 FORGE  ·  2d old                         ║
-║  ⛔  Truth         green-with-external-proof-follow-ups  ·  Geno  ║
-║  ⛔  Compliance   0/0 (0%) → ▁                                    ║
+║  ✓  IGNIS         44184 FORGE  ·  3d old                         ║
+║  ⛔  Truth         green-with-target-scope-and-external-proof-fo  ║
+║  ⚠  Compliance   unavailable (0 checks) · public-repo shim       ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.050  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
@@ -82,16 +82,16 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ✓  Doctor        12/12 (100%)  ·  2026-07-25  ✓                 ║
-║  ✓  Cost          real $0.08/7d · 7d notional $1.23 (flat-rate   ║
+║  ✓  Doctor        12/12 (100%)  ·  2026-07-26  ✓                 ║
+║  ✓  Cost          real $0.08/7d · 7d notional $1.33 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
-║  Workers: 0/? active · 0 stale · 0 conflicts                     ║
-║  Snapshot: snapshot unknown · next n/a                           ║
-║  Propagation: 0 queued · 0 lock-blocked                          ║
-║  Ark: 0 cargo in 24h · full view: node scripts/orchestrate.mjs   ║
-║  Untracked: 0 project-like · 0 scratch                           ║
+║  Workers: unavailable · public-repo shim has no portfolio snaps  ║
+║  Snapshot: unavailable · portfolio/ACTIVE_SESSIONS.json absent   ║
+║  Propagation: unavailable · portfolio queue absent               ║
+║  Ark: 169 drained · 11h old · sig failures 0                     ║
+║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ EXECUTION PLAN ══════════════════════════════════════════════╗
@@ -101,7 +101,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   █▆▄▄▄  5↓  (last 5 sessions)                        ║
+║  Velocity:   █▆▄▄▄  8↑  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -112,7 +112,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 118                               ║
+║  GENIUS HIT LIST  ·  Session 119                               ║
 ║  Project: PromoGrind · ranked by impact                        ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -122,5 +122,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 118 closeout · 2026-07-25*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 119 closeout · 2026-07-26*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-07-23 (S115)
-Overall status: green-with-external-proof-follow-ups
-Next action: map `promogrind.supabase.deploy`, deploy the atomic quota migration plus five provider functions to `fjnpzjjyhnpmunfoycrp`, then record real auth-email, Stripe, friend-beta, Brevo, capture-key, and visual evidence.
+Last reviewed: 2026-07-25 (S119)
+Overall status: green-with-target-scope-and-external-proof-follow-ups
+Next action: grant exact Cloudflare Transform Rules and Email Routing read scopes, rotate the isolated historical privileged Supabase token, verify the S119 capture deploy, then complete real auth-email, purchase, friend-beta, forwarding, and mailbox criteria.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
 ---
@@ -58,6 +58,17 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache now treats Markdown/JSON coherence as part of freshness; remaining launch gaps are real external proof gates.
+
+## Resolved This Session (S119)
+
+- Startup identity, compliance, portfolio, and Ark signals distinguish unavailable/empty/failing states and name their actual source.
+- Launch-proof status derives from criterion receipt quorum in both canonical scripts and the browser; direct generic completion is impossible.
+- Five provider targets now separate credential presence from authentication, target match, and required authorization with freshness-bounded receipts.
+- Brevo `promogrind.bet` is authenticated after four exact DNS changes; the canonical proof truthfully records 1/3 criteria.
+- PromoGrind Supabase REST service scope and the live Stripe account are authorized; stale “generic capability missing” prose is no longer treated as probe truth.
+- The production capture build root cause is fixed: CI injects the browser-safe key into every static capture page and refuses a missing-key Pages build.
+- Full-history scanning completes 314 commits in about two seconds and isolates one real historical privileged token; rotation is routed through Ark without reproducing it.
+- Repo-owned verification is green at 590/590 plus 47 standalone invariant assertions and launch-local direct exit 0.
 
 ## Resolved This Session (S115)
 

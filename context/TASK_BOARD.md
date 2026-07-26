@@ -3,15 +3,28 @@
 ## Now
 
 - configure a header-capable production edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
-- rotate the exposed webhook credential through the Studio secrets gateway; redacted Ark request `01JU98MC5M8FC5EDBEE214F795` records the required action without reproducing the secret
+- rotate the historical privileged Supabase token isolated by the bounded full-history scanner; redacted Ark request `01JUE23NQ1EEF6010874B09F97` records the exact commit/file and never reproduces the credential
 - deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; never infer deployment from repo code
-- record real production auth-email, Stripe purchase, friend-beta, Brevo forwarding, and capture public-key proofs in the canonical proof ledger
+- verify the exact `contact@promogrind.bet` → founder mailbox forwarding route once Cloudflare Email Routing Rules Read is granted; Brevo SPF/DomainKeys Identified Mail (DKIM) is verified at criterion level
+- after S119 deploy, verify capture public-key injection live, then record real production auth-email, Stripe purchase, friend-beta, forwarding, and capture-submission receipts in the canonical proof ledger
 
 ## Next
 
 - repeat AI pixel inspection when the connected image viewer is healthy; S118 captured and hashed the complete desktop/mobile dark/light matrix and found zero live computed-style contrast failures, but does not claim the unavailable pixel-review step
 - inspect S118 CI/deployment and refresh the live web probe against the deployed commit
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
+
+## Shipped This Session (S119)
+
+- startup-brief-provenance-lattice — **DONE**: project identity, compliance, orchestrator, Ark, and untracked-work signals now distinguish unavailable, empty, stale, and failing states with source precedence and eight assertions.
+- streaming-secret-archaeology — **DONE**: one bounded streaming Git scan replaces per-commit fan-out, completes 314 commits in about two seconds, rejects lockfile/test noise, and isolates one real historical privileged token.
+- launch-proof-evidence-quorum — **DONE**: seven proofs migrated to typed criterion receipts; all status and counts derive from coverage, unsafe/manual completion is rejected, and 12 adversarial assertions gate the contract.
+- target-bound-capability-truth-plane — **DONE**: five gateway-resolved provider targets report missing/present/authenticated/authorized separately with redacted, freshness-bounded receipts; Brevo, PromoGrind Supabase, and live Stripe are READY.
+- proof-quorum-browser-self-validation — **DONE (second-order)**: the command center independently derives typed proof state and shows the next missing criterion.
+- capability-receipt-freshness-ratchet — **DONE (second-order)**: stale provider evidence contributes zero trusted-ready capabilities.
+- capture-build-fail-closed — **DONE (second-order)**: the Pages postbuild injects the browser-safe key across all capture pages and CI refuses a production build without it.
+- local-date-noninteractive-closeout — **DONE (second-order)**: mandatory autopilot now stamps the host-local calendar date and follows the protocol's gated no-prompt path in noninteractive sessions.
+- Brevo sender-domain authentication — **DONE / EXTERNAL CONFIG**: created `promogrind.bet`, applied four provider-returned DNS records, verified idempotence, authenticated the domain, and recorded 1/3 canonical Brevo criteria without inventing forwarding/mailbox evidence.
 
 ## Shipped This Session (S118)
 

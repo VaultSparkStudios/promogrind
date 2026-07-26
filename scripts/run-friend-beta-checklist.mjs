@@ -16,6 +16,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
+import { appendReceipts, receiptsFromSteps } from './lib/launch-proof-quorum.mjs';
 
 const ROOT = process.cwd();
 const PROOFS_PATH = path.join(ROOT, "context", "LAUNCH_PROOFS.json");
@@ -25,12 +26,12 @@ const PRINT_ONLY = ARGS.includes("--print");
 const AUTO_RECORD = ARGS.includes("--record");
 
 const STEPS = [
-  { id: "auth", q: "Tester completed account creation or sign-in at https://promogrind.bet without confusion?" },
-  { id: "auth_recovery", q: "Tester verified confirmation-email handling or forgot-password recovery was visible and understandable?" },
-  { id: "calculator", q: "Tester completed at least one top calculator (BonusBet, ProfitBoost, FirstBet, or Kelly) end-to-end and got a sensible result?" },
-  { id: "cta", q: "Tester reviewed sportsbook CTA behavior — link opens, label is honest, no broken book buttons?" },
-  { id: "pricing", q: "Tester reviewed pricing/free-account messaging and understood what's free vs paid without help?" },
-  { id: "trust", q: "Tester saw responsible-gambling copy and trusted the app's honesty (no hidden fees, no dark patterns)?" },
+  { id: "auth", criterionId: 'tester-completed-account-creation-or-sign-in', q: "Tester completed account creation or sign-in at https://promogrind.bet without confusion?" },
+  { id: "auth_recovery", criterionId: 'tester-completed-confirmation-email-or-password-reset-recovery-check', q: "Tester verified confirmation-email handling or forgot-password recovery was visible and understandable?" },
+  { id: "calculator", criterionId: 'tester-completed-at-least-one-top-calculator', q: "Tester completed at least one top calculator (BonusBet, ProfitBoost, FirstBet, or Kelly) end-to-end and got a sensible result?" },
+  { id: "cta", criterionId: 'tester-reviewed-sportsbook-cta-behavior', q: "Tester reviewed sportsbook CTA behavior — link opens, label is honest, no broken book buttons?" },
+  { id: "pricing", criterionId: 'tester-reviewed-pricing-free-account-messaging', q: "Tester reviewed pricing/free-account messaging and understood what's free vs paid without help?" },
+  { id: "trust", criterionId: null, q: "Tester saw responsible-gambling copy and trusted the app's honesty (no hidden fees, no dark patterns)?" },
 ];
 
 const TAG_RULES = [
@@ -136,7 +137,7 @@ async function run() {
       note = (await ask(rl, "  what went wrong? (one line): ")).trim();
       allYes = false;
     }
-    answers.push({ id: step.id, q: step.q, answer: ans, note });
+    answers.push({ id: step.id, criterionId: step.criterionId, q: step.q, answer: ans, note });
   }
 
   const friction = (await ask(rl, "\nOne-line summary of biggest friction (blank = none): ")).trim();
@@ -164,16 +165,17 @@ async function run() {
 
   const proofs = JSON.parse(fs.readFileSync(PROOFS_PATH, "utf8"));
   proofs.proofs.friendBeta ??= {};
-  proofs.proofs.friendBeta.status = allYes ? "complete" : "pending";
   proofs.proofs.friendBeta.evidence ??= [];
   proofs.proofs.friendBeta.evidence.push(evidence);
-  proofs.lastUpdated = sessionDate;
+  appendReceipts(proofs, 'friendBeta', receiptsFromSteps(answers, {
+    source: 'human-observation', target: 'https://promogrind.bet', verifier: `runner:friend-beta:${testerName || 'anonymous'}`,
+  }));
 
   fs.writeFileSync(PROOFS_PATH, JSON.stringify(proofs, null, 2) + "\n");
   fs.writeFileSync(path.join(ROOT, "docs", "BETA_FEEDBACK.md"), renderBetaFeedbackSummary(proofs));
   console.log(`\n✓ Recorded evidence to ${path.relative(ROOT, PROOFS_PATH)}`);
   console.log("✓ Updated docs/BETA_FEEDBACK.md");
-  console.log(`  friendBeta.status = ${proofs.proofs.friendBeta.status}`);
+  console.log(`  friendBeta.status = ${proofs.proofs.friendBeta.status} (derived from criterion receipts)`);
 }
 
 run().catch((err) => {

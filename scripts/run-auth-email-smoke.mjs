@@ -14,6 +14,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
+import { appendReceipts, receiptsFromSteps } from './lib/launch-proof-quorum.mjs';
 
 const ROOT = process.cwd();
 const PROOFS_PATH = path.join(ROOT, "context", "LAUNCH_PROOFS.json");
@@ -23,14 +24,14 @@ const PRINT_ONLY = ARGS.includes("--print");
 const AUTO_RECORD = ARGS.includes("--record");
 
 const STEPS = [
-  { id: "account-create", q: "Created a fresh production PromoGrind account at https://promogrind.bet?" },
-  { id: "confirmation-delivery", q: "Received the confirmation email in the test inbox or spam folder?" },
-  { id: "confirmation-resend", q: "Used Resend confirmation email and confirmed a second email arrived or Supabase showed an accepted resend?" },
-  { id: "signin-after-confirm", q: "Confirmed the account and signed in successfully?" },
-  { id: "forgot-password", q: "Requested a forgot-password email from the production sign-in dialog?" },
-  { id: "recovery-delivery", q: "Received the password reset email in the test inbox or spam folder?" },
-  { id: "recovery-link", q: "Opened the recovery link and landed on https://promogrind.bet/?auth=update-password or equivalent update-password UI?" },
-  { id: "new-password-signin", q: "Set a new password and signed in with it successfully?" },
+  { id: "account-create", criterionId: 'fresh-production-account-created', q: "Created a fresh production PromoGrind account at https://promogrind.bet?" },
+  { id: "confirmation-delivery", criterionId: 'confirmation-email-delivered', q: "Received the confirmation email in the test inbox or spam folder?" },
+  { id: "confirmation-resend", criterionId: 'confirmation-resend-verified', q: "Used Resend confirmation email and confirmed a second email arrived or Supabase showed an accepted resend?" },
+  { id: "signin-after-confirm", criterionId: null, q: "Confirmed the account and signed in successfully?" },
+  { id: "forgot-password", criterionId: null, q: "Requested a forgot-password email from the production sign-in dialog?" },
+  { id: "recovery-delivery", criterionId: 'forgot-password-email-delivered', q: "Received the password reset email in the test inbox or spam folder?" },
+  { id: "recovery-link", criterionId: 'recovery-link-opens-update-password-ui', q: "Opened the recovery link and landed on https://promogrind.bet/?auth=update-password or equivalent update-password UI?" },
+  { id: "new-password-signin", criterionId: 'new-password-sign-in-succeeds', q: "Set a new password and signed in with it successfully?" },
 ];
 
 function printChecklist() {
@@ -80,7 +81,7 @@ async function run() {
 
   for (const step of STEPS) {
     const answer = (await ask(rl, `-> ${step.q} [y/n]: `)).trim().toLowerCase();
-    answers.push({ id: step.id, q: step.q, answer });
+    answers.push({ id: step.id, criterionId: step.criterionId, q: step.q, answer });
     if (answer !== "y") {
       allYes = false;
       console.log(`  x Marked NOT-DONE for "${step.id}". Auth email smoke incomplete.`);
@@ -125,15 +126,15 @@ async function run() {
   }
 
   const proofs = JSON.parse(fs.readFileSync(PROOFS_PATH, "utf8"));
-  proofs.proofs.authEmailSmoke ??= {};
-  proofs.proofs.authEmailSmoke.status = "complete";
   proofs.proofs.authEmailSmoke.evidence ??= [];
-  proofs.proofs.authEmailSmoke.evidence.push(evidence);
-  proofs.lastUpdated = evidence.date;
+  proofs.proofs.authEmailSmoke.evidence.push({ ...evidence, authority: 'narrative-only; criteria receipts derive status' });
+  appendReceipts(proofs, 'authEmailSmoke', receiptsFromSteps(answers, {
+    source: 'human-observation', target: 'https://promogrind.bet', verifier: 'runner:auth-email',
+  }));
 
   fs.writeFileSync(PROOFS_PATH, JSON.stringify(proofs, null, 2) + "\n");
   console.log(`\nOK Recorded evidence to ${path.relative(ROOT, PROOFS_PATH)}`);
-  console.log("OK authEmailSmoke.status = complete");
+  console.log(`OK authEmailSmoke.status = ${proofs.proofs.authEmailSmoke.status} (derived from criterion receipts)`);
 }
 
 run().catch((error) => {

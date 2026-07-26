@@ -30,6 +30,7 @@ import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
+import { classifyRatioSnapshot, resolveProjectProfile, signalIcon, SIGNAL_STATE } from './lib/signal-state.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -52,15 +53,11 @@ if (!process.env.STUDIO_BRIEF_NO_DOCTOR_FIX) {
   } catch { /* non-fatal */ }
 }
 
-function renderProfileLensHeader() {
+function renderProfileLensHeader(status) {
   try {
     const p = readJson(path.join(root, '.cache', 'project-profile.json'), null);
-    if (!p) return '';
-    const m = p.medium || '—';
-    const stage = p.stage || '—';
-    const arch = p.archetype || '—';
-    const ax = (p.ignisTopAxes || [])[0] || '—';
-    const line = `Profile · ${m} · ${stage} · arch=${arch} · top-axis=${ax}`;
+    const profile = resolveProjectProfile(status, p || {});
+    const line = `Profile · ${profile.medium} · ${profile.stage} · source=${profile.source}`;
     return [top('PROJECT PROFILE'), row(line), bot()].join('\n');
   } catch { return ''; }
 }
@@ -563,10 +560,13 @@ const complianceSpark = complianceSnapshots.slice(-8).map(s => {
   if (score >= 50) return '▂';
   return '▁';
 }).join('') || '—';
-const sigCompliance = !complianceLatest ? '⚠' : complianceLatest.score >= 100 ? '✓' : complianceLatest.score >= 95 ? '⚠' : '⛔';
-const complianceDetail = complianceLatest
-  ? `${complianceLatest.passed}/${complianceLatest.total} (${complianceLatest.score}%) ${complianceTrend} ${complianceSpark}`
-  : 'not tracked — run: node scripts/ops.mjs compliance-velocity';
+const complianceState = classifyRatioSnapshot(complianceLatest);
+const sigCompliance = signalIcon(complianceState);
+const complianceDetail = complianceState === SIGNAL_STATE.UNAVAILABLE
+  ? 'unavailable (0 checks) · public-repo shim'
+  : complianceState === SIGNAL_STATE.SKIPPED
+    ? `${complianceLatest.skipped}/${complianceLatest.total} skipped · not a pass`
+    : `${complianceLatest.passed}/${complianceLatest.total} (${complianceLatest.score}%) ${complianceTrend} ${complianceSpark}`;
 
 function buildGeniusBoxFromMarkdown(markdown) {
   const entries = [];
@@ -693,7 +693,7 @@ const lines = [
   ...(Array.isArray(status.testingSurfaces) && status.testingSurfaces.length
     ? [renderTestItNow({ name: status.name || 'Studio Ops', testingSurfaces: status.testingSurfaces }), ``]
     : []),
-  renderProfileLensHeader(),
+  renderProfileLensHeader(status),
   ``,
   ...renderStartupScoreBlock({
     silTotal, silMax, bar24, pct, avg3Raw, velocity, velTrend, silStreak,
