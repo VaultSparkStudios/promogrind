@@ -259,7 +259,16 @@ export const LAUNCH_PROOFS = {
       "details": "The capture page fails closed when its browser-safe Supabase anon key is absent; production configuration has not yet been evidenced.",
       "nextStep": "Provide the browser-safe anon key through the production deploy configuration and run a real capture submission without committing the key to this repository.",
       "evidence": [],
-      "receipts": [],
+      "receipts": [
+        {
+          "criterionId": "production-page-exposes-non-placeholder-browser-safe-configuration",
+          "source": "automated-smoke",
+          "target": "https://promogrind.bet/the-grind/",
+          "observedAt": "2026-07-26T18:31:23.976Z",
+          "verifier": "scripts/check-launch-capabilities.mjs",
+          "detail": "Production capture page returned browser-safe non-placeholder configuration after S119 Pages deployment"
+        }
+      ],
       "target": "https://promogrind.bet/the-grind/",
       "criteria": [
         {
@@ -277,7 +286,8 @@ export const LAUNCH_PROOFS = {
           "label": "lead row is observable without exposing private credentials",
           "required": true
         }
-      ]
+      ],
+      "lastEvaluatedAt": "2026-07-26T18:31:23.977Z"
     }
   }
 };

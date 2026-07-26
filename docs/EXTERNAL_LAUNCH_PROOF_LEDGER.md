@@ -11,7 +11,7 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 - Proof-contract coverage: 8/8 blockers mirrored
 - Unmirrored blockers: 0
 - Blocking canonical launch proofs: 6
-- Target-authorized launch capabilities: 3/5 (fresh)
+- Target-authorized launch capabilities: 0/5 (stale — not trusted)
 
 ## Canonical Launch Proofs
 
@@ -23,7 +23,7 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 | Production auth email smoke | pending | yes | soft-launch, full-launch, marketing-push | 0/6 | Run `npm run smoke:auth-email -- --record` after creating a fresh production account and completing the confirmation/resend/reset flow. Record only masked email and provider IDs; never paste email bodies, tokens, passwords, or full auth links. |
 | On-domain contact email delivery | pending | yes | soft-launch, full-launch, marketing-push | 1/3 | Use the Studio Ops Brevo capability to verify SPF/DKIM and deliver a redacted test message through contact@promogrind.bet to founder@vaultsparkstudios.com. |
 | AI quota migration and provider deployment | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Resolve promogrind.supabase.deploy through the secrets gateway, deploy migration 20260723021000_ai_quota_claim.sql and the five provider functions to fjnpzjjyhnpmunfoycrp, then record redacted deployment IDs. |
-| Production capture public-key configuration | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Provide the browser-safe anon key through the production deploy configuration and run a real capture submission without committing the key to this repository. |
+| Production capture public-key configuration | pending | yes | soft-launch, full-launch, marketing-push | 1/3 | Provide the browser-safe anon key through the production deploy configuration and run a real capture submission without committing the key to this repository. |
 
 ## Project Status Blockers
 

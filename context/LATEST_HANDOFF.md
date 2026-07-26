@@ -25,7 +25,7 @@ S119 completed the requested continuous `/start → /audit → /implement → se
 - `npm run verify:launch-local` — green, direct exit 0.
 - Vitest — 75 files, 590/590 passing; standalone session invariants — 47 assertions passing.
 - Full history — 314 commits in about two seconds; one redacted privileged Supabase token finding routed for rotation.
-- Live capabilities — 3/5 READY: Brevo sender domain, PromoGrind Supabase REST service scope, live Stripe account. Cloudflare Transform Rules is authenticated/403; capture is authenticated but awaits deploy.
+- Live capabilities — 4/5 READY: Brevo sender domain, PromoGrind Supabase REST service scope, live Stripe account, and production capture configuration. Cloudflare Transform Rules remains authenticated/403.
 - Brevo configuration — four DNS outcomes idempotently unchanged on retry; authentication request 200; canonical proof 1/3.
 - Public claims/source/auth/launch/UX/browser/bundle/proof/sanitization gates — green.
 
@@ -34,7 +34,7 @@ S119 completed the requested continuous `/start → /audit → /implement → se
 - Six live security headers require Cloudflare Transform Rules scope; current target token returns 403.
 - Exact Cloudflare Email Routing rule inspection returns 403, so forwarding is not claimed despite public MX records.
 - Historical privileged Supabase token rotation is control-plane work; Ark cargo `01JUE23NQ1EEF6010874B09F97` includes the redacted location.
-- Capture configuration requires the S119 GitHub Pages deployment before live proof.
+- Production capture configuration is verified and recorded 1/3; submission and observable lead-row evidence remain open.
 - Production auth email, real purchase/portal, friend beta, forwarding delivery, and capture submission remain criterion-level external evidence gates.
 - AI pixel inspection remains partial because the connected image viewer still fails at Windows credential protection.
 
@@ -42,10 +42,10 @@ S119 completed the requested continuous `/start → /audit → /implement → se
 
 1. Grant the two exact Cloudflare scopes, configure six headers, verify the forwarding rule, and rerun live checks.
 2. Rotate the isolated historical Supabase credential and provide a target-bound deploy token for the pending migration/functions.
-3. Confirm S119 Pages deployment injected capture configuration, then complete real human/payment/mailbox proof criteria.
+3. Complete capture submission/lead-row plus real human, payment, forwarding, and mailbox proof criteria.
 
 Intent Outcome: Achieved — every repo-owned audit and second-order item shipped; non-repo evidence remains explicitly unclaimed.
-Deploy: pending — CI-on-push publication and live capture verification follow the closeout commit.
+Deploy: deployed — commit `c718c24`; brief-format `30194498456`, CI `30194498448`, and Pages `30194498469` green; live capture configuration verified.
 
 ---
 

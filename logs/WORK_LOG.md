@@ -8,6 +8,7 @@
 - Shipped browser quorum self-validation, six-hour capability receipt decay, fail-closed capture config injection, and a closeout autopilot whose local date, no-prompt path, staged scan, safe staging, push ledger, and exit code now agree.
 - Verification: 590/590 Vitest, 47 standalone invariant assertions, and `npm run verify:launch-local` direct exit 0.
 - Ark remediation request `01JUE23NQ1EEF6010874B09F97` covers exact Cloudflare scope, historical privileged-token rotation, and stale control-plane release/cost truth without exposing credentials.
+- Deploy proof: commit `c718c24`; brief-format `30194498456`, CI `30194498448`, and Deploy Pages `30194498469` passed. Live capability probe rose to 4/5 READY and capture configuration earned criterion 1/3; six edge headers remain absent.
 
 
 ## 2026-07-23 - Session 115 saturated Codex arc

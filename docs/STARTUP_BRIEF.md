@@ -57,13 +57,13 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 119 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    590/590 passing  ·  Deploy: S119 local implementatio  ║
+║  Tests:    590/590 passing  ·  Deploy: S119 commit c718c24 depl  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
-║     25,373 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~12,687 tok/turn  ·  cache 50%  ·  70 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
+║     2,687 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
+║     ~1,344 tok/turn  ·  cache 50%  ·  134 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -90,7 +90,7 @@
 ║  Workers: unavailable · public-repo shim has no portfolio snaps  ║
 ║  Snapshot: unavailable · portfolio/ACTIVE_SESSIONS.json absent   ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 169 drained · 11h old · sig failures 0                     ║
+║  Ark: 169 drained · 21h old · sig failures 0                     ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
