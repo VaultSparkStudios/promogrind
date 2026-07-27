@@ -118,16 +118,23 @@ const NAV_ICONS = [
 const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
 
 export function MobileBottomNav({ gi, goTo, tabs }) {
+  // Derive glass surface from live theme palette so contrast holds in both dark and light modes.
+  // K is mutated to KL when the user switches to light theme; reading K.s1/K.bd at render time
+  // picks up the correct surface color. 8-digit hex (#RRGGBBAA) is supported in all target browsers.
+  const navBg = K.s1 + "eb";       // ~92% opacity — darkNavy in dark, white in light
+  const navBorder = K.bd + "80";   // ~50% opacity border, theme-aware
+  const navShadow = `0 -1px 0 ${K.bd}50, 0 -16px 40px ${K.bg}cc`;
+
   return (
     <div className="pg-mobile-nav" style={{
       position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
-      background: `rgba(15,21,32,0.82)`,
+      background: navBg,
       backdropFilter: "blur(18px) saturate(160%)",
       WebkitBackdropFilter: "blur(18px) saturate(160%)",
-      borderTop: `1px solid rgba(96,165,250,0.10)`,
+      borderTop: `1px solid ${navBorder}`,
       display: "flex",
       paddingBottom: "env(safe-area-inset-bottom, 0px)",
-      boxShadow: "0 -1px 0 rgba(96,165,250,0.08), 0 -16px 40px rgba(0,0,0,0.36)",
+      boxShadow: navShadow,
     }}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
       <style>{`
