@@ -39,7 +39,7 @@ const PROFILE_META = {
   ev: {
     label: "EV Grinder",
     icon: "📊",
-    tip: "You think in expected value. Layer in arb plays when you find 0-margin books — pure guaranteed profit.",
+    tip: "You think in expected value. Layer in arb plays when you find 0-margin books — pure modeled profit.",
     nextCalc: "arb-2way",
     nextLabel: "2-Way Arb",
   },

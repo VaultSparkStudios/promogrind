@@ -9,7 +9,7 @@ const WALKTHROUGHS = [
       { n: "Sign Up", body: "Create a new DraftKings account via a promo link. Deposit $5+." },
       { n: "Place Qualifying Bet", body: "Bet $5+ on any market at -500 odds or better. Your $200 bonus bet arrives within 72 hours." },
       { n: "Find Your Line", body: "Use the Bonus Bet Converter. Look for an underdog at +250 to +400. Sweet spot gives 65-72% conversion." },
-      { n: "Lock In Profit", body: "Place $200 bonus bet on underdog at Book A. Hedge with calculated cash amount on favorite at FanDuel or BetMGM. Collect ~$130-144 guaranteed." },
+      { n: "Lock In Profit", body: "Place $200 bonus bet on underdog at Book A. Hedge with calculated cash amount on favorite at FanDuel or BetMGM. Collect ~$130-144 modeled." },
     ],
     calcSlug: "bonus-bet",
   },
@@ -19,7 +19,7 @@ const WALKTHROUGHS = [
       { n: "Claim the Boost", body: "Open FanDuel app, go to Promos tab. Claim the 25% profit boost token (max $10 boost, typically on a $40 bet)." },
       { n: "Find a Sharp Line", body: "Use No-Vig calculator to find the sharpest market — typically NFL spreads or NBA moneylines. Aim for -110 or better." },
       { n: "Calculate Your Edge", body: "Enter your bet size, odds, 25% boost, and $10 max into the Profit Boost Calculator. Note the effective boosted odds." },
-      { n: "Hedge for Guaranteed Profit", body: "Place boosted bet at FanDuel. Hedge the stake+boost payout at another book. Lock in $6-10 regardless of outcome." },
+      { n: "Hedge for modeled Profit", body: "Place boosted bet at FanDuel. Hedge the stake+boost payout at another book. Lock in $6-10 regardless of outcome." },
     ],
     calcSlug: "profit-boost",
   },
@@ -71,7 +71,7 @@ export default function PromoWalkthrough({ navigate, onClose }) {
               ))}
             </div>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 20 }}>
-              <div style={{ width: 32, height: 32, borderRadius: "50%", background: K.ac, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: K.bg, fontSize: 14, flexShrink: 0 }}>{wtStep + 1}</div>
+              <div style={{ width: 32, height: 32, borderRadius: "50%", background: K.ac, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: K.ink, fontSize: 14, flexShrink: 0 }}>{wtStep + 1}</div>
               <div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 6, fontFamily: fontD }}>{step.n}</div>
                 <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7 }}>{step.body}</div>
@@ -79,7 +79,7 @@ export default function PromoWalkthrough({ navigate, onClose }) {
             </div>
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               {wtStep > 0 && <button onClick={() => setWtStep((s) => s - 1)} style={{ padding: "7px 16px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontSize: 11, cursor: "pointer", fontFamily: font }}>← Prev</button>}
-              {wtStep < wt.steps.length - 1 && <button onClick={() => setWtStep((s) => s + 1)} style={{ padding: "7px 16px", background: K.ac, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Next →</button>}
+              {wtStep < wt.steps.length - 1 && <button onClick={() => setWtStep((s) => s + 1)} style={{ padding: "7px 16px", background: K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Next →</button>}
               {isCalcStep && <button onClick={() => { navigate(`/${wt.calcSlug}`); onClose(); }} style={{ padding: "7px 16px", background: `${K.gn}15`, border: `1px solid ${K.gn}30`, borderRadius: 6, color: K.gn, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Open Calculator →</button>}
             </div>
           </div>

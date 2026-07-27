@@ -14,7 +14,7 @@ const FreeBetArbTracker = () => {
     if(!form.amount) return;
     save([{...form,id:Date.now()},...arbs]);
     setForm(f=>({...f,amount:'',hedgeAmt:'',profit:'',notes:''}));
-    if(toast) toast('âœ“ Arb logged',K.gn);
+    if(toast) toast('✓ Arb logged',K.gn);
   };
   const del = id => { const snap=[...arbs]; save(arbs.filter(a=>a.id!==id)); if(toast) toast('Deleted',K.rd,{label:'UNDO',fn:()=>save(snap)}); };
   const totalProfit = arbs.reduce((s,a)=>s+(parseFloat(a.profit)||0),0);
@@ -30,7 +30,7 @@ const FreeBetArbTracker = () => {
       <div><div style={{fontSize:10,color:K.mt}}>TOTAL ARBS</div><div style={S.big(K.ac)}>{arbs.length}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(K.gn)}>${f(totalProfit)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>AVG PROFIT</div><div style={S.big(K.yl)}>${f(avgProfit)}</div></div>
-      {arbs.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600}}>â†“ Export CSV</button>}
+      {arbs.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600}}>↓ Export CSV</button>}
     </div>
     <div style={S.row}>
       <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
@@ -50,7 +50,7 @@ const FreeBetArbTracker = () => {
         {["open","won","lost"].map(s=><option key={s}>{s}</option>)}
       </select></div>
       <div style={{flex:2,minWidth:120}}><label style={S.label}>Notes</label><input style={S.input} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="optional notes"/></div>
-      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     {arbs.length>0&&<div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
@@ -61,30 +61,30 @@ const FreeBetArbTracker = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{a.bookA}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{a.bookB}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(K.pp)}>{a.promoType}</span></td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.amount?`$${a.amount}`:"â€”"}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.hedgeAmt?`$${a.hedgeAmt}`:"â€”"}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(a.profit)>=0?K.gn:K.rd,fontWeight:600}}>{a.profit?`${parseFloat(a.profit)>=0?"+":""}$${a.profit}`:"â€”"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.amount?`$${a.amount}`:"—"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.hedgeAmt?`$${a.hedgeAmt}`:"—"}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(a.profit)>=0?K.gn:K.rd,fontWeight:600}}>{a.profit?`${parseFloat(a.profit)>=0?"+":""}$${a.profit}`:"—"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(a.status==="won"?K.gn:a.status==="lost"?K.rd:K.yl)}>{a.status}</span></td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(a.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>âœ•</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(a.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>✕</span></td>
           </tr>
         ))}</tbody>
       </table>
     </div>}
     {arbs.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
-      <div style={{fontSize:32,marginBottom:8}}>ðŸŽ¯</div>
+      <div style={{fontSize:32,marginBottom:8}}>🎯</div>
       <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No arb plays tracked yet</div>
       <div style={{fontSize:11,color:K.mt}}>Log your free bet arb plays above to track performance.</div>
     </div>}
     <Help entries={[
-      ["Free Bet Arb","Using a free bet or bonus bet on one side of a market, and a real cash bet on the other side at a different book to guarantee profit."],
+      ["Free Bet Arb","Using a free bet or bonus bet on one side of a market, and a real cash bet on the other side at a different book to model a return."],
       ["Same-Game Arb","Two bets within the same game at different books where combined implied probability is under 100%."],
     ]}/>
   </div>);
 };
 
-// â•â•â• v9.0 NEW COMPONENTS â•â•â•
+// ═══ v9.0 NEW COMPONENTS ═══
 
-// â•â•â• PROMO STACKING CALCULATOR â•â•â•
+// ═══ PROMO STACKING CALCULATOR ═══
 const PromoStacking = () => {
   const [mem, setMem] = useCalcMemory('promo-stacking', {stake:"100",odds:"+200",boost:"50",boostMax:"250",insPct:"100",insMax:"100",conv:"70"});
   const {stake,odds,boost,boostMax,insPct,insMax,conv} = mem;
@@ -121,18 +121,18 @@ const PromoStacking = () => {
           <div style={{fontSize:10,color:K.mt}}>after insurance value</div>
         </div>
       </div>
-      <Nt c={r.ok?K.gn:K.yl}>{r.ok?"Positive EV after stacking boost and insurance.":"Check boost/insurance terms â€” may not be stackable at all books."}</Nt>
+      <Nt c={r.ok?K.gn:K.yl}>{r.ok?"Positive EV after stacking boost and insurance.":"Check boost/insurance terms — may not be stackable at all books."}</Nt>
     </div>}
   </div>
   <Help entries={[
     ["Promo Stacking","Combining a profit boost with an insurance/refund on the same bet for maximum value extraction."],
     ["Boost Value","The extra profit added to your winnings above normal. Capped by Boost Max."],
-    ["Insurance","If your bet loses, you get a portion back as bonus bets. Value = Insurance Amount Ã— Conversion Rate."],
+    ["Insurance","If your bet loses, you get a portion back as bonus bets. Value = Insurance Amount × Conversion Rate."],
     ["EV","Expected value weighs the if-win and if-lose scenarios by their probabilities."],
   ]}/></div>);
 };
 
-// â•â•â• PROMO TRADE JOURNAL â•â•â•
+// ═══ PROMO TRADE JOURNAL ═══
 const PromoJournal = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const journal = data.journal || [];
@@ -146,7 +146,7 @@ const PromoJournal = () => {
     const entry={...form,id:Date.now(),tags:form.tags.split(',').map(t=>t.trim()).filter(Boolean)};
     save([entry,...journal]);
     setForm(f=>({...f,notes:"",profit:"",tags:""}));
-    if(toast) toast('âœ“ Journal entry added',K.gn);
+    if(toast) toast('✓ Journal entry added',K.gn);
   };
   const del = id => { const snap=[...journal]; save(journal.filter(e=>e.id!==id)); if(toast) toast('Deleted',K.rd,{label:'UNDO',fn:()=>save(snap)}); };
   const TYPES = ["Bonus Bet","Profit Boost","First Bet","Arb","EV Bet","Other"];
@@ -162,8 +162,8 @@ const PromoJournal = () => {
       <In l="Net Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$" ph="50"/>
       <In l="Tags (comma-sep)" v={form.tags} set={v=>setForm(f=>({...f,tags:v}))} ph="arb,boost"/>
     </div>
-    <div style={{marginBottom:12}}><label style={S.label}>Notes</label><textarea style={{...S.input,height:64,resize:"vertical"}} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What promo, outcome, lessons learnedâ€¦"/></div>
-    <button onClick={add} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,marginBottom:16}}>+ Add Entry</button>
+    <div style={{marginBottom:12}}><label style={S.label}>Notes</label><textarea style={{...S.input,height:64,resize:"vertical"}} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What promo, outcome, lessons learned…"/></div>
+    <button onClick={add} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,marginBottom:16}}>+ Add Entry</button>
     <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
       <span style={{fontSize:10,color:K.mt}}>Filter:</span>
       <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
@@ -176,7 +176,7 @@ const PromoJournal = () => {
       </select>
     </div>
     {sorted.length===0&&<div style={{textAlign:"center",padding:"24px 16px"}}>
-      <div style={{fontSize:24,marginBottom:8}}>ðŸ““</div>
+      <div style={{fontSize:24,marginBottom:8}}>📓</div>
       <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No journal entries yet</div>
       <div style={{fontSize:11,color:K.mt}}>Fill in the form and click <strong style={{color:K.gn}}>+ Add Entry</strong> to start tracking.</div>
     </div>}
@@ -193,14 +193,14 @@ const PromoJournal = () => {
             {e.notes&&<div style={{fontSize:11,color:K.dm,marginBottom:4,maxWidth:400,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{e.notes}</div>}
             {e.tags&&e.tags.length>0&&<div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{e.tags.map((t,i)=><span key={i} style={S.tag(K.pp)}>{t}</span>)}</div>}
           </div>
-          <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:11,flexShrink:0}}>âœ•</span>
+          <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:11,flexShrink:0}}>✕</span>
         </div>
       </div>
     ))}
   </div>);
 };
 
-// â•â•â• ODDS COMPARISON TABLE â•â•â•
+// ═══ ODDS COMPARISON TABLE ═══
 const OddsComparisonTable = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const rows = data.oddsCompare || [{event:"",odds:{}}];
@@ -253,25 +253,25 @@ const OddsComparisonTable = () => {
               return (<td key={b} style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,background:isB?`${K.gn}10`:"transparent",position:"relative"}}>
                 <input style={{...S.input,padding:"3px 6px",fontSize:11,borderColor:isB?K.gn:undefined,width:76}} value={row.odds[b]||""} onChange={e=>updateOdds(i,b,e.target.value)} placeholder="-110"/>
                 {ip&&<div style={{fontSize:9,color:isB?K.gn:K.mt,marginTop:2,textAlign:"center"}}>{ip}%</div>}
-                {badge&&<span style={{position:"absolute",top:2,right:4,fontSize:9,fontWeight:700,color:badge==="up"?K.gn:K.rd,pointerEvents:"none",animation:"fadeIn 0.2s"}}>{badge==="up"?"â–²":"â–¼"}</span>}
+                {badge&&<span style={{position:"absolute",top:2,right:4,fontSize:9,fontWeight:700,color:badge==="up"?K.gn:K.rd,pointerEvents:"none",animation:"fadeIn 0.2s"}}>{badge==="up"?"▲":"▼"}</span>}
               </td>);
             })}
             <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:700,fontSize:12}}>
               {bestBook&&<div>{bestBook.val}<div style={{fontSize:9,color:K.mt}}>{bestBook.book}</div></div>}
-              {spread&&<div style={{fontSize:9,color:K.yl}}>+{spread}Â¢ vs worst</div>}
+              {spread&&<div style={{fontSize:9,color:K.yl}}>+{spread}¢ vs worst</div>}
             </td>
             <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`}}>
-              {rows.length>1&&<span onClick={()=>removeRow(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>âœ•</span>}
+              {rows.length>1&&<span onClick={()=>removeRow(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>✕</span>}
             </td>
           </tr>);
         })}</tbody>
       </table>
     </div>
     <button onClick={addRow} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.gn,fontSize:11,cursor:"pointer",fontFamily:font}}>+ Add Event</button>
-    <Nt c={K.ac}>Green cells = best odds in that row. â–²â–¼ badges show when a line moves. Always bet where the odds are highest for your side.</Nt>
+    <Nt c={K.ac}>Green cells = best odds in that row. ▲▼ badges show when a line moves. Always bet where the odds are highest for your side.</Nt>
   </div>);
 };
 
-// â•â•â• PROMO ARB FINDER â•â•â•
+// ═══ PROMO ARB FINDER ═══
 
 export { FreeBetArbTracker, PromoJournal, PromoStacking, OddsComparisonTable };

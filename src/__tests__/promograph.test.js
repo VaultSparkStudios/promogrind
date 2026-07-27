@@ -187,6 +187,10 @@ describe("promograph helpers", () => {
         opportunityScore: "88",
         confidence: "high",
         opsTags: ["reload"],
+        assumptions: ["$100 cap"],
+        missingInputs: ["expiry"],
+        sensitivityTriggers: ["odds move"],
+        evidenceGrade: "partial",
       },
       { title: "Run FanDuel reload", source: "promo_advisor", calculatorLabel: "Promo Advisor" },
     );
@@ -198,5 +202,9 @@ describe("promograph helpers", () => {
     expect(workflow.source).toBe("promo_advisor");
     expect(workflow.opportunityScore).toBe(88);
     expect(workflow.actionability).toBe(88);
+    expect(workflow.assumptions).toEqual(["$100 cap"]);
+    expect(workflow.missingInputs).toEqual(["expiry"]);
+    expect(workflow.sensitivityTriggers).toEqual(["odds move"]);
+    expect(workflow.evidenceGrade).toBe("partial");
   });
 });

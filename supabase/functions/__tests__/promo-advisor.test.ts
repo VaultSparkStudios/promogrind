@@ -9,6 +9,7 @@
  */
 
 import { assertEquals, assertExists, assertStringIncludes } from "https://deno.land/std@0.168.0/testing/asserts.ts";
+import { normalizeAdvisorResult } from "../_shared/advisor-result.ts";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -51,33 +52,6 @@ function makeMockAnthropicFetch(response = VALID_ANTHROPIC_RESPONSE) {
 }
 
 // ── normalizeAdvisorResult ────────────────────────────────────────────────────
-
-// Import the normalization function directly by re-declaring (avoid import issues with serve())
-function normalizeAdvisorResult(input: Record<string, unknown>, fallbackText = ""): Record<string, unknown> {
-  const rating = ["excellent", "good", "fair", "poor"].includes(String(input.rating || "").toLowerCase())
-    ? String(input.rating).toLowerCase() : "fair";
-  const confidence = ["high", "medium", "low"].includes(String(input.confidence || "").toLowerCase())
-    ? String(input.confidence).toLowerCase() : "medium";
-  const promoType = ["bonus_bet", "profit_boost", "safety_net", "deposit_match", "insurance", "parlay", "arb", "other"].includes(String(input.promoType || "").toLowerCase())
-    ? String(input.promoType).toLowerCase() : "other";
-  const calculatorSlug = ["bonus-bet", "profit-boost", "first-bet", "deposit-match", "insurance", "parlay", "arb-2way", "ev", "hedge"].includes(String(input.calculatorSlug || ""))
-    ? String(input.calculatorSlug) : null;
-  const riskFlags = Array.isArray(input.riskFlags) ? input.riskFlags.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 3) : [];
-  const opsTags = Array.isArray(input.opsTags) ? input.opsTags.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean).slice(0, 4) : [];
-  const parsedScore = Number.parseInt(String(input.opportunityScore ?? ""), 10);
-  return {
-    verdict: String(input.verdict || "Analysis Complete").trim(),
-    rating, confidence, promoType, calculatorSlug,
-    explanation: String(input.explanation || fallbackText || "Analysis complete.").trim(),
-    ev: input.ev ?? null,
-    action: input.action ? String(input.action).trim() : null,
-    hedge: input.hedge ? String(input.hedge).trim() : null,
-    nextStep: input.nextStep ? String(input.nextStep).trim() : null,
-    riskFlags,
-    opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : 50,
-    opsTags,
-  };
-}
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
@@ -137,6 +111,18 @@ Deno.test("normalizeAdvisorResult — caps opsTags at 4", () => {
 Deno.test("normalizeAdvisorResult — uses fallbackText when explanation missing", () => {
   const result = normalizeAdvisorResult({}, "Fallback explanation.");
   assertStringIncludes(result.explanation as string, "Fallback");
+});
+
+Deno.test("normalizeAdvisorResult — bounds and preserves counterfactual receipt fields", () => {
+  const result = normalizeAdvisorResult({
+    missingInputs: ["expiry", "minimum odds", "cap", "extra"],
+    sensitivityTriggers: ["odds move", "terms change"],
+    evidenceGrade: "PARTIAL",
+  });
+  assertEquals(result.missingInputs, ["expiry", "minimum odds", "cap"]);
+  assertEquals(result.sensitivityTriggers, ["odds move", "terms change"]);
+  assertEquals(result.evidenceGrade, "partial");
+  assertEquals(result.receiptVersion, 2);
 });
 
 Deno.test("mock fetch — validates prompt-caching headers are set", async () => {

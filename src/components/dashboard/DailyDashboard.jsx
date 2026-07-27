@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BOOKS } from "../../books.js";
 import { FEATURE_FLAGS } from "../../launchState.js";
@@ -41,7 +41,7 @@ const TOP_TOOL_TABS = [
     { n: "+EV", slug: "ev" },
     { n: "Kelly", slug: "kelly" },
     { n: "2-Way Arb", slug: "arb-2way" },
-    { n: "Promo Guarantee", slug: "promo-guarantee" },
+    { n: "Promo Return Model", slug: "promo-guarantee" },
     { n: "Gut Check", slug: "gut-check" },
   ] },
   { items: [
@@ -71,24 +71,24 @@ function useAchievements(data, streak) {
   }, [data, streak]);
 }
 
-// â•â•â• ONBOARDING WIZARD â•â•â•
-// â•â•â• ANNUAL INCOME ESTIMATOR â•â•â•
+// ═══ ONBOARDING WIZARD ═══
+// ═══ ANNUAL INCOME ESTIMATOR ═══
 // MiddleBet, OddsConvert, RolloverCalc, IncomeEstimator -> ./calculators/UtilityCalculators.jsx
 
 // PromoFinder -> ./components/PromoFinder.jsx
 
-// â•â•â• REFERRAL HUB â•â•â•
+// ═══ REFERRAL HUB ═══
 
-// â•â•â• COMPETITOR COMPARISON â•â•â•
-// â•â•â• TEAM ACCOUNTS (COMING SOON) â•â•â•
-// â•â•â• SMART PROMO RECOMMENDER â•â•â•
-// â•â•â• QUICK ADD BET â•â•â•
-// â•â•â• ONBOARDING CHECKLIST â•â•â•
-// â•â•â• STARTER PACK MODAL â•â•â•
+// ═══ COMPETITOR COMPARISON ═══
+// ═══ TEAM ACCOUNTS (COMING SOON) ═══
+// ═══ SMART PROMO RECOMMENDER ═══
+// ═══ QUICK ADD BET ═══
+// ═══ ONBOARDING CHECKLIST ═══
+// ═══ STARTER PACK MODAL ═══
 
 
 
-// â•â•â• DAILY DASHBOARD â•â•â•
+// ═══ DAILY DASHBOARD ═══
 const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const navigateHook = useNavigate();
   const navigate = navigateProp || navigateHook;
@@ -130,7 +130,9 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const usageLog = (() => { try { return JSON.parse(localStorage.getItem('pg_usage_log') || '{}'); } catch { return {}; } })();
   const bankroll = (() => { try { return localStorage.getItem('pg_bankroll') || ''; } catch { return ''; } })();
-  const snapshot = getDashboardSnapshot(data, PROMO_SCHED, today, bankroll);
+  // The snapshot composes most of dashboard/today.js — memoize on the data
+  // revision + calendar day so re-renders from local UI state stay cheap.
+  const snapshot = useMemo(() => getDashboardSnapshot(data, PROMO_SCHED, today, bankroll), [data, todayStr, bankroll]); // eslint-disable-line react-hooks/exhaustive-deps
   const bets = data.bets || [];
   const ledger = data.ledger || [];
   const done = data.done || {};
@@ -151,20 +153,20 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
     <div>
       {showWT&&<Suspense fallback={null}><PromoWalkthrough navigate={navigate} onClose={()=>setShowWT(false)}/></Suspense>}
       {showStarterPack&&<StarterPackModal onClose={()=>setShowStarterPack(false)} syncAppData={syncAppData} appData={data}/>}
-      <Suspense fallback={<LoadingState label="Loading dashboard heroâ€¦" />}>
+      <Suspense fallback={<LoadingState label="Loading dashboard hero…" />}>
         <DashboardHero totalProfit={totalProfit} openBetsCount={openBets.length} booksComplete={booksComplete} navigate={navigate} streak={currentStreak}/>
       </Suspense>
-      <Suspense fallback={<LoadingState label="Loading next actionâ€¦" />}>
+      <Suspense fallback={<LoadingState label="Loading next action…" />}>
         <ActivationNextAction data={data} totalProfit={totalProfit} openBets={openBets} booksComplete={booksComplete} navigate={navigate}/>
       </Suspense>
       <Suspense fallback={null}><DailyMissionsPanel navigate={navigate} /></Suspense>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
-      <Suspense fallback={<LoadingState label="Loading launch postureâ€¦" />}>
+      <Suspense fallback={<LoadingState label="Loading launch posture…" />}>
         <LaunchCommandCenterPanel />
       </Suspense>
       <Suspense fallback={null}><CommunityWinsWall /></Suspense>
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
-      <Suspense fallback={<LoadingState label="Loading today dashboardâ€¦" />}>
+      <Suspense fallback={<LoadingState label="Loading today dashboard…" />}>
         <TodayDashboardPanel
           snapshot={snapshot}
           navigate={navigate}
@@ -176,7 +178,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       </Suspense>
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
-          <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started â€” 3 Steps</div>
+          <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
             {[
               {n:"1",t:"Convert your first bonus bet",d:"Open any sportsbook app, grab a welcome promo, enter it in the Bonus Bet Converter.",slug:"bonus-bet",color:K.gn},
@@ -186,7 +188,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
               <div key={s.n} style={{display:"flex",gap:12,alignItems:"flex-start",padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,cursor:"pointer"}} onClick={()=>navigate("/"+s.slug)}>
                 <div style={{fontSize:15,fontWeight:700,color:s.color,minWidth:20}}>{s.n}</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:12,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} â†’</div>
+                  <div style={{fontSize:12,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} →</div>
                   <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{s.d}</div>
                 </div>
               </div>
@@ -201,11 +203,11 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
             Good {today.getHours()<12?"morning":today.getHours()<17?"afternoon":"evening"}
           </div>
           <div style={{fontSize:11,color:K.mt}}>
-            {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} Â· Here&apos;s your daily promo briefing
+            {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} · Here&apos;s your daily promo briefing
           </div>
         </div>
         <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-          <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>â–¶ Promo Walkthroughs</button>
+          <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>▶ Promo Walkthroughs</button>
           <DailyBriefingBtn openBets={openBets} todayPromos={todayPromos}/>
           <PushEnableBtn proStatus={proStatus}/>
         </div>
@@ -214,10 +216,10 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       {streakCount>=3&&!upsellStreakDismissed&&(
         <div style={{...S.card,border:`1px solid ${K.pp}40`,background:`${K.pp}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
           <div>
-            <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:2}}>ðŸ”¥ {streakCount}-day streak! Unlock live arb alerts &amp; daily briefings with VaultSparked</div>
+            <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:2}}>🔥 {streakCount}-day streak! Unlock live arb alerts &amp; daily briefings with VaultSparked</div>
           </div>
           <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade â†’</button>
+            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
             <button onClick={()=>{try{localStorage.setItem('pg_upsell_streak_dismissed','1');}catch{}setUpsellStreakDismissed(true);}} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Not now</button>
           </div>
         </div>
@@ -227,29 +229,29 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:2}}>
-                ðŸŽ‰ VaultSparked Pro Trial â€” {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
+                🎉 VaultSparked Pro Trial — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
               </div>
               <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         ):proStatus.trial_days_left>1?(
           <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.yl,marginBottom:2}}>
-                â³ Trial ending soon â€” {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
+                ⏳ Trial ending soon — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
               </div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         ):(
           <div style={{...S.card,border:`1px solid ${K.rd}40`,background:`${K.rd}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.rd,marginBottom:2}}>
-                ðŸš¨ Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
+                🚨 Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
               </div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access â†’</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         )
       )}
@@ -276,7 +278,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{fontSize:9,color:K.mt}}>days</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="% of days you've visited in your active period">CONSISTENCY â“˜</div>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="% of days you've visited in your active period">CONSISTENCY ⓘ</div>
           <div style={S.big(consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm)}>{consistencyScore}%</div>
           <div style={{height:3,background:K.s3,borderRadius:2,marginTop:4}}><div style={{height:3,borderRadius:2,background:consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm,width:`${consistencyScore}%`}}/></div>
         </div>
@@ -289,12 +291,12 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <DailyRoutinePanel openBetsCount={openBets.length} expiringCount={expiring.length}/>
       {expiring.length>0&&(
         <div style={{...S.note(K.yl),marginBottom:12}}>
-          âš  Expiring soon: {expiring.map(b=>`${b.name} (${expiry[b.name]})`).join(", ")}
+          ⚠ Expiring soon: {expiring.map(b=>`${b.name} (${expiry[b.name]})`).join(", ")}
         </div>
       )}
       {todayPromos.length>0&&(
         <div style={{...S.card,marginBottom:12}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Today&apos;s Promos â€” {todayDay}</div>
+          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Patterns to Verify — {todayDay}</div>
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {todayPromos.slice(0,6).map((p,i)=>(
               <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
@@ -303,7 +305,8 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
                   <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
-                  <span style={{fontSize:11,fontWeight:600,color:K.gn}}>{p.value}</span>
+                  <span style={{fontSize:11,fontWeight:600,color:K.dm}}>Modeled {p.value}</span>
+                  <span style={{fontSize:9,color:p.freshness?.state==="current"?K.gn:K.yl}}>{p.evidenceLabel||"Historical pattern · verify"}</span>
                   <span style={S.tag((p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)||K.ac)}>{p.grade||"B"}</span>
                 </div>
               </div>
@@ -328,7 +331,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
             {label:"Update P/L Ledger",slug:"ledger",color:K.ac},
           ].map(a=>(
             <button key={a.slug} onClick={()=>navigate("/"+a.slug)} style={{padding:"7px 14px",background:`${a.color}10`,border:`1px solid ${a.color}30`,borderRadius:6,color:a.color,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>
-              {a.label} â†’
+              {a.label} →
             </button>
           ))}
         </div>
@@ -337,6 +340,6 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   );
 };
 
-// â•â•â• DEPOSIT OPTIMIZER â•â•â•
+// ═══ DEPOSIT OPTIMIZER ═══
 
 export default DailyDashboard;

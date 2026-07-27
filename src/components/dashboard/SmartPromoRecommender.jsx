@@ -111,7 +111,9 @@ export default function SmartPromoRecommender({ data }) {
   const openBets = useMemo(() => (data.bets || []).filter((b) => b.status === "open"), [data.bets]);
   const expiringSoon = useMemo(() => PROMO_SCHED.filter((p) => p.expires && p.expires >= todayStr && p.expires <= in3Days), [todayStr, in3Days]);
   const bankroll = (() => { try { return localStorage.getItem("pg_bankroll") || ""; } catch { return ""; } })();
-  const snapshot = useMemo(() => getDashboardSnapshot(data || {}, PROMO_SCHED, today, bankroll), [data, today, bankroll]);
+  // Dep on todayStr, not today: a fresh Date object every render made this
+  // memo never hit, recomputing the full snapshot per keystroke.
+  const snapshot = useMemo(() => getDashboardSnapshot(data || {}, PROMO_SCHED, today, bankroll), [data, todayStr, bankroll]); // eslint-disable-line react-hooks/exhaustive-deps
   const recs = useMemo(() => {
     const ranked = snapshot.adaptivePlan?.topPromos;
     if (Array.isArray(ranked) && ranked.length) return ranked;

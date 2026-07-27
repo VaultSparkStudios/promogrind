@@ -260,3 +260,37 @@ Agents MUST NOT modify or remove existing entries.
 ## 2026-07-01 — Session 110 CDR Review
 
 - Reviewed founder direction for this session. The `/goal` prompt gave process/quality/phase discipline, but no new PromoGrind product creative direction, brand direction, feature feeling, or audience pact beyond existing SOUL constraints. No creative canon change recorded.
+
+### 2026-07-23 — Saturated excellence and observability honesty (S115)
+
+- Category: Direction
+- Human input (close paraphrase): Run the entire arc continuously; exhaust primary and second-order innovation work; ship at a genius-level, best-in-history bar; observability must derive from source truth and self-validate; never fabricate gate data; treat honest rejection/deferral as a win; do not alarm on notional flat-rate Max Plan cost.
+- Area affected: quality bar / trust / AI cost posture / process
+- Previous state: PromoGrind had strong local launch gates, but renewable/copy-scattered AI allowances, stale browser test claims, broken copy encoding, and risky earnings language could still contradict those principles.
+- New required direction: prefer structural, self-discovering contracts over checkbox fixes; keep AI cost posture bounded and calm; preserve explicit proof gaps rather than manufacturing screenshots, credentials, or deployment claims.
+- Why it matters: PromoGrind's “quietly elite operator desk” identity depends as much on truthful limits and calm claims as on feature depth.
+- Supersedes prior entry: reinforces the 2026-06-30 saturated `/arc` direction with explicit source-derived observability and non-alarmist cost treatment.
+
+### 2026-07-23 — Continuous best-in-history arc discipline (S116 reinforcement)
+
+- Category: Direction
+- Human input (close paraphrase): Run the complete arc without phase handback; exhaust the Unified Genius List and implement second-order innovation; quality must be genius-level and maximally creative; observability must derive from source truth and self-validate; flat-rate Max Plan cost is notional; honest rejection or deferral is a win.
+- Area affected: product quality / AI decision design / observability / verification / process
+- New required direction: keep pushing beyond an empty primary list into compound product refinements, prefer inspectable decision contracts over opaque AI output, and never manufacture external proof or sibling state to produce a green gate.
+- Why it matters: PromoGrind's quietly elite operator identity depends on disciplined, evidence-bound intelligence and on its system surfaces saying exactly what reality says.
+- Supersedes prior entry: reinforces S115 with explicit continuous-mission and second-order implementation discipline; no SOUL anti-goal changed.
+
+### 2026-07-24 — Verification must change behavior, not decorate it (S118 reinforcement)
+
+- Category: Direction
+- Human input (close paraphrase): Run the entire arc continuously; exhaust primary and second-order innovation; ship at a genius-level, best-in-history bar; derive observability from source truth; never fabricate gate data; treat honest deferral as a win.
+- Area affected: product quality / evidence design / theme craft / verification / process
+- Previous state: Promo freshness appeared in user-facing labels, but did not fully constrain the adaptive plan; theme foreground behavior relied on dark-mode coincidence; a second handwritten launch-blocker source remained.
+- New required direction: make evidence change product decisions, encode visual quality in semantic contracts, and eliminate parallel observability sources before they drift.
+- Why it matters: PromoGrind's quietly elite operator identity requires the system to act as soberly as it speaks and remain legible in every human-best theme.
+- Supersedes prior entry: reinforces S115–S117 saturated excellence with an explicit behavior-over-label and semantic-theme standard; no SOUL anti-goal changed.
+### 2026-07-25 — Sophistication means self-disproving truth surfaces (S119)
+
+- **Direction:** The founder required genius-level, maximally sophisticated work rather than checkbox completion, with observability that cannot lie and honest deferral treated as a win.
+- **Application:** launch proof, startup, capability, and security-history surfaces now carry enough structure to disprove stale or fabricated green states; provider work proceeds to the exact permission boundary and stops with evidence.
+- **Durable rule:** a polished status surface is not sophisticated unless its source, target, freshness, and failure semantics are mechanically inspectable.

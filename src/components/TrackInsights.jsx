@@ -7,6 +7,7 @@ import { patchWorkflowState } from "../workflows/store.js";
 import { flagVisit } from "../lib/missions.js";
 import { useViewport } from "../app/responsive.js";
 import BetHistoryCharts from "./BetHistoryCharts.jsx";
+import EdgeDecayHeatmapPanel from "./EdgeDecayHeatmapPanel.jsx";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -120,6 +121,8 @@ export default function TrackInsights() {
         {metricCard("Execution Rate", insights.executionRate === null ? "—" : `${f(insights.executionRate, 0)}%`, `${insights.attemptedCount} attempted · ${insights.skippedFeedback.length} skipped`, insights.executionRate !== null && insights.executionRate >= 70 ? K.gn : K.yl)}
       </div>
 
+      <EdgeDecayHeatmapPanel appData={appData} />
+
       <div style={{ display: "grid", gridTemplateColumns: pairColumns, gap: 12, alignItems: "start", marginBottom: 14 }}>
         <div style={{ padding: 12, background: `${K.ac}06`, border: `1px solid ${K.ac}25`, borderRadius: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: K.ac, marginBottom: 8 }}>Self-Calibration</div>
@@ -232,7 +235,7 @@ export default function TrackInsights() {
                       <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Actual profit</div>
                       <input value={draft.actualProfit || ""} onChange={(event) => saveDraft(entry.id, "actualProfit", event.target.value)} placeholder="$11.25" style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }} />
                     </div>
-                    <button onClick={() => settle(entry)} style={{ padding: "9px 14px", background: K.ac, border: "none", borderRadius: 8, color: K.bg, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+                    <button onClick={() => settle(entry)} style={{ padding: "9px 14px", background: K.ac, border: "none", borderRadius: 8, color: K.ink, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
                       Settle
                     </button>
                   </div>

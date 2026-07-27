@@ -1,0 +1,38 @@
+{
+  "date": "2026-07-02",
+  "session": 114,
+  "project": "PromoGrind",
+  "type": "app",
+  "axisWeights": { "truth": 2, "launchReadiness": 2, "process": 1.5, "automation": 1.5 },
+  "primaryPremise": "Primary genius list regenerated to 0 items at S114 start. Innovation pack produced one live candidate: external-launch-proof-ledger, based on six real-world proof gates in PROJECT_STATUS.blockers. Repo-owned work was limited to making those deferrals auditable without fabricating evidence.",
+  "items": [
+    {
+      "rank": 1,
+      "slug": "external-launch-proof-ledger",
+      "title": "External Launch Proof Ledger — deterministic honesty surface for unresolved real-world proof gates",
+      "tier": "external",
+      "axis": "truth / launch-readiness",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 1,
+      "effortHours": 1,
+      "priority": 10,
+      "evidence": "docs/INNOVATION_PACK.json reports 6 launch deferrals from PROJECT_STATUS.blockers and 3 blocking canonical launch proofs from context/LAUNCH_PROOFS.json.",
+      "recipe": "Render docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md from PROJECT_STATUS + LAUNCH_PROOFS, expose it through node scripts/ops.mjs launch-proof-ledger, and add regression coverage so pending proof blockers remain explicit. Do not complete any external proof without redacted real evidence.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Static Markdown ledger from current blockers." },
+        "L2": { "effortHours": 1, "recipe": "Deterministic renderer + ops command + freshness check + regression coverage." },
+        "L3": { "effortHours": 2, "recipe": "L2 + CI/launch-local enforcement once the team wants generated docs freshness in the main gate." }
+      }
+    }
+  ],
+  "rejectedOnVerification": [],
+  "honestDeferrals": [
+    "production auth email smoke",
+    "Stripe smoke purchase",
+    "friend beta pass",
+    "Brevo forwarding proof",
+    "Studio Ops Supabase capability",
+    "production capture public-key proof"
+  ]
+}

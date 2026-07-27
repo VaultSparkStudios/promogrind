@@ -1,4 +1,4 @@
-export const PROMO_SCHED = [
+const RAW_PROMO_SCHED = [
   {book:"DraftKings",day:"Daily",promo:"Profit Boosts (2-5/day)",value:"$5-15",type:"Recurring",grade:"A",complexity:"Easy",timeMin:5},
   {book:"DraftKings",day:"Tuesday",promo:"Stepped Up Parlay",value:"$10-25",type:"Weekly",grade:"A",complexity:"Hard",timeMin:20},
   {book:"DraftKings",day:"Thursday",promo:"Parlay Insurance",value:"$10-20",type:"Weekly",grade:"B",complexity:"Medium",timeMin:10},
@@ -21,5 +21,18 @@ export const PROMO_SCHED = [
   {book:"Paddy Power",day:"Weekend",promo:"Money Back Special",value:"£10-25",type:"Weekend",grade:"B",complexity:"Easy",timeMin:10},
   {book:"Sky Bet",day:"Daily",promo:"Price Boosts",value:"£5-15",type:"Recurring",grade:"B",complexity:"Easy",timeMin:5},
 ];
+
+const UK_BOOKS = new Set(["bet365 UK", "Betway UK", "William Hill", "Paddy Power", "Sky Bet"]);
+const scheduleId = (promo, index) => (String(promo.book) + "-" + String(promo.promo) + "-" + index).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+export const PROMO_SCHED = RAW_PROMO_SCHED.map((promo, index) => {
+  const market = UK_BOOKS.has(promo.book) ? "UK" : "US";
+  return {
+    ...promo,
+    id: scheduleId(promo, index),
+    market,
+    evidence: { state: "historical-pattern", verifiedAt: null, sourceUrl: null, jurisdiction: market },
+  };
+});
 
 export const DAYS_ORDER = ["Daily","Monday","Tuesday","Wednesday","Thursday","Friday","Weekend"];

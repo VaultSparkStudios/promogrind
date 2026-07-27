@@ -1,5 +1,56 @@
 # Decisions
 
+## 2026-07-25 — Session 119
+
+### Decision: launch completion is a criterion quorum, never a status write
+
+- Status: accepted
+- Context: one generic evidence note could mark a multi-step launch proof complete while the ledger displayed only 1/N evidence.
+- Decision: stable criterion IDs and validated typed receipts are authoritative; status is derived independently in Node and the browser.
+- Why this was chosen: a release truth surface must be able to disprove its own stale or fabricated completion claim.
+
+### Decision: credentials are target-and-scope claims
+
+- Status: accepted
+- Context: generic READY labels contradicted live 401/403 responses and stale blocker prose.
+- Decision: report missing, present, authenticated, and authorized separately for an exact domain/project/account, with bounded redacted receipts.
+- Why this was chosen: presence answers “do we have bytes”; launch work needs “can this credential perform this exact action here.”
+
+### Decision: static capture configuration belongs at the Pages build boundary
+
+- Status: accepted
+- Context: Vite received the browser-safe Supabase key, but copied static capture pages never did and silently disabled signup.
+- Decision: postbuild injects escaped meta configuration into every capture page and CI fails if the production key is absent.
+- Why this was chosen: one source-backed build contract fixes every static surface without committing a key or duplicating configuration.
+
+### Decision: real external state earns partial proof
+
+- Status: accepted
+- Context: Brevo domain authentication became executable, but forwarding inspection and mailbox receipt did not.
+- Decision: create/authenticate the exact domain and record only the SPF/DKIM criterion; keep forwarding and delivery open after the Cloudflare rule probe returns 403.
+- Why this was chosen: partial verified progress is more useful—and more honest—than either a phantom blocker or a fabricated green proof.
+
+
+## 2026-07-23 — Session 115
+
+### Decision: provider spend policy is one server-owned entitlement contract
+
+- Context: lifetime trial ceilings fixed renewable model spend, but five copied call-site policies could diverge and a future provider function could bypass the perimeter.
+- Decision: every Anthropic function must consume `AI_ENTITLEMENTS`, pass authenticated `requireAiAccess`, reserve finite quota atomically before the provider call, and record usage. `check-ai-entitlement-contract.mjs` discovers provider functions rather than trusting a fixed allowlist.
+- Consequence: free/trial ceilings are non-renewing and fail closed; paid daily/unlimited policy remains explicit; new AI functions cannot silently skip the contract.
+
+### Decision: browser launch validation is derived, allowlisted project truth
+
+- Context: `launchState.js` advertised 380/380 while canonical project status and direct verification were 549/549, proving hand-maintained browser claims drift.
+- Decision: prebuild generates a narrow public-safe mirror from `context/PROJECT_STATUS.json`, and integrity checks reject staleness. No private status fields cross into the bundle.
+- Consequence: Launch Command Center and Studio export can no longer maintain an independent test/build truth.
+
+### Decision: visual evidence and deployment evidence remain explicit skips until executable
+
+- Context: browser tooling failed the available runtime/trust paths, and `promogrind.supabase.deploy` remains absent after secrets discovery and blocker preflight.
+- Decision: record visual verification as SKIPPED and the migration/functions as repo-complete but not live; never turn source presence into screenshot or production-deploy evidence.
+- Consequence: local quality is green without weakening external release proof.
+
 Append new entries. Do not erase historical reasoning unless it is wrong.
 
 ### 2026-05-08 — Production deploy host is GitHub Pages, not Cloudflare Pages (S83)
@@ -481,3 +532,91 @@ Decision: Add bounded local implementations for closeout helper scripts referenc
 Reason: The user explicitly asked to add missing scripts while `AGENTS.md` says this public repo intentionally lacks private Studio OS tooling. The safe compromise is to make the local closeout paths executable, deterministic, and honest: local scripts write cache/brief/freshness/trace artifacts and clearly report no-op fallback where private IGNIS/control-plane context is unavailable.
 
 Impact: Future closeouts can call the expected script names without failing on missing files, while production/launch proof remains evidence-gated and private ops responsibilities stay outside this repo.
+
+### 2026-07-01 — S113 vault tracks the real key surface and excludes non-operator keys
+
+- Status: accepted
+- Context: `src/lib/dataControls.js` tracked phantom keys (`pg_app_data`, `pg_compact_mode`) so local exports silently omitted the core `promo_engine_v3` blob — the export surface lied about covering "Operator data".
+- Decision: the vault inventory now enumerates the keys the app actually writes, and deliberately excludes `pg_pro_status` (entitlement must come from auth/sync, never restore), `pg_ref`/`pg_utm_*` (attribution, not operator memory), `pg_sync_queue`/`pg_sync_pending` (restoring a stale queue could replay old writes), and one-off dismissal flags.
+- Consequence: exports are complete and honest; restore cannot be used to forge entitlements or replay stale sync state. The safety-snapshot slot `pg_vault_backup` is likewise never exported and rejected on import.
+
+### 2026-07-01 — S113 destructive restore must be undoable
+
+- Status: accepted
+- Context: replace-mode restore clears all tracked operator data before writing; a bad paste would be unrecoverable.
+- Decision: replace-restore snapshots current data into `pg_vault_backup` first and the UI offers one-click undo; if the snapshot cannot be saved the restore proceeds but the message says so honestly rather than implying a safety net that does not exist.
+
+### 2026-07-01 — S113 audit premises are demoted with evidence, not silently reshaped
+
+- Status: accepted
+- Context: the calculator a11y candidate claimed unlabelled inputs; live verification showed the shared `In` atom already labels inputs, and the real gap was result announcement plus one raw-input file (LineShop).
+- Decision: the item shipped at its true scope (live regions + LineShop) with the demotion recorded in the audit execution log, consistent with the S173/S175 reject-on-verification-is-a-win pattern.
+
+## 2026-07-23 — Session 116
+
+### Decision: launch blockers and launch proofs must be a total mapping
+
+- Status: accepted
+- Context: PROJECT_STATUS carried six external blockers, while LAUNCH_PROOFS modeled only three of them plus advisory affiliates. The generated ledger exposed false `mirroredInLaunchProofs` rows but did not fail.
+- Decision: every external blocker category must map to a typed proof contract, and ledger freshness fails when coverage is below 100%. A typed proof does not complete its real-world evidence.
+- Why this was chosen: canonical launch truth cannot be canonical if some gates exist only as prose; mechanically complete pending truth is better than an incomplete green surface.
+
+### Decision: performance budgets follow the module graph, not filename folklore
+
+- Status: accepted
+- Context: the old gate celebrated a 5.4KB `index` leaf while ignoring its static imports and a 493.6KB Sentry chunk.
+- Decision: emit the Vite manifest, traverse static imports from the real entry, and enforce separate initial raw/gzip and async raw/gzip ceilings.
+- Why this was chosen: cache boundaries matter, but they do not make bytes free; the gate now reports what a browser actually loads at each phase.
+
+### Decision: AI recommendations must state their counterfactuals
+
+- Status: accepted
+- Context: Promo Advisor confidence was visible, but its model prompt omitted assumptions and neither path said which missing facts or term changes would alter the verdict.
+- Decision: version and persist an inspectable decision receipt containing assumptions, missing inputs, sensitivity triggers, evidence grade, and analysis source.
+- Why this was chosen: this advances PromoGrind's calm operator-desk SOUL—AI should improve decisions and feedback quality, not issue opaque scores.
+
+## 2026-07-24 — Session 117
+
+### Decision: browser-only cryptography is self-attestation
+
+- Status: accepted
+- Context: browser-generated checksums can detect local mutation but cannot prove who created a payload because the verifier has no independent secret or trusted signer.
+- Decision: label the v2 passport and provenance contracts as SHA-256 self-attestation. Independent authenticity requires a server-held signing key or another separately trusted authority.
+- Why this was chosen: truthful integrity evidence is useful; overstating it as authenticity would weaken the trust surface it is meant to support.
+
+### Decision: Advisor profile context stays local unless explicitly opted in
+
+- Status: accepted
+- Context: bankroll, preferences, and betting behavior can be sensitive even when a prompt does not contain obvious account identifiers.
+- Decision: keep profile context client-local by default, require an unchecked explicit consent control before transmission, redact supported identifiers on both sides, bound server context, and emit a privacy receipt.
+- Why this was chosen: personalization should be inspectable and voluntary, with a narrow data boundary that survives client mistakes.
+
+### Decision: recurring promo schedules are observations, not offers
+
+- Status: accepted
+- Context: recurring sportsbook patterns can age, vary by jurisdiction, or disappear without notice; static calendar rows cannot establish current availability.
+- Decision: model every recurring row as a historical-pattern observation with market, jurisdiction, evidence state, freshness, confidence, and user-observed Seen/Not seen state.
+- Why this was chosen: the calendar remains operationally useful without turning remembered timing into a live-offer claim.
+
+## 2026-07-24 — Session 118
+
+### Decision: current evidence gates bankroll allocation
+
+- Status: accepted
+- Context: the Today surface carried honest freshness labels, but the adaptive plan still scored unverified historical cadence rows as actionable recommendations.
+- Decision: only promos with current operator observations may enter `topPromos`; stale, rejected, and unverified rows enter a separate verification queue and can switch the command plane into verification-first mode.
+- Why this was chosen: evidence labels must change system behavior, not merely decorate an otherwise unchanged recommendation.
+
+### Decision: semantic accent fills require semantic ink
+
+- Status: accepted
+- Context: 68 accent-filled controls reused the page background as foreground text. That happened to work in dark mode but failed light-theme contrast on a visible call to action.
+- Decision: each theme owns an explicit `ink` role for text on semantic fills, and a deterministic palette audit checks 37 meaningful foreground/background pairs per theme.
+- Why this was chosen: theme correctness belongs in semantic roles and executable contracts, not in a one-theme color coincidence.
+
+### Decision: release blockers have one generated source
+
+- Status: accepted
+- Context: `launchState.js` retained an unused handwritten blocker array alongside the generated launch-proof ledger.
+- Decision: delete the parallel prose ledger and regression-test that launch state derives from `launchProofs.generated.js`.
+- Why this was chosen: unused observability sources still create future contradiction risk; one mechanically generated source is safer and easier to audit.

@@ -4,7 +4,7 @@ export const PLAYBOOKS = [
   {
     id: "bonus-bet-convert",
     name: "Bonus Bet Conversion",
-    summary: "Convert free/bonus bets into guaranteed cash via a hedge on a second book.",
+    summary: "Convert free/bonus bets into modeled cash via a hedge on a second book.",
     promoTypes: ["bonus_bet"],
     bankrollMin: 200,
     steps: [
@@ -28,7 +28,7 @@ export const PLAYBOOKS = [
   {
     id: "first-bet-safety",
     name: "First-Bet Safety Net",
-    summary: "Treat first-bet refund offers as matched risk-free attempts.",
+    summary: "Treat first-bet refund offers as matched risk-reduced attempts.",
     promoTypes: ["safety_net"],
     bankrollMin: 500,
     steps: [

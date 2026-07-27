@@ -40,7 +40,7 @@ export default function BetSizingAdvisor() {
           </div>
         </div>
         {br > 0 && (
-          <div style={S.res(parseFloat(riskPct) < 30)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(parseFloat(riskPct) < 30)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>${f(current)}</span>
               <span style={{ fontSize: 12, color: K.dm }}>per bet ({style})</span>
@@ -71,7 +71,7 @@ export default function BetSizingAdvisor() {
                   { label: "Total Risk", value: `$${f(totalRisk)} (${riskPct}%)` },
                   { label: `Per Bet (${style})`, value: `$${f(current)}`, highlight: true },
                 ]}
-                disclaimer="Sizing recommendations only. Bankroll management does not guarantee profit."
+                disclaimer="Sizing recommendations only. Bankroll management does not model a return."
                 onClose={() => setShowReceipt(false)}
               />
             )}

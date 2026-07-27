@@ -77,8 +77,8 @@ export function CSVImportModal({ onImport, onClose }) {
           </div>
         )}
         <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-          <button onClick={parse} style={{ flex: 1, padding: "9px", background: K.ac, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, cursor: "pointer", fontFamily: font }}>Parse CSV</button>
-          {preview.length > 0 && <button onClick={confirm} style={{ flex: 1, padding: "9px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, cursor: "pointer", fontFamily: font }}>Import {rowCount} Bets</button>}
+          <button onClick={parse} style={{ flex: 1, padding: "9px", background: K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, cursor: "pointer", fontFamily: font }}>Parse CSV</button>
+          {preview.length > 0 && <button onClick={confirm} style={{ flex: 1, padding: "9px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, cursor: "pointer", fontFamily: font }}>Import {rowCount} Bets</button>}
           <button onClick={onClose} style={{ padding: "9px 16px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.mt, cursor: "pointer", fontFamily: font }}>Cancel</button>
         </div>
       </div>

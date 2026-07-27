@@ -20,7 +20,7 @@ export default function InsurancePromo() {
         <Tl t="Promo Insurance Calculator" badge="SGP / PARLAY" bc={K.pp} shareable />
         <div style={S.row}><In l="Your Stake" v={stake} set={setStake} pre="$" ph="100" /><In l="Insurance % of Stake" v={insPct} set={setInsPct} ph="100" /><In l="Max Insurance $" v={insMax} set={setInsMax} pre="$" ph="100" /><In l="Bonus Conversion %" v={conv} set={setConv} ph="70" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.gn)}>${r.insVal}</span>
               <span style={{ fontSize: 12, color: K.dm }}>insurance value (real cash)</span>
@@ -62,7 +62,7 @@ export default function InsurancePromo() {
         ["Why it changes the math", "Without insurance, a $100 loss costs $100. With 100% SGP insurance, you lose $100 but get $100 in bonus bets back — worth ~$70 after conversion. Net loss is only ~$30."],
         ["Insurance %", "Some promos give 100% back, others give 50% or 25%. A '50% SGP insurance up to $50' on a $100 bet returns $50 as bonus if it loses."],
         ["Conversion Rate", "Bonus bets are worth ~70% as real cash when converted using the Bonus Bet Calculator. Adjust if your lines are particularly good or bad."],
-        ["vs. hedging", "If you CAN hedge the bet, use the First Bet Hedge calculator for guaranteed profit. Insurance calcs are for bets you cannot hedge (SGPs, same-book parlays)."],
+        ["vs. hedging", "If you CAN hedge the bet, use the First Bet Hedge calculator for modeled profit. Insurance calcs are for bets you cannot hedge (SGPs, same-book parlays)."],
       ]} />
     </div>
   );

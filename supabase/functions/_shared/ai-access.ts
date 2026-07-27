@@ -1,13 +1,18 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveAiQuotaPolicy } from "./ai-policy.ts";
 
 export type Tier = "free" | "scout" | "runner" | "closer" | "house";
 
-type AccessOptions = {
+export type AccessOptions = {
   feature: string;
   minTier: Tier;
   dailyLimits: Partial<Record<Tier, number>>;
+  lifetimeLimits?: Partial<Record<Tier, number>>;
+  trialLifetimeLimit?: number;
   corsHeaders?: HeadersInit;
 };
+
+export type AiEntitlement = Omit<AccessOptions, "corsHeaders">;
 
 const TIER_RANK: Record<Tier, number> = {
   free: 0,
@@ -105,42 +110,73 @@ export async function requireAiAccess(req: Request, options: AccessOptions) {
     };
   }
 
-  const limit = options.dailyLimits[tier] ?? options.dailyLimits.free ?? 0;
-  if (Number.isFinite(limit)) {
-    const today = new Date().toISOString().slice(0, 10);
-    const { count, error: countErr } = await supabase
-      .from("vault_events")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .eq("event_type", options.feature)
-      .gte("created_at", `${today}T00:00:00Z`);
+  const quota = resolveAiQuotaPolicy({
+    tier,
+    isTrial,
+    dailyLimits: options.dailyLimits,
+    lifetimeLimits: options.lifetimeLimits,
+    trialLifetimeLimit: options.trialLifetimeLimit,
+  });
 
-    if (countErr) {
-      console.error(`[${options.feature}] quota lookup failed:`, countErr.message);
-      return { error: jsonResponse({ error: "Could not verify usage quota" }, 500, options.corsHeaders), supabase };
-    }
-
-    const used = count ?? 0;
-    if (used >= limit) {
-      return {
-        error: jsonResponse({
-          error: "Daily limit reached",
-          limit,
-          remaining: 0,
-          tier,
-        }, 429, options.corsHeaders),
-        supabase,
-      };
-    }
-
-    return { supabase, user, tier, limit, used, remaining: Math.max(0, limit - used) };
+  if (quota.limit === null) {
+    return {
+      supabase,
+      user,
+      tier,
+      isTrial,
+      limit: null,
+      used: null,
+      remaining: null,
+      quotaWindow: quota.window,
+    };
   }
 
-  return { supabase, user, tier, limit: null, used: null, remaining: null };
+  const { data: claimRows, error: claimErr } = await supabase.rpc("claim_ai_quota", {
+    p_user_id: user.id,
+    p_feature: options.feature,
+    p_window: quota.window,
+    p_window_key: quota.windowKey,
+    p_limit: quota.limit,
+  });
+  if (claimErr) {
+    console.error(`[${options.feature}] quota claim failed:`, claimErr.message);
+    return {
+      error: jsonResponse({ error: "Could not reserve AI usage quota" }, 503, options.corsHeaders),
+      supabase,
+    };
+  }
+
+  const claim = Array.isArray(claimRows) ? claimRows[0] : claimRows;
+  const allowed = claim?.allowed === true;
+  const used = Number.isFinite(Number(claim?.used)) ? Number(claim.used) : quota.limit;
+  if (!allowed) {
+    return {
+      error: jsonResponse({
+        error: quota.window === "lifetime" ? "Lifetime AI allowance used" : "Daily AI allowance used",
+        limit: quota.limit,
+        remaining: 0,
+        tier,
+        trial: isTrial,
+        quota_window: quota.window,
+      }, 429, options.corsHeaders),
+      supabase,
+    };
+  }
+
+  return {
+    supabase,
+    user,
+    tier,
+    isTrial,
+    limit: quota.limit,
+    used,
+    remaining: Math.max(0, quota.limit - used),
+    quotaWindow: quota.window,
+  };
 }
 
 export async function recordAiUsage(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ReturnType<typeof createClient<any>>,
   userId: string,
   feature: string,
   metadata: Record<string, unknown> = {},

@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { createClient } from "@supabase/supabase-js";
 import {
   BOOKS,
@@ -28,6 +29,67 @@ function report(name, ok, detail, extra = {}) {
 
 function advisoryReport(name, ok, detail, extra = {}) {
   return report(name, ok, detail, { severity: "advisory", ...extra });
+}
+
+export function describeAuthError(error) {
+  if (!error) return "unknown authentication error";
+
+  const message = error.message;
+  const nestedMessage = message && typeof message === "object"
+    ? message.message || message.error || message.msg
+    : null;
+  const readableMessage = typeof message === "string" && message.trim()
+    ? message.trim()
+    : typeof nestedMessage === "string" && nestedMessage.trim()
+      ? nestedMessage.trim()
+      : null;
+  const identity = [
+    typeof error.name === "string" ? error.name : null,
+    error.status ? `status ${error.status}` : null,
+    typeof error.code === "string" ? `code ${error.code}` : null,
+  ].filter(Boolean).join(", ");
+
+  return [readableMessage, identity].filter(Boolean).join(" — ")
+    || "authentication request failed without a readable provider message";
+}
+
+export function describeFunctionResponse(name, status, rawBody) {
+  if (status >= 200 && status < 300) {
+    return name === "create-checkout"
+      ? "checkout session created"
+      : name === "customer-portal"
+        ? "customer portal session created"
+        : "function request succeeded";
+  }
+
+  if (name === "customer-portal" && status === 404) {
+    return "no billing record for disposable probe user (expected)";
+  }
+
+  try {
+    const payload = JSON.parse(rawBody);
+    const candidate = payload?.error?.message
+      || payload?.error
+      || payload?.message
+      || payload?.code;
+    if (typeof candidate === "string" && candidate.trim()) {
+      return candidate.trim();
+    }
+  } catch {
+    // Provider bodies are intentionally not copied into public CI artifacts.
+  }
+
+  return `function request failed with HTTP ${status}`;
+}
+
+export function describeRequiredLaunchMonetization(status) {
+  if (status.missingBooks.length > 0) {
+    return `missing tracked monetization links for ${status.missingBooks.join(", ")}`;
+  }
+  if (status.requiredBooks.length === 0) {
+    return "no books are currently designated as required launch monetization";
+  }
+  return `required launch monetization links configured for ${status.configuredBooks.join(", ")}`;
 }
 
 function readFlag(name) {
@@ -98,64 +160,71 @@ async function main() {
     clientEnv.VITE_VAPID_PUBLIC_KEY ? "present" : "missing from .env / build env",
   ));
 
-  const email = `codex-launch-${Date.now()}@example.com`;
   const password = "PromoGrind!23456";
-
-  const signUp = await pub.auth.signUp({ email, password });
-  results.push(report(
-    "public_signup",
-    !signUp.error,
-    signUp.error ? signUp.error.message : "sign-up request accepted",
-  ));
-
-  if (!signUp.error) {
-    const signIn = await pub.auth.signInWithPassword({ email, password });
-    const signInExpected = !signIn.error || /email not confirmed/i.test(signIn.error?.message || "");
-    results.push(report(
-      "public_signin",
-      signInExpected,
-      signIn.error ? signIn.error.message : "sign-in succeeded",
-    ));
-  }
-
   const billingEmail = `codex-billing-${Date.now()}@example.com`;
   const created = await admin.auth.admin.createUser({ email: billingEmail, password, email_confirm: true });
   results.push(report(
     "confirmed_test_user",
     !created.error,
-    created.error ? created.error.message : "confirmed billing-smoke user created",
+    created.error ? describeAuthError(created.error) : "confirmed disposable probe user created",
   ));
 
   if (!created.error) {
-    const billingSignIn = await pub.auth.signInWithPassword({ email: billingEmail, password });
-    results.push(report(
-      "confirmed_signin",
-      !billingSignIn.error,
-      billingSignIn.error ? billingSignIn.error.message : "confirmed user sign-in succeeded",
-    ));
+    try {
+      // Exercise the public signup endpoint with an already-confirmed disposable
+      // identity. Supabase's enumeration protection accepts this without sending
+      // confirmation mail, so the monitor cannot consume the shared email quota.
+      const signUp = await pub.auth.signUp({ email: billingEmail, password });
+      results.push(report(
+        "public_signup",
+        !signUp.error,
+        signUp.error ? describeAuthError(signUp.error) : "public sign-up endpoint accepted the request without sending mail",
+      ));
 
-    const accessToken = billingSignIn.data?.session?.access_token;
-    if (accessToken) {
-      const invoke = async (name, body = {}) => {
-        const res = await fetch(`${adminEnv.SUPABASE_URL}/functions/v1/${name}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(body),
-        });
-        return report(
-          name,
-          res.ok || (name === "customer-portal" && res.status === 404),
-          await res.text(),
-          { status: res.status },
-        );
-      };
+      const billingSignIn = await pub.auth.signInWithPassword({ email: billingEmail, password });
+      results.push(report(
+        "confirmed_signin",
+        !billingSignIn.error,
+        billingSignIn.error ? describeAuthError(billingSignIn.error) : "confirmed user sign-in succeeded",
+      ));
 
-      results.push(await invoke("create-checkout", { plan: "scout_monthly", attribution: { referral_source: "launch-check" } }));
-      results.push(await invoke("customer-portal", {}));
+      const accessToken = billingSignIn.data?.session?.access_token;
+      if (accessToken) {
+        const invoke = async (name, body = {}) => {
+          const res = await fetch(`${adminEnv.SUPABASE_URL}/functions/v1/${name}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(body),
+          });
+          const rawBody = await res.text();
+          return report(
+            name,
+            res.ok || (name === "customer-portal" && res.status === 404),
+            describeFunctionResponse(name, res.status, rawBody),
+            { status: res.status },
+          );
+        };
+
+        results.push(await invoke("create-checkout", { plan: "scout_monthly", attribution: { referral_source: "launch-check" } }));
+        results.push(await invoke("customer-portal", {}));
+      }
+    } finally {
+      const removed = await admin.auth.admin.deleteUser(created.data.user.id);
+      results.push(report(
+        "probe_user_cleanup",
+        !removed.error,
+        removed.error ? describeAuthError(removed.error) : "disposable probe user removed",
+      ));
     }
+  } else {
+    results.push(report(
+      "public_signup",
+      false,
+      "not run because the disposable confirmed probe identity could not be created",
+    ));
   }
 
   const launchMonetization = getRequiredLaunchMonetizationStatus();
@@ -179,9 +248,7 @@ async function main() {
   results.push(advisoryReport(
     "required_launch_monetization",
     launchMonetization.missingBooks.length === 0,
-    launchMonetization.missingBooks.length === 0
-      ? `required launch monetization links configured for ${launchMonetization.configuredBooks.join(", ")}`
-      : `missing tracked monetization links for ${launchMonetization.missingBooks.join(", ")}`,
+    describeRequiredLaunchMonetization(launchMonetization),
     {
       requiredBooks: launchMonetization.requiredBooks,
       configuredBooks: launchMonetization.configuredBooks,
@@ -205,8 +272,13 @@ async function main() {
   if (blockingFailed.length) process.exit(1);
 }
 
-main().catch((error) => {
-  const outPath = readFlag("--out");
-  writePayload(outPath, { ok: false, fatal: error.message });
-  process.exit(1);
-});
+const isDirectInvocation = process.argv[1]
+  && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+
+if (isDirectInvocation) {
+  main().catch((error) => {
+    const outPath = readFlag("--out");
+    writePayload(outPath, { ok: false, fatal: error.message });
+    process.exit(1);
+  });
+}

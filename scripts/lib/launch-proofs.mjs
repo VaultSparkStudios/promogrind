@@ -1,4 +1,5 @@
 import { readProjectJson } from "./context-parsing.mjs";
+import { evaluateProof, reconcileLaunchProofDocument } from './launch-proof-quorum.mjs';
 
 export const DEFAULT_LAUNCH_PROOFS = {
   schemaVersion: "1.0",
@@ -33,15 +34,15 @@ export const DEFAULT_LAUNCH_PROOFS = {
 export function loadLaunchProofs(root) {
   const raw = readProjectJson(root, "context/LAUNCH_PROOFS.json", DEFAULT_LAUNCH_PROOFS);
   const proofs = { ...DEFAULT_LAUNCH_PROOFS.proofs, ...(raw?.proofs || {}) };
-  return {
+  return reconcileLaunchProofDocument({
     ...DEFAULT_LAUNCH_PROOFS,
     ...(raw || {}),
     proofs,
-  };
+  });
 }
 
 export function getBlockingLaunchProofs(root) {
   const payload = loadLaunchProofs(root);
   const proofs = Object.entries(payload.proofs || {}).map(([key, value]) => ({ key, ...value }));
-  return proofs.filter((proof) => proof.blocking && proof.status !== "complete");
+  return proofs.filter((proof) => proof.blocking && evaluateProof(proof).status !== "complete");
 }

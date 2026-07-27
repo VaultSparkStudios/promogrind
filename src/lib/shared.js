@@ -257,7 +257,7 @@ export const calcHold = (o1, o2) => {
 };
 
 // ─── Confidence / Sensitivity helpers ────────────────────────────────────────
-// Each returns a band showing how much the guaranteed profit moves when the
+// Each returns a band showing how much the modeled profit moves when the
 // hedge line shifts ±10% in decimal odds terms. Output is for the Confidence
 // layer chips next to result rows; consumers render `${bandLow} → ${bandHigh}`
 // and optionally show `deltaPer10pct` for a single directional read.
@@ -318,13 +318,15 @@ export const KD = {
   bg: "#0a0e17", s1: "#0f1520", s2: "#161d2a", s3: "#1c2536",
   bd: "#1e293b", bd2: "#334155",
   ac: "#60a5fa", gn: "#4ade80", rd: "#f87171", yl: "#fbbf24",
-  pp: "#c084fc", tx: "#e2e8f0", dm: "#94a3b8", mt: "#7a8fa8", wh: "#ffffff",
+  pp: "#c084fc", tx: "#e2e8f0", dm: "#94a3b8", mt: "#7a8fa8", wh: "#ffffff", ink: "#0a0e17",
 };
 export const KL = {
   bg: "#f8fafc", s1: "#ffffff", s2: "#f1f5f9", s3: "#e2e8f0",
   bd: "#cbd5e1", bd2: "#94a3b8",
-  ac: "#3b82f6", gn: "#22c55e", rd: "#ef4444", yl: "#d97706",
-  pp: "#a855f7", tx: "#1e293b", dm: "#475569", mt: "#64748b", wh: "#000000",
+  // Semantic foregrounds are intentionally deeper than decorative brand swatches.
+  // Every value clears WCAG AA against all four light card surfaces (see themeContrast.test.js).
+  ac: "#1d4ed8", gn: "#166534", rd: "#b91c1c", yl: "#92400e",
+  pp: "#7e22ce", tx: "#0f172a", dm: "#334155", mt: "#475569", wh: "#000000", ink: "#ffffff",
 };
 export const K = { ...KD };
 

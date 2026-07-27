@@ -125,8 +125,8 @@ export default function ProfitCertificate({ entries: entriesProp } = {}) {
           {bestDay.date && <div><div style={{ fontSize: 18, fontWeight: 700, color: K.yl, fontFamily: fontD }}>${f(bestDay.profit)}</div><div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase" }}>Best Day</div></div>}
         </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 16 }}>
-          <button onClick={copy} style={{ padding: "6px 14px", background: copied ? K.gn : K.ac, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>{copied ? "Copied!" : "Copy"}</button>
-          <button onClick={shareNative} style={{ padding: "6px 14px", background: K.pp, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>Share</button>
+          <button onClick={copy} style={{ padding: "6px 14px", background: copied ? K.gn : K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>{copied ? "Copied!" : "Copy"}</button>
+          <button onClick={shareNative} style={{ padding: "6px 14px", background: K.pp, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>Share</button>
           <button onClick={addToWinsWall} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>Add to Wins Wall</button>
         </div>
       </div>

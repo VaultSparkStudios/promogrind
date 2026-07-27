@@ -1,0 +1,161 @@
+{
+  "date": "2026-07-01",
+  "session": 113,
+  "project": "PromoGrind",
+  "type": "app",
+  "axisWeights": { "ux": 2, "featureDepth": 2, "speed": 1.5, "tokenCost": 1.5 },
+  "primaryPremise": "Primary genius list empty at S113 start; fresh 9-axis audit generated against live code with per-candidate premise verification. One candidate rejected on verification (command palette already exists at src/App.jsx:156).",
+  "items": [
+    {
+      "rank": 1,
+      "slug": "intelligence-index",
+      "title": "Operator Command Deck — one surface indexing all operator-intelligence tools with live personal status",
+      "tier": "🔥",
+      "axis": "feature-depth/new-feature",
+      "status": "planned",
+      "impact": 8,
+      "innovation": 8,
+      "effortHours": 4,
+      "priority": 24.8,
+      "evidence": "~15 fully built + unit-tested intelligence libs (tiltGuard, mistakeMemory, twinBattle, operatorPassport, preMortem, bankrollStress, counterfactualPnL, decisionJournal, replayLedger, kellySim, promoConflict, termsDrift, aiCalibration, edgeDecay, seasons) surface only as conditional widgets inside TodayDashboardPanel/ProfilePanel — no discoverable index; users cannot see what the operator system knows about them.",
+      "recipe": "New lazy route 'Command Deck' under Track: a card grid, one card per intelligence module, each with (a) one-line 'decision this helps you make', (b) live personal status computed from the module's own lib (e.g. tilt state, mistakes remembered, decay alerts, passport tier), (c) deep-link to the surface where it acts. Reuse existing libs verbatim — zero new intelligence, pure discoverability. Internal-first: all reuse, no deps.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Static index card grid with decision-line + deep links, no live status." },
+        "L2": { "effortHours": 4, "recipe": "Full deck with live per-module personal status from each lib + tests." },
+        "L3": { "effortHours": 8, "recipe": "L2 + attention ranking (modules with actionable state sort first) + empty-state coaching per module." }
+      }
+    },
+    {
+      "rank": 2,
+      "slug": "operator-data-vault",
+      "title": "Data Vault — versioned export envelope + validated import/restore (the missing half of data portability)",
+      "tier": "🔥",
+      "axis": "feature-depth",
+      "status": "planned",
+      "impact": 9,
+      "innovation": 7,
+      "effortHours": 4,
+      "priority": 24.4,
+      "evidence": "src/lib/dataControls.js exports buildLocalDataExport + clearLocalPromoGrindData but NO import/restore function exists anywhere in src (grep importLocalData|restoreBackup|importBackup = 0 hits); src/storage.js has zero schema-version/migration logic — export is one-directional and un-versioned.",
+      "recipe": "Add versioned envelope to buildLocalDataExport (schemaVersion, exportedAt, appVersion, keyCount, sha-256 integrity digest via crypto.subtle) and importLocalDataExport(json, {mode}) with strict validation (envelope shape, digest check, pg_-prefix allowlist, size caps), merge/replace modes, and a dry-run preview (what will be restored). Wire Restore UI into ProfilePanel data controls next to Export. Full unit tests. Internal-first: WebCrypto, no deps.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "importLocalDataExport with envelope validation + replace mode + tests; minimal ProfilePanel restore button." },
+        "L2": { "effortHours": 4, "recipe": "L1 + integrity digest, merge mode, dry-run preview UI, legacy (un-enveloped) export acceptance." },
+        "L3": { "effortHours": 8, "recipe": "L2 + per-domain selective restore (calculators/tracker/gamification) + automatic pre-restore safety snapshot." }
+      }
+    },
+    {
+      "rank": 3,
+      "slug": "edge-decay-heatmap-wiring",
+      "title": "Wire the built-but-orphaned edge-decay heatmap into the Edge dashboard",
+      "tier": "🔥",
+      "axis": "feature-depth",
+      "status": "planned",
+      "impact": 8,
+      "innovation": 6,
+      "effortHours": 2,
+      "priority": 24.0,
+      "evidence": "src/lib/edgeDecayHeatmap.js (74 lines, S93 ship) is imported ONLY by its own test — no component renders it; the S93 feature never reached users.",
+      "recipe": "Render the heatmap inside TrackInsights.jsx (Edge dashboard) using the existing lib output; theme-aware cells (KD/KL), aria-labelled grid, empty-state explaining what fills it; component-level test.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Minimal grid render in TrackInsights with empty state." },
+        "L2": { "effortHours": 2, "recipe": "L1 + theme-aware intensity scale, cell tooltips, aria grid semantics, test." },
+        "L3": { "effortHours": 4, "recipe": "L2 + click-through from cell to the underlying bets + decay trend mini-sparkline." }
+      }
+    },
+    {
+      "rank": 4,
+      "slug": "calculator-a11y-pass",
+      "title": "Accessibility pass over the calculator fleet (20/21 files have zero aria)",
+      "tier": "⚡",
+      "axis": "ux",
+      "status": "planned",
+      "impact": 7,
+      "innovation": 4,
+      "effortHours": 4,
+      "priority": 10.8,
+      "evidence": "grep -rc 'aria-' src/calculators/*.jsx → 20 of 21 files report 0; result panels announce nothing to screen readers; inputs are unlabelled beyond visual text.",
+      "recipe": "Extend shared primitives in src/ui.jsx (labelled Field wrapper wiring htmlFor/id, role='status' aria-live='polite' on result panels), then sweep calculators to adopt them; verify with a jsx render test asserting label association + live region on two representative calculators.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Primitives + adopt in the 5 Convert calculators." },
+        "L2": { "effortHours": 4, "recipe": "Primitives + full 21-file sweep + representative tests." },
+        "L3": { "effortHours": 8, "recipe": "L2 + keyboard shortcuts audit + focus management on calc switch + axe-style automated a11y test harness." }
+      }
+    },
+    {
+      "rank": 5,
+      "slug": "dashboard-memoization",
+      "title": "Memoize heavy dashboard aggregation + hoist per-render style objects",
+      "tier": "💡",
+      "axis": "speed",
+      "status": "planned",
+      "impact": 5,
+      "innovation": 3,
+      "effortHours": 2,
+      "priority": 7.5,
+      "evidence": "src/dashboard/today.js (556 lines) composes many lib computations consumed by TodayDashboardPanel.jsx (529 lines) with inconsistent memoization; Ledger.jsx (581) and UserMenu.jsx (625) recreate large inline style objects every render.",
+      "recipe": "Verify with a render-count probe first (no phantom fix): wrap today.js composition in useMemo keyed on appData revision; hoist static style objects to module scope in the two worst components. Measure before/after render cost in the probe test.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Probe + memoize the today.js composition call only." },
+        "L2": { "effortHours": 2, "recipe": "L1 + hoist static styles in Ledger + UserMenu." },
+        "L3": { "effortHours": 4, "recipe": "L2 + React.memo leaf widgets in TodayDashboardPanel with prop-stability audit." }
+      }
+    },
+    {
+      "rank": 6,
+      "slug": "component-render-tests",
+      "title": "Render/interaction tests for the largest untested UI surfaces",
+      "tier": "⚡",
+      "axis": "speed/process",
+      "status": "planned",
+      "impact": 6,
+      "innovation": 3,
+      "effortHours": 4,
+      "priority": 7.0,
+      "evidence": "Only 2 of 62 test files are JSX component tests; App.jsx (635), UserMenu.jsx (625), ProfilePanel.jsx (613), Ledger.jsx (581), TodayDashboardPanel.jsx (529) have no direct render tests — logic coverage is excellent, UI regression coverage is thin.",
+      "recipe": "Add @testing-library render tests: ProfilePanel data-controls flow (export/clear/restore once vault ships), UserMenu menu open/actions, TodayDashboardPanel renders with seeded appData without crashing + key widgets present. Target smoke-level confidence, not pixel assertions.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "TodayDashboardPanel + ProfilePanel smoke renders." },
+        "L2": { "effortHours": 4, "recipe": "L1 + UserMenu interactions + Ledger row rendering with seeded bets." },
+        "L3": { "effortHours": 8, "recipe": "L2 + App shell route-switch integration test with lazy-chunk mocking." }
+      }
+    },
+    {
+      "rank": 7,
+      "slug": "public-repo-hygiene",
+      "title": "Remove dead theme.js + tracked screenshot cruft from the public repo",
+      "tier": "💡",
+      "axis": "speed/security",
+      "status": "planned",
+      "impact": 4,
+      "innovation": 2,
+      "effortHours": 0.5,
+      "priority": 6.1,
+      "evidence": "src/theme.js has zero importers (superseded by lib/shared.js palette); 'Screenshot 2026-03-27 152057.png' is git-tracked at repo root of a public repo; *.zip deploy artifacts sit untracked at root.",
+      "recipe": "git rm the screenshot, delete src/theme.js, add *.zip at root to .gitignore; run full suite to prove nothing referenced them.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "As stated — this item is single-rung." },
+        "L2": { "effortHours": 0.5, "recipe": "Same as L1." },
+        "L3": { "effortHours": 1, "recipe": "L1 + sweep root-level duplicate deploy guides into docs/ with a single canonical pointer." }
+      }
+    }
+  ],
+  "rejectedOnVerification": [
+    {
+      "slug": "command-palette",
+      "reason": "Premise false — Ctrl+K / Cmd+K calc search already exists at src/App.jsx:156 (plus '?' shortcut). Reject-on-verification is a recorded WIN."
+    },
+    {
+      "slug": "enable-feature-flags",
+      "reason": "All 8 build-time AI/paid flags defaulting OFF (launchState.js:83-92) is deliberate launch gating tied to the 6 external proof gates, not a defect. Do not flip without external evidence."
+    }
+  ],
+  "honestDeferrals": [
+    "production auth email smoke",
+    "Stripe smoke purchase",
+    "friend beta pass",
+    "Brevo forwarding proof",
+    "Studio Ops Supabase capability",
+    "production capture public-key proof"
+  ]
+}

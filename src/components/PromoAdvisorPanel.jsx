@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { buildCacheKey, estimateAiSpendUsd, getBudgetState, hasStreamingGateway, invokeProjectFunction, readDailyUsage, readTimedCache, recordAiSpend, streamProjectFunction, writeDailyUsage, writeTimedCache } from "../ai/gateway.js";
@@ -14,6 +14,9 @@ import { flagVisit } from "../lib/missions.js";
 import { recordTrustReceipt } from "../lib/trustReceipts.js";
 import { recordPrediction } from "../lib/aiCalibration.js";
 import { noteCacheHit, noteCacheMiss } from "../ai/promptCache.js";
+import { buildAdvisorPrivacyEnvelope } from "../ai/advisorPrivacy.js";
+
+const ADVISOR_RECEIPT_CONTRACT_VERSION = 3;
 
 function predictedProbabilityFromAdvisor(result = {}) {
   const score = Number.parseFloat(result.opportunityScore);
@@ -43,8 +46,14 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const [error, setError] = useState('');
   const [uses, setUses] = useState(() => readDailyUsage("pg_advisor_uses"));
   const [streamingText, setStreamingText] = useState('');
+  const [personalize, setPersonalize] = useState(false);
   const abortRef = useRef(null);
   const toast = useToast();
+  const privacyPreview = useMemo(() => buildAdvisorPrivacyEnvelope({
+    promoText,
+    includeProfile: personalize,
+    appData,
+  }), [promoText, personalize, appData]);
 
   // Gate check after all hooks — safe per Rules of Hooks
   if (!advisorEnabled && !FEATURE_FLAGS.promoAdvisor) {
@@ -62,17 +71,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
     abortRef.current = controller;
     setLoading(true); setError(''); setResult(null); setStreamingText('');
     try {
-      const sanitized = promoText.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
       const { data: { session } } = await supabase.auth.getSession();
-      const activeBooks = Object.entries(appData?.done || {})
-        .filter(([, done]) => !!done).map(([book]) => book);
-      const bankrollNum = parseFloat(appData?.bankroll) || undefined;
-      const userContext = (activeBooks.length || bankrollNum)
-        ? { bankroll: bankrollNum, books: activeBooks.slice(0, 5) }
-        : undefined;
-
-      const body = { promoText: sanitized, ...(userContext && { userContext }) };
-      const cacheKey = buildCacheKey("promo-advisor", body);
+      const privacyEnvelope = buildAdvisorPrivacyEnvelope({
+        promoText,
+        includeProfile: personalize,
+        appData,
+      });
+      const { body } = privacyEnvelope;
+      const privacyReceipt = privacyEnvelope.receipt;
+      const cacheKey = buildCacheKey(`promo-advisor:v${ADVISOR_RECEIPT_CONTRACT_VERSION}`, body);
       const cached = readTimedCache(cacheKey, 12 * 60 * 60 * 1000, null);
       if (cached) {
         noteCacheHit(cached?.usage?.input_tokens || cached?.usage?.inputTokens || 0);
@@ -95,15 +102,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             writeDailyUsage("pg_advisor_uses", newUses);
             setResult(data);
             writeTimedCache(cacheKey, data);
-            recordAiSpend(estimateAiSpendUsd(evt), { feature: "promo-advisor", source: data?.analysisSource || "ai" });
+            recordAiSpend(estimateAiSpendUsd(evt), { feature: "promo-advisor", source: data?.analysisSource || "ai", privacyReceipt });
             recordTrustReceipt({
               type: "ai",
               title: "Promo Advisor analyzed an offer",
               summary: data?.analysisSource === "rule_engine"
                 ? "PromoGrind resolved this promo with local offer rules instead of spending a model call."
-                : "PromoGrind sent sanitized promo text to the AI analysis function and received a structured decision.",
-              stored: ["daily usage count", "cached analysis result"],
-              notStored: ["raw password", "payment data"],
+                : `PromoGrind redacted ${privacyReceipt.redactionCount} sensitive value(s) before analysis and ${privacyReceipt.profileIncluded ? "included the two consented profile fields" : "kept bankroll and active books in this browser"}.`,
+              stored: ["daily usage count", "cached analysis result", "privacy receipt counts (not redacted values)"],
+              notStored: ["raw password", "payment data", ...(!privacyReceipt.profileIncluded ? ["bankroll", "active books"] : [])],
               undo: "Clear browser data to remove local cached analyses.",
               dedupeKey: `ai:advisor:${cacheKey}`,
               dedupeMs: 12 * 60 * 60 * 1000,
@@ -121,15 +128,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         writeDailyUsage("pg_advisor_uses", newUses);
         setResult(data);
         writeTimedCache(cacheKey, data);
-        recordAiSpend(estimateAiSpendUsd(data), { feature: "promo-advisor", source: data?.analysisSource || "ai" });
+        recordAiSpend(estimateAiSpendUsd(data), { feature: "promo-advisor", source: data?.analysisSource || "ai", privacyReceipt });
         recordTrustReceipt({
           type: "ai",
           title: "Promo Advisor analyzed an offer",
           summary: data?.analysisSource === "rule_engine"
             ? "PromoGrind resolved this promo with local offer rules instead of spending a model call."
-            : "PromoGrind sent sanitized promo text to the AI analysis function and received a structured decision.",
-          stored: ["daily usage count", "cached analysis result"],
-          notStored: ["raw password", "payment data"],
+            : `PromoGrind redacted ${privacyReceipt.redactionCount} sensitive value(s) before analysis and ${privacyReceipt.profileIncluded ? "included the two consented profile fields" : "kept bankroll and active books in this browser"}.`,
+          stored: ["daily usage count", "cached analysis result", "privacy receipt counts (not redacted values)"],
+          notStored: ["raw password", "payment data", ...(!privacyReceipt.profileIncluded ? ["bankroll", "active books"] : [])],
           undo: "Clear browser data to remove local cached analyses.",
           dedupeKey: `ai:advisor:${cacheKey}`,
           dedupeMs: 12 * 60 * 60 * 1000,
@@ -238,7 +245,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             href={signUpHref}
             style={{
               display:'block',padding:'10px 0',borderRadius:8,
-              background:K.gn,color:'#0a0e17',fontSize:12,fontWeight:700,
+              background:K.gn,color: K.ink,fontSize:12,fontWeight:700,
               textDecoration:'none',fontFamily:font,
             }}
           >
@@ -264,6 +271,26 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
           placeholder={'Example: "Get a $200 Bonus Bet if your first $5 bet loses. Bonus bet expires in 7 days."\n\nOr paste the full promo T&C text.'}
           style={{width:'100%',minHeight:130,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,padding:10,color:K.tx,fontSize:12,resize:'vertical',fontFamily:font,boxSizing:'border-box',lineHeight:1.5}}
         />
+
+        <div style={{padding:10,border:`1px solid ${K.bd}`,borderRadius:8,background:K.s2}}>
+          <div style={{fontSize:10,color:K.dm,lineHeight:1.5}}>
+            Privacy preview · {privacyPreview.receipt.redactionCount} sensitive value(s) will be replaced before analysis.
+          </div>
+          <label style={{display:'flex',alignItems:'flex-start',gap:8,marginTop:8,fontSize:10,color:K.tx,lineHeight:1.45,cursor:'pointer'}}>
+            <input
+              type="checkbox"
+              checked={personalize}
+              onChange={(event) => setPersonalize(event.target.checked)}
+              style={{marginTop:2}}
+            />
+            <span>Personalize with my bankroll and active books. Optional: only those named fields leave this browser.</span>
+          </label>
+          {!personalize && privacyPreview.receipt.estimatedTokensSaved > 0 && (
+            <div style={{fontSize:9,color:K.mt,marginTop:6}}>
+              Profile stays local · about {privacyPreview.receipt.estimatedTokensSaved} request token(s) avoided.
+            </div>
+          )}
+        </div>
 
         {/* Near-limit char count */}
         {promoText.length > 1800 && (
@@ -433,15 +460,18 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               </div>
             )}
 
-            {Array.isArray(result?.assumptions) && result.assumptions.length > 0 && (
+            {([...(result?.assumptions || []), ...(result?.missingInputs || []), ...(result?.sensitivityTriggers || [])].length > 0) && (
               <details style={{marginTop:4}}>
-                <summary style={{fontSize:10,color:K.mt,cursor:'pointer',userSelect:'none',listStyle:'none',display:'flex',alignItems:'center',gap:4}}>
-                  <span>▸</span><span style={{textDecoration:'underline',textDecorationStyle:'dotted'}}>Assumptions ({result.assumptions.length})</span>
+                <summary aria-label="Open decision receipt" style={{fontSize:10,color:K.mt,cursor:'pointer',userSelect:'none',listStyle:'none',display:'flex',alignItems:'center',gap:4}}>
+                  <span>▸</span><span style={{textDecoration:'underline',textDecorationStyle:'dotted'}}>Decision Receipt · {result.evidenceGrade || 'estimate'}</span>
                 </summary>
                 <div style={{marginTop:6,paddingLeft:12,borderLeft:`2px solid ${K.bd2}`}}>
-                  {result.assumptions.map((a, i) => (
-                    <div key={i} style={{fontSize:10,color:K.dm,lineHeight:1.6}}>• {a}</div>
-                  ))}
+                  {result.assumptions?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginBottom:2}}>Assumptions</div>}
+                  {result.assumptions?.map((item, i) => <div key={`a-${i}`} style={{fontSize:10,color:K.dm,lineHeight:1.6}}>• {item}</div>)}
+                  {result.missingInputs?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>Missing inputs</div>}
+                  {result.missingInputs?.map((item, i) => <div key={`m-${i}`} style={{fontSize:10,color:K.yl,lineHeight:1.6}}>• {item}</div>)}
+                  {result.sensitivityTriggers?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>What would change this</div>}
+                  {result.sensitivityTriggers?.map((item, i) => <div key={`s-${i}`} style={{fontSize:10,color:K.ac,lineHeight:1.6}}>• {item}</div>)}
                 </div>
               </details>
             )}

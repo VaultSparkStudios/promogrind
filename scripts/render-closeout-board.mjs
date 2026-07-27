@@ -23,6 +23,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { spawnSync } from './lib/safe-spawn.mjs';
+import { buildCloseoutGeniusHint } from './lib/closeout-genius-hint.mjs';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -319,14 +320,7 @@ function postSessionSignals(status) {
 }
 
 function nextSessionHint() {
-  const cache = readJson(GENIUS_CACHE);
-  const top = cache?.list?.ranked?.[0];
-  if (!top) return null;
-  return {
-    title: top.title || top.id,
-    rationale: top.rationale || '',
-    cmd: top.command || null,
-  };
+  return buildCloseoutGeniusHint(readJson(GENIUS_CACHE));
 }
 
 function render() {
@@ -418,10 +412,12 @@ function render() {
 
   // 7. NEXT SESSION
   lines.push(top('NEXT SESSION'));
-  if (next) {
+  if (next.state === 'item') {
     lines.push(row(`#1: ${(next.title || '').slice(0, W - 4)}`));
     if (next.rationale) lines.push(row(`    ${next.rationale.slice(0, W - 4)}`));
     if (next.cmd) lines.push(row(`    ↳ ${next.cmd.slice(0, W - 6)}`));
+  } else if (next.state === 'exhausted') {
+    lines.push(row('✓ Unified Genius List exhausted · regenerate from live code'));
   } else {
     lines.push(row('(no genius cache — run `node scripts/cache-genius-list.mjs`)'));
   }

@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S99:1000 | S100:1000 | S101:1000 | S102:1000 | S103:1000
-Avgs - 3: 1000.0 [N=3] | all: 1000.0 [recent closeout series]
-  └ 3-session (S101/S102/S103): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: down
+Sparkline (last 5 totals): S115:1000 | S116:1000 | S117:999 | S118:999 | S119:999
+Avgs - 3: 999.0 [N=3] | 5: 999.4 [N=5] | all: 999.7 [recent closeout series]
+  └ 3-session (S117/S118/S119): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.0
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-06-30 | Session 103 | Total: 1000/1000 | Velocity: 4 | protocolVelocity: 4
+Last session: 2026-07-25 | Session 119 | Total: 999/1000 | Velocity: 8 | protocolVelocity: 8
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1374,3 +1374,196 @@ Protocol verification pass against the active `/start` -> `/audit` -> `/implemen
 | Automation Coverage | 100 | up | Added focused regression coverage for startup helper blocks and preserved launch-local gate. |
 
 **SIL items committed:** Continue using innovation-pack large-file thresholds as a repo-owned maintainability queue; keep real launch-proof gates explicit until external evidence exists.
+
+## 2026-07-01 — Session 113
+
+**Total: 1000/1000 | Velocity: 10 | Status: FORGE**
+
+| Category | Score | Direction | Evidence |
+|---|---:|---|---|
+| Dev Health | 100 | -> | Suite grew 511→549 tests across 66 files; full launch-local gate green with directly captured exit 0; innovation pack reports 0 large files. |
+| Creative Alignment | 100 | up | Command Deck, vault, and heatmap all serve the soul's "every surface helps a real decision" non-negotiable; no dopamine-bait copy added. |
+| Momentum | 100 | up | 10 shipped units in one arc: 7 audit items + 3 second-order (decomposition, export download, vault L3 undo). |
+| Engagement | 100 | up | Three genuinely user-facing capabilities shipped: intelligence discoverability, data portability with undo, decay visibility. |
+| Process Quality | 100 | up | Every audit premise live-verified; one rejection and one demotion recorded as wins; exit codes captured directly (no pipe masking). |
+| Cross-Repo Coherence | 100 | -> | No sibling tree edits; Studio Ops-owned capability work remains external and honestly deferred. |
+| Security Posture | 100 | up | Fail-closed import validation with integrity digest, entitlement/attribution keys excluded from restore, strict sanitization green. |
+| Ecosystem Integration | 100 | -> | Audit/implement/closeout artifacts follow canonical contracts; heatmap lib layering corrected (lib no longer imported from a component). |
+| Capital Efficiency | 100 | -> | Zero new dependencies; every feature reuses existing libs (internal-first held on all 10 items). |
+| Automation Coverage | 100 | up | +38 automated tests including the first render coverage for the four largest components and the full restore flow. |
+
+**Top win:** the operator data vault turned a silently lying export surface into complete, versioned, integrity-checked, undoable data portability — an observability lie root-fixed rather than papered over.
+
+**SIL items committed:**
+1. When a new UI slice pushes a file past the large-file threshold in the same session, extract the slice immediately (ProfilePanel pattern) instead of leaving it for the next innovation pack.
+2. Keep audit premise verification (S175) mandatory: two of nine S113 candidates changed shape under live-code checks; shipping them as-written would have been waste or noise.
+
+## 2026-07-02 — Session 114
+
+**Intent:** Run `/arc`, close out, push direct to main, and deploy while preserving honest launch-proof gates.
+
+**Total: 1000/1000 | Velocity: 1 | Status: FORGE**
+
+| Category | Score | Direction | Evidence |
+|---|---:|---|---|
+| Dev Health | 100 | -> | Full suite remains green at 549/549; launch-local gate passed end to end. |
+| Creative Alignment | 100 | -> | Work reinforced the soul's discipline-over-hype posture by keeping proof claims evidence-gated. |
+| Momentum | 100 | -> | Empty primary genius list still produced one repo-owned truth improvement from innovation-pack evidence. |
+| Engagement | 100 | -> | No user-facing behavior changed; operator launch confidence improved through a clearer proof ledger. |
+| Process Quality | 100 | up | Added a deterministic checkable ledger instead of repeating prose deferrals; all exits verified directly. |
+| Cross-Repo Coherence | 100 | -> | No sibling tree edits; Studio Ops-owned Brevo/Supabase capability items remain explicit external follow-ups. |
+| Security Posture | 100 | -> | No dependencies or secrets added; strict public sanitization passed with 0 findings. |
+| Ecosystem Integration | 100 | up | Launch proofs, project blockers, ops command registry, and closeout surfaces now share one proof-ledger view. |
+| Capital Efficiency | 100 | -> | Zero new dependencies or paid services; reused existing local proof surfaces. |
+| Automation Coverage | 100 | up | Added regression coverage for proof-ledger blocker classification and freshness checking. |
+
+**Top win:** converted repeated external-proof prose into a deterministic, checkable ledger while preserving the rule that real production email, Stripe, friend-beta, Brevo, Supabase capability, and capture-key proof cannot be completed from local code.
+
+**SIL items committed:**
+1. Keep `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md` fresh whenever `PROJECT_STATUS.blockers` or `context/LAUNCH_PROOFS.json` changes.
+2. Continue treating launch-ready `PARTIAL` as honest until external proof runners record redacted real evidence.
+
+## 2026-07-23 — Session 115
+
+**Intent:** Complete and saturate `/start → /audit → /implement → /closeout`, exhaust the scoped genius list plus second-order candidates, preserve honest evidence boundaries, then commit/push direct to main.
+
+**Total: 1000/1000 | Velocity: 10 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | ↑ | Exact-lockfile suite grew to 559/559 across 68 files; launch-local exited 0; five edge functions Deno-check. |
+| Creative Alignment | 100 | ↑ | Eleven corrupted copy surfaces repaired and nine anti-hype/certainty rules now enforce the calm-operator SOUL. |
+| Momentum | 100 | ↑ | Six primary items plus four second-order innovations shipped; project-scoped genius list and session floor both prove exhaustion. |
+| Engagement | 100 | ↑ | User-facing launch truth, copy clarity, and AI allowance behavior now expose real limits instead of stale or risky claims. |
+| Process Quality | 100 | ↑ | Every audit premise was live-verified; four rejected candidates and all external/tooling skips were recorded as wins, never silently passed. |
+| Cross-Repo Coherence | 100 | → | No sibling tree edits; missing Supabase capability remains an Ark/control-plane follow-up. |
+| Security Posture | 100 | ↑ | Authenticated vision, direct-upload caps, atomic quotas, centralized entitlements, provider discovery, and pinned trust-approved SDK. |
+| Ecosystem Integration | 100 | ↑ | Repo-local genius/intent scope and browser project-status mirror make public-repo fallbacks self-validating. |
+| Capital Efficiency | 100 | ↑ | Lifetime free/trial ceilings bound provider use; work used existing infrastructure and no paid action. |
+| Automation Coverage | 100 | ↑ | Added encoding, public-claims, entitlement-discovery, status-mirror, and scope/percentage regressions to the release chain. |
+
+**Top win:** turned the model-cost/auth issue into a self-discovering server contract that protects current and future AI functions rather than merely lowering five literals.
+
+**Top gap:** the new migration/functions are repo-complete but cannot be claimed live until `promogrind.supabase.deploy` is supplied through the secrets gateway and verified against project ref `fjnpzjjyhnpmunfoycrp`.
+
+**Intent outcome:** Achieved for every repo-owned phase and saturation gate. Direct-main push/deploy evidence is completed after canonical write-back.
+
+**SIL items committed:**
+1. Every new provider-backed function must be discovered by `check-ai-entitlement-contract.mjs`; never add a manual exception to make the gate green.
+2. Keep generated browser truth narrow and freshness-checked; update `PROJECT_STATUS.json`, never the generated mirror by hand.
+
+## 2026-07-23 — Session 116
+
+**Intent:** Run the complete agent-neutral `/arc` continuously, exhaust verified primary and second-order work, preserve evidence boundaries, then perform canonical closeout and direct-main push.
+
+**Total: 1000/1000 | Velocity: 6 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | Suite grew to 568/568 across 72 files; 10/10 Deno receipt tests, Deno check, and launch-local are green. |
+| Creative Alignment | 100 | ↑ | Counterfactual receipts make AI calmer, inspectable, and decision-oriented instead of opaque recommendation theater. |
+| Momentum | 100 | ↑ | Four live-code audit items plus two second-order refinements shipped; primary genius list is exhausted. |
+| Engagement | 100 | ↑ | Users can see what an Advisor verdict assumes, what information is missing, and exactly what would change it. |
+| Process Quality | 100 | ↑ | The stale cost-bleeder premise was rejected with source evidence; no sibling registry or external proof was fabricated. |
+| Cross-Repo Coherence | 100 | → | Repo truth remains trial-ceiling; Studio Ops registry drift stays Ark-owned and no sibling tree was edited. |
+| Security Posture | 100 | → | Existing authenticated quota perimeter remains green; typed proof contracts keep pending production security evidence explicit. |
+| Ecosystem Integration | 100 | ↑ | Launch blockers, proof objects, browser mirror, ledger, startup brief, and workflow inbox now share mechanically checked contracts. |
+| Capital Efficiency | 100 | ↑ | No dependency or paid service was added; rule results and versioned caching preserve avoided model calls. |
+| Automation Coverage | 100 | ↑ | Added SIL-format, proof-coverage, bundle-graph, receipt, workflow, and telemetry-buffer regression gates. |
+
+**Top win:** replaced three persuasive-but-wrong surfaces—0/1000 forecast, tiny-main bundle claim, and incomplete canonical proof coverage—with self-validating source-derived contracts.
+
+**Top gap:** all six real-world proof contracts remain honestly pending; typed structure is not deployment, delivery, purchase, or human-test evidence.
+
+**Intent outcome:** Achieved for all repo-owned work and saturation gates; closeout push evidence follows this write-back.
+
+**SIL items committed:**
+1. Treat any unmirrored external blocker or incomplete SIL category set as a failing observability contract, never a warning-only cosmetic issue.
+2. Reassess the async Sentry ceiling against measured field value before enabling heavier replay behavior or increasing its budget.
+
+## 2026-07-24 — Session 117
+
+**Intent:** Run the complete agent-neutral `/arc` continuously through start, audit, implementation, verification, and canonical closeout while preserving honest external-proof boundaries.
+
+**Total: 999/1000 | Velocity: 6 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 582/582 Vitest checks, 3/3 Deno privacy checks, Deno type-check, build, launch-local, and production browser smoke are green. |
+| Creative Alignment | 100 | ↑ | Multilingual public copy now pairs practical utility with sober, jurisdiction-aware execution-risk language. |
+| Momentum | 100 | ↑ | All six ranked audit items shipped in one continuous arc; no verified repo-owned audit item remains. |
+| Engagement | 100 | ↑ | Advisor consent receipts and calendar Seen/Not seen controls turn trust and freshness into visible user actions. |
+| Process Quality | 100 | ↑ | Premises, execution evidence, local gates, and external red states are recorded without inferring deployment or authenticity. |
+| Cross-Repo Coherence | 100 | → | Secret rotation was sent through Ark; the accidentally refreshed sibling generated checklist was restored with no lasting sibling mutation. |
+| Security Posture | 100 | ↑ | Exposed tracked credential/topology removed, scanner strengthened, browser trust claims narrowed, and Advisor data minimized. |
+| Ecosystem Integration | 100 | ↑ | Human-facing trust surfaces, agent navigation metadata, release checks, and provenance contracts now align. |
+| Capital Efficiency | 100 | → | No dependency, paid service, or additional model-spend surface was added; implementation reused existing primitives. |
+| Automation Coverage | 99 | ↓ | Deterministic gates cover code and public surfaces; the manual dark/light desktop/mobile screenshot matrix could not run because browser control failed before launch. |
+
+**Top win:** replaced four kinds of persuasive ambiguity—exposed operational secrets, browser-signature theater, silent AI profile transmission, and static schedule certainty—with bounded, test-backed evidence contracts.
+
+**Top gap:** production edge headers and the required manual theme/device evidence remain unresolved; local green does not promote the project to SPARKED.
+
+**Intent outcome:** Achieved for every repo-owned phase; release-state promotion remains honestly deferred.
+
+**SIL items committed:**
+1. Treat browser-only cryptographic evidence as self-attestation unless verification depends on an independently controlled signer.
+2. Require explicit, inspectable consent and dual-boundary redaction before any stored user profile context enters an AI request.
+
+## 2026-07-24 — Session 118
+
+**Intent:** Run the complete agent-neutral `/arc` continuously, exhaust verified primary and second-order work, preserve evidence boundaries, and complete canonical closeout with direct-main publication.
+
+**Total: 999/1000 | Velocity: 5 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | ↑ | Suite grew to 588/588 across 75 files; launch-local and all repo-owned integrity gates are green. |
+| Creative Alignment | 100 | ↑ | The command plane now treats verification as an operator action instead of recommendation friction or promotional certainty. |
+| Momentum | 100 | ↑ | Three verified primary items and three second-order innovations shipped; the repo-owned list is exhausted. |
+| Engagement | 100 | ↑ | Users see exactly which promos are actionable, which require checking, and why the plan changed. |
+| Process Quality | 100 | ↑ | Every premise was traced through live consumers; the first full gate caught and drove a root fix for a static-component regression. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited; capability and session-lock tooling drift is routed through Ark. |
+| Security Posture | 100 | → | Existing security gates remain green; no edge mutation was attempted without an authenticated ruleset capability. |
+| Ecosystem Integration | 100 | ↑ | Dashboard, brief, generated launch proofs, audit artifacts, and release evidence now agree mechanically. |
+| Capital Efficiency | 100 | → | No dependency, paid service, or new model-spend surface was added; transient Playwright use did not change the lockfile. |
+| Automation Coverage | 99 | → | Palette and runtime contrast are gated; AI pixel inspection remains unavailable and is honestly partial. |
+
+**Top win:** made evidence operational: stale or absent observations now change the plan itself, while semantic theme roles keep that plan readable across both palettes.
+
+**Top gap:** the production edge still lacks six required headers, and AI pixel inspection could not complete despite captured, hashed browser evidence.
+
+**Intent outcome:** Achieved for every repo-owned phase and saturation gate; SPARKED promotion remains honestly deferred.
+
+**SIL items committed:**
+1. Any evidence state shown to users must affect ranking, eligibility, or workflow—not remain a decorative label.
+2. Any foreground placed on semantic fills must use an explicit ink role covered by deterministic contrast tests.
+
+## 2026-07-25 — Session 119
+
+**Intent:** Run the complete agent-neutral `/arc` continuously, exhaust a premise-verified infrastructure audit and second-order work, then close out directly to main with honest external evidence boundaries.
+
+**Total: 999/1000 | Velocity: 8 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 590/590 Vitest, 47 focused invariant assertions, and the full launch-local gate pass directly. |
+| Creative Alignment | 100 | → | Launch operations now match PromoGrind's calm operator voice: exact remaining criteria replace vague green/red theater. |
+| Momentum | 100 | ↑ | Four ranked infrastructure items, four second-order innovations, and bounded Brevo configuration shipped in one mission. |
+| Engagement | 100 | → | The command center shows the next missing proof criterion, making operator action precise and inspectable. |
+| Process Quality | 100 | → | Audit premises, provider targets, freshness, direct exits, and rejected phantom work are recorded explicitly. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited; exact control-plane gaps were shipped through Ark cargo `01JUE23NQ1EEF6010874B09F97`. |
+| Security Posture | 100 | → | History scanning is fast and precise, redaction is preserved, and one true residual is routed for rotation. |
+| Ecosystem Integration | 100 | ↑ | Brevo, Supabase, Stripe, Cloudflare, GitHub Pages, launch proofs, and project truth now meet through typed contracts. |
+| Capital Efficiency | 100 | → | No dependency or recurring-cost surface was added; all provider checks are read-only or bounded configuration on existing plans. |
+| Automation Coverage | 99 | → | Provider/build/proof gates advanced materially; connected AI pixel inspection and real human/mailbox/payment proofs remain external. |
+
+**Top win:** replaced four recurring classes of observability fiction—stale status, generic READY, false zero, and noisy scans—with self-validating evidence contracts.
+
+**Top gap:** exact Cloudflare rules scopes and real human/mailbox/payment evidence remain outside current authority; local green still cannot promote SPARKED.
+
+**Intent outcome:** Achieved for all repo-owned and executable external work; every inaccessible or human-evidence criterion remains openly deferred.
+
+**SIL items committed:**
+1. Any provider readiness signal must bind target, permission, checked time, and evidence source before it can clear a blocker.
+2. Any proof shown in the browser must be independently derivable from the same criterion receipts as its canonical writer.

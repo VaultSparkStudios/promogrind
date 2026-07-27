@@ -99,7 +99,7 @@ assertIncludes(dialog, "This creates a PromoGrind account only. Studio membershi
 assertIncludes(appText, "PromoGrind accounts are separate from Studio membership", "footer account separation copy", errors);
 assertIncludes(appSubcomponents, "Studio membership is separate and is not required to create or use a PromoGrind account.", "member welcome separation copy", errors);
 
-const friendEvidence = proofs?.proofs?.friendBeta?.evidenceRequired || [];
+const friendEvidence = (proofs?.proofs?.friendBeta?.criteria || []).map((criterion) => criterion.label);
 for (const required of [
   "tester completed account creation or sign-in",
   "tester completed confirmation-email or password-reset recovery check",
@@ -124,7 +124,7 @@ if (!authEmailProof) {
     "recovery link opens update-password UI",
     "new password sign-in succeeds",
   ]) {
-    if (!(authEmailProof.evidenceRequired || []).includes(required)) {
+    if (!(authEmailProof.criteria || []).some((criterion) => criterion.label === required)) {
       errors.push(`context/LAUNCH_PROOFS.json authEmailSmoke evidence missing: ${required}`);
     }
   }

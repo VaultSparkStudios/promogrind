@@ -1,8 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
+import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
+import { normalizeAdvisorResult } from "../_shared/advisor-result.ts";
+import { ADVISOR_PRIVACY_CONTRACT_VERSION, redactAdvisorInput, sanitizeAdvisorContext } from "../_shared/advisor-privacy.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
 import { parsePromoTextHeuristic } from "../_shared/promo-parse.ts";
-import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL, validateCalculatorSlug, validateConfidence, validatePromoType, validateRating } from "../_shared/validate.ts";
+import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL } from "../_shared/validate.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -20,36 +23,15 @@ const SYSTEM_PROMPT = `You are a sports betting promo analyst for PromoGrind. A 
 - "riskFlags": array of short risk strings (0-3 items)
 - "opportunityScore": integer 0-100
 - "opsTags": array of 1-4 short machine-friendly tags
+- "assumptions": array of 0-3 concrete assumptions used in the verdict
+- "missingInputs": array of 0-3 offer facts that were absent and would improve confidence
+- "sensitivityTriggers": array of 1-3 specific changes that would materially change the verdict
+- "evidenceGrade": one of "complete" | "partial" | "estimate"
 
 Be concise, practical, and product-native. Focus on real cash value after optimal hedging and route the user to the best next PromoGrind calculator when possible.
 
 ${SLUG_GUARDRAIL}
 ${PROMO_TYPE_GUARDRAIL}`;
-
-function normalizeAdvisorResult(input: Record<string, unknown>, fallbackText = "") {
-  const riskFlags = Array.isArray(input.riskFlags) ? input.riskFlags.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 3) : [];
-  const opsTags = Array.isArray(input.opsTags) ? input.opsTags.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean).slice(0, 4) : [];
-  const parsedScore = Number.parseInt(String(input.opportunityScore ?? ""), 10);
-  const assumptions = Array.isArray(input.assumptions) ? input.assumptions.map((a) => String(a || "").trim()).filter(Boolean).slice(0, 3) : [];
-
-  return {
-    verdict: String(input.verdict || "Analysis Complete").trim(),
-    rating: validateRating(input.rating),
-    confidence: validateConfidence(input.confidence),
-    promoType: validatePromoType(input.promoType),
-    calculatorSlug: validateCalculatorSlug(input.calculatorSlug),
-    explanation: String(input.explanation || fallbackText || "Analysis complete.").trim(),
-    ev: input.ev ?? null,
-    action: input.action ? String(input.action).trim() : null,
-    hedge: input.hedge ? String(input.hedge).trim() : null,
-    nextStep: input.nextStep ? String(input.nextStep).trim() : null,
-    riskFlags,
-    opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : 50,
-    opsTags,
-    assumptions,
-    analysisSource: input.analysisSource ? String(input.analysisSource).trim() : "ai",
-  };
-}
 
 function streamRuleEngineResult(req: Request, corsHeaders: HeadersInit, payload: Record<string, unknown>) {
   const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
@@ -76,9 +58,11 @@ serve(async (req) => {
   }
 
   try {
-    const { promoText, userContext } = await req.json() as {
+    const { promoText, userContext, privacyContractVersion, personalizationConsent } = await req.json() as {
       promoText: string;
       userContext?: { bankroll?: number; books?: string[]; hitRate?: number; topPromoType?: string };
+      privacyContractVersion?: number;
+      personalizationConsent?: boolean;
     };
 
     if (!promoText || typeof promoText !== "string" || promoText.trim().length < 10) {
@@ -89,9 +73,7 @@ serve(async (req) => {
     if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, corsHeaders);
 
     const access = await requireAiAccess(req, {
-      feature: "promo_advisor",
-      minTier: "free",
-      dailyLimits: { free: 3, scout: 10, runner: Infinity, closer: Infinity, house: Infinity },
+      ...AI_ENTITLEMENTS.promoAdvisor,
       corsHeaders,
     });
     if (access.error) return access.error;
@@ -107,17 +89,32 @@ serve(async (req) => {
     });
     if (durableLimit) return durableLimit;
 
-    const sanitizedPromoText = promoText.replace(/<[^>]*>/g, "").trim().slice(0, 2000);
+    if (privacyContractVersion !== ADVISOR_PRIVACY_CONTRACT_VERSION) {
+      return json(req, { error: "Unsupported advisor privacy contract" }, 400);
+    }
+
+    const privacy = redactAdvisorInput(promoText);
+    const sanitizedPromoText = privacy.text;
+    const sanitizedUserContext = sanitizeAdvisorContext(userContext, personalizationConsent);
+    const privacyReceipt = {
+      contractVersion: ADVISOR_PRIVACY_CONTRACT_VERSION,
+      redactions: privacy.redactions,
+      redactionCount: privacy.total,
+      profileIncluded: Boolean(sanitizedUserContext),
+      profileFields: sanitizedUserContext ? Object.keys(sanitizedUserContext) : [],
+    };
     const heuristic = parsePromoTextHeuristic(sanitizedPromoText);
     const wantsStream = req.headers.get("accept") === "text/event-stream";
 
     if (heuristic.clearWinner && heuristic.confidence === "high") {
-      const result = normalizeAdvisorResult(heuristic.result, String(heuristic.result.explanation || ""));
+      const result = { ...normalizeAdvisorResult(heuristic.result, String(heuristic.result.explanation || "")), privacyReceipt };
       recordAiUsage(access.supabase, access.user.id, "promo_advisor", {
         chars: sanitizedPromoText.length,
         tier: access.tier,
         analysis_source: "rule_engine",
         estimated_tokens_saved: 650,
+        privacy_redactions: privacy.total,
+        profile_context_included: Boolean(sanitizedUserContext),
       }).catch(() => {});
       if (wantsStream) {
         return streamRuleEngineResult(req, corsHeaders, {
@@ -136,12 +133,12 @@ serve(async (req) => {
     }
 
     let contextNote = "";
-    if (userContext) {
+    if (sanitizedUserContext) {
       const parts: string[] = [];
-      if (userContext.bankroll) parts.push(`bankroll $${userContext.bankroll}`);
-      if (userContext.books?.length) parts.push(`active books: ${userContext.books.slice(0, 5).join(", ")}`);
-      if (userContext.hitRate !== undefined) parts.push(`hit rate ${Math.round(userContext.hitRate * 100)}%`);
-      if (userContext.topPromoType) parts.push(`best lane: ${userContext.topPromoType}`);
+      if (sanitizedUserContext.bankroll) parts.push(`bankroll $${sanitizedUserContext.bankroll}`);
+      if (sanitizedUserContext.books?.length) parts.push(`active books: ${sanitizedUserContext.books.slice(0, 5).join(", ")}`);
+      if (sanitizedUserContext.hitRate !== undefined) parts.push(`hit rate ${Math.round(sanitizedUserContext.hitRate * 100)}%`);
+      if (sanitizedUserContext.topPromoType) parts.push(`best lane: ${sanitizedUserContext.topPromoType}`);
       if (parts.length) contextNote = `\n\nUser profile: ${parts.join(" | ")}`;
     }
 
@@ -215,7 +212,7 @@ serve(async (req) => {
 
         const parsed = parseAiJson(fullText);
 
-        const result = normalizeAdvisorResult(parsed, fullText);
+        const result = { ...normalizeAdvisorResult(parsed, fullText), privacyReceipt };
         await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "done", result, remaining })}\n\n`));
         await writer.close();
 
@@ -223,6 +220,8 @@ serve(async (req) => {
           input_tokens: inputTokens,
           output_tokens: outputTokens,
           tier: access.tier,
+          privacy_redactions: privacy.total,
+          profile_context_included: Boolean(sanitizedUserContext),
         }).catch(() => {});
       })();
 
@@ -247,10 +246,13 @@ serve(async (req) => {
       analysis_source: "ai",
       input_tokens: anthropicData.usage?.input_tokens ?? 0,
       output_tokens: anthropicData.usage?.output_tokens ?? 0,
+      privacy_redactions: privacy.total,
+      profile_context_included: Boolean(sanitizedUserContext),
     });
 
     return json(req, {
       ...normalizeAdvisorResult(parsed, content),
+      privacyReceipt,
       remaining,
     });
   } catch (err) {

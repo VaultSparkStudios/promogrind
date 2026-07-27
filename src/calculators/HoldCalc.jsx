@@ -22,7 +22,7 @@ export default function HoldCalc() {
           <In l="Side 2 Odds" v={o2} set={setO2} ph="-110" />
         </div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(gradeColor)}>{r.hold}%</span>
               <span style={{ fontSize: 12, color: K.dm }}>book hold</span>

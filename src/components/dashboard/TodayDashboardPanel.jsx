@@ -170,7 +170,7 @@ function OperatorAutopilotCard({ decision, topWorkflow, navigate }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 180 }}>
           <button
             onClick={() => navigate(targetPath)}
-            style={{ padding: "9px 12px", background: tone, border: "none", borderRadius: 8, color: K.bg, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
+            style={{ padding: "9px 12px", background: tone, border: "none", borderRadius: 8, color: K.ink, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
           >
             {hasWorkflow ? "Open workflow →" : `${decision.cta || "Open action"} →`}
           </button>
@@ -202,7 +202,7 @@ function PromoPassportOnboardingCard({ plan, discipline, navigate }) {
         </div>
         <button
           onClick={() => navigate(plan.next?.slug || "/dashboard")}
-          style={{ padding: "8px 12px", background: tone, border: "none", borderRadius: 8, color: K.bg, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
+          style={{ padding: "8px 12px", background: tone, border: "none", borderRadius: 8, color: K.ink, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
         >
           {plan.complete ? "Review dashboard" : "Open next step"} →
         </button>
@@ -373,10 +373,10 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
         </div>
 
         <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
-          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Today&apos;s Promo Volume</div>
+          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Patterns to verify today</div>
           <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: K.gn, marginBottom: 6 }}>{snapshot.todayPromos.length}</div>
           <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
-            {snapshot.todayPromos.length ? "Recurring promos match today’s schedule." : "No recurring promos matched today’s schedule."}
+            {snapshot.todayPromos.length ? `${snapshot.adaptivePlan?.evidenceCoverage?.actionable || 0} recently seen · ${snapshot.adaptivePlan?.evidenceCoverage?.verify || snapshot.todayPromos.length} need verification.` : "No historical cadence patterns match today."}
           </div>
           <button onClick={() => navigate("/promo-calendar")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font }}>
             Open promo calendar →
@@ -509,7 +509,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
                 <button
                   onClick={() => queuePlaybook(playbook)}
                   disabled={!syncAppData}
-                  style={{ padding: "6px 10px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 11, cursor: syncAppData ? "pointer" : "default", fontFamily: font }}
+                  style={{ padding: "6px 10px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: syncAppData ? "pointer" : "default", fontFamily: font }}
                 >
                   Queue {playbook.steps.length} steps →
                 </button>

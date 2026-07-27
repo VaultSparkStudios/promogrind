@@ -106,6 +106,11 @@ function collectLaunchDeferrals(status) {
 
 function buildPack() {
   const status = readJson('context/PROJECT_STATUS.json', {});
+  const targetSession = Number(argValue('--session', String((status.currentSession ?? 0) + 1)));
+  const existingPack = readJson('docs/INNOVATION_PACK.json', {});
+  const shippedOutcomes = existingPack.session === targetSession
+    ? (existingPack.ranked ?? []).filter((item) => item.status === 'shipped')
+    : [];
   const genius = readText('docs/GENIUS_LIST.md');
   const taskBoard = readText('context/TASK_BOARD.md');
   const windowsShell = scanWindowsHide(path.join(ROOT, 'scripts'));
@@ -187,6 +192,10 @@ function buildPack() {
     });
   }
 
+  for (const shipped of shippedOutcomes) {
+    if (!items.some((item) => item.id === shipped.id)) items.push(shipped);
+  }
+
   const ranked = items
     .sort((a, b) => b.priority - a.priority)
     .slice(0, TOP);
@@ -195,7 +204,7 @@ function buildPack() {
     schemaVersion: '1.0',
     generatedAt: new Date().toISOString(),
     project: status.name ?? status.slug ?? 'PromoGrind',
-    session: (status.currentSession ?? 0) + 1,
+    session: targetSession,
     sourceSignals: {
       geniusListEmpty: !/^## /m.test(genius),
       taskBoardBytes: taskBoard.length,
@@ -204,6 +213,7 @@ function buildPack() {
       todoSignals: todoSignals.length,
       largeFiles: largeFiles.length,
       launchDeferrals: launchDeferrals.length,
+      secondOrderShipped: shippedOutcomes.length,
     },
     ranked,
     evidence: {

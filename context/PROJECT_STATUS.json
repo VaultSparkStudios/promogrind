@@ -13,57 +13,60 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 112,
-  "currentFocus": "S112 exhausted repo-owned innovation-pack maintainability items: startup brief renderer is under threshold via focused helper extraction; App shell auth/lazy ownership is extracted; sync workflow persistence and loadData tests are split; UserMenu is below threshold; innovation pack now has 0 large files and only honest external proof deferrals.",
-  "nextMilestone": "Record real production auth email, Stripe, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key proof gates before any public launch announcement.",
+  "currentSession": 119,
+  "currentFocus": "S119 exhausted four premise-verified infrastructure items plus four second-order innovations: provenance-aware startup signals, bounded history scanning, criterion receipt quorums, target-bound capabilities, browser self-validation, evidence freshness decay, fail-closed capture configuration, and local-date noninteractive closeout. Repo-owned verification: 590/590 Vitest, 47 invariant assertions, and launch-local direct exit 0.",
+  "nextMilestone": "Publish S119, verify live capture-key injection, grant exact Cloudflare Transform Rules and Email Routing scopes, rotate the isolated historical Supabase credential, deploy the pending Supabase migration/functions, and complete remaining human/mailbox/payment proof criteria plus AI pixel inspection.",
   "blockers": [
-    "Brevo delivery proof pending for contact@promogrind.bet forwarding/copy to founder@vaultsparkstudios.com; Ark cargo 01JSAJMBF321A097D8CE8E12B9 shipped to Studio Ops because local brevo capability is missing.",
+    "Brevo sender-domain SPF/DKIM is verified and recorded as proof 1/3; exact contact@promogrind.bet forwarding inspection remains pending because all available Cloudflare tokens return 403 for Email Routing Rules Read.",
     "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
     "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
     "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
-    "Studio Ops capability follow-up: consume Ark cargo 01JSAF1R02AEA5B6F3FE74C3B4 and add promogrind.supabase.deploy for project ref fjnpzjjyhnpmunfoycrp.",
-    "Wire the real browser-safe Supabase anon key into the production capture page/deploy config before claiming email capture readiness."
+    "PromoGrind Supabase REST service scope is target-authorized, but CLI deployment still lacks a target-bound access token; Ark cargo 01JUE23NQ1EEF6010874B09F97 requests deploy scope before 20260723021000_ai_quota_claim.sql and five provider functions are deployed.",
+    "S119 Pages deployment exposes browser-safe Supabase configuration and is recorded as capture proof 1/3; real submission plus observable lead-row criteria remain pending.",
+    "Rotate the historical privileged Supabase token isolated at commit b1205ce through the Studio secrets gateway; redacted Ark request 01JUE23NQ1EEF6010874B09F97 is pending.",
+    "Production edge is missing Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy.",
+    "AI pixel inspection remains partial: S118 captured and hashed desktop/mobile dark/light screenshots and found zero live computed-style contrast failures, but the connected image viewer failed before pixel review."
   ],
-  "lastUpdated": "2026-07-01",
-  "silScore": 1000,
-  "silAvg3": 1000,
-  "silVelocity": 5,
+  "lastUpdated": "2026-07-26",
+  "silScore": 999,
+  "silAvg3": 999.3,
+  "silVelocity": 8,
   "silDebt": "stable",
-  "silLastSession": 112,
+  "silLastSession": 119,
   "silMax": 1000,
   "silSparkline": [
     1000,
     1000,
-    1000,
-    1000,
-    1000
+    999,
+    999,
+    999
   ],
-  "ignisScore": 43431,
+  "ignisScore": 44184,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-06-29",
-  "testsPassing": 511,
-  "testsTotal": 511,
-  "testsLastRun": "2026-07-01",
-  "lastDeployStatus": "Latest main is fully deployed through GitHub Pages after manual workflow_dispatch when closeout-only files change; production launch verification and dashboard smoke pass with 0 blocking failures.",
-  "truthAuditStatus": "green-with-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-07-01",
+  "ignisLastComputed": "2026-07-23",
+  "testsPassing": 590,
+  "testsTotal": 590,
+  "testsLastRun": "2026-07-25",
+  "lastDeployStatus": "S119 commit c718c24 deployed successfully: brief-format 30194498456, CI 30194498448, and Deploy Pages 30194498469 passed; production launch verification and dashboard smoke passed. Live capture configuration is verified and proof is 1/3. Edge contract remains NO-GO because six required response headers are absent.",
+  "truthAuditStatus": "green-with-target-scope-external-proof-and-partial-pixel-review-follow-ups",
+  "truthAuditLastRun": "2026-07-25",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 511/511 in S112 via npm test and npm run verify:launch-local"
+      "status": "passing 590/590 across 75 files in S119 on the exact package-lock tree"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S112 with 511/511 tests, AI usage ledger, hook-order guard, auth/launch/UX/browser smokes, dist exposure, proof replay, bundle budget, and strict public sanitization clean"
+      "status": "passing end to end in S119 (direct exit 0) with 590/590 tests, 47 session invariants, source/claims/AI-entitlement integrity, auth/launch/UX/browser smokes, dist exposure, proof replay, release surface, bundle budget, and strict public sanitization clean"
     },
     {
       "type": "ux-integrity",
       "command": "npm run smoke:ux",
-      "status": "passing in S105 across 60 app routes and 100 public HTML files"
+      "status": "passing in S117 across 61 app routes and 100 public HTML files"
     },
     {
       "type": "local",
@@ -74,7 +77,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live; latest main is deployed via GitHub Pages workflow_dispatch after closeout-only commits, with production launch verification and dashboard smoke passing with 0 blocking failures"
+      "status": "live; S119 commit c718c24 deployed via GitHub Pages run 30194498469; production launch verification and dashboard smoke passed; capture configuration verified; six required security headers remain absent"
     },
     {
       "type": "cloudflare",
@@ -87,6 +90,10 @@
   "brandingRequired": true,
   "brandingCompliant": true,
   "revenueModel": "affiliate-plus-subscription",
+  "freeTierCostStatus": "trial-ceiling",
+  "freeTierAuditDate": "2026-07-25",
+  "freeTierAuditDoc": "docs/AUDIT_2026-07-25.md",
+  "freeTierAuditNote": "Server-owned lifetime free/trial ceilings are reserved atomically before provider calls; paid tiers keep explicit daily or unlimited contracts. No recurring-cost alarm is inferred from notional flat-rate plan usage.",
   "stripeReady": false,
   "stripeLiveKeyConfigured": false,
   "stripeProductionPriceIds": [],
@@ -101,10 +108,10 @@
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "automationCoverage": 99
   },
   "doctorScore": {
-    "date": "2026-07-01",
+    "date": "2026-07-26",
     "passing": 12,
     "warning": 0,
     "failing": 0,
@@ -206,10 +213,10 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "sessionMode": "builder",
-  "sessionModeAutoShiftedAt": "2026-07-01T06:44:47.44Z",
+  "sessionMode": "founder",
+  "sessionModeAutoShiftedAt": "2026-07-01T23:13:06.827Z",
   "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-06-30T07:31:13.255Z",
+  "planModeCheckedAt": "2026-07-01T23:13:09.14Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex"
 }

@@ -76,15 +76,15 @@ export default function ProfitBoost() {
           </div>
         )}
         {r && (
-          <div style={S.res(parseFloat(r.g) > 0)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(parseFloat(r.g) > 0)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(parseFloat(r.g) > 0 ? K.gn : K.rd)}>${r.g}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>guaranteed profit</span>
+              <span style={{ fontSize: 12, color: K.dm }}>modeled profit</span>
               <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
               <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b /><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl} /><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`} /><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b /><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn} /><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn} />
-            <Nt c={K.yl}>This is your long-term money machine. Sportsbooks offer 2-5 boosts daily. At $5-$15 profit per boost × 30 days = $300-$1,000/month recurring.</Nt>
+            <Nt c={K.yl}>Treat each boost as a new decision. Verify the live odds, cap, eligibility, and hedge before counting any value.</Nt>
             <BookCTA promoType="boost" />
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
               <CalculatorTrustBadge calculatorKey="profit-boost" promoType="profit_boost" />
@@ -117,7 +117,7 @@ export default function ProfitBoost() {
                   { label: "Hedge Amount", value: `$${r.hs}` },
                   { label: "If Boosted Wins", value: `+$${r.pBW}` },
                   { label: "If Hedge Wins", value: `+$${r.pHW}` },
-                  { label: "Guaranteed Profit", value: `$${r.g}`, highlight: true },
+                  { label: "modeled Profit", value: `$${r.g}`, highlight: true },
                 ]}
                 onClose={() => setShowReceipt(false)}
               />
@@ -129,7 +129,7 @@ export default function ProfitBoost() {
         ["Profit Boost", "A sportsbook promo that adds a percentage to your winnings IF your bet wins. A 50% profit boost on a bet that would win $100 now wins $150 instead. Unlike bonus bets, you're using your OWN money — the boost just sweetens the payout."],
         ["How the math works", "The boost changes your 'effective odds' — the real payout you'd get. We calculate those effective odds, then figure out the exact hedge amount at another book that locks in profit regardless of outcome."],
         ["Max Extra Winnings", "Most boosts have a cap. A '50% boost, max $250 extra' means even if your normal winnings would be $600, the boost only adds up to $250. Always enter this cap — it affects the hedge calculation."],
-        ["Why this is the big money", "Welcome promos are one-time. But profit boosts appear DAILY. DraftKings alone offers 2-3 per day. Across 5-6 sportsbook apps, you can find 5-10 boosts daily. Even at $5 per conversion, that's $150-$300/month from one activity."],
+        ["Why recurring boosts matter", "Welcome promos are one-time, while boosts can recur. Frequency and value vary by account, book, limits, and market conditions, so track realized outcomes instead of projecting a fixed monthly return."],
         ["Step-by-Step", "1) Check your sportsbook apps each morning for profit boosts. 2) Find the boost, note the odds, percentage, and max extra winnings. 3) Find the opposing line at another book. 4) Enter everything here. 5) Place the boosted bet at Book A. 6) Place the hedge at Book B for the calculated amount. 7) Profit either way."],
       ]} />
     </div>

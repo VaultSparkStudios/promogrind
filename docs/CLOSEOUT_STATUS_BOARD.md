@@ -1,21 +1,21 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-01 (Session 112 closeout) -->
+<!-- generated-at: 2026-07-25 (Session 118 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S112 ════════════════════════╗
-║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 5 stable      ║
-║  Mode: BUILDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · PromoGrind · S118 ════════════════════════╗
+║  Date: 2026-07-25  ·  SIL: 999/1000  ·  Velocity: 6 stable       ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Production auth email smoke proof.                            ║
-║  ✓ Stripe smoke purchase proof.                                  ║
-║  ✓ Friend beta pass proof.                                       ║
-║  ✓ Brevo forwarding proof for contact@promogrind.bet.            ║
-║  ✓ Studio Ops Supabase capability proof.                         ║
+╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore(S118): record deployment proof                          ║
+║  ✓ chore(S118): reconcile saturated arc closeout                 ║
+║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
+║  ✓ chore(S117): record deployment proof                          ║
+║  ✓ feat(S117): harden public trust and evidence contracts        ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
+╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
@@ -25,22 +25,22 @@
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  · context/TRUTH_AUDIT.md                                        ║
-║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 30 files  ·  M:21 A:0 D:0 ?:9                          ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,13 +51,14 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         511/511                                          ║
+║  Tests:         588/588                                          ║
 ║  IGNIS:         3d ago                                           ║
-║  Truth:         green-with-external-proof-follow-ups             ║
+║  Truth:         green-with-external-proof-and-partial-pixel-rev  ║
 ║  Sanitization:  —                                                ║
+║  Shell hygiene: 0 session browsers · 0 preview listeners          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
+║  ✓ Unified Genius List exhausted · regenerate from live code     ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 

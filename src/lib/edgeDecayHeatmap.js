@@ -5,6 +5,7 @@
 // copy — pure state surfacing.
 
 import { buildDecayCurve, computeExecutionDeadline } from "./edgeDecay.js";
+import { PROMO_SCHED } from "../data/promoSchedule.js";
 
 function num(value, fallback = 0) {
   const parsed = Number.parseFloat(value);
@@ -17,6 +18,26 @@ function cellTone(remainingPct, horizonHours, expired) {
   if (remainingPct <= 0.5 || horizonHours <= 24) return "warm";
   if (remainingPct <= 0.8) return "fresh";
   return "stable";
+}
+
+// Derive the operator's live promo rows from the same sources the
+// recommender uses: the schedule scoped to active books, with the
+// user-entered per-book expiry from the Sportsbooks tracker as the
+// hard-expiry signal.
+export function buildHeatmapPromoRows(data = {}) {
+  const bookStatus = data.bookStatus || {};
+  const activeBooks = Object.entries(bookStatus)
+    .filter(([, v]) => v === "active" || v === "Active")
+    .map(([k]) => k);
+  const expiry = data.bookExpiry || {};
+  return PROMO_SCHED
+    .filter((p) => (activeBooks.length ? activeBooks.includes(p.book) : p.grade === "A"))
+    .map((p) => ({
+      book: p.book,
+      promo: p.promo,
+      promoType: p.type,
+      expires: expiry[p.book] || null,
+    }));
 }
 
 /**

@@ -14,12 +14,12 @@ const OnboardingWizard = ({ onDone }) => {
   const steps = [
     {
       title: "Welcome to PromoGrind",
-      sub: "Turn sportsbook promos into guaranteed cash. No gambling knowledge needed.",
+      sub: "Turn sportsbook promos into modeled cash. No gambling knowledge needed.",
       content: (
         <div style={{textAlign:"center"}}>
-          <div style={{fontSize:32,marginBottom:16}}>ðŸ¤‘</div>
+          <div style={{fontSize:32,marginBottom:16}}>🤑</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,maxWidth:380,margin:"0 auto",textAlign:"left"}}>
-            {[["Welcome Promos","$1,000â€“$2,500 one-time from 8+ books"],["Profit Boosts","$300â€“$1,000/month recurring, 15 min/day"],["100% Legal","Math calculator, not gambling. Free forever."],["No Sports Knowledge","Pure math. You don't need to know the teams."]].map(([t,d])=>(
+            {[["Welcome Promos","One-time offer value varies by state, book, and account"],["Profit Boosts","Recurring offers; verify terms, odds, and expected value each time"],["Eligibility Varies","Educational calculator — check local law and sportsbook terms"],["No Sports Knowledge","Decision math matters more than knowing the teams"]].map(([t,d])=>(
               <div key={t} style={{padding:"10px 12px",background:"#161d2a",borderRadius:8,border:"1px solid #1e293b"}}>
                 <div style={{fontSize:11,fontWeight:700,color:"#e2e8f0",marginBottom:2}}>{t}</div>
                 <div style={{fontSize:10,color:"#64748b",lineHeight:1.5}}>{d}</div>
@@ -39,7 +39,7 @@ const OnboardingWizard = ({ onDone }) => {
               {b}
             </button>
           ))}
-          <div style={{width:"100%",textAlign:"center",fontSize:11,color:"#64748b",marginTop:4}}>None yet? No problem â€” you'll start fresh.</div>
+          <div style={{width:"100%",textAlign:"center",fontSize:11,color:"#64748b",marginTop:4}}>None yet? No problem — you'll start fresh.</div>
         </div>
       )
     },
@@ -49,7 +49,7 @@ const OnboardingWizard = ({ onDone }) => {
       content: (
         <div style={{textAlign:"center"}}>
           <select style={{...S.input,maxWidth:300,padding:"10px 14px",fontSize:13,margin:"0 auto"}} value={userState} onChange={e=>{setUserState(e.target.value);try{localStorage.setItem('pg_user_state',e.target.value);}catch{}}}>
-            <option value="">â€” Select your state â€”</option>
+            <option value="">— Select your state —</option>
             {US_STATES.map(s=><option key={s} value={s}>{s}</option>)}
           </select>
           <div style={{fontSize:11,color:K.mt,marginTop:12}}>
@@ -60,15 +60,15 @@ const OnboardingWizard = ({ onDone }) => {
     },
     {
       title: "Start with your first promo",
-      sub: books.length > 0 ? `You have ${books.length} book${books.length>1?"s":""} â€” start converting promos immediately.` : "Open one or more sportsbook apps and grab a welcome promo.",
+      sub: books.length > 0 ? `You have ${books.length} book${books.length>1?"s":""} — start converting promos immediately.` : "Open one or more sportsbook apps and grab a welcome promo.",
       content: (
         <div style={{textAlign:"center"}}>
           <div style={{fontSize:13,color:"#94a3b8",marginBottom:16,lineHeight:1.7}}>Your best first move:</div>
           <div style={{display:"grid",gap:8,maxWidth:380,margin:"0 auto",textAlign:"left"}}>
             {[
-              ["1","Get a bonus bet promo","DraftKings, FanDuel, Fanatics, ESPN BET â€” all offer bonus bets after a small qualifying wager"],
-              ["2","Open Bonus Bet Converter","Enter your bonus bet size and odds â€” the calculator tells you exactly what hedge to place"],
-              ["3","Place both bets","Bonus bet at Book A, hedge at Book B. Profit guaranteed no matter the result"],
+              ["1","Get a bonus bet promo","DraftKings, FanDuel, Fanatics, ESPN BET — all offer bonus bets after a small qualifying wager"],
+              ["2","Open Bonus Bet Converter","Enter your bonus bet size and odds — the calculator tells you exactly what hedge to place"],
+              ["3","Place both bets","Bonus bet at Book A, hedge at Book B. Profit modeled no matter the result"],
             ].map(([n,t,d])=>(
               <div key={n} style={{display:"flex",gap:12,padding:"10px 12px",background:"#161d2a",borderRadius:8,border:"1px solid #1e293b"}}>
                 <div style={{fontSize:16,fontWeight:700,color:"#4ade80",minWidth:20}}>{n}</div>
@@ -95,8 +95,8 @@ const OnboardingWizard = ({ onDone }) => {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
           <button onClick={onDone} style={{padding:"6px 14px",background:"transparent",border:"1px solid #1e293b",borderRadius:6,color:"#334155",fontSize:11,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace"}}>Skip</button>
           <div style={{display:"flex",gap:6}}>{steps.map((_,i)=><div key={i} style={{width:6,height:6,borderRadius:"50%",background:i===step?"#4ade80":"#1e293b"}}/>)}</div>
-          <button onClick={()=>{ if(step<steps.length-1) setStep(s=>s+1); else onDone(); }} style={{padding:"8px 20px",background:"#4ade80",border:"none",borderRadius:6,color:"#0a0e17",fontWeight:700,fontSize:13,cursor:"pointer",fontFamily:"'Space Grotesk',sans-serif"}}>
-            {step<steps.length-1?"Next â†’":"Let's Go â†’"}
+          <button onClick={()=>{ if(step<steps.length-1) setStep(s=>s+1); else onDone(); }} style={{padding:"8px 20px",background:"#4ade80",border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:13,cursor:"pointer",fontFamily:"'Space Grotesk',sans-serif"}}>
+            {step<steps.length-1?"Next →":"Let's Go →"}
           </button>
         </div>
       </div>

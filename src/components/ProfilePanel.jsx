@@ -5,7 +5,7 @@ import { FX, AppDataCtx } from "../contexts.jsx";
 import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
 import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
 import { readTrustReceipts, recordTrustReceipt, summarizeTrustReceipt } from "../lib/trustReceipts.js";
-import { buildLocalDataExport, clearLocalPromoGrindData, describeDataControlState } from "../lib/dataControls.js";
+import DataControlsSection from "./profile/DataControlsSection.jsx";
 import { buildReplayInsights } from "../lib/replayLedger.js";
 import { exportPassport } from "../lib/operatorPassport.js";
 import { compareKellyFractions } from "../lib/kellySim.js";
@@ -24,15 +24,15 @@ function PassportExportSection() {
       setShareUrl(url);
       if (navigator?.clipboard?.writeText) {
         await navigator.clipboard.writeText(url);
-        setMessage("Passport URL copied — paste it anywhere to share. Zero PII, signed locally.");
+        setMessage("Passport URL copied — paste it anywhere to share. Zero PII; checksum-verified and explicitly self-attested.");
       } else {
         setMessage("Passport URL ready below.");
       }
       recordTrustReceipt({
         type: "passport",
         title: "Operator passport exported",
-        summary: "PromoGrind generated a zero-PII signed operator passport URL from local performance totals.",
-        stored: ["signed passport payload", "local discipline summary"],
+        summary: "PromoGrind generated a zero-PII self-attested operator passport URL from local performance totals.",
+        stored: ["self-attested passport payload", "local discipline summary"],
         notStored: ["email", "stake-level bet history", "sportsbook login data"],
         undo: "Do not share the copied URL, or clear local browser data to remove the local export trace.",
         dedupeKey: "passport:export",
@@ -51,7 +51,7 @@ function PassportExportSection() {
         Operator Passport
       </div>
       <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
-        Share a verifiable snapshot of your discipline score, lane mastery, and settled-loop ratio. Signed locally. No bet history, no stake amounts, no sportsbook account info — ever.
+        Share a self-attested snapshot of your discipline score, lane mastery, and settled-loop ratio. A checksum catches copy corruption; it does not prove identity. No bet history, stake amounts, or sportsbook account information — ever.
       </div>
       <button
         onClick={handleExport}
@@ -266,74 +266,6 @@ function TrustReceiptsSection() {
           </div>
         </div>
       ))}
-    </div>
-  );
-}
-
-function DataControlsSection() {
-  const [state, setState] = React.useState(() => describeDataControlState());
-  const [message, setMessage] = React.useState("");
-
-  const refresh = () => setState(describeDataControlState());
-
-  function handleExport() {
-    const payload = buildLocalDataExport();
-    try {
-      const text = JSON.stringify(payload, null, 2);
-      if (navigator?.clipboard?.writeText) {
-        navigator.clipboard.writeText(text);
-        setMessage(`Export copied: ${payload.summary.itemCount} item${payload.summary.itemCount === 1 ? "" : "s"}.`);
-      } else {
-        setMessage(`Export ready: ${payload.summary.itemCount} item${payload.summary.itemCount === 1 ? "" : "s"}.`);
-      }
-    } catch {
-      setMessage("Export unavailable in this browser.");
-    }
-  }
-
-  function handleClear() {
-    const confirmed = window.confirm("Clear local PromoGrind operator data on this device? Preferences stay in place.");
-    if (!confirmed) return;
-    const result = clearLocalPromoGrindData(undefined, { includePreferences: false });
-    refresh();
-    setMessage(`Cleared ${result.cleared.length} item${result.cleared.length === 1 ? "" : "s"}; kept preferences.`);
-  }
-
-  return (
-    <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
-        Data Controls
-      </div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
-        {state.label} · {state.totalBytes} bytes on this device
-      </div>
-      <div style={{ display: 'flex', gap: 8 }}>
-        <button
-          onClick={handleExport}
-          disabled={!state.hasData}
-          style={{
-            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.hasData ? 'pointer' : 'not-allowed',
-            background: state.hasData ? `${K.ac}12` : K.s2,
-            border: `1px solid ${state.hasData ? K.ac + '40' : K.bd}`,
-            color: state.hasData ? K.ac : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
-          }}
-        >
-          Export
-        </button>
-        <button
-          onClick={handleClear}
-          disabled={!state.hasData}
-          style={{
-            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.hasData ? 'pointer' : 'not-allowed',
-            background: state.hasData ? `${K.rd}10` : K.s2,
-            border: `1px solid ${state.hasData ? K.rd + '35' : K.bd}`,
-            color: state.hasData ? K.rd : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
-          }}
-        >
-          Clear Local
-        </button>
-      </div>
-      {message && <div style={{ fontSize: 9, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
     </div>
   );
 }

@@ -147,7 +147,7 @@ const CommunityPromoBoard = () => {
             </div>
           </div>
           <div style={{ marginBottom: 10 }}><label style={S.label} htmlFor="pb-desc">Description</label><input id="pb-desc" style={S.input} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="e.g. 50% profit boost on NBA, max $250 extra, all game types" /></div>
-          <button onClick={submit} disabled={submitting || !form.description} style={{ padding: "8px 18px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: font, opacity: submitting ? 0.7 : 1 }}>{submitting ? "Submitting…" : "Submit Promo"}</button>
+          <button onClick={submit} disabled={submitting || !form.description} style={{ padding: "8px 18px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: font, opacity: submitting ? 0.7 : 1 }}>{submitting ? "Submitting…" : "Submit Promo"}</button>
           <Nt c={K.yl}>Only share promos you have personally verified. Do not submit expired or inaccurate promos.</Nt>
         </div>
       )}
@@ -183,7 +183,7 @@ const CommunityPromoBoard = () => {
           <div style={{ fontSize: 24, marginBottom: 8 }} aria-hidden="true">📋</div>
           <div style={{ fontSize: 13, fontWeight: 600, color: K.dm, marginBottom: 6 }}>No promos yet — be the first</div>
           <div style={{ fontSize: 11, color: K.mt, marginBottom: 14 }}>Share a promo you&apos;re seeing at your sportsbook and help the community.</div>
-          <button onClick={() => setShowForm(true)} style={{ padding: "7px 18px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>+ Share a Promo</button>
+          <button onClick={() => setShowForm(true)} style={{ padding: "7px 18px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>+ Share a Promo</button>
         </div>
       )}
       {filtered.map(p => {

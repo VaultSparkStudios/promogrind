@@ -14,6 +14,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
+import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLimitResponse } from "../_shared/http.ts";
 import { parseAiJson, SLUG_GUARDRAIL, validateCalculatorSlug } from "../_shared/validate.ts";
 
@@ -40,9 +41,7 @@ serve(async (req) => {
     if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, CORS);
 
     const access = await requireAiAccess(req, {
-      feature: "stack_builder",
-      minTier: "closer",
-      dailyLimits: { closer: 5, house: 20 },
+      ...AI_ENTITLEMENTS.stackBuilder,
       corsHeaders: CORS,
     });
     if (access.error) return access.error;
@@ -177,7 +176,8 @@ Steps should be in execution order (welcome bonuses first, then recurring). Be s
     );
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    const message = err instanceof Error ? err.message : "Unexpected stack-builder failure";
+    return new Response(JSON.stringify({ error: message }), {
       status: 500, headers: { ...CORS, "Content-Type": "application/json" },
     });
   }

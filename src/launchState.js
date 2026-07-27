@@ -1,4 +1,5 @@
 import { LAUNCH_PROOFS } from "./data/launchProofs.generated.js";
+import { PROJECT_STATUS_MIRROR } from "./data/projectStatus.generated.js";
 
 const env = (typeof import.meta !== "undefined" && import.meta.env) ? import.meta.env : {};
 
@@ -91,74 +92,28 @@ export const FEATURE_FLAGS = {
   paidCheckout: parseLaunchFlag(env.VITE_PG_FEATURE_PAID_CHECKOUT, false),
 };
 
-export const LAUNCH_VALIDATION = {
-  smokeCommand: {
-    label: "Repo launch smoke",
-    command: "npm run smoke:launch",
-    lastKnown: "passing",
-  },
-  browserSmoke: {
-    label: "Browser smoke",
-    command: "npm run smoke:browser",
-    lastKnown: "passing",
-  },
-  tests: {
-    label: "Vitest",
-    command: "npm test",
-    lastKnown: "380/380 passing",
-  },
-  build: {
-    label: "Build",
-    command: "npm run build",
-    lastKnown: "passing",
-  },
-};
+export const LAUNCH_VALIDATION = PROJECT_STATUS_MIRROR.validation;
 
-export const LAUNCH_BLOCKERS = [
-  {
-    key: "affiliateLinks",
-    label: "Affiliate links",
-    status: "manual",
-    detail: "Real affiliate-approved links still need to replace placeholders in src/books.js.",
-  },
-  {
-    key: "edgeDeploy",
-    label: "Edge hardening deploy",
-    status: "cleared",
-    detail: "Core auth-backed edge functions were redeployed on 2026-04-15 so production now matches the repo for checkout, portal, AI, gift, and beta flows.",
-  },
-  {
-    key: "pushConfig",
-    label: "Push config",
-    status: "manual",
-    detail: "Set VITE_VAPID_PUBLIC_KEY in the live frontend before exposing Daily Brief push publicly.",
-  },
-  {
-    key: "edgeAuth",
-    label: "Edge auth compatibility",
-    status: "cleared",
-    detail: "Resolved on 2026-04-15 by deploying Edge Functions with per-function verify_jwt=false config for publishable-key browser calls.",
-  },
-  {
-    key: "stripeSmoke",
-    label: "Stripe smoke test",
-    status: "manual",
-    detail: "Run one real checkout and customer-portal pass against the deployed app before launch.",
-  },
-  {
-    key: "friendPass",
-    label: "Friend beta pass",
-    status: "manual",
-    detail: "Have a friend create an account and run the core calculator flow to confirm the launch experience feels ready.",
-  },
-];
-
+// Launch blockers are derived exclusively from launchProofs.generated.js.
+// FEATURE_INFO below is setup guidance, not evidence or release state.
 export function normalizeLaunchProofs(payload = LAUNCH_PROOFS) {
   const rawProofs = payload?.proofs && typeof payload.proofs === "object" ? payload.proofs : {};
   return Object.entries(rawProofs).map(([key, proof]) => {
-    const status = String(proof?.status || "pending").trim().toLowerCase();
-    const evidence = Array.isArray(proof?.evidence) ? proof.evidence : [];
-    const evidenceRequired = Array.isArray(proof?.evidenceRequired) ? proof.evidenceRequired : [];
+    const evidence = Array.isArray(proof?.receipts) ? proof.receipts : Array.isArray(proof?.evidence) ? proof.evidence : [];
+    const hasCriteria = Array.isArray(proof?.criteria);
+    const criteria = hasCriteria
+      ? proof.criteria.filter((criterion) => criterion?.id && criterion?.label)
+      : (Array.isArray(proof?.evidenceRequired) ? proof.evidenceRequired : []).map((label, index) => ({ id: `legacy-${index + 1}`, label }));
+    const covered = new Set(evidence.map((receipt) => receipt?.criterionId).filter(Boolean));
+    const evidenceRequired = criteria.map((criterion) => criterion.label);
+    const evidenceCount = hasCriteria
+      ? criteria.filter((criterion) => covered.has(criterion.id)).length
+      : evidence.length;
+    const missingEvidence = criteria.filter((criterion) => !covered.has(criterion.id)).map((criterion) => criterion.label);
+    const persistedStatus = String(proof?.status || "pending").trim().toLowerCase();
+    const status = hasCriteria && criteria.length > 0
+      ? evidenceCount === criteria.length ? "complete" : evidenceCount > 0 ? "partial" : "pending"
+      : persistedStatus;
     const requiredFor = Array.isArray(proof?.requiredFor) ? proof.requiredFor : [];
     return {
       key,
@@ -174,7 +129,8 @@ export function normalizeLaunchProofs(payload = LAUNCH_PROOFS) {
       requiredBooks: Array.isArray(proof?.requiredBooks) ? proof.requiredBooks : [],
       isComplete: status === "complete",
       isBlocking: proof?.blocking !== false && status !== "complete",
-      evidenceCount: evidence.length,
+      evidenceCount,
+      missingEvidence,
       requiredEvidenceCount: evidenceRequired.length,
     };
   });
@@ -211,6 +167,7 @@ export function getLaunchProofCommandItems(payload = LAUNCH_PROOFS) {
       evidenceRequired: proof.evidenceRequired,
       evidence: proof.evidence,
       evidenceCount: proof.evidenceCount,
+      missingEvidence: proof.missingEvidence,
       requiredEvidenceCount: proof.requiredEvidenceCount,
       requiredFor: proof.requiredFor,
       requiredBooks: proof.requiredBooks,
@@ -368,4 +325,3 @@ export function getLaunchCommandCenter(input = {}) {
     validation,
   };
 }
-

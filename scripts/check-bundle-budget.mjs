@@ -14,15 +14,19 @@
  * counted toward this budget.
  */
 
-import { readdir, stat } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { gzipSync } from "node:zlib";
+import { evaluateBundleBudget } from "./lib/bundle-budget.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ASSETS = join(ROOT, "dist", "assets");
-const BUDGET_KB = Number.parseInt(process.env.BUNDLE_BUDGET_KB ?? "425", 10);
-const BUDGET_BYTES = BUDGET_KB * 1024;
+const MANIFEST = join(ROOT, "dist", ".vite", "manifest.json");
+const kb = (name, fallback) => Number.parseInt(process.env[name] ?? String(fallback), 10) * 1024;
+const BUDGETS = { initialRawBytes: kb("BUNDLE_INITIAL_RAW_KB", 750), initialGzipBytes: kb("BUNDLE_INITIAL_GZIP_KB", 210), asyncRawBytes: kb("BUNDLE_ASYNC_RAW_KB", 525), asyncGzipBytes: kb("BUNDLE_ASYNC_GZIP_KB", 180) };
+const formatKb = (bytes) => `${(bytes / 1024).toFixed(1)}KB`;
 
 async function main() {
   if (!existsSync(ASSETS)) {
@@ -30,41 +34,26 @@ async function main() {
     process.exit(2);
   }
 
-  const files = await readdir(ASSETS);
-  const jsFiles = files.filter((name) => name.endsWith(".js"));
-
-  // Vite emits `index-*.js` for the main entry. Fall back to largest .js
-  // chunk whose name doesn't match a known secondary chunk.
-  const SECONDARY = /(^vendor-|^supabase-|^analytics-|^chunk-)/;
-  const candidates = jsFiles.filter((name) => !SECONDARY.test(name));
-
-  const sized = await Promise.all(
-    candidates.map(async (name) => {
-      const stats = await stat(join(ASSETS, name));
-      return { name, size: stats.size };
-    }),
-  );
-
-  const entry =
-    sized.find((entry) => /^index[-.]/.test(entry.name)) ??
-    sized.sort((a, b) => b.size - a.size)[0];
-
-  if (!entry) {
-    console.error("[bundle-budget] no main chunk detected in dist/assets.");
+  if (!existsSync(MANIFEST)) {
+    console.error("[bundle-budget] Vite manifest missing — build.manifest must stay enabled.");
     process.exit(2);
   }
-
-  const sizeKb = (entry.size / 1024).toFixed(1);
-  const budgetMsg = `budget ${BUDGET_KB}KB · main chunk ${entry.name} = ${sizeKb}KB`;
-
-  if (entry.size > BUDGET_BYTES) {
-    console.error(`[bundle-budget] FAIL · ${budgetMsg}`);
-    console.error("   Investigate with `npm run build -- --mode production` + the Vite rollup report,");
-    console.error("   or bump BUNDLE_BUDGET_KB in the env if the growth is deliberate.");
+  const manifest = JSON.parse(await readFile(MANIFEST, "utf8"));
+  const files = (await readdir(ASSETS)).filter((name) => name.endsWith(".js"));
+  const assets = await Promise.all(files.map(async (name) => {
+    const file = join(ASSETS, name);
+    const [stats, body] = await Promise.all([stat(file), readFile(file)]);
+    return { file: `assets/${name}`, rawBytes: stats.size, gzipBytes: gzipSync(body).byteLength };
+  }));
+  const result = evaluateBundleBudget({ manifest, assets, budgets: BUDGETS });
+  const { measurements } = result;
+  const largest = measurements.largestAsync;
+  const summary = [`initial ${measurements.initialFiles.length} files`, `${formatKb(measurements.initialRawBytes)} raw/${formatKb(measurements.initialGzipBytes)} gzip`, largest ? `largest async ${largest.file} ${formatKb(largest.rawBytes)} raw/${formatKb(largest.gzipBytes)} gzip` : "no async chunks"].join(" · ");
+  if (!result.pass) {
+    console.error(`[bundle-budget] FAIL (${result.failures.join(", ")}) · ${summary}`);
     process.exit(1);
   }
-
-  console.log(`[bundle-budget] OK · ${budgetMsg}`);
+  console.log(`[bundle-budget] OK · ${summary}`);
 }
 
 main().catch((err) => {

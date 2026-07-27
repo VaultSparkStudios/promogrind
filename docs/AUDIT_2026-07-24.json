@@ -1,0 +1,513 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-07-24",
+  "session": 118,
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched"
+  },
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "product",
+  "successBar": [
+    "Each item must protect or reduce time-to-first-value"
+  ],
+  "axisWeights": {
+    "featureDepth": 1.5,
+    "innovation": 1,
+    "ux": 2,
+    "feedbackLoop": 1,
+    "engagement": 1,
+    "aiIntegration": 1,
+    "security": 1,
+    "speedOrganization": 2,
+    "tokenApiReduction": 1
+  },
+  "premiseVerification": {
+    "liveValidation": "S118: origin/main synchronized; context meter CONTINUE; canon 0 gaps; doctor blockingFailing 0; live code traced through all dashboard consumers.",
+    "releasePosture": "NO-GO for SPARKED: repo-local trial ceiling is green, but sibling registry remains stale; six delivered headers, visual matrix, and external proofs remain independently unverified.",
+    "sample": "Canonical sampler scanned 545 files and selected 16 within the 30,000-token cap; claims, trust, AI privacy, release, calendar, and prior-audit premises were then verified directly against live code.",
+    "visual": "Four local-build screenshots captured at 1440x900 and 390x844 across dark/light; computed-style WCAG audit reports zero visible-text failures in both themes. AI pixel inspection remained unavailable because the image-view sandbox failed at Windows DPAPI, so no pixel-inspection pass is claimed."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "public-repo-secret-and-ops-purge",
+      "title": "Purge the tracked staging secret and private control-plane procedure from the public repo",
+      "tier": "fire",
+      "axis": "security / public sanitization / organization",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 7,
+      "effortHours": 2,
+      "priority": 35,
+      "evidence": "scripts/setup-staging.sh contains a 64-character non-placeholder WEBHOOK_SECRET plus private server/repository/deploy-key topology and has been tracked since S65. scripts/scan-secrets.mjs --all incorrectly reports 0 findings, proving a scanner coverage gap. The script is not used by PromoGrind runtime; only credential-intake prose references it.",
+      "recipe": "Delete the private Studio Ops staging script from this public repo, replace its credential-intake reference with a public-safe control-plane pointer, add a regression rule for high-entropy shell secret assignments and private staging bootstrap markers, verify current and staged scans fail on a fixture but pass the tree, and ship a redacted Ark rotation request because git-history exposure cannot be repaired locally.",
+      "timeToFirstValue": "Users and contributors can trust the public checkout immediately without inheriting a live-looking secret or internal infrastructure instructions.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Remove the tracked secret-bearing script and private reference."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 plus scanner coverage and fixture tests."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "L2 plus all-tree/history assessment and redacted Ark rotation cargo with explicit recovery evidence."
+        }
+      },
+      "id": 1,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 117,
+          "status": "shipped",
+          "note": "Removed the tracked secret-bearing staging bootstrap and its private intake entry; added an entropy-gated unquoted shell-secret rule with redacted snippets; regression and all-tree scan pass; Ark rotation request 01JU98MC5M8FC5EDBEE214F795 shipped.",
+          "verification": [
+            "node scripts/test-scan-secrets.mjs",
+            "node scripts/scan-secrets.mjs --all --json",
+            "node --check scanner/test/intake"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "slug": "self-attestation-trust-boundary",
+      "title": "Replace forgeable browser HMAC attestations and close the Passport injection path",
+      "tier": "fire",
+      "axis": "security / trust UX / feature depth",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 9,
+      "effortHours": 5,
+      "priority": 32.06,
+      "evidence": "src/lib/operatorPassport.js and public/passport/index.html use the public literal pg-passport-v1 as an HMAC secret, so anyone can mint a token the verifier calls authentic. The verifier then interpolates signed payload keys and levels into innerHTML, turning a forged token into script injection. src/lib/promoProvenance.js repeats the public-secret HMAC pattern while describing receipts as tamper-evident.",
+      "recipe": "Version the portable contract as an explicitly self-attested integrity report, replace public-secret HMAC with a transparent SHA-256 checksum, validate and bound every decoded field, render all payload data with textContent, and relabel provenance as a local integrity chain rather than independent authenticity. Add adversarial tests proving arbitrary payloads cannot be called Studio-verified and HTML-like lane values remain inert.",
+      "timeToFirstValue": "Users can safely share a useful discipline summary immediately without relying on a false trust claim or exposing recipients to injected markup.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Remove innerHTML payload rendering and add strict decoded-field validation."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "L1 plus v2 checksum tokens and honest self-attestation copy across Profile and the public verifier."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "L2 plus provenance-chain contract correction, backward-safe failure messages, and adversarial regression coverage."
+        }
+      },
+      "id": 2,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 117,
+          "status": "shipped",
+          "note": "Replaced browser-public HMAC claims with v2 self-attested SHA-256 integrity contracts; strict payload validation rejects injected lane keys; the public verifier renders payloads only through textContent; local provenance uses a new honestly labeled checksum-chain ledger.",
+          "verification": [
+            "operatorPassport.test.js 6/6",
+            "promoProvenance.test.js 6/6",
+            "node --check both modules",
+            "no stale signed/tamper-evident claims"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "slug": "advisor-privacy-envelope",
+      "title": "Give Promo Advisor an explicit privacy envelope before provider calls",
+      "tier": "fire",
+      "axis": "AI integration / privacy / token reduction / UX",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 8,
+      "effortHours": 4,
+      "priority": 27.85,
+      "evidence": "PromoAdvisorPanel.jsx labels HTML stripping as sanitization but does not redact emails, phone numbers, account identifiers, or long digit sequences. It also sends bankroll and active sportsbook context automatically. The privacy and data-policy pages disclose submitted text to Anthropic, not the hidden local profile context.",
+      "recipe": "Add a deterministic advisor input privacy helper shared by UI behavior and mirrored server validation; redact common personal/account identifiers, expose a local redaction summary, default profile personalization off behind a clear consent control, reject unbounded context server-side, and update public disclosure. Measure token reduction from omitted default context and add client/server contract tests.",
+      "timeToFirstValue": "The first analysis becomes understandable and safer: users know exactly what leaves the browser and can get a useful result without configuring or disclosing profile data.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Stop sending userContext by default and correct the disclosure copy."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "L1 plus deterministic PII redaction, opt-in UI, and focused tests."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 plus server-side defense in depth, redaction receipt, and token-savings telemetry."
+        }
+      },
+      "id": 3,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 117,
+          "status": "shipped",
+          "note": "Added deterministic client/server identifier redaction, default-local profile context behind explicit consent, bounded edge validation, privacy receipts and token-savings telemetry, plus corrected Anthropic disclosures.",
+          "verification": [
+            "advisorPrivacy.test.js 5/5",
+            "advisor-privacy_test.ts 3/3",
+            "deno check promo-advisor/index.ts",
+            "focused trust/privacy Vitest 17/17"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "slug": "promo-observation-freshness-loop",
+      "title": "Turn the static Promo Calendar into an evidence-dated observation loop",
+      "tier": "high",
+      "axis": "feature depth / feedback loop / responsible engagement",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 9,
+      "effortHours": 8,
+      "priority": 24.38,
+      "evidence": "All 21 PROMO_SCHED entries expose cadence, estimated value, and letter grade without source, jurisdiction, verifiedAt, or observation age. The calendar requests notification permission and stores an optional email for a coming-soon channel, then says alerts are configured even though no email delivery exists.",
+      "recipe": "Model schedule rows as historical patterns with explicit evidence state; suppress certainty when unverified, show observation age/jurisdiction, let operators confirm or reject a pattern locally, and use those observations to rank what to verify next. Remove dormant email collection and make browser/local reminders state their actual delivery boundary. Add freshness, confirmation, expiry, and no-false-notification tests.",
+      "timeToFirstValue": "New users immediately see which promo patterns are worth checking today and which are stale, instead of spending time chasing an unsupported schedule.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Relabel all rows as unverified patterns and remove false email-alert confirmation."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "L1 plus typed freshness states, local confirm/reject actions, and age-aware ordering."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "L2 plus observation-derived value confidence, jurisdiction evidence, accessible UI, and deterministic tests."
+        }
+      },
+      "id": 4,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 117,
+          "status": "shipped",
+          "note": "Converted 21 static rows to explicit unsourced historical patterns with market evidence; added local confirm/reject timestamps, age-aware verify-first ranking, realized-value confidence, honest local queue/ICS boundaries, and removed dormant email/notification behavior plus its legacy local PII key.",
+          "verification": [
+            "promoObservations.test.js 6/6",
+            "calendar/composition focused tests 15/15",
+            "npm run build",
+            "no email input or Notification.requestPermission"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "slug": "multilingual-claims-totality",
+      "title": "Make sober public claims enforceable across every locale and static surface",
+      "tier": "fire",
+      "axis": "security / legal trust / UX / organization",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 8,
+      "priority": 24.08,
+      "evidence": "scripts/check-public-claims.mjs scans 345 files but has only nine narrow English patterns. Direct search found absolute guaranteed/no-risk/income language across 68 tracked HTML files, including Spanish and Portuguese pages, while S115 and the project Soul explicitly reject certainty and income hype.",
+      "recipe": "Replace absolute marketing promises with conditional modeled-return language that names execution, limits, voids, eligibility, and changing-odds risk. Expand the deterministic contract to English, Spanish, and Portuguese phrase families, scan metadata and JSON-LD as well as body text, permit explicit negations/disclaimers, and regression-test representative failures from all three locales.",
+      "timeToFirstValue": "Visitors encounter credible decision support on the first landing page instead of reconciling hype with later disclaimers.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Block the highest-risk no-risk and guaranteed-income phrases across three locales."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "L1 plus remediate every current finding in metadata, JSON-LD, and visible copy."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "L2 plus context-aware negation handling, locale fixtures, and full launch-gate integration."
+        }
+      },
+      "id": 5,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 117,
+          "status": "shipped",
+          "note": "Replaced certainty and income-hype copy across application strings, metadata, JSON-LD, README, and 69 localized static pages; added localized execution-risk notes and a context-aware EN/ES/PT deterministic gate with negation fixtures.",
+          "verification": [
+            "node scripts/test-public-claims.mjs",
+            "node scripts/check-public-claims.mjs: 281 files / 10 rules / 0 findings",
+            "calculator + handoff focused tests 42/42",
+            "full suite reached 571/576 before five expected copy assertions; all five repaired"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "slug": "release-surface-contract",
+      "title": "Make release completeness machine-verifiable from navigation through rollback",
+      "tier": "high",
+      "axis": "speed / organization / security / release UX",
+      "status": "shipped",
+      "impact": 8,
+      "innovation": 6,
+      "effortHours": 6,
+      "priority": 16,
+      "evidence": "The app-release lens found no footer manifest, no documented rollback plan, no security.txt, and no reachable favicon.ico. The live origin scores 45% on CANON-051 because GitHub Pages ignores the tracked Cloudflare _headers file; current production verification does not check the public standard-file/header contract.",
+      "recipe": "Add a canonical header/footer/legal manifest and check it in launch-local; publish security.txt and a reachable favicon contract; document a tested GitHub Pages rollback procedure; add a read-only live hardening probe that distinguishes repo intent from delivered headers and records edge headers as an explicit external release blocker instead of silently treating _headers as active.",
+      "timeToFirstValue": "Every first visit has complete trust/legal navigation and a predictable security identity while operators can verify readiness with one command.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Add footer manifest, security.txt, favicon reachability, and rollback documentation."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "L1 plus local manifest/standard-file checker wired into verify:launch-local."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "L2 plus live header delivery probe and typed external edge-remediation evidence."
+        }
+      },
+      "id": 6,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 117,
+          "status": "shipped",
+          "note": "Added source-backed navigation/footer manifest, exact proprietary footer copy, security.txt, favicon.ico, rollback plan, local release-surface checker/tests, and an explicit live web contract probe. Local/canonical footer checks pass; live probe truthfully reports six missing delivered headers and the pre-deploy standard-file 404s.",
+          "verification": [
+            "node scripts/test-release-surface.mjs",
+            "node scripts/check-release-surface.mjs --json",
+            "check-footer-completeness --manifest public/navigation-manifest.json",
+            "node scripts/check-live-web-contract.mjs --url https://promogrind.bet (expected external red)"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "slug": "evidence-aware-promo-command-plane",
+      "title": "Make observation freshness a hard boundary for every promo decision surface",
+      "tier": "fire",
+      "axis": "feature depth / UX / feedback loop / responsible engagement / AI",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 10,
+      "effortHours": 6,
+      "priority": 28.46,
+      "evidence": "S117 changed Promo Calendar rows to historical patterns with Seen/Not seen evidence, but getTodayPromos still returns cadence matches without observation state. TodayDashboardPanel, DailyDashboard, DailyBriefPage, and buildAdaptivePromoPlan call those rows Today's Promos, display modeled value, and rank them as actions. Live source proves the correction stopped at one surface.",
+      "recipe": "Decorate cadence matches at the dashboard data boundary with normalized observation freshness; split actionable recently-seen offers from patterns needing verification; forbid unverified/rejected rows from adaptive action ranking; render a verification queue with evidence labels and a direct calendar CTA across all dashboard variants; add regression tests plus a source-level contract that prevents stale Today promo claims from reappearing.",
+      "timeToFirstValue": "The first dashboard visit distinguishes what the operator has actually seen from what is merely worth checking, preventing disciplined users from acting on schedule folklore.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Relabel all dashboard cadence rows as historical patterns."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "L1 plus freshness decoration and actionable-versus-verify partitioning."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "L2 plus adaptive-ranking interlock, evidence coverage telemetry, accessible UI, and deterministic cross-surface regressions."
+        }
+      },
+      "id": 7,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 118,
+          "status": "shipped",
+          "note": "Freshness now decorates cadence matches at the dashboard boundary; adaptive ranking admits only recently confirmed observations; all dashboard variants render verification-first copy; no-evidence state enters a dedicated verify operating mode.",
+          "verification": [
+            "dashboard/promo observation focused tests 25/25",
+            "cross-surface stale-claim regression",
+            "npm run verify:launch-local direct exit 0"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "slug": "semantic-theme-contrast-contract",
+      "title": "Turn light and dark palette readability into a measured semantic contract",
+      "tier": "fire",
+      "axis": "UX / accessibility / automation",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 8,
+      "effortHours": 4,
+      "priority": 27.85,
+      "evidence": "KL uses #22c55e green and #3b82f6 blue as small text on white and near-white cards across hundreds of inline semantic styles. Their contrast against white is below WCAG AA for normal text. Existing responsive tests assert layout markers but no palette contrast invariant; the required screenshot matrix remains honestly skipped because browser control fails at Windows DPAPI initialization.",
+      "recipe": "Replace light-theme semantic foregrounds with brand-faithful accessible tones, add a zero-dependency WCAG contrast library and tests for every semantic foreground against all card backgrounds in both palettes, distinguish foreground colors from translucent decorative fills, and wire the contrast contract into launch-local. Keep the visual screenshot matrix explicitly pending rather than claiming image verification.",
+      "timeToFirstValue": "Users switching to light mode can read status, links, warnings, and outcomes immediately without low-contrast semantic colors disappearing into the card surface.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Darken failing light-theme semantic colors."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "L1 plus deterministic WCAG contrast tests for both palettes."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 plus semantic foreground/fill separation and launch-gate integration with an honest visual-proof status."
+        }
+      },
+      "id": 8,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 118,
+          "status": "shipped",
+          "note": "Introduced WCAG contrast primitives, darker light-theme semantic foregrounds, and a theme-specific accent ink token across 68 controls. Runtime computed-style audit found a 2.71:1 button regression, which was root-fixed; final light and dark audits report 0 failures. Four desktop/mobile screenshots captured.",
+          "verification": [
+            "theme contrast contract 37 palette pairs per theme",
+            "runtime light computed-style audit: 0 failures",
+            "runtime dark computed-style audit: 0 failures",
+            "desktop/mobile light/dark screenshots captured",
+            "npm run verify:launch-local direct exit 0"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "slug": "single-source-launch-blockers",
+      "title": "Remove the dead parallel launch-blocker ledger before it drifts into a lying surface",
+      "tier": "high",
+      "axis": "speed / organization / observability",
+      "status": "shipped",
+      "impact": 7,
+      "innovation": 5,
+      "effortHours": 1,
+      "priority": 22.08,
+      "evidence": "src/launchState.js exports LAUNCH_BLOCKERS with manual prose that duplicates generated launchProofs, but no runtime or test imports it. The command center correctly derives from launchProofs.generated.js, so the unused constant is a second truth source waiting to contradict the ledger.",
+      "recipe": "Delete LAUNCH_BLOCKERS, add a regression that asserts launch blockers are sourced only from the generated proof ledger, and leave FEATURE_INFO as setup guidance because it describes feature requirements rather than release evidence.",
+      "timeToFirstValue": "Operators see one coherent launch posture instead of risking an obsolete list resurfacing in a future UI.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Delete the unused duplicate constant."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "L1 plus an import/search regression."
+        },
+        "L3": {
+          "effortHours": 1,
+          "recipe": "L2 plus a source-of-truth comment and launch-state test proving generated-ledger derivation."
+        }
+      },
+      "id": 9,
+      "executionLog": [
+        {
+          "at": "2026-07-24",
+          "session": 118,
+          "status": "shipped",
+          "note": "Removed the unused LAUNCH_BLOCKERS parallel ledger; runtime blocker state now derives only from launchProofs.generated.js, with a source-level regression.",
+          "verification": [
+            "launchState tests",
+            "no LAUNCH_BLOCKERS source references",
+            "npm run verify:launch-local direct exit 0"
+          ],
+          "ignisScore": 44184,
+          "tier": "FORGE",
+          "recommendedModel": "codex"
+        }
+      ]
+    }
+  ],
+  "rejected": [
+    {
+      "title": "Build guided Promo Passport onboarding",
+      "reason": "Rejected as already shipped: TodayDashboardPanel consumes getPromoPassportOnboardingPlan and renders PromoPassportOnboardingCard; TASK_BOARD is stale, not the product."
+    },
+    {
+      "title": "Re-implement the Promo Advisor free-tier cost ceiling",
+      "reason": "Rejected at repo scope: centralized AI entitlements, authenticated access, atomic quota reservation, and provider discovery guards are already live in source and gates. The blocking CANON-029 result is stale Studio Ops registry truth and must travel through Ark."
+    },
+    {
+      "title": "Complete production email, payment, tester, DNS, or Supabase proof from code",
+      "reason": "Rejected because source cannot certify real external behavior; six typed pending proofs remain the honest outcome."
+    },
+    {
+      "title": "Decompose every source file above 500 lines",
+      "reason": "Rejected as a metric-only premise: the App shell is already below its enforced 900-line boundary, and no failing responsibility/test boundary was demonstrated for the remaining files."
+    }
+  ],
+  "totals": {
+    "count": 9,
+    "priority": 237.76,
+    "top3": [
+      "Make observation freshness a hard boundary for every promo decision surface",
+      "Turn light and dark palette readability into a measured semantic contract",
+      "Remove the dead parallel launch-blocker ledger before it drifts into a lying surface"
+    ]
+  },
+  "sample": {
+    "picked": 16,
+    "scanned": 545,
+    "tokens": 29999
+  },
+  "innovationReserve": [
+    "self-attestation-trust-boundary",
+    "advisor-privacy-envelope",
+    "promo-observation-freshness-loop",
+    "multilingual-claims-totality"
+  ],
+  "skipped": [
+    {
+      "slug": "build-guided-promo-passport-onboarding",
+      "reason": "Rejected as already shipped: TodayDashboardPanel consumes getPromoPassportOnboardingPlan and renders PromoPassportOnboardingCard; TASK_BOARD is stale, not the product."
+    },
+    {
+      "slug": "re-implement-the-promo-advisor-free-tier-cost-ceiling",
+      "reason": "Rejected at repo scope: centralized AI entitlements, authenticated access, atomic quota reservation, and provider discovery guards are already live in source and gates. The blocking CANON-029 result is stale Studio Ops registry truth and must travel through Ark."
+    },
+    {
+      "slug": "complete-production-email-payment-tester-dns-or-supabase-proof-from-code",
+      "reason": "Rejected because source cannot certify real external behavior; six typed pending proofs remain the honest outcome."
+    },
+    {
+      "slug": "decompose-every-source-file-above-500-lines",
+      "reason": "Rejected as a metric-only premise: the App shell is already below its enforced 900-line boundary, and no failing responsibility/test boundary was demonstrated for the remaining files."
+    }
+  ]
+}

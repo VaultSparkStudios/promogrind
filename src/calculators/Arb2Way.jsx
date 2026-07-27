@@ -38,14 +38,14 @@ export default function Arb2Way() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", background: "linear-gradient(90deg,#1e3a2f,#0f1724)", border: "1px solid #4ade80", borderRadius: 8, marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
             <div style={{ fontSize: 13, color: "#cbd5e1" }}>⚡ <strong style={{ color: "#4ade80" }}>The Live Scanner</strong> finds these arb opportunities automatically in real time.</div>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <a href="#/upgrade" style={{ padding: "5px 12px", background: "#4ade80", color: "#0a0e17", borderRadius: 5, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Try Free →</a>
+              <a href="#/upgrade" style={{ padding: "5px 12px", background: "#4ade80", color: K.ink, borderRadius: 5, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Try Free →</a>
               <button onClick={() => dismissTrigger("arb_upsell", setShowArbTrigger)} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 16 }}>×</button>
             </div>
           </div>
         )}
         <div style={S.row}><In l="Outcome 1 (Book A)" v={o1} set={setO1} /><In l="Outcome 2 (Book B)" v={o2} set={setO2} /><In l="Total Stake" v={t} set={setT} pre="$" /></div>
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? `ARB: +$${r.pr}` : "NO ARB"}</span>
               {r.ok && <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>}
@@ -77,7 +77,7 @@ export default function Arb2Way() {
         {r && r.ok && <CalcNextStep calcKey="arb-2way" />}
       </div>
       <Help entries={[
-        ["Arbitrage", "Betting both sides of the same event at different sportsbooks where the combined odds guarantee a profit. It works because different books set different odds. When the gap is big enough, you can bet both sides and win no matter what."],
+        ["Arbitrage", "Betting both sides of the same event at different sportsbooks where the combined odds model a return. It works because different books set different odds. When the gap is big enough, you can bet both sides and win no matter what."],
         ["How to spot one", "You need both sides to be + odds (or the implied probabilities to add up to LESS than 100%). Example: Book A has Team 1 at +110, Book B has Team 2 at +105. Each side implies ~48.8% and ~48.8% = 97.6% total. The missing 2.4% is your profit."],
         ["Why it's rare", "Books monitor each other and adjust quickly. Arb opportunities last seconds to minutes. That's why people use scanning tools — humans can't check fast enough."],
       ]} />

@@ -8,7 +8,8 @@
  *   3. Update PROJECT_STATUS.json lastUpdated + currentSession
  *   3c. Run rotation tripwire / audit freshness check
  *   4. git status + diff preview (excluding secrets/)
- *   5. *** HUMAN CONFIRMATION *** — "Commit + push all of the above? [Y/n/dry]"
+ *   5. Stage the bounded diff and require the staged secret gate
+ *   6. Noninteractive closeout proceeds after verified repo gates; attended terminals may confirm
  *   6. git add (filtered), git commit (conventional message), git push
  *   7. Clear .session-lock + beacon
  *   8. Print Closeout Status Board
@@ -17,6 +18,7 @@
  *   node scripts/closeout-autopilot.mjs                 # full run with confirm
  *   node scripts/closeout-autopilot.mjs --dry-run       # show plan, skip writes
  *   node scripts/closeout-autopilot.mjs --skip-push     # commit only, no push
+ *   node scripts/closeout-autopilot.mjs --yes           # explicit noninteractive commit + push
  *   node scripts/closeout-autopilot.mjs --message "..."
  *
  * IMPORTANT: This script does NOT overwrite the human's context/*.md edits.
@@ -40,7 +42,7 @@ const STUDIO_ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const DRY = args.includes('--dry-run');
 const SKIP_PUSH = args.includes('--skip-push');
-const AUTO_YES = args.includes('--yes');
+const AUTO_YES = args.includes('--yes') || !process.stdin.isTTY;
 const RESPECT_STAGED = args.includes('--respect-staged');
 const msgIdx = args.indexOf('--message');
 const CUSTOM_MSG = msgIdx >= 0 ? args[msgIdx + 1] : null;
@@ -134,7 +136,8 @@ header('Step 3 · Stamp PROJECT_STATUS.json');
 try {
   const s = readJson(STATUS_PATH, null);
   if (!s) throw new Error('PROJECT_STATUS.json unreadable');
-  const today = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   s.lastUpdated = today;
   if (!DRY) fs.writeFileSync(STATUS_PATH, JSON.stringify(s, null, 2) + '\n');
   console.log(`  lastUpdated → ${today}  · session ${sessionNumber(s)}  · SIL ${s.silScore}/${s.silMax ?? 500}`);
@@ -178,6 +181,7 @@ if (!status.trim()) {
       console.log(`  ${aheadRes} unpushed commit(s) — pushing…`);
       const p = sh('git push');
       console.log(redact(p.out + p.err));
+      if (p.code !== 0) { console.error('⛔ Push failed; unpushed commit remains local.'); process.exit(4); }
     }
   }
   // Clear locks even on empty closeout
@@ -194,6 +198,25 @@ if (/^[\sMADRCU?]+secrets\//m.test(status)) {
   console.error('\n⛔ ABORT: changes detected under secrets/. Aborting to prevent accidental commit.');
   console.error('  If this is intentional, hand-commit with `git add <file>` first.');
   process.exit(2);
+}
+
+// ── Step 4b: Stage bounded diff + enforce secrets gate ──────────────────────
+header('Step 4b · Stage bounded diff + secret gate');
+if (DRY) {
+  if (!RESPECT_STAGED) console.log('(dry-run) would: git add -A -- . (secrets/ pre-guarded; ignored paths remain ignored)');
+  console.log('(dry-run) would: node scripts/scan-secrets.mjs --staged');
+} else {
+  if (!RESPECT_STAGED) {
+    const add = sh('git add -A -- .');
+    if (add.code !== 0) { console.error('⛔ Staging failed:', redact(add.err)); process.exit(2); }
+  }
+  const scan = shStudio('scan-secrets.mjs', ['--staged']);
+  process.stdout.write(scan.out);
+  if (scan.code !== 0) {
+    console.error(redact(scan.err));
+    console.error('⛔ Staged secret gate failed; commit aborted.');
+    process.exit(2);
+  }
 }
 
 // ── Step 5: Confirm ──────────────────────────────────────────────────────────
@@ -213,17 +236,16 @@ header('Step 6 · Commit');
 if (DRY) {
   console.log(RESPECT_STAGED
     ? `(dry-run) would: git commit -m "${suggestedMsg}"  (respecting current staged set)`
-    : `(dry-run) would: git add -A :!secrets/  &&  git commit -m "${suggestedMsg}"`);
+    : `(dry-run) would: git commit -m "${suggestedMsg}"  (bounded diff already staged at Step 4b)`);
 } else {
-  if (!RESPECT_STAGED) {
-    sh('git add -A -- . ":!secrets/" ":!.claude/worktrees/"');
-  }
   const c = sh(`git commit -m ${JSON.stringify(suggestedMsg)}`);
   console.log(redact(c.out || c.err));
   if (c.code !== 0) { console.error('  ⚠ Commit failed.'); process.exit(3); }
 }
 
 // ── Step 7: Push ─────────────────────────────────────────────────────────────
+let pushExitCode = 0;
+let pushedState = SKIP_PUSH ? 'no (--skip-push)' : DRY ? 'dry-run' : 'yes';
 if (!SKIP_PUSH) {
   header('Step 7 · Push');
   if (DRY) {
@@ -231,13 +253,17 @@ if (!SKIP_PUSH) {
   } else {
     const p = sh('git push');
     console.log(redact(p.out + p.err));
-    if (p.code !== 0) { console.error('  ⚠ Push failed — commit succeeded, retry `git push` manually.'); }
+    if (p.code !== 0) {
+      pushExitCode = p.code || 4;
+      pushedState = 'failed (commit remains local)';
+      console.error('  ⚠ Push failed — commit succeeded, retry `git push` manually.');
+    }
   }
 }
 
 // ── Step 8: Clear session lock + beacon ──────────────────────────────────────
 header('Step 8 · Clear session lock + beacon');
-if (!DRY) {
+if (!DRY && pushExitCode === 0) {
   if (fs.existsSync(LOCK_PATH)) { fs.unlinkSync(LOCK_PATH); console.log('  ✓ context/.session-lock cleared'); }
   if (fs.existsSync(BEACON_PATH)) {
     sh(`[ -f .claude/beacon.env ] && source .claude/beacon.env && printf '{"active":[]}' | gh gist edit "$BEACON_GIST_ID" -f active.json --filename active.json 2>/dev/null || true`);
@@ -249,7 +275,6 @@ if (!DRY) {
 header('Closeout Complete');
 const sha = sh('git rev-parse --short HEAD').out.trim();
 const branch = sh('git rev-parse --abbrev-ref HEAD').out.trim();
-const pushedState = SKIP_PUSH ? 'no (--skip-push)' : DRY ? 'dry-run' : 'yes';
 const summary = shStudio('closeout-summary.mjs', [
   '--project', PROJECT_ROOT,
   '--pushed', pushedState,
@@ -289,6 +314,7 @@ try {
 } catch { /* best-effort — do not block closeout on insight failure */ }
 
 console.log(`\n✓ Closeout autopilot finished. Startup brief ready for next session.\n`);
+if (pushExitCode !== 0) process.exitCode = pushExitCode;
 
 if (!DRY) {
   try {
@@ -303,7 +329,7 @@ if (!DRY) {
       action: null,
       attemptable: false,
       automationStatus: 'completed',
-      note: `HEAD ${sha} on ${branch}; SIL ${s.silScore}/500`
+      note: `HEAD ${sha} on ${branch}; SIL ${s.silScore}/${s.silMax ?? 500}`
     });
   } catch { /* best-effort */ }
 }

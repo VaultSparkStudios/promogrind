@@ -1,15 +1,19 @@
-# Implement Plan — S111
+# Implementation Plan — S119
 
-1. `startup-context-meter-render-extraction` — shipped; context-meter tile rendering now lives beside meter loading/fallback shaping in `scripts/lib/startup-context-meter-block.mjs`, with focused regression coverage.
-2. `external-launch-proof-ledger` — honest deferral; real production/provider/tester evidence is still required and was not fabricated.
+Source of truth: `docs/AUDIT_2026-07-25.json`.
 
-Verification surfaces:
-- `node --check scripts/lib/startup-context-meter-block.mjs`
-- `node --check scripts/render-startup-brief.mjs`
-- `node --check scripts/test-studio-script-regressions.mjs`
-- `node scripts/test-studio-script-regressions.mjs`
-- `node scripts/render-startup-brief.mjs`
-- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md`
-- `node scripts/check-windows-hide.mjs`
-- `npm test`
-- `npm run verify:launch-local`
+Execution depth: L3 for all items. Context meter: CONTINUE with ample budget.
+
+| Order | Audit item | Why this order | Required verification |
+|---:|---|---|---|
+| 1 | `startup-brief-provenance-lattice` | Small, foundational observability repair; removes lying session signals before later generated surfaces depend on them. | Brief golden/unit tests, regenerated brief, format validator |
+| 2 | `streaming-secret-archaeology` | Independent security root-fix with a reproduced performance failure; yields trustworthy history evidence for closeout. | Scanner fixture tests, bounded full-history JSON run |
+| 3 | `launch-proof-evidence-quorum` | Establishes the criterion/receipt contract before capability probes feed evidence into it. | Schema/unit/adversarial tests, migrated ledger, launch-local |
+| 4 | `target-bound-capability-truth-plane` | Consumes the proof contract and resolves the largest launch-blocker ambiguity with target/scope-aware receipts. | Offline fixtures, live redacted probe, ledger integration, launch-local |
+
+No package additions are planned. External mutations remain fail-closed and require both explicit `--apply` and the mapped capability; read-only probes are the default.
+
+## Skill shim notes
+
+- `scripts/lib/audit-sidecar.mjs`, `scripts/lib/sprint-runner.mjs`, and `scripts/lib/medium-quality-gates.mjs` are absent in this public repo; manual protocol fallbacks are in use.
+- Every new command option must expose `--help` text and at least one README example.

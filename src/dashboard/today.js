@@ -8,6 +8,7 @@ import { buildHotLanes, buildTrackInsights } from "../track/insights.js";
 import { runBankrollStress, shouldShowStressPreview, totalExposure } from "../lib/bankrollStress.js";
 import { buildPreMortem } from "../lib/preMortem.js";
 import { buildTwinBattle } from "../lib/twinBattle.js";
+import { getPromoFreshness } from "../lib/promoObservations.js";
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const GRADE_SCORE = { A: 3, B: 2, C: 1 };
 const PROMO_KEYWORDS = {
@@ -114,11 +115,19 @@ export function getTodayContext(now = new Date()) {
   };
 }
 
-export function getTodayPromos(schedule = [], now = new Date()) {
+export function getTodayPromos(schedule = [], now = new Date(), observations = {}) {
   const { dayName, isWeekend } = getTodayContext(now);
-  return schedule.filter((promo) =>
-    promo.day === "Daily" || promo.day === dayName || (promo.day === "Weekend" && isWeekend),
-  );
+  return schedule
+    .filter((promo) => promo.day === "Daily" || promo.day === dayName || (promo.day === "Weekend" && isWeekend))
+    .map((promo) => {
+      const freshness = getPromoFreshness(promo, observations, now);
+      return {
+        ...promo,
+        freshness,
+        decisionState: freshness.state === "current" ? "actionable" : "verify",
+        evidenceLabel: freshness.label,
+      };
+    });
 }
 
 export function inferPromoTypeFromSchedule(promo = {}) {
@@ -188,7 +197,7 @@ export function buildAdaptivePromoPlan({
 } = {}) {
   const trackInsights = insights || buildTrackInsights(data, now);
   const heat = hotLanes || buildHotLanes(data, now);
-  const todayPromos = snapshot.todayPromos || getTodayPromos(schedule, now);
+  const todayPromos = snapshot.todayPromos || getTodayPromos(schedule, now, data.promoObservations || {});
   const limitedBooks = Object.entries(data.bookStatus || {})
     .filter(([, value]) => ["limited", "gubbed"].includes(String(value || "").trim().toLowerCase()))
     .map(([book]) => book);
@@ -213,9 +222,18 @@ export function buildAdaptivePromoPlan({
     const promoType = inferPromoTypeFromSchedule(promo);
     const reasons = [];
     const contributions = [];
+    const freshness = promo.freshness || getPromoFreshness(promo, data.promoObservations || {}, now);
     const baseScore = GRADE_SCORE[promo.grade] || 0;
     let score = baseScore;
     if (baseScore) contributions.push({ key: "grade", label: `Grade ${promo.grade}`, delta: baseScore });
+    if (freshness.state === "current") {
+      score += 2; reasons.push("recently seen");
+      contributions.push({ key: "evidence", label: freshness.label, delta: 2 });
+    } else {
+      const evidencePenalty = freshness.state === "not-seen" ? -20 : -8;
+      score += evidencePenalty; reasons.push("verify first");
+      contributions.push({ key: "evidence", label: freshness.label, delta: evidencePenalty });
+    }
     const isExpiring = snapshot.expiringBooks?.some((book) => book.name === promo.book);
     const promoIsHot = hotPromoKeys.has(promoType);
     const bookIsHot = hotBookKeys.has(promo.book);
@@ -237,6 +255,8 @@ export function buildAdaptivePromoPlan({
     if (feedbackCoverage < 45 && !promoIsHot && !bookIsHot) { score -= 1; contributions.push({ key: "lowCoverage", label: "Low feedback coverage", delta: -1 }); }
     return {
       ...promo,
+      freshness,
+      decisionState: freshness.state === "current" ? "actionable" : "verify",
       promoType,
       score,
       reasons,
@@ -250,7 +270,9 @@ export function buildAdaptivePromoPlan({
     .sort((a, b) => b.score - a.score || (GRADE_SCORE[b.grade] || 0) - (GRADE_SCORE[a.grade] || 0));
   const indexOf = (arr, item) => arr.findIndex((x) => x.book === item.book && x.promo === item.promo);
 
-  const topPromos = sortedAll.slice(0, 5).map((item) => {
+  const actionableSorted = sortedAll.filter((item) => item.decisionState === "actionable");
+  const verificationPromos = sortedAll.filter((item) => item.decisionState !== "actionable").slice(0, 5);
+  const topPromos = actionableSorted.slice(0, 5).map((item) => {
     const baselineRank = indexOf(sortedAll, item) + 1;
     const whyRanked = (item.contributions || [])
       .map((c) => {
@@ -285,6 +307,10 @@ export function buildAdaptivePromoPlan({
     mode = "protect";
     headline = "Protect bankroll bandwidth";
     detail = "Exposure is high relative to bankroll. Tighten execution and avoid lower-confidence promos for now.";
+  } else if (actionableSorted.length === 0 && verificationPromos.length > 0) {
+    mode = "verify";
+    headline = "Verify the board before allocating bankroll";
+    detail = `${verificationPromos.length} historical cadence pattern${verificationPromos.length === 1 ? "" : "s"} match today, but none has a recent operator observation. Check the sportsbook first.`;
   } else if (topLane || heat.hotPromoTypes?.length || heat.hotBooks?.length) {
     mode = "attack";
     headline = "Press the hottest lane";
@@ -301,6 +327,13 @@ export function buildAdaptivePromoPlan({
     topLane,
     coldLane,
     topPromos,
+    verificationPromos,
+    evidenceCoverage: {
+      actionable: actionableSorted.length,
+      verify: verificationPromos.length,
+      total: sortedAll.length,
+      pct: sortedAll.length ? Math.round((actionableSorted.length / sortedAll.length) * 100) : 0,
+    },
     hotPromoLane: heat.hotPromoTypes?.[0] || null,
     hotBookLane: heat.hotBooks?.[0] || null,
     workflowBacklog,
@@ -394,7 +427,7 @@ export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(),
   const expiringBooks = BOOKS.filter(
     (book) => expiry[book.name] && !done[book.name] && expiry[book.name] <= in3DaysStr && expiry[book.name] >= todayStr,
   );
-  const todayPromos = getTodayPromos(schedule, now);
+  const todayPromos = getTodayPromos(schedule, now, data.promoObservations || {});
   const recentSettledEntries = ledger
     .filter((entry) => {
       const entryDate = dateOnly(entry.date);

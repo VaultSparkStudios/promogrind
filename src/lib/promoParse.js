@@ -91,7 +91,7 @@ function explanationForType(type, amount, percentage, expiryDays) {
     case "profit_boost":
       return `${percentage ? `${percentage}%` : "This"} boost is strongest when used on a longshot line with a clean hedge. Treat it as boosted-edge inventory, not a generic bet.${expiryText}`;
     case "safety_net":
-      return `${amountText || "This first-bet safety net"} behaves like downside protection, not a guaranteed bonus. The value depends on refund format and the fallback hedge after a loss.${expiryText}`;
+      return `${amountText || "This first-bet safety net"} behaves like downside protection, not a modeled bonus. The value depends on refund format and the fallback hedge after a loss.${expiryText}`;
     case "deposit_match":
       return `${amountText || "This deposit match"} can be excellent, but only if rollover and minimum-odds terms stay sane. Treat the unlock path as a bankroll allocation problem first.${expiryText}`;
     case "insurance":
@@ -177,7 +177,7 @@ export function parsePromoTextHeuristic(text = "") {
     calculatorSlug,
     explanation: explanationForType(topType, amount, percentage, expiryDays),
     ev:
-      topType === "bonus_bet" && amount ? `~${formatMoney(amount * 0.7)} guaranteed value` :
+      topType === "bonus_bet" && amount ? `~${formatMoney(amount * 0.7)} modeled value` :
       topType === "profit_boost" && percentage ? `${percentage}% boost — validate hedge spread` :
       topType === "deposit_match" && amount ? `${formatMoney(amount)} match cap before rollover drag` :
       null,

@@ -16,7 +16,7 @@ export default function NoVig() {
         <Tl t="No-Vig Fair Odds Calculator" badge="DEVIG" bc={K.pp} shareable />
         <div style={S.row}><In l="Side 1 Odds" v={o1} set={setO1} ph="-110" /><In l="Side 2 Odds" v={o2} set={setO2} ph="-110" /></div>
         {r && (
-          <div style={S.res(true)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
               <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>

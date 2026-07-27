@@ -1,6 +1,6 @@
-# Genius Hit List — Session 111
+# Genius Hit List — PromoGrind
 
-> Generated: 2026-07-01 | Scope: founder-portfolio | Pattern detectors: 0 signals evaluated | Top 12 shown
+> Generated: 2026-07-25 | Scope: project:promogrind | Pattern detectors: 0 signals evaluated | Top 12 shown
 
 ---
 

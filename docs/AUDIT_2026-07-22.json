@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-07-22",
+  "session": 115,
+  "project": "PromoGrind",
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "product-plus-infrastructure",
+  "axisWeights": { "featureDepth": 2, "innovation": 1, "ux": 2, "feedbackLoop": 1, "engagement": 1, "aiIntegration": 1, "security": 1, "speedOrganization": 1.5, "tokenApiReduction": 1.5 },
+  "primaryPremise": "The live genius list contains two stale-intelligence maintenance items, but fresh code and release-gate verification found deeper repo-owned defects: an unauthenticated AI vision endpoint plus renewable free/trial model spend, widespread user-visible mojibake, SOUL-conflicting earnings claims, and multiple derived observability surfaces that report stale or wrongly scoped truth.",
+  "items": [
+    {
+      "rank": 1,
+      "slug": "ai-cost-and-auth-perimeter",
+      "title": "Close the AI cost/auth perimeter with lifetime trial ceilings and authenticated vision",
+      "tier": "fire",
+      "axis": "security / AI integration / token-API reduction",
+      "status": "unblocked",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 6,
+      "priority": 26.7,
+      "evidence": "The live CANON-029 gate blocks PromoGrind as AUDIT-PENDING and identifies promo-advisor spend. Live code proves a broader issue: trialActive() promotes trial users to closer, several closer limits are Infinity, free promo-advisor resets daily, and parse-bet-slip has verify_jwt=false with no in-function auth or quota.",
+      "recipe": "Extend the shared AI access contract with non-renewing lifetime ceilings for free/trial traffic; retain paid-tier daily/unlimited policy; require authenticated access for parse-bet-slip; cap image payloads and reject remote image URLs; add regression tests that prove hard 429 behavior and no anonymous provider call. Record the project as trial-ceiling in repo truth and ship an Ark request for the Studio-owned registry update.",
+      "ladder": { "L1": { "effortHours": 2, "recipe": "Disable the unauthenticated vision endpoint and set finite trial limits." }, "L2": { "effortHours": 4, "recipe": "Shared lifetime quota semantics, authenticated vision, payload caps, and unit tests." }, "L3": { "effortHours": 6, "recipe": "L2 plus explicit quota metadata, all AI call-site adoption, release-gate evidence, and browser-safe user copy." } }
+    },
+    {
+      "rank": 2,
+      "slug": "unicode-integrity-ratchet",
+      "title": "Repair user-visible mojibake and make UTF-8 integrity a permanent release gate",
+      "tier": "fire",
+      "axis": "UX / creative alignment / process quality",
+      "status": "unblocked",
+      "impact": 9,
+      "innovation": 6,
+      "effortHours": 2,
+      "priority": 54,
+      "evidence": "Live grep finds broken UTF-8 sequences across App, onboarding, dashboard, calculators, tracking tools, team accounts, referral copy, and loading states. Existing 549 tests pass because no integrity test scans user-facing source.",
+      "recipe": "Mechanically decode the known double-encoded sequences in tracked app source, review every remaining suspicious byte sequence, add a deterministic source-integrity checker with a tight allowlist for legitimate non-English content, wire it into launch verification, and add regression coverage.",
+      "ladder": { "L1": { "effortHours": 1, "recipe": "Repair visible strings in the highest-traffic surfaces." }, "L2": { "effortHours": 2, "recipe": "Repair all tracked source and add a failing integrity scanner." }, "L3": { "effortHours": 3, "recipe": "L2 plus launch-gate wiring, fixtures, and source-location diagnostics." } }
+    },
+    {
+      "rank": 3,
+      "slug": "sober-claims-contract",
+      "title": "Turn PromoGrind's SOUL into an executable public-claims contract",
+      "tier": "fire",
+      "axis": "creative alignment / UX / security and trust",
+      "status": "unblocked",
+      "impact": 10,
+      "innovation": 7,
+      "effortHours": 3,
+      "priority": 60.3,
+      "evidence": "Live source contradicts the calm operator SOUL with phrases including '100% Legal', 'passive profit', 'free money', and deterministic monthly-income language. Static tests do not enforce the anti-goal against gambling-hype copy.",
+      "recipe": "Rewrite risky certainty/hype language into evidence-bound, educational operator language; build a public-copy policy scanner for prohibited certainty, passive-income, and reckless-action patterns; provide narrowly documented exceptions for legal policy text; wire the scanner into launch verification and tests.",
+      "ladder": { "L1": { "effortHours": 1, "recipe": "Rewrite the most visible hype claims." }, "L2": { "effortHours": 2, "recipe": "Repo-wide public-copy review plus deterministic scanner." }, "L3": { "effortHours": 3, "recipe": "L2 plus launch-gate wiring, evidence-aware copy rules, and regression fixtures." } }
+    },
+    {
+      "rank": 4,
+      "slug": "studio-scope-honesty",
+      "title": "Make repo-local Studio intelligence stay repo-local and percentage-correct",
+      "tier": "high",
+      "axis": "speed and organization / token reduction / observability",
+      "status": "unblocked",
+      "impact": 8,
+      "innovation": 6,
+      "effortHours": 2,
+      "priority": 36,
+      "evidence": "The generated genius cache says projectScoped:false and Founder portfolio scope even inside PromoGrind; SESSION_INTENT_PLAN defaults repo touch to studio-ops; the startup brief renders pctUsed 0.5 as 50%; PROJECT_BRIEF remains an empty template.",
+      "recipe": "Add a public-repo local-project fallback to genius generation, derive intent repo touch from PROJECT_STATUS.slug, treat context-meter pctUsed as percentage units, populate PROJECT_BRIEF from repo truth, and add focused tests for each invariant.",
+      "ladder": { "L1": { "effortHours": 1, "recipe": "Fix the percentage conversion and local genius scope." }, "L2": { "effortHours": 2, "recipe": "L1 plus intent scope and PROJECT_BRIEF truth with tests." }, "L3": { "effortHours": 3, "recipe": "L2 plus self-validating generated surfaces and stale-input diagnostics." } }
+    },
+    {
+      "rank": 5,
+      "slug": "browser-launch-truth-mirror",
+      "title": "Replace hard-coded browser launch claims with a generated source-of-truth mirror",
+      "tier": "high",
+      "axis": "feedback loop / process quality / UX",
+      "status": "unblocked",
+      "impact": 9,
+      "innovation": 7,
+      "effortHours": 3,
+      "priority": 27.1,
+      "evidence": "src/launchState.js still reports 380/380 tests while live direct verification passes 549/549. Launch Command Center and studio export consume this hard-coded value, violating CANON-031.",
+      "recipe": "Generate a browser-safe validation mirror from PROJECT_STATUS during prebuild, consume it in launchState instead of literals, validate mirror freshness, and cover the source-of-truth chain in tests and launch smoke.",
+      "ladder": { "L1": { "effortHours": 1, "recipe": "Remove the stale count and use count-free wording." }, "L2": { "effortHours": 2, "recipe": "Generate and consume a browser-safe validation mirror." }, "L3": { "effortHours": 3, "recipe": "L2 plus freshness gate, test-count invariants, and launch-command-center evidence." } }
+    },
+    {
+      "rank": 6,
+      "slug": "intelligence-refresh",
+      "title": "Refresh live IGNIS and revenue intelligence, then prove doctor freshness",
+      "tier": "high",
+      "axis": "speed and organization / feedback loop",
+      "status": "unblocked",
+      "impact": 6,
+      "innovation": 3,
+      "effortHours": 0.5,
+      "priority": 20.4,
+      "evidence": "The refreshed Unified Genius List contains exactly two unblocked items: IGNIS re-score overdue by 24 days and REVENUE_SIGNALS.md overdue by 24 days. Doctor confirms both are advisory failures and blockingFailing remains 0.",
+      "recipe": "Run the canonical rescore and revenue-signals commands, verify their real exit codes and timestamps, regenerate the genius list, and require doctor 12/12 rather than refreshing a report without checking its consumers.",
+      "ladder": { "L1": { "effortHours": 0.25, "recipe": "Run both refresh commands." }, "L2": { "effortHours": 0.5, "recipe": "Refresh, regenerate dependent surfaces, and verify doctor." }, "L3": { "effortHours": 1, "recipe": "L2 plus regression tests for freshness propagation." } }
+    }
+  ],
+  "rejectedOnVerification": [
+    { "candidate": "guided-promo-passport-onboarding", "evidence": "Already implemented and wired: getPromoPassportOnboardingPlan is rendered by TodayDashboardPanel and covered by onboarding tests. TASK_BOARD wording is stale, not a feature gap." },
+    { "candidate": "unified-risk-envelope", "evidence": "Already implemented as buildRiskRadarSummary, combining open-position exposure, bankroll stress, pre-mortem, and twin-battle signals in the dashboard." },
+    { "candidate": "edge-debt-prioritizer", "evidence": "Workflow inbox already combines expected profit, expiry, freshness, friction, book availability, history, and confidence decay into ranked execution work." },
+    { "candidate": "add-dark-light-theme-toggle", "evidence": "Dark/light theme state and toggles already exist in usePromoAppShell, App, UserMenu, and ProfilePanel. The remaining need is visual verification, not a missing feature." }
+  ],
+  "honestDeferrals": [
+    "Desktop/mobile and dark/light screenshot verification could not run: the installed in-app browser Node runtime failed to start, @playwright/cli@latest was trust-blocked, and the pinned package depends on alpha Playwright builds. This is a recorded SKIP, never a pass.",
+    "Production auth email, Stripe purchase, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture-key proof require real external evidence and remain incomplete."
+  ],
+  "secondOrderInnovations": [
+    {
+      "rank": 1,
+      "slug": "central-ai-entitlement-registry",
+      "status": "shipped",
+      "premise": "The new lifetime ceiling solved spend renewal but left five copied policy objects able to drift independently.",
+      "implementation": "One typed server-owned registry now supplies every provider-backed function's feature, tier, daily, free-lifetime, and trial-lifetime contract."
+    },
+    {
+      "rank": 2,
+      "slug": "provider-perimeter-discovery-guard",
+      "status": "shipped",
+      "premise": "Call-site tests named a fixed file list, so a future provider function could silently bypass the perimeter.",
+      "implementation": "A launch-gated discovery scanner finds every Anthropic function and requires authenticated access, central entitlements, atomic quota reservation, usage events, and pinned SDK imports."
+    },
+    {
+      "rank": 3,
+      "slug": "pinned-vision-sdk-contract",
+      "status": "shipped",
+      "premise": "Full Deno checking exposed a floating npm SDK import and pre-existing shared-client/catch typing defects.",
+      "implementation": "The trust-approved Anthropic SDK is pinned to 0.113.0, shared usage typing and unknown-error handling are repaired, and all five provider functions pass Deno type checking."
+    },
+    {
+      "rank": 4,
+      "slug": "zero-known-vulnerability-lock",
+      "status": "shipped",
+      "premise": "Exact-lockfile closeout verification found a DOMPurify advisory and then a newly published React Router advisory wave.",
+      "implementation": "DOMPurify 3.4.12 and React Router 7.18.0 passed package-trust plus registry provenance/integrity checks; npm audit returned zero vulnerabilities and the full 559-test launch gate reran green."
+    }
+  ],
+  "executionLog": [
+    { "slug": "ai-cost-and-auth-perimeter", "status": "complete", "evidence": "Atomic claim migration, lifetime trial/free policy, authenticated base64-only vision, payload cap, 6/6 focused tests." },
+    { "slug": "unicode-integrity-ratchet", "status": "complete", "evidence": "Eleven user-facing files repaired; 345-file source-integrity gate green." },
+    { "slug": "sober-claims-contract", "status": "complete", "evidence": "Risky certainty and income copy rewritten; 345-file/9-rule public-claims gate green." },
+    { "slug": "studio-scope-honesty", "status": "complete", "evidence": "Percentage, local genius scope, intent scope, and project brief fixed; script regressions green." },
+    { "slug": "browser-launch-truth-mirror", "status": "complete", "evidence": "Launch validation now consumes a freshness-checked browser-safe PROJECT_STATUS mirror; focused UI/state tests green." },
+    { "slug": "intelligence-refresh", "status": "complete", "evidence": "IGNIS refreshed to 44,184; revenue signals refreshed; scoped genius list regenerated to zero items." },
+    { "slug": "second-order-innovation", "status": "complete", "evidence": "Four planned compound candidates plus three post-push emergent candidates implemented; entitlement discovery green; five edge functions Deno-check green; non-destructive production probe verified; closeout exhausted-list truth regression-tested; npm audit zero." }
+  ]
+}

@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component {
               {this.state.error.message}
             </div>
           )}
-          <button onClick={() => this.setState({ error: null })} style={{ padding: "8px 20px", background: "#60a5fa", border: "none", borderRadius: 6, color: "#0a0e17", fontWeight: 700, cursor: "pointer" }}>
+          <button onClick={() => this.setState({ error: null })} style={{ padding: "8px 20px", background: "#60a5fa", border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, cursor: "pointer" }}>
             Try Again
           </button>
         </div>

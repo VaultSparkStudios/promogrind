@@ -54,11 +54,11 @@ const ReportCard = ({entries, total}) => {
         <div><div style={{fontSize:9,color:K.mt}}>AVG PER ENTRY</div><div style={{...S.big(K.yl),fontSize:18}}>${f(avgConv)}</div></div>
       </div>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-        <button onClick={copyReport} style={{padding:"7px 16px",background:copiedReport?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+        <button onClick={copyReport} style={{padding:"7px 16px",background:copiedReport?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
           {copiedReport?"✓ Copied!":"📋 Copy Report Card"}
         </button>
         <ShareWeekBtn entries={entries}/>
-        <button onClick={()=>{const year=new Date().getFullYear();const header=`"PromoGrind P&L Export - For Tax Purposes - Gambling winnings are taxable income"`;const colHeaders=["Date","Sportsbook","Type","Bonus Amount","Hedge Amount","Profit","Notes"];const rows=entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);const csv=[header,colHeaders,...rows].map((r,i)=>i<2?r:r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");downloadFile(csv,`promogrind-tax-export-${year}.csv`,"text/csv");}} style={{padding:"7px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+        <button onClick={()=>{const year=new Date().getFullYear();const header=`"PromoGrind P&L Export - For Tax Purposes - Gambling winnings are taxable income"`;const colHeaders=["Date","Sportsbook","Type","Bonus Amount","Hedge Amount","Profit","Notes"];const rows=entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);const csv=[header,colHeaders,...rows].map((r,i)=>i<2?r:r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");downloadFile(csv,`promogrind-tax-export-${year}.csv`,"text/csv");}} style={{padding:"7px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
           Export Tax CSV ({entries.length} entries)
         </button>
       </div>
@@ -74,26 +74,31 @@ const BetHeatmap = ({ entries }) => {
     entries.forEach(e=>{ if(!e.date) return; const k=e.date; if(!m[k]) m[k]=0; m[k]+=(parseFloat(e.profit)||0); });
     return m;
   },[entries]);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const start = new Date(today); start.setDate(today.getDate()-90);
-  const cells = [];
-  const d = new Date(start);
-  const dow = d.getDay();
-  const mondayOffset = dow===0?-6:1-dow;
-  d.setDate(d.getDate()+mondayOffset);
-  for(let w=0;w<13;w++) {
-    const week = [];
-    for(let day=0;day<7;day++) {
-      const key = d.toISOString().split('T')[0];
-      const pl = dayMap[key];
-      let color = K.s3;
-      if(pl!==undefined){ if(pl>50) color=K.gn; else if(pl>0) color='#22c55e80'; else if(pl===0) color=K.bd2; else color=`${K.rd}99`; }
-      week.push({key,pl,color,isFuture:d>today});
-      d.setDate(d.getDate()+1);
+  // 91-day grid (365 cell objects + styles) — build only on data change,
+  // not on every parent re-render.
+  const {cells, monthLabels} = useMemo(()=>{
+    const today = new Date(); today.setHours(0,0,0,0);
+    const start = new Date(today); start.setDate(today.getDate()-90);
+    const grid = [];
+    const d = new Date(start);
+    const dow = d.getDay();
+    const mondayOffset = dow===0?-6:1-dow;
+    d.setDate(d.getDate()+mondayOffset);
+    for(let w=0;w<13;w++) {
+      const week = [];
+      for(let day=0;day<7;day++) {
+        const key = d.toISOString().split('T')[0];
+        const pl = dayMap[key];
+        let color = K.s3;
+        if(pl!==undefined){ if(pl>50) color=K.gn; else if(pl>0) color='#22c55e80'; else if(pl===0) color=K.bd2; else color=`${K.rd}99`; }
+        week.push({key,pl,color,isFuture:d>today});
+        d.setDate(d.getDate()+1);
+      }
+      grid.push(week);
     }
-    cells.push(week);
-  }
-  const monthLabels = cells.map((week,wi)=>{ const mon=week[0].key; const prev=wi>0?cells[wi-1][0].key:null; if(!prev||mon.slice(0,7)!==prev.slice(0,7)){ const dt=new Date(mon+'T12:00:00'); return dt.toLocaleString('default',{month:'short'}); } return ''; });
+    const labels = grid.map((week,wi)=>{ const mon=week[0].key; const prev=wi>0?grid[wi-1][0].key:null; if(!prev||mon.slice(0,7)!==prev.slice(0,7)){ const dt=new Date(mon+'T12:00:00'); return dt.toLocaleString('default',{month:'short'}); } return ''; });
+    return {cells:grid, monthLabels:labels};
+  },[dayMap]);
   return (
     <div style={{marginBottom:12}}>
       <button onClick={()=>setShow(s=>!s)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,marginBottom:show?8:0}}>
@@ -243,7 +248,7 @@ const Ledger = () => {
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'linear-gradient(90deg,#1e3a2f,#0f1724)',border:'1px solid #4ade80',borderRadius:8,marginBottom:12,flexWrap:'wrap',gap:8}}>
         <div style={{fontSize:13,color:'#cbd5e1'}}>☁️ <strong style={{color:'#4ade80'}}>VaultSparked</strong> syncs your ledger across all devices + unlocks the Live Scanner.</div>
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          <a href="#/upgrade" style={{padding:'5px 12px',background:'#4ade80',color:'#0a0e17',borderRadius:5,fontSize:12,fontWeight:700,textDecoration:'none'}}>Start Free Trial →</a>
+          <a href="#/upgrade" style={{padding:'5px 12px',background:'#4ade80',color: K.ink,borderRadius:5,fontSize:12,fontWeight:700,textDecoration:'none'}}>Start Free Trial →</a>
           <button onClick={() => dismissTrigger('ledger_upsell', setShowLedgerTrigger)} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:16}}>×</button>
         </div>
       </div>
@@ -252,7 +257,7 @@ const Ledger = () => {
       <div style={{...S.note(K.pp),display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,marginBottom:12}}>
         <span>Get live arb scanner, push alerts + priority support — first 7 days free, then $24.99/mo</span>
         <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color:K.bg,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Try 7 days free</button>
+          <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Try 7 days free</button>
           <button onClick={()=>{try{localStorage.setItem('pg_upsell_ledger_dismissed','1');}catch{}setUpsellLedgerDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
         </div>
       </div>
@@ -338,7 +343,7 @@ const Ledger = () => {
       <In l="EV % (opt)" v={form.ev} set={v=>setForm(f=>({...f,ev:v}))} ph="4.2" pre="%"/>
       <In l="Your Odds (opt)" v={form.myOdds} set={v=>setForm(f=>({...f,myOdds:v}))} ph="+110"/>
       <In l="Closing Odds (opt)" v={form.closingOdds} set={v=>setForm(f=>({...f,closingOdds:v}))} ph="+105"/>
-      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     {entries.length>=2&&(()=>{
       const sorted=[...entries].sort((a,b)=>new Date(a.date)-new Date(b.date));
@@ -476,7 +481,7 @@ const Ledger = () => {
                 <input style={iStyle} value={editForm.closingOdds||''} onChange={ev=>setEditForm(f=>({...f,closingOdds:ev.target.value}))} placeholder="Closing odds"/>
               </div>
               <div style={{display:"flex",gap:8}}>
-                <button onClick={commitEdit} style={{flex:1,padding:"8px 12px",background:K.gn,border:"none",borderRadius:8,color:K.bg,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Save</button>
+                <button onClick={commitEdit} style={{flex:1,padding:"8px 12px",background:K.gn,border:"none",borderRadius:8,color: K.ink,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Save</button>
                 <button onClick={cancelEdit} style={{flex:1,padding:"8px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Cancel</button>
               </div>
             </div>
@@ -523,7 +528,7 @@ const Ledger = () => {
               <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.profit||''} onChange={ev=>setEditForm(f=>({...f,profit:ev.target.value}))} placeholder="$"/></td>
               <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.myOdds||''} onChange={ev=>setEditForm(f=>({...f,myOdds:ev.target.value}))} placeholder="my"/></td>
               <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap",display:"flex",gap:4,alignItems:"center"}}>
-                <button onClick={commitEdit} style={{padding:"3px 8px",background:K.gn,border:"none",borderRadius:4,color:K.bg,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:font}}>✓</button>
+                <button onClick={commitEdit} style={{padding:"3px 8px",background:K.gn,border:"none",borderRadius:4,color: K.ink,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:font}}>✓</button>
                 <button onClick={cancelEdit} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
               </td>
             </tr>

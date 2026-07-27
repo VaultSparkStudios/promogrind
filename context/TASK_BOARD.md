@@ -2,22 +2,65 @@
 
 ## Now
 
-- production auth email smoke after the latest deploy — create a real PromoGrind account, verify confirmation delivery/resend, verify forgot-password email, verify recovery link opens `?auth=update-password`, and confirm new-password sign-in
-- run one real Stripe smoke purchase and record evidence — scripted: `npm run smoke:stripe` walks the operator step-by-step and records to `context/LAUNCH_PROOFS.json` with `--record`
-- complete one friend-facing auth/recovery/calculator/pricing pass — scripted: `npm run beta:check` walks the tester through account creation/sign-in, confirmation or password recovery visibility, calculator, CTA, pricing, and trust checks before recording evidence
-- ~~finish monetization coverage with real approved tracking URLs for `BetMGM`, `bet365`, and `BetRivers`~~ — **DECOUPLED S89**: partner programs rejected/waitlisted or do not offer individual referral codes. Per DECISIONS.md (S89), these 3 books are now advisory, not launch-blocking. PromoGrind monetizes via the 5 books with real referral links (DraftKings, FanDuel, Caesars, ESPN BET, Fanatics); the 3 advisory books still ship clean signup URLs so operators can use them
+- configure a header-capable production edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
+- rotate the historical privileged Supabase token isolated by the bounded full-history scanner; redacted Ark request `01JUE23NQ1EEF6010874B09F97` records the exact commit/file and never reproduces the credential
+- deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; never infer deployment from repo code
+- verify the exact `contact@promogrind.bet` → founder mailbox forwarding route once Cloudflare Email Routing Rules Read is granted; Brevo SPF/DomainKeys Identified Mail (DKIM) is verified at criterion level
+- after S119 deploy, verify capture public-key injection live, then record real production auth-email, Stripe purchase, friend-beta, forwarding, and capture-submission receipts in the canonical proof ledger
 
 ## Next
 
-- ~~finish S89 deferred: `app-jsx-decomposition-finale` — extract `AppProviders.jsx`, `appRoutes.js`, `AppCalculatorRouter.jsx`; target `wc -l src/App.jsx < 1500`. Needs dedicated session with per-extraction test runs.~~ — **DONE S104**: completed the remaining App shell finale with focused route/widget extraction; `appComposition.test.js` now enforces a <1500 App shell ceiling.
-- rerun/inspect the GitHub Pages workflow after S87 operator-loop/trust/AI-usage hardening lands; confirm `launch-verification` artifact remains deploy-health clean and production auth surfaces are ready for manual email proof
-- add a guided promo-passport onboarding path from first account to first settled result, using trust receipts and discipline score as the user's visible progress contract [SIL]
-- add a production `dist/` exposure gate so generated bundles cannot accidentally contain admin-only proof/context artifacts or secrets [SIL]
-- ~~continue decomposing the remaining high-churn `src/App.jsx` seams beyond the extracted shell, route, tracker, utility-calculator, and promo-finder modules (App.jsx is now 2365 lines)~~ — **DONE S104**: extracted Promo Calendar, referral/team/account, onboarding, and dashboard action widgets; future App growth is guarded below <1500 lines.
+- repeat AI pixel inspection when the connected image viewer is healthy; S118 captured and hashed the complete desktop/mobile dark/light matrix and found zero live computed-style contrast failures, but does not claim the unavailable pixel-review step
+- inspect S118 CI/deployment and refresh the live web probe against the deployed commit
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
-- use `npm run launch:status` as the single launch posture command once a full local gate is desired; use `--fast` for proof-only status
 
-## Shipped This Session
+## Shipped This Session (S119)
+
+- startup-brief-provenance-lattice — **DONE**: project identity, compliance, orchestrator, Ark, and untracked-work signals now distinguish unavailable, empty, stale, and failing states with source precedence and eight assertions.
+- streaming-secret-archaeology — **DONE**: one bounded streaming Git scan replaces per-commit fan-out, completes 314 commits in about two seconds, rejects lockfile/test noise, and isolates one real historical privileged token.
+- launch-proof-evidence-quorum — **DONE**: seven proofs migrated to typed criterion receipts; all status and counts derive from coverage, unsafe/manual completion is rejected, and 12 adversarial assertions gate the contract.
+- target-bound-capability-truth-plane — **DONE**: five gateway-resolved provider targets report missing/present/authenticated/authorized separately with redacted, freshness-bounded receipts; Brevo, PromoGrind Supabase, and live Stripe are READY.
+- proof-quorum-browser-self-validation — **DONE (second-order)**: the command center independently derives typed proof state and shows the next missing criterion.
+- capability-receipt-freshness-ratchet — **DONE (second-order)**: stale provider evidence contributes zero trusted-ready capabilities.
+- capture-build-fail-closed — **DONE (second-order)**: the Pages postbuild injects the browser-safe key across all capture pages and CI refuses a production build without it.
+- local-date-noninteractive-closeout — **DONE (second-order)**: mandatory autopilot now stamps the host-local calendar date and follows the protocol's gated no-prompt path in noninteractive sessions.
+- Brevo sender-domain authentication — **DONE / EXTERNAL CONFIG**: created `promogrind.bet`, applied four provider-returned DNS records, verified idempotence, authenticated the domain, and recorded 1/3 canonical Brevo criteria without inventing forwarding/mailbox evidence.
+
+## Shipped This Session (S118)
+
+- evidence-aware-promo-command-plane — **DONE**: current operator observations drive actionable bankroll allocation; unverified historical cadence rows enter an explicit verification queue across Today, Brief, and Dashboard.
+- semantic-theme-contrast-contract — **DONE**: separated accent ink from page backgrounds, repaired 68 accent-filled controls, and launch-tested 37 semantic foreground/background pairs per theme.
+- single-source-launch-blockers — **DONE**: deleted the unused handwritten blocker ledger and locked generated launch-proof ownership with regression coverage.
+- verification-first-operating-mode — **DONE (second-order)**: the adaptive plan enters verify mode when historical patterns exist without current evidence.
+- semantic-accent-ink — **DONE (second-order)**: each theme exposes a human-best semantic foreground for colored fills.
+- self-preserving-innovation-ledger — **DONE (second-order)**: regeneration retains same-session shipped outcomes and reports the exhausted primary list truthfully.
+- release-parity-evidence — **PARTIAL / HONEST**: four viewport/theme screenshots captured and hashed; browser/runtime contrast passed, while OS-level AI pixel inspection remained unavailable and is not claimed.
+
+## Shipped This Session (S117)
+
+- public secret/topology purge — **DONE**: removed the exposed tracked staging script, expanded shell-secret detection, added scanner regressions, and shipped a redacted rotation request through Ark
+- passport/provenance trust boundary — **DONE**: browser-only SHA-256 receipts are versioned self-attestations with strict schemas, safe rendering, and no independent-authenticity claim
+- Advisor privacy boundary — **DONE**: local-by-default profile context, explicit opt-in, client/server identifier redaction, bounded context, privacy receipts, and tests
+- promo observation truth — **DONE**: historical-pattern evidence states, market/jurisdiction metadata, freshness and confidence, local Seen/Not seen controls, and honest local-only reminders/ICS
+- multilingual claims contract — **DONE**: context-aware English/Spanish/Portuguese checks pass across 282 files and all localized static surfaces carry execution-risk caveats
+- release surface — **DONE**: navigation manifest, security contact, favicon, rollback runbook, exact proprietary footer, release gates, and live contract probe
+## Shipped This Session (S115)
+
+- AI cost/auth perimeter — **DONE**: authenticated vision, direct-upload/MIME/size limits, non-renewing free/trial ceilings, atomic database quota reservation, and fail-closed provider access.
+- UTF-8 integrity ratchet — **DONE**: repaired eleven user-facing source files and launch-gated a 345-file encoding scanner.
+- sober public-claims contract — **DONE**: replaced hype/certainty/income copy and launch-gated nine deterministic trust rules.
+- Studio scope honesty — **DONE**: corrected sub-1% context readings, repo-local genius scope, intent repo scope, and the blank project brief.
+- browser launch truth mirror — **DONE**: Launch Command Center now consumes a freshness-checked browser-safe mirror of canonical project status.
+- intelligence refresh — **DONE**: IGNIS 44,184 FORGE; revenue signals current; scoped genius list 0.
+- central AI entitlement registry — **DONE (second-order)**: all five provider features consume one typed server policy.
+- provider discovery guard — **DONE (second-order)**: future provider functions fail integrity checks if auth, registry, atomic quota, usage events, or SDK pinning are missing.
+- pinned Deno contract — **DONE (second-order)**: trust-approved Anthropic SDK pinned at 0.113.0; all five edge functions type-check.
+- zero-known-vulnerability lock — **DONE (second-order + final ratchet)**: reviewed DOMPurify 3.4.12 and React Router 7.18.0 provenance/integrity, cleared both advisory waves, and reran the 559-test full launch gate with `npm audit` at 0.
+- non-destructive production launch probe — **DONE (second-order)**: eliminated confirmation-email quota consumption, guaranteed disposable-user cleanup, bounded provider diagnostics, redacted checkout artifacts, and verified CI/Pages production green.
+- closeout genius-cache truth — **DONE (second-order)**: the canonical board now distinguishes an exhausted ranked list from a missing cache; a regression locks the source-derived wording.
+- closeout genius-cache truth — **DONE (second-order)**: the canonical board now distinguishes an exhausted ranked list from a missing cache; a regression locks the source-derived wording.
+
+## Shipped This Session (S97 and earlier retained history)
 - production-auth-email-smoke-runner S97 — **DONE S97**: added `npm run smoke:auth-email` with redacted evidence capture for production account confirmation, resend, forgot-password, recovery-link, and new-password sign-in; wired `authEmailSmoke` into canonical launch proofs and browser-safe mirror.
 - launch-proof-priority-order S97 — **DONE S97**: updated Launch Command Center prioritization so auth-email proof ranks before Stripe and friend-beta manual launch blockers; added regression coverage in `launchState.test.js`.
 - promogrind-supabase-capability-cargo S97 — **ARK SHIPPED S97**: local repo has no `secrets/CAPABILITY_MAP.json`; shipped Ark cargo `01JSAF1R02AEA5B6F3FE74C3B4` to Studio Ops requesting `promogrind.supabase.deploy` mapping to the Studio PAT plus explicit project ref `fjnpzjjyhnpmunfoycrp`.- command-template-fix S97 — **DONE S97**: fixed stale `ignis-stale` generated command in `scripts/generate-genius-list.mjs` from `npx tsx cli.ts score <project-path>` to `node scripts/ops.mjs rescore --stale` so future /go lists stay executable.
@@ -368,3 +411,47 @@
 - sync-ownership-decomposition S112 - **DONE S112**: split `loadData` tests and moved workflow persistence helpers out of `src/sync.js`; sync tests pass with 62 total test files.
 - usermenu-threshold-trim S112 - **DONE S112**: removed stale non-executable bulk from `UserMenu.jsx`; innovation pack reports 0 large files.
 - external-proof-evidence S112 - **HONEST DEFERRAL S112**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof still require real external evidence; no proof was fabricated.
+
+## Shipped This Session (S113)
+
+- public-repo-hygiene S113 - **DONE S113**: removed dead `src/theme.js` (zero importers) and the git-tracked root screenshot; deleted untracked duplicate root deploy guides (docs/ copies canonical).
+- edge-decay-heatmap-wiring S113 - **DONE S113**: the orphaned S93 `edgeDecayHeatmap` lib now renders in the Edge dashboard (TrackInsights) with tone summary, top movers, aria grid, and 5 component tests.
+- operator-data-vault S113 - **DONE S113**: root-fixed phantom inventory keys (`pg_app_data`, `pg_compact_mode`) that silently omitted the core `promo_engine_v3` blob from exports; versioned envelope + fnv1a32 integrity digest + fail-closed import (merge/replace/dry-run) + ProfilePanel Restore UI; export also downloads a real .json file; L3 climb added pre-restore safety snapshot + one-click undo.
+- intelligence-index S113 - **DONE S113**: Operator Command Deck route under Track — 13 intelligence modules attention-ranked (act>live>idle) with the decision each helps, live status from each module's own lib, coach copy, and deep links.
+- calculator-a11y-pass S113 - **DONE S113**: all 21 calculator result panels announce via role=status aria-live=polite; LineShop raw inputs labelled. Premise honestly demoted — the shared In atom already labelled inputs.
+- dashboard-memoization S113 - **DONE S113**: three verified hotspots fixed — DailyDashboard unmemoized full snapshot, SmartPromoRecommender memo defeated by fresh Date dep, Ledger 91-day grid rebuilt per render.
+- component-render-tests S113 - **DONE S113**: smoke render/interaction tests for TodayDashboardPanel, ProfilePanel (full restore flow), UserMenu, Ledger.
+- profilepanel-decomposition S113 - **DONE S113**: extracted `profile/DataControlsSection.jsx`; ProfilePanel back under the 650-line threshold; innovation pack reports 0 large files.
+- command-palette S113 - **REJECTED ON VERIFICATION S113 (win)**: Ctrl+K/Cmd+K calc search already exists at src/App.jsx:156.
+- external-proof-evidence S113 - **HONEST DEFERRAL S113**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof still require real external evidence; no proof was fabricated.
+
+## S113 Follow-up
+
+- [Vault] Consider per-domain selective restore (calculators/tracker/gamification) as a future vault L3+ slice.
+- [Command Deck] Consider surfacing the deck's act-count as a dashboard chip once real user data exists.
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+
+## Shipped This Session (S114)
+
+- external-launch-proof-ledger S114 - **DONE S114**: added `scripts/render-external-launch-proof-ledger.mjs`, wired `node scripts/ops.mjs launch-proof-ledger --check`, generated `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md`, and added regression coverage so real-world proof blockers stay explicit without being marked complete.
+- external-proof-evidence S114 - **HONEST DEFERRAL S114**: production auth email, Stripe smoke, friend beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof still require real external evidence; no proof was fabricated.
+
+## S114 Follow-up
+
+- [Launch Proof] Record real production auth email, Stripe smoke, friend-beta, Brevo, Studio Ops Supabase capability, and production capture public-key evidence before any public launch announcement.
+- [SIL] Keep the external launch-proof ledger fresh at closeout whenever PROJECT_STATUS blockers or LAUNCH_PROOFS change.
+
+## Shipped This Session (S116)
+
+- sil-forecast-format-tolerance S116 — **DONE S116**: format-tolerant, recency-correct v3 parsing plus completeness gating repaired the false 0/1000 startup forecast; live source now forecasts 1000/1000.
+- external-proof-contract-completeness S116 — **DONE S116**: Brevo, Supabase deployment, and capture configuration are typed launch proofs; the generated ledger proves 6/6 blocker coverage and fails on unmapped blockers.
+- bundle-graph-budget S116 — **DONE S116**: Vite manifest traversal now budgets the true static import graph and largest async chunk with raw+gzip ceilings and deterministic diagnostics.
+- counterfactual-advisor-receipts S116 — **DONE S116**: model and rule paths emit bounded assumptions, missing inputs, sensitivity triggers, and evidence grade; the accessible receipt persists into workflows.
+- boot-error-telemetry-buffer S116 — **DONE S116 (second-order)**: a bounded in-memory FIFO retains boot exceptions until idle-loaded Sentry is ready and retries failed delivery without persistence.
+- advisor-receipt-cache-version S116 — **DONE S116 (second-order)**: receipt contract v2 versions cached Advisor results so legacy payloads cannot silently suppress counterfactual evidence.
+- external-proof-evidence S116 — **HONEST DEFERRAL S116**: production auth email, Stripe purchase, friend beta, Brevo forwarding, Supabase deployment, and capture configuration still require real external evidence; no proof was fabricated.
+
+## S116 Follow-up
+
+- [SIL] Keep bundle thresholds evidence-based; optimize the 482.1KB async Sentry payload only when field telemetry proves its replay value or mobile cost warrants a narrower integration.
+- [Launch Proof] Execute the six typed proof contracts only through the existing redacted runners/secrets gateway; do not infer production readiness from local code.

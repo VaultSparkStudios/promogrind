@@ -34,16 +34,6 @@ function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); 
 // status: 'pending' | 'done' | 'blocked'
 const CREDENTIAL_CHECKLIST = [
   {
-    id: 'cloudflare-wildcard-dns',
-    category: 'DNS',
-    label: 'Cloudflare wildcard DNS *.staging',
-    description: 'Add A record: *.staging → 178.156.211.100 in Cloudflare DNS panel',
-    impact: 'website.staging + studio-hub.staging unreachable; staging smoke tests fail',
-    docs: 'Run setup script after DNS: ssh root@178.156.211.100 "bash -s" < scripts/setup-staging.sh',
-    age: '~33 sessions',
-    priority: 'HIGH',
-  },
-  {
     id: 'resend-api-key',
     category: 'Email',
     label: 'Resend API key',

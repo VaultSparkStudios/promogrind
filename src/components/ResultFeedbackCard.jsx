@@ -318,7 +318,7 @@ export default function ResultFeedbackCard({
             background: !entryId || !actualProfit.trim() || status === "skipped" ? K.bd : K.ac,
             border: "none",
             borderRadius: 8,
-            color: K.bg,
+            color: K.ink,
             fontSize: 11,
             fontWeight: 800,
             cursor: !entryId || !actualProfit.trim() || status === "skipped" ? "not-allowed" : "pointer",

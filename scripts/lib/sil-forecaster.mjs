@@ -8,53 +8,67 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const CATEGORIES = [
+export const CATEGORIES = [
   'Dev Health', 'Creative Alignment', 'Momentum',
-  'Engagement', 'Process Quality', 'Cross-Repo Coher',
-  'Security Posture', 'Ecosystem Integ', 'Capital Efficiency',
-  'Automation Cover'
+  'Engagement', 'Process Quality', 'Cross-Repo Coherence',
+  'Security Posture', 'Ecosystem Integration', 'Capital Efficiency',
+  'Automation Coverage'
 ];
 
 const CATEGORY_ALIASES = {
-  'Cross-Repo Coherence': 'Cross-Repo Coher',
-  'Ecosystem Integration': 'Ecosystem Integ',
-  'Automation Coverage': 'Automation Cover',
+  'Alignment': 'Creative Alignment',
+  'Process Qual': 'Process Quality',
+  'Cross-Repo Coher': 'Cross-Repo Coherence',
+  'Ecosystem Integ': 'Ecosystem Integration',
+  'Automation Cover': 'Automation Coverage',
   'Engagement (infra)': 'Engagement'
 };
 
 export function parseSilHistory(silText, maxSessions = 5) {
-  const sessionRe = /^## (\d{4}-\d{2}-\d{2}) — Session (\d+)[^\n]*Total: (\d+)\/1000/gm;
-  const sessions = [];
+  const sessionRe = /^##\s+(\d{4}-\d{2}-\d{2})\s+[—-]\s+Session\s+(\d+)[^\n]*$/gm;
+  const headers = [];
   let m;
   while ((m = sessionRe.exec(silText)) !== null) {
-    sessions.push({ date: m[1], session: Number(m[2]), total: Number(m[3]), idx: m.index });
-    if (sessions.length >= maxSessions) break;
+    headers.push({ date: m[1], session: Number(m[2]), idx: m.index });
   }
-  // Extract category scores from each session block
-  for (let i = 0; i < sessions.length; i++) {
-    const start = sessions[i].idx;
-    const end = i + 1 < sessions.length ? sessions[i + 1].idx : silText.length;
+
+  const sessions = headers.map((header, i) => {
+    const start = header.idx;
+    const end = i + 1 < headers.length ? headers[i + 1].idx : silText.length;
     const block = silText.slice(start, end);
+    const totalMatch = block.match(/(?:\*\*)?Total:\s*(\d+)\/1000/i);
     const cats = {};
-    // table rows: | N | Category Name | score | Δ | notes |
-    const rowRe = /^\|\s*\d+\s*\|\s*([A-Za-z][^|]+?)\s*\|\s*(\d+)\s*\|/gm;
+    const rowRe = /^\|\s*(?:\d+\s*\|\s*)?([A-Za-z][^|\r\n]+?)\s*\|\s*(\d+)\s*\|/gm;
     let rm;
     while ((rm = rowRe.exec(block)) !== null) {
       const raw = rm[1].trim();
       const canonical = CATEGORY_ALIASES[raw] || raw;
-      cats[canonical] = Number(rm[2]);
+      if (CATEGORIES.includes(canonical)) cats[canonical] = Number(rm[2]);
     }
-    sessions[i].categories = cats;
-  }
-  return sessions;
+    return {
+      date: header.date,
+      session: header.session,
+      total: totalMatch ? Number(totalMatch[1]) : null,
+      idx: header.idx,
+      categories: cats,
+      complete: CATEGORIES.every((category) => Number.isFinite(cats[category])),
+    };
+  });
+
+  return sessions
+    .filter((session) => session.total !== null)
+    .sort((a, b) => b.session - a.session)
+    .slice(0, maxSessions);
 }
 
 export function forecastNext(sessions, signals = {}) {
   // signals: { velocity, blockerPressure, contextAge, unblocked }
-  if (!sessions.length) return null;
+  const completeSessions = sessions.filter((session) => session.complete !== false
+    && CATEGORIES.every((category) => Number.isFinite(session.categories?.[category])));
+  if (!completeSessions.length) return null;
   const forecast = {};
   for (const cat of CATEGORIES) {
-    const series = sessions.map(s => s.categories[cat]).filter(n => typeof n === 'number');
+    const series = completeSessions.map(s => s.categories[cat]).filter(n => typeof n === 'number');
     if (!series.length) { forecast[cat] = { predicted: null, confidence: 'none' }; continue; }
     // Simple AR(1): predict = last + alpha * (last - last-1), clamped 0..100
     const last = series[0];
@@ -81,7 +95,7 @@ export function forecastNext(sessions, signals = {}) {
   const totalPred = Object.values(forecast)
     .filter(f => f.predicted != null)
     .reduce((sum, f) => sum + f.predicted, 0);
-  return { categories: forecast, totalPredicted: totalPred, basis: sessions.length };
+  return { categories: forecast, totalPredicted: totalPred, basis: completeSessions.length };
 }
 
 export function renderForecastBlock(forecast, currentTotal = null) {
@@ -119,7 +133,7 @@ if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` || proce
   const sil = fs.readFileSync(silPath, 'utf8');
   const sessions = parseSilHistory(sil);
   const last = sessions[0];
-  const forecast = forecastNext(sessions, { velocity: 11, blockerPressure: 87, contextAge: 0 });
+  const forecast = forecastNext(sessions, { velocity: 11, blockerPressure: 0, contextAge: 0 });
   if (process.argv.includes('--json')) {
     console.log(JSON.stringify({ basis: sessions.map(s => ({ session: s.session, total: s.total })), forecast }, null, 2));
   } else {

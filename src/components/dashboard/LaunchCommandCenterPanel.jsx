@@ -117,7 +117,7 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
                 {proof.nextStep && <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.5, marginBottom: 7 }}><strong style={{ color: tone }}>Next:</strong> {proof.nextStep}</div>}
                 {proof.evidenceRequired.length > 0 && (
                   <div style={{ fontSize: 9, color: K.mt, lineHeight: 1.6, marginBottom: 7 }}>
-                    Evidence: {proof.evidenceCount}/{proof.evidenceRequired.length} · {proof.evidenceRequired.slice(0, 2).join(" · ")}
+                    Evidence: {proof.evidenceCount}/{proof.evidenceRequired.length} · {proof.missingEvidence.length ? `Missing next: ${proof.missingEvidence[0]}` : "quorum satisfied"}
                   </div>
                 )}
                 {!proof.isComplete && (

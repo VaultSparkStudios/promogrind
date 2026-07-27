@@ -5,12 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/generate-launch-proof-mirror.mjs && node scripts/optimize-images.mjs",
+    "prebuild": "node scripts/generate-launch-proof-mirror.mjs && node scripts/generate-project-status-mirror.mjs && node scripts/optimize-images.mjs",
     "build": "vite build",
     "build:pages": "vite build && node scripts/postbuild-pages.mjs",
     "optimize:images": "node scripts/optimize-images.mjs",
     "package:trust": "node scripts/package-trust.mjs",
     "scan:supply-chain": "node scripts/scan-npm-supply-chain.mjs",
+    "test:scan-secrets": "node scripts/test-scan-secrets.mjs",
+    "test:release-surface": "node scripts/test-release-surface.mjs",
+    "test:session-invariants": "node scripts/test-startup-signal-provenance.mjs && node scripts/test-scan-git-history.mjs && node scripts/test-launch-proof-quorum.mjs && node scripts/test-launch-capabilities.mjs && node scripts/test-capture-config.mjs",
+    "check:release-surface": "node scripts/check-release-surface.mjs",
+    "verify:web-live": "node scripts/check-live-web-contract.mjs",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "build:cap": "vite build --outDir dist-cap",
     "cap:sync": "npm run build:cap && npx cap sync",
@@ -19,8 +24,9 @@
     "smoke:launch": "node scripts/validate-launch-smoke.mjs",
     "smoke:ux": "node scripts/validate-ux-route-integrity.mjs",
     "check:hooks": "node scripts/check-app-hook-order.mjs",
+    "check:integrity": "node scripts/check-source-integrity.mjs && npm run test:public-claims && node scripts/check-public-claims.mjs && node scripts/check-ai-entitlement-contract.mjs && node scripts/generate-project-status-mirror.mjs --check",
     "smoke:browser": "npm run build && node scripts/validate-browser-launch-smoke.mjs",
-    "verify:launch-local": "npm test && npm run ai:usage && node scripts/check-app-hook-order.mjs && npm run smoke:auth && npm run smoke:launch && npm run smoke:ux && npm run smoke:browser && node scripts/check-public-dist-exposure.mjs && node scripts/replay-launch-proofs.mjs && node scripts/check-bundle-budget.mjs && node scripts/check-public-repo-sanitization.mjs --strict --json",
+    "verify:launch-local": "npm run test:scan-secrets && npm run test:release-surface && npm run test:session-invariants && npm run check:release-surface && npm test && npm run check:integrity && npm run ai:usage && node scripts/check-app-hook-order.mjs && npm run smoke:auth && npm run smoke:launch && npm run smoke:ux && npm run smoke:browser && node scripts/check-public-dist-exposure.mjs && node scripts/replay-launch-proofs.mjs && node scripts/check-bundle-budget.mjs && node scripts/check-public-repo-sanitization.mjs --strict --json",
     "verify:production": "node scripts/verify-production-launch.mjs",
     "verify:mcp": "node scripts/validate-ignis-mcp.mjs && node scripts/studio-ops-mcp-bootstrap.mjs --check",
     "ingest:launch": "node scripts/ingest-launch-verification.mjs",
@@ -37,24 +43,25 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "smoke:auth-email": "node scripts/run-auth-email-smoke.mjs"
+    "smoke:auth-email": "node scripts/run-auth-email-smoke.mjs",
+    "test:public-claims": "node scripts/test-public-claims.mjs"
   },
   "dependencies": {
-    "@sentry/react": "^10.62.0",
-    "@supabase/supabase-js": "^2.108.2",
-    "posthog-js": "^1.395.0",
+    "@sentry/react": "^10.67.0",
+    "@supabase/supabase-js": "^2.110.8",
+    "posthog-js": "^1.407.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^7.18.0"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/ui": "^4.1.9",
-    "happy-dom": "^20.10.6",
-    "sharp": "^0.35.2",
+    "@vitest/ui": "^4.1.10",
+    "happy-dom": "^20.11.1",
+    "sharp": "^0.35.3",
     "vite": "^6.0.0",
     "vitest": "^4.1.2"
   }

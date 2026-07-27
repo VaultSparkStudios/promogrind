@@ -17,7 +17,7 @@ export default function NoVig3Way() {
         <Tl t="3-Way No-Vig Calculator" badge="SOCCER / HOCKEY" bc={K.pp} shareable />
         <div style={S.row}><In l="Home Win Odds" v={o1} set={setO1} ph="+220" /><In l="Draw Odds" v={o2} set={setO2} ph="+250" /><In l="Away Win Odds" v={o3} set={setO3} ph="+300" /></div>
         {r && (
-          <div style={S.res(true)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
               <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>

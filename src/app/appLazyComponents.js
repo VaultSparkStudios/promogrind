@@ -13,6 +13,7 @@ export const PromoIntakeRoute = lazy(() => import("../routes/PromoIntakeRoute.js
 export const LandingRoute = lazy(() => import("../routes/LandingRoute.jsx"));
 export const FeatureFlagAdmin = lazy(() => import("../components/FeatureFlagAdmin.jsx"));
 export const TrackInsights = lazy(() => import("../components/TrackInsights.jsx"));
+export const CommandDeck = lazy(() => import("../components/CommandDeck.jsx"));
 export const DailyBriefPage = lazy(() => import("../components/dashboard/DailyBriefPage.jsx"));
 export const DailyDashboard = lazy(() => import("../components/dashboard/DailyDashboard.jsx"));
 export const CommunityPromoBoard = lazy(() => import("../components/CommunityPromoBoard.jsx"));

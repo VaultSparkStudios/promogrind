@@ -1,156 +1,206 @@
 #!/usr/bin/env node
 /**
- * scan-git-history.mjs
+ * Bounded, streaming git-history secret scanner.
  *
- * Full git history secret scanner. Scans the complete commit log for
- * accidentally committed secrets that the working-tree pre-push hook
- * would not catch after the fact.
- *
- * Usage:
- *   node scripts/scan-git-history.mjs
- *   node scripts/scan-git-history.mjs --since 2026-01-01
- *   node scripts/scan-git-history.mjs --repo ../other-project
+ * Examples:
  *   node scripts/scan-git-history.mjs --json
- *   node scripts/ops.mjs history-scan [--since <date>] [--repo <path>] [--json]
+ *   node scripts/scan-git-history.mjs --since 2026-07-01 --timeout-ms 30000
+ *   node scripts/scan-git-history.mjs --repo ../other-project --max-commits 500
  */
 
-import { spawnSync } from './lib/safe-spawn.mjs';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawn } from './lib/safe-spawn.mjs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const args = process.argv.slice(2);
+const flag = (name) => {
+  const index = args.indexOf(name);
+  return index >= 0 ? args[index + 1] : null;
+};
 
-const argv      = process.argv.slice(2);
-const jsonMode  = argv.includes('--json');
-const sinceIdx  = argv.indexOf('--since');
-const repoIdx   = argv.indexOf('--repo');
-const since     = sinceIdx !== -1 ? argv[sinceIdx + 1] : null;
-const repoPath  = repoIdx !== -1 ? path.resolve(argv[repoIdx + 1]) : ROOT;
+if (args.includes('--help')) {
+  console.log(`Usage: node scripts/scan-git-history.mjs [options]
 
-// ── Secret patterns ───────────────────────────────────────────────────────────
+Options:
+  --json                 Emit the stable JSON result schema
+  --since <date>         Scan commits on or after an ISO date
+  --repo <path>          Scan another repository (default: current repo)
+  --max-commits <n>      Bound the scan to the newest n commits
+  --timeout-ms <n>       Kill the git stream after n ms (default: 120000)
+  --help                 Show this help
+
+Example:
+  node scripts/scan-git-history.mjs --since 2026-07-01 --json`);
+  process.exit(0);
+}
+
+const jsonMode = args.includes('--json');
+const repoPath = flag('--repo') ? path.resolve(flag('--repo')) : ROOT;
+const since = flag('--since');
+const maxCommits = positiveInt(flag('--max-commits'));
+const timeoutMs = positiveInt(flag('--timeout-ms')) || 120000;
+
 const PATTERNS = [
-  { id: 'stripe-live',   label: 'Stripe live key',       regex: /sk_live_[A-Za-z0-9]{20,}/g },
-  { id: 'stripe-pub',    label: 'Stripe publishable',    regex: /pk_live_[A-Za-z0-9]{20,}/g },
-  { id: 'github-pat',    label: 'GitHub PAT (classic)',  regex: /ghp_[A-Za-z0-9]{36,}/g },
-  { id: 'github-pat2',   label: 'GitHub PAT (fine)',     regex: /github_pat_[A-Za-z0-9_]{80,}/g },
-  { id: 'aws-key',       label: 'AWS access key',        regex: /AKIA[0-9A-Z]{16}/g },
-  { id: 'aws-secret',    label: 'AWS secret key',        regex: /(?<![A-Za-z0-9])[A-Za-z0-9\/+=]{40}(?![A-Za-z0-9\/+=])/g },
-  { id: 'supabase-jwt',  label: 'Supabase JWT',          regex: /eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}/g },
-  { id: 'db-url',        label: 'DB URL with password',  regex: /postgres:\/\/[^:]+:[^@]+@[^\s"']+/g },
-  { id: 'render-key',    label: 'Render API key',        regex: /rnd_[A-Za-z0-9]{30,}/g },
-  { id: 'anthropic-key', label: 'Anthropic API key',     regex: /sk-ant-[A-Za-z0-9_-]{80,}/g },
-  { id: 'local-path',    label: 'Absolute local path',   regex: /[A-Za-z]:\\Users\\[^\s"'<>]+/g },
-  { id: 'private-env',   label: '.env file reference',   regex: /\b\.env\.(local|production|private|secret)\b/g },
+  { id: 'stripe-live', label: 'Stripe live key', regex: /sk_live_[A-Za-z0-9]{20,}/g },
+  { id: 'stripe-pub', label: 'Stripe publishable key', regex: /pk_live_[A-Za-z0-9]{20,}/g },
+  { id: 'github-pat', label: 'GitHub PAT (classic)', regex: /ghp_[A-Za-z0-9]{36,}/g },
+  { id: 'github-pat2', label: 'GitHub PAT (fine)', regex: /github_pat_[A-Za-z0-9_]{80,}/g },
+  { id: 'aws-key', label: 'AWS access key', regex: /AKIA[0-9A-Z]{16}/g },
+  { id: 'db-url', label: 'DB URL with password', regex: /postgres:\/\/[^:]+:[^@]+@[^\s"']+/g },
+  { id: 'render-key', label: 'Render API key', regex: /rnd_[A-Za-z0-9]{30,}/g },
+  { id: 'anthropic-key', label: 'Anthropic API key', regex: /sk-ant-[A-Za-z0-9_-]{80,}/g },
 ];
 
-// Files/paths to skip in git output
-const SKIP_PATTERNS = [
+const SKIP_PATHS = [
   /\.claude\/worktrees\//,
   /audits\/sanitization\/allowlist/,
   /scripts\/lib\/validate\.mjs/,
   /scripts\/git-hooks\/pre-push/,
-  /scan-git-history\.mjs/,   // this script itself
+  /scan-git-history\.mjs/,
 ];
 
-// ── Run git log to get all commit patches ────────────────────────────────────
-function run(cmd, args, cwd) {
-  const res = spawnSync(cmd, args, { encoding: 'utf8', cwd, maxBuffer: 50 * 1024 * 1024 });
-  return res.stdout ?? '';
+const findings = [];
+const seen = new Set();
+let currentCommit = { sha: '', date: '', msg: '' };
+let currentFile = '';
+let scanned = 0;
+let timedOut = false;
+let stderr = '';
+let carry = '';
+const startedAt = Date.now();
+
+const gitArgs = ['log', '--no-merges', '--date=short', '--format=__PG_COMMIT__%H%x09%ad%x09%s', '-p', '-U0'];
+if (since) gitArgs.push(`--since=${since}`);
+if (maxCommits) gitArgs.push('-n', String(maxCommits));
+
+const child = spawn('git', gitArgs, { cwd: repoPath, stdio: ['ignore', 'pipe', 'pipe'] });
+const timer = setTimeout(() => {
+  timedOut = true;
+  child.kill();
+}, timeoutMs);
+
+child.stdout.setEncoding('utf8');
+child.stderr.setEncoding('utf8');
+child.stdout.on('data', (chunk) => {
+  const lines = (carry + chunk).split(/\r?\n/);
+  carry = lines.pop() || '';
+  for (const line of lines) consumeLine(line);
+});
+child.stderr.on('data', (chunk) => { stderr += chunk; });
+
+const exitCode = await new Promise((resolve) => child.on('close', (code) => resolve(code ?? 1)));
+clearTimeout(timer);
+if (carry) consumeLine(carry);
+
+const payload = {
+  schemaVersion: '2.0',
+  scanned,
+  findings,
+  timedOut,
+  durationMs: Date.now() - startedAt,
+};
+
+if (jsonMode) console.log(JSON.stringify(payload, null, 2));
+else renderHuman(payload, repoPath);
+
+if (timedOut) process.exit(2);
+if (exitCode !== 0) {
+  if (!jsonMode) console.error(stderr.trim() || `git log exited ${exitCode}`);
+  process.exit(2);
 }
+process.exit(findings.length ? 1 : 0);
 
-// Get list of commits
-const logArgs = ['log', '--oneline', '--no-merges'];
-if (since) logArgs.push(`--since=${since}`);
-const logOut = run('git', logArgs, repoPath);
-const commits = logOut.split('\n').filter(Boolean).map(l => ({
-  sha: l.slice(0, 7),
-  full: l.slice(0, 40).replace(/\s.*$/, ''),
-  msg: l.slice(8).trim(),
-}));
+function consumeLine(line) {
+  if (line.startsWith('__PG_COMMIT__')) {
+    const [sha = '', date = '', ...message] = line.slice('__PG_COMMIT__'.length).split('\t');
+    currentCommit = { sha: sha.slice(0, 7), date, msg: message.join('\t') };
+    scanned += 1;
+    if (!jsonMode && scanned % 500 === 0) process.stderr.write(`  scanned ${scanned} commits...\n`);
+    return;
+  }
+  if (line.startsWith('diff --git ')) {
+    currentFile = line.match(/ b\/(.+)$/)?.[1] || '';
+    return;
+  }
+  if (!line.startsWith('+') || line.startsWith('+++')) return;
+  if (!currentFile || SKIP_PATHS.some((pattern) => pattern.test(currentFile))) return;
 
-if (commits.length === 0) {
-  if (jsonMode) { console.log(JSON.stringify({ findings: [], scanned: 0 })); }
-  else console.log('\n✓ No commits to scan.\n');
-  process.exit(0);
-}
-
-// ── Scan each commit's diff ───────────────────────────────────────────────────
-const findings = []; // { sha, msg, date, file, pattern, matches }
-
-process.stderr.write(`Scanning ${commits.length} commit(s) in ${repoPath}...\n`);
-
-for (const commit of commits) {
-  // Get full diff for this commit
-  const diff = run('git', ['show', '--no-color', '-U0', commit.full], repoPath);
-  if (!diff) continue;
-
-  // Get commit date
-  const dateOut = run('git', ['log', '-1', '--format=%ai', commit.full], repoPath).trim();
-  const date = dateOut.slice(0, 10);
-
-  // Parse diff chunks: + lines only (additions)
-  const lines = diff.split('\n');
-  let currentFile = '';
-  for (const line of lines) {
-    if (line.startsWith('diff --git ')) {
-      currentFile = line.match(/b\/(.+)$/)?.[1] ?? '';
-    }
-    if (!line.startsWith('+') || line.startsWith('+++')) continue;
-    if (SKIP_PATTERNS.some(p => p.test(currentFile))) continue;
-
-    const content = line.slice(1);
-    for (const { id, label, regex } of PATTERNS) {
-      regex.lastIndex = 0;
-      const matches = content.match(regex);
-      if (matches) {
-        // Redact matches in output
-        const redacted = matches.map(m => m.slice(0, 8) + '...[REDACTED]');
-        findings.push({ sha: commit.sha, msg: commit.msg, date, file: currentFile, patternId: id, label, count: matches.length, preview: redacted[0] });
-      }
-    }
+  const content = line.slice(1);
+  for (const pattern of PATTERNS) {
+    pattern.regex.lastIndex = 0;
+    for (const match of content.matchAll(pattern.regex)) addFinding(pattern, match[0]);
+  }
+  for (const secret of contextualAwsSecrets(content)) {
+    addFinding({ id: 'aws-secret', label: 'AWS secret access key' }, secret);
+  }
+  for (const secret of supabaseJwtSecrets(content)) {
+    addFinding({ id: 'supabase-service-jwt', label: 'Supabase privileged JWT' }, secret);
   }
 }
 
-// ── Output ────────────────────────────────────────────────────────────────────
-if (jsonMode) {
-  console.log(JSON.stringify({ scanned: commits.length, findings }, null, 2));
-  process.exit(findings.length > 0 ? 1 : 0);
+function contextualAwsSecrets(content) {
+  if (!/(aws[_-]?secret[_-]?access[_-]?key|secretAccessKey)/i.test(content)) return [];
+  const matches = [];
+  const regex = /(?:aws[_-]?secret[_-]?access[_-]?key|secretAccessKey)\s*["']?\s*[:=]\s*["']?([A-Za-z0-9/+=]{40})/gi;
+  for (const match of content.matchAll(regex)) {
+    if (shannonEntropy(match[1]) >= 4.2) matches.push(match[1]);
+  }
+  return matches;
 }
 
-const W = 66;
-function pad(s, w) { const str = String(s ?? ''); return str.length >= w ? str.slice(0, w) : str + ' '.repeat(w - str.length); }
-
-console.log(`\n╔${'═'.repeat(W)}╗`);
-console.log(`║  ${'GIT HISTORY SECRET SCAN'.padEnd(W - 2)}  ║`);
-console.log(`║  ${pad(`${commits.length} commits · ${repoPath.split('/').pop()}`, W - 2)}  ║`);
-console.log(`╠${'═'.repeat(W)}╣`);
-
-if (findings.length === 0) {
-  console.log(`║  ${'✓  No secret patterns found in git history'.padEnd(W - 2)}  ║`);
-} else {
-  // Group by commit
-  const bySha = {};
-  for (const f of findings) {
-    if (!bySha[f.sha]) bySha[f.sha] = { sha: f.sha, date: f.date, msg: f.msg, items: [] };
-    bySha[f.sha].items.push(f);
-  }
-  for (const { sha, date, msg, items } of Object.values(bySha)) {
-    console.log(`║  ${'⛔  ' + sha + '  ' + date + '  ' + msg.slice(0, 30)}`.padEnd(W + 2) + '  ║');
-    for (const item of items) {
-      console.log(`║      ${pad(`[${item.label}] ${item.file.split('/').pop()} — ${item.preview}`, W - 6)}  ║`);
+function supabaseJwtSecrets(content) {
+  const matches = content.match(/eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}/g) || [];
+  return matches.filter((token) => {
+    try {
+      const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'));
+      return payload.role && payload.role !== 'anon';
+    } catch {
+      return false;
     }
+  });
+}
+
+function addFinding(pattern, raw) {
+  const preview = `${raw.slice(0, 8)}...[REDACTED]`;
+  const key = [currentCommit.sha, currentFile, pattern.id, preview].join('|');
+  if (seen.has(key)) return;
+  seen.add(key);
+  findings.push({
+    sha: currentCommit.sha,
+    msg: currentCommit.msg,
+    date: currentCommit.date,
+    file: currentFile,
+    patternId: pattern.id,
+    label: pattern.label,
+    count: 1,
+    preview,
+  });
+}
+
+function shannonEntropy(value) {
+  const counts = new Map();
+  for (const char of value) counts.set(char, (counts.get(char) || 0) + 1);
+  let entropy = 0;
+  for (const count of counts.values()) {
+    const probability = count / value.length;
+    entropy -= probability * Math.log2(probability);
   }
+  return entropy;
 }
 
-console.log(`╠${'═'.repeat(W)}╣`);
-const icon = findings.length === 0 ? '✓' : '⛔';
-console.log(`║  ${pad(`${icon}  ${findings.length} finding(s) across ${commits.length} commit(s)`, W - 2)}  ║`);
-if (findings.length > 0) {
-  console.log(`║  ${pad('  Action: git filter-repo or BFG Repo Cleaner to purge', W - 2)}  ║`);
-  console.log(`║  ${pad('  See: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository', W - 2)}  ║`);
+function positiveInt(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
-console.log(`╚${'═'.repeat(W)}╝\n`);
 
-process.exit(findings.length > 0 ? 1 : 0);
+function renderHuman(result, target) {
+  console.log(`\nGIT HISTORY SECRET SCAN · ${result.scanned} commits · ${result.durationMs}ms`);
+  console.log(`Repository: ${target}`);
+  if (result.timedOut) console.log('⛔ timed out before a complete verdict');
+  else if (!result.findings.length) console.log('✓ no secret patterns found');
+  for (const finding of result.findings) {
+    console.log(`⛔ ${finding.sha} ${finding.date} [${finding.label}] ${finding.file} · ${finding.preview}`);
+  }
+  console.log('');
+}

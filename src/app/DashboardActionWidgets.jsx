@@ -23,7 +23,7 @@ const PushEnableBtn = ({ proStatus }) => {
   if(!FEATURE_FLAGS.pushAlerts) {
     return (
       <div style={{fontSize:10,color:K.yl,fontWeight:600,padding:"4px 10px",background:`${K.yl}10`,border:`1px solid ${K.yl}30`,borderRadius:6}}>
-        ðŸ”” Push beta
+        🔔 Push beta
       </div>
     );
   }
@@ -53,14 +53,14 @@ const PushEnableBtn = ({ proStatus }) => {
         }
       } catch(e) {}
       setState('enabled');
-      if(toast) toast('ðŸ”” Push alerts enabled! Daily briefings + arb alerts incoming.', K.gn);
+      if(toast) toast('🔔 Push alerts enabled! Daily briefings + arb alerts incoming.', K.gn);
     } else {
-      if(toast) toast('Could not subscribe to push â€” try again', K.rd);
+      if(toast) toast('Could not subscribe to push — try again', K.rd);
     }
   };
   return (
     <button onClick={enable} style={{padding:"6px 12px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
-      ðŸ”” Enable Push Alerts
+      🔔 Enable Push Alerts
     </button>
   );
 };
@@ -86,7 +86,7 @@ const QuickAddBet = () => {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <div style={{fontSize:11,fontWeight:700,color:K.dm,textTransform:"uppercase",letterSpacing:"1.5px"}}>Quick Add Bet</div>
         <button onClick={()=>setOpen(o=>!o)} style={{padding:"4px 10px",background:open?K.gn:"transparent",border:`1px solid ${open?K.gn:K.bd2}`,borderRadius:6,color:open?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font}}>
-          {open?"â–² Close":"+ Add Bet"}
+          {open?"▲ Close":"+ Add Bet"}
         </button>
       </div>
       {open&&<div style={{marginTop:12}}>
@@ -104,7 +104,7 @@ const QuickAddBet = () => {
           <label style={S.label}>Notes (optional)</label>
           <input style={S.input} value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Game, promo type, etc."/>
         </div>
-        <button onClick={addBet} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Add to Bet Tracker</button>
+        <button onClick={addBet} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Add to Bet Tracker</button>
       </div>}
     </div>
   );
@@ -130,8 +130,8 @@ const WeeklyGrindReport = () => {
   };
   const copyReport = () => {
     if(!report) return;
-    const bestDay = report.best ? new Date(report.best.date).toLocaleDateString('en-US',{weekday:'short'}) : 'â€”';
-    const text = `ðŸ“Š PromoGrind Weekly Report â€” Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\n${CANONICAL_APP_URL}`;
+    const bestDay = report.best ? new Date(report.best.date).toLocaleDateString('en-US',{weekday:'short'}) : '—';
+    const text = `📊 PromoGrind Weekly Report — Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setCopied(true); setTimeout(()=>setCopied(false),1500);
   };
@@ -147,7 +147,7 @@ const WeeklyGrindReport = () => {
           <div><div style={{fontSize:9,color:K.mt}}>STREAK</div><div style={{fontSize:20,fontWeight:700,color:report.streak>=3?K.gn:K.yl,fontFamily:fontD}}>{report.streak}W</div></div>
         </div>
         <div style={{display:"flex",gap:8}}>
-          <button onClick={copyReport} style={{padding:"6px 14px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{copied?"âœ“ Copied!":"ðŸ“‹ Copy Report"}</button>
+          <button onClick={copyReport} style={{padding:"6px 14px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{copied?"✓ Copied!":"📋 Copy Report"}</button>
           <button onClick={()=>setReport(null)} style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Regenerate</button>
         </div>
       </>}
@@ -189,7 +189,7 @@ const BankrollWizard = () => {
       <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
         <label style={{...S.label,marginBottom:0}}>Bankroll $</label>
         <input style={{...S.input,width:120}} value={bwBankroll} onChange={e=>setBwBankroll(e.target.value)} placeholder="3000"/>
-        <button onClick={recalc} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Recalculate</button>
+        <button onClick={recalc} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Recalculate</button>
       </div>
       <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
         {BOOKS.map(b=>(
@@ -246,9 +246,9 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
     const booksComplete=Object.values(data.done||{}).filter(Boolean).length;
     const totalProfit=(data.ledger||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
     const card=[
-      "ðŸ’° PromoGrind Setup",
-      `State: ${data.userState||"Not set"} Â· Bankroll: ${bankroll?"$"+bankroll:"Not set"}`,
-      `Books done: ${booksComplete}/${BOOKS.length} Â· Total profit: $${f(totalProfit)}`,
+      "💰 PromoGrind Setup",
+      `State: ${data.userState||"Not set"} · Bankroll: ${bankroll?"$"+bankroll:"Not set"}`,
+      `Books done: ${booksComplete}/${BOOKS.length} · Total profit: $${f(totalProfit)}`,
       CANONICAL_APP_URL.replace(/^https?:\/\//,''),
     ].join('\n');
     try{navigator.clipboard.writeText(card);}catch(e){}
@@ -266,8 +266,8 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
         <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Share My Setup</div>
         <div style={{display:"flex",gap:8,marginBottom:8}}>
           <input style={{...S.input,flex:1}} value={bankroll} onChange={e=>{setBankroll(e.target.value);try{localStorage.setItem('pg_bankroll',e.target.value);}catch{}}} placeholder="Your bankroll $"/>
-          <button onClick={copyLink} style={{padding:"7px 14px",background:copied?K.gn:K.ac,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"âœ“ Copied!":"Copy Setup Link"}</button>
-          <button onClick={shareCard} style={{padding:"7px 14px",background:cardCopied?K.gn:K.pp,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{cardCopied?"âœ“ Copied!":"Share Card"}</button>
+          <button onClick={copyLink} style={{padding:"7px 14px",background:copied?K.gn:K.ac,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Setup Link"}</button>
+          <button onClick={shareCard} style={{padding:"7px 14px",background:cardCopied?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{cardCopied?"✓ Copied!":"Share Card"}</button>
         </div>
         <div style={{fontSize:10,color:K.mt}}>Shares your state, completed books, and bankroll. Anyone with the link can load your setup.</div>
       </div>
@@ -281,7 +281,7 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
               Bankroll: <strong style={{color:K.tx}}>{modalData.bankroll?"$"+modalData.bankroll:"Not set"}</strong>
             </div>
             <div style={{display:"flex",gap:8}}>
-              <button onClick={loadSetup} style={{flex:1,padding:"9px",background:K.gn,border:"none",borderRadius:6,color:K.bg,fontWeight:700,cursor:"pointer",fontFamily:font}}>Load Setup</button>
+              <button onClick={loadSetup} style={{flex:1,padding:"9px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font}}>Load Setup</button>
               <button onClick={()=>setShowModal(false)} style={{flex:1,padding:"9px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,cursor:"pointer",fontFamily:font}}>Cancel</button>
             </div>
           </div>

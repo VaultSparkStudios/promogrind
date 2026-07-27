@@ -9,6 +9,8 @@ import { scanShellNodeSpawns } from './check-windows-hide.mjs';
 import { buildHeuristicContextMeter, loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
 import { renderOrchestratorBlock, renderPortfolioTaskBoardsBlock } from './lib/startup-orchestrator-blocks.mjs';
 import { renderExecutionPlanBlock, renderMomentumMeterBlock } from './lib/startup-summary-blocks.mjs';
+import { buildExternalLaunchProofLedger, renderLedgerMd } from './render-external-launch-proof-ledger.mjs';
+import { buildCloseoutGeniusHint } from './lib/closeout-genius-hint.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const json = process.argv.includes('--json');
@@ -56,6 +58,28 @@ run('genius cache refresh keeps JSON and Markdown surfaces coherent', () => {
   assert.ok(doc.includes(`IGNIS source: **${list.ignisSource || 'fallback'}**`), 'Markdown source matches cached list');
 });
 
+run('closeout board distinguishes exhausted genius work from a missing cache', () => {
+  assert.deepEqual(buildCloseoutGeniusHint(null), { state: 'missing' });
+  assert.deepEqual(buildCloseoutGeniusHint({ list: { ranked: [] } }), { state: 'exhausted' });
+  assert.deepEqual(
+    buildCloseoutGeniusHint({ list: { ranked: [{ id: 'next-root-fix', title: 'Next root fix' }] } }),
+    { state: 'item', title: 'Next root fix', rationale: '', cmd: null },
+  );
+});
+
+run('browser launch validation mirror matches canonical project status', () => {
+  const mirror = spawnSync(process.execPath, ['scripts/generate-project-status-mirror.mjs', '--check'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  assert.equal(mirror.status, 0, mirror.stderr || mirror.stdout);
+  const source = JSON.parse(fs.readFileSync(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), 'utf8'));
+  const generated = fs.readFileSync(path.join(ROOT, 'src', 'data', 'projectStatus.generated.js'), 'utf8');
+  assert.ok(generated.includes(`${source.testsPassing}/${source.testsTotal} passing`));
+  assert.ok(!generated.includes('380/380 passing'));
+});
+
 run('startup context meter normalizes live ledger payload', () => {
   const meter = loadStartupContextMeter({
     root: ROOT,
@@ -95,7 +119,7 @@ run('startup context meter fallback is deterministic', () => {
     });
     assert.equal(meter.live, false);
     assert.equal(meter.usedTokens, 100);
-    assert.equal(meter.pctUsed, 0.1);
+    assert.equal(meter.pctUsed, 10);
     assert.equal(meter.recommendation, 'CONTINUE');
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -126,6 +150,45 @@ run('startup context meter block renders normalized live payload', () => {
   assert.ok(rows.some((line) => line.includes('12,345 / 1,000,000 tok')));
   assert.ok(rows.some((line) => line.includes('cache 50%')));
   assert.ok(rows.some((line) => line.includes('Verdict: CONTINUE')));
+});
+
+run('startup context meter preserves sub-one-percent live readings', () => {
+  const block = renderStartupContextMeterBlock({
+    live: true,
+    usedTokens: 5000,
+    limit: 1000000,
+    pctUsed: 0.5,
+    recommendation: 'CONTINUE',
+    confidence: 'measured',
+    agent: 'codex',
+  }, {
+    top: (title) => `[${title}]`,
+    row: (line) => line,
+    bot: () => '[/]',
+  });
+  assert.match(block, /\s1% used/);
+  assert.doesNotMatch(block, /50% used/);
+});
+
+run('repo-local generators preserve PromoGrind scope without a private registry', () => {
+  const genius = spawnSync(process.execPath, ['scripts/generate-genius-list.mjs', '--json', '--local-only', '--no-cross-repo'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  assert.equal(genius.status, 0, genius.stderr || genius.stdout);
+  const geniusPayload = JSON.parse(genius.stdout);
+  assert.equal(geniusPayload.projectScoped, true);
+  assert.equal(geniusPayload.project?.slug, 'promogrind');
+
+  const intent = spawnSync(process.execPath, ['scripts/render-session-intent-plan.mjs', '--json', '--intent', 'Improve PromoGrind launch truth'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  assert.equal(intent.status, 0, intent.stderr || intent.stdout);
+  const intentPayload = JSON.parse(intent.stdout);
+  assert.deepEqual(intentPayload.repos, ['promogrind']);
 });
 
 run('startup orchestrator block summarizes live coordination state', () => {
@@ -200,6 +263,40 @@ run('startup momentum block preserves velocity and cache signals', () => {
   assert.ok(block.includes('Cache hit:  75%'));
   assert.ok(block.includes('Weekly spend: $0.10'));
 });
+run('external launch proof ledger preserves pending proof blockers', () => {
+  const ledger = buildExternalLaunchProofLedger({
+    status: {
+      name: 'PromoGrind',
+      currentSession: 113,
+      liveUrl: 'https://promogrind.bet',
+      blockers: [
+        'Run real production auth email smoke with npm run smoke:auth-email -- --record.',
+        'Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path.',
+        'Wire the real browser-safe Supabase anon key into the production capture page/deploy config.',
+      ],
+    },
+    launchProofs: {
+      proofs: {
+        authEmailSmoke: {
+          label: 'Production auth email smoke',
+          status: 'pending',
+          blocking: true,
+          requiredFor: ['soft-launch'],
+          evidenceRequired: ['confirmation email delivered'],
+          evidence: [],
+          nextStep: 'Run auth email smoke.',
+        },
+      },
+    },
+  });
+
+  assert.equal(ledger.blockersOpen, 3);
+  assert.equal(ledger.launchProofsBlocking, 1);
+  assert.equal(ledger.blockerRows[0].category, 'auth-email');
+  const md = renderLedgerMd(ledger);
+  assert.ok(md.includes('Production auth email smoke'));
+  assert.ok(md.includes('Do not paste secrets'));
+});
 const summary = {
   ok: results.every(r => r.pass),
   passing: results.filter(r => r.pass).length,
@@ -224,4 +321,3 @@ function run(name, fn) {
     results.push({ name, pass: false, detail: error.message });
   }
 }
-

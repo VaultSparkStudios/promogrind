@@ -1,5 +1,31 @@
 # Work Log
 
+## 2026-07-25 — Session 119 Codex saturated goal arc
+
+- Ran the complete continuous `/start → /audit → /implement → second-order expansion → /closeout` mission; pulled `origin/main` first, verified every audit premise live, and exhausted four primary plus four generated second-order items.
+- Shipped provenance-aware startup signals, a two-second streaming history scanner, criterion-level proof quorums, and a five-target capability truth plane.
+- Created and authenticated the exact Brevo sender domain, applied four provider-returned DNS records, and recorded only the verified SPF/DKIM criterion (1/3); forwarding and mailbox delivery remain unclaimed.
+- Shipped browser quorum self-validation, six-hour capability receipt decay, fail-closed capture config injection, and a closeout autopilot whose local date, no-prompt path, staged scan, safe staging, push ledger, and exit code now agree.
+- Verification: 590/590 Vitest, 47 standalone invariant assertions, and `npm run verify:launch-local` direct exit 0.
+- Ark remediation request `01JUE23NQ1EEF6010874B09F97` covers exact Cloudflare scope, historical privileged-token rotation, and stale control-plane release/cost truth without exposing credentials.
+- Deploy proof: commit `c718c24`; brief-format `30194498456`, CI `30194498448`, and Deploy Pages `30194498469` passed. Live capability probe rose to 4/5 READY and capture configuration earned criterion 1/3; six edge headers remain absent.
+
+
+## 2026-07-23 - Session 115 saturated Codex arc
+
+- Ran the complete continuous `/start → /audit → /implement → /closeout` mission; verified six primary premises against live code, rejected four phantom/duplicate ideas as wins, and shipped all six valid items.
+- Shipped authenticated atomic lifetime-aware AI quotas, UTF-8 repair/gating, sober-claims enforcement, truthful repo/context scope, a canonical browser launch-status mirror, and current IGNIS/revenue intelligence.
+- Generated and shipped four second-order improvements: central AI entitlements, provider-perimeter auto-discovery, a trust-approved pinned SDK/Deno contract, and a zero-known-vulnerability lock.
+- Verification: exact-lockfile Vitest 559/559 across 68 files after the production-probe regressions; script regressions 14/14; five edge functions Deno-check; full launch-local direct exit 0; supply-chain scan 0 blocks; npm audit 0.
+- Honest deferrals: Supabase deploy capability remains missing; production email/Stripe/friend/Brevo/capture proofs and visual screenshot matrix remain unclaimed.
+- Ark: shipped `01JU85UQ71086118EE17EF4AF2` for the Studio-owned cost registry/Supabase capability and `01JU85UQC49A8695ED64145316` for upstream CANON-044 propagation; no sibling tree was edited.
+- Pushed S115 direct to `main` (`82b7572`), then diagnosed Deploy Pages run `30037388087`: deployment/dashboard smoke succeeded but the synthetic signup probe had exhausted shared confirmation-email quota and serialized its Auth error as `{}`.
+- Root-fixed the monitor in `520efd7`: public signup now uses an admin-confirmed disposable identity without sending mail, cleanup runs in `finally`, provider diagnostics are bounded, and Stripe checkout URLs/session IDs cannot enter CI artifacts; four regression tests cover the safety contract.
+- Remote verification: CI `30041235301` passed and Deploy Pages `30041234889` passed. Downloaded artifact: 0 blocking failures, signup/sign-in/checkout/portal/cleanup green; production dashboard smoke green with no failures. Affiliate coverage remains one explicit non-blocking advisory.
+- Final audit caught newly published React Router open-redirect/SSR findings after the earlier zero-vulnerability scan. `react-router-dom@7.18.0` passed package trust plus registry provenance/integrity/engine/peer checks; the major migration retained 559/559 tests and the full launch gate, and the final 236-package lock reports 0 vulnerabilities and 0 supply-chain blocks.
+- Final implementation proof: commit `be58dfe` reached `origin/main`; brief `30053484333`, CI `30053484341`, and Deploy Pages `30053484335` passed. Its downloaded artifact reports 0 blocking failures, corrected required-monetization wording, successful disposable-user cleanup, and production dashboard `failures: []`.
+- Closeout-board truth ratchet: fixed the renderer so a fresh `ranked: []` genius cache reports “Unified Genius List exhausted” instead of the false “no genius cache”; Studio script regressions now pass 15/15.
+
 Append chronological entries.
 
 ### YYYY-MM-DD - Session title
@@ -497,3 +523,59 @@ Append chronological entries.
 - Dispatched Deploy Pages run `28537523792` on `main`; it deployed head `01a4f85` successfully.
 - Deploy artifact: deploy health PASS, 15 checks passed, 0 blocking failures, production dashboard smoke PASS with `failures: []`.
 - Remaining advisory gap is affiliate coverage (`affiliate_coverage`: 0 books), which is non-blocking and still requires real external monetization/affiliate evidence.
+
+## 2026-07-01 - Session 113 full arc (fresh audit + saturation)
+
+- Ran /arc as one continuous mission with the genius list empty at start: profiled the repo (app · public-unlaunched · product rubric · direct-to-main with local staging verify), triaged NOT-cut-off, generated a fresh 7-item audit with every premise verified against live code.
+- Shipped all 7 audit items: public-repo hygiene (`7a0d755`), edge-decay heatmap wiring (`36a5d48`), operator data vault (`b7784ef`), Operator Command Deck (`86dd486`), calculator a11y pass (`0c87b41`), dashboard memoization (`6af89c6`), component render tests (`35d1f96`).
+- Second-order wave: ProfilePanel decomposition + export file download (`1059df2`), vault L3 pre-restore safety snapshot + undo (`a0b4221`).
+- Root-fixed a real observability lie: data exports silently omitted `promo_engine_v3` because the inventory tracked phantom keys; the vault now mirrors the real key surface with entitlement/attribution/queue keys deliberately excluded.
+- Honest rejections recorded: command palette (already exists at App.jsx:156), enable-feature-flags (deliberate launch gating). Calculator a11y premise demoted with evidence.
+- Verification: 549/549 tests across 66 files; `verify:launch-local` green with directly captured exit 0; innovation pack clean (0 large files / 0 TODO / 0 shell violations); external proof gates remain honest deferrals.
+
+## 2026-07-02 - Session 114 Codex arc + proof-ledger closeout
+
+- Ran the requested `/arc` continuation through startup, audit, implementation, verification, and closeout write-back preparation.
+- Startup/cutoff triage: no lock, clean tree, `origin/main...HEAD` was `0 0`; repo-local `PROJECT_STATUS.json` was used over the registry mismatch, so PromoGrind was treated as a public-unlaunched app with local staging verification.
+- Audit: primary genius list regenerated to 0 items; innovation pack produced one repo-owned item, `external-launch-proof-ledger`, from six real-world proof deferrals.
+- Shipped: deterministic external launch proof ledger renderer/checker, ops release command, generated `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md`, S114 audit/implement artifacts, and regression coverage.
+- Verification: `launch-proof-ledger --check` fresh, script regressions 11/11, syntax check green, `npm test` 549/549, `npm run verify:launch-local` green with directly captured exit 0, doctor 12/12 blockingFailing 0, windows-hide green.
+- Release truth: `node scripts/ops.mjs launch-ready --project promogrind --json` remains `PARTIAL` because Stripe/auth/friend-beta proofs are external; no proof was fabricated.
+
+## 2026-07-02 - Session 114 deploy verification
+
+- Pushed S114 implementation/closeout commit `81e6858` to `origin/main`.
+- GitHub Actions: `brief-format-check` run `28620695606` succeeded; `CI` run `28620695607` succeeded.
+- Manually dispatched `Deploy Pages` run `28620744679` on `main`; it deployed head `81e6858` successfully with production launch verification and production dashboard smoke passing.
+- Local production dashboard smoke against `https://promogrind.bet/dashboard` returned `ok: true` with `failures: []`.
+- Final closeout proof commit will be pushed and manually dispatched so latest `main` is deployed as requested.
+
+## 2026-07-23 — Session 116 Codex saturated goal arc
+
+- Ran `/goal` + `/arc` continuously through `/start → /audit → /implement → second-order expansion → /closeout`; initial pull was current, context meter remained CONTINUE, and prior-session triage found no interrupted work.
+- Rejected the apparent cost-bleeder premise at repo scope: S115 code and direct integrity checks prove trial-ceiling/auth/quota work is shipped; the remaining Studio Ops registry mismatch stays Ark-owned.
+- Shipped four audit items: SIL forecast format tolerance/completeness, total external-proof mapping, manifest-derived bundle graph budgets, and persisted counterfactual Advisor receipts.
+- Shipped two second-order refinements: pre-Sentry boot exception buffering and receipt-contract cache versioning.
+- Verification: focused Vitest 19/19; Advisor Deno 10/10; full suite 568/568 across 72 files; `npm run verify:launch-local` direct exit 0; initial bundle 179.1KB raw/60.0KB gzip; largest async 482.1KB raw/159.2KB gzip.
+- Honest deferral: six typed external proofs remain pending; no email, purchase, tester, Brevo, deployment, capture, or sibling-registry evidence was invented.
+
+- 2026-07-24 · S117 · Full /arc shipped 6/6 audit items; 582/582 tests and launch-local green; live edge headers/manual theme evidence remain explicitly pending.
+
+- 2026-07-24 · S117 deploy proof · 551f256: brief 30082118132, CI 30082118152, Pages 30082118153 green; standard files 6/6 live, six edge headers still absent.
+
+## 2026-07-24 — Session 118 Codex saturated goal arc
+
+- Ran the requested `/goal` + `/arc` continuously through `/start → /audit → /implement → second-order expansion → /closeout`; initial pull was current, context meter remained CONTINUE, blocker preflight was clear, and canon conformance reported 0 gaps.
+- Verified and shipped three live-code audit items: evidence-aware promo command plane, semantic theme contrast contract, and single-source launch blockers.
+- Shipped three second-order innovations: verification-first operating mode, semantic accent ink, and a self-preserving innovation ledger discovered during the final saturation check.
+- Verification: 588/588 tests across 75 files; `npm run verify:launch-local` direct exit 0; source/claims/AI-entitlement/auth/launch/UX/browser/bundle/proof/sanitization gates green.
+- Release parity: captured and hashed four desktop/mobile dark/light screenshots; runtime computed-style contrast found zero failures in both themes. AI pixel inspection remained explicitly partial because the connected viewer failed.
+- Honest deferral: six production edge headers and the established external production proofs remain pending; Cloudflare zone/TLS state was probed, but no unverified ruleset mutation or fabricated proof was used.
+- Ark closeout: session impact broadcast `01JUDI3T9K3C970BE1CCD58752`; shared lock-writer defect routed to Studio Ops as repo-question `01JUDI42TL8FD77A64F740A2A4`.
+
+## 2026-07-25 — Session 118 deploy proof
+
+- Pushed implementation/closeout head `1914e24` directly to `origin/main`; remote parity was `0 0`.
+- GitHub Actions passed: brief-format `30175588383`, CI `30175588392`, and Deploy Pages `30175588407`.
+- Deploy workflow production launch verification and production dashboard smoke both passed; the failure step was skipped because verification was green.
+- Release-state promotion remains NO-GO because six live response headers and established external proofs remain pending.

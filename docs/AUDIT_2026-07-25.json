@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-07-25",
+  "session": 119,
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched"
+  },
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "infrastructure-first public-app hybrid",
+  "successBar": [
+    "Each item must protect or reduce time-to-first-value",
+    "Every observability claim must carry source, target, freshness, and verification state",
+    "External proof must fail closed without fabricated completion"
+  ],
+  "axisWeights": {
+    "featureDepth": 1.5,
+    "innovation": 1.0,
+    "ux": 2.0,
+    "feedbackLoop": 1.0,
+    "engagement": 1.0,
+    "aiIntegration": 1.5,
+    "security": 1.5,
+    "speedOrganization": 2.0,
+    "tokenApiReduction": 2.0
+  },
+  "premiseVerification": {
+    "liveValidation": "S119: origin/main synchronized before work; context meter CONTINUE; canon conformance 0 gaps; last five GitHub Actions runs green; current genius cache regenerated to a genuine 0-item list.",
+    "releasePosture": "NO-GO for SPARKED. Footer and branding pass; all six public standard files resolve; production still omits six required response headers. Cloudflare DNS is proxied, but every available zone-settings/studio credential returns 403 on Transform Rules. The control-plane cost gate is stale-red despite the repo's verified atomic trial ceiling and must be corrected through Ark, never by editing the sibling tree.",
+    "capabilityEvidence": "Authoritative discovery reports cloudflare, cloudflare.dns, supabase.admin, brevo, and stripe.checkout present. Live probes distinguish that from usable scope: Cloudflare DNS probe is HTTP 200 but Transform Rules are 403; Supabase admin probe is HTTP 401; Brevo has no canonical probe; the local public-repo probe incorrectly skips because secrets/CAPABILITY_MAP.json is intentionally absent.",
+    "visual": "Canonical responsive audit explicitly skipped because Playwright is absent. In-app browser startup then failed at the Windows credential-protection boundary before interaction. No visual pass is claimed; existing CDP/local launch gates remain the deterministic fallback.",
+    "infrastructureSweep": "Four workflows are active and recently green; stale-script age alone was rejected because the public repo carries propagated protocol tooling. Live parser review found duplication but no present parse divergence. Files above 500 lines were rejected absent a failing responsibility boundary. The full-history secret scanner timed out twice and the bounded run emitted lockfile/test false positives, proving a real security-tool defect.",
+    "sample": "Manual fallback sampled 18 live code/config surfaces under the 20-file audit cap after scripts/sample-codebase.mjs was absent."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "id": 1,
+      "slug": "target-bound-capability-truth-plane",
+      "title": "Turn launch credentials into target-bound, scope-verified capabilities",
+      "tier": "fire",
+      "axis": "security / speed / observability / token reduction",
+      "status": "complete",
+      "impact": 10,
+      "innovation": 9,
+      "effortHours": 6,
+      "priority": 30.0,
+      "evidence": "The repo says Brevo and PromoGrind Supabase deploy are missing; authoritative discovery says generic capabilities are READY; live calls prove Cloudflare Transform Rules are 403 and generic Supabase admin is 401. Local probe-capability skips every check because the intentionally public repo lacks secrets/CAPABILITY_MAP.json. Presence is being conflated with target identity, authentication, and required scope.",
+      "recipe": "Build a public-safe launch capability contract whose checks resolve only through the control-plane secrets gateway, bind every capability to its intended project/domain, and report missing/present/authenticated/authorized as distinct states. Add read-only probes for Cloudflare response-header rules, Brevo sender-domain authentication, PromoGrind Supabase project access, Stripe account mode, and browser-safe capture configuration. Emit a redacted JSON receipt consumed by launch-local and the external proof ledger; never print keys or treat presence as readiness.",
+      "timeToFirstValue": "The next agent sees exactly which launch action is executable and why within one command instead of repeating ambiguous credential archaeology.",
+      "execution": "Shipped a five-target read-only truth plane with missing/present/authenticated/authorized states, redacted cache receipt, six-hour freshness ratchet, external-ledger integration, and 11 deterministic assertions. Created and authenticated the exact Brevo domain with four provider-returned DNS records. After commit c718c24 deployed, the live probe reached 4/5 READY: Brevo, PromoGrind Supabase, live Stripe, and capture configuration; Cloudflare remains authenticated but Transform Rules scope denied.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Add target metadata and tri-state read-only checks for the five current capabilities." },
+        "L2": { "effortHours": 4, "recipe": "L1 plus redacted JSON receipts, deterministic fixtures, and launch-ledger integration." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus scope-specific HTTP probes, freshness/target invariants, and Ark-ready remediation payloads for control-plane gaps." }
+      }
+    },
+    {
+      "rank": 2,
+      "id": 2,
+      "slug": "launch-proof-evidence-quorum",
+      "title": "Make launch proof completion require a criterion-level evidence quorum",
+      "tier": "fire",
+      "axis": "feature depth / feedback loop / security / release UX",
+      "status": "complete",
+      "impact": 10,
+      "innovation": 9,
+      "effortHours": 5,
+      "priority": 32.06,
+      "evidence": "LAUNCH_PROOFS lists 3–8 evidenceRequired criteria per proof, but update-launch-proof can mark any proof complete from one arbitrary evidence string. Proof-specific runners flip status after self-reported yes answers, while the generated ledger counts evidence objects rather than satisfied criteria, so a complete proof can render 1/6. The truth surface cannot currently prove its own completion claim.",
+      "recipe": "Version the launch-proof schema with stable criterion IDs and typed receipts. Derive status from criterion coverage instead of writing status directly; require each receipt to name criterion, source, target, observedAt, redacted evidence, and verifier; reject unknown criteria, duplicates, stale targets, unsafe payloads, and manual generic completion. Migrate existing evidence honestly, update all three proof runners and ledger counts, and add adversarial tests proving incomplete or fabricated receipts cannot produce complete.",
+      "timeToFirstValue": "Operators immediately know which exact proof step remains, and completion becomes a trustworthy decision signal rather than a prose toggle.",
+      "execution": "Migrated seven proofs to schema 2 criterion IDs and typed receipts; removed direct status writes; updated auth, Stripe, and friend runners; derived ledger counts/status from quorum; rejected unsafe/unknown/stale-target receipts; and added 12 adversarial assertions plus browser-side independent quorum validation.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Add criterion IDs and derive status from explicit satisfied criteria." },
+        "L2": { "effortHours": 3, "recipe": "L1 plus typed receipt validation and migrate the proof runners/ledger." },
+        "L3": { "effortHours": 5, "recipe": "L2 plus freshness/target/verifier invariants, safe migration, adversarial tests, and generated blocker reconciliation." }
+      }
+    },
+    {
+      "rank": 3,
+      "id": 3,
+      "slug": "startup-brief-provenance-lattice",
+      "title": "Make every startup signal declare provenance, availability, and semantic state",
+      "tier": "fire",
+      "axis": "observability / UX / speed / organization",
+      "status": "complete",
+      "impact": 8,
+      "innovation": 8,
+      "effortHours": 4,
+      "priority": 24.76,
+      "evidence": "The canonical startup brief identifies PromoGrind as a tool although PROJECT_STATUS and arc-profile say app, renders a single 0/0 compliance snapshot as a red failure, reports Ark 0 after draining 169 cargo, and presents absent local portfolio snapshots as zero workers rather than unavailable. render-startup-brief trusts a stale medium-only cache and collapses unavailable, empty, skipped, failing, and stale into misleading values.",
+      "recipe": "Introduce a compact signal-state lattice (pass/warn/fail/empty/unavailable/skipped/stale) and source precedence contract. Project identity must come from PROJECT_STATUS with cache metadata only as enrichment; 0/0 compliance is unavailable rather than 0%; absent portfolio surfaces render public-shim unavailable instead of zero; Ark count must use the drained local receipt/cache source when portfolio logs are absent. Add golden tests for all states and regenerate the brief.",
+      "timeToFirstValue": "The first 30 seconds of every session become trustworthy, eliminating false alarms and false emptiness before work begins.",
+      "execution": "Added the reusable signal-state lattice, corrected PROJECT_STATUS identity precedence and 0/0 compliance semantics, rendered absent portfolio sources as unavailable, bound Ark to the actual 169-item drain receipt, and passed eight focused assertions plus all startup brief format/golden checks.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Correct project identity precedence and 0/0 compliance semantics." },
+        "L2": { "effortHours": 2.5, "recipe": "L1 plus public-shim availability states for orchestrator and Ark signals." },
+        "L3": { "effortHours": 4, "recipe": "L2 plus reusable signal-state helpers, provenance annotations, and golden regression coverage." }
+      }
+    },
+    {
+      "rank": 4,
+      "id": 4,
+      "slug": "streaming-secret-archaeology",
+      "title": "Make full-history secret scanning bounded, streaming, and precision-aware",
+      "tier": "high",
+      "axis": "security / speed / automation",
+      "status": "complete",
+      "impact": 8,
+      "innovation": 7,
+      "effortHours": 3,
+      "priority": 24.12,
+      "evidence": "scan-git-history spawns git show and git log once per commit, buffering up to 50MB each time. It exceeded 60s and 180s without completing. A July-only scan then flagged package-lock integrity fragments and ordinary test text as AWS secrets because the broad 40-character base64 regex has neither entropy/context validation nor lockfile handling. The webhook-rotation premise cannot be independently verified by this tool.",
+      "recipe": "Replace O(commits) subprocess fan-out with one bounded git log --format/--patch stream, parse commit/file/date markers in-process, deduplicate findings, exclude known lockfile integrity fields, and require contextual key labels plus entropy for generic 40-character candidates. Add fixture-based true/false positives, progress and timeout controls, JSON schema stability, then run the full history scan directly and classify every residual finding.",
+      "timeToFirstValue": "A security-sensitive closeout gets a fast, credible answer instead of hanging or flooding the operator with false alarms.",
+      "execution": "Replaced per-commit subprocess fan-out with one bounded streaming git patch, contextual JWT/AWS detection, lockfile noise rejection, stable schema 2 JSON, timeout/progress controls, and ten fixture assertions. Full 314-commit scan completes in about two seconds and isolates one real historical privileged Supabase JWT for rotation rather than prior false-positive floods.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Collapse scanning to one git stream and skip lockfile integrity hashes." },
+        "L2": { "effortHours": 2, "recipe": "L1 plus context/entropy validation and deterministic fixtures." },
+        "L3": { "effortHours": 3, "recipe": "L2 plus bounded progress, dedupe, schema contract, and a verified full-history run." }
+      }
+    }
+  ],
+  "innovationReserve": [
+    "target-bound-capability-truth-plane",
+    "launch-proof-evidence-quorum",
+    "startup-brief-provenance-lattice",
+    "streaming-secret-archaeology"
+  ],
+  "skipped": [
+    { "slug": "upgrade-every-outdated-package", "reason": "Rejected on live verification: only patch/minor updates are wanted and Dependabot plus auto-merge already own that path; major React/Vite upgrades require a separate migration premise, not freshness theater." },
+    { "slug": "decompose-every-file-over-500-lines", "reason": "Rejected as metric-only: 13 files exceed 500 lines, but no failing responsibility, performance, or test-isolation boundary was demonstrated during the capped audit." },
+    { "slug": "add-client-side-security-headers", "reason": "Rejected as technically false: browser code and tracked GitHub Pages _headers cannot repair delivered response headers. The proxied edge needs Zone Transform Rules scope, which every current credential probe returns 403 for." },
+    { "slug": "rewrite-all-stale-propagated-scripts", "reason": "Rejected as a false age premise: most >90-day scripts are public-repo protocol shims or stable one-shot migrations; age alone is not debt. Only the scanner with reproduced timeouts survived." },
+    { "slug": "consolidate-all-task-board-parsers", "reason": "Rejected for now: duplicate parsers exist, but the live genius cache correctly regenerated to zero and no divergent parse result was reproduced." }
+  ],
+  "totals": {
+    "count": 4,
+    "priority": 110.94,
+    "top3": [
+      "Make launch proof completion require a criterion-level evidence quorum",
+      "Turn launch credentials into target-bound, scope-verified capabilities",
+      "Make every startup signal declare provenance, availability, and semantic state"
+    ]
+  },
+  "sample": {
+    "picked": 18,
+    "scanned": 545,
+    "tokens": 30000
+  },
+  "notes": "Infrastructure-first rubric requested by the founder, merged with the public-app release lens and audit personalization weights. No item reverses recent decisions or treats external proof as local completion."
+}

@@ -1,170 +1,107 @@
-// Promo provenance receipts (S92 audit #9).
+// Local promo integrity chain (v2).
 //
-// Every settled promo emits a tamper-evident receipt that links:
-//   promo terms snapshot → user decision → execution proof → settle
-//   outcome → P&L. Receipts chain via previousReceiptHash so any
-//   middle-edit breaks the chain.
-//
-// Signed with the same HMAC infrastructure as operatorPassport so a
-// public verifier can confirm authenticity without learning anything
-// private about the operator.
+// This chain detects accidental edits and broken linkage in the current local
+// ledger. It is self-attested: browser code has no private signing authority,
+// so the receipt must never be described as independent authenticity proof.
 
-const RECEIPT_LEDGER_KEY = "pg_promo_provenance_ledger";
-const PROVENANCE_VERSION = 1;
-const PROVENANCE_KEY_ID = "pg-provenance-v1";
+const RECEIPT_LEDGER_KEY = "pg_promo_integrity_ledger_v2";
+const PROVENANCE_VERSION = 2;
+const DOMAIN = "promogrind-local-integrity-v2:";
 
 function b64urlEncode(bytes) {
-  let s = "";
-  for (const b of bytes) s += String.fromCharCode(b);
-  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  let value = "";
+  for (const byte of bytes) value += String.fromCharCode(byte);
+  return btoa(value).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
-function b64urlDecode(str) {
-  const padded = str.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((str.length + 3) % 4);
-  const bin = atob(padded);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return bytes;
-}
-
-async function importKey(secret) {
+async function digest(value) {
   const subtle = globalThis.crypto?.subtle;
   if (!subtle) throw new Error("WebCrypto unavailable");
-  return subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
-}
-
-async function hashPayload(data) {
-  const subtle = globalThis.crypto?.subtle;
-  if (!subtle) throw new Error("WebCrypto unavailable");
-  const digest = await subtle.digest("SHA-256", new TextEncoder().encode(data));
-  return b64urlEncode(new Uint8Array(digest));
-}
-
-async function signString(secret, data) {
-  const key = await importKey(secret);
-  const sig = await globalThis.crypto.subtle.sign("HMAC", key, new TextEncoder().encode(data));
-  return b64urlEncode(new Uint8Array(sig));
-}
-
-async function verifyString(secret, data, signature) {
-  const key = await importKey(secret);
-  const sig = b64urlDecode(signature);
-  return globalThis.crypto.subtle.verify("HMAC", key, sig, new TextEncoder().encode(data));
+  const bytes = await subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return b64urlEncode(new Uint8Array(bytes));
 }
 
 function readChain(storage) {
   try {
-    return JSON.parse((storage || globalThis.localStorage).getItem(RECEIPT_LEDGER_KEY) || "[]") || [];
+    const value = JSON.parse((storage || globalThis.localStorage).getItem(RECEIPT_LEDGER_KEY) || "[]");
+    return Array.isArray(value) ? value : [];
   } catch {
     return [];
   }
 }
 
 function writeChain(storage, chain) {
-  try {
-    (storage || globalThis.localStorage).setItem(RECEIPT_LEDGER_KEY, JSON.stringify(chain.slice(-500)));
-  } catch {
-    // ignore
-  }
+  try { (storage || globalThis.localStorage).setItem(RECEIPT_LEDGER_KEY, JSON.stringify(chain.slice(-500))); } catch {}
 }
 
-// Zero-PII payload — strip any identifier the operator hasn't opted to share.
-function buildPayload(receipt, prevHash, now) {
+function buildPayload(receipt, previousReceiptHash, now) {
   return {
     version: PROVENANCE_VERSION,
-    occurredAt: receipt.occurredAt || now,
+    attestation: "self-attested",
+    occurredAt: receipt.occurredAt || new Date(now).toISOString(),
     book: receipt.book || null,
     promoType: receipt.promoType || null,
     termsHash: receipt.termsHash || null,
-    decision: receipt.decision || null,        // 'executed' | 'skipped'
+    decision: receipt.decision || null,
     stake: Number.isFinite(Number.parseFloat(receipt.stake)) ? Number.parseFloat(receipt.stake) : null,
     settledProfit: Number.isFinite(Number.parseFloat(receipt.settledProfit)) ? Number.parseFloat(receipt.settledProfit) : null,
-    previousReceiptHash: prevHash,
+    previousReceiptHash,
   };
 }
 
 const PRIVATE_FIELDS = ["email", "name", "userId", "phone", "address", "ssn"];
-
 function assertZeroPii(payload) {
   const json = JSON.stringify(payload).toLowerCase();
   for (const field of PRIVATE_FIELDS) {
-    if (json.includes(`"${field}"`)) {
-      throw new Error(`provenance payload contains PII field: ${field}`);
-    }
+    if (json.includes(`"${field.toLowerCase()}"`)) throw new Error(`integrity payload contains PII field: ${field}`);
   }
 }
 
-/**
- * Append a new receipt to the chain. Returns the signed receipt with
- * hash + signature + the previous hash that anchors it in the chain.
- */
-export async function appendReceipt(receipt, { secret = PROVENANCE_KEY_ID, storage, now = Date.now() } = {}) {
+export async function appendReceipt(receipt, { storage, now = Date.now() } = {}) {
   const chain = readChain(storage);
-  const prev = chain[chain.length - 1] || null;
-  const prevHash = prev?.hash || null;
-
-  const payload = buildPayload(receipt, prevHash, now);
+  const previousReceiptHash = chain.at(-1)?.hash || null;
+  const payload = buildPayload(receipt, previousReceiptHash, now);
   assertZeroPii(payload);
-  const payloadJson = JSON.stringify(payload);
-  const payloadB64 = b64urlEncode(new TextEncoder().encode(payloadJson));
-  const signature = await signString(secret, payloadB64);
-  const hash = await hashPayload(`${payloadB64}.${signature}`);
-
-  const entry = {
-    payload,
-    payloadB64,
-    signature,
-    hash,
-  };
+  const payloadB64 = b64urlEncode(new TextEncoder().encode(JSON.stringify(payload)));
+  const checksum = await digest(`${DOMAIN}${payloadB64}`);
+  const hash = await digest(`${DOMAIN}${previousReceiptHash || "head"}.${payloadB64}.${checksum}`);
+  const entry = { contract: "self-attested-local-integrity", payload, payloadB64, checksum, hash };
   chain.push(entry);
   writeChain(storage, chain);
   return entry;
 }
 
-/**
- * Verify the entire chain. Returns { ok, brokenAt } — brokenAt indicates
- * the first chain index where signature or hash linkage failed.
- */
-export async function verifyChain({ secret = PROVENANCE_KEY_ID, storage } = {}) {
+export async function verifyChain({ storage } = {}) {
   const chain = readChain(storage);
-  let prevHash = null;
-  for (let i = 0; i < chain.length; i++) {
-    const entry = chain[i];
-    if (!entry || !entry.payloadB64 || !entry.signature) {
-      return { ok: false, brokenAt: i, reason: "format" };
+  let previousReceiptHash = null;
+  for (let index = 0; index < chain.length; index++) {
+    const entry = chain[index];
+    if (!entry || entry.contract !== "self-attested-local-integrity" || !entry.payloadB64 || !entry.checksum || !entry.hash) {
+      return { ok: false, brokenAt: index, reason: "format" };
     }
-    const sigOk = await verifyString(secret, entry.payloadB64, entry.signature);
-    if (!sigOk) return { ok: false, brokenAt: i, reason: "signature" };
-    if (entry.payload?.previousReceiptHash !== prevHash) {
-      return { ok: false, brokenAt: i, reason: "link" };
+    if (entry.payload?.version !== PROVENANCE_VERSION || entry.payload?.attestation !== "self-attested") {
+      return { ok: false, brokenAt: index, reason: "version" };
     }
-    const recomputed = await hashPayload(`${entry.payloadB64}.${entry.signature}`);
-    if (recomputed !== entry.hash) return { ok: false, brokenAt: i, reason: "hash" };
-    prevHash = entry.hash;
+    if (entry.payload.previousReceiptHash !== previousReceiptHash) return { ok: false, brokenAt: index, reason: "link" };
+    const checksum = await digest(`${DOMAIN}${entry.payloadB64}`);
+    if (checksum !== entry.checksum) return { ok: false, brokenAt: index, reason: "checksum" };
+    const hash = await digest(`${DOMAIN}${previousReceiptHash || "head"}.${entry.payloadB64}.${entry.checksum}`);
+    if (hash !== entry.hash) return { ok: false, brokenAt: index, reason: "hash" };
+    previousReceiptHash = entry.hash;
   }
-  return { ok: true, length: chain.length };
+  return { ok: true, length: chain.length, attestation: "self-attested", integrity: "checksum-chain" };
 }
 
-export function readReceipts({ storage } = {}) {
-  return readChain(storage);
-}
-
-export function clearReceipts({ storage } = {}) {
-  writeChain(storage, []);
-}
-
-/**
- * Build the public-shareable verifier payload for a single receipt index.
- * The verifier endpoint can recompute the hash and verify the signature
- * against the public key id to confirm authenticity.
- */
+export function readReceipts({ storage } = {}) { return readChain(storage); }
+export function clearReceipts({ storage } = {}) { writeChain(storage, []); }
 export function exportReceiptForVerification(entry) {
-  if (!entry || !entry.payloadB64 || !entry.signature) return null;
+  if (!entry || !entry.payloadB64 || !entry.checksum || !entry.hash) return null;
   return {
-    keyId: PROVENANCE_KEY_ID,
     version: PROVENANCE_VERSION,
+    attestation: "self-attested",
+    integrity: "sha256-checksum-chain",
     payloadB64: entry.payloadB64,
-    signature: entry.signature,
+    checksum: entry.checksum,
     hash: entry.hash,
   };
 }

@@ -6,10 +6,10 @@ import { trackEvent } from "../analytics.js";
 import { useViewport } from "../app/responsive.js";
 
 const CALCULATOR_PRESETS = {
-  "bonus-bet": { name: "Bonus Bet Converter", slug: "bonus-bet", desc: "Convert bonus bets into guaranteed cash with the exact hedge amount." },
+  "bonus-bet": { name: "Bonus Bet Converter", slug: "bonus-bet", desc: "Convert bonus bets into modeled cash with the exact hedge amount." },
   "profit-boost": { name: "Profit Boost Calculator", slug: "profit-boost", desc: "Find the boosted edge and lock in the right hedge before the line moves." },
   "first-bet": { name: "First Bet Safety Net", slug: "first-bet", desc: "Turn insured first-bet offers into a controlled, high-clarity playbook." },
-  "arb": { name: "Arbitrage Calculator", slug: "arb-2way", desc: "Size both sides cleanly when books drift apart and a risk-free window opens." },
+  "arb": { name: "Arbitrage Calculator", slug: "arb-2way", desc: "Size both sides cleanly when books drift apart and a risk-reduced window opens." },
   "kelly": { name: "Kelly Criterion Sizer", slug: "kelly", desc: "Know exactly how much of bankroll to allocate when you actually have an edge." },
   "ev": { name: "+EV Calculator", slug: "ev", desc: "Compare your price to fair probability and see whether the bet is worth taking." },
 };
@@ -157,7 +157,7 @@ export default function LandingRoute() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 20 }}>
                 <button
                   onClick={() => navigate("/dashboard")}
-                  style={{ padding: "14px 18px", background: K.gn, border: "none", borderRadius: 12, color: "#0a0e17", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: font, minWidth: viewport.isPhone ? "100%" : 210 }}
+                  style={{ padding: "14px 18px", background: K.gn, border: "none", borderRadius: 12, color: K.ink, fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: font, minWidth: viewport.isPhone ? "100%" : 210 }}
                 >
                   Open PromoGrind App →
                 </button>

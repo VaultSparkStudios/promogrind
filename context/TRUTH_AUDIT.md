@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-07-01 (S111)
-Overall status: green-with-external-proof-follow-ups
-Next action: inspect the green GitHub Pages launch-verification artifact from run `27791869430`, run production auth email smoke, then complete the two remaining external manual proofs (Stripe smoke and friend beta). Refresh stale revenue and IGNIS derived intelligence after the proof pass.
+Last reviewed: 2026-07-25 (S119)
+Overall status: green-with-target-scope-and-external-proof-follow-ups
+Next action: grant exact Cloudflare Transform Rules and Email Routing read scopes, rotate the isolated historical privileged Supabase token, verify the S119 capture deploy, then complete real auth-email, purchase, friend-beta, forwarding, and mailbox criteria.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
 ---
@@ -21,10 +21,10 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | `CURRENT_STATE.md`, `LATEST_HANDOFF.md`, `TASK_BOARD.md`, `LAUNCH_PROOFS.json`, `PROJECT_STATUS.json`, generated launch-proof mirror, and AI usage ledger agree that S87 repo-owned work advanced while remaining launch blockers are external proof tasks. |
+| Schema alignment | 5 | Canonical S115 status, handoff, task, audit, generated mirror, and work-log surfaces agree on shipped repo work, verified production deployment, and explicit external evidence gates. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Startup brief, task board, launch proof mirror, AI usage ledger, handoff, current state, SIL, and closeout surfaces describe the same S87 posture after closeout generation. |
-| Handoff continuity | 5 | Session 87 handoff reflects shipped repo-local work, verification status, and the remaining external blockers. |
+| Derived-view freshness | 5 | Startup brief, task board, status mirror, handoff, current state, SIL, audit, and closeout surfaces describe the same S115 posture after final regeneration. |
+| Handoff continuity | 5 | Session 115 handoff records saturated implementation, exact local/remote proof, the production-probe root fix, and remaining external gates. |
 | Contradiction density | 5 | No current product-truth contradiction is known; the main gaps are explicit external evidence gates. |
 | **Total** | **24 / 25** | Green: canonical truth surfaces are coherent; remaining yellow posture is due to external launch proofs and public/private ops shim tension, not contradictory product claims. |
 
@@ -44,7 +44,7 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 | In-app launch proof mirror | `context/LAUNCH_PROOFS.json` + `scripts/generate-launch-proof-mirror.mjs` | `src/data/launchProofs.generated.js`, Launch Command Center | green | 2026-05-14 | S87 generated a browser-safe proof mirror so command-center UI matches canonical evidence requirements without exposing private ops fields. |
 | Operator intelligence | `src/dashboard/today.js` + workflow store + feedback ledger | Dashboard hero, Smart Promo Recommender, Today dashboard | green | 2026-05-14 | S87 adds Operator Autopilot, discipline scoring, and outcome-memory recommendation explanations from settled samples/repeat behavior. |
 | AI usage/cost truth | `supabase/functions/promo-advisor/index.ts` + `scripts/render-ai-usage-ledger.mjs` | `docs/AI_USAGE_LEDGER.md`, `npm run ai:usage` | green | 2026-05-14 | S87 records rule-engine wins and token estimates; live query depends on Supabase admin env, offline render is deterministic. |
-| Production dashboard/runtime | `npm run smoke:production-dashboard` + `src/App.jsx` + deploy artifacts | task board, handoff, launch status | yellow | 2026-05-13 | Local S85 launch gate is green; next deploy artifact should be ingested to confirm production runtime/auth behavior after push. |
+| Production dashboard/runtime | `npm run smoke:production-dashboard` + `src/App.jsx` + deploy artifacts | task board, handoff, launch status | green | 2026-07-23 | Final implementation Deploy Pages run `30053484335` and its downloaded dashboard artifact passed with `failures: []`. |
 | Public-repo sanitization | `.gitignore` + git tracking | public commits | green | 2026-06-18 | S95 all-tree and staged secret scans report 0 findings; `package-lock.json` SRI hashes are allowlisted as non-secret integrity metadata. |
 | Dependency and package trust | `package-lock.json` + `scripts/package-trust.mjs` + `scripts/scan-npm-supply-chain.mjs` | `npm audit`, Dependabot alerts, task board, handoff | green | 2026-06-18 | `npm audit` reports 0 vulnerabilities, GitHub Dependabot open alerts are 0, and lockfile supply-chain scan has 0 blocking findings. |
 | VaultSpark website listing | `context/PROJECT_STATUS.json` + `context/STUDIO_MANIFEST.json` | `vaultsparkstudios.com/projects/promogrind/` | green | 2026-04-24 | Website copy now says deployed/FORGE/public-unlaunched, 53 calculators, beta-gated paid/AI surfaces, and points CTA traffic to `https://promogrind.bet/`. |
@@ -58,6 +58,37 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache now treats Markdown/JSON coherence as part of freshness; remaining launch gaps are real external proof gates.
+
+## Resolved This Session (S119)
+
+- Startup identity, compliance, portfolio, and Ark signals distinguish unavailable/empty/failing states and name their actual source.
+- Launch-proof status derives from criterion receipt quorum in both canonical scripts and the browser; direct generic completion is impossible.
+- Five provider targets now separate credential presence from authentication, target match, and required authorization with freshness-bounded receipts.
+- Brevo `promogrind.bet` is authenticated after four exact DNS changes; the canonical proof truthfully records 1/3 criteria.
+- PromoGrind Supabase REST service scope and the live Stripe account are authorized; stale “generic capability missing” prose is no longer treated as probe truth.
+- The production capture build root cause is fixed: CI injects the browser-safe key into every static capture page and refuses a missing-key Pages build.
+- Full-history scanning completes 314 commits in about two seconds and isolates one real historical privileged token; rotation is routed through Ark without reproducing it.
+- Repo-owned verification is green at 590/590 plus 47 standalone invariant assertions and launch-local direct exit 0.
+
+## Resolved This Session (S115)
+
+- Browser launch validation no longer contains an independent hard-coded test count; it is a public-safe generated view of `PROJECT_STATUS.json` with a freshness gate.
+- Context-meter readings use one percentage unit, so live `0.5` renders near 1%, never 50%.
+- Public-repo genius and session-intent generators derive PromoGrind scope from local project status when the private registry is absent.
+- Five Anthropic functions share one typed entitlement contract and are discovered automatically for authentication, atomic quota, usage-event, and SDK-pin enforcement.
+- User-facing source is free of detected mojibake, and public copy clears nine calm-operator trust rules.
+- IGNIS and revenue intelligence are current; the project-scoped genius list reports zero remaining items.
+- Production monitor truth is non-destructive: it no longer sends signup mail, deletes its disposable identity in `finally`, reports bounded provider errors, and redacts checkout credentials from retained artifacts.
+- S115 final implementation proof is green: brief `30053484333`, CI `30053484341`, and Deploy Pages `30053484335` passed for `be58dfe`; the downloaded launch artifact has 0 blocking failures and dashboard smoke has no failures.
+- A newly published React Router advisory wave was caught at final closeout; trust-approved 7.18.0 replaced affected 6.30.4, the full launch gate stayed green, and the exact 236-package lock returns 0 vulnerabilities / 0 supply-chain blocks.
+- The closeout board no longer calls an existing empty genius cache “missing”; `ranked: []` now renders as exhausted and the missing/exhausted distinction is regression-tested.
+- The closeout board no longer calls an existing empty genius cache “missing”; `ranked: []` now renders as exhausted and the missing/exhausted distinction is regression-tested.
+
+## Explicit Evidence Gaps (S115)
+
+- The quota migration and function changes are not live evidence: the secrets gateway reports `promogrind.supabase.deploy` missing.
+- Desktop/mobile dark/light screenshot verification remains SKIPPED because available browser paths did not clear runtime/package-trust requirements.
+- Production auth email, Stripe, friend-beta, Brevo forwarding, and capture public-key proof remain external and unclaimed.
 
 ## Resolved This Session (S96)
 
@@ -340,3 +371,61 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Startup observability truth improved: context-meter tile rendering now comes from `scripts/lib/startup-context-meter-block.mjs`, the same helper that normalizes live/fallback meter payloads.
 - Regression truth improved: `scripts/test-studio-script-regressions.mjs` now checks the rendered context-meter block, and the suite passed 6/6 after an approved rerun outside the Windows sandbox.
 - Launch truth remains partial, not green: production auth email, Stripe, friend-beta, Brevo, Studio Ops Supabase capability, and capture public-key proof are still evidence-gated. No external proof was fabricated.
+### Session 113 — 2026-07-01
+
+- Data-portability truth repaired: exports previously claimed to cover "Operator data" while the phantom `pg_app_data` key meant the real `promo_engine_v3` blob was silently omitted. The inventory now derives from the real key surface and round-trips are covered by 18 vault tests including corruption, alien-key, and legacy-envelope cases.
+- Intelligence surfacing truth improved: the Command Deck derives every module's status from that module's own lib output (no synthesized copy), and the S93 edge-decay heatmap that had zero component importers is now genuinely user-reachable in the Edge dashboard.
+- Launch truth remains partial, not green: production auth email, Stripe, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and capture public-key proof are still evidence-gated. No external proof was fabricated.
+
+## 2026-07-02 — Session 114 Truth Update
+
+- Added `docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md` as a generated honesty surface for the six remaining external proof gates. It merges `context/PROJECT_STATUS.json` blockers with `context/LAUNCH_PROOFS.json` without marking any proof complete.
+- Added `node scripts/ops.mjs launch-proof-ledger --check` so ledger freshness can be verified mechanically.
+- Launch truth remains partial, not green: production auth email, Stripe purchase, friend-beta, Brevo forwarding, Studio Ops Supabase capability, and production capture public-key proof are still evidence-gated. No external proof was fabricated.
+
+## 2026-07-02 — Session 114 Deploy Proof
+
+- Commit `81e6858` reached `origin/main`; CI run `28620695607` and brief-format-check run `28620695606` passed.
+- GitHub Pages workflow_dispatch run `28620744679` deployed `81e6858`; production launch verification and dashboard smoke passed.
+- Local production dashboard smoke also passed against `https://promogrind.bet/dashboard` with no failures.
+
+## 2026-07-23 — Session 116 Truth Update
+
+- Forecast truth repaired: `scripts/lib/sil-forecaster.mjs` now parses the live S108-S115 SIL ledger format, selects newest sessions by session number, and refuses incomplete category sets. The generated startup brief reports 1000/1000 rather than the prior false 0/1000.
+- Launch-proof truth completed structurally, not evidentially: all six PROJECT_STATUS external blockers map to typed `LAUNCH_PROOFS.json` contracts; the ledger self-validates 6/6 coverage and fails closed if wording introduces an unknown blocker. All six proofs remain pending.
+- Bundle observability repaired: the gate derives the transitive static graph from Vite's manifest and separately measures the largest async chunk. Current measured truth is 179.1KB raw / 60.0KB gzip initial JavaScript and 482.1KB raw / 159.2KB gzip for the largest async chunk.
+- AI decision truth improved: Promo Advisor receipts expose assumptions, missing inputs, sensitivity triggers, evidence grade, source, and contract version across rule/model paths and saved workflows. Old cache entries cannot masquerade as v2 receipts.
+- Error observability repaired: exceptions thrown before idle analytics initialization are buffered in memory and flushed to Sentry when ready instead of being silently discarded.
+- Verification truth: 568/568 Vitest checks, 10/10 Deno Advisor tests, Deno type-check, and the full launch-local chain passed with direct exit 0. Production deployment remains S115 until remote S116 evidence exists.
+
+## 2026-07-24 — Session 117 Truth Update
+
+- Removed a tracked staging helper that exposed a real webhook credential and private deployment topology. The scanner now detects unquoted shell secret assignments, regression coverage is present, all-tree scanning reports zero findings, and a redacted rotation request was shipped through Ark as `01JU98MC5M8FC5EDBEE214F795`. Rotation itself is not claimed complete.
+- Browser-only passport and provenance checks are now explicitly SHA-256 self-attestations, not independent signatures. Strict schemas, bounds, and DOM-safe public rendering prevent the verifier from becoming an authenticity or injection theater surface.
+- Promo Advisor sends profile context only after explicit opt-in, with supported identifier redaction on client and server, bounded server input, and an inspectable privacy receipt. Default behavior sends no stored profile context.
+- Promo Calendar recurring rows are historical observations with market/jurisdiction evidence, freshness, confidence, and local Seen/Not seen state. They are not represented as current operator offers or email alerts.
+- Multilingual public-claim verification passed 282 files against 10 English/Spanish/Portuguese rules with zero findings. The release surface now includes the expected manifest, security contact, favicon, rollback runbook, and proprietary footer contract.
+- Repo-owned verification is green: 582/582 Vitest checks, 3/3 Deno privacy checks, Deno type-check, production browser smoke, source integrity, public-dist exposure, proof replay, and launch-local direct exit 0.
+- Release truth remains NO-GO for SPARKED: production lacks six required security headers, the manual desktop/mobile dark/light matrix was skipped after the browser runtime failed before launch, and the existing external production proofs remain pending.
+
+## 2026-07-24 — Session 117 Deploy Proof
+
+- Implementation commit `551f256` reached `origin/main`; brief-format run `30082118132`, CI run `30082118152`, and Deploy Pages run `30082118153` all passed.
+- The Pages workflow's production launch verification and dashboard smoke passed. Post-deploy live probing confirms the root and all six standard files return 200, including `/.well-known/security.txt` and `/favicon.ico`.
+- Release-state promotion remains NO-GO: production still omits CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. This is recorded as a hosting-edge blocker, not a code-pass claim.
+
+## 2026-07-24 — Session 118 Truth Update
+
+- Promo decision truth improved: Today, Brief, and Dashboard no longer allow unverified historical cadence patterns to masquerade as actionable bankroll allocations. Current observations populate the action plan; other rows populate a verification queue with explicit reasons.
+- Theme truth improved: colored controls no longer infer foreground text from the page background. Dark and light themes own explicit semantic ink, and 37 meaningful contrast pairs per theme are mechanically checked.
+- Launch truth simplified: the unused handwritten `LAUNCH_BLOCKERS` ledger was removed; runtime blockers derive from the generated launch-proof source and regression coverage enforces that ownership.
+- Innovation-ledger truth repaired: refreshing the pack preserves shipped same-session second-order outcomes and reports the empty primary Genius List from the current generated surface.
+- Verification truth: 588/588 Vitest checks across 75 files and the full launch-local chain passed with direct exit 0. Four viewport/theme screenshots were captured and hashed; live computed-style inspection found zero contrast failures in both themes.
+- Visual caveat remains honest: AI pixel inspection is PARTIAL because the connected image viewer failed. Browser evidence and deterministic contrast gates are green, but the unavailable review step is not claimed.
+- Release truth remains NO-GO for SPARKED: production still omits six required security headers and the established external production proofs remain pending.
+
+## 2026-07-25 — Session 118 Deploy Proof
+
+- Commit `1914e24` reached `origin/main`; brief-format run `30175588383`, CI run `30175588392`, and Deploy Pages run `30175588407` all passed.
+- The deployed workflow's production launch verification and production dashboard smoke passed.
+- Deployment proof does not satisfy the six missing live security headers or the existing external evidence contracts; SPARKED promotion remains NO-GO.

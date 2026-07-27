@@ -21,14 +21,14 @@
     {
       "name": "Bonus Bet Converter",
       "short_name": "Bonus Bet",
-      "description": "Convert sportsbook bonus bets to guaranteed cash",
+      "description": "Convert sportsbook bonus bets to modeled cash",
       "url": "/bonus-bet",
       "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
     },
     {
       "name": "Profit Boost Calculator",
       "short_name": "Profit Boost",
-      "description": "Calculate guaranteed profit from profit boost promos",
+      "description": "Calculate modeled profit from profit boost promos",
       "url": "/profit-boost",
       "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
     },
@@ -66,7 +66,7 @@
       "src": "/screenshots/bonus-bet.png",
       "sizes": "1280x800",
       "type": "image/png",
-      "label": "Bonus Bet Converter — convert sportsbook bonuses to guaranteed cash"
+      "label": "Bonus Bet Converter — convert sportsbook bonuses to modeled cash"
     },
     {
       "src": "/screenshots/ledger.png",

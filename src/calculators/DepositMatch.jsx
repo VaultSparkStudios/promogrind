@@ -76,7 +76,7 @@ export default function DepositMatch() {
           </div>
         )}
         {r && (
-          <div style={S.res(r.ok)}>
+          <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.net}</span>
               <span style={{ fontSize: 12, color: K.dm }}>estimated net bonus value</span>
@@ -105,7 +105,7 @@ export default function DepositMatch() {
         {r && r.ok && <CalcNextStep calcKey="deposit-match" />}
       </div>
       <Help entries={[
-        ["What this calculator does", "A deposit match gives you bonus funds based on how much you deposit. This calculator estimates the real cash value after rollover instead of treating the full bonus amount as free money."],
+        ["What this calculator does", "A deposit match gives you bonus funds based on how much you deposit. This calculator estimates realizable value after rollover instead of treating the full bonus amount as cash."],
         ["Rollover multiple", "If the bonus has a 5x rollover and the bonus amount is $200, you must place $1,000 in total wagers before the funds are fully cleared."],
         ["Avg vig cost", "Every qualifying wager leaks a small amount of value through the book's hold. Around 4% to 5% is a reasonable default for many mainstream lines if you are not line-shopping aggressively."],
         ["When to use this", "Use this for welcome deposit matches, reload matches, and casino-style sportsbook crossover promos where the terms require playthrough before withdrawal."],

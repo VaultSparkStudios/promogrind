@@ -86,7 +86,7 @@ export default function Leaderboard() {
         <div style={{ textAlign: "center", padding: "32px 16px" }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: K.dm, marginBottom: 4 }}>Be the first on the leaderboard</div>
           <div style={{ fontSize: 11, color: K.mt, marginBottom: 14 }}>Use calculators and log bets to earn Vault Points and claim your spot.</div>
-          <button onClick={() => { window.location.hash = "#/bonus-bet"; }} style={{ padding: "7px 18px", background: K.gn, border: "none", borderRadius: 6, color: K.bg, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Start with Bonus Bet Converter</button>
+          <button onClick={() => { window.location.hash = "#/bonus-bet"; }} style={{ padding: "7px 18px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Start with Bonus Bet Converter</button>
         </div>
       )}
       {!loading && rows.length > 0 && (
