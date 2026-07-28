@@ -33,6 +33,7 @@ S120 completed the founder-requested continuous arc. The primary Genius List was
 - Dependabot alert 34 / GHSA-qwww-vcr4-c8h2 — reviewed and dismissed as `not_used`: the advisory is limited to unstable React Server Components APIs, and the complete source tree has no such import or call path.
 - Ark closeout — session impact broadcast `01JUJEMM4DCF1272F2516B1F5A`; exact Supabase capability plus credential rotation/history remediation request `01JUJEMMRAA0A9ABFECADFBCA1` routed to Studio Ops without secret material.
 - Remote preflight runs `30327745917`, `30328393421`, and `30328482500` correctly blocked promotion before deployment when Linux exposed a Windows-shaped direct-invocation check in the secret scanner: POSIX execution skipped `run()` and silently exited green. The root fix compares canonical filesystem paths, and the regression now passes in both native Windows and a Linux Node 22 container. Closeout also regenerates and self-checks the status mirror after its final source write. Local launch verification is green with direct exit 0; final remote evidence follows the scanner fix.
+- After that scanner fix, preflight `30328568855` reached complete Edge verification and exposed that the Pages job had no Deno runtime. The workflow now installs Deno with the same already-proven setup used by CI before executing the complete launch gate, with a DAG regression locking the ordering.
 
 ## Honest deferrals
 
