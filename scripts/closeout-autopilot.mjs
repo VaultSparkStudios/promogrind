@@ -69,6 +69,15 @@ function shStudio(script, scriptArgs = [], opts = {}) {
   return { out: r.stdout || '', err: r.stderr || '', code: r.status ?? -1 };
 }
 
+function shProject(script, scriptArgs = [], opts = {}) {
+  const r = spawnSync(process.execPath, [path.join(PROJECT_ROOT, 'scripts', script), ...scriptArgs], {
+    cwd: PROJECT_ROOT,
+    encoding: 'utf8',
+    ...opts,
+  });
+  return { out: r.stdout || '', err: r.stderr || '', code: r.status ?? -1 };
+}
+
 function sessionNumber(status) {
   return status.currentSession ?? status.lastSession ?? '?';
 }
@@ -143,6 +152,28 @@ try {
   console.log(`  lastUpdated → ${today}  · session ${sessionNumber(s)}  · SIL ${s.silScore}/${s.silMax ?? 500}`);
 } catch (e) {
   console.error('  ⚠ Could not stamp status:', e.message);
+}
+
+// ── Step 3a: Refresh status-derived runtime truth ───────────────────────────
+header('Step 3a · Refresh PROJECT_STATUS runtime mirror');
+const statusMirrorScript = path.join(PROJECT_ROOT, 'scripts', 'generate-project-status-mirror.mjs');
+if (!fs.existsSync(statusMirrorScript)) {
+  console.log('  ↷ repo-local mirror generator absent — manual public-repo fallback required');
+} else if (DRY) {
+  console.log('(dry-run) would regenerate and check src/data/projectStatus.generated.js');
+} else {
+  const generated = shProject('generate-project-status-mirror.mjs');
+  process.stdout.write(generated.out);
+  if (generated.code !== 0) {
+    console.error('⛔ Status mirror generation failed:', redact(generated.err));
+    process.exit(1);
+  }
+  const checked = shProject('generate-project-status-mirror.mjs', ['--check']);
+  process.stdout.write(checked.out);
+  if (checked.code !== 0) {
+    console.error('⛔ Status mirror self-check failed:', redact(checked.err));
+    process.exit(1);
+  }
 }
 
 // ── Step 3b: Sanitize .claude/settings.local.json before diff ────────────────

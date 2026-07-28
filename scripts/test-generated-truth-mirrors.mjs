@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { spawnSync } from "./lib/safe-spawn.mjs";
 import {
   buildProjectStatusMirror,
@@ -37,5 +38,14 @@ for (const script of ["generate-project-status-mirror.mjs", "generate-launch-pro
   const result = spawnSync(process.execPath, [`scripts/${script}`, "--check"], { encoding: "utf8" });
   assert.equal(result.status, 0, `${script}: ${result.stderr || result.stdout}`);
 }
+
+const closeoutSource = readFileSync("scripts/closeout-autopilot.mjs", "utf8");
+const statusStampIndex = closeoutSource.indexOf("Step 3 · Stamp PROJECT_STATUS.json");
+const mirrorRefreshIndex = closeoutSource.indexOf("Step 3a · Refresh PROJECT_STATUS runtime mirror");
+assert.ok(statusStampIndex >= 0 && mirrorRefreshIndex > statusStampIndex,
+  "closeout must regenerate status-derived runtime truth after stamping PROJECT_STATUS");
+assert.match(closeoutSource.slice(mirrorRefreshIndex),
+  /shProject\('generate-project-status-mirror\.mjs', \['--check'\]\)/,
+  "closeout must self-check the regenerated status mirror before staging");
 
 console.log("generated truth mirror regression passed · strict states/schema/check mode");
