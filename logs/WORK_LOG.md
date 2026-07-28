@@ -588,3 +588,5 @@ Append chronological entries.
 - Root-fixed five Edge type errors discovered by the new complete sweep. All 15 entrypoints typecheck; 43/43 Deno tests and 597/597 Vitest tests pass.
 - `npm run verify:launch-local` passed directly with exit 0; tracked secret and strict sanitizer scans report 0; supply-chain scan reports 0 blocks.
 - Honest deferral: five fully redacted historical credential findings at `b1205ce`, six live headers, true staging, exact forwarding, Supabase deploy authority, and real mailbox/payment/tester/capture/pixel proofs remain unclaimed.
+- Pushed `77ea057` and hook-safe regression fixture follow-up `71fcc2e` directly to `origin/main`.
+- Reviewed Dependabot alert 34 (GHSA-qwww-vcr4-c8h2) against the live advisory and a repository-wide source scan. The issue is limited to unstable React Server Components APIs, which PromoGrind does not use; dismissed it as `not_used` with an evidence-bearing GitHub comment instead of forcing an incompatible React/Router/Node major migration.

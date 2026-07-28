@@ -30,6 +30,7 @@ S120 completed the founder-requested continuous arc. The primary Genius List was
 - Tracked secret scan — 0; strict public sanitizer — 0; supply-chain blocks — 0.
 - Innovation pack — 3 shipped second-order candidates, 1 honest external deferral.
 - Full history — 317 commits; 5 fully redacted findings at `b1205ce`; current tree is clean, history is not claimed clean.
+- Dependabot alert 34 / GHSA-qwww-vcr4-c8h2 — reviewed and dismissed as `not_used`: the advisory is limited to unstable React Server Components APIs, and the complete source tree has no such import or call path.
 
 ## Honest deferrals
 
@@ -47,7 +48,7 @@ S120 completed the founder-requested continuous arc. The primary Genius List was
 3. Execute the criterion-addressed Supabase, mailbox, auth-email, Stripe, friend-beta, capture, and pixel proofs.
 
 Intent Outcome: Achieved — every repo-owned primary and generated second-order candidate shipped; external evidence remains explicitly unclaimed.
-Deploy: pending this closeout commit/push; the prior production head remains S119 until remote workflow evidence says otherwise.
+Deploy: S120 implementation and closeout commits `77ea057` and `71fcc2e` are pushed directly to `origin/main`; final workflow evidence is checked during terminal hygiene.
 
 ---
 

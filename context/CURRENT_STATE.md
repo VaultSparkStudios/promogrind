@@ -10,4 +10,6 @@ Marketing consent is off by default, versioned, sourced, timestamped, reversible
 
 Repo-owned verification is green: 597/597 Vitest checks across 76 files, 43/43 Deno tests, full Edge typecheck, source/claim/entitlement/auth/launch/user-experience/browser/bundle/proof/sanitization gates, and `npm run verify:launch-local` with direct exit 0.
 
+The post-push Dependabot alert for GHSA-qwww-vcr4-c8h2 was reviewed against both the advisory and the complete source tree. The advisory affects only unstable React Server Components APIs; PromoGrind is a client-side BrowserRouter/MemoryRouter application and imports none of those APIs. Alert 34 is therefore dismissed as `not_used` with the evidence recorded on GitHub. No incompatible React Router 8 override was introduced.
+
 Release posture remains NO-GO for SPARKED. There is no true remote staging environment; six live response headers, exact contact forwarding, historical credential rotation, target-bound Supabase deployment authority, real auth-email/purchase/friend/capture proofs, and AI pixel inspection remain explicitly unproved. No external proof was fabricated and no production deployment was performed during implementation.

@@ -629,3 +629,10 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Release boundary:** production promotion requires the exact preflight gate and a commit/tree-bound attestation. Post-deploy smoke remains verification, not permission to bypass preflight.
 - **Rejected alternatives:** fabricating deployment receipts, treating a narrower admin capability as deploy authority, copying secret material into fixtures, hand-editing sibling control-plane state, or calling the lack of external proof a failed implementation.
 - **Consequence:** repo-owned gates are green while SPARKED remains NO-GO until staging and external proofs exist.
+
+### Decision: configuration-specific advisories require reachability evidence
+
+- **Status:** accepted
+- **Context:** The S120 push surfaced GHSA-qwww-vcr4-c8h2 against transitive `react-router`. GitHub's advisory explicitly limits impact to unstable React Server Components APIs, while PromoGrind uses only client-side BrowserRouter/MemoryRouter paths and the full source scan found no RSC surface.
+- **Decision:** Dismiss Dependabot alert 34 as `not_used` with the source-reachability evidence attached. Do not override `react-router-dom` 7 with `react-router` 8.3.0: the packages are not a compatible pair and v8 also raises the React and Node floors.
+- **Consequence:** The repository retains a compatible dependency graph without pretending an unused vulnerable path is reachable. Any future RSC adoption must reopen this decision and upgrade to a patched compatible stack first.
