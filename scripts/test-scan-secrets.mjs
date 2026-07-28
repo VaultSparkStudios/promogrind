@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "./lib/safe-spawn.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const scanner = path.join(root, "scripts", "scan-secrets.mjs");
-const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "promogrind-secret-scan-"));
+// The scanner is deliberately repo-scoped. Keep the integration fixture under
+// that same boundary so Windows and POSIX do not take different relative-path
+// traversals through their unrelated system temp roots.
+const tempDir = fs.mkdtempSync(path.join(root, ".tmp-secret-scan-"));
 const fixture = path.join(tempDir, "shell-secret.sh");
 
 try {
