@@ -34,6 +34,7 @@ S120 completed the founder-requested continuous arc. The primary Genius List was
 - Ark closeout — session impact broadcast `01JUJEMM4DCF1272F2516B1F5A`; exact Supabase capability plus credential rotation/history remediation request `01JUJEMMRAA0A9ABFECADFBCA1` routed to Studio Ops without secret material.
 - Remote preflight runs `30327745917`, `30328393421`, and `30328482500` correctly blocked promotion before deployment when Linux exposed a Windows-shaped direct-invocation check in the secret scanner: POSIX execution skipped `run()` and silently exited green. The root fix compares canonical filesystem paths, and the regression now passes in both native Windows and a Linux Node 22 container. Closeout also regenerates and self-checks the status mirror after its final source write. Local launch verification is green with direct exit 0; final remote evidence follows the scanner fix.
 - After that scanner fix, preflight `30328568855` reached complete Edge verification and exposed that the Pages job had no Deno runtime. The workflow now installs Deno with the same already-proven setup used by CI before executing the complete launch gate, with a DAG regression locking the ordering.
+- Final remote evidence for deployed head `900a850`: CI `30328647383` green; brief-format `30328647375` green; Pages `30328647377` passed complete preflight, attestation, deployment, production launch, and dashboard smoke. Its terminal red is the intended fail-closed result of six absent live edge headers, not a failed deploy.
 
 ## Honest deferrals
 
@@ -51,7 +52,7 @@ S120 completed the founder-requested continuous arc. The primary Genius List was
 3. Execute the criterion-addressed Supabase, mailbox, auth-email, Stripe, friend-beta, capture, and pixel proofs.
 
 Intent Outcome: Achieved — every repo-owned primary and generated second-order candidate shipped; external evidence remains explicitly unclaimed.
-Deploy: S120 implementation and closeout commits `77ea057` and `71fcc2e` are pushed directly to `origin/main`; final workflow evidence is checked during terminal hygiene.
+Deploy: attested application head `900a850` is live. The post-deploy workflow correctly remains red on the six known missing edge headers, so SPARKED promotion remains NO-GO.
 
 ---
 
