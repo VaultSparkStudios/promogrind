@@ -21,6 +21,7 @@ const {
   mockResetPasswordForEmail,
   mockMaybySingle,
   mockInvoke,
+  mockUpdateUser,
   trackEventMock,
 } = vi.hoisted(() => ({
   mockGetSession:            vi.fn().mockResolvedValue({ data: { session: null } }),
@@ -30,6 +31,7 @@ const {
   mockResetPasswordForEmail: vi.fn().mockResolvedValue({ data: {}, error: null }),
   mockMaybySingle:           vi.fn().mockResolvedValue({ data: null, error: null }),
   mockInvoke:                vi.fn().mockResolvedValue({ data: null, error: null }),
+  mockUpdateUser:            vi.fn().mockResolvedValue({ data: {}, error: null }),
   trackEventMock:            vi.fn(),
 }));
 
@@ -42,7 +44,7 @@ vi.mock('@supabase/supabase-js', () => ({
       resend:      mockResend,
       resetPasswordForEmail: mockResetPasswordForEmail,
       signOut:     vi.fn().mockResolvedValue({}),
-      updateUser:  vi.fn().mockResolvedValue({ error: null }),
+      updateUser:  mockUpdateUser,
     },
     from: vi.fn(() => ({
       select:      vi.fn().mockReturnThis(),
@@ -63,6 +65,7 @@ import {
   trialDaysLeft,
   tryAuth,
   createPromoGrindAccount,
+  updateMarketingConsent,
   resendPromoGrindConfirmation,
   resetPromoGrindPassword,
   getSubscription,
@@ -264,6 +267,8 @@ describe('account email actions', () => {
     mockSignUp.mockReset();
     mockResend.mockReset();
     mockResetPasswordForEmail.mockReset();
+    mockUpdateUser.mockReset();
+    mockUpdateUser.mockResolvedValue({ data: {}, error: null });
     mockSignUp.mockResolvedValue({ data: {}, error: null });
     mockResend.mockResolvedValue({ data: {}, error: null });
     mockResetPasswordForEmail.mockResolvedValue({ data: {}, error: null });
@@ -288,6 +293,40 @@ describe('account email actions', () => {
         emailRedirectTo: 'https://promogrind.bet/dashboard?auth=signin',
       }),
     }));
+  });
+
+  it('fails closed when signup omits marketing consent', async () => {
+    await createPromoGrindAccount({
+      email: 'private@example.com',
+      password: 'password123',
+      displayName: 'PrivateScout',
+    });
+    const metadata = mockSignUp.mock.calls[0][0].options.data;
+    expect(metadata.newsletter).toBe(false);
+    expect(metadata.marketing_consent).toBe(false);
+    expect(metadata.marketing_consent_source).toBe('signup-checkbox');
+    expect(metadata.marketing_consent_revoked_at).toEqual(expect.any(String));
+  });
+
+  it('supports reversible, timestamped marketing consent updates', async () => {
+    await updateMarketingConsent(true);
+    expect(mockUpdateUser).toHaveBeenLastCalledWith({
+      data: expect.objectContaining({
+        newsletter: true,
+        marketing_consent: true,
+        marketing_consent_source: 'account-preferences',
+        marketing_consent_granted_at: expect.any(String),
+      }),
+    });
+
+    await updateMarketingConsent(false);
+    expect(mockUpdateUser).toHaveBeenLastCalledWith({
+      data: expect.objectContaining({
+        newsletter: false,
+        marketing_consent: false,
+        marketing_consent_revoked_at: expect.any(String),
+      }),
+    });
   });
 
   it('resends confirmation emails with the same app redirect', async () => {

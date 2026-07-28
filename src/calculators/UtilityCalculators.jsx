@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import AccessibleToggle from "../components/AccessibleToggle.jsx";
 import { toD, toA, toP, toF, f, calcMid, calcRO, K } from "../lib/shared.js";
 import { S, In, RR, Tl, Nt, Help, useCalcMemory } from "../ui.jsx";
 
@@ -99,9 +100,12 @@ const IncomeEstimator = () => {
       </div>
       <div style={{...S.col,display:"flex",alignItems:"center",gap:10,paddingTop:20}}>
         <label style={{...S.label,margin:0}}>Has Recurring Boosts</label>
-        <div role="checkbox" aria-checked={hasBoosts} onClick={()=>setHasBoosts(b=>!b)} style={{width:36,height:20,borderRadius:10,background:hasBoosts?K.gn:K.bd2,cursor:"pointer",display:"flex",alignItems:"center",padding:"0 3px",transition:"background 0.2s"}}>
-          <div style={{width:14,height:14,borderRadius:"50%",background:"white",transform:hasBoosts?"translateX(16px)":"translateX(0)",transition:"transform 0.2s"}}/>
-        </div>
+        <AccessibleToggle
+          checked={hasBoosts}
+          onChange={setHasBoosts}
+          label="Include recurring boosts"
+          compact
+        />
       </div>
     </div>
 

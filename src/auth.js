@@ -19,6 +19,7 @@ import { createClient } from '@supabase/supabase-js';
 import { trackEvent } from './analytics.js';
 import { CANONICAL_APP_URL, getProjectAuthHref } from './launchState.js';
 import { recordTrustReceipt } from './lib/trustReceipts.js';
+import { buildMarketingConsent } from './lib/marketingConsent.js';
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -143,7 +144,7 @@ export async function createPromoGrindAccount({
   email,
   password,
   displayName,
-  marketingOptIn = true,
+  marketingOptIn = false,
 }) {
   const cleanEmail = String(email || '').trim();
   const cleanDisplayName = String(displayName || '').trim().slice(0, 24);
@@ -158,7 +159,10 @@ export async function createPromoGrindAccount({
       data: {
         display_name: cleanDisplayName,
         username: cleanDisplayName,
-        newsletter: !!marketingOptIn,
+        newsletter: marketingOptIn === true,
+        ...buildMarketingConsent(marketingOptIn === true, {
+          source: 'signup-checkbox',
+        }),
         signup_source: 'promogrind',
         project_account_origin: 'promogrind',
         ...(referralSource && { referral_source: referralSource }),
@@ -174,6 +178,32 @@ export async function createPromoGrindAccount({
     notStored: ["Studio membership claim", "password in app storage"],
     undo: "Use account help for deletion or sign out from the account menu.",
     dedupeKey: `account:signup:${cleanEmail}`,
+  });
+  return data;
+}
+
+export async function updateMarketingConsent(granted) {
+  const metadata = buildMarketingConsent(granted === true);
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      ...metadata,
+      newsletter: metadata.marketing_consent,
+    },
+  });
+  if (error) throw error;
+  recordTrustReceipt({
+    type: "privacy",
+    title: metadata.marketing_consent
+      ? "Marketing email consent granted"
+      : "Marketing email consent withdrawn",
+    summary: metadata.marketing_consent
+      ? "PromoGrind recorded your affirmative choice to receive product and promotional email."
+      : "PromoGrind recorded your choice not to receive product and promotional email.",
+    stored: ["consent state", "consent version", "choice timestamp", "choice surface"],
+    notStored: ["a marketing opt-in inferred from account creation or product use"],
+    undo: "Change Marketing email in account preferences at any time.",
+    dedupeKey: `privacy:marketing:${metadata.marketing_consent}`,
+    dedupeMs: 0,
   });
   return data;
 }

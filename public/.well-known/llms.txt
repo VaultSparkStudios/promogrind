@@ -5,6 +5,7 @@ PromoGrind is a sportsbook promo calculator, tracking, and operator-decision sys
 Canonical site: https://promogrind.bet/
 Contact: https://promogrind.bet/contact/
 Agent contract: https://promogrind.bet/agents.json
+Capability truth: https://promogrind.bet/capabilities.json (only entries marked available are callable)
 
 ## What PromoGrind Is
 

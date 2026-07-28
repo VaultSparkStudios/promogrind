@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-07-26",
+  "product": "PromoGrind",
+  "canonical_url": "https://promogrind.bet/",
+  "truth_basis": {
+    "policy": "Fail closed: source implementation is not evidence of live availability.",
+    "sources": [
+      "supabase/functions/calc-api/calculator-contract.json",
+      "supabase/functions/calc-api/index.ts",
+      "context/LAUNCH_PROOFS.json",
+      "src/launchState.js"
+    ],
+    "source_digest": "711231dc0506a127501456e482c33978e95f735e8dc0fd4044652d8ccc01ac6d"
+  },
+  "agent_policy": {
+    "autonomous_betting": false,
+    "account_creation": false,
+    "educational_calculation": true,
+    "independent_verification_required": true
+  },
+  "callable_tools": [],
+  "capabilities": [
+    {
+      "id": "calculator-api",
+      "availability": "unverified",
+      "candidate_base_url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api",
+      "reason": "Implementation exists, but no complete criterion-addressed production deployment receipt exists.",
+      "endpoints": [
+        {
+          "slug": "bonus-bet",
+          "path": "/bonus-bet",
+          "params": {
+            "bonusBetSize": "number",
+            "bonusOdds": "odds",
+            "hedgeOdds": "odds"
+          }
+        },
+        {
+          "slug": "arb-2way",
+          "path": "/arb-2way",
+          "params": {
+            "odds1": "odds",
+            "odds2": "odds",
+            "totalStake": "number"
+          }
+        },
+        {
+          "slug": "arb",
+          "path": "/arb",
+          "params": {
+            "odds1": "odds",
+            "odds2": "odds",
+            "totalStake": "number"
+          },
+          "alias_for": "/arb-2way"
+        },
+        {
+          "slug": "ev",
+          "path": "/ev",
+          "params": {
+            "yourOdds": "odds",
+            "fairOdds": "odds",
+            "stake": "number"
+          }
+        },
+        {
+          "slug": "profit-boost",
+          "path": "/profit-boost",
+          "params": {
+            "stake": "number",
+            "odds": "odds",
+            "boostPct": "number",
+            "maxExtra": "number",
+            "hedgeOdds": "odds"
+          }
+        },
+        {
+          "slug": "no-vig",
+          "path": "/no-vig",
+          "params": {
+            "odds1": "odds",
+            "odds2": "odds"
+          }
+        },
+        {
+          "slug": "kelly",
+          "path": "/kelly",
+          "params": {
+            "winProb": "percentage",
+            "odds": "odds",
+            "bankroll": "number",
+            "fraction": "number_optional"
+          }
+        }
+      ],
+      "disclaimer": "Educational calculator output only. Independently verify inputs and results before acting."
+    },
+    {
+      "id": "aiScan",
+      "availability": "unavailable",
+      "reason": "No complete, criterion-addressed production deployment receipt exists."
+    },
+    {
+      "id": "promoAdvisor",
+      "availability": "unavailable",
+      "reason": "No complete, criterion-addressed production deployment receipt exists."
+    },
+    {
+      "id": "promoChat",
+      "availability": "unavailable",
+      "reason": "No complete, criterion-addressed production deployment receipt exists."
+    },
+    {
+      "id": "liveScanner",
+      "availability": "unavailable",
+      "reason": "No complete, criterion-addressed production deployment receipt exists."
+    },
+    {
+      "id": "stackBuilder",
+      "availability": "unavailable",
+      "reason": "No complete, criterion-addressed production deployment receipt exists."
+    },
+    {
+      "id": "aiActionPlan",
+      "availability": "unavailable",
+      "reason": "No complete, criterion-addressed production deployment receipt exists."
+    }
+  ]
+}

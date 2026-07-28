@@ -15,9 +15,10 @@ function metric(label, value, note, color = K.tx) {
   );
 }
 
-export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDiagnostics = {}, usageLog = {} }) {
+export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDiagnostics, usageLog = {} }) {
   const [aiEvents, setAiEvents] = React.useState([]);
-  const [aiEventsLoaded, setAiEventsLoaded] = React.useState(false);
+  const [aiTelemetry, setAiTelemetry] = React.useState({ state: "loading", source: "vault-events", observedAt: null });
+  const [telemetryAttempt, setTelemetryAttempt] = React.useState(0);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -26,7 +27,7 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
         const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) {
-          if (!cancelled) setAiEventsLoaded(true);
+          if (!cancelled) setAiTelemetry({ state: "unknown", source: "vault-events", observedAt: new Date().toISOString(), reason: "signed-out" });
           return;
         }
         const { data, error } = await supabase
@@ -37,20 +38,28 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
           .order("created_at", { ascending: false })
           .limit(500);
         if (!cancelled) {
-          setAiEvents(error || !Array.isArray(data) ? [] : data);
-          setAiEventsLoaded(true);
+          if (error || !Array.isArray(data)) {
+            setAiEvents([]);
+            setAiTelemetry({ state: "degraded", source: "vault-events", observedAt: new Date().toISOString(), reason: "query-failed" });
+          } else {
+            setAiEvents(data);
+            setAiTelemetry({ state: "healthy", source: "vault-events", observedAt: new Date().toISOString(), reason: null });
+          }
         }
       } catch {
-        if (!cancelled) setAiEventsLoaded(true);
+        if (!cancelled) {
+          setAiEvents([]);
+          setAiTelemetry({ state: "degraded", source: "vault-events", observedAt: new Date().toISOString(), reason: "request-failed" });
+        }
       }
     }
     loadAiEvents();
     return () => { cancelled = true; };
-  }, []);
+  }, [telemetryAttempt]);
 
-  const obs = buildObservabilitySnapshot({ appData, dashboardSnapshot: snapshot, syncDiagnostics, usageLog, aiEvents });
-  const syncTone = syncDiagnostics.online === false ? K.rd : obs.hasPendingWrites ? K.yl : K.gn;
-  const aiTone = obs.aiUsage.risk === "high" ? K.rd : obs.aiUsage.risk === "watch" ? K.yl : obs.aiUsage.today > 0 ? K.gn : K.mt;
+  const obs = buildObservabilitySnapshot({ appData, dashboardSnapshot: snapshot, syncDiagnostics, usageLog, aiEvents, aiTelemetry });
+  const syncTone = obs.syncHealth.state === "healthy" ? K.gn : obs.syncHealth.state === "degraded" ? K.yl : K.mt;
+  const aiTone = obs.aiTelemetry.state === "degraded" ? K.rd : obs.aiTelemetry.state !== "healthy" ? K.mt : obs.aiUsage.risk === "high" ? K.rd : obs.aiUsage.risk === "watch" ? K.yl : K.gn;
   const microNpsLabel = obs.latestMicroNps
     ? (obs.latestMicroNps === "yes" ? "Worth it" : obs.latestMicroNps === "mixed" ? "Mixed" : "Not worth it")
     : "No signal";
@@ -73,10 +82,10 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
         <div style={{ padding: "10px 12px", background: K.s2, border: `1px solid ${syncTone}35`, borderRadius: 8, minWidth: 180 }}>
           <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Sync State</div>
           <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 800, color: syncTone }}>
-            {syncDiagnostics.online === false ? "Offline" : obs.hasPendingWrites ? `${obs.queueDepth} queued` : (syncDiagnostics.syncStatus === "saved" ? "Saved" : "Clean")}
+            {obs.syncHealth.label}
           </div>
           <div style={{ fontSize: 10, color: K.mt }}>
-            {syncDiagnostics.online === false ? "Writes stay local until connection returns." : obs.hasPendingWrites ? "Queued writes will flush on the next successful sync." : "Remote sync is caught up."}
+            {obs.syncHealth.detail}
           </div>
         </div>
       </div>
@@ -89,13 +98,13 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
         {metric("Monetization", `${obs.monetizationCoverage}%`, `${obs.monetizedBooks} of ${snapshot.booksComplete !== undefined ? "tracked" : "total"} books have monetized links configured`, obs.monetizationCoverage >= 60 ? K.gn : K.yl)}
         {metric("Launch Links", obs.launchProofSummary.affiliateLinksReady ? "Ready" : "Blocked", obs.launchProofSummary.affiliateLinksReady ? "Required launch books have tracked links." : `Missing ${missingLaunchBooks || "required books"}`, obs.launchProofSummary.affiliateLinksReady ? K.gn : K.yl)}
         {metric("Usage Volume", `${obs.totalCalculations}`, `${obs.calculatorsUsed} distinct calculators used from local usage log`, obs.totalCalculations > 0 ? K.gn : K.mt)}
-        {metric("AI Load", aiEventsLoaded ? `${obs.aiUsage.today}` : "…", `${obs.aiUsage.week} in 7d · ${obs.aiUsage.recentBurst} in 10m${obs.aiUsage.topFeature ? ` · top: ${obs.aiUsage.topFeature}` : ""}`, aiTone)}
+        {metric("AI Load", obs.aiTelemetry.state === "healthy" ? `${obs.aiUsage.today}` : obs.aiTelemetry.state === "loading" ? "…" : "Unknown", obs.aiTelemetry.state === "healthy" ? `${obs.aiUsage.week} in 7d · ${obs.aiUsage.recentBurst} in 10m${obs.aiUsage.topFeature ? ` · top: ${obs.aiUsage.topFeature}` : ""}` : `Telemetry ${obs.aiTelemetry.reason || obs.aiTelemetry.state}; no health inference.`, aiTone)}
         {metric("Micro-NPS", microNpsLabel, obs.latestMicroNps ? `Captured after ${obs.latestMicroNpsSettledCount} settled workflows` : "Waiting for post-settlement feedback", obs.latestMicroNps === "no" ? K.rd : obs.latestMicroNps === "mixed" ? K.yl : K.gn)}
       </div>
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <span style={{ padding: "4px 8px", background: `${obs.hasPendingWrites ? K.yl : K.gn}12`, border: `1px solid ${obs.hasPendingWrites ? K.yl : K.gn}25`, borderRadius: 999, fontSize: 10, color: obs.hasPendingWrites ? K.yl : K.gn, fontFamily: font }}>
-          {obs.hasPendingWrites ? "Pending sync backlog" : "Remote sync caught up"}
+          {obs.syncHealth.state === "healthy" ? "Remote sync caught up" : obs.syncHealth.state === "degraded" ? obs.syncHealth.label : "Sync state unknown"}
         </span>
         <span style={{ padding: "4px 8px", background: `${obs.monetizationCoverage >= 60 ? K.gn : K.ac}12`, border: `1px solid ${obs.monetizationCoverage >= 60 ? K.gn : K.ac}25`, borderRadius: 999, fontSize: 10, color: obs.monetizationCoverage >= 60 ? K.gn : K.ac, fontFamily: font }}>
           Monetization coverage {obs.monetizationCoverage}%
@@ -107,8 +116,20 @@ export default function ObservabilityPanel({ appData = {}, snapshot = {}, syncDi
           Required launch links {obs.launchProofSummary.affiliateLinksReady ? "ready" : "missing"}
         </span>
         <span style={{ padding: "4px 8px", background: `${aiTone}12`, border: `1px solid ${aiTone}25`, borderRadius: 999, fontSize: 10, color: aiTone, fontFamily: font }}>
-          AI abuse risk {obs.aiUsage.risk}
+          {obs.aiTelemetry.state === "healthy" ? `AI abuse risk ${obs.aiUsage.risk}` : "AI telemetry unavailable"}
         </span>
+        {obs.aiTelemetry.state !== "healthy" && obs.aiTelemetry.state !== "loading" && (
+          <button
+            type="button"
+            onClick={() => {
+              setAiTelemetry({ state: "loading", source: "vault-events", observedAt: null });
+              setTelemetryAttempt((attempt) => attempt + 1);
+            }}
+            style={{ padding: "4px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 999, fontSize: 10, color: K.ac, fontFamily: font, cursor: "pointer" }}
+          >
+            Retry AI telemetry
+          </button>
+        )}
         {obs.hotLanes.hotPromoTypes.slice(0, 2).map((lane) => (
           <span key={lane.key} style={{ padding: "4px 8px", background: `${K.gn}12`, border: `1px solid ${K.gn}25`, borderRadius: 999, fontSize: 10, color: K.gn, fontFamily: font }}>
             {lane.badge} · {lane.label}

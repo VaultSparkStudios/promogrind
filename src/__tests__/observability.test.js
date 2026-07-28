@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildAiUsageSnapshot, buildObservabilitySnapshot } from "../observability.js";
+import { buildAiUsageSnapshot, buildObservabilitySnapshot, buildSyncHealth, normalizeTelemetryReceipt } from "../observability.js";
 
 describe("observability snapshot", () => {
   it("summarizes activation, return loop, monetization, and sync health", () => {
@@ -24,6 +24,7 @@ describe("observability snapshot", () => {
       },
       usageLog: { "bonus-bet": 3, "profit-boost": 2 },
       syncDiagnostics: { queueDepth: 2, hasPendingWrites: true },
+      aiTelemetry: { state: "healthy", source: "vault-events", observedAt: "2026-04-17T18:00:00.000Z" },
       aiEvents: [
         { event_type: "promo_chat", created_at: "2026-04-17T12:00:00.000Z", metadata: { remaining: 19 } },
         { event_type: "promo_advisor", created_at: "2026-04-16T12:00:00.000Z", metadata: { remaining: 4 } },
@@ -39,6 +40,7 @@ describe("observability snapshot", () => {
     expect(snapshot.settledFeedback).toBe(1);
     expect(snapshot.queueDepth).toBe(2);
     expect(snapshot.hasPendingWrites).toBe(true);
+    expect(snapshot.syncHealth.state).toBe("degraded");
     expect(snapshot.latestMicroNps).toBe("mixed");
     expect(snapshot.activationScore).toBeGreaterThan(0);
     expect(snapshot.activationFunnel.completion).toBeGreaterThan(0);
@@ -49,6 +51,26 @@ describe("observability snapshot", () => {
     expect(snapshot.aiUsage.today).toBe(1);
     expect(snapshot.aiUsage.week).toBe(2);
     expect(snapshot.aiUsage.topFeature).toBe("promo_chat");
+    expect(snapshot.aiTelemetry.state).toBe("healthy");
+  });
+
+  it("never converts absent telemetry into a healthy receipt", () => {
+    const snapshot = buildObservabilitySnapshot();
+    expect(snapshot.syncHealth).toMatchObject({ state: "unknown", label: "Unknown" });
+    expect(snapshot.aiTelemetry).toMatchObject({ state: "unknown", reason: "no-receipt" });
+    expect(snapshot.queueDepth).toBe(0);
+    expect(snapshot.hasPendingWrites).toBe(false);
+  });
+
+  it("requires affirmative sync evidence and preserves telemetry failures", () => {
+    expect(buildSyncHealth({})).toMatchObject({ state: "unknown" });
+    expect(buildSyncHealth({ online: false })).toMatchObject({ state: "degraded", label: "Offline" });
+    expect(buildSyncHealth({ syncStatus: "saved", observedAt: "2026-04-17T18:00:00.000Z" })).toMatchObject({ state: "healthy", label: "Saved" });
+    expect(normalizeTelemetryReceipt({ state: "degraded", reason: "query-failed" }, "vault-events")).toMatchObject({
+      state: "degraded",
+      reason: "query-failed",
+      source: "vault-events",
+    });
   });
 
   it("flags bursty or exhausted AI usage as abuse risk", () => {

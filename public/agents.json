@@ -51,5 +51,8 @@
     "license": "Proprietary - All Rights Reserved, VaultSpark Studios LLC",
     "reuse": "Do not reproduce full pages, private app data, account data, or proprietary calculations beyond ordinary search snippets and citation."
   },
-  "last_updated": "2026-06-29"
+  "last_updated": "2026-07-26",
+  "capability_contract": "https://promogrind.bet/capabilities.json",
+  "callable_tools": [],
+  "agent_truth_policy": "Source code is not launch proof. Only capabilities.json entries marked available are callable."
 }

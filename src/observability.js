@@ -50,7 +50,42 @@ export function buildAiUsageSnapshot(events = [], now = new Date()) {
   };
 }
 
-export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {}, usageLog = {}, syncDiagnostics = {}, aiEvents = [], now = new Date() } = {}) {
+export function buildSyncHealth(syncDiagnostics) {
+  if (!syncDiagnostics || typeof syncDiagnostics !== "object") {
+    return { state: "unknown", label: "Unknown", detail: "No sync diagnostic receipt is available.", source: "sync-diagnostics", observedAt: null };
+  }
+  const source = syncDiagnostics.source || "sync-diagnostics";
+  const observedAt = syncDiagnostics.observedAt || null;
+  if (syncDiagnostics.loading === true || syncDiagnostics.state === "loading") {
+    return { state: "loading", label: "Loading", detail: "Sync diagnostics are loading.", source, observedAt };
+  }
+  if (syncDiagnostics.online === false) {
+    return { state: "degraded", label: "Offline", detail: "Writes stay local until connection returns.", source, observedAt };
+  }
+  if (syncDiagnostics.error) {
+    return { state: "degraded", label: "Sync error", detail: "The latest sync attempt did not complete.", source, observedAt };
+  }
+  if (syncDiagnostics.hasPendingWrites === true || Number(syncDiagnostics.queueDepth) > 0) {
+    const queueDepth = Math.max(0, Number(syncDiagnostics.queueDepth) || 0);
+    return { state: "degraded", label: `${queueDepth} queued`, detail: "Queued writes will flush on the next successful sync.", source, observedAt };
+  }
+  if (["saved", "clean", "synced"].includes(String(syncDiagnostics.syncStatus || "").toLowerCase())) {
+    return { state: "healthy", label: "Saved", detail: "Remote sync is caught up.", source, observedAt };
+  }
+  return { state: "unknown", label: "Unknown", detail: "Sync has not produced an affirmative health receipt yet.", source, observedAt };
+}
+
+export function normalizeTelemetryReceipt(receipt, source = "telemetry") {
+  const state = ["loading", "healthy", "degraded", "unknown"].includes(receipt?.state) ? receipt.state : "unknown";
+  return {
+    state,
+    source: receipt?.source || source,
+    observedAt: receipt?.observedAt || null,
+    reason: receipt?.reason || (state === "unknown" ? "no-receipt" : null),
+  };
+}
+
+export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {}, usageLog = {}, syncDiagnostics, aiEvents = [], aiTelemetry, now = new Date() } = {}) {
   const workflows = Array.isArray(appData.workflowInbox) ? appData.workflowInbox : [];
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
   const microNps = Array.isArray(appData.microNps) ? appData.microNps : [];
@@ -107,11 +142,13 @@ export function buildObservabilitySnapshot({ appData = {}, dashboardSnapshot = {
     recentSettledProfit: dashboardSnapshot.recentSettledProfit || 0,
     recentSettledCount: dashboardSnapshot.recentSettledCount || 0,
     activationScore,
-    queueDepth: syncDiagnostics.queueDepth || 0,
-    hasPendingWrites: Boolean(syncDiagnostics.hasPendingWrites),
+    queueDepth: Math.max(0, Number(syncDiagnostics?.queueDepth) || 0),
+    hasPendingWrites: Boolean(syncDiagnostics?.hasPendingWrites),
+    syncHealth: buildSyncHealth(syncDiagnostics),
     latestMicroNps: latestMicroNps?.value || null,
     latestMicroNpsSettledCount: toNumber(latestMicroNps?.settledCount) || 0,
     aiUsage: buildAiUsageSnapshot(aiEvents.length ? aiEvents : appData.vaultEvents, now),
+    aiTelemetry: normalizeTelemetryReceipt(aiTelemetry, "vault-events"),
     hotLanes,
   };
 }

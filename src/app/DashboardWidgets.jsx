@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import AccessibleToggle from "../components/AccessibleToggle.jsx";
 import { disableDailyBriefPush, enableDailyBriefPush, isDailyBriefEnabled } from "../sw-register.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { K, S, f, font, fontD } from "../lib/shared.js";
@@ -24,9 +25,12 @@ export function DailyRoutinePanel({ openBetsCount, expiringCount }) {
       {alerts.map((alert, index) => <div key={index} style={{ fontSize: 11, color: K.yl, fontWeight: 600, marginBottom: 6 }}>{alert}</div>)}
       {tasks.map((task, index) => (
         <div key={index} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
-          <div role="checkbox" aria-checked={!!checks[index]} onClick={() => setChecks((current) => ({ ...current, [index]: !current[index] }))} style={{ width: 16, height: 16, borderRadius: 3, border: `2px solid ${checks[index] ? K.gn : K.bd2}`, background: checks[index] ? K.gn : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            {checks[index] && <span style={{ color: K.ink, fontSize: 10, fontWeight: 700 }}>✓</span>}
-          </div>
+          <AccessibleToggle
+            checked={!!checks[index]}
+            onChange={(checked) => setChecks((current) => ({ ...current, [index]: checked }))}
+            label={`${task} complete`}
+            compact
+          />
           <span style={{ fontSize: 12, color: checks[index] ? K.mt : K.tx, textDecoration: checks[index] ? "line-through" : "none" }}>{index + 1}. {task}</span>
         </div>
       ))}

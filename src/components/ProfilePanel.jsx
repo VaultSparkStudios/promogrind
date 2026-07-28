@@ -1,5 +1,5 @@
 import React, { useMemo, useContext } from "react";
-import { signOut, startCheckout, getTierName } from "../auth.js";
+import { signOut, startCheckout, getTierName, updateMarketingConsent } from "../auth.js";
 import { K, font, fontD } from "../lib/shared.js";
 import { FX, AppDataCtx } from "../contexts.jsx";
 import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
@@ -9,6 +9,8 @@ import DataControlsSection from "./profile/DataControlsSection.jsx";
 import { buildReplayInsights } from "../lib/replayLedger.js";
 import { exportPassport } from "../lib/operatorPassport.js";
 import { compareKellyFractions } from "../lib/kellySim.js";
+import { readMarketingConsent } from "../lib/marketingConsent.js";
+import AccessibleToggle from "./AccessibleToggle.jsx";
 
 function PassportExportSection() {
   const ctx = useContext(AppDataCtx);
@@ -312,6 +314,55 @@ function KellySandboxSection() {
   );
 }
 
+function MarketingConsentSection({ user }) {
+  const initial = readMarketingConsent(user);
+  const [granted, setGranted] = React.useState(initial.granted);
+  const [busy, setBusy] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+
+  async function handleChange(next) {
+    setBusy(true);
+    setMessage("");
+    try {
+      await updateMarketingConsent(next);
+      setGranted(next);
+      setMessage(next
+        ? "Consent recorded. You can withdraw it here at any time."
+        : "Marketing email is off. Essential account and security messages are unaffected.");
+    } catch {
+      setMessage("Could not save this preference. Your previous choice is unchanged.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div style={{ padding: "14px 20px", borderBottom: `1px solid ${K.bd}` }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: 10 }}>
+        Communication consent
+      </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+        <div>
+          <div style={{ fontSize: 12, color: K.tx }}>Marketing email</div>
+          <div style={{ fontSize: 10, color: K.dm, marginTop: 3, lineHeight: 1.45 }}>
+            Optional product news and offers. Off by default; account and security email is separate.
+          </div>
+        </div>
+        <AccessibleToggle
+          checked={granted}
+          onChange={handleChange}
+          label="Receive optional PromoGrind marketing email"
+          disabled={busy}
+          accent={K.ac}
+        />
+      </div>
+      <div aria-live="polite" style={{ minHeight: 14, fontSize: 10, color: message.startsWith("Could not") ? K.rd : K.mt, marginTop: 8, lineHeight: 1.45 }}>
+        {message}
+      </div>
+    </div>
+  );
+}
+
 export default function ProfilePanel({
   user, proStatus, darkMode, toggleTheme,
   compactMode, toggleCompact, currency, setCurrency, onClose,
@@ -498,6 +549,9 @@ export default function ProfilePanel({
             </select>
           </div>
         </div>
+
+        {/* ── Communication consent ─────────────────────────────────── */}
+        <MarketingConsentSection user={user} />
 
         {/* ── Mastery ──────────────────────────────────────────────── */}
         <MasterySection />

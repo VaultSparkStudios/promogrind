@@ -292,7 +292,7 @@ export default function App() {
             {[
               ["27 Free Calculators","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
               ["Free PromoGrind Account","One free account for calculator sync, tracker history, and ledger backups."],
-              ["Live Arb + EV Scanner","Real-time opportunities across 40+ books. VaultSparked Pro."],
+              ["Live Arb + EV Scanner","Activation pending production proof. The app will label it available only after verified deployment."],
             ].map(([title,desc])=>(
               <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>
                 <span style={{color:K.gn,fontWeight:700,marginTop:1}}>✓</span>
