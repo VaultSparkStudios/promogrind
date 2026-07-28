@@ -590,3 +590,4 @@ Append chronological entries.
 - Honest deferral: five fully redacted historical credential findings at `b1205ce`, six live headers, true staging, exact forwarding, Supabase deploy authority, and real mailbox/payment/tester/capture/pixel proofs remain unclaimed.
 - Pushed `77ea057` and hook-safe regression fixture follow-up `71fcc2e` directly to `origin/main`.
 - Reviewed Dependabot alert 34 (GHSA-qwww-vcr4-c8h2) against the live advisory and a repository-wide source scan. The issue is limited to unstable React Server Components APIs, which PromoGrind does not use; dismissed it as `not_used` with an evidence-bearing GitHub comment instead of forcing an incompatible React/Router/Node major migration.
+- Ark closeout broadcast: session impact `01JUJEMM4DCF1272F2516B1F5A`; Studio Ops capability/rotation request `01JUJEMMRAA0A9ABFECADFBCA1`. Both payloads are redacted and contain no credential material.

@@ -31,6 +31,7 @@ S120 completed the founder-requested continuous arc. The primary Genius List was
 - Innovation pack — 3 shipped second-order candidates, 1 honest external deferral.
 - Full history — 317 commits; 5 fully redacted findings at `b1205ce`; current tree is clean, history is not claimed clean.
 - Dependabot alert 34 / GHSA-qwww-vcr4-c8h2 — reviewed and dismissed as `not_used`: the advisory is limited to unstable React Server Components APIs, and the complete source tree has no such import or call path.
+- Ark closeout — session impact broadcast `01JUJEMM4DCF1272F2516B1F5A`; exact Supabase capability plus credential rotation/history remediation request `01JUJEMMRAA0A9ABFECADFBCA1` routed to Studio Ops without secret material.
 
 ## Honest deferrals
 
