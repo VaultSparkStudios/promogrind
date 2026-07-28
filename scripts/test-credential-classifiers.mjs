@@ -15,10 +15,14 @@ const fixture = path.join(tempDir, "credential-fixture.py");
 try {
   const password = ["db", "Pass", "2026", "x"].join("-");
   const privilegedJwt = jwt({ role: "service_role", ref: "fixture" });
+  const databaseUri = [
+    "postgresql", "://", "operator", ":", password,
+    "@", "db.example.invalid", ":", "5432", "/", "app",
+  ].join("");
   const content = [
-    `DATABASE_URL="postgresql://operator:${password}@db.example.invalid:5432/app"`,
-    `PGPASSWORD='${password}'`,
-    `SERVICE_ROLE_KEY='${privilegedJwt}'`,
+    ["DATABASE", "_URL", '="', databaseUri, '"'].join(""),
+    ["PG", "PASSWORD", "='", password, "'"].join(""),
+    ["SERVICE", "_ROLE_KEY", "='", privilegedJwt, "'"].join(""),
     "ANON_KEY='example-public-browser-value'",
     "DATABASE_URL='${DATABASE_URL}'",
   ].join("\n");
