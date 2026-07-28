@@ -32,7 +32,7 @@ S120 completed the founder-requested continuous arc. The primary Genius List was
 - Full history — 317 commits; 5 fully redacted findings at `b1205ce`; current tree is clean, history is not claimed clean.
 - Dependabot alert 34 / GHSA-qwww-vcr4-c8h2 — reviewed and dismissed as `not_used`: the advisory is limited to unstable React Server Components APIs, and the complete source tree has no such import or call path.
 - Ark closeout — session impact broadcast `01JUJEMM4DCF1272F2516B1F5A`; exact Supabase capability plus credential rotation/history remediation request `01JUJEMMRAA0A9ABFECADFBCA1` routed to Studio Ops without secret material.
-- Remote preflight runs `30327745917` and `30328393421` correctly blocked promotion before deployment when Linux exposed that the integration fixture escaped the scanner's repo boundary. The follow-up keeps a deterministic six-bit token inside that boundary, uses canonical `fileURLToPath`, and cleans up synchronously; closeout now also regenerates and self-checks the status mirror after its final source write. Local launch verification is green with direct exit 0; final remote evidence follows the boundary fix.
+- Remote preflight runs `30327745917`, `30328393421`, and `30328482500` correctly blocked promotion before deployment when Linux exposed a Windows-shaped direct-invocation check in the secret scanner: POSIX execution skipped `run()` and silently exited green. The root fix compares canonical filesystem paths, and the regression now passes in both native Windows and a Linux Node 22 container. Closeout also regenerates and self-checks the status mirror after its final source write. Local launch verification is green with direct exit 0; final remote evidence follows the scanner fix.
 
 ## Honest deferrals
 

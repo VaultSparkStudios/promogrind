@@ -299,5 +299,8 @@ function run() {
   }
 }
 
-const INVOKED_DIRECTLY = process.argv[1] && import.meta.url === new URL(`file:///${process.argv[1].replace(/\\/g, "/")}`).href;
+// Compare canonical filesystem paths. Hand-building a file:/// URL makes POSIX
+// absolute paths look like file:////… and can silently skip run() in Linux CI.
+const INVOKED_DIRECTLY = Boolean(process.argv[1]) &&
+  path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
 if (INVOKED_DIRECTLY) run();
