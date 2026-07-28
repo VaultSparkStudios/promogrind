@@ -3,7 +3,7 @@
 ## Now
 
 - configure a header-capable production edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
-- rotate the historical privileged Supabase token isolated by the bounded full-history scanner; redacted Ark request `01JUE23NQ1EEF6010874B09F97` records the exact commit/file and never reproduces the credential
+- rotate and remediate the fully redacted historical credential findings isolated at commit `b1205ce`; the current tracked tree is clean, but history remains red until the Studio secrets owner confirms rotation and the approved history strategy
 - deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; never infer deployment from repo code
 - verify the exact `contact@promogrind.bet` → founder mailbox forwarding route once Cloudflare Email Routing Rules Read is granted; Brevo SPF/DomainKeys Identified Mail (DKIM) is verified at criterion level
 - after S119 deploy, verify capture public-key injection live, then record real production auth-email, Stripe purchase, friend-beta, forwarding, and capture-submission receipts in the canonical proof ledger
@@ -13,6 +13,21 @@
 - repeat AI pixel inspection when the connected image viewer is healthy; S118 captured and hashed the complete desktop/mobile dark/light matrix and found zero live computed-style contrast failures, but does not claim the unavailable pixel-review step
 - inspect S118 CI/deployment and refresh the live web probe against the deployed commit
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
+
+## Shipped This Session (S120)
+
+- public-secret-boundary-ratchet — **DONE**: removed credential-bearing private procedures; unified redacted PostgreSQL URI, assignment, and privileged-token classification across tracked-tree, history, and public sanitization gates.
+- tri-state-observability — **DONE**: sync and Artificial Intelligence telemetry now expose loading/unknown/healthy/degraded receipts; empty or failed evidence never renders green.
+- attest-before-promote — **DONE**: Pages promotion depends on the exact launch-local gate, one built artifact, and a commit/tree-bound release attestation.
+- target-locked-supabase-deploy — **DONE**: every deploy command delegates to a gateway-only dry-run-first orchestrator pinned to `fjnpzjjyhnpmunfoycrp`.
+- receipt-addressed-truth-mirrors — **DONE**: generated project/launch mirrors use strict command-addressed receipts, schema validation, atomic writes, and `--check`.
+- affirmative-marketing-consent — **DONE**: off by default, versioned, timestamped, reversible, visible in Profile, and protected by trust receipts.
+- edge-function-verification-sweep — **DONE**: all 15 entrypoints typecheck and all 5 discovered test files run in CI and launch-local.
+- accessible-toggle-contract — **DONE**: shared native switch replaces pointer-only div checkboxes and is guarded against regression.
+- agent-capability-truth-contract — **DONE**: source-derived `capabilities.json` links from agent surfaces and exposes zero unproved callable tools.
+- consent-send-boundary-enforcement — **DONE (second-order)**: weekly/onboarding send jobs reject legacy, partial, malformed, or revoked consent.
+- windows-hide-window-storm-hardening — **DONE (second-order)**: all spawns route through the hardened wrapper; structural guard reports zero violations.
+- integrity-aware-secret-scanning — **DONE (second-order)**: lockfile integrity digests no longer create false secret findings, while credential assignments remain detected.
 
 ## Shipped This Session (S119)
 

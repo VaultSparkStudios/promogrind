@@ -82,3 +82,7 @@
 {"ts":"2026-07-26T07:04:50.276Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":3249,"output":869,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-07-26T18:32:13.071Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":3275,"output":989,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-07-26T18:32:13.076Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":3275,"output":989,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-26T21:43:36.292Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":3275,"output":955,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-26T21:43:36.300Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":3275,"output":955,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-28T00:57:32.969Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":3371,"output":1001,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-07-28T00:57:32.971Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":3371,"output":1001,"cache_read":0,"cache_create":0,"skill":null}

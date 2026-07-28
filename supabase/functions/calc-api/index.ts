@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { getCorsHeaders, json } from "../_shared/http.ts";
+import CALCULATOR_CONTRACT from "./calculator-contract.json" with { type: "json" };
 
 function toD(v: string | number): number {
   const s = String(v).trim();
@@ -56,22 +57,7 @@ const CALCS: Record<string, (b: Record<string, unknown>) => unknown> = {
   },
 };
 
-const DOCS = {
-  name: "PromoGrind Calculator API",
-  version: "1.0",
-  baseUrl: "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api",
-  attribution: "promogrind.bet — free sports betting calculator tools",
-  endpoints: [
-    { path: "/bonus-bet", params: { bonusBetSize: "number", bonusOdds: "string", hedgeOdds: "string" } },
-    { path: "/arb-2way", params: { odds1: "string", odds2: "string", totalStake: "number" } },
-    { path: "/arb", params: { odds1: "string", odds2: "string", totalStake: "number" }, aliasFor: "/arb-2way" },
-    { path: "/ev", params: { yourOdds: "string", fairOdds: "string", stake: "number" } },
-    { path: "/profit-boost", params: { stake: "number", odds: "string", boostPct: "number", maxExtra: "number", hedgeOdds: "string" } },
-    { path: "/no-vig", params: { odds1: "string", odds2: "string" } },
-    { path: "/kelly", params: { winProb: "number (0-100)", odds: "string", bankroll: "number", fraction: "number (optional, default 1)" } },
-  ],
-  oddsFormats: "American (+150, -110), Decimal (2.50, 1.91), Fractional (3/2)",
-};
+const DOCS = CALCULATOR_CONTRACT;
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);

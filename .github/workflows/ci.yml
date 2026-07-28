@@ -39,5 +39,5 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Test edge functions (Deno)
-        run: deno test --allow-env supabase/functions/__tests__/
+      - name: Verify all Edge Functions (typecheck + discovered tests)
+        run: npm run verify:edge

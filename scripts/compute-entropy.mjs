@@ -91,7 +91,8 @@ const oldestHAR = harAges.length ? Math.max(...harAges) : 0;
 sig('Oldest HAR item',        clamp(oldestHAR / 30), 1.0, `${oldestHAR} sessions old (oldest)`);
 
 // Now bucket fullness (empty Now = stale direction, not zero entropy)
-const openNow = (taskBoard.match(/^- \[ \]/gm) || []).length;
+const nowSection = taskBoard.match(/## Now\s*\r?\n([\s\S]*?)(?=\r?\n## |$)/)?.[1] ?? "";
+const openNow = nowSection.split(/\r?\n/).filter((line) => /^- (?:\[ \]\s*)?\S/.test(line)).length;
 sig('Now bucket',             openNow === 0 ? 0.55 : openNow <= 2 ? 0.15 : 0.0, 0.6, `${openNow} open item(s)`);
 
 // ── Composite score ───────────────────────────────────────────────────────────

@@ -294,3 +294,12 @@ Agents MUST NOT modify or remove existing entries.
 - **Direction:** The founder required genius-level, maximally sophisticated work rather than checkbox completion, with observability that cannot lie and honest deferral treated as a win.
 - **Application:** launch proof, startup, capability, and security-history surfaces now carry enough structure to disprove stale or fabricated green states; provider work proceeds to the exact permission boundary and stops with evidence.
 - **Durable rule:** a polished status surface is not sophisticated unless its source, target, freshness, and failure semantics are mechanically inspectable.
+
+### 2026-07-27 — Best-in-history saturation must remain evidence-bound (S120)
+
+- **Direction:** The founder required one continuous, maximally sophisticated arc that exhausts both the Unified Genius List and second-order innovation, with continuation gated by context capacity rather than “one thing done.”
+- **Quality pact:** best-in-history means root-fixing live premises and implementing compound innovations, not accumulating checkbox greens.
+- **Truth pact:** observability derives from source truth and self-validates; no fabricated gate data; honest rejection or external deferral is a recorded win.
+- **Cost pact:** model cost is notional under the flat-rate Max Plan and must not create alarmist blockers.
+- **Application:** S120 shipped receipt-addressed telemetry/mirrors/releases/capabilities, affirmative reversible consent, and three causal second-order safeguards while preserving every real external proof gap.
+- **Durable rule:** sophistication increases the system's ability to disprove itself; it never weakens evidence requirements.

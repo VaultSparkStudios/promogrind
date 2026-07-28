@@ -620,3 +620,12 @@ Impact: Future closeouts can call the expected script names without failing on m
 - Context: `launchState.js` retained an unused handwritten blocker array alongside the generated launch-proof ledger.
 - Decision: delete the parallel prose ledger and regression-test that launch state derives from `launchProofs.generated.js`.
 - Why this was chosen: unused observability sources still create future contradiction risk; one mechanically generated source is safer and easier to audit.
+
+## 2026-07-27 — S120 evidence cannot inherit authority
+
+- **Decision:** Source implementation, credential presence, prose status, and legacy metadata never inherit the authority of a live receipt.
+- **Applications:** public agent tools remain non-callable until criterion-addressed deployment proof is complete; missing telemetry is unknown rather than healthy; legacy `newsletter` metadata cannot authorize marketing delivery; Supabase apply mode requires the exact target-bound gateway capability.
+- **Security boundary:** credential-bearing private migration/setup procedures were removed from the public tree. Current-tree green does not erase Git history; five fully redacted historical findings remain rotation/remediation work.
+- **Release boundary:** production promotion requires the exact preflight gate and a commit/tree-bound attestation. Post-deploy smoke remains verification, not permission to bypass preflight.
+- **Rejected alternatives:** fabricating deployment receipts, treating a narrower admin capability as deploy authority, copying secret material into fixtures, hand-editing sibling control-plane state, or calling the lack of external proof a failed implementation.
+- **Consequence:** repo-owned gates are green while SPARKED remains NO-GO until staging and external proofs exist.

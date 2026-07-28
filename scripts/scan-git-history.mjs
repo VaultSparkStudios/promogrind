@@ -11,6 +11,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from './lib/safe-spawn.mjs';
+import { classifyCredentialLine } from './lib/credential-classifiers.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -58,6 +59,7 @@ const SKIP_PATHS = [
   /scripts\/lib\/validate\.mjs/,
   /scripts\/git-hooks\/pre-push/,
   /scan-git-history\.mjs/,
+  /credential-classifiers\.mjs/,
 ];
 
 const findings = [];
@@ -131,6 +133,9 @@ function consumeLine(line) {
     pattern.regex.lastIndex = 0;
     for (const match of content.matchAll(pattern.regex)) addFinding(pattern, match[0]);
   }
+  for (const finding of classifyCredentialLine(content).filter((entry) => entry.type !== 'privileged-jwt')) {
+    addFinding({ id: finding.type, label: finding.label }, finding.redacted);
+  }
   for (const secret of contextualAwsSecrets(content)) {
     addFinding({ id: 'aws-secret', label: 'AWS secret access key' }, secret);
   }
@@ -162,7 +167,7 @@ function supabaseJwtSecrets(content) {
 }
 
 function addFinding(pattern, raw) {
-  const preview = `${raw.slice(0, 8)}...[REDACTED]`;
+  const preview = `<redacted:${pattern.id}>`;
   const key = [currentCommit.sha, currentFile, pattern.id, preview].join('|');
   if (seen.has(key)) return;
   seen.add(key);

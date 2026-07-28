@@ -1,51 +1,57 @@
 # Latest Handoff — PromoGrind
 
-Date: 2026-07-25
-Session: 119
+Date: 2026-07-27
+Session: 120
 Agent: Codex
-Status: saturated; repo-owned gates green; release promotion remains NO-GO
+Status: saturated; 9/9 primary and 3 second-order items shipped; repo gates green; SPARKED remains NO-GO
 
-## Where We Left Off (Session 119)
+## Where We Left Off (Session 120)
 
-S119 completed the requested continuous `/start → /audit → /implement → second-order innovation → /closeout` mission. Four verified infrastructure defects and four second-order candidates shipped; the primary Genius List is exhausted. Launch proof, startup, credential, and history-security observability now fail closed and self-validate instead of trusting prose or presence.
+S120 completed the founder-requested continuous arc. The primary Genius List was honestly empty, the infrastructure/public-app audit verified 16 premises and selected nine, all nine shipped at L3, and three generated second-order innovations also shipped. The context meter remained CONTINUE with more than 95% available during saturation.
 
 ## What shipped
 
-1. Startup signal provenance lattice with public-repo availability semantics and true 169-item Ark drain evidence.
-2. Bounded one-stream full-history secret scanner with precision-aware fixtures and one classified real residual.
-3. Criterion-level launch-proof quorums, typed receipts, migrated runners/ledger, and browser-side independent derivation.
-4. Five-target capability truth plane with redacted six-hour receipts and provider-specific scope probes.
-5. Brevo domain creation, four exact DNS authentication records, successful authentication, and one evidence-backed proof criterion.
-6. CI fail-closed injection of browser-safe Supabase configuration across static capture pages.
-7. Browser quorum self-validation, capability freshness decay, and capture build enforcement.
-8. Host-local date stamping and protocol-compliant noninteractive closeout autopilot.
+1. Current-tree privileged-secret removal plus one shared, fully redacted credential classifier across tracked, history, and public-sanitization surfaces.
+2. Receipt-bearing tri-state sync/AI observability where absent or failed evidence cannot become green.
+3. Attest-before-promote Pages workflow binding commit, tree digest, gate outcomes, and the single deploy artifact.
+4. Target-locked, secrets-gateway-only Supabase deployment orchestration with safe dry-run default.
+5. Strict command-addressed generated truth mirrors with atomic/check modes.
+6. Affirmative, versioned, reversible marketing consent with Profile control and trust receipts.
+7. Complete Edge verification: 15 entrypoints and 5 test files.
+8. Shared accessible native switch contract.
+9. Fail-closed public agent capability catalog with no unproved callable tools.
+10. Second-order consent enforcement at send boundaries, Windows spawn hardening, and integrity-aware secret scanning.
 
 ## Verification
 
-- `npm run verify:launch-local` — green, direct exit 0.
-- Vitest — 75 files, 590/590 passing; standalone session invariants — 47 assertions passing.
-- Full history — 314 commits in about two seconds; one redacted privileged Supabase token finding routed for rotation.
-- Live capabilities — 4/5 READY: Brevo sender domain, PromoGrind Supabase REST service scope, live Stripe account, and production capture configuration. Cloudflare Transform Rules remains authenticated/403.
-- Brevo configuration — four DNS outcomes idempotently unchanged on retry; authentication request 200; canonical proof 1/3.
-- Public claims/source/auth/launch/UX/browser/bundle/proof/sanitization gates — green.
+- `npm run verify:launch-local` — direct exit 0.
+- Vitest — 76 files, 597/597 passing.
+- Deno — 15/15 entrypoints typecheck; 5 files, 43/43 tests passing.
+- Tracked secret scan — 0; strict public sanitizer — 0; supply-chain blocks — 0.
+- Innovation pack — 3 shipped second-order candidates, 1 honest external deferral.
+- Full history — 317 commits; 5 fully redacted findings at `b1205ce`; current tree is clean, history is not claimed clean.
 
 ## Honest deferrals
 
-- Six live security headers require Cloudflare Transform Rules scope; current target token returns 403.
-- Exact Cloudflare Email Routing rule inspection returns 403, so forwarding is not claimed despite public MX records.
-- Historical privileged Supabase token rotation is control-plane work; Ark cargo `01JUE23NQ1EEF6010874B09F97` includes the redacted location.
-- Production capture configuration is verified and recorded 1/3; submission and observable lead-row evidence remain open.
-- Production auth email, real purchase/portal, friend beta, forwarding delivery, and capture submission remain criterion-level external evidence gates.
-- AI pixel inspection remains partial because the connected image viewer still fails at Windows credential protection.
+- Six live security headers and a true remote staging environment remain absent.
+- Exact contact forwarding/mailbox delivery cannot be proved with current Cloudflare scope.
+- Historical credentials require control-plane rotation and an approved history-remediation strategy.
+- `promogrind.supabase.deploy` remains MISSING even though narrower Supabase admin capability is READY; no deployment was attempted.
+- Production auth email, real Stripe lifecycle, friend beta, capture submission/lead observation, and AI pixel review remain unproved.
+- Obelisk activation, remote deletion, and generated static-page theme parity remain deliberately deferred for the structural reasons recorded in the audit.
 
 ## Next actions
 
-1. Grant the two exact Cloudflare scopes, configure six headers, verify the forwarding rule, and rerun live checks.
-2. Rotate the isolated historical Supabase credential and provide a target-bound deploy token for the pending migration/functions.
-3. Complete capture submission/lead-row plus real human, payment, forwarding, and mailbox proof criteria.
+1. Establish a real staging target and header-capable edge, then prove all six headers before SPARKED.
+2. Complete historical credential rotation/remediation and add the exact PromoGrind deploy capability mapping.
+3. Execute the criterion-addressed Supabase, mailbox, auth-email, Stripe, friend-beta, capture, and pixel proofs.
 
-Intent Outcome: Achieved — every repo-owned audit and second-order item shipped; non-repo evidence remains explicitly unclaimed.
-Deploy: deployed — commit `c718c24`; brief-format `30194498456`, CI `30194498448`, and Pages `30194498469` green; live capture configuration verified.
+Intent Outcome: Achieved — every repo-owned primary and generated second-order candidate shipped; external evidence remains explicitly unclaimed.
+Deploy: pending this closeout commit/push; the prior production head remains S119 until remote workflow evidence says otherwise.
+
+---
+
+Session Intent (S120, Codex): Run the complete agent-neutral `/arc` continuously through `/start → /audit → /implement → /closeout`; exhaust verified primary and second-order work; keep observability source-derived and self-validating; treat flat-rate Max Plan cost as notional; preserve honest deferrals; finish with canonical write-back, direct-main push, Ark broadcast, and zero-running shell hygiene.
 
 ---
 

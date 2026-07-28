@@ -1,0 +1,375 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-07-26",
+  "session": 120,
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched"
+  },
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "infrastructure-plus-public-app",
+  "successBar": [
+    "Every shipped state is derived from live source truth and fails closed when evidence is absent.",
+    "No credential value is printed, copied into a fixture, or moved into another public file.",
+    "Every deployment command is target-bound and dry-run testable.",
+    "Every item adds direct behavioral verification, not report-only freshness."
+  ],
+  "axisWeights": {
+    "featuresDepth": 1,
+    "uiUxFeedback": 1,
+    "gamificationImmersion": 0.7,
+    "aiIntelligence": 1,
+    "securityPrivacy": 1.4,
+    "speedOrganization": 1.15,
+    "observabilityTruth": 1.35,
+    "ecosystemIntegration": 1,
+    "tokenCostReduction": 0.8
+  },
+  "premiseVerification": {
+    "method": "Live source, workflow, test, generated-artifact, release-gate, and gateway-safe capability inspection.",
+    "primaryGeniusList": "Exhausted: cache regenerated with zero ranked items.",
+    "verifiedCandidates": 16,
+    "selected": 9,
+    "culledOrDeferred": 7
+  },
+  "items": [
+    {
+      "rank": 1,
+      "id": 1,
+      "slug": "public-secret-boundary-ratchet",
+      "title": "Remove tracked privileged credentials and make every public gate detect the class",
+      "tier": "fire",
+      "axis": "security / privacy / observability",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 7,
+      "priority": 31.1,
+      "evidence": "Three tracked internal migration/setup files contain privileged database or service credentials. The current full-tree scanner returns zero because PostgreSQL URI credentials, shorter privileged JSON Web Tokens, Python files, and already-committed content are outside overlapping gate coverage.",
+      "recipe": "Remove private migration/setup procedures from the public tree; expand working-tree, history, and public-sanitization detection with redacted PostgreSQL URI, password assignment, and decoded privileged-token classification; add Python coverage; run a non-writing full tracked-tree scan in launch verification; ship a redacted rotation/history-remediation request through Ark.",
+      "timeToFirstValue": "The next local or continuous-integration run blocks the credential class that is currently invisible.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Remove values and add focused scanner patterns."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "L1 plus tracked-tree gate, sanitizer parity, and redacted fixtures."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "L2 plus shared classifier coverage in history scanning and Ark rotation receipt."
+        }
+      },
+      "executionEvidence": "Removed three credential-bearing private procedure files plus a divergent deploy shell; shared URI/assignment/privileged-token classifier now gates tracked tree, history, and sanitizer. Current tree is clean; five fully redacted historical findings remain explicitly queued for rotation/history remediation."
+    },
+    {
+      "rank": 2,
+      "id": 2,
+      "slug": "tri-state-observability",
+      "title": "Make unknown telemetry impossible to render as healthy",
+      "tier": "fire",
+      "axis": "observability / feedback loop / AI intelligence",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 9,
+      "effortHours": 5,
+      "priority": 30.4,
+      "evidence": "The dashboard defaults absent sync diagnostics to an empty object and maps the result to Clean/caught-up. AI-event query errors collapse to an empty successful set, so unavailable telemetry renders as zero and normal.",
+      "recipe": "Introduce provenance-bearing loading, unknown, healthy, and degraded states for sync and AI telemetry. Only affirmative receipts may render green; errors retain a redacted reason and retry path. Add component and model tests for absent, loading, failed, empty-success, queued, and saved states.",
+      "timeToFirstValue": "Operators stop mistaking missing evidence for a healthy system.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Add explicit unknown/degraded state to the snapshot model."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "L1 plus provenance, timestamp, retry, and component tests."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "L2 plus freshness decay and a self-validating state contract."
+        }
+      },
+      "executionEvidence": "Sync and AI telemetry now expose loading/unknown/healthy/degraded receipts; missing and failed queries cannot render green. Four focused observability tests pass."
+    },
+    {
+      "rank": 3,
+      "id": 3,
+      "slug": "attest-before-promote",
+      "title": "Gate production deployment on an immutable preflight attestation",
+      "tier": "fire",
+      "axis": "security / release engineering / process quality",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 6,
+      "priority": 28,
+      "evidence": "The Pages workflow uploads and deploys before production verification. A later red job reports failure only after the artifact is live, while the workflow omits the repo's full local launch gate.",
+      "recipe": "Split the workflow into preflight, deploy, and post-deploy jobs. Preflight runs the exact launch-local gate, builds once, emits an artifact plus commit-bound attestation, and deploy depends on it. Preserve post-deploy probes as rollback signals; never claim staging exists when only local staging is available.",
+      "timeToFirstValue": "A failing source or policy gate can no longer reach production.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Run launch-local before upload."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Split jobs and pass the built artifact between them."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "L2 plus commit-bound attestation and deterministic workflow tests."
+        }
+      },
+      "executionEvidence": "Pages deployment is a preflight → artifact+attestation → deploy → post-deploy DAG. Attestation binds commit, tree digest, file count, and required gate receipts; workflow/attestation regressions pass."
+    },
+    {
+      "rank": 4,
+      "id": 4,
+      "slug": "target-locked-supabase-deploy",
+      "title": "Replace mutable-link Supabase commands with one target-locked deploy orchestrator",
+      "tier": "fire",
+      "axis": "security / organization / deployment",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 5,
+      "priority": 27.9,
+      "evidence": "Package commands disagree: one function command pins the PromoGrind project while aggregate and daily-brief commands rely on mutable local link state and deploy different function sets.",
+      "recipe": "Create a dry-run-first Node orchestrator with a single function manifest, explicit PromoGrind project reference on every command, target mismatch refusal, gateway-only token resolution for apply mode, and redacted receipts. Make package scripts delegate to it; do not deploy during repository validation.",
+      "timeToFirstValue": "Every future deploy preview proves its exact target and function set before credentials are touched.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Pin every existing package command and unify the function list."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "L1 plus dry-run orchestrator and mismatch tests."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "L2 plus gateway resolution and redacted deployment receipt schema."
+        }
+      },
+      "executionEvidence": "All package deploy entrypoints delegate to one dry-run-first gateway-resolved orchestrator pinned to fjnpzjjyhnpmunfoycrp. Target mismatch and manifest regressions pass; no deployment was performed."
+    },
+    {
+      "rank": 5,
+      "id": 5,
+      "slug": "receipt-addressed-truth-mirrors",
+      "title": "Stop generated launch mirrors from cloning one prose status into independent greens",
+      "tier": "high",
+      "axis": "observability / source of truth / token reduction",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 9,
+      "effortHours": 6,
+      "priority": 27.2,
+      "evidence": "The project-status mirror copies one free-text launch-gate status into smoke, browser-smoke, and build cells; loose substring parsing can classify negated text as passing. The launch-proof mirror catches malformed source and writes an empty proof set without check mode.",
+      "recipe": "Use strict command-addressed testing-surface receipts with enum state, exit code, observed time, and commit. Unknown or stale commands remain unknown. Make both mirrors share fail-closed validation, atomic output, and --check behavior; add them to integrity and deploy triggers.",
+      "timeToFirstValue": "Browser launch state becomes evidence-addressed instead of prose-inferred.",
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Tighten parsing and fail malformed launch proof input."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "L1 plus command-addressed receipt matching and --check."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "L2 plus shared generator helper, freshness, commit binding, and adversarial tests."
+        }
+      },
+      "executionEvidence": "Both generated mirrors now share strict receipt-addressed parsing, atomic writes, schema validation, and --check. Negated prose and missing commands remain unknown."
+    },
+    {
+      "rank": 6,
+      "id": 6,
+      "slug": "affirmative-marketing-consent",
+      "title": "Make marketing consent affirmative, versioned, and reversible",
+      "tier": "high",
+      "axis": "privacy / UX / trust",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 6,
+      "effortHours": 4,
+      "priority": 21.8,
+      "evidence": "Signup initializes marketing opt-in to true in both UI and auth helper while public policy describes newsletter mail as opt-in.",
+      "recipe": "Default to false; store consent version, source, granted/revoked timestamps separately from transactional mail; expose an account control that can grant or revoke without affecting authentication. Add policy and round-trip tests.",
+      "timeToFirstValue": "New accounts no longer receive marketing consent without an affirmative action.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Default both UI and helper to false."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "L1 plus versioned provenance and tests."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 plus reversible profile control and receipt feedback."
+        }
+      },
+      "executionEvidence": "Signup defaults off; consent is versioned, sourced, timestamped, reversible in Profile, and emits trust receipts. Second-order send-boundary enforcement rejects legacy newsletter metadata."
+    },
+    {
+      "rank": 7,
+      "id": 7,
+      "slug": "edge-function-verification-sweep",
+      "title": "Compile and test the complete Edge Function surface in continuous integration",
+      "tier": "high",
+      "axis": "development health / security / automation",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 6,
+      "effortHours": 4,
+      "priority": 21,
+      "evidence": "Continuous integration tests only one Edge Function test directory, missing a real shared privacy test outside it, and never type-checks every function entry point.",
+      "recipe": "Add a deterministic edge verification script that discovers all tests and index files, runs the complete Deno test surface, type-checks every entry point, and self-tests discovery without network execution. Wire it into continuous integration and launch-local where Deno is available.",
+      "timeToFirstValue": "A misplaced test or uncompilable function can no longer remain invisible to continuous integration.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Expand the Deno test path."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "L1 plus compile all function entry points."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 plus deterministic discovery manifest and regression test."
+        }
+      },
+      "executionEvidence": "CI and launch-local discover and typecheck all 15 Edge entrypoints and execute all 5 test files. The sweep exposed and fixed five real type errors; 43 Deno tests pass."
+    },
+    {
+      "rank": 8,
+      "id": 8,
+      "slug": "accessible-toggle-contract",
+      "title": "Replace pointer-only pseudo-checkboxes with one keyboard-native toggle contract",
+      "tier": "high",
+      "axis": "UI / accessibility / process quality",
+      "status": "shipped",
+      "impact": 7,
+      "innovation": 5,
+      "effortHours": 3,
+      "priority": 15.6,
+      "evidence": "Two visible controls use clickable div role=checkbox without focusability or keyboard handlers although a correct precedent exists elsewhere.",
+      "recipe": "Extract a native button-based accessible toggle with pressed/checked semantics, visible focus, and stable styling; replace both pseudo-checkboxes and add keyboard/focus regressions plus a source invariant.",
+      "timeToFirstValue": "Keyboard and switch-device users can operate both controls.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Add tab and keyboard handlers."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Use native controls and focused component tests."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "L2 plus shared toggle and no-pseudo-checkbox invariant."
+        }
+      },
+      "executionEvidence": "Pointer-only div checkboxes were replaced by a shared native button switch used across routine, calculator, and consent controls; source invariant passes."
+    },
+    {
+      "rank": 9,
+      "id": 9,
+      "slug": "agent-capability-truth-contract",
+      "title": "Publish a fail-closed agent capability catalog derived from real availability",
+      "tier": "high",
+      "axis": "AI intelligence / dual audience / public claims",
+      "status": "shipped",
+      "impact": 8,
+      "innovation": 9,
+      "effortHours": 7,
+      "priority": 19.2,
+      "evidence": "agents.json publishes policy and rights but no tool schemas or availability. Public copy describes live scanning while the feature defaults off and the component renders unavailable.",
+      "recipe": "Generate a versioned calculator/agent capability catalog with inputs, outputs, provenance, limits, prohibitions, and source-only/staging/live state from the same launch and feature sources. Link it from agents.json and llms.txt; make public claim tests reject live-tense claims for unavailable capabilities.",
+      "timeToFirstValue": "Humans and agents see what is actually executable instead of inferring capability from marketing prose.",
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Add availability and capability links to agents.json."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "Generate calculator schemas and source-derived states."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "L2 plus contract vectors, public-claim lint, and drift checks."
+        }
+      },
+      "executionEvidence": "agents.json and llms.txt link a deterministic capabilities.json generated from calculator, launch-proof, and default-flag truth. Unproved deployment exposes zero callable tools and live scanner copy now states activation is pending."
+    }
+  ],
+  "innovationReserve": [
+    "Unify credential classifiers across working-tree, history, and public-sanitization gates.",
+    "Bind release attestations to commit and artifact digests so post-deploy receipts can prove lineage.",
+    "Expose consent and telemetry provenance as user-visible trust receipts.",
+    "Make generated agent capabilities self-test against calculator vectors."
+  ],
+  "skipped": [
+    {
+      "title": "Activate Obelisk as the primary identity plane",
+      "reason": "Premise verified, but activation without a server verifier, replay/expiry contract, account-linking semantics, and live identity capability would ship a broken security façade. Record as an honest follow-up, not a checkbox implementation."
+    },
+    {
+      "title": "Self-service remote account deletion",
+      "reason": "Premise verified; safe deletion requires an explicit remote retention/cascade contract and deployed authenticated function. Local export/clear/undo already exists, so a shallow UI-only deletion button would be deceptive."
+    },
+    {
+      "title": "Static public-page theme parity",
+      "reason": "Valid design debt, but generator/template ownership must be resolved first to avoid hand-editing one hundred pages that regeneration would overwrite."
+    },
+    {
+      "title": "Missing baseline legal, agent, theme, bundle, and launch-proof surfaces",
+      "reason": "Disproven by live files and tests; these are refinement gaps, not missing systems."
+    }
+  ],
+  "totals": {
+    "selected": 9,
+    "fire": 4,
+    "high": 5,
+    "effortHoursL2": 35,
+    "priority": 222.2
+  },
+  "sample": {
+    "filesInspected": 76,
+    "commandsRun": 34,
+    "liveExternalReadOnlyChecks": 9
+  },
+  "notes": "All nine verified items shipped at L3 with behavioral gates. No production deployment or fabricated proof occurred. Current-tree credential exposure is removed; historical findings and external launch proofs remain explicit remediation/launch deferrals.",
+  "execution": {
+    "status": "complete",
+    "completedAt": "2026-07-27",
+    "depth": "L3",
+    "selected": 9,
+    "shipped": 9,
+    "partial": 0,
+    "skipped": 0,
+    "secondOrder": {
+      "shipped": [
+        "consent-send-boundary-enforcement",
+        "windows-hide-window-storm-hardening",
+        "integrity-aware-secret-scanning"
+      ],
+      "honestDeferrals": [
+        "external-launch-proof-ledger"
+      ]
+    }
+  }
+}

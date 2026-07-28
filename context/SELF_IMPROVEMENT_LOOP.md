@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S115:1000 | S116:1000 | S117:999 | S118:999 | S119:999
-Avgs - 3: 999.0 [N=3] | 5: 999.4 [N=5] | all: 999.7 [recent closeout series]
-  └ 3-session (S117/S118/S119): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.0
+Sparkline (last 5 totals): S116:1000 | S117:999 | S118:999 | S119:999 | S120:1000
+Avgs - 3: 999.3 [N=3] | 5: 999.4 [N=5] | all: 999.7 [recent closeout series]
+  └ 3-session (S118/S119/S120): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.3
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-07-25 | Session 119 | Total: 999/1000 | Velocity: 8 | protocolVelocity: 8
+Last session: 2026-07-27 | Session 120 | Total: 1000/1000 | Velocity: 12 | protocolVelocity: 12
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1567,3 +1567,32 @@ Protocol verification pass against the active `/start` -> `/audit` -> `/implemen
 **SIL items committed:**
 1. Any provider readiness signal must bind target, permission, checked time, and evidence source before it can clear a blocker.
 2. Any proof shown in the browser must be independently derivable from the same criterion receipts as its canonical writer.
+
+## 2026-07-27 — Session 120
+
+**Intent:** Run the complete agent-neutral `/arc` continuously, exhaust live-code-verified infrastructure/public-app work and generated second-order innovation, then close out directly to main without inventing external proof.
+
+**Total: 1000/1000 | Velocity: 12 | Status: FORGE | Debt: →**
+
+| Category | Score | Direction | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 597/597 Vitest, 43/43 Deno tests, all 15 Edge entrypoints, build, and launch-local pass directly. |
+| Creative Alignment | 100 | ↑ | Trust surfaces now say exactly what evidence permits: unknown stays unknown, consent is visible, and unavailable agent tools are not advertised as callable. |
+| Momentum | 100 | ↑ | Nine L3 audit items and three second-order innovations shipped; primary and generated repo-owned lists are exhausted. |
+| Engagement | 100 | ↑ | Users can reverse marketing consent, operate switches by keyboard, retry failed telemetry, and distinguish pending activation from live capability. |
+| Process Quality | 100 | ↑ | Every premise was verified against live code; adverse discoveries produced root fixes; external deferral remained an explicit win. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited; rotation/capability needs are routed through Ark-owned control-plane work. |
+| Security Posture | 100 | ↑ | Credential-bearing public procedures removed; shared classifiers, tracked-tree scan, release attestation, and send-boundary consent fail closed. |
+| Ecosystem Integration | 100 | ↑ | Human UI, agent catalog, generated mirrors, Edge CI, launch proofs, deploy orchestration, and release workflow share source-derived contracts. |
+| Capital Efficiency | 100 | → | No paid service or recurring-cost alarm was added; notional flat-rate model usage stayed outside blocker logic. |
+| Automation Coverage | 100 | ↑ | Complete Edge discovery, accessibility/source invariants, public capability drift, lockfile scanner tests, and attest-before-promote are launch-gated. |
+
+**Top win:** replaced four authority leaks—secret-class blind spots, empty-as-green telemetry, source-as-live agent claims, and legacy opt-in metadata—with fail-closed, independently testable contracts.
+
+**Top gap:** staging and real-world header/mailbox/payment/tester/deployment/pixel proofs remain external; local excellence is not launch evidence.
+
+**Intent outcome:** Achieved for every repo-owned primary and second-order item; push/Ark evidence follows this canonical write-back.
+
+**SIL items committed:**
+1. Any state that can authorize a send, deploy, promotion, or agent invocation must carry purpose-specific evidence; never inherit authority from a nearby boolean, credential, or source file.
+2. Every generated truth surface must be reproducible in `--check` mode and must preserve unknown when its exact receipt is absent.

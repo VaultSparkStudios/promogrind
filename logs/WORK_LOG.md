@@ -579,3 +579,12 @@ Append chronological entries.
 - GitHub Actions passed: brief-format `30175588383`, CI `30175588392`, and Deploy Pages `30175588407`.
 - Deploy workflow production launch verification and production dashboard smoke both passed; the failure step was skipped because verification was green.
 - Release-state promotion remains NO-GO because six live response headers and established external proofs remain pending.
+
+## 2026-07-27 — Session 120 Codex saturated goal arc
+
+- Ran the complete agent-neutral `/goal` + `/arc` continuously through start, live-code audit, implementation, second-order innovation, verification, and closeout.
+- Shipped 9/9 L3 audit items: public credential boundary, tri-state observability, attest-before-promote, target-locked Supabase deploy, receipt-addressed mirrors, affirmative marketing consent, complete Edge verification, accessible toggles, and the public agent capability contract.
+- Shipped three second-order innovations: send-boundary consent enforcement, structural Windows spawn hardening, and integrity-aware secret scanning.
+- Root-fixed five Edge type errors discovered by the new complete sweep. All 15 entrypoints typecheck; 43/43 Deno tests and 597/597 Vitest tests pass.
+- `npm run verify:launch-local` passed directly with exit 0; tracked secret and strict sanitizer scans report 0; supply-chain scan reports 0 blocks.
+- Honest deferral: five fully redacted historical credential findings at `b1205ce`, six live headers, true staging, exact forwarding, Supabase deploy authority, and real mailbox/payment/tester/capture/pixel proofs remain unclaimed.

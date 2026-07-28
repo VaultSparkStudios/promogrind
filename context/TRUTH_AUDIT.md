@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-07-25 (S119)
-Overall status: green-with-target-scope-and-external-proof-follow-ups
-Next action: grant exact Cloudflare Transform Rules and Email Routing read scopes, rotate the isolated historical privileged Supabase token, verify the S119 capture deploy, then complete real auth-email, purchase, friend-beta, forwarding, and mailbox criteria.
+Last reviewed: 2026-07-27 (S120)
+Overall status: green-repo-owned-with-history-and-external-proof-follow-ups
+Next action: establish true staging and a header-capable edge; rotate/remediate the redacted historical credentials; obtain the exact PromoGrind deploy capability; then complete criterion-addressed mailbox, auth, payment, friend, capture, and pixel proofs.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
 
 ---
@@ -58,6 +58,24 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache now treats Markdown/JSON coherence as part of freshness; remaining launch gaps are real external proof gates.
+
+## Resolved This Session (S120)
+
+- Removed credential-bearing internal procedures from the public tree and unified redacted credential classification across tracked, history, and sanitizer gates. Current tree is clean; history remains explicitly red.
+- Sync and AI observability now require affirmative receipts for healthy state; missing/query-failed evidence is unknown or degraded.
+- Project and launch mirrors use strict command-addressed receipts, atomic output, schema checks, and adversarial negation handling.
+- Supabase deployment is target-locked, dry-run-first, and secrets-gateway-only; source validation did not mutate production.
+- Pages promotion now depends on a commit/tree-bound preflight attestation and a single verified artifact.
+- Marketing consent is affirmative, versioned, reversible, and enforced again at weekly/onboarding send boundaries.
+- All 15 Edge entrypoints typecheck and all 5 test files run; five previously invisible type errors were repaired.
+- Agent capability truth is generated from implementation, flags, and proof receipts; zero unproved tools are callable.
+- Repo-owned verification is green at 597/597 Vitest, 43/43 Deno, and launch-local direct exit 0.
+
+## Explicit Evidence Gaps (S120)
+
+- Five fully redacted findings remain in historical commit `b1205ce`; rotation and approved history remediation are not repo-local proof.
+- There is no true remote staging target and six required live headers remain absent.
+- Exact contact forwarding, target-bound Supabase deployment, auth-email, Stripe lifecycle, friend-beta, capture submission/lead observation, and AI pixel proof remain unclaimed.
 
 ## Resolved This Session (S119)
 

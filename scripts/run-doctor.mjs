@@ -257,7 +257,7 @@ const CHECKS = [
     parse: (out, _code) => {
       try {
         const d = JSON.parse(out);
-        const score = d.entropyScore ?? 0;
+        const score = d.entropy ?? d.entropyScore ?? 0;
         return { pass: score < 0.5, detail: `score: ${score.toFixed(3)} ${score < 0.3 ? '(healthy)' : score < 0.5 ? '(elevated)' : '(high)'}` };
       } catch { return { pass: true, detail: 'entropy unavailable' }; }
     },

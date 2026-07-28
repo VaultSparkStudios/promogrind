@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "lastUpdated": "2026-07-26",
+  "name": "PromoGrind Calculator API",
+  "version": "1.0",
+  "candidateBaseUrl": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api",
+  "attribution": "PromoGrind — promogrind.bet",
+  "endpoints": [
+    {
+      "slug": "bonus-bet",
+      "path": "/bonus-bet",
+      "params": { "bonusBetSize": "number", "bonusOdds": "odds", "hedgeOdds": "odds" }
+    },
+    {
+      "slug": "arb-2way",
+      "path": "/arb-2way",
+      "params": { "odds1": "odds", "odds2": "odds", "totalStake": "number" }
+    },
+    {
+      "slug": "arb",
+      "path": "/arb",
+      "params": { "odds1": "odds", "odds2": "odds", "totalStake": "number" },
+      "aliasFor": "/arb-2way"
+    },
+    {
+      "slug": "ev",
+      "path": "/ev",
+      "params": { "yourOdds": "odds", "fairOdds": "odds", "stake": "number" }
+    },
+    {
+      "slug": "profit-boost",
+      "path": "/profit-boost",
+      "params": { "stake": "number", "odds": "odds", "boostPct": "number", "maxExtra": "number", "hedgeOdds": "odds" }
+    },
+    {
+      "slug": "no-vig",
+      "path": "/no-vig",
+      "params": { "odds1": "odds", "odds2": "odds" }
+    },
+    {
+      "slug": "kelly",
+      "path": "/kelly",
+      "params": { "winProb": "percentage", "odds": "odds", "bankroll": "number", "fraction": "number_optional" }
+    }
+  ],
+  "oddsFormats": ["American", "decimal", "fractional"],
+  "disclaimer": "Educational calculator output only. Independently verify inputs and results before acting."
+}

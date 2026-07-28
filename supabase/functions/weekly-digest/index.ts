@@ -1,8 +1,11 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { hasAffirmativeMarketingConsent } from '../_shared/marketing-consent.ts';
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') ?? '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+
+type ServiceClient = ReturnType<typeof createClient<any, 'public', any>>;
 
 // Resend: batch to avoid rate limits (100/day free, 1000/day pro)
 const BATCH_SIZE = 50;
@@ -29,7 +32,7 @@ Deno.serve(async (req) => {
   const { data: users } = await supabase.auth.admin.listUsers();
   const subscribers = (users?.users ?? []).filter(u => {
     const meta = u.user_metadata ?? {};
-    if (!meta.newsletter) return false;
+    if (!hasAffirmativeMarketingConsent(meta)) return false;
     const freq = meta.newsletter_freq ?? 'weekly';
     if (targetFreq === 'daily') return freq === 'daily';
     if (targetFreq === 'weekly') return freq === 'weekly' || freq === 'daily'; // daily gets weekly too
@@ -71,7 +74,7 @@ interface WeekStats {
 }
 
 async function getUserWeekStats(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   userId: string
 ): Promise<WeekStats> {
   const result: WeekStats = { weeklyPnl: null, topBook: null, entryCount: 0, loginCount: 0 };
@@ -141,7 +144,7 @@ function buildWeekStatsHtml(stats: WeekStats): string {
   `;
 }
 
-async function sendEmail(to: string, meta: Record<string, unknown>, supabase: ReturnType<typeof createClient>, userId: string) {
+async function sendEmail(to: string, meta: Record<string, unknown>, supabase: ServiceClient, userId: string) {
   const firstName = typeof meta.full_name === 'string'
     ? meta.full_name.split(' ')[0]
     : null;
@@ -195,7 +198,7 @@ async function sendEmail(to: string, meta: Record<string, unknown>, supabase: Re
 
       <p style="color:#334155;font-size:11px;line-height:1.7;">
         You're receiving this because you subscribed to PromoGrind weekly tips.<br/>
-        To unsubscribe or change frequency: open PromoGrind → scroll to the bottom → use the newsletter banner.
+        To withdraw consent: open PromoGrind → My Account → Communication consent.
       </p>
     </div>
   `;

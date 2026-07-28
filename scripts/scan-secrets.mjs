@@ -20,6 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 import { spawnSync } from './lib/safe-spawn.mjs';
+import { classifyCredentialLine } from './lib/credential-classifiers.mjs';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -28,6 +29,8 @@ const ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const MODE_STAGED = args.includes('--staged') || (!args.includes('--all') && !args.find(a => !a.startsWith('--')));
 const MODE_ALL = args.includes('--all');
+const MODE_TRACKED = args.includes('--tracked');
+const MODE_NO_LEDGER = args.includes('--no-ledger') || MODE_TRACKED;
 const MODE_JSON = args.includes('--json');
 const pathArg = args.find(a => !a.startsWith('--'));
 
@@ -64,6 +67,8 @@ const ALLOWLIST_PATHS = [
   /\/fixtures\//,
   // This scanner file itself contains regex literals that match patterns.
   /^scripts\/scan-secrets\.mjs$/,
+  /^scripts\/lib\/credential-classifiers\.mjs$/,
+  /^scripts\/git-hooks\/pre-push$/,
 ];
 
 const ALLOWLIST_COMMENT = /#\s*scan-secrets:\s*allow/i;
@@ -94,18 +99,18 @@ function isAllowlistedPath(relPath) {
   return ALLOWLIST_PATHS.some(rx => rx.test(relPath));
 }
 
-function scanContent(relPath, content) {
+export function scanContent(relPath, content) {
   if (!content) return [];
   const findings = [];
   const lines = content.split(/\r?\n/);
-  const isPackageLock = /(^|\/)package-lock\.json$/.test(relPath);
+  const isIntegrityLock = /(^|\/)(?:package-lock\.json|deno\.lock|pnpm-lock\.yaml)$/.test(relPath);
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     // npm lockfiles store base64 Subresource Integrity hashes. These are high
     // entropy by design and frequently match generic token heuristics, but they
     // are not credentials.
-    if (isPackageLock && /^\s*"integrity":\s*"sha(256|384|512)-/.test(line)) continue;
+    if (isIntegrityLock && /^\s*"?integrity"?\s*:\s*"?sha(256|384|512)-/.test(line)) continue;
     // Comment-based allowlist: check current line + prior line
     const allowComment = ALLOWLIST_COMMENT.test(line) ||
       (i > 0 && ALLOWLIST_COMMENT.test(lines[i - 1]));
@@ -138,6 +143,18 @@ function scanContent(relPath, content) {
         })(),
       });
     }
+
+    for (const finding of classifyCredentialLine(line)) {
+      findings.push({
+        file: relPath,
+        line: i + 1,
+        pattern: finding.label,
+        type: finding.type,
+        confidence: 'high',
+        redactedMatch: finding.redacted,
+        snippet: '<credential-bearing content redacted>',
+      });
+    }
   }
   const decisiveLines = new Set(findings.filter((finding) => finding.confidence === "high").map((finding) => `${finding.file}:${finding.line}`));
   return findings.filter((finding) => finding.confidence !== "low" || !decisiveLines.has(`${finding.file}:${finding.line}`));
@@ -158,6 +175,15 @@ function gitStagedContent(file) {
   });
   if (r.status !== 0) return null;
   return r.stdout;
+}
+
+function gitTrackedFiles() {
+  const result = spawnSync('git', ['ls-files'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  if (result.status !== 0) throw new Error('git ls-files failed');
+  return result.stdout.split(/\r?\n/).filter(Boolean);
 }
 
 // ── Working-tree scan ──────────────────────────────────────────────────────
@@ -183,7 +209,9 @@ function run() {
 
   try {
     let files;
-    if (MODE_ALL) {
+    if (MODE_TRACKED) {
+      files = gitTrackedFiles();
+    } else if (MODE_ALL) {
       files = walkFiles(pathArg ? path.resolve(ROOT, pathArg) : ROOT);
     } else if (pathArg) {
       const target = path.resolve(ROOT, pathArg);
@@ -200,7 +228,7 @@ function run() {
       if (isAllowlistedPath(file)) continue;
 
       let content;
-      if (MODE_STAGED && !MODE_ALL && !pathArg) {
+      if (MODE_STAGED && !MODE_TRACKED && !MODE_ALL && !pathArg) {
         content = gitStagedContent(file);
       } else {
         try {
@@ -223,8 +251,8 @@ function run() {
       return true;
     });
 
-    // Append to access ledger
-    try {
+    // Optional operational ledger; tracked-tree/CI mode is read-only.
+    if (!MODE_NO_LEDGER) try {
       const ledgerPath = path.join(ROOT, 'portfolio', 'ACCESS_LEDGER.ndjson');
       fs.mkdirSync(path.dirname(ledgerPath), { recursive: true });
       fs.appendFileSync(ledgerPath, JSON.stringify({
@@ -242,7 +270,7 @@ function run() {
     }
 
     // Human-readable output
-    const scope = MODE_ALL ? 'working tree' : pathArg ? `path: ${pathArg}` : 'staged changes';
+    const scope = MODE_TRACKED ? 'tracked tree' : MODE_ALL ? 'working tree' : pathArg ? `path: ${pathArg}` : 'staged changes';
     const banner = '╔' + '═'.repeat(66) + '╗';
     const line = '║ ' + 'SECRETS SCAN'.padEnd(64) + ' ║';
     const scopeL = '║ ' + `scope: ${scope}`.padEnd(64) + ' ║';
@@ -271,4 +299,5 @@ function run() {
   }
 }
 
-run();
+const INVOKED_DIRECTLY = process.argv[1] && import.meta.url === new URL(`file:///${process.argv[1].replace(/\\/g, "/")}`).href;
+if (INVOKED_DIRECTLY) run();

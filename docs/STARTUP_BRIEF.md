@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-26 (Session 119 closeout) -->
+<!-- generated-at: 2026-07-28 (Session 120 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 119 closeout · 2026-07-26.
+> **Fast-boot brief** — generated at Session 120 closeout · 2026-07-28.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 120 · 2026-07-26 · FOUNDER MODE                         ║
+║  Session 121 · 2026-07-28 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -22,11 +22,11 @@
 
 ╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
 ║  Unit tests    → npm test ·                                      ║
+║  edge         → npm run verify:edge ·                            ║
 ║  launch-gate  → npm run verify:launch-local ·                    ║
 ║  ux-integrity → npm run smoke:ux ·                               ║
 ║  Local dev     → http://localhost:5173 ·                         ║
 ║  Production    → https://promogrind.bet ·                        ║
-║  CF Pages      → https://promogrind.bet ·                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -35,9 +35,9 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    999/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: ?  ·  Velocity 8↑                          ║
-║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    1000/1000   ████████████████████████   100%                   ║
+║    SIL v3.0  ·  Avg3: ?  ·  Velocity 12↑                         ║
+║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -51,46 +51,46 @@
 ║    Security        100    ██████████  ········ →                 ║
 ║    Ecosystem       100    ██████████  ········ →                 ║
 ║    Capital         100    ██████████  ········ →                 ║
-║    Automation       99    ██████████  ········ →                 ║
+║    Automation      100    ██████████  ········ →                 ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 119 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 120 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    590/590 passing  ·  Deploy: S119 commit c718c24 depl  ║
+║  Tests:    597/597 passing  ·  Deploy: S119 commit c718c24 depl  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     2,687 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
-║     ~1,344 tok/turn  ·  cache 50%  ·  134 turns to compact       ║
+║  ✓  ██░░░░░░░░░░░░░░░░░░░░░░    7% used                          ║
+║     69,470 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~34,735 tok/turn  ·  cache 50%  ·  24 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         590/590 passing (2026-07-25)                   ║
-║  ✓  Velocity      8 ↑  ·  Debt: →                                ║
+║  ✓  Tests         597/597 passing (2026-07-27)                   ║
+║  ✓  Velocity      12 ↑  ·  Debt: →                               ║
 ║  ⚠  Runway        ~2 sessions                                    ║
 ║  ✓  Context age   1d                                             ║
-║  ✓  IGNIS         44184 FORGE  ·  3d old                         ║
-║  ⛔  Truth         green-with-target-scope-and-external-proof-fo  ║
+║  ✓  IGNIS         44184 FORGE  ·  5d old                         ║
+║  ⛔  Truth         green-repo-owned-with-history-and-external-pr  ║
 ║  ⚠  Compliance   unavailable (0 checks) · public-repo shim       ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
-║  ✓  Entropy       0.050  (healthy)                               ║
+║  ✓  Entropy       0.031  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ✓  Doctor        12/12 (100%)  ·  2026-07-26  ✓                 ║
-║  ✓  Cost          real $0.08/7d · 7d notional $1.33 (flat-rate   ║
+║  ✓  Doctor        12/12 (100%)  ·  2026-07-28  ✓                 ║
+║  ✓  Cost          real $0.11/7d · 7d notional $1.84 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: unavailable · public-repo shim has no portfolio snaps  ║
 ║  Snapshot: unavailable · portfolio/ACTIVE_SESSIONS.json absent   ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 169 drained · 21h old · sig failures 0                     ║
+║  Ark: 31 drained · 29h old · sig failures 0                      ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -101,18 +101,18 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   █▆▄▄▄  8↑  (last 5 sessions)                        ║
+║  Velocity:   █▆▄▄▄  12↑  (last 5 sessions)                       ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  999/1000  (→0 vs current 999)                       ║
+║  Projected:  1000/1000  (→0 vs current 1000)                     ║
 ║  All categories forecast stable or rising.                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 119                               ║
+║  GENIUS HIT LIST  ·  Session 120                               ║
 ║  Project: PromoGrind · ranked by impact                        ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -122,5 +122,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 119 closeout · 2026-07-26*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 120 closeout · 2026-07-28*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

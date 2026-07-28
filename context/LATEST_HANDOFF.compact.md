@@ -1,48 +1,54 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 6001acb13f5c -->
-<!-- generated-at: 2026-07-26T18:32:13.079Z -->
+<!-- source-hash: 4d1c4e7f6369 -->
+<!-- generated-at: 2026-07-28T00:57:32.971Z -->
 
 # LATEST_HANDOFF (compact)
 
-# PromoGrind Handoff Summary
+PromoGrind Handoff Summary
 
-Session: 119 (Codex)
-Status: saturated; repo-owned gates green; release promotion NO-GO
+Session: 120 (Codex)
 
-## What Shipped (S119)
-- Startup signal provenance lattice with 169-item Ark drain evidence.
-- Bounded full-history secret scanner (one classified residual).
-- Criterion-level launch-proof quorums with typed receipts and browser derivation.
-- Five-target capability truth plane with redacted receipts.
-- Brevo domain + four DNS auth records; authentication succeeded (proof 1/3).
-- CI fail-closed Supabase config injection; browser quorum self-validation.
+Status
+- Saturated; 9/9 primary + 3 second-order items shipped
+- Repo gates green; SPARKED remains NO-GO
+- Deploy: prior production head remains S119 until remote workflow evidence passes
 
-## Verification State
-- verify:launch-local green (exit 0).
-- Vitest 590/590; session invariants 47/47.
-- Full history 314 commits; one redacted Supabase token routed for rotation.
-- Live capabilities 4/5 READY (Brevo, Supabase REST, Stripe, capture config); Cloudflare Transform Rules 403.
-- Deployed commit c718c24; CI/Pages green.
+Shipped (S120)
+- Privileged-secret removal + shared redacted credential classifier across tracked/history/public surfaces
+- Receipt-bearing tri-state sync/AI observability (no green without evidence)
+- Attest-before-promote Pages workflow binding commit, tree digest, gates, deploy artifact
+- Secrets-gateway-only Supabase deploy orchestration (safe dry-run default)
+- Strict generated-truth mirrors (atomic/check modes)
+- Versioned reversible marketing consent with Profile control
+- Full Edge verification: 15 entrypoints, 5 test files
+- Shared accessible native switch contract
+- Fail-closed public agent capability catalog
+- Second-order: consent enforcement at send boundaries, Windows spawn hardening, integrity-aware secret scanning
 
-## Current Intent
-Run complete agent-neutral /arc continuously; exhaust repo-owned + second-order work, preserve honest external-proof boundaries, finish with write-back, direct-main push, Ark broadcast, clean shell. Primary Genius List exhausted.
+Verification
+- verify:launch-local exit 0
+- Vitest 597/597; Deno 15/15 typecheck, 43/43 tests
+- Tracked secret scan 0; strict sanitizer 0; supply-chain 0
+- 317 commits; 5 redacted findings at b1205ce; current tree clean, history not claimed clean
 
-## Now Bucket (Top 3)
-1. Grant two Cloudflare scopes; configure six headers; verify forwarding rule; rerun live checks.
-2. Rotate isolated historical Supabase credential; provide target-bound deploy token for pending migration/functions.
-3. Complete capture submission/lead-row plus real human, payment, forwarding, mailbox proofs.
+Now (Top 3)
+1. Establish real staging target + header-capable edge; prove all six security headers before SPARKED
+2. Complete historical credential rotation/remediation; add exact PromoGrind deploy capability mapping
+3. Execute Supabase, mailbox, auth-email, Stripe, friend-beta, capture, pixel proofs
 
-## Blockers (Top 3)
-1. Cloudflare Transform Rules token returns 403 — blocks six live security headers and forwarding-rule inspection.
-2. Historical privileged Supabase token rotation is control-plane work (Ark cargo 01JUE23NQ1EEF6010874B09F97).
-3. Pending Supabase migration/functions await target-bound deploy token.
+Blockers (Top 3)
+1. Six live security headers absent; no true remote staging environment
+2. promogrind.supabase.deploy MISSING (narrower admin READY; no deploy attempted)
+3. Contact forwarding/mailbox delivery unprovable under current Cloudflare scope
 
-## Human-Blocked Items (with age)
-- Six live security headers via Cloudflare scope — since S118 (~1 day).
-- Cloudflare Email Routing forwarding verification (403) — since S118 (~1 day).
-- Historical Supabase credential rotation — since S118 (~1 day).
-- Webhook credential rotation (Ark 01JU98MC5M8FC5EDBEE214F795) — since S118 (~1 day).
-- Production auth email, real purchase/portal, friend beta, forwarding delivery, capture submission proofs — ongoing external gates.
-- AI pixel inspection PARTIAL: image viewer fails at Windows credential protection — since S118 (~1 day).
+Human-Blocked Items (with age)
+- Historical credential rotation via control-plane + approved history-remediation strategy — since S118 (2 sessions)
+- Exposed webhook credential rotation (Ark cargo 01JU98MC5M8FC5EDBEE214F795) — since S118 (2 sessions)
+- Cloudflare header-ruleset credential path fails auth — since S118 (2 sessions)
+- AI pixel viewer Windows credential-protection failure — since S118 (2 sessions)
 
-Next session: obtain Cloudflare scopes and deploy token, then close live-header, rotation, and external-proof gates.
+Unproved External Gates
+- Production auth email, real Stripe lifecycle, friend beta, capture submission/lead observation, AI pixel review
+- Obelisk activation, remote deletion, generated static-page theme parity (deliberately deferred)
+
+Next session: Stand up staging + header-capable edge and prove all six security headers to advance toward SPARKED GO.

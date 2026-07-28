@@ -7,9 +7,16 @@ on:
       - main
     paths:
       - ".github/workflows/deploy-pages.yml"
+      - "context/LAUNCH_PROOFS.json"
+      - "context/PROJECT_STATUS.json"
       - "index.html"
       - "package.json"
+      - "scripts/generate-launch-proof-mirror.mjs"
+      - "scripts/generate-project-status-mirror.mjs"
+      - "scripts/lib/generated-truth.mjs"
+      - "scripts/lib/release-attestation.mjs"
       - "scripts/postbuild-pages.mjs"
+      - "scripts/render-release-attestation.mjs"
       - "scripts/render-launch-verification-summary.mjs"
       - "scripts/validate-production-dashboard-smoke.mjs"
       - "scripts/verify-production-launch.mjs"
@@ -17,37 +24,33 @@ on:
       - "public/**"
       - "vite.config.js"
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  VITE_APP_BASE_PATH: /
+  VITE_CANONICAL_URL: https://promogrind.bet/
+  VITE_DOMAIN: promogrind.bet
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+  VITE_PG_FEATURE_PROMO_CHAT: ${{ secrets.VITE_PG_FEATURE_PROMO_CHAT }}
+  VITE_PG_FEATURE_PROMO_ADVISOR: ${{ secrets.VITE_PG_FEATURE_PROMO_ADVISOR }}
+  VITE_PG_FEATURE_AI_ACTION_PLAN: ${{ secrets.VITE_PG_FEATURE_AI_ACTION_PLAN }}
+  VITE_PG_FEATURE_AI_SCAN: ${{ secrets.VITE_PG_FEATURE_AI_SCAN }}
+  VITE_PG_FEATURE_STACK_BUILDER: ${{ secrets.VITE_PG_FEATURE_STACK_BUILDER }}
+  VITE_PG_FEATURE_PUSH_ALERTS: ${{ secrets.VITE_PG_FEATURE_PUSH_ALERTS }}
+  VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
+  VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+  VITE_VAPID_PUBLIC_KEY: ${{ secrets.VITE_VAPID_PUBLIC_KEY }}
+
 jobs:
-  deploy-pages:
+  preflight:
+    name: Attest local staging artifact
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    env:
-      VITE_APP_BASE_PATH: /
-      VITE_CANONICAL_URL: https://promogrind.bet/
-      VITE_DOMAIN: promogrind.bet
-      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-      VITE_PG_FEATURE_PROMO_CHAT: ${{ secrets.VITE_PG_FEATURE_PROMO_CHAT }}
-      VITE_PG_FEATURE_PROMO_ADVISOR: ${{ secrets.VITE_PG_FEATURE_PROMO_ADVISOR }}
-      VITE_PG_FEATURE_AI_ACTION_PLAN: ${{ secrets.VITE_PG_FEATURE_AI_ACTION_PLAN }}
-      VITE_PG_FEATURE_AI_SCAN: ${{ secrets.VITE_PG_FEATURE_AI_SCAN }}
-      VITE_PG_FEATURE_STACK_BUILDER: ${{ secrets.VITE_PG_FEATURE_STACK_BUILDER }}
-      VITE_PG_FEATURE_PUSH_ALERTS: ${{ secrets.VITE_PG_FEATURE_PUSH_ALERTS }}
-      VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
-      VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
-      VITE_VAPID_PUBLIC_KEY: ${{ secrets.VITE_VAPID_PUBLIC_KEY }}
+    timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -59,19 +62,63 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Build Pages bundle
+      - name: Verify complete local launch gate
+        run: npm run verify:launch-local
+
+      - name: Build immutable Pages artifact
         run: npm run build:pages
 
-      - name: Upload Pages artifact
+      - name: Bind preflight attestation to commit and artifact
+        run: |
+          node scripts/render-release-attestation.mjs \
+            --dist dist \
+            --out artifacts/release/preflight-attestation.json \
+            --commit "$GITHUB_SHA"
+          node scripts/render-release-attestation.mjs \
+            --dist dist \
+            --out artifacts/release/preflight-attestation.json \
+            --commit "$GITHUB_SHA" \
+            --check
+
+      - name: Upload attested Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
-      - name: Deploy to GitHub Pages
+      - name: Upload preflight attestation
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-preflight-attestation
+          path: artifacts/release/preflight-attestation.json
+
+  deploy-pages:
+    name: Promote attested artifact
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install verification dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Deploy attested artifact
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Prepare verification env files
+      - name: Prepare verification environment
         run: |
           cat > .env <<'EOF'
           VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
@@ -97,6 +144,11 @@ jobs:
           mkdir -p artifacts/launch-verification
           npm run --silent smoke:production-dashboard > artifacts/launch-verification/production-dashboard-smoke.json
 
+      - name: Verify live web hardening contract
+        id: verify_web_live
+        continue-on-error: true
+        run: npm run verify:web-live -- --url https://promogrind.bet
+
       - name: Render verification summary
         if: always()
         run: |
@@ -113,8 +165,8 @@ jobs:
           name: launch-verification
           path: artifacts/launch-verification
 
-      - name: Fail if launch verification failed
-        if: steps.verify_launch.outcome == 'failure' || steps.smoke_production_dashboard.outcome == 'failure'
+      - name: Fail if any post-deploy contract failed
+        if: steps.verify_launch.outcome == 'failure' || steps.smoke_production_dashboard.outcome == 'failure' || steps.verify_web_live.outcome == 'failure'
         run: exit 1
 
 # One-time repo setup required:

@@ -1,9 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { hasAffirmativeMarketingConsent } from "../_shared/marketing-consent.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+
+type ServiceClient = ReturnType<typeof createClient<any, "public", any>>;
 
 interface DripEmail {
   day: number;
@@ -107,7 +110,7 @@ const TRIAL_EXPIRY_EMAILS: Record<string, { subject: string; headline: string; b
 };
 
 async function processTrialExpiryEmails(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ServiceClient,
   from: string
 ): Promise<number> {
   let sent = 0;
@@ -116,7 +119,7 @@ async function processTrialExpiryEmails(
     const now = new Date();
 
     for (const user of users?.users ?? []) {
-      if (!user.email) continue;
+      if (!user.email || !hasAffirmativeMarketingConsent(user.user_metadata)) continue;
       const trialStart = user.user_metadata?.trial_start;
       if (!trialStart) continue;
 
@@ -183,7 +186,7 @@ serve(async (req) => {
 
   const { data: users } = await supabase.auth.admin.listUsers();
   for (const user of users?.users ?? []) {
-    if (!user.email || !user.created_at) continue;
+    if (!user.email || !user.created_at || !hasAffirmativeMarketingConsent(user.user_metadata)) continue;
 
     const daysSinceSignup = Math.floor(
       (now.getTime() - new Date(user.created_at).getTime()) / (1000 * 60 * 60 * 24)

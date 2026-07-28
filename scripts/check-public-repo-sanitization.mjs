@@ -17,6 +17,7 @@ import path from 'path';
 import { execFileSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
 import { loadProjectRegistry } from './lib/project-registry.mjs';
+import { classifyCredentialText } from './lib/credential-classifiers.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -32,7 +33,7 @@ const includeWorktrees = process.argv.includes('--include-worktrees');
 const PUBLIC_AUDIENCES = new Set(['public-live', 'public-unlaunched', 'public-traction']);
 const TEXT_EXTENSIONS = new Set([
   '.md', '.txt', '.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.json',
-  '.html', '.css', '.yml', '.yaml', '.sh', '.bash', '.ps1', '.xml', '.svg',
+  '.html', '.css', '.yml', '.yaml', '.sh', '.bash', '.ps1', '.py', '.xml', '.svg',
 ]);
 const MAX_TEXT_BYTES = 512 * 1024;
 
@@ -214,6 +215,17 @@ function dedupeFindings(findings) {
 }
 
 function scanFileContent(content, relPath, findings) {
+  for (const match of classifyCredentialText(content).slice(0, 3)) {
+    addFinding(findings, {
+      severity: 'critical',
+      type: 'content',
+      rule: match.type,
+      file: relPath,
+      detail: match.label + ' at line ' + match.line + ' (value redacted)',
+      priorityBand: 'confirmed-risk',
+      remediation: 'Treat the credential as compromised, remove it from the public tree/history, and rotate it through the secrets gateway.',
+    });
+  }
   for (const rule of CONTENT_RULES) {
     const matches = [...content.matchAll(rule.regex)].slice(0, 3);
     for (const match of matches) {

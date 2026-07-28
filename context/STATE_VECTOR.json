@@ -1,13 +1,13 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-07-26",
-  "generatedAtMs": 1785049250715,
-  "session": 119,
-  "vectorHash": "a478178451d3aa08",
-  "silTotal": 999,
+  "generatedAt": "2026-07-28",
+  "generatedAtMs": 1785207794733,
+  "session": 120,
+  "vectorHash": "d07751fa08de0fd5",
+  "silTotal": 1000,
   "silMax": 1000,
   "silAvg3": 999.3,
-  "velocity": 7,
+  "velocity": 12,
   "debt": "stable",
   "runway": "~2 sessions",
   "intentRate": "100% achieved (last 5)",
@@ -16,7 +16,7 @@
   "openBlocked": 3,
   "topNow": [
     "configure a header-capable production edge for `promogrind.bet`, add Content-Sec",
-    "rotate the historical privileged Supabase token isolated by the bounded full-his",
+    "rotate and remediate the fully redacted historical credential findings isolated ",
     "deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions "
   ],
   "topNext": [
@@ -25,21 +25,21 @@
     "monitor `artifacts/launch-verification/post-deploy.json` after each deploy via t"
   ],
   "health": "green",
-  "truthStatus": "green-with-target-scope-and-external-proof-follow-ups",
+  "truthStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "genome": "24/25",
   "ignisScore": 44184,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 3,
+  "ignisAgeDays": 5,
   "name": "PromoGrind",
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Publish S119, verify live capture-key injection, grant exact Cloudflare Transform Rules and Email Routing scopes, rotate the isolated historical Supabase credential, deploy the pending Supabase migration/functions, and complete remaining human/mailbox/payment proof criteria plus AI pixel inspection.",
-  "currentFocus": "S119 exhausted four premise-verified infrastructure items plus three second-order innovations: provenance-aware startup signals, bounded history scanning, criterion receipt quorums, target-bound capabilities, browser self-validation, evidence freshness decay, and fail-closed capture configuration. Repo-owned verification: 590/590 Vitest, 47 invariant assertions, and launch-local direct exit 0.",
+  "nextMilestone": "Establish real staging and a header-capable production edge; rotate/remediate historical credentials; obtain exact PromoGrind Supabase deploy authority; complete mailbox/auth/payment/friend/capture/pixel proof criteria; only then reassess SPARKED.",
+  "currentFocus": "S120 shipped all nine verified L3 audit items plus three second-order safeguards: public credential boundary, tri-state observability, attest-before-promote, target-locked Supabase deploy, receipt-addressed mirrors, affirmative consent, complete Edge verification, accessible switches, fail-closed agent capabilities, send-boundary consent, Windows spawn hardening, and integrity-aware scanning.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
-    "Brevo sender-domain SPF/DKIM is verified and recorded as proof 1/3; exact contact@promogrind.bet forwarding inspection remains pending because all available Cloudflare tokens return 403 for Email Routing Rules Read.",
-    "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
-    "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record)."
+    "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
+    "Production edge is missing Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy.",
+    "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved."
   ]
 }
