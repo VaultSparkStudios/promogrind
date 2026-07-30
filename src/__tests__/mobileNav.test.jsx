@@ -34,11 +34,13 @@ describe("MobileBottomNav — CANON-041 100dvh drawer", () => {
     }
   });
 
-  it("drawer is initially hidden (translateY 100%)", () => {
+  it("drawer is initially hidden (translateY 100%) and aria-hidden", () => {
     const { container } = render(<MobileBottomNav gi={0} ti={0} goTo={vi.fn()} tabs={TABS} />);
     const drawer = container.querySelector('[role="dialog"]');
     expect(drawer).toBeTruthy();
     expect(drawer.style.transform).toBe("translateY(100%)");
+    expect(drawer.getAttribute("aria-hidden")).toBe("true");
+    expect(drawer.hasAttribute("inert")).toBe(true);
   });
 
   it("tapping the active tab opens the drawer and shows sub-items", () => {
@@ -100,6 +102,23 @@ describe("MobileBottomNav — CANON-041 100dvh drawer", () => {
     const activeTabBtn = screen.getAllByRole("button").find((b) => b.getAttribute("aria-expanded") !== null);
     fireEvent.click(activeTabBtn);
     expect(screen.getAllByText("PRO").length).toBeGreaterThan(0);
+  });
+
+  it("drawer and backdrop z-index exceed the sticky app chrome (z-index 200)", () => {
+    const { container } = render(<MobileBottomNav gi={0} ti={0} goTo={vi.fn()} tabs={TABS} />);
+    const drawer = container.querySelector('[role="dialog"]');
+    const backdrop = container.querySelector('[aria-hidden="true"]');
+    expect(parseInt(drawer.style.zIndex, 10)).toBeGreaterThan(200);
+    expect(parseInt(backdrop.style.zIndex, 10)).toBeGreaterThan(200);
+  });
+
+  it("opening the drawer removes aria-hidden and inert", () => {
+    const { container } = render(<MobileBottomNav gi={0} ti={0} goTo={vi.fn()} tabs={TABS} />);
+    const drawer = container.querySelector('[role="dialog"]');
+    const activeTabBtn = screen.getAllByRole("button").find((b) => b.getAttribute("aria-expanded") !== null);
+    fireEvent.click(activeTabBtn);
+    expect(drawer.getAttribute("aria-hidden")).toBe("false");
+    expect(drawer.hasAttribute("inert")).toBe(false);
   });
 
   it("drawer label shows the active group name as header", () => {

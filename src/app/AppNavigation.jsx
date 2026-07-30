@@ -109,7 +109,7 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
           background: "rgba(0,0,0,0.6)",
           backdropFilter: "blur(4px)",
           WebkitBackdropFilter: "blur(4px)",
-          zIndex: 98,
+          zIndex: 299,
           opacity: drawerOpen ? 1 : 0,
           pointerEvents: drawerOpen ? "auto" : "none",
           transition: "opacity 0.25s ease",
@@ -121,12 +121,14 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
         role="dialog"
         aria-label={`${activeGroup?.group} navigation`}
         aria-modal="true"
+        aria-hidden={!drawerOpen}
+        {...(!drawerOpen ? { inert: "" } : {})}
         style={{
           position: "fixed",
           left: 0, right: 0, bottom: 0,
           height: "100dvh",
           background: `linear-gradient(180deg, ${K.s2} 0%, ${K.s1} 100%)`,
-          zIndex: 99,
+          zIndex: 300,
           display: "flex",
           flexDirection: "column",
           transform: drawerOpen ? "translateY(0)" : "translateY(100%)",
