@@ -99,32 +99,6 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const [showStarterPack, setShowStarterPack] = React.useState(() => {
     try { return !localStorage.getItem('pg_starter_pack_done') && !localStorage.getItem('pg_onboarding_done'); } catch { return false; }
   });
-  const [upsellStreakDismissed, setUpsellStreakDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_upsell_streak_dismissed');}catch{return false;} });
-  // Streak & Consistency tracking
-  const [streakCount, setStreakCount] = useState(0);
-  const [consistencyScore, setConsistencyScore] = useState(0);
-  useEffect(()=>{
-    try {
-      const key='pg_login_dates';
-      const arr=JSON.parse(localStorage.getItem(key)||'[]');
-      if(!arr.includes(todayStr)){ arr.push(todayStr); localStorage.setItem(key,JSON.stringify(arr)); }
-      const sorted=[...new Set(arr)].sort();
-      let streak=0;
-      const d=new Date(todayStr);
-      for(let i=0;i<365;i++){
-        const ds=new Date(d); ds.setDate(d.getDate()-i);
-        const s=ds.toISOString().split('T')[0];
-        if(sorted.includes(s)) streak++;
-        else break;
-      }
-      setStreakCount(streak);
-      if(sorted.length>=1){
-        const first=new Date(sorted[0]);
-        const diffDays=Math.max(1,Math.round((new Date(todayStr)-first)/(1000*60*60*24))+1);
-        setConsistencyScore(Math.min(100,Math.round(sorted.length/diffDays*100)));
-      }
-    } catch(e){}
-  },[todayStr]);
   const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const todayDay = dayNames[today.getDay()];
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -146,7 +120,9 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
   const monthProfit = snapshot.monthProfit;
 
   const dashIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
-  const currentStreak = computeStreak(data, today).current;
+  const reviewCadence = computeStreak(data, today);
+  const currentStreak = reviewCadence.current;
+  const consistencyScore = reviewCadence.consistency;
   useAchievements(data, currentStreak);
 
   return (
@@ -213,23 +189,12 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
         </div>
       </div>
       <StateLegalAlert userState={data.userState}/>
-      {streakCount>=3&&!upsellStreakDismissed&&(
-        <div style={{...S.card,border:`1px solid ${K.pp}40`,background:`${K.pp}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
-          <div>
-            <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:2}}>🔥 {streakCount}-day streak! Unlock live arb alerts &amp; daily briefings with VaultSparked</div>
-          </div>
-          <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"5px 12px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Upgrade →</button>
-            <button onClick={()=>{try{localStorage.setItem('pg_upsell_streak_dismissed','1');}catch{}setUpsellStreakDismissed(true);}} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>Not now</button>
-          </div>
-        </div>
-      )}
       {proStatus?.status==='trial'&&(
         proStatus.trial_days_left>3?(
           <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:2}}>
-                🎉 VaultSparked Pro Trial — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
+                VaultSparked Pro trial · {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
               </div>
               <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
             </div>
@@ -239,7 +204,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.yl,marginBottom:2}}>
-                ⏳ Trial ending soon — {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} left. Don't lose Pro access.
+                Trial access changes in {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""}. Review plan details before deciding.
               </div>
             </div>
             <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
@@ -248,7 +213,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{...S.card,border:`1px solid ${K.rd}40`,background:`${K.rd}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
               <div style={{fontSize:12,fontWeight:700,color:K.rd,marginBottom:2}}>
-                🚨 Trial expires tomorrow. Upgrade now to keep the Live Scanner and AI features.
+                Trial access changes tomorrow. Review which Live Scanner and Artificial Intelligence features you want to retain.
               </div>
             </div>
             <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
@@ -273,12 +238,12 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={S.big(K.ac)}>{booksComplete}/{BOOKS.length}</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>STREAK</div>
-          <div style={S.big(streakCount>=7?K.gn:streakCount>=3?K.yl:K.dm)}>{streakCount}</div>
-          <div style={{fontSize:9,color:K.mt}}>days</div>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>REVIEW CADENCE</div>
+          <div style={S.big(currentStreak>=7?K.gn:currentStreak>=3?K.yl:K.dm)}>{currentStreak}</div>
+          <div style={{fontSize:9,color:K.mt}}>evidenced days</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="% of days you've visited in your active period">CONSISTENCY ⓘ</div>
+          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="Share of calendar days with a settled result, reasoned skip, or realized ledger entry">REVIEW COVERAGE ⓘ</div>
           <div style={S.big(consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm)}>{consistencyScore}%</div>
           <div style={{height:3,background:K.s3,borderRadius:2,marginTop:4}}><div style={{height:3,borderRadius:2,background:consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm,width:`${consistencyScore}%`}}/></div>
         </div>

@@ -16,21 +16,7 @@ import { recordPrediction } from "../lib/aiCalibration.js";
 import { noteCacheHit, noteCacheMiss } from "../ai/promptCache.js";
 import { buildAdvisorPrivacyEnvelope } from "../ai/advisorPrivacy.js";
 
-const ADVISOR_RECEIPT_CONTRACT_VERSION = 3;
-
-function predictedProbabilityFromAdvisor(result = {}) {
-  const score = Number.parseFloat(result.opportunityScore);
-  if (Number.isFinite(score)) return Math.max(0.05, Math.min(0.95, score / 100));
-  const confidence = String(result.confidence || "").toLowerCase();
-  if (confidence === "high") return 0.75;
-  if (confidence === "medium") return 0.6;
-  if (confidence === "low") return 0.4;
-  const rating = String(result.rating || "").toLowerCase();
-  if (rating === "excellent") return 0.8;
-  if (rating === "good") return 0.65;
-  if (rating === "poor") return 0.25;
-  return null;
-}
+const ADVISOR_RECEIPT_CONTRACT_VERSION = 4;
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   useEffect(() => { flagVisit('advisor'); }, []);
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
@@ -184,6 +170,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
   const saveWorkflow = () => {
     if (!syncAppData) return;
+    const recommendation = normalizeRecommendation(result || {});
     const workflow = recommendationToWorkflow(result || {}, {
       title: result?.verdict || "Promo Advisor recommendation",
       summary: result?.explanation || result?.action || "",
@@ -193,20 +180,27 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       nextStep: result?.nextStep || "",
       note: result?.hedge || "",
     });
-    syncAppData(appendWorkflow(appData || {}, workflow));
-    const predicted = predictedProbabilityFromAdvisor(result || {});
+    const predicted = recommendation.positiveOutcomeProbability;
+    const predictionId = predicted === null ? null : `advisor:${workflow.id}`;
+    const workflowWithCalibration = {
+      ...workflow,
+      calibrationPredictionId: predictionId,
+    };
+    syncAppData(appendWorkflow(appData || {}, workflowWithCalibration));
     if (predicted !== null) {
       recordPrediction({
-        id: `advisor:${workflow.id}`,
+        id: predictionId,
         source: "promo-advisor",
         feature: "promo-advisor",
         predicted,
+        probabilityBasis: recommendation.probabilityBasis,
         payload: {
           workflowId: workflow.id,
           promoType: workflow.promoType,
           calculatorSlug: workflow.calculatorSlug,
           confidence: workflow.confidence,
           opportunityScore: workflow.opportunityScore,
+          probabilityBasis: recommendation.probabilityBasis,
         },
       });
     }

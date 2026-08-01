@@ -8,6 +8,8 @@ import { flagVisit } from "../lib/missions.js";
 import { useViewport } from "../app/responsive.js";
 import BetHistoryCharts from "./BetHistoryCharts.jsx";
 import EdgeDecayHeatmapPanel from "./EdgeDecayHeatmapPanel.jsx";
+import { parseRealizedOutcomeValue } from "../lib/realizedOutcome.js";
+import { resolveWorkflowPrediction } from "../lib/aiCalibration.js";
 
 function metricCard(label, value, sub, color = K.tx) {
   return (
@@ -48,6 +50,7 @@ export default function TrackInsights() {
   const insights = useMemo(() => buildTrackInsights(appData || {}, new Date()), [appData]);
   const [drafts, setDrafts] = useState({});
   const [historyFilter, setHistoryFilter] = useState("all");
+  const [settlementErrors, setSettlementErrors] = useState({});
   const microNpsEntries = Array.isArray(appData?.microNps) ? appData.microNps : [];
   const hasRecentMicroNps = microNpsEntries.some((entry) => new Date(entry.createdAt || 0).getTime() >= Date.now() - (30 * 86400000));
   const showMicroNps = insights.settledCount >= 3 && !hasRecentMicroNps;
@@ -78,11 +81,16 @@ export default function TrackInsights() {
 
   const settle = (entry) => {
     const draft = drafts[entry.id] || {};
-    if (!syncAppData || !String(draft.actualProfit || "").trim()) return;
+    if (!syncAppData) return;
+    const normalizedActualProfit = parseRealizedOutcomeValue(draft.actualProfit);
+    if (normalizedActualProfit === null) {
+      setSettlementErrors((current) => ({ ...current, [entry.id]: "Enter a complete realized profit or loss before settling." }));
+      return;
+    }
     const nextTimestamp = new Date().toISOString();
     const nextEntries = updateResultFeedback(appData?.resultFeedback || [], entry.id, {
       status: "settled",
-      actualProfit: draft.actualProfit,
+      actualProfit: normalizedActualProfit,
       calculatorAccurate: draft.calculatorAccurate || "yes",
       book: draft.book ?? entry.book,
       updatedAt: nextTimestamp,
@@ -95,12 +103,15 @@ export default function TrackInsights() {
       id: entry.id,
     }, {
       status: "settled",
-      actualProfit: draft.actualProfit,
+      actualProfit: normalizedActualProfit,
       calculatorAccurate: draft.calculatorAccurate || "yes",
       book: draft.book ?? entry.book,
       updatedAt: nextTimestamp,
     }));
+    const linkedWorkflow = (appData?.workflowInbox || []).find((workflow) => workflow?.id === entry.id) || entry;
+    resolveWorkflowPrediction(linkedWorkflow, normalizedActualProfit);
     setDrafts((current) => ({ ...current, [entry.id]: { actualProfit: "", calculatorAccurate: "yes", book: draft.book ?? entry.book } }));
+    setSettlementErrors((current) => ({ ...current, [entry.id]: "" }));
   };
 
   return (
@@ -239,6 +250,7 @@ export default function TrackInsights() {
                       Settle
                     </button>
                   </div>
+                  {settlementErrors[entry.id] && <div role="alert" style={{ marginTop: 8, fontSize: 10, color: K.rd }}>{settlementErrors[entry.id]}</div>}
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
                     {[
                       ["yes", "Accurate"],

@@ -123,7 +123,7 @@ export default function FirstBet() {
       <Help entries={[
         ["Safety Net Promo", "Books like BetMGM ($1,500), bet365 ($1,000), and BetRivers ($500) refund your first bet as bonus bets if it loses. This is different from a bonus bet — you're wagering your own real cash."],
         ["The Strategy", "Place your first bet at Book A. Immediately hedge at Book B. If your bet wins: you profit from the hedge math. If it loses: you get bonus bets back, which you convert using the Bonus Bet Converter tab. Either outcome is profitable."],
-        ["Why hedge immediately?", "If you don't hedge, you're just gambling. The hedge locks in a small profit from the math, and MORE IMPORTANTLY, it means when you lose (and get the bonus bets), those bonus bets are pure profit to convert — you haven't actually lost anything."],
+        ["Why price the hedge immediately?", "A hedge can reduce outcome exposure while quoted prices remain available. If the qualifying bet loses and the refund is issued as advertised, model that bonus credit as a new conversion with its own eligibility, price, limit, void, and execution risk."],
       ]} />
     </div>
   );

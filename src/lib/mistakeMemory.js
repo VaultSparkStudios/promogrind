@@ -1,3 +1,5 @@
+import { realizedOutcomeValue } from "./realizedOutcome.js";
+
 // Mistake-memory loop (S92 audit #4).
 //
 // Given a candidate promo play and an operator's settled-bet ledger,
@@ -71,7 +73,7 @@ function priorLossEntries(ledger = []) {
     if (!entry) return false;
     const status = lc(entry.status);
     if (status !== "settled") return false;
-    return num(entry.profit ?? entry.netProfit ?? entry.outcome) < 0;
+    return realizedOutcomeValue(entry) < 0;
   });
 }
 
@@ -80,7 +82,7 @@ const SHAME_PHRASES = ["!", "STOP", "DON'T", "never ", "should not"];
 function buildCopy(loss) {
   const book = loss.book || "this book";
   const promo = loss.promoType || loss.promo || "this play";
-  const amount = Math.abs(num(loss.profit ?? loss.netProfit ?? loss.outcome));
+  const amount = Math.abs(realizedOutcomeValue(loss));
   return `prior ${promo} on ${book} settled -$${amount.toFixed(2)}`;
 }
 
@@ -110,7 +112,7 @@ export function matchPriorMistake(candidate = {}, ledger = [], { threshold = 0.8
       copy,
       book: loss.book || null,
       promoType: loss.promoType || loss.promo || null,
-      lossAmount: Math.round(Math.abs(num(loss.profit ?? loss.netProfit ?? loss.outcome)) * 100) / 100,
+      lossAmount: Math.round(Math.abs(realizedOutcomeValue(loss)) * 100) / 100,
       occurredAt: loss.createdAt || loss.settledAt || loss.updatedAt || null,
     };
   });

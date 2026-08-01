@@ -1,14 +1,10 @@
 import { computeDisciplineScore } from "./discipline.js";
+import { realizedOutcomeValue } from "./realizedOutcome.js";
 
 const CALC_WINDOW_MS = 15 * 60 * 1000;
 const RAPID_FIRE_THRESHOLD = 4;
 const LOSING_STREAK_THRESHOLD = 3;
 const COOLDOWN_MS = 30 * 60 * 1000;
-
-function num(value) {
-  const parsed = Number.parseFloat(value);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
 
 function asTime(value) {
   if (!value) return 0;
@@ -33,7 +29,7 @@ function losingStreak(feedback) {
     .sort((a, b) => asTime(b.settledAt || b.updatedAt || b.createdAt) - asTime(a.settledAt || a.updatedAt || a.createdAt));
   let streak = 0;
   for (const entry of settled) {
-    const profit = num(entry.profit ?? entry.netProfit ?? entry.outcome);
+    const profit = realizedOutcomeValue(entry);
     if (profit < 0) streak += 1;
     else break;
   }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { getLaunchCommandCenter, getLaunchProofCommandItems, getLaunchProofSummary, getValidationSignal, resolveLaunchValidation } from "../launchState.js";
+import { getLaunchCommandCenter, getLaunchProofCommandItems, getLaunchProofSummary, getValidationSignal, parseValidationSignal, resolveLaunchValidation } from "../launchState.js";
 
 describe("launch truth source", () => {
   it("derives blocker state only from the generated proof ledger", () => {
@@ -20,6 +20,27 @@ describe("launch state helpers", () => {
     expect(getValidationSignal("stale")).toBe("warning");
   });
 
+  it("fails counted evidence closed unless a positive suite is complete", () => {
+    expect(parseValidationSignal("0/597 passing")).toMatchObject({
+      signal: "failing", observedCount: 0, expectedCount: 597,
+    });
+    expect(parseValidationSignal("3/5 pass")).toMatchObject({
+      signal: "failing", observedCount: 3, expectedCount: 5,
+    });
+    expect(parseValidationSignal("0/0 passing")).toMatchObject({
+      signal: "warning", observedCount: 0, expectedCount: 0,
+    });
+    expect(parseValidationSignal("598/597 passing")).toMatchObject({
+      signal: "failing", observedCount: 598, expectedCount: 597,
+    });
+    expect(parseValidationSignal("597/597 passing but deploy failed")).toMatchObject({
+      signal: "failing", reason: "explicit failure marker",
+    });
+    expect(parseValidationSignal("597/597")).toMatchObject({
+      signal: "passing", reason: "complete positive count",
+    });
+  });
+
   it("resolves validation rows with merged signals", () => {
     const validation = resolveLaunchValidation({
       tests: { lastKnown: "153/153 passing" },
@@ -27,6 +48,7 @@ describe("launch state helpers", () => {
     });
 
     expect(validation.tests.signal).toBe("passing");
+    expect(validation.tests.evidence).toMatchObject({ observedCount: 153, expectedCount: 153, reason: "complete positive count" });
     expect(validation.browserSmoke.signal).toBe("failing");
   });
 

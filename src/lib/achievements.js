@@ -1,5 +1,6 @@
 // Achievement engine — 30 badges, event-driven, evaluated from appData + streak + mastery
 import { MASTERY_RANK } from './mastery.js';
+import { parseRealizedOutcomeValue } from './realizedOutcome.js';
 
 export const ACHIEVEMENTS = [
   // Onboarding
@@ -7,30 +8,30 @@ export const ACHIEVEMENTS = [
   { id: 'first_ledger',   label: 'Record Keeper',      desc: 'Logged your first P&L entry',         icon: '📒', category: 'start'    },
   { id: 'first_book',     label: 'Book One',           desc: 'Completed your first sportsbook',     icon: '✅', category: 'start'    },
   { id: 'first_workflow', label: 'In the System',      desc: 'Queued your first workflow action',   icon: '⚡', category: 'start'    },
-  // Profit milestones
-  { id: 'profit_1',       label: 'First Dollar',       desc: '$1+ total profit logged',             icon: '💵', category: 'profit'   },
-  { id: 'profit_100',     label: '$100 Club',          desc: '$100+ total profit',                  icon: '💰', category: 'profit'   },
-  { id: 'profit_500',     label: 'Five Hundred',       desc: '$500+ total profit',                  icon: '💸', category: 'profit'   },
-  { id: 'profit_1000',    label: 'Grand Total',        desc: '$1,000+ total profit',                icon: '🤑', category: 'profit'   },
-  { id: 'profit_5000',    label: 'Five Figure Threat', desc: '$5,000+ total profit',                icon: '🏆', category: 'profit'   },
-  { id: 'profit_10000',   label: 'The House',          desc: '$10,000+ total profit',               icon: '🏛️', category: 'profit'   },
+  // Evidence milestones (legacy IDs retained so existing earned receipts survive)
+  { id: 'profit_1',       label: 'First Outcome',      desc: 'Recorded a realized result',          icon: '◇', category: 'evidence' },
+  { id: 'profit_100',     label: 'Ten Reviews',        desc: 'Reviewed 10 realized outcomes',       icon: '▦', category: 'evidence' },
+  { id: 'profit_500',     label: 'Evidence Set',       desc: 'Reviewed 25 realized outcomes',       icon: '▤', category: 'evidence' },
+  { id: 'profit_1000',    label: 'Fifty Observations', desc: 'Reviewed 50 realized outcomes',       icon: '◫', category: 'evidence' },
+  { id: 'profit_5000',    label: 'Pattern Reader',     desc: 'Reviewed 100 realized outcomes',      icon: '⌁', category: 'evidence' },
+  { id: 'profit_10000',   label: 'Deep Sample',        desc: 'Reviewed 250 realized outcomes',      icon: '◎', category: 'evidence' },
   // Book milestones
   { id: 'books_5',        label: 'Multi-Book',         desc: 'Completed 5 sportsbooks',             icon: '📚', category: 'books'    },
   { id: 'books_10',       label: 'Ten-Book Stack',     desc: 'Completed 10 sportsbooks',            icon: '📦', category: 'books'    },
   { id: 'books_20',       label: 'Full Rack',          desc: 'Completed 20 sportsbooks',            icon: '🗄️', category: 'books'    },
   // Streaks
-  { id: 'streak_3',       label: 'Hat Trick',          desc: '3-day profit streak',                 icon: '🔥', category: 'streak'   },
-  { id: 'streak_7',       label: 'Week Grinder',       desc: '7-day profit streak',                 icon: '🔥🔥', category: 'streak' },
-  { id: 'streak_30',      label: 'Iron Grinder',       desc: '30-day profit streak',                icon: '⚔️', category: 'streak'   },
-  { id: 'streak_100',     label: 'Legend',             desc: '100-day profit streak',               icon: '👑', category: 'streak'   },
+  { id: 'streak_3',       label: 'Three-Day Review',   desc: '3-day evidence review cadence',       icon: '◇', category: 'cadence'  },
+  { id: 'streak_7',       label: 'Weekly Review',      desc: '7-day evidence review cadence',       icon: '◆', category: 'cadence'  },
+  { id: 'streak_30',      label: 'Monthly Discipline', desc: '30-day evidence review cadence',      icon: '▦', category: 'cadence'  },
+  { id: 'streak_100',     label: 'Long-Run Reviewer',  desc: '100-day evidence review cadence',     icon: '◎', category: 'cadence'  },
   // Mastery
   { id: 'bonus_closer',   label: 'Bonus Bet Closer',   desc: 'Reached Closer on Bonus Bet',         icon: '🎯', category: 'mastery'  },
-  { id: 'arb_executor',   label: 'Arb Hunter',         desc: 'Reached Executor on Arbitrage',       icon: '⚡', category: 'mastery'  },
-  { id: 'boost_executor', label: 'Boost Baron',        desc: 'Reached Executor on Profit Boost',    icon: '🚀', category: 'mastery'  },
-  { id: 'dep_executor',   label: 'Match Player',       desc: 'Reached Executor on Deposit Match',   icon: '🔄', category: 'mastery'  },
+  { id: 'arb_executor',   label: 'Arbitrage Reviewer', desc: 'Reached Executor on Arbitrage',       icon: '↔', category: 'mastery'  },
+  { id: 'boost_executor', label: 'Boost Reviewer',     desc: 'Reached Executor on Profit Boost',    icon: '↗', category: 'mastery'  },
+  { id: 'dep_executor',   label: 'Match Reviewer',     desc: 'Reached Executor on Deposit Match',   icon: '↻', category: 'mastery'  },
   { id: 'multi_lane',     label: 'All-Lane Operator',  desc: 'Reached Executor on 4+ promo types',  icon: '🌐', category: 'mastery'  },
   // Engagement
-  { id: 'bets_10',        label: 'Active Bettor',      desc: 'Tracked 10+ open bets',               icon: '🎲', category: 'engage'   },
+  { id: 'bets_10',        label: 'Ten Decisions Logged', desc: 'Recorded 10 reviewed or reasoned decisions', icon: '□', category: 'engage' },
   { id: 'ledger_50',      label: 'Data Driven',        desc: '50+ ledger entries',                  icon: '📊', category: 'engage'   },
   { id: 'advisor_used',   label: 'AI Consulted',       desc: 'Used the Promo Advisor',              icon: '🤖', category: 'engage'   },
   { id: 'stack_built',    label: 'Stack Architect',    desc: 'Built an AI extraction stack',        icon: '🏗️', category: 'engage'   },
@@ -45,11 +46,12 @@ export const ACHIEVEMENTS = [
 export function evaluateAchievements(appData = {}, streak = 0, masteryData = null) {
   const ledger = Array.isArray(appData.ledger) ? appData.ledger : [];
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
-  const bets = Array.isArray(appData.bets) ? appData.bets : [];
   const done = appData.done || {};
   const events = Array.isArray(appData.vaultEvents) ? appData.vaultEvents : [];
 
-  const totalProfit = ledger.reduce((s, e) => s + (parseFloat(e.profit) || 0), 0);
+  const reviewedResults = ledger.filter((entry) => parseRealizedOutcomeValue(entry.profit) !== null).length
+    + feedback.filter((entry) => entry.status === 'settled' && parseRealizedOutcomeValue(entry.actualProfit) !== null).length;
+  const reasonedDecisions = reviewedResults + feedback.filter((entry) => entry.status === 'skipped' && String(entry.skipReason || '').trim()).length;
   const booksComplete = Object.values(done).filter(Boolean).length;
   const settled = feedback.filter(f => f.status === 'settled');
   const accurateCount = settled.filter(f => {
@@ -82,12 +84,12 @@ export function evaluateAchievements(appData = {}, streak = 0, masteryData = nul
     first_ledger:   ledger.length > 0,
     first_book:     booksComplete > 0,
     first_workflow: (Array.isArray(appData.workflowInbox) && appData.workflowInbox.length > 0),
-    profit_1:       totalProfit >= 1,
-    profit_100:     totalProfit >= 100,
-    profit_500:     totalProfit >= 500,
-    profit_1000:    totalProfit >= 1000,
-    profit_5000:    totalProfit >= 5000,
-    profit_10000:   totalProfit >= 10000,
+    profit_1:       reviewedResults >= 1,
+    profit_100:     reviewedResults >= 10,
+    profit_500:     reviewedResults >= 25,
+    profit_1000:    reviewedResults >= 50,
+    profit_5000:    reviewedResults >= 100,
+    profit_10000:   reviewedResults >= 250,
     books_5:        booksComplete >= 5,
     books_10:       booksComplete >= 10,
     books_20:       booksComplete >= 20,
@@ -100,7 +102,7 @@ export function evaluateAchievements(appData = {}, streak = 0, masteryData = nul
     boost_executor: boostExec,
     dep_executor:   depExec,
     multi_lane:     multiLane,
-    bets_10:        bets.length >= 10,
+    bets_10:        reasonedDecisions >= 10,
     ledger_50:      ledger.length >= 50,
     advisor_used:   hasEvent('promo_advisor'),
     stack_built:    hasEvent('stack_builder'),

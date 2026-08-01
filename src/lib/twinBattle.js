@@ -1,3 +1,5 @@
+import { realizedOutcomeValue } from "./realizedOutcome.js";
+
 // Counterfactual Twin Battle (S92 audit #6).
 //
 // Three-way weekly P&L scorecard:
@@ -13,20 +15,13 @@
 
 const MS_PER_DAY = 86400000;
 
-function num(value) {
-  const parsed = Number.parseFloat(value);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
 function asTime(value) {
   if (!value) return 0;
   const t = new Date(value).getTime();
   return Number.isFinite(t) ? t : 0;
 }
 
-function profitOf(entry) {
-  return num(entry?.profit ?? entry?.netProfit ?? entry?.outcome);
-}
+const profitOf = (entry) => realizedOutcomeValue(entry);
 
 function withinDays(entry, now, days) {
   const t = asTime(entry?.settledAt || entry?.updatedAt || entry?.createdAt);

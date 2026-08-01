@@ -1,3 +1,5 @@
+import { realizedOutcomeValue } from "./realizedOutcome.js";
+
 const REPLAY_LAG_DAYS = 14;
 const MS_PER_DAY = 86400000;
 
@@ -18,7 +20,7 @@ export function buildReplayInsights(appData = {}, opts = {}) {
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
 
   const eligible = feedback.filter((entry) => {
-    const t = asTime(entry.createdAt || entry.settledAt || entry.updatedAt);
+    const t = asTime(entry.settledAt || entry.updatedAt || entry.createdAt);
     if (!t) return false;
     return now - t >= minLagMs;
   });
@@ -27,7 +29,7 @@ export function buildReplayInsights(appData = {}, opts = {}) {
 
   const skipped = eligible.filter((e) => String(e.status || "").toLowerCase() === "skipped");
   const settled = eligible.filter((e) => String(e.status || "").toLowerCase() === "settled");
-  const settledProfit = settled.reduce((sum, e) => sum + num(e.profit ?? e.netProfit ?? e.outcome), 0);
+  const settledProfit = settled.reduce((sum, entry) => sum + realizedOutcomeValue(entry), 0);
   const avgSettledProfit = settled.length ? settledProfit / settled.length : 0;
   const lossesAvoided = skipped.length * Math.max(0, -Math.min(0, avgSettledProfit));
 
@@ -54,7 +56,7 @@ export function buildReplayInsights(appData = {}, opts = {}) {
     if (!byLane.has(lane)) byLane.set(lane, { count: 0, profit: 0 });
     const bucket = byLane.get(lane);
     bucket.count += 1;
-    bucket.profit += num(entry.profit ?? entry.netProfit ?? entry.outcome);
+    bucket.profit += realizedOutcomeValue(entry);
   }
   const bestLane = [...byLane.entries()]
     .filter(([, b]) => b.count >= 2)

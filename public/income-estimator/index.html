@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How Much Can I Make? — Sports Promo Income Estimator | PromoGrind</title>
-  <meta name="description" content="Calculate your realistic annual earnings from sportsbook promotions. Enter your state, bankroll, and time commitment to get a personalized promo income estimate." />
+  <title>Sports Promo Scenario Planner | PromoGrind</title>
+  <meta name="description" content="Build a transparent sports-promo value scenario from your own eligible-offer counts, modeled values, and execution-risk haircut." />
   <link rel="canonical" href="https://promogrind.bet/income-estimator/" />
-  <meta property="og:title" content="How Much Can I Make From Sportsbook Promos? | PromoGrind" />
-  <meta property="og:description" content="Free income estimator — see your realistic annual promo earnings based on your state, bankroll, and time commitment." />
+  <meta property="og:title" content="Sports Promo Scenario Planner | PromoGrind" />
+  <meta property="og:description" content="No population earnings claims: enter your own assumptions and compare the scenario with realized outcomes." />
   <meta property="og:type" content="website" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Sports Promo Income Estimator",
-    "description": "Calculate how much you can realistically earn from sportsbook promotions based on your state, bankroll, and time commitment.",
+    "name": "Sports Promo Scenario Planner",
+    "description": "Build a user-input scenario from eligible offers, modeled values, and an explicit execution-risk haircut.",
     "url": "https://promogrind.bet/income-estimator/",
     "publisher": {
       "@type": "Organization",
@@ -82,8 +82,8 @@
 <div class="wrap">
   <a class="logo" href="https://promogrind.bet/">⚡ PromoGrind</a>
 
-  <h1>How Much Can You Make From Sportsbook Promos?</h1>
-  <p class="sub">Enter your region, bankroll, and time commitment — get a personalized estimate of your realistic annual promo earnings.</p>
+  <h1>Build a Promo-Value Scenario From Your Inputs</h1>
+  <p class="sub">PromoGrind supplies no typical earnings assumptions here. Enter only current offers you have verified, then compare this model with realized outcomes in your ledger.</p>
 
   <div class="card">
     <div class="card-title">Your Region</div>
@@ -118,8 +118,8 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Starting Bankroll</div>
-    <label>How much can you set aside for promo hunting?</label>
+    <div class="card-title">Capital Exposure Limit</div>
+    <label>Maximum capital you are willing to have committed at once</label>
     <div class="bankroll-row">
       <span id="bankroll-display">$500</span>
       <input type="range" id="bankroll" min="100" max="10000" step="100" value="500" oninput="updateBankroll(this.value)" />
@@ -127,138 +127,100 @@
     <div style="display:flex;justify-content:space-between;margin-top:4px;color:#475569;font-size:11px;">
       <span>$100</span><span>$10,000</span>
     </div>
+    <div style="margin-top:8px;color:#94a3b8;font-size:12px;">This limits exposure context only; a larger bankroll never creates an assumed return.</div>
   </div>
 
   <div class="card">
-    <div class="card-title">Time Commitment</div>
-    <label>Hours per week you can dedicate</label>
-    <div class="radio-group" style="margin-bottom:0">
-      <div class="radio-btn">
-        <input type="radio" name="time" id="casual" value="casual" />
-        <label for="casual">Casual<br/><span style="font-size:11px;color:#64748b">1–3 hrs/wk</span></label>
-      </div>
-      <div class="radio-btn">
-        <input type="radio" name="time" id="active" value="active" checked />
-        <label for="active">Active<br/><span style="font-size:11px;color:#64748b">5–10 hrs/wk</span></label>
-      </div>
-      <div class="radio-btn">
-        <input type="radio" name="time" id="serious" value="serious" />
-        <label for="serious">Serious<br/><span style="font-size:11px;color:#64748b">15+ hrs/wk</span></label>
-      </div>
-    </div>
+    <div class="card-title">Verified One-Time Offers</div>
+    <label for="signup-count">Eligible offers in your current inventory</label>
+    <input type="number" id="signup-count" min="0" max="50" step="1" value="0" />
+    <label for="signup-value" style="margin-top:12px;display:block;">Your modeled value per offer, using live prices</label>
+    <input type="number" id="signup-value" min="0" max="10000" step="1" value="0" />
   </div>
 
   <div class="card">
-    <div class="card-title">Experience Level</div>
-    <div class="radio-group">
-      <div class="radio-btn">
-        <input type="radio" name="exp" id="beginner" value="beginner" checked />
-        <label for="beginner">Beginner</label>
-      </div>
-      <div class="radio-btn">
-        <input type="radio" name="exp" id="intermediate" value="intermediate" />
-        <label for="intermediate">Intermediate</label>
-      </div>
-      <div class="radio-btn">
-        <input type="radio" name="exp" id="advanced" value="advanced" />
-        <label for="advanced">Advanced</label>
-      </div>
-    </div>
+    <div class="card-title">Observed Recurring Offers</div>
+    <label for="recurring-count">Current offers observed per month</label>
+    <input type="number" id="recurring-count" min="0" max="500" step="1" value="0" />
+    <label for="recurring-value" style="margin-top:12px;display:block;">Your modeled value per observed offer</label>
+    <input type="number" id="recurring-value" min="0" max="10000" step="1" value="0" />
+    <label for="risk-retention" style="margin-top:12px;display:block;">Retained after your execution-risk haircut: <span id="risk-display">70%</span></label>
+    <input type="range" id="risk-retention" min="0" max="100" step="5" value="70" />
   </div>
 
   <div class="results" id="results">
-    <div class="results-title">Your Estimated Annual Promo Income</div>
+    <div class="results-title">Your User-Input Scenario</div>
     <div class="grid2" style="margin-bottom:4px">
       <div>
         <div class="big-number" id="annual-total">$0</div>
-        <div class="big-label">Estimated annual total</div>
+        <div class="big-label">Risk-adjusted annual model</div>
       </div>
       <div>
         <div class="big-number" id="monthly-avg" style="font-size:clamp(24px,4vw,36px);color:#94a3b8">$0</div>
-        <div class="big-label">Monthly average</div>
+        <div class="big-label">Risk-adjusted monthly model</div>
       </div>
     </div>
-    <div id="books-badge" class="books-badge">0 major books available in your region</div>
+    <div id="books-badge" class="books-badge">No return is inferred from region or bankroll</div>
     <div class="breakdown">
       <div class="breakdown-row">
-        <span class="breakdown-label">Sign-up bonuses (one-time)</span>
+        <span class="breakdown-label">Verified one-time offers (gross model)</span>
         <span class="breakdown-value" id="bd-signup">$0</span>
       </div>
       <div class="breakdown-row">
-        <span class="breakdown-label">Recurring monthly promos × 12</span>
+        <span class="breakdown-label">Observed recurring offers × 12 (gross model)</span>
         <span class="breakdown-value" id="bd-recurring">$0</span>
       </div>
       <div class="breakdown-row">
-        <span class="breakdown-label">Arb / +EV opportunities</span>
+        <span class="breakdown-label">Explicit execution-risk haircut</span>
         <span class="breakdown-value" id="bd-arb">$0</span>
       </div>
     </div>
     <a class="cta-btn" href="https://promogrind.bet/#/bonus-bet">
-      Start Tracking Your Promo Income — Free →
+      Track Modeled vs Realized Outcomes →
     </a>
   </div>
 
   <div class="disclaimer">
-    <strong>Disclaimer:</strong> These estimates are based on typical promo conversion rates and average sportsbook offer values. Individual results vary based on account history, betting volume, and book availability in your area. Promo hunting is low-risk but not risk-reduced. You must be 21+ to bet in the US. Gamble responsibly. If you or someone you know has a gambling problem, call 1-800-GAMBLER.
+    <strong>Scenario, not forecast:</strong> Every numeric assumption above comes from you. The calculation does not predict earnings, source live offers, or verify eligibility. Prices, limits, rejected stakes, partial fills, voids, grading, counterparty risk, taxes, and execution can reduce or reverse a modeled result. You must be 21+ where required. Gamble responsibly. If you or someone you know has a gambling problem, call 1-800-GAMBLER.
   </div>
     <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
   </div>
 
 <script>
-  const BOOKS_BY_REGION = {
-    'US-NY':8,'US-NJ':9,'US-IL':7,'US-MI':8,'US-OH':8,'US-PA':8,
-    'US-MA':8,'US-MD':7,'US-CO':7,'US-AZ':7,'US-VA':7,'US-TN':6,
-    'US-IN':7,'US-IA':6,'US-KS':5,'US-KY':6,'US-LA':6,'US-NC':7,
-    'US-WV':5,'US-VT':5,'UK':12
-  };
-
-  const AVG_SIGNUP_PER_BOOK = { US: 300, UK: 60 }; // USD / GBP
   const CURRENCY = { US: '$', UK: '£' };
-
-  const MONTHLY_RECURRING = {
-    casual:    { US: 75,  UK: 150  },
-    active:    { US: 250, UK: 400  },
-    serious:   { US: 600, UK: 900  }
-  };
-
-  const ARB_MONTHLY = { casual: 0, active: 120, serious: 400 };
-  const ARB_MONTHLY_UK = { casual: 0, active: 200, serious: 600 };
-
-  const EXP_MULTIPLIER = { beginner: 0.60, intermediate: 0.85, advanced: 1.0 };
 
   function getInputs() {
     const region = document.getElementById('region').value;
     const bankroll = parseInt(document.getElementById('bankroll').value);
-    const time = document.querySelector('input[name="time"]:checked')?.value || 'active';
-    const exp = document.querySelector('input[name="exp"]:checked')?.value || 'beginner';
-    return { region, bankroll, time, exp };
+    const signupCount = Math.max(0, Number(document.getElementById('signup-count').value) || 0);
+    const signupValue = Math.max(0, Number(document.getElementById('signup-value').value) || 0);
+    const recurringCount = Math.max(0, Number(document.getElementById('recurring-count').value) || 0);
+    const recurringValue = Math.max(0, Number(document.getElementById('recurring-value').value) || 0);
+    const retention = Math.max(0, Math.min(100, Number(document.getElementById('risk-retention').value) || 0)) / 100;
+    return { region, bankroll, signupCount, signupValue, recurringCount, recurringValue, retention };
   }
 
   function fmt(n, sym) { return sym + Math.round(n).toLocaleString(); }
 
   function calculate() {
-    const { region, bankroll, time, exp } = getInputs();
+    const { region, bankroll, signupCount, signupValue, recurringCount, recurringValue, retention } = getInputs();
     const isUK = region === 'UK';
     const market = isUK ? 'UK' : 'US';
     const sym = CURRENCY[market];
-    const books = BOOKS_BY_REGION[region] || 6;
-    const expMult = EXP_MULTIPLIER[exp];
-    const bankrollMult = Math.min(1 + (bankroll - 500) / 5000 * 0.4, 1.4);
-
-    const signupBonuses = Math.round(books * AVG_SIGNUP_PER_BOOK[market] * expMult);
-    const monthlyRecurring = Math.round(MONTHLY_RECURRING[time][market] * expMult * bankrollMult);
-    const monthlyArb = Math.round((isUK ? ARB_MONTHLY_UK[time] : ARB_MONTHLY[time]) * expMult);
+    const signupBonuses = signupCount * signupValue;
+    const monthlyRecurring = recurringCount * recurringValue;
     const annualRecurring = monthlyRecurring * 12;
-    const annualArb = monthlyArb * 12;
-    const annualTotal = signupBonuses + annualRecurring + annualArb;
+    const grossAnnual = signupBonuses + annualRecurring;
+    const annualTotal = grossAnnual * retention;
     const monthlyAvg = Math.round(annualTotal / 12);
 
     document.getElementById('annual-total').textContent = fmt(annualTotal, sym);
     document.getElementById('monthly-avg').textContent = fmt(monthlyAvg, sym);
-    document.getElementById('books-badge').textContent = books + ' major books available in your region';
+    document.getElementById('books-badge').textContent = `Exposure cap: ${fmt(bankroll, sym)} · region sets currency only`;
     document.getElementById('bd-signup').textContent = fmt(signupBonuses, sym);
     document.getElementById('bd-recurring').textContent = fmt(annualRecurring, sym);
-    document.getElementById('bd-arb').textContent = time === 'casual' ? sym + '0 (upgrade to Active)' : fmt(annualArb, sym);
+    document.getElementById('bd-arb').textContent = '-' + fmt(grossAnnual - annualTotal, sym);
+    document.getElementById('risk-display').textContent = Math.round(retention * 100) + '%';
   }
 
   function updateBankroll(val) {
@@ -267,8 +229,9 @@
   }
 
   document.getElementById('region').addEventListener('change', calculate);
-  document.querySelectorAll('input[name="time"]').forEach(r => r.addEventListener('change', calculate));
-  document.querySelectorAll('input[name="exp"]').forEach(r => r.addEventListener('change', calculate));
+  ['signup-count', 'signup-value', 'recurring-count', 'recurring-value', 'risk-retention'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calculate);
+  });
 
   calculate();
 </script>

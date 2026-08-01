@@ -1,3 +1,5 @@
+import { realizedOutcomeValue } from "./realizedOutcome.js";
+
 const MS_PER_DAY = 86400000;
 
 function num(value) {
@@ -11,9 +13,7 @@ function asTime(value) {
   return Number.isFinite(t) ? t : 0;
 }
 
-function profitOf(entry) {
-  return num(entry.profit ?? entry.netProfit ?? entry.outcome);
-}
+const profitOf = (entry) => realizedOutcomeValue(entry);
 
 /**
  * Build a 7-day counterfactual P&L ribbon comparing:
@@ -36,7 +36,7 @@ export function buildCounterfactualPnL(appData = {}, opts = {}) {
   const redFlags = appData.redFlags && typeof appData.redFlags === "object" ? appData.redFlags : {};
 
   const inWindow = feedback.filter((e) => {
-    const t = asTime(e.createdAt || e.settledAt || e.updatedAt);
+    const t = asTime(e.settledAt || e.updatedAt || e.createdAt);
     return t >= since && t <= now;
   });
 

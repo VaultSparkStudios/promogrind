@@ -1,14 +1,11 @@
+import { realizedOutcomeValue } from "./realizedOutcome.js";
+
 const MS_PER_DAY = 86400000;
 
 function asTime(value) {
   if (!value) return 0;
   const t = new Date(value).getTime();
   return Number.isFinite(t) ? t : 0;
-}
-
-function num(value) {
-  const parsed = Number.parseFloat(value);
-  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 function startOfDay(ms) {
@@ -27,13 +24,13 @@ export function buildDecisionJournal(appData = {}, opts = {}) {
 
   const inWindow = (t) => t >= yStart && t < yEnd;
 
-  const yEntries = feedback.filter((e) => inWindow(asTime(e.createdAt || e.settledAt || e.updatedAt)));
+  const yEntries = feedback.filter((entry) => inWindow(asTime(entry.settledAt || entry.updatedAt || entry.createdAt)));
   const executed = yEntries.filter((e) => String(e.status || "").toLowerCase() === "settled");
   const skipped = yEntries.filter((e) => String(e.status || "").toLowerCase() === "skipped");
 
-  const wins = executed.filter((e) => num(e.profit ?? e.netProfit ?? e.outcome) > 0).length;
-  const losses = executed.filter((e) => num(e.profit ?? e.netProfit ?? e.outcome) < 0).length;
-  const netProfit = executed.reduce((s, e) => s + num(e.profit ?? e.netProfit ?? e.outcome), 0);
+  const wins = executed.filter((entry) => realizedOutcomeValue(entry) > 0).length;
+  const losses = executed.filter((entry) => realizedOutcomeValue(entry) < 0).length;
+  const netProfit = executed.reduce((sum, entry) => sum + realizedOutcomeValue(entry), 0);
 
   const yBets = bets.filter((b) => inWindow(asTime(b.createdAt || b.placedAt)));
 
@@ -56,14 +53,16 @@ export function buildDecisionJournal(appData = {}, opts = {}) {
   const last7Start = startOfDay(now) - 7 * MS_PER_DAY;
   const prior7Start = startOfDay(now) - 14 * MS_PER_DAY;
   const inLast7 = feedback.filter((e) => {
-    const t = asTime(e.createdAt || e.settledAt);
+    const t = asTime(e.settledAt || e.updatedAt || e.createdAt);
     return t >= last7Start && t < startOfDay(now);
   }).filter((e) => String(e.status || "").toLowerCase() === "settled");
   const inPrior7 = feedback.filter((e) => {
-    const t = asTime(e.createdAt || e.settledAt);
+    const t = asTime(e.settledAt || e.updatedAt || e.createdAt);
     return t >= prior7Start && t < last7Start;
   }).filter((e) => String(e.status || "").toLowerCase() === "settled");
-  const avg = (arr) => (arr.length ? arr.reduce((s, e) => s + num(e.profit ?? e.netProfit ?? e.outcome), 0) / arr.length : 0);
+  const avg = (entries) => (entries.length
+    ? entries.reduce((sum, entry) => sum + realizedOutcomeValue(entry), 0) / entries.length
+    : 0);
   const delta = avg(inLast7) - avg(inPrior7);
   const deltaStr = delta === 0
     ? "edge profile flat"

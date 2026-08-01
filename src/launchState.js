@@ -241,21 +241,58 @@ export function getLaunchSummary() {
   };
 }
 
+export function parseValidationSignal(value = "") {
+  const raw = String(value || "").trim();
+  const normalized = raw.toLowerCase();
+  const base = {
+    raw,
+    signal: "unknown",
+    observedCount: null,
+    expectedCount: null,
+    reason: "missing evidence",
+  };
+
+  if (!normalized) return base;
+  if (/(fail|error|blocked|broken|timeout|abort|cancel)/i.test(normalized)) {
+    return { ...base, signal: "failing", reason: "explicit failure marker" };
+  }
+
+  const countMatch = normalized.match(/(?:^|\D)(\d[\d,]*)\s*\/\s*(\d[\d,]*)(?:\D|$)/);
+  if (countMatch) {
+    const observedCount = Number.parseInt(countMatch[1].replace(/,/g, ""), 10);
+    const expectedCount = Number.parseInt(countMatch[2].replace(/,/g, ""), 10);
+    if (!Number.isFinite(observedCount) || !Number.isFinite(expectedCount) || expectedCount <= 0) {
+      return { ...base, signal: "warning", observedCount, expectedCount, reason: "non-positive or malformed expected count" };
+    }
+    if (observedCount !== expectedCount) {
+      return { ...base, signal: "failing", observedCount, expectedCount, reason: "observed count does not equal expected count" };
+    }
+    return { ...base, signal: "passing", observedCount, expectedCount, reason: "complete positive count" };
+  }
+
+  if (/\b(?:passing|passed|pass|success|successful|green)\b/i.test(normalized)) {
+    return { ...base, signal: "passing", reason: "explicit uncounted pass marker" };
+  }
+  if (/\b(?:stale|unknown|pending|partial|skipped|unavailable|not run)\b/i.test(normalized)) {
+    return { ...base, signal: "warning", reason: "non-terminal or unavailable evidence" };
+  }
+  return { ...base, signal: "warning", reason: "unrecognized evidence" };
+}
+
 export function getValidationSignal(value = "") {
-  const normalized = String(value || "").trim().toLowerCase();
-  if (!normalized) return "unknown";
-  if (/(fail|error|blocked|broken|timeout)/i.test(normalized)) return "failing";
-  if (/(passing|pass|\d+\/\d+)/i.test(normalized)) return "passing";
-  return "warning";
+  return parseValidationSignal(value).signal;
 }
 
 export function resolveLaunchValidation(overrides = {}) {
   const resolved = {};
   for (const [key, value] of Object.entries(LAUNCH_VALIDATION)) {
+    const lastKnown = (overrides[key] || {}).lastKnown ?? value.lastKnown;
+    const evidence = parseValidationSignal(lastKnown);
     resolved[key] = {
       ...value,
       ...(overrides[key] || {}),
-      signal: getValidationSignal((overrides[key] || {}).lastKnown ?? value.lastKnown),
+      signal: evidence.signal,
+      evidence,
     };
   }
   return resolved;

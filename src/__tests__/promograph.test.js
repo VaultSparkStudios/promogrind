@@ -27,12 +27,16 @@ describe("promograph helpers", () => {
       promoType: "odds_boost",
       calculatorSlug: "deposit-match-calculator",
       opportunityScore: "104",
+      positiveOutcomeProbability: "0.64",
+      probabilityBasis: "Known hedge prices at capture time.",
       bookTarget: "DraftKings",
       opsTags: ["reload", "", null],
     });
     expect(recommendation.promoType).toBe("profit_boost");
     expect(recommendation.calculatorSlug).toBe("deposit-match");
     expect(recommendation.opportunityScore).toBe(100);
+    expect(recommendation.positiveOutcomeProbability).toBe(0.64);
+    expect(recommendation.probabilityBasis).toBe("Known hedge prices at capture time.");
     expect(recommendation.opsTags).toEqual(["reload"]);
   });
 

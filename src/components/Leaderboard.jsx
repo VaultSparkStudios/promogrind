@@ -80,7 +80,7 @@ export default function Leaderboard() {
         {privacySaving && <span style={{ fontSize: 10, color: K.yl }}>Saving...</span>}
       </div>
       {myRank && <Nt c={K.gn}>You are ranked #{myRank} on the leaderboard.</Nt>}
-      <Nt c={K.ac}>Earn points by using calculators, logging bets, and daily logins.</Nt>
+      <Nt c={K.ac}>Account points summarize eligible product activity. Review cadence is calculated separately from recorded outcomes, never from visits.</Nt>
       {loading && <div style={{ textAlign: "center", padding: 32, color: K.mt, fontSize: 11 }}>Loading leaderboard...</div>}
       {!loading && rows.length === 0 && (
         <div style={{ textAlign: "center", padding: "32px 16px" }}>

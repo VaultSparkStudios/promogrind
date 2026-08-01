@@ -1,3 +1,5 @@
+import { parseRealizedOutcomeValue } from "../lib/realizedOutcome.js";
+
 function safeUUID() {
   try {
     if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
@@ -12,6 +14,11 @@ function safeUUID() {
 function toNumber(value) {
   const parsed = Number.parseFloat(value);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+function toProbability(value) {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) && parsed >= 0 && parsed <= 1 ? parsed : null;
 }
 
 function titleCase(value = "") {
@@ -126,6 +133,8 @@ export function normalizeRecommendation(input = {}) {
     calculatorSlug: normalizeCalculatorSlug(input.calculatorSlug),
     bookTarget: String(input.bookTarget || input.book || "").trim(),
     opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : null,
+    positiveOutcomeProbability: toProbability(input.positiveOutcomeProbability),
+    probabilityBasis: String(input.probabilityBasis || "").trim() || null,
     confidence: String(input.confidence || "").trim().toLowerCase() || null,
     opsTags: Array.isArray(input.opsTags) ? input.opsTags.map((tag) => String(tag || "").trim()).filter(Boolean) : [],
     assumptions: list(input.assumptions),
@@ -150,7 +159,7 @@ export function normalizeWorkflowEntry(entry = {}) {
     promoType: normalizePromoType(entry.promoType),
     status,
     expectedProfit: toNumber(entry.expectedProfit),
-    actualProfit: toNumber(entry.actualProfit),
+    actualProfit: parseRealizedOutcomeValue(entry.actualProfit),
     calculatorAccurate: entry.calculatorAccurate || null,
     book: String(entry.book || entry.bookTarget || "").trim(),
     skipReason: String(entry.skipReason || "").trim(),
@@ -159,6 +168,9 @@ export function normalizeWorkflowEntry(entry = {}) {
     wouldRepeat: entry.wouldRepeat === "no" ? "no" : entry.wouldRepeat === "maybe" ? "maybe" : entry.wouldRepeat === "yes" ? "yes" : null,
     confidence: recommendation.confidence,
     opportunityScore: recommendation.opportunityScore,
+    positiveOutcomeProbability: recommendation.positiveOutcomeProbability,
+    probabilityBasis: recommendation.probabilityBasis,
+    calibrationPredictionId: entry.calibrationPredictionId ? String(entry.calibrationPredictionId).trim() : null,
     opsTags: recommendation.opsTags,
     assumptions: recommendation.assumptions,
     missingInputs: recommendation.missingInputs,

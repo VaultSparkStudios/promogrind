@@ -43,12 +43,3 @@ export const APP_CHROME_COPY = {
   footerLegal:
     "Powered by VaultSpark Studios. PromoGrind is a free educational calculator tool.",
 };
-
-export const DAILY_STREAK_COPY = {
-  label: "day streak",
-  messages: [
-    [7, 50, "7-day streak! +50 Vault Points earned!"],
-    [30, 200, "30-day streak! +200 Vault Points earned!"],
-    [100, 500, "100-day streak! +500 Vault Points earned!"],
-  ],
-};

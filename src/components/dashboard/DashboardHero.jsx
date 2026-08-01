@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { BOOKS } from "../../books.js";
 import { f, K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
-import { streakEmoji, streakLabel, streakMilestone, computeStreak } from "../../lib/streaks.js";
+import { streakEmoji, streakLabel } from "../../lib/streaks.js";
 import { computeMastery, MASTERY_COLOR } from "../../lib/mastery.js";
 import { computeDisciplineScore } from "../../lib/discipline.js";
 import { AppDataCtx } from "../../contexts.jsx";
@@ -54,18 +54,9 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
   const percent = Math.min(100, Math.round((booksComplete / BOOKS.length) * 100));
   const emoji = streakEmoji(streak);
   const label = streakLabel(streak);
-  const milestone = streakMilestone(streak);
   const animatedProfit = useCountUp(totalProfit);
   const globalRank = mastery?.globalRank;
   const disciplineColor = discipline.tone === "elite" ? K.gn : discipline.tone === "healthy" ? K.ac : discipline.tone === "watch" ? K.yl : K.rd;
-
-  const streakData = useMemo(() => ctx?.appData ? computeStreak(ctx.appData) : null, [ctx?.appData]);
-  const daysSinceActive = useMemo(() => {
-    if (!streakData?.lastActiveDay) return null;
-    const ms = Date.now() - new Date(streakData.lastActiveDay + 'T00:00:00Z').getTime();
-    return Math.floor(ms / 86400000);
-  }, [streakData?.lastActiveDay]);
-  const showComeback = streak === 0 && daysSinceActive != null && daysSinceActive >= 3 && daysSinceActive <= 30;
 
   const activeLanes = mastery
     ? Object.entries(mastery.perType).filter(([, d]) => d.xp > 0).sort(([, a], [, b]) => b.xp - a.xp).slice(0, 4)
@@ -93,18 +84,10 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
               </div>
             )}
           </div>
-          {milestone && (
-            <div style={{ fontSize: 10, color: K.yl, fontWeight: 700, marginBottom: 4 }}>🎉 {milestone}-day milestone reached!</div>
-          )}
-          {showComeback && (
-            <div style={{ padding: '6px 10px', background: `${K.pp}12`, border: `1px solid ${K.pp}30`, borderRadius: 6, marginBottom: 6, fontSize: 10, color: K.pp, fontWeight: 600 }}>
-              ⚡ Comeback Bonus — away {daysSinceActive}d · complete a mission for 2× XP today
-            </div>
-          )}
           <div style={{ fontFamily: fontD, fontSize: 26, fontWeight: 800, color: totalProfit >= 0 ? K.gn : K.rd, marginBottom: 4 }}>
             {totalProfit >= 0 ? '+' : '-'}${f(Math.abs(animatedProfit))}
           </div>
-          <div style={{ fontSize: 11, color: K.mt }}>Total profit extracted · {booksComplete}/{BOOKS.length} books done</div>
+          <div style={{ fontSize: 11, color: K.mt }}>Recorded realized P/L · {booksComplete}/{BOOKS.length} book profiles complete</div>
           <div style={{ height: 4, background: K.s3, borderRadius: 2, marginTop: 8, width: 220 }}>
             <div style={{ height: 4, borderRadius: 2, background: K.gn, width: `${percent}%`, transition: 'width 0.6s cubic-bezier(0.22,1,0.36,1)' }} />
           </div>
@@ -119,7 +102,7 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
           {streak > 0 && (
             <div style={{ padding: '10px 16px', background: streak >= 3 ? `${K.yl}10` : `${K.mt}10`, border: `1px solid ${streak >= 3 ? K.yl : K.mt}30`, borderRadius: 8, textAlign: 'center' }}>
               <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: streak >= 3 ? K.yl : K.mt }}>{streak}</div>
-              <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Day Streak</div>
+              <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Review Cadence</div>
             </div>
           )}
           <div style={{ padding: '10px 16px', background: `${disciplineColor}10`, border: `1px solid ${disciplineColor}30`, borderRadius: 8, textAlign: 'center', maxWidth: 132 }}>
@@ -127,7 +110,7 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
             <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Discipline</div>
           </div>
           <button onClick={() => navigate('/ledger')} style={{ padding: '10px 16px', background: `${K.ac}15`, border: `1px solid ${K.ac}30`, borderRadius: 8, color: K.ac, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: font, whiteSpace: 'nowrap' }}>
-            Log Profit →
+            Log Result →
           </button>
         </div>
       </div>
@@ -156,9 +139,9 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
           style={{ marginTop: 10, padding: '8px 12px', background: `${MASTERY_COLOR[weakLane[1].level] || K.mt}0d`, border: `1px solid ${MASTERY_COLOR[weakLane[1].level] || K.mt}25`, borderRadius: 7, cursor: navigate ? 'pointer' : 'default', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
           <div>
-            <div style={{ fontSize: 10, color: K.mt, marginBottom: 1 }}>Weakest Lane · Boost it →</div>
+            <div style={{ fontSize: 10, color: K.mt, marginBottom: 1 }}>Review Lane · Add evidence →</div>
             <div style={{ fontSize: 11, fontWeight: 700, color: MASTERY_COLOR[weakLane[1].level] || K.mt }}>
-              {weakLane[1].label} · {weakLane[1].level} · {weakLane[1].nextXp != null ? `${weakLane[1].nextXp - weakLane[1].xp} XP to next level` : 'Max level'}
+              {weakLane[1].label} · {weakLane[1].level} · {weakLane[1].nextXp != null ? `${weakLane[1].nextXp - weakLane[1].xp} reviewed observation${weakLane[1].nextXp - weakLane[1].xp === 1 ? '' : 's'} to next confidence band` : 'Highest evidence band'}
             </div>
           </div>
           <span style={{ fontSize: 9, color: K.mt }}>▸</span>

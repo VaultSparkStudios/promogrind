@@ -6,7 +6,7 @@ const now = new Date("2026-05-17T12:00:00Z").getTime();
 describe("buildReplayInsights", () => {
   it("returns no insights when no 14-day-old evidence exists", () => {
     const r = buildReplayInsights(
-      { resultFeedback: [{ status: "settled", profit: 10, createdAt: new Date(now - 86400000).toISOString() }] },
+      { resultFeedback: [{ status: "settled", actualProfit: 10, createdAt: new Date(now - 86400000).toISOString() }] },
       { now },
     );
     expect(r.hasEnoughHistory).toBe(false);
@@ -17,7 +17,7 @@ describe("buildReplayInsights", () => {
     const old = (days, lane, profit) => ({
       status: "settled",
       promoType: lane,
-      profit,
+      actualProfit: profit,
       createdAt: new Date(now - days * 86400000).toISOString(),
       settledAt: new Date(now - (days - 1) * 86400000).toISOString(),
     });
@@ -40,7 +40,7 @@ describe("buildReplayInsights", () => {
     const old = (days, status, profit, lane = "bonus_bet") => ({
       status,
       promoType: lane,
-      profit,
+      actualProfit: profit,
       createdAt: new Date(now - days * 86400000).toISOString(),
     });
     const r = buildReplayInsights(

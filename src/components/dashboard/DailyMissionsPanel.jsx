@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from "react";
 import { K, font, fontD } from "../../lib/shared.js";
 import { S } from "../../ui.jsx";
 import { AppDataCtx } from "../../contexts.jsx";
-import { getDailyMissions, completeMission, getTodayXp } from "../../lib/missions.js";
+import { getDailyMissions, completeMission } from "../../lib/missions.js";
 import { buildOperatorSeason } from "../../lib/seasons.js";
 
 export default function DailyMissionsPanel({ navigate }) {
@@ -13,8 +13,6 @@ export default function DailyMissionsPanel({ navigate }) {
   const [tick, setTick] = useState(0);
   const missions = useMemo(() => getDailyMissions(appData, todayStr), [appData, todayStr, tick]);
   const season = useMemo(() => buildOperatorSeason(appData), [appData, tick]);
-  const xpToday = getTodayXp(todayStr);
-  const maxXp = missions.reduce((s, m) => s + m.xp, 0);
   const doneCount = missions.filter(m => m.completed).length;
 
   // Auto-complete any mission whose check has passed
@@ -41,12 +39,6 @@ export default function DailyMissionsPanel({ navigate }) {
   }, []);
 
   function handleComplete(mission) {
-    if (mission.completed) {
-      if (navigate) navigate(mission.nav);
-      return;
-    }
-    completeMission(mission.id, todayStr);
-    setTick(t => t + 1);
     if (navigate) navigate(mission.nav);
   }
 
@@ -90,10 +82,10 @@ export default function DailyMissionsPanel({ navigate }) {
       <div style={{ ...S.card, border: `1px solid ${K.gn}40`, background: `${K.gn}06`, marginBottom: 12, padding: '14px 18px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: K.gn, marginBottom: 2 }}>✓ All missions done — come back tomorrow</div>
-            <div style={{ fontSize: 10, color: K.mt }}>{xpToday} XP earned today</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: K.gn, marginBottom: 2 }}>Daily review complete</div>
+            <div style={{ fontSize: 10, color: K.mt }}>Three actions verified from recorded evidence. Return when there is another decision to review.</div>
           </div>
-          <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 800, color: K.gn }}>+{xpToday}</div>
+          <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 800, color: K.gn }}>3/3</div>
         </div>
       </div>
       </>
@@ -106,13 +98,13 @@ export default function DailyMissionsPanel({ navigate }) {
     <div style={{ ...S.card, marginBottom: 12, padding: '14px 18px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontFamily: fontD, fontSize: 11, fontWeight: 700, color: K.ac, textTransform: 'uppercase', letterSpacing: '2px' }}>Daily Missions</span>
-          <span style={{ fontSize: 10, color: K.mt }}>{doneCount}/3 done</span>
+          <span style={{ fontFamily: fontD, fontSize: 11, fontWeight: 700, color: K.ac, textTransform: 'uppercase', letterSpacing: '2px' }}>Daily Review</span>
+          <span style={{ fontSize: 10, color: K.mt }}>{doneCount}/3 evidenced</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 10, color: K.yl, fontWeight: 600 }}>{xpToday}/{maxXp} XP</span>
+          <span style={{ fontSize: 10, color: K.yl, fontWeight: 600 }}>{Math.round((doneCount / 3) * 100)}% reviewed</span>
           <div style={{ width: 48, height: 4, background: K.s3, borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ height: 4, background: K.yl, borderRadius: 2, width: `${maxXp > 0 ? (xpToday / maxXp) * 100 : 0}%`, transition: 'width 0.5s ease' }} />
+            <div style={{ height: 4, background: K.yl, borderRadius: 2, width: `${(doneCount / 3) * 100}%`, transition: 'width 0.5s ease' }} />
           </div>
         </div>
       </div>
@@ -147,7 +139,7 @@ export default function DailyMissionsPanel({ navigate }) {
               </div>
               <div style={{ fontSize: 10, color: K.mt, marginTop: 1 }}>{m.desc}</div>
             </div>
-            <span style={{ fontSize: 10, fontWeight: 700, color: m.completed ? K.mt : K.yl, whiteSpace: 'nowrap' }}>+{m.xp} XP</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: m.completed ? K.gn : K.mt, whiteSpace: 'nowrap' }}>{m.completed ? 'Evidenced' : 'Open'}</span>
           </button>
         ))}
       </div>

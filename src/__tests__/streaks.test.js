@@ -17,7 +17,7 @@ describe("computeStreak — basic cases", () => {
     expect(result.activeToday).toBe(false);
   });
 
-  it("counts a single profitable settlement today as streak=1", () => {
+  it("counts a single reviewed settlement today as cadence=1", () => {
     const appData = {
       resultFeedback: [
         { id: "rf-1", status: "settled", actualProfit: "25", updatedAt: "2026-04-17T10:00:00Z" },
@@ -28,7 +28,7 @@ describe("computeStreak — basic cases", () => {
     expect(result.activeToday).toBe(true);
   });
 
-  it("counts 3 consecutive profitable days as streak=3", () => {
+  it("counts 3 consecutive reviewed days as cadence=3", () => {
     const appData = {
       resultFeedback: [
         { id: "rf-1", status: "settled", actualProfit: "20", updatedAt: "2026-04-17T10:00:00Z" },
@@ -40,27 +40,43 @@ describe("computeStreak — basic cases", () => {
     expect(result.current).toBe(3);
   });
 
-  it("does not count zero-profit days as active today", () => {
+  it("counts a reviewed zero outcome without judging its sign", () => {
     const appData = {
       resultFeedback: [
-        // profit=0 does not add April 17 to profitDays → activeToday=false
         { id: "rf-1", status: "settled", actualProfit: "0", updatedAt: "2026-04-17T10:00:00Z" },
-        // yesterday was profitable → streak is still alive at 1
         { id: "rf-2", status: "settled", actualProfit: "30", updatedAt: "2026-04-16T10:00:00Z" },
       ],
     };
     const result = computeStreak(appData, NOW);
-    expect(result.current).toBe(1);
-    expect(result.activeToday).toBe(false);
+    expect(result.current).toBe(2);
+    expect(result.activeToday).toBe(true);
   });
 
-  it("does not count days where profit is negative", () => {
+  it("counts a reviewed loss as discipline evidence", () => {
     const appData = {
       resultFeedback: [
         { id: "rf-1", status: "settled", actualProfit: "-10", updatedAt: "2026-04-17T10:00:00Z" },
       ],
     };
     const result = computeStreak(appData, NOW);
+    expect(result.current).toBe(1);
+    expect(result.evidence.settledReviews).toBe(1);
+  });
+
+  it("counts a reasoned skip but refuses an unexplained skip", () => {
+    const appData = { resultFeedback: [
+      { id: "rf-1", status: "skipped", skipReason: "terms_unclear", updatedAt: "2026-04-17T10:00:00Z" },
+      { id: "rf-2", status: "skipped", skipReason: "", updatedAt: "2026-04-16T10:00:00Z" },
+    ] };
+    const result = computeStreak(appData, NOW);
+    expect(result.current).toBe(1);
+    expect(result.evidence.reasonedSkips).toBe(1);
+  });
+
+  it("refuses expected-only settlements as realized evidence", () => {
+    const result = computeStreak({ resultFeedback: [
+      { status: "settled", expectedProfit: "25", updatedAt: "2026-04-17T10:00:00Z" },
+    ] }, NOW);
     expect(result.current).toBe(0);
   });
 
@@ -135,20 +151,15 @@ describe("computeStreak — basic cases", () => {
   });
 });
 
-describe("streakEmoji", () => {
+describe("cadence symbol", () => {
   it("returns null for streak < 3", () => {
     expect(streakEmoji(0)).toBeNull();
     expect(streakEmoji(2)).toBeNull();
   });
-  it("returns single fire for 3–13 days", () => {
-    expect(streakEmoji(3)).toBe("🔥");
-    expect(streakEmoji(13)).toBe("🔥");
-  });
-  it("returns double fire for 14–29 days", () => {
-    expect(streakEmoji(14)).toBe("🔥🔥");
-  });
-  it("returns triple fire for 30+ days", () => {
-    expect(streakEmoji(30)).toBe("🔥🔥🔥");
+  it("uses one neutral evidence marker at every mature cadence", () => {
+    expect(streakEmoji(3)).toBe("◆");
+    expect(streakEmoji(14)).toBe("◆");
+    expect(streakEmoji(30)).toBe("◆");
   });
 });
 
@@ -156,11 +167,11 @@ describe("streakLabel", () => {
   it("returns null for 0", () => {
     expect(streakLabel(0)).toBeNull();
   });
-  it("returns '1-day streak' for 1", () => {
-    expect(streakLabel(1)).toBe("1-day streak");
+  it("returns a review-cadence label for 1", () => {
+    expect(streakLabel(1)).toBe("1-day review cadence");
   });
-  it("returns 'N-day streak' for N > 1", () => {
-    expect(streakLabel(7)).toBe("7-day streak");
+  it("returns a review-cadence label for N > 1", () => {
+    expect(streakLabel(7)).toBe("7-day review cadence");
   });
 });
 

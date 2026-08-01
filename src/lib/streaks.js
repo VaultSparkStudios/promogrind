@@ -1,7 +1,4 @@
-function toNumber(value) {
-  const n = Number.parseFloat(value);
-  return Number.isFinite(n) ? n : null;
-}
+import { parseRealizedOutcomeValue } from "./realizedOutcome.js";
 
 function dayStr(value) {
   if (!value) return null;
@@ -15,9 +12,9 @@ function addDays(dateStr, delta) {
   return d.toISOString().slice(0, 10);
 }
 
-function bestStreakFromSet(profitDays) {
-  if (!profitDays.size) return 0;
-  const days = [...profitDays].sort();
+function bestStreakFromSet(reviewDays) {
+  if (!reviewDays.size) return 0;
+  const days = [...reviewDays].sort();
   let best = 1;
   let run = 1;
   for (let i = 1; i < days.length; i++) {
@@ -33,58 +30,67 @@ function bestStreakFromSet(profitDays) {
 
 export function computeStreak(appData = {}, now = new Date()) {
   const todayStr = dayStr(now);
-  if (!todayStr) return { current: 0, best: 0, activeToday: false };
+  if (!todayStr) return { current: 0, best: 0, activeToday: false, consistency: 0, reviewedDays: 0 };
 
-  const profitDays = new Set();
+  const reviewDays = new Set();
+  let settledReviews = 0;
+  let reasonedSkips = 0;
+  let ledgerReviews = 0;
 
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
   for (const entry of feedback) {
-    if (entry.status === "settled") {
-      const profit = toNumber(entry.actualProfit) ?? toNumber(entry.expectedProfit) ?? 0;
-      if (profit > 0) {
-        const d = dayStr(entry.updatedAt || entry.createdAt);
-        if (d) profitDays.add(d);
-      }
+    const settled = entry.status === "settled" && parseRealizedOutcomeValue(entry.actualProfit) !== null;
+    const reasonedSkip = entry.status === "skipped" && Boolean(String(entry.skipReason || "").trim());
+    if (settled || reasonedSkip) {
+      const d = dayStr(entry.updatedAt || entry.createdAt);
+      if (d) reviewDays.add(d);
+      if (settled) settledReviews += 1;
+      if (reasonedSkip) reasonedSkips += 1;
     }
   }
 
   const ledger = Array.isArray(appData.ledger) ? appData.ledger : [];
   for (const entry of ledger) {
-    const profit = toNumber(entry.profit) ?? 0;
-    if (profit > 0) {
+    if (parseRealizedOutcomeValue(entry.profit) !== null) {
       const d = dayStr(entry.date);
-      if (d) profitDays.add(d);
+      if (d) reviewDays.add(d);
+      ledgerReviews += 1;
     }
   }
 
-  const best = bestStreakFromSet(profitDays);
-  const activeToday = profitDays.has(todayStr);
-  const lastActiveDay = profitDays.size > 0 ? [...profitDays].sort().at(-1) : null;
+  const best = bestStreakFromSet(reviewDays);
+  const activeToday = reviewDays.has(todayStr);
+  const sortedDays = [...reviewDays].sort();
+  const lastActiveDay = sortedDays.at(-1) || null;
+  const firstActiveDay = sortedDays[0] || null;
+  const spanDays = firstActiveDay
+    ? Math.max(1, Math.floor((new Date(`${todayStr}T00:00:00Z`) - new Date(`${firstActiveDay}T00:00:00Z`)) / 86400000) + 1)
+    : 0;
+  const consistency = spanDays ? Math.min(100, Math.round((reviewDays.size / spanDays) * 100)) : 0;
 
-  // Streak is active if today OR yesterday has profit (allows one check-in per day)
-  const streakAnchor = activeToday ? todayStr : profitDays.has(addDays(todayStr, -1)) ? addDays(todayStr, -1) : null;
-  if (!streakAnchor) return { current: 0, best, activeToday, lastActiveDay };
+  // A cadence remains current through the following day; it rewards completed
+  // review evidence, never profit sign, login frequency, or modeled outcomes.
+  const streakAnchor = activeToday ? todayStr : reviewDays.has(addDays(todayStr, -1)) ? addDays(todayStr, -1) : null;
+  const evidence = { settledReviews, reasonedSkips, ledgerReviews };
+  if (!streakAnchor) return { current: 0, best, activeToday, lastActiveDay, firstActiveDay, consistency, reviewedDays: reviewDays.size, evidence };
 
   let current = 0;
   let cursor = streakAnchor;
-  while (profitDays.has(cursor)) {
+  while (reviewDays.has(cursor)) {
     current++;
     cursor = addDays(cursor, -1);
   }
 
-  return { current, best, activeToday, lastActiveDay };
+  return { current, best, activeToday, lastActiveDay, firstActiveDay, consistency, reviewedDays: reviewDays.size, evidence };
 }
 
 export function streakEmoji(streak) {
-  if (streak >= 30) return "🔥🔥🔥";
-  if (streak >= 14) return "🔥🔥";
-  if (streak >= 3) return "🔥";
-  return null;
+  return streak >= 3 ? "◆" : null;
 }
 
 export function streakLabel(streak) {
   if (!streak) return null;
-  return streak === 1 ? "1-day streak" : `${streak}-day streak`;
+  return streak === 1 ? "1-day review cadence" : `${streak}-day review cadence`;
 }
 
 export function streakMilestone(streak) {

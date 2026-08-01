@@ -4,6 +4,8 @@
 // outcomes. Surfaces a per-source Brier score so users can see the AI's
 // own honesty record. Cold-start: hide until ≥ MIN_SAMPLE per source.
 
+import { parseRealizedOutcomeValue } from "./realizedOutcome.js";
+
 const LEDGER_KEY = "pg_ai_calibration_ledger";
 export const MIN_SAMPLE = 10;
 
@@ -44,14 +46,16 @@ export function recordPrediction(entry, { storage } = {}) {
   const predicted = clamp01(entry.predicted);
   if (predicted === null) return null;
   const ledger = readLedger(storage);
+  const existing = ledger.find((candidate) => candidate.id === entry.id);
+  if (existing) return existing;
   const now = entry.occurredAt ? new Date(entry.occurredAt).getTime() : Date.now();
-  // upsert by id
-  const next = ledger.filter((e) => e.id !== entry.id);
+  const next = [...ledger];
   next.push({
     id: entry.id,
     source: String(entry.source),
     predicted,
     feature: entry.feature || null,
+    probabilityBasis: entry.probabilityBasis ? String(entry.probabilityBasis) : null,
     payload: entry.payload || null,
     actual: null,
     occurredAt: now,
@@ -76,6 +80,15 @@ export function resolvePrediction(id, actual, { storage } = {}) {
   return ledger[idx];
 }
 
+/** Resolve a workflow-linked prediction from the canonical realized outcome. */
+export function resolveWorkflowPrediction(workflow, actualProfit, { storage } = {}) {
+  const predictionId = String(workflow?.calibrationPredictionId || "").trim();
+  if (!predictionId) return null;
+  const realized = parseRealizedOutcomeValue(actualProfit);
+  if (realized === null) return null;
+  return resolvePrediction(predictionId, realized > 0 ? 1 : 0, { storage });
+}
+
 function brierForEntries(entries) {
   if (!entries.length) return null;
   const sum = entries.reduce((acc, e) => acc + (e.predicted - e.actual) ** 2, 0);
@@ -95,7 +108,7 @@ function brierForEntries(entries) {
  *   }
  */
 export function summarizeCalibration({ storage, windowMs = null } = {}) {
-  const ledger = readLedger(storage).filter((e) => e.actual !== null);
+  const ledger = readLedger(storage);
   const cutoff = Number.isFinite(windowMs) ? Date.now() - windowMs : null;
   const filtered = cutoff !== null ? ledger.filter((e) => (e.resolvedAt || e.occurredAt) >= cutoff) : ledger;
 
@@ -107,14 +120,17 @@ export function summarizeCalibration({ storage, windowMs = null } = {}) {
 
   return Array.from(bySource.entries())
     .map(([source, entries]) => {
-      const brier = brierForEntries(entries);
+      const resolved = entries.filter((entry) => entry.actual !== null);
+      const brier = brierForEntries(resolved);
       const calibration = brier === null ? null : Math.max(0, Math.min(100, Math.round((1 - brier) * 100)));
       return {
         source,
-        sample: entries.length,
+        sample: resolved.length,
+        total: entries.length,
+        unresolved: entries.length - resolved.length,
         brier,
         calibration,
-        showable: entries.length >= MIN_SAMPLE,
+        showable: resolved.length >= MIN_SAMPLE,
       };
     })
     .sort((a, b) => b.sample - a.sample);

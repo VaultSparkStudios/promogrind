@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useId, useMemo, useState } from "react";
 import { AppDataCtx } from "../contexts.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
 import { normalizePromoType } from "../promograph/index.js";
+import { parseRealizedOutcomeValue } from "../lib/realizedOutcome.js";
 import { patchWorkflowState, writeWorkflowFeedback } from "../workflows/store.js";
 
 export default function ResultFeedbackCard({
@@ -13,6 +14,7 @@ export default function ResultFeedbackCard({
   suggestedBook = "",
 }) {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
+  const fieldId = useId();
   const entries = appData?.resultFeedback || [];
   const roundedExpected = useMemo(() => {
     const parsed = Number.parseFloat(expectedProfit);
@@ -29,6 +31,7 @@ export default function ResultFeedbackCard({
   const [wouldRepeat, setWouldRepeat] = useState("yes");
   const [note, setNote] = useState("");
   const [status, setStatus] = useState(null);
+  const [validationError, setValidationError] = useState("");
 
   const skipReasons = [
     ["odds_moved", "Odds moved"],
@@ -62,7 +65,13 @@ export default function ResultFeedbackCard({
   };
 
   const record = (nextStatus) => {
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    if (nextStatus === "skipped" && !skipReason) {
+      setValidationError("Choose a skip reason before saving this outcome.");
+      return;
+    }
+    const id = entryId || `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    const existing = entries.find((candidate) => candidate?.id === id);
+    const now = new Date().toISOString();
     const entry = {
       id,
       calculatorKey,
@@ -76,8 +85,8 @@ export default function ResultFeedbackCard({
       executionMinutes,
       wouldRepeat,
       note,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: existing?.createdAt || now,
+      updatedAt: now,
     };
     writeEntries(upsertResultFeedback(entries, entry), {
       ...entry,
@@ -89,13 +98,19 @@ export default function ResultFeedbackCard({
     });
     setEntryId(id);
     setStatus(nextStatus);
+    setValidationError("");
   };
 
   const settle = () => {
     if (!entryId) return;
+    const normalizedActualProfit = parseRealizedOutcomeValue(actualProfit);
+    if (normalizedActualProfit === null) {
+      setValidationError("Enter a complete realized profit or loss, such as 12.40 or -8.25.");
+      return;
+    }
     const patch = {
       status: "settled",
-      actualProfit,
+      actualProfit: normalizedActualProfit,
       calculatorAccurate: accuracy,
       book,
       frictionReason,
@@ -119,6 +134,7 @@ export default function ResultFeedbackCard({
       source: "calculator_result",
     }, patch));
     setStatus("settled");
+    setValidationError("");
   };
 
   return (
@@ -147,7 +163,9 @@ export default function ResultFeedbackCard({
         ].map(([value, label]) => (
           <button
             key={value}
+            type="button"
             onClick={() => record(value)}
+            aria-pressed={status === value}
             style={{
               padding: "7px 12px",
               background: status === value ? `${K.gn}18` : "transparent",
@@ -167,8 +185,9 @@ export default function ResultFeedbackCard({
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10 }}>
         <div>
-          <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Sportsbook</div>
+          <label htmlFor={`${fieldId}-book`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Sportsbook</label>
           <input
+            id={`${fieldId}-book`}
             value={book}
             onChange={(event) => setBook(event.target.value)}
             placeholder="DraftKings"
@@ -176,8 +195,10 @@ export default function ResultFeedbackCard({
           />
         </div>
         <div>
-          <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Actual profit</div>
+          <label htmlFor={`${fieldId}-profit`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Realized profit or loss</label>
           <input
+            id={`${fieldId}-profit`}
+            inputMode="decimal"
             value={actualProfit}
             onChange={(event) => setActualProfit(event.target.value)}
             placeholder="$12.40"
@@ -185,8 +206,10 @@ export default function ResultFeedbackCard({
           />
         </div>
         <div>
-          <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Minutes spent</div>
+          <label htmlFor={`${fieldId}-minutes`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Minutes spent</label>
           <input
+            id={`${fieldId}-minutes`}
+            inputMode="decimal"
             value={executionMinutes}
             onChange={(event) => setExecutionMinutes(event.target.value.replace(/[^\d.]/g, ""))}
             placeholder="12"
@@ -195,13 +218,15 @@ export default function ResultFeedbackCard({
         </div>
       </div>
 
-      <div style={{ marginTop: 10 }}>
-        <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Why skip?</div>
+      <div role="group" aria-labelledby={`${fieldId}-skip-label`} style={{ marginTop: 10 }}>
+        <div id={`${fieldId}-skip-label`} style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Why skip?</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {skipReasons.map(([value, label]) => (
             <button
               key={value}
-              onClick={() => setSkipReason(skipReason === value ? "" : value)}
+              type="button"
+              aria-pressed={skipReason === value}
+              onClick={() => { setSkipReason(skipReason === value ? "" : value); setValidationError(""); }}
               style={{
                 padding: "5px 10px",
                 background: skipReason === value ? `${K.yl}18` : "transparent",
@@ -220,12 +245,14 @@ export default function ResultFeedbackCard({
         </div>
       </div>
 
-      <div style={{ marginTop: 10 }}>
-        <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Execution friction</div>
+      <div role="group" aria-labelledby={`${fieldId}-friction-label`} style={{ marginTop: 10 }}>
+        <div id={`${fieldId}-friction-label`} style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Execution friction</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {frictionReasons.map(([value, label]) => (
             <button
               key={value}
+              type="button"
+              aria-pressed={frictionReason === value}
               onClick={() => setFrictionReason(frictionReason === value ? "" : value)}
               style={{
                 padding: "5px 10px",
@@ -246,8 +273,9 @@ export default function ResultFeedbackCard({
       </div>
 
       <div style={{ marginTop: 10 }}>
-        <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Notes</div>
+        <label htmlFor={`${fieldId}-note`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Notes</label>
         <input
+          id={`${fieldId}-note`}
           value={note}
           onChange={(event) => setNote(event.target.value)}
           placeholder="What blocked this or what mattered?"
@@ -255,8 +283,8 @@ export default function ResultFeedbackCard({
         />
       </div>
 
-      <div style={{ marginTop: 10 }}>
-        <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Would you run this again?</div>
+      <div role="group" aria-labelledby={`${fieldId}-repeat-label`} style={{ marginTop: 10 }}>
+        <div id={`${fieldId}-repeat-label`} style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Would you run this again?</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {[
             ["yes", "Yes"],
@@ -265,6 +293,8 @@ export default function ResultFeedbackCard({
           ].map(([value, label]) => (
             <button
               key={value}
+              type="button"
+              aria-pressed={wouldRepeat === value}
               onClick={() => setWouldRepeat(value)}
               style={{
                 padding: "5px 10px",
@@ -284,8 +314,8 @@ export default function ResultFeedbackCard({
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginTop: 10 }}>
-        <span style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Calculator accurate?</span>
+      <div role="group" aria-labelledby={`${fieldId}-accuracy-label`} style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginTop: 10 }}>
+        <span id={`${fieldId}-accuracy-label`} style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Calculator accurate?</span>
         {[
           ["yes", "Yes"],
           ["close", "Close"],
@@ -293,6 +323,8 @@ export default function ResultFeedbackCard({
         ].map(([value, label]) => (
           <button
             key={value}
+            type="button"
+            aria-pressed={accuracy === value}
             onClick={() => setAccuracy(value)}
             style={{
               padding: "6px 10px",
@@ -310,6 +342,7 @@ export default function ResultFeedbackCard({
           </button>
         ))}
         <button
+          type="button"
           onClick={settle}
           disabled={!entryId || !actualProfit.trim() || status === "skipped"}
           style={{
@@ -329,7 +362,13 @@ export default function ResultFeedbackCard({
         </button>
       </div>
 
-      <div style={{ marginTop: 10, fontSize: 10, color: status === "settled" ? K.gn : status === "skipped" ? K.yl : K.mt }}>
+      {validationError && (
+        <div role="alert" style={{ marginTop: 10, fontSize: 11, color: K.rd }}>
+          {validationError}
+        </div>
+      )}
+
+      <div role="status" aria-live="polite" aria-atomic="true" style={{ marginTop: 10, fontSize: 10, color: status === "settled" ? K.gn : status === "skipped" ? K.yl : K.mt }}>
         {status === "settled" && "Settled result saved. It now feeds the Track analytics dashboard."}
         {status === "placed" && "Placed result saved. Settle it now or later in Track → Edge."}
         {status === "skipped" && "Skipped result saved with reason data so PromoGrind can measure opportunity loss and friction."}

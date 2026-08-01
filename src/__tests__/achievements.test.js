@@ -63,33 +63,33 @@ describe("evaluateAchievements — onboarding", () => {
   });
 });
 
-describe("evaluateAchievements — profit milestones", () => {
-  const makeProfit = (total) => ({
-    ledger: [{ profit: String(total), date: "2026-04-01" }],
+describe("evaluateAchievements — evidence milestones", () => {
+  const makeReviews = (count) => ({
+    ledger: Array.from({ length: count }, (_, index) => ({ profit: index % 2 ? "-1" : "0", date: "2026-04-01" })),
   });
 
-  it("profit_1 unlocks at $1", () => {
-    const checks = evaluateAchievements(makeAppData(makeProfit(1)), 0);
+  it("legacy profit_1 receipt unlocks at one reviewed outcome", () => {
+    const checks = evaluateAchievements(makeAppData(makeReviews(1)), 0);
     expect(checks.profit_1).toBe(true);
   });
 
-  it("profit_100 unlocks at $100", () => {
-    const checks = evaluateAchievements(makeAppData(makeProfit(100)), 0);
+  it("legacy profit_100 receipt unlocks at ten reviewed outcomes", () => {
+    const checks = evaluateAchievements(makeAppData(makeReviews(10)), 0);
     expect(checks.profit_100).toBe(true);
   });
 
-  it("profit_1000 unlocks at $1000", () => {
-    const checks = evaluateAchievements(makeAppData(makeProfit(1000)), 0);
+  it("legacy profit_1000 receipt unlocks at fifty reviewed outcomes", () => {
+    const checks = evaluateAchievements(makeAppData(makeReviews(50)), 0);
     expect(checks.profit_1000).toBe(true);
   });
 
-  it("profit_5000 does NOT unlock at $999", () => {
-    const checks = evaluateAchievements(makeAppData(makeProfit(999)), 0);
+  it("legacy profit_5000 receipt does NOT unlock below 100 reviews", () => {
+    const checks = evaluateAchievements(makeAppData(makeReviews(99)), 0);
     expect(checks.profit_5000).toBe(false);
   });
 
-  it("profit_10000 unlocks at $10000", () => {
-    const checks = evaluateAchievements(makeAppData(makeProfit(10000)), 0);
+  it("legacy profit_10000 receipt unlocks at 250 reviews", () => {
+    const checks = evaluateAchievements(makeAppData(makeReviews(250)), 0);
     expect(checks.profit_10000).toBe(true);
   });
 });

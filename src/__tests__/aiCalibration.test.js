@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import {
   recordPrediction,
   resolvePrediction,
+  resolveWorkflowPrediction,
   summarizeCalibration,
   renderCalibrationBadge,
   MIN_SAMPLE,
@@ -53,10 +54,29 @@ describe("aiCalibration", () => {
     expect(summary.calibration).toBe(19);
   });
 
-  it("excludes unresolved entries", () => {
+  it("reports unresolved entries without treating them as calibration evidence", () => {
     recordPrediction({ id: "x", source: "advisor", predicted: 0.5 });
-    const summaries = summarizeCalibration();
-    expect(summaries).toHaveLength(0);
+    const [summary] = summarizeCalibration();
+    expect(summary).toMatchObject({ sample: 0, total: 1, unresolved: 1, brier: null, showable: false });
+  });
+
+  it("resolves a linked workflow from the canonical realized outcome", () => {
+    recordPrediction({
+      id: "advisor:wf-1",
+      source: "promo-advisor",
+      predicted: 0.62,
+      probabilityBasis: "Offer-implied conversion range.",
+    });
+    const resolved = resolveWorkflowPrediction({ calibrationPredictionId: "advisor:wf-1" }, "($4.50)");
+    expect(resolved).toMatchObject({ actual: 0, predicted: 0.62, probabilityBasis: "Offer-implied conversion range." });
+  });
+
+  it("is idempotent when the same workflow is saved twice", () => {
+    const first = recordPrediction({ id: "same", source: "advisor", predicted: 0.4 });
+    resolvePrediction("same", 1);
+    const duplicate = recordPrediction({ id: "same", source: "advisor", predicted: 0.9 });
+    expect(first.predicted).toBe(0.4);
+    expect(duplicate).toMatchObject({ predicted: 0.4, actual: 1 });
   });
 
   it("renderCalibrationBadge returns formatted string when showable", () => {
