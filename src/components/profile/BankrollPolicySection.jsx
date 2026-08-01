@@ -44,7 +44,9 @@ function PolicySlider({ label, field, value, bounds, onChange, bankroll, hint })
 
 export default function BankrollPolicySection() {
   const ctx = React.useContext(AppDataCtx);
-  const bankroll = Number.parseFloat(ctx?.appData?.bankroll ?? "") || 0;
+  const bankroll = Number.parseFloat(
+    ctx?.appData?.bankroll || (() => { try { return localStorage.getItem("pg_bankroll") || ""; } catch { return ""; } })()
+  ) || 0;
 
   const [policy, setPolicy] = React.useState(() => loadBankrollPolicy());
   const [saved, setSaved] = React.useState(false);

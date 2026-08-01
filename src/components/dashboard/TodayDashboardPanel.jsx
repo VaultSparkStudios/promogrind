@@ -64,7 +64,7 @@ function RiskRadarCard({ radar, navigate }) {
     </div>
   );
 }
-function PolicyViolationBanner({ violations, navigate }) {
+function PolicyViolationBanner({ violations }) {
   if (!violations || violations.length === 0) return null;
   return (
     <div style={{ padding: "10px 12px", background: `${K.yl}08`, border: `1px solid ${K.yl}40`, borderRadius: 8, marginBottom: 12 }}>
@@ -76,12 +76,9 @@ function PolicyViolationBanner({ violations, navigate }) {
           <span style={{ fontWeight: 700 }}>{v.label}:</span> {v.detail}
         </div>
       ))}
-      <button
-        onClick={() => navigate("/profile")}
-        style={{ marginTop: 6, padding: "5px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontSize: 9, fontWeight: 700, cursor: "pointer", fontFamily: font }}
-      >
-        Adjust policy →
-      </button>
+      <div style={{ marginTop: 6, fontSize: 9, color: K.mt, lineHeight: 1.4 }}>
+        Open your account menu (top right) → Account &amp; Profile to adjust limits.
+      </div>
     </div>
   );
 }
@@ -351,7 +348,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
       </div>
 
       <TiltBreakerBanner state={computeTiltState(appData)} />
-      <PolicyViolationBanner violations={policyViolations} navigate={navigate} />
+      <PolicyViolationBanner violations={policyViolations} />
       <OperatorTwinCard forecast={buildTwinForecast(appData)} />
       <RiskRadarCard radar={riskRadar} navigate={navigate} />
       <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />
