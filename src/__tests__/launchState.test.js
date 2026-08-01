@@ -39,6 +39,12 @@ describe("launch state helpers", () => {
     expect(parseValidationSignal("597/597")).toMatchObject({
       signal: "passing", reason: "complete positive count",
     });
+    expect(parseValidationSignal("597/597 passing — stale")).toMatchObject({
+      signal: "warning", reason: "non-terminal or unavailable evidence",
+    });
+    expect(parseValidationSignal("611/611; production pending")).toMatchObject({
+      signal: "warning", reason: "non-terminal or unavailable evidence",
+    });
   });
 
   it("resolves validation rows with merged signals", () => {

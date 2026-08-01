@@ -1,6 +1,6 @@
 # Innovation Pack
 
-> Generated: 2026-07-27 | Project: PromoGrind | Session: 120
+> Generated: 2026-08-01 | Project: PromoGrind | Session: 121
 
 Second-order work generated after the primary genius list is empty. Items are live-code verified where repo-owned; external proof gates stay explicit deferrals.
 
@@ -8,15 +8,15 @@ Second-order work generated after the primary genius list is empty. Items are li
 
 | # | Tier | Axis | Status | Effort | Impact | Innov. | Priority | Item |
 |---|---|---|---|---|---:|---:|---:|---|
-| 1 | critical | privacy / product integrity | shipped | 45m | 10 | 5 | 35.4 | **consent-send-boundary-enforcement** - Legacy newsletter metadata could bypass the new affirmative UI contract; all marketing send jobs now require versioned, timestamped, unrevoked consent. **Recipe:** Shipped a shared Edge consent predicate plus three fail-closed Deno tests across weekly and onboarding send paths. |
-| 2 | high | automation / developer-experience / security | shipped | 30m | 9 | 4 | 27.2 | **windows-hide-window-storm-hardening** - All script spawns now route through safe-spawn; the structural guard reports zero direct child_process imports and zero window-storm violations. **Recipe:** Shipped in S120 and enforced by test:session-invariants. |
-| 3 | high | security / observability | shipped | 20m | 8 | 4 | 25.5 | **integrity-aware-secret-scanning** - Hermetic Deno integrity digests produced 61 low-confidence false positives; the scanner now recognizes lockfile integrity fields while retaining credential-assignment detection. **Recipe:** Shipped an import-safe scanner core and lockfile regression in test:scan-secrets. |
+| 1 | high | automation / security / developer-experience | shipped | 30m | 9 | 4 | 18 | **shell-free-ignis-rescore** - The live IGNIS rescore used npx with shell:true, producing DEP0190 and exposing argument interpolation to the shell. **Recipe:** Shipped: invoke the trusted local TSX CLI through process.execPath with validated paths and a focused shell-free spawn contract. |
+| 2 | high | truth / compliance / observability | shipped | 45m | 9 | 4 | 17.2 | **content-addressed-public-claims-attestation** - A green console line could not prove which 315 public files or which 18 multilingual rules were actually scanned. **Recipe:** Shipped: deterministic source/rule SHA-256 hashes, compatibility status, machine-readable receipt, and an attestation contract. |
+| 3 | high | process / observability | shipped | 20m | 8 | 4 | 16.2 | **truthful-genius-exhaustion-signal** - The innovation pack inferred exhaustion from Markdown headings and falsely reported geniusListEmpty=false after the canonical list reached zero. **Recipe:** Shipped: derive exhaustion from .cache/genius-list.json list.count with a conservative Markdown fallback and regression coverage. |
 | 4 | external | truth / launch-readiness | honest-deferral | external | 10 | 1 | 3 | **external-launch-proof-ledger** - 6 real-world proof gates remain in PROJECT_STATUS.blockers. **Recipe:** Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists. |
 
 ## Source Signals
 
 - geniusListEmpty: true
-- taskBoardBytes: 68307
+- taskBoardBytes: 71253
 - windowsHideShellViolations: 0
 - directChildProcessImports: 0
 - todoSignals: 0

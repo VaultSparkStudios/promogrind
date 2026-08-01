@@ -1,15 +1,15 @@
 # External Launch Proof Ledger
 
-> Generated: 2026-07-26 | Project: PromoGrind | Session: 119
+> Generated: 2026-08-01 | Project: PromoGrind | Session: 121
 
 This ledger is an honesty surface. It records proof gates that require real-world evidence and must not be marked complete from local code alone.
 
 ## Summary
 
 - Live URL: https://promogrind.bet
-- Project-status external blockers: 8
-- Proof-contract coverage: 8/8 blockers mirrored
-- Unmirrored blockers: 0
+- Project-status external blockers: 7
+- Proof-contract coverage: 6/7 blockers mirrored
+- Unmirrored blockers: 1
 - Blocking canonical launch proofs: 6
 - Target-authorized launch capabilities: 0/5 (stale — not trusted)
 
@@ -21,7 +21,7 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 | Real Stripe smoke | pending | yes | full-launch, marketing-push | 0/4 | Run docs/STRIPE_SMOKE_TEST.md against the deployed app with a real checkout, then record the checkout/session/subscription/customer-portal evidence. |
 | Friend-facing beta pass | pending | yes | soft-launch, marketing-push, full-launch | 0/5 | Have one trusted tester complete account creation/sign-in, confirmation or password recovery visibility, a top calculator, a sportsbook CTA review, and pricing review after deploy. |
 | Production auth email smoke | pending | yes | soft-launch, full-launch, marketing-push | 0/6 | Run `npm run smoke:auth-email -- --record` after creating a fresh production account and completing the confirmation/resend/reset flow. Record only masked email and provider IDs; never paste email bodies, tokens, passwords, or full auth links. |
-| On-domain contact email delivery | pending | yes | soft-launch, full-launch, marketing-push | 1/3 | Use the Studio Ops Brevo capability to verify SPF/DKIM and deliver a redacted test message through contact@promogrind.bet to founder@vaultsparkstudios.com. |
+| Zoho on-domain contact email delivery and reply identity | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Resolve zoho.mail.admin through the secrets gateway, attach contact@promogrind.bet to the founder mailbox, verify MX/SPF/DKIM/DMARC, then record redacted delivery and reply-as-alias receipts. |
 | AI quota migration and provider deployment | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Resolve promogrind.supabase.deploy through the secrets gateway, deploy migration 20260723021000_ai_quota_claim.sql and the five provider functions to fjnpzjjyhnpmunfoycrp, then record redacted deployment IDs. |
 | Production capture public-key configuration | pending | yes | soft-launch, full-launch, marketing-push | 1/3 | Provide the browser-safe anon key through the production deploy configuration and run a real capture submission without committing the key to this repository. |
 
@@ -29,14 +29,13 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 
 | Category | Mirrored In Launch Proofs | Blocker |
 |---|---:|---|
-| brevo | yes | Brevo sender-domain SPF/DKIM is verified and recorded as proof 1/3; exact contact@promogrind.bet forwarding inspection remains pending because all available Cloudflare tokens return 403 for Email Routing Rules Read. |
-| auth-email | yes | Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in. |
-| stripe | yes | Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record). |
-| friend-beta | yes | Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record). |
-| supabase-capability | yes | PromoGrind Supabase REST service scope is target-authorized, but CLI deployment still lacks a target-bound access token; Ark cargo 01JUE23NQ1EEF6010874B09F97 requests deploy scope before 20260723021000_ai_quota_claim.sql and five provider functions are deployed. |
-| capture-config | yes | S119 Pages build now injects the browser-safe Supabase anon key into every static capture page; live capture submission proof awaits deployment. |
-| supabase-capability | yes | Rotate the historical privileged Supabase token isolated at commit b1205ce through the Studio secrets gateway; redacted Ark request 01JUE23NQ1EEF6010874B09F97 is pending. |
-| capture-config | yes | AI pixel inspection remains partial: S118 captured and hashed desktop/mobile dark/light screenshots and found zero live computed-style contrast failures, but the connected image viewer failed before pixel review. |
+| external-proof | no | No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof. |
+| brevo | yes | The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only. |
+| supabase-capability | yes | promogrind.supabase.deploy is MISSING; migration 20260723021000_ai_quota_claim.sql and target-pinned functions were not deployed. |
+| auth-email | yes | Production auth confirmation/resend/reset/recovery delivery proof is pending. |
+| stripe | yes | Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending. |
+| friend-beta | yes | One friend-facing auth/recovery/calculator/pricing pass is pending. |
+| capture-config | yes | Capture submission and observable lead-row criteria remain pending. |
 
 ## Target-Bound Capability Receipt
 

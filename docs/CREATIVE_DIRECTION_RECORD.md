@@ -303,3 +303,12 @@ Agents MUST NOT modify or remove existing entries.
 - **Cost pact:** model cost is notional under the flat-rate Max Plan and must not create alarmist blockers.
 - **Application:** S120 shipped receipt-addressed telemetry/mirrors/releases/capabilities, affirmative reversible consent, and three causal second-order safeguards while preserving every real external proof gap.
 - **Durable rule:** sophistication increases the system's ability to disprove itself; it never weakens evidence requirements.
+
+### 2026-07-31 — Saturated best-in-history arc with evidence-bound completion (S121)
+
+- **Category:** Assignment / quality direction
+- **Human input (close paraphrase):** Run `/start → /audit → /implement → /closeout` as one continuous mission; do not stop after one objective; exhaust the Unified Genius List and implement second-order innovation; ship at a genius-level, maximally sophisticated quality bar; gate continuation on context capacity; derive observability from source truth; treat flat-rate Max Plan cost as notional; never fabricate gate data; record honest deferral as a win.
+- **Area affected:** product trust / engagement design / AI learning / public claims / visual craft / process
+- **New required direction:** completion means every verified repo-owned item and compound innovation is fully implemented and tested, while real-world staging, mailbox, deployment, payment, tester, and capture facts remain explicitly external until observed.
+- **Application:** S121 unified realized outcomes, made AI probability basis-bound and settleable, replaced variance/activity pressure with disciplined review cadence, converted quantified-income claims into sober user-driven scenarios, and added hash-bound claims and rendered-pixel receipts.
+- **Durable rule:** best-in-history craft is evidence that can invalidate itself; a prettier green state, more urgent engagement loop, or nearby credential never substitutes for the exact fact claimed.

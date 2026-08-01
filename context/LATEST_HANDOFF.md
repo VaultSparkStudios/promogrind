@@ -1,60 +1,62 @@
 # Latest Handoff — PromoGrind
 
-Date: 2026-07-27
-Session: 120
+Date: 2026-08-01
+Session: 121
 Agent: Codex
-Status: saturated; 9/9 primary and 3 second-order items shipped; repo gates green; SPARKED remains NO-GO
+Status: saturated; 6/6 L3 audit items and 3/3 repo-owned second-order innovations shipped; primary list exhausted; local RC green; SPARKED remains NO-GO
 
-## Where We Left Off (Session 120)
+## Where We Left Off (Session 121)
 
-S120 completed the founder-requested continuous arc. The primary Genius List was honestly empty, the infrastructure/public-app audit verified 16 premises and selected nine, all nine shipped at L3, and three generated second-order innovations also shipped. The context meter remained CONTINUE with more than 95% available during saturation.
+S121 completed the founder-requested continuous arc without phase handback. The infrastructure-aware public-app audit generated 27 candidates, verified 14 premises against live code, selected six, and shipped all six at L3. The Unified Genius List is now truthfully empty. Three second-order innovations shipped; the fourth candidate remains an explicit external-proof deferral. The final context meter returned CONTINUE with more than 96% capacity available.
 
 ## What shipped
 
-1. Current-tree privileged-secret removal plus one shared, fully redacted credential classifier across tracked, history, and public-sanitization surfaces.
-2. Receipt-bearing tri-state sync/AI observability where absent or failed evidence cannot become green.
-3. Attest-before-promote Pages workflow binding commit, tree digest, gate outcomes, and the single deploy artifact.
-4. Target-locked, secrets-gateway-only Supabase deployment orchestration with safe dry-run default.
-5. Strict command-addressed generated truth mirrors with atomic/check modes.
-6. Affirmative, versioned, reversible marketing consent with Profile control and trust receipts.
-7. Complete Edge verification: 15 entrypoints and 5 test files.
-8. Shared accessible native switch contract.
-9. Fail-closed public agent capability catalog with no unproved callable tools.
-10. Second-order consent enforcement at send boundaries, Windows spawn hardening, and integrity-aware secret scanning.
+1. One canonical realized-outcome contract across persistence, replay, journal, counterfactual, mistake, twin, tilt, and AI settlement consumers.
+2. Strict structured validation receipts that cannot green zero, partial, contradictory, stale, or malformed counts.
+3. An accessible, validation-aware result-feedback card with stable record identity and exact error focus.
+4. Basis-bound explicit AI probability, workflow linkage, automatic settlement, and calibration coverage telemetry.
+5. Evidence-bearing review cadence replacing profit/login compulsion, betting-volume rewards, urgency, and comeback pressure.
+6. A multilingual public-claims ratchet over static, app, and Edge copy; 33 violations repaired and the income estimator converted to a zero-default user-input scenario planner.
+7. A deterministic source-hash FAQ contract and three second-order safeguards: shell-free IGNIS rescore, content-addressed claims attestation, and truthful Genius exhaustion.
+8. Accessible light/dark estimator themes with four visually reviewed, hash-bound production-build desktop/mobile captures.
+9. An executable React Router advisory posture that fails if the app adopts an affected React Server Components surface.
+10. A proprietary `/ip` route plus sitemap, agent, and large-language-model discovery links.
 
 ## Verification
 
 - `npm run verify:launch-local` — direct exit 0.
-- Vitest — 76 files, 597/597 passing.
-- Deno — 15/15 entrypoints typecheck; 5 files, 43/43 tests passing.
-- Tracked secret scan — 0; strict public sanitizer — 0; supply-chain blocks — 0.
-- Innovation pack — 3 shipped second-order candidates, 1 honest external deferral.
-- Full history — 317 commits; 5 fully redacted findings at `b1205ce`; current tree is clean, history is not claimed clean.
-- Dependabot alert 34 / GHSA-qwww-vcr4-c8h2 — reviewed and dismissed as `not_used`: the advisory is limited to unstable React Server Components APIs, and the complete source tree has no such import or call path.
-- Ark closeout — session impact broadcast `01JUJEMM4DCF1272F2516B1F5A`; exact Supabase capability plus credential rotation/history remediation request `01JUJEMMRAA0A9ABFECADFBCA1` routed to Studio Ops without secret material.
-- Remote preflight runs `30327745917`, `30328393421`, and `30328482500` correctly blocked promotion before deployment when Linux exposed a Windows-shaped direct-invocation check in the secret scanner: POSIX execution skipped `run()` and silently exited green. The root fix compares canonical filesystem paths, and the regression now passes in both native Windows and a Linux Node 22 container. Closeout also regenerates and self-checks the status mirror after its final source write. Local launch verification is green with direct exit 0; final remote evidence follows the scanner fix.
-- After that scanner fix, preflight `30328568855` reached complete Edge verification and exposed that the Pages job had no Deno runtime. The workflow now installs Deno with the same already-proven setup used by CI before executing the complete launch gate, with a DAG regression locking the ordering.
-- Final remote evidence for deployed head `900a850`: CI `30328647383` green; brief-format `30328647375` green; Pages `30328647377` passed complete preflight, attestation, deployment, production launch, and dashboard smoke. Its terminal red is the intended fail-closed result of six absent live edge headers, not a failed deploy.
+- Vitest — 79 files, 613/613 passing.
+- Deno — all 15 entrypoints typecheck; 5 files, 45/45 tests passing.
+- Doctor — 12/12 passing; `blockingFailing: 0`.
+- Public claims — 316 files, 18 multilingual rules, content-addressed receipt green.
+- Visual QA — 4 hash-bound captures across dark/light and desktop/mobile; CANON-053 authoritative checker green.
+- UX/build — 61 app routes, 101 public HTML files, browser smoke green, initial graph 179.1KB raw / 60.0KB gzip.
+- Security — tracked secrets 0; strict public sanitizer 0; Obelisk supply-chain incident matches 0. `npm audit` still reports GHSA-qwww-vcr4-c8h2 and is explicitly not claimed green; current static client architecture is mechanically guarded as non-reachable.
+- Live verification — database tables, disposable-user auth, signup, checkout creation, portal behavior, and probe cleanup passed; affiliate coverage remains advisory.
+- Innovation pack — 3/3 repo-owned candidates passing; one honest external-proof deferral.
+- Ark closeout — pattern broadcast `01JUTV2CUV1C618CDA4FC4BB96`; cost/sitemap truth-plane request `01JUTV2R411AA97A792A922A22`; Zoho/Supabase/Cloudflare capability request `01JUTV36LJ34D016800F482D06`. All payloads are redacted and contain no credential material.
 
 ## Honest deferrals
 
-- Six live security headers and a true remote staging environment remain absent.
-- Exact contact forwarding/mailbox delivery cannot be proved with current Cloudflare scope.
-- Historical credentials require control-plane rotation and an approved history-remediation strategy.
-- `promogrind.supabase.deploy` remains MISSING even though narrower Supabase admin capability is READY; no deployment was attempted.
-- Production auth email, real Stripe lifecycle, friend beta, capture submission/lead observation, and AI pixel review remain unproved.
-- Obelisk activation, remote deletion, and generated static-page theme parity remain deliberately deferred for the structural reasons recorded in the audit.
+- A true remote staging environment and six production response headers remain absent; the current Cloudflare token reaches the correct zone but lacks response-header rules scope.
+- Five fully redacted historical credential findings at `b1205ce` still require rotation and approved history remediation.
+- `promogrind.supabase.deploy` remains MISSING; no code presence was treated as deployment proof.
+- `contact@promogrind.bet` needs real Zoho MX/SPF/DKIM/DMARC, delivery, and reply-as-alias evidence; Brevo transactional authentication is historical/non-qualifying for that mailbox criterion.
+- Production auth-email, complete Stripe lifecycle, friend beta, and capture submission/lead-row receipts remain unproved.
+- Studio sitemap scoring remains 7/10 despite the real directory-index pages and new `/ip` page; the checker mismatch is routed through Ark rather than patched cross-repo.
 
 ## Next actions
 
 1. Establish a real staging target and header-capable edge, then prove all six headers before SPARKED.
 2. Complete historical credential rotation/remediation and add the exact PromoGrind deploy capability mapping.
-3. Execute the criterion-addressed Supabase, mailbox, auth-email, Stripe, friend-beta, capture, and pixel proofs.
+3. Configure and prove Zoho mailbox identity, then execute the criterion-addressed auth-email, full Stripe, friend-beta, and capture proofs.
 
-Intent Outcome: Achieved — every repo-owned primary and generated second-order candidate shipped; external evidence remains explicitly unclaimed.
-Deploy: attested application head `900a850` is live. The post-deploy workflow correctly remains red on the six known missing edge headers, so SPARKED promotion remains NO-GO.
+Intent Outcome: Achieved — every repo-owned primary and second-order item shipped at the highest verified depth; external evidence remains explicitly unclaimed.
+Deploy: the currently deployed application passes live functional probes, but the S121 work is not claimed deployed until post-push workflow evidence exists. SPARKED promotion remains NO-GO.
 
 ---
+
+Session Intent (S121, Codex): Run the complete agent-neutral `/arc` continuously through `/start → /audit → /implement → /closeout`; exhaust the verified Unified Genius List and implement second-order innovations; use the infrastructure-aware public-app rubric; keep observability source-derived and self-validating; treat flat-rate Max Plan cost as notional; preserve honest deferrals; finish with canonical write-back, direct-main push, Ark broadcast, and zero-running shell hygiene.
 
 Session Intent (S120, Codex): Run the complete agent-neutral `/arc` continuously through `/start → /audit → /implement → /closeout`; exhaust verified primary and second-order work; keep observability source-derived and self-validating; treat flat-rate Max Plan cost as notional; preserve honest deferrals; finish with canonical write-back, direct-main push, Ark broadcast, and zero-running shell hygiene.
 

@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-28 (Session 120 closeout) -->
+<!-- generated-at: 2026-08-01 (Session 121 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 120 closeout · 2026-07-28.
+> **Fast-boot brief** — generated at Session 121 closeout · 2026-08-01.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 121 · 2026-07-28 · FOUNDER MODE                         ║
+║  Session 122 · 2026-08-01 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -37,7 +37,7 @@
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
 ║    SIL v3.0  ·  Avg3: ?  ·  Velocity 12↑                         ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Last active: 0d  ·  Last closeout: 5d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -55,24 +55,24 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 120 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 121 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    597/597 passing  ·  Deploy: S119 commit c718c24 depl  ║
+║  Tests:    613/613 passing  ·  Deploy: S119 commit c718c24 depl  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ██░░░░░░░░░░░░░░░░░░░░░░    7% used                          ║
-║     69,470 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~34,735 tok/turn  ·  cache 50%  ·  24 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    6% used                          ║
+║     54,658 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~27,329 tok/turn  ·  cache 50%  ·  31 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         597/597 passing (2026-07-27)                   ║
+║  ✓  Tests         613/613 passing (2026-08-01)                   ║
 ║  ✓  Velocity      12 ↑  ·  Debt: →                               ║
 ║  ⚠  Runway        ~2 sessions                                    ║
-║  ✓  Context age   1d                                             ║
-║  ✓  IGNIS         44184 FORGE  ·  5d old                         ║
+║  ✓  Context age   0d                                             ║
+║  ✓  IGNIS         44911 FORGE  ·  0d old                         ║
 ║  ⛔  Truth         green-repo-owned-with-history-and-external-pr  ║
 ║  ⚠  Compliance   unavailable (0 checks) · public-repo shim       ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
@@ -80,17 +80,17 @@
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
-║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
+║  ✓  Revenue sig.  0d old (2026-08-01)                            ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ✓  Doctor        12/12 (100%)  ·  2026-07-28  ✓                 ║
-║  ✓  Cost          real $0.11/7d · 7d notional $1.84 (flat-rate   ║
+║  ✓  Doctor        12/12 (100%)  ·  2026-08-01  ✓                 ║
+║  ✓  Cost          real $0.05/7d · 7d notional $0.74 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: unavailable · public-repo shim has no portfolio snaps  ║
 ║  Snapshot: unavailable · portfolio/ACTIVE_SESSIONS.json absent   ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 31 drained · 29h old · sig failures 0                      ║
+║  Ark: 649 drained · 4h old · sig failures 0                      ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -112,7 +112,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 120                               ║
+║  GENIUS HIT LIST  ·  Session 121                               ║
 ║  Project: PromoGrind · ranked by impact                        ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -122,5 +122,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 120 closeout · 2026-07-28*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 121 closeout · 2026-08-01*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

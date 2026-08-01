@@ -126,6 +126,8 @@ export function isWorkflowOpen(status) {
 export function normalizeRecommendation(input = {}) {
   const parsedScore = Number.parseInt(input.opportunityScore, 10);
   const list = (value, limit = 3) => Array.isArray(value) ? value.map((item) => String(item || "").trim()).filter(Boolean).slice(0, limit) : [];
+  const probabilityBasis = String(input.probabilityBasis || "").trim() || null;
+  const positiveOutcomeProbability = probabilityBasis ? toProbability(input.positiveOutcomeProbability) : null;
   return {
     title: String(input.title || input.verdict || "").trim() || null,
     summary: String(input.summary || input.explanation || input.action || "").trim() || null,
@@ -133,8 +135,8 @@ export function normalizeRecommendation(input = {}) {
     calculatorSlug: normalizeCalculatorSlug(input.calculatorSlug),
     bookTarget: String(input.bookTarget || input.book || "").trim(),
     opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : null,
-    positiveOutcomeProbability: toProbability(input.positiveOutcomeProbability),
-    probabilityBasis: String(input.probabilityBasis || "").trim() || null,
+    positiveOutcomeProbability,
+    probabilityBasis: positiveOutcomeProbability === null ? null : probabilityBasis,
     confidence: String(input.confidence || "").trim().toLowerCase() || null,
     opsTags: Array.isArray(input.opsTags) ? input.opsTags.map((tag) => String(tag || "").trim()).filter(Boolean) : [],
     assumptions: list(input.assumptions),

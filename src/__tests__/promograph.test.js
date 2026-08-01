@@ -40,6 +40,17 @@ describe("promograph helpers", () => {
     expect(recommendation.opsTags).toEqual(["reload"]);
   });
 
+  it("fails probability receipts closed unless probability and basis are paired", () => {
+    expect(normalizeRecommendation({ positiveOutcomeProbability: 0.61 })).toMatchObject({
+      positiveOutcomeProbability: null,
+      probabilityBasis: null,
+    });
+    expect(normalizeRecommendation({ positiveOutcomeProbability: 1.4, probabilityBasis: "Live odds." })).toMatchObject({
+      positiveOutcomeProbability: null,
+      probabilityBasis: null,
+    });
+  });
+
   it("normalizes workflow state and summarizes open work", () => {
     expect(normalizeWorkflowStatus("pending")).toBe("waiting");
     expect(isWorkflowOpen("ready")).toBe(true);

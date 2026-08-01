@@ -88,6 +88,11 @@ async function loadAllFiles(filePaths) {
   );
 }
 
+const revenueSignalsPath = [
+  path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'),
+  path.join(root, 'docs', 'REVENUE_SIGNALS.md'),
+].find(candidate => fs.existsSync(candidate)) || path.join(root, 'docs', 'REVENUE_SIGNALS.md');
+
 const FILE_MANIFEST = [
   { key: 'status',    path: path.join(root, 'context', 'PROJECT_STATUS.json'),        json: true  },
   { key: 'sil',       path: path.join(root, 'context', 'SELF_IMPROVEMENT_LOOP.md'),   json: false },
@@ -100,7 +105,7 @@ const FILE_MANIFEST = [
   { key: 'startMd',  path: path.join(root, 'prompts', 'start.md'),                    json: false },
   { key: 'startTpl', path: path.join(root, 'docs', 'templates', 'project-system', 'START_PROMPT.template.md'), json: false },
   { key: 'registry', path: path.join(root, 'portfolio', 'PROJECT_REGISTRY.json'),    json: true  },
-  { key: 'revSig',   path: path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'),       json: false },
+  { key: 'revSig',   path: revenueSignalsPath,                                     json: false },
   { key: 'doctorOut', path: path.join(root, 'context', 'PROJECT_STATUS.json'),       json: true  }, // same as status, reuse
 ];
 
@@ -148,7 +153,7 @@ const truth       = readText(path.join(root, 'context', 'TRUTH_AUDIT.md'));
 const csmd        = readText(path.join(root, 'context', 'CURRENT_STATE.md'));
 const sessionPlan = readText(path.join(root, 'docs', 'SESSION_PLAN.md'));
 const cdr         = readText(path.join(root, 'docs', 'CREATIVE_DIRECTION_RECORD.md'));
-const revSig      = readText(path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'));
+const revSig      = readText(revenueSignalsPath);
 const complianceHistory = readJson(path.join(root, 'context', 'COMPLIANCE_HISTORY.json'), { snapshots: [] });
 const intentPlan  = readText(path.join(root, 'context', 'SESSION_INTENT_PLAN.md'));
 const humanPressure = readJson(path.join(root, 'portfolio', 'compiled', 'HUMAN_ACTION_PRESSURE.json'), { items: [] });

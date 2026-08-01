@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-01T06:11:16.650Z",
+  "ok": true,
+  "status": "passed",
+  "checkedFiles": 316,
+  "rules": 18,
+  "sourceSha256": "96513636b569f27feaaf6723c2f0baa13e9e85e682fdd38e0ae2ba4a3220d096",
+  "ruleSha256": "5af97127b0a3cf9e46a669c06f386131ac449c54ef838cdae01272ab57dde247",
+  "findings": []
+}

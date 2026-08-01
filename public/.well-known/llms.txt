@@ -21,6 +21,7 @@ PromoGrind helps users evaluate sportsbook promotions, bonus bets, boosts, arbit
 - Affiliate disclosure: https://promogrind.bet/affiliate-disclosure/
 - Data policy: https://promogrind.bet/data-policy/
 - Contact: https://promogrind.bet/contact/
+- Intellectual property and attribution: https://promogrind.bet/ip/
 
 ## Agent Guidance
 

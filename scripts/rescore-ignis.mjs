@@ -152,6 +152,11 @@ if (!fs.existsSync(cliPath)) {
   console.error(`⛔ IGNIS CLI not found at: ${cliPath}`);
   process.exit(1);
 }
+const tsxCliPath = path.join(ignisPath, 'node_modules', 'tsx', 'dist', 'cli.mjs');
+if (!fs.existsSync(tsxCliPath)) {
+  console.error(`⛔ IGNIS TSX runtime not found at: ${tsxCliPath}. Run the package-trust-gated install in the IGNIS repo before rescoring.`);
+  process.exit(1);
+}
 
 const toScore = allMode
   ? rows.filter(r => r.localExists)
@@ -184,11 +189,10 @@ for (const r of toScore) {
     continue;
   }
   process.stdout.write(`  Scoring ${r.name} ...`);
-  const res = spawnSync('npx', ['tsx', cliPath, 'score', localPathNorm], {
+  const res = spawnSync(process.execPath, [tsxCliPath, cliPath, 'score', localPathNorm], {
     encoding: 'utf8',
     timeout: 60000,
     cwd: ignisPath,
-    shell: true,
     windowsHide: true,
   });
   if (res.status === 0) {

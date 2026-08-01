@@ -66,6 +66,8 @@ Deno.test("normalizeAdvisorResult — accepts valid fields", () => {
     ev: "+$100",
     action: "Open calculator.",
     opportunityScore: 85,
+    positiveOutcomeProbability: 0.61,
+    probabilityBasis: "The supplied odds imply a 61% positive-outcome estimate.",
     riskFlags: ["7-day expiry"],
     opsTags: ["welcome_offer"],
   });
@@ -74,6 +76,8 @@ Deno.test("normalizeAdvisorResult — accepts valid fields", () => {
   assertEquals(result.promoType, "bonus_bet");
   assertEquals(result.calculatorSlug, "bonus-bet");
   assertEquals(result.opportunityScore, 85);
+  assertEquals(result.positiveOutcomeProbability, 0.61);
+  assertEquals(result.probabilityBasis, "The supplied odds imply a 61% positive-outcome estimate.");
   assertEquals((result.riskFlags as string[]).length, 1);
 });
 
@@ -96,6 +100,24 @@ Deno.test("normalizeAdvisorResult — caps opportunityScore at 100", () => {
 Deno.test("normalizeAdvisorResult — enforces 0 floor on opportunityScore", () => {
   const result = normalizeAdvisorResult({ opportunityScore: -50 });
   assertEquals(result.opportunityScore, 0);
+});
+
+Deno.test("normalizeAdvisorResult — refuses unsupported probability receipts", () => {
+  const result = normalizeAdvisorResult({
+    positiveOutcomeProbability: 1.4,
+    probabilityBasis: "This must not survive without a valid probability.",
+  });
+  assertEquals(result.positiveOutcomeProbability, null);
+  assertEquals(result.probabilityBasis, null);
+});
+
+Deno.test("normalizeAdvisorResult — refuses probability without a nonempty basis", () => {
+  const result = normalizeAdvisorResult({
+    positiveOutcomeProbability: 0.61,
+    probabilityBasis: "   ",
+  });
+  assertEquals(result.positiveOutcomeProbability, null);
+  assertEquals(result.probabilityBasis, null);
 });
 
 Deno.test("normalizeAdvisorResult — caps riskFlags at 3", () => {
@@ -122,7 +144,7 @@ Deno.test("normalizeAdvisorResult — bounds and preserves counterfactual receip
   assertEquals(result.missingInputs, ["expiry", "minimum odds", "cap"]);
   assertEquals(result.sensitivityTriggers, ["odds move", "terms change"]);
   assertEquals(result.evidenceGrade, "partial");
-  assertEquals(result.receiptVersion, 2);
+  assertEquals(result.receiptVersion, 3);
 });
 
 Deno.test("mock fetch — validates prompt-caching headers are set", async () => {

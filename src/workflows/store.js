@@ -33,10 +33,15 @@ export function patchWorkflowState(appData = {}, workflow = {}, patch = {}, { sy
   const hasFeedbackEntry = Array.isArray(appData?.resultFeedback)
     && appData.resultFeedback.some((entry) => entry?.id === workflow?.id);
 
+  const resultFeedback = appData?.resultFeedback || [];
+  const materializesSettlement = syncFeedback
+    && !hasFeedbackEntry
+    && (nextWorkflow.status === "placed" || nextWorkflow.status === "waiting");
   next.resultFeedback = syncFeedback && hasFeedbackEntry
-    ? updateResultFeedback(appData?.resultFeedback || [], workflow.id, { ...patch, updatedAt: nextTimestamp })
-    : (appData?.resultFeedback || []);
+    ? updateResultFeedback(resultFeedback, workflow.id, { ...patch, updatedAt: nextTimestamp })
+    : materializesSettlement
+      ? upsertResultFeedback(resultFeedback, nextWorkflow)
+      : resultFeedback;
 
   return next;
 }
-

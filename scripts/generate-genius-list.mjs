@@ -22,6 +22,7 @@ import { MODELS, buildThinkingConfig, withCache, callClaude, logMetrics } from '
 import { rankItems as ignisRank, isLiveRankingAvailable } from './lib/ignis-rank.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { resolveCapability } from './lib/secrets.mjs';
+import { inspectProtocolFaq } from './lib/protocol-faq-contract.mjs';
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url));
 const ROOT       = path.resolve(__dirname, '..');
@@ -310,8 +311,7 @@ const sanitCritical = status.blockers?.find(b => /sanitization/i.test(b))?.match
 const criticalCount = sanitCritical ? parseInt(sanitCritical) : 0;
 
 // ── FAQ / Oracle staleness ────────────────────────────────────────────────────
-const faqLastUpdate = faq.match(/\*Generated:\s*(\d{4}-\d{2}-\d{2})/)?.[1];
-const faqAge        = faqLastUpdate ? daysBetween(faqLastUpdate, today) : 999;
+const faqContract = inspectProtocolFaq(ROOT, faq);
 
 // ── Pattern detectors → candidate items ──────────────────────────────────────
 // tier: 'critical'=100  'high'=70  'medium'=40  'low'=15
@@ -530,11 +530,11 @@ if (intentRate < 70) {
 }
 
 // ── Protocol FAQ stale ────────────────────────────────────────────────────────
-if (faqAge > 30) {
+if (!faqContract.fresh) {
   add('faq-stale', 'low', 'protocol', '🔧',
-    `Protocol Oracle FAQ cache stale (${faqAge}d)`,
-    'Refresh the 10 Q&A pairs so agents self-serve current protocol knowledge.',
-    'node scripts/ops.mjs ask --list', 5);
+    'Protocol Oracle FAQ source contract stale',
+    'Re-render the 10 reviewed Q&A pairs because protocol or FAQ definitions changed.',
+    'node scripts/render-protocol-faq.mjs', 5);
 }
 
 // ── Orphaned brainstorm ideas (from archive if available) ─────────────────────
@@ -871,4 +871,3 @@ ranked.forEach(({ icon, tier, title, ignisScore }, i) => {
   console.log(`  ${String(i + 1).padStart(2)}. ${icon} [${tier.toUpperCase()}]  IGNIS ${String(ignisScore).padStart(3)}  ${title.slice(0, 58)}`);
 });
 console.log(`  IGNIS source: ${ignisSource}${isLiveRankingAvailable() ? ' (MCP configured)' : ' (fallback — set IGNIS_MCP_URL for live)'}`);
-

@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-07-31",
+  "session": 121,
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched"
+  },
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "infrastructure-aware-public-app",
+  "successBar": [
+    "Every green state must be derived from the exact evidence it claims and fail closed when evidence is absent, contradictory, partial, or stale.",
+    "Every engagement mechanic must reward disciplined evidence capture or review, never profit outcomes, raw betting activity, login compulsion, or urgency pressure.",
+    "Every user-facing outcome and Artificial Intelligence calibration surface must share one typed result contract and prove end-to-end resolution in tests.",
+    "Public claims must be sober in every supported locale and every user-visible code path, including Edge-generated copy.",
+    "Every interactive feedback control must be keyboard-native, screen-reader named, validation-aware, and honest about what was saved."
+  ],
+  "axisWeights": {
+    "featuresDepth": 2,
+    "innovativeFeatures": 1.4,
+    "uiUxFeedback": 2,
+    "feedbackLoop": 1.5,
+    "gamificationEngagement": 1.2,
+    "aiIntegration": 1.3,
+    "securityPrivacy": 1.5,
+    "speedOrganization": 1.5,
+    "tokenApiReduction": 1.5
+  },
+  "premiseVerification": {
+    "method": "Live source, test, build-manifest, public-copy, generated-truth, doctor, and release-contract inspection; missing Studio Oracle helper was replaced by direct source evidence.",
+    "primaryGeniusList": "Generated startup hits contain three maintenance candidates; each remains untrusted until its command and source premise are verified during implementation.",
+    "generatedCandidates": 27,
+    "verifiedCandidates": 14,
+    "selected": 6,
+    "rejectedOrMerged": 21
+  },
+  "items": [
+    {
+      "rank": 1,
+      "id": 1,
+      "slug": "sober-engagement-contract",
+      "title": "Replace outcome and login compulsion with a discipline-first engagement system",
+      "tier": "fire",
+      "axis": "gamification / engagement / soul fidelity",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 10,
+      "effortHours": 8,
+      "priority": 30.1,
+      "why": "The product currently rewards profitable days, raw login streaks, betting volume, daily XP, fire badges, a comeback bonus, and urgency upsells. Those mechanics conflict with the explicit SOUL: calm operator discipline rather than casino-style dopamine or activity-as-edge.",
+      "evidence": "src/lib/streaks.js counts only positive-profit days and even falls back to expected profit; src/components/dashboard/DailyDashboard.jsx creates a login streak and uses it to trigger a paid upsell; DashboardHero renders fire/milestone/comeback bonus copy; achievements include Active Bettor, Five Figure Threat, and Legend.",
+      "recipe": "Define discipline days from evidence-bearing actions regardless of profit direction: a settled outcome with an actual value, a reasoned skip, or a logged reviewed result. Replace profit/login streak language with review cadence, remove XP/bonus/urgency pressure from the dashboard, retone achievements toward verified decisions and learning, and add a source-level SOUL regression that rejects the displaced dopamine patterns.",
+      "timeToFirstValue": "The first dashboard render rewards process quality instead of profitable variance or repeated logins.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Make streaks count reviewed decisions regardless of profit and rename the visible labels." },
+        "L2": { "effortHours": 5, "recipe": "L1 plus remove login-derived upsells/comeback bonuses and retone achievement copy." },
+        "L3": { "effortHours": 8, "recipe": "L2 plus convert daily XP into a calm review checklist, add explicit discipline evidence/reasons, and launch-gate SOUL anti-patterns." }
+      },
+      "executionLog": [
+        {
+          "session": 121,
+          "status": "shipped",
+          "depth": "L3",
+          "evidence": "Cadence now derives only from actual settled values, reasoned skips, and realized ledger entries; losses and zero count equally while expected-only and visits do not. Login writes, points awards, streak upsells, comeback/XP pressure, fire copy, and profit-volume badges were removed or converted to evidence receipts. Seventy-four engagement, dashboard, and SOUL contract tests pass."
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "id": 2,
+      "slug": "probabilistic-ai-calibration-loop",
+      "title": "Turn Promo Advisor calibration into a semantically valid, automatically resolved learning loop",
+      "tier": "fire",
+      "axis": "Artificial Intelligence / feedback loop / feature depth",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 10,
+      "effortHours": 8,
+      "priority": 27.1,
+      "why": "The app advertises calibration but records opportunity attractiveness as if it were outcome probability, then never resolves a prediction in production. The badge can only appear in synthetic tests.",
+      "evidence": "PromoAdvisorPanel.predictedProbabilityFromAdvisor maps opportunityScore/100 to predicted probability; opportunityScore is separately defined as offer attractiveness. resolvePrediction is referenced only by tests. TrackInsights settles the corresponding workflow but does not resolve advisor calibration.",
+      "recipe": "Version the advisor receipt with an explicit positiveOutcomeProbability and probabilityBasis, normalize and bound both rule and model responses, refuse calibration when the field is absent, preserve the prediction identifier on the workflow, resolve it from a settled real outcome, expose resolved/unresolved coverage, and test the complete advisor-save-settle-summary path without a model call.",
+      "timeToFirstValue": "The first settled advisor workflow creates a truthful calibration observation instead of permanent synthetic-only telemetry.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Stop treating opportunityScore as probability and resolve only explicit probabilities." },
+        "L2": { "effortHours": 6, "recipe": "L1 plus Edge receipt fields, workflow linkage, and automatic settlement resolution." },
+        "L3": { "effortHours": 8, "recipe": "L2 plus basis/provenance, unresolved-coverage telemetry, cache-contract versioning, and end-to-end tests." }
+      },
+      "executionLog": [
+        {
+          "session": 121,
+          "status": "shipped",
+          "depth": "L3",
+          "evidence": "Opportunity score is no longer converted into probability. Receipt v3 accepts only an explicit bounded positive-outcome probability with basis; client cache v4 preserves the linked prediction id; Track settlement resolves it from canonical realized profit; summaries expose resolved and unresolved coverage. Focused client integration coverage and all 45 Edge tests pass."
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "id": 3,
+      "slug": "strict-validation-receipts",
+      "title": "Make launch validation counts prove completion instead of merely resembling a fraction",
+      "tier": "fire",
+      "axis": "observability / security / release engineering",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 7,
+      "effortHours": 3,
+      "priority": 27.1,
+      "why": "Launch state recognizes any digit fraction as passing after a shallow word scan, so zero or partial execution can render green.",
+      "evidence": "getValidationSignal uses /passing|pass|\\d+\\/\\d+/ and therefore classifies 0/597, 3/5, and bare 1/9 as passing unless another failure word happens to appear first. Existing tests cover 153/153 but no adversarial count cases.",
+      "recipe": "Add a structured parser that returns signal, observed count, expected count, and reason. A counted suite is green only when expected is positive and observed equals expected; zero, partial, contradictory, stale, or malformed evidence stays non-green. Preserve the wrapper API, attach parsed evidence to resolved validation rows, and add an adversarial matrix.",
+      "timeToFirstValue": "The launch command center can no longer green a partial or zero-execution suite.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Require equal positive counts before a fraction passes." },
+        "L2": { "effortHours": 2, "recipe": "L1 plus contradiction/zero/malformed cases and tests." },
+        "L3": { "effortHours": 3, "recipe": "L2 plus structured reason/count provenance on every validation row." }
+      },
+      "executionLog": [
+        {
+          "session": 121,
+          "status": "shipped",
+          "depth": "L3",
+          "evidence": "Launch validation now carries raw evidence, observed/expected counts, signal, and reason. Only equal positive counts pass; zero, partial, over-counted, contradictory, stale, and malformed evidence stays non-green. Eight launch-state tests pass."
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "id": 4,
+      "slug": "canonical-realized-outcome-contract",
+      "title": "Unify every learning surface on the actual realized outcome field",
+      "tier": "fire",
+      "axis": "feature depth / organization / observability",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 6,
+      "priority": 26.7,
+      "why": "The core outcome feedback loop stores actualProfit, but multiple high-value learning modules silently read legacy aliases and calculate real settlements as zero.",
+      "evidence": "ResultFeedbackCard and track/insights write/read actualProfit. replayLedger, counterfactualPnL, decisionJournal, mistakeMemory, twinBattle, and tiltGuard use profit ?? netProfit ?? outcome. Existing replay tests seed profit, so they validate the obsolete shape rather than the production path.",
+      "recipe": "Create one typed realized-outcome resolver with exact precedence actualProfit → profit → netProfit → outcome, explicit missing-vs-zero semantics, and finite-number normalization. Migrate every result-feedback consumer, preserve ledger compatibility, add contract vectors and a production-shaped end-to-end fixture, then ban new ad-hoc alias chains in the integrity gate.",
+      "timeToFirstValue": "Existing actualProfit settlements immediately drive replay, decision, counterfactual, mistake, tilt, and twin insights correctly.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Teach the affected modules to read actualProfit first." },
+        "L2": { "effortHours": 4, "recipe": "Extract one resolver and migrate every known consumer with compatibility tests." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus production-shaped cross-module vectors, missing/zero provenance, and a no-divergent-alias source invariant." }
+      },
+      "executionLog": [
+        {
+          "session": 121,
+          "status": "shipped",
+          "depth": "L3",
+          "evidence": "One authority-aware currency parser now normalizes actualProfit before workflow persistence and feeds replay, journal, counterfactual, mistake, twin, and tilt modules. Production-shaped cross-module vectors plus focused suites pass 25/25."
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "id": 5,
+      "slug": "multisurface-public-claim-ratchet",
+      "title": "Close quantified-income and Edge-copy escape hatches in the multilingual public-claims gate",
+      "tier": "fire",
+      "axis": "security / public trust / international UX",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 7,
+      "priority": 25.2,
+      "why": "The public claims gate reports green while live pages state typical monthly earnings, guaranteed first-month ranges, pure profit, money that cannot be lost, and outcome-independent collection. Edge-generated advisor copy also escapes the scan.",
+      "evidence": "public/matched-betting-es claims $500–1,500 'en garantía'; matched-betting-uk says most beginners earn £500–1,500 and users do not lose the float; multiple regional/blog pages publish recurring monthly-profit ranges. scripts/lib/public-claims.mjs has only ten narrow phrase rules and check-public-claims excludes supabase/functions, where promo-parse.ts emits 'guaranteed value'.",
+      "recipe": "Extend the locale-aware contract to evidence-sensitive quantified typical-income, recurring-profit, pure-profit, no-loss, and guarantee-adjacent phrasing; scan user-visible Edge result strings; make fixtures include structured data and code literals; rewrite every new finding into labeled illustrative/model outputs with execution, void, limit, eligibility, and price-movement boundaries; keep exact mathematical hedge descriptions only when their assumptions are local and explicit.",
+      "timeToFirstValue": "The next gate catches the currently live Spanish and UK claims instead of certifying them.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Add missing high-risk phrases and repair the two verified pages." },
+        "L2": { "effortHours": 5, "recipe": "L1 plus quantified typical-income rules and all-repo copy remediation." },
+        "L3": { "effortHours": 7, "recipe": "L2 plus Edge-generated copy coverage, structured-data fixtures, contextual safe-case handling, and a source inventory report." }
+      },
+      "executionLog": [
+        {
+          "session": 121,
+          "status": "shipped",
+          "depth": "L3",
+          "evidence": "The ratchet now scans 316 static, application, and Edge-authored files with 18 multilingual rules and adversarial fixtures. All 33 surfaced violations were remediated; unsupported aggregate/ranking pages were publicly corrected; the hard-coded income predictor became a zero-default user-input scenario planner. Claims and release-surface gates pass with a content-addressed receipt."
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "id": 6,
+      "slug": "accessible-high-integrity-outcome-capture",
+      "title": "Make the result-feedback loop accessible and refuse semantically incomplete records",
+      "tier": "high",
+      "axis": "UI / UX / feedback quality",
+      "status": "shipped",
+      "impact": 8,
+      "innovation": 7,
+      "effortHours": 4,
+      "priority": 21.7,
+      "why": "The highest-leverage feedback surface has visible div labels but no programmatic field names, pill buttons without pressed state, a non-live status message, and permissive records that omit the very reason or numeric outcome later analytics depend on.",
+      "evidence": "ResultFeedbackCard inputs have placeholders but no id/label or aria-label; choice buttons do not expose aria-pressed; a skipped record can be saved before a skip reason; settlement accepts any non-empty actualProfit string.",
+      "recipe": "Use stable ids and semantic labels, decimal input modes, native pressed-state semantics, grouped legends, and an aria-live receipt. Validate a finite signed realized value for settlement, require a reason for skip, preserve editable drafts without duplicate workflow entries, and add keyboard/accessibility plus data-integrity component tests.",
+      "timeToFirstValue": "Keyboard and assistive-technology users can complete the loop, and downstream analytics receive meaningful records.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add labels, input modes, pressed state, and live status." },
+        "L2": { "effortHours": 3, "recipe": "L1 plus finite settlement/required skip validation and focused tests." },
+        "L3": { "effortHours": 4, "recipe": "L2 plus idempotent record updates, error focus, grouped semantics, and production-shaped workflow assertions." }
+      },
+      "executionLog": [
+        {
+          "session": 121,
+          "status": "shipped",
+          "depth": "L3",
+          "evidence": "The feedback card now exposes labeled decimal inputs, semantic choice groups, pressed states, live status, fail-closed skip and settlement validation, normalized signed outcomes, and stable record identity. Four production-shaped component tests pass."
+        }
+      ]
+    }
+  ],
+  "innovationReserve": [
+    "A discipline cadence that treats reasoned restraint and loss review as progress, decoupling engagement from profit variance.",
+    "A probability-basis receipt that separates offer attractiveness, confidence, and calibrated positive-outcome probability.",
+    "A public-claim risk inventory that scans both static pages and dynamic Edge-authored user copy.",
+    "A single realized-outcome resolver that makes zero, missing, modeled, and actual values mechanically distinct."
+  ],
+  "skipped": [
+    {
+      "slug": "bundle-splitting-overhaul",
+      "reason": "Rejected on verification: the live module graph is already route-split and the bundle gate reports 179.1KB initial raw / 60.0KB gzip, within budget. The empty PostHog chunk warning is low impact and below the 1.5 priority floor."
+    },
+    {
+      "slug": "new-ai-cost-controls",
+      "reason": "Rejected on verification: rule-engine short circuiting, prompt caching, daily entitlement ceilings, usage telemetry, and a budget state already exist. No measured overrun premise was found; flat-rate model cost remains notional."
+    },
+    {
+      "slug": "new-marketing-consent-system",
+      "reason": "Rejected on verification: S120 already shipped affirmative, versioned, reversible consent and send-boundary enforcement."
+    },
+    {
+      "slug": "manual-intelligence-report-refresh-as-a-fix",
+      "reason": "Rejected as a root fix: doctor --loop already owns source-derived revenue and IGNIS remediation. The current 9-day warnings remain maintenance work for this session, not a new product system."
+    },
+    {
+      "slug": "obelisk-ui-only-auth-switch",
+      "reason": "Honest deferral: CANON-045 checker output is malformed and the identity capabilities are incomplete. A UI-only switch without a verifier, replay/expiry contract, and account-link semantics would be a broken security facade."
+    },
+    {
+      "slug": "fabricate-external-release-proofs",
+      "reason": "Rejected by evidence policy: headers, forwarding, credential rotation, Supabase deployment authority, and real mailbox/payment/tester receipts remain external facts and cannot be manufactured by repository edits."
+    }
+  ],
+  "totals": {
+    "count": 6,
+    "selected": 6,
+    "fire": 5,
+    "high": 1,
+    "effortHoursL2": 25,
+    "priority": 157.9,
+    "top3": [
+      "sober-engagement-contract",
+      "probabilistic-ai-calibration-loop",
+      "strict-validation-receipts"
+    ]
+  },
+  "sample": {
+    "picked": 20,
+    "scanned": 596,
+    "tokens": 30000,
+    "commandsRun": 26,
+    "baselineTests": "597/597 passing across 76 files",
+    "baselineBundle": "179.1KB initial raw / 60.0KB gzip"
+  },
+  "notes": "All six items are verified against live implementation. Twenty-one candidates were merged, disproven, or honestly deferred. No external proof, credential authority, or launch readiness was invented."
+}

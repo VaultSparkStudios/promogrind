@@ -256,6 +256,9 @@ export function parseValidationSignal(value = "") {
   if (/(fail|error|blocked|broken|timeout|abort|cancel)/i.test(normalized)) {
     return { ...base, signal: "failing", reason: "explicit failure marker" };
   }
+  if (/\b(?:stale|unknown|pending|partial|skipped|unavailable|not run)\b/i.test(normalized)) {
+    return { ...base, signal: "warning", reason: "non-terminal or unavailable evidence" };
+  }
 
   const countMatch = normalized.match(/(?:^|\D)(\d[\d,]*)\s*\/\s*(\d[\d,]*)(?:\D|$)/);
   if (countMatch) {
@@ -272,9 +275,6 @@ export function parseValidationSignal(value = "") {
 
   if (/\b(?:passing|passed|pass|success|successful|green)\b/i.test(normalized)) {
     return { ...base, signal: "passing", reason: "explicit uncounted pass marker" };
-  }
-  if (/\b(?:stale|unknown|pending|partial|skipped|unavailable|not run)\b/i.test(normalized)) {
-    return { ...base, signal: "warning", reason: "non-terminal or unavailable evidence" };
   }
   return { ...base, signal: "warning", reason: "unrecognized evidence" };
 }

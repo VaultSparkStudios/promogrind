@@ -187,7 +187,7 @@ export function parsePromoTextHeuristic(text = "") {
       calculatorSlug,
       explanation: explanationForType(topType, amount, percentage, expiryDays),
       ev:
-        topType === "bonus_bet" && amount ? `~${formatMoney(amount * 0.7)} guaranteed value` :
+        topType === "bonus_bet" && amount ? `~${formatMoney(amount * 0.7)} modeled value before execution risk` :
         topType === "profit_boost" && percentage ? `${percentage}% boost — validate hedge spread` :
         topType === "deposit_match" && amount ? `${formatMoney(amount)} match cap before rollover drag` :
         null,

@@ -8,6 +8,8 @@ import {
   renderCalibrationBadge,
   MIN_SAMPLE,
 } from "../lib/aiCalibration.js";
+import { patchWorkflowState } from "../workflows/store.js";
+import { buildTrackInsights } from "../track/insights.js";
 
 beforeEach(() => {
   window.localStorage.clear();
@@ -69,6 +71,35 @@ describe("aiCalibration", () => {
     });
     const resolved = resolveWorkflowPrediction({ calibrationPredictionId: "advisor:wf-1" }, "($4.50)");
     expect(resolved).toMatchObject({ actual: 0, predicted: 0.62, probabilityBasis: "Offer-implied conversion range." });
+  });
+
+  it("connects an advisor save through waiting, Track settlement, and calibration summary", () => {
+    const workflow = {
+      id: "advisor-flow-1",
+      title: "Advisor workflow",
+      source: "promo_advisor",
+      status: "queued",
+      promoType: "bonus_bet",
+      positiveOutcomeProbability: 0.62,
+      probabilityBasis: "Offer-implied conversion range.",
+      calibrationPredictionId: "advisor:advisor-flow-1",
+    };
+    recordPrediction({
+      id: workflow.calibrationPredictionId,
+      source: "promo-advisor",
+      predicted: workflow.positiveOutcomeProbability,
+      probabilityBasis: workflow.probabilityBasis,
+    });
+    const appData = patchWorkflowState({ workflowInbox: [workflow], resultFeedback: [] }, workflow, { status: "waiting" });
+    const insights = buildTrackInsights(appData, new Date("2026-07-31T12:00:00.000Z"));
+    expect(insights.openFeedback).toHaveLength(1);
+    expect(insights.openFeedback[0]).toMatchObject({
+      id: workflow.id,
+      status: "waiting",
+      calibrationPredictionId: workflow.calibrationPredictionId,
+    });
+    resolveWorkflowPrediction(insights.openFeedback[0], "12.40");
+    expect(summarizeCalibration()[0]).toMatchObject({ sample: 1, total: 1, unresolved: 0 });
   });
 
   it("is idempotent when the same workflow is saved twice", () => {

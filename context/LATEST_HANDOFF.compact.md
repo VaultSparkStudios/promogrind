@@ -1,54 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 4d1c4e7f6369 -->
-<!-- generated-at: 2026-07-28T00:57:32.971Z -->
+<!-- source-hash: c028c356020e -->
+<!-- generated-at: 2026-08-01T06:10:39.329Z -->
 
 # LATEST_HANDOFF (compact)
 
-PromoGrind Handoff Summary
-
-Session: 120 (Codex)
+SESSION 121 HANDOFF SUMMARY
 
 Status
-- Saturated; 9/9 primary + 3 second-order items shipped
-- Repo gates green; SPARKED remains NO-GO
-- Deploy: prior production head remains S119 until remote workflow evidence passes
+- Session 121 (Codex): saturated. 6/6 L3 audit items and 3/3 repo-owned second-order innovations shipped. Unified Genius List truthfully empty. Local RC green.
+- SPARKED promotion: NO-GO. S121 work not claimed deployed pending post-push workflow evidence.
 
-Shipped (S120)
-- Privileged-secret removal + shared redacted credential classifier across tracked/history/public surfaces
-- Receipt-bearing tri-state sync/AI observability (no green without evidence)
-- Attest-before-promote Pages workflow binding commit, tree digest, gates, deploy artifact
-- Secrets-gateway-only Supabase deploy orchestration (safe dry-run default)
-- Strict generated-truth mirrors (atomic/check modes)
-- Versioned reversible marketing consent with Profile control
-- Full Edge verification: 15 entrypoints, 5 test files
-- Shared accessible native switch contract
-- Fail-closed public agent capability catalog
-- Second-order: consent enforcement at send boundaries, Windows spawn hardening, integrity-aware secret scanning
+Shipped (S121)
+- Canonical realized-outcome contract across persistence/replay/journal/twin/tilt/AI settlement consumers.
+- Strict validation receipts (cannot green zero/partial/contradictory/stale/malformed).
+- Accessible validation-aware result-feedback card; basis-bound AI probability with settlement and calibration telemetry.
+- Evidence-based review cadence replacing compulsion/urgency rewards.
+- Multilingual public-claims ratchet; 33 violations repaired; income estimator converted to zero-default scenario planner.
+- Source-hash FAQ contract; shell-free IGNIS rescore; content-addressed claims attestation; proprietary /ip route + discovery links.
 
-Verification
-- verify:launch-local exit 0
-- Vitest 597/597; Deno 15/15 typecheck, 43/43 tests
-- Tracked secret scan 0; strict sanitizer 0; supply-chain 0
-- 317 commits; 5 redacted findings at b1205ce; current tree clean, history not claimed clean
+Verification (green)
+- verify:launch-local exit 0; Vitest 613/613; Deno 45/45, 15 entrypoints typecheck; Doctor 12/12, 0 blocking.
+- Public claims receipt green; 4 hash-bound visual captures; security: 0 tracked secrets, 0 sanitizer findings.
+- npm audit: GHSA-qwww-vcr4-c8h2 NOT claimed green; static client mechanically guarded non-reachable.
 
-Now (Top 3)
-1. Establish real staging target + header-capable edge; prove all six security headers before SPARKED
-2. Complete historical credential rotation/remediation; add exact PromoGrind deploy capability mapping
-3. Execute Supabase, mailbox, auth-email, Stripe, friend-beta, capture, pixel proofs
+Now Bucket (top 3)
+1. Establish real staging target + header-capable edge; prove all six response headers before SPARKED.
+2. Complete historical credential rotation/remediation; add exact PromoGrind deploy capability mapping.
+3. Configure and prove Zoho mailbox identity, then auth-email, full Stripe lifecycle, friend-beta, and capture proofs.
 
-Blockers (Top 3)
-1. Six live security headers absent; no true remote staging environment
-2. promogrind.supabase.deploy MISSING (narrower admin READY; no deploy attempted)
-3. Contact forwarding/mailbox delivery unprovable under current Cloudflare scope
+Blockers (top 3)
+1. No remote staging env; six production response headers absent. Cloudflare token reaches zone but lacks response-header rules scope.
+2. promogrind.supabase.deploy MISSING; no deployment proof.
+3. contact@promogrind.bet lacks real Zoho MX/SPF/DKIM/DMARC and delivery evidence; Brevo non-qualifying.
 
-Human-Blocked Items (with age)
-- Historical credential rotation via control-plane + approved history-remediation strategy — since S118 (2 sessions)
-- Exposed webhook credential rotation (Ark cargo 01JU98MC5M8FC5EDBEE214F795) — since S118 (2 sessions)
-- Cloudflare header-ruleset credential path fails auth — since S118 (2 sessions)
-- AI pixel viewer Windows credential-protection failure — since S118 (2 sessions)
+Human-Blocked / External (age)
+- 5 redacted historical credential findings at b1205ce require rotation + approved history remediation (open since ≤S118, ~1 week).
+- Production auth-email, Stripe lifecycle, friend-beta, capture lead-row receipts unproved (external gate, carried since S118+).
+- Studio sitemap scoring stuck 7/10 despite /ip; checker mismatch routed through Ark, not patched (S121).
 
-Unproved External Gates
-- Production auth email, real Stripe lifecycle, friend beta, capture submission/lead observation, AI pixel review
-- Obelisk activation, remote deletion, generated static-page theme parity (deliberately deferred)
+Ark Closeout
+- Broadcast 01JUTV2CUV1C618CDA4FC4BB96; cost/sitemap truth-plane request 01JUTV2R411AA97A792A922A22; Zoho/Supabase/Cloudflare capability request 01JUTV36LJ34D016800F482D06. All payloads redacted.
 
-Next session: Stand up staging + header-capable edge and prove all six security headers to advance toward SPARKED GO.
+Next session: Pursue external-proof gates (staging headers, credential rotation, Zoho/Supabase deploy) since repo-owned work is exhausted.

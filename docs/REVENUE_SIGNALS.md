@@ -5,7 +5,7 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ---
 
-## 2026-07-23 — Revenue Readiness Assessment
+## 2026-08-01 — Revenue Readiness Assessment
 
 ### Pipeline Summary
 
@@ -17,11 +17,11 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 | Project | Readiness | Stage | Lifecycle | Audience | Medium | Health | Next Milestone |
 |---|---:|---|---|---|---|---|---|
-| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Push/deploy S114, verify the GitHub Pages deploym... |
+| PromoGrind | 7/10 | revenue-ready | deployed | public-unlaunched | tool | green | Establish real staging and a header-capable produ... |
 
 ### Revenue-Ready Projects (score 7+)
 
-- **PromoGrind** (7/10) — S114 shipped a deterministic external launch-proof ledger after the primary genius list regenerated to 0 items: docs/EXTERNAL_LAUNCH_PROOF_LEDGER.md now merges PROJECT_STATUS blockers and LAUNCH_PROOFS, node scripts/ops.mjs launch-proof-ledger --check verifies freshness, and script regressions cover pending proof classification. Suite 549/549; launch-local gate green; launch-ready remains PARTIAL only because external proof gates are still real.
+- **PromoGrind** (7/10) — S121 exhausted all six verified L3 audit items and the primary Unified Genius List, then shipped three second-order safeguards: a canonical realized-outcome contract, strict launch receipts, evidence-first accessible feedback, basis-bound AI calibration with automatic settlement, sober review cadence, multilingual public-claims attestation, deterministic FAQ freshness, shell-free IGNIS rescoring, and truthful exhaustion telemetry.
 
 ### Pre-Revenue Pipeline (score 4-6)
 
@@ -43,4 +43,4 @@ Purpose: surface revenue readiness and monetization pipeline for studio strategy
 
 ---
 
-*Generated: 2026-07-23 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*
+*Generated: 2026-08-01 | Source: PROJECT_REGISTRY.json + PROJECT_STATUS.json per repo*

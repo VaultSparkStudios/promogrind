@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-07-27T23:48:34.685Z",
+  "generatedAt": "2026-08-01T05:11:13.035Z",
   "project": "PromoGrind",
-  "session": 120,
+  "session": 121,
   "sourceSignals": {
     "geniusListEmpty": true,
-    "taskBoardBytes": 68307,
+    "taskBoardBytes": 71253,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
@@ -15,43 +15,43 @@
   },
   "ranked": [
     {
-      "id": "consent-send-boundary-enforcement",
-      "tier": "critical",
-      "axis": "privacy / product integrity",
-      "status": "shipped",
-      "effort": "45m",
-      "effortHours": 0.75,
-      "impact": 10,
-      "innovation": 5,
-      "priority": 35.4,
-      "evidence": "Legacy newsletter metadata could bypass the new affirmative UI contract; all marketing send jobs now require versioned, timestamped, unrevoked consent.",
-      "recipe": "Shipped a shared Edge consent predicate plus three fail-closed Deno tests across weekly and onboarding send paths."
-    },
-    {
-      "id": "windows-hide-window-storm-hardening",
-      "tier": "high",
-      "axis": "automation / developer-experience / security",
       "status": "shipped",
       "effort": "30m",
       "effortHours": 0.5,
+      "priority": 18,
+      "id": "shell-free-ignis-rescore",
+      "tier": "high",
+      "axis": "automation / security / developer-experience",
       "impact": 9,
       "innovation": 4,
-      "priority": 27.2,
-      "evidence": "All script spawns now route through safe-spawn; the structural guard reports zero direct child_process imports and zero window-storm violations.",
-      "recipe": "Shipped in S120 and enforced by test:session-invariants."
+      "evidence": "The live IGNIS rescore used npx with shell:true, producing DEP0190 and exposing argument interpolation to the shell.",
+      "recipe": "Shipped: invoke the trusted local TSX CLI through process.execPath with validated paths and a focused shell-free spawn contract."
     },
     {
-      "id": "integrity-aware-secret-scanning",
+      "status": "shipped",
+      "effort": "45m",
+      "effortHours": 0.75,
+      "priority": 17.2,
+      "id": "content-addressed-public-claims-attestation",
       "tier": "high",
-      "axis": "security / observability",
+      "axis": "truth / compliance / observability",
+      "impact": 9,
+      "innovation": 4,
+      "evidence": "A green console line could not prove which 315 public files or which 18 multilingual rules were actually scanned.",
+      "recipe": "Shipped: deterministic source/rule SHA-256 hashes, compatibility status, machine-readable receipt, and an attestation contract."
+    },
+    {
       "status": "shipped",
       "effort": "20m",
-      "effortHours": 0.33,
+      "effortHours": 0.34,
+      "priority": 16.2,
+      "id": "truthful-genius-exhaustion-signal",
+      "tier": "high",
+      "axis": "process / observability",
       "impact": 8,
       "innovation": 4,
-      "priority": 25.5,
-      "evidence": "Hermetic Deno integrity digests produced 61 low-confidence false positives; the scanner now recognizes lockfile integrity fields while retaining credential-assignment detection.",
-      "recipe": "Shipped an import-safe scanner core and lockfile regression in test:scan-secrets."
+      "evidence": "The innovation pack inferred exhaustion from Markdown headings and falsely reported geniusListEmpty=false after the canonical list reached zero.",
+      "recipe": "Shipped: derive exhaustion from .cache/genius-list.json list.count with a conservative Markdown fallback and regression coverage."
     },
     {
       "status": "honest-deferral",
@@ -73,12 +73,12 @@
     "todoSignals": [],
     "largeFiles": [],
     "launchDeferrals": [
-      "Brevo sender-domain SPF/DKIM is verified and recorded as proof 1/3; exact contact@promogrind.bet forwarding inspection remains pending because all available Cloudflare tokens return 403 for Email Routing Rules Read.",
-      "Run real production auth email smoke with npm run smoke:auth-email -- --record: confirmation delivery/resend, forgot-password email, recovery link, and new-password sign-in.",
-      "Run one real Stripe smoke purchase and verify the post-checkout portal/subscription path (runner ready: npm run smoke:stripe -- --record).",
-      "Complete one friend-facing auth/recovery/calculator/pricing pass (runner ready: npm run beta:check -- --record).",
-      "S119 Pages deployment exposes browser-safe Supabase configuration and is recorded as capture proof 1/3; real submission plus observable lead-row criteria remain pending.",
-      "AI pixel inspection remains partial: S118 captured and hashed desktop/mobile dark/light screenshots and found zero live computed-style contrast failures, but the connected image viewer failed before pixel review."
+      "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
+      "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
+      "Production auth confirmation/resend/reset/recovery delivery proof is pending.",
+      "Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending.",
+      "One friend-facing auth/recovery/calculator/pricing pass is pending.",
+      "Capture submission and observable lead-row criteria remain pending."
     ]
   }
 }

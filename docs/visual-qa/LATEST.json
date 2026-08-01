@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-01T00:55:59.2488121-04:00",
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "captures": [
+    {
+      "file": "captures/income-estimator-desktop-dark.png",
+      "sha256": "b230e0d230306fa0c29a4896ae63cfdf32094f189dc3c9976513c8efbaf0d7c5",
+      "page": "/income-estimator/ - default scenario result",
+      "theme": "dark",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/income-estimator-desktop-light.png",
+      "sha256": "db46887ed9ec1703d5d444a7393f8647a340418d50fdd98429b57c5f8e4c93b8",
+      "page": "/income-estimator/ - default scenario result",
+      "theme": "light",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/income-estimator-mobile-dark.png",
+      "sha256": "7fccd117036f6bc452dc8705a95420d906a51d1c3af0aa57849e26c435dd0c9b",
+      "page": "/income-estimator/ - default scenario result",
+      "theme": "dark",
+      "viewport": { "width": 390, "height": 844 }
+    },
+    {
+      "file": "captures/income-estimator-mobile-light.png",
+      "sha256": "37e56a134a9877bdd7706b744abd95acde683420e5ba74ca383f222092ad7e3b",
+      "page": "/income-estimator/ - default scenario result",
+      "theme": "light",
+      "viewport": { "width": 390, "height": 844 }
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex GPT-5",
+    "findings": [
+      "No blocking readability, overlap, clipping, or horizontal-overflow defect was visible in the reviewed desktop and mobile renders.",
+      "Both palettes preserve distinct surfaces, readable controls, visible focusable actions, and the green result hierarchy."
+    ],
+    "fixesApplied": [
+      "Added a persistent accessible light/dark theme control tied to system preference.",
+      "Added light-palette surface, border, text, input, slider, result-card, and footer overrides.",
+      "Captured the built static estimator route directly so the receipt cannot accidentally attest the SPA age gate."
+    ],
+    "blockingDefectsOpen": 0
+  }
+}

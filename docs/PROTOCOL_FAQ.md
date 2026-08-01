@@ -1,108 +1,109 @@
-<!-- generated-by: codex manual protocol refresh -->
+<!-- generated-by: scripts/render-protocol-faq.mjs -->
+<!-- protocol-source-sha256: 0c57875c877276bb34f066b0e179e9040d8071436a16f7bce90259012ccc29f0 -->
+<!-- faq-definition-sha256: cc19d0e615b748a05edb7ae044b3106ee5f7a4df828faaf7435b62dfd6d886ba -->
 
 # Protocol FAQ
 
-*Generated: 2026-06-29*
+*Reviewed: 2026-07-31*
 
-> Cached Q&A from the local Studio OS session protocol. Source: `docs/SESSION_PROTOCOL.md`.
+> Deterministic, reviewed Q&A derived from the local protocol contract. Freshness is content-addressed; elapsed time alone never makes an unchanged protocol stale.
 
 ## Q: How should a session start?
 
-> Asked: 2026-06-29 · Model: codex-manual
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
 
-A session starts with `/start` or `start`. The agent writes `context/.session-lock`, runs the compact preflight scripts, checks context pressure, verifies the project is initiated, renders and validates `docs/STARTUP_BRIEF.md`, then reads only that startup brief for initial context.
+Start with `/start` or `start`. Pull and reconcile the current branch as the protocol directs, write `context/.session-lock`, run compact preflights and the context meter, verify project initiation, render and validate `docs/STARTUP_BRIEF.md`, and load context in the canonical order.
 
-Source: `docs/SESSION_PROTOCOL.md` sections 1 and 15.
-
----
-
-## Q: What should happen if a startup script is missing in this public repo?
-
-> Asked: 2026-06-29 · Model: codex-manual
-
-If a Studio OS script referenced by the protocol is missing, note the missing script explicitly and continue with the manual fallback rather than stopping. Prefer repo-truth files already present in `context/`, `audits/`, and `logs/WORK_LOG.md`.
-
-Source: `AGENTS.md` public-repo protocol shim and `docs/SESSION_PROTOCOL.md` section 1.
+Source: docs/SESSION_PROTOCOL.md sections 1 and 15.
 
 ---
 
-## Q: What does `/go` do?
+## Q: What should happen if a Studio OS script is missing in this public repo?
 
-> Asked: 2026-06-29 · Model: codex-manual
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
 
-`/go` means: update memory and task board with Genius List items and implement all refreshed Genius List items at the highest quality bar. It requires session lock, `context/SELF_IMPROVEMENT_LOOP.md`, and `context/TASK_BOARD.md` before any work begins.
+Name the missing script explicitly and continue with the protocol's manual fallback. Prefer repo-truth files in `context/`, `audits/`, and `logs/WORK_LOG.md`; do not invent a placeholder copy of private operations tooling.
 
-Source: `docs/SESSION_PROTOCOL.md` sections 2.0 and 2.7.
-
----
-
-## Q: When should the Genius List be regenerated?
-
-> Asked: 2026-06-29 · Model: codex-manual
-
-Run `node scripts/cache-genius-list.mjs --check` first. If the cache is fresh, read `.cache/genius-list.json`. If stale, regenerate the list with the repo's Genius List command before executing items.
-
-Source: `docs/SESSION_PROTOCOL.md` section 2.1 and local `/go` skill.
+Source: AGENTS.md public-repo protocol shim.
 
 ---
 
-## Q: How should context pressure affect `/go`?
+## Q: What does `/arc` require?
 
-> Asked: 2026-06-29 · Model: codex-manual
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
 
-Run `node scripts/context-meter.mjs --json` before refreshing the list and between Genius List items. `CONTINUE` proceeds, `CONSIDER_CLOSEOUT` should surface the pressure and ask whether to continue, and `CLOSEOUT` stops immediately and prompts for `/closeout`.
+`/arc` is one continuous mission: `/start` → `/audit` → `/implement` → `/closeout`. It does not hand back between phases, implements the full verified list, generates and executes second-order innovations when primary work is exhausted, and gates continuation on the context meter.
 
-Source: `docs/SESSION_PROTOCOL.md` sections 2.0.5 and 2.7.
-
----
-
-## Q: How are blocked Genius List items handled?
-
-> Asked: 2026-06-29 · Model: codex-manual
-
-Classify each item before execution. Unblocked items are implemented. Human-blocked items require blocker preflight before leaving them blocked. Cross-repo locked and externally blocked items are skipped with a note and retry hint where applicable.
-
-Source: `docs/SESSION_PROTOCOL.md` sections 2.5 and 2.6.
+Source: docs/SESSION_PROTOCOL.md section 2B.
 
 ---
 
-## Q: When should specialty protocols be suggested?
+## Q: How is the Unified Genius List refreshed and executed?
 
-> Asked: 2026-06-29 · Model: codex-manual
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
 
-Before `/go`, check project type and context for specialty fits. Examples include game projects for `/game-loop-review`, infrastructure/internal ops projects for `/infra-debt-sweep`, prose projects for `/novel-continuity-check`, and placeholder soul files for `/soul-interview`.
+Run the cache check first. If stale, regenerate from live repo truth. Verify every item's premise against current code, classify its execution state, implement every unblocked item at the highest justified depth, and record honest deferrals rather than silently skipping them.
 
-Source: `docs/SESSION_PROTOCOL.md` specialty suggestion table in section 2.
+Source: docs/SESSION_PROTOCOL.md sections 2.1 through 2.7.
 
 ---
 
-## Q: What is the closeout rule?
+## Q: How should context pressure affect a long mission?
 
-> Asked: 2026-06-29 · Model: codex-manual
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
 
-Never auto-invoke `/closeout`. Suggest it only when context pressure or session state calls for it, then wait for the founder to explicitly request `closeout` or `/closeout`.
+Run `node scripts/context-meter.mjs --json` before list refresh and between items. Continue on `CONTINUE`; follow the protocol's escalation behavior for `CONSIDER_CLOSEOUT`; stop implementation and execute the authorized closeout path on `CLOSEOUT`.
 
-Source: `docs/SESSION_PROTOCOL.md` sections 2.7 and 3.
+Source: docs/SESSION_PROTOCOL.md section 2.0.5.
+
+---
+
+## Q: When may an item be labeled human-blocked?
+
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
+
+Only after secrets discovery and blocker preflight prove there is no agent path. Ready credentials must be resolved through the secrets gateway and used by the agent. Human-blocked is reserved for the narrow founder-only cases defined by CANON-019.
+
+Source: AGENTS.md hard gates and docs/SESSION_PROTOCOL.md blocker handling.
+
+---
+
+## Q: What is the audit-to-implementation rule?
+
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
+
+The audit must be ranked, evidence-backed, and checked against live code so phantom items are rejected. Implementation root-fixes every accepted item, verifies in proportion to risk, and treats the audit artifact as the execution source of truth rather than refreshing a report in place of shipping.
+
+Source: docs/SESSION_PROTOCOL.md sections 2B and 2C.
+
+---
+
+## Q: What must closeout prove?
+
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
+
+Write back canonical context surfaces, score SIL v3 out of 1000, run doctor until `blockingFailing` is zero, verify suite exit codes directly, commit and push according to the declared workflow, ship the Ark update, remove the session lock, and leave zero agent-started shells running.
+
+Source: docs/SESSION_PROTOCOL.md section 3.
 
 ---
 
 ## Q: Where does Codex-specific behavior differ?
 
-> Asked: 2026-06-29 · Model: codex-manual
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
 
-Codex receives slash commands as plain text. It should normalize optional leading slashes, match the command against `AGENTS.md` and `docs/SESSION_PROTOCOL.md`, and execute the matching protocol directly. Codex personal memory lives under `~/.codex/memories/<slug>/` or equivalent.
+Codex receives slash commands as text, normalizes an optional leading slash, and executes the matching protocol from `AGENTS.md` and `docs/SESSION_PROTOCOL.md`. Personal project memory lives under the Codex memory root, while repo truth remains in the canonical project files.
 
-Source: `docs/SESSION_PROTOCOL.md` Codex notes.
-
----
-
-## Q: What public-safe rules matter in this repo?
-
-> Asked: 2026-06-29 · Model: codex-manual
-
-Keep deployable code and public-safe docs here. Do not add private Studio OS process docs, secret-handling workflows, or placeholder private tooling. VaultSpark-original code and assets are proprietary by default; do not add open-source licensing unless explicitly instructed by the Studio Owner.
-
-Source: `AGENTS.md` public-safe rule and CANON-008.
+Source: docs/SESSION_PROTOCOL.md Codex notes.
 
 ---
 
+## Q: What public-safe and licensing rules apply here?
+
+> Reviewed: 2026-07-31 · Reviewer: codex-manual
+
+Keep deployable code and public-safe documentation in this repository. Do not copy private Studio OS procedures or secret workflows here. VaultSpark-original work is proprietary by default; do not add an open-source license unless the Studio Owner explicitly directs it or an upstream legal obligation applies.
+
+Source: AGENTS.md public-safe rule and CANON-008.
+
+---

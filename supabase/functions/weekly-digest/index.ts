@@ -163,19 +163,19 @@ async function sendEmail(to: string, meta: Record<string, unknown>, supabase: Se
       <p style="color:#64748b;font-size:13px;margin-bottom:28px;">${greeting}</p>
 
       <div style="background:#0f1520;border:1px solid #1e293b;border-radius:8px;padding:20px;margin-bottom:16px;">
-        <h2 style="color:#fbbf24;font-size:15px;font-weight:700;margin-bottom:10px;">🔥 This Week's Best Plays</h2>
+        <h2 style="color:#fbbf24;font-size:15px;font-weight:700;margin-bottom:10px;">Offers to Verify This Week</h2>
         <ul style="color:#94a3b8;font-size:13px;line-height:1.9;margin:0;padding-left:18px;">
-          <li><strong style="color:#e2e8f0;">Profit Boosts</strong> — Check DraftKings, FanDuel &amp; Caesars every morning. 2–5 boosts/day = $5–20 per conversion.</li>
-          <li><strong style="color:#e2e8f0;">Stepped Up Parlays</strong> — DraftKings posts these Tuesdays. Use the Profit Boost Converter to lock in guaranteed profit.</li>
-          <li><strong style="color:#e2e8f0;">FanDuel SGP Insurance</strong> — Weekends. $10–25 in bonus bets if your SGP loses. Convert at 70% with the Bonus Bet Converter.</li>
+          <li><strong style="color:#e2e8f0;">Profit Boosts</strong> — Check current terms and use the converter to model both outcomes before staking.</li>
+          <li><strong style="color:#e2e8f0;">Stepped Up Parlays</strong> — If one appears, compare boosted price, hold, limits, and hedge availability.</li>
+          <li><strong style="color:#e2e8f0;">SGP Insurance</strong> — Verify the refund trigger, credit type, expiry, and modeled conversion range.</li>
         </ul>
       </div>
 
       <div style="background:#0f1520;border:1px solid #1e293b;border-radius:8px;padding:20px;margin-bottom:16px;">
         <h2 style="color:#60a5fa;font-size:15px;font-weight:700;margin-bottom:10px;">💡 Tip of the Week</h2>
         <p style="color:#94a3b8;font-size:13px;line-height:1.7;">
-          Use the <strong style="color:#e2e8f0;">Deposit Optimizer</strong> to figure out which books to fund first for maximum guaranteed EV.
-          Enter your bankroll and state — it ranks every book by expected value so you never leave money on the table.
+          Use the <strong style="color:#e2e8f0;">Deposit Optimizer</strong> to compare modeled expected value, rollover drag, and bankroll exposure.
+          Enter your bankroll and state, then verify every operator term before funding an account.
         </p>
       </div>
 

@@ -52,6 +52,8 @@ describe("ResultFeedbackCard outcome integrity", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Skipped it" }));
     expect(screen.getByRole("alert").textContent).toMatch(/choose a skip reason/i);
+    expect(document.activeElement).toBe(screen.getByRole("group", { name: "Why skip?" }));
+    expect(document.activeElement.getAttribute("aria-invalid")).toBe("true");
     expect(onSync).not.toHaveBeenCalled();
 
     const skipGroup = screen.getByRole("group", { name: "Why skip?" });
@@ -87,6 +89,8 @@ describe("ResultFeedbackCard outcome integrity", () => {
     fireEvent.click(screen.getByRole("button", { name: "Mark Settled" }));
 
     expect(screen.getByRole("alert").textContent).toMatch(/complete realized profit or loss/i);
+    expect(document.activeElement).toBe(screen.getByLabelText("Realized profit or loss"));
+    expect(document.activeElement.getAttribute("aria-invalid")).toBe("true");
     expect(onSync).toHaveBeenCalledTimes(1);
   });
 });

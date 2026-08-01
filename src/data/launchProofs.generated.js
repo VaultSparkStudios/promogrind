@@ -174,7 +174,7 @@ export const LAUNCH_PROOFS = {
       ]
     },
     "brevoDelivery": {
-      "label": "On-domain contact email delivery",
+      "label": "Zoho on-domain contact email delivery and reply identity",
       "status": "pending",
       "blocking": true,
       "requiredFor": [
@@ -182,34 +182,35 @@ export const LAUNCH_PROOFS = {
         "full-launch",
         "marketing-push"
       ],
-      "details": "contact@promogrind.bet is published, but forwarding/copy delivery through Brevo has not been proven end to end.",
-      "nextStep": "Use the Studio Ops Brevo capability to verify SPF/DKIM and deliver a redacted test message through contact@promogrind.bet to founder@vaultsparkstudios.com.",
+      "details": "contact@promogrind.bet is published, but a Zoho send/receive alias, delivery, and reply-as-alias identity have not been proven end to end. Brevo authentication applies only to transactional/app email.",
+      "nextStep": "Resolve zoho.mail.admin through the secrets gateway, attach contact@promogrind.bet to the founder mailbox, verify MX/SPF/DKIM/DMARC, then record redacted delivery and reply-as-alias receipts.",
       "evidence": [],
-      "receipts": [
+      "receipts": [],
+      "historicalReceipts": [
         {
           "criterionId": "spf-and-dkim-are-verified",
           "source": "provider-api",
           "target": "contact@promogrind.bet",
           "observedAt": "2026-07-26T01:43:02.780Z",
           "verifier": "scripts/check-launch-capabilities.mjs",
-          "detail": "Brevo API authenticated promogrind.bet after provider-returned DNS records were verified"
+          "detail": "Brevo API authenticated promogrind.bet for transactional/app email; this does not satisfy the human-mail Zoho alias criteria"
         }
       ],
       "target": "contact@promogrind.bet",
       "criteria": [
         {
-          "id": "brevo-inbound-or-forwarding-route-is-active",
-          "label": "Brevo inbound or forwarding route is active",
+          "id": "zoho-send-receive-alias-is-active",
+          "label": "Zoho send/receive alias is active on the founder mailbox",
           "required": true
         },
         {
-          "id": "spf-and-dkim-are-verified",
-          "label": "SPF and DKIM are verified",
+          "id": "human-mail-dns-is-verified",
+          "label": "MX, SPF, DKIM, and DMARC are verified for human mail",
           "required": true
         },
         {
-          "id": "redacted-test-message-reaches-the-destination-mailbox",
-          "label": "redacted test message reaches the destination mailbox",
+          "id": "delivery-and-reply-as-alias-are-proven",
+          "label": "redacted delivery and reply-as-alias identity are proven",
           "required": true
         }
       ],

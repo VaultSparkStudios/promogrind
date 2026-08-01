@@ -5,14 +5,42 @@
 - configure a header-capable production edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
 - rotate and remediate the fully redacted historical credential findings isolated at commit `b1205ce`; the current tracked tree is clean, but history remains red until the Studio secrets owner confirms rotation and the approved history strategy
 - deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; never infer deployment from repo code
-- verify the exact `contact@promogrind.bet` → founder mailbox forwarding route once Cloudflare Email Routing Rules Read is granted; Brevo SPF/DomainKeys Identified Mail (DKIM) is verified at criterion level
-- after S119 deploy, verify capture public-key injection live, then record real production auth-email, Stripe purchase, friend-beta, forwarding, and capture-submission receipts in the canonical proof ledger
+- configure and prove the `contact@promogrind.bet` Zoho mailbox/alias: MX, Sender Policy Framework (SPF), DomainKeys Identified Mail (DKIM), Domain-based Message Authentication, Reporting and Conformance (DMARC), delivery to the founder mailbox, and reply-as-alias identity; Brevo remains transactional/app email only
+- record real production auth-email, complete Stripe checkout/webhook/subscription/portal lifecycle, friend-beta, and capture-submission/lead-row receipts in the canonical proof ledger
 
 ## Next
 
-- repeat AI pixel inspection when the connected image viewer is healthy; S118 captured and hashed the complete desktop/mobile dark/light matrix and found zero live computed-style contrast failures, but does not claim the unavailable pixel-review step
-- inspect S118 CI/deployment and refresh the live web probe against the deployed commit
+- monitor for a stable React Router release that resolves GHSA-qwww-vcr4-c8h2; retain the executable client-only non-reachability guard until then
+- reconcile the Studio cost registry and sitemap checker through Ark so source-derived trial ceilings and directory-index routes are represented accurately
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
+
+## Unified Genius List (S121)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| ⚡ | Intelligence | done | 0.5h | IGNIS re-score overdue — live IQ refreshed to 45,053 FORGE |
+| 💡 | Intelligence | done | 0.5h | Revenue signals overdue — regenerated from current project truth |
+| 🔧 | Protocol | done | 2h | Protocol FAQ cache contract — source-fingerprint verification and deterministic rendering shipped |
+| 🔥 | Feature depth / truth | done | 6h | canonical-realized-outcome-contract |
+| 🔥 | Release observability | done | 3h | strict-validation-receipts |
+| ⚡ | UI / feedback | done | 4h | accessible-high-integrity-outcome-capture |
+| 🔥 | Artificial Intelligence / feedback | done | 8h | probabilistic-ai-calibration-loop |
+| 🔥 | Engagement / SOUL | done | 8h | sober-engagement-contract |
+| 🔥 | Public trust / international | done | 7h | multisurface-public-claim-ratchet |
+
+## Shipped This Session (S121)
+
+- canonical-realized-outcome-contract — **DONE L3**: one authority-aware currency parser drives persistence, replay, journal, counterfactual, mistake, twin, tilt, and AI settlement behavior.
+- strict-validation-receipts — **DONE L3**: counted validation proves equal positive completion and rejects zero, partial, contradictory, stale, and malformed evidence.
+- accessible-high-integrity-outcome-capture — **DONE L3**: semantic controls, pressed state, live receipts, finite-value/skip-reason validation, stable record identity, and precise error focus.
+- probabilistic-ai-calibration-loop — **DONE L3**: explicit probability plus nonempty basis, cache/workflow linkage, automatic settlement, and resolved/unresolved coverage.
+- sober-engagement-contract — **DONE L3**: evidence-bearing review cadence replaces profit/login compulsion, betting-volume rewards, urgency, and comeback pressure.
+- multisurface-public-claim-ratchet — **DONE L3**: 316 files, 18 multilingual rules, 33 remediations, sober scenario planning, and a content-addressed receipt.
+- protocol-faq-cache-contract — **DONE**: canonical structured FAQ source, deterministic renderer, and hash-based freshness contract.
+- public-repo-revenue-signal-fallback — **DONE**: startup brief reads the repo-local fresh revenue source when the private portfolio path is intentionally absent; source regression prevents false red observability.
+- rendered-pixel-theme-parity — **DONE**: accessible light/dark estimator themes reviewed across desktop/mobile with four hash-bound production-build captures; CANON-053 checker passes.
+- shell-free-ignis-rescore, content-addressed-public-claims-attestation, truthful-genius-exhaustion-signal — **DONE (second-order)**: 3/3 regression-tested and the primary list reports zero actionable items.
+- external-launch-proof-ledger — **HONEST DEFERRAL S121**: staging, edge headers, historical rotation, Zoho mailbox, Supabase deploy authority, auth-email, full payment lifecycle, friend, and capture evidence remain external facts; no proof was fabricated.
 
 ## Shipped This Session (S120)
 

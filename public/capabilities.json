@@ -11,7 +11,7 @@
       "context/LAUNCH_PROOFS.json",
       "src/launchState.js"
     ],
-    "source_digest": "711231dc0506a127501456e482c33978e95f735e8dc0fd4044652d8ccc01ac6d"
+    "source_digest": "a4e65b78a8ed7973f671532f50cf7acc0e6d3aee9219e5c2d4b79a67e959c4a1"
   },
   "agent_policy": {
     "autonomous_betting": false,

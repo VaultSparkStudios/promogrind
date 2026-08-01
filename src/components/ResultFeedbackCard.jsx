@@ -1,4 +1,4 @@
-import React, { useId, useMemo, useState } from "react";
+import React, { useId, useMemo, useRef, useState } from "react";
 import { AppDataCtx } from "../contexts.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
@@ -15,6 +15,8 @@ export default function ResultFeedbackCard({
 }) {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const fieldId = useId();
+  const skipGroupRef = useRef(null);
+  const profitInputRef = useRef(null);
   const entries = appData?.resultFeedback || [];
   const roundedExpected = useMemo(() => {
     const parsed = Number.parseFloat(expectedProfit);
@@ -67,6 +69,7 @@ export default function ResultFeedbackCard({
   const record = (nextStatus) => {
     if (nextStatus === "skipped" && !skipReason) {
       setValidationError("Choose a skip reason before saving this outcome.");
+      skipGroupRef.current?.focus();
       return;
     }
     const id = entryId || `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -106,6 +109,7 @@ export default function ResultFeedbackCard({
     const normalizedActualProfit = parseRealizedOutcomeValue(actualProfit);
     if (normalizedActualProfit === null) {
       setValidationError("Enter a complete realized profit or loss, such as 12.40 or -8.25.");
+      profitInputRef.current?.focus();
       return;
     }
     const patch = {
@@ -198,9 +202,12 @@ export default function ResultFeedbackCard({
           <label htmlFor={`${fieldId}-profit`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Realized profit or loss</label>
           <input
             id={`${fieldId}-profit`}
+            ref={profitInputRef}
             inputMode="decimal"
             value={actualProfit}
-            onChange={(event) => setActualProfit(event.target.value)}
+            onChange={(event) => { setActualProfit(event.target.value); setValidationError(""); }}
+            aria-invalid={validationError.includes("realized profit")}
+            aria-describedby={validationError ? `${fieldId}-error` : undefined}
             placeholder="$12.40"
             style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
           />
@@ -218,7 +225,15 @@ export default function ResultFeedbackCard({
         </div>
       </div>
 
-      <div role="group" aria-labelledby={`${fieldId}-skip-label`} style={{ marginTop: 10 }}>
+      <div
+        ref={skipGroupRef}
+        role="group"
+        tabIndex={-1}
+        aria-labelledby={`${fieldId}-skip-label`}
+        aria-invalid={validationError.includes("skip reason")}
+        aria-describedby={validationError ? `${fieldId}-error` : undefined}
+        style={{ marginTop: 10 }}
+      >
         <div id={`${fieldId}-skip-label`} style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Why skip?</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {skipReasons.map(([value, label]) => (
@@ -363,7 +378,7 @@ export default function ResultFeedbackCard({
       </div>
 
       {validationError && (
-        <div role="alert" style={{ marginTop: 10, fontSize: 11, color: K.rd }}>
+        <div id={`${fieldId}-error`} role="alert" style={{ marginTop: 10, fontSize: 11, color: K.rd }}>
           {validationError}
         </div>
       )}

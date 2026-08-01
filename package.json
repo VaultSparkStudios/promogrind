@@ -14,7 +14,7 @@
     "test:scan-secrets": "node scripts/test-scan-secrets.mjs && node scripts/test-credential-classifiers.mjs && node scripts/test-secret-scanner-lockfiles.mjs",
     "scan:tracked-secrets": "node scripts/scan-secrets.mjs --tracked --no-ledger",
     "test:release-surface": "node scripts/test-release-surface.mjs",
-    "test:session-invariants": "node scripts/test-startup-signal-provenance.mjs && node scripts/test-scan-git-history.mjs && node scripts/test-launch-proof-quorum.mjs && node scripts/test-launch-capabilities.mjs && node scripts/test-capture-config.mjs && node scripts/test-generated-truth-mirrors.mjs && node scripts/test-supabase-deploy-plan.mjs && node scripts/test-release-attestation.mjs && node scripts/test-release-workflow.mjs && node scripts/test-edge-verification.mjs && node scripts/test-accessible-toggle-contract.mjs && node scripts/test-public-capability-contract.mjs && node scripts/check-windows-hide.mjs && node scripts/test-closeout-observability.mjs",
+    "test:session-invariants": "node scripts/test-startup-signal-provenance.mjs && node scripts/test-scan-git-history.mjs && node scripts/test-launch-proof-quorum.mjs && node scripts/test-launch-capabilities.mjs && node scripts/test-capture-config.mjs && node scripts/test-generated-truth-mirrors.mjs && node scripts/test-supabase-deploy-plan.mjs && node scripts/test-release-attestation.mjs && node scripts/test-release-workflow.mjs && node scripts/test-edge-verification.mjs && node scripts/test-accessible-toggle-contract.mjs && node scripts/test-public-capability-contract.mjs && node scripts/test-protocol-faq-contract.mjs && node scripts/test-rescore-ignis-spawn.mjs && node scripts/test-public-claims-receipt.mjs && node scripts/check-router-advisory-posture.mjs && node scripts/check-windows-hide.mjs && node scripts/test-closeout-observability.mjs",
     "check:release-surface": "node scripts/check-release-surface.mjs",
     "verify:web-live": "node scripts/check-live-web-contract.mjs",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
@@ -56,7 +56,7 @@
     "posthog-js": "^1.408.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.18.2"
+    "react-router-dom": "7.18.2"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",

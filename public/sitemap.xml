@@ -90,6 +90,7 @@
   <url><loc>https://promogrind.bet/about/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://promogrind.bet/compliance/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://promogrind.bet/contact/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://promogrind.bet/ip/</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
 
   <!-- Marketing & legal pages -->
   <url><loc>https://promogrind.bet/promogrind-verified/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>

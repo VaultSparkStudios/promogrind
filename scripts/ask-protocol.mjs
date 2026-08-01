@@ -34,6 +34,7 @@ import {
   loadSemanticCache,
   storeSemanticCache,
 } from './lib/model-router.mjs';
+import { inspectProtocolFaq } from './lib/protocol-faq-contract.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -100,10 +101,12 @@ if (listMode) {
     process.exit(0);
   }
   const entries = faqText.match(/^## Q: .+/gm) ?? [];
-  console.log(`\nProtocol FAQ — ${entries.length} cached entr${entries.length === 1 ? 'y' : 'ies'}\n`);
+  const contract = inspectProtocolFaq(targetPath, faqText);
+  console.log(`\nProtocol FAQ — ${entries.length} reviewed entr${entries.length === 1 ? 'y' : 'ies'} · ${contract.fresh ? 'current' : 'STALE'}\n`);
   entries.forEach((e, i) => console.log(`  ${i + 1}. ${e.slice(5)}`));
   console.log('');
-  process.exit(0);
+  if (!contract.fresh) console.error('Run: node scripts/render-protocol-faq.mjs');
+  process.exit(contract.fresh ? 0 : 1);
 }
 
 // ── Search mode ───────────────────────────────────────────────────────────────
@@ -271,16 +274,7 @@ async function askClaude(q) {
     console.log(`Q: ${q}\n`);
     console.log(`A: ${answer}\n`);
 
-    if (!noCache) {
-      const today = new Date().toISOString().slice(0, 10);
-      const entry = `\n## Q: ${q}\n\n> Asked: ${today} · Model: ${modelLabel}\n\n${answer}\n\n---\n`;
-      const existing = readText(faqPath);
-      const header   = existing.trim()
-        ? existing
-        : `<!-- generated-by: scripts/ask-protocol.mjs -->\n\n# Protocol FAQ\n\n*Generated: ${today}*\n\n> Cached Q&A from Protocol Oracle sessions.\n`;
-      fs.writeFileSync(faqPath, header + entry, 'utf8');
-      console.log(`  ✓ Cached in docs/PROTOCOL_FAQ.md`);
-    }
+    if (!noCache) console.log('  ✓ Cached in the semantic query cache; reviewed FAQ remains deterministic');
   } catch (e) {
     console.error(`API error: ${e.message}`);
     keywordFallback(q);

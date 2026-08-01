@@ -31,7 +31,8 @@
     "https://promogrind.bet/compliance/",
     "https://promogrind.bet/privacy/",
     "https://promogrind.bet/terms/",
-    "https://promogrind.bet/contact/"
+    "https://promogrind.bet/contact/",
+    "https://promogrind.bet/ip/"
   ],
   "policy_surfaces": {
     "privacy": "https://promogrind.bet/privacy/",
@@ -39,6 +40,7 @@
     "affiliate_disclosure": "https://promogrind.bet/affiliate-disclosure/",
     "responsible_gambling": "https://promogrind.bet/responsible-gambling/",
     "dmca": "https://promogrind.bet/dmca/",
+    "intellectual_property": "https://promogrind.bet/ip/",
     "llms": "https://promogrind.bet/.well-known/llms.txt"
   },
   "product_boundaries": [

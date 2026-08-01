@@ -636,3 +636,47 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** The S120 push surfaced GHSA-qwww-vcr4-c8h2 against transitive `react-router`. GitHub's advisory explicitly limits impact to unstable React Server Components APIs, while PromoGrind uses only client-side BrowserRouter/MemoryRouter paths and the full source scan found no RSC surface.
 - **Decision:** Dismiss Dependabot alert 34 as `not_used` with the source-reachability evidence attached. Do not override `react-router-dom` 7 with `react-router` 8.3.0: the packages are not a compatible pair and v8 also raises the React and Node floors.
 - **Consequence:** The repository retains a compatible dependency graph without pretending an unused vulnerable path is reachable. Any future RSC adoption must reopen this decision and upgrade to a patched compatible stack first.
+
+## 2026-08-01 — S121 learning and public-trust contracts
+
+### Decision: actual outcomes have one authority-aware resolver
+
+- **Status:** accepted
+- **Context:** production writes `actualProfit`, while replay, counterfactual, decision, mistake, twin, and tilt consumers used divergent legacy aliases and could silently read a real settlement as zero.
+- **Decision:** all consumers use one finite-number resolver with explicit `actualProfit → profit → netProfit → outcome` precedence and missing-vs-zero provenance; divergent alias chains are regression-gated.
+- **Consequence:** one settled result drives every learning surface consistently without breaking legacy records.
+
+### Decision: probability requires a basis and a settlement path
+
+- **Status:** accepted
+- **Context:** opportunity attractiveness had been treated as probability, and Advisor predictions could remain synthetic or permanently unresolved.
+- **Decision:** only an explicit bounded probability with a nonempty basis may enter calibration. Persist its identifier with the workflow, materialize new Advisor workflows into result feedback, and resolve from the canonical realized outcome.
+- **Consequence:** calibration now measures declared probabilistic claims against real results instead of scoring an unrelated attractiveness field.
+
+### Decision: disciplined review, including restraint and losses, is engagement
+
+- **Status:** accepted
+- **Context:** profit streaks, login streaks, betting-volume badges, comeback rewards, and urgency copy rewarded variance and compulsion rather than operator discipline.
+- **Decision:** cadence counts evidence-bearing settlement or a reasoned skip regardless of profit direction. Remove login/activity/profit pressure and reward review completeness.
+- **Consequence:** engagement aligns with PromoGrind's calm operator SOUL and cannot imply that more betting or profitable variance is progress.
+
+### Decision: public claim green must be content-addressed and multisurface
+
+- **Status:** accepted
+- **Context:** static copy checks missed localized quantified-income language and Edge-authored user copy; a dated report could remain green after source drift.
+- **Decision:** scan static, application, structured, and Edge-authored copy with multilingual rules, bind the receipt to the exact source inventory hash, and turn the income estimator into a user-input scenario planner rather than a typical-earnings promise.
+- **Consequence:** 316 files and 18 rules are covered; changes invalidate the receipt instead of inheriting stale trust.
+
+### Decision: Brevo transactional proof cannot satisfy the Zoho mailbox criterion
+
+- **Status:** accepted
+- **Context:** the launch ledger retained a legacy field name and historical Brevo authentication receipt while live Studio Canon requires a working on-domain Zoho mailbox/alias with delivery and reply identity.
+- **Decision:** retain the legacy machine key only for schema compatibility, relabel its criteria to Zoho MX/SPF/DKIM/DMARC plus delivery/reply-as proof, and move Brevo evidence to a non-qualifying historical field.
+- **Consequence:** mailbox readiness remains pending until real Zoho evidence exists; no nearby email capability can make it green.
+
+### Decision: router advisory non-reachability is executable, not merely documented
+
+- **Status:** accepted
+- **Context:** no stable React Router 7.x is currently audit-clean: 7.11 reintroduces multiple older fixed advisories, while 7.18.2 carries GHSA-qwww-vcr4-c8h2 for React Server Components mode.
+- **Decision:** retain the newer pinned 7.18.2 client-only BrowserRouter architecture and launch-gate a source invariant that rejects affected RSC APIs or posture drift. Keep `npm audit` explicitly non-green until upstream ships a compatible fix.
+- **Consequence:** current reachable risk is minimized without an unsafe downgrade or false security claim; any RSC adoption automatically reopens the decision.

@@ -111,6 +111,7 @@ function buildPack() {
   const shippedOutcomes = existingPack.session === targetSession
     ? (existingPack.ranked ?? []).filter((item) => item.status === 'shipped')
     : [];
+  const geniusCache = readJson('.cache/genius-list.json', null);
   const genius = readText('docs/GENIUS_LIST.md');
   const taskBoard = readText('context/TASK_BOARD.md');
   const windowsShell = scanWindowsHide(path.join(ROOT, 'scripts'));
@@ -206,7 +207,9 @@ function buildPack() {
     project: status.name ?? status.slug ?? 'PromoGrind',
     session: targetSession,
     sourceSignals: {
-      geniusListEmpty: !/^## /m.test(genius),
+      geniusListEmpty: Number.isFinite(geniusCache?.list?.count)
+        ? geniusCache.list.count === 0
+        : !/^\s*\d+\.\s+/m.test(genius),
       taskBoardBytes: taskBoard.length,
       windowsHideShellViolations: windowsShell.length,
       directChildProcessImports: rawImports.length,

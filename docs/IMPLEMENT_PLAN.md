@@ -1,24 +1,31 @@
-# Implementation Plan — S120
+# Implementation Plan — S121
 
-Source of truth: `docs/AUDIT_2026-07-26.json`.
+Source of truth: `docs/AUDIT_2026-07-31.json`; the Unified Genius List is now truthfully exhausted at zero actionable items.
 
-Execution depth: L3 for all nine live-code-verified items. Status: complete.
+Execution depth: L3 for every verified repo-owned item. Foundations precede façades; token/API work remains last and only if a measured premise appears.
 
-| Order | Audit item | Result | Verification |
+| Order | Work item | State | Required verification |
 |---:|---|---|---|
-| 1 | `public-secret-boundary-ratchet` | Shipped | tracked scan 0; sanitizer 0; classifier/history regressions |
-| 2 | `tri-state-observability` | Shipped | loading/unknown/healthy/degraded model tests |
-| 3 | `attest-before-promote` | Shipped | attestation and workflow DAG regressions |
-| 4 | `target-locked-supabase-deploy` | Shipped | mismatch refusal, manifest, secret-free dry run |
-| 5 | `receipt-addressed-truth-mirrors` | Shipped | strict schema, adversarial parsing, atomic --check |
-| 6 | `affirmative-marketing-consent` | Shipped | UI/auth round trip plus send-boundary Deno tests |
-| 7 | `edge-function-verification-sweep` | Shipped | 15 entrypoints; 5 test files; CI + launch-local |
-| 8 | `accessible-toggle-contract` | Shipped | native switch invariant; no div-checkbox regression |
-| 9 | `agent-capability-truth-contract` | Shipped | source parity; zero unproved callable tools |
+| 0a | `ignis-rescore-overdue` | Done | `PROJECT_STATUS.ignisLastComputed` and score changed from live IGNIS output |
+| 0b | `revenue-signals-overdue` | Done | source-derived `docs/REVENUE_SIGNALS.md` carries the current assessment |
+| 0c | `protocol-faq-cache-contract` | Done | source-fingerprint freshness and deterministic render verification shipped |
+| 1 | `canonical-realized-outcome-contract` | Done | production-shaped outcome vectors pass across replay, journal, counterfactual, mistake, tilt, and twin consumers |
+| 2 | `strict-validation-receipts` | Done | adversarial zero/partial/contradictory/stale/full count matrix passes |
+| 3 | `accessible-high-integrity-outcome-capture` | Done | keyboard/name/pressed/live-region/error-focus checks and fail-closed settlement/skip semantics pass |
+| 4 | `probabilistic-ai-calibration-loop` | Done | Edge normalization and advisor-save-settle-summary end-to-end path pass |
+| 5 | `sober-engagement-contract` | Done | discipline evidence, calm dashboard copy, and SOUL anti-pattern source gate pass |
+| 6 | `multisurface-public-claim-ratchet` | Done | 316 static/application/Edge files pass 18 multilingual rules with a hash-bound receipt |
+| 7 | second-order innovation pack and compound refinements | Done | 3/3 repo-owned innovations shipped; external launch-proof ledger honestly deferred with evidence |
 
-Second-order saturation shipped three additional innovations recorded in `docs/INNOVATION_PACK.md`. External launch proofs and historical credential rotation remain explicit deferrals because repository code cannot truthfully manufacture them.
+## Success bar
+
+- No green or outcome value may be inferred from missing, partial, contradictory, or obsolete evidence.
+- Engagement rewards reviewed decisions and restraint, never profitable variance, betting volume, login compulsion, or urgency.
+- Artificial Intelligence calibration distinguishes attractiveness, confidence, and probability, then resolves from a real outcome.
+- Public claims remain sober across English, Spanish, Portuguese, structured data, and Edge-generated copy.
+- No external proof is fabricated and no sibling repository tree is edited.
 
 ## Skill shim notes
 
-- Newer private audit/implementation helper scripts remain absent from this public repo; the documented manual fallback was used.
-- No sibling repository tree was edited.
+- `scripts/lib/skill-profile.mjs`, `scripts/sample-codebase.mjs`, `scripts/studio-oracle.mjs`, and the local audit renderer are absent in this public repo; the protocol-defined manual fallbacks and the authoritative Studio Ops renderer were used.
+- The primary list's `ask --list` command only lists cache entries and cannot refresh them. S121 treats that premise defect as work to root-fix rather than stamping a date.

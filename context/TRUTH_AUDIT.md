@@ -447,3 +447,16 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Commit `1914e24` reached `origin/main`; brief-format run `30175588383`, CI run `30175588392`, and Deploy Pages run `30175588407` all passed.
 - The deployed workflow's production launch verification and production dashboard smoke passed.
 - Deployment proof does not satisfy the six missing live security headers or the existing external evidence contracts; SPARKED promotion remains NO-GO.
+
+## 2026-08-01 — Session 121 Truth Update
+
+- Outcome truth converged: one authority-aware resolver distinguishes actual, legacy, zero, and missing realized values across every learning consumer.
+- Validation truth tightened: only complete equal positive counts pass; partial, zero, contradictory, stale, and malformed receipts remain non-green with structured reasons.
+- AI truth tightened: opportunity attractiveness is not probability. Calibration accepts only an explicit bounded probability with a nonempty basis, persists its prediction link, and resolves automatically from a canonical settlement.
+- Engagement truth improved: evidence-bearing settlements and reasoned skips count as discipline regardless of profit; login, volume, profit-streak, urgency, and comeback pressure no longer masquerade as progress.
+- Public-claim truth expanded and content-addressed: 316 static/application/Edge files pass 18 multilingual rules; 33 findings were repaired and the income estimator now models only user-entered assumptions.
+- Rendered-pixel truth completed: four production-build captures cover light/dark and desktop/mobile; pixels were reviewed and hash-bound in `docs/visual-qa/LATEST.json`; CANON-053 passes with zero blocking defects.
+- Mailbox truth corrected: Brevo transactional authentication is historical/non-qualifying for the required Zoho on-domain mailbox, delivery, and reply-as criterion.
+- Dependency truth remains explicit: `npm audit` reports two high entries for the RSC-mode React Router advisory. The current static BrowserRouter path is non-reachable and mechanically guarded, but audit green is not claimed.
+- Verification truth: launch-local direct exit 0; 613/613 Vitest; 45/45 Deno tests; all 15 Edge entrypoints; doctor 12/12 and `blockingFailing: 0`; tracked secrets and strict public sanitizer 0; supply-chain incident matches 0.
+- Release truth remains NO-GO for SPARKED despite successful live database/auth/checkout/cleanup probes: staging, six headers, historical rotation, exact deploy authority, Zoho mailbox, auth-email, complete payment, friend, and capture evidence remain unproved.

@@ -26,4 +26,7 @@ assert.match(block, /Workers: unavailable/);
 assert.match(block, /Ark: 169 drained · 5m old · sig failures 0/);
 assert.doesNotMatch(block, /Workers: 0\/\?/);
 
-console.log('startup signal provenance: 8 assertions passing');
+const startupRenderer = fs.readFileSync(path.join(import.meta.dirname, 'render-startup-brief.mjs'), 'utf8');
+assert.match(startupRenderer, /path\.join\(root, 'docs', 'REVENUE_SIGNALS\.md'\)/, 'public-repo startup must fall back to the repo-local revenue source');
+
+console.log('startup signal provenance: 9 assertions passing');

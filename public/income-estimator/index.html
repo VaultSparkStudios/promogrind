@@ -9,6 +9,13 @@
   <meta property="og:title" content="Sports Promo Scenario Planner | PromoGrind" />
   <meta property="og:description" content="No population earnings claims: enter your own assumptions and compare the scenario with realized outcomes." />
   <meta property="og:type" content="website" />
+  <script>
+    (() => {
+      const saved = localStorage.getItem('pg_public_theme');
+      const preferred = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = saved === 'light' || saved === 'dark' ? saved : preferred;
+    })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -76,11 +83,43 @@
       .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
     .trust strong { color: #4ade80; }
     .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 32px; }
+    .topbar .logo { margin-bottom: 0; }
+    .theme-toggle { border: 1px solid #334155; background: #0f1724; color: #cbd5e1; border-radius: 999px; padding: 8px 12px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .theme-toggle:focus-visible { outline: 3px solid #4ade80; outline-offset: 3px; }
+    html[data-theme='light'] { color-scheme: light; }
+    html[data-theme='dark'] { color-scheme: dark; }
+    html[data-theme='light'] body { background: #f4f7f3; color: #17221a; }
+    html[data-theme='light'] h1 { color: #102116; }
+    html[data-theme='light'] .sub,
+    html[data-theme='light'] .footer-note { color: #52635a; }
+    html[data-theme='light'] .card { background: #ffffff; border-color: #ccd8cf; box-shadow: 0 10px 30px rgba(22, 55, 33, .06); }
+    html[data-theme='light'] .card-title,
+    html[data-theme='light'] .big-label { color: #51685a; }
+    html[data-theme='light'] label { color: #294335; }
+    html[data-theme='light'] select,
+    html[data-theme='light'] input[type='number'] { background: #f7faf7; border-color: #b9cabd; color: #17221a; }
+    html[data-theme='light'] .results { background: linear-gradient(135deg, #e9f8ed 0%, #ffffff 100%); border-color: #16833d; }
+    html[data-theme='light'] .results-title,
+    html[data-theme='light'] .big-number,
+    html[data-theme='light'] .logo { color: #087b32; }
+    html[data-theme='light'] .breakdown { border-top-color: #b7dec2; }
+    html[data-theme='light'] .breakdown-row { border-bottom-color: #dce9df; }
+    html[data-theme='light'] .breakdown-label { color: #506258; }
+    html[data-theme='light'] .breakdown-value { color: #17221a; }
+    html[data-theme='light'] .books-badge { background: #e7efe9; color: #405347; }
+    html[data-theme='light'] .disclaimer { background: #eef3ef; border-color: #c7d4ca; color: #4b5e52; }
+    html[data-theme='light'] .trust { background: #ffffff; border-color: #ccd8cf; color: #33483b; }
+    html[data-theme='light'] .theme-toggle { background: #ffffff; border-color: #aebfb3; color: #22382b; }
+    @media (max-width: 480px) { .wrap { padding-top: 18px; } .topbar { margin-bottom: 24px; } }
   </style>
 </head>
 <body>
 <div class="wrap">
-  <a class="logo" href="https://promogrind.bet/">⚡ PromoGrind</a>
+  <div class="topbar">
+    <a class="logo" href="https://promogrind.bet/">⚡ PromoGrind</a>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch color theme">Theme: <span id="theme-label">Dark</span></button>
+  </div>
 
   <h1>Build a Promo-Value Scenario From Your Inputs</h1>
   <p class="sub">PromoGrind supplies no typical earnings assumptions here. Enter only current offers you have verified, then compare this model with realized outcomes in your ledger.</p>
@@ -187,6 +226,17 @@
   </div>
 
 <script>
+  const applyThemeLabel = () => {
+    document.getElementById('theme-label').textContent = document.documentElement.dataset.theme === 'light' ? 'Light' : 'Dark';
+  };
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('pg_public_theme', next);
+    applyThemeLabel();
+  });
+  applyThemeLabel();
+
   const CURRENCY = { US: '$', UK: '£' };
 
   function getInputs() {

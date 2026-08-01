@@ -2,7 +2,7 @@
  * PromoGrind — Stack Builder Edge Function
  *
  * Given a user's bankroll and available book promos, uses Claude to generate
- * an optimal 3-book promo sequence with guaranteed extraction amounts.
+ * an evidence-labeled 3-book promo sequence with modeled return amounts.
  *
  * POST /functions/v1/stack-builder
  * Body: { bankroll: number, booksAvailable: string[], goal?: string }
@@ -57,7 +57,7 @@ serve(async (req) => {
     });
     if (durableLimit) return durableLimit;
 
-    const { bankroll, booksAvailable = [], goal = "maximize guaranteed extraction" } = await req.json();
+    const { bankroll, booksAvailable = [], goal = "maximize modeled return while controlling execution risk" } = await req.json();
 
     if (!bankroll || bankroll < 100) {
       return new Response(JSON.stringify({ error: "Minimum $100 bankroll required" }), {
@@ -82,7 +82,7 @@ serve(async (req) => {
       `- ${p.book} | ${p.type} | Value: $${p.value} | ROI: ${p.roiPct}% | ${p.detail} | Recurring: ${p.recurring}`
     ).join("\n");
 
-    const systemPrompt = `You are a sports betting promo optimization expert. Given a bankroll and list of available sportsbook promos, you create an optimal extraction sequence to maximize guaranteed profit.
+    const systemPrompt = `You are a sports betting promo optimization expert. Given a bankroll and list of available sportsbook promos, create a conditional sequence that compares modeled returns and execution risk.
 
 Rules:
 - Always recommend hedging (using bonus bets or profit boosts with a hedge on the opposing outcome at another book)
@@ -91,6 +91,7 @@ Rules:
 - Be specific with dollar amounts based on the bankroll provided
 - Keep recommendations actionable, not vague
 - Tone: confident math, no gambling encouragement, educational framing
+- Never describe a return as certain. Name changing prices, stake acceptance, limits, void rules, eligibility, and grading differences in assumptions.
 
 Available promos for this user (bankroll: $${bankroll}):
 ${promoContext}
@@ -102,7 +103,7 @@ ${SLUG_GUARDRAIL}`;
     const userPrompt = `My bankroll is $${bankroll}. Return ONLY a valid JSON object (no markdown, no code blocks):
 {
   "summary": "one-sentence overview of the plan",
-  "estimatedTotal": <number — total guaranteed extraction in dollars>,
+  "estimatedTotal": <number — total modeled return in dollars before execution risk>,
   "steps": [
     { "order": 1, "book": "BookName", "promoType": "bonus_bet", "value": <number>, "action": "one-sentence action", "calculatorSlug": "bonus-bet|profit-boost|first-bet|null", "hedgeRequired": true|false }
   ],
