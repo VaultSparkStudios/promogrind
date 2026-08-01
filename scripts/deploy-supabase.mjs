@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+/**
+ * Usage:
+ *   node scripts/deploy-supabase.mjs [--all | --function <name> ...] [--migration]
+ *     [--target <project-ref>] [--apply] [--json]
+ *
+ * Defaults to a credential-free dry run. `--apply` resolves the pinned
+ * PromoGrind deployment capability through the Studio secrets gateway.
+ */
 
 import crypto from "node:crypto";
 import fs from "node:fs";

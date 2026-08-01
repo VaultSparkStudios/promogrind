@@ -1,36 +1,33 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-01T00:55:59.2488121-04:00",
-  "themes": [
-    "dark",
-    "light"
-  ],
+  "capturedAt": "2026-08-01T18:19:07.6543181-04:00",
+  "themes": ["dark", "light"],
   "captures": [
     {
-      "file": "captures/income-estimator-desktop-dark.png",
-      "sha256": "b230e0d230306fa0c29a4896ae63cfdf32094f189dc3c9976513c8efbaf0d7c5",
-      "page": "/income-estimator/ - default scenario result",
+      "file": "captures/decision-controls-desktop-dark.png",
+      "sha256": "4353965d15d129b04376013c9ff070f819bce7536fd53a2b2dc2cb2dedb5e6f9",
+      "page": "/bet-tracker - empty decision tracker and primary controls",
       "theme": "dark",
       "viewport": { "width": 1440, "height": 1000 }
     },
     {
-      "file": "captures/income-estimator-desktop-light.png",
-      "sha256": "db46887ed9ec1703d5d444a7393f8647a340418d50fdd98429b57c5f8e4c93b8",
-      "page": "/income-estimator/ - default scenario result",
+      "file": "captures/decision-controls-desktop-light.png",
+      "sha256": "ad0be9a1a2630d94927a9cf719e7bd4424b12d6f4da2930733c655d2c0d362ff",
+      "page": "/bet-tracker - empty decision tracker and primary controls",
       "theme": "light",
       "viewport": { "width": 1440, "height": 1000 }
     },
     {
-      "file": "captures/income-estimator-mobile-dark.png",
-      "sha256": "7fccd117036f6bc452dc8705a95420d906a51d1c3af0aa57849e26c435dd0c9b",
-      "page": "/income-estimator/ - default scenario result",
+      "file": "captures/decision-controls-mobile-dark.png",
+      "sha256": "f1f1637ac82c7a9b6d8b00423cba68117f067d96cb76e17004d7b40c18c365a0",
+      "page": "/bet-tracker - mobile decision controls and footer",
       "theme": "dark",
       "viewport": { "width": 390, "height": 844 }
     },
     {
-      "file": "captures/income-estimator-mobile-light.png",
-      "sha256": "37e56a134a9877bdd7706b744abd95acde683420e5ba74ca383f222092ad7e3b",
-      "page": "/income-estimator/ - default scenario result",
+      "file": "captures/decision-controls-mobile-light.png",
+      "sha256": "c86491388fff7b30eebac38860944915a9bbdef30c26f92d5585858b5c4a7b9d",
+      "page": "/bet-tracker - mobile decision controls and footer",
       "theme": "light",
       "viewport": { "width": 390, "height": 844 }
     }
@@ -39,13 +36,14 @@
     "renderedPixelsReviewed": true,
     "reviewer": "Codex GPT-5",
     "findings": [
-      "No blocking readability, overlap, clipping, or horizontal-overflow defect was visible in the reviewed desktop and mobile renders.",
-      "Both palettes preserve distinct surfaces, readable controls, visible focusable actions, and the green result hierarchy."
+      "The original mobile header exceeded the 390px viewport and the fixed AI-chat launcher covered a decision field.",
+      "After repair, the document and header both measure exactly 390px wide with no horizontal overflow.",
+      "All reviewed labels, controls, surfaces, and action hierarchy remain legible in desktop and mobile dark and light themes."
     ],
     "fixesApplied": [
-      "Added a persistent accessible light/dark theme control tied to system preference.",
-      "Added light-palette surface, border, text, input, slider, result-card, and footer overrides.",
-      "Captured the built static estimator route directly so the receipt cannot accidentally attest the SPA age gate."
+      "Compacted signed-out mobile account actions to Sign In and Join Free.",
+      "Moved the AI-chat launcher into normal document flow on mobile while preserving its desktop floating behavior.",
+      "Associated 60 visible labels and added keyboard semantics or native buttons to all governed non-native decision controls."
     ],
     "blockingDefectsOpen": 0
   }

@@ -57,24 +57,24 @@ function TaxesEstimator({ appData }) {
 
       <div style={{display:'grid',gap:12,marginBottom:20}}>
         <div>
-          <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Gross Betting Profit ($)</label>
-          <input type="number" value={manualProfit} onChange={e => setManualProfit(e.target.value)}
+          <label htmlFor="tax-gross-profit" style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Gross Betting Profit ($)</label>
+          <input id="tax-gross-profit" type="number" value={manualProfit} onChange={e => setManualProfit(e.target.value)}
             placeholder={grossProfit ? grossProfit.toFixed(2) : '0.00'}
             style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:14,boxSizing:'border-box'}} />
           {ledger.length > 0 && !manualProfit && <div style={{fontSize:11,color:'#475569',marginTop:3}}>Using ledger total. Enter a value to override.</div>}
         </div>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
           <div>
-            <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Filing Status</label>
-            <select value={filingStatus} onChange={e => setFilingStatus(e.target.value)}
+            <label htmlFor="tax-filing-status" style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>Filing Status</label>
+            <select id="tax-filing-status" value={filingStatus} onChange={e => setFilingStatus(e.target.value)}
               style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}>
               <option value="single">Single</option>
               <option value="married">Married Filing Jointly</option>
             </select>
           </div>
           <div>
-            <label style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>State Tax Rate (%)</label>
-            <input type="number" value={stateRate} onChange={e => setStateRate(e.target.value)} min="0" max="15" step="0.1"
+            <label htmlFor="tax-state-rate" style={{display:'block',color:'#94a3b8',fontSize:12,marginBottom:4}}>State Tax Rate (%)</label>
+            <input id="tax-state-rate" type="number" value={stateRate} onChange={e => setStateRate(e.target.value)} min="0" max="15" step="0.1"
               style={{width:'100%',padding:'9px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:14,boxSizing:'border-box'}} />
           </div>
         </div>

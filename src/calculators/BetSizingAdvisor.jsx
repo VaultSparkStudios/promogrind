@@ -30,8 +30,8 @@ export default function BetSizingAdvisor() {
           <In l="Concurrent Bets" v={numBets} set={setNumBets} ph="5" />
           <In l="Avg Edge %" v={avgEdge} set={setAvgEdge} ph="3" />
           <div style={S.col}>
-            <label style={S.label}>Sizing Style</label>
-            <select style={S.input} value={style} onChange={(e) => setStyle(e.target.value)}>
+            <label htmlFor="bet-sizing-style" style={S.label}>Sizing Style</label>
+            <select id="bet-sizing-style" style={S.input} value={style} onChange={(e) => setStyle(e.target.value)}>
               <option value="flat">Flat 1%</option>
               <option value="quarter-kelly">Quarter Kelly</option>
               <option value="half-kelly">Half Kelly</option>

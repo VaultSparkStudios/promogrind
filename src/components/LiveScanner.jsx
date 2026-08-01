@@ -9,6 +9,7 @@ import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { appendWorkflow } from "../workflows/store.js";
 import { scannerOpportunityToWorkflow } from "../workflows/suggestions.js";
+import { createEntityId } from "../lib/entityId.js";
 
 const SPORTS_LIST = [
   { key:"americanfootball_nfl",  label:"NFL"  },
@@ -144,7 +145,7 @@ const LiveScanner = ({ proStatus, mode }) => {
   const [oppLog, setOppLog] = useState(()=>{try{return JSON.parse(localStorage.getItem('pg_opp_log')||'[]');}catch{return [];}});
   const [showOppLog, setShowOppLog] = useState(false);
   const logOpportunity=(r,type)=>{
-    const entry={id:Date.now(),ts:new Date().toISOString(),type,sport:r.sport,books:type==='arb'?[r.b1,r.b2]:[r.book],roi:type==='arb'?r.roi:r.ev,acted:false,date:new Date().toISOString().split('T')[0],game:r.game};
+    const entry={id:createEntityId("opportunity"),ts:new Date().toISOString(),type,sport:r.sport,books:type==='arb'?[r.b1,r.b2]:[r.book],roi:type==='arb'?r.roi:r.ev,acted:false,date:new Date().toISOString().split('T')[0],game:r.game};
     setOppLog(log=>{const n=[entry,...log].slice(0,20);try{localStorage.setItem('pg_opp_log',JSON.stringify(n));}catch{};return n;});
     if(toast) toast('Opportunity logged',K.gn);
   };
@@ -324,7 +325,7 @@ const LiveScanner = ({ proStatus, mode }) => {
           {watchlist.map(game=>(
             <div key={game} style={{display:"flex",alignItems:"center",gap:4,padding:"3px 8px",background:`${K.yl}15`,border:`1px solid ${K.yl}40`,borderRadius:50,fontSize:10,color:K.yl}}>
               <span>{game}</span>
-              <span onClick={()=>toggleWatchlist(game)} style={{cursor:"pointer",color:K.rd,fontWeight:700,marginLeft:2}}>✕</span>
+              <button type="button" aria-label={`Remove ${game} from watchlist`} onClick={()=>toggleWatchlist(game)} style={{cursor:"pointer",color:K.rd,fontWeight:700,marginLeft:2,background:"transparent",border:0,padding:3}}>✕</button>
             </div>
           ))}
         </div>

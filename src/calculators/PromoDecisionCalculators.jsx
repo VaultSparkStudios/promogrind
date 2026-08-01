@@ -25,12 +25,12 @@ export const DepositOptimizer = () => {
         <Tl t="Deposit Optimizer" badge="BANKROLL PLANNER" bc={K.gn} shareable />
         <div style={S.row}>
           <div style={S.col}>
-            <label style={S.label}>Your Bankroll</label>
-            <input style={S.input} value={bankroll} onChange={(event) => setBankroll(event.target.value)} placeholder="3000" />
+            <label htmlFor="deposit-optimizer-bankroll" style={S.label}>Your Bankroll</label>
+            <input id="deposit-optimizer-bankroll" style={S.input} value={bankroll} onChange={(event) => setBankroll(event.target.value)} placeholder="3000" />
           </div>
           <div style={S.col}>
-            <label style={S.label}>Your State</label>
-            <select style={S.input} value={userState} onChange={(event) => {
+            <label htmlFor="deposit-optimizer-state" style={S.label}>Your State</label>
+            <select id="deposit-optimizer-state" style={S.input} value={userState} onChange={(event) => {
               setUserState(event.target.value);
               try { localStorage.setItem("pg_user_state", event.target.value); } catch {}
             }}>
@@ -154,9 +154,9 @@ export const PromoGuarantee = () => {
       <div style={S.card}>
         <Tl t="Promo Return Model" badge="CONVERSION EST." bc={K.gn} shareable />
         <div style={S.row}>
-          <div style={S.col}><label style={S.label}>Promo Type</label><select style={S.input} value={promoType} onChange={(event) => setPromoType(event.target.value)}>{promoTypes.map((promo) => <option key={promo.id} value={promo.id}>{promo.label}</option>)}</select></div>
-          <div style={S.col}><label style={S.label}>Promo Size</label><input style={S.input} value={promoSize} onChange={(event) => setPromoSize(event.target.value)} placeholder="200" /></div>
-          <div style={S.col}><label style={S.label}>Your State</label><select style={S.input} value={userState} onChange={(event) => {
+          <div style={S.col}><label htmlFor="promo-return-type" style={S.label}>Promo Type</label><select id="promo-return-type" style={S.input} value={promoType} onChange={(event) => setPromoType(event.target.value)}>{promoTypes.map((promo) => <option key={promo.id} value={promo.id}>{promo.label}</option>)}</select></div>
+          <div style={S.col}><label htmlFor="promo-return-size" style={S.label}>Promo Size</label><input id="promo-return-size" style={S.input} value={promoSize} onChange={(event) => setPromoSize(event.target.value)} placeholder="200" /></div>
+          <div style={S.col}><label htmlFor="promo-return-state" style={S.label}>Your State</label><select id="promo-return-state" style={S.input} value={userState} onChange={(event) => {
             setUserState(event.target.value);
             try { localStorage.setItem("pg_user_state", event.target.value); } catch {}
           }}><option value="">All States</option>{US_STATES.map((state) => <option key={state} value={state}>{state}</option>)}</select></div>

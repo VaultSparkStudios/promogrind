@@ -55,7 +55,7 @@ export function buildAppTabs(c) {
       { n: "Free Bet Arb", slug: "free-bet-arb", c: c.FreeBetArbTracker },
       { n: "Trade Journal", slug: "trade-journal", c: c.PromoJournal },
       { n: "Odds Compare", slug: "odds-compare", c: c.OddsComparisonTable },
-      { n: "Profit Cert", slug: "profit-cert", c: c.ProfitCertificate },
+      { n: "Outcome Review", slug: "profit-cert", c: c.ProfitCertificate },
     ] },
     { group: "Live", items: [
       { n: "Arb Scanner", slug: "arb-scanner", c: c.LiveScanner, pro: true },

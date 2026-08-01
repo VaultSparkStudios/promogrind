@@ -3,6 +3,7 @@ import { toD, f, downloadFile, K, font } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
 import { S, In, Tl, Nt, Help } from "../ui.jsx";
+import { createEntityId } from "../lib/entityId.js";
 
 const FreeBetArbTracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -12,7 +13,7 @@ const FreeBetArbTracker = () => {
   const [form, setForm] = useState({date:new Date().toISOString().split('T')[0],bookA:'',bookB:'',promoType:'Bonus Bet',amount:'',hedgeAmt:'',profit:'',status:'open',notes:''});
   const add = () => {
     if(!form.amount) return;
-    save([{...form,id:Date.now()},...arbs]);
+    save([{...form,id:createEntityId("arb")},...arbs]);
     setForm(f=>({...f,amount:'',hedgeAmt:'',profit:'',notes:''}));
     if(toast) toast('✓ Arb logged',K.gn);
   };
@@ -33,12 +34,12 @@ const FreeBetArbTracker = () => {
       {arbs.length>0&&<button onClick={exportCSV} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,fontWeight:600}}>↓ Export CSV</button>}
     </div>
     <div style={S.row}>
-      <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-      <div style={S.col}><label style={S.label}>Book A</label><input style={S.input} value={form.bookA} onChange={e=>setForm(f=>({...f,bookA:e.target.value}))} placeholder="DraftKings"/></div>
-      <div style={S.col}><label style={S.label}>Book B</label><input style={S.input} value={form.bookB} onChange={e=>setForm(f=>({...f,bookB:e.target.value}))} placeholder="FanDuel"/></div>
+      <div style={S.col}><label htmlFor="arb-tracker-date" style={S.label}>Date</label><input id="arb-tracker-date" style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+      <div style={S.col}><label htmlFor="arb-tracker-book-a" style={S.label}>Book A</label><input id="arb-tracker-book-a" style={S.input} value={form.bookA} onChange={e=>setForm(f=>({...f,bookA:e.target.value}))} placeholder="DraftKings"/></div>
+      <div style={S.col}><label htmlFor="arb-tracker-book-b" style={S.label}>Book B</label><input id="arb-tracker-book-b" style={S.input} value={form.bookB} onChange={e=>setForm(f=>({...f,bookB:e.target.value}))} placeholder="FanDuel"/></div>
     </div>
     <div style={S.row}>
-      <div style={S.col}><label style={S.label}>Promo Type</label><select style={S.input} value={form.promoType} onChange={e=>setForm(f=>({...f,promoType:e.target.value}))}>
+      <div style={S.col}><label htmlFor="arb-tracker-promo-type" style={S.label}>Promo Type</label><select id="arb-tracker-promo-type" style={S.input} value={form.promoType} onChange={e=>setForm(f=>({...f,promoType:e.target.value}))}>
         {["Bonus Bet","Same-Game Arb","Insurance","Boost"].map(t=><option key={t}>{t}</option>)}
       </select></div>
       <In l="Amount" v={form.amount} set={v=>setForm(f=>({...f,amount:v}))} pre="$"/>
@@ -46,11 +47,11 @@ const FreeBetArbTracker = () => {
       <In l="Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$"/>
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
-      <div style={S.col}><label style={S.label}>Status</label><select style={S.input} value={form.status} onChange={e=>setForm(f=>({...f,status:e.target.value}))}>
+      <div style={S.col}><label htmlFor="arb-tracker-status" style={S.label}>Status</label><select id="arb-tracker-status" style={S.input} value={form.status} onChange={e=>setForm(f=>({...f,status:e.target.value}))}>
         {["open","won","lost"].map(s=><option key={s}>{s}</option>)}
       </select></div>
-      <div style={{flex:2,minWidth:120}}><label style={S.label}>Notes</label><input style={S.input} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="optional notes"/></div>
-      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{flex:2,minWidth:120}}><label htmlFor="arb-tracker-notes" style={S.label}>Notes</label><input id="arb-tracker-notes" style={S.input} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="optional notes"/></div>
+      <div style={{...S.col,minWidth:80,paddingTop:18}}><button type="button" onClick={add} style={{padding:"8px 16px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     {arbs.length>0&&<div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
@@ -65,7 +66,7 @@ const FreeBetArbTracker = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{a.hedgeAmt?`$${a.hedgeAmt}`:"—"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(a.profit)>=0?K.gn:K.rd,fontWeight:600}}>{a.profit?`${parseFloat(a.profit)>=0?"+":""}$${a.profit}`:"—"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(a.status==="won"?K.gn:a.status==="lost"?K.rd:K.yl)}>{a.status}</span></td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(a.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>✕</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><button type="button" aria-label={`Delete ${a.bookA} and ${a.bookB} arbitrage entry`} onClick={()=>del(a.id)} style={{cursor:"pointer",color:K.rd,fontSize:10,background:"transparent",border:0,padding:4}}>✕</button></td>
           </tr>
         ))}</tbody>
       </table>
@@ -143,7 +144,7 @@ const PromoJournal = () => {
   const save = (j) => syncAppData({...data, journal:j});
   const add = () => {
     if(!form.profit) return;
-    const entry={...form,id:Date.now(),tags:form.tags.split(',').map(t=>t.trim()).filter(Boolean)};
+    const entry={...form,id:createEntityId("journal"),tags:form.tags.split(',').map(t=>t.trim()).filter(Boolean)};
     save([entry,...journal]);
     setForm(f=>({...f,notes:"",profit:"",tags:""}));
     if(toast) toast('✓ Journal entry added',K.gn);
@@ -154,15 +155,15 @@ const PromoJournal = () => {
   const sorted = [...filtered].sort((a,b)=>b.date.localeCompare(a.date));
   return (<div style={S.card}><Tl t="Promo Trade Journal" badge="TRACK" bc={K.ac}/>
     <div style={S.row}>
-      <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-      <div style={{...S.col,minWidth:140}}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
-      <div style={{...S.col,minWidth:140}}><label style={S.label}>Type</label><select style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
+      <div style={S.col}><label htmlFor="journal-date" style={S.label}>Date</label><input id="journal-date" style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+      <div style={{...S.col,minWidth:140}}><label htmlFor="journal-book" style={S.label}>Book</label><select id="journal-book" style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
+      <div style={{...S.col,minWidth:140}}><label htmlFor="journal-type" style={S.label}>Type</label><select id="journal-type" style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
     </div>
     <div style={S.row}>
       <In l="Net Profit" v={form.profit} set={v=>setForm(f=>({...f,profit:v}))} pre="$" ph="50"/>
       <In l="Tags (comma-sep)" v={form.tags} set={v=>setForm(f=>({...f,tags:v}))} ph="arb,boost"/>
     </div>
-    <div style={{marginBottom:12}}><label style={S.label}>Notes</label><textarea style={{...S.input,height:64,resize:"vertical"}} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What promo, outcome, lessons learned…"/></div>
+    <div style={{marginBottom:12}}><label htmlFor="journal-notes" style={S.label}>Notes</label><textarea id="journal-notes" style={{...S.input,height:64,resize:"vertical"}} value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What promo, outcome, lessons learned…"/></div>
     <button onClick={add} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,marginBottom:16}}>+ Add Entry</button>
     <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap",alignItems:"center"}}>
       <span style={{fontSize:10,color:K.mt}}>Filter:</span>
@@ -193,7 +194,7 @@ const PromoJournal = () => {
             {e.notes&&<div style={{fontSize:11,color:K.dm,marginBottom:4,maxWidth:400,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{e.notes}</div>}
             {e.tags&&e.tags.length>0&&<div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{e.tags.map((t,i)=><span key={i} style={S.tag(K.pp)}>{t}</span>)}</div>}
           </div>
-          <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:11,flexShrink:0}}>✕</span>
+          <button type="button" aria-label={`Delete ${e.book} journal entry`} onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:11,flexShrink:0,background:"transparent",border:0,padding:4}}>✕</button>
         </div>
       </div>
     ))}
@@ -261,7 +262,7 @@ const OddsComparisonTable = () => {
               {spread&&<div style={{fontSize:9,color:K.yl}}>+{spread}¢ vs worst</div>}
             </td>
             <td style={{padding:"4px 8px",borderBottom:`1px solid ${K.bd}`}}>
-              {rows.length>1&&<span onClick={()=>removeRow(i)} style={{cursor:"pointer",color:K.rd,fontSize:11}}>✕</span>}
+              {rows.length>1&&<button type="button" aria-label={`Remove odds comparison row ${i+1}`} onClick={()=>removeRow(i)} style={{cursor:"pointer",color:K.rd,fontSize:11,background:"transparent",border:0,padding:4}}>✕</button>}
             </td>
           </tr>);
         })}</tbody>

@@ -48,10 +48,11 @@ export default function PromoIntakePanel({ onOpenCalculator, initialText = "" })
         </div>
       </div>
 
-      <label style={{ display: "block", fontSize: 11, color: K.mt, marginBottom: 4 }}>
+      <label htmlFor="promo-intake-text" style={{ display: "block", fontSize: 11, color: K.mt, marginBottom: 4 }}>
         Paste promo text
       </label>
       <textarea
+        id="promo-intake-text"
         value={text}
         onChange={(event) => setText(event.target.value)}
         rows={4}

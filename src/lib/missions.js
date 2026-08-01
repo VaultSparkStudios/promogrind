@@ -1,21 +1,21 @@
 // Daily review actions — 3 deterministic evidence prompts seeded from the date.
 
 const POOL = [
-  { id: 'log_ledger',     label: 'Log a result',          desc: 'Record a P&L entry in the Ledger',        xp: 10, nav: '/ledger',          check: (d, date) => (d.ledger||[]).some(e => (e.date||'').slice(0,10) === date) },
-  { id: 'rate_settle',    label: 'Rate a settlement',     desc: 'Provide feedback on a settled bet',       xp: 15, nav: '/sportsbooks',      check: (d, date) => (d.resultFeedback||[]).some(f => f.status==='settled' && (f.updatedAt||f.createdAt||'').slice(0,10) === date) },
-  { id: 'add_workflow',   label: 'Queue an action',       desc: 'Add an item to your Workflow Inbox',      xp: 10, nav: '/dashboard',        check: (d, date) => (d.workflowInbox||[]).some(w => (w.createdAt||'').slice(0,10) === date) },
-  { id: 'add_bet',        label: 'Track an open bet',     desc: 'Add a bet to the Open Bets tracker',      xp: 10, nav: '/dashboard',        check: (d, date) => (d.bets||[]).some(b => (b.createdAt||b.date||'').slice(0,10) === date) },
-  { id: 'run_bonus',      label: 'Convert a bonus bet',   desc: 'Use the Bonus Bet Calculator',            xp: 8,  nav: '/bonus-bet',        check: () => todayFlag('pg_used_bonus_bet') },
-  { id: 'run_arb',        label: 'Review an arb',         desc: 'Use the Arb 2-Way Calculator',            xp: 8,  nav: '/arb-2way',         check: () => todayFlag('pg_used_arb') },
-  { id: 'run_boost',      label: 'Size a profit boost',   desc: 'Use the Profit Boost Calculator',         xp: 8,  nav: '/profit-boost',     check: () => todayFlag('pg_used_boost') },
-  { id: 'run_kelly',      label: 'Size with Kelly',       desc: 'Use the Kelly Criterion Calculator',      xp: 8,  nav: '/kelly',            check: () => todayFlag('pg_used_kelly') },
-  { id: 'open_advisor',   label: 'Consult the Advisor',   desc: 'Open the AI Promo Advisor',               xp: 10, nav: '/promo-advisor',    check: () => todayFlag('pg_advisor_opened') },
-  { id: 'check_insights', label: 'Review outcomes',       desc: 'Inspect realized performance in Track Insights', xp: 8, nav: '/edge-dashboard', check: () => todayFlag('pg_insights_visited') },
-  { id: 'check_brief',    label: 'Read your brief',       desc: 'Open the Daily Brief',                    xp: 5,  nav: '/daily-brief',      check: () => todayFlag('pg_brief_visited') },
-  { id: 'mark_book',      label: 'Update a book',         desc: 'Change a sportsbook status in Tracker',   xp: 12, nav: '/sportsbooks',      check: () => todayFlag('pg_book_updated') },
-  { id: 'run_nv',         label: 'Find fair odds',        desc: 'Use the No-Vig Calculator',               xp: 8,  nav: '/no-vig',           check: () => todayFlag('pg_used_novig') },
-  { id: 'set_bankroll',   label: 'Set your bankroll',     desc: 'Enter your current bankroll on the dashboard', xp: 5, nav: '/dashboard',  check: (d) => !!(d.bankroll || getFlag('pg_bankroll')) },
-  { id: 'run_first_bet',  label: 'Analyze a first bet',   desc: 'Use the First Bet Safety Net Calculator', xp: 8,  nav: '/first-bet',        check: () => todayFlag('pg_used_first_bet') },
+  { id: 'log_ledger',     label: 'Log a result',          desc: 'Record a P&L entry in the Ledger',        nav: '/ledger',          check: (d, date) => (d.ledger||[]).some(e => (e.date||'').slice(0,10) === date) },
+  { id: 'rate_settle',    label: 'Rate a settlement',     desc: 'Provide feedback on a settled bet',       nav: '/sportsbooks',      check: (d, date) => (d.resultFeedback||[]).some(f => f.status==='settled' && (f.updatedAt||f.createdAt||'').slice(0,10) === date) },
+  { id: 'add_workflow',   label: 'Queue an action',       desc: 'Add an item to your Workflow Inbox',      nav: '/dashboard',        check: (d, date) => (d.workflowInbox||[]).some(w => (w.createdAt||'').slice(0,10) === date) },
+  { id: 'add_bet',        label: 'Track an open bet',     desc: 'Add a bet to the Open Bets tracker',      nav: '/dashboard',        check: (d, date) => (d.bets||[]).some(b => (b.createdAt||b.date||'').slice(0,10) === date) },
+  { id: 'run_bonus',      label: 'Convert a bonus bet',   desc: 'Use the Bonus Bet Calculator',            nav: '/bonus-bet',        check: () => todayFlag('pg_used_bonus_bet') },
+  { id: 'run_arb',        label: 'Review an arb',         desc: 'Use the Arb 2-Way Calculator',            nav: '/arb-2way',         check: () => todayFlag('pg_used_arb') },
+  { id: 'run_boost',      label: 'Size a profit boost',   desc: 'Use the Profit Boost Calculator',         nav: '/profit-boost',     check: () => todayFlag('pg_used_boost') },
+  { id: 'run_kelly',      label: 'Size with Kelly',       desc: 'Use the Kelly Criterion Calculator',      nav: '/kelly',            check: () => todayFlag('pg_used_kelly') },
+  { id: 'open_advisor',   label: 'Consult the Advisor',   desc: 'Open the AI Promo Advisor',               nav: '/promo-advisor',    check: () => todayFlag('pg_advisor_opened') },
+  { id: 'check_insights', label: 'Review outcomes',       desc: 'Inspect realized performance in Track Insights', nav: '/edge-dashboard', check: () => todayFlag('pg_insights_visited') },
+  { id: 'check_brief',    label: 'Read your brief',       desc: 'Open the Daily Brief',                    nav: '/daily-brief',      check: () => todayFlag('pg_brief_visited') },
+  { id: 'mark_book',      label: 'Update a book',         desc: 'Change a sportsbook status in Tracker',   nav: '/sportsbooks',      check: () => todayFlag('pg_book_updated') },
+  { id: 'run_nv',         label: 'Find fair odds',        desc: 'Use the No-Vig Calculator',               nav: '/no-vig',           check: () => todayFlag('pg_used_novig') },
+  { id: 'set_bankroll',   label: 'Set your bankroll',     desc: 'Enter your current bankroll on the dashboard', nav: '/dashboard',  check: (d) => !!(d.bankroll || getFlag('pg_bankroll')) },
+  { id: 'run_first_bet',  label: 'Analyze a first bet',   desc: 'Use the First Bet Safety Net Calculator', nav: '/first-bet',        check: () => todayFlag('pg_used_first_bet') },
 ];
 
 function todayStr() { return new Date().toISOString().slice(0, 10); }
@@ -70,17 +70,6 @@ export function completeMission(missionId, date = todayStr()) {
     }
     return true;
   } catch { return false; }
-}
-
-export function getTodayXp(date = todayStr()) {
-  try {
-    const data = JSON.parse(localStorage.getItem('pg_missions') || '{}');
-    const completed = data[date] || [];
-    return completed.reduce((s, id) => {
-      const m = POOL.find(x => x.id === id);
-      return s + (m?.xp || 0);
-    }, 0);
-  } catch { return 0; }
 }
 
 // Mark a calculator-specific flag for mission detection

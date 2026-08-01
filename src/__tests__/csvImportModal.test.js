@@ -1,10 +1,8 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { parseBetCsvRows } from "../app/CSVImportModal.jsx";
 
 describe("parseBetCsvRows", () => {
   it("maps common sportsbook CSV headers into bet tracker rows", () => {
-    vi.spyOn(Date, "now").mockReturnValue(1000);
-
     const rows = parseBetCsvRows(
       "date,book,odds,stake,status,event\n2026-03-01,DraftKings,+150,$50,win,Chiefs ML",
       "2026-06-30",
@@ -12,7 +10,7 @@ describe("parseBetCsvRows", () => {
 
     expect(rows).toEqual([
       {
-        id: 1000,
+        id: "pg-bet-csv-v1-6d54e3a3f0069cd5",
         date: "2026-03-01",
         book: "DraftKings",
         type: "Moneyline",
@@ -24,7 +22,11 @@ describe("parseBetCsvRows", () => {
       },
     ]);
 
-    vi.restoreAllMocks();
+  });
+
+  it("keeps a repeated import idempotent", () => {
+    const csv = "date,book,odds,stake,status,event\n2026-03-01,DraftKings,+150,$50,win,Chiefs ML";
+    expect(parseBetCsvRows(csv, "2026-06-30")[0].id).toBe(parseBetCsvRows(csv, "2026-08-01")[0].id);
   });
 
   it("rejects header-only input", () => {

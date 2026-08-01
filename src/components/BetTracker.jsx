@@ -6,6 +6,7 @@ import { S, In, Tl } from "../ui.jsx";
 import { CSVImportModal } from "../app/CSVImportModal.jsx";
 import { BET_TRACKER_UI } from "../app/appText.js";
 import { parseBetSlip } from "../app/parseBetSlip.js";
+import { createEntityId } from "../lib/entityId.js";
 
 const BetTracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
@@ -21,7 +22,7 @@ const BetTracker = () => {
   const add = () => {
     if(!form.stake||!form.odds) return;
     const toWin = calcToWin(form.odds, form.stake);
-    save([{...form,toWin,id:Date.now()},...bets]);
+    save([{...form,toWin,id:createEntityId("bet")},...bets]);
     setForm(f=>({...f,stake:"",odds:"+110",toWin:"",notes:""}));
     if(toast) toast("Bet added");
   };
@@ -45,14 +46,14 @@ const BetTracker = () => {
   const atRisk = open.reduce((s,b)=>s+(parseFloat(b.stake)||0),0);
   const potentialWin = open.reduce((s,b)=>s+(parseFloat(b.toWin)||0),0);
   const settled = bets.filter(b=>b.status==="won"||b.status==="lost");
-  const winRate = settled.length ? (bets.filter(b=>b.status==="won").length/settled.length*100) : null;
+  const positiveOutcomeShare = settled.length ? (bets.filter(b=>b.status==="won").length/settled.length*100) : null;
   const statusColor = {open:K.yl,won:K.gn,lost:K.rd,void:K.mt};
   return (<div style={S.card}><Tl t="Pending Bet Tracker" badge="OPEN BETS" bc={K.yl}/>
     <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
       <div><div style={{fontSize:10,color:K.mt}}>OPEN BETS</div><div style={S.big(K.yl)}>{open.length}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>AT RISK</div><div style={S.big(K.rd)}>${f(atRisk)}</div></div>
       <div><div style={{fontSize:10,color:K.mt}}>TO WIN</div><div style={S.big(K.gn)}>${f(potentialWin)}</div></div>
-      {winRate!==null&&<div><div style={{fontSize:10,color:K.mt}}>WIN RATE</div><div style={S.big(winRate>=55?K.gn:winRate>=45?K.yl:K.rd,{fontSize:22})}>{f(winRate,1)}%</div><div style={{fontSize:9,color:K.mt}}>{settled.length} settled</div></div>}
+      {positiveOutcomeShare!==null&&<div><div style={{fontSize:10,color:K.mt}}>POSITIVE OUTCOME SHARE</div><div style={S.big(K.ac,{fontSize:22})}>{f(positiveOutcomeShare,1)}%</div><div style={{fontSize:9,color:K.mt}}>{settled.length} settled · descriptive, not predictive</div></div>}
       {open.length>0&&(()=>{
         const ev=open.reduce((s,b)=>{
           const d=toD(b.odds); if(d<=1) return s;
@@ -66,7 +67,7 @@ const BetTracker = () => {
       {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.exportCsvButton}</button>}
       {showPasteSlip&&<div style={{width:"100%",marginTop:8,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
         <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:8}}>Paste Bet Slip Text</div>
-        <textarea style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder={BET_TRACKER_UI.slipPlaceholder}/>
+        <textarea aria-label="Bet slip text" style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder={BET_TRACKER_UI.slipPlaceholder}/>
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>{const p=parseBetSlip(slipText);setSlipParsed(p);}} style={{padding:"6px 14px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Parse</button>
           {slipParsed&&<button onClick={()=>{setForm(prev=>({...prev,...slipParsed,toWin:slipParsed.stake&&slipParsed.odds?f((parseFloat(slipParsed.stake||0))*(toD(slipParsed.odds||"+100")-1)):""}));setShowPasteSlip(false);setSlipParsed(null);setSlipText("");}} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Use Parsed Values</button>}
@@ -75,15 +76,15 @@ const BetTracker = () => {
       </div>}
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
-      <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-      <div style={{...S.col,minWidth:140}}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
-      <div style={{...S.col,minWidth:140}}><label style={S.label}>Bet Type</label><select style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Moneyline","Spread","Total","Parlay","Prop","Bonus Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
+      <div style={S.col}><label htmlFor="bet-tracker-date" style={S.label}>Date</label><input id="bet-tracker-date" style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+      <div style={{...S.col,minWidth:140}}><label htmlFor="bet-tracker-book" style={S.label}>Book</label><select id="bet-tracker-book" style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
+      <div style={{...S.col,minWidth:140}}><label htmlFor="bet-tracker-type" style={S.label}>Bet Type</label><select id="bet-tracker-type" style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Moneyline","Spread","Total","Parlay","Prop","Bonus Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
       <In l="Odds" v={form.odds} set={v=>{setForm(f=>({...f,odds:v,toWin:calcToWin(v,f.stake)}));}} ph="+110"/>
       <In l="Stake" v={form.stake} set={v=>{setForm(f=>({...f,stake:v,toWin:calcToWin(f.odds,v)}));}} pre="$" ph="100"/>
       <In l="To Win (auto)" v={form.toWin} set={v=>setForm(f=>({...f,toWin:v}))} pre="$" ph="auto"/>
-      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{...S.col,minWidth:80,paddingTop:18}}><button type="button" onClick={add} style={{padding:"8px 16px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     {bets.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
       <div style={{fontSize:18,fontWeight:700,letterSpacing:"1px",marginBottom:8,color:K.mt}}>{BET_TRACKER_UI.noBetsGlyph}</div>
@@ -102,12 +103,12 @@ const BetTracker = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>${e.stake}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{e.toWin?`$${e.toWin}`:"-"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-              <select value={e.status} onChange={ev=>setStatus(e.id,ev.target.value)} style={{...S.input,width:80,padding:"3px 6px",fontSize:10,color:statusColor[e.status]||K.tx}}>
+              <select aria-label={`Status for ${e.book} ${e.type}`} value={e.status} onChange={ev=>setStatus(e.id,ev.target.value)} style={{...S.input,width:80,padding:"3px 6px",fontSize:10,color:statusColor[e.status]||K.tx}}>
                 {["open","won","lost","void"].map(s=><option key={s} value={s}>{s.toUpperCase()}</option>)}
               </select>
             </td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{gr?<span style={S.tag(gr.c)}>{gr.g}</span>:<span style={{color:K.mt}}>-</span>}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}}>x</span></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><button type="button" aria-label={`Delete ${e.book} ${e.type} bet`} onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10,background:"transparent",border:0,padding:4}}>x</button></td>
           </tr>
         );})}</tbody>
       </table>

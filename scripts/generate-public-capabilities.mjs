@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+/**
+ * Usage:
+ *   node scripts/generate-public-capabilities.mjs [--check]
+ *
+ * Generates the public agent capability contract from source truth. `--check`
+ * is read-only and fails when `public/capabilities.json` is stale.
+ */
+
 import fs from "node:fs";
 import path from "node:path";
 import { buildPublicCapabilityContract } from "./lib/public-capability-contract.mjs";

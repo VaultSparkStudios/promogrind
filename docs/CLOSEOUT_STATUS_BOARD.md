@@ -1,21 +1,21 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-25 (Session 118 closeout) -->
+<!-- generated-at: 2026-08-01 (Session 122 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S118 ════════════════════════╗
-║  Date: 2026-07-25  ·  SIL: 999/1000  ·  Velocity: 6 stable       ║
+╔══ SESSION CLOSEOUT · PromoGrind · S122 ════════════════════════╗
+║  Date: 2026-08-01  ·  SIL: 1000/1000  ·  Velocity: 15 stable     ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ chore(S118): record deployment proof                          ║
-║  ✓ chore(S118): reconcile saturated arc closeout                 ║
+║  ✓ chore(S121): S121 exhausted all six verified L3 audit items   ║
 ║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
-║  ✓ chore(S117): record deployment proof                          ║
-║  ✓ feat(S117): harden public trust and evidence contracts        ║
+║  ✓ chore(deps): bump the production-minor-patch group with 4 up  ║
+║  ✓ docs(S120): record attested deploy evidence                   ║
+║  ✓ fix(S120): provision Deno in release preflight                ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
@@ -25,22 +25,22 @@
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         99   ██████████                            ║
+║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 129 files  ·  M:85 A:43 D:1 ?:0                        ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,11 +51,10 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         588/588                                          ║
-║  IGNIS:         3d ago                                           ║
-║  Truth:         green-with-external-proof-and-partial-pixel-rev  ║
+║  Tests:         606/606                                          ║
+║  IGNIS:         1d ago                                           ║
+║  Truth:         green-repo-owned-with-history-and-external-proo  ║
 ║  Sanitization:  —                                                ║
-║  Shell hygiene: 0 session browsers · 0 preview listeners          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  ✓ Unified Genius List exhausted · regenerate from live code     ║

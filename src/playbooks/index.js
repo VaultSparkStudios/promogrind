@@ -1,4 +1,5 @@
 import { normalizeWorkflowEntry, normalizePromoType, formatPromoTypeLabel } from "../promograph/index.js";
+import { createEntityId } from "../lib/entityId.js";
 
 export const PLAYBOOKS = [
   {
@@ -130,7 +131,7 @@ export function playbookToWorkflows(playbook, context = {}) {
   const now = new Date().toISOString();
   const promoType = playbook.promoTypes?.[0] || "other";
   return playbook.steps.map((step, index) => normalizeWorkflowEntry({
-    id: `playbook-${playbook.id}-${Date.now()}-${index}`,
+    id: createEntityId(`playbook-${playbook.id}-${index}`),
     title: step.title,
     summary: step.note,
     note: step.note,

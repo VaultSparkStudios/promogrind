@@ -1,3 +1,5 @@
+import { createEntityId } from "./entityId.js";
+
 const TRUST_RECEIPTS_KEY = "pg_trust_receipts";
 const TRUST_RECEIPT_DEDUPE_KEY = "pg_trust_receipt_dedupe";
 const MAX_RECEIPTS = 20;
@@ -40,7 +42,7 @@ export function recordTrustReceipt({
   if (key && dedupe[key] && now - dedupe[key] < dedupeMs) return null;
 
   const receipt = {
-    id: `${now}-${Math.random().toString(36).slice(2, 8)}`,
+    id: createEntityId("trust-receipt"),
     type,
     title,
     summary,

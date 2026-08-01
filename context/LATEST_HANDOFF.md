@@ -1,11 +1,60 @@
 # Latest Handoff — PromoGrind
 
 Date: 2026-08-01
-Session: 121
+Session: 122
 Agent: Codex
-Status: saturated; 6/6 L3 audit items and 3/3 repo-owned second-order innovations shipped; primary list exhausted; local RC green; SPARKED remains NO-GO
+Status: saturated; 6/6 L3 audit items and 9 live second-order innovations shipped; 15/12 floor; local RC green; SPARKED remains NO-GO
 
-## Where We Left Off (Session 121)
+## Where We Left Off (Session 122)
+
+S122 completed the founder-requested continuous goal arc without phase handback. The infrastructure-aware public-app audit generated 34 candidates, verified 19 premises against live code, selected six, and shipped all six at L3. The canonical expansion pass then shipped nine live second-order improvements. Its final refresh contained only three deleted historical shell paths and a recursive test-of-a-test row, all evidence-rejected. The session-floor gate returned `STOP` at 15/12 shipped with list exhaustion re-verified.
+
+## What shipped
+
+1. Evidence-gated Artificial Intelligence Action Plan: current confirmed observations only, explicit profile consent, deterministic no-provider fallback, evidence/usage/source receipts, and no invented bankroll/book/value claims.
+2. Semantic SOUL ratchet: review depth replaces login/activity/profit rewards, and local outcome-review cards replace false verified-profit certificates.
+3. Production decision-evidence v3: idempotent workflow/global hash chains across create, placement/skip, settlement, and reflection with source references and hashed private notes.
+4. Source-derived data rights: 81 production storage tokens classified; export/restore/clear and UI counts derive from one registry.
+5. Collision-resistant entity identity: 11 mergeable writer surfaces governed, deterministic import IDs, zero clock-only IDs.
+6. Decision-control accessibility: 60 labels associated, mouse-only controls repaired, keyboard contracts enforced, mobile overflow and chat overlap root-fixed.
+7. CANON-053 proof: four inspected, hash-bound dark/light desktop/mobile captures with zero blocking defects.
+8. Nine second-order infrastructure improvements: deployment, entropy, sanitization, generated mirrors, public capabilities, release attestation, doctor, and scanner discoverability contracts.
+9. Sanitization confidentiality repair: explicit secret-pattern findings now redact matched values; adversarial fixtures prove tracked `.env`, credential, local-path, report, and redaction behavior.
+
+## Verification
+
+- `npm run verify:launch-local` — direct exit 0 on the final implementation state.
+- Vitest — 82 files, 606/606 passing.
+- Deno — 15 entrypoints typecheck; 5 files, 45/45 tests passing.
+- Session invariants — expanded suite direct exit 0; 81 storage tokens classified, 11 ID writers governed, 60 labels associated.
+- Doctor — 12/12 passing; `blockingFailing: 0`.
+- Visual QA — four hash-bound captures, two themes, desktop/mobile, rendered pixels reviewed, CANON-053 checker green.
+- Security — tracked secrets 0; strict public sanitizer 0; credential fixtures emit redacted values only.
+- UX/build — 61 app routes, 101 public HTML files, browser smoke green, source integrity 372 files, initial graph 179.1KB raw / 60.0KB gzip.
+- Saturation — session floor `STOP`, 15/12 shipped, list exhausted and re-verified.
+- Ark closeout — evidence-gated decision-infrastructure pattern broadcast `01JUVS4H8O725C0370808C9B05`; innovation-generator live-path/test-recursion request `01JUVS4JTG76F9FC9EF402575C`. Both receipts are signed and contain no credential material.
+
+## Honest deferrals
+
+- A true remote staging environment and six production response headers remain absent.
+- Five fully redacted historical credential findings at `b1205ce` still require rotation and approved history remediation.
+- `promogrind.supabase.deploy` remains MISSING; repository code is not deployment proof.
+- `contact@promogrind.bet` still needs real Zoho MX/SPF/DKIM/DMARC, delivery, and reply-as-alias evidence.
+- Production auth-email, complete Stripe lifecycle, friend beta, and capture submission/lead-row receipts remain unproved.
+- Studio cost/sitemap truth reconciliation and the innovation generator's historical/test-recursion false positives belong to Studio Ops; route by Ark, never sibling edits.
+
+## Next actions
+
+1. Establish a true staging target and header-capable edge, then prove all six headers.
+2. Complete historical credential rotation/remediation and exact PromoGrind Supabase deployment authority.
+3. Prove Zoho mailbox identity, then execute the criterion-addressed auth-email, Stripe, friend-beta, and capture checks.
+
+Intent Outcome: Achieved — every verified repo-owned primary and second-order item shipped at the highest useful depth; the direct saturation gate returned STOP.
+Deploy: S122 is locally release-candidate green but not claimed deployed until post-push workflow evidence exists. SPARKED promotion remains NO-GO.
+
+---
+
+## Prior handoff (Session 121)
 
 S121 completed the founder-requested continuous arc without phase handback. The infrastructure-aware public-app audit generated 27 candidates, verified 14 premises against live code, selected six, and shipped all six at L3. The Unified Genius List is now truthfully empty. Three second-order innovations shipped; the fourth candidate remains an explicit external-proof deferral. The final context meter returned CONTINUE with more than 96% capacity available.
 
@@ -114,3 +163,5 @@ S118 exhausted the repo-owned plan and shipped three ranked audit items plus thr
 4. Repeat AI pixel inspection when the connected viewer is healthy; retain the deterministic contrast contract as the continuous gate.
 
 Intent Outcome: Achieved for every repo-owned phase and saturation gate; release-state promotion remains honestly deferred.
+
+Session Intent (S122, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through `/start → /audit → /implement → /closeout`; exhaust every live-code-verified primary item and generate plus implement second-order innovations at the highest useful depth; preserve source-derived observability, flat-rate Max Plan cost framing, honest deferrals, public-repo sanitization, local staging verification, direct-main push, Ark broadcast, and zero-running shell hygiene.

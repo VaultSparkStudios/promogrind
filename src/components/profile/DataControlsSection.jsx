@@ -82,17 +82,18 @@ export default function DataControlsSection() {
         Data Controls
       </div>
       <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
-        {state.label} · {state.totalBytes} bytes on this device
+        {state.label} · {state.totalBytes} governed bytes on this device
+        {state.excludedItems > 0 && <> · {state.excludedItems} transient/authority item{state.excludedItems === 1 ? "" : "s"} never enter exports</>}
       </div>
       <div style={{ display: 'flex', gap: 8 }}>
         <button
           onClick={handleExport}
-          disabled={!state.hasData}
+          disabled={!state.canExport}
           style={{
-            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.hasData ? 'pointer' : 'not-allowed',
-            background: state.hasData ? `${K.ac}12` : K.s2,
-            border: `1px solid ${state.hasData ? K.ac + '40' : K.bd}`,
-            color: state.hasData ? K.ac : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
+            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.canExport ? 'pointer' : 'not-allowed',
+            background: state.canExport ? `${K.ac}12` : K.s2,
+            border: `1px solid ${state.canExport ? K.ac + '40' : K.bd}`,
+            color: state.canExport ? K.ac : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
           }}
         >
           Export
@@ -110,12 +111,12 @@ export default function DataControlsSection() {
         </button>
         <button
           onClick={handleClear}
-          disabled={!state.hasData}
+          disabled={!state.clearableItems}
           style={{
-            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.hasData ? 'pointer' : 'not-allowed',
-            background: state.hasData ? `${K.rd}10` : K.s2,
-            border: `1px solid ${state.hasData ? K.rd + '35' : K.bd}`,
-            color: state.hasData ? K.rd : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
+            flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.clearableItems ? 'pointer' : 'not-allowed',
+            background: state.clearableItems ? `${K.rd}10` : K.s2,
+            border: `1px solid ${state.clearableItems ? K.rd + '35' : K.bd}`,
+            color: state.clearableItems ? K.rd : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
           }}
         >
           Clear Local

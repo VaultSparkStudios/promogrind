@@ -254,7 +254,7 @@ const Tracker = () => {
           </td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
             <div style={{display:"flex",gap:1}}>{[1,2,3,4,5].map(n=>(
-              <span key={n} onClick={()=>setBookRating(b.name,n===bookRatings[b.name]?0:n)} style={{cursor:"pointer",color:n<=(bookRatings[b.name]||0)?K.yl:K.bd2,fontSize:14}}>★</span>
+              <button type="button" key={n} aria-label={`Rate ${b.name} ${n} out of 5`} aria-pressed={n<=(bookRatings[b.name]||0)} onClick={()=>setBookRating(b.name,n===bookRatings[b.name]?0:n)} style={{cursor:"pointer",color:n<=(bookRatings[b.name]||0)?K.yl:K.bd2,fontSize:14,background:"transparent",border:0,padding:2}}>★</button>
             ))}</div>
           </td>
           <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>

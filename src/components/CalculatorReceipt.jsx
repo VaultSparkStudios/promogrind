@@ -55,9 +55,11 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
       position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 9999,
       display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
     }}
+      data-backdrop-dismiss
       onClick={onClose}
     >
       <div
+        data-click-shield
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#fff", borderRadius: 8, padding: 24, maxWidth: 360, width: "100%",

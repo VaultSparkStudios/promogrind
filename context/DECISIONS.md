@@ -1,5 +1,42 @@
 # Decisions
 
+## 2026-08-01 — Session 122
+
+### Decision: Artificial Intelligence actionability requires current cited observations
+
+- Status: accepted
+- Context: the weekly plan defaulted an absent bankroll, transmitted operator profile context implicitly, and asked a model for sportsbook actions without current offer evidence.
+- Decision: only confirmed observations no older than seven days can authorize the provider path; profile context is explicit opt-in per request; an evidence-empty request returns a deterministic local verify-first plan and makes zero provider call.
+- Why this was chosen: it prevents invented urgency/value, protects operator context, and spends model work only where current evidence can support a useful decision briefing.
+
+### Decision: engagement progression measures review quality, never raw activity or profit sign
+
+- Status: accepted
+- Context: login, calculation, and ledger events still awarded points; mastery and shared surfaces elevated profit, streaks, and a false independent-verification label.
+- Decision: reviews, corrections, evidence coverage, calibration settlement, and reasoned restraint are the only progression inputs. Loss, zero, and skip outcomes remain first-class. Shared outcome cards are local self-reports.
+- Why this was chosen: a responsible decision tool should reward closure and learning, not betting volume or favorable variance.
+
+### Decision: browser data rights and merge identity are source contracts
+
+- Status: accepted
+- Context: a handwritten export allowlist omitted live keys and mergeable records independently synthesized clock/random IDs.
+- Decision: one exact/prefix storage registry owns classification, retention, export, restore, and clear policy; one typed ID module owns collision-resistant entity identity and deterministic imports. Source scanners fail when new writers bypass either contract.
+- Why this was chosen: user control and merge correctness must evolve automatically with production code rather than depend on remembered manual lists.
+
+### Decision: provenance is a privacy-preserving self-attestation, not execution proof
+
+- Status: accepted
+- Context: a checksum chain existed only in tests and could be mistaken for third-party verification if surfaced imprecisely.
+- Decision: production workflows append idempotent v3 events linked globally and per workflow, bind source references and hashed private notes, and describe only checksum continuity. Corruption is reported without blocking data recovery.
+- Why this was chosen: the chain can make local history tamper-evident without overstating who performed or verified the underlying action.
+
+### Decision: generated work is accepted only after live premise verification
+
+- Status: accepted
+- Context: the canonical innovation generator repeatedly surfaced deleted historical shell paths and ultimately requested a test for a test.
+- Decision: implement every live, useful candidate at behavior depth; record absent/recursive rows as premise rejections; route the generator defect to Studio Ops via Ark rather than editing a sibling tree or creating placeholders.
+- Why this was chosen: honest rejection preserves saturation truth and avoids manufacturing maintenance surface to satisfy a report.
+
 ## 2026-07-25 — Session 119
 
 ### Decision: launch completion is a criterion quorum, never a status write

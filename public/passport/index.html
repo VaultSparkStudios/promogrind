@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Operator Passport — PromoGrind</title>
-  <meta name="description" content="View a self-attested PromoGrind operator passport with checksum-verified integrity. Discipline score, lane mastery, settled-loop ratio, and zero personally identifying information.">
+  <meta name="description" content="View a self-attested PromoGrind operator passport with checksum-verified integrity. Discipline score, decision-review depth, settled-loop ratio, and zero personally identifying information.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://promogrind.bet/passport/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
     .lane { padding: 10px 12px; background: #0a0e17; border: 1px solid #1e293b; border-radius: 8px; }
     .lane .label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
     .lane .level { font-size: 0.95rem; color: #e2e8f0; font-weight: 700; }
-    .lane .xp { font-size: 0.75rem; color: #94a3b8; }
+    .lane .reviews { font-size: 0.75rem; color: #94a3b8; }
     code { background: #0a0e17; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #94a3b8; }
     .empty { color: #64748b; font-style: italic; }
     .footer { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #64748b; }
@@ -50,7 +50,7 @@
     </div>
 
     <h1>Operator Passport</h1>
-    <p style="color:#94a3b8">Self-attested discipline + mastery snapshot. Checksum-verified integrity; zero personally identifying information.</p>
+    <p style="color:#94a3b8">Self-attested discipline + decision-review snapshot. Checksum-verified integrity; zero personally identifying information.</p>
 
     <div id="status" class="card" style="text-align:center">
       <div class="empty">Loading passport from URL fragment…</div>
@@ -87,8 +87,8 @@
       </div>
 
       <div class="card">
-        <h2 style="margin-top:0">Lane mastery</h2>
-        <div style="font-size:0.85rem; color:#94a3b8; margin-bottom:6px">Global rank: <strong id="globalRank">—</strong></div>
+        <h2 style="margin-top:0">Lane review depth</h2>
+        <div style="font-size:0.85rem; color:#94a3b8; margin-bottom:6px">Review-depth band: <strong id="reviewDepthBand">—</strong></div>
         <div class="lane-grid" id="lanes"></div>
       </div>
 
@@ -100,16 +100,16 @@
     </div>
 
     <div class="footer">
-      <p>Passports are generated locally and checksum-verified in-browser. A checksum detects copy corruption; it does not prove identity or independent authenticity. Payloads contain only discipline score, lane mastery, and settled-loop ratio — no bet history, stake amounts, or sportsbook account information. <a href="/privacy/">Privacy policy</a>.</p>
+      <p>Passports are generated locally and checksum-verified in-browser. A checksum detects copy corruption; it does not prove identity or independent authenticity. Payloads contain only discipline score, lane review depth, and settled-loop ratio — no bet history, stake amounts, profit rank, or sportsbook account information. <a href="/privacy/">Privacy policy</a>.</p>
     </div>
   </div>
 
   <script>
-    const VERSION = 2;
-    const DOMAIN = "promogrind-self-attested-passport-v2:";
+    const VERSION = 3;
+    const DOMAIN = "promogrind-self-attested-passport-v3:";
     const PROMO_TYPES = new Set(["bonus_bet", "profit_boost", "safety_net", "deposit_match", "insurance", "parlay", "arb", "other"]);
-    const LEVELS = new Set(["Analyst", "Executor", "Closer", "Shark"]);
-    const RANKS = new Set(["Novice", "Grinder", "Closer", "Shark", "The House"]);
+    const LEVELS = new Set(["Analyst", "Reviewer", "Calibrator", "Steward"]);
+    const REVIEW_DEPTH_BANDS = new Set(["Observer", "Reviewer", "Calibrator", "Steward", "Evidence Lead"]);
     const BANDS = new Set(["Elite", "Controlled", "Building", "Loose"]);
 
     function b64urlEncode(bytes) {
@@ -149,18 +149,18 @@
       const settled = bounded(operator.settledCount, 0, 1000000);
       const closed = bounded(operator.closedCount, 0, 1000000);
       if (!Number.isFinite(issued.getTime()) || [score, coverage, ratio, settled, closed].some((value) => value === null)) return null;
-      if (!BANDS.has(discipline.band) || !RANKS.has(mastery.globalRank) || closed < settled) return null;
+      if (!BANDS.has(discipline.band) || !REVIEW_DEPTH_BANDS.has(mastery.reviewDepthBand) || closed < settled) return null;
       const perType = {};
       for (const [key, info] of Object.entries(mastery.perType || {})) {
-        const xp = bounded(info && info.xp, 0, 1000000);
-        if (!PROMO_TYPES.has(key) || !info || !LEVELS.has(info.level) || xp === null) return null;
-        perType[key] = { level: info.level, xp };
+        const reviews = bounded(info && info.reviews, 0, 1000000);
+        if (!PROMO_TYPES.has(key) || !info || !LEVELS.has(info.level) || reviews === null) return null;
+        perType[key] = { level: info.level, reviews };
       }
       return {
         issuedAt: issued.toISOString(),
         discipline: { score, band: discipline.band, feedbackCoverage: coverage },
         operator: { settledLoopRatio: ratio, settledCount: settled, closedCount: closed },
-        mastery: { globalRank: mastery.globalRank, perType },
+        mastery: { reviewDepthBand: mastery.reviewDepthBand, perType },
       };
     }
 
@@ -195,15 +195,15 @@
       document.getElementById("loopBar").style.width = payload.operator.settledLoopRatio + "%";
       document.getElementById("closedCount").textContent = payload.operator.closedCount;
       document.getElementById("settledCount").textContent = payload.operator.settledCount;
-      document.getElementById("globalRank").textContent = payload.mastery.globalRank;
+      document.getElementById("reviewDepthBand").textContent = payload.mastery.reviewDepthBand;
 
       const lanes = document.getElementById("lanes");
       lanes.replaceChildren();
-      const entries = Object.entries(payload.mastery.perType).sort((a, b) => b[1].xp - a[1].xp);
+      const entries = Object.entries(payload.mastery.perType).sort((a, b) => b[1].reviews - a[1].reviews);
       if (!entries.length) {
         const empty = document.createElement("div");
         empty.className = "empty";
-        empty.textContent = "No lane mastery recorded yet.";
+        empty.textContent = "No closed decision reviews recorded yet.";
         lanes.appendChild(empty);
       } else {
         for (const [key, info] of entries) {
@@ -215,10 +215,10 @@
           const level = document.createElement("div");
           level.className = "level";
           level.textContent = info.level;
-          const xp = document.createElement("div");
-          xp.className = "xp";
-          xp.textContent = info.xp + " XP";
-          lane.append(label, level, xp);
+          const reviews = document.createElement("div");
+          reviews.className = "reviews";
+          reviews.textContent = info.reviews + (info.reviews === 1 ? " review" : " reviews");
+          lane.append(label, level, reviews);
           lanes.appendChild(lane);
         }
       }

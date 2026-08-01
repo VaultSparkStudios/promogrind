@@ -7,7 +7,7 @@ const appData = {
   bankroll: "1000",
   workflowInbox: [{ id: "w1" }],
   resultFeedback: [
-    { status: "settled", profit: 12, promoType: "bonus_bet" },
+    { status: "settled", actualProfit: 12, expectedProfit: 10, promoType: "bonus_bet" },
     { status: "skipped", skipReason: "timing" },
   ],
   bets: [],
@@ -21,7 +21,7 @@ function encode(bytes) {
 
 async function mintSelfAttestedToken(payload) {
   const payloadB64 = encode(new TextEncoder().encode(JSON.stringify(payload)));
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`promogrind-self-attested-passport-v2:${payloadB64}`));
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`promogrind-self-attested-passport-v3:${payloadB64}`));
   return `${payloadB64}.${encode(new Uint8Array(digest))}`;
 }
 
@@ -44,7 +44,7 @@ describe("operator passport", () => {
     expect(result.ok).toBe(true);
     expect(result.attestation).toBe("self-attested");
     expect(result.integrity).toBe("checksum-verified");
-    expect(result.payload.mastery.globalRank).toBe("Novice");
+    expect(result.payload.mastery.reviewDepthBand).toBe("Observer");
     expect(PASSPORT_CONTRACT.authenticity).toBe("not-independently-verified");
   });
 
@@ -58,7 +58,7 @@ describe("operator passport", () => {
 
   it("rejects a checksum-valid payload with an injected lane key", async () => {
     const payload = buildPassportPayload(appData, { now: new Date("2026-07-24T00:00:00Z") });
-    payload.mastery.perType['<img src=x onerror="alert(1)">'] = { level: "Shark", xp: 99 };
+    payload.mastery.perType['<img src=x onerror="alert(1)">'] = { level: "Steward", reviews: 99 };
     const token = await mintSelfAttestedToken(payload);
     await expect(verifyPassport(token)).resolves.toEqual({ ok: false, reason: "payload" });
   });

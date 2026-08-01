@@ -26,7 +26,7 @@ const OddsConvert = () => {
   const setV=x=>setMem('v',x),setMode=x=>setMem('mode',x);
   const dec = mode==="american"?toD(v):mode==="decimal"?parseFloat(v):(()=>{const[n,d]=v.split("/").map(Number);return d?n/d+1:0;})();
   return (<div><div style={S.card}><Tl t="Odds Format Converter" badge="UTILITY" bc={K.dm} shareable/>
-    <div style={S.row}><div style={S.col}><label style={S.label}>Input Format</label><select style={S.input} value={mode} onChange={e=>setMode(e.target.value)}><option value="american">American (+/- odds)</option><option value="decimal">Decimal (e.g. 2.10)</option><option value="fractional">Fractional (e.g. 11/10)</option></select></div><In l="Enter Odds" v={v} set={setV}/></div>
+    <div style={S.row}><div style={S.col}><label htmlFor="odds-input-format" style={S.label}>Input Format</label><select id="odds-input-format" style={S.input} value={mode} onChange={e=>setMode(e.target.value)}><option value="american">American (+/- odds)</option><option value="decimal">Decimal (e.g. 2.10)</option><option value="fractional">Fractional (e.g. 11/10)</option></select></div><In l="Enter Odds" v={v} set={setV}/></div>
     {dec>0&&<div role="status" aria-live="polite" aria-atomic="false" style={{...S.res(true),display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:12,textAlign:"center"}}>
       {[["American",toA(dec),K.ac],["Decimal",f(dec,3),K.pp],["Fractional",toF(dec),K.yl],["Implied Prob",f(toP(dec),1)+"%",K.gn]].map(([l,vv,c])=>(<div key={l}><div style={{fontSize:10,color:K.mt,marginBottom:4}}>{l}</div><div style={{fontSize:18,fontWeight:700,color:c}}>{vv}</div></div>))}
     </div>}
@@ -81,25 +81,25 @@ const IncomeEstimator = () => {
 
   return (<div><div style={S.card}><Tl t="Annual Income Estimator" badge="PROJECTION" bc={K.gn} shareable/>
     <div style={S.row}>
-      <div style={S.col}><label style={S.label}>Sportsbooks Available in Your State</label>
-        <select style={S.input} value={numBooks} onChange={e=>setNumBooks(e.target.value)}>
+      <div style={S.col}><label htmlFor="income-books" style={S.label}>Sportsbooks Available in Your State</label>
+        <select id="income-books" style={S.input} value={numBooks} onChange={e=>setNumBooks(e.target.value)}>
           {["2","3","4","5","6","7","8","9","10","11","12"].map(n=><option key={n} value={n}>{n} books</option>)}
         </select>
       </div>
-      <div style={S.col}><label style={S.label}>Hours Per Week Available</label>
-        <select style={S.input} value={hoursPerWeek} onChange={e=>setHoursPerWeek(e.target.value)}>
+      <div style={S.col}><label htmlFor="income-hours" style={S.label}>Hours Per Week Available</label>
+        <select id="income-hours" style={S.input} value={hoursPerWeek} onChange={e=>setHoursPerWeek(e.target.value)}>
           {[["1","~1 hr/week (minimal)"],["3","~3 hrs/week (casual)"],["5","~5 hrs/week (regular)"],["7","~7 hrs/week (dedicated)"],["10","10+ hrs/week (full grind)"]].map(([v,l])=><option key={v} value={v}>{l}</option>)}
         </select>
       </div>
     </div>
     <div style={S.row}>
-      <div style={S.col}><label style={S.label}>Daily Profit Boosts Available</label>
-        <select style={S.input} value={boostsPerDay} onChange={e=>setBoostsPerDay(e.target.value)}>
+      <div style={S.col}><label htmlFor="income-boosts" style={S.label}>Daily Profit Boosts Available</label>
+        <select id="income-boosts" style={S.input} value={boostsPerDay} onChange={e=>setBoostsPerDay(e.target.value)}>
           {[["2","2/day (1-2 books)"],["5","5/day (3-5 books)"],["8","8/day (6-8 books)"],["12","12/day (all books, multiple daily)"]].map(([v,l])=><option key={v} value={v}>{l}</option>)}
         </select>
       </div>
       <div style={{...S.col,display:"flex",alignItems:"center",gap:10,paddingTop:20}}>
-        <label style={{...S.label,margin:0}}>Has Recurring Boosts</label>
+        <span aria-hidden="true" style={{...S.label,margin:0}}>Has Recurring Boosts</span>
         <AccessibleToggle
           checked={hasBoosts}
           onChange={setHasBoosts}

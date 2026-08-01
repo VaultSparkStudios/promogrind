@@ -7,6 +7,7 @@ import { subscribeToPush } from "../sw-register.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS } from "../launchState.js";
 import { K, f, font, fontD } from "../lib/shared.js";
 import { S } from "../ui.jsx";
+import { createEntityId } from "../lib/entityId.js";
 
 const PushEnableBtn = ({ proStatus }) => {
   const toast = useToast();
@@ -76,7 +77,7 @@ const QuickAddBet = () => {
   const addBet = () => {
     if(!book||!stake||!odds) { if(toast) toast('Fill in Book, Stake, and Odds', K.rd); return; }
     const bets = [...(data.bets||[])];
-    bets.push({ id:Date.now(), book, stake, odds, notes, status:'open', date:new Date().toISOString().split('T')[0] });
+    bets.push({ id:createEntityId("bet"), book, stake, odds, notes, status:'open', date:new Date().toISOString().split('T')[0] });
     syncAppData({...data, bets});
     if(toast) toast('Bet added', K.gn);
     setStake(""); setOdds(""); setNotes(""); setOpen(false);
@@ -92,17 +93,17 @@ const QuickAddBet = () => {
       {open&&<div style={{marginTop:12}}>
         <div style={S.row}>
           <div style={S.col}>
-            <label style={S.label}>Sportsbook</label>
-            <select style={S.input} value={book} onChange={e=>setBook(e.target.value)}>
+            <label htmlFor="quick-add-book" style={S.label}>Sportsbook</label>
+            <select id="quick-add-book" style={S.input} value={book} onChange={e=>setBook(e.target.value)}>
               {BOOKS.map(b=><option key={b.name} value={b.name}>{b.name}</option>)}
             </select>
           </div>
-          <div style={S.col}><label style={S.label}>Stake ($)</label><input style={S.input} value={stake} onChange={e=>setStake(e.target.value)} placeholder="100"/></div>
-          <div style={S.col}><label style={S.label}>Odds</label><input style={S.input} value={odds} onChange={e=>setOdds(e.target.value)} placeholder="-110"/></div>
+          <div style={S.col}><label htmlFor="quick-add-stake" style={S.label}>Stake ($)</label><input id="quick-add-stake" style={S.input} value={stake} onChange={e=>setStake(e.target.value)} placeholder="100"/></div>
+          <div style={S.col}><label htmlFor="quick-add-odds" style={S.label}>Odds</label><input id="quick-add-odds" style={S.input} value={odds} onChange={e=>setOdds(e.target.value)} placeholder="-110"/></div>
         </div>
         <div style={{marginBottom:10}}>
-          <label style={S.label}>Notes (optional)</label>
-          <input style={S.input} value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Game, promo type, etc."/>
+          <label htmlFor="quick-add-notes" style={S.label}>Notes (optional)</label>
+          <input id="quick-add-notes" style={S.input} value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Game, promo type, etc."/>
         </div>
         <button onClick={addBet} style={{padding:"8px 20px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>Add to Bet Tracker</button>
       </div>}
@@ -110,41 +111,42 @@ const QuickAddBet = () => {
   );
 };
 
-const WeeklyGrindReport = () => {
+const WeeklyDecisionReview = () => {
   const { appData: data } = React.useContext(AppDataCtx);
   const [report, setReport] = useState(null);
   const [copied, setCopied] = useState(false);
   const generate = () => {
     const mon = new Date(); mon.setDate(mon.getDate() - (mon.getDay()||7) + 1); mon.setHours(0,0,0,0);
-    const ledger = data.ledger || [];
-    const week = ledger.filter(e => e.date && new Date(e.date) >= mon);
-    const wins = week.filter(e => parseFloat(e.profit) > 0);
-    const pl = week.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-    const winRate = week.length ? Math.round(wins.length/week.length*100) : 0;
-    const best = week.length ? week.reduce((b,e)=>parseFloat(e.profit)>parseFloat(b.profit)?e:b,week[0]) : null;
-    const sorted = [...(data.ledger||[])].sort((a,b)=>new Date(b.date)-new Date(a.date));
-    let streak = 0;
-    for(const e of sorted) { if(parseFloat(e.profit)>0) streak++; else break; }
+    const ledger = (data.ledger || []).filter(e => e.date && new Date(e.date) >= mon);
+    const feedback = (data.resultFeedback || []).filter(e => new Date(e.updatedAt || e.createdAt || 0) >= mon);
+    const closed = feedback.filter(e => ['settled','skipped'].includes(e.status));
+    const settled = closed.filter(e => e.status === 'settled' && Number.isFinite(Number.parseFloat(e.actualProfit)));
+    const reasonedSkips = closed.filter(e => e.status === 'skipped' && String(e.skipReason || '').trim()).length;
+    const paired = settled.filter(e => Number.isFinite(Number.parseFloat(e.expectedProfit)));
+    const averageDrift = paired.length ? paired.reduce((sum,e)=>sum+(Number.parseFloat(e.actualProfit)-Number.parseFloat(e.expectedProfit)),0)/paired.length : null;
+    const pl = ledger.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+    const reviewCoverage = feedback.length ? Math.round((closed.length/feedback.length)*100) : 0;
     const monStr = mon.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    setReport({ bets:week.length, pl:f(pl), winRate, best, streak, monStr });
+    setReport({ ledgerRows:ledger.length, closed:closed.length, settled:settled.length, reasonedSkips, reviewCoverage, pl:f(pl), averageDrift, monStr });
   };
   const copyReport = () => {
     if(!report) return;
-    const bestDay = report.best ? new Date(report.best.date).toLocaleDateString('en-US',{weekday:'short'}) : '—';
-    const text = `📊 PromoGrind Weekly Report — Week of ${report.monStr}\nBets logged: ${report.bets} | P/L: ${parseFloat(report.pl)>=0?'+':''}$${report.pl} | Win rate: ${report.winRate}%\nBest day: ${bestDay} +$${report.best?f(parseFloat(report.best.profit)):'0'} | Current streak: ${report.streak} wins\n${CANONICAL_APP_URL}`;
+    const drift = report.averageDrift === null ? 'not enough paired estimates/outcomes' : `${report.averageDrift>=0?'+':''}$${f(report.averageDrift)} average actual-vs-estimate drift`;
+    const text = `PromoGrind Weekly Decision Review — Week of ${report.monStr}\nClosed loops: ${report.closed} (${report.settled} settled, ${report.reasonedSkips} reasoned skips) | Review coverage: ${report.reviewCoverage}%\nRecorded realized P/L: ${parseFloat(report.pl)>=0?'+':'-'}$${f(Math.abs(parseFloat(report.pl)))} across ${report.ledgerRows} local ledger rows | Calibration: ${drift}\nSelf-recorded operator data; not independently verified.\n${CANONICAL_APP_URL}`;
     try{navigator.clipboard.writeText(text);}catch(e){}
     setCopied(true); setTimeout(()=>setCopied(false),1500);
   };
   return (
     <div style={{...S.card,marginBottom:12}}>
-      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Weekly Grind Report</div>
-      {!report&&<button onClick={generate} style={{padding:"7px 14px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>Generate Report</button>}
+      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:4,fontFamily:fontD}}>Weekly Decision Review</div>
+      <div style={{fontSize:10,color:K.mt,marginBottom:8,lineHeight:1.5}}>Measures closed feedback loops and calibration. Profit is context, never rank progress.</div>
+      {!report&&<button onClick={generate} style={{padding:"7px 14px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>Build Review</button>}
       {report&&<>
         <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:10}}>
-          <div><div style={{fontSize:9,color:K.mt}}>BETS</div><div style={{fontSize:20,fontWeight:700,color:K.tx,fontFamily:fontD}}>{report.bets}</div></div>
-          <div><div style={{fontSize:9,color:K.mt}}>WEEK P/L</div><div style={{fontSize:20,fontWeight:700,color:parseFloat(report.pl)>=0?K.gn:K.rd,fontFamily:fontD}}>{parseFloat(report.pl)>=0?'+':''}${report.pl}</div></div>
-          <div><div style={{fontSize:9,color:K.mt}}>WIN RATE</div><div style={{fontSize:20,fontWeight:700,color:report.winRate>=50?K.gn:K.rd,fontFamily:fontD}}>{report.winRate}%</div></div>
-          <div><div style={{fontSize:9,color:K.mt}}>STREAK</div><div style={{fontSize:20,fontWeight:700,color:report.streak>=3?K.gn:K.yl,fontFamily:fontD}}>{report.streak}W</div></div>
+          <div><div style={{fontSize:9,color:K.mt}}>CLOSED LOOPS</div><div style={{fontSize:20,fontWeight:700,color:K.ac,fontFamily:fontD}}>{report.closed}</div></div>
+          <div><div style={{fontSize:9,color:K.mt}}>REVIEW COVERAGE</div><div style={{fontSize:20,fontWeight:700,color:K.tx,fontFamily:fontD}}>{report.reviewCoverage}%</div></div>
+          <div><div style={{fontSize:9,color:K.mt}}>RECORDED P/L</div><div style={{fontSize:20,fontWeight:700,color:parseFloat(report.pl)>=0?K.ac:K.rd,fontFamily:fontD}}>{parseFloat(report.pl)>=0?'+':'-'}${f(Math.abs(parseFloat(report.pl)))}</div></div>
+          <div><div style={{fontSize:9,color:K.mt}}>AVG CALIBRATION DRIFT</div><div style={{fontSize:20,fontWeight:700,color:K.dm,fontFamily:fontD}}>{report.averageDrift===null?'—':`${report.averageDrift>=0?'+':''}$${f(report.averageDrift)}`}</div></div>
         </div>
         <div style={{display:"flex",gap:8}}>
           <button onClick={copyReport} style={{padding:"6px 14px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>{copied?"✓ Copied!":"📋 Copy Report"}</button>
@@ -187,8 +189,8 @@ const BankrollWizard = () => {
     <div style={{...S.card,marginBottom:12}}>
       <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8,fontFamily:fontD}}>Bankroll Allocation Wizard</div>
       <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
-        <label style={{...S.label,marginBottom:0}}>Bankroll $</label>
-        <input style={{...S.input,width:120}} value={bwBankroll} onChange={e=>setBwBankroll(e.target.value)} placeholder="3000"/>
+        <label htmlFor="bankroll-wizard-amount" style={{...S.label,marginBottom:0}}>Bankroll $</label>
+        <input id="bankroll-wizard-amount" style={{...S.input,width:120}} value={bwBankroll} onChange={e=>setBwBankroll(e.target.value)} placeholder="3000"/>
         <button onClick={recalc} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>Recalculate</button>
       </div>
       <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
@@ -291,4 +293,4 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
   );
 };
 
-export { BankrollWizard, CopyMySetup, PushEnableBtn, QuickAddBet, WeeklyGrindReport };
+export { BankrollWizard, CopyMySetup, PushEnableBtn, QuickAddBet, WeeklyDecisionReview };

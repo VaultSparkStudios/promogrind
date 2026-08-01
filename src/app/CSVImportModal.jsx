@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { K, S, font, fontD } from "../lib/shared.js";
+import { createImportEntityId } from "../lib/entityId.js";
 
 function splitCsvLine(line) {
   return line.match(/(".*?"|[^,]+)(?=,|$)/g) || [];
 }
 
 function normalizeCsvRecord(record, index, today) {
-  return {
-    id: Date.now() + index,
+  const normalized = {
     date: record.date || record["settled date"] || record["place date"] || today,
     book: record.book || record.sportsbook || "Imported",
     type: record.type || record["bet type"] || "Moneyline",
@@ -17,6 +17,7 @@ function normalizeCsvRecord(record, index, today) {
     status: (record.status || record.result || "open").toLowerCase().replace("win", "won").replace("loss", "lost"),
     notes: record.description || record.notes || record.event || "",
   };
+  return { id: createImportEntityId("bet", "csv-v1", normalized, index), ...normalized };
 }
 
 export function parseBetCsvRows(raw, today = new Date().toISOString().split("T")[0]) {
@@ -62,7 +63,7 @@ export function CSVImportModal({ onImport, onClose }) {
   const rowCount = Math.max(0, raw.trim().split("\n").filter(Boolean).length - 1);
 
   return (
-    <div onClick={(event) => { if (event.target === event.currentTarget) onClose(); }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+    <div data-backdrop-dismiss onClick={(event) => { if (event.target === event.currentTarget) onClose(); }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <div style={{ background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 12, padding: 24, width: "100%", maxWidth: 560, maxHeight: "80vh", overflow: "auto", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: K.tx, marginBottom: 4, fontFamily: fontD }}>Import Bets from CSV</div>
         <div style={{ fontSize: 11, color: K.dm, marginBottom: 16 }}>Paste your DraftKings, FanDuel, or any sportsbook CSV export below. Headers are auto-detected.</div>

@@ -63,15 +63,15 @@ export function StarterPackModal({ onClose, syncAppData, appData }) {
         <div style={{fontSize:12,color:K.mt,marginBottom:20}}>Choose a starter profile — sets your bankroll and profit goal. You can change these anytime.</div>
         <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:20}}>
           {PACKS.map(p=>(
-            <div key={p.id} onClick={()=>setSelected(p.id)}
-              style={{padding:'14px 16px',background:selected===p.id?'#1e3a2f':K.s3,border:`2px solid ${selected===p.id?K.gn:K.bd}`,borderRadius:8,cursor:'pointer',transition:'border-color 0.15s'}}>
+            <button type="button" key={p.id} onClick={()=>setSelected(p.id)} aria-pressed={selected===p.id}
+              style={{width:'100%',textAlign:'left',padding:'14px 16px',background:selected===p.id?'#1e3a2f':K.s3,border:`2px solid ${selected===p.id?K.gn:K.bd}`,borderRadius:8,cursor:'pointer',transition:'border-color 0.15s',fontFamily:font}}>
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:4}}>
                 <span style={{fontSize:20}}>{p.icon}</span>
                 <span style={{fontWeight:700,color:K.tx,fontSize:14}}>{p.label}</span>
                 <span style={{marginLeft:'auto',fontSize:10,color:K.ac,fontWeight:600}}>${parseInt(p.bankroll).toLocaleString()} bankroll · ${p.goal.toLocaleString()} goal</span>
               </div>
               <div style={{fontSize:11,color:K.mt,marginLeft:30}}>{p.desc} · {p.hrs}</div>
-            </div>
+            </button>
           ))}
         </div>
         <div style={{display:'flex',gap:10}}>

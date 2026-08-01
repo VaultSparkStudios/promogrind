@@ -1,71 +1,91 @@
 // @vitest-environment happy-dom
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import {
-  appendReceipt,
-  verifyChain,
-  readReceipts,
+  appendDecisionEvidence,
   clearReceipts,
   exportReceiptForVerification,
+  readReceipts,
+  verifyChain,
 } from "../lib/promoProvenance.js";
+
+const sample = {
+  workflowId: "workflow:sample-1",
+  eventType: "placed",
+  occurredAt: "2026-08-01T12:00:00.000Z",
+  calculatorKey: "bonus-bet",
+  promoType: "bonus_bet",
+  book: "Example Book",
+  expectedProfit: 18.25,
+  sourceEvidence: { calculatorKey: "bonus-bet", expectedProfit: 18.25 },
+};
 
 beforeEach(() => { clearReceipts(); });
 
-const sampleReceipt = {
-  occurredAt: "2026-05-18T12:00:00Z",
-  book: "DraftKings",
-  promoType: "bonus_bet",
-  termsHash: "abc123",
-  decision: "executed",
-  stake: 25,
-  settledProfit: 10.5,
-};
-
-describe("promoProvenance local integrity contract", () => {
-  it("appends a self-attested checksum receipt at the chain head", async () => {
-    const entry = await appendReceipt(sampleReceipt);
-    expect(entry.payload.previousReceiptHash).toBeNull();
-    expect(entry.payload.attestation).toBe("self-attested");
-    expect(entry.checksum).toBeTruthy();
+describe("local decision-evidence contract", () => {
+  it("links a source calculation to a self-attested workflow event", async () => {
+    const entry = await appendDecisionEvidence(sample);
+    expect(entry.payload).toMatchObject({
+      version: 3,
+      workflowId: sample.workflowId,
+      eventType: "placed",
+      previousReceiptHash: null,
+      workflowPreviousHash: null,
+      attestation: "self-attested",
+      scope: "local-decision-continuity",
+    });
+    expect(entry.payload.sourceEvidenceRef).toMatch(/^sha256:/);
     expect(entry.hash).toBeTruthy();
     expect(entry).not.toHaveProperty("signature");
   });
 
-  it("chains subsequent receipts to the previous hash", async () => {
-    const first = await appendReceipt(sampleReceipt);
-    const second = await appendReceipt({ ...sampleReceipt, settledProfit: -5 });
-    expect(second.payload.previousReceiptHash).toBe(first.hash);
+  it("maintains both global and per-workflow continuity", async () => {
+    const first = await appendDecisionEvidence(sample);
+    const other = await appendDecisionEvidence({ ...sample, workflowId: "workflow:other", occurredAt: "2026-08-01T12:01:00.000Z" });
+    const settled = await appendDecisionEvidence({
+      ...sample,
+      eventType: "settled",
+      occurredAt: "2026-08-01T12:02:00.000Z",
+      realizedProfit: 10.5,
+    });
+    expect(other.payload.previousReceiptHash).toBe(first.hash);
+    expect(other.payload.workflowPreviousHash).toBeNull();
+    expect(settled.payload.previousReceiptHash).toBe(other.hash);
+    expect(settled.payload.workflowPreviousHash).toBe(first.hash);
+    await expect(verifyChain()).resolves.toMatchObject({ ok: true, length: 3, workflows: 2, attestation: "self-attested" });
   });
 
-  it("verifies an unmodified local integrity chain without claiming authenticity", async () => {
-    await appendReceipt(sampleReceipt);
-    await appendReceipt({ ...sampleReceipt, settledProfit: -5 });
-    const result = await verifyChain();
-    expect(result).toMatchObject({ ok: true, length: 2, attestation: "self-attested", integrity: "checksum-chain" });
+  it("deduplicates retries by event idempotency key", async () => {
+    const input = { ...sample, idempotencyKey: "workflow:sample-1:placed:source-event-1" };
+    const first = await appendDecisionEvidence(input);
+    const retry = await appendDecisionEvidence(input);
+    expect(retry.hash).toBe(first.hash);
+    expect(readReceipts()).toHaveLength(1);
   });
 
-  it("detects payload-byte tampering", async () => {
-    await appendReceipt(sampleReceipt);
+  it("detects stored payload and byte tampering", async () => {
+    await appendDecisionEvidence(sample);
     const chain = readReceipts();
-    chain[0].payloadB64 = chain[0].payloadB64.replace(/A/, "B");
-    window.localStorage.setItem("pg_promo_integrity_ledger_v2", JSON.stringify(chain));
-    const result = await verifyChain();
-    expect(result.ok).toBe(false);
-    expect(result.brokenAt).toBe(0);
+    chain[0].payload.book = "Tampered Book";
+    window.localStorage.setItem("pg_promo_integrity_ledger_v3", JSON.stringify(chain));
+    await expect(verifyChain()).resolves.toMatchObject({ ok: false, brokenAt: 0, reason: "payload-mismatch" });
   });
 
-  it("strips PII from receipt inputs", async () => {
-    const entry = await appendReceipt({ ...sampleReceipt, email: "user@example.com" });
-    expect(JSON.stringify(entry.payload).toLowerCase()).not.toContain("email");
-    expect(JSON.stringify(entry.payload).toLowerCase()).not.toContain("user@example.com");
+  it("hashes private notes rather than storing note text or PII fields", async () => {
+    const entry = await appendDecisionEvidence({ ...sample, privateNote: "Call me at 555-0100; user@example.com" });
+    const json = JSON.stringify(entry.payload).toLowerCase();
+    expect(entry.payload.operatorContextRef).toMatch(/^sha256:/);
+    expect(json).not.toContain("555-0100");
+    expect(json).not.toContain("user@example.com");
+    expect(json).not.toContain('"note"');
   });
 
-  it("exports an honestly labeled public-safe integrity payload", async () => {
-    const entry = await appendReceipt(sampleReceipt);
-    const exported = exportReceiptForVerification(entry);
-    expect(exported).toMatchObject({ version: 2, attestation: "self-attested", integrity: "sha256-checksum-chain" });
-    expect(exported.payloadB64).toBe(entry.payloadB64);
-    expect(exported.checksum).toBe(entry.checksum);
-    expect(exported).not.toHaveProperty("keyId");
-    expect(exported).not.toHaveProperty("signature");
+  it("exports an honestly scoped verification payload", async () => {
+    const entry = await appendDecisionEvidence(sample);
+    expect(exportReceiptForVerification(entry)).toMatchObject({
+      version: 3,
+      attestation: "self-attested",
+      scope: "local-decision-continuity",
+      integrity: "sha256-global-and-workflow-checksum-chain",
+    });
   });
 });

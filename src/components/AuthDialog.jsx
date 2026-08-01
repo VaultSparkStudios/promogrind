@@ -182,6 +182,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
 
   return (
     <div
+      data-backdrop-dismiss
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -199,7 +200,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
         padding: 20,
       }}
     >
-      <div ref={panelRef} style={panel} onClick={(event) => event.stopPropagation()}>
+      <div data-click-shield ref={panelRef} style={panel} onClick={(event) => event.stopPropagation()}>
         <div
           style={{
             padding: "18px 20px 16px",

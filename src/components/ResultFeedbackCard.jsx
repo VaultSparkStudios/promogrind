@@ -4,6 +4,8 @@ import { K, font, fontD } from "../lib/shared.js";
 import { updateResultFeedback, upsertResultFeedback } from "../track/insights.js";
 import { normalizePromoType } from "../promograph/index.js";
 import { parseRealizedOutcomeValue } from "../lib/realizedOutcome.js";
+import { createEntityId } from "../lib/entityId.js";
+import { appendDecisionEvidence } from "../lib/promoProvenance.js";
 import { patchWorkflowState, writeWorkflowFeedback } from "../workflows/store.js";
 
 export default function ResultFeedbackCard({
@@ -34,6 +36,7 @@ export default function ResultFeedbackCard({
   const [note, setNote] = useState("");
   const [status, setStatus] = useState(null);
   const [validationError, setValidationError] = useState("");
+  const [evidenceState, setEvidenceState] = useState("idle");
 
   const skipReasons = [
     ["odds_moved", "Odds moved"],
@@ -66,13 +69,37 @@ export default function ResultFeedbackCard({
     ));
   };
 
+  const linkEvidence = (entry, eventType) => {
+    setEvidenceState("linking");
+    appendDecisionEvidence({
+      workflowId: entry.id,
+      eventType,
+      occurredAt: entry.updatedAt,
+      idempotencyKey: `${entry.id}:${eventType}:${entry.updatedAt}`,
+      calculatorKey: entry.calculatorKey,
+      promoType: entry.promoType,
+      book: entry.book,
+      expectedProfit: entry.expectedProfit,
+      realizedProfit: entry.actualProfit,
+      reasonCode: entry.skipReason || entry.frictionReason,
+      repeatIntent: entry.wouldRepeat,
+      executionMinutes: entry.executionMinutes,
+      privateNote: entry.note,
+      sourceEvidence: {
+        calculatorKey: entry.calculatorKey,
+        promoType: entry.promoType,
+        expectedProfit: entry.expectedProfit,
+      },
+    }).then(() => setEvidenceState("linked"), () => setEvidenceState("failed"));
+  };
+
   const record = (nextStatus) => {
     if (nextStatus === "skipped" && !skipReason) {
       setValidationError("Choose a skip reason before saving this outcome.");
       skipGroupRef.current?.focus();
       return;
     }
-    const id = entryId || `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    const id = entryId || createEntityId("result");
     const existing = entries.find((candidate) => candidate?.id === id);
     const now = new Date().toISOString();
     const entry = {
@@ -99,6 +126,7 @@ export default function ResultFeedbackCard({
       source: "calculator_result",
       actionability: nextStatus === "skipped" ? 20 : 72,
     });
+    linkEvidence(entry, nextStatus);
     setEntryId(id);
     setStatus(nextStatus);
     setValidationError("");
@@ -123,6 +151,15 @@ export default function ResultFeedbackCard({
       note,
       updatedAt: new Date().toISOString(),
     };
+    const settledEntry = {
+      ...(entries.find((entry) => entry?.id === entryId) || {}),
+      id: entryId,
+      calculatorKey,
+      calculatorLabel,
+      promoType: normalizePromoType(promoType),
+      expectedProfit: roundedExpected,
+      ...patch,
+    };
     syncAppData(patchWorkflowState({
       ...appData,
       resultFeedback: updateResultFeedback(entries, entryId, patch),
@@ -137,6 +174,7 @@ export default function ResultFeedbackCard({
       summary: `Settled from ${calculatorLabel || "calculator"} workflow.`,
       source: "calculator_result",
     }, patch));
+    linkEvidence(settledEntry, "settled");
     setStatus("settled");
     setValidationError("");
   };
@@ -388,6 +426,11 @@ export default function ResultFeedbackCard({
         {status === "placed" && "Placed result saved. Settle it now or later in Track → Edge."}
         {status === "skipped" && "Skipped result saved with reason data so PromoGrind can measure opportunity loss and friction."}
         {!status && "Use this after you run the math so the app learns what converted, how long it took, and which workflows you would actually repeat."}
+      </div>
+      <div aria-live="polite" style={{ marginTop: 5, fontSize: 9, color: evidenceState === "failed" ? K.rd : K.mt }}>
+        {evidenceState === "linking" && "Linking this transition to the local decision-evidence chain…"}
+        {evidenceState === "linked" && "Linked locally: self-attested checksum continuity (not independent execution proof)."}
+        {evidenceState === "failed" && "Outcome saved, but the local evidence link could not be written on this device."}
       </div>
     </div>
   );

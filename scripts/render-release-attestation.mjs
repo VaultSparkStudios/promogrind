@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+/**
+ * Usage:
+ *   node scripts/render-release-attestation.mjs --dist <dir> --out <json>
+ *     --commit <sha> [--check]
+ *
+ * Creates or verifies a commit-bound digest of release artifacts. Check mode
+ * is read-only and fails closed on artifact or commit drift.
+ */
 
 import fs from "node:fs";
 import path from "node:path";

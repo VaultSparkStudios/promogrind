@@ -2,9 +2,9 @@
 
 ## Now
 
-- configure a header-capable production edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
+- [SIL] configure a true staging/header-capable edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
 - rotate and remediate the fully redacted historical credential findings isolated at commit `b1205ce`; the current tracked tree is clean, but history remains red until the Studio secrets owner confirms rotation and the approved history strategy
-- deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; never infer deployment from repo code
+- [SIL] deploy `20260723021000_ai_quota_claim.sql` plus the modified provider functions to explicit PromoGrind project ref `fjnpzjjyhnpmunfoycrp` once `promogrind.supabase.deploy` is READY; never infer deployment from repo code
 - configure and prove the `contact@promogrind.bet` Zoho mailbox/alias: MX, Sender Policy Framework (SPF), DomainKeys Identified Mail (DKIM), Domain-based Message Authentication, Reporting and Conformance (DMARC), delivery to the founder mailbox, and reply-as-alias identity; Brevo remains transactional/app email only
 - record real production auth-email, complete Stripe checkout/webhook/subscription/portal lifecycle, friend-beta, and capture-submission/lead-row receipts in the canonical proof ledger
 
@@ -14,7 +14,34 @@
 - reconcile the Studio cost registry and sitemap checker through Ark so source-derived trial ceilings and directory-index routes are represented accurately
 - monitor `artifacts/launch-verification/post-deploy.json` after each deploy via the ingester
 
-## Unified Genius List (S121)
+## Unified Genius List (S122)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| 🔥 | Artificial Intelligence / privacy | done | 7h | evidence-gated-ai-action-plan |
+| 🔥 | Engagement / SOUL | done | 8h | semantic-soul-policy-ratchet |
+| 🔥 | Trust / feedback | done | 8h | workflow-decision-evidence-chain |
+| 🔥 | Privacy / data rights | done | 6h | source-derived-local-data-rights-registry |
+| ⚡ | UI / accessibility | done | 8h | decision-control-accessibility-contract |
+| ⚡ | Sync / identity | done | 6h | canonical-entity-id-contract |
+| ⚡ | Infrastructure / security | done | 9 items | innovation-pack behavioral contracts and sanitization redaction root-fix |
+
+Primary and live second-order work is exhausted. The final generator refresh contained only deleted historical paths and a recursive test-of-a-test candidate; those premise rejections are documented in `docs/INNOVATION_PACK.md`.
+
+## Shipped This Session (S122)
+
+- evidence-gated-ai-action-plan — **DONE L3**: current confirmed observations only, explicit profile consent, deterministic zero-provider fallback, and evidence/usage/source receipts.
+- semantic-soul-policy-ratchet — **DONE L3**: review depth replaces login/activity/profit rewards; public outcome cards are explicitly local self-reports.
+- workflow-decision-evidence-chain — **DONE L3**: idempotent v3 workflow/global checksum chain across create, place/skip, settle, and reflect paths.
+- source-derived-local-data-rights-registry — **DONE L3**: 81 production storage tokens classified; retention/export/restore/clear behavior derives from one registry.
+- decision-control-accessibility-contract — **DONE L3**: 60 labels associated, 12 remaining non-native nodes governed, mobile overflow and chat overlap fixed, four CANON-053 captures hash-bound and reviewed.
+- canonical-entity-id-contract — **DONE L3**: 11 mergeable writer surfaces governed; deterministic import IDs and monotonic fallback; zero clock-only IDs.
+- deploy/entropy/sanitization/mirror/capability/attestation/doctor/scanner contracts — **DONE (nine second-order)**: behavior-level fixtures, convention-discoverable coverage, usage contracts, and coherent machine outputs.
+- sanitization-match-redaction — **DONE (root fix)**: explicit credential patterns no longer echo the matched secret; adversarial fixture proves redaction and report behavior.
+- innovation-pack phantom rows — **HONEST PREMISE REJECTION S122**: three shell paths are absent and the fourth row asks a test to have a test; no placeholders or recursive tests were created.
+- saturation — **DONE**: 15/12 items shipped; `session-floor` returned `STOP` only after list exhaustion and re-verification.
+
+## Unified Genius List (S121, retained history)
 
 | Tier | Category | Status | Effort | Item |
 |---|---|---|---:|---|

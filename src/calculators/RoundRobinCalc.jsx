@@ -22,23 +22,23 @@ export default function RoundRobinCalc() {
         <Tl t="Round Robin Calculator" badge="PARLAY" bc={K.yl} shareable />
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-            <label style={S.label}>Your Picks (enter odds for each)</label>
+            <div id="round-robin-picks-label" style={S.label}>Your Picks (enter odds for each)</div>
             <button onClick={addPick} style={{ padding: "3px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>+ Pick</button>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {picks.map((p, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                 <span style={{ fontSize: 10, color: K.mt }}>#{i + 1}</span>
-                <input style={{ ...S.input, width: 80 }} value={p.odds} onChange={(e) => updatePick(i, e.target.value)} placeholder="+150" />
-                {picks.length > 2 && <span onClick={() => removePick(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11 }}>✕</span>}
+                <input aria-label={`Pick ${i + 1} odds`} aria-describedby="round-robin-picks-label" style={{ ...S.input, width: 80 }} value={p.odds} onChange={(e) => updatePick(i, e.target.value)} placeholder="+150" />
+                {picks.length > 2 && <button type="button" aria-label={`Remove round robin pick ${i + 1}`} onClick={() => removePick(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11, background: "transparent", border: 0, padding: 4 }}>✕</button>}
               </div>
             ))}
           </div>
         </div>
         <div style={S.row}>
           <div style={S.col}>
-            <label style={S.label}>Combo Size</label>
-            <select style={S.input} value={size} onChange={(e) => setSize(e.target.value)}>
+            <label htmlFor="round-robin-combo-size" style={S.label}>Combo Size</label>
+            <select id="round-robin-combo-size" style={S.input} value={size} onChange={(e) => setSize(e.target.value)}>
               {["2", "3", "4"].filter((n) => parseInt(n) <= picks.length).map((n) => <option key={n}>{n}-team parlays</option>)}
             </select>
           </div>

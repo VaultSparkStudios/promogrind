@@ -1,12 +1,10 @@
 /**
  * PromoGrind — Sync Helper Tests
  *
- * Tests saveData, loadData, onCalculation, onLedgerEntry, and onDailyLogin.
+ * Tests saveData, loadData, sync diagnostics, and the absence of raw-activity
+ * reward hooks.
  * All Supabase I/O is mocked. localStorage is shimmed for the Node test env.
  *
- * Test ordering matters for onCalculation: _calcCount is module-level state
- * that increments with each call. Tests in the "points schedule" group are
- * intentionally ordered to verify first-call (5 pts) then subsequent (1 pt).
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
@@ -58,7 +56,8 @@ vi.mock('../auth.js', () => ({
   },
 }));
 
-import { saveData, loadData, onCalculation, onLedgerEntry, onDailyLogin, readSyncDiagnostics } from '../sync.js';
+import * as syncApi from '../sync.js';
+import { saveData, loadData, readSyncDiagnostics } from '../sync.js';
 
 // ── Session fixtures ──────────────────────────────────────────────────────────
 const NO_SESSION   = { data: { session: null } };
@@ -254,66 +253,16 @@ describe('saveData', () => {
 
 // ── loadData ──────────────────────────────────────────────────────────────────
 
-describe('onDailyLogin', () => {
-  it("writes today's date key to localStorage on the first call", () => {
-    const today = new Date().toISOString().slice(0, 10);
-    onDailyLogin();
-    expect(localStorage.getItem('_pg_login_day')).toBe(today);
+describe('semantic engagement boundary', () => {
+  it('does not export login, calculation, or ledger activity reward hooks', () => {
+    expect(syncApi).not.toHaveProperty('onDailyLogin');
+    expect(syncApi).not.toHaveProperty('onCalculation');
+    expect(syncApi).not.toHaveProperty('onLedgerEntry');
   });
 
-  it('does not trigger a vault event when called a second time the same day', async () => {
-    // Pre-seed localStorage as if the user already logged in today
+  it('does not call the points RPC during ordinary local persistence', async () => {
     mocks.getSession.mockResolvedValue(WITH_SESSION);
-    const today = new Date().toISOString().slice(0, 10);
-    localStorage.setItem('_pg_login_day', today);
-    onDailyLogin();
-    // The function returns before reaching fireVaultEvent → rpc never called
-    await new Promise((r) => setTimeout(r, 0));
-    expect(mocks.rpc).not.toHaveBeenCalled();
-  });
-});
-
-// ── onLedgerEntry ─────────────────────────────────────────────────────────────
-
-describe('onLedgerEntry', () => {
-  it('does not call supabase.rpc when there is no active session', async () => {
-    // Default beforeEach: NO_SESSION
-    onLedgerEntry();
-    await new Promise((r) => setTimeout(r, 20));
-    expect(mocks.rpc).not.toHaveBeenCalled();
-  });
-});
-
-// ── onCalculation — points schedule ──────────────────────────────────────────
-// These three tests are ORDER-DEPENDENT. _calcCount is module-level state that
-// starts at 0 for this file and increments with each onCalculation() call.
-// "First call" below means the first invocation across the entire test file.
-
-describe('onCalculation — points schedule', () => {
-  it('awards 5 points on the very first calculation of the session', async () => {
-    mocks.getSession.mockResolvedValue(WITH_SESSION);
-    await onCalculation('BonusBet');
-    expect(mocks.rpc).toHaveBeenCalledWith(
-      'award_vault_points',
-      expect.objectContaining({ p_event_type: 'calculation', p_points: 5 }),
-    );
-  });
-
-  it('awards 1 point on the second calculation (first-time bonus exhausted)', async () => {
-    mocks.getSession.mockResolvedValue(WITH_SESSION);
-    await onCalculation('ArbFinder');
-    expect(mocks.rpc).toHaveBeenCalledWith(
-      'award_vault_points',
-      expect.objectContaining({ p_event_type: 'calculation', p_points: 1 }),
-    );
-  });
-
-  it('continues awarding 1 point on all subsequent calculations', async () => {
-    mocks.getSession.mockResolvedValue(WITH_SESSION);
-    await onCalculation('KellyCriterion');
-    expect(mocks.rpc).toHaveBeenCalledWith(
-      'award_vault_points',
-      expect.objectContaining({ p_points: 1 }),
-    );
+    await saveData({ ledger: [{ id: 'decision-1', profit: '-5.00' }] });
+    expect(mocks.rpc).not.toHaveBeenCalledWith('award_vault_points', expect.anything());
   });
 });

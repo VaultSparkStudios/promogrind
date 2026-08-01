@@ -2,6 +2,8 @@ node_modules
 dist
 dist-cap
 .cache/
+.playwright-cli/
+output/playwright/
 portfolio/ACCESS_LEDGER.ndjson
 .env
 .env.local

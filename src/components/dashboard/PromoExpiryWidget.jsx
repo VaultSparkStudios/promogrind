@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { K, font, fontD, f } from "../../lib/shared.js";
+import { createEntityId } from "../../lib/entityId.js";
 
 const STORAGE_KEY = "pg_promo_expirations";
 
@@ -44,7 +45,7 @@ export default function PromoExpiryWidget() {
 
   const add = () => {
     if (!form.expiresAt || !form.promo) return;
-    const next = [...items, { id: Date.now(), ...form }];
+    const next = [...items, { id: createEntityId("expiry"), ...form }];
     saveExpirations(next);
     setItems(next);
     setForm({ book: "", promo: "", expiresAt: "" });

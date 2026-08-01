@@ -1,15 +1,5 @@
 import { parseRealizedOutcomeValue } from "../lib/realizedOutcome.js";
-
-function safeUUID() {
-  try {
-    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-      return crypto.randomUUID();
-    }
-  } catch {
-    // fall through to fallback
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-}
+import { createEntityId } from "../lib/entityId.js";
 
 function toNumber(value) {
   const parsed = Number.parseFloat(value);
@@ -152,7 +142,7 @@ export function normalizeWorkflowEntry(entry = {}) {
   const parsedActionability = Number.parseInt(entry.actionability, 10);
   const parsedExecutionMinutes = Number.parseFloat(entry.executionMinutes);
   return {
-    id: entry.id ?? safeUUID(),
+    id: entry.id ?? createEntityId("workflow"),
     calculatorKey: entry.calculatorKey || normalizeCalculatorSlug(entry.calculatorSlug) || "unknown",
     calculatorSlug: normalizeCalculatorSlug(entry.calculatorSlug || entry.calculatorKey),
     calculatorLabel: entry.calculatorLabel || "Unknown calculator",

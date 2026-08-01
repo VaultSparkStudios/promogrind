@@ -11,6 +11,7 @@ import BookCTA from "../components/BookCTA.jsx";
 import ShareCard from "../components/ShareCard.jsx";
 import CalculatorReceipt from "../components/CalculatorReceipt.jsx";
 import CalcNextStep from "../components/CalcNextStep.jsx";
+import { createEntityId } from "../lib/entityId.js";
 
 function parseNL(text) {
   const dollars = text.match(/\$(\d+(?:\.\d+)?)/);
@@ -96,9 +97,9 @@ export default function BonusBet() {
       <div style={S.card}>
         <Tl t="Bonus Bet Converter" badge="STAKE NOT RETURNED" bc={K.gn} shareable getParams={() => ({ sz, bo, ho })} />
         <div style={{ marginBottom: 12 }}>
-          <label style={S.label}>Quick Input (natural language)</label>
+          <label htmlFor="bonus-bet-natural-input" style={S.label}>Quick Input (natural language)</label>
           <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-            <textarea value={nlText} onChange={(e) => { setNlText(e.target.value); setNlPreview(parseNL(e.target.value)); }} placeholder='Try: "I have a $200 bonus bet at +350, hedge at -400"' style={{ ...S.input, height: 48, resize: "none", flex: 1, lineHeight: 1.5, fontSize: 12 }} />
+            <textarea id="bonus-bet-natural-input" value={nlText} onChange={(e) => { setNlText(e.target.value); setNlPreview(parseNL(e.target.value)); }} placeholder='Try: "I have a $200 bonus bet at +350, hedge at -400"' style={{ ...S.input, height: 48, resize: "none", flex: 1, lineHeight: 1.5, fontSize: 12 }} />
             <button onClick={applyNL} style={{ padding: "8px 14px", background: `${K.ac}15`, border: `1px solid ${K.ac}30`, borderRadius: 4, color: K.ac, fontSize: 10, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}>Parse</button>
             {FEATURE_FLAGS.aiScan ? (
               <>
@@ -114,7 +115,7 @@ export default function BonusBet() {
           {scanResult && !scanResult.error && bbSyncAppData && (
             <button
               onClick={() => {
-                const newBet = { id: Date.now(), date: new Date().toISOString().split("T")[0], book: scanResult.book || "", sport: "", description: scanResult.promoName || scanResult.betType || "Scanned bet", betType: scanResult.betType || "straight", stake: parseFloat(scanResult.stake) || 0, odds: scanResult.odds || "", result: "pending", payout: 0, profit: 0, notes: "Added via AI scan", tags: ["scanned"] };
+                const newBet = { id: createEntityId("bet"), date: new Date().toISOString().split("T")[0], book: scanResult.book || "", sport: "", description: scanResult.promoName || scanResult.betType || "Scanned bet", betType: scanResult.betType || "straight", stake: parseFloat(scanResult.stake) || 0, odds: scanResult.odds || "", result: "pending", payout: 0, profit: 0, notes: "Added via AI scan", tags: ["scanned"] };
                 const updatedBets = [...(bbAppData?.bets || []), newBet];
                 bbSyncAppData({ ...bbAppData, bets: updatedBets });
                 alert("Bet added to Tracker!");

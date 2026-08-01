@@ -208,7 +208,7 @@ const MODULES = [
       const passport = buildPassportPayload(appData, { now });
       const settled = passport.operator?.settledCount || 0;
       if (!settled) return { state: "idle", line: null };
-      return { state: "live", line: `${passport.discipline?.band} discipline · ${passport.mastery?.globalRank?.name} rank · ${settled} settled loops.` };
+      return { state: "live", line: `${passport.discipline?.band} discipline · ${passport.mastery?.reviewDepthBand || "Observer"} review depth · ${settled} settled loops.` };
     },
   },
 ];

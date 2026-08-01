@@ -100,6 +100,7 @@ const CONTENT_RULES = [
     priorityBand: 'confirmed-risk',
     description: 'Stripe secret key pattern',
     remediation: 'Treat as compromised until proven otherwise: rotate the key and remove it from git history.',
+    redactMatch: true,
     regex: /\bsk_(?:live|test)_[A-Za-z0-9]{16,}\b/g,
   },
   {
@@ -108,6 +109,7 @@ const CONTENT_RULES = [
     priorityBand: 'confirmed-risk',
     description: 'Stripe webhook secret pattern',
     remediation: 'Rotate the webhook secret and remove it from tracked files/history.',
+    redactMatch: true,
     regex: /\bwhsec_[A-Za-z0-9]{16,}\b/g,
   },
   {
@@ -116,6 +118,7 @@ const CONTENT_RULES = [
     priorityBand: 'confirmed-risk',
     description: 'GitHub personal access token pattern',
     remediation: 'Revoke the token and purge any tracked copy immediately.',
+    redactMatch: true,
     regex: /\b(?:ghp|github_pat)_[A-Za-z0-9_]{20,}\b/g,
   },
   {
@@ -124,6 +127,7 @@ const CONTENT_RULES = [
     priorityBand: 'review-required',
     description: 'Render API key pattern',
     remediation: 'Verify whether the match is a real credential or a synthetic fixture, then rotate/remove if real.',
+    redactMatch: true,
     regex: /\brnd_[A-Za-z0-9]{16,}\b/g,
   },
   {
@@ -132,6 +136,7 @@ const CONTENT_RULES = [
     priorityBand: 'confirmed-risk',
     description: 'AWS access key pattern',
     remediation: 'Rotate the access key and purge it from the repo and history.',
+    redactMatch: true,
     regex: /\bAKIA[0-9A-Z]{16}\b/g,
   },
   {
@@ -140,6 +145,7 @@ const CONTENT_RULES = [
     priorityBand: 'confirmed-risk',
     description: 'Private key block',
     remediation: 'Treat the key as compromised, rotate it, and remove it from the repo and history.',
+    redactMatch: true,
     regex: /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----/g,
   },
 ];
@@ -234,7 +240,7 @@ function scanFileContent(content, relPath, findings) {
         type: 'content',
         rule: rule.id,
         file: relPath,
-        detail: `${rule.description}: ${match[0].slice(0, 80)}`,
+        detail: `${rule.description}: ${rule.redactMatch ? '(value redacted)' : match[0].slice(0, 80)}`,
         priorityBand: rule.priorityBand,
         remediation: rule.remediation,
       });

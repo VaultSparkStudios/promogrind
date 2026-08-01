@@ -20,7 +20,7 @@ function getTierLimit(plan) {
   return 0;
 }
 
-const PromoChat = ({ navigate }) => {
+const PromoChat = ({ navigate, mobile = false }) => {
   const signInHref = getProjectAuthHref('signin');
   const { appData } = React.useContext(AppDataCtx) || {};
   const [chatOpen, setChatOpen] = useState(false);
@@ -207,7 +207,11 @@ const PromoChat = ({ navigate }) => {
         onClick={() => setChatOpen(v => !v)}
         title="PromoGrind AI — ask about any promo or calculator"
         style={{
-          position: 'fixed', bottom: 80, right: 20, zIndex: 1050,
+          position: mobile ? 'relative' : 'fixed',
+          bottom: mobile ? 'auto' : 80,
+          right: mobile ? 'auto' : 20,
+          zIndex: 1050,
+          margin: mobile ? '20px 16px 96px auto' : 0,
           width: 48, height: 48, borderRadius: '50%',
           background: K.gr || K.gn, border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -230,7 +234,7 @@ const PromoChat = ({ navigate }) => {
       {chatOpen && (
         <div style={{
           position: 'fixed', right: 0, top: 0, bottom: 0,
-          width: 360, background: '#0f1520',
+          width: mobile ? '100%' : 360, background: '#0f1520',
           borderLeft: `1px solid #1e293b`,
           zIndex: 1100, display: 'flex', flexDirection: 'column',
           boxShadow: '-4px 0 32px rgba(0,0,0,0.6)',

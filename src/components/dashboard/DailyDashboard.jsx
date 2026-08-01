@@ -14,7 +14,7 @@ import { getDashboardSnapshot } from "../../dashboard/today.js";
 import PromoWalkthrough from "../PromoWalkthrough.jsx";
 import { StarterPackModal, OnboardingChecklist, MemberWelcomeCard } from "../../app/AppSubcomponents.jsx";
 import { DailyBriefingBtn, DailyRoutinePanel, OpenExposurePanel, ProfitGoalTracker, TopToolsPanel } from "../../app/DashboardWidgets.jsx";
-import { BankrollWizard, CopyMySetup, PushEnableBtn, QuickAddBet, WeeklyGrindReport } from "../../app/DashboardActionWidgets.jsx";
+import { BankrollWizard, CopyMySetup, PushEnableBtn, QuickAddBet, WeeklyDecisionReview } from "../../app/DashboardActionWidgets.jsx";
 import DashboardHero from "./DashboardHero.jsx";
 import ActivationNextAction from "./ActivationNextAction.jsx";
 import DailyMissionsPanel from "./DailyMissionsPanel.jsx";
@@ -161,13 +161,13 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
               {n:"2",t:"Log the result in your Ledger",d:"Track every conversion so you always know your true P/L across all books.",slug:"ledger",color:K.ac},
               {n:"3",t:"Mark books complete in Tracker",d:"Check off each sportsbook after you've claimed and converted their welcome offer.",slug:"sportsbooks",color:K.yl},
             ].map(s=>(
-              <div key={s.n} style={{display:"flex",gap:12,alignItems:"flex-start",padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,cursor:"pointer"}} onClick={()=>navigate("/"+s.slug)}>
+              <button type="button" key={s.n} style={{width:"100%",textAlign:"left",display:"flex",gap:12,alignItems:"flex-start",padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,cursor:"pointer",fontFamily:font}} onClick={()=>navigate("/"+s.slug)}>
                 <div style={{fontSize:15,fontWeight:700,color:s.color,minWidth:20}}>{s.n}</div>
                 <div style={{flex:1}}>
                   <div style={{fontSize:12,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} →</div>
                   <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{s.d}</div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -283,7 +283,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <QuickAddBet/>
       <OpenExposurePanel bets={bets}/>
       <TopToolsPanel navigate={navigate} tabs={TOP_TOOL_TABS}/>
-      <WeeklyGrindReport/>
+      <WeeklyDecisionReview/>
       <BankrollWizard/>
       <CopyMySetup appData={data} syncAppData={syncAppData}/>
       <div style={{...S.card}}>

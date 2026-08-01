@@ -1,7 +1,7 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-07-27 (S120)
+Last reviewed: 2026-08-01 (S122)
 Overall status: green-repo-owned-with-history-and-external-proof-follow-ups
 Next action: establish true staging and a header-capable edge; rotate/remediate the redacted historical credentials; obtain the exact PromoGrind deploy capability; then complete criterion-addressed mailbox, auth, payment, friend, capture, and pixel proofs.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
@@ -21,10 +21,10 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | Canonical S115 status, handoff, task, audit, generated mirror, and work-log surfaces agree on shipped repo work, verified production deployment, and explicit external evidence gates. |
+| Schema alignment | 5 | Canonical S122 status, handoff, task, audit, generated mirror, and work-log surfaces agree on shipped repo work, prior verified production deployment, and explicit external evidence gates. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Startup brief, task board, status mirror, handoff, current state, SIL, audit, and closeout surfaces describe the same S115 posture after final regeneration. |
-| Handoff continuity | 5 | Session 115 handoff records saturated implementation, exact local/remote proof, the production-probe root fix, and remaining external gates. |
+| Derived-view freshness | 5 | Task board, status mirror, handoff, current state, SIL, audit, visual receipt, and closeout surfaces describe the same S122 posture after final regeneration. |
+| Handoff continuity | 5 | Session 122 handoff records six L3 product contracts, nine second-order improvements, exact local proof, premise rejections, and remaining external gates. |
 | Contradiction density | 5 | No current product-truth contradiction is known; the main gaps are explicit external evidence gates. |
 | **Total** | **24 / 25** | Green: canonical truth surfaces are coherent; remaining yellow posture is due to external launch proofs and public/private ops shim tension, not contradictory product claims. |
 
@@ -58,6 +58,25 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache now treats Markdown/JSON coherence as part of freshness; remaining launch gaps are real external proof gates.
+
+## Resolved This Session (S122)
+
+- AI Action Plan actionability now requires current confirmed observations; profile context is explicit opt-in and evidence-empty requests make zero provider call.
+- Progression, mastery, missions, weekly review, and outcome sharing no longer reward login/activity/profit sign or claim independent verification.
+- Real workflow creation and settlement paths append idempotent privacy-preserving v3 self-attested provenance events.
+- One registry classifies all 81 production browser-storage tokens and derives export/restore/clear behavior; 11 mergeable writers share the canonical entity-ID contract.
+- Decision controls expose 60 associated labels and governed keyboard semantics; mobile overflow and chat overlap are fixed.
+- Four dark/light desktop/mobile captures were inspected and hash-bound; CANON-053 reports zero blocking visual defects.
+- Nine second-order operational improvements add behavior-level entrypoint contracts. Adversarial sanitization fixtures exposed and fixed explicit credential patterns echoing matched values.
+- Final direct verification: 606/606 Vitest, 45/45 Deno, 15 Edge entrypoints, launch-local exit 0, strict secret/sanitization scans clean, and doctor 12/12 with `blockingFailing: 0`.
+
+## Explicit Evidence Gaps (S122)
+
+- There is no true remote staging target and six required live headers remain absent.
+- Five redacted historical credential findings still require rotation and approved remediation.
+- Exact PromoGrind Supabase deployment authority and a target-bound deploy receipt remain absent.
+- Zoho send/receive identity, production auth-email, complete Stripe lifecycle, friend-beta, and capture submission/lead observation remain unproved.
+- S122 is not claimed deployed until the post-push workflows produce receipts.
 
 ## Resolved This Session (S120)
 

@@ -1,9 +1,10 @@
 // @vitest-environment happy-dom
 import React, { useState } from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import ResultFeedbackCard from "../components/ResultFeedbackCard.jsx";
 import { AppDataCtx } from "../contexts.jsx";
+import { clearReceipts, readReceipts, verifyChain } from "../lib/promoProvenance.js";
 
 const seed = {
   bets: [],
@@ -11,6 +12,8 @@ const seed = {
   workflowInbox: [],
   resultFeedback: [],
 };
+
+beforeEach(() => { clearReceipts(); });
 
 function Harness({ onSync = () => {} }) {
   const [appData, setAppData] = useState(seed);
@@ -79,6 +82,19 @@ describe("ResultFeedbackCard outcome integrity", () => {
     expect(settled).toHaveLength(1);
     expect(settled[0]).toMatchObject({ id: firstId, status: "settled", actualProfit: 1234.5 });
     expect(screen.getByRole("status").textContent).toMatch(/settled result saved/i);
+  });
+
+  it("links placed and settled transitions to verifiable local evidence", async () => {
+    render(<Harness />);
+    fireEvent.change(screen.getByLabelText("Notes"), { target: { value: "private operator context" } });
+    fireEvent.click(screen.getByRole("button", { name: "Placed it" }));
+    await waitFor(() => expect(screen.getByText(/linked locally: self-attested/i)).toBeDefined());
+    fireEvent.change(screen.getByLabelText("Realized profit or loss"), { target: { value: "12.40" } });
+    fireEvent.click(screen.getByRole("button", { name: "Mark Settled" }));
+    await waitFor(() => expect(readReceipts()).toHaveLength(2));
+    expect(readReceipts().map((entry) => entry.payload.eventType)).toEqual(["placed", "settled"]);
+    expect(JSON.stringify(readReceipts())).not.toContain("private operator context");
+    await expect(verifyChain()).resolves.toMatchObject({ ok: true, length: 2, workflows: 1 });
   });
 
   it("rejects incomplete numeric-looking settlement input", () => {

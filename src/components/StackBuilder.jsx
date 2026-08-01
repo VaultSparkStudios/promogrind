@@ -99,13 +99,13 @@ export function StackBuilder({ proStatus }) {
           <div style={S.col}><In l="Your Bankroll" v={bankroll} set={v=>{setBankroll(v); try{localStorage.setItem('pg_bankroll',v);}catch{}}} pre="$" ph="1000"/></div>
         </div>
 
-        <div style={{marginBottom:16}}>
-          <label style={S.label}>Books you have available (optional — leave blank for all)</label>
+        <fieldset style={{margin:"0 0 16px",padding:0,border:0,minWidth:0}}>
+          <legend style={S.label}>Books you have available (optional — leave blank for all)</legend>
           <div style={{display:'flex',flexWrap:'wrap',gap:6,marginTop:6}}>
             {allBooks.map(book => {
               const sel = booksAvailable.includes(book);
               return (
-                <button key={book} onClick={() => toggleBook(book)}
+                <button type="button" key={book} aria-pressed={sel} onClick={() => toggleBook(book)}
                   style={{padding:'4px 10px',background:sel?`${K.gn}15`:'transparent',border:`1px solid ${sel?K.gn:K.bd2}`,borderRadius:50,color:sel?K.gn:K.dm,fontSize:10,cursor:'pointer',fontFamily:font}}>
                   {sel ? '✓ ' : ''}{book}
                 </button>
@@ -115,7 +115,7 @@ export function StackBuilder({ proStatus }) {
           {booksAvailable.length > 0 && (
             <button onClick={() => setBooksAvailable([])} style={{marginTop:6,background:'none',border:'none',color:K.mt,fontSize:10,cursor:'pointer',textDecoration:'underline',padding:0}}>Clear all</button>
           )}
-        </div>
+        </fieldset>
 
         <button
           onClick={generate}

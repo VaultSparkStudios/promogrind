@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/**
+ * Usage:
+ *   node scripts/generate-launch-proof-mirror.mjs [--check]
+ *
+ * Generates the browser-safe launch-proof mirror from its canonical context
+ * source. `--check` is read-only and fails when the generated file is stale.
+ */
 
 import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

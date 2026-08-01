@@ -2,31 +2,15 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLimitResponse } from "../_shared/http.ts";
-import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL, validateCalculatorSlug, validateConfidence, validatePromoType } from "../_shared/validate.ts";
+import { parseAiJson, PROMO_TYPE_GUARDRAIL, SLUG_GUARDRAIL } from "../_shared/validate.ts";
+import { buildGroundedActionPlan, parseActionPlanContext, renderActionPlanContext } from "../_shared/action-plan-contract.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
-const ACTION_PLAN_SYSTEM = `You are PromoGrind's AI assistant. Generate personalized weekly action plans for sports betting promo hunters. Always respond with valid JSON only — no markdown, no explanation outside the JSON. Reference real sportsbook promotion types (deposit match, bonus bet, profit boost, reload, SGP insurance, etc.). Return exactly 3 specific, actionable items appropriate for the user's bankroll tier with this schema: { "summary": string, "assumptions": string[], "actions": [{ "title": string, "why": string, "value": string, "priority": "high"|"medium"|"low", "calculatorSlug": string|null, "bookTarget": string|null, "opsTags": string[], "promoType": string, "confidence": "high"|"medium"|"low", "opportunityScore": number, "nextStep": string }] }
+const ACTION_PLAN_SYSTEM = `You rank evidence-bound PromoGrind workflow steps. Always respond with valid JSON only. Never invent a sportsbook, offer, eligibility fact, value, payout, terms, odds, or live availability. Use only evidenceRef values supplied by the user context. An observation proves only that the operator recently saw a pattern; it does not prove current terms. Return exactly 3 ranked items with this schema: { "actions": [{ "evidenceRef": string, "actionMode": "verify_terms"|"calculate_value"|"queue_review", "priority": "high"|"medium"|"low", "calculatorSlug": string|null, "opportunityScore": number }] }
 
 ${SLUG_GUARDRAIL}
 ${PROMO_TYPE_GUARDRAIL}`;
-
-function normalizeAction(action: Record<string, unknown> = {}) {
-  const parsedScore = Number.parseInt(String(action.opportunityScore ?? ""), 10);
-  return {
-    title: String(action.title || "Action").trim(),
-    why: String(action.why || "").trim(),
-    value: action.value ? String(action.value).trim() : null,
-    priority: String(action.priority || "medium").trim().toLowerCase(),
-    calculatorSlug: validateCalculatorSlug(action.calculatorSlug),
-    bookTarget: action.bookTarget ? String(action.bookTarget).trim() : null,
-    opsTags: Array.isArray(action.opsTags) ? action.opsTags.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean).slice(0, 4) : [],
-    promoType: validatePromoType(action.promoType),
-    confidence: validateConfidence(action.confidence),
-    nextStep: action.nextStep ? String(action.nextStep).trim() : null,
-    opportunityScore: Number.isFinite(parsedScore) ? Math.max(0, Math.min(parsedScore, 100)) : 60,
-  };
-}
 
 serve(async (req) => {
   const CORS = getCorsHeaders(req);
@@ -60,35 +44,8 @@ serve(async (req) => {
     });
     if (durableLimit) return durableLimit;
 
-    const body = await req.json();
-    const {
-      bankroll = "1000",
-      booksComplete = 0,
-      recentProfit = "0",
-      ledgerCount = 0,
-      activeBooks = [] as string[],
-      topPromoType = null as string | null,
-      hitRate = null as number | null,
-    } = body;
-
-    const bankrollNum = parseFloat(bankroll) || 1000;
-    const tier = bankrollNum < 1000 ? "under $1,000 (focus on welcome promos)" :
-                 bankrollNum < 3000 ? "$1,000–$3,000 (recurring promos + small arbs)" :
-                 "over $3,000 (live scanner + multi-book stacking)";
-
-    const contextLines: string[] = [
-      `- Bankroll: $${bankroll} (tier: ${tier})`,
-      `- Sportsbooks completed: ${booksComplete}`,
-      `- Recent P/L (last 10 tracked entries): $${recentProfit}`,
-      `- Total entries logged: ${ledgerCount}`,
-    ];
-    if (Array.isArray(activeBooks) && activeBooks.length > 0) {
-      contextLines.push(`- Active books: ${activeBooks.slice(0, 6).join(", ")}`);
-    }
-    if (topPromoType) contextLines.push(`- Strongest promo lane: ${topPromoType}`);
-    if (hitRate !== null && hitRate !== undefined) contextLines.push(`- Historical hit rate: ${Math.round(Number(hitRate))}%`);
-
-    const userPrompt = `Generate a personalized weekly action plan.\n\nUser context:\n${contextLines.join("\n")}`;
+    const context = parseActionPlanContext(await req.json());
+    const userPrompt = `Rank three verification workflow steps using only cited evidence references.\n\nEvidence context:\n${renderActionPlanContext(context)}`;
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -118,17 +75,17 @@ serve(async (req) => {
 
     await recordAiUsage(access.supabase, access.user.id, "ai_action_plan", {
       tier: access.tier,
-      bankroll: String(bankroll).slice(0, 24),
-      ledgerCount,
+      observationCount: context.observations.length,
+      profileIncluded: Boolean(context.profileConsent && context.profile),
     });
 
-    const normalizedPlan = {
-      summary: String(plan?.summary || "Weekly plan generated.").trim(),
-      assumptions: Array.isArray(plan?.assumptions) ? (plan.assumptions as unknown[]).map((a) => String(a || "").trim()).filter(Boolean).slice(0, 3) : [],
-      actions: Array.isArray(plan?.actions) ? (plan.actions as Record<string, unknown>[]).map((action) => normalizeAction(action)) : [],
-    };
+    const normalizedPlan = buildGroundedActionPlan(plan as Record<string, unknown>, context);
 
-    return new Response(JSON.stringify({ ...normalizedPlan, remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1) }), {
+    return new Response(JSON.stringify({
+      ...normalizedPlan,
+      usage: claude.usage || null,
+      remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
+    }), {
       headers: { ...CORS, "Content-Type": "application/json" },
     });
   } catch (e) {

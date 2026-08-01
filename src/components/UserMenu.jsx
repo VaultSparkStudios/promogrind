@@ -45,7 +45,7 @@ const pillBtn = (active, color) => ({
   transition: 'all 0.15s',
 });
 export default function UserMenu({
-  user, proStatus, darkMode, toggleTheme,
+  user, mobile = false, proStatus, darkMode, toggleTheme,
   compactMode, toggleCompact, currency, setCurrency,
   syncStatus, onSessionClick,
 }) {
@@ -160,14 +160,14 @@ export default function UserMenu({
   const signUpHref = getProjectAuthHref('signup');
   if (!user) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: mobile ? 4 : 8, minWidth: 0 }}>
         <a
           href={signInHref}
           style={{
             display: 'inline-flex', alignItems: 'center',
-            padding: '8px 16px', borderRadius: 8, minHeight: 36,
+            padding: mobile ? '7px 9px' : '8px 16px', borderRadius: 8, minHeight: mobile ? 32 : 36,
             background: 'transparent', border: `1px solid ${K.bd2}`,
-            color: K.dm, fontSize: 12, fontWeight: 600, fontFamily: font,
+            color: K.dm, fontSize: mobile ? 10 : 12, fontWeight: 600, fontFamily: font,
             textDecoration: 'none', whiteSpace: 'nowrap',
             transition: 'border-color 0.15s, color 0.15s',
           }}
@@ -180,9 +180,9 @@ export default function UserMenu({
           href={signUpHref}
           style={{
             display: 'inline-flex', alignItems: 'center',
-            padding: '8px 18px', borderRadius: 8, minHeight: 36,
+            padding: mobile ? '7px 10px' : '8px 18px', borderRadius: 8, minHeight: mobile ? 32 : 36,
             background: K.gn, border: 'none',
-            color: K.ink, fontSize: 12, fontWeight: 700, fontFamily: font,
+            color: K.ink, fontSize: mobile ? 10 : 12, fontWeight: 700, fontFamily: font,
             textDecoration: 'none', whiteSpace: 'nowrap',
             boxShadow: `0 0 20px ${K.gn}35`,
             transition: 'opacity 0.15s, box-shadow 0.15s',
@@ -190,7 +190,7 @@ export default function UserMenu({
           onMouseEnter={e => { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.boxShadow = `0 0 28px ${K.gn}55`; }}
           onMouseLeave={e => { e.currentTarget.style.opacity = '1';    e.currentTarget.style.boxShadow = `0 0 20px ${K.gn}35`; }}
         >
-          Create Free Account →
+          {mobile ? 'Join Free' : 'Create Free Account →'}
         </a>
       </div>
     );

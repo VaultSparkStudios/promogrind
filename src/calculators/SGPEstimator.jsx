@@ -25,15 +25,15 @@ export default function SGPEstimator() {
         <Tl t="SGP EV Estimator" badge="SAME-GAME PARLAY" bc={K.pp} shareable />
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-            <label style={S.label}>Individual leg odds (assume independent)</label>
+            <div id="sgp-legs-label" style={S.label}>Individual leg odds (assume independent)</div>
             <button onClick={addLeg} disabled={legs.length >= 4} style={{ padding: "3px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>+ Leg</button>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {legs.map((lg, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                 <span style={{ fontSize: 10, color: K.mt }}>Leg {i + 1}</span>
-                <input style={{ ...S.input, width: 90 }} value={lg.odds} onChange={(e) => updateLeg(i, e.target.value)} placeholder="+150" />
-                {legs.length > 2 && <span onClick={() => removeLeg(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11, padding: "0 2px" }}>✕</span>}
+                <input aria-label={`Same game parlay leg ${i + 1} odds`} aria-describedby="sgp-legs-label" style={{ ...S.input, width: 90 }} value={lg.odds} onChange={(e) => updateLeg(i, e.target.value)} placeholder="+150" />
+                {legs.length > 2 && <button type="button" aria-label={`Remove same game parlay leg ${i + 1}`} onClick={() => removeLeg(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11, padding: "2px 4px", background: "transparent", border: 0 }}>✕</button>}
               </div>
             ))}
           </div>

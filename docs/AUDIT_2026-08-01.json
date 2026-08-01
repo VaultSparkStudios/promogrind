@@ -1,0 +1,307 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-08-01",
+  "session": 122,
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched"
+  },
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "infrastructure-aware-public-app",
+  "successBar": [
+    "Every recommendation, reward, badge, and public/shared receipt must be derived from current evidence and must never convert visits, raw activity, profit sign, or a database row into implied trust.",
+    "Artificial Intelligence may prioritize verified observations; it must not invent live offers, silently substitute a bankroll, or transmit operator context without an explicit, inspectable privacy choice.",
+    "Every durable browser datum must have one source-derived owner, classification, retention/export policy, and test-enforced schema entry.",
+    "Every decision-critical control must be keyboard operable, programmatically named, focus-visible, and protected against regression.",
+    "Every entity and evidence event that participates in local/cloud merge must carry a collision-resistant, contract-identifiable identifier."
+  ],
+  "axisWeights": {
+    "featuresDepth": 2,
+    "innovativeFeatures": 1.4,
+    "uiUxFeedback": 2,
+    "feedbackLoop": 1.5,
+    "gamificationEngagement": 1.2,
+    "aiIntegration": 1.3,
+    "securityPrivacy": 1.5,
+    "speedOrganization": 1.5,
+    "tokenApiReduction": 1.5
+  },
+  "premiseVerification": {
+    "method": "Direct inspection of live React, workflow, storage, Artificial Intelligence Edge, release-workflow, accessibility, generated-truth, and test surfaces; main-branch GitHub Actions and release-gate evidence; baseline Vitest direct exit 0. The missing Studio Oracle/sample helper was replaced by bounded source searches and behavioral call-path tracing.",
+    "primaryGeniusList": "The S121 generated list is truthfully exhausted, so this audit is a fresh second-order live-code pass rather than a re-list of completed TASK_BOARD prose.",
+    "generatedCandidates": 34,
+    "verifiedCandidates": 19,
+    "selected": 6,
+    "rejectedOrMerged": 28,
+    "baselineTests": "79 files, 613/613 Vitest checks passing with direct exit 0",
+    "releaseLens": "Main CI passes at 4ad9c72; Deploy Pages truthfully remains red after successful deployment because the post-deploy launch contract is red. Remote staging is absent. Branding/release-surface checks pass. SPARKED remains NO-GO."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "id": 1,
+      "slug": "evidence-gated-ai-action-plan",
+      "title": "Turn the weekly AI plan from a context-leaking offer generator into an evidence-gated decision briefing",
+      "tier": "fire",
+      "axis": "Artificial Intelligence / privacy / token reduction / feature depth",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 9,
+      "effortHours": 7,
+      "priority": 28.4,
+      "why": "The current plan silently defaults an absent bankroll to $1,000, reads recent profit and active books directly from localStorage without the Advisor privacy contract, and instructs the model to produce specific sportsbook actions despite having no current verified offer observations. That can create fabricated urgency/value while spending a model call on an evidence vacuum.",
+      "evidence": "src/components/AIActionPlan.jsx reads promo_engine_v3 and pg_bankroll directly, substitutes '1000', sends activeBooks/recentProfit by default, and renders value claims. supabase/functions/ai-action-plan/index.ts defaults bankroll again and prompts for three specific sportsbook actions without an observation/evidence input. No buildAdvisorPrivacyEnvelope, terms receipt, freshness boundary, or calibration policy is present in this path.",
+      "recipe": "Create a typed action-plan context contract built from canonical appData. Require an explicit profile-context choice before sending bankroll, books, or outcomes. Accept only fresh verified promo observations as actionable evidence; when none exist, return a deterministic local verification plan and make zero provider call. Add evidence references, assumptions, requiresVerification, analysisSource, usage, and probability-basis fields; feed resolved calibration into confidence guardrails without rewriting probabilities; refuse ungrounded book/value claims; add client/Edge/adversarial tests and a source invariant.",
+      "timeToFirstValue": "The first user without fresh observations gets a sober verify-first plan locally, while a consented user with fresh evidence gets an auditable plan tied to what was actually observed.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Remove the default bankroll and require current observations before rendering book/value claims." },
+        "L2": { "effortHours": 5, "recipe": "L1 plus explicit privacy choice, typed evidence references, deterministic no-evidence fallback, and client/Edge tests." },
+        "L3": { "effortHours": 7, "recipe": "L2 plus calibration-aware confidence guardrails, source invariants, usage/analysis receipts, idempotent cache keys, and complete decision-brief provenance." }
+      },
+      "executionLog": [{
+        "session": 122,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-01",
+        "result": "Current confirmed observations are the only actionable evidence; profile context is explicit opt-in; evidence-empty requests stay local and spend zero provider calls; Edge output is normalized to verification-first claims with cited evidence references.",
+        "verification": ["17 focused client/contract checks", "Deno typecheck for ai-action-plan", "npm run verify:launch-local (direct exit 0)"],
+        "ignisScore": 44911,
+        "ignisTier": "FORGE",
+        "recommendedModel": "T2_opusplan",
+        "telemetrySource": "context/PROJECT_STATUS.json"
+      }]
+    },
+    {
+      "rank": 2,
+      "id": 2,
+      "slug": "semantic-soul-policy-ratchet",
+      "title": "Enforce sober engagement by behavior and data flow, not a narrow phrase list",
+      "tier": "fire",
+      "axis": "gamification / engagement / observability / SOUL fidelity",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 9,
+      "effortHours": 8,
+      "priority": 27.1,
+      "why": "S121 removed several visible pressure patterns, but reachable code still awards points for login, calculations, and ledger activity; ranks mastery by extracted profit; celebrates win rate and win streak; posts a profit-only Wins Wall; and labels a database row 'verified'. The current regression suite therefore certifies phrases while missing the actual incentive graph.",
+      "evidence": "usePromoAuthSession calls onDailyLogin; sync.js awards daily_login/calculation/ledger_entry points; mastery.js derives GLOBAL_RANKS and extra XP from profit; DashboardActionWidgets produces win-rate/streak/best-day reports; ProfitCertificate and CommunityWinsWall publish profit totals and label server rows verified; DailyDashboard mounts the wall. All are reachable imports.",
+      "recipe": "Define a semantic engagement policy around evidence-bearing review, reasoned skip, correction, calibration settlement, and terms verification. Remove visit/raw-activity point awards and profit-sign rank progression; rebuild weekly reporting and mastery around review completeness, evidence coverage, and learning notes; turn the profit-only wall/certificate into an explicitly self-reported review receipt with no independent-verification badge; add behavior-level contract tests and a source scanner that fails on prohibited reward call paths, not merely copy.",
+      "timeToFirstValue": "The next dashboard session rewards closure and reflection regardless of whether the realized amount is positive, negative, or zero.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Remove login/raw-activity rewards and the false verified label." },
+        "L2": { "effortHours": 6, "recipe": "L1 plus review-based mastery and weekly review reporting, preserving loss/zero/skip evidence." },
+        "L3": { "effortHours": 8, "recipe": "L2 plus one semantic policy module, behavior/source contracts, self-reported review receipts, and migration-safe compatibility for existing local data." }
+      },
+      "executionLog": [{
+        "session": 122,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-01",
+        "result": "Removed login/calculation/ledger point awards and profit-derived ranks; mastery and weekly reporting now measure evidence-bearing review depth; public outcome cards are explicitly local self-reports rather than verified certificates.",
+        "verification": ["64 focused mastery/mission/passport/achievement checks", "SOUL semantic source contract", "606/606 full Vitest checks"],
+        "ignisScore": 44911,
+        "ignisTier": "FORGE",
+        "recommendedModel": "T2_opusplan",
+        "telemetrySource": "context/PROJECT_STATUS.json"
+      }]
+    },
+    {
+      "rank": 3,
+      "id": 3,
+      "slug": "workflow-decision-evidence-chain",
+      "title": "Wire the dormant self-attested chain into the real terms-to-outcome workflow",
+      "tier": "fire",
+      "axis": "innovative features / feedback loop / security / trust",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 10,
+      "effortHours": 8,
+      "priority": 27.1,
+      "why": "PromoGrind has terms snapshots, workflows, result feedback, and a checksum chain, but they are separate islands. The chain is imported only by tests, so a real decision cannot show that the observed terms, action, skip/placement, settlement, and reflection belong to one evidence packet.",
+      "evidence": "src/lib/promoProvenance.js exports appendReceipt/verifyChain/readReceipts but no production source imports them. SmartPromoRecommender records termsDrift snapshots; ResultFeedbackCard creates and settles workflows; no shared evidence identifier or chain receipt links those surfaces. The current chain payload also lacks workflowId/event type.",
+      "recipe": "Evolve the local self-attested contract to version 3 with workflowId, eventType, source evidence reference, canonical realized outcome provenance, reason/note hashes, and previous hash. Append idempotent decision-created, placed/skipped, and settled/reflected events from the actual workflow path; expose chain health and event count beside result feedback/Profile; preserve explicit self-attested language; detect corruption without blocking user data recovery; add production-shaped lifecycle, idempotency, tamper, privacy, and migration tests.",
+      "timeToFirstValue": "The first saved workflow receives a visible, locally verifiable evidence trail that grows when the operator settles or explains the decision.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Append workflow-created and settled events with workflow IDs." },
+        "L2": { "effortHours": 6, "recipe": "L1 plus idempotency, terms references, UI chain health, and v2 compatibility." },
+        "L3": { "effortHours": 8, "recipe": "L2 plus complete event taxonomy, privacy-preserving hashed notes, corruption receipts, migration tests, and source-enforced production wiring." }
+      },
+      "executionLog": [{
+        "session": 122,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-01",
+        "result": "Production workflow creation and both settlement paths append idempotent v3 per-workflow/global hash-linked receipts with source references, private-note hashes, clear/write serialization, and explicit self-attested scope.",
+        "verification": ["29 focused provenance/lifecycle checks", "decision-evidence production-wiring contract", "606/606 full Vitest checks"],
+        "ignisScore": 44911,
+        "ignisTier": "FORGE",
+        "recommendedModel": "T2_opusplan",
+        "telemetrySource": "context/PROJECT_STATUS.json"
+      }]
+    },
+    {
+      "rank": 4,
+      "id": 4,
+      "slug": "source-derived-local-data-rights-registry",
+      "title": "Make browser storage ownership, export, deletion, and retention source-derived",
+      "tier": "fire",
+      "axis": "security / privacy / organization / user control",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 8,
+      "effortHours": 6,
+      "priority": 24.0,
+      "why": "The data-control allowlist is handwritten while dozens of feature modules write their own keys. New operator memory can silently fall outside export/clear, and transient or entitlement state can be restored accidentally unless every key is centrally classified.",
+      "evidence": "src/lib/dataControls.js lists 22 keys and six prefixes, while live writers include pg_ai_calibration_ledger, pg_promo_integrity_ledger_v2, pg_promo_terms_receipts, pg_profit_goal, pg_expiring_promos, pg_promo_observations, pg_action_plan_cache/date, AI usage/spend caches, milestone keys, and feature cache families. No test scans source literals against the data-control classification.",
+      "recipe": "Create one storage registry with exact/prefix entries, owner, kind, exportability, clearability, retention, sensitivity, and restore policy. Derive data inventory/export/clear behavior from it; classify every live literal/prefix and preserve deliberate exclusions; add a source scanner that finds localStorage/sessionStorage reads/writes and fails on unclassified durable keys; show excluded/transient counts honestly in the Data Controls UI; add export/restore/clear/source-drift tests.",
+      "timeToFirstValue": "The Profile data inventory immediately reflects every durable operator datum and can no longer silently omit a new feature key.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Add missing exportable keys and regression tests." },
+        "L2": { "effortHours": 4, "recipe": "L1 plus a typed central registry and derive data controls from it." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus source-literal discovery, prefix/dynamic-key policy, retention/sensitivity metadata, excluded-state receipts, and complete adversarial restore coverage." }
+      },
+      "executionLog": [{
+        "session": 122,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-01",
+        "result": "One exact/prefix registry now owns local/session storage classification, retention, sensitivity, export, restore, and deletion policy; all 81 production storage tokens are classified and the UI reports governed versus exportable data honestly.",
+        "verification": ["23 focused data/identity checks", "storage source scanner: 81 classified, 3 event signals excluded", "npm run verify:launch-local (direct exit 0)"],
+        "ignisScore": 44911,
+        "ignisTier": "FORGE",
+        "recommendedModel": "T2_opusplan",
+        "telemetrySource": "context/PROJECT_STATUS.json"
+      }]
+    },
+    {
+      "rank": 5,
+      "id": 5,
+      "slug": "decision-control-accessibility-contract",
+      "title": "Make every decision-critical input and action natively operable and named",
+      "tier": "high",
+      "axis": "UI / UX / accessibility / feedback quality",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 7,
+      "effortHours": 8,
+      "priority": 19.0,
+      "why": "The highest-value tracker, ledger, calculator, and dashboard forms visually show labels but frequently do not associate them with controls; destructive/edit/favorite/rating actions use clickable spans or divs. Keyboard and assistive-technology users therefore cannot reliably enter or revise the evidence the product depends on.",
+      "evidence": "Live source scan finds 56 JSX label elements without htmlFor and 20 nonsemantic div/span click targets. Verified examples include Ledger edit/delete and form controls, BetTracker delete and form controls, calculator leg removals, App favorite controls, TrackingTools deletes, DashboardActionWidgets inputs, and star ratings.",
+      "recipe": "Introduce small native control primitives where useful, then repair every verified decision-critical label/action with stable IDs, native buttons/fieldset/legend, accessible names, input modes, focus-visible styles, pressed/checked state, and 44px mobile targets where space permits. Add a source-level regression for nonsemantic interactive elements and detached decision-form labels, plus focused keyboard/name tests and desktop/mobile rendered-pixel review in both themes.",
+      "timeToFirstValue": "A keyboard-only user can create, edit, delete, rate, and settle operator records without guessing which control has focus.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Replace nonsemantic destructive/favorite actions and label the primary ledger/tracker controls." },
+        "L2": { "effortHours": 6, "recipe": "L1 plus calculator/dashboard forms, focus states, grouping, input modes, and tests." },
+        "L3": { "effortHours": 8, "recipe": "L2 plus a structural source gate, all verified decision-critical surfaces, theme/device pixel review, and accessibility receipts." }
+      },
+      "executionLog": [{
+        "session": 122,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-01",
+        "result": "Associated 60 visible labels, converted or governed every verified non-native decision control, repaired mobile header overflow, and moved the mobile AI-chat launcher out of decision fields.",
+        "verification": ["decision-control accessibility contract: 60 labels, 12 governed non-native nodes", "keyboard focus-order browser proof", "CANON-053: 4 hash-bound dark/light desktop/mobile captures, 0 blocking defects"],
+        "ignisScore": 44911,
+        "ignisTier": "FORGE",
+        "recommendedModel": "T2_opusplan",
+        "telemetrySource": "context/PROJECT_STATUS.json"
+      }]
+    },
+    {
+      "rank": 6,
+      "id": 6,
+      "slug": "canonical-entity-id-contract",
+      "title": "Give every mergeable operator entity one collision-resistant identity contract",
+      "tier": "high",
+      "axis": "speed / organization / sync correctness / observability",
+      "status": "shipped",
+      "impact": 8,
+      "innovation": 7,
+      "effortHours": 6,
+      "priority": 18.7,
+      "why": "Cloud/entity merge depends on IDs, yet records are created with Date.now(), Date.now()+index, and short Math.random fragments across trackers, ledger, imports, feedback, playbooks, and widgets. Same-millisecond or multi-tab/import collisions can overwrite or conflate unrelated evidence.",
+      "evidence": "Live writers in BetTracker, Ledger, DashboardActionWidgets, CSVImportModal, BonusBet AI scan, TrackingTools, PromoExpiryWidget, ResultFeedbackCard, playbooks, ProfitCertificate, LiveScanner, and trust receipts synthesize IDs independently. promograph already has a private safeUUID helper, proving the reusable primitive exists only inside one module.",
+      "recipe": "Create a canonical entity-ID utility using crypto.randomUUID when available and a monotonic entropy-bearing fallback, with type prefixes and deterministic import namespaces. Migrate every mergeable/operator-evidence creation path while leaving timestamps as timestamps; preserve legacy IDs on read; make CSV re-import idempotent from normalized row content; add collision, fallback, multi-row import, legacy compatibility, and source-drift tests.",
+      "timeToFirstValue": "New records from two tabs or a repeated import remain distinct or deliberately idempotent instead of colliding by clock tick.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Extract randomUUID-based IDs and migrate feedback/ledger/tracker paths." },
+        "L2": { "effortHours": 4, "recipe": "L1 plus imports, playbooks, widgets, trust receipts, and legacy compatibility." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus deterministic import IDs, monotonic fallback, source enforcement, multi-tab collision tests, and entity-type provenance." }
+      },
+      "executionLog": [{
+        "session": 122,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-01",
+        "result": "Typed random UUIDs with monotonic fallback now govern 11 mergeable writer surfaces; deterministic import IDs preserve idempotency without clock collisions.",
+        "verification": ["40 focused ID/writer checks", "entity-ID source contract: 11 governed writers, 0 clock-only IDs", "606/606 full Vitest checks"],
+        "ignisScore": 44911,
+        "ignisTier": "FORGE",
+        "recommendedModel": "T2_opusplan",
+        "telemetrySource": "context/PROJECT_STATUS.json"
+      }]
+    }
+  ],
+  "innovationReserve": [
+    "A local decision evidence graph that can answer not only what happened, but which observed terms and reasoning produced the action.",
+    "A calibration brake that changes workflow actionability when an AI source has enough resolved evidence to be measurably unreliable, without rewriting the model's stated probability.",
+    "A data-rights registry that makes every new browser feature declare its retention and export semantics before it can ship.",
+    "A semantic SOUL ratchet that rejects incentive data flows even when their copy is euphemistically renamed."
+  ],
+  "skipped": [
+    {
+      "slug": "force-deploy-workflow-green",
+      "reason": "Rejected on verification: the red Deploy Pages conclusion is currently truthful evidence that post-deploy launch contracts remain red. Hiding it would weaken the release gate. The implementation may improve verdict separation, but it must not erase the red contract."
+    },
+    {
+      "slug": "local-obelisk-ui-switch",
+      "reason": "Honest deferral: Supabase password auth remains reachable and the generated Obelisk component has no deployed verifier/account-link/session bridge. A UI-only identity swap would be a security facade; external Obelisk contract and provider authority are required first."
+    },
+    {
+      "slug": "edit-central-cost-registry-to-match-local-status",
+      "reason": "Rejected as an illegal cross-repo write. The local canonical status says trial-ceiling while Studio release gates read AUDIT-PENDING/COST-BLEEDER from the private registry. Reconciliation belongs in Studio Ops via signed Ark cargo, with the repo evidence attached; flat-rate Max Plan cost is not treated as an alarm."
+    },
+    {
+      "slug": "full-bundle-splitting-overhaul",
+      "reason": "Rejected on verification: the prior module-graph gate remains within its 60KB gzip initial budget and major surfaces are already lazy-loaded. Large source files are maintainability candidates, not a measured runtime emergency."
+    },
+    {
+      "slug": "ban-every-direct-profit-field-read",
+      "reason": "Rejected on verification: ledger rows intentionally use profit as their domain field while result-feedback rows use actualProfit. The canonical resolver is required at mixed-domain boundaries, not inside a ledger-only calculation; a blanket ban would obscure correct domain contracts."
+    },
+    {
+      "slug": "install-an-accessibility-component-library",
+      "reason": "Rejected by the internal-first ladder: native controls plus the existing shared UI layer can solve the verified defects without new supply-chain surface or design-system replacement."
+    },
+    {
+      "slug": "fabricate-external-launch-proof",
+      "reason": "Rejected by evidence policy: remote staging, headers, historical rotation, Zoho delivery/reply identity, Supabase deployment, auth-email, complete payment, friend, and capture receipts are external facts and cannot be manufactured by repository edits."
+    }
+  ],
+  "totals": {
+    "count": 6,
+    "selected": 6,
+    "fire": 4,
+    "high": 2,
+    "effortHoursL2": 31,
+    "effortHoursL3": 43,
+    "priority": 144.3,
+    "top3": [
+      "evidence-gated-ai-action-plan",
+      "semantic-soul-policy-ratchet",
+      "workflow-decision-evidence-chain"
+    ]
+  },
+  "sample": {
+    "picked": 20,
+    "scanned": 600,
+    "tokens": 30000,
+    "commandsRun": 31,
+    "baselineTests": "613/613 passing across 79 files",
+    "baselineRelease": "main CI green; deploy workflow red on explicit post-deploy contract; SPARKED NO-GO"
+  },
+  "notes": "All six selected items are repository-owned and verified against reachable production code. External proofs and cross-repo truth remain explicit deferrals. No launch, cost, identity, or provider evidence was fabricated."
+}

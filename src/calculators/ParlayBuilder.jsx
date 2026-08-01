@@ -23,7 +23,7 @@ export default function ParlayBuilder() {
         <Tl t="Parlay Builder" badge="MULTI-LEG" bc={K.yl} shareable />
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-            <label style={S.label}>Legs ({legs.length}/8) — enter any odds format</label>
+            <div id="parlay-legs-label" style={S.label}>Legs ({legs.length}/8) — enter any odds format</div>
             <button onClick={addLeg} disabled={legs.length >= 8} style={{ padding: "3px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>+ Leg</button>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -35,9 +35,9 @@ export default function ParlayBuilder() {
                 <div key={i} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                     <span style={{ fontSize: 10, color: K.mt }}>Leg {i + 1}</span>
-                    <input style={{ ...S.input, width: 90, borderColor: isFav ? `${K.rd}80` : undefined }} value={lg.odds} onChange={(e) => updateLeg(i, e.target.value)} placeholder="+150" />
+                    <input aria-label={`Leg ${i + 1} odds`} aria-describedby="parlay-legs-label" style={{ ...S.input, width: 90, borderColor: isFav ? `${K.rd}80` : undefined }} value={lg.odds} onChange={(e) => updateLeg(i, e.target.value)} placeholder="+150" />
                     {isFav && <span style={S.tag(K.rd)}>FAV</span>}
-                    {legs.length > 2 && <span onClick={() => removeLeg(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11, padding: "0 2px" }}>✕</span>}
+                    {legs.length > 2 && <button type="button" aria-label={`Remove parlay leg ${i + 1}`} onClick={() => removeLeg(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11, padding: "2px 4px", background: "transparent", border: 0 }}>✕</button>}
                   </div>
                   {ip && <div style={{ fontSize: 9, color: isFav ? K.rd : K.mt, paddingLeft: 40 }}>{ip}% implied</div>}
                 </div>

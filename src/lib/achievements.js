@@ -25,11 +25,11 @@ export const ACHIEVEMENTS = [
   { id: 'streak_30',      label: 'Monthly Discipline', desc: '30-day evidence review cadence',      icon: '▦', category: 'cadence'  },
   { id: 'streak_100',     label: 'Long-Run Reviewer',  desc: '100-day evidence review cadence',     icon: '◎', category: 'cadence'  },
   // Mastery
-  { id: 'bonus_closer',   label: 'Bonus Bet Closer',   desc: 'Reached Closer on Bonus Bet',         icon: '🎯', category: 'mastery'  },
-  { id: 'arb_executor',   label: 'Arbitrage Reviewer', desc: 'Reached Executor on Arbitrage',       icon: '↔', category: 'mastery'  },
-  { id: 'boost_executor', label: 'Boost Reviewer',     desc: 'Reached Executor on Profit Boost',    icon: '↗', category: 'mastery'  },
-  { id: 'dep_executor',   label: 'Match Reviewer',     desc: 'Reached Executor on Deposit Match',   icon: '↻', category: 'mastery'  },
-  { id: 'multi_lane',     label: 'All-Lane Operator',  desc: 'Reached Executor on 4+ promo types',  icon: '🌐', category: 'mastery'  },
+  { id: 'bonus_closer',   label: 'Bonus Bet Calibrator', desc: 'Reached Calibrator on Bonus Bet reviews', icon: '◇', category: 'mastery'  },
+  { id: 'arb_executor',   label: 'Arbitrage Reviewer', desc: 'Reached Reviewer on Arbitrage',        icon: '↔', category: 'mastery'  },
+  { id: 'boost_executor', label: 'Boost Reviewer',     desc: 'Reached Reviewer on Profit Boost',     icon: '↗', category: 'mastery'  },
+  { id: 'dep_executor',   label: 'Match Reviewer',     desc: 'Reached Reviewer on Deposit Match',    icon: '↻', category: 'mastery'  },
+  { id: 'multi_lane',     label: 'All-Lane Reviewer',  desc: 'Reached Reviewer on 4+ promo types',   icon: '▦', category: 'mastery'  },
   // Engagement
   { id: 'bets_10',        label: 'Ten Decisions Logged', desc: 'Recorded 10 reviewed or reasoned decisions', icon: '□', category: 'engage' },
   { id: 'ledger_50',      label: 'Data Driven',        desc: '50+ ledger entries',                  icon: '📊', category: 'engage'   },

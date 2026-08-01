@@ -6,7 +6,7 @@
  * - Unauthenticated / Supabase unavailable: falls back to localStorage only
  *
  * Usage (drop-in replacement for storage.js):
- *   import { loadData, saveData, fireVaultEvent } from './sync.js';
+ *   import { loadData, saveData } from './sync.js';
  */
 
 import { supabase } from './auth.js';
@@ -139,61 +139,6 @@ export async function saveData(data) {
       throw error;
     }
   }
-}
-
-// ── Vault Event ───────────────────────────────────────────────────────────────
-// Awards vault points and unlocks achievements server-side.
-// Points schedule:
-//   first_calculation  → 5 pts
-//   calculation        → 1 pt  (subsequent)
-//   ledger_entry       → 2 pts
-//   daily_login        → 3 pts
-
-const _fired = new Set(); // dedupe within a single page session
-
-export async function fireVaultEvent(eventType, points, metadata = {}) {
-  // Dedupe milestone events within the same page session
-  const dedupeKey = `${eventType}_${JSON.stringify(metadata)}`;
-  if (_fired.has(dedupeKey)) return;
-  _fired.add(dedupeKey);
-
-  let session = null;
-  try {
-    const { data } = await supabase.auth.getSession();
-    session = data.session;
-  } catch { return; }
-
-  if (!session) return;
-
-  try {
-    await supabase.rpc('award_vault_points', {
-      p_user_id:    session.user.id,
-      p_event_type: eventType,
-      p_points:     points,
-      p_metadata:   metadata,
-    });
-  } catch { /* non-critical — don't surface errors to the user */ }
-}
-
-// ── Shortcuts for common events ───────────────────────────────────────────────
-
-let _calcCount = 0;
-export function onCalculation(calculatorName) {
-  _calcCount++;
-  const isFirst = _calcCount === 1;
-  fireVaultEvent('calculation', isFirst ? 5 : 1, { calculator: calculatorName, count: _calcCount });
-}
-
-export function onLedgerEntry() {
-  fireVaultEvent('ledger_entry', 2);
-}
-
-export function onDailyLogin() {
-  // Only fires once per calendar day (dedupe by date key)
-  const today = new Date().toISOString().slice(0, 10);
-  if (localStorage.getItem('_pg_login_day') === today) return;
-  localStorage.setItem('_pg_login_day', today);
-  fireVaultEvent('daily_login', 3);
 }
 
 // ── Internals ─────────────────────────────────────────────────────────────────
@@ -516,4 +461,3 @@ async function _flushQueue(userId) {
   }
   await _saveQueue(remaining);
 }
-

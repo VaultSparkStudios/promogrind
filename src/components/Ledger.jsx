@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { toD, f, calcROI, downloadFile, K, font, fontD, S } from "../lib/shared.js";
 import { BOOKS } from "../books.js";
-import { onLedgerEntry } from "../sync.js";
 import { CANONICAL_APP_URL, getProjectAuthHref } from "../launchState.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
 import { In, RR, Tl, Nt, shouldShowTrigger, dismissTrigger } from "../ui.jsx";
 import { useViewport } from "../app/responsive.js";
+import { createEntityId } from "../lib/entityId.js";
 
 // ═══ SHARE WEEK BUTTON ═══
 const ShareWeekBtn = ({entries}) => {
@@ -182,9 +182,8 @@ const Ledger = () => {
   const add = () => {
     if(!form.profit) return;
     if(entries.length === 0) window.plausible?.('first_ledger_entry');
-    save([{...form,id:Date.now()},...entries]);
+    save([{...form,id:createEntityId("ledger")},...entries]);
     setForm(f=>({...f,bonus:"",hedge:"",profit:"",ev:"",notes:""}));
-    onLedgerEntry();
     if(toast) toast('✓ Entry logged');
     if(form.myOdds&&form.closingOdds&&toast) {
       const my=toD(form.myOdds),cl=toD(form.closingOdds);
@@ -332,9 +331,9 @@ const Ledger = () => {
       </div>);
     })()}
     <div style={{...S.row,alignItems:"flex-end"}}>
-      <div style={S.col}><label style={S.label}>Date</label><input style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-      <div style={{...S.col,minWidth:140}}><label style={S.label}>Book</label><select style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
-      <div style={{...S.col,minWidth:160}}><label style={S.label}>Type</label><select style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
+      <div style={S.col}><label htmlFor="ledger-date" style={S.label}>Date</label><input id="ledger-date" style={S.input} type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+      <div style={{...S.col,minWidth:140}}><label htmlFor="ledger-book" style={S.label}>Book</label><select id="ledger-book" style={S.input} value={form.book} onChange={e=>setForm(f=>({...f,book:e.target.value}))}>{BOOKS.map(b=><option key={b.name}>{b.name}</option>)}</select></div>
+      <div style={{...S.col,minWidth:160}}><label htmlFor="ledger-type" style={S.label}>Type</label><select id="ledger-type" style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
       <In l="Bonus $" v={form.bonus} set={v=>setForm(f=>({...f,bonus:v}))} pre="$"/>
@@ -343,7 +342,7 @@ const Ledger = () => {
       <In l="EV % (opt)" v={form.ev} set={v=>setForm(f=>({...f,ev:v}))} ph="4.2" pre="%"/>
       <In l="Your Odds (opt)" v={form.myOdds} set={v=>setForm(f=>({...f,myOdds:v}))} ph="+110"/>
       <In l="Closing Odds (opt)" v={form.closingOdds} set={v=>setForm(f=>({...f,closingOdds:v}))} ph="+105"/>
-      <div style={{...S.col,minWidth:80}}><label style={S.label}>&nbsp;</label><button onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{...S.col,minWidth:80,paddingTop:18}}><button type="button" onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
     </div>
     {entries.length>=2&&(()=>{
       const sorted=[...entries].sort((a,b)=>new Date(a.date)-new Date(b.date));
@@ -458,7 +457,7 @@ const Ledger = () => {
             <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div>
             <div style={{fontSize:11,color:K.mt,marginBottom:12}}>Every promo you convert goes here. Start with the Bonus Bet Converter — it auto-logs results.</div>
             <button onClick={()=>{
-              const demo={id:Date.now(),date:new Date().toISOString().slice(0,10),book:"DraftKings",type:"Bonus Conversion",bonus:"200",hedge:"126",profit:"138.60",notes:"Demo entry — replace with your actual result"};
+          const demo={id:createEntityId("ledger-demo"),date:new Date().toISOString().slice(0,10),book:"DraftKings",type:"Bonus Conversion",bonus:"200",hedge:"126",profit:"138.60",notes:"Demo entry — replace with your actual result"};
               syncAppData({...data,ledger:[demo,...(data.ledger||[])]});
             }} style={{padding:"7px 18px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>
               + Add demo entry
@@ -542,8 +541,8 @@ const Ledger = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(e.profit)>=0?K.gn:K.rd,fontWeight:600}}>{parseFloat(e.profit)>=0?"+":""}${e.profit}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{(()=>{if(!e.myOdds||!e.closingOdds)return<span style={{color:K.mt}}>—</span>;const my=toD(e.myOdds),cl=toD(e.closingOdds);if(my<=1||cl<=1)return<span style={{color:K.mt}}>—</span>;const clv=(my/cl-1)*100;return<span style={{color:clv>=0?K.gn:K.rd,fontWeight:600}}>{clv>=0?"+":""}{f(clv,2)}%</span>;})()}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
-              <span onClick={()=>startEdit(e)} style={{cursor:"pointer",color:K.ac,fontSize:11,marginRight:8}} title="Edit">✎</span>
-              <span onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10}} title="Delete">✕</span>
+              <button type="button" aria-label={`Edit ${e.book} ledger entry`} onClick={()=>startEdit(e)} style={{cursor:"pointer",color:K.ac,fontSize:11,marginRight:4,background:"transparent",border:0,padding:4}} title="Edit">✎</button>
+              <button type="button" aria-label={`Delete ${e.book} ledger entry`} onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10,background:"transparent",border:0,padding:4}} title="Delete">✕</button>
             </td>
           </tr>);
         })}</tbody>

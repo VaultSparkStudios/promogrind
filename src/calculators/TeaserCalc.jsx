@@ -23,8 +23,8 @@ export default function TeaserCalc() {
         <Tl t="Teaser Calculator" badge="NFL / NBA" bc={K.ac} shareable />
         <div style={S.row}>
           <div style={S.col}>
-            <label style={S.label}>Legs</label>
-            <select style={S.input} value={legs} onChange={(e) => setLegs(e.target.value)}>
+            <label htmlFor="teaser-legs" style={S.label}>Legs</label>
+            <select id="teaser-legs" style={S.input} value={legs} onChange={(e) => setLegs(e.target.value)}>
               {["2", "3", "4", "5"].map((n) => <option key={n}>{n}</option>)}
             </select>
           </div>

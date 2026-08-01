@@ -121,11 +121,11 @@ function AchievementsSection() {
   const [expanded, setExpanded] = React.useState(false);
 
   const categories = [
-    { key: 'profit',   label: 'Profit'   },
+    { key: 'evidence', label: 'Evidence' },
     { key: 'books',    label: 'Books'    },
-    { key: 'streak',   label: 'Streak'   },
+    { key: 'cadence',  label: 'Review cadence' },
     { key: 'mastery',  label: 'Mastery'  },
-    { key: 'engage',   label: 'Activity' },
+    { key: 'engage',   label: 'Decision tools' },
     { key: 'accuracy', label: 'Accuracy' },
     { key: 'start',    label: 'Start'    },
     { key: 'missions', label: 'Missions' },
@@ -136,6 +136,10 @@ function AchievementsSection() {
       <div
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, cursor: 'pointer' }}
         onClick={() => setExpanded(e => !e)}
+        role="button"
+        tabIndex={0}
+        aria-expanded={expanded}
+        onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setExpanded(e => !e); } }}
       >
         <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
           Achievements
@@ -151,7 +155,7 @@ function AchievementsSection() {
           {ACHIEVEMENTS.filter(a => earnedIds.has(a.id)).slice(0, 8).map(a => (
             <span key={a.id} title={a.label} style={{ fontSize: 18, animation: 'pgBadgeIn 0.35s ease backwards' }}>{a.icon}</span>
           ))}
-          {earnedCount === 0 && <span style={{ fontSize: 10, color: K.mt }}>Complete actions to earn badges</span>}
+          {earnedCount === 0 && <span style={{ fontSize: 10, color: K.mt }}>Close review loops to document evidence milestones</span>}
         </div>
       )}
 
@@ -195,22 +199,22 @@ function MasterySection() {
   const mastery = useMemo(() => ctx?.appData ? computeMastery(ctx.appData) : null, [ctx?.appData]);
   if (!mastery) return null;
 
-  const { globalRank, perType } = mastery;
-  const activeLanes = Object.entries(perType).filter(([, d]) => d.xp > 0).sort(([, a], [, b]) => b.xp - a.xp);
+  const { reviewDepthBand, perType } = mastery;
+  const activeLanes = Object.entries(perType).filter(([, d]) => d.reviews > 0).sort(([, a], [, b]) => b.reviews - a.reviews);
 
   return (
     <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
       <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
-        Operator Mastery
+        Decision-review depth
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: globalRank.color, background: `${globalRank.color}18`, border: `1px solid ${globalRank.color}35`, padding: '3px 12px', borderRadius: 99, fontFamily: font }}>
-          {globalRank.name}
+        <span style={{ fontSize: 11, fontWeight: 700, color: reviewDepthBand.color, background: `${reviewDepthBand.color}18`, border: `1px solid ${reviewDepthBand.color}35`, padding: '3px 12px', borderRadius: 99, fontFamily: font }}>
+          {reviewDepthBand.name}
         </span>
-        <span style={{ fontSize: 10, color: K.mt }}>Global Rank</span>
+        <span style={{ fontSize: 10, color: K.mt }}>{mastery.reviewCount} closed review{mastery.reviewCount === 1 ? "" : "s"} · profit does not affect this band</span>
       </div>
       {activeLanes.length === 0 && (
-        <div style={{ fontSize: 10, color: K.mt }}>Settle bets to build lane mastery</div>
+        <div style={{ fontSize: 10, color: K.mt }}>Settle with a realized result or save a reasoned skip to build review depth.</div>
       )}
       {activeLanes.map(([key, d]) => {
         const color = MASTERY_COLOR[d.level] || K.mt;
@@ -218,10 +222,10 @@ function MasterySection() {
           <div key={key} style={{ marginBottom: 8 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
               <span style={{ fontSize: 10, color: K.tx }}>{d.label}</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color }}>{d.level} · {d.xp} XP</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color }}>{d.level} · {d.reviews} review{d.reviews === 1 ? "" : "s"}</span>
             </div>
             <div style={{ height: 4, background: K.s3, borderRadius: 2, overflow: 'hidden' }}>
-              <div style={{ height: 4, background: color, borderRadius: 2, width: `${d.levelPct}%`, transition: 'width 0.7s cubic-bezier(0.22,1,0.36,1)' }} />
+              <div style={{ height: 4, background: color, borderRadius: 2, width: `${d.reviewPct}%`, transition: 'width 0.7s cubic-bezier(0.22,1,0.36,1)' }} />
             </div>
           </div>
         );
@@ -240,6 +244,10 @@ function TrustReceiptsSection() {
       <div
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, cursor: 'pointer' }}
         onClick={() => setExpanded(e => !e)}
+        role="button"
+        tabIndex={0}
+        aria-expanded={expanded}
+        onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setExpanded(e => !e); } }}
       >
         <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
           Trust Receipts
@@ -398,6 +406,7 @@ export default function ProfilePanel({
     <>
       {/* Backdrop */}
       <div
+        data-backdrop-dismiss
         onClick={onClose}
         style={{
           position: 'fixed', inset: 0,

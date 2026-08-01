@@ -2,7 +2,7 @@
 /**
  * Bounded, streaming git-history secret scanner.
  *
- * Examples:
+ * Usage:
  *   node scripts/scan-git-history.mjs --json
  *   node scripts/scan-git-history.mjs --since 2026-07-01 --timeout-ms 30000
  *   node scripts/scan-git-history.mjs --repo ../other-project --max-commits 500

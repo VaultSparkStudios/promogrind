@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { startCheckout, startTrial } from "./auth.js";
-import { loadData, saveData, onCalculation, onLedgerEntry, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
+import { loadData, saveData, readSyncDiagnostics, triggerQueueFlush } from "./sync.js";
 import { flagCalcUsed } from "./lib/missions.js";
 import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
@@ -17,7 +17,6 @@ import { APP_CHROME_COPY, BET_TRACKER_UI, PUSH_UI } from "./app/appText.js";
 import { parseBetSlip } from "./app/parseBetSlip.js";
 import { StarterPackModal, OnboardingChecklist, MemberWelcomeCard } from "./app/AppSubcomponents.jsx";
 import OnboardingWizard, { ONBOARDING_KEY } from "./app/OnboardingWizard.jsx";
-import { useProfitNotifications } from "./app/useProfitNotifications.js";
 import { usePromoAuthSession } from "./app/usePromoAuthSession.js";
 import { CANONICAL_APP_URL, FEATURE_FLAGS, getProjectAuthHref, getProjectAuthMode } from "./launchState.js";
 import { trackFeatureEnabledUse, trackFeatureGateClick, trackFeatureGateSeen, trackLaunchEvent } from "./launchTelemetry.js";
@@ -161,7 +160,6 @@ export default function App() {
     window.addEventListener('keydown',handler);
     return ()=>window.removeEventListener('keydown',handler);
   },[]);
-  useProfitNotifications({ appData, authReady });
   const setAuthQueryMode = (mode) => {
     const params = new URLSearchParams(search);
     if (mode) params.set('auth', mode);
@@ -185,7 +183,6 @@ export default function App() {
     if (!authReady || slug === prevSlugRef.current) return;
     prevSlugRef.current = slug;
     visitedSlugsRef.current.add(slug);
-    if (gi === 1 || gi === 2) onCalculation(slug);
     trackPage(slug);
     try {
       const log = JSON.parse(localStorage.getItem('pg_usage_log')||'{}');
@@ -362,7 +359,7 @@ export default function App() {
       }}>
         <div style={{maxWidth:shellMaxWidth,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
           {/* ── Logo ─────────────────────────────────────────────────── */}
-          <div style={{cursor:'pointer',flexShrink:0,minWidth:0}} onClick={()=>navigate('/'+DEFAULT_SLUG)}>
+          <button type="button" aria-label="Go to PromoGrind dashboard" style={{cursor:'pointer',flexShrink:0,minWidth:0,background:'transparent',border:0,padding:0,textAlign:'left',fontFamily:font}} onClick={()=>navigate('/'+DEFAULT_SLUG)}>
             <div style={{fontFamily:fontD,fontSize:isMobile?18:21,fontWeight:800,color:K.gn,letterSpacing:'-0.5px',lineHeight:1}}>
               PROMOGRIND
             </div>
@@ -386,7 +383,7 @@ export default function App() {
                 ))}
               </div>
             )}
-          </div>
+          </button>
           {/* ── Right controls ───────────────────────────────────────── */}
           <div style={{display:'flex',alignItems:'center',gap:isMobile?6:10,flexShrink:0}}>
             {/* Streak — hide on mobile (shown in mobile strip below) */}
@@ -443,6 +440,7 @@ export default function App() {
             {/* UserMenu — auth widget */}
             <UserMenu
               user={user}
+              mobile={isMobile}
               proStatus={proStatus}
               darkMode={darkMode}
               toggleTheme={toggleTheme}
@@ -560,11 +558,10 @@ export default function App() {
               if(!favItem) return null;
               const favGiTi = slugMap[favSlug];
               return (
-                <button key={favSlug} onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }}
-                  style={{padding:"2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:4}}>
-                  ★ {favItem.n}
-                  <span onClick={e=>{e.stopPropagation();const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",marginLeft:2}}>✕</span>
-                </button>
+                <div key={favSlug} role="group" aria-label={`${favItem.n} pinned calculator`} style={{padding:"2px 6px 2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:11,fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:2}}>
+                  <button type="button" onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }} style={{background:"transparent",border:0,padding:0,color:"inherit",fontSize:11,cursor:"pointer",fontFamily:font}}>★ {favItem.n}</button>
+                  <button type="button" aria-label={`Unpin ${favItem.n}`} onClick={()=>{const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",background:"transparent",border:0,padding:"2px 3px"}}>✕</button>
+                </div>
               );
             })}
           </div>}
@@ -594,11 +591,10 @@ export default function App() {
           >{g.items.map((t,i)=>{
             const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
             const isFav = calcFavorites.includes(t.slug);
-            return (<button key={t.n} onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
+            return (<React.Fragment key={t.n}><button onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 10px 9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
               {t.n}
-              {gi===CALC_GI&&<span onClick={e=>{e.stopPropagation();const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</span>}
               {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
-            </button>);
+            </button>{gi===CALC_GI&&<button type="button" aria-label={`${isFav?"Unpin":"Pin"} ${t.n}`} aria-pressed={isFav} onClick={()=>{const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s",background:"transparent",border:0,padding:"8px 5px 8px 0"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</button>}</React.Fragment>);
           })}</div>
         </div>
         {!isDesktop && <div style={{position:"absolute",right:0,top:0,bottom:0,width:42,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>}
@@ -627,7 +623,7 @@ export default function App() {
       <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
-        <PromoChat navigate={navigate}/>
+        <PromoChat navigate={navigate} mobile={isMobile}/>
       </Suspense>
       <QuickCalcPanel goTo={goTo}/>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { BOOKS, getConfiguredAffiliateCount, getConfiguredMonetizationCount, getRequiredLaunchMonetizationStatus, hasConfiguredMonetizationLinks } from "../../books.js";
 import { FEATURE_KEYS, getFeatureState, getLaunchCommandCenter, getLaunchProofCommandItems, getLaunchProofSummary, getLaunchSummary, resolveLaunchValidation } from "../../launchState.js";
-import { K, S, fontD } from "../../lib/shared.js";
+import { K, S, font, fontD } from "../../lib/shared.js";
 import { AppDataCtx } from "../../contexts.jsx";
 import { appendStudioContractHistory } from "../../studio/export.js";
 import { buildOperatorSurfaceState } from "../../dashboard/operatorSurfaces.js";
@@ -246,10 +246,10 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
         {snapshot.workflows.top.length > 0 && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
             {snapshot.workflows.top.slice(0, 4).map((workflow) => (
-              <div
+              <button type="button"
                 key={workflow.id}
                 onClick={() => navigate && navigate(getWorkflowActionSlug(workflow))}
-                style={{ padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: navigate ? "pointer" : "default" }}
+                style={{ width: "100%", textAlign: "left", padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: navigate ? "pointer" : "default", fontFamily: font }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: K.tx }}>{workflow.title}</div>
@@ -257,7 +257,7 @@ export default function LaunchCommandCenterPanel({ navigate: navigateProp = null
                 </div>
                 <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 4 }}>{workflow.scoreSummary || `${workflow.status} workflow.`}</div>
                 <div style={{ fontSize: 10, color: K.dm }}>{workflow.status} · {String(workflow.source || "").replace(/_/g, " ")}</div>
-              </div>
+              </button>
             ))}
           </div>
         )}

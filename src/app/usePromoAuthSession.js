@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getSubscription, supabase, tryAuth } from "../auth.js";
 import { identifyUser } from "../analytics.js";
 import { trackEvent } from "../analytics.js";
-import { onDailyLogin } from "../sync.js";
 
 export function usePromoAuthSession({ appData }) {
   const authReady = true;
@@ -75,7 +74,6 @@ export function usePromoAuthSession({ appData }) {
         trackEvent("promogrind_account_login");
       }
 
-      onDailyLogin();
       window.VSSupabase = supabase;
       window.VaultSDK?.init("promogrind", {
         onReady: () => window.VaultSDK?.applyGates(),

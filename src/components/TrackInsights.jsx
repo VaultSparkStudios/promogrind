@@ -9,6 +9,7 @@ import { useViewport } from "../app/responsive.js";
 import BetHistoryCharts from "./BetHistoryCharts.jsx";
 import EdgeDecayHeatmapPanel from "./EdgeDecayHeatmapPanel.jsx";
 import { parseRealizedOutcomeValue } from "../lib/realizedOutcome.js";
+import { appendDecisionEvidence } from "../lib/promoProvenance.js";
 import { resolveWorkflowPrediction } from "../lib/aiCalibration.js";
 
 function metricCard(label, value, sub, color = K.tx) {
@@ -109,6 +110,22 @@ export default function TrackInsights() {
       updatedAt: nextTimestamp,
     }));
     const linkedWorkflow = (appData?.workflowInbox || []).find((workflow) => workflow?.id === entry.id) || entry;
+    void appendDecisionEvidence({
+      workflowId: entry.id,
+      eventType: "settled",
+      occurredAt: nextTimestamp,
+      idempotencyKey: `${entry.id}:settled:${nextTimestamp}`,
+      calculatorKey: entry.calculatorKey,
+      promoType: entry.promoType,
+      book: draft.book ?? entry.book,
+      expectedProfit: entry.expectedProfit,
+      realizedProfit: normalizedActualProfit,
+      sourceEvidence: {
+        calculatorKey: entry.calculatorKey,
+        promoType: entry.promoType,
+        expectedProfit: entry.expectedProfit,
+      },
+    }).catch(() => {});
     resolveWorkflowPrediction(linkedWorkflow, normalizedActualProfit);
     setDrafts((current) => ({ ...current, [entry.id]: { actualProfit: "", calculatorAccurate: "yes", book: draft.book ?? entry.book } }));
     setSettlementErrors((current) => ({ ...current, [entry.id]: "" }));

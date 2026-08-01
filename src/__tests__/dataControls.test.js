@@ -35,7 +35,7 @@ describe("data controls", () => {
     const state = describeDataControlState(storage);
     const exported = buildLocalDataExport(storage);
 
-    expect(state.label).toContain("3 local items");
+    expect(state.label).toContain("3 exportable of 3 governed local items");
     expect(exported.summary.itemCount).toBe(3);
     expect(exported.data.promo_engine_v3).toContain("bankroll");
     expect(exported.data.unrelated).toBeUndefined();
@@ -55,6 +55,26 @@ describe("data controls", () => {
     const keys = Object.keys(exported.data);
     expect(keys).toEqual(expect.arrayContaining(["promo_engine_v3", "pg_calc_favorites", "pg_hist_bonus", "pg_compact"]));
     expect(keys).not.toEqual(expect.arrayContaining(["pg_app_data", "pg_pro_status", "pg_sync_queue"]));
+    expect(exported.summary.governedItemCount).toBe(6);
+    expect(exported.summary.excludedCount).toBe(2);
+  });
+
+  it("reports non-exportable stores honestly and applies their distinct rights", () => {
+    const storage = makeStorage({
+      pg_ai_prompt_cache_stats: "{}",
+      pg_sync_queue: "[]",
+      pg_pro_status: "pro",
+    });
+    const state = describeDataControlState(storage);
+    const exported = buildLocalDataExport(storage);
+    expect(state).toMatchObject({ hasData: true, canExport: false, exportableItems: 0, excludedItems: 3, clearableItems: 2 });
+    expect(exported.summary).toMatchObject({ itemCount: 0, governedItemCount: 3, excludedCount: 3 });
+    expect(exported.data).toEqual({});
+
+    const cleared = clearLocalPromoGrindData(storage);
+    expect(cleared.cleared).toEqual(expect.arrayContaining(["pg_ai_prompt_cache_stats", "pg_sync_queue"]));
+    expect(cleared.skipped).toContain("pg_pro_status");
+    expect(storage.getItem("pg_pro_status")).toBe("pro");
   });
 
   it("clears operator data while preserving preferences by default", () => {

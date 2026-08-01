@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { getDailyMissions, isMissionCompleted, completeMission, getTodayXp, MISSION_POOL, flagCalcUsed, flagVisit } from "../lib/missions.js";
+import { getDailyMissions, isMissionCompleted, completeMission, MISSION_POOL, flagCalcUsed, flagVisit } from "../lib/missions.js";
 
 // Minimal localStorage mock for node test environment
 const _store = {};
@@ -23,13 +23,12 @@ describe("MISSION_POOL", () => {
     expect(MISSION_POOL.length).toBeGreaterThanOrEqual(10);
   });
 
-  it("every mission has id, label, desc, xp, nav, check", () => {
+  it("every mission has an action contract and no activity-point score", () => {
     for (const m of MISSION_POOL) {
       expect(typeof m.id).toBe("string");
       expect(typeof m.label).toBe("string");
       expect(typeof m.desc).toBe("string");
-      expect(typeof m.xp).toBe("number");
-      expect(m.xp).toBeGreaterThan(0);
+      expect(m).not.toHaveProperty("xp");
       expect(typeof m.nav).toBe("string");
       expect(typeof m.check).toBe("function");
     }
@@ -89,29 +88,6 @@ describe("completeMission + isMissionCompleted", () => {
     completeMission("log_ledger", "2026-04-22");
     const data = JSON.parse(localStorage.getItem("pg_missions") ?? "{}");
     expect(data["2026-04-22"].filter(id => id === "log_ledger").length).toBe(1);
-  });
-});
-
-describe("getTodayXp", () => {
-  it("returns 0 when no missions completed", () => {
-    expect(getTodayXp("2026-04-22")).toBe(0);
-  });
-
-  it("returns sum of XP for completed missions", () => {
-    const date = "2026-04-22";
-    // Complete a mission we know exists in the pool
-    const m = MISSION_POOL[0];
-    completeMission(m.id, date);
-    expect(getTodayXp(date)).toBe(m.xp);
-  });
-
-  it("accumulates XP across multiple completed missions", () => {
-    const date = "2026-04-22";
-    const m1 = MISSION_POOL[0];
-    const m2 = MISSION_POOL[1];
-    completeMission(m1.id, date);
-    completeMission(m2.id, date);
-    expect(getTodayXp(date)).toBe(m1.xp + m2.xp);
   });
 });
 

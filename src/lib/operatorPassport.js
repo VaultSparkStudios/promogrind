@@ -1,11 +1,11 @@
 import { computeDisciplineScore } from "./discipline.js";
 import { computeMastery, PROMO_TYPE_KEYS } from "./mastery.js";
 
-const PASSPORT_VERSION = 2;
-const PASSPORT_DOMAIN = "promogrind-self-attested-passport-v2:";
+const PASSPORT_VERSION = 3;
+const PASSPORT_DOMAIN = "promogrind-self-attested-passport-v3:";
 const DISCIPLINE_BANDS = new Set(["Elite", "Controlled", "Building", "Loose"]);
-const MASTERY_LEVELS = new Set(["Analyst", "Executor", "Closer", "Shark"]);
-const GLOBAL_RANKS = new Set(["Novice", "Grinder", "Closer", "Shark", "The House"]);
+const MASTERY_LEVELS = new Set(["Analyst", "Reviewer", "Calibrator", "Steward"]);
+const REVIEW_DEPTH_BANDS = new Set(["Observer", "Reviewer", "Calibrator", "Steward", "Evidence Lead"]);
 
 function b64urlEncode(bytes) {
   let value = "";
@@ -50,14 +50,14 @@ function normalizePassportPayload(raw) {
   const closedCount = boundedNumber(operator.closedCount, 0, 1_000_000, true);
   if ([score, feedbackCoverage, settledLoopRatio, settledCount, closedCount].some((value) => value === null)) return null;
   if (!DISCIPLINE_BANDS.has(discipline.band) || closedCount < settledCount) return null;
-  if (!GLOBAL_RANKS.has(mastery.globalRank)) return null;
+  if (!REVIEW_DEPTH_BANDS.has(mastery.reviewDepthBand)) return null;
 
   const perType = {};
   for (const [key, value] of Object.entries(mastery.perType || {})) {
     if (!PROMO_TYPE_KEYS.includes(key) || !value || !MASTERY_LEVELS.has(value.level)) return null;
-    const xp = boundedNumber(value.xp, 0, 1_000_000, true);
-    if (xp === null) return null;
-    perType[key] = { level: value.level, xp };
+    const reviews = boundedNumber(value.reviews, 0, 1_000_000, true);
+    if (reviews === null) return null;
+    perType[key] = { level: value.level, reviews };
   }
 
   return {
@@ -67,19 +67,19 @@ function normalizePassportPayload(raw) {
     issuedAt: issuedAt.toISOString(),
     handle,
     discipline: { score, band: discipline.band, feedbackCoverage },
-    mastery: { globalRank: mastery.globalRank, perType },
+    mastery: { reviewDepthBand: mastery.reviewDepthBand, perType },
     operator: { settledLoopRatio, settledCount, closedCount },
   };
 }
 
 function pickSafeMastery(mastery) {
   const perType = Object.entries(mastery?.perType || {})
-    .filter(([key, data]) => PROMO_TYPE_KEYS.includes(key) && data.xp > 0)
+    .filter(([key, data]) => PROMO_TYPE_KEYS.includes(key) && data.reviews > 0)
     .reduce((result, [key, data]) => {
-      result[key] = { level: data.level, xp: Math.round(data.xp) };
+      result[key] = { level: data.level, reviews: Math.round(data.reviews) };
       return result;
     }, {});
-  return { globalRank: mastery?.globalRank?.name || "Novice", perType };
+  return { reviewDepthBand: mastery?.reviewDepthBand?.name || "Observer", perType };
 }
 
 export function buildPassportPayload(appData = {}, opts = {}) {
