@@ -17,6 +17,7 @@ import { buildDecisionJournal } from "../../lib/decisionJournal.js";
 import { computeDisciplineScore } from "../../lib/discipline.js";
 import { assertShareCardPiiSafe, buildShareCardData, renderShareCardCanvas } from "../../lib/shareCard.js";
 import { readTrustReceipts } from "../../lib/trustReceipts.js";
+import { evaluateBankrollPolicy, loadBankrollPolicy } from "../../lib/bankrollPolicy.js";
 
 function OperatorTwinCard({ forecast }) {
   if (!forecast) return null;
@@ -60,6 +61,24 @@ function RiskRadarCard({ radar, navigate }) {
           {radar.preMortem.copy.body} {radar.preMortem.scenarios?.[0]?.detail || "No similar prior loss is recorded yet, so keep the stake intentional."}
         </div>
       )}
+    </div>
+  );
+}
+function PolicyViolationBanner({ violations }) {
+  if (!violations || violations.length === 0) return null;
+  return (
+    <div style={{ padding: "10px 12px", background: `${K.yl}08`, border: `1px solid ${K.yl}40`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ fontSize: 10, color: K.yl, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 6 }}>
+        Bankroll policy · {violations.length} violation{violations.length > 1 ? "s" : ""}
+      </div>
+      {violations.map((v) => (
+        <div key={v.type + (v.book || "")} style={{ fontSize: 10, color: K.dm, lineHeight: 1.6, marginBottom: 3 }}>
+          <span style={{ fontWeight: 700 }}>{v.label}:</span> {v.detail}
+        </div>
+      ))}
+      <div style={{ marginTop: 6, fontSize: 9, color: K.mt, lineHeight: 1.4 }}>
+        Open your account menu (top right) → Account &amp; Profile to adjust limits.
+      </div>
     </div>
   );
 }
@@ -233,6 +252,15 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
   const journal = React.useMemo(() => buildDecisionJournal(appData), [appData]);
   const discipline = React.useMemo(() => computeDisciplineScore(appData), [appData]);
   const riskRadar = React.useMemo(() => buildRiskRadarSummary(appData, snapshot), [appData, snapshot]);
+  const policyViolations = React.useMemo(() => {
+    const policy = loadBankrollPolicy();
+    const result = evaluateBankrollPolicy({
+      policy,
+      bankroll: snapshot?.bankroll ?? 0,
+      bets: snapshot?.openBets ?? [],
+    });
+    return result.violations;
+  }, [snapshot?.bankroll, snapshot?.openBets]);
   const passportPlan = React.useMemo(() => getPromoPassportOnboardingPlan({
     appData,
     user,
@@ -320,6 +348,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
       </div>
 
       <TiltBreakerBanner state={computeTiltState(appData)} />
+      <PolicyViolationBanner violations={policyViolations} />
       <OperatorTwinCard forecast={buildTwinForecast(appData)} />
       <RiskRadarCard radar={riskRadar} navigate={navigate} />
       <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />

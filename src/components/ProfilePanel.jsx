@@ -6,6 +6,7 @@ import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.j
 import { computeMastery, MASTERY_COLOR, GLOBAL_RANKS } from "../lib/mastery.js";
 import { readTrustReceipts, recordTrustReceipt, summarizeTrustReceipt } from "../lib/trustReceipts.js";
 import DataControlsSection from "./profile/DataControlsSection.jsx";
+import BankrollPolicySection from "./profile/BankrollPolicySection.jsx";
 import { buildReplayInsights } from "../lib/replayLedger.js";
 import { exportPassport } from "../lib/operatorPassport.js";
 import { compareKellyFractions } from "../lib/kellySim.js";
@@ -567,6 +568,9 @@ export default function ProfilePanel({
 
         {/* ── Operator passport ────────────────────────────────────── */}
         <PassportExportSection />
+
+        {/* ── Bankroll policy ──────────────────────────────────────── */}
+        <BankrollPolicySection />
 
         {/* ── Kelly sandbox ────────────────────────────────────────── */}
         <KellySandboxSection />
