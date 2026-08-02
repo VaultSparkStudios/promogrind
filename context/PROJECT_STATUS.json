@@ -47,7 +47,7 @@
   "testsPassing": 606,
   "testsTotal": 606,
   "testsLastRun": "2026-08-01",
-  "lastDeployStatus": "S119 commit c718c24 remains the last verified deployed head: brief-format 30194498456, CI 30194498448, and Deploy Pages 30194498469 passed. S122 is locally release-candidate green but is not claimed deployed until post-push workflows prove it. Edge contract remains NO-GO because six required response headers are absent.",
+  "lastDeployStatus": "S122 commit ca2a134 reached origin/main. Brief-format 30724615417 and CI 30724615412 passed. Deploy Pages 30724615420 attested and deployed the immutable artifact, then passed production launch and dashboard smoke; its final release-state step correctly failed because six required response headers remain absent.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-01",
   "truthGenome": "24/25",
@@ -82,7 +82,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live at prior verified S119 head; S122 deployment evidence pending; six required headers remain absent"
+      "status": "live at verified S122 head ca2a134; production launch and dashboard smoke passed in run 30724615420; six required headers remain absent"
     }
   ],
   "stagingUrl": null,

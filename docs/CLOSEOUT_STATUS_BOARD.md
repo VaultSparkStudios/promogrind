@@ -9,11 +9,11 @@
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ feat(S122): harden evidence, data rights, and decision contr  ║
 ║  ✓ chore(S121): S121 exhausted all six verified L3 audit items   ║
 ║  ✓ feat(auth): add Obelisk Passport scaffold                     ║
 ║  ✓ chore(deps): bump the production-minor-patch group with 4 up  ║
 ║  ✓ docs(S120): record attested deploy evidence                   ║
-║  ✓ fix(S120): provision Deno in release preflight                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -40,7 +40,7 @@
 ║  ✓ agent memory (~/.codex or ~/.claude)                          ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 129 files  ·  M:85 A:43 D:1 ?:0                        ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
