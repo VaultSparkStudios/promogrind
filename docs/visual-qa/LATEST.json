@@ -1,157 +1,66 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-03T03:37:01.150Z",
+  "capturedAt": "2026-08-03T21:49:44.881Z",
   "themes": [
     "dark",
     "light"
   ],
   "captures": [
     {
-      "file": "captures/pricing-desktop-dark.png",
-      "page": "/pricing — capability-derived launch-state and planned-commerce copy",
+      "file": "captures/chat-after-desktop-dark.png",
+      "page": "/dashboard — consent-bound PromoChat, unchecked profile disclosure",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "47b0b8beb79b24bd26393a0f16af011cc80139ed2bbad4d0233ee2151366f196"
+      "sha256": "f658c9ca4a55bc6d0796852d763561b8bcf4486c5816cf0f6d68654cb31851f4"
     },
     {
-      "file": "captures/pricing-desktop-light.png",
-      "page": "/pricing — capability-derived launch-state and planned-commerce copy",
+      "file": "captures/chat-after-desktop-light.png",
+      "page": "/dashboard — consent-bound PromoChat, semantic light palette",
       "theme": "light",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "4f707072a4b1b1ec97c0e89952ff9c86efffd1f9f7dd44fdafbdbeebb09e602d"
+      "sha256": "0d65ca7fc88c4722ba820621bf008fe1e23e3a9c623b1913a6fc0261d191c16d"
     },
     {
-      "file": "captures/pricing-mobile-dark.png",
-      "page": "/pricing — full mobile evidence and plan cards",
+      "file": "captures/chat-after-mobile-dark.png",
+      "page": "/dashboard — full-screen mobile Chat consent boundary",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "46dfa747f32fce9028ebd52de486fa925ca62d877a59193df99758c7083f2cf1"
+      "sha256": "bb374ea79bb76d9f3115e5de9fd04d1013cbabdddea0476d8cfea1fa5f4bfcc1"
     },
     {
-      "file": "captures/pricing-mobile-light.png",
-      "page": "/pricing — full mobile evidence and plan cards",
+      "file": "captures/chat-after-mobile-light.png",
+      "page": "/dashboard — repaired full-screen mobile light Chat",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "5ec7547a88dc942810ff09a848f29e2c400f1bc4ccb7e20cee8340ec024dbd27"
-    },
-    {
-      "file": "captures/auth-desktop-dark.png",
-      "page": "/pricing?auth=signup — hybrid identity disclosure and account form",
-      "theme": "dark",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "7f2f814cd26c224622d8571d89374f566c922b1c354230e31f2f8898da60b27e"
-    },
-    {
-      "file": "captures/auth-desktop-light.png",
-      "page": "/pricing?auth=signup — hybrid identity disclosure and account form",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "5dbc3a3fcfb6817273fb9a67e050963062cfef4b5e74e51013cb9532b93e23b2"
-    },
-    {
-      "file": "captures/auth-mobile-dark.png",
-      "page": "/pricing?auth=signup — mobile account form at scroll origin",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "eb1046add19184cc6b0768f652e98fd83998d4e5b5e10d59c5273f97215ccd88"
-    },
-    {
-      "file": "captures/auth-mobile-dark-bottom.png",
-      "page": "/pricing?auth=signup — mobile dialog scrolled to its reachable final disclosure",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "53c16708a8401dc980f1f791ce3ebefe200183d878be2787c47e5fecf6519c1d"
-    },
-    {
-      "file": "captures/auth-mobile-light.png",
-      "page": "/pricing?auth=signup — theme-coherent mobile account form",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "4b932fe1825e7da8374247f666ad76c7566415d16208eac6df7bd1b9e91f89b9"
-    },
-    {
-      "file": "captures/scanner-desktop-dark.png",
-      "page": "/arb-scanner — actual BETA/SETUP PENDING provider-capability state",
-      "theme": "dark",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "886fbf2af7b672974222d786d0e89b2f08790c5e49b52474540b3fd09ed93bd3"
-    },
-    {
-      "file": "captures/scanner-desktop-light.png",
-      "page": "/arb-scanner — actual BETA/SETUP PENDING provider-capability state",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "8bb677b761d2f38cf76d7245ccf2b758008d03c9322b1d4f62d2b5eba3536dac"
-    },
-    {
-      "file": "captures/scanner-mobile-dark.png",
-      "page": "/arb-scanner — mobile disabled-capability truth and navigation",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "ad781749bf37c2e011c779f01fbe0a49bc3cfe0c70ffaa08280285ce52d89f17"
-    },
-    {
-      "file": "captures/scanner-mobile-light.png",
-      "page": "/arb-scanner — mobile disabled-capability truth and navigation",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "0c8be635ee106ca33c6540957c3c65ec8becea49e9004248cea0a6943454dca7"
+      "sha256": "a38b472706c80d25cac3befd8ef05bbf08058db23d64afeedfc375ce0b9c6d67"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex GPT-5",
     "findings": [
-      "Pricing copy, evidence cards, plan states, controls, and hierarchy remain readable at 1440×1000 and 390×844 in dark and light themes.",
-      "The first mobile auth capture exposed a clipped final disclosure because the dialog had no bounded internal scrolling.",
-      "The first light-theme auth capture exposed module-scope palette snapshots that left the form body dark and materially reduced contrast.",
-      "After repair, the auth dialog is bounded to the dynamic viewport, scrolls to its final disclosure, and uses the active palette across the entire surface.",
-      "The actual scanner route renders BETA/SETUP PENDING in both themes and viewport classes; it does not present provider coverage or refresh cadence as live."
+      "The before-fix mobile light capture exposed a dark transcript slab inside otherwise light controls, materially weakening empty-state readability and theme coherence.",
+      "After repair, desktop and mobile Chat surfaces use the active semantic palette in both themes with no horizontal overflow or clipped consent copy.",
+      "All four after captures visibly expose the optional bankroll/active-books disclosure and the personalization checkbox remains unchecked by default.",
+      "The input, send action, close action, usage state, and privacy disclosure remain reachable at 1440×1000 and 390×844."
     ],
     "fixesApplied": [
-      "Added a 100dvh-aware, overscroll-contained internal scroll surface to the account dialog.",
-      "Replaced module-load palette snapshots with render-time panel and input styles so theme changes update every auth surface.",
-      "Removed local analytics beacon noise by loading the production beacon only on the production hostname.",
-      "Replaced stale competitor-price framing in the global header and scanner upgrade state with capability-gated, provider-neutral language."
+      "Replaced PromoChat's hard-coded dark panel and border colors with render-time semantic theme tokens.",
+      "Added explicit accessible names to the floating Chat trigger, close control, and message input.",
+      "Added client/server redaction, versioned consent enforcement, bounded history/profile egress, and an inspectable privacy receipt.",
+      "Added a dependency-free isolated Chromium capture harness that asserts visible disclosure, unchecked consent, and viewport overflow before saving evidence."
     ],
     "blockingDefectsOpen": 0
   }

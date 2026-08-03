@@ -7,6 +7,7 @@ import { AppDataCtx } from "../contexts.jsx";
 import { LoadingState } from "../ui.jsx";
 import { noteCacheHit, noteCacheMiss } from "../ai/promptCache.js";
 import { normalizeFeatureTier, useFeatureFlag } from "../lib/featureFlags.js";
+import { buildChatPrivacyEnvelope } from "../ai/advisorPrivacy.js";
 
 // Daily message limits per tier
 const LIMITS = { scout: 20, runner: 50, closer: Infinity, house: Infinity };
@@ -27,6 +28,8 @@ const PromoChat = ({ navigate, mobile = false }) => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
+  const [personalize, setPersonalize] = useState(false);
+  const [privacyReceipt, setPrivacyReceipt] = useState(null);
   const [session, setSession] = useState(null);
   const [sessionLoading, setSessionLoading] = useState(true);
   const [subPlan, setSubPlan] = useState(null);   // raw plan string or null
@@ -89,14 +92,14 @@ const PromoChat = ({ navigate, mobile = false }) => {
 
     try {
       const history = newMessages.slice(-10).map(m => ({ role: m.role, content: m.content }));
-      const requestBody = {
+      const privacy = buildChatPrivacyEnvelope({
         message: userMsg.content,
         history: history.slice(0, -1),
-        userContext: {
-          bankroll: appData?.bankroll,
-          books: Object.entries(appData?.done || {}).filter(([, v]) => !!v).map(([k]) => k).slice(0, 5),
-        },
-      };
+        includeProfile: personalize,
+        appData,
+      });
+      const requestBody = privacy.body;
+      setPrivacyReceipt(privacy.receipt);
       const cacheKey = buildCacheKey("promo-chat", requestBody);
       const cached = readTimedCache(cacheKey, 6 * 60 * 60 * 1000, null);
       if (cached) {
@@ -131,6 +134,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
           setChatRemaining(newRemaining);
           writeTimedCache(cacheKey, { message: fullText || "No response.", suggestions: evt.suggestions || [] });
           recordAiSpend(estimateAiSpendUsd(evt), { feature: "promo-chat", source: "ai" });
+          if (evt.privacy) setPrivacyReceipt(evt.privacy);
           setMessages((prev) => prev.map((message) =>
             message._id === streamingId
               ? { role: "assistant", content: fullText || "No response.", suggestions: evt.suggestions || [] }
@@ -206,6 +210,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
       <button
         onClick={() => setChatOpen(v => !v)}
         title="PromoGrind AI — ask about any promo or calculator"
+        aria-label={chatOpen ? "Close PromoGrind AI Chat" : "Open PromoGrind AI Chat"}
         style={{
           position: mobile ? 'relative' : 'fixed',
           bottom: mobile ? 'auto' : 80,
@@ -225,7 +230,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
         <span style={{
           position: 'absolute', top: 6, right: 6,
           width: 8, height: 8, borderRadius: '50%',
-          background: K.gn, border: '2px solid #0a0e17',
+          background: K.gn, border: `2px solid ${K.bg}`,
           animation: 'pulse 2s infinite',
         }}/>
       </button>
@@ -234,8 +239,8 @@ const PromoChat = ({ navigate, mobile = false }) => {
       {chatOpen && (
         <div style={{
           position: 'fixed', right: 0, top: 0, bottom: 0,
-          width: mobile ? '100%' : 360, background: '#0f1520',
-          borderLeft: `1px solid #1e293b`,
+          width: mobile ? '100%' : 360, background: K.bg,
+          borderLeft: `1px solid ${K.bd}`,
           zIndex: 1100, display: 'flex', flexDirection: 'column',
           boxShadow: '-4px 0 32px rgba(0,0,0,0.6)',
         }}>
@@ -245,7 +250,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
               <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>💬 PromoGrind AI</div>
               <div style={{ fontSize: 11, color: K.mt, marginTop: 2 }}>Ask about promos, calculators, or strategy</div>
             </div>
-            <button onClick={() => setChatOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: K.mt, fontSize: 18, padding: 4 }}>×</button>
+            <button aria-label="Close PromoGrind AI Chat" onClick={() => setChatOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: K.mt, fontSize: 18, padding: 4 }}>×</button>
           </div>
 
           {/* Loading state */}
@@ -319,9 +324,29 @@ const PromoChat = ({ navigate, mobile = false }) => {
                 <div ref={messagesEndRef}/>
               </div>
 
+              <div style={{ padding: '9px 16px', borderTop: `1px solid ${K.bd}`, background: K.s1 }}>
+                <label htmlFor="pg-chat-personalize" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, color: K.dm, fontSize: 10, lineHeight: 1.5, cursor: 'pointer' }}>
+                  <input
+                    id="pg-chat-personalize"
+                    type="checkbox"
+                    checked={personalize}
+                    onChange={(event) => setPersonalize(event.target.checked)}
+                    style={{ marginTop: 2, accentColor: K.ac }}
+                  />
+                  <span>Personalize with my bankroll and active books. Optional: only those named fields leave this browser.</span>
+                </label>
+                {privacyReceipt && (
+                  <div role="status" aria-live="polite" style={{ marginTop: 6, color: privacyReceipt.profileIncluded ? K.ac : K.mt, fontSize: 10, lineHeight: 1.5 }}>
+                    {privacyReceipt.profileIncluded ? 'Profile consent applied.' : 'Profile kept in this browser.'}
+                    {' '}{privacyReceipt.redactionCount > 0 ? `${privacyReceipt.redactionCount} sensitive value(s) redacted.` : 'Message boundary checked.'}
+                  </div>
+                )}
+              </div>
+
               {/* Input */}
               <div style={{ padding: '12px 16px', borderTop: `1px solid ${K.bd}`, background: K.s2, display: 'flex', gap: 8 }}>
                 <input
+                  aria-label="Ask PromoGrind AI about a promo or calculator"
                   value={chatInput}
                   onChange={e => setChatInput(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}

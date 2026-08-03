@@ -53,7 +53,7 @@ const OnboardingWizard = ({ onDone }) => {
             {US_STATES.map(s=><option key={s} value={s}>{s}</option>)}
           </select>
           <div style={{fontSize:11,color:K.mt,marginTop:12}}>
-            Sports betting is legal in 35+ states. Select yours to see which books you can use.
+            Availability, eligibility, and rules change by location. Select yours to review books, then verify current regulator and operator guidance.
           </div>
         </div>
       )

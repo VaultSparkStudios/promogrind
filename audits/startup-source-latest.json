@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-03T03:00:38.254Z",
+  "generatedAt": "2026-08-03T21:51:32.060Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "d24b5132d65f9f725fd679126c52b817330edec7a70cc89848aa73b151e0d8db",
+  "briefSha256": "d0c6e9d921eba75e9b462fa8969755c65ea1a66aac47ba62998b04fc95222b55",
   "rendererVersion": "3.2",
-  "targetSession": 124,
-  "sourceSession": 123,
+  "targetSession": 125,
+  "sourceSession": 124,
   "sources": {
     "projectProfile": {
       "medium": "app",

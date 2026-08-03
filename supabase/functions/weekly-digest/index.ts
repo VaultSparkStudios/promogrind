@@ -182,8 +182,8 @@ async function sendEmail(to: string, meta: Record<string, unknown>, supabase: Se
       <div style="background:#0f1520;border:1px solid #1e293b;border-radius:8px;padding:20px;margin-bottom:28px;">
         <h2 style="color:#4ade80;font-size:15px;font-weight:700;margin-bottom:10px;">📊 Keep Your Records Clean</h2>
         <p style="color:#94a3b8;font-size:13px;line-height:1.7;">
-          All gambling winnings are taxable income. Use the <strong style="color:#e2e8f0;">P/L Ledger → Export Tax CSV</strong>
-          feature to download a tax-ready file at any time. Your future self will thank you.
+          Wagering activity can have tax consequences. Use the <strong style="color:#e2e8f0;">P/L Ledger → Export Tax CSV</strong>
+          feature to preserve source records, then confirm current treatment with a qualified professional.
         </p>
       </div>
 

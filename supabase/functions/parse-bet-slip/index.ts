@@ -183,6 +183,14 @@ Deno.serve(async (req) => {
       ...result,
       remaining: access.remaining,
       quotaWindow: access.quotaWindow,
+      privacy: {
+        contractVersion: 1,
+        egress: ['user-uploaded-bet-slip-image'],
+        userInitiated: true,
+        imageBase64Characters: imageBase64.length,
+        remoteFetch: false,
+        persistedByPromoGrind: false,
+      },
     }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

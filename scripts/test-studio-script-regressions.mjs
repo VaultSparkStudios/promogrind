@@ -5,16 +5,28 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from './lib/safe-spawn.mjs';
-import { scanShellNodeSpawns } from './check-windows-hide.mjs';
+import { scanDirectChildProcessImports, scanShellNodeSpawns } from './check-windows-hide.mjs';
+import { rewireToSafeSpawn } from './codemod-safe-spawn.mjs';
 import { buildHeuristicContextMeter, loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
 import { renderOrchestratorBlock, renderPortfolioTaskBoardsBlock } from './lib/startup-orchestrator-blocks.mjs';
 import { renderExecutionPlanBlock, renderMomentumMeterBlock } from './lib/startup-summary-blocks.mjs';
 import { buildExternalLaunchProofLedger, renderLedgerMd } from './render-external-launch-proof-ledger.mjs';
 import { buildCloseoutGeniusHint } from './lib/closeout-genius-hint.mjs';
+import { createStartupBriefBox } from './lib/startup-brief-box.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const json = process.argv.includes('--json');
 const results = [];
+
+run('startup brief box toolkit preserves width, words, and bounded bars', () => {
+  const box = createStartupBriefBox(24);
+  assert.equal(box.row('truth stays source bound').length, 28);
+  assert.ok(box.truncateWordAware('truth stays source bound beyond width').endsWith('…'));
+  assert.equal(box.bar20(150), '████████████████████');
+  assert.equal(box.bar10(-5), '░░░░░░░░░░');
+  assert.equal(box.bar24(500, 1000), '████████████░░░░░░░░░░░░');
+  assert.throws(() => createStartupBriefBox(4), /width/);
+});
 
 run('scanner flags shell-resolved literal node spawns', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'windows-hide-node-'));
@@ -35,6 +47,26 @@ run('scanner ignores process.execPath shell spawns', () => {
     fs.writeFileSync(file, "import { spawnSync } from './lib/safe-spawn.mjs';\nspawnSync(process.execPath, ['x.mjs'], { shell: true, windowsHide: true });\n", 'utf8');
     const hits = scanShellNodeSpawns(dir);
     assert.equal(hits.length, 0);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+run('scanner and codemod close dynamic child_process import escape hatches', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'windows-hide-dynamic-'));
+  try {
+    fs.mkdirSync(path.join(dir, 'lib'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'lib', 'safe-spawn.mjs'), 'export const spawnSync = () => ({ status: 0 });\n', 'utf8');
+    const file = path.join(dir, 'bad.mjs');
+    const rawModule = 'node:' + 'child_process';
+    fs.writeFileSync(file, `const { spawnSync } = await import( '${rawModule}' );\nspawnSync('node', ['x.mjs']);\n`, 'utf8');
+    const hits = scanDirectChildProcessImports(dir);
+    assert.equal(hits.length, 1);
+    const result = rewireToSafeSpawn(dir, { apply: true });
+    assert.equal(result.changed.length, 1);
+    const repaired = fs.readFileSync(file, 'utf8');
+    assert.match(repaired, /import\(\s*['"]\.\/lib\/safe-spawn\.mjs['"]\s*\)/);
+    assert.equal(scanDirectChildProcessImports(dir).length, 0);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

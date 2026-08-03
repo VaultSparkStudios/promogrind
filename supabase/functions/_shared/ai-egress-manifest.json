@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "provider": "Anthropic",
+  "providerPersistenceAssumption": "API payload handling follows the configured provider account; PromoGrind does not persist raw provider request payloads in its own database.",
+  "functions": [
+    {
+      "function": "ai-action-plan",
+      "dataClasses": ["operator-observations", "optional-financial-profile"],
+      "consentMode": "explicit-optional-profile",
+      "inputBoundary": ["parseActionPlanContext", "contextVersion"],
+      "payloadLimit": "1-6 observations; bounded labels; optional profile fields only",
+      "remoteFetch": false,
+      "promoGrindPayloadPersistence": false,
+      "receiptField": "privacy"
+    },
+    {
+      "function": "parse-bet-slip",
+      "dataClasses": ["user-uploaded-bet-slip-image"],
+      "consentMode": "user-initiated-upload",
+      "inputBoundary": ["imageBase64.length > 8_000_000", "Remote image URLs are not accepted"],
+      "payloadLimit": "8,000,000 base64 characters; JPEG, PNG, GIF, or WebP",
+      "remoteFetch": false,
+      "promoGrindPayloadPersistence": false,
+      "receiptField": "privacy"
+    },
+    {
+      "function": "promo-advisor",
+      "dataClasses": ["redacted-promo-text", "optional-bankroll-and-book-labels"],
+      "consentMode": "explicit-optional-profile",
+      "inputBoundary": ["privacyContractVersion", "redactAdvisorInput", "sanitizeAdvisorContext"],
+      "payloadLimit": "2,000 redacted text characters; five book labels",
+      "remoteFetch": false,
+      "promoGrindPayloadPersistence": false,
+      "receiptField": "privacyReceipt"
+    },
+    {
+      "function": "promo-chat",
+      "dataClasses": ["redacted-message-history", "optional-bankroll-and-book-labels"],
+      "consentMode": "explicit-optional-profile",
+      "inputBoundary": ["sanitizeChatPayload"],
+      "payloadLimit": "1,000 message characters; ten redacted history messages; five book labels",
+      "remoteFetch": false,
+      "promoGrindPayloadPersistence": false,
+      "receiptField": "privacy"
+    },
+    {
+      "function": "stack-builder",
+      "dataClasses": ["bankroll", "selected-book-labels", "redacted-goal"],
+      "consentMode": "user-initiated-workflow-input",
+      "inputBoundary": ["parseStackBuilderRequest", "STACK_BUILDER_CONTRACT_VERSION"],
+      "payloadLimit": "bankroll 100-1,000,000; five known book labels; 160 redacted goal characters",
+      "remoteFetch": false,
+      "promoGrindPayloadPersistence": false,
+      "receiptField": "privacy"
+    }
+  ]
+}

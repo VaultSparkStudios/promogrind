@@ -52,3 +52,43 @@ export function sanitizeAdvisorContext(value: unknown, consent: unknown): Adviso
   if (typeof raw.topPromoType === "string" && /^[a-z0-9_-]{1,40}$/i.test(raw.topPromoType)) context.topPromoType = raw.topPromoType;
   return Object.keys(context).length ? context : undefined;
 }
+
+export function sanitizeChatPayload(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return { ok: false as const, error: "JSON object required" };
+  }
+  const raw = value as Record<string, unknown>;
+  if (raw.privacyContractVersion !== ADVISOR_PRIVACY_CONTRACT_VERSION) {
+    return { ok: false as const, error: "Unsupported privacy contract" };
+  }
+  const message = redactAdvisorInput(raw.message);
+  if (!message.text) return { ok: false as const, error: "Message is required" };
+  const history = Array.isArray(raw.history)
+    ? raw.history.slice(-10).flatMap((entry) => {
+        if (!entry || typeof entry !== "object" || Array.isArray(entry)) return [];
+        const item = entry as Record<string, unknown>;
+        if (item.role !== "user" && item.role !== "assistant") return [];
+        const content = redactAdvisorInput(item.content);
+        return content.text
+          ? [{ role: item.role as "user" | "assistant", content: content.text, redactions: content.total }]
+          : [];
+      })
+    : [];
+  const userContext = sanitizeAdvisorContext(raw.userContext, raw.personalizationConsent);
+  const historyRedactions = history.reduce((sum, entry) => sum + entry.redactions, 0);
+  return {
+    ok: true as const,
+    message: message.text.slice(0, 1000),
+    history: history.map(({ role, content }) => ({ role, content })),
+    userContext,
+    receipt: {
+      contractVersion: ADVISOR_PRIVACY_CONTRACT_VERSION,
+      redactionCount: message.total + historyRedactions,
+      messageRedactions: message.total,
+      historyRedactions,
+      historyMessages: history.length,
+      profileIncluded: Boolean(userContext),
+      profileFields: userContext ? ["bankroll", "books"].filter((field) => field in userContext) : [],
+    },
+  };
+}

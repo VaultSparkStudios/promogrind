@@ -373,7 +373,7 @@ const Ledger = () => {
       );
     })()}
     <BetHeatmap entries={entries}/>
-    <Nt c={K.yl}>All gambling winnings are taxable income. Keep records year-round. Export this ledger each tax season.</Nt>
+    <Nt c={K.yl}>Wagering activity can have tax consequences. Keep source records year-round, export this ledger for review, and confirm current treatment with a qualified professional.</Nt>
     <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center",flexWrap:"wrap"}}>
       <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>View:</span>
       {["entries","by-book"].map(v=>(

@@ -1,49 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: de1a4d665aae -->
-<!-- generated-at: 2026-08-03T02:23:25.825Z -->
+<!-- source-hash: d0143fab3cf2 -->
+<!-- generated-at: 2026-08-03T07:08:28.604Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 123 HANDOFF — PromoGrind (Codex)
+# PromoGrind Handoff Summary
 
-Status
-- Saturated; 4/4 L3 infra items plus 2 second-order innovations shipped.
-- Local RC green; SPARKED remains NO-GO.
-- Actionable Unified Genius List empty; external proof work unclaimed.
+Session: 124 (Codex)
+Status: saturated; 6/6 L3 audit items + 2 second-order innovations shipped; local RC green; SPARKED NO-GO
 
-Shipped (S123)
-- Provider-native Codex context truth bound to session/repo; fails closed without native evidence.
-- Severity-correct context verdict selection (85%+ closeout guidance not maskable).
-- Project-attributed scheduled-write admission receipts with canonical slug and provenance.
-- Typed startup signals: qualified truth, 0/0 compliance, cache freshness, revenue evidence, test remediation.
-- 35-module propagation compatibility ratchet (5 documented overrides, zero undocumented drift).
-- Recovery fixes: SIL category export/completeness, public-repo revenue fallback.
+## Shipped (S124)
+- Propagation overlay contract/reconciler; crash-safe 48-check compatibility receipt.
+- Removed synthetic testimonials, categorical legal claims, unsourced competitor prices; 22 claim rules over 321 files.
+- Single commerce catalog deriving plan/trial/feature/checkout/evidence from runtime truth.
+- Hash-bound startup-source receipt; truthful hybrid identity boundary (PromoGrind auth current, Obelisk target, agent identity not-live).
+- Idempotent proprietary footer applicator (101/101); fail-closed visual-review compiler (13 hash-bound captures); identity-claim ratchet forbidding premature SPARKED.
 
-Verification
-- verify:launch-local exit 0.
-- Vitest 625/625 (86 files, 19 new contracts); Deno 45/45, 15 entrypoints typecheck.
-- Runtime pack 43/43; 30 mirrors; 5 overrides; 0 drift.
-- Security: tracked secrets 0, sanitizer 0, supply-chain checked.
-- Deploy: impl bb6f03f, closeout 46b32cb, publication a6cd46b to origin/main; CI/Pages passed; release-state failed on 6 absent edge headers.
+## Current Intent
+Run continuous agent-neutral arc, exhaust live-verified primary + second-order work, keep observability source-derived, flat-rate cost notional, honest external-proof deferrals, public-app release lens. Every repo-owned item shipped; release truth remains evidence-gated.
 
-Current Intent
-- Achieve external evidence: staging target, credential rotation, mailbox identity, and downstream production proofs.
+## Now (top 3)
+1. Establish stable staging + header control; prove all six required response headers.
+2. Complete credential rotation + exact Supabase deploy authority; execute pinned deployment plan.
+3. Prove Obelisk, Zoho, auth-email, Stripe lifecycle, friend beta, capture, founder approval individually before reassessing SPARKED.
 
-Now Bucket (top 3)
-1. Establish true staging target + header-capable edge; prove all six response headers.
-2. Complete historical credential rotation/remediation; establish exact PromoGrind Supabase deployment authority.
-3. Prove Zoho mailbox identity; then run auth-email, Stripe, friend-beta, capture checks.
+## Blockers (top 3)
+1. No stable remote staging target; six production headers absent (Cloudflare credential lacks header-ruleset scope).
+2. promogrind.supabase.deploy MISSING; repo code not deployment proof; historical credential rotation/remediation unproved.
+3. contact@promogrind.bet needs real Zoho MX/SPF/DKIM/DMARC + delivery/reply-as-alias evidence.
 
-Blockers (top 3)
-- No remote staging environment; six production response headers absent.
-- promogrind.supabase.deploy MISSING; repo code not deployment proof.
-- contact@promogrind.bet lacks real Zoho MX/SPF/DKIM/DMARC and delivery/reply-as evidence.
+## Human-Blocked / External (with age)
+- Historical credential rotation at b1205ce — open since S121+ (approx 3 sessions).
+- Founder launch approval — pending, ongoing.
+- Zoho mailbox identity, auth-email, full Stripe lifecycle, friend beta, capture lead-row receipts — unproved since S118+ (6+ sessions).
+- Obelisk delegation, agent identity — not-live, new S124.
 
-Human-Blocked / External (age)
-- Five redacted historical credential findings at b1205ce need rotation + approved history remediation — open since ≤S118 (~5 sessions).
-- Six production edge headers unproved — open since S118 (~5 sessions).
-- Production auth-email, full Stripe lifecycle, friend beta, capture receipts unproved — open since ≤S118.
-- Five public runtime-pack overrides need Studio Ops adoption/resolution; routed via signed Ark cargo only.
+## Verification (last)
+verify:launch-local exit 0; Vitest 639/639; Deno 45/45; 15 Edge entrypoints typecheck; runtime pack 48/48 (9 documented overrides, 0 drift); public trust 22 rules/321 files/0 findings; footer 101/101; CANON-053 13 captures; security scans 0 findings.
 
-Next Session Pointer
-- Start with staging/edge header proof, then credential rotation and Supabase deploy authority; do not claim external evidence without live receipts.
+## Nine consumer runtime overlays
+Need upstream three-way propagation contract; route via signed Ark cargo only, never sibling edits.
+
+Next session: prove staging + six edge headers, then advance credential/Supabase deployment path.

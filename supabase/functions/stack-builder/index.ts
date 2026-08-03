@@ -17,6 +17,7 @@ import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, rateLimitResponse } from "../_shared/http.ts";
 import { parseAiJson, SLUG_GUARDRAIL, validateCalculatorSlug } from "../_shared/validate.ts";
+import { parseStackBuilderRequest, STACK_BUILDER_CONTRACT_VERSION } from "../_shared/stack-builder-contract.ts";
 
 // Current promos by book — update these as promos rotate
 const PROMO_DATABASE = [
@@ -31,6 +32,7 @@ const PROMO_DATABASE = [
   { book: "ESPN BET",    type: "bonus_bet",     value: 200, roiPct: 72, minBankroll: 300,  detail: "Bet $5 → $200 bonus bets",                recurring: false },
   { book: "BetRivers",   type: "bonus_bet",     value: 500, roiPct: 70, minBankroll: 700,  detail: "Up to $500 second chance bet",            recurring: false },
 ];
+const KNOWN_BOOKS = new Set(PROMO_DATABASE.map((promo) => promo.book));
 
 serve(async (req) => {
   const CORS = getCorsHeaders(req);
@@ -57,13 +59,15 @@ serve(async (req) => {
     });
     if (durableLimit) return durableLimit;
 
-    const { bankroll, booksAvailable = [], goal = "maximize modeled return while controlling execution risk" } = await req.json();
-
-    if (!bankroll || bankroll < 100) {
-      return new Response(JSON.stringify({ error: "Minimum $100 bankroll required" }), {
+    let request;
+    try {
+      request = parseStackBuilderRequest(await req.json(), KNOWN_BOOKS);
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Invalid Stack Builder request" }), {
         status: 400, headers: { ...CORS, "Content-Type": "application/json" },
       });
     }
+    const { bankroll, booksAvailable, goal, privacy } = request;
 
     const apiKey = Deno.env.get("ANTHROPIC_API_KEY");
     if (!apiKey) {
@@ -172,6 +176,7 @@ Steps should be in execution order (welcome bonuses first, then recurring). Be s
         promoCount: eligible.length,
         generatedAt: new Date().toISOString(),
         remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
+        privacy: { ...privacy, contractVersion: STACK_BUILDER_CONTRACT_VERSION },
       }),
       { headers: { ...CORS, "Content-Type": "application/json" } }
     );

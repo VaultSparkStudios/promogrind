@@ -1,5 +1,15 @@
 # Task Board
 
+## Unified Genius List (S125)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| 🔥 | Security / commerce infrastructure | done | 12h | stripe-authority-boundary — **DONE L3 S125**: mandatory fresh rotated HMAC, safe redirects/metadata, checked provider and persistence outcomes, 50 Edge tests |
+| 🔥 | Privacy / Artificial Intelligence / UX | done | 9h | consent-bound-ai-chat — **DONE L3 S125**: explicit named-field consent, double redaction, privacy receipts, four rendered theme/viewport proofs |
+| 🔥 | Observability / release infrastructure | done | 7h | release-control-plane-truth — **DONE L3 S125**: executable Windows launch status, honest local release architecture, upstream parser defect routed via Ark |
+| 🔥 | Public trust / legal guidance | done | 4h | categorical-legal-guidance-contract — **DONE L3 S125**: 24-rule ratchet repaired 26 live categorical legal/tax claims across 321 files |
+| ⚡ | Windows automation / process quality | done | 3h | dynamic-child-process-sentinel — **DONE L3 S125**: dynamic imports are guarded/codemodded and startup v5 uses the hidden wrapper |
+
 ## Unified Genius List (S124)
 
 | Tier | Category | Status | Effort | Item |

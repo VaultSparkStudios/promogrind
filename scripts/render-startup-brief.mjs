@@ -39,6 +39,7 @@ import {
   selectComplianceEvidence,
 } from './lib/startup-signal-semantics.mjs';
 import { buildStartupSourceReceipt, writeStartupSourceReceipt } from './lib/startup-source-receipt.mjs';
+import { createStartupBriefBox } from './lib/startup-brief-box.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -54,14 +55,25 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
 // to render-startup-brief-v5.mjs (71% token reduction, validated S117). Default
 // remains v3.1 until 3-session hash-stability monitoring completes.
 if (process.argv.includes('--v5') || process.env.BRIEF_V5 === '1') {
-  const { spawnSync } = await import('node:child_process');
   const r = spawnSync(node, [path.join(__dirname, 'render-startup-brief-v5.mjs'), ...process.argv.slice(2).filter(a => a !== '--v5')], { stdio: 'inherit', cwd: root });
   process.exit(r.status ?? 0);
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const W  = 62; // inner box width (content between ║  and  ║)
-const BW = W + 4; // total line width including ║  prefix/suffix
+const {
+  totalWidth: BW,
+  truncateWordAware,
+  pad,
+  row,
+  blank,
+  top,
+  mid,
+  bot,
+  bar20,
+  bar10,
+  bar24,
+} = createStartupBriefBox(W);
 
 // ── Preflight: doctor --fix --update-json (S120 audit #2 — clear stable warns) ─
 // S173 [audit #1 · CANON-031 observability honesty]: the preflight already runs
@@ -163,23 +175,6 @@ function extractSection(content, heading) {
   return nl === -1 ? '' : match.slice(nl + 1);
 }
 
-// ── Box-drawing helpers ───────────────────────────────────────────────────────
-// S220 audit #20 — word-aware truncation: founder boxes were cutting mid-word
-// ("ver", "ti", "heuristi", "flat-rat"), which reads as corruption. When a line
-// overflows, cut at the last word boundary that fits and mark with "…". A word
-// longer than the whole width still hard-cuts (pathological case).
-function truncateWordAware(str, w) {
-  if (str.length <= w) return str;
-  const cut = str.slice(0, w - 1);
-  const lastSpace = cut.lastIndexOf(' ');
-  return (lastSpace > Math.floor(w * 0.6) ? cut.slice(0, lastSpace) : cut) + '…';
-}
-function pad(s, w) {
-  let str = String(s ?? '');
-  if (str.length > w) str = truncateWordAware(str, w);
-  return str + ' '.repeat(Math.max(0, w - str.length));
-}
-function row(content) { return `║  ${pad(content, W)}  ║`; }
 // S220 audit #7 — persist the SIGNALS box verbatim as context/SIGNALS.md, the
 // single-file producer for brief v5's 'signals' computed block (v5 resolver
 // already targets this path; it resolved null since S209). Pass-through: the
@@ -190,33 +185,6 @@ function writeSignalsArtifact(rows) {
   } catch { /* advisory */ }
   return rows;
 }
-function blank() { return `║  ${' '.repeat(W)}  ║`; }
-function top(title) {
-  const t = title ? `══ ${title} ` : '';
-  return '╔' + t + '═'.repeat(Math.max(1, W + 2 - t.length)) + '╗';
-}
-function mid(title) {
-  const t = title ? `══ ${title} ` : '';
-  return '╠' + t + '═'.repeat(Math.max(1, W + 2 - t.length)) + '╣';
-}
-function bot() { return '╚' + '═'.repeat(W + 2) + '╝'; }
-
-// Progress bar: score /100 → 20 chars  █░
-function bar20(score) {
-  const n = Math.min(20, Math.max(0, Math.round(score / 5)));
-  return '█'.repeat(n) + '░'.repeat(20 - n);
-}
-// 10-char proportional bar for category rows (score 0-100 → 0-10 blocks).
-function bar10(score) {
-  const n = Math.min(10, Math.max(0, Math.round((score ?? 0) / 10)));
-  return '█'.repeat(n) + '░'.repeat(10 - n);
-}
-// Progress bar: total / silMax → 24 chars  █░  (SIL v3.0 default 1000)
-function bar24(total, max = 1000) {
-  const n = Math.min(24, Math.max(0, Math.floor((total ?? 0) / max * 24)));
-  return '█'.repeat(n) + '░'.repeat(24 - n);
-}
-
 // ── Load source files ─────────────────────────────────────────────────────────
 const status      = readJson(path.join(root, 'context', 'PROJECT_STATUS.json'), {});
 const packageJson = readJson(path.join(root, 'package.json'), {});

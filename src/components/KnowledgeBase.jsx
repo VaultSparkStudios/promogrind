@@ -3,12 +3,12 @@ import { K, font } from "../lib/shared.js";
 import { S, Tl } from "../ui.jsx";
 
 const FAQS = [
-  ["Is this legal in my state?", "Yes, if your state has legal online sports betting. This tool is a math calculator: it does not place bets, access sportsbook systems, or handle money. The legal question is whether online sports betting is legal where you are, not whether you can use a calculator."],
+  ["Is this legal in my state?", "PromoGrind cannot determine that for you. Rules, age requirements, operator eligibility, and permitted activity vary by jurisdiction and can change. PromoGrind is a calculator: it does not place bets, access sportsbook systems, or handle money. Verify current rules with your state regulator and each operator; this is not legal advice."],
   ["Can I get limited by sportsbooks?", "Books can reduce your maximum bet size or exclude you from specific promotions. This typically happens to accounts that only place hedging bets with no recreational activity. To improve account longevity, use varied stake sizes, avoid immediate withdrawal patterns, and keep most action on main markets."],
   ["How should I estimate potential value?", "Do not begin with a population earnings range. Inventory current offers for which you are eligible, enter live prices and constraints, and treat every output as a model. Your realized ledger and skipped-offer reasons are the evidence for whether the workflow is worthwhile."],
   ["Do I need to know anything about sports?", "No. Promo conversion is mostly math, timing, and disciplined execution. You are evaluating odds, stakes, timing, and risk controls, not predicting teams or players."],
-  ["Is this gambling?", "Traditional gambling means taking risk for the chance of reward. Matched betting aims to reduce or eliminate outcome risk by covering both sides. Positive expected value betting still has variance, so PromoGrind treats it as an advanced discipline surface rather than a hype loop."],
-  ["What if I lose a bet?", "With a correctly hedged promo, the worst case is usually a smaller profit than expected. The main operational risks are missing the hedge, placing the wrong amount, using the wrong market, or misunderstanding terms."],
+  ["Is this gambling?", "Sportsbook wagers put capital at risk. A hedge can reduce exposure to one event outcome, but it cannot remove execution, eligibility, limit, void, counterparty, or changing-price risk. Positive expected value betting still has variance, so PromoGrind treats it as an advanced discipline surface rather than a hype loop."],
+  ["What if I lose a bet?", "There is no fixed worst case: an incorrect, rejected, limited, voided, or mistimed hedge can create a real loss. Recheck the market, amount, accepted status, eligibility, and terms before treating a modeled result as protected."],
 ];
 
 function FaqAccordion() {
@@ -50,7 +50,7 @@ export default function KnowledgeBase() {
         <p>This is a math calculator for sportsbook promotions. Sportsbooks give away promotional value to attract new customers. PromoGrind helps you evaluate how to convert those offers into disciplined, trackable value without sportsbook hype or impulsive betting language.</p>
 
         <div style={S.helpH}>Is This Legal?</div>
-        <p>Matched betting and promo conversion are legal in US states where online sports betting is legal. PromoGrind does not place bets, access sportsbook accounts, or handle money. It is closer to a spreadsheet or tax calculator than a sportsbook.</p>
+        <p>PromoGrind is a calculator; it does not place bets, access sportsbook accounts, or handle money. That product behavior is not a legal conclusion about your use or related sportsbook activity. Laws, age rules, operator eligibility, and terms vary by jurisdiction and change over time. Verify current official guidance for your location; PromoGrind does not provide legal advice.</p>
 
         <div style={S.helpH}>How Much Can I Make?</div>
         <p>Welcome offers can create meaningful one-time value, while daily boosts can create recurring smaller opportunities. Treat these ranges as planning assumptions, not modeled income. Your state, available books, limits, bankroll, timing, and execution quality all matter.</p>
@@ -106,13 +106,13 @@ export default function KnowledgeBase() {
         <p>Use no-vig and expected value tools only after your tracking discipline is solid. Positive expected value is not a guarantee on any single bet.</p>
 
         <div style={{ ...S.tag(K.rd), marginBottom: 12, marginTop: 24, fontSize: 12 }}>IMPORTANT WARNINGS</div>
-        <p><strong>This is not gambling advice.</strong> You must be of legal age and only use sportsbooks where betting is legal. All winnings are taxable. Never bet more than you can afford to lose. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
+        <p><strong>This is not gambling, legal, or tax advice.</strong> You must meet the age, location, identity, and operator rules that apply to you. Wagering activity and promotional value can have tax consequences; keep source records and consult a qualified professional for your situation. Never bet more than you can afford to lose. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
         <p><strong>Account longevity:</strong> Avoid same-book hedges, vary behavior, keep records, avoid reckless withdrawal patterns, and understand that books can still limit accounts.</p>
 
         <div style={{ ...S.tag(K.gn), marginBottom: 12, marginTop: 24, fontSize: 12 }}>TAX GUIDE</div>
 
         <div style={S.helpH}>Reporting Your Winnings</div>
-        <p>All gambling winnings are taxable ordinary income in the US. Keep records even if a sportsbook does not issue a form.</p>
+        <p>United States tax reporting can apply to gambling winnings and promotional value, but classification and obligations depend on the facts and current rules. Keep complete source records even when an operator does not issue a form, and confirm treatment with a qualified tax professional.</p>
 
         <div style={S.helpH}>Deducting Losses</div>
         <p>Loss deductions have strict limits and generally require itemizing. The ledger is designed to help you keep source records, not to replace a tax professional.</p>

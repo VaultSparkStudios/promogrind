@@ -79,4 +79,39 @@ export function buildAdvisorPrivacyEnvelope({ promoText, includeProfile = false,
   };
 }
 
+export function buildChatPrivacyEnvelope({ message, history = [], includeProfile = false, appData = {} } = {}) {
+  const sanitizedMessage = redactAdvisorInput(message);
+  const safeHistory = Array.isArray(history)
+    ? history.slice(-10).flatMap((entry) => {
+        if (!entry || !["user", "assistant"].includes(entry.role)) return [];
+        const sanitized = redactAdvisorInput(entry.content);
+        return sanitized.text ? [{ role: entry.role, content: sanitized.text, redactions: sanitized.total }] : [];
+      })
+    : [];
+  const profile = buildAdvisorPrivacyEnvelope({ promoText: "", includeProfile, appData });
+  const historyRedactions = safeHistory.reduce((sum, entry) => sum + entry.redactions, 0);
+  const historyBody = safeHistory.map(({ role, content }) => ({ role, content }));
+  const redactionCount = sanitizedMessage.total + historyRedactions;
+  return {
+    body: {
+      message: sanitizedMessage.text.slice(0, 1000),
+      history: historyBody,
+      privacyContractVersion: 1,
+      personalizationConsent: profile.body.personalizationConsent,
+      ...(profile.body.userContext ? { userContext: profile.body.userContext } : {}),
+    },
+    receipt: {
+      contractVersion: 1,
+      redactionCount,
+      messageRedactions: sanitizedMessage.total,
+      historyRedactions,
+      historyMessages: historyBody.length,
+      profileIncluded: profile.receipt.profileIncluded,
+      profileFields: profile.receipt.profileFields,
+      omittedContextChars: profile.receipt.omittedContextChars,
+      estimatedTokensSaved: profile.receipt.estimatedTokensSaved,
+    },
+  };
+}
+
 export { MAX_ADVISOR_CHARS };

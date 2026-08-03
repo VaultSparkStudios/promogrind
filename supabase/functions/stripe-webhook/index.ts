@@ -1,53 +1,87 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { isStripeId, parseStripeEvent, verifyStripeWebhook } from "../_shared/stripe-boundary.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
+  "Content-Type": "application/json",
 };
 
 const WEBHOOK_SECRET = Deno.env.get("STRIPE_WEBHOOK_SECRET") ?? "";
+const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
 
-// Maps billing plan nicknames → stored plan names
 const PLAN_NAME_MAP: Record<string, string> = {
-  scout_monthly:  "scout",
-  scout_annual:   "scout",
+  scout_monthly: "scout",
+  scout_annual: "scout",
   runner_monthly: "runner",
-  runner_annual:  "runner",
+  runner_annual: "runner",
   closer_monthly: "closer",
-  closer_annual:  "closer",
-  house:          "house",
-  monthly:        "pro",
-  annual:         "pro",
-  agency:         "agency",
+  closer_annual: "closer",
+  house: "house",
+  monthly: "pro",
+  annual: "pro",
+  agency: "agency",
 };
 
-/** Minimal Stripe webhook signature verification (HMAC-SHA256) */
-async function verifyStripeSignature(payload: string, header: string, secret: string): Promise<boolean> {
-  try {
-    const parts = Object.fromEntries(header.split(",").map(p => p.split("=")));
-    const timestamp = parts["t"];
-    const signature = parts["v1"];
-    if (!timestamp || !signature) return false;
+function response(body: Record<string, unknown>, status = 200): Response {
+  return new Response(JSON.stringify(body), { status, headers: corsHeaders });
+}
 
-    const signed = `${timestamp}.${payload}`;
-    const key = await crypto.subtle.importKey(
-      "raw",
-      new TextEncoder().encode(secret),
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"],
-    );
-    const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(signed));
-    const computed = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, "0")).join("");
-    return computed === signature;
-  } catch {
-    return false;
+function userId(value: unknown): string | null {
+  return typeof value === "string" && /^[A-Za-z0-9-]{6,128}$/.test(value) ? value : null;
+}
+
+function planFrom(subscription: Record<string, unknown>): { billingPlan: string; planName: string } {
+  const metadata = subscription.metadata as Record<string, unknown> | undefined;
+  const billingPlan = metadata?.billing_plan ?? metadata?.plan;
+  if (typeof billingPlan !== "string" || !PLAN_NAME_MAP[billingPlan]) throw new Error("Stripe subscription has no recognized billing plan");
+  return { billingPlan, planName: PLAN_NAME_MAP[billingPlan] };
+}
+
+function periodEnd(subscription: Record<string, unknown>): string | null {
+  const value = Number(subscription.current_period_end);
+  return Number.isFinite(value) && value > 0 ? new Date(value * 1000).toISOString() : null;
+}
+
+async function fetchSubscription(subscriptionId: unknown): Promise<Record<string, unknown>> {
+  if (!isStripeId(subscriptionId, "sub")) throw new Error("Malformed Stripe subscription ID");
+  if (!STRIPE_SECRET) throw new Error("Stripe API secret is not configured");
+  const result = await fetch(`https://api.stripe.com/v1/subscriptions/${subscriptionId}`, {
+    headers: { "Authorization": `Bearer ${STRIPE_SECRET}` },
+  });
+  const body = await result.json().catch(() => null);
+  if (!result.ok || !body || typeof body !== "object" || Array.isArray(body)) {
+    throw new Error(`Stripe subscription lookup failed (${result.status})`);
   }
+  return body as Record<string, unknown>;
 }
 
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method !== "POST") return response({ error: "Method not allowed" }, 405);
+  if (!req.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+    return response({ error: "Content-Type must be application/json" }, 415);
+  }
+  if (!WEBHOOK_SECRET) {
+    console.error("[stripe-webhook] signature secret missing; refusing ingress");
+    return response({ error: "Webhook verification unavailable" }, 503);
+  }
+
+  const payload = await req.text();
+  const signature = await verifyStripeWebhook({
+    payload,
+    header: req.headers.get("stripe-signature") ?? "",
+    secret: WEBHOOK_SECRET,
+  });
+  if (!signature.ok) {
+    console.error(`[stripe-webhook] rejected signature: ${signature.reason}`);
+    return response({ error: "Invalid signature" }, 400);
+  }
+  const parsed = parseStripeEvent(payload);
+  if (!parsed.ok) return response({ error: parsed.error }, 400);
+  const event = parsed.event;
+  const object = event.data.object;
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
@@ -55,151 +89,80 @@ serve(async (req: Request) => {
   );
 
   try {
-    const payload = await req.text();
-    const sig = req.headers.get("stripe-signature") ?? "";
+    console.log(`[stripe-webhook] verified ${event.type} (${event.id})`);
 
-    // Verify signature if secret is configured
-    if (WEBHOOK_SECRET) {
-      const valid = await verifyStripeSignature(payload, sig, WEBHOOK_SECRET);
-      if (!valid) {
-        console.error("[stripe-webhook] Invalid signature");
-        return new Response(JSON.stringify({ error: "Invalid signature" }), { status: 400, headers: corsHeaders });
-      }
-    }
-
-    const event = JSON.parse(payload);
-    console.log(`[stripe-webhook] ${event.type} — ${event.id}`);
-
-    // ── checkout.session.completed ─────────────────────────────────────────
     if (event.type === "checkout.session.completed") {
-      const session = event.data.object;
-      const userId = session.client_reference_id;
-      const subscriptionId = session.subscription;
-
-      if (!userId || !subscriptionId) {
-        console.warn("[stripe-webhook] Missing user_id or subscription_id in checkout session");
-        return new Response("ok", { headers: corsHeaders });
-      }
-
-      // Fetch subscription from Stripe to get plan details
-      const stripeKey = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
-      const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${subscriptionId}`, {
-        headers: { "Authorization": `Bearer ${stripeKey}` },
-      });
-      const sub = await subRes.json();
-
-      const billingPlan = sub.metadata?.billing_plan ?? sub.metadata?.plan ?? "runner_monthly";
-      const planName = PLAN_NAME_MAP[billingPlan] ?? billingPlan;
-      const periodEnd = sub.current_period_end
-        ? new Date(sub.current_period_end * 1000).toISOString()
-        : null;
-
-      const { error } = await supabase
-        .from("subscriptions")
-        .upsert({
-          user_id: userId,
-          stripe_subscription_id: subscriptionId,
-          stripe_customer_id: session.customer ?? null,
-          plan: planName,
-          billing_plan: billingPlan,
-          status: "active",
-          current_period_end: periodEnd,
-          updated_at: new Date().toISOString(),
-        }, { onConflict: "user_id" });
-
-      if (error) console.error("[stripe-webhook] upsert error:", error.message);
-      else console.log(`[stripe-webhook] Activated ${planName} for user ${userId}`);
+      const owner = userId(object.client_reference_id);
+      const subscriptionId = object.subscription;
+      if (!owner || !isStripeId(subscriptionId, "sub")) throw new Error("Checkout session lacks bounded ownership metadata");
+      const subscription = await fetchSubscription(subscriptionId);
+      const plan = planFrom(subscription);
+      const customer = isStripeId(object.customer, "cus") ? object.customer : null;
+      const { error } = await supabase.from("subscriptions").upsert({
+        user_id: owner,
+        stripe_subscription_id: subscriptionId,
+        stripe_customer_id: customer,
+        plan: plan.planName,
+        billing_plan: plan.billingPlan,
+        status: "active",
+        current_period_end: periodEnd(subscription),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id" });
+      if (error) throw new Error(`Subscription activation persistence failed: ${error.message}`);
     }
 
-    // ── invoice.paid ───────────────────────────────────────────────────────
     if (event.type === "invoice.paid") {
-      const invoice = event.data.object;
-      const subscriptionId = invoice.subscription;
-      if (!subscriptionId) return new Response("ok", { headers: corsHeaders });
-
-      const stripeKey = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
-      const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${subscriptionId}`, {
-        headers: { "Authorization": `Bearer ${stripeKey}` },
-      });
-      const sub = await subRes.json();
-      const userId = sub.metadata?.user_id;
-      if (!userId) return new Response("ok", { headers: corsHeaders });
-
-      const billingPlan = sub.metadata?.billing_plan ?? sub.metadata?.plan ?? "runner_monthly";
-      const planName = PLAN_NAME_MAP[billingPlan] ?? billingPlan;
-      const periodEnd = sub.current_period_end
-        ? new Date(sub.current_period_end * 1000).toISOString()
-        : null;
-
-      const { error } = await supabase
-        .from("subscriptions")
-        .upsert({
-          user_id: userId,
-          stripe_subscription_id: subscriptionId,
-          stripe_customer_id: sub.customer ?? null,
-          plan: planName,
-          billing_plan: billingPlan,
-          status: "active",
-          current_period_end: periodEnd,
-          updated_at: new Date().toISOString(),
-        }, { onConflict: "user_id" });
-
-      if (error) console.error("[stripe-webhook] renewal upsert error:", error.message);
-      else console.log(`[stripe-webhook] Renewed ${planName} for user ${userId}`);
+      const subscription = await fetchSubscription(object.subscription);
+      const metadata = subscription.metadata as Record<string, unknown> | undefined;
+      const owner = userId(metadata?.user_id);
+      const subscriptionId = subscription.id;
+      if (!owner || !isStripeId(subscriptionId, "sub")) throw new Error("Invoice subscription lacks bounded ownership metadata");
+      const plan = planFrom(subscription);
+      const customer = isStripeId(subscription.customer, "cus") ? subscription.customer : null;
+      const { error } = await supabase.from("subscriptions").upsert({
+        user_id: owner,
+        stripe_subscription_id: subscriptionId,
+        stripe_customer_id: customer,
+        plan: plan.planName,
+        billing_plan: plan.billingPlan,
+        status: "active",
+        current_period_end: periodEnd(subscription),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id" });
+      if (error) throw new Error(`Subscription renewal persistence failed: ${error.message}`);
     }
 
-    // ── customer.subscription.deleted ─────────────────────────────────────
     if (event.type === "customer.subscription.deleted") {
-      const sub = event.data.object;
-      const userId = sub.metadata?.user_id;
-      if (!userId) return new Response("ok", { headers: corsHeaders });
-
-      const { error } = await supabase
-        .from("subscriptions")
-        .update({
-          status: "cancelled",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId);
-
-      if (error) console.error("[stripe-webhook] cancel error:", error.message);
-      else console.log(`[stripe-webhook] Cancelled subscription for user ${userId}`);
+      const metadata = object.metadata as Record<string, unknown> | undefined;
+      const owner = userId(metadata?.user_id);
+      if (!owner) throw new Error("Deleted subscription lacks bounded ownership metadata");
+      const { error } = await supabase.from("subscriptions").update({
+        status: "cancelled",
+        updated_at: new Date().toISOString(),
+      }).eq("user_id", owner);
+      if (error) throw new Error(`Subscription cancellation persistence failed: ${error.message}`);
     }
 
-    // ── customer.subscription.updated ─────────────────────────────────────
     if (event.type === "customer.subscription.updated") {
-      const sub = event.data.object;
-      const userId = sub.metadata?.user_id;
-      if (!userId) return new Response("ok", { headers: corsHeaders });
-
-      const billingPlan = sub.metadata?.billing_plan ?? sub.metadata?.plan ?? "";
-      const planName = PLAN_NAME_MAP[billingPlan] ?? billingPlan;
-      const periodEnd = sub.current_period_end
-        ? new Date(sub.current_period_end * 1000).toISOString()
-        : null;
-
-      const { error } = await supabase
-        .from("subscriptions")
-        .update({
-          plan: planName || undefined,
-          billing_plan: billingPlan || undefined,
-          status: sub.status === "active" ? "active" : sub.status,
-          current_period_end: periodEnd,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId);
-
-      if (error) console.error("[stripe-webhook] update error:", error.message);
-      else console.log(`[stripe-webhook] Updated subscription for user ${userId} → ${planName}`);
+      const metadata = object.metadata as Record<string, unknown> | undefined;
+      const owner = userId(metadata?.user_id);
+      if (!owner) throw new Error("Updated subscription lacks bounded ownership metadata");
+      const plan = planFrom(object);
+      const rawStatus = typeof object.status === "string" && /^[a-z_]{3,30}$/.test(object.status) ? object.status : "incomplete";
+      const { error } = await supabase.from("subscriptions").update({
+        plan: plan.planName,
+        billing_plan: plan.billingPlan,
+        status: rawStatus,
+        current_period_end: periodEnd(object),
+        updated_at: new Date().toISOString(),
+      }).eq("user_id", owner);
+      if (error) throw new Error(`Subscription update persistence failed: ${error.message}`);
     }
 
-    return new Response(JSON.stringify({ received: true }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-
-  } catch (err) {
-    console.error("[stripe-webhook] Unhandled error:", err);
-    return new Response(JSON.stringify({ error: "Internal error" }), { status: 500, headers: corsHeaders });
+    return response({ received: true, event_id: event.id, verification: "hmac-sha256+timestamp" });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "unknown handler failure";
+    console.error(`[stripe-webhook] ${event.id} failed: ${message}`);
+    return response({ error: "Webhook processing failed", event_id: event.id }, 500);
   }
 });

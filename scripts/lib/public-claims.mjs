@@ -1,5 +1,7 @@
 export const PUBLIC_CLAIM_RULES = [
   { id: "absolute-legality-en", locale: "en", pattern: /\b(?:100%|completely|entirely) legal\b/gi, guidance: "Describe eligibility as jurisdiction- and terms-dependent." },
+  { id: "categorical-legality-en", locale: "en", pattern: /\b(?:matched betting|promo conversion|sports betting|online sports betting)\b[^.!?]{0,90}\b(?:is|are)\s+legal\b/gi, guidance: "Describe product behavior, then direct readers to current jurisdiction-specific authority; do not publish a blanket legal conclusion." },
+  { id: "categorical-tax-en", locale: "en", pattern: /\ball\s+(?:gambling\s+)?(?:winnings|profits?)\s+are\s+taxable\b/gi, guidance: "Tax treatment depends on current rules and facts. Require source records and qualified advice instead of a universal conclusion." },
   { id: "absolute-legality-es", locale: "es", pattern: /\bcompletamente legal\b/gi, guidance: "Describe eligibility as dependent on jurisdiction and operator terms." },
   { id: "income-hype-en", locale: "en", pattern: /\b(?:passive profit|free money|money machine|side hustle|significant income|side income|ongoing income|monthly income|making extra income every month)\b/gi, guidance: "Use tracked promo-value language, not recurring-income promises." },
   { id: "income-hype-es", locale: "es", pattern: /\b(?:ingresos consistentes|ingresos mensuales|ingresos adicionales)\b/gi, guidance: "Use observed or modeled value, not income promises." },
@@ -38,9 +40,17 @@ export const PUBLIC_CLAIM_DOCUMENT_RULES = [
   },
   {
     id: 'categorical-legal-answer', locale: 'en',
-    applies: (text) => /(?:is\s+promogrind\s+legal|do\s+we\s+need\s+a\s+gambling\s+licen[cs]e)[\s\S]{0,220}?\b(?:yes|no)\b/i.test(text)
-      && !/(?:jurisdiction|local law|var(?:y|ies)|not legal advice)/i.test(text),
-    pattern: /(?:is\s+promogrind\s+legal|do\s+we\s+need\s+a\s+gambling\s+licen[cs]e)/i,
+    applies: (text) => {
+      const question = /(?:is\s+(?:this|promogrind|matched betting|promo conversion)\s+legal(?:\s+in\s+(?:my|this|your)\s+(?:state|jurisdiction))?|do\s+we\s+need\s+a\s+gambling\s+licen[cs]e)/ig;
+      for (const match of text.matchAll(question)) {
+        const local = text.slice(match.index, match.index + 360);
+        const categorical = /(?:[?"'’\s>:,-]|^)(?:yes|no)\b|\b(?:is|are)\s+legal\b/i.test(local);
+        const bounded = /(?:cannot determine|jurisdiction|local law|var(?:y|ies)|not legal advice|official (?:guidance|source|regulator))/i.test(local);
+        if (categorical && !bounded) return true;
+      }
+      return false;
+    },
+    pattern: /(?:is\s+(?:this|promogrind|matched betting|promo conversion)\s+legal|do\s+we\s+need\s+a\s+gambling\s+licen[cs]e)/i,
     guidance: 'State product behavior and direct readers to jurisdiction-specific authority; do not give a categorical legal conclusion.',
   },
   {
@@ -67,6 +77,12 @@ function isSafeNegation(line, match) {
   return SAFE_NEGATIONS.some((pattern) => pattern.test(context));
 }
 
+function isConditionedLegality(line, match) {
+  const prefix = line.slice(Math.max(0, match.index - 40), match.index);
+  return /\b(?:where|whether|if)\s*$/i.test(prefix)
+    || /\bconfirm(?:ing)?\s+that\s*$/i.test(prefix);
+}
+
 export function scanPublicClaimText(text, file = "<memory>") {
   const findings = [];
   String(text).split(/\r?\n/).forEach((line, index) => {
@@ -74,6 +90,7 @@ export function scanPublicClaimText(text, file = "<memory>") {
       rule.pattern.lastIndex = 0;
       for (const match of line.matchAll(rule.pattern)) {
         if (rule.id.startsWith("outcome-certainty") && isSafeNegation(line, match)) continue;
+        if (rule.id === "categorical-legality-en" && isConditionedLegality(line, match)) continue;
         findings.push({
           id: rule.id,
           locale: rule.locale,

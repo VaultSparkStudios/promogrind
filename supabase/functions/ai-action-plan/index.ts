@@ -85,6 +85,12 @@ serve(async (req) => {
       ...normalizedPlan,
       usage: claude.usage || null,
       remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
+      privacy: {
+        contractVersion: context.contextVersion,
+        egress: ["operator-observations", ...(context.profileConsent && context.profile ? ["consented-financial-profile"] : [])],
+        profileIncluded: Boolean(context.profileConsent && context.profile),
+        persistedByPromoGrind: false,
+      },
     }), {
       headers: { ...CORS, "Content-Type": "application/json" },
     });

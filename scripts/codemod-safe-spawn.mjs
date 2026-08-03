@@ -22,6 +22,7 @@ const SKIP_DIRS = new Set([...WALK_IGNORE_DIRS, 'coverage']);
 // Matches a direct child-process module import in a from-clause (single/double quote,
 // optional node: prefix) and captures the surrounding quotes for the swap.
 const IMPORT_RE = /(from\s*['"])(?:node:)?child_process(['"])/g;
+const DYNAMIC_IMPORT_RE = /(import\(\s*['"])(?:node:)?child_process(['"]\s*\))/g;
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
@@ -56,11 +57,14 @@ export function rewireToSafeSpawn(scriptsDir, { apply = false } = {}) {
   for (const file of files) {
     if (skip.has(file)) continue;
     const src = readFileSync(file, 'utf8');
-    if (!IMPORT_RE.test(src)) continue;
+    if (!IMPORT_RE.test(src) && !DYNAMIC_IMPORT_RE.test(src)) continue;
     IMPORT_RE.lastIndex = 0;
+    DYNAMIC_IMPORT_RE.lastIndex = 0;
     let rel = relative(dirname(file), wrapperAbs).replace(/\\/g, '/');
     if (!rel.startsWith('.')) rel = './' + rel;
-    const next = src.replace(IMPORT_RE, `$1${rel}$2`);
+    const next = src
+      .replace(IMPORT_RE, `$1${rel}$2`)
+      .replace(DYNAMIC_IMPORT_RE, `$1${rel}$2`);
     if (next !== src) {
       changed.push({ file, rel });
       if (apply) writeFileSync(file, next);

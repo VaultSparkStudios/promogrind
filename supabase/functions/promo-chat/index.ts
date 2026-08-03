@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { recordAiUsage, requireAiAccess } from "../_shared/ai-access.ts";
 import { AI_ENTITLEMENTS } from "../_shared/ai-entitlements.ts";
 import { clientKey, enforceRateLimit, getCorsHeaders, inMemoryRateLimit, json, rateLimitResponse } from "../_shared/http.ts";
+import { sanitizeChatPayload } from "../_shared/advisor-privacy.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
 
@@ -19,11 +20,6 @@ Keep responses concise and practical (3–6 sentences max). When discussing calc
 
 You do NOT give specific game picks, score predictions, or general gambling advice beyond promo/EV optimization strategy.`;
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
-
 serve(async (req: Request) => {
   const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -36,6 +32,9 @@ serve(async (req: Request) => {
     // First-line burst protection: 6 requests / 10s per client IP.
     const burst = inMemoryRateLimit(clientKey(req, "promo_chat"), 6, 10_000);
     if (!burst.allowed) return rateLimitResponse(req, burst.retryAfterMs / 1000, corsHeaders);
+
+    const privacy = sanitizeChatPayload(await req.json());
+    if (!privacy.ok) return json(req, { error: privacy.error }, 400);
 
     const access = await requireAiAccess(req, {
       ...AI_ENTITLEMENTS.promoChat,
@@ -54,15 +53,7 @@ serve(async (req: Request) => {
     });
     if (durableLimit) return durableLimit;
 
-    const { message, history = [], userContext } = await req.json() as {
-      message: string;
-      history?: Message[];
-      userContext?: { bankroll?: number; books?: string[]; recentProfit?: number };
-    };
-
-    if (!message?.trim()) {
-      return json(req, { error: "Message is required" }, 400);
-    }
+    const { message, history, userContext } = privacy;
 
     // Build context note from user profile
     let contextNote = "";
@@ -70,13 +61,12 @@ serve(async (req: Request) => {
       const parts: string[] = [];
       if (userContext.bankroll) parts.push(`bankroll: $${userContext.bankroll}`);
       if (userContext.books?.length) parts.push(`active books: ${userContext.books.slice(0, 5).join(", ")}`);
-      if (userContext.recentProfit !== undefined) parts.push(`recent 30-day P/L: $${userContext.recentProfit.toFixed(2)}`);
       if (parts.length) contextNote = `\n\nUser context: ${parts.join(" | ")}`;
     }
 
     const trimmedHistory = history.slice(-10);
     const messages = [
-      ...trimmedHistory.map((m: Message) => ({ role: m.role, content: m.content })),
+      ...trimmedHistory.map((m) => ({ role: m.role, content: m.content })),
       { role: "user" as const, content: message },
     ];
 
@@ -165,7 +155,7 @@ serve(async (req: Request) => {
         if (combined.includes("parlay")) suggestions.push("parlay");
         if (combined.includes("hedge")) suggestions.push("hedge");
 
-        await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "done", remaining, suggestions: [...new Set(suggestions)].slice(0, 3) })}\n\n`));
+        await writer.write(encoder.encode(`data: ${JSON.stringify({ type: "done", remaining, suggestions: [...new Set(suggestions)].slice(0, 3), privacy: privacy.receipt })}\n\n`));
         await writer.close();
 
         // Record usage after stream completes (best-effort)
@@ -173,6 +163,9 @@ serve(async (req: Request) => {
           input_tokens: inputTokens,
           output_tokens: outputTokens,
           tier: access.tier,
+          privacy_contract: privacy.receipt.contractVersion,
+          redaction_count: privacy.receipt.redactionCount,
+          profile_included: privacy.receipt.profileIncluded,
         }).catch(() => {});
       })();
 
@@ -212,6 +205,7 @@ serve(async (req: Request) => {
       suggestions: [...new Set(suggestions)].slice(0, 3),
       tier: access.tier,
       remaining: access.remaining === null ? null : Math.max(0, access.remaining - 1),
+      privacy: privacy.receipt,
     });
 
   } catch (err) {

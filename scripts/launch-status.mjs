@@ -7,6 +7,7 @@
  */
 
 import { spawnSync } from "./lib/safe-spawn.mjs";
+import { classifySpawnResult, resolveCommandSpec } from "./lib/command-spec.mjs";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -18,18 +19,26 @@ const SKIP_PROD_SMOKE = ARGS.has("--skip-prod-smoke");
 
 function runStep(label, command, args, options = {}) {
   console.log(`\n== ${label} ==`);
-  const executable = process.platform === "win32" && command === "npm" ? "npm.cmd" : command;
-  const result = spawnSync(executable, args, {
+  const spec = resolveCommandSpec(command, args);
+  const result = spawnSync(spec.executable, spec.args, {
     cwd: ROOT,
     stdio: "inherit",
     shell: false,
     env: process.env,
   });
-  const ok = result.status === 0;
-  if (!ok && !options.allowFailure) {
-    console.log(`\n${label} failed with exit code ${result.status ?? "unknown"}.`);
+  const outcome = classifySpawnResult(result);
+  if (!outcome.ok && !options.allowFailure) {
+    console.log(`\n${label} failed with ${outcome.detail}.`);
   }
-  return { label, ok, status: result.status ?? 1, allowFailure: Boolean(options.allowFailure) };
+  return {
+    label,
+    ok: outcome.ok,
+    status: outcome.status,
+    signal: outcome.signal,
+    spawnError: outcome.spawnError,
+    transport: spec.transport,
+    allowFailure: Boolean(options.allowFailure),
+  };
 }
 
 function readProofSummary() {

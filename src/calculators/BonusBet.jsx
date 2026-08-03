@@ -111,6 +111,7 @@ export default function BonusBet() {
             )}
           </div>
           {!FEATURE_FLAGS.aiScan && <div style={{ fontSize: 10, color: K.mt, marginTop: 4 }}>Bet slip scan will appear here once the AI backend is activated.</div>}
+          {FEATURE_FLAGS.aiScan && <div style={{ fontSize: 10, color: K.mt, marginTop: 4 }}>Your selected image is sent to the configured AI provider for this scan; PromoGrind does not store the uploaded image.</div>}
           {scanResult && !scanResult.error && <div style={{ fontSize: 10, color: K.gn, marginTop: 4 }}>✓ Scanned: {[scanResult.book, scanResult.betType?.replace(/_/g, " "), scanResult.odds && `${scanResult.odds} odds`, scanResult.stake && `$${scanResult.stake} stake`].filter(Boolean).join(" · ")}</div>}
           {scanResult && !scanResult.error && bbSyncAppData && (
             <button

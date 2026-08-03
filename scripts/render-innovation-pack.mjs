@@ -98,6 +98,15 @@ function collectLargeFiles() {
   return rows.sort((a, b) => b.lines - a.lines).slice(0, 8);
 }
 
+function collectProviderFunctions() {
+  const root = path.join(ROOT, 'supabase', 'functions');
+  return walk(root)
+    .filter((file) => file.endsWith(`${path.sep}index.ts`))
+    .filter((file) => /api\.anthropic\.com|ANTHROPIC_API_KEY|npm:@anthropic-ai\/sdk/.test(fs.readFileSync(file, 'utf8')))
+    .map((file) => path.basename(path.dirname(file)))
+    .sort();
+}
+
 function collectLaunchDeferrals(status) {
   return (status.blockers ?? [])
     .filter((entry) => /proof|smoke|friend|brevo|capture|capability|stripe|email/i.test(entry))
@@ -118,6 +127,12 @@ function buildPack() {
   const rawImports = scanDirectChildProcessImports(path.join(ROOT, 'scripts'));
   const todoSignals = collectTodoSignals();
   const largeFiles = collectLargeFiles();
+  const providerFunctions = collectProviderFunctions();
+  const aiEgressManifest = readJson('supabase/functions/_shared/ai-egress-manifest.json', null);
+  const aiEgressCovered = new Set((aiEgressManifest?.functions ?? []).map((entry) => entry.function));
+  const aiEgressMissing = providerFunctions.filter((name) => !aiEgressCovered.has(name));
+  const cdpCopies = ['scripts/validate-production-dashboard-smoke.mjs', 'scripts/capture-ai-chat-visual.mjs']
+    .filter((file) => /class\s+Cdp\b/.test(readText(file)));
   const launchDeferrals = collectLaunchDeferrals(status);
   const items = [];
 
@@ -163,6 +178,34 @@ function buildPack() {
     });
   }
 
+  if (providerFunctions.length && (aiEgressMissing.length || !fs.existsSync(path.join(ROOT, 'scripts', 'check-ai-egress-contract.mjs')))) {
+    add(items, {
+      id: 'provider-egress-manifest',
+      tier: 'high',
+      axis: 'privacy / artificial-intelligence / observability',
+      impact: 9,
+      innovation: 9,
+      effort: '4h',
+      effortHours: 4,
+      evidence: `${providerFunctions.length} provider functions exist; ${aiEgressMissing.length || providerFunctions.length} lack a machine-checked egress classification.`,
+      recipe: 'Declare every provider-bound function, data class, consent mode, input boundary, payload limit, persistence posture, and receipt contract in one public-safe manifest; make integrity checks reject undisclosed provider egress.',
+    });
+  }
+
+  if (cdpCopies.length > 1 && !fs.existsSync(path.join(ROOT, 'scripts', 'lib', 'chromium-cdp.mjs'))) {
+    add(items, {
+      id: 'shared-chromium-cdp-harness',
+      tier: 'medium',
+      axis: 'rendered UX / automation / process quality',
+      impact: 8,
+      innovation: 8,
+      effort: '3h',
+      effortHours: 3,
+      evidence: `${cdpCopies.length} browser proof scripts independently implement Chromium discovery, DevTools connection, cleanup, and command routing.`,
+      recipe: 'Extract a dependency-free Chromium/CDP session primitive with command timeouts and guaranteed cleanup; migrate production smoke and visual capture to it and regression-test its bounded failure semantics.',
+    });
+  }
+
   if (largeFiles.length) {
     const top = largeFiles[0];
     add(items, {
@@ -194,7 +237,9 @@ function buildPack() {
   }
 
   for (const shipped of shippedOutcomes) {
-    if (!items.some((item) => item.id === shipped.id)) items.push(shipped);
+    const current = items.findIndex((item) => item.id === shipped.id);
+    if (current >= 0) items[current] = { ...items[current], ...shipped, status: 'shipped' };
+    else items.push(shipped);
   }
 
   const ranked = items
@@ -214,6 +259,9 @@ function buildPack() {
       windowsHideShellViolations: windowsShell.length,
       directChildProcessImports: rawImports.length,
       todoSignals: todoSignals.length,
+      providerFunctions: providerFunctions.length,
+      aiEgressMissing: aiEgressMissing.length,
+      cdpHarnessCopies: cdpCopies.length,
       largeFiles: largeFiles.length,
       launchDeferrals: launchDeferrals.length,
       secondOrderShipped: shippedOutcomes.length,

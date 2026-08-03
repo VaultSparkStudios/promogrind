@@ -1,21 +1,52 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-03T01:43:40.512Z",
+  "generatedAt": "2026-08-03T21:50:42.763Z",
   "project": "PromoGrind",
-  "session": 123,
+  "session": 125,
   "sourceSignals": {
     "geniusListEmpty": true,
-    "taskBoardBytes": 77054,
+    "taskBoardBytes": 79882,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
+    "providerFunctions": 5,
+    "aiEgressMissing": 0,
+    "cdpHarnessCopies": 0,
     "largeFiles": 3,
     "launchDeferrals": 6,
-    "secondOrderShipped": 0
+    "secondOrderShipped": 3
   },
   "ranked": [
     {
-      "status": "unblocked",
+      "status": "shipped",
+      "effort": "4h",
+      "effortHours": 4,
+      "priority": 31.3,
+      "id": "provider-egress-manifest",
+      "tier": "high",
+      "axis": "privacy / artificial-intelligence / observability",
+      "impact": 9,
+      "innovation": 9,
+      "evidence": "Five provider functions now have a complete public-safe egress classification.",
+      "recipe": "Declare and ratchet every provider boundary.",
+      "outcome": "Five functions are classified, bounded, non-persisting, and response-receipted; Stack Builder gained a redacting server contract and Deno tests."
+    },
+    {
+      "status": "shipped",
+      "effort": "3h",
+      "effortHours": 3,
+      "priority": 27.6,
+      "id": "shared-chromium-cdp-harness",
+      "tier": "medium",
+      "axis": "rendered UX / automation / process quality",
+      "impact": 8,
+      "innovation": 8,
+      "evidence": "Production smoke and visual capture now share one dependency-free CDP session primitive.",
+      "recipe": "Centralize browser discovery, command routing, timeouts, and cleanup.",
+      "outcome": "Both consumers pass live local runs; every DevTools command is timeout-bounded and child cleanup is guaranteed."
+    },
+    {
+      "status": "shipped",
       "effort": "2h",
       "effortHours": 2,
       "priority": 10.5,
@@ -24,8 +55,9 @@
       "axis": "speed / organization",
       "impact": 7,
       "innovation": 3,
-      "evidence": "scripts/render-startup-brief.mjs is 1485 lines (threshold 900); 3 files exceed local maintainability thresholds.",
-      "recipe": "Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate."
+      "evidence": "scripts/render-startup-brief.mjs is 1473 lines (threshold 900); 3 files exceed local maintainability thresholds.",
+      "recipe": "Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate.",
+      "outcome": "Extracted a bounded startup-brief box toolkit, added 17/17 regression coverage, preserved live rendering, and corrected the latent row/top width mismatch."
     },
     {
       "status": "honest-deferral",
@@ -48,7 +80,7 @@
     "largeFiles": [
       {
         "file": "scripts/render-startup-brief.mjs",
-        "lines": 1485,
+        "lines": 1473,
         "limit": 900
       },
       {

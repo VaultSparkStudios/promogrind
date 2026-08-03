@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders, json } from "../_shared/http.ts";
+import { sanitizeCheckoutRedirect, sanitizeStripeMetadata } from "../_shared/stripe-boundary.ts";
 
 // Live mode requires STRIPE_TEST_MODE=false AND a sk_live_ key
 const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
@@ -71,10 +72,14 @@ const VALID_PLANS = Object.keys(PLAN_AMOUNTS);
 serve(async (req: Request) => {
   const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method !== "POST") return json(req, { error: "Method not allowed" }, 405);
+  if (!req.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+    return json(req, { error: "Content-Type must be application/json" }, 415);
+  }
 
   try {
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    if (!authHeader?.startsWith("Bearer ")) {
       return json(req, { error: "Unauthorized" }, 401);
     }
 
@@ -89,7 +94,7 @@ serve(async (req: Request) => {
       return json(req, { error: "Unauthorized" }, 401);
     }
 
-    const payload = await req.json() as {
+    let payload: {
       plan: string;
       success_url?: string;
       cancel_url?: string;
@@ -100,6 +105,11 @@ serve(async (req: Request) => {
         utm_campaign?: string | null;
       };
     };
+    try {
+      payload = await req.json();
+    } catch {
+      return json(req, { error: "Invalid JSON" }, 400);
+    }
     const { plan, success_url, cancel_url, attribution: rawAttribution } = payload;
 
     if (!VALID_PLANS.includes(plan)) {
@@ -107,11 +117,16 @@ serve(async (req: Request) => {
     }
 
     const planName = PLAN_NAME_MAP[plan] ?? plan;
+    const successUrl = sanitizeCheckoutRedirect(success_url, "https://promogrind.bet/?checkout=success");
+    const cancelUrl = sanitizeCheckoutRedirect(cancel_url, "https://promogrind.bet/?checkout=cancelled");
+    if (!successUrl || !cancelUrl) {
+      return json(req, { error: "Checkout redirects must use an approved PromoGrind HTTPS origin" }, 400);
+    }
     const attribution = {
-      referral_source: String(rawAttribution?.referral_source || "").trim() || null,
-      utm_source: String(rawAttribution?.utm_source || "").trim() || null,
-      utm_medium: String(rawAttribution?.utm_medium || "").trim() || null,
-      utm_campaign: String(rawAttribution?.utm_campaign || "").trim() || null,
+      referral_source: sanitizeStripeMetadata(rawAttribution?.referral_source),
+      utm_source: sanitizeStripeMetadata(rawAttribution?.utm_source),
+      utm_medium: sanitizeStripeMetadata(rawAttribution?.utm_medium),
+      utm_campaign: sanitizeStripeMetadata(rawAttribution?.utm_campaign),
     };
 
     // Test mode — simulate checkout without calling Stripe
@@ -155,8 +170,8 @@ serve(async (req: Request) => {
         "client_reference_id": user.id,
         "line_items[0][price]": priceId,
         "line_items[0][quantity]": "1",
-        "success_url": success_url ?? "https://promogrind.bet/?checkout=success",
-        "cancel_url": cancel_url ?? "https://promogrind.bet/?checkout=cancelled",
+        "success_url": successUrl,
+        "cancel_url": cancelUrl,
         "subscription_data[metadata][user_id]": user.id,
         "subscription_data[metadata][plan]": planName,
         "subscription_data[metadata][billing_plan]": plan,
