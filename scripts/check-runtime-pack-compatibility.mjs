@@ -47,6 +47,7 @@ const BASE_PROPAGATED_SURFACE = [
   'scripts/lib/spawn-resilience.mjs',
   'scripts/lib/test-duration-ordering.mjs',
   'scripts/lib/test-sidecar-summary.mjs',
+  'scripts/lib/test-signal.mjs',
   'scripts/lib/token-cost-tier.mjs',
   'scripts/run-tests.mjs',
   'scripts/session-beacon.mjs',

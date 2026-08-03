@@ -227,5 +227,13 @@
   "planModeCheckedAt": "2026-07-01T23:13:09.14Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
+  "sessionShellHygiene": {
+    "session": 125,
+    "started": 5,
+    "closed": 5,
+    "running": 0,
+    "enumeratedAt": "2026-08-03T22:25:00.000Z",
+    "evidence": "Two bounded Chromium harness runs, one PromoGrind Vite/esbuild tree, and two closeout-autopilot roots were session-owned. Browser children self-cleaned; the remaining Vite/esbuild tree was stopped by exact PID; both closeout roots exited. A final command-line and listener enumeration found zero PromoGrind node/npm/git/chrome/esbuild workers and zero listeners on 4173/4174/4175/5173. Unrelated host processes were not disturbed."
+  },
   "lastSessionSummary": "S125 shipped all five verified audit items plus three second-order innovations across commerce authority, AI privacy, release truth, legal guidance, Windows process safety, provider egress, shared browser evidence, and startup rendering. The actionable repo-owned Unified Genius List is empty and the full local launch gate passes."
 }

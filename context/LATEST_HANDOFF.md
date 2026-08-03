@@ -26,11 +26,12 @@ S125 ran the complete agent-neutral arc continuously. It verified every selected
 
 - `npm run verify:launch-local` returned direct exit 0 on the finalized code and canonical status state.
 - Vitest: 93 files / 642 checks; Deno: 52/52 across seven files; all 15 Edge Function entrypoints typecheck.
-- Runtime pack: 48/48, 29 exact mirrors, ten documented safety overlays, zero undocumented drift.
+- Runtime pack: 49/49 after adding the newly required `test-signal.mjs` dependency to the governed surface; 30 exact mirrors, ten documented safety overlays, zero undocumented drift.
 - AI egress, shared-browser, production-dashboard smoke, startup-renderer, 24-rule/326-file public claims, and visual-receipt checks pass.
 - Four Advisor captures cover desktop/mobile and light/dark; the light-theme panel defect found in pixels was repaired and recaptured.
 - Tracked secrets and strict public sanitization report zero findings; doctor, supply-chain, staged secret, Git, Ark, and process-hygiene receipts are finalized during closeout.
 - Closeout commit `1a321fe` reached `origin/main`; signed Ark impact broadcast `01JV4RK1IBA480360CD87EFF9B` was delivered studio-wide.
+- Persisted closeout board now derives session shell hygiene from an S125 enumeration: five session-owned roots started, five closed, zero running.
 
 ## S125 honest deferrals
 
