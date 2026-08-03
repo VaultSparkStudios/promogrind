@@ -47,7 +47,7 @@
   "testsPassing": 625,
   "testsTotal": 625,
   "testsLastRun": "2026-08-02",
-  "lastDeployStatus": "S123 is locally release-candidate green: launch-local direct exit 0, 625/625 Vitest, 45/45 Deno, all 15 Edge entrypoints, production build/browser smoke, and runtime compatibility 43/43. Direct-main publication is in progress; no production deployment is claimed yet.",
+  "lastDeployStatus": "S123 implementation bb6f03f and closeout 46b32cb reached origin/main after the ordinary push hook timed out without updating the remote; the documented no-verify fallback followed stronger direct local gates. No production deployment is claimed.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-02",
   "truthGenome": "24/25",
