@@ -5,7 +5,9 @@ Session: 125
 Agent: Codex
 Status: saturated; 5/5 L3 audit items plus 3 second-order innovations shipped; local RC green; SPARKED remains NO-GO
 
-Session Intent (S125, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through `/start → /audit → /implement → /closeout`; verify every audit premise against live PromoGrind code, exhaust all repo-owned primary work, generate and implement second-order innovations while the context meter permits, preserve source-derived observability and honest external deferrals, verify through the local staging/launch gate, and finish with canonical write-back, SIL v3 scoring, direct-main push, Ark broadcast, and zero-running shell hygiene.## Where We Left Off (Session 125)
+Session Intent (S125, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through `/start → /audit → /implement → /closeout`; verify every audit premise against live PromoGrind code, exhaust all repo-owned primary work, generate and implement second-order innovations while the context meter permits, preserve source-derived observability and honest external deferrals, verify through the local staging/launch gate, and finish with canonical write-back, SIL v3 scoring, direct-main push, Ark broadcast, and zero-running shell hygiene.
+
+## Where We Left Off (Session 125)
 
 S125 ran the complete agent-neutral arc continuously. It verified every selected premise against live code, shipped all five primary items, generated and shipped three repo-owned second-order innovations, and retained the external launch-proof candidate as an honest deferral. The measured context gate moved the mission into closeout only after the actionable list was exhausted.
 
@@ -28,6 +30,7 @@ S125 ran the complete agent-neutral arc continuously. It verified every selected
 - AI egress, shared-browser, production-dashboard smoke, startup-renderer, 24-rule/326-file public claims, and visual-receipt checks pass.
 - Four Advisor captures cover desktop/mobile and light/dark; the light-theme panel defect found in pixels was repaired and recaptured.
 - Tracked secrets and strict public sanitization report zero findings; doctor, supply-chain, staged secret, Git, Ark, and process-hygiene receipts are finalized during closeout.
+- Closeout commit `1a321fe` reached `origin/main`; signed Ark impact broadcast `01JV4RK1IBA480360CD87EFF9B` was delivered studio-wide.
 
 ## S125 honest deferrals
 

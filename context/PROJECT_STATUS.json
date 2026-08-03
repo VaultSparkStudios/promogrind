@@ -55,7 +55,7 @@
   "testsPassing": 642,
   "testsTotal": 642,
   "testsLastRun": "2026-08-03",
-  "lastDeployStatus": "S123 publication proof a6cd46b reached origin/main. Brief-format 30778998510 and CI 30778998493 passed. Deploy Pages 30778998474 attested/deployed the immutable artifact and passed production launch with 0 blocking failures plus dashboard smoke; its final release-state step correctly failed on six absent edge headers. Affiliate coverage remains one advisory.",
+  "lastDeployStatus": "S125 closeout commit 1a321fe reached origin/main after the direct-main pre-push health gate. Local launch verification passed with direct exit 0; remote CI/deploy proof for this commit is not yet claimed. The last observed production release remains S123 and SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-03",
   "truthGenome": "24/25",

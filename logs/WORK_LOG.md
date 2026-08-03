@@ -661,3 +661,4 @@ Append chronological entries.
 - Flat-rate Max Plan usage remained notional telemetry and no external fact was fabricated to satisfy a gate.
 - Final verification: `npm run verify:launch-local` returned direct exit 0; 642/642 Vitest, 52/52 Deno across seven files, all 15 Edge entrypoints, 48/48 runtime compatibility, 326 public files × 24 claim rules, production build/browser smoke, proof replay, bundle budget, tracked-secret scan, and strict sanitizer passed.
 - Closeout caught and repaired a stale five-file Edge discovery assertion, then reconciled concurrent Studio runtime movement: six safe upstream fixes adopted, the dynamic-import sentinel retained as the tenth documented overlay, and zero undocumented drift.
+- Canonical closeout commit `1a321fe` reached `origin/main` after its direct-main pre-push health gate; signed, redacted Ark impact broadcast `01JV4RK1IBA480360CD87EFF9B` was delivered to all Studio consumers.
