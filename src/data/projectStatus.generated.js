@@ -4,9 +4,9 @@ export const PROJECT_STATUS_MIRROR = {
   "schemaVersion": "2.0",
   "source": "context/PROJECT_STATUS.json",
   "sourceLastUpdated": "2026-08-02",
-  "testsPassing": 606,
-  "testsTotal": 606,
-  "testsLastRun": "2026-08-01",
+  "testsPassing": 625,
+  "testsTotal": 625,
+  "testsLastRun": "2026-08-02",
   "validation": {
     "smokeCommand": {
       "label": "Repo launch smoke",
@@ -32,11 +32,11 @@ export const PROJECT_STATUS_MIRROR = {
       "label": "Vitest",
       "command": "npm test",
       "state": "passing",
-      "observedAt": "2026-08-01",
+      "observedAt": "2026-08-02",
       "exitCode": 0,
       "commitSha": null,
       "source": "context/PROJECT_STATUS.json#tests",
-      "lastKnown": "606/606 passing · verified 2026-08-01"
+      "lastKnown": "625/625 passing · verified 2026-08-02"
     },
     "build": {
       "label": "Build",

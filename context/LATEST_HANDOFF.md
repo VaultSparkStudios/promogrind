@@ -1,5 +1,56 @@
 # Latest Handoff — PromoGrind
 
+Date: 2026-08-02
+Session: 123
+Agent: Codex
+Status: saturated; 4/4 L3 infrastructure items plus 2 second-order innovations shipped; local RC green; SPARKED remains NO-GO
+
+## Where We Left Off (Session 123)
+
+S123 recovered an interrupted public runtime-pack propagation, ran the complete agent-neutral goal arc without phase handback, verified 14 of 31 generated premises against live code, shipped all four selected infrastructure items, then shipped two second-order innovations. The actionable Unified Genius List is empty; external proof work remains explicitly unclaimed.
+
+## What shipped
+
+1. Provider-native Codex context truth bound to the active session and repository, using the runtime token window and failing closed when native evidence is unavailable.
+2. Severity-correct context verdict selection so 85%+ closeout guidance cannot be masked by lower-priority warnings.
+3. Project-attributed scheduled-write admission receipts with canonical slug derivation and preserved trigger/write-mode provenance.
+4. Typed startup signal semantics for qualified truth, 0/0 compliance, profile-cache freshness, public revenue evidence, and project-specific test remediation.
+5. A 35-module propagation compatibility ratchet: syntax, upstream equality, five named local overrides, behavioral contracts, and zero tolerance for undocumented drift.
+6. Recovery root fixes for canonical SIL category export/completeness and the public-repo revenue fallback.
+
+## Verification
+
+- `npm run verify:launch-local` — direct exit 0 on the final implementation state.
+- Vitest — 86 files, 625/625 passing; 19 new contract checks.
+- Deno — 15 Edge entrypoints typecheck; 45/45 tests across 5 files.
+- Runtime pack — 43/43 checks; 30 exact mirrors; 5 documented local overrides; 0 undocumented drift.
+- Security — tracked secrets 0; strict public sanitizer 0; supply-chain scan checked at closeout.
+- UX/build — 61 app routes, 101 public HTML files, browser smoke green, source integrity 376 files, initial graph 179.1KB raw / 60.0KB gzip.
+- Saturation — four primary items and two second-order innovations shipped; no actionable Genius item remains.
+- Ark — runtime/cost reconciliation request `01JV2LSBDF74706EFC00E61495`; reusable pattern broadcast `01JV2LSDSSFE222098BFF85ACA`; both signed and secret-free.
+
+## Honest deferrals
+
+- A true remote staging environment and six production response headers remain absent.
+- Five fully redacted historical credential findings at `b1205ce` still require rotation and approved history remediation.
+- `promogrind.supabase.deploy` remains MISSING; repository code is not deployment proof.
+- `contact@promogrind.bet` still needs real Zoho MX/SPF/DKIM/DMARC, delivery, and reply-as-alias evidence.
+- Production auth-email, complete Stripe lifecycle, friend beta, and capture submission/lead-row receipts remain unproved.
+- The five public runtime-pack overrides need adoption or explicit resolution in Studio Ops; they are routed by signed Ark cargo, never sibling edits.
+
+## Next actions
+
+1. Establish a true staging target and header-capable edge, then prove all six headers.
+2. Complete historical credential rotation/remediation and exact PromoGrind Supabase deployment authority.
+3. Prove Zoho mailbox identity, then execute the criterion-addressed auth-email, Stripe, friend-beta, and capture checks.
+
+Intent Outcome: Achieved — every verified repo-owned primary and second-order item shipped; external evidence remains explicitly unclaimed.
+Deploy: S123 is locally release-candidate green and will be published directly to `origin/main` during this closeout. SPARKED promotion remains NO-GO.
+
+---
+
+## Prior handoff (Session 122)
+
 Date: 2026-08-01
 Session: 122
 

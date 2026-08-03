@@ -622,3 +622,13 @@ Append chronological entries.
 - React Router 7.18.2 remains pinned: `npm audit` reports the RSC-mode-only GHSA-qwww-vcr4-c8h2, and a new executable invariant fails if the current static BrowserRouter architecture adopts an affected API. Audit green is not claimed.
 - Closeout root-fix: the public-repo startup brief falsely reported fresh revenue truth as missing because it only read the absent private `portfolio/` path. Added and regression-tested the `docs/REVENUE_SIGNALS.md` fallback; the regenerated brief now reports revenue current.
 - Ark closeout shipped reusable pattern `01JUTV2CUV1C618CDA4FC4BB96`, cost/sitemap truth-plane request `01JUTV2R411AA97A792A922A22`, and exact Zoho/Supabase/Cloudflare capability request `01JUTV36LJ34D016800F482D06`; all payloads are redacted.
+## 2026-08-02 — Session 123 Codex saturated runtime-truth arc
+
+- Recovered an interrupted 35-module public runtime-pack propagation without discarding user work, verified its initial mirror hashes, and continued the complete `/start → /audit → /implement → /closeout` mission.
+- Audited 31 generated candidates against live code, verified 14 premises, selected and shipped four L3 infrastructure items, then implemented two second-order innovations; the actionable Unified Genius List is empty.
+- Replaced heuristic Codex context reporting with active-session native token evidence and runtime window discovery; fixed verdict precedence so the 85% closeout threshold cannot be masked.
+- Added canonical project attribution to scheduled-write admission, typed startup signal semantics, and a 35-module compatibility ratchet with 43/43 checks, 30 exact mirrors, five documented overrides, and zero undocumented drift.
+- Root-fixed canonical SIL category export/incomplete-ledger behavior and restored the public-repo revenue signal fallback.
+- Verification: `npm run verify:launch-local` direct exit 0; 625/625 Vitest across 86 files; 45/45 Deno; all 15 Edge entrypoints; production build/browser smoke; tracked secrets and strict sanitization clean; bundle budget green.
+- Honest deferral: true staging, six edge headers, historical rotation, exact Supabase deployment authority, Zoho mailbox identity, auth-email, complete Stripe lifecycle, friend beta, capture receipts, and upstream adoption of five runtime fixes remain unclaimed.
+- Ark closeout shipped runtime/cost reconciliation request `01JV2LSBDF74706EFC00E61495` and reusable runtime-truth pattern `01JV2LSDSSFE222098BFF85ACA`; both receipts are signed and contain no credential material.

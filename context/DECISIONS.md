@@ -717,3 +717,26 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** no stable React Router 7.x is currently audit-clean: 7.11 reintroduces multiple older fixed advisories, while 7.18.2 carries GHSA-qwww-vcr4-c8h2 for React Server Components mode.
 - **Decision:** retain the newer pinned 7.18.2 client-only BrowserRouter architecture and launch-gate a source invariant that rejects affected RSC APIs or posture drift. Keep `npm audit` explicitly non-green until upstream ships a compatible fix.
 - **Consequence:** current reachable risk is minimized without an unsafe downgrade or false security claim; any RSC adoption automatically reopens the decision.
+
+## 2026-08-02 — S123 runtime truth contracts
+
+### Decision: provider-native context evidence outranks auxiliary ledgers
+
+- **Status:** accepted
+- **Context:** the public context meter estimated usage from a cache ledger and could report a low-confidence percentage unrelated to the active Codex thread.
+- **Decision:** bind measurement to the active Codex session metadata, repository, newest native token-count event, and runtime-declared window. Auxiliary ledgers remain labeled estimates and cannot promote measurement state.
+- **Consequence:** continuation and closeout guidance is based on the provider's own active-session evidence or fails closed as unmeasured.
+
+### Decision: propagated runtime drift is executable compatibility debt
+
+- **Status:** accepted
+- **Context:** 35 public runtime modules arrived from the private control plane, while five necessary repo-local repairs diverged from their available upstream copies.
+- **Decision:** compare the full propagated surface, syntax-check every module, name every temporary local override, attach behavioral contracts, and fail on all undocumented drift. Route the upstream repair through Ark instead of editing the sibling tree.
+- **Consequence:** future propagation cannot silently erase PromoGrind's context, SIL, startup, or write-admission correctness.
+
+### Decision: startup and write receipts carry typed project provenance
+
+- **Status:** accepted
+- **Context:** startup presentation conflated qualified green with red, 0/0 with failure, stale cache identity with canonical truth, and hard-coded Studio Ops attribution with the active project.
+- **Decision:** classify startup signals by source semantics and freshness, and derive scheduled-write project identity from canonical repo truth while preserving trigger and write mode.
+- **Consequence:** public operational surfaces describe PromoGrind rather than nearby control-plane assumptions and can mechanically reject contradictions.

@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S118:999 | S119:999 | S120:1000 | S121:1000 | S122:1000
-Avgs - 3: 1000.0 [N=3] | 5: 999.6 [N=5] | all: 999.7 [recent closeout series]
-  └ 3-session (S120/S121/S122): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
+Sparkline (last 5 totals): S119:999 | S120:1000 | S121:1000 | S122:1000 | S123:1000
+Avgs - 3: 1000.0 [N=3] | 5: 999.8 [N=5] | all: 999.8 [recent closeout series]
+  └ 3-session (S121/S122/S123): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-08-01 | Session 122 | Total: 1000/1000 | Velocity: 15 | protocolVelocity: 15
+Last session: 2026-08-02 | Session 123 | Total: 1000/1000 | Velocity: 6 | protocolVelocity: 6
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1655,6 +1655,39 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 2. Surface the v3 evidence-chain event timeline and export receipt beside Data Controls without implying third-party verification.
 3. Gate production-only telemetry scripts by canonical host so local browser smoke remains console-clean without weakening deployed analytics.
 4. Teach the Studio innovation generator to ignore deleted git-log paths and test files through a signed cross-repo fix.
+
+**Committed follow-up(s):**
+- Existing Now item: establish a true staging/header-capable edge and prove all six response headers. `[SIL]`
+- Existing Now item: obtain exact PromoGrind Supabase deploy authority and deploy only to the pinned project ref with a receipt. `[SIL]`
+
+## 2026-08-02 — Session 123 | Total: 1000/1000 | Velocity: 6 | Debt: stable
+Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
+
+| Category | Score | vs Last | Notes |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 625/625 Vitest, 45/45 Deno, all 15 Edge entrypoints, 43/43 runtime compatibility, production build, browser smoke, and launch-local pass directly. |
+| Creative Alignment | 100 | → | Operational intelligence becomes less certain when provider/project/source evidence is missing instead of rendering optimistic estimates. |
+| Momentum | 100 | → | Four L3 infrastructure contracts plus two second-order innovations shipped after interrupted-work recovery; the live list is exhausted. |
+| Engagement | 100 | → | No compulsion loop or fabricated user metric was introduced; work improved the reliability of the systems steering future product sessions. |
+| Process Quality | 100 | → | Start/audit/implement/closeout remained continuous; every premise, override, direct exit, and external deferral is evidence-backed. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited; upstream runtime fixes are isolated, behavior-tested, and routed through signed Ark cargo. |
+| Security Posture | 100 | → | Tracked and strict sanitizer scans are clean; write admission is correctly attributed; incomplete SIL evidence fails closed. |
+| Ecosystem Integration | 100 | → | Context, startup, scheduled writes, SIL, and propagation now share explicit identity, freshness, and compatibility contracts. |
+| Capital Efficiency | 100 | → | No dependency was added and no paid API was invoked; flat-rate Max Plan usage remains notional, not an alarm. |
+| Automation Coverage | 100 | → | Nineteen new tests plus a 43-check runtime ratchet prevent regression across the newly repaired infrastructure seams. |
+| **Total** | **1000 / 1000** | | |
+
+**Top win:** transformed four silent control-plane ambiguity classes—session utilization, project attribution, startup semantics, and propagation drift—into self-invalidating executable contracts.
+
+**Top gap:** launch promotion remains externally constrained by true staging, six edge headers, historical rotation, exact deployment authority, Zoho identity, and real auth/payment/friend/capture receipts.
+
+**Intent outcome:** Achieved. Every verified primary and second-order item shipped; the actionable Unified Genius List is empty.
+
+**Brainstorm**
+
+1. Move the five behavior-backed runtime repairs upstream through Studio Ark so every public project inherits them.
+2. Add fixture-driven transcript rotation coverage once Codex exposes a stable public session telemetry interface.
+3. Persist compatibility receipts as signed propagation manifests when the private pack provides canonical version metadata.
 
 **Committed follow-up(s):**
 - Existing Now item: establish a true staging/header-capable edge and prove all six response headers. `[SIL]`

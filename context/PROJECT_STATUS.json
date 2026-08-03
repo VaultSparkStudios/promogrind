@@ -13,8 +13,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 122,
-  "currentFocus": "S122 shipped all six verified L3 audit items plus nine second-order improvements: evidence-gated AI planning, semantic review-depth engagement, production workflow provenance, a source-derived 81-token data-rights registry, 11 governed collision-resistant entity writers, accessible decision controls with four hash-bound theme/device captures, operational entrypoint contracts, and a sanitization credential-redaction root fix. Saturation stopped honestly at 15/12 after the live list was exhausted.",
+  "currentSession": 123,
+  "currentFocus": "S123 recovered the interrupted public runtime-pack propagation and shipped four verified L3 infrastructure items plus two second-order innovations: provider-native Codex context truth, severity-correct context verdicts, project-attributed scheduled writes, typed startup signals, a 35-module compatibility ratchet, and SIL/revenue recovery fixes. The actionable Unified Genius List is empty.",
   "nextMilestone": "Establish real staging and a header-capable production edge; rotate/remediate historical credentials; obtain exact PromoGrind Supabase deploy authority; complete Zoho mailbox, auth-email, payment-lifecycle, friend, and capture proof criteria; only then reassess SPARKED.",
   "blockers": [
     "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
@@ -30,13 +30,13 @@
   "lastUpdated": "2026-08-02",
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 15,
+  "silVelocity": 6,
   "silDebt": "stable",
-  "silLastSession": 122,
+  "silLastSession": 123,
   "silMax": 1000,
   "silSparkline": [
     999,
-    999,
+    1000,
     1000,
     1000,
     1000
@@ -44,19 +44,19 @@
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "testsPassing": 606,
-  "testsTotal": 606,
-  "testsLastRun": "2026-08-01",
-  "lastDeployStatus": "S122 commit ca2a134 reached origin/main. Brief-format 30724615417 and CI 30724615412 passed. Deploy Pages 30724615420 attested and deployed the immutable artifact, then passed production launch and dashboard smoke; its final release-state step correctly failed because six required response headers remain absent.",
+  "testsPassing": 625,
+  "testsTotal": 625,
+  "testsLastRun": "2026-08-02",
+  "lastDeployStatus": "S123 is locally release-candidate green: launch-local direct exit 0, 625/625 Vitest, 45/45 Deno, all 15 Edge entrypoints, production build/browser smoke, and runtime compatibility 43/43. Direct-main publication is in progress; no production deployment is claimed yet.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-08-01",
+  "truthAuditLastRun": "2026-08-02",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 606/606 across 82 files in S122 on the exact lock tree"
+      "status": "passing 625/625 across 86 files in S123 on the exact lock tree"
     },
     {
       "type": "edge",
@@ -66,7 +66,7 @@
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S122 with direct exit 0"
+      "status": "passing end to end in S123 with direct exit 0"
     },
     {
       "type": "ux-integrity",
@@ -219,5 +219,5 @@
   "planModeCheckedAt": "2026-07-01T23:13:09.14Z",
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
-  "lastSessionSummary": "S122 shipped all six verified L3 audit items plus nine second-order improvements: evidence-gated AI planning, semantic review-depth engagement, production workflow provenance, a source-derived 81-token data-rights registry, 11 governed collision-resistant entity writers, accessible decision controls with four hash-bound theme/device captures, operational entrypoint contracts, and a sanitization credential-redaction root fix. Saturation stopped honestly at 15/12 after the live list was exhausted."
+  "lastSessionSummary": "S123 recovered the interrupted public runtime-pack propagation and shipped four verified L3 infrastructure items plus two second-order innovations: provider-native Codex context truth, severity-correct context verdicts, project-attributed scheduled writes, typed startup signals, a 35-module compatibility ratchet, and SIL/revenue recovery fixes. The actionable Unified Genius List is empty."
 }

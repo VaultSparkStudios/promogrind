@@ -322,3 +322,12 @@ Agents MUST NOT modify or remove existing entries.
 - **New required direction:** intelligence must become less actionable when evidence is absent; engagement must reward review and correction rather than activity or favorable variance; local trust/data/identity contracts must be mechanically inspectable; rendered pixels and keyboard behavior are implementation evidence; generated work must survive live premise verification before it earns implementation.
 - **Why it matters:** PromoGrind's competitive advantage should be sober decision quality and earned operator trust, not model fluency, gamified pressure, or optimistic status prose.
 - **Supersedes prior entry:** reinforces S120–S121 with explicit `/goal` saturation, accessibility, data-rights, and premise-rejection requirements; no SOUL anti-goal changed.
+
+### 2026-08-02 — Runtime observability must be native, attributable, and self-invalidating (S123)
+
+- **Category:** Assignment / quality direction
+- **Human input (close paraphrase):** Run the entire agent-neutral arc continuously; exhaust primary and second-order innovation; ship at a genius-level, best-in-history bar; gate continuation on the context meter; derive observability from source truth; treat flat-rate Max Plan cost as notional; never fabricate gate data; record honest deferral as a win; finish with direct-main push and zero-running shell hygiene.
+- **Area affected:** agent runtime / startup truth / propagation safety / release process
+- **New required direction:** session infrastructure must identify the active provider thread and project, preserve typed source semantics, reject incomplete evidence, and prove propagated compatibility before it can steer work.
+- **Application:** S123 replaced heuristic context truth, project-misattributed writes, brittle startup rendering, and unguarded propagation drift with source-bound contracts and adversarial tests.
+- **Durable rule:** operational polish is only trustworthy when the receipt can name its source, scope, freshness, precedence, and invalidation condition.
