@@ -1,5 +1,22 @@
 # Task Board
 
+## Unified Genius List (S123)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| 🔥 | Observability / token safety | done | 5h | exact-codex-context-meter — **DONE L3 S123** |
+| 🔥 | Security / provenance | done | 4h | project-attributed-write-admission — **DONE L3 S123** |
+| 🔥 | Infrastructure / ecosystem | done | 6h | propagated-runtime-compatibility-ratchet — **DONE L3 S123** |
+| ⚡ | Feedback / release truth | done | 6h | typed-startup-signal-contract — **DONE L3 S123** |
+
+## Shipped This Session (S123)
+
+- Provider-native Codex context truth keyed to the active thread and repository.
+- Project-attributed scheduled-write receipts with fail-closed Git and beacon paths.
+- A 35-module propagation compatibility ratchet: 43/43 checks, five documented local overrides, zero undocumented drift.
+- Typed startup signals for truth, compliance, profile freshness, revenue, and test remediation.
+- Recovery root fixes: canonical SIL forecast export/completeness and public revenue fallback.
+
 ## Now
 
 - [SIL] configure a true staging/header-capable edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`

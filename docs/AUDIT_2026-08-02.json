@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "2.0",
+  "date": "2026-08-02",
+  "session": 123,
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched"
+  },
+  "type": "app",
+  "audience": "public-unlaunched",
+  "rubric": "infrastructure-aware-public-app",
+  "successBar": [
+    "Context pressure must come from the active runtime's own token evidence or remain explicitly unmeasured; auxiliary model calls and filesystem size may never masquerade as interactive context.",
+    "Every startup signal must preserve typed state, freshness, and source provenance; green-qualified statuses, zero-denominator history, stale caches, and public-repo fallbacks must render honestly.",
+    "Propagated Studio runtime code must prove compatibility against PromoGrind's live contracts after every sync, with local deltas explicit and upstream defects routed by signed Ark cargo.",
+    "Every write-admission and lease receipt must attribute the actual current project and fail closed only for the correct project identity."
+  ],
+  "axisWeights": {
+    "featuresDepth": 1.2,
+    "innovativeFeatures": 1.5,
+    "uiUxFeedback": 1.1,
+    "feedbackLoop": 1.3,
+    "gamificationEngagement": 0.8,
+    "aiIntegration": 1.1,
+    "securityPrivacy": 1.5,
+    "speedOrganization": 2,
+    "tokenApiReduction": 1.8
+  },
+  "premiseVerification": {
+    "method": "Direct recovery diff classification, exact SHA-256 comparison against the authoritative Studio Ops copies, direct Vitest and session-invariant exit codes, canonical startup-brief rendering, Codex JSONL token-count inspection keyed by CODEX_THREAD_ID, and read-only runtime entrypoint probes.",
+    "primaryGeniusList": "The S122 Unified Genius List is truthfully exhausted. S123 began from a 35-module propagated runtime update plus one modified consumer contract and therefore audited live propagation/runtime behavior rather than recycling completed product work.",
+    "generatedCandidates": 31,
+    "verifiedCandidates": 14,
+    "selected": 4,
+    "rejectedOrMerged": 27,
+    "baselineTests": "Initial direct Vitest: 81 files passed and 603 assertions passed, with one import-contract failure; isolated SIL forecast contract fixed and 3/3 passed; full session-invariant chain passed with direct exit 0.",
+    "releaseLens": "PromoGrind remains FORGE/public-unlaunched. Local staging and release-surface gates are applicable; true remote staging, six production headers, historical rotation, exact Supabase authority, Zoho, auth-email, payment, friend, and capture proofs remain honest external deferrals. No SPARKED promotion is authorized."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "id": 1,
+      "slug": "exact-codex-context-meter",
+      "title": "Make the context meter read Codex's exact live token-count events instead of promoting auxiliary-call heuristics",
+      "tier": "fire",
+      "axis": "observability / token efficiency / session safety / agent parity",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 10,
+      "effortHours": 5,
+      "priority": 35.6,
+      "why": "The meter's S262 honesty gate still sets measured_ok=true whenever any auxiliary Studio model call exists, even when usedTokens remains the filesystem heuristic. During this session it reported 7,943/272,000 (2.9%) while the active Codex transcript exposed a runtime token-count event at 148,558 input tokens with a 258,400-token window.",
+      "evidence": "scripts/context-meter.mjs defines hasRealMeasurement as ledger.length > 0 || interactive.length > 0 || proxy, but its own output contract says Studio API ledger rows do not include the interactive conversation. CODEX_THREAD_ID identifies the active ~/.codex/sessions JSONL; its latest event_msg/token_count contains last_token_usage.input_tokens and model_context_window. Non-JSON UNMEASURED output also dereferences null with toLocaleString().",
+      "recipe": "Extract a pure Codex transcript probe that validates session_meta.id and cwd, finds the active thread file, tail-parses the newest token_count event, and returns exact input tokens plus runtime window. Prefer it over heuristics, remove auxiliary ledger rows from measured_ok, preserve honest UNMEASURED behavior when no runtime evidence exists, make text rendering null-safe, and add adversarial fixtures for foreign threads, malformed tails, stale auxiliary ledgers, over-limit readings, and runtime-window override.",
+      "timeToFirstValue": "The next meter run in this session reports the real Codex context pressure and can genuinely govern whether the arc continues.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Stop counting auxiliary ledger presence as interactive measurement." },
+        "L2": { "effortHours": 3, "recipe": "L1 plus active CODEX_THREAD_ID JSONL token-count parsing and runtime-window override." },
+        "L3": { "effortHours": 5, "recipe": "L2 plus a pure probe module, foreign/malformed/over-limit fixtures, null-safe text output, and source-attributed machine receipts." }
+      },
+      "executionLog": [{
+        "session": 123,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-02",
+        "result": "The meter now binds CODEX_THREAD_ID to the active repo transcript, reads the provider-native token_count event and runtime window, excludes auxiliary model ledgers from measured_ok, and renders honest nulls.",
+        "verification": ["8/8 focused Codex probe and SIL contracts", "live reading 216836/258400 from codex-token-count", "runtime-pack compatibility 43/43"],
+        "telemetrySource": "active Codex JSONL token_count event"
+      }]
+    },
+    {
+      "rank": 2,
+      "id": 2,
+      "slug": "project-attributed-write-admission",
+      "title": "Bind scheduled-write and session-lease decisions to the actual repository identity",
+      "tier": "fire",
+      "axis": "security / provenance / cross-repo safety / automation",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 8,
+      "effortHours": 4,
+      "priority": 27.9,
+      "why": "A write-admission receipt attributed a PromoGrind execution to studio-ops. Wrong-project attribution weakens the exact concurrency and cross-repo safety boundary the new session beacon is intended to enforce.",
+      "evidence": "Running node scripts/check-scheduled-write-admission.mjs --json from PromoGrind returned project=studio-ops. The source defaults project to the literal 'studio-ops' instead of deriving path.basename(ROOT). The beacon check itself honestly reports unconfigured when BEACON_GIST_ID is missing.",
+      "recipe": "Derive the default project slug from the current repository root, normalize explicit --project input, carry root/project/trigger/writeMode through every allow and deny receipt, fail on empty or path-shaped project identifiers, and add direct CLI fixtures proving PromoGrind attribution, explicit override, scheduled telemetry, scheduled Git denial without policy, and unconfigured-beacon honesty.",
+      "timeToFirstValue": "The next scheduled-write decision can no longer claim the wrong repository owner.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Replace the hardcoded default with the current root basename." },
+        "L2": { "effortHours": 2, "recipe": "L1 plus normalized explicit project input and receipt provenance." },
+        "L3": { "effortHours": 4, "recipe": "L2 plus pure decision helpers and CLI fixtures across interactive/scheduled/git/unconfigured-beacon paths." }
+      },
+      "executionLog": [{
+        "session": 123,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-02",
+        "result": "Write admission derives promogrind from the repository root, normalizes explicit overrides, and carries root/project/trigger/write-mode provenance through allow and deny receipts.",
+        "verification": ["5/5 focused write-admission contracts", "interactive receipt project=promogrind", "scheduled Git path fails closed without policy"],
+        "telemetrySource": "direct CLI and pure helper contracts"
+      }]
+    },
+    {
+      "rank": 3,
+      "id": 3,
+      "slug": "propagated-runtime-compatibility-ratchet",
+      "title": "Turn propagation from a blind file mirror into a consumer-verified compatibility receipt",
+      "tier": "fire",
+      "axis": "infrastructure / test depth / ecosystem coherence / root-cause prevention",
+      "status": "shipped",
+      "impact": 9,
+      "innovation": 9,
+      "effortHours": 6,
+      "priority": 27.0,
+      "why": "Thirty-four inherited modules were exact Studio Ops mirrors, but two local contracts immediately regressed: the SIL forecaster stopped exporting canonical CATEGORIES and stopped rejecting incomplete ledgers, and the startup renderer dropped the public-repo revenue fallback. A byte-identical propagation receipt is not proof that the consumer remains correct.",
+      "evidence": "SHA-256 comparison found 34 exact Studio Ops mirrors and one locally repaired forecaster. Direct Vitest failed at src/__tests__/silForecaster.test.js before repair. npm run test:session-invariants then failed its public-repo revenue-source invariant before repair. Both isolated surfaces now pass, proving consumer-specific compatibility requirements are real.",
+      "recipe": "Create a deterministic compatibility ratchet that enumerates the propagated runtime surface, syntax-checks every module, records exact-mirror versus documented-local-override state, and executes consumer contracts for SIL parsing, public revenue fallback, context evidence, write attribution, and startup rendering. Emit a machine JSON receipt, integrate it into test:session-invariants, and ship a signed Ark defect report to Studio Ops instead of editing the sibling tree.",
+      "timeToFirstValue": "The next propagation sync fails at the exact consumer contract it breaks, before a false brief or closeout receipt can ship.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Add a source manifest and syntax checks for the changed runtime surface." },
+        "L2": { "effortHours": 4, "recipe": "L1 plus behavioral compatibility assertions for the two proven regressions." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus exact-mirror/local-override classification, machine receipt, package integration, and signed upstream defect cargo." }
+      },
+      "executionLog": [{
+        "session": 123,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-02",
+        "result": "A 35-module consumer ratchet syntax-checks the propagated surface, classifies exact mirrors versus documented overrides, behavior-checks the repaired contracts, and emits a machine receipt.",
+        "verification": ["43/43 compatibility checks", "30 exact mirrors", "5 documented local overrides", "0 undocumented drift"],
+        "telemetrySource": ".cache/runtime-pack-compatibility.json"
+      }]
+    },
+    {
+      "rank": 4,
+      "id": 4,
+      "slug": "typed-startup-signal-contract",
+      "title": "Give the startup brief one typed, freshness-aware signal semantics layer",
+      "tier": "high",
+      "axis": "UI feedback / observability / organization / release truth",
+      "status": "shipped",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 6,
+      "priority": 26.7,
+      "why": "The founder brief rendered a red icon beside a green-qualified truth status, treated an April 0/0 compliance snapshot as a current failure, trusted an expired project-profile cache with contradictory Stripe readiness, omitted repo-local revenue evidence until repaired, and hardcodes a Studio Ops test command even though PromoGrind's canonical suite is npm test.",
+      "evidence": "docs/STARTUP_BRIEF.md showed Truth green-repo-owned... with ⛔, Compliance 0/0 (0%) with ⛔, Revenue not found, and a cached tool lens. scripts/render-startup-brief.mjs compares truthStatus only to exact 'green'/'yellow', accepts any last compliance snapshot without denominator/freshness checks, reads project-profile.json without generatedAt/ttlMs validation, and tells stale app repos to run scripts/run-tests.mjs rather than deriving testingSurfaces/package.json.",
+      "recipe": "Extract pure signal semantics for qualified truth states, meaningful compliance denominators and freshness, cache expiry plus canonical-status fallback, public/private revenue source selection, and project-specific test remediation. Render explicit unknown/not-tracked states instead of red, preserve source labels, add table-driven tests, rerender the brief, and validate the canonical box format.",
+      "timeToFirstValue": "The next startup brief no longer contradicts its own source values or send the founder to the wrong recovery command.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Fix truth prefix mapping and reject 0/0 compliance as a failure." },
+        "L2": { "effortHours": 4, "recipe": "L1 plus cache freshness and source-derived test command." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus one pure signal-semantics module, table-driven fixtures, public revenue fallback, and canonical rendered-output verification." }
+      },
+      "executionLog": [{
+        "session": 123,
+        "rung": "L3",
+        "shipped": true,
+        "verifiedAt": "2026-08-02",
+        "result": "Startup signal semantics now preserve qualified truth states, reject zero/stale compliance evidence, ignore expired profile claims, derive the app test command, and retain public revenue fallback.",
+        "verification": ["5/5 focused signal-semantics contracts", "canonical startup brief conformant", "revenue/truth/compliance/profile compatibility checks green"],
+        "telemetrySource": "docs/STARTUP_BRIEF.md plus pure semantics fixtures"
+      }]
+    }
+  ],
+  "innovationReserve": [
+    "Read active Codex token_count events as a provider-native, agent-parity context gauge rather than estimating conversation size from repository bytes.",
+    "Treat propagation as a consumer contract with exact-mirror/local-override receipts, not as evidence that copied bytes are behaviorally compatible.",
+    "Make every founder-facing signal a typed state carrying value, source, freshness, and confidence before it can choose an icon."
+  ],
+  "skipped": [
+    {
+      "slug": "invent-missing-private-skill-profile",
+      "reason": "Rejected by the public-repo protocol shim: skill-profile and brief-staleness automation are missing private Studio tooling; record the gap and use the documented manual fallback rather than inventing placeholders here."
+    },
+    {
+      "slug": "fabricate-release-proof",
+      "reason": "Rejected by evidence policy: remote staging, headers, historical rotation, Supabase authority, Zoho, auth-email, Stripe lifecycle, friend, and capture receipts are external facts and remain honest deferrals."
+    },
+    {
+      "slug": "edit-studio-ops-to-fix-propagation",
+      "reason": "Rejected by CANON-018: the sibling tree is read-only for this mission. The consumer fix lands locally and the upstream defect travels through signed Ark cargo."
+    },
+    {
+      "slug": "replace-promo-test-suite-with-studio-runner",
+      "reason": "Rejected on live inspection: scripts/run-tests.mjs discovers Studio script tests, while PromoGrind's canonical app suite is npm test plus session/release/Edge gates. Treating them as interchangeable would create a partial-suite green lie."
+    },
+    {
+      "slug": "cost-alarm",
+      "reason": "Rejected by founder direction: model use is notional flat-rate Max Plan telemetry and must not become a recurring-cost alarm."
+    }
+  ],
+  "totals": {
+    "count": 4,
+    "selected": 4,
+    "fire": 3,
+    "high": 1,
+    "effortHoursL2": 13,
+    "effortHoursL3": 21,
+    "priority": 117.2,
+    "top3": [
+      "exact-codex-context-meter",
+      "project-attributed-write-admission",
+      "propagated-runtime-compatibility-ratchet"
+    ]
+  },
+  "sample": {
+    "picked": 20,
+    "scanned": 412,
+    "tokens": 30000,
+    "commandsRun": 24,
+    "baselineTests": "603 assertions passed with one forecaster import failure; isolated repair 3/3; session invariants direct exit 0",
+    "baselineRelease": "FORGE/public-unlaunched; release remains NO-GO on external proof"
+  },
+  "notes": "All selected items are repository-owned and live-code verified. The missing private audit renderer was handled by the public-repo manual fallback. No dependency was added, no sibling tree was edited, and no launch or credential proof was fabricated."
+}

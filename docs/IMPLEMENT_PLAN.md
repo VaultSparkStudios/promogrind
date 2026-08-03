@@ -1,11 +1,10 @@
-# PromoGrind Implementation Plan — Session 122
+# Implementation Plan — Audit 2026-08-02
 
-1. Canonical entity IDs — foundation for every later evidence write.
-2. Source-derived storage registry — classify new evidence and Artificial Intelligence keys before wiring them.
-3. Workflow decision evidence chain — build on typed IDs and registered retention.
-4. Evidence-gated Artificial Intelligence action plan — consume canonical evidence/privacy contracts.
-5. Semantic SOUL policy ratchet — replace the remaining incentive graph and public/share surfaces.
-6. Decision-control accessibility contract — repair touched and verified critical surfaces, then complete rendered-pixel review.
-7. Expansion pass — generate and ship second-order innovations after primary exhaustion.
+Source: `docs/AUDIT_2026-08-02.json` · Session 123 · L3 throughout.
 
-All six primary items shipped at L3 with focused behavior checks, existing relevant test surfaces, and execution receipts in `docs/AUDIT_2026-08-01.json`. The expansion pass shipped nine live second-order improvements. Final saturation: 15/12 velocity-floor items, list exhausted and re-verified, direct session-floor verdict `STOP`.
+1. **Exact Codex context meter** — foundational truth signal; pure runtime probe, meter integration, adversarial tests.
+2. **Project-attributed write admission** — correct the security/provenance boundary and test every decision path.
+3. **Typed startup-signal contract** — consume the exact meter and normalize truth, compliance, cache freshness, revenue, and test remediation.
+4. **Propagated-runtime compatibility ratchet** — bind the repaired consumer contracts into one machine receipt and the canonical invariant suite, then route upstream defects by Ark.
+
+Efficiency rule: foundations before renderers; focused tests after each item; full suite and launch-local only after all four items and second-order work are complete.

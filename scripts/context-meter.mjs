@@ -24,28 +24,16 @@
 //   node scripts/context-meter.mjs --warn-threshold=0.75
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { execSync } from './lib/safe-spawn.mjs';
-import { VERDICT_EXITS } from './lib/context-verdicts.mjs';
-import { PRICING_PER_MTOK, MODELS, contextWindowForAgent, shortModelName } from './lib/model-router.mjs';
-
-const PRICING = {
-  [shortModelName(MODELS.opus)]:   PRICING_PER_MTOK[MODELS.opus],
-  [shortModelName(MODELS.sonnet)]: PRICING_PER_MTOK[MODELS.sonnet],
-  [shortModelName(MODELS.haiku)]:  PRICING_PER_MTOK[MODELS.haiku],
-};
-const PRICING_BY_ID = Object.fromEntries(
-  Object.entries(PRICING_PER_MTOK).map(([modelId, pricing]) => [modelId, pricing])
-);
-function priceFor(modelId) {
-  if (!modelId) return PRICING.sonnet;
-  for (const [prefix, p] of Object.entries(PRICING_BY_ID)) {
-    if (modelId.startsWith(prefix)) return p;
-  }
-  if (modelId.includes('opus'))   return PRICING.opus;
-  if (modelId.includes('haiku'))  return PRICING.haiku;
-  return PRICING.sonnet;
-}
+import { VERDICT_EXITS, chooseContextVerdict } from './lib/context-verdicts.mjs';
+import { readCodexContext } from './lib/codex-context-probe.mjs';
+import { captureLockTrigger } from './lib/boot-amortization.mjs';
+// Provider context and pricing are owned by the model-router chokepoint. The
+// meter is already propagated with its lib dependencies, so duplicating these
+// values here creates an observability-lie risk whenever providers change them.
+import { contextWindowForAgent, priceForModel as priceFor } from './lib/model-router.mjs';
 function tierOf(modelId) {
   if (!modelId) return 'unknown';
   if (modelId.includes('opus'))   return 'opus';
@@ -62,6 +50,12 @@ function costOfEntry(e) {
 }
 
 const ROOT = process.cwd();
+// S248 [audit #3] — every context-meter run that sees a typed session lock
+// persists the trigger to .cache/session-trigger.json, so a closeout/finalize
+// running AFTER the Stop hook clears the lock still records typed provenance.
+// Static import + sync call: the meter exits via process.exit, which would kill
+// a fire-and-forget dynamic import before the capture lands. Best-effort.
+try { captureLockTrigger(ROOT); } catch { /* meter must never fail on capture */ }
 const args = process.argv.slice(2);
 const asJson = args.includes('--json');
 const thrArg = args.find((a) => a.startsWith('--warn-threshold='));
@@ -115,10 +109,10 @@ if (fs.existsSync(lockPath)) {
   if (mid) lockModel = mid[1];
   if (cl) lockLimit = parseInt(cl[1], 10);
 }
-const limit = lockLimit || contextWindowForAgent(agent);
+let limit = lockLimit || contextWindowForAgent(agent);
 const model = lockModel
   || (agent === 'claude-code' ? (limit === 200_000 ? 'sonnet-200k' : 'opus-1m')
-      : agent === 'codex' ? 'codex-1m'
+      : agent === 'codex' ? 'codex-272k'
       : 'default');
 
 // --- Ledger-measured tokens (when Studio Ops scripts called Claude via model-router).
@@ -157,6 +151,64 @@ const lastInteractive = interactive[interactive.length - 1] || null;
 const measuredContextTokens = lastInteractive
   ? ((lastInteractive.input || 0) + (lastInteractive.cache_read || 0))
   : 0;
+
+// --- Transcript-growth proxy (S240 audit #1 · SIL S239 #1) ------------------
+// The Stop hook only fires BETWEEN turns. A /goal arc is one continuous turn,
+// so for its entire duration no interactive ledger entry lands and the meter
+// used to sit on the static heuristic ("2% used" through a full arc — the
+// CANON-031 violation S239 flagged). But the Claude Code session transcript
+// (~/.claude/projects/<munged-cwd>/*.jsonl) is appended LIVE during the turn:
+// its growth is a real, locally observable measurement of context pressure.
+//
+// Honesty notes: the transcript keeps growing across compaction, so after a
+// compaction this proxy OVERestimates (errs toward earlier closeout — the safe
+// direction). JSONL envelope overhead means bytes/token is higher than prose;
+// we use 5 bytes/token as the proxy divisor and label the source explicitly.
+const TRANSCRIPT_BYTES_PER_TOKEN = 5;
+const TRANSCRIPT_FRESH_MS = 10 * 60_000;   // only trust a transcript growing NOW
+const LEDGER_FRESH_MS = 5 * 60_000;        // a Stop-hook entry this recent is exact truth
+function transcriptProxy() {
+  try {
+    if (agent === 'codex') {
+      return readCodexContext({
+        threadId: process.env.CODEX_THREAD_ID,
+        cwd: ROOT,
+        sessionsRoot: process.env.CODEX_SESSIONS_DIR,
+      });
+    }
+    // Claude transcripts are provider-specific evidence. A fresh file in the
+    // shared repo's ~/.claude directory may belong to another terminal while
+    // Codex (or an unknown agent before its lock is written) is running here.
+    // Treating that file as this session's context creates a phantom CLOSEOUT
+    // and can deadlock durable /goal continuations. Never cross agent boundaries.
+    if (agent !== 'claude-code') return null;
+    const dir = process.env.CLAUDE_TRANSCRIPT_DIR
+      || path.join(os.homedir(), '.claude', 'projects', path.resolve(ROOT).replace(/[:\\/]/g, '-'));
+    if (!fs.existsSync(dir)) return null;
+    let newest = null;
+    for (const f of fs.readdirSync(dir)) {
+      if (!f.endsWith('.jsonl')) continue;
+      try {
+        const st = fs.statSync(path.join(dir, f));
+        if (!newest || st.mtimeMs > newest.mtimeMs) newest = { file: f, mtimeMs: st.mtimeMs, size: st.size };
+      } catch { /* skip */ }
+    }
+    if (!newest) return null;
+    const ageMs = Date.now() - newest.mtimeMs;
+    if (ageMs > TRANSCRIPT_FRESH_MS) return null; // stale = previous session/turn, not evidence
+    return {
+      file: newest.file,
+      bytes: newest.size,
+      tokens: Math.round(newest.size / TRANSCRIPT_BYTES_PER_TOKEN),
+      ageSeconds: Math.round(ageMs / 1000),
+    };
+  } catch { return null; }
+}
+const proxy = transcriptProxy();
+if (proxy?.source === 'codex-token-count' && Number.isFinite(proxy.contextWindow)) {
+  limit = proxy.contextWindow;
+}
+const lastInteractiveTs = lastInteractive ? new Date(lastInteractive.ts).getTime() : 0;
 
 // --- Used-tokens estimate (ADVISORY — heuristic only, not a real token count)
 //
@@ -233,12 +285,44 @@ if (fs.existsSync(metricsDir)) {
 
 const usedBytes = ctxBytes + churnBytes + observedBytes;
 const heuristicTokens = Math.round(usedBytes / BYTES_PER_TOKEN);
-// When the Stop hook has recorded an interactive turn, that IS the truth:
-// the model literally processed that many input + cache_read tokens on its
-// last turn. Prefer it over the heuristic. When there's no interactive entry
-// yet (first Stop event hasn't fired in this session), fall back to heuristic.
-const usedTokens = measuredContextTokens > 0 ? measuredContextTokens : heuristicTokens;
-const remaining = limit - usedTokens;
+// Measurement-source preference (S240 audit #1):
+//   1. interactive-ledger  — a Stop-hook entry landed within LEDGER_FRESH_MS:
+//                            exact usage straight from Claude's usage block.
+//   2. transcript-proxy    — mid-turn (arc) measurement from live transcript
+//                            growth; real observation, labeled as a proxy.
+//   3. interactive-ledger-stale — an entry exists this session but is old and
+//                            no live transcript is visible; better than bytes.
+//   4. heuristic           — static byte estimate; last resort, labeled.
+let usedTokens;
+let measurementSource;
+if (measuredContextTokens > 0 && (Date.now() - lastInteractiveTs) <= LEDGER_FRESH_MS) {
+  usedTokens = measuredContextTokens;
+  measurementSource = 'interactive-ledger';
+} else if (proxy && proxy.tokens > 0) {
+  // Mid-turn: transcript growth is the freshest real signal. Never report
+  // LESS than an exact measurement we already have from this session.
+  usedTokens = Math.max(proxy.tokens, measuredContextTokens);
+  measurementSource = proxy.source || 'transcript-proxy';
+} else if (measuredContextTokens > 0) {
+  usedTokens = measuredContextTokens;
+  measurementSource = 'interactive-ledger-stale';
+} else {
+  usedTokens = heuristicTokens;
+  measurementSource = 'heuristic';
+}
+// S262 [secondary, same report] — do NOT clamp usedTokens to the limit.
+//
+// The clamp turned a real 307,673 / 200,000 reading into a flat "100% used", so a
+// session at ~154% of its window looked merely full. That is the same class of
+// dishonesty as the UNMEASURED bug above: the display contradicted the tool's own
+// token figure, which is what tripped check-startup-meter-freshness. An overrun is
+// exactly the condition the founder most needs to see, and clipping it hides the
+// magnitude — 101% and 154% demand very different responses.
+//
+// `remaining` still floors at 0 (there is no negative headroom), but `usedTokens`
+// and `pctUsed` now report the truth and may exceed the limit.
+const overLimit = usedTokens > limit;
+const remaining = Math.max(0, limit - usedTokens);
 const pctUsed = usedTokens / limit;
 
 // --- Continuation vs fresh comparison
@@ -281,25 +365,46 @@ const isSonnetExecTier = /sonnet|opusplan/i.test(tierModel);
 const sonnetBreachPct = isSonnetExecTier ? usedTokens / 200_000 : 0;
 
 // --- Recommendation
+//
+// S262 [cross-repo defect, reported by vaultsparkstudios-website S302] — the
+// UNMEASURED gate comes FIRST, before any threshold can fire.
+//
+// When no ledger entry, no interactive turn, and no live transcript are readable,
+// `usedTokens` is the byte heuristic: context FILE sizes + git churn + hook
+// metrics. That is not a measurement of the agent's context window, and dividing
+// it by the window produced a confident "1.5% used · CONTINUE" for a session
+// actually at ~154%. A non-measurement rendered as a measurement, on the single
+// signal that exists to stop an overrun.
+//
+// So: refuse. No verdict, no percentage. The gauge says it cannot read.
+const hasRealMeasurement =
+  interactive.length > 0 || Boolean(proxy && proxy.tokens > 0);
+
 let recommendation;
 let reason;
-if (pctUsed >= 0.95) {
-  recommendation = 'CLOSEOUT';
+recommendation = chooseContextVerdict({
+  measured: hasRealMeasurement,
+  pctUsed,
+  warnAt: WARN_AT,
+  isSonnetExecTier,
+  sonnetBreachPct,
+  compactImminent,
+});
+if (recommendation === 'UNMEASURED') {
+  reason =
+    'no interactive runtime usage or active transcript token event is readable — context usage is UNKNOWN. ' +
+    'The byte heuristic measures context-file size, not window usage, and is not reported as one.';
+} else if (recommendation === 'CLOSEOUT') {
   reason = 'context effectively exhausted — continuation risks truncation';
-} else if (isSonnetExecTier && sonnetBreachPct >= 0.80) {
-  recommendation = 'CONSIDER_CLOSEOUT';
+} else if (recommendation === 'CONSIDER_CLOSEOUT' && isSonnetExecTier && sonnetBreachPct >= 0.80) {
   reason = `Sonnet 200K guardrail — ${(sonnetBreachPct*100).toFixed(0)}% of execute-tier limit · switch to opus or /closeout`;
-} else if (compactImminent) {
-  recommendation = 'WARN_COMPACT_SOON';
-  reason = `compaction predicted in ~${turnsToCompact} turn(s) at current burn rate — proactive autosave recommended`;
-} else if (pctUsed >= WARN_AT) {
-  recommendation = 'CONSIDER_CLOSEOUT';
+} else if (recommendation === 'CONSIDER_CLOSEOUT') {
   reason = `context ${(pctUsed * 100).toFixed(0)}% used — fresh session saves ~${continueCostPerTurn} tokens/turn after ${breakEvenTurns} turns`;
+} else if (recommendation === 'WARN_COMPACT_SOON') {
+  reason = `compaction predicted in ~${turnsToCompact} turn(s) at current burn rate — proactive autosave recommended`;
 } else if (pctUsed >= 0.50 && breakEvenTurns <= 3) {
-  recommendation = 'CONTINUE';
   reason = `fresh would pay off after ${breakEvenTurns} turns but you\'re only at ${(pctUsed * 100).toFixed(0)}% — keep going`;
 } else {
-  recommendation = 'CONTINUE';
   reason = `${(pctUsed * 100).toFixed(0)}% used · ${remaining.toLocaleString()} tokens remaining`;
 }
 
@@ -380,17 +485,36 @@ const actions = buildActions();
 //                         hook data yet (rare: scripts ran before any Stop).
 //   "heuristic"         — No ledger entries this session; falling back to
 //                         file-system byte estimates.
-const confidence = interactive.length > 0
-  ? 'measured'
-  : (ledger.length > 0 ? 'measured+heuristic' : 'heuristic');
+// S262 — "heuristic" with nothing measured is not a low-confidence READING, it is
+// the ABSENCE of a reading. Naming it `heuristic` invited callers to treat it as a
+// weak measurement and carry on; `unmeasured` cannot be misread that way.
+const confidence = !hasRealMeasurement
+  ? 'unmeasured'
+  : {
+      'interactive-ledger': 'measured',
+      'codex-token-count': 'measured',
+      'transcript-proxy': 'measured-proxy',
+      'interactive-ledger-stale': 'measured-stale',
+      'heuristic': 'unmeasured',
+    }[measurementSource];
 
 const out = {
   agent,
   model,
   limit,
-  usedTokens,
-  remainingTokens: remaining,
-  pctUsed: +(pctUsed * 100).toFixed(1),
+  // S262 — when nothing was measured, usedTokens/remainingTokens/pctUsed are
+  // NULL, not zero and not a byte guess. A consumer that does `pctUsed ?? 0`
+  // would otherwise convert "I cannot see" into "0% used", which reads as a
+  // permanent CONTINUE — the precise way this defect propagated downstream.
+  // The raw byte estimate stays visible under `measured.heuristicTokens` for
+  // debugging; it is simply never promoted to a context reading.
+  usedTokens: hasRealMeasurement ? usedTokens : null,
+  remainingTokens: hasRealMeasurement ? remaining : null,
+  pctUsed: hasRealMeasurement ? +(pctUsed * 100).toFixed(1) : null,
+  measured_ok: hasRealMeasurement,
+  // True when the reading EXCEEDS the window — surfaced so consumers can render
+  // the overage instead of clipping it to a reassuring 100%.
+  overLimit: hasRealMeasurement ? overLimit : null,
   turnCountObserved: turnCount,
   cacheHitRate: +cacheHitRate.toFixed(2),
   continueCostPerTurn,
@@ -403,6 +527,8 @@ const out = {
   reason,
   actions,
   warnThreshold: WARN_AT,
+  measurementSource,
+  transcriptProxy: proxy,
   // Ledger-measured (API-call) usage from Studio Ops scripts this session.
   // Does NOT include the interactive Claude Code conversation — that's
   // outside our chokepoint and only the runtime can see it.
@@ -431,22 +557,38 @@ const out = {
   confidence,
 };
 
+// Persist the latest reading — consumers (brief-v5 COMPACTION WARNING block,
+// boot-amortization) read .cache/context-meter.json instead of re-running us.
+try {
+  fs.mkdirSync(path.join(ROOT, '.cache'), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, '.cache', 'context-meter.json'), JSON.stringify(out, null, 2) + '\n');
+} catch { /* cache write is best-effort */ }
+
 if (asJson) {
   console.log(JSON.stringify(out, null, 2));
 } else {
-  console.log(`context-meter · ${agent} (${model}) · confidence: ${confidence}`);
-  console.log(`  used:        ${out.usedTokens.toLocaleString()} / ${limit.toLocaleString()} tokens (${out.pctUsed}%)`);
-  console.log(`  remaining:   ${out.remainingTokens.toLocaleString()} tokens`);
+  console.log(`context-meter · ${agent} (${model}) · confidence: ${confidence} · source: ${measurementSource}`);
+  if (measurementSource === 'transcript-proxy') {
+    console.log(`  live-turn:   transcript ${proxy.file} · ${proxy.bytes.toLocaleString()} bytes (${proxy.ageSeconds}s fresh) → ~${proxy.tokens.toLocaleString()} tok proxy`);
+  } else if (measurementSource === 'codex-token-count') {
+    console.log(`  live-turn:   Codex ${proxy.file} · exact input ${proxy.tokens.toLocaleString()} / runtime ${proxy.contextWindow.toLocaleString()} tokens`);
+  }
+  console.log(`  used:        ${out.usedTokens == null ? 'UNKNOWN' : out.usedTokens.toLocaleString()} / ${limit.toLocaleString()} tokens (${out.pctUsed == null ? '?' : out.pctUsed}%)`);
+  console.log(`  remaining:   ${out.remainingTokens == null ? 'UNKNOWN' : out.remainingTokens.toLocaleString()} tokens`);
   console.log(`  continue:    ~${out.continueCostPerTurn.toLocaleString()} tokens/turn (cache hit ${(cacheHitRate * 100).toFixed(0)}%)`);
   console.log(`  fresh:       ~${out.freshSessionBootstrap.toLocaleString()} tokens bootstrap`);
   console.log(`  break-even:  ${out.breakEvenTurns ?? '∞'} turns`);
   console.log(`  verdict:     ${out.recommendation} — ${out.reason}`);
-  if (interactive.length > 0) {
+  if (measurementSource === 'codex-token-count') {
+    console.log(`  measured:    provider-native Codex token_count · thread ${proxy.threadId}`);
+  } else if (interactive.length > 0) {
     console.log(`  measured:    ${interactive.length} interactive turn(s) · last=${measuredContextTokens.toLocaleString()} ctx tokens · +${ledger.length - interactive.length} Studio Ops call(s)`);
     console.log(`               ledger $${ledgerUSD.toFixed(4)} total this session (priced per-model)`);
   } else if (ledger.length > 0) {
     console.log(`  measured:    ${ledger.length} Studio Ops call(s) · ${ledgerTokens.toLocaleString()} tokens · $${ledgerUSD.toFixed(4)}`);
-    console.log(`               (no interactive turns yet — Stop hook fires after this response)`);
+    console.log(`               auxiliary telemetry only — not an interactive context measurement`);
+  } else if (measurementSource === 'transcript-proxy') {
+    console.log(`  measured:    no ledger entries yet — live transcript-growth proxy in use (above)`);
   } else {
     console.log(`  measured:    (no ledger entries yet — heuristic estimate only)`);
   }

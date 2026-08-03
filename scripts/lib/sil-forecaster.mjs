@@ -7,6 +7,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { parseSilSessions } from './sil-ledger.mjs';
 
 export const CATEGORIES = [
   'Dev Health', 'Creative Alignment', 'Momentum',
@@ -25,40 +26,21 @@ const CATEGORY_ALIASES = {
 };
 
 export function parseSilHistory(silText, maxSessions = 5) {
-  const sessionRe = /^##\s+(\d{4}-\d{2}-\d{2})\s+[—-]\s+Session\s+(\d+)[^\n]*$/gm;
-  const headers = [];
-  let m;
-  while ((m = sessionRe.exec(silText)) !== null) {
-    headers.push({ date: m[1], session: Number(m[2]), idx: m.index });
-  }
-
-  const sessions = headers.map((header, i) => {
-    const start = header.idx;
-    const end = i + 1 < headers.length ? headers[i + 1].idx : silText.length;
-    const block = silText.slice(start, end);
-    const totalMatch = block.match(/(?:\*\*)?Total:\s*(\d+)\/1000/i);
-    const cats = {};
-    const rowRe = /^\|\s*(?:\d+\s*\|\s*)?([A-Za-z][^|\r\n]+?)\s*\|\s*(\d+)\s*\|/gm;
-    let rm;
-    while ((rm = rowRe.exec(block)) !== null) {
-      const raw = rm[1].trim();
-      const canonical = CATEGORY_ALIASES[raw] || raw;
-      if (CATEGORIES.includes(canonical)) cats[canonical] = Number(rm[2]);
-    }
-    return {
-      date: header.date,
-      session: header.session,
-      total: totalMatch ? Number(totalMatch[1]) : null,
-      idx: header.idx,
-      categories: cats,
-      complete: CATEGORIES.every((category) => Number.isFinite(cats[category])),
-    };
-  });
-
-  return sessions
-    .filter((session) => session.total !== null)
-    .sort((a, b) => b.session - a.session)
-    .slice(0, maxSessions);
+  return parseSilSessions(silText)
+    .filter((entry) => entry.total != null)
+    .slice(0, maxSessions)
+    .map((entry) => {
+      const categories = Object.fromEntries(
+        Object.entries(entry.categories).map(([raw, value]) => [CATEGORY_ALIASES[raw] || raw, value])
+      );
+      return {
+        date: entry.date,
+        session: entry.session,
+        total: entry.totalNormalized,
+        categories,
+        complete: CATEGORIES.every((category) => Number.isFinite(categories[category])),
+      };
+    });
 }
 
 export function forecastNext(sessions, signals = {}) {
@@ -133,7 +115,7 @@ if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` || proce
   const sil = fs.readFileSync(silPath, 'utf8');
   const sessions = parseSilHistory(sil);
   const last = sessions[0];
-  const forecast = forecastNext(sessions, { velocity: 11, blockerPressure: 0, contextAge: 0 });
+  const forecast = forecastNext(sessions, { velocity: 11, blockerPressure: 87, contextAge: 0 });
   if (process.argv.includes('--json')) {
     console.log(JSON.stringify({ basis: sessions.map(s => ({ session: s.session, total: s.total })), forecast }, null, 2));
   } else {

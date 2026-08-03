@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "forSession": 123,
+      "forecast": 999,
+      "recordedAt": "2026-08-02",
+      "actual": null
+    }
+  ]
+}

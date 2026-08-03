@@ -1,44 +1,48 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: c028c356020e -->
-<!-- generated-at: 2026-08-01T06:10:39.329Z -->
+<!-- source-hash: 3265cc15a264 -->
+<!-- generated-at: 2026-08-02T23:57:34.041Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 121 HANDOFF SUMMARY
+# Handoff Summary — PromoGrind
 
-Status
-- Session 121 (Codex): saturated. 6/6 L3 audit items and 3/3 repo-owned second-order innovations shipped. Unified Genius List truthfully empty. Local RC green.
-- SPARKED promotion: NO-GO. S121 work not claimed deployed pending post-push workflow evidence.
+Session
+- S122 (Codex); status: saturated, session floor STOP at 15/12 shipped; SPARKED NO-GO.
 
-Shipped (S121)
-- Canonical realized-outcome contract across persistence/replay/journal/twin/tilt/AI settlement consumers.
-- Strict validation receipts (cannot green zero/partial/contradictory/stale/malformed).
-- Accessible validation-aware result-feedback card; basis-bound AI probability with settlement and calibration telemetry.
-- Evidence-based review cadence replacing compulsion/urgency rewards.
-- Multilingual public-claims ratchet; 33 violations repaired; income estimator converted to zero-default scenario planner.
-- Source-hash FAQ contract; shell-free IGNIS rescore; content-addressed claims attestation; proprietary /ip route + discovery links.
+What Shipped (S122)
+- Evidence-gated AI Action Plan: confirmed observations only, consent, deterministic no-provider fallback, receipts, no invented claims.
+- Semantic SOUL ratchet: review-depth rewards replace login/activity/profit; local outcome-review cards replace verified-profit certificates.
+- Decision-evidence v3: idempotent hash chains across create/placement/settlement/reflection with source refs.
+- Source-derived data rights: 81 storage tokens classified from one registry.
+- Collision-resistant identity: 11 writer surfaces governed, deterministic import IDs.
+- Accessibility: 60 labels associated, keyboard/mobile fixes; CANON-053 proof green.
+- Nine second-order infra improvements plus sanitization confidentiality repair (secret values redacted).
 
-Verification (green)
-- verify:launch-local exit 0; Vitest 613/613; Deno 45/45, 15 entrypoints typecheck; Doctor 12/12, 0 blocking.
-- Public claims receipt green; 4 hash-bound visual captures; security: 0 tracked secrets, 0 sanitizer findings.
-- npm audit: GHSA-qwww-vcr4-c8h2 NOT claimed green; static client mechanically guarded non-reachable.
+Verification
+- verify:launch-local exit 0; Vitest 606/606; Deno 45/45; Doctor 12/12 blockingFailing 0.
+- Visual QA 4 hash-bound captures green; tracked secrets 0; sanitizer 0.
+- 61 app routes, 101 public HTML; bundle 179.1KB raw / 60.0KB gzip.
+- Deploy: commit ca2a134 to origin/main; CI/Pages passed; intentional release-state failure on six absent edge headers.
+
+Current Intent
+- Run continuous /goal + /arc; exhaust live-verified primary + second-order items at highest useful depth; preserve source-derived observability, honest deferrals, sanitization, local staging, direct-main push, Ark broadcast, zero-shell hygiene.
 
 Now Bucket (top 3)
-1. Establish real staging target + header-capable edge; prove all six response headers before SPARKED.
-2. Complete historical credential rotation/remediation; add exact PromoGrind deploy capability mapping.
-3. Configure and prove Zoho mailbox identity, then auth-email, full Stripe lifecycle, friend-beta, and capture proofs.
+1. Establish true staging target + header-capable edge; prove all six response headers.
+2. Complete historical credential rotation/remediation; resolve exact PromoGrind Supabase deployment authority.
+3. Prove Zoho mailbox identity, then run auth-email, Stripe, friend-beta, and capture checks.
 
 Blockers (top 3)
-1. No remote staging env; six production response headers absent. Cloudflare token reaches zone but lacks response-header rules scope.
-2. promogrind.supabase.deploy MISSING; no deployment proof.
-3. contact@promogrind.bet lacks real Zoho MX/SPF/DKIM/DMARC and delivery evidence; Brevo non-qualifying.
+- No remote staging environment; six production response headers absent.
+- promogrind.supabase.deploy MISSING (repo code not deployment proof).
+- contact@promogrind.bet lacks real Zoho MX/SPF/DKIM/DMARC and delivery evidence.
 
-Human-Blocked / External (age)
-- 5 redacted historical credential findings at b1205ce require rotation + approved history remediation (open since ≤S118, ~1 week).
-- Production auth-email, Stripe lifecycle, friend-beta, capture lead-row receipts unproved (external gate, carried since S118+).
-- Studio sitemap scoring stuck 7/10 despite /ip; checker mismatch routed through Ark, not patched (S121).
+Human-Blocked / External Proof (age)
+- Five redacted historical credential findings at b1205ce awaiting rotation/history remediation (since S118, ~4 sessions).
+- Cloudflare header-ruleset credential scope missing (since S118, ~4 sessions).
+- Webhook credential rotation, Ark cargo 01JU98MC5M8FC5EDBEE214F795 (since S118, ~4 sessions).
+- Production auth-email, full Stripe lifecycle, friend beta, capture lead-row receipts unproved (persistent).
+- Studio cost/sitemap reconciliation + innovation-generator false positives routed to Studio Ops via Ark, never sibling edits.
 
-Ark Closeout
-- Broadcast 01JUTV2CUV1C618CDA4FC4BB96; cost/sitemap truth-plane request 01JUTV2R411AA97A792A922A22; Zoho/Supabase/Cloudflare capability request 01JUTV36LJ34D016800F482D06. All payloads redacted.
-
-Next session: Pursue external-proof gates (staging headers, credential rotation, Zoho/Supabase deploy) since repo-owned work is exhausted.
+Next Session
+- Begin with staging + edge header setup to unblock SPARKED promotion.

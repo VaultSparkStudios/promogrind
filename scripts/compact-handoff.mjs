@@ -27,6 +27,7 @@ import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { MODELS, callClaude, withLongCache, logMetrics } from './lib/model-router.mjs';
 import { getSecret } from './lib/secrets.mjs';
+import { archiveBeforeMutate } from './lib/archive-then-compact.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -68,6 +69,12 @@ if (trim) {
   });
 
   if (!dryRun) {
+    archiveBeforeMutate({
+      sourcePath: HANDOFF,
+      content: raw,
+      label: 'handoff-trim',
+      suffix: '.full.md',
+    });
     // Append archived sessions to HANDOFF_ARCHIVE.md
     const archiveHeader = `\n\n---\n<!-- archived: ${new Date().toISOString().slice(0, 10)} -->\n\n`;
     fs.appendFileSync(ARCHIVE, archiveHeader + toArchive.join(''));

@@ -1,6 +1,6 @@
 # Genius Hit List — PromoGrind
 
-> Generated: 2026-08-01 | Scope: project:promogrind | Pattern detectors: 0 signals evaluated | Top 12 shown
+> Generated: 2026-08-03 | Scope: project:promogrind | Pattern detectors: 0 signals evaluated | Top 12 shown
 
 ---
 

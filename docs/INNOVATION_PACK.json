@@ -1,57 +1,31 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-01T05:11:13.035Z",
+  "generatedAt": "2026-08-03T01:43:40.512Z",
   "project": "PromoGrind",
-  "session": 121,
+  "session": 123,
   "sourceSignals": {
     "geniusListEmpty": true,
-    "taskBoardBytes": 71253,
+    "taskBoardBytes": 77054,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
-    "largeFiles": 0,
+    "largeFiles": 3,
     "launchDeferrals": 6,
-    "secondOrderShipped": 3
+    "secondOrderShipped": 0
   },
   "ranked": [
     {
-      "status": "shipped",
-      "effort": "30m",
-      "effortHours": 0.5,
-      "priority": 18,
-      "id": "shell-free-ignis-rescore",
-      "tier": "high",
-      "axis": "automation / security / developer-experience",
-      "impact": 9,
-      "innovation": 4,
-      "evidence": "The live IGNIS rescore used npx with shell:true, producing DEP0190 and exposing argument interpolation to the shell.",
-      "recipe": "Shipped: invoke the trusted local TSX CLI through process.execPath with validated paths and a focused shell-free spawn contract."
-    },
-    {
-      "status": "shipped",
-      "effort": "45m",
-      "effortHours": 0.75,
-      "priority": 17.2,
-      "id": "content-addressed-public-claims-attestation",
-      "tier": "high",
-      "axis": "truth / compliance / observability",
-      "impact": 9,
-      "innovation": 4,
-      "evidence": "A green console line could not prove which 315 public files or which 18 multilingual rules were actually scanned.",
-      "recipe": "Shipped: deterministic source/rule SHA-256 hashes, compatibility status, machine-readable receipt, and an attestation contract."
-    },
-    {
-      "status": "shipped",
-      "effort": "20m",
-      "effortHours": 0.34,
-      "priority": 16.2,
-      "id": "truthful-genius-exhaustion-signal",
-      "tier": "high",
-      "axis": "process / observability",
-      "impact": 8,
-      "innovation": 4,
-      "evidence": "The innovation pack inferred exhaustion from Markdown headings and falsely reported geniusListEmpty=false after the canonical list reached zero.",
-      "recipe": "Shipped: derive exhaustion from .cache/genius-list.json list.count with a conservative Markdown fallback and regression coverage."
+      "status": "unblocked",
+      "effort": "2h",
+      "effortHours": 2,
+      "priority": 10.5,
+      "id": "next-god-file-decomposition",
+      "tier": "medium",
+      "axis": "speed / organization",
+      "impact": 7,
+      "innovation": 3,
+      "evidence": "scripts/render-startup-brief.mjs is 1485 lines (threshold 900); 3 files exceed local maintainability thresholds.",
+      "recipe": "Extract one cohesive ownership slice from scripts/render-startup-brief.mjs, add or extend focused tests, and preserve the existing launch-local gate."
     },
     {
       "status": "honest-deferral",
@@ -71,7 +45,23 @@
     "windowsShell": [],
     "rawImports": [],
     "todoSignals": [],
-    "largeFiles": [],
+    "largeFiles": [
+      {
+        "file": "scripts/render-startup-brief.mjs",
+        "lines": 1485,
+        "limit": 900
+      },
+      {
+        "file": "scripts/lib/model-router.mjs",
+        "lines": 947,
+        "limit": 900
+      },
+      {
+        "file": "scripts/run-tests.mjs",
+        "lines": 943,
+        "limit": 900
+      }
+    ],
     "launchDeferrals": [
       "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
       "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
