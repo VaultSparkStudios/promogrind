@@ -57,10 +57,27 @@ export function run(root = ROOT) {
   return evaluateLastSessionSummary({ status, silText });
 }
 
+// deriveSummaryFromSil (S264): build an honest summary line straight from the
+// latest SIL ledger entry — the canonical, append-only record of what the
+// session actually was. Used when currentFocus cannot heal (e.g. a recovery
+// session whose focus names the RECOVERED session, not the one that closed:
+// exactly how S263's summary froze at S261 for two closeouts).
+export function deriveSummaryFromSil(silText = '') {
+  const expected = latestSilSession(silText);
+  if (!expected) return null;
+  const entryRe = new RegExp(`^##\\s+(\\d{4}-\\d{2}-\\d{2})\\s+—\\s+Session\\s+${expected}\\s*\\|([^\\n]*)`, 'm');
+  const head = silText.match(entryRe);
+  if (!head) return null;
+  const stats = head[2].trim().replace(/\s+/g, ' ');
+  const win = silText.slice(head.index).match(/^\*\*Win:\*\*\s+([^\n]+)/m)?.[1] ?? '';
+  const winSnippet = win ? ` Win: ${win.slice(0, 180)}${win.length > 180 ? '…' : ''}` : '';
+  return `S${expected} (${head[1]}, from SIL ledger): ${stats}.${winSnippet}`;
+}
+
 // Self-heal: mirror currentFocus → lastSessionSummary ONLY when currentFocus already
-// names the expected (latest-completed) session. Never fabricates a summary; if
-// currentFocus is also stale/missing the right session, we leave the field untouched
-// and report unhealable so the agent fixes it consciously at closeout.
+// names the expected (latest-completed) session; otherwise (S264) fall back to a
+// summary DERIVED from the latest SIL ledger entry — never fabricated, always
+// sourced from the append-only session record.
 export function fix(root = ROOT) {
   const statusPath = path.join(root, 'context', 'PROJECT_STATUS.json');
   const status = readJson(statusPath, {});
@@ -68,14 +85,22 @@ export function fix(root = ROOT) {
   const verdict = evaluateLastSessionSummary({ status, silText });
   if (verdict.ok) return { ...verdict, healed: false };
   const focusSession = extractSessionId(status.currentFocus);
-  if (!focusSession || focusSession !== verdict.expected) {
-    return { ...verdict, healed: false, healable: false,
-      reason: `${verdict.reason}; currentFocus names S${focusSession ?? '?'} (not S${verdict.expected}) — cannot auto-heal` };
+  let healedFrom = null;
+  if (focusSession && focusSession === verdict.expected) {
+    status.lastSessionSummary = String(status.currentFocus);
+    healedFrom = 'currentFocus';
+  } else {
+    const derived = deriveSummaryFromSil(silText);
+    if (!derived) {
+      return { ...verdict, healed: false, healable: false,
+        reason: `${verdict.reason}; currentFocus names S${focusSession ?? '?'} (not S${verdict.expected}) and SIL entry unparsable — cannot auto-heal` };
+    }
+    status.lastSessionSummary = derived;
+    healedFrom = 'sil-ledger';
   }
-  status.lastSessionSummary = String(status.currentFocus);
   fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n', 'utf8');
   const after = evaluateLastSessionSummary({ status, silText });
-  return { ...after, healed: true, reason: `healed from currentFocus → S${after.actual}` };
+  return { ...after, healed: true, reason: `healed from ${healedFrom} → S${after.actual}` };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {

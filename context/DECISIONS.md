@@ -766,3 +766,33 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** startup presentation conflated qualified green with red, 0/0 with failure, stale cache identity with canonical truth, and hard-coded Studio Ops attribution with the active project.
 - **Decision:** classify startup signals by source semantics and freshness, and derive scheduled-write project identity from canonical repo truth while preserving trigger and write mode.
 - **Consequence:** public operational surfaces describe PromoGrind rather than nearby control-plane assumptions and can mechanically reject contradictions.
+
+## 2026-08-03 — S125 authority and egress contracts
+
+### Decision: provider egress is declared, bounded, and receipted
+
+- **Status:** accepted
+- **Context:** five Edge Functions could call external AI providers, but consent, redaction, input ceilings, and response receipts were distributed implementation details.
+- **Decision:** maintain one machine-checked egress manifest and require every provider caller to name its data classes, apply bounds/redaction, and emit an inspectable privacy receipt.
+- **Consequence:** adding or changing provider egress fails closed until the privacy boundary is explicit and executable.
+
+### Decision: commerce authority fails closed across cryptographic, provider, and persistence boundaries
+
+- **Status:** accepted
+- **Context:** webhook acknowledgement could outpace signature freshness, provider truth, or database persistence and thereby convert uncertainty into false success.
+- **Decision:** require a fresh signature matching any configured rotated secret, validate the event shape, bound checkout metadata and redirects, and return retryable non-2xx responses whenever provider or persistence outcomes are uncertain.
+- **Consequence:** Stripe remains externally unproved, but repository behavior can no longer acknowledge an untrusted or unpersisted event as complete.
+
+### Decision: local real-browser automation uses one bounded cleanup-owning harness
+
+- **Status:** accepted
+- **Context:** visual capture and dashboard smoke duplicated process launch, protocol framing, timeouts, and cleanup logic.
+- **Decision:** centralize Chromium discovery, hidden launch, command deadlines, session routing, and process cleanup in a dependency-free shared harness with focused tests.
+- **Consequence:** rendered-pixel evidence and smoke testing share the same fail-closed lifecycle contract without adding a package.
+
+### Decision: external launch evidence is never synthesized from repository readiness
+
+- **Status:** reaffirmed
+- **Context:** the saturated generator correctly surfaced remote staging and production lifecycle proof, but those facts cannot be created by local code changes.
+- **Decision:** count the candidate as an honest deferral after exhausting repo-owned work; retain every criterion in the canonical proof ledger.
+- **Consequence:** list exhaustion is truthful and SPARKED remains NO-GO until the external observations exist.

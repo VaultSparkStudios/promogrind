@@ -340,3 +340,12 @@ Agents MUST NOT modify or remove existing entries.
 - **New required direction:** persuasive surfaces must derive availability, price state, evidence, identity authority, and legal limits from inspectable contracts; visual quality earns its status only after both themes and device classes are viewed and defects are repaired.
 - **Application:** S124 removed synthetic proof and unsourced comparison claims, unified commerce availability, declared the real hybrid identity boundary, repaired two rendered auth defects, and compiled thirteen hash-bound captures while keeping all external release facts unclaimed.
 - **Durable rule:** best-in-history public craft is not maximal confidence; it is maximal clarity about what works, what is planned, what is external, and what evidence would change the answer.
+
+### 2026-08-03 — Authority boundaries should be visible at the moment of trust (S125)
+
+- **Category:** Assignment / quality direction
+- **Human input (close paraphrase):** Run the entire agent-neutral arc continuously; exhaust primary and second-order innovation; ship at a genius-level bar; gate continuation on measured context; derive observability from source truth; treat flat-rate Max Plan use as notional; never fabricate proof; record honest deferral as a win; finish with direct-main publication and zero-running hygiene.
+- **Area affected:** payment authority / AI privacy / legal guidance / rendered-pixel craft / release automation
+- **New required direction:** high-consequence boundaries must be explicit where a person or machine makes the decision: payment acknowledgement must follow verified persistence, provider egress must show consent and data classes, guidance must preserve uncertainty, and visual proof must be able to disprove implementation assumptions.
+- **Application:** S125 hardened Stripe and AI egress, eliminated categorical public guidance, unified bounded browser automation, and repaired a light-theme defect found only by inspecting rendered pixels.
+- **Durable rule:** sophisticated trust design makes uncertainty inspectable and retryable; it never converts missing authority into a confident success state.

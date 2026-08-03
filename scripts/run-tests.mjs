@@ -732,15 +732,25 @@ if (!NO_WRITE) {
     j.testsEnvBlocked = envBlocked;
     // S205 [SIL][S204 #2]: surface deliberately-deferred slow sibling-walkers (host
     // saturated) and budget-deferred files so a smaller-green run is auditable and never read as a full pass.
-    j.testsDeferred = deferred;
+    // S263 — this used to write `testsDeferred` and `testsLastRun`, the scope and
+    // FRESHNESS metadata of the file-level counts it deliberately refuses to write
+    // (see the S160 #4 note above). A red run therefore re-dated a stale green:
+    // testsPassing sat frozen at 346/346 from 2026-08-01 while testsLastRun was
+    // bumped to 2026-08-03 by a RED run, so the brief rendered "✓ 346/346
+    // (2026-08-03)" and the doctor's staleness guard — which reads this same
+    // field — reset to 0 days old. A freshness stamp belongs to the producer of
+    // the numbers it dates. Keep assertion-scoped metadata under assertion-scoped
+    // names; leave the file-level surface to refresh-test-count.mjs and
+    // test-proof-reconciliation.mjs.
+    j.testsAssertionsDeferred = deferred;
     j.testsBudgetExhausted = budgetExhausted;
-    j.testsLastRun = new Date().toISOString().slice(0, 10);
+    j.testsAssertionsLastRun = new Date().toISOString().slice(0, 10);
     fs.writeFileSync(sp, JSON.stringify(j, null, 2) + '\n', 'utf8');
     // S166 [SIL][S165 #1]: record this session's flaky set so the flaky-trend
     // probe can escalate a chronically-flaky test (≥3 consecutive sessions).
     try {
       const { recordFlaky } = await import('./lib/flaky-trend.mjs');
-      recordFlaky({ session: j.currentSession, date: j.testsLastRun, flaky });
+      recordFlaky({ session: j.currentSession, date: j.testsAssertionsLastRun, flaky });
     } catch { /* trend recording is best-effort; never fail the test run */ }
   } catch (e) { /* ignore write failure in CI */ }
 }
@@ -929,9 +939,14 @@ async function runShardAggregate(shardCount) {
       j.testsFlaky = flaky;
       j.testsInconclusive = inconclusive;
       j.testsEnvBlocked = envBlocked;
-      j.testsDeferred = deferred;
+      // S263 — assertion-scoped stamps only (see the note in the non-sharded
+      // writer). A sharded run that is GREEN is promoted to the file-level
+      // surface by test-proof-reconciliation.mjs, which stamps testsLastRun from
+      // the proof's own generatedAt. A sharded run that is RED must not re-date
+      // the file-level counts it did not produce.
+      j.testsAssertionsDeferred = deferred;
       j.testsBudgetExhausted = budgetExhausted;
-      j.testsLastRun = new Date().toISOString().slice(0, 10);
+      j.testsAssertionsLastRun = new Date().toISOString().slice(0, 10);
       j.testsLastRunMode = `sharded:${shardCount}`;
       j.testsShardProofDir = path.relative(ROOT, proofDir).replace(/\\/g, '/');
       j.testsShardProofResumed = resumedShards;

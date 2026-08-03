@@ -23,6 +23,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { spawnSync } from './lib/safe-spawn.mjs';
+import { resolveTestSignal } from './lib/test-signal.mjs';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -334,9 +335,15 @@ function postSessionSignals(status) {
   const doctor = status?.doctorScore && typeof status.doctorScore === 'object'
     ? `${status.doctorScore.passing ?? '?'}/${status.doctorScore.total ?? '?'}`
     : (typeof status?.doctorScore === 'number' ? String(status?.doctorScore) : '—');
-  const tests = status?.testsPassing != null && status?.testsTotal != null
-    ? `${status.testsPassing}/${status.testsTotal}`
-    : '—';
+  // S263 — the closeout board is the LAST surface a session sees, so a phantom
+  // green here is the most expensive one. Reconcile both test surfaces
+  // (D-S263.1); a contradicted signal reports the contradiction, not the count.
+  const testSignal = resolveTestSignal(status || {});
+  const tests = testSignal.state === 'contradicted'
+    ? `⛔ CONTRADICTED — ${status.testsPassing}/${status.testsTotal} files vs ${status.testsAssertionsPassing}/${status.testsAssertionsTotal} assertions`
+    : status?.testsPassing != null && status?.testsTotal != null
+      ? `${status.testsPassing}/${status.testsTotal}`
+      : '—';
   const shardProof = status?.testsShardProofDir
     ? `${status.testsLastRunMode || 'sharded'} · ${status.testsShardProofDir}/aggregate.json`
     : null;

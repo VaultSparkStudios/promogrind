@@ -1,7 +1,7 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-08-03 (S124)
+Last reviewed: 2026-08-03 (S125)
 Overall status: green-repo-owned-with-history-and-external-proof-follow-ups
 Next action: establish true staging and a header-capable edge; rotate/remediate the redacted historical credentials; obtain the exact PromoGrind deploy capability; then complete criterion-addressed mailbox, auth, payment, friend, capture, and pixel proofs.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
@@ -517,3 +517,13 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Dependency truth remains explicit: `npm audit` reports two high entries for the RSC-mode React Router advisory. The current static BrowserRouter path is non-reachable and mechanically guarded, but audit green is not claimed.
 - Verification truth: launch-local direct exit 0; 613/613 Vitest; 45/45 Deno tests; all 15 Edge entrypoints; doctor 12/12 and `blockingFailing: 0`; tracked secrets and strict public sanitizer 0; supply-chain incident matches 0.
 - Release truth remains NO-GO for SPARKED despite successful live database/auth/checkout/cleanup probes: staging, six headers, historical rotation, exact deploy authority, Zoho mailbox, auth-email, complete payment, friend, and capture evidence remain unproved.
+
+## 2026-08-03 — Session 125 Truth Update
+
+- Commerce truth now fails closed across fresh rotated HMAC verification, validated event shape, provider response, database persistence, bounded metadata, and safe redirect origin. Repository correctness is not represented as a completed production Stripe lifecycle.
+- AI egress truth is classified for all five provider-calling Edge Functions. Named profile fields require explicit consent; inputs are bounded and redacted at both client and server boundaries; responses carry inspectable privacy receipts.
+- Guidance truth expanded to 24 structural rules over 321 files; legal and tax uncertainty remains explicit rather than categorical.
+- Release-control truth is executable on Windows and distinguishes local architecture evidence from missing remote staging/provider proof. The upstream parser defect was sent by Ark, never repaired by a sibling-tree edit.
+- Browser truth uses one bounded cleanup-owning Chromium harness. Four desktop/mobile, light/dark Advisor captures are hash-bound; a rendered light-theme defect was repaired before recapture.
+- Process truth: five verified primary items and three generated repo-owned innovations shipped. The remaining external proof candidate is an explicit honest deferral, and the measured context gate—not a single completed objective—triggered closeout.
+- Release truth remains NO-GO for SPARKED: staging, six headers, historical rotation, exact deployment authority, Zoho and Obelisk identity, and production auth/payment/friend/capture/founder receipts remain unproved.

@@ -1,5 +1,5 @@
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║ ✓  Tests         639/639 passing (2026-08-03)                  ║
+║ ✓  Tests         642/642 passing (2026-08-03)                  ║
 ║ ✓  Velocity      8 ↑  ·  Debt: →                               ║
 ║ ⚠  Runway        ~2 sessions                                   ║
 ║ ✓  Context age   0d                                            ║
@@ -7,7 +7,7 @@
 ║ ✓  Truth         green-repo-owned-with-history-and-external-p… ║
 ║ ⚠  Compliance   not-tracked: no non-zero compliance run…       ║
 ║ ✓  Genome dims   all stable  (24/25)                           ║
-║ ✓  Entropy       0.031  (healthy)                              ║
+║ ✓  Entropy       0.017  (healthy)                              ║
 ║ ✓  CDR           no gap detected                               ║
 ║ ✓  Patterns      no recurring pressure detected                ║
 ║ ✓  Templates     v3.3 aligned                                  ║

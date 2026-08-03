@@ -22,6 +22,7 @@ import { readFileSync, existsSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from './safe-spawn.mjs';
+import { STUDIO_STATE_DIRS } from './studio-state-dirs.mjs';
 
 const WIPE_THRESHOLD = 0.5; // warn/abort if new content < 50% of existing
 
@@ -242,7 +243,15 @@ export function checkContextFiles(root, opts = {}) {
     return new Set(r.stdout.trim().split('\n').filter(Boolean));
   }
 
-  const CONTEXT_DIRS = ['context', 'docs', 'logs'];
+  // S263 — `portfolio/` was OUT of scope, so portfolio/SKILL_CATALOG.json was
+  // never protected by this gate at all. The nightly out-of-session lane
+  // overwrote it 27 skills -> 7 on four consecutive nights (29576e73, a92717a3,
+  // d6cb27b3) because its cloud environment cannot see ~/.claude/skills, and a
+  // local session restored it in between — a flip-flop nobody saw because
+  // nothing compared the artifact against its own prior size. Portfolio holds
+  // studio-wide source-of-truth indexes; it belongs under the same wipe rule as
+  // context/ and docs/. Shared with the context meter (see the lib's own note).
+  const CONTEXT_DIRS = STUDIO_STATE_DIRS;
   const changedFiles = getChangedFiles(CONTEXT_DIRS); // null = fallback
 
   // Check append-only files for prefix violation.

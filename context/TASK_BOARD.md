@@ -10,6 +10,24 @@
 | 🔥 | Public trust / legal guidance | done | 4h | categorical-legal-guidance-contract — **DONE L3 S125**: 24-rule ratchet repaired 26 live categorical legal/tax claims across 321 files |
 | ⚡ | Windows automation / process quality | done | 3h | dynamic-child-process-sentinel — **DONE L3 S125**: dynamic imports are guarded/codemodded and startup v5 uses the hidden wrapper |
 
+## Shipped This Session (S125)
+
+- Stripe authority boundary with rotated HMAC verification, bounded checkout inputs, safe redirects, checked persistence, and retryable failure semantics.
+- Consent-bound Advisor chat with named-field opt-in, double redaction, bounded context, accessible privacy receipts, and four repaired rendered states.
+- Executable release-control truth on Windows, including structural command parsing and an honest local/external architecture receipt.
+- Twenty-four-rule public legal/tax guidance contract covering 321 files with zero remaining findings.
+- Dynamic child-process sentinel plus hidden startup spawning.
+- Second-order provider-egress manifest covering every provider-calling Edge Function.
+- Second-order shared bounded Chromium DevTools Protocol harness used by visual capture and production-dashboard smoke.
+- Second-order startup brief box extraction with a latent row-width mismatch repaired and regression-covered.
+
+## Saturation result (S125)
+
+- Five of five audited items implemented plus three of three generated repo-owned second-order innovations.
+- The refreshed generator reports no actionable repo-owned remainder.
+- The remaining external launch-proof candidate is an explicit honest deferral, not a fabricated completion or silent skip.
+- Context-meter verdict moved to closeout only after primary and second-order exhaustion.
+
 ## Unified Genius List (S124)
 
 | Tier | Category | Status | Effort | Item |

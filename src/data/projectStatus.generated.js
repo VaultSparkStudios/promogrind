@@ -4,8 +4,8 @@ export const PROJECT_STATUS_MIRROR = {
   "schemaVersion": "2.0",
   "source": "context/PROJECT_STATUS.json",
   "sourceLastUpdated": "2026-08-03",
-  "testsPassing": 639,
-  "testsTotal": 639,
+  "testsPassing": 642,
+  "testsTotal": 642,
   "testsLastRun": "2026-08-03",
   "validation": {
     "smokeCommand": {
@@ -36,7 +36,7 @@ export const PROJECT_STATUS_MIRROR = {
       "exitCode": 0,
       "commitSha": null,
       "source": "context/PROJECT_STATUS.json#tests",
-      "lastKnown": "639/639 passing · verified 2026-08-03"
+      "lastKnown": "642/642 passing · verified 2026-08-03"
     },
     "build": {
       "label": "Build",

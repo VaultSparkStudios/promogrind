@@ -648,3 +648,16 @@ Append chronological entries.
 - Ark closeout shipped runtime/cost reconciliation request `01JV2LSBDF74706EFC00E61495` and reusable runtime-truth pattern `01JV2LSDSSFE222098BFF85ACA`; both receipts are signed and contain no credential material.
 - Published implementation `bb6f03f` and canonical closeout `46b32cb` directly to `origin/main`. The ordinary pre-push hook exceeded three minutes and was terminated before updating the remote; the documented `--no-verify` fallback was used only after the complete launch-local gate, doctor, staged secret scan, sanitizer, runtime compatibility, supply-chain, and diff checks passed directly.
 - Remote proof for `a6cd46b`: brief-format `30778998510` and CI `30778998493` passed. Deploy Pages `30778998474` attested/deployed the immutable artifact, returned 0 blocking production-launch failures, passed dashboard smoke, and intentionally ended red on the six missing edge headers; affiliate coverage is one advisory. A final docs-only truth commit uses `[skip ci]` so unchanged application bytes are not recursively redeployed.
+
+## 2026-08-03 — Session 125 Codex saturated authority-and-egress arc
+
+- Ran the complete agent-neutral `/goal` + `/arc` continuously through startup synchronization, infrastructure audit, full implementation, second-order expansion, rendered-pixel review, and canonical closeout.
+- Verified 19 generated premises against live code, selected five, and shipped 5/5 at L3: Stripe authority, consent-bound Advisor chat, release control-plane truth, categorical legal guidance, and dynamic child-process safety.
+- Generated and shipped three repo-owned second-order innovations: a provider-egress manifest, a shared bounded Chromium DevTools Protocol harness, and startup brief box extraction with a latent width invariant repaired.
+- Hardened all provider paths with classified egress, bounded/redacted inputs, and privacy receipts; 52/52 Deno tests pass across seven files and all 15 Edge Function entrypoints typecheck.
+- Reviewed four hash-bound Advisor captures across desktop/mobile and light/dark; the pixels exposed a hard-coded dark panel in light mode, which was repaired and recaptured.
+- Routed an upstream launch-status parser defect through signed Ark cargo rather than editing the sibling repository.
+- Kept stable staging, live headers, historical rotation, exact deploy authority, Zoho/Obelisk identity, and real auth/payment/friend/capture/founder evidence as explicit honest deferrals.
+- Flat-rate Max Plan usage remained notional telemetry and no external fact was fabricated to satisfy a gate.
+- Final verification: `npm run verify:launch-local` returned direct exit 0; 642/642 Vitest, 52/52 Deno across seven files, all 15 Edge entrypoints, 48/48 runtime compatibility, 326 public files × 24 claim rules, production build/browser smoke, proof replay, bundle budget, tracked-secret scan, and strict sanitizer passed.
+- Closeout caught and repaired a stale five-file Edge discovery assertion, then reconciled concurrent Studio runtime movement: six safe upstream fixes adopted, the dynamic-import sentinel retained as the tenth documented overlay, and zero undocumented drift.

@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 
 export const DOCUMENTED_LOCAL_OVERRIDES = Object.freeze([
   'scripts/check-secrets.mjs',
+  'scripts/check-windows-hide.mjs',
   'scripts/check-scheduled-write-admission.mjs',
   'scripts/context-meter.mjs',
   'scripts/lib/context-verdicts.mjs',
