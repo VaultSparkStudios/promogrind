@@ -55,7 +55,7 @@
   "testsPassing": 642,
   "testsTotal": 642,
   "testsLastRun": "2026-08-03",
-  "lastDeployStatus": "S125 closeout commit 1a321fe reached origin/main after the direct-main pre-push health gate. Local launch verification passed with direct exit 0; remote CI/deploy proof for this commit is not yet claimed. The last observed production release remains S123 and SPARKED remains NO-GO.",
+  "lastDeployStatus": "S125 commit 1a321fe reached origin/main. Brief-format run 30858455903 and CI run 30858455864 passed. Deploy Pages run 30858455440 passed the complete local gate, immutable build/attestation, Pages deployment, production launch, and dashboard smoke; its final release-state aggregator correctly failed only because the six declared edge headers remain absent. SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-03",
   "truthGenome": "24/25",

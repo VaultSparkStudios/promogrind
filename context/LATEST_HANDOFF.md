@@ -32,6 +32,7 @@ S125 ran the complete agent-neutral arc continuously. It verified every selected
 - Tracked secrets and strict public sanitization report zero findings; doctor, supply-chain, staged secret, Git, Ark, and process-hygiene receipts are finalized during closeout.
 - Closeout commit `1a321fe` reached `origin/main`; signed Ark impact broadcast `01JV4RK1IBA480360CD87EFF9B` was delivered studio-wide.
 - Persisted closeout board now derives session shell hygiene from an S125 enumeration: five session-owned roots started, five closed, zero running.
+- Remote proof: brief-format `30858455903` and CI `30858455864` passed. Deploy Pages `30858455440` passed immutable build/attestation, deployment, production launch, and dashboard smoke; its final aggregator correctly stayed red on the six absent edge headers. SPARKED remains NO-GO.
 
 ## S125 honest deferrals
 
