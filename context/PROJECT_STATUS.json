@@ -47,7 +47,7 @@
   "testsPassing": 625,
   "testsTotal": 625,
   "testsLastRun": "2026-08-02",
-  "lastDeployStatus": "S123 implementation bb6f03f and closeout 46b32cb reached origin/main after the ordinary push hook timed out without updating the remote; the documented no-verify fallback followed stronger direct local gates. No production deployment is claimed.",
+  "lastDeployStatus": "S123 publication proof a6cd46b reached origin/main. Brief-format 30778998510 and CI 30778998493 passed. Deploy Pages 30778998474 attested/deployed the immutable artifact and passed production launch with 0 blocking failures plus dashboard smoke; its final release-state step correctly failed on six absent edge headers. Affiliate coverage remains one advisory.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-02",
   "truthGenome": "24/25",

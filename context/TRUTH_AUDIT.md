@@ -76,6 +76,7 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Exact PromoGrind Supabase deployment authority and a target-bound deploy receipt remain absent.
 - Zoho send/receive identity, production auth-email, complete Stripe lifecycle, friend-beta, and capture submission/lead observation remain unproved.
 - Five documented runtime-pack fixes remain local until Studio Ops accepts or supersedes the signed Ark report.
+- S123 publication proof `a6cd46b` is deployed: brief-format `30778998510` and CI `30778998493` passed; Deploy Pages `30778998474` attested/deployed the immutable artifact and passed production launch/dashboard smoke. The final release-state step failed exactly on the six absent edge headers; affiliate coverage is one advisory.
 
 ## Resolved This Session (S122)
 

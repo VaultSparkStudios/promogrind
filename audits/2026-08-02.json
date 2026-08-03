@@ -35,6 +35,12 @@
     "secrets": "tracked tree 0; strict public sanitizer 0; historical findings remain explicit",
     "innovation": "4/4 primary items plus 2/2 second-order innovations passing; actionable Genius list 0"
   },
+  "remoteVerification": {
+    "head": "a6cd46b",
+    "briefFormatRun": "30778998510 success",
+    "ciRun": "30778998493 success",
+    "deployPagesRun": "30778998474 deployed; production launch blocking failures 0; dashboard smoke passed; release-state failed on six missing edge headers; affiliate coverage advisory 1"
+  },
   "ark": {
     "runtimeAndCostReconciliation": "01JV2LSBDF74706EFC00E61495",
     "patternBroadcast": "01JV2LSDSSFE222098BFF85ACA"

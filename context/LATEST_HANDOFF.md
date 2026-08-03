@@ -45,7 +45,7 @@ S123 recovered an interrupted public runtime-pack propagation, ran the complete 
 3. Prove Zoho mailbox identity, then execute the criterion-addressed auth-email, Stripe, friend-beta, and capture checks.
 
 Intent Outcome: Achieved — every verified repo-owned primary and second-order item shipped; external evidence remains explicitly unclaimed.
-Deploy: implementation commit `bb6f03f` and closeout commit `46b32cb` reached `origin/main`. The ordinary push hook exceeded three minutes without updating the remote; the documented `--no-verify` fallback was used only after the stronger direct launch-local, doctor, staged-secret, sanitization, compatibility, and supply-chain gates passed. No production deployment is claimed. SPARKED promotion remains NO-GO.
+Deploy: implementation `bb6f03f`, closeout `46b32cb`, and publication proof `a6cd46b` reached `origin/main`. Brief-format `30778998510` and CI `30778998493` passed. Deploy Pages `30778998474` attested and deployed the immutable artifact, then passed production launch (0 blocking failures) and dashboard smoke. Its final release-state step correctly failed on the same six absent edge headers; affiliate coverage is one advisory. SPARKED promotion remains NO-GO.
 
 ---
 
