@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-03T03:59:31.032Z",
+  "ok": true,
+  "errors": [],
+  "comparisons": [
+    {
+      "label": "projectStatus.obeliskArchitecture",
+      "actual": "hybrid",
+      "expected": "hybrid",
+      "ok": true
+    },
+    {
+      "label": "studioManifest.identityArchitecture.obeliskArchitecture",
+      "actual": "hybrid",
+      "expected": "hybrid",
+      "ok": true
+    },
+    {
+      "label": "agents.identity_architecture.declared",
+      "actual": "hybrid",
+      "expected": "hybrid",
+      "ok": true
+    },
+    {
+      "label": "projectStatus.identityArchitecture.lifecycle",
+      "actual": "forge-compatibility",
+      "expected": "forge-compatibility",
+      "ok": true
+    },
+    {
+      "label": "studioManifest.identityArchitecture.lifecycle",
+      "actual": "forge-compatibility",
+      "expected": "forge-compatibility",
+      "ok": true
+    },
+    {
+      "label": "projectStatus.identityArchitecture.currentHumanAuthority",
+      "actual": "promogrind-supabase",
+      "expected": "promogrind-supabase",
+      "ok": true
+    },
+    {
+      "label": "studioManifest.identityArchitecture.currentHumanAuthority",
+      "actual": "promogrind-supabase",
+      "expected": "promogrind-supabase",
+      "ok": true
+    },
+    {
+      "label": "projectStatus.identityArchitecture.targetStudioAuthority",
+      "actual": "obelisk",
+      "expected": "obelisk",
+      "ok": true
+    },
+    {
+      "label": "studioManifest.identityArchitecture.targetStudioAuthority",
+      "actual": "obelisk",
+      "expected": "obelisk",
+      "ok": true
+    },
+    {
+      "label": "projectStatus.identityArchitecture.obeliskDelegation",
+      "actual": "not-live",
+      "expected": "not-live",
+      "ok": true
+    },
+    {
+      "label": "studioManifest.identityArchitecture.obeliskDelegation",
+      "actual": "not-live",
+      "expected": "not-live",
+      "ok": true
+    },
+    {
+      "label": "projectStatus.identityArchitecture.agentIdentity",
+      "actual": "not-live",
+      "expected": "not-live",
+      "ok": true
+    },
+    {
+      "label": "studioManifest.identityArchitecture.agentIdentity",
+      "actual": "not-live",
+      "expected": "not-live",
+      "ok": true
+    },
+    {
+      "label": "agents.identity_architecture.lifecycle",
+      "actual": "forge-compatibility",
+      "expected": "forge-compatibility",
+      "ok": true
+    },
+    {
+      "label": "agents.identity_architecture.obelisk_delegation",
+      "actual": "not-live",
+      "expected": "not-live",
+      "ok": true
+    },
+    {
+      "label": "agents.identity_architecture.agent_identity",
+      "actual": "not-live",
+      "expected": "not-live",
+      "ok": true
+    }
+  ],
+  "sourceDigest": "97e8c439d40e3055402f28ea19f98074e825cafe55ad1fff0de2679bc7ae4db0"
+}

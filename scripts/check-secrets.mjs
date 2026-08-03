@@ -12,15 +12,21 @@
  *   node scripts/check-secrets.mjs --for claude.api --json
  */
 
-import { listCapabilities, resolveCapability } from './lib/secrets.mjs';
+import { getCapabilityMapMetadata, listCapabilities, resolveCapability } from './lib/secrets.mjs';
 
 const args = process.argv.slice(2);
 const capArg = args.includes('--for') ? args[args.indexOf('--for') + 1] : null;
 const json = args.includes('--json');
 
 function render(rows) {
+  const metadata = getCapabilityMapMetadata();
   if (json) {
-    process.stdout.write(JSON.stringify(rows, null, 2) + '\n');
+    process.stdout.write(JSON.stringify({ metadata, capabilities: rows }, null, 2) + '\n');
+    return;
+  }
+  console.log(`\nCapability declarations: ${metadata.source} · ${metadata.declaredCount} known${metadata.corrupt ? ' · CORRUPT' : ''}`);
+  if (metadata.declaredCount === 0) {
+    console.log('No capability declarations are available; readiness is unmeasured (not 0/0 ready).\n');
     return;
   }
   const cols = [
@@ -30,7 +36,7 @@ function render(rows) {
   ];
   const line = cols.map(([h, w]) => h.padEnd(w)).join(' ');
   const sep  = cols.map(([, w]) => '─'.repeat(w)).join(' ');
-  console.log('\n' + line);
+  console.log(line);
   console.log(sep);
   for (const r of rows) {
     const status = r.ok ? '✓ READY   ' : (r.found.length ? '⚠ PARTIAL ' : '⛔ MISSING ');

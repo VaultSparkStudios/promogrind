@@ -1,5 +1,5 @@
 <!-- generated-by: scripts/render-protocol-faq.mjs -->
-<!-- protocol-source-sha256: 0c57875c877276bb34f066b0e179e9040d8071436a16f7bce90259012ccc29f0 -->
+<!-- protocol-source-sha256: ce246c8dc5dcf39bbb41cb760126ea17120fd765815e75cf8f8a6fd940ee89c7 -->
 <!-- faq-definition-sha256: cc19d0e615b748a05edb7ae044b3106ee5f7a4df828faaf7435b62dfd6d886ba -->
 
 # Protocol FAQ

@@ -28,6 +28,7 @@ Repo-local expectations for this project:
 - if `context/ACTION_QUEUE.md` is absent, use the top unblocked item from `context/TASK_BOARD.md`
 - if closeout automation scripts are absent, perform manual write-back in canonical order and state which automation steps could not run
 - `docs/CREATIVE_DIRECTION_RECORD.md` is part of the expected closeout surface and should remain commit-able in this repo
+- immediately after `start-canon-sync.mjs`, run `node scripts/reconcile-runtime-overrides.mjs --apply`; it restores a committed PromoGrind safety overlay only when canonical propagation replaced it byte-for-byte, and refuses to overwrite any working copy that differs from both sources
 
 ## IP and Licensing (CANON-008)
 

@@ -1,5 +1,19 @@
 # Work Log
 
+## 2026-08-03 — Session 124 Codex saturated evidence-and-propagation arc
+
+- Ran `/start → /audit → /implement → /closeout` as one continuous goal mission; pulled main first, verified 16 live premises, selected six items, and shipped all six plus two generated innovations.
+- Root-fixed propagation overwrite risk with a nine-overlay contract, conservative reconciler, source-derived changed-file inventory, and 48/48 crash-safe compatibility checks.
+- Removed synthetic social proof, simulated activity, unsourced external prices, and categorical legal answers; added 22 structural rules over 321 public sources.
+- Rebuilt pricing from one capability-derived commerce catalog and declared an honest hybrid identity boundary with fail-closed Obelisk behavior.
+- Established 101/101 exact proprietary footer coverage and hash-bound startup semantics against the canonical 68-capability registry.
+- Rendered pricing, auth, and scanner in dark/light at 1440×1000 and 390×844; fixed mobile dialog clipping and frozen dark palette tokens; compiled 13 content-addressed captures.
+- Second-order work: fail-closed visual receipt compiler plus identity claim/SPARKED ratchet, both adversarially tested.
+- Verification: comprehensive local launch command direct exit 0; 639/639 Vitest, 45/45 Deno, 15 Edge entrypoints, 61 routes, 101 HTML files, production/browser smoke, strict sanitization, and tracked secrets all green.
+- Premise wins: refused fake external proof, a Max Plan cost alarm, private-tool recreation, sibling edits, and volatile competitor-price refreshes.
+- Ark closeout: signed overlay reconciliation request `01JV2SCILQ070F439ED625EF70`, reusable evidence-compiled public-truth broadcast `01JV2SCJBF8E02B950156F5C9B`, and Canon/Anthropic chokepoint reconciliation request `01JV2UHKJ26FB653CA17150E58`.
+- Remaining risk: release remains FORGE/public-unlaunched pending stable staging, six headers, historical rotation, exact Supabase authority, Obelisk delegation, Zoho identity, auth/payment/friend/capture proofs, and founder launch approval.
+
 ## 2026-08-01 — Session 122 Codex saturated goal arc
 
 - Goal: run the complete continuous `/start → /audit → /implement → /closeout` mission, exhaust every verified primary item, generate and implement second-order innovations, then push directly to main with honest release truth.

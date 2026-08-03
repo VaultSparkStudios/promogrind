@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
-import { scanPublicClaimText } from "./lib/public-claims.mjs";
+import { scanPublicClaimDocument, scanPublicClaimText } from "./lib/public-claims.mjs";
 
 const bad = [
   ["en", "Turn every bonus into guaranteed cash with no effort."],
@@ -25,4 +25,13 @@ const safe = [
   "A modeled return can change because odds, limits, voids, and eligibility change.",
 ];
 for (const text of safe) assert.equal(scanPublicClaimText(text).length, 0, text);
-console.log("public-claims regression: multilingual certainty, typical earnings, and risk erasure blocked; sober modeled language allowed");
+
+const structuralBad = [
+  '<section class="testimonials"><q>I made $400.</q><span class="testimonial-name">— Pat</span></section>',
+  'Live Activity: 2m ago<script>setInterval(next, 1000)</script>',
+  'Is PromoGrind legal? Yes. It is a calculator.',
+  'OddsJam costs $99/mo for this feature.',
+];
+for (const text of structuralBad) assert.ok(scanPublicClaimDocument(text).length > 0, text);
+assert.equal(scanPublicClaimDocument('Eligibility and local law vary by jurisdiction. PromoGrind is not legal advice.').length, 0);
+console.log("public-claims regression: multilingual certainty, structural synthetic proof, categorical legal answers, and stale external prices blocked");

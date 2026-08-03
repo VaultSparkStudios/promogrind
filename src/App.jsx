@@ -287,7 +287,7 @@ export default function App() {
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
-              ["27 Free Calculators","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
+              ["53 Calculator Routes","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
               ["Free PromoGrind Account","One free account for calculator sync, tracker history, and ledger backups."],
               ["Live Arb + EV Scanner","Activation pending production proof. The app will label it available only after verified deployment."],
             ].map(([title,desc])=>(
@@ -373,7 +373,7 @@ export default function App() {
                 {[
                   [String(TABS.filter(g=>g.group==='Convert'||g.group==='Calculate').reduce((n,g)=>n+g.items.length,0)),'Calculators'],
                   ['Free','Forever'],
-                  ['vs $99-199/mo','Competitors charge'],
+                  ['Explicit','Launch-state labels'],
                   ...(weeklyActive>0?[[String(weeklyActive),'grinders this week']]:[]),
                 ].map(([val,label])=>(
                   <div key={label} style={{display:'flex',alignItems:'baseline',gap:4}}>

@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S119:999 | S120:1000 | S121:1000 | S122:1000 | S123:1000
-Avgs - 3: 1000.0 [N=3] | 5: 999.8 [N=5] | all: 999.8 [recent closeout series]
-  └ 3-session (S121/S122/S123): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
+Sparkline (last 5 totals): S120:1000 | S121:1000 | S122:1000 | S123:1000 | S124:1000
+Avgs - 3: 1000.0 [N=3] | 5: 1000.0 [N=5] | all: 1000.0 [recent closeout series]
+  └ 3-session (S122/S123/S124): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-08-02 | Session 123 | Total: 1000/1000 | Velocity: 6 | protocolVelocity: 6
+Last session: 2026-08-03 | Session 124 | Total: 1000/1000 | Velocity: 8 | protocolVelocity: 8
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1659,6 +1659,39 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 **Committed follow-up(s):**
 - Existing Now item: establish a true staging/header-capable edge and prove all six response headers. `[SIL]`
 - Existing Now item: obtain exact PromoGrind Supabase deploy authority and deploy only to the pinned project ref with a receipt. `[SIL]`
+
+## 2026-08-03 — Session 124 | Total: 1000/1000 | Velocity: 8 | Debt: down
+Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
+
+| Category | Score | vs Last | Notes |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 639/639 Vitest, 45/45 Deno, 15 Edge entrypoints, production build/browser smoke, and the complete launch-local chain pass directly. |
+| Creative Alignment | 100 | → | Synthetic proof and urgency framing were replaced with sober evidence states; the interface becomes less certain when capabilities are unproved. |
+| Momentum | 100 | → | Six L3 audit items plus two second-order innovations shipped; session-floor reports eight shipped and zero remainder. |
+| Engagement | 100 | → | Pricing and comparison surfaces invite inspection and responsible use rather than income promises, fabricated popularity, or competitive fear. |
+| Process Quality | 100 | → | The continuous arc preserved phase discipline, repaired every verifier-discovered regression, and obtained one authoritative full-gate exit 0. |
+| Cross-Repo Coherence | 100 | → | Eight local runtime overlays are explicit and tested; no sibling edit occurred; upstream reconciliation travels only through Ark. |
+| Security Posture | 100 | → | Tracked secret and strict public sanitization scans are clean; identity and public claims fail closed; no secret values enter receipts. |
+| Ecosystem Integration | 100 | → | Startup, status, manifest, public agent metadata, commerce, identity, footer, and visual evidence share source-derived contracts. |
+| Capital Efficiency | 100 | → | No dependency entered the lockfile and no paid API was invoked; a pinned temporary browser CLI was trust-reviewed and Max Plan use stayed notional. |
+| Automation Coverage | 100 | → | Propagation, claims, commerce, startup, identity, sitewide branding, visual receipts, and browser surface presence all have executable regression guards. |
+| **Total** | **1000 / 1000** | | |
+
+**Top win:** converted a synthetic, partially contradictory commerce/identity surface into an evidence-derived public proof plane while simultaneously making Canon propagation safe for consumer-owned semantics.
+
+**Top gap:** external release authority remains absent: stable staging, six edge headers, rotation, exact deployment capability, Obelisk delegation, Zoho identity, and live provider/user proofs.
+
+**Intent outcome:** Achieved. Six verified primary items and two generated innovations shipped; the actionable list is exhausted and the full local gate exits 0.
+
+**Brainstorm**
+
+1. Upstream a signed three-way runtime overlay manifest so every public consumer can merge canonical propagation without losing local safety semantics.
+2. Extend the compiled visual receipt with deterministic source-bundle hashes and automated capture-state recipes while preserving mandatory human pixel inspection.
+3. Add an evidence ledger for dated external comparison observations if PromoGrind ever needs exact competitor claims again.
+
+**Committed follow-up(s):**
+- Existing Now item: establish stable staging/header control and prove all six response headers. `[SIL]`
+- Existing Now item: complete exact Obelisk and Supabase authority before any SPARKED reassessment. `[SIL]`
 
 ## 2026-08-02 — Session 123 | Total: 1000/1000 | Velocity: 6 | Debt: stable
 Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0

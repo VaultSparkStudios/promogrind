@@ -1,5 +1,31 @@
 # Decisions
 
+## 2026-08-03 — Session 124
+
+### Decision: consumer-owned runtime semantics require a three-way propagation contract
+
+- **Context:** Canon sync legitimately refreshes the public runtime pack but overwrote five behavior-critical PromoGrind overrides before product work began.
+- **Decision:** name every consumer overlay, test its semantics, restore only when the working copy is byte-identical to the propagated upstream version, and refuse any possible user edit. Compatibility inventory derives from live Git/upstream intersection rather than a frozen list.
+- **Consequence:** propagation can update shared modules without silently erasing project truth; upstream adoption is requested through Ark rather than a sibling edit.
+
+### Decision: commercial claims are evidence states, not persuasive filler
+
+- **Context:** pricing and comparison surfaces mixed real capabilities with invented activity, testimonials, categorical legal answers, and volatile competitor prices.
+- **Decision:** every plan, trial, provider feature, checkout call to action, comparison, and social-proof statement must resolve to available, planned, disabled, or external-proof-needed from a named source. Unproven exact competitor facts and synthetic endorsements are removed.
+- **Consequence:** PromoGrind can market strongly without pretending product state, customer outcomes, legal applicability, or another provider's current price.
+
+### Decision: hybrid identity is truthful only when the compatibility authority is visible
+
+- **Context:** Obelisk callback scaffolding existed while normal account lifecycle remained project-local Supabase and no canonical architecture was declared.
+- **Decision:** declare `hybrid`; label PromoGrind Supabase as the current FORGE compatibility authority; name Obelisk as target; keep delegation and agent identity `not-live`; forbid SPARKED while that remains true.
+- **Consequence:** identity architecture is agent-readable, user-visible, and unable to drift into a false unified-login claim.
+
+### Decision: rendered review receipts are compiled evidence
+
+- **Context:** visual inspection found two defects invisible to source tests, while hand-written receipts were easy to hash incorrectly or leave incomplete.
+- **Decision:** compile receipts from reviewed capture metadata, require dark/light and desktop/mobile coverage, constrain capture paths, and bind every file by SHA-256.
+- **Consequence:** visual QA stays a human pixel judgment but its coverage and artifacts are mechanically verifiable.
+
 ## 2026-08-01 — Session 122
 
 ### Decision: Artificial Intelligence actionability requires current cited observations

@@ -331,3 +331,12 @@ Agents MUST NOT modify or remove existing entries.
 - **New required direction:** session infrastructure must identify the active provider thread and project, preserve typed source semantics, reject incomplete evidence, and prove propagated compatibility before it can steer work.
 - **Application:** S123 replaced heuristic context truth, project-misattributed writes, brittle startup rendering, and unguarded propagation drift with source-bound contracts and adversarial tests.
 - **Durable rule:** operational polish is only trustworthy when the receipt can name its source, scope, freshness, precedence, and invalidation condition.
+
+### 2026-08-03 — Public persuasion must be capability-derived and visually disproved (S124)
+
+- **Category:** Assignment / quality direction
+- **Human input (close paraphrase):** Run the complete agent-neutral arc continuously; exhaust the live Unified Genius List and implement generated second-order innovation; ship at a best-in-history quality bar; gate stopping on measured context plus true list exhaustion; derive observability from source truth; never alarm on flat-rate Max Plan cost; never fabricate proof; finish with direct-main publication and zero-running hygiene.
+- **Area affected:** public commerce / comparisons / identity / rendered-pixel craft / propagation safety / release truth
+- **New required direction:** persuasive surfaces must derive availability, price state, evidence, identity authority, and legal limits from inspectable contracts; visual quality earns its status only after both themes and device classes are viewed and defects are repaired.
+- **Application:** S124 removed synthetic proof and unsourced comparison claims, unified commerce availability, declared the real hybrid identity boundary, repaired two rendered auth defects, and compiled thirteen hash-bound captures while keeping all external release facts unclaimed.
+- **Durable rule:** best-in-history public craft is not maximal confidence; it is maximal clarity about what works, what is planned, what is external, and what evidence would change the answer.

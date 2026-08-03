@@ -3,7 +3,7 @@ import fs from "node:fs";
 import crypto from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PUBLIC_CLAIM_RULES, scanPublicClaimText } from "./lib/public-claims.mjs";
+import { PUBLIC_CLAIM_DOCUMENT_RULES, PUBLIC_CLAIM_RULES, scanPublicClaimDocument, scanPublicClaimText } from "./lib/public-claims.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const TARGETS = ["src", "public", "supabase/functions", "index.html", "README.md"];
@@ -29,11 +29,14 @@ const scanned = files.map((file) => ({
   file: path.relative(ROOT, file).replace(/\\/g, "/"),
   text: fs.readFileSync(file, "utf8"),
 }));
-const findings = scanned.flatMap(({ file, text }) => scanPublicClaimText(text, file));
+const findings = scanned.flatMap(({ file, text }) => [
+  ...scanPublicClaimText(text, file),
+  ...scanPublicClaimDocument(text, file),
+]);
 const sourceHash = crypto.createHash("sha256");
 for (const item of scanned) sourceHash.update(`${item.file}\0${item.text}\0`, "utf8");
 const ruleHash = crypto.createHash("sha256")
-  .update(PUBLIC_CLAIM_RULES.map((rule) => `${rule.id}\0${rule.locale}\0${rule.pattern}\0${rule.guidance}`).join("\n"), "utf8")
+  .update([...PUBLIC_CLAIM_RULES, ...PUBLIC_CLAIM_DOCUMENT_RULES].map((rule) => `${rule.id}\0${rule.locale}\0${rule.pattern}\0${rule.guidance}`).join("\n"), "utf8")
   .digest("hex");
 const receipt = {
   schemaVersion: 1,
@@ -41,7 +44,7 @@ const receipt = {
   ok: findings.length === 0,
   status: findings.length ? "failed" : "passed",
   checkedFiles: files.length,
-  rules: PUBLIC_CLAIM_RULES.length,
+  rules: PUBLIC_CLAIM_RULES.length + PUBLIC_CLAIM_DOCUMENT_RULES.length,
   sourceSha256: sourceHash.digest("hex"),
   ruleSha256: ruleHash,
   findings,

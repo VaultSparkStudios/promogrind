@@ -147,7 +147,15 @@
     </style>
     <script>try{if(localStorage.getItem('pg_theme')==='light'){document.body.classList.add('light');document.body.style.background='#f8fafc';document.body.style.color='#1e293b';}}catch(e){}</script>
     <!-- Cloudflare Web Analytics -->
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"4e762921576545ecbbeb8bc7da17e2cd"}'></script>
+    <script>
+      if (location.hostname === 'promogrind.bet' || location.hostname === 'www.promogrind.bet') {
+        const beacon = document.createElement('script');
+        beacon.defer = true;
+        beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+        beacon.dataset.cfBeacon = JSON.stringify({ token: '4e762921576545ecbbeb8bc7da17e2cd' });
+        document.head.appendChild(beacon);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

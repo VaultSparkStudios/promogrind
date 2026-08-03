@@ -45,7 +45,18 @@ function findStudioOpsSecretsDir() {
   return null;
 }
 const STUDIO_OPS_SECRETS_DIR = findStudioOpsSecretsDir();
-const CAP_MAP_PATH = path.join(SECRETS_DIR, 'CAPABILITY_MAP.json');
+const LOCAL_CAP_MAP_PATH = path.join(SECRETS_DIR, 'CAPABILITY_MAP.json');
+const STUDIO_CAP_MAP_PATH = STUDIO_OPS_SECRETS_DIR
+  ? path.join(STUDIO_OPS_SECRETS_DIR, 'CAPABILITY_MAP.json')
+  : null;
+// Public project repos intentionally omit the private capability registry. The
+// canonical sibling registry is therefore the truthful fallback; a repo-local
+// map still wins for tests and explicit project-specific declarations.
+const CAP_MAP_PATH = fs.existsSync(LOCAL_CAP_MAP_PATH)
+  ? LOCAL_CAP_MAP_PATH
+  : STUDIO_CAP_MAP_PATH && fs.existsSync(STUDIO_CAP_MAP_PATH)
+    ? STUDIO_CAP_MAP_PATH
+    : LOCAL_CAP_MAP_PATH;
 const ACCESS_LOG = path.join(SECRETS_DIR, '.access.log');
 
 let _cache = null;         // flat merged env
@@ -237,6 +248,18 @@ export function listCapabilities() {
   const map = loadCapMap();
   const caps = Object.keys(map.capabilities || {});
   return caps.map(c => ({ capability: c, ...resolveCapability(c) }));
+}
+
+/** Public-safe provenance for readiness output. Never returns filesystem paths. */
+export function getCapabilityMapMetadata() {
+  const map = loadCapMap();
+  return {
+    source: CAP_MAP_PATH === LOCAL_CAP_MAP_PATH
+      ? (fs.existsSync(LOCAL_CAP_MAP_PATH) ? 'repo-local' : 'absent')
+      : 'studio-ops-sibling',
+    declaredCount: Object.keys(map.capabilities || {}).length,
+    corrupt: Boolean(map._corrupt),
+  };
 }
 
 /**

@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-03 (Session 123 closeout) -->
+<!-- generated-at: 2026-08-03 (Session 124 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S123 ════════════════════════╗
-║  Date: 2026-08-03  ·  SIL: 1000/1000  ·  Velocity: 6 stable      ║
+╔══ SESSION CLOSEOUT · PromoGrind · S124 ════════════════════════╗
+║  Date: 2026-08-03  ·  SIL: 1000/1000  ·  Velocity: 8 stable      ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ docs(S123): record remote verification [skip ci]              ║
+║  ✓ docs(S123): record direct-main publication                    ║
 ║  ✓ docs(S123): record saturated arc closeout                     ║
 ║  ✓ feat(S123): harden runtime truth and propagation              ║
 ║  ✓ docs(S122): record attested deploy evidence                   ║
-║  ✓ feat(S122): harden evidence, data rights, and decision contr  ║
-║  ✓ chore(S121): S121 exhausted all six verified L3 audit items   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,19 +28,19 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 6 files  ·  M:6 A:0 D:0 ?:0                            ║
+║  Changes: 182 files  ·  M:139 A:0 D:0 ?:43                       ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,7 +51,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         625/625                                          ║
+║  Tests:         639/639                                          ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         2d ago                                           ║
 ║  Truth:         green-repo-owned-with-history-and-external-proo  ║

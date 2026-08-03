@@ -1,54 +1,30 @@
-import React from "react";
-import { K } from "../lib/shared.js";
-import { S, Tl, Nt } from "../ui.jsx";
+import React from 'react';
+import { K } from '../lib/shared.js';
+import { S, Tl, Nt } from '../ui.jsx';
+import { COMMERCE_CATALOG } from '../data/commerceCatalog.js';
+
+const rows = [
+  ['Calculator route contract', '53 routes', 'Verify current documentation'],
+  ['Paid checkout', COMMERCE_CATALOG.checkout.enabled ? 'Available' : 'Not live', 'Verify current pricing and terms'],
+  ['Provider-backed features', 'Explicit launch-state labels', 'Verify current data sources and coverage'],
+  ['Outcome evidence', 'User-recorded realized outcomes', 'Test with the same representative workflow'],
+  ['Legal and operator eligibility', 'User verifies jurisdiction and terms', 'Verify with operator and local authority'],
+];
 
 const CompetitorComparison = () => (
-  <div><div style={S.card}>
-    <Tl t="PromoGrind vs The Competition" badge="WHY FREE WINS" bc={K.gn}/>
-    <Nt c={K.gn}>PromoGrind is permanently free for all 27 calculators, tracker, and knowledge base. Competitors charge $49–$199/month for similar tools.</Nt>
-    <div style={{overflowX:"auto",marginTop:16}}>
-      <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead>
-          <tr>
-            {["Feature","PromoGrind","OddsJam","ProfitDuel","Spreadsheet"].map((h,i)=>(
-              <th key={h} style={{textAlign:"left",padding:"8px 10px",borderBottom:`1px solid ${K.bd2}`,color:i===1?K.gn:K.mt,fontSize:10,textTransform:"uppercase",letterSpacing:"1px",fontWeight:i===1?700:500,background:i===1?`${K.gn}05`:"transparent"}}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            ["Price","Free","$99–$199/mo","$49–$99/mo","Free"],
-            ["Bonus Bet Converter","✓","✓","✓","Manual"],
-            ["Profit Boost Converter","✓","✓","✓","Manual"],
-            ["Arb Calculator","✓","✓","✓","Manual"],
-            ["No-Vig / +EV Calculator","✓","✓","✓","Manual"],
-            ["Live Arb Scanner","✓ (Pro $24.99/mo)","✓ Included","✓ Included","✗"],
-            ["P/L Ledger & Tracker","✓","Limited","✓","Manual"],
-            ["Cloud Sync","✓","✓","✓","✗"],
-            ["Mobile PWA","✓","✗","✗","✗"],
-            ["Knowledge Base","✓ Full guide","Limited","Limited","✗"],
-            ["CSV Import/Export","✓","✗","✗","Manual"],
-            ["Referral Program","✓","✗","✗","✗"],
-            ["Push Notifications","✓","✗","✗","✗"],
-            ["Total 27 Calculators","✓","~10","~15","DIY"],
-          ].map(([feature,...vals])=>(
-            <tr key={feature}>
-              <td style={{padding:"8px 10px",borderBottom:`1px solid ${K.bd}`,color:K.dm,fontSize:11}}>{feature}</td>
-              {vals.map((v,i)=>(
-                <td key={i} style={{padding:"8px 10px",borderBottom:`1px solid ${K.bd}`,color:i===0?K.gn:v==="✗"?K.rd:K.dm,fontWeight:i===0?600:400,background:i===0?`${K.gn}03`:"transparent",fontSize:11}}>{v}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
+  <div style={S.card}>
+    <Tl t="Evaluate the Alternatives" badge="EVIDENCE FIRST" bc={K.gn} />
+    <Nt c={K.gn}>Third-party features and prices change. PromoGrind does not reproduce them as timeless facts; compare current primary documentation and run the same workflow in each product.</Nt>
+    <div style={{ overflowX: 'auto', marginTop: 16 }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+        <thead><tr>{['Decision criterion', 'PromoGrind evidence', 'External-provider check'].map((heading, index) => <th key={heading} style={{ textAlign: 'left', padding: '9px 10px', borderBottom: `1px solid ${K.bd2}`, color: index === 1 ? K.gn : K.mt, fontSize: 10, textTransform: 'uppercase', letterSpacing: '1px' }}>{heading}</th>)}</tr></thead>
+        <tbody>{rows.map((row) => <tr key={row[0]}>{row.map((value, index) => <td key={value} style={{ padding: '9px 10px', borderBottom: `1px solid ${K.bd}`, color: index === 1 ? K.gn : K.dm, fontWeight: index === 0 ? 700 : 400 }}>{value}</td>)}</tr>)}</tbody>
       </table>
     </div>
-    <div style={{marginTop:16,padding:14,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:6}}>The Bottom Line</div>
-      <div style={{fontSize:12,color:K.dm,lineHeight:1.7}}>
-        OddsJam and ProfitDuel are capable tools with higher subscription prices. PromoGrind keeps the calculator suite free; its paid scanner is lower-cost, and its value depends on how often you use verified opportunities and record real outcomes.
-      </div>
+    <div style={{ marginTop: 16, padding: 14, background: K.s2, borderRadius: 8, border: `1px solid ${K.bd}`, color: K.dm, fontSize: 12, lineHeight: 1.7 }}>
+      Choose from measured fit: correctness, provenance, workflow time, accessibility, current terms, and the features you can actually verify—not an undated price table.
     </div>
-  </div></div>
+  </div>
 );
 
 export default CompetitorComparison;

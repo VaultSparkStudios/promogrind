@@ -1,5 +1,31 @@
 # Task Board
 
+## Unified Genius List (S124)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| 🔥 | Security / infrastructure | done | 8h | propagation-safe-local-overlays — **DONE L3 S124** |
+| 🔥 | Trust / public claims | done | 10h | evidence-first-public-proof-plane — **DONE L3 S124** |
+| 🔥 | Commerce truth / UX | done | 8h | capability-derived-commerce-copy — **DONE L3 S124** |
+| ⚡ | Observability / feedback | done | 6h | startup-source-coherence-receipt — **DONE L3 S124** |
+| 🔥 | Identity / release architecture | done | 12h | obelisk-hybrid-auth-truth — **DONE L3 S124** |
+| ⚡ | Branding / legal automation | done | 6h | sitewide-proprietary-footer-contract — **DONE L3 S124** |
+
+## Shipped This Session (S124)
+
+- Conservative nine-overlay propagation reconciliation plus 48/48 source-derived compatibility checks.
+- Evidence-first commerce and comparison surfaces; 22 structural public-claim rules across 321 files.
+- Hash-bound startup-source receipt using the canonical 68-capability registry without secret-value exposure.
+- Honest hybrid identity contract plus a cross-surface SPARKED/Obelisk claim ratchet.
+- Exact linked proprietary identity on 101/101 public HTML files.
+- Second-order visual-review compiler and 13 dark/light × desktop/mobile captures; two rendered defects repaired.
+
+## Saturation result (S124)
+
+- Six of six audited items implemented plus two of two generated second-order innovations.
+- Session floor: `STOP — saturated`; eight items shipped; zero list remainder.
+- Honest non-items retained: no fabricated staging, provider, mailbox, payment, tester, capture, identity, or launch-approval proof; no cost alarm; no sibling edit.
+
 ## Unified Genius List (S123)
 
 | Tier | Category | Status | Effort | Item |

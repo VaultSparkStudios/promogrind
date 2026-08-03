@@ -11,6 +11,14 @@
     "email": "contact@promogrind.bet",
     "url": "https://promogrind.bet/contact/"
   },
+  "identity_architecture": {
+    "declared": "hybrid",
+    "lifecycle": "forge-compatibility",
+    "human_auth_current": "PromoGrind compatibility account (Supabase)",
+    "human_auth_target": "Obelisk",
+    "obelisk_delegation": "not-live",
+    "agent_identity": "not-live"
+  },
   "audience": [
     "sportsbook promo operators",
     "matched betting users",

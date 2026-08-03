@@ -1,5 +1,55 @@
 # Latest Handoff — PromoGrind
 
+Date: 2026-08-03
+Session: 124
+Agent: Codex
+Status: saturated; 6/6 L3 audit items plus 2 second-order innovations shipped; local RC green; SPARKED remains NO-GO
+
+## Where We Left Off (Session 124)
+
+S124 completed the complete agent-neutral arc continuously. Canon propagation initially regressed five consumer overrides; the session restored them, generalized protection to nine documented overlays, verified every selected audit premise against live code, shipped all six selected items, and then implemented two compound innovations. The measured context gate still said CONTINUE, while the canonical session floor correctly returned STOP because the list was exhausted and reverified.
+
+## What shipped
+
+1. A conservative propagation overlay contract/reconciler and crash-safe, source-derived 48-check compatibility receipt.
+2. Removal of synthetic testimonials/activity, categorical legal claims, and unsourced competitor prices; 22 structural claim rules now govern 321 files.
+3. One commerce catalog deriving plan, trial, feature, checkout, and evidence states from runtime truth.
+4. A hash-bound startup-source receipt that reconciles renderer/session/profile/signal semantics and canonical capability counts.
+5. A truthful hybrid identity boundary: PromoGrind compatibility auth current, Obelisk target, delegation/agent identity explicitly not-live.
+6. An idempotent proprietary footer applicator and independent 101/101 coverage receipt.
+7. A fail-closed visual-review compiler producing 13 hash-bound captures with required theme/viewport coverage.
+8. An identity-claim ratchet that cross-checks status, manifest, public agent metadata, and auth surfaces and forbids premature SPARKED claims.
+
+## Verification
+
+- `npm run verify:launch-local` — direct exit 0 on the finalized implementation state.
+- Vitest — 93 files, 639/639 passing; Deno — 45/45 across five files; all 15 Edge entrypoints typecheck.
+- Runtime pack — 48/48; 30 exact mirrors; nine documented local overrides; zero undocumented drift.
+- Public trust — 22 claim rules / 321 files / zero findings; exact proprietary footer 101/101.
+- CANON-053 — 13 content-addressed pricing/auth/scanner captures; dark/light and desktop/mobile; zero open blocking defects.
+- UX/build — 61 app routes, 101 HTML files, 601-module production build, browser smoke, public exposure, proof replay, and bundle budget green.
+- Security — tracked secret scan and strict public sanitizer both zero findings.
+- Ark — overlay reconciliation request `01JV2SCILQ070F439ED625EF70`; evidence-compiled public-truth pattern `01JV2SCJBF8E02B950156F5C9B`; Anthropic chokepoint reconciliation request `01JV2UHKJ26FB653CA17150E58`; all signed and secret-free.
+
+## Honest deferrals
+
+- No stable remote staging target and six production headers remain absent.
+- Historical credential rotation/remediation and exact PromoGrind Supabase deployment authority remain unproved.
+- Obelisk delegation, Zoho delivery/reply identity, auth-email, complete Stripe lifecycle, friend beta, capture observation, and founder launch approval remain unproved.
+- The nine consumer runtime overlays need an upstream three-way propagation contract; work travels by Ark, never sibling edits.
+
+## Next actions
+
+1. Establish stable staging and header control, then prove all six required headers.
+2. Complete rotation plus exact Supabase authority, then execute the pinned deployment plan.
+3. Prove Obelisk, Zoho, auth-email, payment, friend, capture, and founder-approval criteria individually before reassessing SPARKED.
+
+Intent Outcome: Achieved — every verified repo-owned primary and generated second-order item shipped; local verification is fully green; release truth remains evidence-gated.
+
+---
+
+## Prior handoff (Session 123)
+
 Date: 2026-08-02
 Session: 123
 Agent: Codex
@@ -218,3 +268,5 @@ S118 exhausted the repo-owned plan and shipped three ranked audit items plus thr
 Intent Outcome: Achieved for every repo-owned phase and saturation gate; release-state promotion remains honestly deferred.
 
 Session Intent (S122, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through `/start → /audit → /implement → /closeout`; exhaust every live-code-verified primary item and generate plus implement second-order innovations at the highest useful depth; preserve source-derived observability, flat-rate Max Plan cost framing, honest deferrals, public-repo sanitization, local staging verification, direct-main push, Ark broadcast, and zero-running shell hygiene.
+
+Session Intent (S124, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through `/start → /audit → /implement → /closeout`; exhaust every live-code-verified primary item and generate plus implement second-order innovations at the highest optimal quality; root-fix source-derived observability, treat flat-rate Max Plan cost as notional, preserve honest external-proof deferrals, apply the public-app release lens, and finish with canonical write-back, local staging verification, direct-main push, signed Ark broadcast, zero divergence, and zero-running shell hygiene.

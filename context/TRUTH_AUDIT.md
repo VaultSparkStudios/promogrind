@@ -1,7 +1,7 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-08-02 (S123)
+Last reviewed: 2026-08-03 (S124)
 Overall status: green-repo-owned-with-history-and-external-proof-follow-ups
 Next action: establish true staging and a header-capable edge; rotate/remediate the redacted historical credentials; obtain the exact PromoGrind deploy capability; then complete criterion-addressed mailbox, auth, payment, friend, capture, and pixel proofs.
 Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
@@ -21,10 +21,10 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | Canonical S123 status, handoff, task, audit, generated mirror, and work-log surfaces agree on shipped repo work, prior verified production deployment, and explicit external evidence gates. |
+| Schema alignment | 5 | Canonical S124 status, handoff, task, audit, generated mirror, identity contract, and work-log surfaces agree on shipped repo work and explicit external evidence gates. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Task board, status mirror, handoff, current state, SIL, audit, and closeout surfaces describe the same S123 posture after final regeneration. |
-| Handoff continuity | 5 | Session 123 handoff records four L3 infrastructure contracts, two second-order improvements, exact local proof, recovery provenance, and remaining external gates. |
+| Derived-view freshness | 5 | Task board, status mirror, handoff, current state, SIL, audit, receipts, and closeout surfaces describe the same S124 posture after final regeneration. |
+| Handoff continuity | 5 | Session 124 handoff records six L3 items, two second-order innovations, exact local/visual proof, and remaining external gates. |
 | Contradiction density | 5 | No current product-truth contradiction is known; the main gaps are explicit external evidence gates. |
 | **Total** | **24 / 25** | Green: canonical truth surfaces are coherent; remaining yellow posture is due to external launch proofs and public/private ops shim tension, not contradictory product claims. |
 
@@ -58,6 +58,25 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Historical startup briefs and genome history snapshots contain template-era values (`0/25`, `0/1000`) that no longer describe the repo accurately.
 - Production auth email delivery is unproven until the latest deploy is checked with a real confirmation/reset email pass.
 - Genius List cache now treats Markdown/JSON coherence as part of freshness; remaining launch gaps are real external proof gates.
+
+## Resolved This Session (S124)
+
+- Canon propagation now preserves nine documented consumer overlays conservatively and reports 48/48 checks with zero undocumented drift.
+- Public commerce removed synthetic testimonials/activity, categorical legal answers, and unsourced competitor prices; 22 structural rules scan 321 files.
+- Pricing, trial, checkout, and provider feature language derive from one capability catalog and represent planned/disabled states explicitly.
+- Startup renderer/session/profile/signal/capability sources are hash-bound; canonical capability totals are visible without exposing secret values.
+- Hybrid identity is canonical and public: PromoGrind compatibility authority current, Obelisk target, delegation/agent identity not-live.
+- Exact linked proprietary identity covers 101/101 public HTML files.
+- Thirteen rendered captures cover pricing/auth/scanner, dark/light, and desktop/mobile; mobile clipping and light-theme palette defects were repaired.
+- Final direct verification: 639/639 Vitest, 45/45 Deno, 15 Edge entrypoints, launch-local exit 0, strict sanitization/secret scans clean, and runtime compatibility 48/48.
+
+## Explicit Evidence Gaps (S124)
+
+- Stable remote staging and all six required production headers remain absent.
+- Historical credential rotation/remediation and exact target-bound Supabase deployment authority remain unproved.
+- Obelisk live delegation and agent identity remain unproved; PromoGrind Supabase is explicitly a FORGE compatibility authority.
+- Zoho send/receive identity, production auth-email, complete Stripe lifecycle, friend-beta, capture observation, and founder launch approval remain unproved.
+- Eight documented runtime overlays remain consumer-owned until Studio Ops accepts or supersedes the Ark reconciliation request.
 
 ## Resolved This Session (S123)
 

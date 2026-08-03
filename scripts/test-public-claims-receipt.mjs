@@ -15,7 +15,7 @@ assert.equal(receipt.ok, true);
 assert.equal(receipt.status, "passed");
 assert.equal(receipt.findings.length, 0);
 assert.ok(receipt.checkedFiles >= 300);
-assert.ok(receipt.rules >= 18);
+assert.ok(receipt.rules >= 22);
 assert.match(receipt.sourceSha256, /^[a-f0-9]{64}$/);
 assert.match(receipt.ruleSha256, /^[a-f0-9]{64}$/);
 console.log(`public claims attestation contract passed · ${receipt.checkedFiles} files · ${receipt.rules} rules · ${receipt.sourceSha256.slice(0, 12)}`);

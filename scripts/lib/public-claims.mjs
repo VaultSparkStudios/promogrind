@@ -19,6 +19,38 @@ export const PUBLIC_CLAIM_RULES = [
   { id: "risk-erasure-en", locale: "en", pattern: /\b(?:you do not lose this money|regardless of which side wins,? you pocket|cannot lose|no downside)\b/gi, guidance: "Name capital, execution, counterparty, void, and changing-odds risk explicitly." },
 ];
 
+export const PUBLIC_CLAIM_DOCUMENT_RULES = [
+  {
+    id: 'synthetic-testimonial-proof', locale: 'multi',
+    applies: (text) => /\btestimonial|what\s+[^\n<]{0,40}\s+say\b/i.test(text)
+      && /<q\b|\bquote\s*:|testimonial-name/i.test(text)
+      && !/evidenceRef|consentAt|sourceReceipt/i.test(text),
+    pattern: /\btestimonial|what\s+[^\n<]{0,40}\s+say\b/i,
+    guidance: 'Publish testimonials only with consent and evidence provenance; otherwise use inspectable first-party product facts.',
+  },
+  {
+    id: 'simulated-live-activity', locale: 'multi',
+    applies: (text) => /\blive activity\b/i.test(text)
+      && /Date\.now\s*\(|setInterval\s*\(|\b\d+\s*m(?:in)?\s+ago\b/i.test(text)
+      && !/simulated|demonstration data/i.test(text),
+    pattern: /\blive activity\b/i,
+    guidance: 'Do not render generated events as live user activity. Bind the feed to a verified source or label a static demonstration explicitly.',
+  },
+  {
+    id: 'categorical-legal-answer', locale: 'en',
+    applies: (text) => /(?:is\s+promogrind\s+legal|do\s+we\s+need\s+a\s+gambling\s+licen[cs]e)[\s\S]{0,220}?\b(?:yes|no)\b/i.test(text)
+      && !/(?:jurisdiction|local law|var(?:y|ies)|not legal advice)/i.test(text),
+    pattern: /(?:is\s+promogrind\s+legal|do\s+we\s+need\s+a\s+gambling\s+licen[cs]e)/i,
+    guidance: 'State product behavior and direct readers to jurisdiction-specific authority; do not give a categorical legal conclusion.',
+  },
+  {
+    id: 'unsourced-external-price', locale: 'en',
+    applies: (text) => /(?:\b(?:OddsJam|RebelBetting|ProfitDuel|Arb Academy|DarkHorse Odds)\b[\s\S]{0,180}?[$£€]\s?\d[\d,.]*(?:\s*[–-]\s*[$£€]?\s?\d[\d,.]*)?\s*(?:\/\s*mo|per month|\/\s*month)|\bcompetitors?\s+charge\b[\s\S]{0,100}?[$£€]\s?\d)/i.test(text),
+    pattern: /\b(?:OddsJam|RebelBetting|ProfitDuel|Arb Academy|DarkHorse Odds|competitors?\s+charge)\b/i,
+    guidance: 'External pricing changes. Remove exact competitor prices or attach a current dated primary-source receipt.',
+  },
+];
+
 const SAFE_NEGATIONS = [
   /\b(?:no|not|never|without|cannot|can\x27t|does not|do not)\b[^.!?]{0,32}\bguarantee(?:d|s|ing)?\b/i,
   /\bnot (?:a )?guarantee\b/i,
@@ -54,5 +86,19 @@ export function scanPublicClaimText(text, file = "<memory>") {
       }
     }
   });
+  return findings;
+}
+
+export function scanPublicClaimDocument(text, file = '<memory>') {
+  const source = String(text);
+  const findings = [];
+  for (const rule of PUBLIC_CLAIM_DOCUMENT_RULES) {
+    if (!rule.applies(source)) continue;
+    const match = source.match(rule.pattern);
+    const index = match?.index ?? 0;
+    const line = source.slice(0, index).split(/\r?\n/).length;
+    const excerpt = source.slice(index, index + 180).replace(/\s+/g, ' ').trim();
+    findings.push({ id: rule.id, locale: rule.locale, guidance: rule.guidance, file, line, excerpt, matched: match?.[0] || rule.id });
+  }
   return findings;
 }

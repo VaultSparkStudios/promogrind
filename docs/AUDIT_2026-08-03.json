@@ -1,0 +1,242 @@
+{
+  "schemaVersion": "2.0",
+  "project": "promogrind",
+  "projectType": "app",
+  "audience": "public-unlaunched",
+  "session": 124,
+  "date": "2026-08-03",
+  "rubric": "infrastructure-aware public-app product rubric",
+  "status": "implemented-and-verified",
+  "context": {
+    "method": "Manual 20-file capped survey because the public repo does not carry sample-codebase.mjs, studio-oracle.mjs, audit-sidecar.mjs, or render-audit-md.mjs; direct Vitest and session-invariant exit codes; propagation diff inspection; public-claim scanner replay; commerce/entitlement source tracing; release-gate lens.",
+    "generatedCandidates": 37,
+    "premisesVerified": 16,
+    "selected": 4,
+    "rejectedOrMerged": 33,
+    "baseline": "Direct Vitest: 83/86 files passed, 616/622 assertions passed; 3 files red, 6 assertions red, 1 suite import-failed immediately after canonical propagation. Session invariants failed at the first startup-signal provenance contract. Public claims falsely reported 0 findings across 319 files and 18 rules.",
+    "releaseLens": "FORGE/public-unlaunched. No SPARKED promotion is authorized. True remote staging, six production headers, historical credential rotation, exact Supabase authority, Zoho identity, auth-email, payment lifecycle, friend, and capture proofs remain external and unproved."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "id": "S124-1",
+      "slug": "propagation-safe-local-overlays",
+      "title": "Make canonical propagation preserve and self-heal consumer-owned safety overlays",
+      "tier": "fire",
+      "axis": "security / infrastructure / ecosystem coherence / automation",
+      "status": "implemented",
+      "impact": 10,
+      "innovation": 10,
+      "effortHours": 8,
+      "priority": 30.1,
+      "why": "The mandatory start sync overwrote all five documented PromoGrind runtime overrides and made the exact contracts shipped in S123 fail before product work began. The existing checker detects some drift only after imports crash and its hard-coded surface omits newly propagated session-floor files.",
+      "evidence": [
+        "npm test: 3 failed files, 6 failed assertions, 1 import-failed suite after start-canon-sync",
+        "npm run test:session-invariants: first public-revenue provenance assertion failed",
+        "git diff shows regressions in context-meter, context-verdicts, sil-forecaster, scheduled-write admission, and startup renderer",
+        "scripts/check-runtime-pack-compatibility.mjs hard-codes 35 paths but this sync also introduced session-floor-items.mjs and token-cost-tier.mjs and changed session-floor.mjs"
+      ],
+      "recipe": "Extract a project-owned runtime overlay contract with protected paths and semantic probes. Add a conservative reconciler that restores the committed local version only when the working copy is byte-identical to canonical upstream and the committed version differs, refusing to touch user edits. Discover newly propagated changed files from live Git/upstream intersection, make compatibility reporting survive broken imports, run reconcile immediately after Canon sync through the repo-local protocol, and emit signed Ark cargo requesting an upstream consumer-overlay contract.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Restore the five known overrides and rerun focused tests." },
+        "L2": { "effortHours": 5, "recipe": "Add protected-path manifest, conservative reconcile planning, check/apply CLI, and focused fixtures." },
+        "L3": { "effortHours": 8, "recipe": "L2 plus source-derived changed-file inventory, crash-safe compatibility receipts, repo-local start integration, full behavioral verification, and signed upstream cargo." }
+      },
+      "executionLog": []
+    },
+    {
+      "rank": 2,
+      "id": "S124-2",
+      "slug": "evidence-first-public-proof-plane",
+      "title": "Replace synthetic social proof with an inspectable, provenance-enforced public evidence plane",
+      "tier": "fire",
+      "axis": "trust / UX / security / feedback loop / public claims",
+      "status": "implemented",
+      "impact": 10,
+      "innovation": 10,
+      "effortHours": 10,
+      "priority": 27.9,
+      "why": "PromoGrind promises a sober, evidence-led operator product, but its pricing and landing surfaces present invented live activity, named testimonials, outcome amounts, competitor prices, and categorical legal assertions as facts. The source-derived public-claims receipt says green because its rules do not model endorsement or comparison provenance.",
+      "evidence": [
+        "PricingPage.jsx contains a rotating fake activity feed with states, books, outcomes, amounts, and minute timestamps",
+        "PricingPage.jsx and public/landing/index.html contain the same three named testimonials and $340 first-week / $1,200-per-month claims",
+        "PricingPage.jsx, public/compliance/index.html, and comparison pages contain categorical legal or unsourced competitor-price claims",
+        "node scripts/check-public-claims.mjs --json reports ok=true, findings=[], checkedFiles=319"
+      ],
+      "recipe": "Delete synthetic user/activity claims everywhere. Replace them with a source-derived Evidence You Can Inspect surface built only from first-party capability and validation facts. Extend the public-claims engine with endorsement-provenance, simulated-live-activity, absolute-legality, and external-price rules; require explicit evidence metadata for any future testimonial; cover React and static HTML fixtures; render and visually inspect desktop/mobile dark/light pricing states.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Remove the known fake feed/testimonials and categorical legal answer." },
+        "L2": { "effortHours": 6, "recipe": "L1 plus evidence cards and scanner rules across React/static surfaces." },
+        "L3": { "effortHours": 10, "recipe": "L2 plus structured provenance contract, adversarial fixtures, complete public-surface cleanup, rendered-pixel QA, and a content-addressed receipt." }
+      },
+      "executionLog": []
+    },
+    {
+      "rank": 3,
+      "id": "S124-3",
+      "slug": "capability-derived-commerce-copy",
+      "title": "Make plans, trials, and calls to action derive from the same runtime entitlement and launch-capability truth",
+      "tier": "fire",
+      "axis": "feature depth / commerce truth / UX / organization",
+      "status": "implemented",
+      "impact": 9,
+      "innovation": 9,
+      "effortHours": 8,
+      "priority": 24.4,
+      "why": "The page disables paid checkout but still markets unavailable plan features and tells trial users they have full Closer access. Trial metadata maps to vault_sparked, while several advertised Closer capabilities remain feature-flagged, provider-limited, or externally unproved.",
+      "evidence": [
+        "FEATURE_FLAGS.paidCheckout is false and PROJECT_STATUS stripeReady=false",
+        "PricingPage promises full Closer access and a live scanner while launchState says paid checkout and scanner-related setup are incomplete",
+        "auth.js maps trial to vault_sparked/Closer while feature access is split across normalizeFeatureTier, feature flags, provider limits, and app-specific gates",
+        "PricingPage maintains a separate handwritten feature matrix with no parity test against runtime entitlements"
+      ],
+      "recipe": "Create one commerce catalog that binds plan, price, entitlement tier, feature key, availability state, and evidence source. Render tier cards, trial language, comparison rows, and disabled/beta states from it; never promise a disabled capability. Add parity tests against featureFlags/launchState/auth mappings and make unproved checkout states offer a waitlist or free workspace path instead of a subscription promise.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Correct false Closer/trial and disabled-checkout copy." },
+        "L2": { "effortHours": 5, "recipe": "L1 plus a shared plan/entitlement catalog and component tests." },
+        "L3": { "effortHours": 8, "recipe": "L2 plus launch-capability binding, fail-closed availability states, parity receipts, and accessible pricing interactions." }
+      },
+      "executionLog": []
+    },
+    {
+      "rank": 4,
+      "id": "S124-4",
+      "slug": "startup-source-coherence-receipt",
+      "title": "Make every startup signal prove value, source, freshness, and renderer identity in one receipt",
+      "tier": "high",
+      "axis": "observability / feedback / token safety / agent parity",
+      "status": "implemented",
+      "impact": 9,
+      "innovation": 8,
+      "effortHours": 6,
+      "priority": 24.0,
+      "why": "The start command printed v3.2 and Session 124 while the rendered file declared v3.1 and Session 123; the profile regressed from app to tool; green-qualified truth and 0/0 compliance rendered red; the local secrets audit printed 0/0 while the canonical gateway reported 41/68; the live meter became UNMEASURED after its Codex probe was overwritten.",
+      "evidence": [
+        "render-startup-brief stdout and docs/STARTUP_BRIEF.md metadata disagree",
+        "brief Profile changed from app to tool after an expired cache was trusted",
+        "context/SIGNALS.md regressed qualified truth, compliance, and revenue evidence",
+        "local and canonical secrets audit totals disagree 0/0 versus 41/68"
+      ],
+      "recipe": "Restore typed startup semantics, then emit a machine receipt containing renderer version, target session, source file/hash/freshness, semantic state, and human label for every signal. Validate stdout metadata against the written artifact, distinguish no local capability declarations from zero ready credentials, preserve canonical gateway counts without exposing secrets, and fail the brief validator on internal source/version/session contradictions.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Restore the S123 semantics and correct the rendered brief." },
+        "L2": { "effortHours": 4, "recipe": "L1 plus per-signal provenance and renderer/artifact coherence checks." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus a machine receipt, secrets-surface semantics, adversarial stale/zero/qualified-state fixtures, and validator integration." }
+      },
+      "executionLog": []
+    },
+    {
+      "rank": 5,
+      "id": "S124-5",
+      "slug": "obelisk-hybrid-auth-truth",
+      "title": "Declare and enforce a truthful Obelisk-hybrid identity boundary before launch",
+      "tier": "fire",
+      "axis": "identity / security / ecosystem integration / release architecture",
+      "status": "implemented",
+      "impact": 10,
+      "innovation": 8,
+      "effortHours": 12,
+      "priority": 21.0,
+      "why": "The project has Obelisk callback and Passport scaffolding but declares no obeliskArchitecture, while normal signup/sign-in/recovery still route directly through project-local Supabase auth. A hidden hybrid is not a release architecture and cannot satisfy CANON-045.",
+      "evidence": [
+        "context/PROJECT_STATUS.json has no obeliskArchitecture field",
+        "src/auth.js owns primary email/password auth and recovery",
+        "src/ObeliskLogin.jsx and src/obelisk-callback.js exist but are not the declared identity boundary",
+        "release gate classifies Obelisk architecture and founder launch approval red"
+      ],
+      "recipe": "Declare `obeliskArchitecture: hybrid` in canonical status and a machine-readable identity contract. Make public auth entry points present Obelisk as the studio identity path, label local Supabase auth as an explicit FORGE compatibility path, preserve callback receipt verification, and add a launch contract that fails if architecture is absent or public auth silently becomes local-only. Do not claim Obelisk production readiness without external verification.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Declare hybrid architecture and surface Obelisk at auth entry points." },
+        "L2": { "effortHours": 7, "recipe": "L1 plus one identity contract, callback receipt semantics, and local-compatibility labeling." },
+        "L3": { "effortHours": 12, "recipe": "L2 plus fail-closed release checks, recovery/logout/session flow coverage, and public agent-readable identity metadata." }
+      },
+      "executionLog": []
+    },
+    {
+      "rank": 6,
+      "id": "S124-6",
+      "slug": "sitewide-proprietary-footer-contract",
+      "title": "Guarantee VaultSpark proprietary branding and legal identity across every public HTML surface",
+      "tier": "high",
+      "axis": "branding / legal completeness / UX / automation",
+      "status": "implemented",
+      "impact": 9,
+      "innovation": 6,
+      "effortHours": 6,
+      "priority": 18.0,
+      "why": "Footer-link completeness passes, but site-wide legal identity does not: only 16 of 101 public HTML files mention VaultSpark and only 6 carry the exact proprietary footer. A manifest for destinations cannot prove every page displays the required owner identity.",
+      "evidence": [
+        "read-only release scan: VaultSpark mention 16/101 public HTML files",
+        "exact © 2026 VaultSpark Studios LLC. All rights reserved. line 6/101",
+        "footer manifest completeness passes 12/12, proving the current gate measures link set rather than page coverage"
+      ],
+      "recipe": "Create an idempotent source-page branding applicator and independent coverage checker. Reuse an existing footer when present, otherwise add one accessible footer before body close; inject one exact linked proprietary identity line without duplicating navigation. Cover every public HTML source, bind the checker into release verification, and visually inspect representative landing, calculator, article, and legal pages at desktop/mobile.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Add the exact linked identity line to uncovered source pages." },
+        "L2": { "effortHours": 4, "recipe": "L1 plus an idempotent applicator and full 101-page coverage receipt." },
+        "L3": { "effortHours": 6, "recipe": "L2 plus release-gate integration, duplicate/navigation guards, representative rendered-pixel QA, and machine evidence." }
+      },
+      "executionLog": []
+    }
+  ],
+  "implementationSummary": {
+    "auditItemsShipped": 6,
+    "secondOrderInnovationsShipped": 2,
+    "innovationIds": [
+      "hash-bound-visual-review-compiler",
+      "identity-claim-ratchet"
+    ],
+    "evidence": [
+      "Runtime overlay compatibility: 48/48 governed checks, nine documented local overrides, zero undocumented drift.",
+      "Public claims: 22 structural rules across 321 source files with zero findings after synthetic proof, categorical legal answers, and unsourced competitor prices were removed.",
+      "Commerce and identity contracts are source-derived, fail closed, and covered by behavioral tests.",
+      "Sitewide proprietary footer: 101/101 public HTML files with an idempotent applicator and independent receipt.",
+      "Startup brief v3.2 validates against a hash-bound multi-source receipt and the canonical 68-capability registry without exposing values.",
+      "CANON-053: nine hash-bound captures across pricing/auth, desktop/mobile, and dark/light; two rendered defects found, repaired, and recaptured."
+    ],
+    "honestDeferrals": [
+      "Release remains FORGE/public-unlaunched: stable remote staging, production edge headers, Obelisk delegation, Zoho alias proof, credential-dependent provider proofs, and founder launch approval remain unproved.",
+      "No external state was fabricated and no Max Plan cost alarm was created."
+    ]
+  },
+  "skipped": [
+    {
+      "slug": "fabricate-external-release-proof",
+      "reason": "Rejected: staging, edge headers, rotation, Zoho, Supabase deployment, auth-email, payment, friend, and capture evidence are external facts and remain honest deferrals."
+    },
+    {
+      "slug": "refresh-competitor-prices-without-provenance",
+      "reason": "Rejected: current external prices are volatile. Exact claims will be removed unless a source, observation date, and freshness policy exist."
+    },
+    {
+      "slug": "invent-private-studio-tooling",
+      "reason": "Rejected by the public-repo shim: missing private skill-profile/audit helpers are documented gaps, not permission to recreate the private control plane here."
+    },
+    {
+      "slug": "edit-studio-ops-propagation-directly",
+      "reason": "Rejected by CANON-018: the consumer fix lands locally and the upstream request travels through signed Ark cargo."
+    },
+    {
+      "slug": "model-cost-alarm",
+      "reason": "Rejected by founder direction: flat-rate Max Plan model usage remains notional telemetry and never becomes a recurring-cost alarm."
+    }
+  ],
+  "innovationReserve": [
+    "Content-address every public commercial claim against a first-party capability or time-bounded external observation.",
+    "Turn consumer-local runtime overlays into a three-way propagation contract rather than a post-failure diff.",
+    "Render commerce availability as evidence states—available, beta, disabled, external-proof-needed—rather than binary marketing copy."
+  ],
+  "totals": {
+    "count": 6,
+    "fire": 4,
+    "high": 2,
+    "effortHoursL2": 31,
+    "effortHoursL3": 50,
+    "priority": 145.4,
+    "top3": [
+      "propagation-safe-local-overlays",
+      "evidence-first-public-proof-plane",
+      "capability-derived-commerce-copy"
+    ]
+  }
+}

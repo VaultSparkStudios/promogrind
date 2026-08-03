@@ -251,10 +251,10 @@ const LiveScanner = ({ proStatus, mode }) => {
         <div style={{...S.tag(K.yl),fontSize:12,marginBottom:16,display:"inline-block"}}>PRO MEMBERS ONLY</div>
         <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.tx,marginBottom:8}}>Live Odds Scanner</div>
         <div style={{fontSize:13,color:K.dm,maxWidth:440,margin:"0 auto 24px",lineHeight:1.7}}>
-          Real-time arb and +EV opportunities across every major US sportsbook, updated every 2 minutes. Finds what competitors charge $99–$199/month to show you.
+          A scanner workspace for evaluating arbitrage and positive expected-value opportunities. Live provider coverage and refresh cadence are shown only after the required data capability is configured.
         </div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:8,maxWidth:400,margin:"0 auto 28px",textAlign:"left"}}>
-          {[["Live Arb Scanner","Auto-detects 2-way arbs across all books"],["+ EV Scanner","Finds where books are mispriced vs fair value"],["Auto-Refresh","Updates every 2 min — never miss an opportunity"],["All Major Sports","NFL, NBA, MLB, NHL, NCAAF, MLS and more"]].map(([t,d])=>(
+          {[["Arbitrage Review","Compare two-way prices supplied by the configured provider"],["Expected-Value Review","Evaluate supplied prices against a selected fair-value reference"],["Provider Refresh","Cadence is reported from the active provider rather than promised in advance"],["Coverage Receipt","Sportsbooks, markets, and leagues remain explicit capability evidence"]].map(([t,d])=>(
             <div key={t} style={{padding:"10px 12px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
               <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:2}}>{t}</div>
               <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{d}</div>

@@ -4,14 +4,15 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from './lib/safe-spawn.mjs';
-import { CATEGORIES, forecastNext } from './lib/sil-forecaster.mjs';
 import { resolveProjectIdentity } from './lib/write-admission.mjs';
+import { DOCUMENTED_LOCAL_OVERRIDES } from './lib/runtime-overlay-contract.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OPS = path.resolve(ROOT, '..', 'vaultspark-studio-ops');
 const JSON_MODE = process.argv.includes('--json');
 
-export const PROPAGATED_SURFACE = [
+const BASE_PROPAGATED_SURFACE = [
+  'scripts/check-secrets.mjs',
   'scripts/check-windows-hide.mjs',
   'scripts/compact-handoff.mjs',
   'scripts/context-meter.mjs',
@@ -41,24 +42,43 @@ export const PROPAGATED_SURFACE = [
   'scripts/lib/proof-source-manifest.mjs',
   'scripts/lib/session-beacon.mjs',
   'scripts/lib/session-economics.mjs',
+  'scripts/lib/session-floor-items.mjs',
   'scripts/lib/sil-ledger.mjs',
   'scripts/lib/spawn-resilience.mjs',
   'scripts/lib/test-duration-ordering.mjs',
   'scripts/lib/test-sidecar-summary.mjs',
+  'scripts/lib/token-cost-tier.mjs',
   'scripts/run-tests.mjs',
-  'scripts/session-beacon.mjs'
+  'scripts/session-beacon.mjs',
+  'scripts/session-floor.mjs'
 ];
 
-export const DOCUMENTED_LOCAL_OVERRIDES = new Set([
-  'scripts/check-scheduled-write-admission.mjs',
-  'scripts/context-meter.mjs',
-  'scripts/lib/context-verdicts.mjs',
-  'scripts/lib/sil-forecaster.mjs',
-  'scripts/render-startup-brief.mjs'
-]);
+function changedUpstreamScripts() {
+  const result = spawnSync('git', ['-C', ROOT, 'status', '--porcelain=v1', '--', 'scripts'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    windowsHide: true,
+    timeout: 30_000,
+  });
+  if (result.status !== 0) return [];
+  return String(result.stdout || '')
+    .split(/\r?\n/)
+    .map((line) => line.slice(3).trim().replace(/\\/g, '/'))
+    .filter((file) => file.startsWith('scripts/') && fs.existsSync(path.join(OPS, file)));
+}
 
-function sha(file) {
-  return createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+export const PROPAGATED_SURFACE = [...new Set([
+  ...BASE_PROPAGATED_SURFACE,
+  ...changedUpstreamScripts(),
+])].sort();
+const LOCAL_OVERRIDE_SET = new Set(DOCUMENTED_LOCAL_OVERRIDES);
+
+function normalizedSourceHash(file) {
+  const source = fs.readFileSync(file, 'utf8')
+    .replace(/\r\n/g, '\n')
+    .replace(/[\t ]+$/gm, '')
+    .replace(/\n+$/, '\n');
+  return createHash('sha256').update(source).digest('hex');
 }
 
 function result(id, pass, detail) {
@@ -82,8 +102,10 @@ for (const rel of PROPAGATED_SURFACE) {
     syntax = run.status === 0;
   }
   const upstreamExists = fs.existsSync(upstream);
-  const exactMirror = exists && upstreamExists ? sha(local) === sha(upstream) : null;
-  const documentedOverride = DOCUMENTED_LOCAL_OVERRIDES.has(rel);
+  const exactMirror = exists && upstreamExists
+    ? normalizedSourceHash(local) === normalizedSourceHash(upstream)
+    : null;
+  const documentedOverride = LOCAL_OVERRIDE_SET.has(rel);
   const driftClass = exactMirror === true
     ? 'exact-mirror'
     : exactMirror === false && documentedOverride
@@ -95,15 +117,19 @@ for (const rel of PROPAGATED_SURFACE) {
   checks.push(result(`module:${rel}`, exists && syntax && driftClass !== 'undocumented-drift', driftClass));
 }
 
+let silModule = null;
+try { silModule = await import('./lib/sil-forecaster.mjs'); } catch {}
 const canonicalCategories = [
   'Dev Health', 'Creative Alignment', 'Momentum', 'Engagement', 'Process Quality',
   'Cross-Repo Coherence', 'Security Posture', 'Ecosystem Integration',
   'Capital Efficiency', 'Automation Coverage'
 ];
-checks.push(result('sil-category-export', JSON.stringify(CATEGORIES) === JSON.stringify(canonicalCategories), `${CATEGORIES.length} canonical categories`));
+const exportedCategories = silModule?.CATEGORIES;
+checks.push(result('sil-module-import', Boolean(silModule), silModule ? 'module imports' : 'module import failed'));
+checks.push(result('sil-category-export', JSON.stringify(exportedCategories) === JSON.stringify(canonicalCategories), `${exportedCategories?.length ?? 0} canonical categories`));
 checks.push(result(
   'sil-incomplete-fail-closed',
-  forecastNext([{ categories: { 'Dev Health': 100 }, complete: false }]) === null,
+  silModule?.forecastNext?.([{ categories: { 'Dev Health': 100 }, complete: false }]) === null,
   'incomplete SIL ledgers cannot produce a partial forecast'
 ));
 
@@ -127,6 +153,7 @@ const summary = {
   generatedAt: new Date().toISOString(),
   project: identity.project,
   surfaceCount: PROPAGATED_SURFACE.length,
+  sourceDerivedChangedFiles: changedUpstreamScripts(),
   exactMirrors: files.filter((file) => file.exactMirror === true).length,
   documentedLocalOverrides: files.filter((file) => file.driftClass === 'documented-local-override').length,
   upstreamUnavailable: files.filter((file) => file.driftClass === 'upstream-unavailable').length,

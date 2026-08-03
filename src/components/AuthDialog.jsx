@@ -8,18 +8,23 @@ import {
 } from "../auth.js";
 import { useFocusTrap } from "../lib/focus-trap.js";
 import { K, font, fontD } from "../lib/shared.js";
+import { getIdentitySurfaceState } from '../data/identityArchitecture.js';
 
-const panel = {
+const getPanelStyle = () => ({
   width: "100%",
   maxWidth: 460,
   background: K.s1,
   border: `1px solid ${K.bd}`,
   borderRadius: 18,
   boxShadow: "0 24px 80px rgba(0,0,0,0.55)",
-  overflow: "hidden",
-};
+  maxHeight: "calc(100dvh - 24px)",
+  overflowX: "hidden",
+  overflowY: "auto",
+  overscrollBehavior: "contain",
+  scrollbarGutter: "stable",
+});
 
-const inputStyle = {
+const getInputStyle = () => ({
   width: "100%",
   padding: "12px 14px",
   borderRadius: 10,
@@ -30,9 +35,10 @@ const inputStyle = {
   fontSize: 13,
   outline: "none",
   boxSizing: "border-box",
-};
+});
 
 export default function AuthDialog({ mode = "signup", open, onClose, onModeChange }) {
+  const identityState = getIdentitySurfaceState();
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -200,7 +206,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
         padding: 20,
       }}
     >
-      <div data-click-shield ref={panelRef} style={panel} onClick={(event) => event.stopPropagation()}>
+      <div data-click-shield ref={panelRef} style={getPanelStyle()} onClick={(event) => event.stopPropagation()}>
         <div
           style={{
             padding: "18px 20px 16px",
@@ -230,6 +236,11 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
           >
             ×
           </button>
+        </div>
+
+        <div role="status" style={{ margin: '16px 20px 0', padding: '10px 12px', borderRadius: 10, border: `1px solid ${K.yl}35`, background: `${K.yl}0d`, color: K.dm, fontSize: 10, lineHeight: 1.55 }}>
+          <strong style={{ color: K.yl }}>Identity architecture · {identityState.declaredArchitecture}</strong><br />
+          {identityState.currentLabel}. This form uses the current compatibility authority; it is not represented as unified studio sign-in.
         </div>
 
         <form onSubmit={handleSubmit} style={{ padding: 20 }}>
@@ -271,7 +282,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   onChange={(event) => setDisplayName(event.target.value)}
                   placeholder="SharpScout"
                   maxLength={24}
-                  style={inputStyle}
+                  style={getInputStyle()}
                 />
                 <span style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>
                   This name appears inside PromoGrind.
@@ -290,7 +301,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
                   autoComplete="email"
-                  style={inputStyle}
+                  style={getInputStyle()}
                 />
               </label>
             )}
@@ -306,7 +317,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder={isSignup || isUpdatePassword ? "At least 8 characters" : "Enter your password"}
                   autoComplete={isSignup || isUpdatePassword ? "new-password" : "current-password"}
-                  style={inputStyle}
+                  style={getInputStyle()}
                 />
               </label>
             )}

@@ -12,6 +12,14 @@
     "audience": "public-unlaunched",
     "vaultStatus": "FORGE"
   },
+  "identityArchitecture": {
+    "obeliskArchitecture": "hybrid",
+    "lifecycle": "forge-compatibility",
+    "currentHumanAuthority": "promogrind-supabase",
+    "targetStudioAuthority": "obelisk",
+    "obeliskDelegation": "not-live",
+    "agentIdentity": "not-live"
+  },
   "studioOs": {
     "applied": true,
     "templateVersion": "3.2",

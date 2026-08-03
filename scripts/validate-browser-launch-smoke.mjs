@@ -139,7 +139,7 @@ try {
     ["Resend confirmation email", "auth confirmation resend action"],
     ["Forgot your password?", "auth password reset entrypoint"],
     ["Choose a new password", "auth recovery update-password mode"],
-    ["Choose your edge.", "pricing surface"],
+    ["data-pricing-surface", "pricing surface"],
     ["Don't have these books yet? Open accounts to use this promo:", "sportsbook CTA"],
     ["Manage billing", "auth menu billing action"],
     [".pg-mobile-nav", "mobile nav layout hook"],

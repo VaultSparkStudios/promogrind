@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-03T03:00:38.254Z",
+  "artifact": "docs/STARTUP_BRIEF.md",
+  "briefSha256": "d24b5132d65f9f725fd679126c52b817330edec7a70cc89848aa73b151e0d8db",
+  "rendererVersion": "3.2",
+  "targetSession": 124,
+  "sourceSession": 123,
+  "sources": {
+    "projectProfile": {
+      "medium": "app",
+      "stage": "launch-hardening",
+      "source": "canonical-status"
+    },
+    "truth": {
+      "status": "green-repo-owned-with-history-and-external-proof-follow-ups",
+      "classification": "green"
+    },
+    "compliance": {
+      "state": "not-tracked",
+      "snapshots": 1
+    },
+    "revenue": {
+      "source": "docs/REVENUE_SIGNALS.md",
+      "ageDays": 2
+    },
+    "context": {
+      "confidence": "heuristic-stale",
+      "recommendation": "CONTINUE",
+      "measured": true
+    },
+    "tests": {
+      "command": "npm test",
+      "stale": false
+    }
+  }
+}

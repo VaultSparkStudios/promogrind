@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "themes": ["dark", "light"],
+  "captures": [
+    {
+      "file": "captures/pricing-desktop-dark.png",
+      "page": "/pricing — capability-derived launch-state and planned-commerce copy",
+      "theme": "dark",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/pricing-desktop-light.png",
+      "page": "/pricing — capability-derived launch-state and planned-commerce copy",
+      "theme": "light",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/pricing-mobile-dark.png",
+      "page": "/pricing — full mobile evidence and plan cards",
+      "theme": "dark",
+      "viewport": { "width": 390, "height": 844 }
+    },
+    {
+      "file": "captures/pricing-mobile-light.png",
+      "page": "/pricing — full mobile evidence and plan cards",
+      "theme": "light",
+      "viewport": { "width": 390, "height": 844 }
+    },
+    {
+      "file": "captures/auth-desktop-dark.png",
+      "page": "/pricing?auth=signup — hybrid identity disclosure and account form",
+      "theme": "dark",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/auth-desktop-light.png",
+      "page": "/pricing?auth=signup — hybrid identity disclosure and account form",
+      "theme": "light",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/auth-mobile-dark.png",
+      "page": "/pricing?auth=signup — mobile account form at scroll origin",
+      "theme": "dark",
+      "viewport": { "width": 390, "height": 844 }
+    },
+    {
+      "file": "captures/auth-mobile-dark-bottom.png",
+      "page": "/pricing?auth=signup — mobile dialog scrolled to its reachable final disclosure",
+      "theme": "dark",
+      "viewport": { "width": 390, "height": 844 }
+    },
+    {
+      "file": "captures/auth-mobile-light.png",
+      "page": "/pricing?auth=signup — theme-coherent mobile account form",
+      "theme": "light",
+      "viewport": { "width": 390, "height": 844 }
+    },
+    {
+      "file": "captures/scanner-desktop-dark.png",
+      "page": "/arb-scanner — actual BETA/SETUP PENDING provider-capability state",
+      "theme": "dark",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/scanner-desktop-light.png",
+      "page": "/arb-scanner — actual BETA/SETUP PENDING provider-capability state",
+      "theme": "light",
+      "viewport": { "width": 1440, "height": 1000 }
+    },
+    {
+      "file": "captures/scanner-mobile-dark.png",
+      "page": "/arb-scanner — mobile disabled-capability truth and navigation",
+      "theme": "dark",
+      "viewport": { "width": 390, "height": 844 }
+    },
+    {
+      "file": "captures/scanner-mobile-light.png",
+      "page": "/arb-scanner — mobile disabled-capability truth and navigation",
+      "theme": "light",
+      "viewport": { "width": 390, "height": 844 }
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex GPT-5",
+    "findings": [
+      "Pricing copy, evidence cards, plan states, controls, and hierarchy remain readable at 1440×1000 and 390×844 in dark and light themes.",
+      "The first mobile auth capture exposed a clipped final disclosure because the dialog had no bounded internal scrolling.",
+      "The first light-theme auth capture exposed module-scope palette snapshots that left the form body dark and materially reduced contrast.",
+      "After repair, the auth dialog is bounded to the dynamic viewport, scrolls to its final disclosure, and uses the active palette across the entire surface.",
+      "The actual scanner route renders BETA/SETUP PENDING in both themes and viewport classes; it does not present provider coverage or refresh cadence as live."
+    ],
+    "fixesApplied": [
+      "Added a 100dvh-aware, overscroll-contained internal scroll surface to the account dialog.",
+      "Replaced module-load palette snapshots with render-time panel and input styles so theme changes update every auth surface.",
+      "Removed local analytics beacon noise by loading the production beacon only on the production hostname.",
+      "Replaced stale competitor-price framing in the global header and scanner upgrade state with capability-gated, provider-neutral language."
+    ],
+    "blockingDefectsOpen": 0
+  }
+}
