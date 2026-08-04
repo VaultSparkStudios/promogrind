@@ -3,13 +3,13 @@
   "name": "PromoGrind",
   "repo": "VaultSparkStudios/promogrind",
   "audience": "public-unlaunched",
-  "localPath": "C:\\Users\\p4cka\\Documents\\Development\\PromoGrind",
+  "localPath": ".",
   "scanMode": "local",
   "repoState": {
-    "lockPath": "C:\\Users\\p4cka\\Documents\\Development\\PromoGrind\\context\\.session-lock",
+    "lockPath": null,
     "ahead": 0,
     "behind": 0,
-    "status": "locked"
+    "status": "clear"
   },
   "summary": {
     "critical": 0,

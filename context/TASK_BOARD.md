@@ -19,6 +19,7 @@
 - Second-order startup-renderer decomposition from 1,463 to below the strict 900-line boundary using focused source, context, orchestration, pattern, score, summary, forecast, Genius, and output modules.
 - Second-order test-run proof semantics extraction with stable public re-exports and adversarial shard/retry/failure-format coverage.
 - Second-order model-router state extraction for semantic cache and session-budget persistence while preserving the single Anthropic network chokepoint.
+- Closeout root-fix: canonical SIL v3 category labels plus self-sanitizing, repo-relative security receipts discovered by remote CI and strict replay.
 
 ## Saturation result (S126)
 

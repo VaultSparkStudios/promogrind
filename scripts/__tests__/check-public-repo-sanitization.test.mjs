@@ -11,6 +11,8 @@ const fixture = fs.mkdtempSync(path.join(os.tmpdir(), "promogrind-sanitization-"
 try {
   spawnSync("git", ["init", "--quiet"], { cwd: fixture, encoding: "utf8" });
   fs.mkdirSync(path.join(fixture, "docs"), { recursive: true });
+  fs.mkdirSync(path.join(fixture, "context"), { recursive: true });
+  fs.writeFileSync(path.join(fixture, "context", ".session-lock"), "fixture\n", "utf8");
   fs.writeFileSync(path.join(fixture, ".env"), "PUBLIC_VALUE=fixture-only\n", "utf8");
   const syntheticStripe = ["sk", "test", "A".repeat(20)].join("_");
   const syntheticPath = ["C:", "Users", "fixture", "Development", "repo"].join("\\");
@@ -32,6 +34,9 @@ try {
   assert.ok(rules.has("stripe_secret"), "credential-shaped content must be rejected");
   assert.ok(rules.has("windows_local_path"), "absolute local paths must be rejected");
   assert.ok(result.findings.every(finding => !String(finding.detail).includes(syntheticStripe)), "credential values must be redacted");
+  assert.equal(result.localPath, ".", "public result must use a repo-relative local path");
+  assert.equal(result.repoState.lockPath, "context/.session-lock", "lock receipt must be repo-relative");
+  assert.ok(!JSON.stringify(result).includes(fixture), "public result must not serialize the machine-specific checkout path");
 
   const reportDir = path.join(fixture, "reports");
   writeReports([result], reportDir);
@@ -39,6 +44,10 @@ try {
   assert.equal(issue.slug, "sanitization-fixture");
   assert.ok(issue.labels.includes("security"));
   assert.ok(fs.existsSync(path.join(reportDir, "_summary.json")));
+  const renderedReports = fs.readdirSync(reportDir)
+    .map(name => fs.readFileSync(path.join(reportDir, name), "utf8"))
+    .join("\n");
+  assert.ok(!renderedReports.includes(fixture), "tracked report artifacts must not serialize the checkout path");
 } finally {
   fs.rmSync(fixture, { recursive: true, force: true });
 }

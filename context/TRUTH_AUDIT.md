@@ -66,14 +66,14 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Startup claims carry source witnesses for current intent, SIL average, typed test/deploy posture, and notional flat-rate Max Plan treatment.
 - Release parity binds four inspected dark/light desktop/mobile captures to typed tests and an explicit no-native-project scope.
 - Startup rendering, test-proof semantics, and model-router persistence were decomposed behind preserved behavior contracts.
-- Final direct verification returned exit 0 with 51/51 runtime compatibility checks and zero undocumented drift.
+- Final direct verification returned exit 0 with 50/50 runtime compatibility checks and zero undocumented drift.
 
 ## Explicit Evidence Gaps (S126)
 
 - Stable remote staging and all six required response headers remain absent.
 - Historical credential remediation and exact target-bound Supabase deployment authority remain unproved.
 - Zoho identity, live Obelisk delegation, auth-email, full Stripe lifecycle, friend beta, capture evidence, and founder approval remain unproved.
-- Sixteen consumer runtime overlays remain local until Studio Ops accepts or supersedes the Ark reconciliation request.
+- Fifteen consumer runtime overlays remain local until Studio Ops accepts or supersedes the Ark reconciliation request.
 
 ## Resolved This Session (S124)
 

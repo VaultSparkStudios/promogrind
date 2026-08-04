@@ -20,6 +20,12 @@
 - **Decision:** generated second-order work decomposes each hotspot behind preserved public contracts and behavioral tests, while keeping the single provider network chokepoint intact.
 - **Consequence:** the operational layer is easier to reason about and harder to regress without changing behavior or adding dependencies.
 
+### Decision: a security receipt is part of the public surface it scans
+
+- **Context:** the first tracked sanitization receipt correctly summarized a clean scan but serialized an absolute checkout path for the active session lock, causing the next strict scan to indict its own evidence.
+- **Decision:** public sanitization results expose only repo-relative location semantics (`.` and `context/.session-lock`), and fixtures assert that no report artifact contains its generating checkout path.
+- **Consequence:** the scanner can be rerun indefinitely without manufacturing a new critical finding from its own provenance.
+
 ## 2026-08-03 — Session 124
 
 ### Decision: consumer-owned runtime semantics require a three-way propagation contract

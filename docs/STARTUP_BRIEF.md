@@ -65,10 +65,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  ███████████░░░░░░░░░░░░░   45% used                         ║
-║    115,973 / 258,400 tok  ·  codex/codex-272k  ·  measured     ║
-║    ~57,987 tok/turn  ·  cache 50%  ·  2 turns to compact       ║
-║    Verdict: WARN_COMPACT_SOON  ← act now                       ║
+║ ✓  █████████████░░░░░░░░░░░   54% used                         ║
+║    108,038 / 200,000 tok  ·  unknown  ·  heuristic-stale       ║
+║    Verdict: CONTINUE                                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
@@ -94,9 +93,9 @@
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
-║  Snapshot: 38m old · next n/a                                    ║
+║  Snapshot: 1h old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 4 drained · 6h old · sig failures 0                        ║
+║  Ark: 4 drained · 7h old · sig failures 0                        ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 

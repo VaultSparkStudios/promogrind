@@ -305,7 +305,9 @@ function getTrackedFiles(localPath) {
 function getRepoState(localPath) {
   const lockPath = path.join(localPath, 'context', '.session-lock');
   const state = {
-    lockPath: fs.existsSync(lockPath) ? lockPath : null,
+    // Public receipts describe the repo-relative lock boundary; they never
+    // serialize the machine-specific checkout path used to perform the scan.
+    lockPath: fs.existsSync(lockPath) ? 'context/.session-lock' : null,
     ahead: 0,
     behind: 0,
   };
@@ -622,7 +624,9 @@ export function scanProject(project) {
     name: project.name,
     repo: project.repo,
     audience: project.audience,
-    localPath: project.localPath || null,
+    // Keep the transport shape stable without leaking a workstation path into
+    // tracked JSON reports. The registry remains the private/local path source.
+    localPath: scan.mode === 'local' ? '.' : null,
     scanMode: scan.mode,
     repoState: scan.repoState,
     summary,
