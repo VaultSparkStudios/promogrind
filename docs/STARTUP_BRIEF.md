@@ -21,7 +21,7 @@
 ╔══ LAST SESSION (S126) - WHAT SHIPPED ══════════════════════════╗
 ║  S126 shipped all five verified primary items and every generat  ║
 ║  Tests  93/93 files · 642/642 assertions                         ║
-║  Deploy S126 commit 3342722 reached origin/main with zero diver  ║
+║  Deploy S126 repair commit d3d611b reached origin/main. CI 3088  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
@@ -61,12 +61,12 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 126 ═══════════════════════════╗
 ║ Shipped:  see LATEST_HANDOFF.md                                ║
-║ Tests:    93/93 passing  ·  Deploy: S126 commit 3342722…       ║
+║ Tests:    93/93 passing  ·  Deploy: S126 repair commit…        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║ ✓  █████████████░░░░░░░░░░░   54% used                         ║
-║    108,038 / 200,000 tok  ·  unknown  ·  heuristic-stale       ║
+║    108,427 / 200,000 tok  ·  unknown  ·  heuristic-stale       ║
 ║    Verdict: CONTINUE                                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -93,9 +93,9 @@
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
-║  Snapshot: 1h old · next n/a                                     ║
+║  Snapshot: 2h old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 4 drained · 7h old · sig failures 0                        ║
+║  Ark: 4 drained · 8h old · sig failures 0                        ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 

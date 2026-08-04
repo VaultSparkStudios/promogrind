@@ -1,49 +1,31 @@
-<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 82e0ac7aae89 -->
-<!-- generated-at: 2026-08-03T23:14:02.908Z -->
+<!-- generated-by: manual public-repo fallback (scripts/compact-handoff.mjs API path intentionally not invoked) -->
+<!-- source-hash: 9999e45871cc -->
+<!-- generated-at: 2026-08-04T06:59:00.000Z -->
 
 # LATEST_HANDOFF (compact)
 
 SESSION
-- S125 (Codex). Status: saturated; 5/5 L3 audit items + 3 second-order innovations shipped; local RC green; SPARKED NO-GO.
+- S126 (Codex). Saturated: 5/5 primary items and all 3 repo-owned second-order candidates shipped; local gate green; SPARKED NO-GO.
 
-SHIPPED S125
-- Fail-closed Stripe checkout/webhook auth: rotated HMAC, bounded inputs, safe redirects, checked outcomes.
-- Consent-bound Advisor chat: named-field opt-in, client/server redaction, bounded context, privacy receipts.
-- Executable Windows release-control truth; structural command parsing.
-- 24-rule public legal/tax guidance ratchet across 321 files.
-- Dynamic child-process detection; hidden startup spawning.
-- Generated provider-egress manifest covering all provider-calling Edge Functions.
-- Shared bounded Chromium DevTools harness (visual capture + prod-dashboard smoke).
-- Startup brief box helper; fixed latent row-width mismatch.
+SHIPPED
+- Typed launch-proof graph and honest public release-gate shim.
+- Atomic Vitest evidence with exact exit/completeness and dependency-safe mirror refresh.
+- Source-witnessed startup truth and compiled four-capture release parity.
+- Startup renderer, test-proof semantics, and model-router persistence decomposed and regression-tested.
+- Public sanitization receipts are machine-path-safe and self-testing.
+- Commit-stable runtime inventory: 52/52, 26 exact mirrors, all 17 documented overlays, zero undocumented drift.
 
-CURRENT INTENT
-- Run complete agent-neutral /goal+/arc through start→audit→implement→closeout; verify premises vs live code; exhaust repo-owned work; ship second-order innovations; preserve observability and honest deferrals; verify via local staging gate; finish with write-back, SIL v3 scoring, direct-main push, Ark broadcast, zero-running shell hygiene.
+VERIFICATION
+- `verify:launch-local` direct exit 0: Vitest 93/642, Deno 52/52, 15 Edge entrypoints, production build/browser smoke, proof replay, tracked secrets, and strict sanitization pass.
+- Published commits through `d3d611b`; CI `30883558365` and brief `30883558594` green.
+- Deploy `30883558417` passed preflight, attestation, deploy, launch, dashboard, and standard files; aggregator remained red only on six absent hosting-edge headers.
+- Ark receipts: impact `01JV5JKVNK9CFD6369D46207D0`; reconciliation `01JV5JL2ED583E440DD6136E24`; receipt pattern `01JV5MUHVP1AA7E1180F3E010D`.
 
-VERIFICATION S125
-- verify:launch-local exit 0. Vitest 93 files/642; Deno 52/52; 15 Edge entrypoints typecheck.
-- Runtime pack 49/49; 30 mirrors, 10 safety overlays, zero undocumented drift.
-- Closeout commit 1a321fe on origin/main; Ark broadcast 01JV4RK1IBA480360CD87EFF9B delivered.
-- Shell hygiene: 5 started, 5 closed, 0 running.
-- Remote: brief-format 30858455903 pass; CI 30858455864 pass; Deploy Pages 30858455440 pass build/deploy/launch/dashboard; aggregator red on 6 absent edge headers.
+NOW / HONEST DEFERRALS
+- Establish stable remote staging and prove all six production headers.
+- Complete historical rotation and exact PromoGrind Supabase deploy authority.
+- Prove Zoho, Obelisk, auth-email, Stripe lifecycle, friend, capture, and founder approval receipts.
+- External proof remains the only candidate; no evidence was fabricated and no sibling tree was edited.
 
-NOW (top 3)
-- Establish stable remote staging + header control; prove all six required production headers.
-- Complete credential rotation + exact Supabase deploy authority; execute pinned deployment plan.
-- Prove Obelisk, Zoho, auth-email, Stripe lifecycle, friend, capture, founder-approval individually before reassessing SPARKED.
-
-BLOCKERS (top 3)
-- No stable remote staging target; six production headers absent.
-- Exact PromoGrind Supabase deployment authority unproved.
-- SPARKED NO-GO pending external launch proof.
-
-HUMAN-BLOCKED (age: since S124+)
-- Founder launch approval — unproved.
-- Historical credential rotation/remediation — unproved.
-- Zoho identity, auth-email, friend beta, capture observation — unproved.
-
-DEFERRALS
-- Upstream parser defect traveled by signed Ark cargo; no sibling tree edited.
-
-NEXT SESSION
-- Start on remote staging + six production headers; without them SPARKED stays NO-GO.
+NEXT
+- Start with stable staging plus edge-header control; SPARKED remains evidence-gated NO-GO until all 12 typed criteria pass.

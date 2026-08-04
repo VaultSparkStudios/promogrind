@@ -55,7 +55,7 @@
   "testsPassing": 93,
   "testsTotal": 93,
   "testsLastRun": "2026-08-04",
-  "lastDeployStatus": "S126 commit 3342722 reached origin/main with zero divergence after verify:launch-local direct exit 0 and an independently verified pre-push policy result. SPARKED remains NO-GO until all typed external proof criteria pass.",
+  "lastDeployStatus": "S126 repair commit d3d611b reached origin/main. CI 30883558365 and brief-format 30883558594 passed. Deploy Pages 30883558417 passed preflight, immutable attestation, deployment, production launch, dashboard smoke, and standard files; its final aggregator correctly stayed red on the six absent hosting-edge headers. SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-04",
   "truthGenome": "24/25",
@@ -239,8 +239,8 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-04T06:13:45.662Z",
-    "commitSha": "1f0c0bb14eeabe955aab484e3b10597b4e60c4bf",
+    "generatedAt": "2026-08-04T06:54:16.982Z",
+    "commitSha": "d3d611b9475e0a0c57d5013dd6090d6e26a2cfb6",
     "complete": true,
     "partial": false,
     "success": true,
@@ -253,7 +253,7 @@
       "passing": 642,
       "total": 642
     },
-    "reportSha256": "c2e0b7ae7e328275e8f410a221bede7272faea2a767bdee715d57b9381b6b41f"
+    "reportSha256": "9acdd7a8b369baa4a6198c4ff7bc87d65df17002222bc3a26a8845eb884b5bb8"
   },
   "testsAssertionsPassing": 642,
   "testsAssertionsTotal": 642,

@@ -5,7 +5,10 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { resolveProjectIdentity } from './lib/write-admission.mjs';
-import { DOCUMENTED_LOCAL_OVERRIDES } from './lib/runtime-overlay-contract.mjs';
+import {
+  DOCUMENTED_LOCAL_OVERRIDES,
+  composeRuntimeCompatibilitySurface,
+} from './lib/runtime-overlay-contract.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OPS = path.resolve(ROOT, '..', 'vaultspark-studio-ops');
@@ -68,10 +71,12 @@ function changedUpstreamScripts() {
     .filter((file) => file.startsWith('scripts/') && fs.existsSync(path.join(OPS, file)));
 }
 
-export const PROPAGATED_SURFACE = [...new Set([
-  ...BASE_PROPAGATED_SURFACE,
-  ...changedUpstreamScripts(),
-])].sort();
+const SOURCE_DERIVED_CHANGED_FILES = changedUpstreamScripts();
+export const PROPAGATED_SURFACE = composeRuntimeCompatibilitySurface({
+  base: BASE_PROPAGATED_SURFACE,
+  documentedOverrides: DOCUMENTED_LOCAL_OVERRIDES,
+  changed: SOURCE_DERIVED_CHANGED_FILES,
+});
 const LOCAL_OVERRIDE_SET = new Set(DOCUMENTED_LOCAL_OVERRIDES);
 
 function normalizedSourceHash(file) {
@@ -154,7 +159,7 @@ const summary = {
   generatedAt: new Date().toISOString(),
   project: identity.project,
   surfaceCount: PROPAGATED_SURFACE.length,
-  sourceDerivedChangedFiles: changedUpstreamScripts(),
+  sourceDerivedChangedFiles: SOURCE_DERIVED_CHANGED_FILES,
   exactMirrors: files.filter((file) => file.exactMirror === true).length,
   documentedLocalOverrides: files.filter((file) => file.driftClass === 'documented-local-override').length,
   upstreamUnavailable: files.filter((file) => file.driftClass === 'upstream-unavailable').length,

@@ -1673,7 +1673,7 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 | Security Posture | 100 | → | Typed proofs fail closed, partial test receipts are inconclusive, tracked-secret and strict sanitizer scans pass. |
 | Ecosystem Integration | 100 | → | Startup, status, release gate, visual parity, tests, and runtime compatibility share evidence-addressed contracts. |
 | Capital Efficiency | 100 | → | No dependency or paid API was added; flat-rate Max Plan use remains notional and non-alarming. |
-| Automation Coverage | 100 | → | Final launch-local gate passes 93 files/642 assertions, 52 Deno checks, 15 Edge entrypoints, and 50/50 runtime checks. |
+| Automation Coverage | 100 | → | Final launch-local gate passes 93 files/642 assertions, 52 Deno checks, 15 Edge entrypoints, and a commit-stable 52/52 runtime inventory covering every documented override. |
 | **Total** | **1000 / 1000** | | |
 
 **Top win:** converted release, test, startup, and parity reporting into a connected proof graph that fails closed on omission, staleness, partial execution, or missing witnesses.

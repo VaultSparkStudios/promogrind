@@ -21,7 +21,7 @@ S126 completed the continuous arc without a phase handback. Five live-code-verif
 5. Behavioral startup provenance testing and strict release-gate `--check` / `--require-ready` semantics.
 6. Focused startup renderer modules below the maintainability threshold.
 7. Isolated, regression-tested test-run proof semantics and model-router persistence while preserving one provider network chokepoint.
-8. A 50/50 runtime compatibility contract: 26 exact mirrors, 15 documented local overrides, zero undocumented drift.
+8. A commit-stable 52/52 runtime compatibility contract: 26 exact mirrors, all 17 documented local overrides, zero undocumented drift.
 
 ## S126 verification
 
@@ -35,14 +35,18 @@ S126 completed the continuous arc without a phase handback. Five live-code-verif
 - Signed Ark impact `01JV5JKVNK9CFD6369D46207D0` and Studio Ops reconciliation request `01JV5JL2ED583E440DD6136E24` were delivered.
 - Remote CI run `30880707517` correctly failed one live-ledger forecaster assertion because S126 used five descriptive rather than canonical SIL category names. The ledger was root-fixed; focused forecaster is 3/3 and full Vitest is 93/93 files, 642/642 assertions locally pending the replacement CI run.
 - Strict post-fix sanitization found its tracked issue receipt leaked the absolute checkout path through session-lock provenance. The renderer now emits `.` and `context/.session-lock`, its fixture forbids checkout-path serialization, and regenerated reports pass strict mode with zero findings.
-- The fully repaired `npm run verify:launch-local` returned direct exit 0: 93/93 Vitest files, 642/642 assertions, 52/52 Deno tests, 15 Edge entrypoints, 50/50 runtime compatibility, build/browser smoke, proof replay, bundle budget, tracked secrets, and strict sanitization all pass.
+- The fully repaired `npm run verify:launch-local` returned direct exit 0: 93/93 Vitest files, 642/642 assertions, 52/52 Deno tests, 15 Edge entrypoints, 52/52 runtime compatibility, build/browser smoke, proof replay, bundle budget, tracked secrets, and strict sanitization all pass.
+- Repair commit `d3d611b` reached `origin/main`; replacement CI `30883558365` and brief-format `30883558594` passed.
+- Deploy Pages `30883558417` passed complete preflight, immutable attestation, deployment, production launch, dashboard smoke, and standard files; the final aggregator correctly failed only on the six declared missing hosting-edge headers.
+- Reusable self-sanitizing receipt pattern `01JV5MUHVP1AA7E1180F3E010D` was broadcast through signed Ark.
+- A post-commit replay exposed that three documented overrides vanished from the compatibility inventory when no longer dirty. The inventory now always unions the complete documented-override contract, and a clean-versus-dirty regression proves the 52-check receipt cannot change at the commit boundary.
 
 ## S126 honest deferrals
 
 - Stable remote staging and six response headers remain absent.
 - Historical credential remediation and exact PromoGrind Supabase deploy authority remain unproved.
 - Zoho identity, Obelisk delegation, auth-email, Stripe lifecycle, friend beta, capture evidence, and founder approval remain unproved.
-- Fifteen consumer safety overlays require upstream reconciliation via Studio Ark; no sibling repository was edited.
+- Seventeen consumer safety overlays require upstream reconciliation via Studio Ark; no sibling repository was edited.
 
 Intent Outcome: Achieved — the repo-owned Unified Genius List and generated second-order work are exhausted; the remaining item is a typed external evidence boundary, preserved as a win rather than counterfeited green.
 

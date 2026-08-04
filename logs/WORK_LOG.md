@@ -672,7 +672,7 @@ Append chronological entries.
 - Shipped 5/5 primary items: typed launch-proof graph, honest public-shim release gate, atomic Vitest evidence, witnessed startup truth, and compiled release parity.
 - Generated and shipped every repo-owned second-order candidate: startup renderer decomposition, isolated test-proof semantics, and model-router state persistence.
 - Root-fixed six failures exposed by the complete gate, including behavioral public-revenue provenance, regenerated proof/capability mirrors, documented runtime overlays, and cyclic status/parity staleness.
-- Final `npm run verify:launch-local` returned direct exit 0: 93/93 Vitest files, 642/642 assertions, 52/52 Deno tests, 15 Edge entrypoints, 50/50 runtime compatibility, production build/browser smoke, proof replay, bundle budget, tracked-secret scan, and strict sanitizer all passed.
+- Final `npm run verify:launch-local` returned direct exit 0: 93/93 Vitest files, 642/642 assertions, 52/52 Deno tests, 15 Edge entrypoints, 52/52 runtime compatibility, production build/browser smoke, proof replay, bundle budget, tracked-secret scan, and strict sanitizer all passed.
 - Retained one generated external-launch-proof candidate as an honest deferral; 12 criterion-level blocking proofs remain incomplete and SPARKED remains NO-GO.
 - Added no dependency, invoked no paid API, treated flat-rate Max Plan usage as notional, fabricated no evidence, and edited no sibling tree.
 - Published closeout commit `3342722` directly to `origin/main`; remote divergence verified `0 0`.
@@ -680,4 +680,7 @@ Append chronological entries.
 - Broadcast signed Ark impact `01JV5JKVNK9CFD6369D46207D0` and routed runtime-overlay/pre-push reconciliation request `01JV5JL2ED583E440DD6136E24` to Studio Ops.
 - GitHub CI run `30880707517` exposed a post-closeout truth defect that the earlier gate could not see before the S126 SIL entry existed: five category labels were descriptive rather than canonical v3 names, so the newest ledger parsed incomplete. Corrected the ledger, then passed focused forecaster 3/3 and full Vitest 93 files / 642 assertions.
 - Direct strict sanitizer replay exposed a self-referential critical: the tracked clean-scan issue receipt serialized the absolute session-lock checkout path. Made result and lock provenance repo-relative, added a report-wide no-checkout-path fixture, regenerated the receipts, and verified strict mode returns direct exit 0 with zero findings.
-- Registered the sanitizer as the fifteenth governed consumer safety overlay, restoring runtime compatibility to 50/50 with zero undocumented drift; the complete launch-local gate then returned direct exit 0.
+- Registered the sanitizer as a governed consumer safety overlay. A clean-tree replay then exposed a deeper observability defect: three documented overrides were included only while dirty. The surface now always unions all 17 governed overrides, a clean-versus-dirty regression locks the behavior, and compatibility passes 52/52 with zero undocumented drift.
+- Published repair `d3d611b` directly to main after the exact-ref hook passed. Replacement CI `30883558365` and brief-format `30883558594` are green.
+- Deploy Pages `30883558417` passed complete preflight, immutable attestation, deployment, production launch, dashboard smoke, and all standard files; final promotion correctly remained red only on CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy.
+- Broadcast reusable signed Ark pattern `01JV5MUHVP1AA7E1180F3E010D` for self-sanitizing public receipts.

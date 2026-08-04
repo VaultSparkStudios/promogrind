@@ -20,6 +20,14 @@ export const DOCUMENTED_LOCAL_OVERRIDES = Object.freeze([
   'scripts/validate-brief-format.mjs',
 ]);
 
+export function composeRuntimeCompatibilitySurface({ base = [], documentedOverrides = [], changed = [] } = {}) {
+  return [...new Set([
+    ...base,
+    ...documentedOverrides,
+    ...changed,
+  ])].sort();
+}
+
 export function contentHash(value) {
   return createHash('sha256').update(value).digest('hex');
 }
