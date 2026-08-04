@@ -34,6 +34,10 @@ function normalize(text) {
 
 function classifyBlocker(text) {
   const value = text.toLowerCase();
+  if (value.includes('staging') || value.includes('header') || value.includes('content-security-policy')) return 'staging-edge';
+  if (value.includes('historical') || value.includes('credential') || value.includes('rotation')) return 'credential-remediation';
+  if (value.includes('obelisk') || value.includes('identity')) return 'obelisk-delegation';
+  if (value.includes('founder') || value.includes('approval')) return 'founder-approval';
   if (value.includes('stripe')) return 'stripe';
   if (value.includes('friend') || value.includes('beta')) return 'friend-beta';
   if (value.includes('brevo') || value.includes('contact@')) return 'brevo';
@@ -57,7 +61,11 @@ function proofMirrorsCategory(proof, category) {
   return haystack.includes(needle) ||
     (category === 'auth-email' && haystack.includes('auth')) ||
     (category === 'friend-beta' && haystack.includes('friend')) ||
-    (category === 'supabase-capability' && haystack.includes('supabase'));
+    (category === 'supabase-capability' && haystack.includes('supabase')) ||
+    (category === 'staging-edge' && haystack.includes('stagingandheaders')) ||
+    (category === 'credential-remediation' && haystack.includes('credentialremediation')) ||
+    (category === 'obelisk-delegation' && haystack.includes('obeliskdelegation')) ||
+    (category === 'founder-approval' && haystack.includes('founderapproval'));
 }
 
 export function buildExternalLaunchProofLedger({ status, launchProofs, capabilityReceipt = null, now = Date.now() }) {
@@ -76,7 +84,6 @@ export function buildExternalLaunchProofLedger({ status, launchProofs, capabilit
   }));
 
   const blockerRows = blockers
-    .filter((entry) => /proof|smoke|friend|brevo|capture|capability|stripe|email|supabase/i.test(entry))
     .map((entry) => {
       const category = classifyBlocker(entry);
       return {

@@ -665,3 +665,13 @@ Append chronological entries.
 - Post-push board regeneration exposed an incomplete protocol propagation: refreshed `render-closeout-board.mjs` imported missing `scripts/lib/test-signal.mjs`. Restored the exact upstream helper, added it to the governed runtime surface, and raised the compatibility receipt to 49/49 with zero undocumented drift.
 - Final shell enumeration recorded five session-owned roots closed and zero PromoGrind workers/listeners still running; unrelated host processes were left untouched.
 - Remote S125 proof: brief-format `30858455903` and CI `30858455864` passed. Deploy Pages `30858455440` passed the full preflight, immutable artifact attestation, deployment, production launch, and dashboard smoke; its final release-state step failed only on the six already-declared missing edge headers, preserving the FORGE NO-GO truth.
+
+## 2026-08-04 — Session 126 Codex saturated evidence-graph arc
+
+- Ran the requested `/goal` + `/arc` continuously through `/start`, live-code audit, full implementation, generated second-order saturation, direct-exit verification, and canonical closeout.
+- Shipped 5/5 primary items: typed launch-proof graph, honest public-shim release gate, atomic Vitest evidence, witnessed startup truth, and compiled release parity.
+- Generated and shipped every repo-owned second-order candidate: startup renderer decomposition, isolated test-proof semantics, and model-router state persistence.
+- Root-fixed six failures exposed by the complete gate, including behavioral public-revenue provenance, regenerated proof/capability mirrors, documented runtime overlays, and cyclic status/parity staleness.
+- Final `npm run verify:launch-local` returned direct exit 0: 93/93 Vitest files, 642/642 assertions, 52/52 Deno tests, 15 Edge entrypoints, 51/51 runtime compatibility, production build/browser smoke, proof replay, bundle budget, tracked-secret scan, and strict sanitizer all passed.
+- Retained one generated external-launch-proof candidate as an honest deferral; 12 criterion-level blocking proofs remain incomplete and SPARKED remains NO-GO.
+- Added no dependency, invoked no paid API, treated flat-rate Max Plan usage as notional, fabricated no evidence, and edited no sibling tree.

@@ -102,3 +102,5 @@
 {"ts":"2026-08-03T02:23:25.824Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":7759,"output":1000,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-08-03T07:08:28.599Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":9331,"output":1043,"cache_read":0,"cache_create":0,"skill":null}
 {"ts":"2026-08-03T07:08:28.602Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":9331,"output":1043,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-08-03T23:14:02.906Z","script":"unknown","mode":"long-cache","model":"claude-opus-4-8","input":2973,"output":1065,"cache_read":0,"cache_create":0,"skill":null}
+{"ts":"2026-08-03T23:14:02.907Z","script":"compact-handoff","mode":"compact","model":"claude-haiku-4-5-20251001","input":2973,"output":1065,"cache_read":0,"cache_create":0,"skill":null}

@@ -1,8 +1,86 @@
 {
-  "generatedAt": "2026-08-01T05:10:21.397Z",
+  "generatedAt": "2026-08-04T04:54:59.789Z",
   "source": "check-release-gate.mjs",
+  "sourceMode": "public-shim-self-profile",
+  "evaluatedProjectCount": 1,
   "ready": 0,
   "review": 0,
-  "hold": 0,
-  "projects": []
+  "hold": 1,
+  "projects": [
+    {
+      "slug": "promogrind",
+      "name": "PromoGrind",
+      "repo": null,
+      "publicFacing": true,
+      "launchStatus": "not-applicable",
+      "vaultStatus": "FORGE",
+      "decision": "hold",
+      "gates": [
+        {
+          "ok": true,
+          "label": "Private by default",
+          "detail": "Manifest preserves private-first lifecycle.",
+          "severity": "required"
+        },
+        {
+          "ok": true,
+          "label": "Manifest present",
+          "detail": "Real STUDIO_MANIFEST.json present.",
+          "severity": "required"
+        },
+        {
+          "ok": true,
+          "label": "Runtime pack present",
+          "detail": "Runtime-pack assets generated.",
+          "severity": "required"
+        },
+        {
+          "ok": true,
+          "label": "Studio OS map intact",
+          "detail": "15/15 required Studio OS files present.",
+          "severity": "required"
+        },
+        {
+          "ok": true,
+          "label": "Public-safe file map intact",
+          "detail": "Core navigation surfaces preserved.",
+          "severity": "required"
+        },
+        {
+          "ok": true,
+          "label": "Rights provenance present",
+          "detail": "RIGHTS_PROVENANCE.md present.",
+          "severity": "required"
+        },
+        {
+          "ok": true,
+          "label": "Branding compliant",
+          "detail": "VaultSpark branding requirement satisfied.",
+          "severity": "required"
+        },
+        {
+          "ok": false,
+          "label": "Stable staging path available",
+          "detail": "stagingType=local · no stable URL",
+          "severity": "required"
+        },
+        {
+          "ok": true,
+          "label": "Sanitization clear",
+          "detail": "0 critical · 0 warning",
+          "severity": "required"
+        },
+        {
+          "ok": false,
+          "label": "Blocking launch proofs complete",
+          "detail": "10 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, supabaseDeployment, captureConfig, stagingAndHeaders, obeliskDelegation, credentialRemediation, founderApproval",
+          "severity": "required"
+        }
+      ],
+      "summary": [
+        "Stable staging path available",
+        "Blocking launch proofs complete"
+      ]
+    }
+  ]
 }

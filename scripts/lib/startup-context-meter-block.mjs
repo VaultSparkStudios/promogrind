@@ -94,7 +94,8 @@ export function renderStartupContextMeterBlock(meter, { row, top, bot }) {
   const limit = meter.limit || 1;
   const usedTokens = meter.usedTokens || 0;
   const pctUsedRaw = Number(meter.pctUsed) || 0;
-  const pctUsed = Math.max(0, Math.min(100, Math.round(pctUsedRaw)));
+  // Preserve an overrun in the numeric claim; only the fixed-width bar clamps.
+  const pctUsed = Math.max(0, Math.round(pctUsedRaw));
   const usedFraction = Math.max(0, Math.min(1, pctUsedRaw / 100));
   const fillN = Math.min(24, Math.max(0, Math.round(usedFraction * 24)));
   const bar = '█'.repeat(fillN) + '░'.repeat(24 - fillN);

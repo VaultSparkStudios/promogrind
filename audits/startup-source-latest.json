@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-03T22:14:42.392Z",
+  "generatedAt": "2026-08-04T04:54:19.424Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "d91723d75a536e8ab8b4ade26d7ced3df6532d088500ce02c6409570a6503fad",
+  "briefSha256": "75b338bba535753f097835789bb9b559f1035a1260d9af408c1f8bba83777a27",
   "rendererVersion": "3.2",
-  "targetSession": 126,
-  "sourceSession": 125,
+  "targetSession": 127,
+  "sourceSession": 126,
   "sources": {
     "projectProfile": {
       "medium": "app",
@@ -22,7 +22,7 @@
     },
     "revenue": {
       "source": "docs/REVENUE_SIGNALS.md",
-      "ageDays": 2
+      "ageDays": 3
     },
     "context": {
       "confidence": "heuristic-stale",
@@ -33,5 +33,15 @@
       "command": "npm test",
       "stale": false
     }
-  }
+  },
+  "claims": [
+    {
+      "id": "sil-avg3",
+      "rendered": "Avg3: 1000"
+    },
+    {
+      "id": "notional-cost",
+      "rendered": "flat-rate Max Plan"
+    }
+  ]
 }

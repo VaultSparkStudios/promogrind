@@ -21,8 +21,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 125,
-  "currentFocus": "S125 shipped five verified L3 items plus three second-order innovations: fail-closed Stripe authority, consent-bound AI chat, executable release truth, categorical-guidance prevention, dynamic child-process safety, a provider-egress manifest, a shared bounded Chromium harness, and startup brief extraction. The actionable repo-owned Unified Genius List is empty.",
+  "currentSession": 126,
+  "currentFocus": "S126 shipped all five verified primary items and three generated repo-owned second-order innovations: a typed launch-proof graph, honest public-shim release gate, atomic Vitest evidence, witnessed startup truth, compiled release parity, and focused startup/test-proof/model-router decomposition. The only remaining Genius List candidate is the external proof boundary.",
   "nextMilestone": "Establish real staging and a header-capable production edge; rotate/remediate historical credentials; obtain exact PromoGrind Supabase deploy authority; complete Zoho mailbox, auth-email, payment-lifecycle, friend, and capture proof criteria; only then reassess SPARKED.",
   "blockers": [
     "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
@@ -35,12 +35,12 @@
     "One friend-facing auth/recovery/calculator/pricing pass is pending.",
     "Capture submission and observable lead-row criteria remain pending."
   ],
-  "lastUpdated": "2026-08-03",
+  "lastUpdated": "2026-08-04",
   "silScore": 1000,
   "silAvg3": 1000,
   "silVelocity": 8,
-  "silDebt": "stable",
-  "silLastSession": 125,
+  "silDebt": "down",
+  "silLastSession": 126,
   "silMax": 1000,
   "silSparkline": [
     1000,
@@ -52,19 +52,19 @@
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "testsPassing": 642,
-  "testsTotal": 642,
-  "testsLastRun": "2026-08-03",
-  "lastDeployStatus": "S125 commit 1a321fe reached origin/main. Brief-format run 30858455903 and CI run 30858455864 passed. Deploy Pages run 30858455440 passed the complete local gate, immutable build/attestation, Pages deployment, production launch, and dashboard smoke; its final release-state aggregator correctly failed only because the six declared edge headers remain absent. SPARKED remains NO-GO.",
+  "testsPassing": 93,
+  "testsTotal": 93,
+  "testsLastRun": "2026-08-04",
+  "lastDeployStatus": "S126 finalized `npm run verify:launch-local` with direct exit 0. Publication to origin/main is the remaining closeout action; SPARKED remains NO-GO until all typed external proof criteria pass.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-08-03",
+  "truthAuditLastRun": "2026-08-04",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 642/642 across 93 files in S125 on the exact lock tree"
+      "status": "passing 642/642 across 93 files in S126 on the exact lock tree"
     },
     {
       "type": "edge",
@@ -74,7 +74,7 @@
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S125 with direct exit 0"
+      "status": "passing end to end in S126 with direct exit 0"
     },
     {
       "type": "ux-integrity",
@@ -119,7 +119,7 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-08-03",
+    "date": "2026-08-04",
     "passing": 12,
     "warning": 0,
     "failing": 0,
@@ -214,8 +214,8 @@
       }
     ]
   },
-  "entropyScore": 0.017,
-  "entropyLastComputed": "2026-08-03",
+  "entropyScore": 0.016,
+  "entropyLastComputed": "2026-08-04",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
@@ -228,12 +228,35 @@
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
   "sessionShellHygiene": {
-    "session": 125,
-    "started": 5,
-    "closed": 5,
+    "session": 126,
+    "started": 0,
+    "closed": 0,
     "running": 0,
-    "enumeratedAt": "2026-08-03T22:25:00.000Z",
-    "evidence": "Two bounded Chromium harness runs, one PromoGrind Vite/esbuild tree, and two closeout-autopilot roots were session-owned. Browser children self-cleaned; the remaining Vite/esbuild tree was stopped by exact PID; both closeout roots exited. A final command-line and listener enumeration found zero PromoGrind node/npm/git/chrome/esbuild workers and zero listeners on 4173/4174/4175/5173. Unrelated host processes were not disturbed."
+    "enumeratedAt": "2026-08-04T00:51:23.0693933-04:00",
+    "evidence": "Final scoped Win32 process enumeration found zero PromoGrind node/npm/npx/git/chrome/msedge/esbuild workers; TCP enumeration found zero listeners on 4173/4174/4175/5173. Bounded browser and test harnesses had self-cleaned, and unrelated host processes were not disturbed."
   },
-  "lastSessionSummary": "S125 shipped all five verified audit items plus three second-order innovations across commerce authority, AI privacy, release truth, legal guidance, Windows process safety, provider egress, shared browser evidence, and startup rendering. The actionable repo-owned Unified Genius List is empty and the full local launch gate passes."
+  "lastSessionSummary": "S126 shipped all five verified primary items and every generated repo-owned second-order candidate across typed release evidence, atomic test observability, witnessed startup truth, release parity, and operational maintainability. The full local launch gate passes; the external evidence graph remains an explicit HOLD.",
+  "testsLatestRunState": "green",
+  "testEvidence": {
+    "schemaVersion": "1.0",
+    "generatedAt": "2026-08-04T04:37:55.939Z",
+    "commitSha": "435321e81f5f9ab1111533afa3c925044ee2d966",
+    "complete": true,
+    "partial": false,
+    "success": true,
+    "exitCode": 0,
+    "files": {
+      "passing": 93,
+      "total": 93
+    },
+    "assertions": {
+      "passing": 642,
+      "total": 642
+    },
+    "reportSha256": "0441bc6a5ec3de5a95d82a9e6d9a699644d031815138487b00838a81415aa189"
+  },
+  "testsAssertionsPassing": 642,
+  "testsAssertionsTotal": 642,
+  "testsAssertionsFiles": 93,
+  "testsAssertionsLastRun": "2026-08-04"
 }

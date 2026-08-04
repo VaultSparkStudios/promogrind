@@ -110,7 +110,11 @@ export function parseHumanItems(markdown) {
 }
 
 export function extractCurrentSessionIntent(markdown) {
-  const match = String(markdown || '').match(/## Current Session Intent: Session \d+\n([\s\S]*?)(?=\n## |\n---|$)/);
-  if (!match) return '';
-  return match[1].trim().replace(/\r?\n+/g, ' ');
+  const source = String(markdown || '');
+  const section = source.match(/## Current Session Intent: Session (\d+)\n([\s\S]*?)(?=\n## |\n---|$)/);
+  const inline = [...source.matchAll(/^Session Intent \(S(\d+),[^)]*\):\s*(.+)$/gm)];
+  const candidates = [];
+  if (section) candidates.push({ session: Number(section[1]), text: section[2] });
+  for (const match of inline) candidates.push({ session: Number(match[1]), text: match[2] });
+  return candidates.sort((a, b) => b.session - a.session)[0]?.text.trim().replace(/\r?\n+/g, ' ') || '';
 }

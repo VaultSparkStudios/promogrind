@@ -287,6 +287,62 @@
         }
       ],
       "lastEvaluatedAt": "2026-07-26T18:31:23.977Z"
+    },
+    "stagingAndHeaders": {
+      "label": "Stable staging and delivered edge hardening",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "details": "Local artifact attestation is green; a stable HTTPS staging origin and six production response headers remain unproved.",
+      "nextStep": "Provision stable staging, prove config parity and health, then verify all six headers on the delivered response.",
+      "receipts": [],
+      "target": "https://promogrind.bet",
+      "criteria": [
+        {"id":"stable-https-staging-health-is-green","label":"stable HTTPS staging health is green","required":true},
+        {"id":"staging-production-config-parity-is-proven","label":"staging and production config parity is proven","required":true},
+        {"id":"six-required-security-headers-are-delivered","label":"all six required security headers are delivered","required":true}
+      ]
+    },
+    "obeliskDelegation": {
+      "label": "Live Obelisk identity delegation",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "details": "Hybrid architecture is declared, but human lifecycle delegation and agent identity are not live.",
+      "nextStep": "Resolve the Obelisk relying-party capability and record redacted account-lifecycle and agent-identity exchange receipts.",
+      "receipts": [],
+      "target": "obelisk:promogrind",
+      "criteria": [
+        {"id":"human-account-lifecycle-delegates-to-obelisk","label":"human account lifecycle delegates to Obelisk","required":true},
+        {"id":"agent-identity-exchange-is-live","label":"agent identity exchange is live","required":true}
+      ]
+    },
+    "credentialRemediation": {
+      "label": "Historical credential rotation and remediation",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "details": "The tracked tree is clean; five redacted historical findings still need rotation and approved history remediation evidence.",
+      "nextStep": "Rotate every affected credential, verify provider revocation, and execute only the founder-approved history-remediation path.",
+      "receipts": [],
+      "target": "git:b1205ce",
+      "criteria": [
+        {"id":"all-affected-credentials-rotated-and-revoked","label":"all affected credentials rotated and revoked","required":true},
+        {"id":"approved-history-remediation-completed","label":"approved history remediation completed","required":true}
+      ]
+    },
+    "founderApproval": {
+      "label": "Founder launch approval",
+      "status": "pending",
+      "blocking": true,
+      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "details": "No founder approval receipt exists. Automated readiness cannot grant launch authority.",
+      "nextStep": "After every blocking proof is complete, record explicit founder approval without secrets or private identity data.",
+      "receipts": [],
+      "target": "promogrind:launch",
+      "criteria": [
+        {"id":"founder-explicitly-approved-public-launch","label":"founder explicitly approved public launch","required":true}
+      ]
     }
   }
 }

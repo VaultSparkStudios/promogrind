@@ -1,16 +1,16 @@
 # External Launch Proof Ledger
 
-> Generated: 2026-08-01 | Project: PromoGrind | Session: 121
+> Generated: 2026-08-03 | Project: PromoGrind | Session: 125
 
 This ledger is an honesty surface. It records proof gates that require real-world evidence and must not be marked complete from local code alone.
 
 ## Summary
 
 - Live URL: https://promogrind.bet
-- Project-status external blockers: 7
-- Proof-contract coverage: 6/7 blockers mirrored
-- Unmirrored blockers: 1
-- Blocking canonical launch proofs: 6
+- Project-status external blockers: 9
+- Proof-contract coverage: 9/9 blockers mirrored
+- Unmirrored blockers: 0
+- Blocking canonical launch proofs: 10
 - Target-authorized launch capabilities: 0/5 (stale — not trusted)
 
 ## Canonical Launch Proofs
@@ -24,13 +24,19 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 | Zoho on-domain contact email delivery and reply identity | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Resolve zoho.mail.admin through the secrets gateway, attach contact@promogrind.bet to the founder mailbox, verify MX/SPF/DKIM/DMARC, then record redacted delivery and reply-as-alias receipts. |
 | AI quota migration and provider deployment | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Resolve promogrind.supabase.deploy through the secrets gateway, deploy migration 20260723021000_ai_quota_claim.sql and the five provider functions to fjnpzjjyhnpmunfoycrp, then record redacted deployment IDs. |
 | Production capture public-key configuration | pending | yes | soft-launch, full-launch, marketing-push | 1/3 | Provide the browser-safe anon key through the production deploy configuration and run a real capture submission without committing the key to this repository. |
+| Stable staging and delivered edge hardening | pending | yes | soft-launch, full-launch, marketing-push | 0/3 | Provision stable staging, prove config parity and health, then verify all six headers on the delivered response. |
+| Live Obelisk identity delegation | pending | yes | soft-launch, full-launch, marketing-push | 0/2 | Resolve the Obelisk relying-party capability and record redacted account-lifecycle and agent-identity exchange receipts. |
+| Historical credential rotation and remediation | pending | yes | soft-launch, full-launch, marketing-push | 0/2 | Rotate every affected credential, verify provider revocation, and execute only the founder-approved history-remediation path. |
+| Founder launch approval | pending | yes | soft-launch, full-launch, marketing-push | 0/1 | After every blocking proof is complete, record explicit founder approval without secrets or private identity data. |
 
 ## Project Status Blockers
 
 | Category | Mirrored In Launch Proofs | Blocker |
 |---|---:|---|
-| external-proof | no | No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof. |
-| brevo | yes | The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only. |
+| staging-edge | yes | No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof. |
+| staging-edge | yes | Production edge is missing Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy. |
+| credential-remediation | yes | Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved. |
+| obelisk-delegation | yes | The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only. |
 | supabase-capability | yes | promogrind.supabase.deploy is MISSING; migration 20260723021000_ai_quota_claim.sql and target-pinned functions were not deployed. |
 | auth-email | yes | Production auth confirmation/resend/reset/recovery delivery proof is pending. |
 | stripe | yes | Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending. |
@@ -39,7 +45,7 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 
 ## Target-Bound Capability Receipt
 
-> Checked: 2026-07-26T01:39:33.674Z
+> Checked: 2026-08-01T06:08:58.093Z
 
 | Capability | Target | State | Ready | Reason |
 |---|---|---|---:|---|
@@ -47,7 +53,7 @@ This ledger is an honesty surface. It records proof gates that require real-worl
 | Brevo sender-domain authentication | promogrind.bet | authorized | yes | Target sender domain is authenticated. |
 | PromoGrind Supabase project access | fjnpzjjyhnpmunfoycrp | authorized | yes | Target project REST surface authorized the service credential. |
 | Stripe account mode | live | authorized | yes | Live account authorized (US). |
-| Production capture configuration | https://promogrind.bet/js/pg-capture.js | authenticated | no | Capture code is live, but the production page has no browser-safe key configuration. |
+| Production capture configuration | https://promogrind.bet/js/pg-capture.js | authorized | yes | Production capture page includes browser-safe configuration. |
 
 ## Completion Rule
 

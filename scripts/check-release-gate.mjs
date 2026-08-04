@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { REQUIRED_STUDIO_FILES, inferManifest, readJson } from './lib/runtime-pack.mjs';
+import { getBlockingLaunchProofs } from './lib/launch-proofs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -13,6 +14,8 @@ const OUT_JSON = path.join(ROOT, 'portfolio', 'compiled', 'RELEASE_GATES.json');
 const OUT_MD = path.join(ROOT, 'docs', 'RELEASE_GATES.md');
 
 const jsonMode = process.argv.includes('--json');
+const checkMode = process.argv.includes('--check');
+const requireReady = process.argv.includes('--require-ready');
 const projectIndex = process.argv.indexOf('--project');
 const projectArg = projectIndex !== -1 ? process.argv[projectIndex + 1] : null;
 
@@ -32,6 +35,10 @@ function writeJson(filePath, value) {
 function writeText(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, value);
+}
+
+function readText(filePath) {
+  try { return fs.readFileSync(filePath, 'utf8'); } catch { return ''; }
 }
 
 function isPublicAudience(value) {
@@ -59,9 +66,26 @@ function releaseDecision(gates) {
 
 const registry = readJson(REGISTRY, { projects: [] });
 const sanitization = readJson(SUMMARY, []);
+const localStatus = readJson(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), {});
+const localManifest = readJson(path.join(ROOT, 'context', 'STUDIO_MANIFEST.json'), {});
+const registryProjects = Array.isArray(registry.projects) && registry.projects.length
+  ? registry.projects
+  : [{
+      slug: localStatus.slug || localManifest.identity?.slug || path.basename(ROOT).toLowerCase(),
+      name: localStatus.name || localManifest.identity?.name || path.basename(ROOT),
+      type: localStatus.type || localManifest.identity?.type || 'app',
+      audience: localStatus.audience || localManifest.identity?.audience,
+      vaultStatus: localStatus.vaultStatus || localManifest.identity?.vaultStatus,
+      localPath: ROOT,
+      stagingType: localStatus.stagingType,
+      stagingUrl: localStatus.stagingUrl,
+      brandingRequired: localStatus.brandingRequired,
+      brandingCompliant: localStatus.brandingCompliant,
+    }];
+const sourceMode = Array.isArray(registry.projects) && registry.projects.length ? 'private-registry' : 'public-shim-self-profile';
 const filteredProjects = projectArg
-  ? (registry.projects || []).filter((project) => project.slug === projectArg || project.name === projectArg)
-  : (registry.projects || []);
+  ? registryProjects.filter((project) => project.slug === projectArg || project.name === projectArg)
+  : registryProjects;
 
 const projects = [];
 
@@ -84,8 +108,10 @@ for (const project of filteredProjects) {
   const brandingCompliant = manifest.publicMetadata?.brandingCompliant ?? project.brandingCompliant ?? null;
   const stagingUrl = project.stagingUrl ?? status.stagingUrl ?? manifest.hosting?.stagingUrl ?? null;
   const stagingType = project.stagingType ?? status.stagingType ?? manifest.hosting?.hostingProvider ?? 'none';
+  const stableStaging = Boolean(stagingUrl) && !['none', 'local', 'vercel-preview'].includes(stagingType);
   const privateByDefault = manifest.publicMetadata?.privateByDefault ?? true;
   const sanitizationSummary = sanitizationEntry(sanitization, project.slug);
+  const blockingLaunchProofs = publicFacing ? getBlockingLaunchProofs(root) : [];
 
   const gates = [
     gate(privateByDefault, 'Private by default', privateByDefault ? 'Manifest preserves private-first lifecycle.' : 'Manifest does not explicitly preserve private-first lifecycle.'),
@@ -95,8 +121,11 @@ for (const project of filteredProjects) {
     gate(publicSafeMapOk, 'Public-safe file map intact', publicSafeMapOk ? 'Core navigation surfaces preserved.' : 'Public-safe Studio OS navigation map is incomplete.'),
     gate(rightsOk, 'Rights provenance present', rightsOk ? 'RIGHTS_PROVENANCE.md present.' : 'RIGHTS_PROVENANCE.md missing.', publicFacing ? 'required' : 'recommended'),
     gate(!brandingRequired || brandingCompliant === true, 'Branding compliant', brandingRequired ? (brandingCompliant ? 'VaultSpark branding requirement satisfied.' : 'VaultSpark branding requirement still open.') : 'Branding not required for this project.'),
-    gate(!publicFacing || launchStatus !== 'announced' || Boolean(stagingUrl) || stagingType === 'local' || stagingType === 'vercel-preview', 'Staging path available', publicFacing ? `stagingType=${stagingType}${stagingUrl ? ` · ${stagingUrl}` : ''}` : 'Internal/private audience; staging gate exempt.', publicFacing && vaultStatus === 'SPARKED' ? 'required' : 'recommended'),
-    gate(!publicFacing || !sanitizationSummary || sanitizationSummary.critical === 0, 'Sanitization clear', sanitizationSummary ? `${sanitizationSummary.critical} critical · ${sanitizationSummary.warning} warning` : 'No local sanitization packet found for this repo.', publicFacing ? 'required' : 'recommended'),
+    gate(!publicFacing || stableStaging, 'Stable staging path available', publicFacing ? `stagingType=${stagingType}${stagingUrl ? ` · ${stagingUrl}` : ' · no stable URL'}` : 'Internal/private audience; staging gate exempt.', publicFacing ? 'required' : 'recommended'),
+    gate(!publicFacing || Boolean(sanitizationSummary && sanitizationSummary.critical === 0), 'Sanitization clear', sanitizationSummary ? `${sanitizationSummary.critical} critical · ${sanitizationSummary.warning} warning` : 'No fresh local sanitization packet found for this repo.', publicFacing ? 'required' : 'recommended'),
+    gate(!publicFacing || blockingLaunchProofs.length === 0, 'Blocking launch proofs complete', blockingLaunchProofs.length
+      ? `${blockingLaunchProofs.length} typed blocking proof${blockingLaunchProofs.length === 1 ? '' : 's'} remain incomplete: ${blockingLaunchProofs.map((proof) => proof.key).join(', ')}`
+      : 'No incomplete typed blocking launch proofs remain.', publicFacing ? 'required' : 'recommended'),
   ];
 
   projects.push({
@@ -115,6 +144,8 @@ for (const project of filteredProjects) {
 const payload = {
   generatedAt: new Date().toISOString(),
   source: 'check-release-gate.mjs',
+  sourceMode,
+  evaluatedProjectCount: projects.length,
   ready: projects.filter((project) => project.decision === 'ready').length,
   review: projects.filter((project) => project.decision === 'review').length,
   hold: projects.filter((project) => project.decision === 'hold').length,
@@ -123,10 +154,9 @@ const payload = {
 
 if (jsonMode) {
   console.log(JSON.stringify(payload, null, 2));
+  if (projects.length === 0 || (requireReady && projects.some((project) => project.decision !== 'ready'))) process.exit(1);
   process.exit(0);
 }
-
-writeJson(OUT_JSON, payload);
 
 const lines = [
   '# Release Gates',
@@ -151,5 +181,21 @@ for (const project of projects) {
   lines.push('');
 }
 
-writeText(OUT_MD, lines.join('\n'));
+const markdown = lines.join('\n');
+if (checkMode) {
+  const current = readJson(OUT_JSON, null);
+  const comparable = (value) => value ? { ...value, generatedAt: null } : null;
+  const jsonFresh = JSON.stringify(comparable(current)) === JSON.stringify(comparable(payload));
+  const markdownFresh = readText(OUT_MD) === markdown;
+  if (!jsonFresh || !markdownFresh) {
+    console.error(`release gates: stale (${jsonFresh ? 'markdown' : markdownFresh ? 'json' : 'json + markdown'})`);
+    process.exit(1);
+  }
+  console.log(`release gates: fresh · ${projects.length} project(s) · ${payload.hold} hold`);
+  process.exit(0);
+}
+
+writeJson(OUT_JSON, payload);
+writeText(OUT_MD, markdown);
 console.log(`✓ Release gates → ${path.relative(ROOT, OUT_MD).replace(/\\/g, '/')} (${projects.length} projects)`);
+if (projects.length === 0 || (requireReady && projects.some((project) => project.decision !== 'ready'))) process.exit(1);

@@ -16,6 +16,7 @@ export function buildStartupSourceReceipt(input) {
     targetSession: input.targetSession,
     sourceSession: input.sourceSession,
     sources: input.sources,
+    claims: input.claims || [],
   };
 }
 
@@ -33,5 +34,9 @@ export function verifyStartupSourceReceipt({ body, receipt, rendererVersion }) {
   if (receipt?.rendererVersion !== rendererVersion) failures.push('renderer version does not match canonical version');
   if (!Number.isInteger(receipt?.targetSession) || !Number.isInteger(receipt?.sourceSession)) failures.push('session provenance is incomplete');
   if (receipt?.targetSession !== receipt?.sourceSession + 1) failures.push('target session is not source session + 1');
+  for (const claim of receipt?.claims || []) {
+    if (!claim?.id || !claim?.rendered) failures.push('semantic claim is incomplete');
+    else if (!String(body).includes(String(claim.rendered))) failures.push(`semantic claim missing from brief: ${claim.id}`);
+  }
   return { ok: failures.length === 0, failures };
 }

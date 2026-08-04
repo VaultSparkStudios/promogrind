@@ -1,5 +1,32 @@
 # Task Board
 
+## Unified Genius List (S126)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| 🔥 | Trust / release infrastructure | done | 6h | complete-launch-proof-graph — **DONE L3 S126**: all nine status blockers map to typed criteria with zero unmirrored edges or fabricated receipts |
+| 🔥 | Security / release observability | done | 8h | public-shim-release-gate — **DONE L3 S126**: one-project self-profile, sanitization provenance, stable-staging and typed-proof HOLD, fresh-artifact check |
+| 🔥 | Observability / infrastructure | done | 8h | typed-vitest-evidence — **DONE L3 S126**: exact-exit wrapper, atomic content-addressed receipt, 93/93 file and 642/642 assertion truth |
+| 🔥 | Observability / founder control | done | 6h | startup-semantic-truth — **DONE L3 S126**: source-derived Avg3, intent, tests, deploy, and notional Max-plan cost with semantic claim witnesses |
+| ⚡ | UX / release trust | done | 4h | release-parity-compiler — **DONE L3 S126**: current hash-bound visual, typed test, and native-applicability JSON/Markdown |
+
+## Shipped This Session (S126)
+
+- Complete typed launch-proof graph and an honest public-repo release HOLD derived from stable staging, sanitization, and twelve blocking proof states.
+- Crash-safe Vitest evidence contract with distinct file/assertion counts, report hash, exact child exit, and incomplete-run fail-closed semantics.
+- Semantically witnessed startup brief with current session intent, SIL average, typed test/deploy evidence, and flat-rate Max Plan language.
+- Release parity compiler bound to four inspected dark/light desktop/mobile captures and explicit planned-no-native-projects applicability.
+- Second-order startup-renderer decomposition from 1,463 to below the strict 900-line boundary using focused source, context, orchestration, pattern, score, summary, forecast, Genius, and output modules.
+- Second-order test-run proof semantics extraction with stable public re-exports and adversarial shard/retry/failure-format coverage.
+- Second-order model-router state extraction for semantic cache and session-budget persistence while preserving the single Anthropic network chokepoint.
+
+## Saturation result (S126)
+
+- Five of five audited items implemented at L3 and regression-covered.
+- The refreshed innovation generator reports no repo-owned candidate; its only remainder is the typed external launch-proof ledger, retained as an honest deferral.
+- No stable staging, delivered header, credential rotation, provider deployment, mailbox, real user journey, Obelisk exchange, or founder approval was fabricated.
+- Full launch-local, doctor, security, sanitizer, and direct-main closeout gates remain the terminal proof.
+
 ## Unified Genius List (S125)
 
 | Tier | Category | Status | Effort | Item |

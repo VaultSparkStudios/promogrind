@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { classifyRatioSnapshot, resolveProjectProfile, SIGNAL_STATE } from './lib/signal-state.mjs';
 import { loadArkDrainState, renderOrchestratorBlock } from './lib/startup-orchestrator-blocks.mjs';
+import { loadStartupBriefSources } from './lib/startup-source-loader.mjs';
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pg-startup-signal-'));
 fs.mkdirSync(path.join(root, '.cache'), { recursive: true });
@@ -26,7 +27,10 @@ assert.match(block, /Workers: unavailable/);
 assert.match(block, /Ark: 169 drained · 5m old · sig failures 0/);
 assert.doesNotMatch(block, /Workers: 0\/\?/);
 
-const startupRenderer = fs.readFileSync(path.join(import.meta.dirname, 'render-startup-brief.mjs'), 'utf8');
-assert.match(startupRenderer, /path\.join\(root, 'docs', 'REVENUE_SIGNALS\.md'\)/, 'public-repo startup must fall back to the repo-local revenue source');
+fs.mkdirSync(path.join(root, 'docs'), { recursive: true });
+fs.writeFileSync(path.join(root, 'docs', 'REVENUE_SIGNALS.md'), 'public-safe revenue truth');
+const startupSources = await loadStartupBriefSources(root);
+assert.equal(startupSources.revenueSignalsPath, path.join(root, 'docs', 'REVENUE_SIGNALS.md'), 'public-repo startup must fall back to the repo-local revenue source');
+assert.equal(startupSources.fileCache.revSig, 'public-safe revenue truth');
 
-console.log('startup signal provenance: 9 assertions passing');
+console.log('startup signal provenance: 10 assertions passing');

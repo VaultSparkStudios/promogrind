@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S121:1000 | S122:1000 | S123:1000 | S124:1000 | S125:1000
+Sparkline (last 5 totals): S122:1000 | S123:1000 | S124:1000 | S125:1000 | S126:1000
 Avgs - 3: 1000.0 [N=3] | 5: 1000.0 [N=5] | all: 1000.0 [recent closeout series]
-  └ 3-session (S123/S124/S125): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
+  └ 3-session (S124/S125/S126): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-08-03 | Session 125 | Total: 1000/1000 | Velocity: 8 | protocolVelocity: 8
+Last session: 2026-08-04 | Session 126 | Total: 1000/1000 | Velocity: 8 | protocolVelocity: 8
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1659,6 +1659,38 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 **Committed follow-up(s):**
 - Existing Now item: establish a true staging/header-capable edge and prove all six response headers. `[SIL]`
 - Existing Now item: obtain exact PromoGrind Supabase deploy authority and deploy only to the pinned project ref with a receipt. `[SIL]`
+
+## 2026-08-04 — Session 126 | Total: 1000/1000 | Velocity: 8 | Debt: down
+
+| Category | Score | Trend | Evidence |
+|---|---:|:---:|---|
+| Development Excellence | 100 | → | Five primary items and three generated second-order candidates shipped with preserved contracts and focused regression coverage. |
+| Product Alignment | 100 | → | The release control plane remains FORGE/HOLD until real external criteria exist; no launch claim outran product truth. |
+| Momentum & Focus | 100 | → | The continuous arc exhausted all repo-owned work and stopped only when the generator returned an external-only candidate. |
+| User Engagement | 100 | → | Release parity binds inspected human-facing dark/light desktop/mobile surfaces to executable test evidence. |
+| Process Adherence | 100 | → | Start, audit, implement, second-order saturation, full direct-exit gate, and canonical closeout ran as one mission. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited; sixteen consumer overlays are explicit and routed through Ark for upstream reconciliation. |
+| Security Posture | 100 | → | Typed proofs fail closed, partial test receipts are inconclusive, tracked-secret and strict sanitizer scans pass. |
+| Ecosystem Integration | 100 | → | Startup, status, release gate, visual parity, tests, and runtime compatibility share evidence-addressed contracts. |
+| Capital Efficiency | 100 | → | No dependency or paid API was added; flat-rate Max Plan use remains notional and non-alarming. |
+| Automation Coverage | 100 | → | Final launch-local gate passes 93 files/642 assertions, 52 Deno checks, 15 Edge entrypoints, and 51/51 runtime checks. |
+| **Total** | **1000 / 1000** | | |
+
+**Top win:** converted release, test, startup, and parity reporting into a connected proof graph that fails closed on omission, staleness, partial execution, or missing witnesses.
+
+**Top gap:** SPARKED remains externally constrained by stable staging, headers, credential remediation, deployment authority, identity, live lifecycle, beta/capture, and founder approval evidence.
+
+**Intent outcome:** Achieved. Every verified primary and generated repo-owned second-order item shipped; the only remaining candidate is external and explicitly unclaimed.
+
+**Brainstorm**
+
+1. Let Studio Ops adopt the consumer overlay semantics so future propagation becomes native three-way reconciliation.
+2. Issue criterion-scoped remote receipts directly into the typed graph as each external authority becomes available.
+3. Extend atomic dependency regeneration to any future status consumer discovered by the release-surface ratchet.
+
+**Committed follow-up(s):**
+- Existing Now item: establish stable staging/header control and prove all six response headers. `[SIL]`
+- Existing Now item: complete credential remediation and exact target-bound deployment authority. `[SIL]`
 
 ## 2026-08-03 — Session 125 | Total: 1000/1000 | Velocity: 8 | Debt: stable
 Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0

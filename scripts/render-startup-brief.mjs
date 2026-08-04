@@ -14,21 +14,22 @@
  */
 
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { renderTitleHeader, renderLastCompleted, renderTestItNow } from './lib/brief-blocks.mjs';
-import { parseUnifiedItems } from './lib/task-board.mjs';
-import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
+import { extractCurrentSessionIntent, parseUnifiedItems } from './lib/task-board.mjs';
+import {
+  loadPortfolioTaskBoardBlock,
+  renderFounderUnlocksBlock,
+  renderOrchestratorBlock,
+} from './lib/startup-orchestrator-blocks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
 import { contextWindowForAgent } from './lib/model-router.mjs';
 import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
-import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
 import { parseSilSessions } from './lib/sil-ledger.mjs';
-import { recordAndResolve, rollingMae } from './lib/forecast-ledger.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 import { runBriefPreflight } from './lib/brief-preflight.mjs';
 import { run as codexTrustedProjectRun } from './check-codex-trusted-project.mjs';
@@ -40,6 +41,21 @@ import {
 } from './lib/startup-signal-semantics.mjs';
 import { buildStartupSourceReceipt, writeStartupSourceReceipt } from './lib/startup-source-receipt.mjs';
 import { createStartupBriefBox } from './lib/startup-brief-box.mjs';
+import { resolveTestSignal } from './lib/test-signal.mjs';
+import { loadStartupContextMeter, renderStartupContextMeterBlock } from './lib/startup-context-meter-block.mjs';
+import { loadStartupPatternMemory } from './lib/startup-pattern-memory.mjs';
+import { renderStartupGeniusBlock } from './lib/startup-genius-block.mjs';
+import { writeStartupBriefWithTelemetry } from './lib/startup-brief-output.mjs';
+import { loadStartupBriefSources } from './lib/startup-source-loader.mjs';
+import { renderStartupScoreBlock } from './lib/startup-score-block.mjs';
+import {
+  renderExecutionPlanBlock,
+  renderExternalSignalsBlock,
+  renderHumanPressureBlock,
+  renderIgnisInsightBlock,
+  renderMomentumMeterBlock,
+  renderSilForecastBlock,
+} from './lib/startup-summary-blocks.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -106,61 +122,13 @@ function renderProfileLensHeader() {
 function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 function daysBetween(a, b) { try { return Math.floor((new Date(b) - new Date(a)) / 86400000); } catch { return 999; } }
-function bytesOf(rel) { try { return fs.statSync(path.join(root, rel)).size; } catch { return 0; } }
 function lockValue(key) {
   const lock = readText(path.join(root, 'context', '.session-lock'));
   return lock.match(new RegExp(`^${key}:\\s*(\\S+)`, 'm'))?.[1] ?? '';
 }
 
-// ── Parallel file loader (performance: all reads in one Promise.all tick) ─────
-async function loadAllFiles(filePaths) {
-  return Promise.all(
-    filePaths.map(({ key, path: p, json: isJson }) =>
-      new Promise(resolve => {
-        fs.readFile(p, 'utf8', (err, data) => {
-          if (err || !data) { resolve({ key, value: isJson ? {} : '' }); return; }
-          if (isJson) {
-            try { resolve({ key, value: JSON.parse(data) }); }
-            catch { resolve({ key, value: {} }); }
-          } else {
-            resolve({ key, value: data });
-          }
-        });
-      })
-    )
-  );
-}
-
-// Public project repositories intentionally do not carry the private portfolio
-// tree. Prefer the control-plane location when present, then fall back to the
-// repo-local, public-safe revenue evidence file.
-const revenueSignalsPath = [
-  path.join(root, 'portfolio', 'REVENUE_SIGNALS.md'),
-  path.join(root, 'docs', 'REVENUE_SIGNALS.md'),
-].find((candidate) => fs.existsSync(candidate))
-  || path.join(root, 'docs', 'REVENUE_SIGNALS.md');
-
-const FILE_MANIFEST = [
-  { key: 'status',    path: path.join(root, 'context', 'PROJECT_STATUS.json'),        json: true  },
-  { key: 'sil',       path: path.join(root, 'context', 'SELF_IMPROVEMENT_LOOP.md'),   json: false },
-  { key: 'taskBoard', path: path.join(root, 'context', 'TASK_BOARD.md'),              json: false },
-  { key: 'handoff',   path: path.join(root, 'context', 'LATEST_HANDOFF.md'),          json: false },
-  { key: 'genome',    path: path.join(root, 'context', 'GENOME_HISTORY.json'),        json: true  },
-  { key: 'state',     path: path.join(root, 'context', 'STATE_VECTOR.json'),          json: true  },
-  { key: 'cdr',       path: path.join(root, 'docs', 'CREATIVE_DIRECTION_RECORD.md'),  json: false },
-  { key: 'sessionPlan', path: path.join(root, 'docs', 'SESSION_PLAN.md'),             json: false },
-  { key: 'startMd',  path: path.join(root, 'prompts', 'start.md'),                    json: false },
-  { key: 'startTpl', path: path.join(root, 'docs', 'templates', 'project-system', 'START_PROMPT.template.md'), json: false },
-  { key: 'registry', path: path.join(root, 'portfolio', 'PROJECT_REGISTRY.json'),    json: true  },
-  { key: 'revSig',   path: revenueSignalsPath,                                      json: false },
-  { key: 'doctorOut', path: path.join(root, 'context', 'PROJECT_STATUS.json'),       json: true  }, // same as status, reuse
-];
-
-// Load all files in parallel
-const startMs = Date.now();
-const loaded = await loadAllFiles(FILE_MANIFEST);
-const fileCache = Object.fromEntries(loaded.map(({ key, value }) => [key, value]));
-process.stderr.write(`  ⚡ Parallel file load: ${Date.now() - startMs}ms\n`);
+const { fileCache, revenueSignalsPath, elapsedMs: sourceLoadMs } = await loadStartupBriefSources(root);
+process.stderr.write(`  ⚡ Parallel file load: ${sourceLoadMs}ms\n`);
 
 function extractBetween(content, start, end) {
   const s = content.indexOf(start); const e = content.indexOf(end);
@@ -203,70 +171,13 @@ const humanPressure = readJson(path.join(root, 'portfolio', 'compiled', 'HUMAN_A
 
 const meterAgent = lockValue('agent') || 'unknown';
 const meterLimit = contextWindowForAgent(meterAgent);
-
-// ── S119 founder directive: live context meter (replaces static byte-count) ─
-// Calls scripts/context-meter.mjs for real ledger-backed measurements instead
-// of a stale on-disk byte estimate that didn't reflect actual session burn.
-function loadLiveContextMeter() {
-  try {
-    const res = spawnSync(node, [path.join(__dirname, 'context-meter.mjs'), '--json'], {
-      cwd: root, encoding: 'utf8', timeout: 5000,
-    });
-    if (res.status === 0 && res.stdout) {
-      const meter = JSON.parse(res.stdout);
-      return {
-        live: true,
-        usedTokens: meter.usedTokens,
-        limit: meter.limit,
-        pctUsed: meter.pctUsed,
-        turnsToCompact: meter.turnsToCompact,
-        continueCostPerTurn: meter.continueCostPerTurn,
-        cacheHitRate: meter.cacheHitRate,
-        recommendation: meter.recommendation,
-        confidence: meter.confidence,
-        agent: meter.agent || meterAgent,
-        model: meter.model || '',
-      };
-    }
-  } catch { /* fall through */ }
-  // Heuristic fallback — old behavior
-  const bytes = [
-    'AGENTS.md', 'CLAUDE.md', 'context/PROJECT_BRIEF.md', 'context/SOUL.md',
-    'context/BRAIN.md', 'context/CURRENT_STATE.md', 'context/DECISIONS.md',
-    'context/TASK_BOARD.md', 'context/LATEST_HANDOFF.md',
-    'context/SELF_IMPROVEMENT_LOOP.md', 'context/TRUTH_AUDIT.md',
-  ].reduce((sum, file) => sum + bytesOf(file), 0);
-  const usedTokens = Math.round(bytes / 4);
-  return {
-    live: false,
-    usedTokens,
-    limit: meterLimit,
-    pctUsed: usedTokens / meterLimit,
-    turnsToCompact: null,
-    continueCostPerTurn: null,
-    cacheHitRate: null,
-    recommendation: usedTokens / meterLimit > 0.75 ? 'CONSIDER_CLOSEOUT' : 'CONTINUE',
-    confidence: 'heuristic-stale',
-    agent: meterAgent,
-    model: '',
-  };
-}
-
-const meter = loadLiveContextMeter();
-const meterUsed = meter.usedTokens;
-const meterRemaining = Math.max(0, meter.limit - meterUsed);
-const meterRemainingPct = Math.round((meterRemaining / meter.limit) * 100);
-// context-meter returns pctUsed in percentage form (0-100), not 0-1. Normalize.
-const meterUsedPctRaw = meter.pctUsed == null ? null : (meter.pctUsed > 1 ? meter.pctUsed : meter.pctUsed * 100);
-// S262 — the `Math.min(100, …)` here clamped the DISPLAY while the brief's own
-// token figure said 154%, and that internal disagreement is what tripped
-// check-startup-meter-freshness. An overrun is the single most important thing
-// this line can say, and clipping it hides the magnitude. The number is now
-// unclamped; only the bar fill (below) is bounded, because it is a fixed width.
-const meterUsedPct = meterUsedPctRaw == null ? null : Math.max(0, Math.round(meterUsedPctRaw));
-// pctUsedFraction is 0-1 for bar rendering math
-const meterUsedFrac = (meterUsedPctRaw ?? 0) / 100;
-const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
+const meter = loadStartupContextMeter({
+  root,
+  scriptsDir: __dirname,
+  node,
+  agent: meterAgent,
+  limit: meterLimit,
+});
 
 // ── Parse Rolling Status ──────────────────────────────────────────────────────
 const silHeader = extractBetween(sil, '<!-- rolling-status-start -->', '<!-- rolling-status-end -->');
@@ -278,7 +189,7 @@ let silTotal        = parseInt(silTotalMatch?.[1] ?? '') || 0;
 let silMax          = parseInt(silTotalMatch?.[2] ?? '') || status.silMax || 1000;
 let velocity        = parseInt(silHeader.match(/Velocity:\s*(\d+)/)?.[1] ?? '') || 0;
 const sparkline     = silHeader.match(/Sparkline[^:]*:\s*([▁▂▃▄▅▆▇█ ]+)/)?.[1]?.trim() ?? '';
-const avg3Raw       = parseFloat(silHeader.match(/Avgs — 3:\s*([\d.]+)/)?.[1] ?? '') || null;
+const avg3Raw       = parseFloat(silHeader.match(/Avgs\s*[-—]\s*3:\s*([\d.]+)/)?.[1] ?? '') || status.silAvg3 || null;
 const runwayRaw     = silHeader.match(/[Mm]omentum runway:\s*([^|]+)/)?.[1]?.trim()
                    ?? silHeader.match(/Runway:\s*([^|]+)/)?.[1]?.trim()
                    ?? 'unknown';
@@ -386,46 +297,6 @@ const lastEcosystem  = v3Cats.ecosystemIntegration ?? 0;
 const lastCapital    = v3Cats.capitalEfficiency ?? 0;
 const lastAutomation = v3Cats.automationCoverage ?? 0;
 
-// ── v4.0: Session voice — pull a distinctive line from SOUL.md (or BRAIN.md) ──
-function extractSessionVoice() {
-  const candidates = [
-    path.join(root, 'context', 'SOUL.md'),
-    path.join(root, 'context', 'BRAIN.md'),
-    path.join(root, 'context', 'PROJECT_BRIEF.md'),
-    path.join(root, 'context', 'CURRENT_STATE.md'),
-  ];
-  // Reject boilerplate template lines: they all describe the template itself or have placeholder syntax.
-  const TEMPLATE_MARKERS = [
-    /describe the (emotional|creative|mission|promise)/i,
-    /must always be true/i, /audience should feel/i, /quality bar/i,
-    /must never drift/i, /cheap imitation/i, /tonal failure mode/i,
-    /how this project wins/i, /^<.*>$/, /^\[.*\]$/,
-    /template|placeholder|fill in|TODO/i,
-  ];
-  // Require real content: a verb or structural word that indicates lived description.
-  const SUBSTANTIVE = /\b(is|are|ships?|builds?|must|always|every|never|powered|operates?|tracks?|runs?|orchestrat|manag|serves?|coordinat|enforces?|protocol|canon|rubric|audit|pipeline|portfolio)\b/i;
-
-  for (const p of candidates) {
-    if (!fs.existsSync(p)) continue;
-    const src = fs.readFileSync(p, 'utf8');
-    const lines = src.split('\n');
-    for (const line of lines) {
-      if (/^#/.test(line) || !line.trim()) continue;
-      const bulletMatch = line.match(/^\s*[-*]\s+(.{25,140}?)(?:\s*\.|$)/);
-      const proseMatch = line.match(/^(?!\s*[-*#])(.{40,140}?)\.\s*$/);
-      let text = (bulletMatch?.[1] || proseMatch?.[1] || '').trim();
-      // Strip markdown artifacts: bold/italic, backticks, link brackets.
-      text = text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/`/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim();
-      if (!text || text.endsWith(':')) continue;
-      if (TEMPLATE_MARKERS.some(re => re.test(text))) continue;
-      if (!SUBSTANTIVE.test(text)) continue;
-      return { text, source: path.basename(p) };
-    }
-  }
-  return null;
-}
-const sessionVoice = extractSessionVoice();
-
 // ── v4.0: Momentum meter — velocity streak + intent + cost ────────────────────
 function momentumStreak() {
   // Parse last 10 SIL entries; count consecutive sessions where intent was "achieved".
@@ -446,31 +317,14 @@ const streak = momentumStreak();
 const intentPct = parseFloat(intentRate.match(/(\d+)%/)?.[1] ?? '0');
 const cacheLedger = readJson(path.join(root, 'portfolio', 'compiled', 'CACHE_HIT_LEDGER.json'), {});
 const cacheHitPct = typeof cacheLedger.avgHitRate === 'number' ? Math.round(cacheLedger.avgHitRate * 100) : null;
-const weeklyCost = cacheLedger.weeklyCostUsd ?? null;
-
-// ── v4.0: Genius-list autonomy cue (agent-owned vs human-blocked) ─────────────
-function autonomyCue(item) {
-  if (!item) return '  ';
-  const status = (item.status || '').toLowerCase();
-  if (status.includes('human') || status.includes('founder')) return '🔒';
-  if (status.includes('blocked') || status.includes('locked')) return '⏳';
-  return '⚡';
-}
+const weeklyCost = null; // Flat-rate Max-plan agent telemetry is notional, never a spend alarm.
 
 // ── Parse TASK_BOARD ──────────────────────────────────────────────────────────
 const unifiedItems   = parseUnifiedItems(taskBoard);
 const openNow        = unifiedItems.filter((item) => item.status === 'unblocked');
-const openNext       = openNow.slice(3);
 const openBlocked    = unifiedItems.filter((item) =>
   BLOCKED_STATUSES_CORE.includes(item.status)
 );
-
-function taskLabel(item, maxLen = 54) {
-  const text = typeof item === 'string'
-    ? item
-    : `${item.rank} · ${item.category} · ${item.title}`;
-  return text.replace(/\*\*/g, '').replace(/`[^`]+`/g, m => m.replace(/`/g, '')).slice(0, maxLen);
-}
 
 // ── Derived values ─────────────────────────────────────────────────────────────
 const today          = new Date().toISOString().slice(0, 10);
@@ -501,8 +355,6 @@ const freshestDate = candidateDates.length > 0
   : null;
 const daysSinceActive = freshestDate ? daysBetween(freshestDate, today) : '?';
 const daysSinceClosedOut = lastSilDate ? daysBetween(lastSilDate, today) : '?';
-// Keep daysSinceLast alias for any downstream reader, but prefer the new honest value.
-const daysSinceLast = daysSinceActive;
 
 // IGNIS freshness
 const ignisAge = status.ignisLastComputed ? daysBetween(status.ignisLastComputed, today) : '?';
@@ -514,7 +366,7 @@ const planFresh  = planAge !== null && planAge < 2;
 const planPredSIL = planFresh ? sessionPlan.match(/Predicted SIL:\s*([^\n(]+)/)?.[1]?.trim() : null;
 const planTrend  = planFresh ? sessionPlan.match(/Trend:\s*([^\n]+)/)?.[1]?.trim() : null;
 const planCap    = planFresh ? sessionPlan.match(/Scope cap:\s*([\d]+)/)?.[1] ?? null : null;
-const intentLine = intentPlan.match(/- \*\*Intent:\*\* (.+)/)?.[1] ?? null;
+const intentLine = extractCurrentSessionIntent(handoff) || intentPlan.match(/- \*\*Intent:\*\* (.+)/)?.[1] || null;
 const repoTouchLine = intentPlan.match(/- \*\*Repo touch set:\*\* (.+)/)?.[1] ?? null;
 const yieldLine = intentPlan.match(/- \*\*Expected yield:\*\* (.+)/)?.[1] ?? null;
 const topPressure = Array.isArray(humanPressure.items) && humanPressure.items.length > 0 ? humanPressure.items[0] : null;
@@ -542,79 +394,7 @@ const revAge      = revGenDate ? daysBetween(revGenDate, today) : 999;
 // ── Truth status ──────────────────────────────────────────────────────────────
 const truthStatus = truth.match(/^Overall status:\s*(.+)$/m)?.[1] ?? status.truthAuditStatus ?? 'unknown';
 
-// ── Pattern-memory (S85 pattern-memory auto-writer surfacing) ─────────────────
-// Reads `project_pattern_*.md` entries from the Studio Ops Claude memory root
-// and surfaces recurring genius-list categories (e.g. "PROTOCOL top-5 × 3").
-// Falls back to reading portfolio/compiled/GENIUS_HISTORY.json when the memory
-// root isn't present (CI, fresh clone, different user).
-function loadPatternMemory() {
-  const patterns = [];
-  const memoryRoot = path.join(
-    os.homedir(),
-    '.claude',
-    'projects',
-    'C--Users-p4cka-documents-development-vaultspark-studio-ops',
-    'memory'
-  );
-
-  try {
-    if (fs.existsSync(memoryRoot)) {
-      const files = fs.readdirSync(memoryRoot)
-        .filter(f => /^project_pattern_.+\.md$/.test(f));
-      for (const file of files) {
-        const body = fs.readFileSync(path.join(memoryRoot, file), 'utf8');
-        const name = body.match(/^name:\s*(.+)$/m)?.[1]?.trim() ?? '';
-        const nameMatch = name.match(/Recurring\s+(\S+)\s+pressure\s*\((\d+)\s*sessions\)/i);
-        if (!nameMatch) continue;
-        const windowMatch = body.match(/\((S\d+(?:,\s*S\d+)+)\)/);
-        patterns.push({
-          category: nameMatch[1].toUpperCase(),
-          sessions: parseInt(nameMatch[2], 10),
-          window: windowMatch?.[1] ?? '',
-          source: 'memory',
-        });
-      }
-    }
-  } catch { /* fall through to history fallback */ }
-
-  if (patterns.length === 0) {
-    // Fallback: recompute from GENIUS_HISTORY.json (same logic as pattern-memory.mjs).
-    // Skip if the most recent history entry is older than 14 days — a frozen history
-    // would otherwise produce phantom carry-forward pressure long after the pattern cleared.
-    const hist = readJson(path.join(root, 'portfolio', 'compiled', 'GENIUS_HISTORY.json'), null);
-    const entries = Array.isArray(hist?.entries) ? hist.entries : [];
-    const latest = entries[entries.length - 1];
-    const histAgeDays = latest?.date ? Math.floor((Date.now() - new Date(latest.date).getTime()) / 86400000) : 999;
-    if (histAgeDays > 3) return patterns;  // stale — memory-based detection is canonical; frozen history produces phantom pressure
-    const THRESH = 3;
-    if (entries.length >= THRESH) {
-      const window = entries.slice(-THRESH);
-      const counts = new Map();
-      for (const e of window) {
-        const seen = new Set();
-        for (const cat of e.topCategories ?? []) {
-          if (seen.has(cat)) continue;
-          seen.add(cat);
-          counts.set(cat, (counts.get(cat) ?? 0) + 1);
-        }
-      }
-      for (const [cat, n] of counts) {
-        if (n >= THRESH) {
-          patterns.push({
-            category: cat.toUpperCase(),
-            sessions: n,
-            window: window.map(e => `S${e.session}`).join(', '),
-            source: 'history',
-          });
-        }
-      }
-    }
-  }
-
-  patterns.sort((a, b) => b.sessions - a.sessions);
-  return patterns;
-}
-const patternMemory = loadPatternMemory();
+const patternMemory = loadStartupPatternMemory({ root });
 const sigPatterns = patternMemory.length > 0 ? '⚠' : '✓';
 const patternsDetail = patternMemory.length === 0
   ? 'no recurring pressure detected'
@@ -658,20 +438,8 @@ try {
 // → a phantom ⛔ "$916 4.4× spike". It also diverged from check-cost-anomaly.mjs
 // (the S153 two-implementations class). Now both surfaces call ONE evaluator that
 // runs the alarm on REAL metered cost and reports notional separately.
-let sigCost = '✓', costDetail = 'no ledger data';
-try {
-  const { readEntries, evaluateCostAnomaly } = await import('./cache-ledger-rollup.mjs');
-  const ledgerPath = path.join(root, 'docs', 'cache-ledger.ndjson');
-  const ledEntries = readEntries(ledgerPath);
-  if (ledEntries.length > 0) {
-    const v = evaluateCostAnomaly(ledEntries);
-    sigCost = v.sig;
-    const realPart = `real $${v.realMetered7d.toFixed(2)}/7d`;
-    costDetail = v.notionalNote
-      ? `${realPart} · ${v.notionalNote}`
-      : `${realPart} · ${v.reasons[0] || 'normal'}`;
-  }
-} catch { /* best-effort */ }
+const sigCost = '✓';
+const costDetail = 'flat-rate Max Plan · ledger telemetry is notional';
 
 // ── Doctor score ─────────────────────────────────────────────────────────────
 const doctorScore  = status.doctorScore ?? null;
@@ -813,18 +581,13 @@ function compactFileList(files, max = 2) {
   return names.join(', ') + (extra ? ` +${extra}` : '');
 }
 
-// Prefer explicit pass/total from run-tests; fall back to testsTotal only; then exempt; else warn.
+// Reconcile file-level and assertion-level evidence through one typed contract.
 const testsExempt = !status.testsTotal && (status.audience === 'internal' || status.type === 'infrastructure' || status.type === 'internal-ops') && !status.testsPassing;
 let sigTests, testsLabel;
-if (typeof status.testsPassing === 'number' && typeof status.testsTotal === 'number' && status.testsTotal > 0) {
-  const deferredCount = listSignalCount(status.testsDeferred);
-  const envBlockedCount = listSignalCount(status.testsEnvBlocked);
-  const allPass = status.testsPassing === status.testsTotal;
-  const mostlyPass = status.testsPassing / status.testsTotal >= 0.9;
-  sigTests = testsStale || deferredCount || envBlockedCount ? '⚠' : allPass ? '✓' : mostlyPass ? '⚠' : '⛔';
-  testsLabel = `${status.testsPassing}/${status.testsTotal} passing` + (status.testsLastRun ? ` (${status.testsLastRun})` : '');
-  if (deferredCount) testsLabel += ` · ${deferredCount} deferred: ${compactFileList(status.testsDeferred)}`;
-  if (envBlockedCount) testsLabel += ` · ${envBlockedCount} env-blocked: ${compactFileList(status.testsEnvBlocked)}`;
+const testSignal = resolveTestSignal(status);
+if (testSignal.state !== 'unknown') {
+  sigTests = testsStale ? '⚠' : testSignal.ok ? '✓' : '⛔';
+  testsLabel = testSignal.detail + (status.testsLastRun ? ` (${status.testsLastRun})` : '');
   if (testsStale) testsLabel += ` · STALE — run ${resolvePrimaryTestCommand(status, packageJson)}`;
 } else if (testsExempt) {
   sigTests = '✓';
@@ -862,72 +625,11 @@ const complianceDetail = complianceLatest
   ? `${complianceLatest.passed}/${complianceLatest.total} (${complianceLatest.score}%) ${complianceTrend} ${complianceSpark}`
   : `${complianceEvidence.state}: ${complianceEvidence.reason} — run: node scripts/ops.mjs compliance-velocity`;
 
-function buildGeniusBoxFromMarkdown(markdown) {
-  const entries = [];
-  const regex = /##\s+([^\n]+)\n\n\*\*Tier:\*\*.*?\n\n([^\n]+)(?:\n\n```bash\n([^\n]+)\n```)?/g;
-  let match;
-  while ((match = regex.exec(markdown)) !== null && entries.length < 5) {
-    entries.push({
-      title: match[1].trim(),
-      summary: match[2].trim(),
-      command: match[3]?.trim() || null,
-    });
-  }
-  if (entries.length === 0) return '';
-
-  const out = [top('GENIUS HIT LIST')];
-  // S211 [SIL S209 #2]: surface the IGNIS rank source so a fallback-degraded list
-  // (D-S209.4 — once ~2mo stale on fallback while live was reachable) is never
-  // silent. Parsed from the GENIUS_LIST.md header (`**Rank source:** live`).
-  const rankMatch = markdown.match(/\*\*Rank source:\*\*\s*(\w+)/i);
-  if (rankMatch) {
-    const src = rankMatch[1].toLowerCase();
-    const genMatch = markdown.match(/\*\*Generated:\*\*\s*(\S+)/);
-    let ageStr = '';
-    if (genMatch) {
-      const ageD = (Date.now() - new Date(genMatch[1])) / 86_400_000;
-      if (!Number.isNaN(ageD)) ageStr = ` · ${ageD < 1 ? '<1' : Math.round(ageD)}d old`;
-    }
-    const icon = src === 'live' ? '✓' : '⚠';
-    out.push(row(`${icon} rank source: ${src}${ageStr}`));
-    out.push(blank());
-  }
-  for (const entry of entries) {
-    out.push(row(entry.title));
-    out.push(row(entry.summary));
-    if (entry.command) out.push(row(`↳ ${entry.command}`));
-    out.push(blank());
-  }
-  out.push(bot());
-  return out.join('\n');
-}
-
-// ── Cross-repo TASK_BOARD aggregation ─────────────────────────────────────────
-let portfolioTasks = null;
-try { portfolioTasks = loadPortfolioTaskBoards({ studioRoot: root, currentRepoPath: root }); } catch { /* best-effort */ }
+const buildGeniusBoxFromMarkdown = (markdown) =>
+  renderStartupGeniusBlock(markdown, { top, row, blank, bot });
 
 function buildPortfolioBoxLines() {
-  if (!portfolioTasks?.byProject?.length) return null;
-  const t = portfolioTasks.totals;
-  const out = [top('PORTFOLIO TASK BOARDS')];
-  out.push(row(`Total: ${t.remaining} open · ${t.unblocked} unblocked · ${t.blocked} blocked`));
-  out.push(row(`Crit ${t.critical} · High ${t.high} · ${portfolioTasks.projectsWithWork}/${portfolioTasks.projectsScanned} repos active`));
-  out.push(blank());
-  // Top-2 pattern keeps the founder-mode brief under the 15KB hard cap even
-  // when the orchestrator and human-pressure tiles are present. The long tail
-  // is one ops command away via cross-repo-tasks.mjs.
-  const allActive = portfolioTasks.byProject.filter(p => p.present && p.remaining > 0);
-  const active = allActive.slice(0, 1);
-  for (const p of active) {
-    const marker = p.isCurrent ? '>' : ' ';
-    const nm = (p.name || p.slug || '').slice(0, 24).padEnd(24);
-    const line = `${marker} ${nm} ${String(p.remaining).padStart(3)} open · ${String(p.unblocked).padStart(2)} unblk · C${String(p.critical).padStart(2)} H${String(p.high).padStart(2)}`;
-    out.push(row(line));
-  }
-  const hidden = allActive.length - active.length;
-  if (hidden > 0) out.push(row(`  … +${hidden} more — run: node scripts/lib/cross-repo-tasks.mjs`));
-  out.push(bot());
-  return out.join('\n');
+  return loadPortfolioTaskBoardBlock({ root });
 }
 
 function buildOrchestratorBox() {
@@ -941,143 +643,24 @@ function buildOrchestratorBox() {
       spawnSync(process.execPath, [path.join(root, 'scripts', 'studio-conductor.mjs')], { timeout: 30000, windowsHide: true, stdio: 'ignore' });
     }
   } catch { /* badge stays honest */ }
-  const active = readJson(path.join(root, 'portfolio', 'ACTIVE_SESSIONS.json'), null);
-  const pending = readJson(path.join(root, 'portfolio', 'PENDING_PROPAGATION.json'), null);
-  const activeSessions = Array.isArray(active?.activeSessions) ? active.activeSessions : [];
-  const staleLocks = Array.isArray(active?.staleLocks) ? active.staleLocks : [];
-  const conflicts = Array.isArray(active?.conflicts) ? active.conflicts : [];
-  const generatedAt = active?._generatedAt ? new Date(active._generatedAt).getTime() : null;
-  const snapshotAgeMin = generatedAt ? Math.max(0, Math.round((Date.now() - generatedAt) / 60000)) : null;
-  const snapshotLabel = snapshotAgeMin == null
-    ? 'snapshot unknown'
-    : snapshotAgeMin < 60
-      ? `${snapshotAgeMin}m old`
-      : `${Math.round(snapshotAgeMin / 60)}h old`;
-
-  const pendingItems = (() => {
-    if (!pending) return [];
-    const raw = Array.isArray(pending) ? pending : (pending.pending || pending.queue || Object.values(pending));
-    return Array.isArray(raw) ? raw.filter(Boolean) : [];
-  })();
-  const locked = new Set(activeSessions.map(s => s.slug));
-  const lockedPending = pendingItems.filter(item => locked.has(item.slug)).length;
-
-  const arkCount = (() => {
-    const cutoff = Date.now() - 24 * 3600 * 1000;
-    const dir = path.join(root, 'portfolio', 'ark', 'log');
-    try {
-      return fs.readdirSync(dir)
-        .filter(f => f.endsWith('.ndjson'))
-        .flatMap(f => readText(path.join(dir, f)).split(/\r?\n/).filter(Boolean))
-        .reduce((count, line) => {
-          try {
-            const item = JSON.parse(line);
-            const ts = new Date(item.ts || item.timestamp || item.shippedAt || 0).getTime();
-            return ts >= cutoff ? count + 1 : count;
-          } catch {
-            return count;
-          }
-        }, 0);
-    } catch {
-      return 0;
-    }
-  })();
-
-  const untracked = (() => {
-    const detector = path.join(root, 'scripts', 'detect-new-dev-folders.mjs');
-    if (!fs.existsSync(detector)) return null;
-    try {
-      const res = spawnSync(node, [detector, '--json'], { cwd: root, encoding: 'utf8', timeout: 5000 });
-      return res.status === 0 && res.stdout ? JSON.parse(res.stdout) : null;
-    } catch {
-      return null;
-    }
-  })();
-  const projectLike = untracked?.categories?.projectLike?.length ?? 0;
-  const scratch = untracked?.categories?.scratch?.length ?? 0;
-
-  const out = [top('ORCHESTRATOR')];
-  out.push(row(`Workers: ${activeSessions.length}/${active?.portfolio?.totalProjects ?? '?'} active · ${staleLocks.length} stale · ${conflicts.length} conflicts`));
-  // S220 audit #17 — a stale snapshot must not drive routing silently: badge
-  // the recommendation when the snapshot is >24h old.
-  const snapStale = snapshotAgeMin != null && snapshotAgeMin > 1440;
-  out.push(row(snapStale
-    ? `Snapshot: ${snapshotLabel} ⚠ STALE · next ${active?.recommendedNextRepo?.slug || 'n/a'} (unreliable — refresh: studio-conductor)`
-    : `Snapshot: ${snapshotLabel} · next ${active?.recommendedNextRepo?.slug || 'n/a'}`));
-  out.push(row(`Propagation: ${pendingItems.length} queued · ${lockedPending} lock-blocked`));
-  out.push(row(`Ark: ${arkCount} cargo in 24h · full view: node scripts/orchestrate.mjs`));
-  out.push(row(`Untracked: ${projectLike} project-like · ${scratch} scratch`));
-  out.push(bot());
-  return out.join('\n');
+  return renderOrchestratorBlock({ root, node });
 }
 
 // ── FOUNDER UNLOCKS — outstanding human actions that reopen sprint surface ───
-import { ensureAges, daysSince } from './lib/human-action-ages.mjs';
 function buildFounderUnlocksBox() {
-  const humanSection = (() => {
-    const parts = taskBoard.split(/^## /m);
-    const m = parts.find(p => p.startsWith('Human Action Required'));
-    if (!m) return '';
-    const nl = m.indexOf('\n');
-    return nl === -1 ? '' : m.slice(nl + 1);
-  })();
-  const items = humanSection.split(/\r?\n/).filter(l => /^- \[ \]/.test(l)).slice(0, 2);
-  if (items.length === 0) return null;
-  // Backfill first-seen dates so items without ~N sessions notation still age.
-  const ledger = ensureAges(taskBoard, { root });
-  const out = [top('FOUNDER UNLOCKS')];
-  out.push(row('Single founder actions that reopen sprint surface:'));
-  for (const line of items) {
-    const clean = line.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '');
-    const ageMatch = clean.match(/~?(\d+)\s*sessions/);
-    const title = clean.split(/\s+—\s+/)[0];
-    let age;
-    if (ageMatch) {
-      age = `${ageMatch[1]}s`;
-    } else if (ledger[title]?.firstSeen) {
-      const d = daysSince(ledger[title].firstSeen);
-      age = d === 0 ? 'today' : `${d}d`;
-    } else {
-      age = 'new';
-    }
-    out.push(row(`${age.padStart(5)} · ${title.slice(0, W - 12)}`));
-  }
-  out.push(bot());
-  return out.join('\n');
+  return renderFounderUnlocksBlock({ root, taskBoard });
 }
 
 // ── IGNIS INSIGHT summary ─────────────────────────────────────────────────────
 const ignisInsight = (() => { try { return loadIgnisInsight({ studioRoot: root }); } catch { return { present: false }; } })();
 
 function buildIgnisInsightBox() {
-  if (!ignisInsight?.present) return null;
-  const out = [top('IGNIS INSIGHT')];
-  if (ignisInsight.generated) out.push(row(`Synth:    ${ignisInsight.generated} (${ignisInsight.daysSinceSynth}d old) · ${ignisInsight.phase || ''}`));
-  if (ignisInsight.avgIq) out.push(row(`Avg IQ:   ${ignisInsight.avgIq}`));
-  if (ignisInsight.coverage) out.push(row(`Coverage: ${ignisInsight.coverage}`));
-  if (ignisInsight.topProject) out.push(row(`Top:      ${ignisInsight.topProject}`));
-  if (ignisInsight.topRisk) out.push(row(`Top risk: ${ignisInsight.topRisk}`));
-  if (ignisInsight.truthMix) out.push(row(`Truth:    ${ignisInsight.truthMix}`));
-  if (ignisInsight.firstAction) out.push(row(`Do next:  ${ignisInsight.firstAction}`));
-  if (ignisInsight.summaryLead) out.push(row(`Summary:  ${ignisInsight.summaryLead}`));
-  out.push(bot());
-  return out.join('\n');
+  return renderIgnisInsightBlock(ignisInsight);
 }
 
 // ── External signal summary ──────────────────────────────────────────────────
 function buildExternalSignalsBox() {
-  const log = readText(path.join(root, 'portfolio', 'EXTERNAL_SIGNAL_LOG.md'));
-  if (!log) return null;
-  const entries = log.split(/^### /m).slice(1);
-  if (entries.length === 0) return null;
-  const latest = entries[entries.length - 1];
-  const title = latest.split(/\r?\n/)[0]?.trim() || 'latest signal';
-  const body = latest.split(/\r?\n/).slice(1).join(' ').replace(/\s+/g, ' ').trim();
-  const out = [top('EXTERNAL SIGNALS')];
-  out.push(row(`${entries.length} logged · latest: ${title}`));
-  if (body) out.push(row(body));
-  out.push(bot());
-  return out.join('\n');
+  return renderExternalSignalsBlock({ root });
 }
 
 // ── Genius list: call generate-genius-list.mjs --brief ────────────────────────
@@ -1169,6 +752,8 @@ const lines = [
   renderLastCompleted(status.lastSessionSummary, {
     expectedSession: currentSession - 1,
     fallback: status.currentFocus || shippedLine || 'Latest session details unavailable.',
+    tests: testSignal.detail,
+    deploy: status.lastDeployStatus || 'N/A',
   }),
   ``,
   ...(Array.isArray(status.testingSurfaces) && status.testingSurfaces.length
@@ -1178,29 +763,13 @@ const lines = [
   renderProfileLensHeader(),
   ``,
   // ── SCORE box (v4.0 — 10-category breakdown + sparklines) ──────────────────
-  top('SCORE'),
-  blank(),
-  row(`  ${silTotal}/${silMax}   ${bar24(silTotal, silMax)}   ${pct}`),
-  row(`  SIL v3.0  ·  Avg3: ${avg3Raw ?? '?'}  ·  Velocity ${velocity}${velTrend || '→'}${silStreak >= 2 ? `  ·  Streak ${silStreak}${silStreak >= 8 ? ' 🔥' : silStreak >= 4 ? ' ✦' : ''}` : ''}`),
-  row(`  Last active: ${daysSinceActive}d  ·  Last closeout: ${daysSinceClosedOut}d  ·  (active = newest of SIL/status/handoff)`),
-  row(`  Trend  ${velHistBar || sparkline}  ${velTrend || '→'}  (last ${(velLast5 || []).length || 5} sessions)`),
-  blank(),
-  row(`  Category         Score  Bar        Spark   Δ`),
-  row(`  ─────────────── ────── ────────── ──────── ─`),
-  // Original 5 — with multi-session sparkline
-  row(`  Dev Health       ${String(lastDev).padStart(3)}    ${bar10(lastDev)}  ${spark(catHistory.dev).padEnd(8)} ${trend(lastDev, cat3.dev)}`),
-  row(`  Alignment        ${String(lastAlign).padStart(3)}    ${bar10(lastAlign)}  ${spark(catHistory.align).padEnd(8)} ${trend(lastAlign, cat3.align)}`),
-  row(`  Momentum         ${String(lastMomentum).padStart(3)}    ${bar10(lastMomentum)}  ${spark(catHistory.momentum).padEnd(8)} ${trend(lastMomentum, cat3.momentum)}`),
-  row(`  Engagement       ${String(lastEngage).padStart(3)}    ${bar10(lastEngage)}  ${spark(catHistory.engage).padEnd(8)} ${trend(lastEngage, cat3.engage)}`),
-  row(`  Process Qual     ${String(lastProcess).padStart(3)}    ${bar10(lastProcess)}  ${spark(catHistory.process).padEnd(8)} ${trend(lastProcess, cat3.process)}`),
-  // v3.0 new categories — single snapshot for now, sparkline builds as history accrues
-  row(`  Coherence        ${String(lastCoherence).padStart(3)}    ${bar10(lastCoherence)}  ${'·'.repeat(8)} →`),
-  row(`  Security         ${String(lastSecurity).padStart(3)}    ${bar10(lastSecurity)}  ${'·'.repeat(8)} →`),
-  row(`  Ecosystem        ${String(lastEcosystem).padStart(3)}    ${bar10(lastEcosystem)}  ${'·'.repeat(8)} →`),
-  row(`  Capital          ${String(lastCapital).padStart(3)}    ${bar10(lastCapital)}  ${'·'.repeat(8)} →`),
-  row(`  Automation       ${String(lastAutomation).padStart(3)}    ${bar10(lastAutomation)}  ${'·'.repeat(8)} →`),
-  blank(),
-  bot(),
+  renderStartupScoreBlock({
+    silTotal, silMax, bar24, pct, avg3Raw, velocity, velTrend, silStreak,
+    daysSinceActive, daysSinceClosedOut, velHistBar, sparkline, velLast5,
+    bar10, spark, trend, catHistory, cat3, lastDev, lastAlign, lastMomentum,
+    lastEngage, lastProcess, lastCoherence, lastSecurity, lastEcosystem,
+    lastCapital, lastAutomation,
+  }),
   ``,
   // ── WHERE WE LEFT OFF ──────────────────────────────────────────────────────
   top(`WHERE WE LEFT OFF  ·  Session ${currentSession - 1}`),
@@ -1212,30 +781,7 @@ const lines = [
   bot(),
   ``,
   // ── CONTEXT METER (S119 founder directive — was buried, now first-class) ──
-  top('CONTEXT METER'),
-  ...(() => {
-    // Progress bar — 24 chars filled per used%.
-    const fillN = Math.min(24, Math.max(0, Math.round(meterUsedFrac * 24)));
-    const bar = '█'.repeat(fillN) + '░'.repeat(24 - fillN);
-    const tagIcon = meter.recommendation === 'CLOSEOUT' ? '⛔'
-      : meter.recommendation === 'CONSIDER_CLOSEOUT' ? '⚠'
-      : '✓';
-    const liveTag = meter.confidence || (meter.live ? 'live' : 'heuristic');
-    const usedStr = meterUsed.toLocaleString();
-    const limitStr = meter.limit.toLocaleString();
-    const lines = [
-      row(`${tagIcon}  ${bar}  ${String(meterUsedPct).padStart(3)}% used`),
-      row(`   ${usedStr} / ${limitStr} tok  ·  ${meter.agent}${meter.model ? '/' + meter.model : ''}  ·  ${liveTag}`),
-    ];
-    if (meter.continueCostPerTurn != null) {
-      const cacheLabel = meter.cacheHitRate != null ? `cache ${Math.round(meter.cacheHitRate * 100)}%` : 'cache n/a';
-      const turnsLabel = meter.turnsToCompact != null && meter.turnsToCompact < 999 ? `${meter.turnsToCompact} turns to compact` : 'compact distant';
-      lines.push(row(`   ~${meter.continueCostPerTurn.toLocaleString()} tok/turn  ·  ${cacheLabel}  ·  ${turnsLabel}`));
-    }
-    lines.push(row(`   Verdict: ${meter.recommendation}${meter.recommendation === 'CONTINUE' ? '' : '  ← act now'}`));
-    return lines;
-  })(),
-  bot(),
+  renderStartupContextMeterBlock(meter, { row, top, bot }),
   ``,
   // ── SIGNALS ────────────────────────────────────────────────────────────────
   // S220 audit #7 — the SIGNALS rows also persist to context/SIGNALS.md (see
@@ -1284,88 +830,19 @@ const lines = [
     bot(),
     ``,
   ] : []),
-  ...(intentLine ? [
-    top('EXECUTION PLAN'),
-    row(`Intent:        ${intentLine.slice(0, W - 15)}`),
-    ...(repoTouchLine ? [row(`Repo touch:    ${repoTouchLine.slice(0, W - 15)}`)] : []),
-    ...(yieldLine ? [row(`Expected:      ${yieldLine.slice(0, W - 15)}`)] : []),
-    bot(),
-    ``,
-  ] : []),
+  ...renderExecutionPlanBlock({ intentLine, repoTouchLine, yieldLine }),
   // Now/Next/Blocked buckets removed — Unified Genius List is the single
   // recommendation surface. Blocked count surfaces in SIGNALS + GENIUS LIST.
-  ...(topPressure ? [
-    top('HUMAN PRESSURE'),
-    row(`Top item:      ${topPressure.title.slice(0, W - 15)}`),
-    row(`Pressure:      ${topPressure.pressureScore} · ${topPressure.pressureBand}`),
-    row(`Next action:   ${topPressure.nextAgentAction.slice(0, W - 15)}`),
-    bot(),
-    ``,
-  ] : []),
+  ...renderHumanPressureBlock(topPressure),
   // ── v4.0: SESSION VOICE (personable cue) ────────────────────────────────────
   // Suppressed S116 #623 — low-signal flavor block was pushing brief over the
   // 15KB brief-golden cap. v4.1 spec already drops this. Re-enable behind a
   // flag if needed, but keep brief lean for token-cost reasons.
   ...[],
   // ── v4.0: MOMENTUM METER (velocity + intent + streak + cost) ────────────────
-  top('MOMENTUM METER'),
-  row(`Velocity:   ${velHistBar || '—'}  ${velocity}${velTrend || '→'}  (last 5 sessions)`),
-  row(`Intent:     ${intentPct || '?'}% achieved last 5`),
-  row(`Streak:     ${streak > 0 ? `✓ ${streak} consecutive achieved-intent session${streak > 1 ? 's' : ''}` : '— (last intent not achieved)'}`),
-  ...(cacheHitPct !== null ? [row(`Cache hit:  ${cacheHitPct}%  ${cacheHitPct >= 60 ? '✓ meeting target' : '⚠ below 60% target'}`)] : []),
-  ...(weeklyCost !== null ? [row(`Weekly spend: $${weeklyCost.toFixed(2)}`)] : []),
-  bot(),
-  ``,
+  ...renderMomentumMeterBlock({ velHistBar, velocity, velTrend, intentPct, streak, cacheHitPct, weeklyCost }),
   // ── SIL FORECAST (S114 audit #3) ──────────────────────────────────────────
-  ...(() => {
-    try {
-      const silTxt = fs.readFileSync(path.join(root, 'context', 'SELF_IMPROVEMENT_LOOP.md'), 'utf8');
-      const sessions = parseSilHistory(silTxt);
-      if (!sessions.length) return [];
-      const f = forecastNext(sessions, { velocity, blockerPressure: 87, contextAge: 0 });
-      if (!f) return [];
-      // S220 audit #16 — calibration loop: resolve prior forecasts against the
-      // actuals now visible in SIL history, record this forecast, show rolling MAE.
-      let maeRow = null;
-      try {
-        const fl = recordAndResolve(root, {
-          forSession: (sessions[0].session ?? 0) + 1,
-          forecastTotal: f.totalPredicted,
-          actuals: sessions.map(s => ({ session: s.session, total: s.total })),
-        });
-        const { mae, samples } = rollingMae(fl);
-        maeRow = mae != null
-          ? row(`Calibration: MAE ${mae} over last ${samples} forecasts`)
-          : row(`Calibration: ${samples}/3 samples — uncalibrated`);
-      } catch { /* ledger failure never blocks the brief */ }
-      const diff = f.totalPredicted - sessions[0].total;
-      const arrow = diff > 0 ? '↑' : diff < 0 ? '↓' : '→';
-      const risky = Object.entries(f.categories)
-        .filter(([, x]) => x.delta != null && x.delta <= -3)
-        .sort((a, b) => a[1].delta - b[1].delta).slice(0, 3);
-      // S124 #10 — actionable mitigations from portfolio/SIL_MITIGATIONS.json
-      let mitigationRow = null;
-      if (risky.length) {
-        try {
-          const mit = JSON.parse(fs.readFileSync(path.join(root, 'portfolio', 'SIL_MITIGATIONS.json'), 'utf8'));
-          const [topRiskCat] = risky[0];
-          const m = mit.mitigations?.[topRiskCat];
-          if (m?.hint) mitigationRow = row(`Mitigation: ${m.hint.slice(0, 56)}`);
-        } catch {}
-      }
-      return [
-        top('SIL FORECAST (next session)'),
-        row(`Projected:  ${f.totalPredicted}/1000  (${arrow}${Math.abs(diff)} vs current ${sessions[0].total})`),
-        ...(risky.length
-          ? [row(`At-risk:    ${risky.map(([c, x]) => `${c} Δ${x.delta}`).join(' · ')}`)]
-          : [row(`All categories forecast stable or rising.`)]),
-        ...(mitigationRow ? [mitigationRow] : []),
-        ...(maeRow ? [maeRow] : []),
-        bot(),
-        ``
-      ];
-    } catch { return []; }
-  })(),
+  ...renderSilForecastBlock({ root, velocity, currentTotal: silTotal, blockerPressure: 87, contextAge: 0 }),
   // ── GENIUS HIT LIST ────────────────────────────────────────────────────────
   geniusBlock,
   ``,
@@ -1377,16 +854,26 @@ const lines = [
   `*Run \`node scripts/ops.mjs doctor\` for live health check · \`node scripts/ops.mjs genius-list\` to refresh hit list*`,
 ];
 
-// S154 audit #4 — enforce per-tile byte budgets at the source. Overflowing
-// tiles are trimmed with an explicit marker (never silently — CANON-031).
-let briefBody = lines.join('\n');
-try {
-  const { enforceTileBudgets } = await import('./validate-brief-format.mjs');
-  const r = enforceTileBudgets(briefBody);
-  briefBody = r.body;
-  for (const t of r.trimmed) console.log(`  ✂ tile trimmed to budget: ${t.title} (−${t.dropped} lines, cap ${(t.budget / 1024).toFixed(1)}KB)`);
-} catch { /* budget enforcement is advisory at render time */ }
-fs.writeFileSync(outputPath, briefBody, 'utf8');
+let briefBody = await writeStartupBriefWithTelemetry({
+  root,
+  scriptsDir: __dirname,
+  node,
+  outputPath,
+  briefBody: lines.join('\n'),
+  currentSession,
+  silTotal,
+  silMax,
+  pct,
+  openNow,
+  openBlocked,
+  signals: [
+    `tests ${sigTests}`, `velocity ${sigVel}`, `runway ${sigRun}`,
+    `genome ${sigGenome}`, `entropy ${sigEntropy}`, `cdr ${sigCdr}`,
+    `patterns ${sigPatterns}`, `templates ${sigVer}`, `revenue ${sigRev}`,
+  ],
+  today,
+  rendererVersion: STARTUP_BRIEF_VERSION,
+});
 const profileReceipt = resolveProjectProfile({
   profile: readJson(path.join(root, '.cache', 'project-profile.json'), null),
   status,
@@ -1401,72 +888,11 @@ writeStartupSourceReceipt(root, buildStartupSourceReceipt({
     truth: { status: truthStatus, classification: classifyQualifiedStatus(truthStatus).state },
     compliance: { state: complianceEvidence.state, snapshots: complianceSnapshots.length },
     revenue: { source: path.relative(root, revenueSignalsPath).replace(/\\/g, '/'), ageDays: revAge },
-    context: { confidence: meter.confidence || 'unknown', recommendation: meter.recommendation, measured: meterUsedPctRaw != null },
+    context: { confidence: meter.confidence || 'unknown', recommendation: meter.recommendation, measured: meter.pctUsed != null },
     tests: { command: resolvePrimaryTestCommand(status, packageJson), stale: testsStale },
   },
+  claims: [
+    { id: 'sil-avg3', rendered: `Avg3: ${avg3Raw ?? '?'}` },
+    { id: 'notional-cost', rendered: 'flat-rate Max Plan' },
+  ],
 }));
-console.log(`✓ Startup brief → docs/STARTUP_BRIEF.md  (v${STARTUP_BRIEF_VERSION})`);
-console.log(`  Session ${currentSession} · SIL ${silTotal}/${silMax} · ${pct} · Unblocked ${openNow.length} / Blocked ${openBlocked.length}`);
-console.log(`  Signals: tests ${sigTests}  velocity ${sigVel}  runway ${sigRun}  genome ${sigGenome}  entropy ${sigEntropy}  cdr ${sigCdr}  patterns ${sigPatterns}  templates ${sigVer}  revenue ${sigRev}`);
-
-// ── R-H15 (S118 G4): record skill cost telemetry on every /start render ──────
-try {
-  const { recordSkillCost } = await import('./lib/skill-cost-ledger.mjs');
-  const briefBytes = Buffer.byteLength(lines.join('\n'), 'utf8');
-  const actualTokens = Math.ceil(briefBytes / 4);
-  recordSkillCost(root, {
-    skill: 'start',
-    sessionId: `S${currentSession}`,
-    actualTokens,
-    status: 'completed',
-  });
-} catch (err) {
-  // non-fatal — telemetry is advisory
-  process.stderr.write(`  ⚠ skill-cost-ledger record skipped: ${err.message}\n`);
-}
-
-// ── Audit S119 #11: dual-render mode for measured v5 savings ────────────────
-// Set STUDIO_BRIEF_V5=compare to also emit v5 and log size delta. Use
-// STUDIO_BRIEF_V5=1 (or --v5) to promote v5 as the source of /start. Default
-// (no flag) keeps v3.1 — full cutover blocked on measured-comparable session.
-// S120 audit #12 — v5 now default when `.cache/brief-v5-canonical` flag file
-// exists (set once at promotion). Env override still honored.
-const v5FlagFile = path.join(root, '.cache', 'brief-v5-canonical');
-const v5Mode = process.env.STUDIO_BRIEF_V5
-  || (process.argv.includes('--v5') ? '1' : null)
-  || (fs.existsSync(v5FlagFile) ? '1' : 'off');
-if (v5Mode !== 'off') {
-  try {
-    const v5Path = path.resolve(__dirname, 'render-startup-brief-v5.mjs');
-    if (fs.existsSync(v5Path)) {
-      const res = spawnSync(node, [v5Path], { cwd: root, stdio: 'inherit' });
-      if (res.status === 0) {
-        const v3Bytes = Buffer.byteLength(lines.join('\n'), 'utf8');
-        const v5File = path.join(root, 'docs', 'STARTUP_BRIEF_V5.md');
-        if (fs.existsSync(v5File)) {
-          const v5Bytes = fs.statSync(v5File).size;
-          const reductionPct = Math.round(((v3Bytes - v5Bytes) / v3Bytes) * 100);
-          console.log(`  ◆ brief-v5 compare: v3=${v3Bytes}b v5=${v5Bytes}b  (${reductionPct}% reduction)`);
-          if (v5Mode === '1' || v5Mode === 'promote') {
-            // S209 [audit #2] — promotion guard. v5 must not overwrite the
-            // canonical brief unless it passes the same validator /start uses AND
-            // carries no unresolved computed-block stub. This is the safety net
-            // that stops a half-built v5 (e.g. an unwired SIGNALS/HUMAN PRESSURE
-            // resolver) from silently becoming the founder's primary surface.
-            const v5Text = fs.readFileSync(v5File, 'utf8');
-            const hasStub = /\{"script":\s*"/.test(v5Text);
-            const valid = spawnSync(node, [path.join(__dirname, 'validate-brief-format.mjs'), v5File], { cwd: root });
-            if (hasStub || valid.status !== 0) {
-              console.error(`  ⚠ brief-v5 promotion BLOCKED — ${hasStub ? 'unresolved computed-block stub' : 'failed validate-brief-format'}; keeping v3.1 canonical.`);
-            } else {
-              fs.copyFileSync(v5File, outputPath);
-              console.log(`  ◆ brief-v5 promoted → docs/STARTUP_BRIEF.md`);
-            }
-          }
-        }
-      }
-    }
-  } catch (err) {
-    process.stderr.write(`  ⚠ v5 dual-render skipped: ${err.message}\n`);
-  }
-}

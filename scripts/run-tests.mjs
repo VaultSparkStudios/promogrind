@@ -23,9 +23,11 @@ import { isSpawnExhaustion, spawnBackoffMs, spawnResilient } from './lib/spawn-r
 import { getHostLoad } from './lib/host-load.mjs';
 import { readDurationCache, recordDuration, sortByHistoricalDuration, writeDurationCache } from './lib/test-duration-ordering.mjs';
 import { buildProofSourceManifest } from './lib/proof-source-manifest.mjs';
+import { classifyAfterRetry, formatProgressLine, lastFailureCause, parseShardSpec, proofShapeMatches, reusableShardProof, stableProofHash } from './lib/test-run-proof-semantics.mjs';
 // Re-export the pure helpers so existing importers of run-tests keep working and the
 // single source of truth stays scripts/lib/spawn-resilience.mjs.
 export { isSpawnExhaustion, spawnBackoffMs };
+export { classifyAfterRetry, formatProgressLine, lastFailureCause, parseShardSpec, proofShapeMatches, reusableShardProof, stableProofHash };
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DURATION_CACHE = path.join(ROOT, '.cache', 'test-durations.json');
@@ -96,18 +98,6 @@ function discover() {
   return files.sort((a, b) => a.tier.localeCompare(b.tier) || a.path.localeCompare(b.path));
 }
 
-export function parseShardSpec(spec) {
-  if (!spec) return null;
-  const m = String(spec).match(/^(\d+)\/(\d+)$/);
-  if (!m) throw new Error(`invalid shard spec "${spec}" (expected i/n)`);
-  const index = Number(m[1]);
-  const total = Number(m[2]);
-  if (!Number.isInteger(index) || !Number.isInteger(total) || total < 1 || index < 1 || index > total) {
-    throw new Error(`invalid shard spec "${spec}" (expected 1 <= i <= n)`);
-  }
-  return { index, total };
-}
-
 export function fileShardIndex(file, total) {
   const rel = path.relative(ROOT, file.path || String(file)).replace(/\\/g, '/');
   let hash = 2166136261;
@@ -126,16 +116,6 @@ export function shardProofPath(proofDir, shardCount, shardIndex) {
   return path.join(proofDir, `shard-${shardIndex}-of-${shardCount}.json`);
 }
 
-export function stableProofHash(value) {
-  const text = JSON.stringify(value ?? null);
-  let hash = 2166136261;
-  for (let i = 0; i < text.length; i++) {
-    hash ^= text.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-  return (hash >>> 0).toString(16).padStart(8, '0');
-}
-
 export function shardProofShape({ files = [], shardCount = null, passthrough = [] } = {}) {
   const filePaths = files
     .map(f => path.relative(ROOT, f.path || String(f)).replace(/\\/g, '/'))
@@ -148,42 +128,6 @@ export function shardProofShape({ files = [], shardCount = null, passthrough = [
     argsHash: stableProofHash(normalizedArgs),
     proofSources: buildProofSourceManifest(ROOT),
   };
-}
-
-export function proofShapeMatches(actual, expected) {
-  if (!actual || !expected) return false;
-  return actual.totalFiles === expected.totalFiles
-    && actual.filesHash === expected.filesHash
-    && actual.shardCount === expected.shardCount
-    && actual.argsHash === expected.argsHash
-    && actual.proofSources?.schemaVersion === expected.proofSources?.schemaVersion
-    && actual.proofSources?.rootHash === expected.proofSources?.rootHash;
-}
-
-export function reusableShardProof(proof, { shardCount, shardIndex, proofShape = null } = {}) {
-  if (!proof || proof.mode !== 'shard-proof') return false;
-  if (shardCount && proof.shardCount !== shardCount) return false;
-  if (shardIndex && proof.shardIndex !== shardIndex) return false;
-  if (proofShape && !proofShapeMatches(proof.proofShape, proofShape)) return false;
-  const parsed = proof.parsed || {};
-  return proof.exitCode === 0
-    && !proof.signal
-    && parsed.failures === 0
-    && !(parsed.envBlocked || []).length
-    && !(parsed.deferred || []).length
-    && !parsed.budgetExhausted;
-}
-
-// S167 [audit #2] test-runner-inconclusive-honesty — pure, unit-testable
-// classifier for a file that FAILED in-suite, given its solo-retry result.
-// Honest discriminator: a real regression shows pass < total; concurrent-load
-// contention (Windows teardown/file-lock race) shows pass === total with a
-// non-zero exit. 'inconclusive' carries the passing assertions forward but is
-// surfaced distinctly — it can never mask an assertion failure.
-export function classifyAfterRetry(retry) {
-  if (retry.status === 'pass') return 'flaky';
-  if (retry.total > 0 && retry.pass === retry.total) return 'inconclusive';
-  return 'fail';
 }
 
 // S190 [SIL S189 #2] test-runner failures-only streaming sidecar.
@@ -199,22 +143,6 @@ export const SIDECAR_PATH = path.join(ROOT, '.cache', 'test-failures.ndjson');
 // Extract the single most diagnostic line from a captured test output blob.
 // Prefers a line that looks like an assertion/failure/error; falls back to the
 // last non-empty line. Bounded so the sidecar stays line-oriented and greppable.
-export function lastFailureCause(output) {
-  const lines = (output || '').split('\n').map(s => s.trim()).filter(Boolean);
-  if (!lines.length) return '';
-  for (let i = lines.length - 1; i >= 0; i--) {
-    if (/⛔|FAIL|Error|✗|assert|Expected|Received|throw/i.test(lines[i])) return lines[i].slice(0, 200);
-  }
-  return lines[lines.length - 1].slice(0, 200);
-}
-
-// One fixed-width progress line per resolved file (streamed to stderr).
-export function formatProgressLine(i, n, r) {
-  const mark = r.status === 'pass' || r.status === 'covered-directly' ? '✓' : r.status === 'flaky' ? '⚠' : r.status === 'inconclusive' ? '◐' : r.status === 'env-blocked' ? '⊘' : '⛔';
-  const idx = `${String(i).padStart(String(n).length)}/${n}`;
-  return `[${idx}] ${mark} T${String(r.tier).padEnd(6)} ${String(r.file).padEnd(46)} ${r.pass}/${r.total}`;
-}
-
 // S203 [SIL][S202 #1] test-runner handle-exhaustion ROOT-FIX (carried [SIL #2]
 // since S200, deferred 3× as "env-blocked — attempt on a quiet host"). The runner
 // runs files SERIALLY, so the exhaustion is never the runner's own concurrency:

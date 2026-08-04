@@ -349,3 +349,12 @@ Agents MUST NOT modify or remove existing entries.
 - **New required direction:** high-consequence boundaries must be explicit where a person or machine makes the decision: payment acknowledgement must follow verified persistence, provider egress must show consent and data classes, guidance must preserve uncertainty, and visual proof must be able to disprove implementation assumptions.
 - **Application:** S125 hardened Stripe and AI egress, eliminated categorical public guidance, unified bounded browser automation, and repaired a light-theme defect found only by inspecting rendered pixels.
 - **Durable rule:** sophisticated trust design makes uncertainty inspectable and retryable; it never converts missing authority into a confident success state.
+
+### 2026-08-04 — A green control plane must survive its own execution order (S126)
+
+- **Category:** Assignment / quality direction
+- **Human input (close paraphrase):** Run the entire agent-neutral arc as one uninterrupted mission; exhaust verified primary and generated second-order work; ship at a genius-level, best-in-history bar; gate stopping on measured context; derive observability from source truth and make it self-validating; treat flat-rate Max Plan cost as notional; never fabricate proof; record honest deferral as a win; finish on main with signed broadcast and zero-running hygiene.
+- **Area affected:** release evidence / test observability / startup truth / visual parity / operational maintainability
+- **New required direction:** operational truth must remain correct across real execution order, partial runs, regenerated dependencies, and missing external authority—not merely look coherent when read in isolation.
+- **Application:** S126 created a typed launch-proof graph, atomic test evidence with dependent regeneration, witnessed startup claims, compiled release parity, and focused control-plane modules.
+- **Durable rule:** a green gate is trustworthy only if running it can neither erase nor stale the evidence it consumes; every unproved external fact stays a visible HOLD.

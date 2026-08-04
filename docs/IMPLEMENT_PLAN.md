@@ -1,28 +1,26 @@
-# Implementation Plan — Session 125
+# Implementation Plan — Session 126
 
 Source: `docs/AUDIT_2026-08-03.json`
 
 ## Efficiency order
 
-1. `dynamic-child-process-sentinel` — close the false-green Windows spawn escape before any implementation script relies on it.
-2. `release-control-plane-truth` — reuse the corrected spawn contract and restore executable Canon/release observability.
-3. `categorical-legal-guidance-contract` — repair the narrow live trust defect and strengthen the claim ratchet before UI work.
-4. `consent-bound-ai-chat` — build one client/server AI egress envelope, accessible consent control, and inspectable receipt.
-5. `stripe-authority-boundary` — harden the payment authority perimeter, checkout redirects, provider/DB failure semantics, and adversarial Edge tests.
+1. [x] `complete-launch-proof-graph` — typed vocabulary covers every current blocker with zero fabricated receipts.
+2. [x] `public-shim-release-gate` — public self-profile consumes proof and sanitization sources and emits HOLD.
+3. [x] `typed-vitest-evidence` — atomic file/assertion truth now drives later renderers.
+4. [x] `startup-semantic-truth` — score, intent, tests, deploy, and notional cost are source-derived.
+5. [x] `release-parity-compiler` — parity derives from current visual and test receipts.
 
 ## Completion gates
 
-- Each new item reaches L3 or is explicitly deferred after two evidence-bearing retries; the six preserved S124 items remain no-op shipped history.
-- Every changed contract has focused behavioral tests before its audit row is marked shipped.
-- New options or flags include help text and a concrete example where user-facing.
-- No dependency install, sibling-tree edit, fabricated external proof, or flat-rate Max Plan cost alarm.
-- AI Chat changes receive real-browser dark/light and desktop/mobile inspection with a hash-bound CANON-053 receipt.
-- The final direct `npm run verify:launch-local`, Edge sweep, doctor `blockingFailing: 0`, public sanitization, and secret scans remain mandatory at closeout.
+- All five new items reach L3 with focused adversarial tests; prior S124/S125 rows remain shipped no-ops.
+- No stable staging, delivered header, rotation, provider deployment, mailbox, identity, user-journey, or founder-approval proof is fabricated.
+- Every child process is hidden on Windows and its direct exit is preserved.
+- No dependency install, sibling-tree edit, or Max-plan cost alarm.
+- Final launch-local, doctor, sanitizer, secret, runtime-overlay, and direct-main closeout gates remain mandatory.
 
 ## Wave map
 
-- Wave 3A: spawn + release-control foundations.
-- Wave 3B: public legal-claim truth.
-- Wave 3C: consent-bound AI egress and rendered-pixel verification.
-- Wave 3D: Stripe authority boundary and full Edge verification.
-- Wave 4: generated innovation pack plus compound refinements of the three most recent surfaces.
+- [x] Wave 3A: typed launch graph + public-shim release gate.
+- [x] Wave 3B: typed Vitest evidence + semantic startup brief.
+- [x] Wave 3C: release parity compiler + full focused verification.
+- [x] Wave 4: generated maintainability candidate exhausted through focused startup, runner, and model-router ownership extractions; external proof remains an explicit honest deferral.

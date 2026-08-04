@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-03T21:49:44.881Z",
+  "visual": {
+    "capturedAt": "2026-08-03T21:49:44.881Z",
+    "themes": [
+      "dark",
+      "light"
+    ],
+    "captures": [
+      {
+        "file": "captures/chat-after-desktop-dark.png",
+        "page": "/dashboard — consent-bound PromoChat, unchecked profile disclosure",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "f658c9ca4a55bc6d0796852d763561b8bcf4486c5816cf0f6d68654cb31851f4"
+      },
+      {
+        "file": "captures/chat-after-desktop-light.png",
+        "page": "/dashboard — consent-bound PromoChat, semantic light palette",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "0d65ca7fc88c4722ba820621bf008fe1e23e3a9c623b1913a6fc0261d191c16d"
+      },
+      {
+        "file": "captures/chat-after-mobile-dark.png",
+        "page": "/dashboard — full-screen mobile Chat consent boundary",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "bb374ea79bb76d9f3115e5de9fd04d1013cbabdddea0476d8cfea1fa5f4bfcc1"
+      },
+      {
+        "file": "captures/chat-after-mobile-light.png",
+        "page": "/dashboard — repaired full-screen mobile light Chat",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "a38b472706c80d25cac3befd8ef05bbf08058db23d64afeedfc375ce0b9c6d67"
+      }
+    ],
+    "reviewed": true,
+    "blockingDefectsOpen": 0
+  },
+  "tests": {
+    "state": "green",
+    "files": {
+      "passing": 93,
+      "total": 93
+    },
+    "assertions": {
+      "passing": 642,
+      "total": 642
+    },
+    "receiptSha256": "0441bc6a5ec3de5a95d82a9e6d9a699644d031815138487b00838a81415aa189"
+  },
+  "native": {
+    "state": "planned-no-native-projects",
+    "projects": []
+  }
+}

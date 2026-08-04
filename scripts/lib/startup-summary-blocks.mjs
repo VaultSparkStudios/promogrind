@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { forecastNext, parseSilHistory } from './sil-forecaster.mjs';
+import { recordAndResolve, rollingMae } from './forecast-ledger.mjs';
 
 const W = 62;
 
@@ -104,6 +105,20 @@ export function renderSilForecastBlock({ root, velocity, currentTotal, blockerPr
       .filter(([, x]) => x.delta != null && x.delta <= -3)
       .sort((a, b) => a[1].delta - b[1].delta).slice(0, 3);
     const mitigationRow = buildMitigationRow({ root, risky });
+    let calibrationRow = null;
+    try {
+      const ledger = recordAndResolve(root, {
+        forSession: (sessions[0].session ?? 0) + 1,
+        forecastTotal: f.totalPredicted,
+        actuals: sessions.map((session) => ({ session: session.session, total: session.total })),
+      });
+      const { mae, samples } = rollingMae(ledger);
+      calibrationRow = mae != null
+        ? row(`Calibration: MAE ${mae} over last ${samples} forecasts`)
+        : row(`Calibration: ${samples}/3 samples — uncalibrated`);
+    } catch {
+      // Forecast rendering remains available if its calibration ledger cannot write.
+    }
     return [
       top('SIL FORECAST (next session)'),
       row(`Projected:  ${f.totalPredicted}/1000  (${arrow}${Math.abs(diff)} vs current ${currentTotal ?? sessions[0].total})`),
@@ -111,6 +126,7 @@ export function renderSilForecastBlock({ root, velocity, currentTotal, blockerPr
         ? [row(`At-risk:    ${risky.map(([c, x]) => `${c} Δ${x.delta}`).join(' · ')}`)]
         : [row(`All categories forecast stable or rising.`)]),
       ...(mitigationRow ? [mitigationRow] : []),
+      ...(calibrationRow ? [calibrationRow] : []),
       bot(),
       ``,
     ];

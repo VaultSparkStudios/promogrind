@@ -58,6 +58,9 @@ function countList(v) {
  * staleness compare `lastRun` themselves, so this stays testable.
  */
 export function resolveTestSignal(status = {}) {
+  if (status.testsLatestRunState === 'inconclusive') {
+    return { state: 'unknown', ok: false, detail: 'latest full test run was inconclusive — green evidence was not refreshed' };
+  }
   const passing = status.testsPassing;
   const total = status.testsTotal;
   const deferred = countList(status.testsDeferred);

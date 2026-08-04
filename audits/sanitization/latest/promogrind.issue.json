@@ -1,0 +1,10 @@
+{
+  "title": "[Sanitization] PromoGrind — 0 critical / 0 warning",
+  "body": "## Public-repo sanitization follow-up\n\n**Project:** `PromoGrind` (`promogrind`)\n**Repo:** `VaultSparkStudios/promogrind`\n**Scan mode:** local\n**Repo state:** locked\n**Summary:** critical 0 · warning 0 · confirmed-risk 0 · review-required 0 · hygiene 0\n\n### Priority 1 — confirmed real risk\n- No confirmed-risk findings.\n\n### Priority 2 — review-required\n\n- No review-required findings.\n\n### Priority 3 — hygiene cleanup\n\n- No hygiene findings.\n\n### Rules\n\n- Preserve the public-safe Studio OS map (`PROJECT_BRIEF`, `SOUL`, `CURRENT_STATE`, `TASK_BOARD`, `LATEST_HANDOFF`, `PROJECT_STATUS.json`, `AGENTS.md`, `prompts/start.md`, `prompts/closeout.md`, `logs/WORK_LOG.md`).\n- Remove or sanitize sensitive content; do not delete the navigation layer.\n- If any real secrets were ever committed, rotate first, then purge history.\n\n### Session lock\n\n- Active lock detected: `C:\\Users\\p4cka\\Documents\\Development\\PromoGrind\\context\\.session-lock`",
+  "labels": [
+    "sanitization",
+    "cleanup"
+  ],
+  "repo": "VaultSparkStudios/promogrind",
+  "slug": "promogrind"
+}

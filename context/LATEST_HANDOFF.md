@@ -1,11 +1,49 @@
 # Latest Handoff — PromoGrind
 
-Date: 2026-08-03
-Session: 125
+Date: 2026-08-04
+Session: 126
 Agent: Codex
-Status: saturated; 5/5 L3 audit items plus 3 second-order innovations shipped; local RC green; SPARKED remains NO-GO
+Status: saturated; 5/5 primary items plus all 3 repo-owned second-order candidates shipped; launch-local green; SPARKED remains evidence-gated NO-GO
+
+Session Intent (S126, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through `/start → /audit → /implement → /closeout`; verify every new premise against live PromoGrind code; apply both the public-product and founder-requested infrastructure lenses; exhaust the Unified Genius List; generate and implement second-order innovations while the measured context gate permits; preserve source-derived observability, notional Max-plan cost treatment, and honest external deferrals; verify local staging; then complete canonical write-back, SIL v3 scoring, direct-main push, signed Ark impact broadcast, and zero-running shell hygiene.
 
 Session Intent (S125, Codex): Run the complete agent-neutral `/goal` + `/arc` continuously through `/start → /audit → /implement → /closeout`; verify every audit premise against live PromoGrind code, exhaust all repo-owned primary work, generate and implement second-order innovations while the context meter permits, preserve source-derived observability and honest external deferrals, verify through the local staging/launch gate, and finish with canonical write-back, SIL v3 scoring, direct-main push, Ark broadcast, and zero-running shell hygiene.
+
+## Where We Left Off (Session 126)
+
+S126 completed the continuous arc without a phase handback. Five live-code-verified primary items and all three generated repo-owned second-order candidates shipped. The generator now returns only the typed external launch-proof ledger, correctly classified as an honest external deferral.
+
+## What shipped in S126
+
+1. A typed launch-proof graph mapping every status blocker to criterion-level evidence and refusing empty, stale, or incomplete promotion output.
+2. An atomic Vitest evidence wrapper preserving exact exit, file/assertion totals, completeness semantics, and dependency-safe status/parity regeneration.
+3. Source-witnessed startup truth for session intent, SIL average, typed test/deploy posture, and notional flat-rate Max Plan usage.
+4. A compiled release-parity receipt binding four inspected dark/light desktop/mobile captures to typed test and native-surface scope.
+5. Behavioral startup provenance testing and strict release-gate `--check` / `--require-ready` semantics.
+6. Focused startup renderer modules below the maintainability threshold.
+7. Isolated, regression-tested test-run proof semantics and model-router persistence while preserving one provider network chokepoint.
+8. A 51/51 runtime compatibility contract: 26 exact mirrors, 16 documented local overrides, zero undocumented drift.
+
+## S126 verification
+
+- Final `npm run verify:launch-local` returned direct exit 0.
+- Vitest: 93/93 files and 642/642 assertions; Deno: 52/52 tests across seven files; all 15 Edge Function entrypoints typecheck.
+- Release surface, session invariants, proof replay, production build/browser smoke, public exposure, bundle budget, tracked-secret scan, and strict public sanitization pass.
+- Initial bundle is 179.1 KB raw / 60.0 KB gzip.
+- Release gate honestly returns HOLD because 12 typed blocking criteria remain incomplete; no external receipt was fabricated.
+
+## S126 honest deferrals
+
+- Stable remote staging and six response headers remain absent.
+- Historical credential remediation and exact PromoGrind Supabase deploy authority remain unproved.
+- Zoho identity, Obelisk delegation, auth-email, Stripe lifecycle, friend beta, capture evidence, and founder approval remain unproved.
+- Sixteen consumer safety overlays require upstream reconciliation via Studio Ark; no sibling repository was edited.
+
+Intent Outcome: Achieved — the repo-owned Unified Genius List and generated second-order work are exhausted; the remaining item is a typed external evidence boundary, preserved as a win rather than counterfeited green.
+
+---
+
+## Prior handoff (Session 125)
 
 ## Where We Left Off (Session 125)
 

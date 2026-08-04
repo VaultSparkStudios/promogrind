@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-03 (Session 125 closeout) -->
+<!-- generated-at: 2026-08-04 (Session 126 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S125 ════════════════════════╗
-║  Date: 2026-08-03  ·  SIL: 1000/1000  ·  Velocity: 8 stable      ║
+╔══ SESSION CLOSEOUT · PromoGrind · S126 ════════════════════════╗
+║  Date: 2026-08-04  ·  SIL: 1000/1000  ·  Velocity: 8 down        ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ docs(S125): record remote verification [skip ci]              ║
+║  ✓ docs(S125): publish clean closeout board [skip ci]            ║
 ║  ✓ fix(S125): complete closeout runtime propagation [skip ci]    ║
 ║  ✓ docs(S125): record Ark and publication receipts [skip ci]     ║
 ║  ✓ feat(S125): close authority boundaries and saturate runtime   ║
-║  ✓ chore(S124): S124 shipped six verified L3 items plus two sec  ║
-║  ✓ feat: make public truth evidence-derived                      ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,19 +28,19 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 68 files  ·  M:52 A:0 D:0 ?:16                         ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,15 +51,17 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         642/642                                          ║
+║  Tests:         93/93                                            ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         3d ago                                           ║
 ║  Truth:         green-repo-owned-with-history-and-external-proo  ║
 ║  Sanitization:  —                                                ║
-║  shells:        5 started · 5 closed · 0 running                 ║
+║  shells:        0 started · 0 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
+║  #1: 1 public-facing repo(s) blocked by release gates            ║
+║      promogrind is held on Stable staging path available, Block  ║
+║      ↳ node scripts/ops.mjs release-gate                         ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 

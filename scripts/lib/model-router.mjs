@@ -27,10 +27,10 @@
 
 import fs from 'fs';
 import path from 'path';
-import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { classifyTurn as _classifyTurn } from './turn-classifier.mjs';
-
+import { loadSemanticCache, semanticCacheKey, storeSemanticCache, trackBudgetState } from './model-router-state.mjs';
+export { loadSemanticCache, semanticCacheKey, storeSemanticCache };
 // S121 G3: file-based active-skill fallback for cross-process attribution.
 function readActiveSkillFile() {
   try {
@@ -681,34 +681,6 @@ export async function callWithEscalation(opts, httpsModule) {
 }
 
 /**
- * Semantic response cache — dedupes repeat calls with identical system+user hash.
- * Stored under `.ops-cache/semantic/<sha256>.json` (gitignored).
- * Returns cached response if hash matches and is under `ttlSec` old.
- */
-export function semanticCacheKey(system, messages, model) {
-  const normalized = JSON.stringify({ m: model, s: typeof system === 'string' ? system : JSON.stringify(system), u: messages });
-  return crypto.createHash('sha256').update(normalized).digest('hex');
-}
-
-export function loadSemanticCache(key, ttlSec = 3600) {
-  const cacheDir = path.resolve(__dirname, '..', '..', '.ops-cache', 'semantic');
-  const file = path.join(cacheDir, `${key}.json`);
-  try {
-    const stat = fs.statSync(file);
-    if ((Date.now() - stat.mtimeMs) / 1000 > ttlSec) return null;
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch { return null; }
-}
-
-export function storeSemanticCache(key, response) {
-  const cacheDir = path.resolve(__dirname, '..', '..', '.ops-cache', 'semantic');
-  try {
-    fs.mkdirSync(cacheDir, { recursive: true });
-    fs.writeFileSync(path.join(cacheDir, `${key}.json`), JSON.stringify(response));
-  } catch { /* cache never breaks callers */ }
-}
-
-/**
  * Upload a file to the Anthropic Files API; returns file_id.
  * Use for static context that's re-sent across many calls (SOUL.md, CANON, rubrics).
  *
@@ -750,30 +722,10 @@ export function uploadFile({ apiKey, filename, content, mimeType = 'text/plain' 
   });
 }
 
-/**
- * Session budget tracker — lightweight dollar cap per session.
- * Writes running total to `.ops-cache/session-budget.json` (gitignored).
- * Returns `{ spent, remaining, overBudget }`.
- */
 export function trackSessionBudget({ usage, model, cap = 5.0 }) {
   const price = PRICING_PER_MTOK[model] || FALLBACK_PRICE;
-  const cost =
-    (usage.input_tokens || 0)                 * price.input       / 1_000_000 +
-    (usage.output_tokens || 0)                * price.output      / 1_000_000 +
-    (usage.cache_read_input_tokens || 0)      * price.cacheRead   / 1_000_000 +
-    (usage.cache_creation_input_tokens || 0)  * price.cacheWrite  / 1_000_000;
-
   const file = path.resolve(__dirname, '..', '..', '.ops-cache', 'session-budget.json');
-  let state;
-  try { state = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { state = { session: null, spent: 0, cap }; }
-  state.spent = (state.spent || 0) + cost;
-  state.cap = cap;
-  state.lastUpdated = new Date().toISOString();
-  try {
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, JSON.stringify(state, null, 2));
-  } catch { /* budget never breaks callers */ }
-  return { spent: state.spent, remaining: cap - state.spent, overBudget: state.spent > cap };
+  return trackBudgetState({ usage, price, cap, file });
 }
 
 /**

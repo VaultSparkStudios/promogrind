@@ -1,5 +1,25 @@
 # Decisions
 
+## 2026-08-04 — Session 126
+
+### Decision: release readiness is a typed proof graph, not a summary string
+
+- **Context:** canonical status named external blockers that the release ledger did not represent one-for-one, allowing an attractive report to omit inconvenient criteria.
+- **Decision:** every blocking status fact maps to a typed launch-proof node with criterion-level receipts; empty, stale, unmirrored, or incomplete graphs fail closed, and `--require-ready` cannot pass a HOLD.
+- **Consequence:** promotion truth can invalidate itself, while stable staging, headers, credentials, identity, payments, beta, capture, and founder approval remain honestly external.
+
+### Decision: test evidence must be atomic with its dependent mirrors
+
+- **Context:** a green Vitest process could leave project status or release parity stale because later checks consumed generated surfaces from the previous run.
+- **Decision:** the test wrapper owns the exact child exit, atomic typed receipt, completeness semantics, and immediate regeneration of every test-dependent mirror. Inconclusive or partial evidence is never green.
+- **Consequence:** gate ordering cannot manufacture truth drift; 93/93 files and 642/642 assertions are source evidence, not copied prose.
+
+### Decision: maintainability thresholds apply to operational control planes
+
+- **Context:** startup rendering, test-run proof interpretation, and model-router persistence had accumulated into large mixed-responsibility modules even while behavior remained green.
+- **Decision:** generated second-order work decomposes each hotspot behind preserved public contracts and behavioral tests, while keeping the single provider network chokepoint intact.
+- **Consequence:** the operational layer is easier to reason about and harder to regress without changing behavior or adding dependencies.
+
 ## 2026-08-03 — Session 124
 
 ### Decision: consumer-owned runtime semantics require a three-way propagation contract

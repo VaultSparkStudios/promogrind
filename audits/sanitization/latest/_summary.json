@@ -1,0 +1,11 @@
+[
+  {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "repo": "VaultSparkStudios/promogrind",
+    "critical": 0,
+    "warning": 0,
+    "repoState": "locked",
+    "issueFile": "promogrind.issue.md"
+  }
+]

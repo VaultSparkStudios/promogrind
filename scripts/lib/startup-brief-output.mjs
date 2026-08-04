@@ -16,6 +16,7 @@ export async function writeStartupBriefWithTelemetry({
   openBlocked,
   signals,
   today,
+  rendererVersion = '3.2',
   env = process.env,
 }) {
   let body = briefBody;
@@ -31,7 +32,7 @@ export async function writeStartupBriefWithTelemetry({
   }
 
   fs.writeFileSync(outputPath, body, 'utf8');
-  console.log(`✓ Startup brief → docs/STARTUP_BRIEF.md  (v3.2)`);
+  console.log(`✓ Startup brief → docs/STARTUP_BRIEF.md  (v${rendererVersion})`);
   console.log(`  Session ${currentSession} · SIL ${silTotal}/${silMax} · ${pct} · Unblocked ${openNow.length} / Blocked ${openBlocked.length}`);
   console.log(`  Signals: ${signals.join('  ')}`);
 
@@ -56,11 +57,8 @@ async function recordStartupBriefCost({ root, currentSession, body }) {
     recordSkillCost(root, {
       sessionId: `S${currentSession}`,
       skill: 'start',
-      model: 'script',
-      inputTokens: approxTokens,
-      outputTokens: 0,
-      elapsedMs: 0,
-      note: 'render-startup-brief output size',
+      actualTokens: approxTokens,
+      status: 'completed',
     });
   } catch {
     // Telemetry must never break /start.
@@ -69,7 +67,7 @@ async function recordStartupBriefCost({ root, currentSession, body }) {
 
 function runBriefV5DualRender({ root, scriptsDir, node, outputPath, currentSession, today, env }) {
   const v5Mode = env.STUDIO_BRIEF_V5
-    || (fs.existsSync(path.join(root, '.cache', 'brief-v5-enable.flag')) ? 'shadow' : '');
+    || (fs.existsSync(path.join(root, '.cache', 'brief-v5-canonical')) ? 'promote' : '');
   if (!v5Mode || v5Mode === '0') return;
 
   try {

@@ -1,12 +1,12 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-03T18:40:00.000Z",
+  "generatedAt": "2026-08-03T23:30:00.000Z",
   "project": {
     "slug": "promogrind",
     "name": "PromoGrind",
     "type": "app",
     "audience": "public-unlaunched",
-    "session": 125
+    "session": 126
   },
   "rubric": "infrastructure rubric with public-app release, trust, privacy, and rendered-UX lenses",
   "axes": {
@@ -21,21 +21,76 @@
     "tokenEfficiency": 1.0
   },
   "sample": {
-    "picked": 16,
-    "scanned": 672,
-    "tokens": 29884,
-    "method": "Canonical sample-codebase pass plus direct behavioral baselines, targeted source tracing, live release probes, and premise-specific searches."
+    "picked": 28,
+    "scanned": 755,
+    "tokens": 30000,
+    "method": "Public-shim fallback sample plus direct Vitest and bundle baselines, live GitHub/production/release probes, generated-surface replay, source tracing, and premise-specific contradiction searches."
   },
   "premiseLedger": {
-    "candidatesGenerated": 34,
-    "premisesVerified": 19,
+    "candidatesGenerated": 41,
+    "premisesVerified": 24,
     "newItemsSelected": 5,
-    "priorShippedItemsPreserved": 6,
-    "rejectedOrMerged": 29,
-    "baseline": "Vitest 93/93 files and 639/639 assertions green; bundle 179.1KB raw / 60.0KB gzip initial graph; UX integrity 61 routes / 101 public pages; live web still lacks six edge-delivered headers.",
-    "releaseLens": "FORGE/public-unlaunched remains NO-GO. The audit fixes repo-owned authority, privacy, trust, and observability defects without fabricating stable staging, headers, historical rotation, provider deployment, mailbox, payment-lifecycle, tester, capture, or founder-approval evidence."
+    "priorShippedItemsPreserved": 11,
+    "rejectedOrMerged": 36,
+    "baseline": "Vitest direct exit 0 with 93/93 files and 642/642 assertions; bundle 179.1KB raw / 60.0KB gzip; public sanitization, footer/legal/IP, rollback, and hash-bound visual evidence green. Local release-gate output is an empty 0/0/0 report, the external-proof ledger fails freshness/coverage, and live web lacks six edge-delivered headers.",
+    "releaseLens": "FORGE/public-unlaunched remains NO-GO. Selected items repair repo-owned evidence compilation. Stable staging, delivered headers, historical rotation, provider deployment, Zoho/Obelisk authority, real journeys, and founder approval remain pending until redacted real evidence exists."
   },
   "items": [
+    {
+      "id": "S126-1", "rank": 1, "slug": "public-shim-release-gate",
+      "title": "Make the public-repo release gate self-profile instead of emitting an empty green-shaped 0/0/0 report",
+      "tier": "🔥", "axis": "security / release infrastructure / observability",
+      "effortHours": 8, "impact": 10, "innovation": 9, "priority": 67.7, "status": "shipped",
+      "why": "Without the private portfolio registry, check-release-gate evaluates zero projects and overwrites RELEASE_GATES with an empty 0/0/0 table. Direct sanitization, footer, legal, and rollback checks are green, while real external gates are red; the empty shape is neither.",
+      "evidence": ["check-release-gate --project promogrind --json returned projects:[]", "docs/RELEASE_GATES.md is an empty table", "The read-only release audit proved local trust gates green and the overall verdict HOLD."],
+      "recipe": "Add a public-safe self-profile fallback from PROJECT_STATUS plus STUDIO_MANIFEST; consume a fresh sanitization receipt; derive a non-empty provenance-bound HOLD; test registry and shim modes; wire the check into launch-local.",
+      "ladder": {"L1":{"effortHours":2,"recipe":"Construct one local record and reject an empty result."},"L2":{"effortHours":5,"recipe":"Add sanitization provenance and shim tests."},"L3":{"effortHours":8,"recipe":"Add freshness, source receipts, launch integration, and contradiction tests."}},
+      "executionLog": [{ "at": "2026-08-04", "status": "shipped", "note": "Public self-profile evaluates one real project; stable staging and 12 typed blocking proofs force an honest HOLD. Sanitization provenance, empty-result rejection, --require-ready, and stale-artifact --check are covered by test-release-evidence-control-plane.mjs." }]
+    },
+    {
+      "id": "S126-2", "rank": 2, "slug": "typed-vitest-evidence",
+      "title": "Replace ambiguous test counters with one typed, crash-safe Vitest evidence contract",
+      "tier": "🔥", "axis": "observability / infrastructure / automation",
+      "effortHours": 8, "impact": 10, "innovation": 9, "priority": 54.2, "status": "shipped",
+      "why": "PROJECT_STATUS stores 642 assertions in fields documented as file counts; assertion fields are absent, startup bypasses the reconciler, and npm test does not atomically stamp complete evidence. A failed run can leave a fresh-looking green.",
+      "evidence": ["npm test exited 0 with 93 files and 642 assertions", "testsPassing/testsTotal are 642/642 while testsAssertions* are null", "test-signal.mjs defines the two evidence classes but startup does not use it"],
+      "recipe": "Create a Vitest runner with an atomic content-addressed receipt and exact child exit; update typed counts only for complete runs; make failure/incomplete evidence unable to refresh stale green; route startup/doctor/closeout/mirrors through resolveTestSignal.",
+      "ladder": {"L1":{"effortHours":2,"recipe":"Stamp 93 file and 642 assertion counts separately."},"L2":{"effortHours":5,"recipe":"Add wrapper, atomic receipt, exit propagation, and failed-run tests."},"L3":{"effortHours":8,"recipe":"Add shared-consumer reconciliation, hash, malformed fail-closed behavior, and launch coverage."}},
+      "executionLog": [{ "at": "2026-08-04", "status": "shipped", "note": "npm test now runs through an exact-exit Vitest wrapper and atomically emits audits/test-evidence-latest.json: 93/93 files and 642/642 assertions with a report SHA-256; complete and partial evidence semantics are focused-test covered." }]
+    },
+    {
+      "id": "S126-3", "rank": 3, "slug": "startup-semantic-truth",
+      "title": "Make the startup brief prove the meaning of every score, intent, test, deploy, and cost row",
+      "tier": "🔥", "axis": "observability / token efficiency / founder control",
+      "effortHours": 6, "impact": 9, "innovation": 9, "priority": 54.0, "status": "shipped",
+      "why": "The brief renders Avg3 ?, no current intent, Tests - / Deploy -, unknown test dots, and real spend language despite live source values and founder direction. Its receipt proves bytes, not semantic agreement.",
+      "evidence": ["SIL uses Avgs - 3 while the renderer only matches an em dash and ignores status.silAvg3", "intent parsing ignores Session Intent (S126, Codex)", "renderLastCompleted hard-codes Tests - and Deploy -", "cost rows say real and Weekly spend for notional flat-rate Max-plan telemetry"],
+      "recipe": "Extract pure resolvers for average, newest intent, typed tests/deploy, surface state, and notional cost. Add claim-level expected/actual witnesses to the source receipt and fail validation on contradictions while preserving fixed-width output.",
+      "ladder": {"L1":{"effortHours":1.5,"recipe":"Fix the five live rows."},"L2":{"effortHours":3.5,"recipe":"Extract shared resolvers and typed rendering."},"L3":{"effortHours":6,"recipe":"Add semantic witnesses, contradiction validation, golden live render, and cohesive extraction."}},
+      "executionLog": [{ "at": "2026-08-04", "status": "shipped", "note": "Startup now derives current intent, Avg3, typed tests, deploy state, and notional Max-plan cost from canonical sources; claim witnesses bind the rendered receipt. Golden, provenance, fixed-width, and source-hash checks pass." }]
+    },
+    {
+      "id": "S126-4", "rank": 4, "slug": "complete-launch-proof-graph",
+      "title": "Give every launch blocker a typed criterion and redacted evidence edge",
+      "tier": "🔥", "axis": "trust / release observability / security",
+      "effortHours": 6, "impact": 10, "innovation": 8, "priority": 53.3, "status": "shipped",
+      "why": "The stale external ledger fails check mode, filters nine status blockers down to seven, leaves staging unmirrored, and has no typed Obelisk, credential-remediation, security-header, or founder-approval proof.",
+      "evidence": ["external launch ledger check exited 1 on an unmirrored blocker", "PROJECT_STATUS has nine blockers while the ledger reports seven", "Release audit found staging, identity, rotation, headers, and approval red without complete typed proof coverage"],
+      "recipe": "Extend LAUNCH_PROOFS for staging/headers, Obelisk, rotation, and founder approval; classify every blocker; fail on any unmirrored blocker or unsafe receipt; regenerate ledger/public mirror; add exhaustive no-fabrication tests.",
+      "ladder": {"L1":{"effortHours":2,"recipe":"Add missing proof entries and include all blockers."},"L2":{"effortHours":4,"recipe":"Add exhaustive classification and unsafe-receipt tests."},"L3":{"effortHours":6,"recipe":"Add causal invariants, public mirror, launch wiring, and zero-unmirrored proof."}},
+      "executionLog": [{ "at": "2026-08-04", "status": "shipped", "note": "All nine PROJECT_STATUS blockers enter the typed proof graph with zero unmirrored edges; staging/headers, Obelisk, credential remediation, and founder approval have explicit pending criteria and no fabricated receipts. Ledger and quorum tests pass." }]
+    },
+    {
+      "id": "S126-5", "rank": 5, "slug": "release-parity-compiler",
+      "title": "Compile release parity from the current hash-bound visual receipt instead of stale prose",
+      "tier": "⚡", "axis": "UX / trust / observability",
+      "effortHours": 4, "impact": 7, "innovation": 8, "priority": 43.3, "status": "shipped",
+      "why": "RELEASE_PARITY is frozen at S118, says image inspection failed, and cites 588 tests. The current S125 receipt has four hash-valid inspected theme/viewport captures and zero defects; Capacitor config exists but native projects do not.",
+      "evidence": ["RELEASE_PARITY is dated 2026-07-24 and marked PARTIAL", "visual-qa/LATEST is dated 2026-08-03 with inspected dark/light desktop/mobile hashes", "capacitor.config.ts exists but ios/android directories do not"],
+      "recipe": "Render and check parity from visual hashes, required matrix, inspection state, typed test receipt, and native applicability. Emit JSON plus Markdown and test missing, drifted, uninspected, and browser-only/native-planned states.",
+      "ladder": {"L1":{"effortHours":1,"recipe":"Regenerate from the current receipt."},"L2":{"effortHours":2.5,"recipe":"Add hash/matrix and applicability checks."},"L3":{"effortHours":4,"recipe":"Add typed sidecar, launch integration, and adversarial tests."}},
+      "executionLog": [{ "at": "2026-08-04", "status": "shipped", "note": "RELEASE_PARITY now compiles JSON and Markdown from four hash-valid inspected visual captures, typed test evidence, and explicit planned-no-native-projects applicability; adversarial compiler and freshness checks pass." }]
+    },
     {
       "id": "S125-1",
       "rank": 1,
@@ -298,28 +353,33 @@
     }
   ],
   "innovationReserve": [
-    "provider-egress-manifest — discover every browser-to-provider payload and prove consent, redaction, boundedness, and server revalidation from one inventory",
-    "stripe-event-causal-receipt — model event type, signed creation time, fetched canonical subscription state, mutation result, and retry disposition without storing secret-bearing payloads",
-    "release-causal-graph — derive each green/yellow/red launch claim from its executable evidence edge so parser errors and skipped commands cannot collapse into green"
+    "evidence-merkle-root — bind test, sanitization, visual, release-gate, and launch-proof receipts to one commit-aware root without pretending external proofs are green",
+    "contradiction-witness-minimizer — emit the smallest source/field/value witness when truth surfaces disagree",
+    "capability-freshness-decay — distinguish authenticated, target-authorized, and delivered evidence with explicit expiry"
   ],
   "skipped": [
     { "slug": "fabricate-external-release-proof", "reason": "Rejected: stable staging, live headers, historical rotation, exact Supabase deployment, Zoho delivery, payment lifecycle, tester, capture, and founder approval remain external evidence." },
     { "slug": "rewrite-studio-cost-registry-locally", "reason": "Rejected by CANON-018: the sibling registry still says AUDIT-PENDING while local source truth proves trial-ceiling. Reconciliation travels by Ark cargo, never a sibling edit." },
     { "slug": "force-react-router-version", "reason": "Rejected: the live advisory is limited to React Server Components mode and the executable client-only reachability guard remains green; no compatible stable upgrade fixes the current range." },
     { "slug": "extract-large-files-by-line-count", "reason": "Rejected: App composition, bundle, route integrity, and focused tests are green; line count alone is not a verified defect." },
-    { "slug": "model-cost-alarm", "reason": "Rejected by founder direction: flat-rate Max Plan usage is notional telemetry, never a cost alarm." }
+    { "slug": "model-cost-alarm", "reason": "Rejected by founder direction: flat-rate Max Plan usage is notional telemetry, never a cost alarm." },
+    { "slug": "fabricate-staging-or-identity", "reason": "Rejected: local config or mock identity cannot satisfy stable HTTPS staging or live Obelisk delegation." },
+    { "slug": "visual-redesign-without-defect", "reason": "Rejected: S125 pixels are hash-valid, inspected, and defect-free; stale reporting is the verified defect." },
+    { "slug": "dependency-churn", "reason": "Rejected: tests, bundle, and the client-only router reachability guard are green." },
+    { "slug": "god-file-by-line-count", "reason": "Deferred during the primary audit because line count alone was insufficient. The post-primary innovation generator later verified three concrete threshold breaches; focused ownership slices were extracted with regression coverage until largeFiles reached zero." }
   ],
   "totals": {
-    "count": 11,
-    "newPending": 5,
-    "preservedShipped": 6,
-    "priority": 438.6,
-    "newPriority": 262.2,
+    "count": 16,
+    "newPending": 0,
+    "newShipped": 5,
+    "preservedShipped": 11,
+    "priority": 711.1,
+    "newPriority": 272.5,
     "top3": [
-      "stripe-authority-boundary",
-      "consent-bound-ai-chat",
-      "release-control-plane-truth"
+      "public-shim-release-gate",
+      "typed-vitest-evidence",
+      "startup-semantic-truth"
     ]
   },
-  "notes": "S125 live-code audit: five new premises accepted at L3; 29 candidates rejected or merged with evidence. Every selected item protects trust or time-to-first-value."
+  "notes": "S126 live-code audit and implementation: 41 candidates across nine axes, 24 premises verified, all five repo-owned L3 items shipped, and 36 rejected or merged with evidence. The generated second-order maintainability candidate was exhausted across startup rendering, test-run proof semantics, and model-router state ownership. The public app remains release HOLD; no external proof or cost alarm was fabricated."
 }
