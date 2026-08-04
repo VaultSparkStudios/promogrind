@@ -21,7 +21,7 @@
 ╔══ LAST SESSION (S126) - WHAT SHIPPED ══════════════════════════╗
 ║  S126 shipped all five verified primary items and every generat  ║
 ║  Tests  93/93 files · 642/642 assertions                         ║
-║  Deploy S126 finalized `npm run verify:launch-local` with direc  ║
+║  Deploy S126 commit 3342722 reached origin/main with zero diver  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
@@ -61,13 +61,14 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 126 ═══════════════════════════╗
 ║ Shipped:  see LATEST_HANDOFF.md                                ║
-║ Tests:    93/93 passing  ·  Deploy: S126 finalized `npm run…   ║
+║ Tests:    93/93 passing  ·  Deploy: S126 commit 3342722…       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  ██████████░░░░░░░░░░░░░░   40% used                         ║
-║    108,186 / 272,000 tok  ·  codex  ·  heuristic-stale         ║
-║    Verdict: CONTINUE                                           ║
+║ ✓  ███████████░░░░░░░░░░░░░   45% used                         ║
+║    115,973 / 258,400 tok  ·  codex/codex-272k  ·  measured     ║
+║    ~57,987 tok/turn  ·  cache 50%  ·  2 turns to compact       ║
+║    Verdict: WARN_COMPACT_SOON  ← act now                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
@@ -93,7 +94,7 @@
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
-║  Snapshot: 7m old · next n/a                                     ║
+║  Snapshot: 38m old · next n/a                                    ║
 ║  Propagation: unavailable · portfolio queue absent               ║
 ║  Ark: 4 drained · 6h old · sig failures 0                        ║
 ║  Untracked: unavailable · detector absent                        ║

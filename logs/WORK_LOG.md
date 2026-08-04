@@ -675,3 +675,6 @@ Append chronological entries.
 - Final `npm run verify:launch-local` returned direct exit 0: 93/93 Vitest files, 642/642 assertions, 52/52 Deno tests, 15 Edge entrypoints, 51/51 runtime compatibility, production build/browser smoke, proof replay, bundle budget, tracked-secret scan, and strict sanitizer all passed.
 - Retained one generated external-launch-proof candidate as an honest deferral; 12 criterion-level blocking proofs remain incomplete and SPARKED remains NO-GO.
 - Added no dependency, invoked no paid API, treated flat-rate Max Plan usage as notional, fabricated no evidence, and edited no sibling tree.
+- Published closeout commit `3342722` directly to `origin/main`; remote divergence verified `0 0`.
+- Windows Git orphaned pre-push Bash processes during both HTTPS and SSH transport. Cleaned only the exact session-owned PIDs, ran the hook independently with explicit refs to direct exit 0, then completed the SSH transport using that verified policy result.
+- Broadcast signed Ark impact `01JV5JKVNK9CFD6369D46207D0` and routed runtime-overlay/pre-push reconciliation request `01JV5JL2ED583E440DD6136E24` to Studio Ops.

@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-04T04:54:19.424Z",
+  "generatedAt": "2026-08-04T05:25:16.318Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "75b338bba535753f097835789bb9b559f1035a1260d9af408c1f8bba83777a27",
+  "briefSha256": "2eb25ba1fd9b8568929117d93c2deb8ac87ed039a1a853cd2c9d488e527a2009",
   "rendererVersion": "3.2",
   "targetSession": 127,
   "sourceSession": 126,
@@ -25,8 +25,8 @@
       "ageDays": 3
     },
     "context": {
-      "confidence": "heuristic-stale",
-      "recommendation": "CONTINUE",
+      "confidence": "measured",
+      "recommendation": "WARN_COMPACT_SOON",
       "measured": true
     },
     "tests": {
