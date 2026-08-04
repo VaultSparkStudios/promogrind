@@ -52,8 +52,8 @@
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "testsPassing": 93,
-  "testsTotal": 93,
+  "testsPassing": 94,
+  "testsTotal": 94,
   "testsLastRun": "2026-08-04",
   "lastDeployStatus": "S126 repair commit d3d611b reached origin/main. CI 30883558365 and brief-format 30883558594 passed. Deploy Pages 30883558417 passed preflight, immutable attestation, deployment, production launch, dashboard smoke, and standard files; its final aggregator correctly stayed red on the six absent hosting-edge headers. SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
@@ -239,24 +239,24 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-04T06:54:16.982Z",
-    "commitSha": "d3d611b9475e0a0c57d5013dd6090d6e26a2cfb6",
+    "generatedAt": "2026-08-04T15:06:48.028Z",
+    "commitSha": "c2a7534b45b8f67d0a2c6c1417de3855eba6be9c",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 93,
-      "total": 93
+      "passing": 94,
+      "total": 94
     },
     "assertions": {
-      "passing": 642,
-      "total": 642
+      "passing": 652,
+      "total": 652
     },
-    "reportSha256": "9acdd7a8b369baa4a6198c4ff7bc87d65df17002222bc3a26a8845eb884b5bb8"
+    "reportSha256": "52b879b07f1c59a26144bfb22197e8e56c03a06381a532776ee388b7c47761de"
   },
-  "testsAssertionsPassing": 642,
-  "testsAssertionsTotal": 642,
-  "testsAssertionsFiles": 93,
+  "testsAssertionsPassing": 652,
+  "testsAssertionsTotal": 652,
+  "testsAssertionsFiles": 94,
   "testsAssertionsLastRun": "2026-08-04"
 }
