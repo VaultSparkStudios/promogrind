@@ -37,6 +37,14 @@
       "forSession": 127,
       "forecast": 999,
       "recordedAt": "2026-08-04",
+      "actual": 998,
+      "absErr": 1,
+      "resolvedAt": "2026-08-04"
+    },
+    {
+      "forSession": 128,
+      "forecast": 995,
+      "recordedAt": "2026-08-04",
       "actual": null
     }
   ]

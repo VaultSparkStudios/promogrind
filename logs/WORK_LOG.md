@@ -684,3 +684,16 @@ Append chronological entries.
 - Published repair `d3d611b` directly to main after the exact-ref hook passed. Replacement CI `30883558365` and brief-format `30883558594` are green.
 - Deploy Pages `30883558417` passed complete preflight, immutable attestation, deployment, production launch, dashboard smoke, and all standard files; final promotion correctly remained red only on CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy.
 - Broadcast reusable signed Ark pattern `01JV5MUHVP1AA7E1180F3E010D` for self-sanitizing public receipts.
+
+## 2026-08-04 — Session 127 Codex recovery closeout
+
+- Reconstructed the interrupted S127 mission from handoff, work log, latest closeout brief, git history, and the complete dirty tree; classified the cutoff as mid-implement.
+- Validated every changed/untracked JSON and NDJSON artifact. The apparent Claude-config warning was a PowerShell case-folding limitation; standards-compliant JSON parsing confirmed ~/.claude.json is syntactically valid. No debris or half-written data artifact was found.
+- Verified the inherited work before editing: npm test passed 97/97 files and 679/679 assertions; Studio Doctor passed 12/12 with blockingFailing 0.
+- Completed all five L3 items: sync tombstone convergence, calibration-governed Advisor posture, canonical ledger evidence quarantine, exposure concentration topology, and deterministic friction recovery.
+- Completed second-order saturation by root-fixing the interrupted pixel auditor's Sharp entropy contract. Twenty unique real-Chromium desktop/mobile dark/light captures now pass objective pixel and capture-time state/overflow checks.
+- The complete launch gate then exposed stale release parity after a visual receipt write. Shared artifact preparation/atomic writers now regenerate parity in the same producer transaction; focused compiler and freshness checks pass.
+- Preserved visual honesty: both local image-return paths failed Windows DPAPI initialization, so semantic AI image judgment is not claimed.
+- Refreshed the Genius List and innovation pack. The only remaining candidate is the external release gate; blocker preflight found no mislabeled human item and promogrind.supabase.deploy remains MISSING.
+- Release remains FORGE HOLD on stable staging and ten incomplete typed proofs; no external proof, paid call, dependency, secret, sibling-tree edit, SPARKED claim, or force operation was introduced.
+- Read-only release-gate probing further confirmed Cloudflare header-rule scope 403 and a canonical cost-status conflict; both stay control-plane/provider work and will be routed without sibling-tree edits.

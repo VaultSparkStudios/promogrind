@@ -1,6 +1,7 @@
 // Achievement engine — 30 badges, event-driven, evaluated from appData + streak + mastery
 import { MASTERY_RANK } from './mastery.js';
 import { parseRealizedOutcomeValue } from './realizedOutcome.js';
+import { ledgerEvidenceEntries } from './ledgerEvidence.js';
 
 export const ACHIEVEMENTS = [
   // Onboarding
@@ -44,7 +45,7 @@ export const ACHIEVEMENTS = [
 ];
 
 export function evaluateAchievements(appData = {}, streak = 0, masteryData = null) {
-  const ledger = Array.isArray(appData.ledger) ? appData.ledger : [];
+  const ledger = ledgerEvidenceEntries(appData.ledger);
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
   const done = appData.done || {};
   const events = Array.isArray(appData.vaultEvents) ? appData.vaultEvents : [];

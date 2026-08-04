@@ -59,6 +59,9 @@ export default function TrackInsights() {
     if (historyFilter === "all") return true;
     return row.statuses.some((status) => status.toLowerCase().includes(historyFilter));
   });
+  const openRecovery = (route) => {
+    if (typeof window !== "undefined" && route) window.location.hash = `#${route}`;
+  };
 
   const saveDraft = (id, key, value) => {
     setDrafts((current) => ({ ...current, [id]: { ...(current[id] || {}), [key]: value } }));
@@ -301,6 +304,17 @@ export default function TrackInsights() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: pairColumns, gap: 12, alignItems: "start", marginTop: 14 }}>
+        {insights.frictionRecovery?.ready && (
+          <div role="status" aria-label="Friction recovery plan" style={{ gridColumn: "1 / -1", padding: 13, background: `${K.ac}08`, border: `1px solid ${K.ac}35`, borderRadius: 10 }}>
+            <div style={{ fontSize: 10, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Recovery plan · {insights.frictionRecovery.evidenceCount} receipts</div>
+            <div style={{ fontSize: 13, color: K.tx, fontWeight: 800, marginBottom: 4 }}>{insights.frictionRecovery.title}</div>
+            <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 4 }}>{insights.frictionRecovery.action}</div>
+            <div style={{ fontSize: 10, color: K.mt, marginBottom: 9 }}>{insights.frictionRecovery.whyNow} Ranked by frequency and recency, never profit.</div>
+            <button type="button" onClick={() => openRecovery(insights.frictionRecovery.route)} style={{ padding: "7px 11px", background: "transparent", border: `1px solid ${K.ac}55`, borderRadius: 7, color: K.ac, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+              {insights.frictionRecovery.cta} →
+            </button>
+          </div>
+        )}
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Skip Reasons</div>
           {insights.skipReasonRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Skip reasons will appear once users mark why a workflow was passed over.</div>}

@@ -543,3 +543,16 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Browser truth uses one bounded cleanup-owning Chromium harness. Four desktop/mobile, light/dark Advisor captures are hash-bound; a rendered light-theme defect was repaired before recapture.
 - Process truth: five verified primary items and three generated repo-owned innovations shipped. The remaining external proof candidate is an explicit honest deferral, and the measured context gate—not a single completed objective—triggered closeout.
 - Release truth remains NO-GO for SPARKED: staging, six headers, historical rotation, exact deployment authority, Zoho and Obelisk identity, and production auth/payment/friend/capture/founder receipts remain unproved.
+
+## 2026-08-04 — Session 127 Recovery Truth Update
+
+- Recovery truth is explicit: S127 died during implementation, not after closeout. Its five feature slices and 20 captures were uncommitted; the latest committed boundary remained S126 at c2a7534.
+- Data-integrity truth now includes negative facts. Seven merged collection domains carry monotonic tombstones; stale remote rows cannot silently reverse an offline deletion.
+- Ledger truth now excludes synthetic/demo evidence before load, sync, totals, reporting, exports, progression, portfolio analysis, and recommendation surfaces. Quarantined rows remain inspectable and tombstoned.
+- Advisor truth now separates raw confidence from action posture. Evidence grade, missing inputs, provenance, and resolved calibration produce act/verify/abstain with no inferred outcome-probability claim.
+- Exposure truth now describes gross shared-label concentration with explicit confidence, unknown metadata, and unnetted declared hedges; it does not claim statistical correlation or independence.
+- Feedback truth now closes repeated friction into one deterministic route-safe recovery action ranked by frequency and recency; profit is excluded from ranking.
+- Verification truth: 97/97 Vitest files and 679/679 assertions pass; Studio Doctor is 12/12 with blockingFailing 0.
+- Rendered evidence truth: 20 unique real-Chromium captures pass dimensions, opacity, non-blank entropy, tonal range, theme-pair separation, required-state text, and horizontal-overflow assertions. Semantic AI image judgment remains unclaimed because both image-return paths failed Windows DPAPI initialization.
+- Derived visual truth is transactional: writing the canonical visual receipt now refreshes release-parity JSON/Markdown atomically, so capture updates cannot leave a stale green consumer.
+- Release truth remains FORGE HOLD: stable staging and ten typed proofs are incomplete, promogrind.supabase.deploy remains MISSING, Cloudflare header-rule authorization returns 403, and canonical cost status remains unreconciled with repo trial-ceiling truth.

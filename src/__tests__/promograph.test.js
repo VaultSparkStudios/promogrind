@@ -222,4 +222,16 @@ describe("promograph helpers", () => {
     expect(workflow.sensitivityTriggers).toEqual(["odds move"]);
     expect(workflow.evidenceGrade).toBe("partial");
   });
+
+  it("preserves a governed Advisor posture and bounded receipt in canonical workflows", () => {
+    const receipt = { contractVersion: 1, posture: "verify", reasonCodes: ["calibration-cold-start"], outcomeProbabilityClaimed: false };
+    const workflow = normalizeWorkflowEntry({
+      id: "advisor-1",
+      source: "promo_advisor",
+      advisorPosture: "verify",
+      advisorConfidenceReceipt: receipt,
+    });
+    expect(workflow.advisorPosture).toBe("verify");
+    expect(workflow.advisorConfidenceReceipt).toEqual(receipt);
+  });
 });

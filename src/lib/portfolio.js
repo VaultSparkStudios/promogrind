@@ -10,6 +10,13 @@ function confidenceToProb(confidence) {
   return 0.60;
 }
 
+function explicitAdvisorProbability(workflow) {
+  if (workflow?.source !== "promo_advisor") return null;
+  if (workflow.advisorPosture !== "act" || !String(workflow.probabilityBasis || "").trim()) return null;
+  const probability = Number.parseFloat(workflow.positiveOutcomeProbability);
+  return Number.isFinite(probability) && probability > 0 && probability < 1 ? probability : null;
+}
+
 function kellyFraction(p, b) {
   if (b <= 0 || p <= 0 || p >= 1) return 0;
   const q = 1 - p;
@@ -27,16 +34,19 @@ export function buildPortfolioAllocation(workflows = [], bankroll = 0) {
   const candidates = workflows
     .filter((wf) => {
       const ev = toNumber(wf.expectedProfit);
+      const advisorEligible = wf.source !== "promo_advisor" || explicitAdvisorProbability(wf) !== null;
       return (
         ["ready", "queued"].includes(wf.status || "") &&
         ev !== null &&
-        ev >= MIN_EV_THRESHOLD
+        ev >= MIN_EV_THRESHOLD &&
+        advisorEligible
       );
     })
     .map((wf) => {
       const ev = toNumber(wf.expectedProfit) ?? 0;
       const score = Math.max(0, Math.min(100, Number(wf.opportunityScore || wf.score || 50)));
-      const p = Math.min(0.92, confidenceToProb(wf.confidence) * (0.7 + (score / 100) * 0.3));
+      const advisorProbability = explicitAdvisorProbability(wf);
+      const p = advisorProbability ?? Math.min(0.92, confidenceToProb(wf.confidence) * (0.7 + (score / 100) * 0.3));
       // Implied "odds" b: treating ev as the profit on a nominal $100 stake equivalent
       // b = ev / 100 — scales Kelly fraction to reasonable bet sizes
       const b = ev / 100;
@@ -80,7 +90,9 @@ export function buildPortfolioAllocation(workflows = [], bankroll = 0) {
       ev: Math.round(projectedEv * 100) / 100,
       kelly: Math.round(c.kelly * 1000) / 1000,
       confidence: c.wf.confidence || "medium",
-      reason: `${Math.round(c.p * 100)}% confidence${book} · est. $${c.ev.toFixed(0)} EV`,
+      reason: c.wf.source === "promo_advisor"
+        ? `${Math.round(c.p * 100)}% explicit modeled basis${book} · est. $${c.ev.toFixed(0)} EV`
+        : `${Math.round(c.p * 100)}% confidence${book} · est. $${c.ev.toFixed(0)} EV`,
     });
   }
 

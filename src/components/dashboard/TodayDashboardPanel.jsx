@@ -37,6 +37,12 @@ function RiskRadarCard({ radar, navigate }) {
   const tone = radar.stressPreview || radar.preMortem?.triggered ? K.yl : K.ac;
   const exposureCopy = radar.exposurePct === null ? `$${f(radar.exposure)} open exposure` : `$${f(radar.exposure)} open · ${radar.exposurePct}% bankroll`;
   const leader = radar.twinBattle?.leaderboard?.[0];
+  const cluster = radar.concentration?.largestCluster;
+  const clusterLabel = cluster
+    ? `${cluster.count} positions · $${f(cluster.stake)} · ${radar.concentration.concentrationPct}% gross`
+    : radar.concentration?.unknownEventCount
+      ? `${radar.concentration.unknownEventCount} position${radar.concentration.unknownEventCount === 1 ? "" : "s"} need event details`
+      : "No repeated cluster";
   return (
     <div style={{ padding: "12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 10 }}>
@@ -53,13 +59,29 @@ function RiskRadarCard({ radar, navigate }) {
         <InsightChip label="Stress P10" value={`$${f(radar.stress?.results?.p10 || 0)}`} tone={radar.stressPreview ? K.yl : K.ac} />
         <InsightChip label="Stress P50" value={`$${f(radar.stress?.results?.p50 || 0)}`} tone={K.ac} />
         <InsightChip label="Worst case" value={`$${f(radar.stress?.worstCase || 0)}`} tone={radar.stress?.worstCase < 0 ? K.rd : K.yl} />
+        <InsightChip label={cluster ? `${cluster.dimension} concentration` : "Concentration"} value={clusterLabel} tone={radar.concentration?.hasConcentration ? K.yl : K.ac} />
         <InsightChip label="Twin leader" value={leader ? `${leader.name} $${f(Math.abs(leader.pnl))}` : "No sample"} tone={leader?.name === "you" ? K.gn : K.yl} />
+      </div>
+      <div style={{ marginTop: 9, fontSize: 9, color: K.mt, lineHeight: 1.55 }}>
+        {radar.concentration?.disclosure}
+        {radar.concentration?.unknownEventStake > 0 ? ` $${f(radar.concentration.unknownEventStake)} lacks event metadata.` : ""}
       </div>
       {radar.preMortem?.triggered && (
         <div style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: `${K.yl}10`, border: `1px solid ${K.yl}35`, fontSize: 10, color: K.dm, lineHeight: 1.6 }}>
           {radar.preMortem.copy.body} {radar.preMortem.scenarios?.[0]?.detail || "No similar prior loss is recorded yet, so keep the stake intentional."}
         </div>
       )}
+    </div>
+  );
+}
+function FrictionRecoveryCard({ plan, navigate }) {
+  if (!plan?.ready) return null;
+  return (
+    <div role="status" aria-label="Friction recovery plan" style={{ padding: "11px 12px", background: `${K.ac}08`, border: `1px solid ${K.ac}32`, borderRadius: 8, marginBottom: 12 }}>
+      <div style={{ fontSize: 10, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Recovery loop · {plan.evidenceCount} receipts</div>
+      <div style={{ fontSize: 12, color: K.tx, fontWeight: 800, marginBottom: 3 }}>{plan.title}</div>
+      <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.6, marginBottom: 8 }}>{plan.action} {plan.whyNow}</div>
+      <button type="button" onClick={() => navigate(plan.route)} style={{ padding: "6px 10px", background: "transparent", border: `1px solid ${K.ac}45`, borderRadius: 7, color: K.ac, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>{plan.cta} →</button>
     </div>
   );
 }
@@ -321,6 +343,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
 
       <TiltBreakerBanner state={computeTiltState(appData)} />
       <OperatorTwinCard forecast={buildTwinForecast(appData)} />
+      <FrictionRecoveryCard plan={snapshot.trackInsights?.frictionRecovery} navigate={navigate} />
       <RiskRadarCard radar={riskRadar} navigate={navigate} />
       <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />
 

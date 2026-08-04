@@ -11,6 +11,7 @@ const makeWorkflow = (overrides = {}) => ({
   book: overrides.book || "DraftKings",
   calculatorSlug: overrides.calculatorSlug || "bonus-bet",
   promoType: overrides.promoType || "bonus_bet",
+  ...overrides,
 });
 
 describe("buildPortfolioAllocation", () => {
@@ -86,5 +87,29 @@ describe("buildPortfolioAllocation", () => {
     );
     const sumEv = result.allocations.reduce((s, a) => s + a.ev, 0);
     expect(result.totalEv).toBeCloseTo(sumEv, 1);
+  });
+
+  it("never allocates an abstained or verify-only Advisor workflow from raw confidence", () => {
+    const workflows = [
+      makeWorkflow({ id: "advisor-abstain", source: "promo_advisor", advisorPosture: "abstain", expectedProfit: "80", confidence: "high" }),
+      makeWorkflow({ id: "advisor-verify", source: "promo_advisor", advisorPosture: "verify", expectedProfit: "80", confidence: "high" }),
+    ];
+    expect(buildPortfolioAllocation(workflows, 500).allocations).toEqual([]);
+  });
+
+  it("requires an explicit numeric basis before an act-posture Advisor workflow enters allocation", () => {
+    const ungrounded = makeWorkflow({ id: "advisor-raw", source: "promo_advisor", advisorPosture: "act", expectedProfit: "40", confidence: "high" });
+    const grounded = makeWorkflow({
+      id: "advisor-grounded",
+      source: "promo_advisor",
+      advisorPosture: "act",
+      expectedProfit: "40",
+      positiveOutcomeProbability: 0.72,
+      probabilityBasis: "Offer terms plus supplied hedge prices",
+    });
+    expect(buildPortfolioAllocation([ungrounded], 500).allocations).toEqual([]);
+    const result = buildPortfolioAllocation([grounded], 500);
+    expect(result.allocations).toHaveLength(1);
+    expect(result.allocations[0].reason).toMatch(/explicit modeled basis/);
   });
 });

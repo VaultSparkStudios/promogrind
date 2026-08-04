@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.2 -->
-<!-- generated-at: 2026-08-04 (Session 126 closeout) -->
+<!-- generated-at: 2026-08-04 (Session 127 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 126 closeout · 2026-08-04.
+> **Fast-boot brief** — generated at Session 127 closeout · 2026-08-04.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,13 +14,13 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 127 · 2026-08-04 · FOUNDER MODE                         ║
+║  Session 128 · 2026-08-04 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S126) - WHAT SHIPPED ══════════════════════════╗
-║  S126 shipped all five verified primary items and every generat  ║
-║  Tests  93/93 files · 642/642 assertions                         ║
+╔══ LAST SESSION (S127) - WHAT SHIPPED ══════════════════════════╗
+║  S127 recovery verified and completed five L3 product/data cont  ║
+║  Tests  97/97 files · 679/679 assertions                         ║
 ║  Deploy S126 repair commit d3d611b reached origin/main. CI 3088  ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -39,8 +39,8 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 8↑                       ║
+║    998/1000   ███████████████████████░   100%                    ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 7↑                       ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
@@ -50,29 +50,30 @@
 ║    Alignment       100    ██████████  ████████ →                 ║
 ║    Momentum        100    ██████████  ████████ →                 ║
 ║    Engagement      100    ██████████  ████████ →                 ║
-║    Process Qual    100    ██████████  ████████ →                 ║
+║    Process Qual     99    ██████████  ███████▇ →                 ║
 ║    Coherence       100    ██████████  ········ →                 ║
 ║    Security        100    ██████████  ········ →                 ║
 ║    Ecosystem       100    ██████████  ········ →                 ║
 ║    Capital         100    ██████████  ········ →                 ║
-║    Automation      100    ██████████  ········ →                 ║
+║    Automation       99    ██████████  ········ →                 ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 126 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 127 ═══════════════════════════╗
 ║ Shipped:  see LATEST_HANDOFF.md                                ║
-║ Tests:    93/93 passing  ·  Deploy: S126 repair commit…        ║
+║ Tests:    97/97 passing  ·  Deploy: S126 repair commit…        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  █████████████░░░░░░░░░░░   54% used                         ║
-║    108,427 / 200,000 tok  ·  unknown  ·  heuristic-stale       ║
+║ ✓  █████░░░░░░░░░░░░░░░░░░░   20% used                         ║
+║    52,468 / 258,400 tok  ·  codex/codex-272k  ·  measured      ║
+║    ~26,234 tok/turn  ·  cache 50%  ·  7 turns to compact       ║
 ║    Verdict: CONTINUE                                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║ ✓  Tests         93/93 files · 642/642 assertions (2026-08-04) ║
-║ ✓  Velocity      8 ↑  ·  Debt: →                               ║
+║ ✓  Tests         97/97 files · 679/679 assertions (2026-08-04) ║
+║ ✓  Velocity      7 ↑  ·  Debt: →                               ║
 ║ ⚠  Runway        ~2 sessions                                   ║
 ║ ✓  Context age   0d                                            ║
 ║ ✓  IGNIS         44911 FORGE  ·  3d old                        ║
@@ -93,32 +94,32 @@
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
-║  Snapshot: 2h old · next n/a                                     ║
+║  Snapshot: 0m old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 4 drained · 8h old · sig failures 0                        ║
+║  Ark: 35 drained · 14h old · sig failures 0                      ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ EXECUTION PLAN ══════════════════════════════════════════════╗
 ║  Intent:        Run the complete agent-neutral `/goal` + `/arc`  ║
-║  Repo touch:    studio-ops                                       ║
+║  Repo touch:    promogrind                                       ║
 ║  Expected:      Low-confidence execution window; refine scope b  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   █▆▄▄▄  8↑  (last 5 sessions)                        ║
+║  Velocity:   █▆▄▄▄  7↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  999/1000  (↓1 vs current 1000)                      ║
+║  Projected:  995/1000  (↓3 vs current 998)                       ║
 ║  All categories forecast stable or rising.                       ║
-║  Calibration: MAE 1 over last 4 forecasts                        ║
+║  Calibration: MAE 1 over last 5 forecasts                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 126                               ║
+║  GENIUS HIT LIST  ·  Session 127                               ║
 ║  Project: PromoGrind · ranked by impact                        ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -131,5 +132,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 126 closeout · 2026-08-04*
+*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 127 closeout · 2026-08-04*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

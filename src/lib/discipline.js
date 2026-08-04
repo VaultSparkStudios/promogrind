@@ -1,3 +1,5 @@
+import { analyzeExposureClusters } from "./exposureClusters.js";
+
 function num(value) {
   const parsed = Number.parseFloat(value);
   return Number.isFinite(parsed) ? parsed : 0;
@@ -20,6 +22,7 @@ export function computeDisciplineScore(appData = {}, now = new Date()) {
   const feedbackCoverage = feedback.length ? closedCount / feedback.length : 0;
   const openBets = bets.filter((bet) => ["", "open", "pending"].includes(String(bet.status || "").toLowerCase()));
   const openStake = openBets.reduce((sum, bet) => sum + num(bet.stake), 0);
+  const concentration = analyzeExposureClusters(openBets);
   const exposureRatio = bankroll > 0 ? openStake / bankroll : 0;
   const staleOpenBets = openBets.filter((bet) => daysOld(bet.updatedAt || bet.createdAt || bet.date, now) >= 7);
   const repeatVotes = feedback.filter((entry) => ["yes", "maybe", "no"].includes(String(entry.wouldRepeat || "").toLowerCase()));
@@ -52,6 +55,7 @@ export function computeDisciplineScore(appData = {}, now = new Date()) {
     staleOpenBets.length ? "Settle stale open bets first." :
     bankroll <= 0 ? "Set a bankroll anchor." :
     feedbackCoverage < 0.6 ? "Record placed, skipped, or settled outcomes." :
+    concentration.hasConcentration ? "Review the largest shared exposure cluster before adding volume." :
     exposureRatio > 0.2 ? "Reduce open exposure before adding volume." :
     "Keep closing loops before adding new promos.";
 
@@ -65,5 +69,6 @@ export function computeDisciplineScore(appData = {}, now = new Date()) {
     exposurePct: bankroll > 0 ? Math.round(exposureRatio * 100) : null,
     staleOpenBetCount: staleOpenBets.length,
     closedCount,
+    concentration,
   };
 }

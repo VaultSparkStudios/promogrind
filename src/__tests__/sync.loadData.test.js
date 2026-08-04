@@ -68,6 +68,30 @@ describe('loadData', () => {
     expect(result.ledger[0].id).toBe(99);
   });
 
+  it('quarantines historical demo profit before an offline load can expose it as evidence', async () => {
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [{
+        id: 'ledger-demo-legacy',
+        date: '2026-08-04',
+        book: 'DraftKings',
+        profit: '138.60',
+        notes: 'Demo entry — replace with your actual result',
+      }],
+    }));
+
+    const result = await loadData();
+    expect(result.ledger).toEqual([]);
+    expect(result._ledgerQuarantine).toEqual([
+      expect.objectContaining({
+        key: 'ledger-demo-legacy',
+        reason: 'legacy-demo-id',
+        entry: expect.objectContaining({ id: 'ledger-demo-legacy' }),
+      }),
+    ]);
+    expect(result._tombstones.ledger['ledger-demo-legacy']).toEqual(expect.any(Number));
+    expect(JSON.parse(localStorage.getItem('promo_engine_v3')).ledger).toEqual([]);
+  });
+
   it('returns an empty object when localStorage contains corrupt JSON', async () => {
     localStorage.setItem('promo_engine_v3', 'not{json{{');
     const result = await loadData();
@@ -159,6 +183,98 @@ describe('loadData', () => {
       expect.objectContaining({ id: 'local-ledger' }),
       expect.objectContaining({ id: 'remote-ledger' }),
     ]));
+  });
+
+  it('does not resurrect a remotely stale ledger row after an offline deletion', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    const deletedAt = Date.now();
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [],
+      _tombstones: { ledger: { 'ledger-gone': deletedAt } },
+      _updated: deletedAt,
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [{ id: 'ledger-gone', profit: '12', updatedAt: new Date(deletedAt - 5000).toISOString() }],
+        tracker: {},
+        updated_at: new Date(deletedAt + 1000).toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.ledger).toEqual([]);
+    expect(result._tombstones.ledger['ledger-gone']).toBe(deletedAt);
+  });
+
+  it('allows an explicit edit newer than a tombstone to restore the same entity id', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    const deletedAt = Date.now();
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [],
+      _tombstones: { ledger: { 'ledger-restored': deletedAt } },
+      _updated: deletedAt,
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [{ id: 'ledger-restored', profit: '18', updatedAt: new Date(deletedAt + 5000).toISOString() }],
+        tracker: {},
+        updated_at: new Date(deletedAt + 6000).toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.ledger).toEqual([expect.objectContaining({ id: 'ledger-restored', profit: '18' })]);
+  });
+
+  it('applies tombstones independently across workflow and journal domains', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    const deletedAt = Date.now();
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      workflowInbox: [],
+      journal: [],
+      _tombstones: {
+        workflowInbox: { 'wf-gone': deletedAt },
+        journal: { 'journal-gone': deletedAt },
+      },
+      _updated: deletedAt,
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [],
+        tracker: {
+          workflowInbox: [{ id: 'wf-gone', title: 'Stale', status: 'queued', updatedAt: new Date(deletedAt - 1000).toISOString() }],
+          journal: [{ id: 'journal-gone', date: '2026-08-01', profit: '3' }],
+        },
+        updated_at: new Date(deletedAt + 1000).toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.workflowInbox).toEqual([]);
+    expect(result.journal).toEqual([]);
+  });
+
+  it('ignores malformed tombstone clocks instead of suppressing valid remote evidence', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [],
+      _tombstones: { ledger: { 'ledger-valid': 'not-a-clock' } },
+      _updated: Date.now() - 1000,
+    }));
+    mocks.maybeSingle.mockResolvedValue({
+      data: {
+        ledger: [{ id: 'ledger-valid', profit: '7', updatedAt: '2026-08-04T08:00:00.000Z' }],
+        tracker: {},
+        updated_at: new Date().toISOString(),
+      },
+      error: null,
+    });
+
+    const result = await loadData();
+    expect(result.ledger).toEqual([expect.objectContaining({ id: 'ledger-valid' })]);
   });
 
   it('prefers the newer workflow row while preserving other workflows from both devices', async () => {
@@ -518,4 +634,3 @@ describe('loadData', () => {
 });
 
 // ── onDailyLogin ──────────────────────────────────────────────────────────────
-

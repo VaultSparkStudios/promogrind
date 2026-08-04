@@ -1,31 +1,52 @@
-<!-- generated-by: manual public-repo fallback (scripts/compact-handoff.mjs API path intentionally not invoked) -->
-<!-- source-hash: 9999e45871cc -->
-<!-- generated-at: 2026-08-04T06:59:00.000Z -->
+<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
+<!-- source-hash: 8c8dc9ff18fe -->
+<!-- generated-at: 2026-08-04T08:05:40.120Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION
-- S126 (Codex). Saturated: 5/5 primary items and all 3 repo-owned second-order candidates shipped; local gate green; SPARKED NO-GO.
+# PromoGrind Handoff — Session 126
 
-SHIPPED
-- Typed launch-proof graph and honest public release-gate shim.
-- Atomic Vitest evidence with exact exit/completeness and dependency-safe mirror refresh.
-- Source-witnessed startup truth and compiled four-capture release parity.
-- Startup renderer, test-proof semantics, and model-router persistence decomposed and regression-tested.
-- Public sanitization receipts are machine-path-safe and self-testing.
-- Commit-stable runtime inventory: 52/52, 26 exact mirrors, all 17 documented overlays, zero undocumented drift.
+Status
+- Saturated; 5/5 primary plus all 3 repo-owned second-order items shipped
+- launch-local green (exit 0); SPARKED remains evidence-gated NO-GO
 
-VERIFICATION
-- `verify:launch-local` direct exit 0: Vitest 93/642, Deno 52/52, 15 Edge entrypoints, production build/browser smoke, proof replay, tracked secrets, and strict sanitization pass.
-- Published commits through `d3d611b`; CI `30883558365` and brief `30883558594` green.
-- Deploy `30883558417` passed preflight, attestation, deploy, launch, dashboard, and standard files; aggregator remained red only on six absent hosting-edge headers.
-- Ark receipts: impact `01JV5JKVNK9CFD6369D46207D0`; reconciliation `01JV5JL2ED583E440DD6136E24`; receipt pattern `01JV5MUHVP1AA7E1180F3E010D`.
+Shipped in S126
+- Typed launch-proof graph mapping status blockers to criterion-level evidence; refuses empty/stale/incomplete output
+- Atomic Vitest evidence wrapper preserving exit, totals, completeness; dependency-safe status/parity regen
+- Source-witnessed startup truth (intent, SIL avg, test/deploy posture, notional Max Plan usage)
+- Release-parity receipt binding 4 desktop/mobile dark/light captures to test/native scope
+- Startup provenance tests; strict release-gate --check/--require-ready semantics
+- Focused startup renderer modules under maintainability threshold
+- Isolated test-run proof semantics; model-router persistence; one provider network chokepoint
+- Commit-stable 52/52 runtime compat contract (26 mirrors, 17 documented overrides, zero drift)
 
-NOW / HONEST DEFERRALS
-- Establish stable remote staging and prove all six production headers.
-- Complete historical rotation and exact PromoGrind Supabase deploy authority.
-- Prove Zoho, Obelisk, auth-email, Stripe lifecycle, friend, capture, and founder approval receipts.
-- External proof remains the only candidate; no evidence was fabricated and no sibling tree was edited.
+Verification
+- verify:launch-local exit 0; Vitest 93 files/642 assertions; Deno 52/52; 15 Edge entrypoints typecheck
+- Bundle 179.1 KB raw / 60.0 KB gzip
+- Release gate HOLD: 12 typed blocking criteria incomplete; no receipt fabricated
+- Closeout commit 3342722 -> origin/main; repair d3d611b -> origin/main; CI/brief/replacement runs passed
+- Deploy Pages passed all but 6 declared missing hosting-edge headers
 
-NEXT
-- Start with stable staging plus edge-header control; SPARKED remains evidence-gated NO-GO until all 12 typed criteria pass.
+Current Intent (S127)
+- Run full agent-neutral /goal + /arc through /start -> /audit -> /implement -> /closeout
+- Verify premises against live code; apply public-product and founder-infra lenses
+- Exhaust Unified Genius List; generate/implement second-order work while context gate permits
+- Preserve source observability, notional Max-plan cost, honest deferrals; verify staging
+- Complete write-back, SIL v3 scoring, direct-main push, signed Ark broadcast, zero-shell hygiene
+
+Now (top 3)
+- Resolve 6 missing hosting-edge response headers to advance release gate
+- Establish stable remote staging environment
+- Close remaining 12 typed blocking criteria toward SPARKED GO
+
+Blockers (top 3)
+- 12 typed blocking criteria incomplete -> release gate HOLD
+- No stable remote staging; 6 production headers absent
+- Windows Git orphans pre-push hook during transport (verified result reused, not bypassed)
+
+Human-blocked (age unspecified; open since >=S125)
+- Founder approval; exact PromoGrind Supabase deploy authority; historical credential remediation
+- Zoho identity, Obelisk delegation, auth-email, Stripe lifecycle, friend beta, capture evidence
+- 17 consumer safety overlays await Studio Ark upstream reconciliation (no sibling repo edits)
+
+Next: S127 resume continuous arc; prioritize hosting-edge headers and remote staging to unblock release gate.

@@ -21,8 +21,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 126,
-  "currentFocus": "S126 shipped all five verified primary items and three generated repo-owned second-order innovations: a typed launch-proof graph, honest public-shim release gate, atomic Vitest evidence, witnessed startup truth, compiled release parity, and focused startup/test-proof/model-router decomposition. The only remaining Genius List candidate is the external proof boundary.",
+  "currentSession": 127,
+  "currentFocus": "Recovered and completed the interrupted S127 mission: all five L3 items plus pixel-entropy and visual-parity transaction repairs shipped across sync convergence, ledger evidence, calibrated Advisor posture, exposure concentration, friction recovery, and rendered-proof freshness. The refreshed Genius List contains only the external release gate.",
   "nextMilestone": "Establish real staging and a header-capable production edge; rotate/remediate historical credentials; obtain exact PromoGrind Supabase deploy authority; complete Zoho mailbox, auth-email, payment-lifecycle, friend, and capture proof criteria; only then reassess SPARKED.",
   "blockers": [
     "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
@@ -33,27 +33,29 @@
     "Production auth confirmation/resend/reset/recovery delivery proof is pending.",
     "Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending.",
     "One friend-facing auth/recovery/calculator/pricing pass is pending.",
-    "Capture submission and observable lead-row criteria remain pending."
+    "Capture submission and observable lead-row criteria remain pending.",
+    "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
+    "The live Cloudflare target probe lacks response-header-rules authorization (HTTP 403), so the six missing headers cannot be remediated through the current token."
   ],
   "lastUpdated": "2026-08-04",
-  "silScore": 1000,
-  "silAvg3": 1000,
-  "silVelocity": 8,
-  "silDebt": "down",
-  "silLastSession": 126,
+  "silScore": 998,
+  "silAvg3": 999.3,
+  "silVelocity": 7,
+  "silDebt": "stable",
+  "silLastSession": 127,
   "silMax": 1000,
   "silSparkline": [
     1000,
     1000,
     1000,
     1000,
-    1000
+    998
   ],
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "testsPassing": 93,
-  "testsTotal": 93,
+  "testsPassing": 97,
+  "testsTotal": 97,
   "testsLastRun": "2026-08-04",
   "lastDeployStatus": "S126 repair commit d3d611b reached origin/main. CI 30883558365 and brief-format 30883558594 passed. Deploy Pages 30883558417 passed preflight, immutable attestation, deployment, production launch, dashboard smoke, and standard files; its final aggregator correctly stayed red on the six absent hosting-edge headers. SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
@@ -64,7 +66,7 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 642/642 across 93 files in S126 on the exact lock tree"
+      "status": "passing 679/679 across 97 files in S127 recovery on the exact lock tree"
     },
     {
       "type": "edge",
@@ -111,12 +113,12 @@
     "creativeAlignment": 100,
     "momentum": 100,
     "engagement": 100,
-    "processQuality": 100,
+    "processQuality": 99,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "automationCoverage": 99
   },
   "doctorScore": {
     "date": "2026-08-04",
@@ -228,35 +230,35 @@
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
   "sessionShellHygiene": {
-    "session": 126,
-    "started": 0,
-    "closed": 0,
+    "session": 127,
+    "started": 1,
+    "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-08-04T00:51:23.0693933-04:00",
-    "evidence": "Final scoped Win32 process enumeration found zero PromoGrind node/npm/npx/git/chrome/msedge/esbuild workers; TCP enumeration found zero listeners on 4173/4174/4175/5173. Bounded browser and test harnesses had self-cleaned, and unrelated host processes were not disturbed."
+    "enumeratedAt": "2026-08-04T18:00:00-04:00",
+    "evidence": "Final scoped Win32 process and TCP enumeration found one PromoGrind-owned Vite/esbuild pair listening on 127.0.0.1:4173. The exact process paths resolved inside this repository, both processes were closed, and a follow-up probe found zero listeners on 4173/4174/4175/5173. Unrelated host processes were not disturbed."
   },
-  "lastSessionSummary": "S126 shipped all five verified primary items and every generated repo-owned second-order candidate across typed release evidence, atomic test observability, witnessed startup truth, release parity, and operational maintainability. The full local launch gate passes; the external evidence graph remains an explicit HOLD.",
+  "lastSessionSummary": "S127 recovery verified and completed five L3 product/data contracts plus two verifier/dependency root fixes. Vitest passes 679/679 and Doctor 12/12; 20 objective rendered states and transactional release parity pass. Stable staging, semantic image return, canonical cost reconciliation, and typed external launch proofs remain explicit HOLDs.",
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-04T06:54:16.982Z",
-    "commitSha": "d3d611b9475e0a0c57d5013dd6090d6e26a2cfb6",
+    "generatedAt": "2026-08-04T21:53:51.123Z",
+    "commitSha": "c2a7534b45b8f67d0a2c6c1417de3855eba6be9c",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 93,
-      "total": 93
+      "passing": 97,
+      "total": 97
     },
     "assertions": {
-      "passing": 642,
-      "total": 642
+      "passing": 679,
+      "total": 679
     },
-    "reportSha256": "9acdd7a8b369baa4a6198c4ff7bc87d65df17002222bc3a26a8845eb884b5bb8"
+    "reportSha256": "ddb0ab37a0fa9cd53a3a465eea6638f0f7f9b83f4e1b52002fbba8e290261880"
   },
-  "testsAssertionsPassing": 642,
-  "testsAssertionsTotal": 642,
-  "testsAssertionsFiles": 93,
+  "testsAssertionsPassing": 679,
+  "testsAssertionsTotal": 679,
+  "testsAssertionsFiles": 97,
   "testsAssertionsLastRun": "2026-08-04"
 }

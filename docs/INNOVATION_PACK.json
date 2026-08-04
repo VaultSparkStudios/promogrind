@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-04T02:00:53.625Z",
+  "generatedAt": "2026-08-04T21:47:53.721Z",
   "project": "PromoGrind",
-  "session": 126,
+  "session": 127,
   "sourceSignals": {
     "geniusListEmpty": false,
-    "taskBoardBytes": 83965,
+    "taskBoardBytes": 86963,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
@@ -14,9 +14,35 @@
     "cdpHarnessCopies": 0,
     "largeFiles": 0,
     "launchDeferrals": 6,
-    "secondOrderShipped": 0
+    "secondOrderShipped": 2
   },
   "ranked": [
+    {
+      "status": "shipped",
+      "effort": "small",
+      "effortHours": 1,
+      "priority": 46,
+      "id": "visual-parity-dependent-transaction",
+      "tier": "⚡",
+      "axis": "observability / dependency order",
+      "impact": 9,
+      "innovation": 7,
+      "evidence": "The complete launch gate proved that writing a fresh canonical visual receipt could leave release-parity JSON and Markdown stale.",
+      "recipe": "Share artifact preparation and atomic writers, then refresh parity inside the visual-receipt producer transaction and regression-test the written outputs."
+    },
+    {
+      "status": "shipped",
+      "effort": "small",
+      "effortHours": 0.5,
+      "priority": 44,
+      "id": "s127-pixel-audit-entropy-contract",
+      "tier": "⚡",
+      "axis": "verification / rendered-pixel observability",
+      "impact": 8,
+      "innovation": 7,
+      "evidence": "Recovery replay found all 20 valid captures falsely red because the verifier read nonexistent per-channel Sharp entropy and serialized NaN as null.",
+      "recipe": "Use Sharp's canonical aggregate entropy with a guarded per-channel compatibility fallback, then require every capture and dark/light pair to pass."
+    },
     {
       "status": "honest-deferral",
       "effort": "external",

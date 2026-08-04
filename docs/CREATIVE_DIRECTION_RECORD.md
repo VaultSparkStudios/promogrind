@@ -358,3 +358,12 @@ Agents MUST NOT modify or remove existing entries.
 - **New required direction:** operational truth must remain correct across real execution order, partial runs, regenerated dependencies, and missing external authority—not merely look coherent when read in isolation.
 - **Application:** S126 created a typed launch-proof graph, atomic test evidence with dependent regeneration, witnessed startup claims, compiled release parity, and focused control-plane modules.
 - **Durable rule:** a green gate is trustworthy only if running it can neither erase nor stale the evidence it consumes; every unproved external fact stays a visible HOLD.
+
+### 2026-08-04 — Recovery first, then continuous best-in-history saturation (S127)
+
+- **Category:** Assignment / recovery and quality direction
+- **Human input (close paraphrase):** Begin mid-recovery by proving what the cut-off session intended and where it died; validate every changed data artifact and configuration; replay tests and doctor before trusting any green; finish and checkpoint the prior closeout; then continue automatically through a complete start, audit, implement, and closeout arc. Exhaust both primary and second-order work at a genius-level, sophisticated, maximally creative quality bar, pausing only for genuine corruption or intent ambiguity.
+- **Area affected:** recovery integrity / sync truth / Advisor trust / ledger evidence / decision safety / feedback loop / rendered verification / release process
+- **New required direction:** recovery evidence must distinguish committed truth from merely dirty work, and saturation must complete every live repo-owned premise without manufacturing external readiness or silently downgrading verification.
+- **Application:** S127 replayed the dirty tree before editing, completed five L3 product/infrastructure contracts, repaired the visual verifier itself, and retained semantic-viewer and launch-proof gaps as explicit limits.
+- **Durable rule:** best-in-history recovery is a clean proof boundary: reconstruct, validate, replay, finish, checkpoint, then innovate from current truth.

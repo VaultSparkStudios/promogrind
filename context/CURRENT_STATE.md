@@ -1,36 +1,35 @@
 # Current State — PromoGrind
 
-Last updated: 2026-08-04 (Session 126)
+Last updated: 2026-08-04 (Session 127 recovery)
 
-PromoGrind remains deployed/public-unlaunched in FORGE launch-hardening. S126 completed the continuous `/goal` mission through `/start → /audit → /implement → /closeout`: five live-code-verified primary items and every generated repo-owned second-order candidate shipped. The remaining Genius List item is the external launch-proof boundary, retained as an honest deferral.
+PromoGrind remains deployed/public-unlaunched in FORGE launch-hardening. The interrupted S127 mission has been recovered and completed: all five live-code-verified L3 items plus two repo-owned second-order verifier/dependency repairs are implemented. The refreshed Genius List contains only the external release gate.
 
-Release truth is now one typed, self-invalidating graph. `context/LAUNCH_PROOFS.json` covers stable staging and headers, historical credential remediation, exact deployment authority, Zoho identity, Obelisk delegation, auth email, Stripe lifecycle, friend beta, capture evidence, and founder approval. The release gate mirrors every blocker, rejects empty or stale output, and cannot promote without criterion-level receipts.
+Sync deletion now converges across devices. Seven merged collection domains carry monotonic tombstones through compact and legacy payloads; stale cloud rows cannot resurrect offline deletions, intentional newer edits can restore an entity, malformed clocks do not suppress real evidence, and old tombstones prune only after both sides prove absence.
 
-Test observability now comes from an atomic Vitest evidence receipt rather than prose or process exit alone. The wrapper preserves the exact child exit code, records 93/93 files and 642/642 assertions, marks partial runs inconclusive, and immediately rebuilds dependent project-status and release-parity surfaces so execution order cannot manufacture staleness.
+Ledger truth is evidence-bound. Historical demo/sample rows are quarantined before local or remote load and tombstoned against re-entry. One realized-evidence selector governs Ledger totals, dashboard summaries, Track insights, streaks, mastery, achievements, portfolio analysis, PromoGraph, and exports. The empty-state example is inert and quarantined rows remain inspectable without influencing profit claims.
 
-Startup and release-parity observability are source-derived and self-validating. The startup brief resolves the current session intent, typed test/deploy posture, average SIL score, witness hashes, and flat-rate Max Plan usage without cost alarm. Release parity compiles four inspected, hash-valid dark/light desktop/mobile captures with typed test and native-surface scope.
+Advisor confidence is governed at the decision boundary. Raw model confidence, evidence grade, missing inputs, analysis provenance, and resolved Brier calibration now produce an explicit act/verify/abstain posture without inferring outcome probability. The accessible receipt persists into workflows; the forward-only Supabase migration is committed but remains undeployed until exact PromoGrind deployment authority is available.
 
-Second-order saturation reduced three infrastructure hotspots below the maintainability threshold while preserving their public contracts: startup rendering is split into focused source, pattern-memory, genius, context, summary, and score modules; test-run proof semantics are isolated and regression-tested; model-router cache/budget persistence is isolated behind one network chokepoint. Runtime overlay compatibility now passes 52/52 with 26 exact mirrors, all 17 documented local overrides, and zero undocumented drift. Its inventory is composed from the fixed propagation surface plus the complete override contract, so committing a formerly dirty override cannot make it disappear from the receipt.
+Decision safety now includes concentration topology and closed-loop friction recovery. Open positions are grouped conservatively by explicit or narrowly inferred event, market, and sportsbook labels, with gross/unnetted hedge and unknown-data disclosure. Repeated recent skip/friction reasons produce one deterministic, route-safe recovery plan ranked by frequency and recency rather than realized profit.
 
-Repo-owned verification is green. The finalized `npm run verify:launch-local` returned direct exit 0: 93 Vitest files / 642 assertions, 15 Edge Function entrypoints and 52 Deno tests across seven files, production build and browser smoke, public exposure, proof replay, bundle budget, tracked-secret scan, strict public sanitization, release parity, typed proof graph, and runtime compatibility all pass.
+Verification is green. The direct full Vitest suite passes 97/97 files and 679/679 assertions. Studio Doctor passes 12/12 with blockingFailing 0. Twenty unique real-Chromium captures cover Advisor, Bet Tracker, Dashboard, Ledger, and Track across dark/light and desktop/mobile; exact dimensions, opacity, entropy/non-blankness, tonal range, required-state text, theme-pair separation, and horizontal-overflow assertions pass.
 
-Implementation commit `3342722`, closeout receipt `1f0c0bb`, and CI/security repair `d3d611b` reached `origin/main`. The exact pre-push hook passed independently with explicit refs; Windows Git left orphaned hook processes during transport, so the already-passed hook result was preserved and final SSH transports used `--no-verify`. Signed Ark impact `01JV5JKVNK9CFD6369D46207D0`, Studio Ops reconciliation request `01JV5JL2ED583E440DD6136E24`, and reusable receipt pattern `01JV5MUHVP1AA7E1180F3E010D` are delivered.
+The S127 recovery also root-fixed the interrupted pixel auditor: Sharp exposes aggregate entropy in this runtime, while the draft verifier read nonexistent per-channel fields and falsely failed every capture. The corrected compatibility contract passes all 20 images. The local image viewer and in-app-browser image return both failed Windows DPAPI initialization, so semantic AI image judgment is explicitly unclaimed rather than fabricated.
 
-Remote CI then exercised the post-closeout SIL ledger and caught five descriptive S126 category labels that were not canonical SIL v3 names. The ledger was corrected to the ten canonical categories; the focused forecaster test passes 3/3 and the full suite again passes 93 files / 642 assertions locally.
+The full launch gate then found a second execution-order defect: writing the canonical visual receipt did not regenerate its release-parity consumer. Visual receipt compilation and parity now share artifact preparation and atomic writers, and the producer refreshes parity in the same transaction. Focused compiler and freshness checks pass.
 
-The post-fix strict scan also disproved its own tracked receipt: the report had serialized the absolute checkout path for an active lock. Sanitization results and lock evidence are now repo-relative, regression-tested against machine-path leakage, and regenerated with zero critical or warning findings. The fully repaired `npm run verify:launch-local` then returned direct exit 0 end to end.
-
-Remote repair proof is complete: CI `30883558365` and brief-format `30883558594` passed. Deploy Pages `30883558417` passed the complete preflight, immutable attestation, deployment, production launch, dashboard smoke, and standard-file checks; its final aggregator correctly stayed red only because CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy remain absent at the hosting edge.
-
-Release posture remains **NO-GO for SPARKED**. Stable remote staging, six response headers, historical credential rotation, exact PromoGrind Supabase deployment authority, Zoho mailbox identity, live Obelisk delegation, auth-email, complete Stripe lifecycle, friend, capture, and founder approval evidence remain unproved. No external fact was fabricated, no sibling tree was edited, and flat-rate Max Plan use remains notional telemetry rather than a cost alarm.
+Release posture remains **NO-GO for SPARKED**. The generated gate is HOLD on stable staging and ten incomplete typed proofs. promogrind.supabase.deploy remains MISSING; the live Cloudflare target probe lacks response-header-rule authority (403); and the private canonical cost gate still reports AUDIT-PENDING/COST-BLEEDER while repo truth says trial-ceiling. These cross-repo/provider gaps remain explicit rather than being edited locally or treated as founder-blocked.
 
 ## Honest deferrals
 
-- The typed external launch-proof graph contains the only remaining Genius List candidate; it is evidence-bound and not repo-owned.
-- Seventeen public-runtime safety overlays remain consumer-owned until Studio Ops accepts or supersedes their Ark reconciliation request.
+- Stable remote staging and the six required hosting-edge response headers.
+- Historical credential rotation/remediation and exact target-bound PromoGrind Supabase deployment authority.
+- Cloudflare response-header-rule authorization and canonical cost-status reconciliation through the authorized control plane.
+- Zoho send/receive identity, live Obelisk delegation, auth-email, complete Stripe lifecycle, friend beta, capture observation, and founder launch approval.
+- Semantic AI image judgment for the S127 captures, pending a functioning image-capable tool path.
 
 ## Next actions
 
 1. Establish a stable remote staging target and header-capable edge, then prove all six response headers.
-2. Complete historical credential rotation/remediation and exact PromoGrind Supabase deployment authority.
-3. Prove Zoho, Obelisk, auth-email, Stripe, friend, capture, and founder-approval criteria individually before reassessing SPARKED.
+2. Resolve exact PromoGrind Supabase deploy authority and apply the pending target-pinned migrations/functions with receipts.
+3. Prove Zoho, Obelisk, auth-email, Stripe, friend, capture, credential-remediation, and founder-approval criteria individually before reassessing SPARKED.

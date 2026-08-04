@@ -1,20 +1,36 @@
 # Release Parity Evidence
 
-> Generated from typed receipts: 2026-08-03T21:49:44.881Z · visual inspected · defects 0
+> Generated from typed receipts: 2026-08-04T21:22:15.970Z · visual inspected · defects 0
 
 ## Browser matrix
 
 | Viewport | Theme | Artifact | SHA-256 |
 |---|---|---|---|
-| 1440 × 1000 | dark | `captures/chat-after-desktop-dark.png` | `f658c9ca4a55bc6d0796852d763561b8bcf4486c5816cf0f6d68654cb31851f4` |
-| 1440 × 1000 | light | `captures/chat-after-desktop-light.png` | `0d65ca7fc88c4722ba820621bf008fe1e23e3a9c623b1913a6fc0261d191c16d` |
-| 390 × 844 | dark | `captures/chat-after-mobile-dark.png` | `bb374ea79bb76d9f3115e5de9fd04d1013cbabdddea0476d8cfea1fa5f4bfcc1` |
-| 390 × 844 | light | `captures/chat-after-mobile-light.png` | `a38b472706c80d25cac3befd8ef05bbf08058db23d64afeedfc375ce0b9c6d67` |
+| 1440 × 1000 | dark | `captures/s127-after-advisor-desktop-dark.png` | `92dde2331dfdee531392df87a8803bf94a2d2044aeeb6a8608ab478f9595edbb` |
+| 1440 × 1000 | light | `captures/s127-after-advisor-desktop-light.png` | `15074d9fd5fdcbb6a0758a6e61562cece25fcab722891d12892827d1f19b8242` |
+| 390 × 844 | dark | `captures/s127-after-advisor-mobile-dark.png` | `1507c57b5a9fa54d0786f406b42ff16ce466e3a71569c726f8694a5508a4b013` |
+| 390 × 844 | light | `captures/s127-after-advisor-mobile-light.png` | `78ad4912c166a0fcf07766fd1ccfeaac13472e10fb6891e573eb83ea050e9db2` |
+| 1440 × 1000 | dark | `captures/s127-after-bet-tracker-desktop-dark.png` | `7d8b8ed505e5693f028e3387f90f0cb970352c269d2f6d29325a7fc6e7b4e392` |
+| 1440 × 1000 | light | `captures/s127-after-bet-tracker-desktop-light.png` | `f1f02d433ae6e5983f814fa7a6202f7253c45234115b50a51657092e3685e0c2` |
+| 390 × 844 | dark | `captures/s127-after-bet-tracker-mobile-dark.png` | `7f14cbc8194e1ae7242829c1250507d9b218255df370a88d195c2d2e3d2ea65d` |
+| 390 × 844 | light | `captures/s127-after-bet-tracker-mobile-light.png` | `ee6904928c9e85060484e049ef67f8b4dcd01168b88b23c66cea7379f710d3a4` |
+| 1440 × 1000 | dark | `captures/s127-after-dashboard-desktop-dark.png` | `c4d8575c196430990072bea63d45595c11577de81821a78009305c91204fca3c` |
+| 1440 × 1000 | light | `captures/s127-after-dashboard-desktop-light.png` | `32168576a70e4d5118f6f4d639eec056613f9630f49c3295bd9ae3ee59a49fee` |
+| 390 × 844 | dark | `captures/s127-after-dashboard-mobile-dark.png` | `0108116c7c1e941fcc006fee513a270a05b7a2e62e9d78b325d3670c115b8dec` |
+| 390 × 844 | light | `captures/s127-after-dashboard-mobile-light.png` | `8013a6b4a19b6b9be6ef6d7d96ce73b67ac7912335f19017ed46df659f8c76bc` |
+| 1440 × 1000 | dark | `captures/s127-after-ledger-desktop-dark.png` | `21a2e5f914d964a831e8884b845423bb63938f2643216ec1e2724526b5334aa8` |
+| 1440 × 1000 | light | `captures/s127-after-ledger-desktop-light.png` | `8924d7d0211ba44bcd938832abb0fbe2244daedea4ed679d96c81bffe828b4f5` |
+| 390 × 844 | dark | `captures/s127-after-ledger-mobile-dark.png` | `b1ac79e5063726fecadfd828c2829404facb7ef7a8b66097636d53d157c77b55` |
+| 390 × 844 | light | `captures/s127-after-ledger-mobile-light.png` | `a274e14c60890b89637eab62c2f4a7c4b54d56ed238952caf5f3174674c4796c` |
+| 1440 × 1000 | dark | `captures/s127-after-track-desktop-dark.png` | `5f7d17c6652d984bbf75ca6abc719a2af102d877de9fcb98161cc02dec99921c` |
+| 1440 × 1000 | light | `captures/s127-after-track-desktop-light.png` | `4c8678972be84b3a6fc4df7cde88755a11e334b75c746b68ea1e88c7fb3ba08a` |
+| 390 × 844 | dark | `captures/s127-after-track-mobile-dark.png` | `d142bf0e5296e3c823ff5ebbdbb6e99ab8ece6a39abadda296deeb2b4a9dfc5f` |
+| 390 × 844 | light | `captures/s127-after-track-mobile-light.png` | `0869b2cd6bd02640adce43a73828c625b7552a26ce893159ab762b1937b1dab2` |
 
 ## Evidence state
 
 - Pixel inspection: **COMPLETE** · blocking defects: 0
-- Tests: **GREEN** · 93/93 files · 642/642 assertions
+- Tests: **GREEN** · 97/97 files · 679/679 assertions
 - Native applicability: **planned-no-native-projects**
 
 Native parity is not claimed from Capacitor configuration alone; an iOS or Android project directory plus rendered evidence is required.

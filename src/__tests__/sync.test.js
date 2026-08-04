@@ -195,6 +195,36 @@ describe('saveData', () => {
     expect(parsed._entities.ledger).toBeTypeOf('number');
   });
 
+  it('records and clears exact collection tombstones as rows are deleted and intentionally re-added', async () => {
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      ledger: [{ id: 'ledger-gone', profit: '12', updatedAt: '2026-08-04T08:00:00.000Z' }],
+      _updated: Date.now() - 5000,
+    }));
+
+    await saveData({ ledger: [] });
+    let parsed = JSON.parse(localStorage.getItem('promo_engine_v3'));
+    expect(parsed._tombstones.ledger['ledger-gone']).toBeTypeOf('number');
+    expect(readSyncDiagnostics()).toEqual(expect.objectContaining({ tombstoneCount: 1 }));
+
+    await saveData({ ledger: [{ id: 'ledger-gone', profit: '14', updatedAt: '2026-08-04T08:10:00.000Z' }] });
+    parsed = JSON.parse(localStorage.getItem('promo_engine_v3'));
+    expect(parsed._tombstones.ledger['ledger-gone']).toBeUndefined();
+    expect(parsed.ledger).toHaveLength(1);
+  });
+
+  it('preserves collection tombstones in the compact compatibility payload', async () => {
+    mocks.getSession.mockResolvedValue(WITH_SESSION);
+    localStorage.setItem('promo_engine_v3', JSON.stringify({
+      workflowInbox: [{ id: 'wf-gone', title: 'Remove me', status: 'queued' }],
+      _updated: Date.now() - 5000,
+    }));
+
+    await saveData({ workflowInbox: [] });
+    const tracker = mocks.upsert.mock.calls.at(-1)[0].tracker;
+    expect(tracker._compat.blobMode).toBe('compact');
+    expect(tracker._tombstones.workflowInbox['wf-gone']).toBeTypeOf('number');
+  });
+
   it('stamps stable ids for odds comparison rows so tracker merges can reconcile them', async () => {
     await saveData({ oddsCompare: [{ event: 'Chiefs ML', odds: { DraftKings: '-110' } }] });
     const parsed = JSON.parse(localStorage.getItem('promo_engine_v3'));

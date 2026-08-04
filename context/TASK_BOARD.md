@@ -1,5 +1,33 @@
 # Task Board
 
+## Unified Genius List (S127)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| 🔥 | Security / sync data integrity | done | 8h | sync-deletion-convergence — **DONE L3 S127**: monotonic tombstones, compact preservation, convergence-safe pruning, and 38/38 focused sync tests |
+| 🔥 | Artificial Intelligence / feedback / trust | done | 6h | calibration-governed-advisor — **DONE L3 S127**: history-aware act/verify/abstain governor with workflow receipt persistence |
+| 🔥 | Observability / ledger truth | done | 7h | ledger-evidence-boundary — **DONE L3 S127**: synthetic-row quarantine and canonical realized-evidence selectors across derived surfaces |
+| ⚡ | Feature depth / decision safety | done | 6h | correlated-exposure-radar — **DONE L3 S127**: event/book/market clusters with declared-hedge and unknown-data disclosure |
+| ⚡ | Feedback / engagement / user experience | done | 5h | friction-recovery-loop — **DONE L3 S127**: evidence-thresholded, route-safe recovery plans in Track and Today |
+
+## Shipped This Session (S127)
+
+- Monotonic per-domain sync tombstones with offline-delete convergence, intentional newer restoration, compact compatibility, and bounded pruning.
+- Calibration-governed Advisor posture that turns raw confidence into inspectable act/verify/abstain decisions and persists the receipt.
+- Realized-evidence ledger boundary that quarantines historical synthetic profit before storage, sync, totals, exports, mastery, or narrative can consume it.
+- Conservative exposure topology across event, market, and sportsbook dimensions with declared-hedge and unknown-metadata honesty.
+- Closed-loop friction recovery ranked by repeated recent evidence—not profit—with safe actions on Track and Today.
+- Second-order recovery verifier fix: Sharp aggregate-entropy compatibility, proving 20 unique desktop/mobile dark/light captures without false-red NaN results.
+- Second-order visual-parity transaction: a canonical visual-receipt write now refreshes hash-bound release parity atomically, so the producer cannot leave a stale consumer.
+
+## Saturation result (S127)
+
+- Five of five premise-verified L3 audit items and both repo-owned verifier/dependency refinements are shipped.
+- Full Vitest passes 679/679 assertions across 97/97 files; Studio Doctor passes 12/12 with blockingFailing 0.
+- Twenty real-Chromium captures pass objective pixel, required-state, theme-pair, and horizontal-overflow checks.
+- Semantic AI image viewing remains explicitly unclaimed because both local viewer paths failed Windows DPAPI initialization.
+- Stable staging, six hosting-edge headers, credential remediation, exact Supabase deploy authority, Zoho/Obelisk identity, canonical cost reconciliation, real auth/payment/friend/capture journeys, and founder approval remain external evidence—not fabricated completions.
+
 ## Unified Genius List (S126)
 
 | Tier | Category | Status | Effort | Item |

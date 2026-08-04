@@ -331,8 +331,8 @@ describe("dashboard helpers", () => {
     const snapshot = {
       bankroll: 500,
       openBets: [
-        { id: "open-1", book: "DraftKings", type: "bonus_bet", stake: "150", odds: "+120", status: "open" },
-        { id: "open-2", book: "FanDuel", type: "profit_boost", stake: "40", odds: "-110", status: "pending" },
+        { id: "open-1", eventId: "event-1", market: "moneyline", book: "DraftKings", type: "bonus_bet", stake: "150", odds: "+120", status: "open" },
+        { id: "open-2", eventId: "event-1", market: "total", book: "FanDuel", type: "profit_boost", stake: "40", odds: "-110", status: "pending" },
       ],
     };
     const radar = buildRiskRadarSummary({
@@ -346,6 +346,8 @@ describe("dashboard helpers", () => {
     expect(radar.show).toBe(true);
     expect(radar.exposure).toBe(190);
     expect(radar.exposurePct).toBe(38);
+    expect(radar.concentration).toMatchObject({ concentrationPct: 100, hasConcentration: true });
+    expect(radar.concentration.largestCluster).toMatchObject({ dimension: "event", count: 2, stake: 190 });
     expect(radar.stressPreview).toBe(true);
     expect(radar.preMortem.triggered).toBe(true);
     expect(radar.preMortem.scenarios[0].headline).toMatch(/DraftKings/);

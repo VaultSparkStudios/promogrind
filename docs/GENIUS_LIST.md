@@ -10,7 +10,7 @@
 
 promogrind is held on Stable staging path available, Blocking launch proofs complete.
 
-*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=4143(+2)
+*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=4113(+2)
 
 ```bash
 node scripts/ops.mjs release-gate

@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-04T06:59:08.186Z",
+  "generatedAt": "2026-08-04T21:58:25.672Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "22213664c63dfc0ab806531730d0ba7b7db92276ef045b71efe4598d220dcbec",
+  "briefSha256": "19aeda55215b5820b3006e41e818235239f17dd9bcc4fcc2907f77cae9179a3f",
   "rendererVersion": "3.2",
-  "targetSession": 127,
-  "sourceSession": 126,
+  "targetSession": 128,
+  "sourceSession": 127,
   "sources": {
     "projectProfile": {
       "medium": "app",
@@ -25,7 +25,7 @@
       "ageDays": 3
     },
     "context": {
-      "confidence": "heuristic-stale",
+      "confidence": "measured",
       "recommendation": "CONTINUE",
       "measured": true
     },

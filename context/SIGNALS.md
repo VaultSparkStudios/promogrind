@@ -1,6 +1,6 @@
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║ ✓  Tests         93/93 files · 642/642 assertions (2026-08-04) ║
-║ ✓  Velocity      8 ↑  ·  Debt: →                               ║
+║ ✓  Tests         97/97 files · 679/679 assertions (2026-08-04) ║
+║ ✓  Velocity      7 ↑  ·  Debt: →                               ║
 ║ ⚠  Runway        ~2 sessions                                   ║
 ║ ✓  Context age   0d                                            ║
 ║ ✓  IGNIS         44911 FORGE  ·  3d old                        ║

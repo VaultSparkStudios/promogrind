@@ -1,4 +1,5 @@
 import { parseRealizedOutcomeValue } from "./realizedOutcome.js";
+import { ledgerEvidenceEntries } from "./ledgerEvidence.js";
 
 function dayStr(value) {
   if (!value) return null;
@@ -49,7 +50,7 @@ export function computeStreak(appData = {}, now = new Date()) {
     }
   }
 
-  const ledger = Array.isArray(appData.ledger) ? appData.ledger : [];
+  const ledger = ledgerEvidenceEntries(appData.ledger);
   for (const entry of ledger) {
     if (parseRealizedOutcomeValue(entry.profit) !== null) {
       const d = dayStr(entry.date);

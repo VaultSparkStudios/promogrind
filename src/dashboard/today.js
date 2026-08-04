@@ -9,6 +9,8 @@ import { runBankrollStress, shouldShowStressPreview, totalExposure } from "../li
 import { buildPreMortem } from "../lib/preMortem.js";
 import { buildTwinBattle } from "../lib/twinBattle.js";
 import { getPromoFreshness } from "../lib/promoObservations.js";
+import { ledgerEvidenceEntries } from "../lib/ledgerEvidence.js";
+import { analyzeExposureClusters } from "../lib/exposureClusters.js";
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const GRADE_SCORE = { A: 3, B: 2, C: 1 };
 const PROMO_KEYWORDS = {
@@ -60,6 +62,7 @@ export function buildRiskRadarSummary(data = {}, snapshot = {}, opts = {}) {
   const bankroll = Number.parseFloat(snapshot.bankroll ?? data.bankroll ?? "");
   const openBets = Array.isArray(snapshot.openBets) ? snapshot.openBets : [];
   const positions = openBets.map(normalizeOpenPosition).filter(Boolean);
+  const concentration = analyzeExposureClusters(openBets);
   const exposure = totalExposure(positions);
   const stress = runBankrollStress({
     bankroll: Number.isFinite(bankroll) ? bankroll : 0,
@@ -89,8 +92,13 @@ export function buildRiskRadarSummary(data = {}, snapshot = {}, opts = {}) {
     stressPreview,
     preMortem,
     twinBattle,
+    concentration,
     headline: stressPreview
-      ? "Exposure deserves a forward look"
+      ? concentration.hasConcentration
+        ? "Exposure is concentrated, not merely elevated"
+        : "Exposure deserves a forward look"
+      : concentration.hasConcentration
+        ? "Several open stakes share one concentration cluster"
       : preMortem?.triggered
         ? "Largest stake needs a pause"
         : !twinBattle.empty
@@ -399,7 +407,7 @@ export function buildAdaptiveRankingSnapshot({
 export function getDashboardSnapshot(data = {}, schedule = [], now = new Date(), bankrollValue = "", { includePlaybooks = false, includePortfolio = false } = {}) {
   const { todayStr, in3DaysStr, monthKey } = getTodayContext(now);
   const bets = data.bets || [];
-  const ledger = data.ledger || [];
+  const ledger = ledgerEvidenceEntries(data.ledger);
   const done = data.done || {};
   const expiry = data.bookExpiry || {};
   const workflowSummary = summarizeWorkflows([

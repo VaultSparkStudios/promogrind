@@ -1,26 +1,38 @@
-# Implementation Plan — Session 126
+# PromoGrind Implementation Plan — Session 127
 
-Source: `docs/AUDIT_2026-08-03.json`
+Source: docs/AUDIT_2026-08-04.json.
 
-## Efficiency order
+All five premise-verified items target L3. The order is optimized for shared foundations and verification efficiency, not raw audit rank.
 
-1. [x] `complete-launch-proof-graph` — typed vocabulary covers every current blocker with zero fabricated receipts.
-2. [x] `public-shim-release-gate` — public self-profile consumes proof and sanitization sources and emits HOLD.
-3. [x] `typed-vitest-evidence` — atomic file/assertion truth now drives later renderers.
-4. [x] `startup-semantic-truth` — score, intent, tests, deploy, and notional cost are source-derived.
-5. [x] `release-parity-compiler` — parity derives from current visual and test receipts.
+## Wave A — data truth foundations
 
-## Completion gates
+1. ✅ sync-deletion-convergence
+   - Establish monotonic collection tombstones before any new derived state is added.
+   - Verify focused sync/load/queue suites and adversarial multi-device convergence.
+2. ✅ ledger-evidence-boundary
+   - Establish one realized-evidence selector before risk, feedback, and Advisor surfaces consume new summaries.
+   - Verify ledger, insights, mastery, achievements, dashboard, export, and render contracts.
 
-- All five new items reach L3 with focused adversarial tests; prior S124/S125 rows remain shipped no-ops.
-- No stable staging, delivered header, rotation, provider deployment, mailbox, identity, user-journey, or founder-approval proof is fabricated.
-- Every child process is hidden on Windows and its direct exit is preserved.
-- No dependency install, sibling-tree edit, or Max-plan cost alarm.
-- Final launch-local, doctor, sanitizer, secret, runtime-overlay, and direct-main closeout gates remain mandatory.
+## Wave B — decision intelligence
 
-## Wave map
+3. ✅ correlated-exposure-radar
+   - Build the pure cluster engine, then integrate risk radar and stress/discipline detail.
+4. ✅ friction-recovery-loop
+   - Build the pure intervention engine on canonical feedback aggregates, then integrate Track and Today.
+5. ✅ calibration-governed-advisor
+   - Build the pure governor on the existing Brier ledger and finish the shared UI pass in Advisor/workflow receipts.
 
-- [x] Wave 3A: typed launch graph + public-shim release gate.
-- [x] Wave 3B: typed Vitest evidence + semantic startup brief.
-- [x] Wave 3C: release parity compiler + full focused verification.
-- [x] Wave 4: generated maintainability candidate exhausted through focused startup, runner, and model-router ownership extractions; external proof remains an explicit honest deferral.
+## Wave C — verification
+
+- Run focused tests after every item and the direct full Vitest suite after the primary wave.
+- Run build, route/accessibility, public claims, release surface, and launch-local gates.
+- Because four items touch rendered UI, capture and inspect affected dark/light desktop/mobile states, repair defects, and write a hash-bound CANON-053 receipt.
+- Mark shipped only after behavior and evidence agree; partial work is blocked, never done.
+
+## Recovery verification
+
+- Primary implementation: 5/5 L3 items shipped; 2/2 verifier/dependency refinements shipped during recovery replay.
+- Focused and full behavior: 97/97 Vitest files, 679/679 assertions.
+- Rendered evidence: 20 unique real-Chromium captures across five touched states, desktop/mobile and dark/light; capture-time required-state and overflow assertions pass.
+- Objective pixel audit: dimensions, opacity, entropy/non-blankness, tonal range, and all 10 dark/light pairs pass after repairing the interrupted verifier's Sharp entropy contract.
+- Honest limitation: the local image viewer and in-app browser image return failed Windows DPAPI initialization, so the receipt does not claim semantic AI image judgment.

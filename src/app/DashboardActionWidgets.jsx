@@ -8,6 +8,7 @@ import { CANONICAL_APP_URL, FEATURE_FLAGS } from "../launchState.js";
 import { K, f, font, fontD } from "../lib/shared.js";
 import { S } from "../ui.jsx";
 import { createEntityId } from "../lib/entityId.js";
+import { ledgerEvidenceEntries } from "../lib/ledgerEvidence.js";
 
 const PushEnableBtn = ({ proStatus }) => {
   const toast = useToast();
@@ -117,7 +118,7 @@ const WeeklyDecisionReview = () => {
   const [copied, setCopied] = useState(false);
   const generate = () => {
     const mon = new Date(); mon.setDate(mon.getDate() - (mon.getDay()||7) + 1); mon.setHours(0,0,0,0);
-    const ledger = (data.ledger || []).filter(e => e.date && new Date(e.date) >= mon);
+    const ledger = ledgerEvidenceEntries(data.ledger).filter(e => e.date && new Date(e.date) >= mon);
     const feedback = (data.resultFeedback || []).filter(e => new Date(e.updatedAt || e.createdAt || 0) >= mon);
     const closed = feedback.filter(e => ['settled','skipped'].includes(e.status));
     const settled = closed.filter(e => e.status === 'settled' && Number.isFinite(Number.parseFloat(e.actualProfit)));
@@ -246,7 +247,7 @@ const CopyMySetup = ({ appData: data, syncAppData }) => {
   };
   const shareCard = () => {
     const booksComplete=Object.values(data.done||{}).filter(Boolean).length;
-    const totalProfit=(data.ledger||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+    const totalProfit=ledgerEvidenceEntries(data.ledger).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
     const card=[
       "💰 PromoGrind Setup",
       `State: ${data.userState||"Not set"} · Bankroll: ${bankroll?"$"+bankroll:"Not set"}`,

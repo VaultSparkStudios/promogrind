@@ -1660,6 +1660,38 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 - Existing Now item: establish a true staging/header-capable edge and prove all six response headers. `[SIL]`
 - Existing Now item: obtain exact PromoGrind Supabase deploy authority and deploy only to the pinned project ref with a receipt. `[SIL]`
 
+## 2026-08-04 — Session 127 Recovery | Total: 998/1000 | Velocity: 7 | Debt: stable
+
+| Category | Score | Trend | Evidence |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | Five L3 items plus the verifier repair pass 97/97 Vitest files and 679/679 assertions; Studio Doctor passes 12/12 with blockingFailing 0. |
+| Creative Alignment | 100 | → | Advisor, ledger, exposure, and recovery surfaces become calmer and more evidence-bound as uncertainty rises. |
+| Momentum | 100 | → | Five L3 items and two verifier/dependency refinements were reconstructed, verified, completed, saturated, and prepared as a clean recovery boundary. |
+| Engagement | 100 | → | Recovery guidance rewards evidence repair and review rather than profit, volume, urgency, or synthetic progress. |
+| Process Quality | 99 | ↓ | Full recovery protocol, premise replay, direct exits, and honest deferrals held; semantic image return remained unavailable because the Windows DPAPI path failed. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited; external authority remains in typed proofs and the secrets gateway. |
+| Security Posture | 100 | → | Tombstones prevent stale resurrection, synthetic profit is quarantined, and no secret or external authority was inferred. |
+| Ecosystem Integration | 100 | → | Sync, workflow persistence, calibration, dashboard, Track, portfolio, mastery, achievements, and release evidence share canonical contracts. |
+| Capital Efficiency | 100 | → | No dependency, paid API, or recurring-cost alarm was added; internal primitives and existing Chromium/Sharp tooling were reused. |
+| Automation Coverage | 99 | ↓ | Twenty objective pixel/browser-state receipts and transactional parity regeneration pass; semantic AI image judgment awaits a functioning image-capable return path. |
+| **Total** | **998 / 1000** | | |
+
+**Top win:** turned five subtle evidence gaps—negative sync facts, synthetic profit, ungoverned confidence, scalar exposure, and passive friction—into connected product behavior that can explain and invalidate itself.
+
+**Top gap:** semantic image return failed at the environment boundary, while stable staging and ten external launch proofs remain honestly incomplete.
+
+**Intent outcome:** Achieved through recovery. Every verified repo-owned primary and generated second-order item shipped; the remaining Genius candidate is external and explicitly unclaimed.
+
+**Brainstorm**
+
+1. Add a merge-law property harness that generates multi-device edit/delete timelines and proves convergence across every collection domain.
+2. Add receipt expiry and settlement drift to the Advisor governor so old calibration can decay without erasing historical truth.
+3. Give quarantined ledger evidence an exportable, reversible review receipt without ever restoring it automatically.
+
+**Committed follow-up(s):**
+- Existing Now item: establish stable staging/header control and prove all six response headers. [SIL]
+- Existing Now item: obtain exact PromoGrind Supabase deploy authority before applying pending migrations or functions. [SIL]
+
 ## 2026-08-04 — Session 126 | Total: 1000/1000 | Velocity: 8 | Debt: down
 
 | Category | Score | Trend | Evidence |

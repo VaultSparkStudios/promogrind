@@ -1,18 +1,18 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-04T06:54:16.982Z",
-  "commitSha": "d3d611b9475e0a0c57d5013dd6090d6e26a2cfb6",
+  "generatedAt": "2026-08-04T21:53:51.123Z",
+  "commitSha": "c2a7534b45b8f67d0a2c6c1417de3855eba6be9c",
   "complete": true,
   "partial": false,
   "success": true,
   "exitCode": 0,
   "files": {
-    "passing": 93,
-    "total": 93
+    "passing": 97,
+    "total": 97
   },
   "assertions": {
-    "passing": 642,
-    "total": 642
+    "passing": 679,
+    "total": 679
   },
-  "reportSha256": "9acdd7a8b369baa4a6198c4ff7bc87d65df17002222bc3a26a8845eb884b5bb8"
+  "reportSha256": "ddb0ab37a0fa9cd53a3a465eea6638f0f7f9b83f4e1b52002fbba8e290261880"
 }

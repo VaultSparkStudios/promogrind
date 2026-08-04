@@ -3,6 +3,7 @@
 // reasoned skip. Login, calculator activity, wagers, and profit never advance it.
 
 import { parseRealizedOutcomeValue } from "./realizedOutcome.js";
+import { ledgerEvidenceEntries } from "./ledgerEvidence.js";
 
 const TYPE_ALIASES = {
   bonus: "bonus_bet", bonus_bet: "bonus_bet", free_bet: "bonus_bet", freebet: "bonus_bet",
@@ -65,7 +66,7 @@ function isReviewedDecision(entry) {
 }
 
 export function computeMastery(appData = {}) {
-  const ledger = Array.isArray(appData.ledger) ? appData.ledger : [];
+  const ledger = ledgerEvidenceEntries(appData.ledger);
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
   const reviewed = feedback.filter(isReviewedDecision);
   const reviewCount = reviewed.length;

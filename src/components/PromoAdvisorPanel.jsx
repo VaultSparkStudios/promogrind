@@ -12,9 +12,11 @@ import { recommendationToWorkflow } from "../promograph/recommendations.js";
 import { appendWorkflow } from "../workflows/store.js";
 import { flagVisit } from "../lib/missions.js";
 import { recordTrustReceipt } from "../lib/trustReceipts.js";
-import { recordPrediction } from "../lib/aiCalibration.js";
+import { recordPrediction, summarizeCalibration } from "../lib/aiCalibration.js";
 import { noteCacheHit, noteCacheMiss } from "../ai/promptCache.js";
 import { buildAdvisorPrivacyEnvelope } from "../ai/advisorPrivacy.js";
+import { governAdvisorConfidence } from "../lib/advisorConfidence.js";
+import AdvisorConfidenceCard from "./AdvisorConfidenceCard.jsx";
 
 const ADVISOR_RECEIPT_CONTRACT_VERSION = 4;
 export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
@@ -40,6 +42,11 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
     includeProfile: personalize,
     appData,
   }), [promoText, personalize, appData]);
+  const advisorGovernor = useMemo(() => {
+    if (!result) return null;
+    const calibration = summarizeCalibration().find((summary) => summary.source === "promo-advisor") || null;
+    return governAdvisorConfidence({ ...result, calibration });
+  }, [result]);
 
   // Gate check after all hooks — safe per Rules of Hooks
   if (!advisorEnabled && !FEATURE_FLAGS.promoAdvisor) {
@@ -184,7 +191,12 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
     const predictionId = predicted === null ? null : `advisor:${workflow.id}`;
     const workflowWithCalibration = {
       ...workflow,
+      status: advisorGovernor?.posture === "act" ? workflow.status : "waiting",
+      actionability: Math.min(workflow.actionability ?? 0, advisorGovernor?.actionabilityCap ?? 0),
+      nextStep: advisorGovernor?.instruction || workflow.nextStep,
       calibrationPredictionId: predictionId,
+      advisorPosture: advisorGovernor?.posture || "abstain",
+      advisorConfidenceReceipt: advisorGovernor?.receipt || null,
     };
     syncAppData(appendWorkflow(appData || {}, workflowWithCalibration));
     if (predicted !== null) {
@@ -201,6 +213,8 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
           confidence: workflow.confidence,
           opportunityScore: workflow.opportunityScore,
           probabilityBasis: recommendation.probabilityBasis,
+          advisorPosture: advisorGovernor?.posture || "abstain",
+          advisorConfidenceReceipt: advisorGovernor?.receipt || null,
         },
       });
     }
@@ -380,7 +394,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               )}
               {confColor && (
                 <span style={{padding:'2px 8px',borderRadius:50,fontSize:9,fontWeight:700,background:`${confColor}20`,color:confColor,letterSpacing:'0.8px'}}>
-                  {confKey}
+                  RAW {confKey}
                 </span>
               )}
               {result?.opportunityScore != null && (
@@ -389,6 +403,8 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
                 </span>
               )}
             </div>
+
+            <AdvisorConfidenceCard governor={advisorGovernor} />
 
             {result.explanation && (
               <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{result.explanation}</div>
@@ -416,7 +432,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
             {result.action && (
               <div style={{fontSize:12}}>
-                <span style={{color:K.mt}}>Best Action: </span>
+                <span style={{color:K.mt}}>{advisorGovernor?.posture === "act" ? "Bounded Action: " : "Unverified Suggestion: "}</span>
                 <span style={{color:K.ac,fontWeight:700}}>{result.action}</span>
               </div>
             )}
@@ -481,7 +497,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
               onClick={saveWorkflow}
               style={{marginTop:4,padding:'7px 12px',background:'transparent',border:`1px solid ${K.gn}35`,borderRadius:7,color:K.gn,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
             >
-              Save to workflow inbox →
+              {advisorGovernor?.posture === "act" ? "Save bounded workflow →" : "Save as review workflow →"}
             </button>
           </div>
         )}

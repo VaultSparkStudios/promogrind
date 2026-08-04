@@ -6,6 +6,7 @@ import { AppDataCtx, useToast } from "../contexts.jsx";
 import { In, RR, Tl, Nt, shouldShowTrigger, dismissTrigger } from "../ui.jsx";
 import { useViewport } from "../app/responsive.js";
 import { createEntityId } from "../lib/entityId.js";
+import { summarizeLedgerEvidence } from "../lib/ledgerEvidence.js";
 
 // ═══ SHARE WEEK BUTTON ═══
 const ShareWeekBtn = ({entries}) => {
@@ -137,34 +138,26 @@ const BetHeatmap = ({ entries }) => {
   );
 };
 
-// ═══ TAX TIMING ADVISOR ═══
-const TaxTimingAdvisor = ({ entries }) => {
+// ═══ RECORDKEEPING CONTEXT ═══
+const RecordkeepingContext = ({ entries }) => {
   const [open, setOpen] = useState(false);
-  const total = (entries||[]).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  if(total<=0) return null;
-  const now = new Date();
-  const month = now.getMonth();
-  const quarter = month<3?1:month<6?2:month<9?3:4;
-  const bracket = total>578125?0.37:total>231250?0.35:total>182050?0.32:total>95375?0.24:total>44725?0.22:total>10275?0.12:0.10;
-  const taxOwed = total*bracket;
-  const annualized = total/(now.getMonth()+1)*12;
-  let advice = "";
-  if(quarter===4) advice = "Consider settling losing hedges before Dec 31 to offset gains.";
-  else if(quarter===1) advice = "New tax year — ideal time for highest-variance plays.";
-  else advice = `On track for ~$${Math.round(annualized).toLocaleString()} annualized — consider quarterly estimated taxes.`;
+  if(!entries.length) return null;
+  const year = new Date().getFullYear();
+  const yearRows = entries.filter((entry) => String(entry.date || "").startsWith(String(year)));
+  const missingDate = entries.filter((entry) => !entry.date).length;
+  const missingBook = entries.filter((entry) => !entry.book).length;
   return (
     <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
       <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
-        Tax Timing Advisor
+        Recordkeeping context
         <span style={{color:K.mt,fontSize:10}}>{open?"▲":"▼"}</span>
       </button>
       {open&&<div style={{marginTop:12}}>
-        <RR l="Current year profit" v={`$${f(total)}`} c={K.gn}/>
-        <RR l="Estimated federal bracket" v={`${Math.round(bracket*100)}%`} c={K.yl}/>
-        <RR l="Estimated federal tax owed" v={`~$${f(taxOwed)}`} c={K.rd}/>
-        <RR l="Annualized pace" v={`~$${Math.round(annualized).toLocaleString()}`} c={K.ac}/>
-        <Nt c={K.yl}>{advice}</Nt>
-        <div style={{fontSize:10,color:K.mt,marginTop:8}}>Estimate only. Consult a tax professional. Report all gambling income.</div>
+        <RR l="Current-year rows" v={String(yearRows.length)} c={K.ac}/>
+        <RR l="Rows missing a date" v={String(missingDate)} c={missingDate ? K.yl : K.gn}/>
+        <RR l="Rows missing a book" v={String(missingBook)} c={missingBook ? K.yl : K.gn}/>
+        <Nt c={K.yl}>Keep complete source records and export them before filing. PromoGrind does not estimate tax liability or recommend wagering decisions for tax timing.</Nt>
+        <div style={{fontSize:10,color:K.mt,marginTop:8}}>Rules vary by jurisdiction and personal circumstances. Use your records with a qualified tax professional.</div>
       </div>}
     </div>
   );
@@ -175,7 +168,10 @@ const Ledger = () => {
   const { appData: data, syncAppData, user } = React.useContext(AppDataCtx);
   const viewport = useViewport();
   const isCompact = viewport.isPhone;
-  const entries = data.ledger || [];
+  const ledgerSummary = useMemo(() => summarizeLedgerEvidence(data.ledger || []), [data.ledger]);
+  const entries = ledgerSummary.evidenceRows.map((row) => row.entry);
+  const quarantinedRows = Array.isArray(data._ledgerQuarantine) ? data._ledgerQuarantine : [];
+  const [showExample, setShowExample] = useState(false);
   const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Bonus Conversion",bonus:"",hedge:"",profit:"",ev:"",myOdds:"",closingOdds:"",notes:""});
   const save = (newEntries) => syncAppData({...data, ledger: newEntries});
   const toast = useToast();
@@ -209,11 +205,10 @@ const Ledger = () => {
   const signInHref = getProjectAuthHref('signin');
   const [goalInput, setGoalInput] = useState(() => { try { return localStorage.getItem('pg_profit_goal')||''; } catch { return ''; } });
   const saveGoal = v => { setGoalInput(v); try { localStorage.setItem('pg_profit_goal', v); } catch {} };
-  const total = entries.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  const total = ledgerSummary.totalProfit;
   const todayStr = new Date().toISOString().split('T')[0];
-  const todayPL = entries.filter(e=>e.date===todayStr).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
-  const thisMonth = new Date().toISOString().slice(0,7);
-  const monthPL = entries.filter(e=>e.date&&e.date.startsWith(thisMonth)).reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
+  const todayPL = ledgerSummary.todayProfit;
+  const monthPL = ledgerSummary.monthProfit;
   const [upsellLedgerDismissed, setUpsellLedgerDismissed] = useState(()=>{ try{return !!localStorage.getItem('pg_upsell_ledger_dismissed');}catch{return false;} });
   const ledgerIsPro = () => { try { return ['vault_sparked','pro','trial'].includes(localStorage.getItem('pg_pro_status')||''); } catch { return false; } };
   const [showLedgerTrigger, setShowLedgerTrigger] = useState(() => {
@@ -241,6 +236,12 @@ const Ledger = () => {
       <div style={{...S.note(K.gn), marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8}}>
         <span>Saving to this device only.</span>
         <a href={signInHref} style={{color: K.gn, textDecoration: 'none', fontWeight: 700, fontSize: 11, whiteSpace: 'nowrap'}}>Sign in free to sync →</a>
+      </div>
+    )}
+    {quarantinedRows.length>0&&(
+      <div role="status" style={{...S.note(K.yl),marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",gap:10,flexWrap:"wrap"}}>
+        <span>{quarantinedRows.length} synthetic ledger example{quarantinedRows.length===1?" is":"s are"} quarantined and excluded from every total, report, export, and progress signal.</span>
+        <button type="button" onClick={()=>syncAppData({...data,_ledgerQuarantine:[]})} style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.yl}`,borderRadius:6,color:K.yl,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:font}}>Remove quarantined examples</button>
       </div>
     )}
     {showLedgerTrigger && (
@@ -456,12 +457,14 @@ const Ledger = () => {
             <div style={{fontSize:32,marginBottom:8}}>📒</div>
             <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div>
             <div style={{fontSize:11,color:K.mt,marginBottom:12}}>Every promo you convert goes here. Start with the Bonus Bet Converter — it auto-logs results.</div>
-            <button onClick={()=>{
-          const demo={id:createEntityId("ledger-demo"),date:new Date().toISOString().slice(0,10),book:"DraftKings",type:"Bonus Conversion",bonus:"200",hedge:"126",profit:"138.60",notes:"Demo entry — replace with your actual result"};
-              syncAppData({...data,ledger:[demo,...(data.ledger||[])]});
-            }} style={{padding:"7px 18px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>
-              + Add demo entry
+            <button type="button" onClick={()=>setShowExample((value)=>!value)} aria-expanded={showExample} style={{padding:"7px 18px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>
+              {showExample?"Hide example":"Preview an example"}
             </button>
+            {showExample&&<div role="note" style={{margin:"12px auto 0",maxWidth:420,padding:12,textAlign:"left",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
+              <div style={{fontSize:10,color:K.gn,fontWeight:800,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Example only · never saved</div>
+              <div style={{display:"flex",justifyContent:"space-between",gap:12,fontSize:11,color:K.dm}}><span>DraftKings · Bonus Conversion</span><strong style={{color:K.gn}}>+$138.60</strong></div>
+              <div style={{fontSize:10,color:K.mt,marginTop:6}}>A real row appears only after you enter and save your own realized result.</div>
+            </div>}
           </div>;
       if (isCompact) return (<div style={{display:"grid",gap:10,marginTop:12}}>
         {filteredEntries.map(e=>{
@@ -577,7 +580,7 @@ const Ledger = () => {
       ))}
       <Nt c={K.yl}>Report all winnings even without a W-2G. You may deduct gambling losses up to your winnings if you itemize deductions. Keep Form W-2G records.</Nt>
     </div>}
-    <TaxTimingAdvisor entries={entries}/>
+    <RecordkeepingContext entries={entries}/>
     {entries.length>=1&&<ReportCard entries={entries} total={total}/>}
   </div>);
 };

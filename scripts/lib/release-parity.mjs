@@ -44,3 +44,26 @@ export function renderReleaseParity(payload) {
   ];
   return lines.join('\n');
 }
+
+export function prepareReleaseParityArtifacts({ root, visualReceipt, testEvidence = null }) {
+  const payload = compileReleaseParity({ root, visualReceipt, testEvidence });
+  return {
+    payload,
+    json: JSON.stringify(payload, null, 2) + '\n',
+    md: renderReleaseParity(payload),
+    jsonPath: path.join(root, 'audits', 'release-parity-latest.json'),
+    mdPath: path.join(root, 'docs', 'RELEASE_PARITY.md'),
+  };
+}
+
+export function writeReleaseParityArtifacts(artifacts) {
+  fs.mkdirSync(path.dirname(artifacts.jsonPath), { recursive: true });
+  fs.mkdirSync(path.dirname(artifacts.mdPath), { recursive: true });
+  const jsonTemp = artifacts.jsonPath + '.' + process.pid + '.tmp';
+  const mdTemp = artifacts.mdPath + '.' + process.pid + '.tmp';
+  fs.writeFileSync(jsonTemp, artifacts.json);
+  fs.writeFileSync(mdTemp, artifacts.md);
+  fs.renameSync(jsonTemp, artifacts.jsonPath);
+  fs.renameSync(mdTemp, artifacts.mdPath);
+  return artifacts.payload;
+}

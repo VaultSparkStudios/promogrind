@@ -14,6 +14,7 @@ import { recordTrustReceipt } from './lib/trustReceipts.js';
 import { _appendWorkflowHistory, _loadRemoteEntityData, _saveEntityState, _saveWorkflowEntities } from './lib/sync-workflows.js';
 import { normalizeWorkflowEntry, resolveWorkflowStatusConflict } from './promograph/index.js';
 import { enqueueWrite as _queueEnqueue, getQueueDepthSync, loadQueue as _queueLoad, saveQueue as _queueSave } from './lib/sync-queue.js';
+import { quarantineLedgerData } from './lib/ledgerEvidence.js';
 
 const LOCAL_KEY = 'promo_engine_v3';
 const LEDGER_STATE_TABLE = 'ledger_state';
@@ -22,6 +23,16 @@ const WORKFLOW_STATE_TABLE = 'workflow_state';
 const WORKFLOW_HISTORY_TABLE = 'workflow_history';
 const WORKFLOW_BLOB_KEYS = ['workflowInbox', 'workflowHistory'];
 const TRACKER_BLOB_KEYS = ['resultFeedback', 'promoValueHistory', 'journal', 'oddsCompare'];
+const MERGED_COLLECTION_KINDS = Object.freeze({
+  ledger: 'ledger',
+  workflowInbox: 'workflow',
+  resultFeedback: 'workflow',
+  workflowHistory: 'history',
+  journal: 'journal',
+  oddsCompare: 'oddsCompare',
+  promoValueHistory: 'promoValueHistory',
+});
+const TOMBSTONE_RETENTION_MS = 180 * 24 * 60 * 60 * 1000;
 const ENTITY_KEYS = [
   'ledger',
   'bets',
@@ -144,7 +155,12 @@ export async function saveData(data) {
 // ── Internals ─────────────────────────────────────────────────────────────────
 
 function _loadLocal() {
-  try { return JSON.parse(localStorage.getItem(LOCAL_KEY)) || {}; }
+  try {
+    const raw = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {};
+    const quarantined = quarantineLedgerData(raw);
+    if (quarantined.changed) localStorage.setItem(LOCAL_KEY, JSON.stringify(quarantined.data));
+    return quarantined.data;
+  }
   catch { return {}; }
 }
 
@@ -155,9 +171,13 @@ function _saveLocal(data) {
 
 export function readSyncDiagnostics() {
   const queueDepth = getQueueDepthSync();
+  const local = _loadLocal();
+  const tombstoneCount = Object.values(_normalizeTombstones(local._tombstones))
+    .reduce((sum, domain) => sum + Object.keys(domain).length, 0);
   return {
     queueDepth,
     hasPendingWrites: queueDepth > 0,
+    tombstoneCount,
   };
 }
 
@@ -187,8 +207,10 @@ async function _saveRemote(userId, data) {
 function _stampData(data) {
   const previous = _loadLocal();
   const now = Date.now();
-  const next = _normalizeSyncDomains(previous, { ...data, _updated: now }, now);
+  let next = _normalizeSyncDomains(previous, { ...data, _updated: now }, now);
   next.workflowHistory = _appendWorkflowHistory(previous, next, now);
+  next = quarantineLedgerData(next, now).data;
+  next._tombstones = _recordCollectionTombstones(previous, next, now);
   next._entities = _buildEntityMeta(previous, next, now);
   return next;
 }
@@ -233,6 +255,94 @@ function _numericTimestamp(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function _normalizeTombstones(input = {}) {
+  const normalized = {};
+  for (const domain of Object.keys(MERGED_COLLECTION_KINDS)) {
+    const source = input?.[domain];
+    normalized[domain] = {};
+    if (!source || typeof source !== 'object' || Array.isArray(source)) continue;
+    for (const [key, value] of Object.entries(source)) {
+      const timestamp = _numericTimestamp(value);
+      if (key && timestamp > 0) normalized[domain][key] = timestamp;
+    }
+  }
+  return normalized;
+}
+
+function _promoValueEntryKey(promoKey, entry = {}, index = 0) {
+  return [promoKey, entry?.date || '', entry?.id || index].join('|');
+}
+
+function _collectionKeyMap(data = {}, domain) {
+  const kind = MERGED_COLLECTION_KINDS[domain];
+  const map = new Map();
+  if (domain === 'promoValueHistory') {
+    const history = data?.promoValueHistory;
+    if (!history || typeof history !== 'object' || Array.isArray(history)) return map;
+    for (const [promoKey, entries] of Object.entries(history)) {
+      (Array.isArray(entries) ? entries : []).forEach((entry, index) => {
+        map.set(_promoValueEntryKey(promoKey, entry, index), entry);
+      });
+    }
+    return map;
+  }
+  (Array.isArray(data?.[domain]) ? data[domain] : []).forEach((entry, index) => {
+    map.set(_entryKey(entry, kind, index), entry);
+  });
+  return map;
+}
+
+function _recordCollectionTombstones(previous = {}, next = {}, now = Date.now()) {
+  const tombstones = _mergeTombstones(previous._tombstones, next._tombstones);
+  for (const [domain, kind] of Object.entries(MERGED_COLLECTION_KINDS)) {
+    const previousRows = _collectionKeyMap(previous, domain);
+    const nextRows = _collectionKeyMap(next, domain);
+    for (const key of previousRows.keys()) {
+      if (!nextRows.has(key)) tombstones[domain][key] = now;
+    }
+    for (const [key, entry] of nextRows.entries()) {
+      const tombstone = tombstones[domain][key] || 0;
+      const entryClock = domain === 'promoValueHistory'
+        ? _numericTimestamp(entry?.updatedAt || entry?.date)
+        : _entryTime(entry, kind);
+      if (!previousRows.has(key) || entryClock > tombstone) delete tombstones[domain][key];
+    }
+  }
+  return tombstones;
+}
+
+function _mergeTombstones(localInput = {}, remoteInput = {}) {
+  const local = _normalizeTombstones(localInput);
+  const remote = _normalizeTombstones(remoteInput);
+  const merged = {};
+  for (const domain of Object.keys(MERGED_COLLECTION_KINDS)) {
+    merged[domain] = { ...remote[domain] };
+    for (const [key, timestamp] of Object.entries(local[domain])) {
+      merged[domain][key] = Math.max(timestamp, merged[domain][key] || 0);
+    }
+  }
+  return merged;
+}
+
+function _entrySurvivesTombstone(entry, kind, key, tombstones = {}) {
+  const deletedAt = _numericTimestamp(tombstones[key]);
+  if (!deletedAt) return true;
+  return _entryTime(entry, kind) > deletedAt;
+}
+
+function _pruneConvergedTombstones(tombstones, local, remote, now = Date.now()) {
+  const pruned = _normalizeTombstones(tombstones);
+  for (const domain of Object.keys(MERGED_COLLECTION_KINDS)) {
+    const localRows = _collectionKeyMap(local, domain);
+    const remoteRows = _collectionKeyMap(remote, domain);
+    for (const [key, timestamp] of Object.entries(pruned[domain])) {
+      const oldEnough = now - timestamp >= TOMBSTONE_RETENTION_MS;
+      if (oldEnough && !localRows.has(key) && !remoteRows.has(key)) delete pruned[domain][key];
+    }
+  }
+  return pruned;
+}
+
 function _entryKey(entry = {}, kind, index = 0) {
   if (kind !== 'history' && entry?.id !== undefined && entry?.id !== null && entry.id !== '') return String(entry.id);
   if (kind === 'history' && entry?.eventKey) return entry.eventKey;
@@ -266,12 +376,15 @@ function _preferNewerEntry(existing, incoming, kind) {
   return { ...incoming, ...existing };
 }
 
-function _mergeCollection(localEntries, remoteEntries, { kind, normalize = (entry) => entry, limit = null } = {}) {
+function _mergeCollection(localEntries, remoteEntries, { kind, normalize = (entry) => entry, limit = null, tombstones = {} } = {}) {
   const merged = new Map();
   const applyEntries = (entries = []) => {
     entries.forEach((rawEntry, index) => {
+      const rawKey = _entryKey(rawEntry, kind, index);
+      if (!_entrySurvivesTombstone(rawEntry, kind, rawKey, tombstones)) return;
       const entry = normalize(rawEntry);
       const key = _entryKey(entry, kind, index);
+      if (key !== rawKey && !_entrySurvivesTombstone(entry, kind, key, tombstones)) return;
       const existing = merged.get(key);
       merged.set(key, existing ? _preferNewerEntry(existing, entry, kind) : entry);
     });
@@ -325,7 +438,7 @@ function _normalizeOddsCompareRows(previousRows = [], nextRows = [], now = Date.
   });
 }
 
-function _mergePromoValueHistory(localHistory = {}, remoteHistory = {}) {
+function _mergePromoValueHistory(localHistory = {}, remoteHistory = {}, tombstones = {}) {
   const local = localHistory && typeof localHistory === 'object' && !Array.isArray(localHistory) ? localHistory : {};
   const remote = remoteHistory && typeof remoteHistory === 'object' && !Array.isArray(remoteHistory) ? remoteHistory : {};
   const merged = {};
@@ -335,6 +448,10 @@ function _mergePromoValueHistory(localHistory = {}, remoteHistory = {}) {
     const applyEntries = (entries = []) => {
       entries.forEach((entry, index) => {
         if (!entry || typeof entry !== 'object') return;
+        const tombstoneKey = _promoValueEntryKey(key, entry, index);
+        const deletedAt = _numericTimestamp(tombstones[tombstoneKey]);
+        const entryClock = _numericTimestamp(entry.updatedAt || entry.date);
+        if (deletedAt && entryClock <= deletedAt) return;
         const entryKey = entry.date || `index-${index}`;
         values.set(entryKey, entry);
       });
@@ -369,19 +486,20 @@ function _mergeEntityAware(local, row) {
   };
   const localMeta = local._entities && typeof local._entities === 'object' ? local._entities : {};
   const remoteMeta = trackerData._entities && typeof trackerData._entities === 'object' ? trackerData._entities : {};
+  const mergedTombstones = _mergeTombstones(local._tombstones, remote._tombstones);
   const base = remote._updated >= (local._updated ?? 0) ? { ...local, ...remote } : { ...remote, ...local };
   const mergedMeta = { ...remoteMeta, ...localMeta };
   for (const key of new Set([...Object.keys(remoteMeta), ...Object.keys(localMeta)])) {
     mergedMeta[key] = Math.max(_numericTimestamp(remoteMeta[key]), _numericTimestamp(localMeta[key]));
   }
 
-  base.ledger = _mergeCollection(local.ledger, remote.ledger, { kind: 'ledger' });
-  base.workflowInbox = _mergeCollection(local.workflowInbox, remote.workflowInbox, { kind: 'workflow', normalize: normalizeWorkflowEntry, limit: 250 });
-  base.resultFeedback = _mergeCollection(local.resultFeedback, remote.resultFeedback, { kind: 'workflow', normalize: normalizeWorkflowEntry, limit: 250 });
-  base.workflowHistory = _mergeCollection(local.workflowHistory, remote.workflowHistory, { kind: 'history', limit: 500 });
-  base.journal = _mergeCollection(local.journal, remote.journal, { kind: 'journal', normalize: (entry) => entry, limit: 500 });
-  base.oddsCompare = _mergeCollection(local.oddsCompare, remote.oddsCompare, { kind: 'oddsCompare', normalize: (entry) => entry, limit: 100 });
-  base.promoValueHistory = _mergePromoValueHistory(local.promoValueHistory, remote.promoValueHistory);
+  base.ledger = _mergeCollection(local.ledger, remote.ledger, { kind: 'ledger', tombstones: mergedTombstones.ledger });
+  base.workflowInbox = _mergeCollection(local.workflowInbox, remote.workflowInbox, { kind: 'workflow', normalize: normalizeWorkflowEntry, limit: 250, tombstones: mergedTombstones.workflowInbox });
+  base.resultFeedback = _mergeCollection(local.resultFeedback, remote.resultFeedback, { kind: 'workflow', normalize: normalizeWorkflowEntry, limit: 250, tombstones: mergedTombstones.resultFeedback });
+  base.workflowHistory = _mergeCollection(local.workflowHistory, remote.workflowHistory, { kind: 'history', limit: 500, tombstones: mergedTombstones.workflowHistory });
+  base.journal = _mergeCollection(local.journal, remote.journal, { kind: 'journal', normalize: (entry) => entry, limit: 500, tombstones: mergedTombstones.journal });
+  base.oddsCompare = _mergeCollection(local.oddsCompare, remote.oddsCompare, { kind: 'oddsCompare', normalize: (entry) => entry, limit: 100, tombstones: mergedTombstones.oddsCompare });
+  base.promoValueHistory = _mergePromoValueHistory(local.promoValueHistory, remote.promoValueHistory, mergedTombstones.promoValueHistory);
 
   for (const key of ENTITY_KEYS) {
     const localStamp = Number(localMeta[key] || 0);
@@ -407,7 +525,12 @@ function _mergeEntityAware(local, row) {
 
   base._updated = Math.max(remote._updated || 0, local._updated || 0);
   base._entities = mergedMeta;
-  return base;
+  base._ledgerQuarantine = [
+    ...(Array.isArray(remote._ledgerQuarantine) ? remote._ledgerQuarantine : []),
+    ...(Array.isArray(local._ledgerQuarantine) ? local._ledgerQuarantine : []),
+  ];
+  base._tombstones = _pruneConvergedTombstones(mergedTombstones, local, remote);
+  return quarantineLedgerData(base).data;
 }
 
 async function _loadQueue() {

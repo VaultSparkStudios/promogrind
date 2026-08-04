@@ -11,7 +11,7 @@ import { createEntityId } from "../lib/entityId.js";
 const BetTracker = () => {
   const { appData: data, syncAppData } = React.useContext(AppDataCtx);
   const bets = data.bets || [];
-  const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",type:"Moneyline",odds:"+110",stake:"",toWin:"",status:"open",notes:""});
+  const [form, setForm] = useState({date:new Date().toISOString().split("T")[0],book:"DraftKings",event:"",type:"Moneyline",odds:"+110",stake:"",toWin:"",status:"open",notes:""});
   const [showImport, setShowImport] = useState(false);
   const [showPasteSlip, setShowPasteSlip] = useState(false);
   const [slipText, setSlipText] = useState("");
@@ -23,14 +23,14 @@ const BetTracker = () => {
     if(!form.stake||!form.odds) return;
     const toWin = calcToWin(form.odds, form.stake);
     save([{...form,toWin,id:createEntityId("bet")},...bets]);
-    setForm(f=>({...f,stake:"",odds:"+110",toWin:"",notes:""}));
+    setForm(f=>({...f,event:"",stake:"",odds:"+110",toWin:"",notes:""}));
     if(toast) toast("Bet added");
   };
   const setStatus = (id, status) => save(bets.map(b=>b.id===id?{...b,status}:b));
   const del = id => { const snapshot=[...bets]; save(bets.filter(b=>b.id!==id)); if(toast) toast('Bet deleted',K.rd,{label:'UNDO',fn:()=>save(snapshot)}); };
   const exportBets = () => {
-    const headers = ["Date","Book","Type","Odds","Stake","To Win","Status","Notes"];
-    const rows = bets.map(e=>[e.date,e.book,e.type,e.odds,e.stake,e.toWin||"",e.status,e.notes||""]);
+    const headers = ["Date","Book","Event / Matchup","Type","Odds","Stake","To Win","Status","Notes"];
+    const rows = bets.map(e=>[e.date,e.book,e.event||e.game||"",e.type,e.odds,e.stake,e.toWin||"",e.status,e.notes||""]);
     const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
     downloadFile(csv, `promogrind-bets-${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
   };
@@ -81,6 +81,7 @@ const BetTracker = () => {
       <div style={{...S.col,minWidth:140}}><label htmlFor="bet-tracker-type" style={S.label}>Bet Type</label><select id="bet-tracker-type" style={S.input} value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{["Moneyline","Spread","Total","Parlay","Prop","Bonus Bet","Other"].map(t=><option key={t}>{t}</option>)}</select></div>
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
+      <div style={{...S.col,minWidth:220}}><label htmlFor="bet-tracker-event" style={S.label}>Event / Matchup <span style={{color:K.mt,fontWeight:400}}>(for concentration)</span></label><input id="bet-tracker-event" style={S.input} value={form.event} onChange={e=>setForm(f=>({...f,event:e.target.value}))} placeholder="Chiefs vs Bills"/></div>
       <In l="Odds" v={form.odds} set={v=>{setForm(f=>({...f,odds:v,toWin:calcToWin(v,f.stake)}));}} ph="+110"/>
       <In l="Stake" v={form.stake} set={v=>{setForm(f=>({...f,stake:v,toWin:calcToWin(f.odds,v)}));}} pre="$" ph="100"/>
       <In l="To Win (auto)" v={form.toWin} set={v=>setForm(f=>({...f,toWin:v}))} pre="$" ph="auto"/>
@@ -93,11 +94,12 @@ const BetTracker = () => {
     </div>}
     {bets.length>0&&<div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Date","Book","Type","Odds","Stake","To Win","Status","Grade",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        <thead><tr>{["Date","Book","Event","Type","Odds","Stake","To Win","Status","Grade",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
         <tbody>{bets.map(e=>{const gr=betGrade(e);return(
           <tr key={e.id} style={{opacity:e.status==="void"?0.4:1}}>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{e.date}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,fontWeight:600}}>{e.book}</td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.dm}}>{e.event||e.game||"—"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><span style={S.tag(K.ac)}>{e.type}</span></td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.pp,fontWeight:600}}>{e.odds}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>${e.stake}</td>

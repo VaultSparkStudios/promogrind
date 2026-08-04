@@ -1,4 +1,6 @@
 import { formatPromoTypeLabel, normalizeWorkflowEntry } from "../promograph/index.js";
+import { ledgerEvidenceEntries } from "../lib/ledgerEvidence.js";
+import { buildFrictionRecovery } from "../lib/frictionRecovery.js";
 export { formatPromoTypeLabel } from "../promograph/index.js";
 
 function toNumber(value) {
@@ -33,7 +35,7 @@ export function updateResultFeedback(entries = [], id, patch = {}) {
 }
 
 export function buildTrackInsights(data = {}, now = new Date()) {
-  const ledger = Array.isArray(data.ledger) ? data.ledger : [];
+  const ledger = ledgerEvidenceEntries(data.ledger);
   const feedbackEntries = Array.isArray(data.resultFeedback)
     ? data.resultFeedback.map((entry) => normalizeResultFeedback(entry))
     : [];
@@ -187,6 +189,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
 
   const skipReasonRows = [...skipReasonMap.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
   const frictionReasonRows = [...frictionReasonMap.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  const frictionRecovery = buildFrictionRecovery(feedbackEntries, now);
   const sourceRows = [...sourceMap.values()].sort((a, b) => (b.settled - a.settled) || (b.total - a.total) || a.label.localeCompare(b.label));
   const driftRows = promoTypeRows
     .filter((row) => row.averageDrift !== null)
@@ -276,6 +279,7 @@ export function buildTrackInsights(data = {}, now = new Date()) {
     bookRows,
     skipReasonRows,
     frictionReasonRows,
+    frictionRecovery,
     sourceRows,
     workflowTimeline,
     workflowHistoryRows,
@@ -394,7 +398,7 @@ const HOT_LANE_MIN_COUNT = 3;
 export function buildHotLanes(appData = {}, now = new Date()) {
   const cutoff = new Date(now).getTime() - HOT_LANE_WINDOW_MS;
   const feedback = Array.isArray(appData.resultFeedback) ? appData.resultFeedback : [];
-  const ledger = Array.isArray(appData.ledger) ? appData.ledger : [];
+  const ledger = ledgerEvidenceEntries(appData.ledger);
 
   const byPromoType = new Map();
   const byBook = new Map();

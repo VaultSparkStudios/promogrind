@@ -822,3 +822,33 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** the saturated generator correctly surfaced remote staging and production lifecycle proof, but those facts cannot be created by local code changes.
 - **Decision:** count the candidate as an honest deferral after exhausting repo-owned work; retain every criterion in the canonical proof ledger.
 - **Consequence:** list exhaustion is truthful and SPARKED remains NO-GO until the external observations exist.
+
+## 2026-08-04 — S127 evidence-bound decision intelligence
+
+### Decision: negative sync facts are first-class, bounded domain evidence
+
+- **Status:** accepted
+- **Context:** collection union could resurrect a locally deleted row from stale remote state.
+- **Decision:** carry monotonic per-domain tombstones through compact and legacy payloads, suppress entries that do not beat deletion time, allow only demonstrably newer restoration, and prune only after age plus two-sided absence prove convergence.
+- **Consequence:** offline deletion becomes convergent without turning malformed clocks into destructive authority.
+
+### Decision: synthetic ledger rows never participate in realized truth
+
+- **Status:** accepted
+- **Context:** the empty-state demo wrote positive profit into canonical storage and every downstream total.
+- **Decision:** quarantine explicit and legacy synthetic rows before load/sync, tombstone them against resurrection, and make one realized-evidence selector authoritative across derived consumers.
+- **Consequence:** examples remain inspectable but cannot influence profit, streak, mastery, portfolio, export, or recommendation claims.
+
+### Decision: decision support exposes evidence posture, not implied probability
+
+- **Status:** accepted
+- **Context:** raw Advisor confidence and scalar open exposure could overstate actionability while existing calibration and concentration evidence remained disconnected.
+- **Decision:** govern Advisor output with act/verify/abstain receipts and describe exposure through conservative shared-label clusters; never infer outcome probability, statistical independence, or hedge protection.
+- **Consequence:** decision intelligence becomes more cautious as evidence weakens and remains inspectable at the action boundary.
+
+### Decision: recovery guidance ranks friction evidence, never favorable variance
+
+- **Status:** accepted
+- **Context:** repeated skip/friction reasons were counted but not closed into a safe next action.
+- **Decision:** select one recovery plan from canonical reason codes using thresholds, frequency, recency, stable ties, and route allowlists; realized profit is not an input.
+- **Consequence:** the feedback loop helps repair execution without rewarding betting volume or lucky outcomes.

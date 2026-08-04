@@ -1,52 +1,212 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-03T21:49:44.881Z",
+  "generatedAt": "2026-08-04T21:22:15.970Z",
   "visual": {
-    "capturedAt": "2026-08-03T21:49:44.881Z",
+    "capturedAt": "2026-08-04T21:22:15.970Z",
     "themes": [
       "dark",
       "light"
     ],
     "captures": [
       {
-        "file": "captures/chat-after-desktop-dark.png",
-        "page": "/dashboard — consent-bound PromoChat, unchecked profile disclosure",
+        "file": "captures/s127-after-advisor-desktop-dark.png",
+        "page": "/dashboard — governed Advisor confidence receipt",
         "theme": "dark",
         "viewport": {
           "width": 1440,
           "height": 1000
         },
-        "sha256": "f658c9ca4a55bc6d0796852d763561b8bcf4486c5816cf0f6d68654cb31851f4"
+        "sha256": "92dde2331dfdee531392df87a8803bf94a2d2044aeeb6a8608ab478f9595edbb"
       },
       {
-        "file": "captures/chat-after-desktop-light.png",
-        "page": "/dashboard — consent-bound PromoChat, semantic light palette",
+        "file": "captures/s127-after-advisor-desktop-light.png",
+        "page": "/dashboard — governed Advisor confidence receipt",
         "theme": "light",
         "viewport": {
           "width": 1440,
           "height": 1000
         },
-        "sha256": "0d65ca7fc88c4722ba820621bf008fe1e23e3a9c623b1913a6fc0261d191c16d"
+        "sha256": "15074d9fd5fdcbb6a0758a6e61562cece25fcab722891d12892827d1f19b8242"
       },
       {
-        "file": "captures/chat-after-mobile-dark.png",
-        "page": "/dashboard — full-screen mobile Chat consent boundary",
+        "file": "captures/s127-after-advisor-mobile-dark.png",
+        "page": "/dashboard — governed Advisor confidence receipt",
         "theme": "dark",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "bb374ea79bb76d9f3115e5de9fd04d1013cbabdddea0476d8cfea1fa5f4bfcc1"
+        "sha256": "1507c57b5a9fa54d0786f406b42ff16ce466e3a71569c726f8694a5508a4b013"
       },
       {
-        "file": "captures/chat-after-mobile-light.png",
-        "page": "/dashboard — repaired full-screen mobile light Chat",
+        "file": "captures/s127-after-advisor-mobile-light.png",
+        "page": "/dashboard — governed Advisor confidence receipt",
         "theme": "light",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "a38b472706c80d25cac3befd8ef05bbf08058db23d64afeedfc375ce0b9c6d67"
+        "sha256": "78ad4912c166a0fcf07766fd1ccfeaac13472e10fb6891e573eb83ea050e9db2"
+      },
+      {
+        "file": "captures/s127-after-bet-tracker-desktop-dark.png",
+        "page": "/bet-tracker — event metadata capture",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "7d8b8ed505e5693f028e3387f90f0cb970352c269d2f6d29325a7fc6e7b4e392"
+      },
+      {
+        "file": "captures/s127-after-bet-tracker-desktop-light.png",
+        "page": "/bet-tracker — event metadata capture",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "f1f02d433ae6e5983f814fa7a6202f7253c45234115b50a51657092e3685e0c2"
+      },
+      {
+        "file": "captures/s127-after-bet-tracker-mobile-dark.png",
+        "page": "/bet-tracker — event metadata capture",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "7f14cbc8194e1ae7242829c1250507d9b218255df370a88d195c2d2e3d2ea65d"
+      },
+      {
+        "file": "captures/s127-after-bet-tracker-mobile-light.png",
+        "page": "/bet-tracker — event metadata capture",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "ee6904928c9e85060484e049ef67f8b4dcd01168b88b23c66cea7379f710d3a4"
+      },
+      {
+        "file": "captures/s127-after-dashboard-desktop-dark.png",
+        "page": "/dashboard — exposure concentration and friction recovery",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "c4d8575c196430990072bea63d45595c11577de81821a78009305c91204fca3c"
+      },
+      {
+        "file": "captures/s127-after-dashboard-desktop-light.png",
+        "page": "/dashboard — exposure concentration and friction recovery",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "32168576a70e4d5118f6f4d639eec056613f9630f49c3295bd9ae3ee59a49fee"
+      },
+      {
+        "file": "captures/s127-after-dashboard-mobile-dark.png",
+        "page": "/dashboard — exposure concentration and friction recovery",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "0108116c7c1e941fcc006fee513a270a05b7a2e62e9d78b325d3670c115b8dec"
+      },
+      {
+        "file": "captures/s127-after-dashboard-mobile-light.png",
+        "page": "/dashboard — exposure concentration and friction recovery",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "8013a6b4a19b6b9be6ef6d7d96ce73b67ac7912335f19017ed46df659f8c76bc"
+      },
+      {
+        "file": "captures/s127-after-ledger-desktop-dark.png",
+        "page": "/ledger — synthetic evidence quarantine",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "21a2e5f914d964a831e8884b845423bb63938f2643216ec1e2724526b5334aa8"
+      },
+      {
+        "file": "captures/s127-after-ledger-desktop-light.png",
+        "page": "/ledger — synthetic evidence quarantine",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "8924d7d0211ba44bcd938832abb0fbe2244daedea4ed679d96c81bffe828b4f5"
+      },
+      {
+        "file": "captures/s127-after-ledger-mobile-dark.png",
+        "page": "/ledger — synthetic evidence quarantine",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "b1ac79e5063726fecadfd828c2829404facb7ef7a8b66097636d53d157c77b55"
+      },
+      {
+        "file": "captures/s127-after-ledger-mobile-light.png",
+        "page": "/ledger — synthetic evidence quarantine",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "a274e14c60890b89637eab62c2f4a7c4b54d56ed238952caf5f3174674c4796c"
+      },
+      {
+        "file": "captures/s127-after-track-desktop-dark.png",
+        "page": "/edge-dashboard — evidence-thresholded recovery plan",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "5f7d17c6652d984bbf75ca6abc719a2af102d877de9fcb98161cc02dec99921c"
+      },
+      {
+        "file": "captures/s127-after-track-desktop-light.png",
+        "page": "/edge-dashboard — evidence-thresholded recovery plan",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "4c8678972be84b3a6fc4df7cde88755a11e334b75c746b68ea1e88c7fb3ba08a"
+      },
+      {
+        "file": "captures/s127-after-track-mobile-dark.png",
+        "page": "/edge-dashboard — evidence-thresholded recovery plan",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "d142bf0e5296e3c823ff5ebbdbb6e99ab8ece6a39abadda296deeb2b4a9dfc5f"
+      },
+      {
+        "file": "captures/s127-after-track-mobile-light.png",
+        "page": "/edge-dashboard — evidence-thresholded recovery plan",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "0869b2cd6bd02640adce43a73828c625b7552a26ce893159ab762b1937b1dab2"
       }
     ],
     "reviewed": true,
@@ -55,14 +215,14 @@
   "tests": {
     "state": "green",
     "files": {
-      "passing": 93,
-      "total": 93
+      "passing": 97,
+      "total": 97
     },
     "assertions": {
-      "passing": 642,
-      "total": 642
+      "passing": 679,
+      "total": 679
     },
-    "receiptSha256": "9acdd7a8b369baa4a6198c4ff7bc87d65df17002222bc3a26a8845eb884b5bb8"
+    "receiptSha256": "ddb0ab37a0fa9cd53a3a465eea6638f0f7f9b83f4e1b52002fbba8e290261880"
   },
   "native": {
     "state": "planned-no-native-projects",

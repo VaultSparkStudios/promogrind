@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "themes": ["dark", "light"],
+  "captures": [
+    { "file": "captures/s127-after-advisor-desktop-dark.png", "page": "/dashboard — governed Advisor confidence receipt", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-advisor-desktop-light.png", "page": "/dashboard — governed Advisor confidence receipt", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-advisor-mobile-dark.png", "page": "/dashboard — governed Advisor confidence receipt", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-advisor-mobile-light.png", "page": "/dashboard — governed Advisor confidence receipt", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-bet-tracker-desktop-dark.png", "page": "/bet-tracker — event metadata capture", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-bet-tracker-desktop-light.png", "page": "/bet-tracker — event metadata capture", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-bet-tracker-mobile-dark.png", "page": "/bet-tracker — event metadata capture", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-bet-tracker-mobile-light.png", "page": "/bet-tracker — event metadata capture", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-dashboard-desktop-dark.png", "page": "/dashboard — exposure concentration and friction recovery", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-dashboard-desktop-light.png", "page": "/dashboard — exposure concentration and friction recovery", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-dashboard-mobile-dark.png", "page": "/dashboard — exposure concentration and friction recovery", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-dashboard-mobile-light.png", "page": "/dashboard — exposure concentration and friction recovery", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-ledger-desktop-dark.png", "page": "/ledger — synthetic evidence quarantine", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-ledger-desktop-light.png", "page": "/ledger — synthetic evidence quarantine", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-ledger-mobile-dark.png", "page": "/ledger — synthetic evidence quarantine", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-ledger-mobile-light.png", "page": "/ledger — synthetic evidence quarantine", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-track-desktop-dark.png", "page": "/edge-dashboard — evidence-thresholded recovery plan", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-track-desktop-light.png", "page": "/edge-dashboard — evidence-thresholded recovery plan", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s127-after-track-mobile-dark.png", "page": "/edge-dashboard — evidence-thresholded recovery plan", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s127-after-track-mobile-light.png", "page": "/edge-dashboard — evidence-thresholded recovery plan", "theme": "light", "viewport": { "width": 390, "height": 844 } }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex objective-pixel verifier (semantic viewer unavailable)",
+    "findings": [
+      "Twenty real-Chromium captures are unique, opaque, non-blank, exact-size images with broad tonal ranges across all five touched surfaces.",
+      "All ten desktop/mobile theme pairs have distinct hashes and 185–219 mean-luminance separation, so dark and light states are not duplicate or collapsed renders.",
+      "Capture-time browser assertions found every required decision state and no document-level horizontal overflow at 1440×1000 or 390×844.",
+      "The image viewer and in-app browser image return both failed Windows DPAPI initialization; this receipt records objective rendered-pixel and browser-state evidence, not semantic AI image judgment."
+    ],
+    "fixesApplied": [
+      "Added calibrated act/verify/abstain Advisor posture with accessible receipt copy.",
+      "Replaced persisted synthetic ledger examples with quarantined, evidence-bound realized totals.",
+      "Added conservative exposure clusters and deterministic friction-recovery cards across dashboard and Track surfaces.",
+      "Added event metadata capture to Bet Tracker so concentration analysis has inspectable source evidence.",
+      "Corrected the S127 pixel auditor to consume Sharp's aggregate entropy field instead of producing false NaN failures."
+    ],
+    "blockingDefectsOpen": 0
+  }
+}

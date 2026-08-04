@@ -163,6 +163,10 @@ export function normalizeWorkflowEntry(entry = {}) {
     positiveOutcomeProbability: recommendation.positiveOutcomeProbability,
     probabilityBasis: recommendation.probabilityBasis,
     calibrationPredictionId: entry.calibrationPredictionId ? String(entry.calibrationPredictionId).trim() : null,
+    advisorPosture: ["act", "verify", "abstain"].includes(entry.advisorPosture) ? entry.advisorPosture : null,
+    advisorConfidenceReceipt: entry.advisorConfidenceReceipt && typeof entry.advisorConfidenceReceipt === "object"
+      ? entry.advisorConfidenceReceipt
+      : null,
     opsTags: recommendation.opsTags,
     assumptions: recommendation.assumptions,
     missingInputs: recommendation.missingInputs,
