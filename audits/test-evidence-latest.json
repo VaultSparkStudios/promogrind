@@ -1,18 +1,10 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-05T02:23:36.077Z",
-  "commitSha": "b3fac027fbc99a9dd60fe685f5380af19197968e",
-  "complete": true,
-  "partial": false,
-  "success": true,
-  "exitCode": 0,
-  "files": {
-    "passing": 103,
-    "total": 103
-  },
-  "assertions": {
-    "passing": 705,
-    "total": 705
-  },
-  "reportSha256": "76264f0ebe0aa58b4a8084506e5d9880bdb00ea3e72b444fb8b0d880acbf1b18"
+  "generatedAt": "2026-08-05T15:06:58.616Z",
+  "complete": false,
+  "partial": true,
+  "success": false,
+  "exitCode": 1,
+  "error": "ENOENT: no such file or directory, open '/home/user/promogrind/.cache/vitest-results.json'",
+  "reportSha256": "da3c01050b1f352b33853bf17e408ba64e0b14423d4f7137a20906ed2e58e679"
 }
