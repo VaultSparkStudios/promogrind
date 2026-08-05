@@ -1,47 +1,47 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-04 (Session 126 closeout) -->
+<!-- generated-at: 2026-08-05 (Session 128 closeout) -->
 
 # Closeout Status Board — PromoGrind
 
 ```
-╔══ SESSION CLOSEOUT · PromoGrind · S126 ════════════════════════╗
-║  Date: 2026-08-04  ·  SIL: 1000/1000  ·  Velocity: 8 down        ║
+╔══ SESSION CLOSEOUT · PromoGrind · S128 ════════════════════════╗
+║  Date: 2026-08-05  ·  SIL: 998/1000  ·  Velocity: 8 stable       ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ fix: keep closeout evidence canonical and public-safe         ║
-║  ✓ docs: finalize S126 closeout receipts                         ║
-║  ✓ feat: make release evidence self-validating                   ║
-║  ✓ docs(S125): record remote verification [skip ci]              ║
-║  ✓ docs(S125): publish clean closeout board [skip ci]            ║
+╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
+║  ✓ Status: S127 recovery and the complete S128 mission are satu  ║
+║  ✓ Shipped: five premise-verified L3 product-truth contracts pl  ║
+║  ✓ Verification: 103/103 test files, 705/705 assertions, 52/52   ║
+║  ✓ Visual: 24 unique real-Chromium captures across six surfaces  ║
+║  ✓ Release: FORGE HOLD; stable staging and ten typed external p  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
+╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
 ║    Engagement         100  ██████████                            ║
-║    Process Qual       100  ██████████                            ║
+║    Process Qual       99   ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
+║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
+║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 17 files  ·  M:17 A:0 D:0 ?:0                          ║
-║  Ahead: 1  ·  Behind: 0                                          ║
+║  Changes: 82 files  ·  M:42 A:0 D:0 ?:40                         ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -51,12 +51,12 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        12/12                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         93/93                                            ║
+║  Tests:         103/103                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         3d ago                                           ║
+║  IGNIS:         4d ago                                           ║
 ║  Truth:         green-repo-owned-with-history-and-external-proo  ║
 ║  Sanitization:  —                                                ║
-║  shells:        0 started · 0 closed · 0 running                 ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  #1: 1 public-facing repo(s) blocked by release gates            ║

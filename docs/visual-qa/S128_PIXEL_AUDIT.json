@@ -1,0 +1,496 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-05T02:07:26.416Z",
+  "method": "Sharp statistics over exact real-Chromium PNG bytes, paired with capture-time required-state and horizontal-overflow assertions.",
+  "limitation": "Semantic image inspection is attempted separately; this auditor reports objective pixels, not visual taste.",
+  "pass": true,
+  "uniqueHashes": 24,
+  "captures": [
+    {
+      "file": "captures/s128-after-arb-3way-desktop-dark.png",
+      "sha256": "8a4656c0054455012702e035d644036cdf9474b19e7f81643584fa3c5130e315",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 26.81,
+      "meanStdev": 21.16,
+      "meanEntropy": 3.489,
+      "tonalSpan": 237,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-arb-3way-desktop-light.png",
+      "sha256": "821779fd522022cf6fc63d25adbb30c6596b31e7fbd8b96dce8fc42764064750",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 244.16,
+      "meanStdev": 24.77,
+      "meanEntropy": 2.761,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-arb-3way-mobile-dark.png",
+      "sha256": "84204ae0665f6fc7baf94d0ccfd00a614e31b16f931f79f69924123e913269fd",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 33.46,
+      "meanStdev": 26.93,
+      "meanEntropy": 4.023,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-arb-3way-mobile-light.png",
+      "sha256": "e9e601a13607b395652e76b25043f52b4c46d5b1adb84983d604e500266a4d24",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 239.33,
+      "meanStdev": 30.18,
+      "meanEntropy": 3.915,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-referral-desktop-dark.png",
+      "sha256": "0e4fa895dc132622273c9636aa19bdb6cbc408e6242c7e7c530f85b7bca39b8f",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 26.33,
+      "meanStdev": 21.61,
+      "meanEntropy": 3.395,
+      "tonalSpan": 238,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-referral-desktop-light.png",
+      "sha256": "60b04479ded703406b1616943f9cd5c42dc00804712eee382d56e9574892520d",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 238.88,
+      "meanStdev": 42.49,
+      "meanEntropy": 3.321,
+      "tonalSpan": 241,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-referral-mobile-dark.png",
+      "sha256": "3755ec29ee2fa74a5f89851ea53f30f332a68f28f6efc366cbf6055ed20c8129",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 32.73,
+      "meanStdev": 30.66,
+      "meanEntropy": 4.18,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-referral-mobile-light.png",
+      "sha256": "ba8b061ab8908518992a5558ebef20afe0b184341fc0ef46430ac6232a87dc16",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 240.18,
+      "meanStdev": 29.9,
+      "meanEntropy": 4.295,
+      "tonalSpan": 232,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-scanner-desktop-dark.png",
+      "sha256": "a9b31e69de72f59d90271d33045d04da35b5b3f234c4c0312b0e798e8f54fc1d",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 20.99,
+      "meanStdev": 17.37,
+      "meanEntropy": 2.6,
+      "tonalSpan": 235,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-scanner-desktop-light.png",
+      "sha256": "6093b2fb310c32a4413fa6f60c0d50797dc174f2b5c563abd5d2fb6a8a3413a4",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 245.46,
+      "meanStdev": 19.55,
+      "meanEntropy": 2.421,
+      "tonalSpan": 232,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-scanner-mobile-dark.png",
+      "sha256": "7853d0bf6b99e4fd3f1df98aba5190e9e6eba868ea0d6c8f5e3edab9b33d78a8",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 26.76,
+      "meanStdev": 26.18,
+      "meanEntropy": 3.88,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-scanner-mobile-light.png",
+      "sha256": "4539a659390d9175258079db71d3c7630535165c1b176f90f2aaa49f357a1857",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 239.3,
+      "meanStdev": 29.04,
+      "meanEntropy": 3.826,
+      "tonalSpan": 232,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-sgp-desktop-dark.png",
+      "sha256": "4af991e957cdd98f431c3ebfe64cf255fa3a4a580242e4257a8988d8784dd568",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 28.3,
+      "meanStdev": 21.6,
+      "meanEntropy": 3.539,
+      "tonalSpan": 235,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-sgp-desktop-light.png",
+      "sha256": "ea70b382db0420ec6673992fc10af1a01982ba3df9d81c758545dbdd472758e0",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 243.11,
+      "meanStdev": 25.55,
+      "meanEntropy": 2.926,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-sgp-mobile-dark.png",
+      "sha256": "bd20abc1c67fd1345970a990f708ed426b4936786637622c9016649a993a29e4",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 34.54,
+      "meanStdev": 27.95,
+      "meanEntropy": 4.097,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-sgp-mobile-light.png",
+      "sha256": "17cf6e5248e29599864f9b51ebcca519b2b55fab0516d2c7db2a522ea082ccde",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 237.59,
+      "meanStdev": 31.8,
+      "meanEntropy": 4.163,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-teaser-desktop-dark.png",
+      "sha256": "2e95442814b8765168ed0a4ff0427b2ecd5bb9a7f239877dc5e4b4a0c6ba210b",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 28.18,
+      "meanStdev": 20.85,
+      "meanEntropy": 3.588,
+      "tonalSpan": 235,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-teaser-desktop-light.png",
+      "sha256": "e417e0e0358205ddd5cbec97bcbf4c3d3034f99882f8d103dd9bdac432b0752f",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 243.14,
+      "meanStdev": 25.23,
+      "meanEntropy": 2.998,
+      "tonalSpan": 232,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-teaser-mobile-dark.png",
+      "sha256": "5b6e1b3cbbf4b56877f4e70a97fbc1f4d66ce53dc30645f743176cceeda02e15",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 33.6,
+      "meanStdev": 26.08,
+      "meanEntropy": 4.025,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-teaser-mobile-light.png",
+      "sha256": "4bdc0fe3cfc5019a22fafbe0eab1f9bac854b9a6c32565f865905a53bdc5920f",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 238.37,
+      "meanStdev": 30.12,
+      "meanEntropy": 4.112,
+      "tonalSpan": 232,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-tool-mix-desktop-dark.png",
+      "sha256": "26857720c060aa77f58857d0a1e4186c0b9004283e5b398cf5382608e07027ac",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 26.27,
+      "meanStdev": 21.54,
+      "meanEntropy": 4.338,
+      "tonalSpan": 237,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-tool-mix-desktop-light.png",
+      "sha256": "2e7690bdb0c585100da7b1f0828964fd501428e2097d7e5d85e90879a0eaa845",
+      "width": 1440,
+      "height": 1000,
+      "meanLuminance": 244.11,
+      "meanStdev": 23.63,
+      "meanEntropy": 3.872,
+      "tonalSpan": 232,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-tool-mix-mobile-dark.png",
+      "sha256": "2c084c9b8e395bcd23e8591347eaf39990d12a0dac157527e076488d999ee01c",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 31.1,
+      "meanStdev": 25.07,
+      "meanEntropy": 4.882,
+      "tonalSpan": 222,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    },
+    {
+      "file": "captures/s128-after-tool-mix-mobile-light.png",
+      "sha256": "c90d2f2da9f31f00f9369a7ec4466698950c5d899f450b1fa2c3a366332639b6",
+      "width": 390,
+      "height": 844,
+      "meanLuminance": 239.14,
+      "meanStdev": 28.92,
+      "meanEntropy": 4.829,
+      "tonalSpan": 227,
+      "checks": {
+        "dimensions": true,
+        "nonBlank": true,
+        "tonalRange": true,
+        "opaque": true
+      }
+    }
+  ],
+  "themePairs": [
+    {
+      "surface": "arb-3way",
+      "viewport": "desktop",
+      "dark": "captures/s128-after-arb-3way-desktop-dark.png",
+      "light": "captures/s128-after-arb-3way-desktop-light.png",
+      "luminanceDelta": 217.35,
+      "pass": true
+    },
+    {
+      "surface": "arb-3way",
+      "viewport": "mobile",
+      "dark": "captures/s128-after-arb-3way-mobile-dark.png",
+      "light": "captures/s128-after-arb-3way-mobile-light.png",
+      "luminanceDelta": 205.87,
+      "pass": true
+    },
+    {
+      "surface": "referral",
+      "viewport": "desktop",
+      "dark": "captures/s128-after-referral-desktop-dark.png",
+      "light": "captures/s128-after-referral-desktop-light.png",
+      "luminanceDelta": 212.55,
+      "pass": true
+    },
+    {
+      "surface": "referral",
+      "viewport": "mobile",
+      "dark": "captures/s128-after-referral-mobile-dark.png",
+      "light": "captures/s128-after-referral-mobile-light.png",
+      "luminanceDelta": 207.45,
+      "pass": true
+    },
+    {
+      "surface": "scanner",
+      "viewport": "desktop",
+      "dark": "captures/s128-after-scanner-desktop-dark.png",
+      "light": "captures/s128-after-scanner-desktop-light.png",
+      "luminanceDelta": 224.47,
+      "pass": true
+    },
+    {
+      "surface": "scanner",
+      "viewport": "mobile",
+      "dark": "captures/s128-after-scanner-mobile-dark.png",
+      "light": "captures/s128-after-scanner-mobile-light.png",
+      "luminanceDelta": 212.54,
+      "pass": true
+    },
+    {
+      "surface": "sgp",
+      "viewport": "desktop",
+      "dark": "captures/s128-after-sgp-desktop-dark.png",
+      "light": "captures/s128-after-sgp-desktop-light.png",
+      "luminanceDelta": 214.81,
+      "pass": true
+    },
+    {
+      "surface": "sgp",
+      "viewport": "mobile",
+      "dark": "captures/s128-after-sgp-mobile-dark.png",
+      "light": "captures/s128-after-sgp-mobile-light.png",
+      "luminanceDelta": 203.05,
+      "pass": true
+    },
+    {
+      "surface": "teaser",
+      "viewport": "desktop",
+      "dark": "captures/s128-after-teaser-desktop-dark.png",
+      "light": "captures/s128-after-teaser-desktop-light.png",
+      "luminanceDelta": 214.96,
+      "pass": true
+    },
+    {
+      "surface": "teaser",
+      "viewport": "mobile",
+      "dark": "captures/s128-after-teaser-mobile-dark.png",
+      "light": "captures/s128-after-teaser-mobile-light.png",
+      "luminanceDelta": 204.77,
+      "pass": true
+    },
+    {
+      "surface": "tool-mix",
+      "viewport": "desktop",
+      "dark": "captures/s128-after-tool-mix-desktop-dark.png",
+      "light": "captures/s128-after-tool-mix-desktop-light.png",
+      "luminanceDelta": 217.84,
+      "pass": true
+    },
+    {
+      "surface": "tool-mix",
+      "viewport": "mobile",
+      "dark": "captures/s128-after-tool-mix-mobile-dark.png",
+      "light": "captures/s128-after-tool-mix-mobile-light.png",
+      "luminanceDelta": 208.04,
+      "pass": true
+    }
+  ],
+  "failures": {
+    "captures": [],
+    "themePairs": []
+  }
+}

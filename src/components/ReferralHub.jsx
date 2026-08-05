@@ -5,6 +5,7 @@ import { CANONICAL_APP_URL } from "../launchState.js";
 import { trackEvent } from "../analytics.js";
 import { K, font } from "../lib/shared.js";
 import { S, Tl } from "../ui.jsx";
+import { REFERRAL_PROGRAM } from "../data/referralProgram.js";
 
 const ReferralHub = () => {
   const [copied, setCopied] = useState(false);
@@ -43,9 +44,10 @@ const ReferralHub = () => {
     if (!error) setSavedInfluencerCode(influencerCode);
   };
   const refLink = userId ? `${CANONICAL_APP_URL}?ref=${userId}` : "Loading…";
+  const earnedGiftDays = Number(rhUser?.user_metadata?.gift_bonus_days) || 0;
   const copy = () => { try{navigator.clipboard.writeText(refLink); trackEvent('referral_shared'); localStorage.setItem('pg_referral_shared','1');}catch(e){} setCopied(true); setTimeout(()=>setCopied(false),2000); };
   return (<div><div style={S.card}><Tl t="Refer &amp; Earn" badge="FREE VAULTSPARKED" bc={K.pp}/>
-    <div style={{...S.note(K.pp),marginBottom:16}}>Share your link. When a friend signs up and subscribes to VaultSparked, you both get <strong>30 days free</strong>. No limit on referrals.</div>
+    <div style={{...S.note(K.pp),marginBottom:16}}>{REFERRAL_PROGRAM.attribution.description} Gift access has separate, explicit terms below.</div>
     <div style={{marginBottom:16}}>
       <div style={S.label}>Your Referral Link</div>
       <div style={{display:"flex",gap:8,alignItems:"center"}}>
@@ -55,14 +57,14 @@ const ReferralHub = () => {
     </div>
     <div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
       <div><div style={{fontSize:10,color:K.mt}}>YOUR REFERRALS</div><div style={S.big(K.pp)}>{refCount===null?'…':refCount}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>FREE DAYS EARNED</div><div style={S.big(K.gn)}>{refCount===null?'…':(refCount||0)*30}</div></div>
+      <div><div style={{fontSize:10,color:K.mt}}>RECORDED GIFT BONUS DAYS</div><div style={S.big(K.gn)}>{earnedGiftDays}</div></div>
     </div>
     <div style={{marginTop:16,padding:12,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
       <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Share on</div>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
         {[
           {label:"Twitter/X",color:"#1DA1F2",msg:`I use PromoGrind to calculate, track, and review sportsbook promo decisions without the usual hype. The core tools are free: ${refLink}`},
-          {label:"Discord",color:"#5865F2",msg:`**PromoGrind** — free matched betting tools. 22 calculators, live arb scanner. Sign up free: ${refLink}`},
+          {label:"Discord",color:"#5865F2",msg:`**PromoGrind** — free promo-decision calculators and local tracking. Provider-backed tools show their live availability in the app: ${refLink}`},
           {label:"Reddit",color:"#FF4500",msg:`Has anyone else been using PromoGrind? It's free and has all the calculators you need for promo conversion. Link: ${refLink}`},
         ].map(({label,color,msg})=>(
           <button key={label} onClick={()=>{try{navigator.clipboard.writeText(msg);}catch(e){} }} style={{padding:"6px 14px",background:`${color}15`,border:`1px solid ${color}40`,borderRadius:6,color,fontSize:11,cursor:"pointer",fontFamily:font}}>Copy {label} Post</button>
@@ -121,7 +123,7 @@ const ReferralHub = () => {
     )}
     <div style={{marginTop:20,padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
       <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>🎁 Gift 14 Days Free</div>
-      <div style={{fontSize:11,color:K.dm,marginBottom:12,lineHeight:1.6}}>Give a friend 14 days of VaultSparked Pro for free. They get the Live Scanner, +EV Scanner, and all Pro tools. You earn 7 bonus days when they sign up.</div>
+      <div style={{fontSize:11,color:K.dm,marginBottom:12,lineHeight:1.6}}>Create a link for {REFERRAL_PROGRAM.gift.recipientDays} days of workspace access. The function attempts a {REFERRAL_PROGRAM.gift.senderBonusDays}-day sender bonus at token issuance and returns whether that update persisted, up to {REFERRAL_PROGRAM.gift.limitCount} gifts per rolling {REFERRAL_PROGRAM.gift.limitWindowDays} days. {REFERRAL_PROGRAM.gift.providerScope}</div>
       <GiftTrialBox/>
     </div>
   </div></div>);

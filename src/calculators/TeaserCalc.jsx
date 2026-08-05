@@ -72,9 +72,9 @@ export default function TeaserCalc() {
                 onClose={() => setShowReceipt(false)}
               />
             )}
-            {r.ok && <Nt c={K.gn}>This teaser has positive EV at your estimated per-leg win rate. Make sure your estimate accounts for the line movement — teasers are only +EV when crossing key numbers (3 and 7 in NFL).</Nt>}
+            {r.ok && <Nt c={K.gn}>The model is positive at your supplied per-leg win rate. Verify that estimate and the live lines; the result is not outcome evidence.</Nt>}
             {!r.ok && <Nt c={K.rd}>At {wp}% per-leg win rate, this teaser is -EV. You need {r.beProb}% per leg to break even. Teasers crossing 3 and 7 in NFL can reach 72-76% per leg — otherwise avoid.</Nt>}
-            {r.ok && <JuiceScore score={juiceFromEVPct(parseFloat(r.ev))} />}
+            {r.ok && <JuiceScore score={juiceFromEVPct(parseFloat(r.ev))} basis="User-entered win-rate model" assumption="Leg outcomes are independent and the supplied per-leg win rate is accurate." />}
             {r.ok && !showShareCard && (
               <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
                 🎉 Share this teaser edge

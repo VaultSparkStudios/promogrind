@@ -19,6 +19,11 @@ export const PUBLIC_CLAIM_RULES = [
   { id: "monthly-earnings-pt", locale: "pt", pattern: /R\$\s?[\d,.]+(?:\s*(?:a|[–-])\s*R?\$?\s?[\d,.]+)?\s*(?:\/|por )m[eê]s\b[^.!?]{0,55}\b(?:lucro|renda|gerar)\w*/gi, guidance: "Do not present monthly profit as a typical outcome; use a user-input scenario with uncertainty." },
   { id: "pure-profit-multilingual", locale: "multi", pattern: /\b(?:pure profit|ganancia pura|lucro puro)\b/gi, guidance: "Describe a modeled return and preserve execution, eligibility, void, and changing-odds risk." },
   { id: "risk-erasure-en", locale: "en", pattern: /\b(?:you do not lose this money|regardless of which side wins,? you pocket|cannot lose|no downside)\b/gi, guidance: "Name capital, execution, counterparty, void, and changing-odds risk explicitly." },
+  { id: "simulated-live-market-copy", locale: "en", pattern: /\b(?:live right now for|members are scanning these right now)\b/gi, guidance: "Show live-market activity only from a current provider receipt; never derive it from time or decorative state." },
+  { id: "unproved-gift-delivery", locale: "en", pattern: /\b(?:gift sent to|they(?:'|’)ll get an email with)\b/gi, guidance: "Distinguish token issuance, provider acceptance, and inbox delivery; do not collapse them into sent." },
+  { id: "usage-as-performance", locale: "en", pattern: /\b(?:you excel at|maximum bankroll growth|pure modeled profit)\b/gi, guidance: "Calculator usage may describe tool mix, not skill, profit, or future performance." },
+  { id: "authoritative-play-grade", locale: "en", pattern: /\b(?:excellent|good|fair|poor) play\b|\bpromo quality score\b/gi, guidance: "Label heuristic output as an assumption-bound model signal, not an authoritative play grade." },
+  { id: "unbounded-referral-reward", locale: "en", pattern: /\b(?:both get \d+ days free|no limit on referrals)\b/gi, guidance: "Referral rewards must derive from the canonical live program contract and disclose limits." },
 ];
 
 export const PUBLIC_CLAIM_DOCUMENT_RULES = [
@@ -37,6 +42,13 @@ export const PUBLIC_CLAIM_DOCUMENT_RULES = [
       && !/simulated|demonstration data/i.test(text),
     pattern: /\blive activity\b/i,
     guidance: 'Do not render generated events as live user activity. Bind the feed to a verified source or label a static demonstration explicitly.',
+  },
+  {
+    id: 'simulated-live-market-count', locale: 'multi',
+    applies: (text) => /\barb opportunities\b|\+EV picks/i.test(text)
+      && /new Date\(\)\.get(?:Hours|Minutes|Date)\(\)/.test(text),
+    pattern: /\barb opportunities\b|\+EV picks/i,
+    guidance: 'Market counts must be counted from a current authenticated provider response, never generated from the clock.',
   },
   {
     id: 'categorical-legal-answer', locale: 'en',

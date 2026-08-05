@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { supabase, startTrial } from "../auth.js";
 import { invokeProjectFunction } from "../ai/gateway.js";
-import { FEATURE_FLAGS } from "../launchState.js";
 import { S, In, Tl, FeatureUnavailableCard, Help } from "../ui.jsx";
 import { useToast } from "../contexts.jsx";
 import { K, font } from "../lib/shared.js";
@@ -73,7 +72,7 @@ export function StackBuilder({ proStatus }) {
     setCopied(true); setTimeout(() => setCopied(false), 1800);
   };
 
-  if (!stackBuilderEnabled && !FEATURE_FLAGS.stackBuilder) {
+  if (!stackBuilderEnabled) {
     return <FeatureUnavailableCard featureKey="stackBuilder" title="Stack Builder" body="Stack Builder will unlock here once the AI planning backend is activated." />;
   }
 

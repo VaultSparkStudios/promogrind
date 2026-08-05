@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.3",
   "date": "2026-08-04",
-  "session": 127,
+  "session": 128,
   "project": "PromoGrind",
-  "intentOutcome": "achieved-recovered-saturated-local-verified",
+  "intentOutcome": "achieved-saturated-local-verified",
   "writeback": [
     "CURRENT_STATE",
     "TASK_BOARD",
@@ -19,24 +19,27 @@
     "agent-memory"
   ],
   "shipped": [
-    "sync-deletion-convergence",
-    "calibration-governed-advisor",
-    "ledger-evidence-boundary",
-    "correlated-exposure-radar",
-    "friction-recovery-loop",
-    "s127-pixel-audit-entropy-contract"
-    ,"visual-parity-dependent-transaction"
+    "capability-ceiling-feature-flags",
+    "quote-evidence-live-scanner",
+    "referral-delivery-truth",
+    "evidence-labeled-tool-profile",
+    "model-signal-receipts",
+    "decision-claim-ratchet",
+    "source-independence-and-persistence-refinement",
+    "s128-rendered-proof-harness"
   ],
   "verification": {
-    "tests": "679/679 passing across 97 files",
+    "tests": "705/705 passing across 103 files",
+    "edge": "52/52 passing; all 15 entrypoints typecheck",
     "doctor": "12/12 passing; blockingFailing 0",
-    "visualQa": "20 unique real-Chromium captures; 5 surfaces; dark/light; desktop/mobile; objective pixel and browser-state checks pass",
-    "visualLimitation": "Windows DPAPI initialization prevented both semantic image-return paths; no semantic AI image-review claim",
+    "visualQa": "24 unique real-Chromium captures; 6 surfaces; dark/light; desktop/mobile; objective pixel and browser-state checks pass",
+    "visualLimitation": "Windows DPAPI initialization prevents semantic image return; no semantic AI image-review claim",
+    "launchLocal": "full aggregate chain direct exit 0",
     "releaseGate": "HOLD; stable staging plus 10 typed blocking proofs incomplete",
-    "capability": "promogrind.supabase.deploy MISSING",
-    "innovation": "5/5 primary L3 items plus 2/2 repo-owned second-order refinements; external-only remainder"
+    "innovation": "5/5 primary L3 items plus 3/3 repo-owned second-order refinements; external-only remainder"
   },
   "releasePosture": "FORGE/public-unlaunched; SPARKED NO-GO",
+  "arkReceipts": ["01JV7RIVGHAC08EF1903E27E52"],
   "honestDeferrals": [
     "stable remote staging",
     "six hosting-edge response headers",
@@ -49,50 +52,40 @@
     "friend beta",
     "capture submission and lead observation",
     "founder launch approval",
-    "semantic AI image judgment for S127 captures"
-    ,"Cloudflare response-header-rules authorization"
-    ,"canonical cost-status reconciliation"
+    "semantic AI image judgment",
+    "Studio-owned boolean passIf parser repair"
   ],
-  "headline": "Recovered seven evidence-bound improvements; product truth and rendered-proof dependencies now fail closed.",
+  "headline": "Eight decision-truth improvements shipped; capability, evidence, delivery, and model language now fail closed as compound receipts.",
   "items": [
     {
-      "id": "convergent-data-truth",
-      "title": "Convergent sync deletion and synthetic-ledger quarantine",
+      "id": "capability-and-quote-authority",
+      "title": "Subtractive capability and independent quote evidence",
       "projectImpact": 10,
-      "ecosystemImpact": 8,
-      "insight": "Negative facts and realized evidence now survive offline/cloud boundaries without resurrecting stale or synthetic profit.",
-      "evidence": "Seven tombstone domains; 38/38 focused sync checks; canonical selectors across derived consumers."
+      "ecosystemImpact": 9,
+      "insight": "Remote configuration cannot create capability, while +EV requires fresh target-excluded no-vig evidence from distinct sources.",
+      "evidence": "11 flag checks; 5 quote-evidence checks; five consumers ratcheted."
     },
     {
-      "id": "governed-decision-intelligence",
-      "title": "Governed Advisor confidence and exposure topology",
+      "id": "delivery-and-decision-language",
+      "title": "Persistence-aware gifts and evidence-labeled decision language",
       "projectImpact": 10,
       "ecosystemImpact": 8,
-      "insight": "Action posture weakens with missing evidence, while concentration is disclosed without invented probability or independence.",
-      "evidence": "Act/verify/abstain receipts; event/market/book clusters; declared-hedge and unknown-data contracts."
+      "insight": "Gift success is decomposed by authority, and behavioral/model signals no longer imply skill or action quality.",
+      "evidence": "4 referral checks; 6 tool/model checks; 52 Edge tests."
     },
     {
-      "id": "closed-loop-recovery-and-pixels",
-      "title": "Evidence-ranked friction recovery and self-validating rendered QA",
+      "id": "claim-and-rendered-ratchet",
+      "title": "Cross-surface claim ratchet and rendered proof",
       "projectImpact": 9,
-      "ecosystemImpact": 7,
-      "insight": "Repeated friction becomes one safe next action, and the visual verifier can now disprove blank or theme-collapsed captures.",
-      "evidence": "679/679 full assertions; 20/20 captures; 10/10 theme pairs; entropy and parity-transaction defects repaired."
+      "ecosystemImpact": 8,
+      "insight": "Repaired claims are mechanically rejected and every touched decision state is hash-bound across themes and viewports.",
+      "evidence": "334 files × 30 rules; 24/24 captures; 12/12 theme pairs; launch-local exit 0."
     }
   ],
   "honestyLedger": [
-    {
-      "title": "No synthetic product evidence",
-      "why": "Demo ledger profit is quarantined and excluded from every realized surface."
-    },
-    {
-      "title": "No visual overclaim",
-      "why": "Objective pixels and browser state pass, while unavailable semantic AI viewing stays explicitly unclaimed."
-    },
-    {
-      "title": "No launch fabrication",
-      "why": "Stable staging, credentials, deployment authority, identity, mailbox, journeys, capture, and approval remain external."
-    }
+    { "title": "No capability fabrication", "why": "The production-default false build ceiling wins over remote rows and visual fixtures do not change shipped defaults." },
+    { "title": "No delivery or performance overclaim", "why": "Provider acceptance, inbox delivery, metadata persistence, tool use, and model quality remain separate evidence classes." },
+    { "title": "No visual or launch fabrication", "why": "Objective pixels pass; unavailable semantic viewing and all external launch criteria remain explicit." }
   ],
   "followUps": [
     "Establish stable staging plus all six response headers.",
@@ -103,9 +96,5 @@
     "External release evidence remains incomplete; this does not block repository development or local verification.",
     "Semantic image return is unavailable in the current Windows sandbox; objective rendered evidence passes but semantic AI review is not claimed."
   ],
-  "silDelta": {
-    "kind": "numeric",
-    "from": 1000,
-    "to": 998
-  }
+  "silDelta": { "kind": "numeric", "from": 998, "to": 998 }
 }

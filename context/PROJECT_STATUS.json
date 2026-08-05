@@ -21,8 +21,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 127,
-  "currentFocus": "Recovered and completed the interrupted S127 mission: all five L3 items plus pixel-entropy and visual-parity transaction repairs shipped across sync convergence, ledger evidence, calibrated Advisor posture, exposure concentration, friction recovery, and rendered-proof freshness. The refreshed Genius List contains only the external release gate.",
+  "currentSession": 128,
+  "currentFocus": "Completed the S128 decision-truth mission: all five L3 items plus claim-ratchet, compound-source/persistence, and rendered-proof refinements shipped across capability authority, quote evidence, referral delivery, tool-mix observation, and model-signal receipts. The actionable repo-owned Genius List is empty.",
   "nextMilestone": "Establish real staging and a header-capable production edge; rotate/remediate historical credentials; obtain exact PromoGrind Supabase deploy authority; complete Zoho mailbox, auth-email, payment-lifecycle, friend, and capture proof criteria; only then reassess SPARKED.",
   "blockers": [
     "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
@@ -37,26 +37,26 @@
     "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
     "The live Cloudflare target probe lacks response-header-rules authorization (HTTP 403), so the six missing headers cannot be remediated through the current token."
   ],
-  "lastUpdated": "2026-08-04",
+  "lastUpdated": "2026-08-05",
   "silScore": 998,
-  "silAvg3": 999.3,
-  "silVelocity": 7,
+  "silAvg3": 998.7,
+  "silVelocity": 8,
   "silDebt": "stable",
-  "silLastSession": 127,
+  "silLastSession": 128,
   "silMax": 1000,
   "silSparkline": [
     1000,
     1000,
     1000,
-    1000,
+    998,
     998
   ],
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "testsPassing": 97,
-  "testsTotal": 97,
-  "testsLastRun": "2026-08-04",
+  "testsPassing": 103,
+  "testsTotal": 103,
+  "testsLastRun": "2026-08-05",
   "lastDeployStatus": "S126 repair commit d3d611b reached origin/main. CI 30883558365 and brief-format 30883558594 passed. Deploy Pages 30883558417 passed preflight, immutable attestation, deployment, production launch, dashboard smoke, and standard files; its final aggregator correctly stayed red on the six absent hosting-edge headers. SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-04",
@@ -66,7 +66,7 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 679/679 across 97 files in S127 recovery on the exact lock tree"
+      "status": "passing 705/705 across 103 files in S128 on the exact lock tree"
     },
     {
       "type": "edge",
@@ -76,7 +76,7 @@
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S126 with direct exit 0"
+      "status": "passing end to end in S128 with direct exit 0"
     },
     {
       "type": "ux-integrity",
@@ -230,35 +230,35 @@
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
   "sessionShellHygiene": {
-    "session": 127,
+    "session": 128,
     "started": 1,
     "closed": 1,
     "running": 0,
     "enumeratedAt": "2026-08-04T18:00:00-04:00",
-    "evidence": "Final scoped Win32 process and TCP enumeration found one PromoGrind-owned Vite/esbuild pair listening on 127.0.0.1:4173. The exact process paths resolved inside this repository, both processes were closed, and a follow-up probe found zero listeners on 4173/4174/4175/5173. Unrelated host processes were not disturbed."
+    "evidence": "S128 Chromium fixtures used a hidden repo-local Vite process on 127.0.0.1:4173. Final closeout enumerates and closes only processes whose executable/command path resolves to PromoGrind, then re-probes 4173/4174/4175/5173; unrelated host processes remain untouched."
   },
-  "lastSessionSummary": "S127 recovery verified and completed five L3 product/data contracts plus two verifier/dependency root fixes. Vitest passes 679/679 and Doctor 12/12; 20 objective rendered states and transactional release parity pass. Stable staging, semantic image return, canonical cost reconciliation, and typed external launch proofs remain explicit HOLDs.",
+  "lastSessionSummary": "S128 shipped five L3 decision-truth contracts and three repo-owned second-order refinements. Vitest passes 705/705, Edge 52/52, Doctor 12/12, full launch-local exits 0, and 24 objective rendered states are hash-bound. Stable staging, semantic image return, and typed external launch proofs remain explicit HOLDs.",
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-04T21:53:51.123Z",
-    "commitSha": "c2a7534b45b8f67d0a2c6c1417de3855eba6be9c",
+    "generatedAt": "2026-08-05T02:23:36.077Z",
+    "commitSha": "b3fac027fbc99a9dd60fe685f5380af19197968e",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 97,
-      "total": 97
+      "passing": 103,
+      "total": 103
     },
     "assertions": {
-      "passing": 679,
-      "total": 679
+      "passing": 705,
+      "total": 705
     },
-    "reportSha256": "ddb0ab37a0fa9cd53a3a465eea6638f0f7f9b83f4e1b52002fbba8e290261880"
+    "reportSha256": "76264f0ebe0aa58b4a8084506e5d9880bdb00ea3e72b444fb8b0d880acbf1b18"
   },
-  "testsAssertionsPassing": 679,
-  "testsAssertionsTotal": 679,
-  "testsAssertionsFiles": 97,
-  "testsAssertionsLastRun": "2026-08-04"
+  "testsAssertionsPassing": 705,
+  "testsAssertionsTotal": 705,
+  "testsAssertionsFiles": 103,
+  "testsAssertionsLastRun": "2026-08-05"
 }

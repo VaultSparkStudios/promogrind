@@ -28,7 +28,7 @@ export default function Arb3Way() {
               {r.ok && <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>}
             </div>
             {r.ok && <><RR l="Stake Home" v={`$${r.s1}`} c={K.ac} b /><RR l="Stake Draw" v={`$${r.s2}`} c={K.ac} b /><RR l="Stake Away" v={`$${r.s3}`} c={K.ac} b /><RR l="ROI" v={`${r.roi}%`} c={K.gn} /></>}
-            {r.ok && <JuiceScore score={juiceFromROI(r.roi)} />}
+            {r.ok && <JuiceScore score={juiceFromROI(r.roi)} basis="Quoted three-way return" assumption="All three prices, limits, and settlement rules remain available through execution." />}
             {showReceipt && r.ok && (
               <CalculatorReceipt
                 calcName="3-Way Arbitrage"

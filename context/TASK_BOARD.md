@@ -1,5 +1,42 @@
 # Task Board
 
+## Unified Genius List (S128)
+
+| Tier | Category | Status | Effort | Item |
+|---|---|---|---:|---|
+| 🔥 | Security / capability control | done | 5h | capability-ceiling-feature-flags — **DONE L3 S128**: subtractive typed policy and five-consumer bypass ratchet |
+| 🔥 | Feature depth / mathematical truth | done | 8h | quote-evidence-live-scanner — **DONE L3 S128**: fresh target-excluded no-vig consensus and zero simulated liveness |
+| 🔥 | Commerce truth / privacy / feedback | done | 7h | referral-delivery-truth — **DONE L3 S128**: canonical 14/7, 5/30 terms and token/provider delivery receipts |
+| ⚡ | Gamification restraint / UX | done | 4h | evidence-labeled-tool-profile — **DONE L3 S128**: sample-bound tool mix with explicit non-performance posture |
+| ⚡ | Decision safety / public claims | done | 5h | model-signal-receipts — **DONE L3 S128**: basis/assumption receipts replace authoritative play grades |
+
+## Wave List (S128 · CANON-044)
+
+- **Wave 1 · complete:** capability ceiling and adversarial rollout tests.
+- **Wave 2 · complete:** quote-evidence engine and Scanner state repair.
+- **Wave 3 · complete:** referral/gift contract and delivery receipts.
+- **Wave 4 · complete:** tool-mix and model-signal UI truth.
+- **Wave 5 · complete:** claim ratchet, source-independence and persistence refinements, 24 rendered states, launch-local, Doctor, and closeout evidence are green.
+
+## Shipped This Session (S128)
+
+- Subtractive capability-ceiling decisions with reason receipts and five protected-consumer bypass guards.
+- Fresh, target-excluded, duplicate-source-resistant, no-vig quote consensus; unsupported opportunities fail closed.
+- Canonical referral/gift terms with separate token, provider-acceptance, inbox, and sender-credit persistence truth.
+- Local tool-mix observations with sample/confidence/distribution and no skill, profit, or outcome implication.
+- Assumption-bound model-signal receipts on three calculators in place of authoritative play grades.
+- Thirty public-claim rules over 334 source files, including liveness, delivery, usage-performance, model-grade, and referral-limit ratchets.
+- Twenty-four hash-bound Chromium captures across six surfaces, dark/light, and desktop/mobile, with objective pixel and overflow proof.
+- Second-order independence and persistence repairs discovered during saturation: duplicate bookmaker rows cannot inflate consensus, and failed sender metadata writes cannot be claimed as credit.
+
+## Saturation result (S128)
+
+- Five of five premise-verified L3 items and three repo-owned second-order refinements shipped; no repo-owned item remains.
+- Full Vitest passes 705/705 assertions across 103/103 files; 52/52 Edge tests and all 15 entrypoints pass; Doctor is 12/12 with `blockingFailing: 0`.
+- `npm run verify:launch-local` exits 0 end to end; tracked secrets, strict sanitization, public claims, integrity, build, browser smoke, proof replay, and bundle budget are green.
+- Semantic image viewing remains explicitly unclaimed because Windows DPAPI blocks the image-return path; objective pixel/browser-state proof passes.
+- The remaining innovation candidate is external launch evidence only; FORGE HOLD remains truthful.
+
 ## Unified Genius List (S127)
 
 | Tier | Category | Status | Effort | Item |

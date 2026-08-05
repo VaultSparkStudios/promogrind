@@ -1,227 +1,267 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-04T21:22:15.970Z",
+  "capturedAt": "2026-08-05T02:08:08.183Z",
   "themes": [
     "dark",
     "light"
   ],
   "captures": [
     {
-      "file": "captures/s127-after-advisor-desktop-dark.png",
-      "page": "/dashboard — governed Advisor confidence receipt",
+      "file": "captures/s128-after-scanner-desktop-dark.png",
+      "page": "/arb-scanner — build-capability-closed live state",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "92dde2331dfdee531392df87a8803bf94a2d2044aeeb6a8608ab478f9595edbb"
+      "sha256": "a9b31e69de72f59d90271d33045d04da35b5b3f234c4c0312b0e798e8f54fc1d"
     },
     {
-      "file": "captures/s127-after-advisor-desktop-light.png",
-      "page": "/dashboard — governed Advisor confidence receipt",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "15074d9fd5fdcbb6a0758a6e61562cece25fcab722891d12892827d1f19b8242"
-    },
-    {
-      "file": "captures/s127-after-advisor-mobile-dark.png",
-      "page": "/dashboard — governed Advisor confidence receipt",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "1507c57b5a9fa54d0786f406b42ff16ce466e3a71569c726f8694a5508a4b013"
-    },
-    {
-      "file": "captures/s127-after-advisor-mobile-light.png",
-      "page": "/dashboard — governed Advisor confidence receipt",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "78ad4912c166a0fcf07766fd1ccfeaac13472e10fb6891e573eb83ea050e9db2"
-    },
-    {
-      "file": "captures/s127-after-bet-tracker-desktop-dark.png",
-      "page": "/bet-tracker — event metadata capture",
+      "file": "captures/s128-after-referral-desktop-dark.png",
+      "page": "/refer-earn — bounded gift and delivery truth",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "7d8b8ed505e5693f028e3387f90f0cb970352c269d2f6d29325a7fc6e7b4e392"
+      "sha256": "0e4fa895dc132622273c9636aa19bdb6cbc408e6242c7e7c530f85b7bca39b8f"
     },
     {
-      "file": "captures/s127-after-bet-tracker-desktop-light.png",
-      "page": "/bet-tracker — event metadata capture",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "f1f02d433ae6e5983f814fa7a6202f7253c45234115b50a51657092e3685e0c2"
-    },
-    {
-      "file": "captures/s127-after-bet-tracker-mobile-dark.png",
-      "page": "/bet-tracker — event metadata capture",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "7f14cbc8194e1ae7242829c1250507d9b218255df370a88d195c2d2e3d2ea65d"
-    },
-    {
-      "file": "captures/s127-after-bet-tracker-mobile-light.png",
-      "page": "/bet-tracker — event metadata capture",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "ee6904928c9e85060484e049ef67f8b4dcd01168b88b23c66cea7379f710d3a4"
-    },
-    {
-      "file": "captures/s127-after-dashboard-desktop-dark.png",
-      "page": "/dashboard — exposure concentration and friction recovery",
+      "file": "captures/s128-after-tool-mix-desktop-dark.png",
+      "page": "/dashboard — evidence-bounded local tool mix",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "c4d8575c196430990072bea63d45595c11577de81821a78009305c91204fca3c"
+      "sha256": "26857720c060aa77f58857d0a1e4186c0b9004283e5b398cf5382608e07027ac"
     },
     {
-      "file": "captures/s127-after-dashboard-desktop-light.png",
-      "page": "/dashboard — exposure concentration and friction recovery",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "32168576a70e4d5118f6f4d639eec056613f9630f49c3295bd9ae3ee59a49fee"
-    },
-    {
-      "file": "captures/s127-after-dashboard-mobile-dark.png",
-      "page": "/dashboard — exposure concentration and friction recovery",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "0108116c7c1e941fcc006fee513a270a05b7a2e62e9d78b325d3670c115b8dec"
-    },
-    {
-      "file": "captures/s127-after-dashboard-mobile-light.png",
-      "page": "/dashboard — exposure concentration and friction recovery",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "8013a6b4a19b6b9be6ef6d7d96ce73b67ac7912335f19017ed46df659f8c76bc"
-    },
-    {
-      "file": "captures/s127-after-ledger-desktop-dark.png",
-      "page": "/ledger — synthetic evidence quarantine",
+      "file": "captures/s128-after-arb-3way-desktop-dark.png",
+      "page": "/arb-3way — assumption-bound model signal",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "21a2e5f914d964a831e8884b845423bb63938f2643216ec1e2724526b5334aa8"
+      "sha256": "8a4656c0054455012702e035d644036cdf9474b19e7f81643584fa3c5130e315"
     },
     {
-      "file": "captures/s127-after-ledger-desktop-light.png",
-      "page": "/ledger — synthetic evidence quarantine",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "8924d7d0211ba44bcd938832abb0fbe2244daedea4ed679d96c81bffe828b4f5"
-    },
-    {
-      "file": "captures/s127-after-ledger-mobile-dark.png",
-      "page": "/ledger — synthetic evidence quarantine",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "b1ac79e5063726fecadfd828c2829404facb7ef7a8b66097636d53d157c77b55"
-    },
-    {
-      "file": "captures/s127-after-ledger-mobile-light.png",
-      "page": "/ledger — synthetic evidence quarantine",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "a274e14c60890b89637eab62c2f4a7c4b54d56ed238952caf5f3174674c4796c"
-    },
-    {
-      "file": "captures/s127-after-track-desktop-dark.png",
-      "page": "/edge-dashboard — evidence-thresholded recovery plan",
+      "file": "captures/s128-after-sgp-desktop-dark.png",
+      "page": "/sgp-estimator — assumption-bound model signal",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "5f7d17c6652d984bbf75ca6abc719a2af102d877de9fcb98161cc02dec99921c"
+      "sha256": "4af991e957cdd98f431c3ebfe64cf255fa3a4a580242e4257a8988d8784dd568"
     },
     {
-      "file": "captures/s127-after-track-desktop-light.png",
-      "page": "/edge-dashboard — evidence-thresholded recovery plan",
+      "file": "captures/s128-after-teaser-desktop-dark.png",
+      "page": "/teaser — assumption-bound model signal",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "2e95442814b8765168ed0a4ff0427b2ecd5bb9a7f239877dc5e4b4a0c6ba210b"
+    },
+    {
+      "file": "captures/s128-after-scanner-desktop-light.png",
+      "page": "/arb-scanner — build-capability-closed live state",
       "theme": "light",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "4c8678972be84b3a6fc4df7cde88755a11e334b75c746b68ea1e88c7fb3ba08a"
+      "sha256": "6093b2fb310c32a4413fa6f60c0d50797dc174f2b5c563abd5d2fb6a8a3413a4"
     },
     {
-      "file": "captures/s127-after-track-mobile-dark.png",
-      "page": "/edge-dashboard — evidence-thresholded recovery plan",
+      "file": "captures/s128-after-referral-desktop-light.png",
+      "page": "/refer-earn — bounded gift and delivery truth",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "60b04479ded703406b1616943f9cd5c42dc00804712eee382d56e9574892520d"
+    },
+    {
+      "file": "captures/s128-after-tool-mix-desktop-light.png",
+      "page": "/dashboard — evidence-bounded local tool mix",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "2e7690bdb0c585100da7b1f0828964fd501428e2097d7e5d85e90879a0eaa845"
+    },
+    {
+      "file": "captures/s128-after-arb-3way-desktop-light.png",
+      "page": "/arb-3way — assumption-bound model signal",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "821779fd522022cf6fc63d25adbb30c6596b31e7fbd8b96dce8fc42764064750"
+    },
+    {
+      "file": "captures/s128-after-sgp-desktop-light.png",
+      "page": "/sgp-estimator — assumption-bound model signal",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "ea70b382db0420ec6673992fc10af1a01982ba3df9d81c758545dbdd472758e0"
+    },
+    {
+      "file": "captures/s128-after-teaser-desktop-light.png",
+      "page": "/teaser — assumption-bound model signal",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "e417e0e0358205ddd5cbec97bcbf4c3d3034f99882f8d103dd9bdac432b0752f"
+    },
+    {
+      "file": "captures/s128-after-scanner-mobile-dark.png",
+      "page": "/arb-scanner — build-capability-closed live state",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "d142bf0e5296e3c823ff5ebbdbb6e99ab8ece6a39abadda296deeb2b4a9dfc5f"
+      "sha256": "7853d0bf6b99e4fd3f1df98aba5190e9e6eba868ea0d6c8f5e3edab9b33d78a8"
     },
     {
-      "file": "captures/s127-after-track-mobile-light.png",
-      "page": "/edge-dashboard — evidence-thresholded recovery plan",
+      "file": "captures/s128-after-referral-mobile-dark.png",
+      "page": "/refer-earn — bounded gift and delivery truth",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "3755ec29ee2fa74a5f89851ea53f30f332a68f28f6efc366cbf6055ed20c8129"
+    },
+    {
+      "file": "captures/s128-after-tool-mix-mobile-dark.png",
+      "page": "/dashboard — evidence-bounded local tool mix",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "2c084c9b8e395bcd23e8591347eaf39990d12a0dac157527e076488d999ee01c"
+    },
+    {
+      "file": "captures/s128-after-arb-3way-mobile-dark.png",
+      "page": "/arb-3way — assumption-bound model signal",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "84204ae0665f6fc7baf94d0ccfd00a614e31b16f931f79f69924123e913269fd"
+    },
+    {
+      "file": "captures/s128-after-sgp-mobile-dark.png",
+      "page": "/sgp-estimator — assumption-bound model signal",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "bd20abc1c67fd1345970a990f708ed426b4936786637622c9016649a993a29e4"
+    },
+    {
+      "file": "captures/s128-after-teaser-mobile-dark.png",
+      "page": "/teaser — assumption-bound model signal",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "5b6e1b3cbbf4b56877f4e70a97fbc1f4d66ce53dc30645f743176cceeda02e15"
+    },
+    {
+      "file": "captures/s128-after-scanner-mobile-light.png",
+      "page": "/arb-scanner — build-capability-closed live state",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "0869b2cd6bd02640adce43a73828c625b7552a26ce893159ab762b1937b1dab2"
+      "sha256": "4539a659390d9175258079db71d3c7630535165c1b176f90f2aaa49f357a1857"
+    },
+    {
+      "file": "captures/s128-after-referral-mobile-light.png",
+      "page": "/refer-earn — bounded gift and delivery truth",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "ba8b061ab8908518992a5558ebef20afe0b184341fc0ef46430ac6232a87dc16"
+    },
+    {
+      "file": "captures/s128-after-tool-mix-mobile-light.png",
+      "page": "/dashboard — evidence-bounded local tool mix",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "c90d2f2da9f31f00f9369a7ec4466698950c5d899f450b1fa2c3a366332639b6"
+    },
+    {
+      "file": "captures/s128-after-arb-3way-mobile-light.png",
+      "page": "/arb-3way — assumption-bound model signal",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "e9e601a13607b395652e76b25043f52b4c46d5b1adb84983d604e500266a4d24"
+    },
+    {
+      "file": "captures/s128-after-sgp-mobile-light.png",
+      "page": "/sgp-estimator — assumption-bound model signal",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "17cf6e5248e29599864f9b51ebcca519b2b55fab0516d2c7db2a522ea082ccde"
+    },
+    {
+      "file": "captures/s128-after-teaser-mobile-light.png",
+      "page": "/teaser — assumption-bound model signal",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "4bdc0fe3cfc5019a22fafbe0eab1f9bac854b9a6c32565f865905a53bdc5920f"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex objective-pixel verifier (semantic viewer unavailable)",
     "findings": [
-      "Twenty real-Chromium captures are unique, opaque, non-blank, exact-size images with broad tonal ranges across all five touched surfaces.",
-      "All ten desktop/mobile theme pairs have distinct hashes and 185–219 mean-luminance separation, so dark and light states are not duplicate or collapsed renders.",
+      "Twenty-four real-Chromium captures are unique, opaque, nonblank, exact-size images with broad tonal ranges across all six touched surfaces.",
+      "All twelve desktop/mobile theme pairs have distinct hashes and pass the dark/light luminance-separation threshold.",
       "Capture-time browser assertions found every required decision state and no document-level horizontal overflow at 1440×1000 or 390×844.",
-      "The image viewer and in-app browser image return both failed Windows DPAPI initialization; this receipt records objective rendered-pixel and browser-state evidence, not semantic AI image judgment."
+      "The image viewer failed Windows DPAPI initialization; this receipt records objective rendered-pixel and browser-state evidence, not semantic AI image judgment."
     ],
     "fixesApplied": [
-      "Added calibrated act/verify/abstain Advisor posture with accessible receipt copy.",
-      "Replaced persisted synthetic ledger examples with quarantined, evidence-bound realized totals.",
-      "Added conservative exposure clusters and deterministic friction-recovery cards across dashboard and Track surfaces.",
-      "Added event metadata capture to Bet Tracker so concentration analysis has inspectable source evidence.",
-      "Corrected the S127 pixel auditor to consume Sharp's aggregate entropy field instead of producing false NaN failures."
+      "Bounded live-scanner availability to the reviewed build capability and rendered the production-default beta/setup state.",
+      "Separated referral attribution, gift-token issuance, provider acceptance, and sender-credit persistence into inspectable claims.",
+      "Reframed calculator frequency as a limited-sample local tool mix rather than a skill or performance profile.",
+      "Replaced authoritative play grades with assumption-bound model-signal receipts on three calculator surfaces.",
+      "Added deterministic real-browser fixtures and an objective pixel auditor for all S128 decision-truth surfaces."
     ],
     "blockingDefectsOpen": 0
   }

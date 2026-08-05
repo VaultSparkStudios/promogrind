@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { buildCacheKey, estimateAiSpendUsd, hasStreamingGateway, incrementDailyUsage, readDailyUsage, readTimedCache, recordAiSpend, streamProjectFunction, writeTimedCache } from "../ai/gateway.js";
 import { K, font, fontD } from "../lib/shared.js";
-import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
+import { getProjectAuthHref } from "../launchState.js";
 import { supabase, getSubscription } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { LoadingState } from "../ui.jsx";
@@ -76,7 +76,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
 
   const isLimited = dailyLimit !== Infinity && chatRemaining <= 0;
   const hasAccess = subPlan !== null && dailyLimit > 0;
-  const featureEnabled = promoChatEnabled || FEATURE_FLAGS.promoChat;
+  const featureEnabled = promoChatEnabled;
 
   const sendMessage = async () => {
     if (!chatInput.trim() || chatLoading || !session || !hasAccess || isLimited) return;

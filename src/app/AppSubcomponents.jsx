@@ -1,11 +1,13 @@
 import React from "react";
 import { supabase } from "../auth.js";
 import { S, K, font, fontD } from "../lib/shared.js";
+import { describeGiftReceipt, describeSenderBonus, REFERRAL_PROGRAM } from "../data/referralProgram.js";
 
 export function GiftTrialBox() {
   const [email, setEmail] = React.useState('');
   const [status, setStatus] = React.useState(null);
   const [giftLink, setGiftLink] = React.useState('');
+  const [receipt, setReceipt] = React.useState(null);
   const send = async () => {
     if (!email.includes('@')) return;
     setStatus('loading');
@@ -18,19 +20,21 @@ export function GiftTrialBox() {
       });
       if (error) throw error;
       setGiftLink(data?.giftUrl || '');
+      setReceipt(data || null);
       setStatus('sent');
     } catch (e) { setStatus('error'); }
   };
   if (status === 'sent') return (
     <div style={{padding:'10px 12px',background:'#1e3a2f',borderRadius:6,border:'1px solid #4ade8040'}}>
-      <div style={{fontSize:12,color:'#4ade80',fontWeight:700,marginBottom:6}}>✓ Gift sent to {email}</div>
+      <div role="status" style={{fontSize:12,color:'#4ade80',fontWeight:700,marginBottom:6}}>✓ {describeGiftReceipt(receipt).title}</div>
       {giftLink && <div style={{fontSize:10,color:'#64748b',wordBreak:'break-all'}}>Gift link: <span style={{color:'#60a5fa'}}>{giftLink}</span></div>}
-      <div style={{fontSize:11,color:'#94a3b8',marginTop:4}}>They'll get an email with 14-day Pro access. You earned 7 bonus days.</div>
+      <div style={{fontSize:11,color:'#94a3b8',marginTop:4}}>{describeGiftReceipt(receipt).detail} The token grants {REFERRAL_PROGRAM.gift.recipientDays} workspace days. {describeSenderBonus(receipt)}</div>
     </div>
   );
   return (
     <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-      <input type="email" placeholder="friend@email.com" value={email} onChange={e=>setEmail(e.target.value)}
+      <label htmlFor="gift-trial-email" style={{position:'absolute',width:1,height:1,overflow:'hidden',clip:'rect(0 0 0 0)'}}>Friend email address</label>
+      <input id="gift-trial-email" type="email" autoComplete="email" placeholder="friend@email.com" value={email} onChange={e=>setEmail(e.target.value)}
         style={{flex:1,minWidth:180,padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:6,color:'#e2e8f0',fontFamily:"'JetBrains Mono',monospace",fontSize:13,outline:'none',boxSizing:'border-box'}}
         onKeyDown={e=>e.key==='Enter'&&send()}
       />
@@ -39,6 +43,7 @@ export function GiftTrialBox() {
         {status==='loading'?'Sending…':'Send Gift →'}
       </button>
       {status==='error'&&<div style={{fontSize:11,color:'#f87171',width:'100%'}}>Failed — check the email or try again.</div>}
+      <div style={{fontSize:10,color:'#64748b',width:'100%'}}>Limit: {REFERRAL_PROGRAM.gift.limitCount} gift links per rolling {REFERRAL_PROGRAM.gift.limitWindowDays} days. {REFERRAL_PROGRAM.gift.providerScope}</div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toD, f, calcKelly, downloadFile, K, font, fontD, S } from "../lib/shared.js";
-import { supabase, startCheckout } from "../auth.js";
-import { FEATURE_FLAGS } from "../launchState.js";
+import { supabase } from "../auth.js";
 import { trackFeatureEnabledUse } from "../launchTelemetry.js";
 import { useToast } from "../contexts.jsx";
 import { FeatureUnavailableCard, LoadingState } from "../ui.jsx";
@@ -10,6 +9,7 @@ import { AppDataCtx } from "../contexts.jsx";
 import { appendWorkflow } from "../workflows/store.js";
 import { scannerOpportunityToWorkflow } from "../workflows/suggestions.js";
 import { createEntityId } from "../lib/entityId.js";
+import { analyzeEvOpportunities } from "../lib/quoteEvidence.js";
 
 const SPORTS_LIST = [
   { key:"americanfootball_nfl",  label:"NFL"  },
@@ -85,41 +85,12 @@ const detectArbs = (games) => {
   return opps.sort((a,b)=>parseFloat(b.roi)-parseFloat(a.roi));
 };
 
-const detectEV = (games) => {
-  const opps = [], seen = new Set();
-  for (const game of games) {
-    const evMktKeys = [...new Set((game.bookmakers||[]).flatMap(bm=>(bm.markets||[]).map(m=>m.key)))];
-    for (const mktKey of evMktKeys) {
-      for (const bm of (game.bookmakers||[])) {
-        const mkt = (bm.markets||[]).find(m=>m.key===mktKey);
-        if (!mkt) continue;
-        for (const outcome of mkt.outcomes) {
-          const ptKey = outcome.point!=null ? `_${outcome.point}` : '';
-          const allPrices = (game.bookmakers||[])
-            .map(b=>b.markets?.find(m=>m.key===mktKey)?.outcomes?.find(o=>o.name===outcome.name&&o.point===outcome.point)?.price)
-            .filter(Boolean).map(toD).filter(d=>d>1);
-          if (allPrices.length<2) continue;
-          const avgProb = allPrices.reduce((s,d)=>s+1/d,0)/allPrices.length;
-          const bd=toD(outcome.price); if(bd<=1) continue;
-          const ev=(avgProb*(bd-1)-(1-avgProb))*100;
-          const key=`${game.id}-${mktKey}-${outcome.name}${ptKey}-${bm.title}`;
-          const mktLabel = mktKey==='h2h'?'ML':mktKey==='totals'?`O/U ${outcome.point}`:`${outcome.point>0?'+':''}${outcome.point}`;
-          if (ev>2&&!seen.has(key)) { seen.add(key);
-            opps.push({ game:`${game.home_team} vs ${game.away_team}`, sport:game.sport_title, start:game.commence_time, outcome:`${outcome.name} (${mktLabel})`, book:bm.title, price:outcome.price, fairPct:f(avgProb*100,1), bookPct:f(100/bd,1), ev:f(ev,1) });
-          }
-        }
-      }
-    }
-  }
-  return opps.sort((a,b)=>parseFloat(b.ev)-parseFloat(a.ev)).slice(0,50);
-};
-
 const LiveScanner = ({ proStatus, mode }) => {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const { enabled: liveScannerEnabled } = useFeatureFlag("liveScanner", {
     tier: normalizeFeatureTier(proStatus?.plan),
   });
-  const featureEnabled = liveScannerEnabled || FEATURE_FLAGS.liveScanner;
+  const featureEnabled = liveScannerEnabled;
   useEffect(() => {
     if (!featureEnabled) return;
     trackFeatureEnabledUse('liveScanner', mode || 'live');
@@ -191,7 +162,7 @@ const LiveScanner = ({ proStatus, mode }) => {
         const data = await resp.json();
         allGames.push(...data);
       }
-      const newArbs=detectArbs(allGames); const newEvs=detectEV(allGames);
+      const newArbs=detectArbs(allGames); const newEvs=analyzeEvOpportunities(allGames,{now:new Date()}).opportunities;
       setGames(allGames); setArbs(newArbs); setEvs(newEvs); setUpdated(new Date());
       if(newArbs.length||newEvs.length) {
         const ts=new Date();
@@ -215,10 +186,9 @@ const LiveScanner = ({ proStatus, mode }) => {
     return ()=>clearInterval(intervalRef.current);
   },[sports,isActive,featureEnabled]);
 
-  const handleUpgrade = async () => {
+  const handleUpgrade = () => {
     setUpgrading(true);
-    await startCheckout();
-    setUpgrading(false);
+    window.location.hash = "/upgrade";
   };
 
   if (!featureEnabled) {
@@ -240,11 +210,11 @@ const LiveScanner = ({ proStatus, mode }) => {
   if (!isActive) return (
     <div style={S.card}>
       <div style={{marginBottom:16,padding:'12px 14px',background:`${K.gn}08`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-        <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>Live right now for VaultSparked members</div>
+        <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>Capability-controlled live workspace</div>
         <div style={{display:'flex',gap:20,alignItems:'center',flexWrap:'wrap'}}>
-          <div><div style={{fontSize:28,fontWeight:700,color:K.gn,fontFamily:fontD}}>{((new Date().getHours()*7+new Date().getMinutes())%8)+2}</div><div style={{fontSize:10,color:K.mt}}>arb opportunities</div></div>
-          <div><div style={{fontSize:28,fontWeight:700,color:K.ac,fontFamily:fontD}}>{((new Date().getHours()*11+new Date().getDate())%12)+5}</div><div style={{fontSize:10,color:K.mt}}>+EV picks</div></div>
-          <div style={{fontSize:11,color:K.dm,flex:1,minWidth:140,lineHeight:1.6}}>Members are scanning these right now. Upgrade to see the full list and get push alerts.</div>
+          <div><div style={{fontSize:22,fontWeight:700,color:K.gn,fontFamily:fontD}}>—</div><div style={{fontSize:10,color:K.mt}}>observed arbs</div></div>
+          <div><div style={{fontSize:22,fontWeight:700,color:K.ac,fontFamily:fontD}}>—</div><div style={{fontSize:10,color:K.mt}}>evidence-backed +EV</div></div>
+          <div style={{fontSize:11,color:K.dm,flex:1,minWidth:140,lineHeight:1.6}}>Counts appear only after an authenticated provider response. PromoGrind does not simulate live market activity.</div>
         </div>
       </div>
       <div style={{textAlign:"center",padding:"24px 16px"}}>
@@ -263,10 +233,10 @@ const LiveScanner = ({ proStatus, mode }) => {
         </div>
         <div style={{marginBottom:8}}>
           <button onClick={handleUpgrade} disabled={upgrading} style={{padding:"12px 28px",background:K.yl,border:"none",borderRadius:8,color: K.ink,fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:fontD,opacity:upgrading?0.7:1}}>
-            {upgrading?"Redirecting to checkout…":"Start 7-Day Free Trial →"}
+            {upgrading?"Opening availability…":"Review plans & availability →"}
           </button>
         </div>
-        <div style={{fontSize:11,color:K.mt}}>7 days free. No credit card required. $24.99/mo after trial. Cancel anytime.</div>
+        <div style={{fontSize:11,color:K.mt}}>Workspace trials do not activate provider-gated features unless their verified launch capability is live.</div>
       </div>
     </div>
   );
@@ -363,7 +333,8 @@ const LiveScanner = ({ proStatus, mode }) => {
               </div>
               <div style={{textAlign:"right",display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6}}>
                 <div style={{...S.big(K.gn),fontSize:20}}>+{r.ev}% EV</div>
-                <div style={{fontSize:10,color:K.mt}}>Fair: {r.fairPct}% · Book: {r.bookPct}%</div>
+                <div style={{fontSize:10,color:K.mt}}>Consensus: {r.fairPct}% · Quote: {r.bookPct}%</div>
+                <div style={{fontSize:9,color:K.dm}}>{r.evidence.sourceCount} independent books · no-vig · target excluded · {r.evidence.grade} evidence</div>
                 <div style={{display:"flex",gap:6}}>
                   <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
                   <button onClick={()=>logOpportunity(r,'ev')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>

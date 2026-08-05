@@ -2,7 +2,6 @@ import React from "react";
 import { supabase } from "../auth.js";
 import { invokeProjectFunction, readJsonCache, writeJsonCache } from "../ai/gateway.js";
 import { AppDataCtx, useToast } from "../contexts.jsx";
-import { FEATURE_FLAGS } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { K, font, fontD } from "../lib/shared.js";
 import { recommendationToWorkflow } from "../promograph/recommendations.js";
@@ -96,7 +95,7 @@ export function AIActionPlan({ proStatus }) {
     if (toast) toast(`Queued "${action.title}" in workflow inbox.`, K.gn);
   };
 
-  if (!actionPlanEnabled && !FEATURE_FLAGS.aiActionPlan) {
+  if (!actionPlanEnabled) {
     return <FeatureUnavailableCard featureKey="aiActionPlan" title="AI Weekly Action Plan" body="AI weekly plans stay in beta until the planning backend is activated." />;
   }
 

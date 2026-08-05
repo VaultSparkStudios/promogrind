@@ -14,6 +14,11 @@ const bad = [
   ["en", "Recurring profit is $300–$900/month for disciplined users."],
   ["en", "Matched betting and promo conversion are legal in states with online betting."],
   ["en", "All gambling winnings are taxable ordinary income."],
+  ["en", "Live right now for members — members are scanning these right now."],
+  ["en", "Gift sent to friend@example.com. They'll get an email with 14-day access."],
+  ["en", "You excel at promo conversion. Use this for maximum bankroll growth."],
+  ["en", "EXCELLENT PLAY — Promo quality score 92."],
+  ["en", "You both get 30 days free. No limit on referrals."],
 ];
 for (const [locale, text] of bad) {
   const findings = scanPublicClaimText(text, `${locale}.html`);
@@ -34,9 +39,10 @@ const structuralBad = [
   'Is PromoGrind legal? Yes. It is a calculator.',
   'Is this legal in my state? Yes, if online betting is legal where you live.',
   'OddsJam costs $99/mo for this feature.',
+  'const count=((new Date().getHours()*7+new Date().getMinutes())%8)+2; return `${count} arb opportunities`;',
 ];
 for (const text of structuralBad) assert.ok(scanPublicClaimDocument(text).length > 0, text);
 assert.equal(scanPublicClaimDocument('Eligibility and local law vary by jurisdiction. PromoGrind is not legal advice.').length, 0);
 assert.equal(scanPublicClaimDocument('Is this legal in my state? PromoGrind cannot determine that. Rules vary by jurisdiction; verify official regulator guidance. This is not legal advice.').length, 0);
 assert.equal(scanPublicClaimText('Tax treatment can depend on current rules and individual facts.').length, 0);
-console.log("public-claims regression: multilingual certainty, structural synthetic proof, categorical legal answers, and stale external prices blocked");
+console.log("public-claims regression: legal/outcome certainty, synthetic proof/liveness, delivery, usage-performance, play grades, referral limits, and stale prices blocked");

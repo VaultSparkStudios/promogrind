@@ -852,3 +852,33 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** repeated skip/friction reasons were counted but not closed into a safe next action.
 - **Decision:** select one recovery plan from canonical reason codes using thresholds, frequency, recency, stable ties, and route allowlists; realized profit is not an input.
 - **Consequence:** the feedback loop helps repair execution without rewarding betting volume or lucky outcomes.
+
+## 2026-08-04 — S128 compound decision evidence
+
+### Decision: rollout configuration may narrow but never create capability
+
+- **Status:** accepted
+- **Context:** a remote feature row could broaden a provider-backed or paid capability beyond the reviewed build's false launch ceiling.
+- **Decision:** make the immutable build flag the maximum authority; remote state can only narrow an enabled build through typed tier/cohort rules, with malformed rows failing closed.
+- **Consequence:** database drift cannot activate unbuilt commerce, provider, push, or Artificial Intelligence surfaces, and each denial remains inspectable.
+
+### Decision: market consensus requires distinct fresh identities and within-market normalization
+
+- **Status:** accepted
+- **Context:** raw implied probabilities included vig and the target quote in its own benchmark; duplicate rows could masquerade as independent evidence.
+- **Decision:** exclude the target source, normalize each paired market to no-vig probability, enforce freshness, deduplicate by bookmaker identity, and require at least two comparison identities.
+- **Consequence:** unsupported +EV stays suppressed and source count represents actual independence rather than row count.
+
+### Decision: a gift outcome is a chain of separate receipts
+
+- **Status:** accepted
+- **Context:** token issuance, provider acceptance, inbox delivery, and sender metadata persistence were collapsed into “sent” and credited-day claims.
+- **Decision:** expose each authority separately; provider acceptance is not inbox certainty, and sender days are claimed only after the metadata update succeeds.
+- **Consequence:** the product can return a useful gift link while remaining honest about delivery and reward uncertainty.
+
+### Decision: behavioral frequency and heuristic scores remain descriptive, not evaluative
+
+- **Status:** accepted
+- **Context:** calculator-use counts became skill personas and materially different models became authoritative play grades.
+- **Decision:** report tool mix with sample/confidence/distribution and model signals with basis/assumption/non-recommendation receipts.
+- **Consequence:** decision support remains useful without implying expertise, profit, probability, or validated action quality.

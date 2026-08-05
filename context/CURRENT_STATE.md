@@ -1,35 +1,35 @@
 # Current State — PromoGrind
 
-Last updated: 2026-08-04 (Session 127 recovery)
+Last updated: 2026-08-04 (Session 128)
 
-PromoGrind remains deployed/public-unlaunched in FORGE launch-hardening. The interrupted S127 mission has been recovered and completed: all five live-code-verified L3 items plus two repo-owned second-order verifier/dependency repairs are implemented. The refreshed Genius List contains only the external release gate.
+PromoGrind remains deployed/public-unlaunched in FORGE launch-hardening. S128 completed the full recovered `/start → /audit → /implement → /closeout` arc: all five premise-verified L3 items and all three repo-owned second-order refinements are shipped. The only remaining innovation candidate is real external launch evidence.
 
-Sync deletion now converges across devices. Seven merged collection domains carry monotonic tombstones through compact and legacy payloads; stale cloud rows cannot resurrect offline deletions, intentional newer edits can restore an entity, malformed clocks do not suppress real evidence, and old tombstones prune only after both sides prove absence.
+Capability authority now fails closed. The reviewed build declares the maximum for all protected features; remote rows may narrow enabled builds by tier or cohort but cannot broaden a disabled provider, billing, push, or Artificial Intelligence capability. Malformed rollout rows return typed denial reasons, and five consumers are mechanically barred from bypassing the policy.
 
-Ledger truth is evidence-bound. Historical demo/sample rows are quarantined before local or remote load and tombstoned against re-entry. One realized-evidence selector governs Ledger totals, dashboard summaries, Track insights, streaks, mastery, achievements, portfolio analysis, PromoGraph, and exports. The empty-state example is inert and quarantined rows remain inspectable without influencing profit claims.
+Live Scanner decisions are evidence-bound. A candidate requires a fresh target quote and at least two distinct fresh comparison books, each normalized within its own paired market to remove vig. The target source is excluded, duplicate bookmaker identities cannot inflate the threshold, unsupported candidates stay suppressed, and the locked/default states no longer fabricate market activity or checkout certainty.
 
-Advisor confidence is governed at the decision boundary. Raw model confidence, evidence grade, missing inputs, analysis provenance, and resolved Brier calibration now produce an explicit act/verify/abstain posture without inferring outcome probability. The accessible receipt persists into workflows; the forward-only Supabase migration is committed but remains undeployed until exact PromoGrind deployment authority is available.
+Referral and gift truth is decomposed into real authorities. Referral links record attribution without inventing free-day rewards. Gift links use one 14-recipient/7-sender/5-per-30-day contract. Token issuance, provider acceptance, inbox uncertainty, and sender-credit persistence are separate receipts; a failed metadata update cannot become credited days, and sender identity is absent from gift email copy.
 
-Decision safety now includes concentration topology and closed-loop friction recovery. Open positions are grouped conservatively by explicit or narrowly inferred event, market, and sportsbook labels, with gross/unnetted hedge and unknown-data disclosure. Repeated recent skip/friction reasons produce one deterministic, route-safe recovery plan ranked by frequency and recency rather than realized profit.
+Decision language is evidence-labeled. Calculator history yields a local tool-mix observation with sample, distribution, dominance, and limited confidence—not skill, profit, or outcome performance. Three calculators now show model-signal receipts with a named basis, assumption, bounded interpretation, and explicit non-recommendation posture instead of authoritative play grades.
 
-Verification is green. The direct full Vitest suite passes 97/97 files and 679/679 assertions. Studio Doctor passes 12/12 with blockingFailing 0. Twenty unique real-Chromium captures cover Advisor, Bet Tracker, Dashboard, Ledger, and Track across dark/light and desktop/mobile; exact dimensions, opacity, entropy/non-blankness, tonal range, required-state text, theme-pair separation, and horizontal-overflow assertions pass.
+The public-claim ratchet now covers 30 rules across 334 source files, including simulated liveness, collapsed delivery, usage-as-performance, play-grade certainty, and unbounded referral rewards. All fixtures and the full inventory pass.
 
-The S127 recovery also root-fixed the interrupted pixel auditor: Sharp exposes aggregate entropy in this runtime, while the draft verifier read nonexistent per-channel fields and falsely failed every capture. The corrected compatibility contract passes all 20 images. The local image viewer and in-app-browser image return both failed Windows DPAPI initialization, so semantic AI image judgment is explicitly unclaimed rather than fabricated.
+Rendered verification is hash-bound. Twenty-four unique real-Chromium captures cover Scanner, Referral, Tool Mix, three-way arbitrage, same-game parlay, and teaser states in dark/light at 1440×1000 and 390×844. Required-state, horizontal-overflow, exact dimensions, opacity, nonblankness, tonal range, hash uniqueness, and theme-pair separation all pass. The semantic image viewer remains unavailable because Windows DPAPI initialization fails, so semantic AI image judgment is explicitly unclaimed.
 
-The full launch gate then found a second execution-order defect: writing the canonical visual receipt did not regenerate its release-parity consumer. Visual receipt compilation and parity now share artifact preparation and atomic writers, and the producer refreshes parity in the same transaction. Focused compiler and freshness checks pass.
+Verification is green: 103/103 Vitest files and 705/705 assertions; 52/52 Edge tests with all 15 entrypoints typechecked; Studio Doctor 12/12 with `blockingFailing: 0`; and the full `npm run verify:launch-local` chain exits 0, including secrets, sanitizer, release controls, integrity, public claims, build/browser smoke, proof replay, and bundle budget.
 
-Release posture remains **NO-GO for SPARKED**. The generated gate is HOLD on stable staging and ten incomplete typed proofs. promogrind.supabase.deploy remains MISSING; the live Cloudflare target probe lacks response-header-rule authority (403); and the private canonical cost gate still reports AUDIT-PENDING/COST-BLEEDER while repo truth says trial-ceiling. These cross-repo/provider gaps remain explicit rather than being edited locally or treated as founder-blocked.
+Release posture remains **NO-GO for SPARKED**. The generated release gate is HOLD because stable staging is absent and ten typed blocking proofs remain incomplete. No local test or mock receipt is used to fabricate staging, response headers, credential remediation, exact Supabase deployment authority, Zoho/Obelisk identity, production auth/payment/friend/capture journeys, or founder approval.
 
 ## Honest deferrals
 
-- Stable remote staging and the six required hosting-edge response headers.
+- Stable remote staging and all six required hosting-edge response headers.
 - Historical credential rotation/remediation and exact target-bound PromoGrind Supabase deployment authority.
-- Cloudflare response-header-rule authorization and canonical cost-status reconciliation through the authorized control plane.
-- Zoho send/receive identity, live Obelisk delegation, auth-email, complete Stripe lifecycle, friend beta, capture observation, and founder launch approval.
-- Semantic AI image judgment for the S127 captures, pending a functioning image-capable tool path.
+- Zoho send/receive and reply identity, live Obelisk delegation, production auth email, complete Stripe lifecycle, friend beta, capture observation, and founder approval.
+- Studio-owned boolean `passIf` parser repair, routed through signed Ark cargo.
+- Semantic AI image judgment for S128 captures, pending a working image-return path.
 
 ## Next actions
 
-1. Establish a stable remote staging target and header-capable edge, then prove all six response headers.
-2. Resolve exact PromoGrind Supabase deploy authority and apply the pending target-pinned migrations/functions with receipts.
-3. Prove Zoho, Obelisk, auth-email, Stripe, friend, capture, credential-remediation, and founder-approval criteria individually before reassessing SPARKED.
+1. Establish stable staging plus a header-capable edge and prove all six delivered response headers.
+2. Resolve exact PromoGrind Supabase authority and apply only target-pinned migrations/functions with redacted receipts.
+3. Complete each remaining typed Zoho, Obelisk, auth, Stripe, friend, capture, remediation, and founder criterion before reassessing SPARKED.

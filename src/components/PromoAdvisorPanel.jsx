@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import { supabase } from "../auth.js";
 import { AppDataCtx } from "../contexts.jsx";
 import { buildCacheKey, estimateAiSpendUsd, getBudgetState, hasStreamingGateway, invokeProjectFunction, readDailyUsage, readTimedCache, recordAiSpend, streamProjectFunction, writeDailyUsage, writeTimedCache } from "../ai/gateway.js";
-import { FEATURE_FLAGS, getProjectAuthHref } from "../launchState.js";
+import { getProjectAuthHref } from "../launchState.js";
 import { FeatureUnavailableCard } from "../ui.jsx";
 import { useFeatureFlag } from "../lib/featureFlags.js";
 import { useToast } from "../contexts.jsx";
@@ -24,7 +24,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   const { appData, syncAppData } = React.useContext(AppDataCtx) || {};
   const signInHref = getProjectAuthHref('signin');
   const signUpHref = getProjectAuthHref('signup');
-  // Remote-overridable feature gate (falls back to build-time FEATURE_FLAGS.promoAdvisor)
+  // Remote rollout can narrow, but never broaden, the audited build capability.
   const { enabled: advisorEnabled } = useFeatureFlag('promoAdvisor');
   const isPro = proStatus?.status === 'active' || proStatus?.status === 'trial';
   const DAILY_LIMIT = isPro ? 9999 : 3;
@@ -49,7 +49,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   }, [result]);
 
   // Gate check after all hooks — safe per Rules of Hooks
-  if (!advisorEnabled && !FEATURE_FLAGS.promoAdvisor) {
+  if (!advisorEnabled) {
     return (
       <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
         <FeatureUnavailableCard featureKey="promoAdvisor" title="Promo Advisor" body="Promo Advisor will appear here once the AI explainer backend is activated." />

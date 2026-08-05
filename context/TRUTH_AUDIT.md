@@ -556,3 +556,16 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Rendered evidence truth: 20 unique real-Chromium captures pass dimensions, opacity, non-blank entropy, tonal range, theme-pair separation, required-state text, and horizontal-overflow assertions. Semantic AI image judgment remains unclaimed because both image-return paths failed Windows DPAPI initialization.
 - Derived visual truth is transactional: writing the canonical visual receipt now refreshes release-parity JSON/Markdown atomically, so capture updates cannot leave a stale green consumer.
 - Release truth remains FORGE HOLD: stable staging and ten typed proofs are incomplete, promogrind.supabase.deploy remains MISSING, Cloudflare header-rule authorization returns 403, and canonical cost status remains unreconciled with repo trial-ceiling truth.
+
+## 2026-08-04 — Session 128 Decision Truth Update
+
+- Capability truth is subtractive: remote data can narrow a reviewed build but cannot create a disabled provider, commerce, push, or Artificial Intelligence capability.
+- Quote truth requires a fresh target and two fresh distinct comparison bookmakers, with per-market vig removal and target exclusion. Duplicate rows do not increase independent-source count.
+- Scanner liveness truth no longer derives opportunity activity from the clock; unsupported provider states render capability/setup truth rather than synthetic counts.
+- Referral truth separates attribution from gift rewards. Gift truth separates token issuance, provider acceptance, inbox certainty, and sender-credit persistence; failed metadata writes claim no credit.
+- Profile truth describes only local calculator tool mix with explicit sample and non-performance posture.
+- Calculator signal truth names its heuristic basis and assumptions and explicitly refuses recommendation or outcome-probability meaning.
+- Claim-ratchet truth: 334 files pass 30 structural rules covering the repaired liveness, delivery, usage-performance, play-grade, and referral-limit classes.
+- Verification truth: 103/103 Vitest files and 705/705 assertions, 52/52 Edge tests, 15/15 entrypoints, Doctor 12/12 with `blockingFailing: 0`, and full launch-local direct exit 0.
+- Rendered evidence truth: 24 unique Chromium states across six surfaces, two themes, and two viewport classes pass objective pixel/browser-state checks and are hash-bound. Semantic AI image judgment remains unclaimed because Windows DPAPI blocks the viewer.
+- Release truth remains FORGE HOLD on stable staging and ten incomplete typed production proofs; repository correctness is not launch authority.

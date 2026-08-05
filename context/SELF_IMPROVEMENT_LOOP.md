@@ -1660,6 +1660,39 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 - Existing Now item: establish a true staging/header-capable edge and prove all six response headers. `[SIL]`
 - Existing Now item: obtain exact PromoGrind Supabase deploy authority and deploy only to the pinned project ref with a receipt. `[SIL]`
 
+## 2026-08-04 — Session 128 | Total: 998/1000 | Velocity: 8 | Debt: stable
+Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 99.3 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.3
+
+| Category | Score | vs Last | Notes |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | 103/103 files, 705/705 assertions, 52/52 Edge tests, all 15 entrypoints, build/browser smoke, and the complete launch-local gate pass. |
+| Creative Alignment | 100 | → | Decision surfaces become less certain as evidence weakens; no fabricated activity, skill, delivery, or action quality remains. |
+| Momentum | 100 | ↑ | Five verified L3 primaries and three repo-owned second-order refinements shipped; the actionable list is empty. |
+| Engagement | 100 | → | Tool mix and model signals remain informative without compulsion, profit pressure, or false authority. |
+| Process Quality | 99 | → | The continuous arc and all direct gates completed; semantic image viewing remains unavailable and honestly unclaimed. |
+| Cross-Repo Coherence | 100 | → | The Studio-owned boolean parser defect travels through Ark; no sibling tree was edited. |
+| Security Posture | 100 | → | Capability broadening fails closed; tracked secrets and strict sanitization are clean; no secret value entered output. |
+| Ecosystem Integration | 100 | → | Feature decisions, claim scanning, Edge receipts, rendered QA, release parity, and closeout share executable evidence. |
+| Capital Efficiency | 100 | → | No dependency or paid API was added; local browser proof reused the existing Chromium harness. |
+| Automation Coverage | 99 | → | Thirty claim rules and 24-state capture/pixel automation guard the work; semantic visual judgment remains a tool-path gap. |
+| **Total** | **998 / 1000** | | |
+
+**Top win:** compound evidence now includes capability authority, source identity, mathematical normalization, delivery authority, persistence, and assumptions rather than collapsing nearby signals into certainty.
+
+**Top gap:** SPARKED remains externally constrained by stable staging, headers, credential remediation, exact deployment authority, identity, and live user/provider proof.
+
+**Intent outcome:** Achieved. Every verified primary and generated repo-owned second-order item shipped; only honest external evidence remains.
+
+**Brainstorm**
+
+1. Generalize distinct-source identity receipts for any future multi-provider comparison feature.
+2. Add provider webhook delivery evidence only when a real transactional deployment exists; never infer inbox delivery from acceptance.
+3. Upstream boolean `passIf` support through the existing Ark defect receipt.
+
+**Committed follow-up(s):**
+- Existing Now item: establish stable staging/header control and prove all six response headers. `[SIL]`
+- Existing Now item: obtain exact PromoGrind Supabase authority and record only target-bound deployment proof. `[SIL]`
+
 ## 2026-08-04 — Session 127 Recovery | Total: 998/1000 | Velocity: 7 | Debt: stable
 
 | Category | Score | Trend | Evidence |

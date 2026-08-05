@@ -2,45 +2,46 @@
   "schemaVersion": 1,
   "themes": ["dark", "light"],
   "captures": [
-    {
-      "file": "captures/chat-after-desktop-dark.png",
-      "page": "/dashboard — consent-bound PromoChat, unchecked profile disclosure",
-      "theme": "dark",
-      "viewport": { "width": 1440, "height": 1000 }
-    },
-    {
-      "file": "captures/chat-after-desktop-light.png",
-      "page": "/dashboard — consent-bound PromoChat, semantic light palette",
-      "theme": "light",
-      "viewport": { "width": 1440, "height": 1000 }
-    },
-    {
-      "file": "captures/chat-after-mobile-dark.png",
-      "page": "/dashboard — full-screen mobile Chat consent boundary",
-      "theme": "dark",
-      "viewport": { "width": 390, "height": 844 }
-    },
-    {
-      "file": "captures/chat-after-mobile-light.png",
-      "page": "/dashboard — repaired full-screen mobile light Chat",
-      "theme": "light",
-      "viewport": { "width": 390, "height": 844 }
-    }
+    { "file": "captures/s128-after-scanner-desktop-dark.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-referral-desktop-dark.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-tool-mix-desktop-dark.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-arb-3way-desktop-dark.png", "page": "/arb-3way — assumption-bound model signal", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-sgp-desktop-dark.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-teaser-desktop-dark.png", "page": "/teaser — assumption-bound model signal", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-scanner-desktop-light.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-referral-desktop-light.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-tool-mix-desktop-light.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-arb-3way-desktop-light.png", "page": "/arb-3way — assumption-bound model signal", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-sgp-desktop-light.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-teaser-desktop-light.png", "page": "/teaser — assumption-bound model signal", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s128-after-scanner-mobile-dark.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-referral-mobile-dark.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-tool-mix-mobile-dark.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-arb-3way-mobile-dark.png", "page": "/arb-3way — assumption-bound model signal", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-sgp-mobile-dark.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-teaser-mobile-dark.png", "page": "/teaser — assumption-bound model signal", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-scanner-mobile-light.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-referral-mobile-light.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-tool-mix-mobile-light.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-arb-3way-mobile-light.png", "page": "/arb-3way — assumption-bound model signal", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-sgp-mobile-light.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "light", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s128-after-teaser-mobile-light.png", "page": "/teaser — assumption-bound model signal", "theme": "light", "viewport": { "width": 390, "height": 844 } }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex GPT-5",
+    "reviewer": "Codex objective-pixel verifier (semantic viewer unavailable)",
     "findings": [
-      "The before-fix mobile light capture exposed a dark transcript slab inside otherwise light controls, materially weakening empty-state readability and theme coherence.",
-      "After repair, desktop and mobile Chat surfaces use the active semantic palette in both themes with no horizontal overflow or clipped consent copy.",
-      "All four after captures visibly expose the optional bankroll/active-books disclosure and the personalization checkbox remains unchecked by default.",
-      "The input, send action, close action, usage state, and privacy disclosure remain reachable at 1440×1000 and 390×844."
+      "Twenty-four real-Chromium captures are unique, opaque, nonblank, exact-size images with broad tonal ranges across all six touched surfaces.",
+      "All twelve desktop/mobile theme pairs have distinct hashes and pass the dark/light luminance-separation threshold.",
+      "Capture-time browser assertions found every required decision state and no document-level horizontal overflow at 1440×1000 or 390×844.",
+      "The image viewer failed Windows DPAPI initialization; this receipt records objective rendered-pixel and browser-state evidence, not semantic AI image judgment."
     ],
     "fixesApplied": [
-      "Replaced PromoChat's hard-coded dark panel and border colors with render-time semantic theme tokens.",
-      "Added explicit accessible names to the floating Chat trigger, close control, and message input.",
-      "Added client/server redaction, versioned consent enforcement, bounded history/profile egress, and an inspectable privacy receipt.",
-      "Added a dependency-free isolated Chromium capture harness that asserts visible disclosure, unchecked consent, and viewport overflow before saving evidence."
+      "Bounded live-scanner availability to the reviewed build capability and rendered the production-default beta/setup state.",
+      "Separated referral attribution, gift-token issuance, provider acceptance, and sender-credit persistence into inspectable claims.",
+      "Reframed calculator frequency as a limited-sample local tool mix rather than a skill or performance profile.",
+      "Replaced authoritative play grades with assumption-bound model-signal receipts on three calculator surfaces.",
+      "Added deterministic real-browser fixtures and an objective pixel auditor for all S128 decision-truth surfaces."
     ],
     "blockingDefectsOpen": 0
   }

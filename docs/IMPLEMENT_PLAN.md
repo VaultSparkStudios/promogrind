@@ -1,38 +1,30 @@
-# PromoGrind Implementation Plan — Session 127
+# PromoGrind Implementation Plan — Session 128
 
-Source: docs/AUDIT_2026-08-04.json.
+Source: `docs/AUDIT_2026-08-04_S128.json`.
 
-All five premise-verified items target L3. The order is optimized for shared foundations and verification efficiency, not raw audit rank.
+All five premise-verified items target L3. Work is ordered by dependency and verification leverage.
 
-## Wave A — data truth foundations
+## Wave 1 — capability ceiling
 
-1. ✅ sync-deletion-convergence
-   - Establish monotonic collection tombstones before any new derived state is added.
-   - Verify focused sync/load/queue suites and adversarial multi-device convergence.
-2. ✅ ledger-evidence-boundary
-   - Establish one realized-evidence selector before risk, feedback, and Advisor surfaces consume new summaries.
-   - Verify ledger, insights, mastery, achievements, dashboard, export, and render contracts.
+1. [x] Make remote rollouts subtractive to the audited build capability ceiling.
+2. [x] Add typed reason receipts plus malformed/tier/cohort adversarial tests.
 
-## Wave B — decision intelligence
+## Wave 2 — quote evidence
 
-3. ✅ correlated-exposure-radar
-   - Build the pure cluster engine, then integrate risk radar and stress/discipline detail.
-4. ✅ friction-recovery-loop
-   - Build the pure intervention engine on canonical feedback aggregates, then integrate Track and Today.
-5. ✅ calibration-governed-advisor
-   - Build the pure governor on the existing Brier ledger and finish the shared UI pass in Advisor/workflow receipts.
+3. [x] Extract target-excluded, paired-market, no-vig quote evidence.
+4. [x] Remove time-seeded liveness and route locked users to capability-derived availability.
 
-## Wave C — verification
+## Wave 3 — referral truth
 
-- Run focused tests after every item and the direct full Vitest suite after the primary wave.
-- Run build, route/accessibility, public claims, release surface, and launch-local gates.
-- Because four items touch rendered UI, capture and inspect affected dark/light desktop/mobile states, repair defects, and write a hash-bound CANON-053 receipt.
-- Mark shipped only after behavior and evidence agree; partial work is blocked, never done.
+5. [x] Establish one 14/7-day, five-per-30-day gift contract.
+6. [x] Return and render token-versus-delivery receipts; remove invented reward totals and identity leakage.
 
-## Recovery verification
+## Wave 4 — decision language
 
-- Primary implementation: 5/5 L3 items shipped; 2/2 verifier/dependency refinements shipped during recovery replay.
-- Focused and full behavior: 97/97 Vitest files, 679/679 assertions.
-- Rendered evidence: 20 unique real-Chromium captures across five touched states, desktop/mobile and dark/light; capture-time required-state and overflow assertions pass.
-- Objective pixel audit: dimensions, opacity, entropy/non-blankness, tonal range, and all 10 dark/light pairs pass after repairing the interrupted verifier's Sharp entropy contract.
-- Honest limitation: the local image viewer and in-app browser image return failed Windows DPAPI initialization, so the receipt does not claim semantic AI image judgment.
+7. [x] Replace skill personas with evidence-labeled tool-mix observations.
+8. [x] Replace Juice Score play grades with assumption-bound model-signal receipts.
+
+## Wave 5 — ratchet and proof
+
+9. [x] Extend the public-claim contract for repaired liveness, delivery, profile, and model-grade classes.
+10. [x] Capture desktop/mobile dark/light states, run objective pixel inspection, full launch-local, Doctor, security, writeback, and closeout.

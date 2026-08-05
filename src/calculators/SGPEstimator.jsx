@@ -52,10 +52,10 @@ export default function SGPEstimator() {
             <RR l="Independent Parlay Odds (fair)" v={`${r.indOdds} (${r.indD}x)`} c={K.ac} />
             <RR l="Book's SGP Odds" v={`${sgpOdds} (${r.sgpD}x)`} c={K.tx} />
             <RR l="SGP Discount vs Fair" v={`${r.discount}%`} c={parseFloat(r.discount) > 20 ? K.rd : parseFloat(r.discount) > 10 ? K.yl : K.gn} b />
-            <RR l="True Win Probability" v={`${r.prob}%`} c={K.dm} />
+            <RR l="Independent-model Win Probability" v={`${r.prob}%`} c={K.dm} />
             {parseFloat(r.discount) > 25 && <Nt c={K.rd}>This SGP is priced 25%+ below fair value. The book is heavily discounting for leg correlation. Look for better-priced SGPs or use the individual legs separately.</Nt>}
-            {parseFloat(r.discount) <= 10 && r.ok && <Nt c={K.gn}>Low discount — this SGP is priced close to fair value with positive EV. Rare. Consider placing it.</Nt>}
-            {r.ok && <JuiceScore score={juiceFromEVPct(Math.min(15, Math.max(0, 10 - parseFloat(r.discount || 10))))} />}
+            {parseFloat(r.discount) <= 10 && r.ok && <Nt c={K.gn}>The independent-leg model is positive under these inputs. Verify correlation, limits, and the live price before deciding.</Nt>}
+            {r.ok && <JuiceScore score={juiceFromEVPct(Math.min(15, Math.max(0, 10 - parseFloat(r.discount || 10))))} basis="Independent-leg price comparison" assumption="Legs are treated as independent; unmodeled correlation can materially change fair value." />}
             {showReceipt && (
               <CalculatorReceipt
                 calcName="SGP EV Estimator"
@@ -67,7 +67,7 @@ export default function SGPEstimator() {
                 outputs={[
                   { label: "Fair Parlay Odds", value: r.indOdds },
                   { label: "SGP Discount vs Fair", value: `${r.discount}%` },
-                  { label: "True Win Probability", value: `${r.prob}%` },
+                  { label: "Independent-model Win Probability", value: `${r.prob}%` },
                   { label: "Expected Value", value: `${r.ok ? "+" : ""}$${r.ev}`, highlight: true },
                 ]}
                 disclaimer="Assumes independent legs. Correlated legs reduce true fair value further."

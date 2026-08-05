@@ -1,36 +1,40 @@
 # Release Parity Evidence
 
-> Generated from typed receipts: 2026-08-04T21:22:15.970Z · visual inspected · defects 0
+> Generated from typed receipts: 2026-08-05T02:08:08.183Z · visual inspected · defects 0
 
 ## Browser matrix
 
 | Viewport | Theme | Artifact | SHA-256 |
 |---|---|---|---|
-| 1440 × 1000 | dark | `captures/s127-after-advisor-desktop-dark.png` | `92dde2331dfdee531392df87a8803bf94a2d2044aeeb6a8608ab478f9595edbb` |
-| 1440 × 1000 | light | `captures/s127-after-advisor-desktop-light.png` | `15074d9fd5fdcbb6a0758a6e61562cece25fcab722891d12892827d1f19b8242` |
-| 390 × 844 | dark | `captures/s127-after-advisor-mobile-dark.png` | `1507c57b5a9fa54d0786f406b42ff16ce466e3a71569c726f8694a5508a4b013` |
-| 390 × 844 | light | `captures/s127-after-advisor-mobile-light.png` | `78ad4912c166a0fcf07766fd1ccfeaac13472e10fb6891e573eb83ea050e9db2` |
-| 1440 × 1000 | dark | `captures/s127-after-bet-tracker-desktop-dark.png` | `7d8b8ed505e5693f028e3387f90f0cb970352c269d2f6d29325a7fc6e7b4e392` |
-| 1440 × 1000 | light | `captures/s127-after-bet-tracker-desktop-light.png` | `f1f02d433ae6e5983f814fa7a6202f7253c45234115b50a51657092e3685e0c2` |
-| 390 × 844 | dark | `captures/s127-after-bet-tracker-mobile-dark.png` | `7f14cbc8194e1ae7242829c1250507d9b218255df370a88d195c2d2e3d2ea65d` |
-| 390 × 844 | light | `captures/s127-after-bet-tracker-mobile-light.png` | `ee6904928c9e85060484e049ef67f8b4dcd01168b88b23c66cea7379f710d3a4` |
-| 1440 × 1000 | dark | `captures/s127-after-dashboard-desktop-dark.png` | `c4d8575c196430990072bea63d45595c11577de81821a78009305c91204fca3c` |
-| 1440 × 1000 | light | `captures/s127-after-dashboard-desktop-light.png` | `32168576a70e4d5118f6f4d639eec056613f9630f49c3295bd9ae3ee59a49fee` |
-| 390 × 844 | dark | `captures/s127-after-dashboard-mobile-dark.png` | `0108116c7c1e941fcc006fee513a270a05b7a2e62e9d78b325d3670c115b8dec` |
-| 390 × 844 | light | `captures/s127-after-dashboard-mobile-light.png` | `8013a6b4a19b6b9be6ef6d7d96ce73b67ac7912335f19017ed46df659f8c76bc` |
-| 1440 × 1000 | dark | `captures/s127-after-ledger-desktop-dark.png` | `21a2e5f914d964a831e8884b845423bb63938f2643216ec1e2724526b5334aa8` |
-| 1440 × 1000 | light | `captures/s127-after-ledger-desktop-light.png` | `8924d7d0211ba44bcd938832abb0fbe2244daedea4ed679d96c81bffe828b4f5` |
-| 390 × 844 | dark | `captures/s127-after-ledger-mobile-dark.png` | `b1ac79e5063726fecadfd828c2829404facb7ef7a8b66097636d53d157c77b55` |
-| 390 × 844 | light | `captures/s127-after-ledger-mobile-light.png` | `a274e14c60890b89637eab62c2f4a7c4b54d56ed238952caf5f3174674c4796c` |
-| 1440 × 1000 | dark | `captures/s127-after-track-desktop-dark.png` | `5f7d17c6652d984bbf75ca6abc719a2af102d877de9fcb98161cc02dec99921c` |
-| 1440 × 1000 | light | `captures/s127-after-track-desktop-light.png` | `4c8678972be84b3a6fc4df7cde88755a11e334b75c746b68ea1e88c7fb3ba08a` |
-| 390 × 844 | dark | `captures/s127-after-track-mobile-dark.png` | `d142bf0e5296e3c823ff5ebbdbb6e99ab8ece6a39abadda296deeb2b4a9dfc5f` |
-| 390 × 844 | light | `captures/s127-after-track-mobile-light.png` | `0869b2cd6bd02640adce43a73828c625b7552a26ce893159ab762b1937b1dab2` |
+| 1440 × 1000 | dark | `captures/s128-after-scanner-desktop-dark.png` | `a9b31e69de72f59d90271d33045d04da35b5b3f234c4c0312b0e798e8f54fc1d` |
+| 1440 × 1000 | dark | `captures/s128-after-referral-desktop-dark.png` | `0e4fa895dc132622273c9636aa19bdb6cbc408e6242c7e7c530f85b7bca39b8f` |
+| 1440 × 1000 | dark | `captures/s128-after-tool-mix-desktop-dark.png` | `26857720c060aa77f58857d0a1e4186c0b9004283e5b398cf5382608e07027ac` |
+| 1440 × 1000 | dark | `captures/s128-after-arb-3way-desktop-dark.png` | `8a4656c0054455012702e035d644036cdf9474b19e7f81643584fa3c5130e315` |
+| 1440 × 1000 | dark | `captures/s128-after-sgp-desktop-dark.png` | `4af991e957cdd98f431c3ebfe64cf255fa3a4a580242e4257a8988d8784dd568` |
+| 1440 × 1000 | dark | `captures/s128-after-teaser-desktop-dark.png` | `2e95442814b8765168ed0a4ff0427b2ecd5bb9a7f239877dc5e4b4a0c6ba210b` |
+| 1440 × 1000 | light | `captures/s128-after-scanner-desktop-light.png` | `6093b2fb310c32a4413fa6f60c0d50797dc174f2b5c563abd5d2fb6a8a3413a4` |
+| 1440 × 1000 | light | `captures/s128-after-referral-desktop-light.png` | `60b04479ded703406b1616943f9cd5c42dc00804712eee382d56e9574892520d` |
+| 1440 × 1000 | light | `captures/s128-after-tool-mix-desktop-light.png` | `2e7690bdb0c585100da7b1f0828964fd501428e2097d7e5d85e90879a0eaa845` |
+| 1440 × 1000 | light | `captures/s128-after-arb-3way-desktop-light.png` | `821779fd522022cf6fc63d25adbb30c6596b31e7fbd8b96dce8fc42764064750` |
+| 1440 × 1000 | light | `captures/s128-after-sgp-desktop-light.png` | `ea70b382db0420ec6673992fc10af1a01982ba3df9d81c758545dbdd472758e0` |
+| 1440 × 1000 | light | `captures/s128-after-teaser-desktop-light.png` | `e417e0e0358205ddd5cbec97bcbf4c3d3034f99882f8d103dd9bdac432b0752f` |
+| 390 × 844 | dark | `captures/s128-after-scanner-mobile-dark.png` | `7853d0bf6b99e4fd3f1df98aba5190e9e6eba868ea0d6c8f5e3edab9b33d78a8` |
+| 390 × 844 | dark | `captures/s128-after-referral-mobile-dark.png` | `3755ec29ee2fa74a5f89851ea53f30f332a68f28f6efc366cbf6055ed20c8129` |
+| 390 × 844 | dark | `captures/s128-after-tool-mix-mobile-dark.png` | `2c084c9b8e395bcd23e8591347eaf39990d12a0dac157527e076488d999ee01c` |
+| 390 × 844 | dark | `captures/s128-after-arb-3way-mobile-dark.png` | `84204ae0665f6fc7baf94d0ccfd00a614e31b16f931f79f69924123e913269fd` |
+| 390 × 844 | dark | `captures/s128-after-sgp-mobile-dark.png` | `bd20abc1c67fd1345970a990f708ed426b4936786637622c9016649a993a29e4` |
+| 390 × 844 | dark | `captures/s128-after-teaser-mobile-dark.png` | `5b6e1b3cbbf4b56877f4e70a97fbc1f4d66ce53dc30645f743176cceeda02e15` |
+| 390 × 844 | light | `captures/s128-after-scanner-mobile-light.png` | `4539a659390d9175258079db71d3c7630535165c1b176f90f2aaa49f357a1857` |
+| 390 × 844 | light | `captures/s128-after-referral-mobile-light.png` | `ba8b061ab8908518992a5558ebef20afe0b184341fc0ef46430ac6232a87dc16` |
+| 390 × 844 | light | `captures/s128-after-tool-mix-mobile-light.png` | `c90d2f2da9f31f00f9369a7ec4466698950c5d899f450b1fa2c3a366332639b6` |
+| 390 × 844 | light | `captures/s128-after-arb-3way-mobile-light.png` | `e9e601a13607b395652e76b25043f52b4c46d5b1adb84983d604e500266a4d24` |
+| 390 × 844 | light | `captures/s128-after-sgp-mobile-light.png` | `17cf6e5248e29599864f9b51ebcca519b2b55fab0516d2c7db2a522ea082ccde` |
+| 390 × 844 | light | `captures/s128-after-teaser-mobile-light.png` | `4bdc0fe3cfc5019a22fafbe0eab1f9bac854b9a6c32565f865905a53bdc5920f` |
 
 ## Evidence state
 
 - Pixel inspection: **COMPLETE** · blocking defects: 0
-- Tests: **GREEN** · 97/97 files · 679/679 assertions
+- Tests: **GREEN** · 103/103 files · 705/705 assertions
 - Native applicability: **planned-no-native-projects**
 
 Native parity is not claimed from Capacitor configuration alone; an iOS or Android project directory plus rendered evidence is required.

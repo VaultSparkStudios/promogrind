@@ -1,6 +1,6 @@
 # Release Gates
 
-> Generated: 2026-08-04 · Ready: 0 · Review: 0 · Hold: 1
+> Generated: 2026-08-05 · Ready: 0 · Review: 0 · Hold: 1
 
 | Project | Public-facing | Decision | Open gates |
 |---|---|---|---|

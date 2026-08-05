@@ -16,10 +16,11 @@ function PlayStyleCard({ navigate }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 220 }}>
           <div style={{ fontSize: 10, color: K.pp, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 4 }}>
-            {profile.icon} Your Play Style
+            {profile.icon} Your Tool Mix
           </div>
           <div style={{ fontFamily: fontD, fontSize: 15, fontWeight: 800, color: K.tx, marginBottom: 3 }}>{profile.label}</div>
           <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>{profile.tip}</div>
+          <div style={{ fontSize: 9, color: K.mt, lineHeight: 1.5, marginTop: 4 }}>{profile.evidence.sampleCount} local calculator record{profile.evidence.sampleCount === 1 ? "" : "s"} · {profile.evidence.confidence.replace(/-/g, " ")} · {profile.disclaimer}</div>
         </div>
         <button
           onClick={() => navigate(`/${profile.nextCalc}`)}

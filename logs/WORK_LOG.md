@@ -697,3 +697,18 @@ Append chronological entries.
 - Refreshed the Genius List and innovation pack. The only remaining candidate is the external release gate; blocker preflight found no mislabeled human item and promogrind.supabase.deploy remains MISSING.
 - Release remains FORGE HOLD on stable staging and ten incomplete typed proofs; no external proof, paid call, dependency, secret, sibling-tree edit, SPARKED claim, or force operation was introduced.
 - Read-only release-gate probing further confirmed Cloudflare header-rule scope 403 and a canonical cost-status conflict; both stay control-plane/provider work and will be routed without sibling-tree edits.
+
+## 2026-08-04 — Session 128 Codex decision-truth saturation
+
+- Ran the fresh S128 `/start → /audit → /implement → /closeout` mission after the recovered S127 checkpoint reached `origin/main`.
+- Premise-verified 31 candidates, selected five repo-owned L3 items, and shipped all five: capability ceiling, quote-evidence Scanner, referral delivery/persistence truth, tool-mix observation, and model-signal receipts.
+- Made remote feature rollouts subtractive to the reviewed build capability and removed five raw build-flag bypasses.
+- Replaced Scanner self-benchmarking and simulated liveness with fresh target-excluded, per-book no-vig consensus from distinct bookmaker identities.
+- Unified gift terms at 14 recipient days, a 7-day sender-credit attempt, and five gifts per 30 days; token, provider, inbox, and persistence outcomes are separate receipts.
+- Reframed calculator frequency as a limited-sample tool mix and replaced authoritative play grades with named-basis, named-assumption model signals.
+- Shipped three second-order refinements: a 30-rule/334-file claim ratchet, duplicate-source plus swallowed-persistence repair, and a 24-state real-browser proof harness.
+- Captured six touched surfaces in dark/light at 1440×1000 and 390×844. All 24 exact PNGs are unique and pass required-state, overflow, dimension, opacity, nonblank, tonal-range, and theme-pair checks.
+- Preserved visual honesty: the image viewer failed Windows DPAPI initialization, so objective pixel/browser-state proof is recorded without claiming semantic AI viewing.
+- Verification passed: 103/103 Vitest files, 705/705 assertions, 52/52 Edge tests, all 15 Edge entrypoints, Doctor 12/12 with `blockingFailing: 0`, and full `verify:launch-local` direct exit 0.
+- Release remains FORGE HOLD on stable staging plus ten incomplete typed production proofs; no external fact, secret, dependency, provider enablement, sibling edit, or force operation was introduced.
+- Routed the Studio-owned boolean `passIf` conformance parser defect through signed Ark repo-question `01JV7RIVGHAC08EF1903E27E52`; no cross-repo file mutation occurred.

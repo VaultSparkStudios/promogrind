@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../auth.js";
 import { FEATURE_FLAGS } from "../launchState.js";
+import { normalizeFeatureTier, resolveFlagDecision } from "./featureFlagPolicy.js";
+
+export { normalizeFeatureTier, resolveFlagDecision } from "./featureFlagPolicy.js";
 
 const CACHE_KEY = "pg_feature_flags_cache";
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
@@ -36,61 +39,15 @@ export async function fetchRemoteFlags() {
   }
 }
 
-export function normalizeFeatureTier(tier) {
-  const normalized = String(tier || "free").toLowerCase();
-  if (["house"].includes(normalized)) return "house";
-  if (["closer", "vault_sparked"].includes(normalized)) return "closer";
-  if (["runner", "pro", "sharp"].includes(normalized)) return "runner";
-  if (["scout", "grinder", "concierge"].includes(normalized)) return "scout";
-  return "free";
-}
-
-/**
- * Deterministic hash of a string → integer in range [0, 100).
- * Same userId always maps to the same bucket, enabling stable percentage rollouts.
- */
-function stableHash(s) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = (h * 0x01000193) >>> 0;
-  }
-  return h % 100;
-}
-
 /** Resolve effective flag value for a user.
- *  Remote overrides build-time defaults. Tier + cohort gates applied client-side.
+ *  The build declares the maximum capability. Remote state can only narrow that
+ *  ceiling with tier/cohort rollout rules; it can never broaden a disabled build.
  *  Cohort supports:
  *    - Array<string> (exact userId match, existing behavior)
  *    - { type: "percentage", value: N } — stable N% rollout by userId hash
  */
 export function resolveFlag(key, remoteFlags, userTier, userId) {
-  const buildDefault = !!FEATURE_FLAGS[key];
-  if (!remoteFlags || !(key in remoteFlags)) return buildDefault;
-
-  const flag = remoteFlags[key];
-  if (!flag.enabled) return false;
-
-  // Cohort gate
-  if (flag.cohort) {
-    if (Array.isArray(flag.cohort) && flag.cohort.length > 0) {
-      if (!userId || !flag.cohort.includes(userId)) return false;
-    } else if (flag.cohort && typeof flag.cohort === "object" && flag.cohort.type === "percentage") {
-      const pct = Number(flag.cohort.value) || 0;
-      if (!userId) return false;
-      if (stableHash(key + ":" + userId) >= pct) return false;
-    }
-  }
-
-  // Tier gate
-  const tierOrder = ["free", "scout", "runner", "closer", "house"];
-  if (flag.min_tier) {
-    const minIdx = tierOrder.indexOf(flag.min_tier);
-    const userIdx = tierOrder.indexOf(normalizeFeatureTier(userTier));
-    if (userIdx < minIdx) return false;
-  }
-
-  return true;
+  return resolveFlagDecision(key, remoteFlags, userTier, userId, FEATURE_FLAGS).enabled;
 }
 
 /**
@@ -112,10 +69,8 @@ export function useFeatureFlag(key, { tier = "free", userId = null } = {}) {
     });
   }, []);
 
-  return {
-    enabled: resolveFlag(key, remoteFlags, tier, userId),
-    loading,
-  };
+  const decision = resolveFlagDecision(key, remoteFlags, tier, userId, FEATURE_FLAGS);
+  return { ...decision, loading };
 }
 
 /** Invalidate the client-side flag cache (call after admin saves a flag). */

@@ -36,16 +36,24 @@ export function juiceFromEVPct(evPct) {
   return Math.max(5, Math.round(45 + e * 4));
 }
 
-export function juiceLabel(score) {
-  if (score >= 80) return "EXCELLENT";
-  if (score >= 60) return "GOOD";
-  if (score >= 40) return "FAIR";
-  return "POOR";
-}
-
 export function juiceColor(score) {
   if (score >= 80) return "#4ade80";
   if (score >= 60) return "#fbbf24";
   if (score >= 40) return "#f97316";
   return "#f87171";
+}
+
+export function buildModelSignal({ score, basis, assumption }) {
+  const boundedScore = Math.max(0, Math.min(100, Math.round(Number(score) || 0)));
+  const band = boundedScore >= 80 ? "higher" : boundedScore >= 60 ? "moderate" : boundedScore >= 40 ? "mixed" : "lower";
+  return {
+    schemaVersion: 1,
+    score: boundedScore,
+    band,
+    label: `${band.toUpperCase()} MODEL SIGNAL`,
+    basis: String(basis || "Calculator model output"),
+    assumption: String(assumption || "The supplied inputs and model assumptions remain valid."),
+    confidence: "assumption-bound",
+    interpretation: "Relative model signal only — not a recommendation or outcome probability.",
+  };
 }

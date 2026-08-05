@@ -1,11 +1,10 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-04T21:47:53.721Z",
+  "generatedAt": "2026-08-05T02:15:00.000Z",
   "project": "PromoGrind",
-  "session": 127,
+  "session": 128,
   "sourceSignals": {
-    "geniusListEmpty": false,
-    "taskBoardBytes": 86963,
+    "geniusListEmpty": true,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
@@ -14,34 +13,47 @@
     "cdpHarnessCopies": 0,
     "largeFiles": 0,
     "launchDeferrals": 6,
-    "secondOrderShipped": 2
+    "secondOrderShipped": 3
   },
   "ranked": [
     {
       "status": "shipped",
-      "effort": "small",
-      "effortHours": 1,
-      "priority": 46,
-      "id": "visual-parity-dependent-transaction",
-      "tier": "⚡",
-      "axis": "observability / dependency order",
+      "effort": "repo-owned",
+      "effortHours": 3,
+      "priority": 54,
+      "id": "decision-claim-ratchet",
+      "tier": "high",
+      "axis": "truth / regression prevention",
       "impact": 9,
-      "innovation": 7,
-      "evidence": "The complete launch gate proved that writing a fresh canonical visual receipt could leave release-parity JSON and Markdown stale.",
-      "recipe": "Share artifact preparation and atomic writers, then refresh parity inside the visual-receipt producer transaction and regression-test the written outputs."
+      "innovation": 9,
+      "evidence": "Thirty rules now scan 334 source files; repaired liveness, delivery, usage-performance, model-grade, and reward-limit claims are fixture-backed.",
+      "recipe": "Reject each repaired claim class at the source boundary and bind the receipt to the exact inventory hash."
     },
     {
       "status": "shipped",
-      "effort": "small",
-      "effortHours": 0.5,
-      "priority": 44,
-      "id": "s127-pixel-audit-entropy-contract",
-      "tier": "⚡",
-      "axis": "verification / rendered-pixel observability",
+      "effort": "repo-owned",
+      "effortHours": 2,
+      "priority": 49,
+      "id": "source-independence-and-persistence-refinement",
+      "tier": "high",
+      "axis": "mathematical truth / commerce truth",
+      "impact": 9,
+      "innovation": 8,
+      "evidence": "Duplicate bookmaker rows fail the independent-source threshold; sender bonus responses report recorded only after metadata persistence succeeds.",
+      "recipe": "Make identity and persistence explicit parts of every compound evidence claim."
+    },
+    {
+      "status": "shipped",
+      "effort": "repo-owned",
+      "effortHours": 3,
+      "priority": 43,
+      "id": "s128-rendered-proof-harness",
+      "tier": "high",
+      "axis": "rendered UX / observability",
       "impact": 8,
-      "innovation": 7,
-      "evidence": "Recovery replay found all 20 valid captures falsely red because the verifier read nonexistent per-channel Sharp entropy and serialized NaN as null.",
-      "recipe": "Use Sharp's canonical aggregate entropy with a guarded per-channel compatibility fallback, then require every capture and dark/light pair to pass."
+      "innovation": 9,
+      "evidence": "24 unique Chromium captures cover six decision-truth surfaces in dark/light and desktop/mobile; pixel, theme-pair, required-state, and overflow checks pass.",
+      "recipe": "Use deterministic positive/negative fixtures and hash exact rendered bytes into release parity."
     },
     {
       "status": "honest-deferral",
@@ -53,8 +65,8 @@
       "axis": "truth / launch-readiness",
       "impact": 10,
       "innovation": 1,
-      "evidence": "6 real-world proof gates remain in PROJECT_STATUS.blockers.",
-      "recipe": "Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists."
+      "evidence": "Stable staging plus ten typed blocking production proofs remain incomplete.",
+      "recipe": "Do not fabricate proof; keep each criterion pending until a real redacted observation exists."
     }
   ],
   "evidence": {
@@ -63,12 +75,12 @@
     "todoSignals": [],
     "largeFiles": [],
     "launchDeferrals": [
-      "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
-      "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
-      "Production auth confirmation/resend/reset/recovery delivery proof is pending.",
-      "Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending.",
-      "One friend-facing auth/recovery/calculator/pricing pass is pending.",
-      "Capture submission and observable lead-row criteria remain pending."
+      "No true remote staging environment is configured.",
+      "Zoho delivery and reply identity remain unproved.",
+      "Production auth email proof remains pending.",
+      "Real Stripe lifecycle proof remains pending.",
+      "One friend-facing beta proof remains pending.",
+      "Capture submission and lead-row proof remain pending."
     ]
   }
 }
