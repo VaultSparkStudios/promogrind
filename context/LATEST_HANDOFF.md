@@ -26,6 +26,7 @@
 - `node scripts/run-doctor.mjs --json`: 12/12; `overallPass: true`; `blockingFailing: 0`.
 - `npm run verify:launch-local`: direct exit 0 across the full aggregate chain.
 - `docs/visual-qa/LATEST.json`: 24 hash-bound captures; both themes and both target viewport classes present.
+- Remote `8e38efb`: CI `30969391522` and brief-format `30969391495` passed. Deploy run `30969391523` attested and deployed the artifact, then passed production launch, disposable-user auth/checkout/cleanup, dashboard smoke, and standard files; the terminal red preserves six missing headers and one nonblocking affiliate-coverage advisory.
 - Honest limitation: Windows DPAPI prevents semantic image return, so semantic AI viewing is not claimed.
 
 ## Current intent

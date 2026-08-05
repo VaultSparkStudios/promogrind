@@ -35,6 +35,7 @@
     "visualQa": "24 unique real-Chromium captures; 6 surfaces; dark/light; desktop/mobile; objective pixel and browser-state checks pass",
     "visualLimitation": "Windows DPAPI initialization prevents semantic image return; no semantic AI image-review claim",
     "launchLocal": "full aggregate chain direct exit 0",
+    "remote": "8e38efb on origin/main; CI 30969391522 and brief 30969391495 passed; Deploy Pages 30969391523 deployed and passed production launch/dashboard/standard files, then held red on six headers plus one affiliate advisory",
     "releaseGate": "HOLD; stable staging plus 10 typed blocking proofs incomplete",
     "innovation": "5/5 primary L3 items plus 3/3 repo-owned second-order refinements; external-only remainder"
   },

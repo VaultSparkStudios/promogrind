@@ -1,5 +1,5 @@
 <!-- generated-by: manual closeout fallback (no paid API) -->
-<!-- source-hash: f04a5210a9b5 -->
+<!-- source-hash: 0db126900394 -->
 <!-- generated-at: 2026-08-05T02:19:14.577Z -->
 
 # LATEST_HANDOFF (compact)

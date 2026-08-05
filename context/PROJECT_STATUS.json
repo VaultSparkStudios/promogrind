@@ -57,7 +57,7 @@
   "testsPassing": 103,
   "testsTotal": 103,
   "testsLastRun": "2026-08-05",
-  "lastDeployStatus": "S126 repair commit d3d611b reached origin/main. CI 30883558365 and brief-format 30883558594 passed. Deploy Pages 30883558417 passed preflight, immutable attestation, deployment, production launch, dashboard smoke, and standard files; its final aggregator correctly stayed red on the six absent hosting-edge headers. SPARKED remains NO-GO.",
+  "lastDeployStatus": "S128 commit 8e38efb reached origin/main. CI 30969391522 and brief-format 30969391495 passed. Deploy Pages 30969391523 passed the complete preflight, immutable attestation, artifact deployment, production launch, disposable-user auth/checkout/cleanup, dashboard smoke, and standard files. Its final aggregator correctly stayed red on six absent hosting-edge headers plus one nonblocking affiliate-coverage advisory; five-book monetization coverage passed. SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-04",
   "truthGenome": "24/25",
@@ -92,7 +92,7 @@
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live at verified S122 head ca2a134; production launch and dashboard smoke passed in run 30724615420; six required headers remain absent"
+      "status": "live at verified S128 head 8e38efb; production launch, dashboard smoke, and standard files passed in run 30969391523; six required headers remain absent and affiliate_coverage is advisory while five-book monetization coverage passes"
     }
   ],
   "stagingUrl": null,
@@ -237,7 +237,7 @@
     "enumeratedAt": "2026-08-04T18:00:00-04:00",
     "evidence": "S128 Chromium fixtures used a hidden repo-local Vite process on 127.0.0.1:4173. Final closeout enumerates and closes only processes whose executable/command path resolves to PromoGrind, then re-probes 4173/4174/4175/5173; unrelated host processes remain untouched."
   },
-  "lastSessionSummary": "S128 shipped five L3 decision-truth contracts and three repo-owned second-order refinements. Vitest passes 705/705, Edge 52/52, Doctor 12/12, full launch-local exits 0, and 24 objective rendered states are hash-bound. Stable staging, semantic image return, and typed external launch proofs remain explicit HOLDs.",
+  "lastSessionSummary": "S128 shipped five L3 decision-truth contracts and three repo-owned second-order refinements. Vitest passes 705/705, Edge 52/52, Doctor 12/12, full launch-local exits 0, and 24 objective rendered states are hash-bound. CI and brief passed; the attested artifact deployed and production smoke passed. Six headers, semantic image return, and typed external launch proofs remain explicit HOLDs.",
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
