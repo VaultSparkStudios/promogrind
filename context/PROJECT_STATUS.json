@@ -54,8 +54,8 @@
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "testsPassing": 103,
-  "testsTotal": 103,
+  "testsPassing": 104,
+  "testsTotal": 104,
   "testsLastRun": "2026-08-05",
   "lastDeployStatus": "S128 commit 8e38efb reached origin/main. CI 30969391522 and brief-format 30969391495 passed. Deploy Pages 30969391523 passed the complete preflight, immutable attestation, artifact deployment, production launch, disposable-user auth/checkout/cleanup, dashboard smoke, and standard files. Its final aggregator correctly stayed red on six absent hosting-edge headers plus one nonblocking affiliate-coverage advisory; five-book monetization coverage passed. SPARKED remains NO-GO.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
@@ -241,24 +241,24 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-05T02:23:36.077Z",
-    "commitSha": "b3fac027fbc99a9dd60fe685f5380af19197968e",
+    "generatedAt": "2026-08-05T15:18:04.180Z",
+    "commitSha": "08c271c5829e0a21ca633a917a6d8250a069919f",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 103,
-      "total": 103
+      "passing": 104,
+      "total": 104
     },
     "assertions": {
-      "passing": 705,
-      "total": 705
+      "passing": 711,
+      "total": 711
     },
-    "reportSha256": "76264f0ebe0aa58b4a8084506e5d9880bdb00ea3e72b444fb8b0d880acbf1b18"
+    "reportSha256": "dfdaf4ef974e355d04a02ba944fc2b6e408704b151049d6961868a2bbe178115"
   },
-  "testsAssertionsPassing": 705,
-  "testsAssertionsTotal": 705,
-  "testsAssertionsFiles": 103,
+  "testsAssertionsPassing": 711,
+  "testsAssertionsTotal": 711,
+  "testsAssertionsFiles": 104,
   "testsAssertionsLastRun": "2026-08-05"
 }
