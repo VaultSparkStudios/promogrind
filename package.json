@@ -58,8 +58,8 @@
   },
   "dependencies": {
     "@sentry/react": "^10.69.0",
-    "@supabase/supabase-js": "^2.111.0",
-    "posthog-js": "^1.408.3",
+    "@supabase/supabase-js": "^2.112.0",
+    "posthog-js": "^1.410.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "7.18.2"
