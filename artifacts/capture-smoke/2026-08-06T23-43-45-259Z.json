@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "target": "fjnpzjjyhnpmunfoycrp",
+  "createdAt": "2026-08-06T23:43:44.806Z",
+  "emailHash": "6eed2a06b8984a0f79cbfacd70c2e0e01423ca9c8d03b778d5b8bd12f88855f2",
+  "source": "codex-s129-capture-smoke",
+  "browserAuthority": "secrets-gateway",
+  "submission": {
+    "status": 201,
+    "ok": true
+  },
+  "readback": {
+    "status": 200,
+    "ok": true,
+    "rowObserved": true,
+    "sourceMatched": true
+  },
+  "cleanup": {
+    "status": 204,
+    "ok": true
+  },
+  "completedAt": "2026-08-06T23:43:45.259Z"
+}

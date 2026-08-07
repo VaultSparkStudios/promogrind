@@ -76,11 +76,18 @@
         'Prefer': 'return=minimal',
       },
       body: JSON.stringify({ email: email, source: window.PG_SOURCE || 'seo', created_at: new Date().toISOString() }),
-    }).catch(function () {});
-    try { localStorage.setItem('pg_email_captured', '1'); } catch (e) {}
-    var box = document.getElementById('pg-box');
-    box.innerHTML = '<div id="pg-ok">\u2713 You\'re in! Taking you to PromoGrind\u2026</div>';
-    setTimeout(redirect, 1200);
+    }).then(function (response) {
+      if (!response.ok) throw new Error('capture request failed');
+      try { localStorage.setItem('pg_email_captured', '1'); } catch (e) {}
+      var box = document.getElementById('pg-box');
+      box.innerHTML = '<div id="pg-ok">\u2713 You\'re in! Taking you to PromoGrind\u2026</div>';
+      setTimeout(redirect, 1200);
+    }).catch(function () {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+      var copy = document.querySelector('#pg-box p');
+      if (copy) copy.textContent = 'Signup could not be confirmed. Check your connection and try again.';
+    });
   }
 
   if (!ANON_KEY) {

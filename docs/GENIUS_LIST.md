@@ -1,6 +1,6 @@
 # Genius Hit List — PromoGrind
 
-> Generated: 2026-08-04 | Scope: project:promogrind | Pattern detectors: 1 signals evaluated | Top 12 shown
+> Generated: 2026-08-06 | Scope: project:promogrind | Pattern detectors: 1 signals evaluated | Top 12 shown
 
 ---
 
@@ -10,7 +10,7 @@
 
 promogrind is held on Stable staging path available, Blocking launch proofs complete.
 
-*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=4113(+2)
+*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=4039(+2)
 
 ```bash
 node scripts/ops.mjs release-gate

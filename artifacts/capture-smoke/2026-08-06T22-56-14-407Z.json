@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "target": "fjnpzjjyhnpmunfoycrp",
+  "createdAt": "2026-08-06T22:56:13.722Z",
+  "emailHash": "689d3e420437344092e19929f5e4c200a4ba7f9a7e7418ada93e4bfbf532d5e8",
+  "source": "codex-s129-capture-smoke",
+  "submission": {
+    "status": 404,
+    "ok": false
+  },
+  "completedAt": "2026-08-06T22:56:14.407Z"
+}

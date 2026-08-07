@@ -2,6 +2,7 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "../lib/safe-spawn.mjs";
@@ -22,5 +23,29 @@ assert.match(check.stdout, /matches source truth/);
 assert.equal(fs.readFileSync(outputPath, "utf8"), before, "--check must be read-only");
 
 const contract = JSON.parse(before);
-assert.deepEqual(contract.callable_tools, [], "unproved remote deployment must advertise no callable tools");
-console.log("public capabilities generator: PASS (canonical equality, fail-closed tools, read-only check)");
+assert.ok(contract.callable_tools.length > 0, "criterion-complete live deployment must advertise the calculator tools");
+
+const fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "promogrind-capability-contract-"));
+try {
+  for (const source of [
+    "supabase/functions/calc-api/calculator-contract.json",
+    "supabase/functions/calc-api/index.ts",
+    "context/LAUNCH_PROOFS.json",
+    "src/launchState.js",
+  ]) {
+    const destination = path.join(fixtureRoot, source);
+    fs.mkdirSync(path.dirname(destination), { recursive: true });
+    fs.copyFileSync(path.join(root, source), destination);
+  }
+  const proofPath = path.join(fixtureRoot, "context/LAUNCH_PROOFS.json");
+  const launchProofs = JSON.parse(fs.readFileSync(proofPath, "utf8"));
+  launchProofs.proofs.supabaseDeployment.receipts = [];
+  fs.writeFileSync(proofPath, `${JSON.stringify(launchProofs, null, 2)}\n`);
+  process.chdir(fixtureRoot);
+  assert.deepEqual(buildPublicCapabilityContract().callable_tools, [], "unproved remote deployment must advertise no callable tools");
+} finally {
+  process.chdir(root);
+  fs.rmSync(fixtureRoot, { recursive: true, force: true });
+}
+
+console.log("public capabilities generator: PASS (canonical equality, proven tools, fail-closed fixture, read-only check)");

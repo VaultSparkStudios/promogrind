@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0",
+  "receiptId": "d10f4515-c8ca-4643-9354-7059e0589069",
+  "target": "fjnpzjjyhnpmunfoycrp",
+  "capability": "promogrind.supabase.deploy",
+  "authorityMode": "composed-target-verified",
+  "managementReceipt": {
+    "authorized": true,
+    "httpStatus": 200,
+    "target": "fjnpzjjyhnpmunfoycrp"
+  },
+  "completedAt": "2026-08-06T22:58:20.090Z",
+  "planDigest": "3f35c109fb05192005057903140cf56d809f91ec2ed2a537a66cdee21a345852",
+  "results": [
+    {
+      "kind": "migration-management-api",
+      "name": "newsletter_capture",
+      "version": "20260806230000",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T22:58:01.937Z",
+      "exitCode": 0,
+      "httpStatus": 201
+    },
+    {
+      "kind": "function",
+      "name": "ai-action-plan",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T22:58:02.358Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "parse-bet-slip",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T22:58:06.111Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "promo-advisor",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T22:58:08.816Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "promo-chat",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T22:58:10.874Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "stack-builder",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T22:58:13.785Z",
+      "exitCode": 0
+    }
+  ]
+}

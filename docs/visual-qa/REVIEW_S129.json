@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "themes": ["dark", "light"],
+  "captures": [
+    { "file": "captures/s129-final-landing-desktop-dark.png", "page": "/ — branded landing footer", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s129-final-landing-desktop-light.png", "page": "/ — branded landing footer", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
+    { "file": "captures/s129-final-landing-mobile-dark.png", "page": "/ — branded landing footer", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
+    { "file": "captures/s129-final-landing-mobile-light.png", "page": "/ — branded landing footer", "theme": "light", "viewport": { "width": 390, "height": 844 } }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex rendered-pixel review via real Chromium CDP and image inspection",
+    "findings": [
+      "The landing footer is visible and structurally clean at 1440×1000 and 390×844 in both dark and light themes.",
+      "VaultSpark attribution, rights copy, legal links, contact access, and responsible-gambling copy remain readable without horizontal overflow.",
+      "Dark and light captures use distinct branded palettes, and the landing theme control reflects the persisted theme.",
+      "Browser assertions found no footer link below 44 CSS pixels in any captured state."
+    ],
+    "fixesApplied": [
+      "Added the shared branded/legal AppFooter to the public landing route.",
+      "Added a 44×44 landing theme control and enforced 44px calculator, app, and footer link targets.",
+      "Replaced the copyright line's decorative border token with the semantic muted-text token after pixel review exposed low light-theme contrast."
+    ],
+    "blockingDefectsOpen": 0
+  }
+}

@@ -1,6 +1,6 @@
 # Release Gates
 
-> Generated: 2026-08-05 · Ready: 0 · Review: 0 · Hold: 1
+> Generated: 2026-08-07 · Ready: 0 · Review: 0 · Hold: 1
 
 | Project | Public-facing | Decision | Open gates |
 |---|---|---|---|
@@ -20,4 +20,4 @@
 - ✓ Branding compliant — VaultSpark branding requirement satisfied.
 - ⛔ Stable staging path available — stagingType=local · no stable URL
 - ✓ Sanitization clear — 0 critical · 0 warning
-- ⛔ Blocking launch proofs complete — 10 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, supabaseDeployment, captureConfig, stagingAndHeaders, obeliskDelegation, credentialRemediation, founderApproval
+- ⛔ Blocking launch proofs complete — 8 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, stagingAndHeaders, obeliskDelegation, credentialRemediation, founderApproval

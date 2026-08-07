@@ -1,10 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-05T02:15:00.000Z",
+  "generatedAt": "2026-08-06T04:51:00.687Z",
   "project": "PromoGrind",
-  "session": 128,
+  "session": 129,
   "sourceSignals": {
-    "geniusListEmpty": true,
+    "geniusListEmpty": false,
+    "taskBoardBytes": 90160,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
@@ -13,48 +14,9 @@
     "cdpHarnessCopies": 0,
     "largeFiles": 0,
     "launchDeferrals": 6,
-    "secondOrderShipped": 3
+    "secondOrderShipped": 0
   },
   "ranked": [
-    {
-      "status": "shipped",
-      "effort": "repo-owned",
-      "effortHours": 3,
-      "priority": 54,
-      "id": "decision-claim-ratchet",
-      "tier": "high",
-      "axis": "truth / regression prevention",
-      "impact": 9,
-      "innovation": 9,
-      "evidence": "Thirty rules now scan 334 source files; repaired liveness, delivery, usage-performance, model-grade, and reward-limit claims are fixture-backed.",
-      "recipe": "Reject each repaired claim class at the source boundary and bind the receipt to the exact inventory hash."
-    },
-    {
-      "status": "shipped",
-      "effort": "repo-owned",
-      "effortHours": 2,
-      "priority": 49,
-      "id": "source-independence-and-persistence-refinement",
-      "tier": "high",
-      "axis": "mathematical truth / commerce truth",
-      "impact": 9,
-      "innovation": 8,
-      "evidence": "Duplicate bookmaker rows fail the independent-source threshold; sender bonus responses report recorded only after metadata persistence succeeds.",
-      "recipe": "Make identity and persistence explicit parts of every compound evidence claim."
-    },
-    {
-      "status": "shipped",
-      "effort": "repo-owned",
-      "effortHours": 3,
-      "priority": 43,
-      "id": "s128-rendered-proof-harness",
-      "tier": "high",
-      "axis": "rendered UX / observability",
-      "impact": 8,
-      "innovation": 9,
-      "evidence": "24 unique Chromium captures cover six decision-truth surfaces in dark/light and desktop/mobile; pixel, theme-pair, required-state, and overflow checks pass.",
-      "recipe": "Use deterministic positive/negative fixtures and hash exact rendered bytes into release parity."
-    },
     {
       "status": "honest-deferral",
       "effort": "external",
@@ -65,8 +27,8 @@
       "axis": "truth / launch-readiness",
       "impact": 10,
       "innovation": 1,
-      "evidence": "Stable staging plus ten typed blocking production proofs remain incomplete.",
-      "recipe": "Do not fabricate proof; keep each criterion pending until a real redacted observation exists."
+      "evidence": "6 real-world proof gates remain in PROJECT_STATUS.blockers.",
+      "recipe": "Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists."
     }
   ],
   "evidence": {
@@ -75,12 +37,12 @@
     "todoSignals": [],
     "largeFiles": [],
     "launchDeferrals": [
-      "No true remote staging environment is configured.",
-      "Zoho delivery and reply identity remain unproved.",
-      "Production auth email proof remains pending.",
-      "Real Stripe lifecycle proof remains pending.",
-      "One friend-facing beta proof remains pending.",
-      "Capture submission and lead-row proof remain pending."
+      "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
+      "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
+      "Production auth confirmation/resend/reset/recovery delivery proof is pending.",
+      "Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending.",
+      "One friend-facing auth/recovery/calculator/pricing pass is pending.",
+      "Capture submission and observable lead-row criteria remain pending."
     ]
   }
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "lastUpdated": "2026-07-26",
+  "lastUpdated": "2026-08-07",
   "notes": "Canonical machine-readable launch proof surface for PromoGrind. Use this instead of scattered prose when reporting external/manual launch blockers.",
   "proofs": {
     "affiliateLinks": {
@@ -216,7 +216,7 @@
     },
     "supabaseDeployment": {
       "label": "AI quota migration and provider deployment",
-      "status": "pending",
+      "status": "complete",
       "blocking": true,
       "requiredFor": [
         "soft-launch",
@@ -226,7 +226,32 @@
       "details": "The quota migration and five authenticated provider functions are verified locally but are not claimed live until deployed to the explicit PromoGrind Supabase project.",
       "nextStep": "Resolve promogrind.supabase.deploy through the secrets gateway, deploy migration 20260723021000_ai_quota_claim.sql and the five provider functions to fjnpzjjyhnpmunfoycrp, then record redacted deployment IDs.",
       "evidence": [],
-      "receipts": [],
+      "receipts": [
+        {
+          "criterionId": "quota-migration-applied-to-fjnpzjjyhnpmunfoycrp",
+          "source": "deployment",
+          "target": "supabase:fjnpzjjyhnpmunfoycrp",
+          "observedAt": "2026-08-06T05:53:49.136Z",
+          "verifier": "scripts/deploy-supabase.mjs",
+          "detail": "Management API HTTP 201 applied migration 20260723021000; remote migration history confirmed."
+        },
+        {
+          "criterionId": "five-provider-functions-deployed",
+          "source": "deployment",
+          "target": "supabase:fjnpzjjyhnpmunfoycrp",
+          "observedAt": "2026-08-06T05:53:51.891Z",
+          "verifier": "scripts/deploy-supabase.mjs",
+          "detail": "Remote inventory confirms five audited functions ACTIVE: ai-action-plan, parse-bet-slip, promo-advisor, promo-chat, stack-builder."
+        },
+        {
+          "criterionId": "authenticated-quota-exhaustion-smoke-returns-a-hard-429",
+          "source": "automated-smoke",
+          "target": "supabase:fjnpzjjyhnpmunfoycrp",
+          "observedAt": "2026-08-06T05:53:55.616Z",
+          "verifier": "scripts/smoke-ai-quota.mjs",
+          "detail": "Confirmed disposable user received HTTP 429 with remaining 0 and lifetime quota; provider egress avoided; user removed."
+        }
+      ],
       "target": "supabase:fjnpzjjyhnpmunfoycrp",
       "criteria": [
         {
@@ -244,11 +269,12 @@
           "label": "authenticated quota exhaustion smoke returns a hard 429",
           "required": true
         }
-      ]
+      ],
+      "lastEvaluatedAt": "2026-08-06T05:53:55.617Z"
     },
     "captureConfig": {
       "label": "Production capture public-key configuration",
-      "status": "pending",
+      "status": "complete",
       "blocking": true,
       "requiredFor": [
         "soft-launch",
@@ -266,6 +292,22 @@
           "observedAt": "2026-07-26T18:31:23.976Z",
           "verifier": "scripts/check-launch-capabilities.mjs",
           "detail": "Production capture page returned browser-safe non-placeholder configuration after S119 Pages deployment"
+        },
+        {
+          "criterionId": "capture-submission-succeeds",
+          "source": "automated-smoke",
+          "target": "https://promogrind.bet/the-grind/",
+          "observedAt": "2026-08-06T23:51:32.558Z",
+          "verifier": "codex-s129",
+          "detail": "Disposable anonymous lead insert returned HTTP 201; receipt artifacts/capture-smoke/2026-08-06T23-43-45-259Z.json"
+        },
+        {
+          "criterionId": "lead-row-is-observable-without-exposing-private-credentials",
+          "source": "automated-smoke",
+          "target": "https://promogrind.bet/the-grind/",
+          "observedAt": "2026-08-07T00:24:14.614Z",
+          "verifier": "codex-s129",
+          "detail": "Privileged readback observed the disposable lead and cleanup returned HTTP 204; the receipt persists only an email hash and public-safe authority provenance"
         }
       ],
       "target": "https://promogrind.bet/the-grind/",
@@ -286,62 +328,128 @@
           "required": true
         }
       ],
-      "lastEvaluatedAt": "2026-07-26T18:31:23.977Z"
+      "lastEvaluatedAt": "2026-08-07T00:24:14.616Z"
     },
     "stagingAndHeaders": {
       "label": "Stable staging and delivered edge hardening",
       "status": "pending",
       "blocking": true,
-      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "requiredFor": [
+        "soft-launch",
+        "full-launch",
+        "marketing-push"
+      ],
       "details": "Local artifact attestation is green; a stable HTTPS staging origin and six production response headers remain unproved.",
       "nextStep": "Provision stable staging, prove config parity and health, then verify all six headers on the delivered response.",
-      "receipts": [],
+      "receipts": [
+        {
+          "criterionId": "stable-https-staging-health-is-green",
+          "source": "deployment",
+          "target": "https://promogrind.bet",
+          "observedAt": "2026-08-07T00:35:04.353Z",
+          "verifier": "codex-s129",
+          "detail": "https://staging.promogrind.bet returned HTTP 200 for root, _health, dashboard, arb-scanner, and pricing; deployment receipt artifacts/cloudflare-pages/staging-2026-08-07T00-28-19-177Z.json"
+        },
+        {
+          "criterionId": "six-required-security-headers-are-delivered",
+          "source": "automated-smoke",
+          "target": "https://promogrind.bet",
+          "observedAt": "2026-08-07T08:24:55.345Z",
+          "verifier": "codex-s129",
+          "detail": "Stable staging delivered CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy on the verified release artifact"
+        }
+      ],
       "target": "https://promogrind.bet",
       "criteria": [
-        {"id":"stable-https-staging-health-is-green","label":"stable HTTPS staging health is green","required":true},
-        {"id":"staging-production-config-parity-is-proven","label":"staging and production config parity is proven","required":true},
-        {"id":"six-required-security-headers-are-delivered","label":"all six required security headers are delivered","required":true}
-      ]
+        {
+          "id": "stable-https-staging-health-is-green",
+          "label": "stable HTTPS staging health is green",
+          "required": true
+        },
+        {
+          "id": "staging-production-config-parity-is-proven",
+          "label": "staging and production config parity is proven",
+          "required": true
+        },
+        {
+          "id": "six-required-security-headers-are-delivered",
+          "label": "all six required security headers are delivered",
+          "required": true
+        }
+      ],
+      "lastEvaluatedAt": "2026-08-07T08:24:55.347Z"
     },
     "obeliskDelegation": {
       "label": "Live Obelisk identity delegation",
       "status": "pending",
       "blocking": true,
-      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "requiredFor": [
+        "soft-launch",
+        "full-launch",
+        "marketing-push"
+      ],
       "details": "Hybrid architecture is declared, but human lifecycle delegation and agent identity are not live.",
       "nextStep": "Resolve the Obelisk relying-party capability and record redacted account-lifecycle and agent-identity exchange receipts.",
       "receipts": [],
       "target": "obelisk:promogrind",
       "criteria": [
-        {"id":"human-account-lifecycle-delegates-to-obelisk","label":"human account lifecycle delegates to Obelisk","required":true},
-        {"id":"agent-identity-exchange-is-live","label":"agent identity exchange is live","required":true}
+        {
+          "id": "human-account-lifecycle-delegates-to-obelisk",
+          "label": "human account lifecycle delegates to Obelisk",
+          "required": true
+        },
+        {
+          "id": "agent-identity-exchange-is-live",
+          "label": "agent identity exchange is live",
+          "required": true
+        }
       ]
     },
     "credentialRemediation": {
       "label": "Historical credential rotation and remediation",
       "status": "pending",
       "blocking": true,
-      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "requiredFor": [
+        "soft-launch",
+        "full-launch",
+        "marketing-push"
+      ],
       "details": "The tracked tree is clean; five redacted historical findings still need rotation and approved history remediation evidence.",
       "nextStep": "Rotate every affected credential, verify provider revocation, and execute only the founder-approved history-remediation path.",
       "receipts": [],
       "target": "git:b1205ce",
       "criteria": [
-        {"id":"all-affected-credentials-rotated-and-revoked","label":"all affected credentials rotated and revoked","required":true},
-        {"id":"approved-history-remediation-completed","label":"approved history remediation completed","required":true}
+        {
+          "id": "all-affected-credentials-rotated-and-revoked",
+          "label": "all affected credentials rotated and revoked",
+          "required": true
+        },
+        {
+          "id": "approved-history-remediation-completed",
+          "label": "approved history remediation completed",
+          "required": true
+        }
       ]
     },
     "founderApproval": {
       "label": "Founder launch approval",
       "status": "pending",
       "blocking": true,
-      "requiredFor": ["soft-launch", "full-launch", "marketing-push"],
+      "requiredFor": [
+        "soft-launch",
+        "full-launch",
+        "marketing-push"
+      ],
       "details": "No founder approval receipt exists. Automated readiness cannot grant launch authority.",
       "nextStep": "After every blocking proof is complete, record explicit founder approval without secrets or private identity data.",
       "receipts": [],
       "target": "promogrind:launch",
       "criteria": [
-        {"id":"founder-explicitly-approved-public-launch","label":"founder explicitly approved public launch","required":true}
+        {
+          "id": "founder-explicitly-approved-public-launch",
+          "label": "founder explicitly approved public launch",
+          "required": true
+        }
       ]
     }
   }

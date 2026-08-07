@@ -4,6 +4,7 @@ import { K, font, fontD } from "../lib/shared.js";
 import { APP_DASHBOARD_PATH, getAbsoluteAppUrl, getProjectAuthHref } from "../launchState.js";
 import { trackEvent } from "../analytics.js";
 import { useViewport } from "../app/responsive.js";
+import { AppFooter } from "../app/AppChrome.jsx";
 
 const CALCULATOR_PRESETS = {
   "bonus-bet": { name: "Bonus Bet Converter", slug: "bonus-bet", desc: "Convert bonus bets into modeled cash with the exact hedge amount." },
@@ -52,7 +53,7 @@ function statCard(value, label) {
   );
 }
 
-export default function LandingRoute() {
+export default function LandingRoute({ darkMode, toggleTheme }) {
   const location = useLocation();
   const navigate = useNavigate();
   const viewport = useViewport();
@@ -105,6 +106,26 @@ export default function LandingRoute() {
       }}
     >
       <div style={{ maxWidth: viewport.contentMaxWidth, margin: "0 auto", padding: surfacePadding }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={darkMode ? "Switch landing page to light theme" : "Switch landing page to dark theme"}
+            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              cursor: "pointer",
+              background: darkMode ? K.s1 : `${K.yl}15`,
+              border: `1px solid ${darkMode ? K.bd2 : `${K.yl}60`}`,
+              color: darkMode ? K.dm : K.yl,
+              fontSize: 18,
+            }}
+          >
+            {darkMode ? "☀" : "☾"}
+          </button>
+        </div>
         <div
           style={{
             display: "grid",
@@ -204,7 +225,7 @@ export default function LandingRoute() {
                   <button
                     key={slug}
                     onClick={() => navigate(`/${slug}`)}
-                    style={{ padding: "12px 14px", background: `${K.s3}88`, border: `1px solid ${K.bd2}`, borderRadius: 12, color: K.tx, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: font, textAlign: "left" }}
+                    style={{ minHeight: 44, padding: "12px 14px", background: `${K.s3}88`, border: `1px solid ${K.bd2}`, borderRadius: 12, color: K.tx, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: font, textAlign: "left" }}
                   >
                     {name}
                   </button>
@@ -215,11 +236,13 @@ export default function LandingRoute() {
         </div>
 
         <div style={{ fontSize: 11, color: K.dm, textAlign: "center", lineHeight: 1.8, padding: viewport.isPhone ? "0 6px" : 0 }}>
-          <a href={APP_DASHBOARD_PATH} style={{ color: K.gn, textDecoration: "none", fontWeight: 700 }}>Open the app</a>
+          <a href={APP_DASHBOARD_PATH} style={{ color: K.gn, textDecoration: "none", fontWeight: 700, minHeight: 44, display: "inline-flex", alignItems: "center" }}>Open the app</a>
           {" "}— free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.
         </div>
       </div>
+      <footer aria-label="PromoGrind legal and studio information">
+        <AppFooter />
+      </footer>
     </div>
   );
 }
-

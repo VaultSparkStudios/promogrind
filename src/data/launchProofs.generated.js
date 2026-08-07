@@ -2,7 +2,7 @@
 // Do not edit by hand; update the canonical context source instead.
 export const LAUNCH_PROOFS = {
   "schemaVersion": "2.0",
-  "lastUpdated": "2026-07-26",
+  "lastUpdated": "2026-08-07",
   "notes": "Canonical machine-readable launch proof surface for PromoGrind. Use this instead of scattered prose when reporting external/manual launch blockers.",
   "proofs": {
     "affiliateLinks": {
@@ -218,7 +218,7 @@ export const LAUNCH_PROOFS = {
     },
     "supabaseDeployment": {
       "label": "AI quota migration and provider deployment",
-      "status": "pending",
+      "status": "complete",
       "blocking": true,
       "requiredFor": [
         "soft-launch",
@@ -228,7 +228,32 @@ export const LAUNCH_PROOFS = {
       "details": "The quota migration and five authenticated provider functions are verified locally but are not claimed live until deployed to the explicit PromoGrind Supabase project.",
       "nextStep": "Resolve promogrind.supabase.deploy through the secrets gateway, deploy migration 20260723021000_ai_quota_claim.sql and the five provider functions to fjnpzjjyhnpmunfoycrp, then record redacted deployment IDs.",
       "evidence": [],
-      "receipts": [],
+      "receipts": [
+        {
+          "criterionId": "quota-migration-applied-to-fjnpzjjyhnpmunfoycrp",
+          "source": "deployment",
+          "target": "supabase:fjnpzjjyhnpmunfoycrp",
+          "observedAt": "2026-08-06T05:53:49.136Z",
+          "verifier": "scripts/deploy-supabase.mjs",
+          "detail": "Management API HTTP 201 applied migration 20260723021000; remote migration history confirmed."
+        },
+        {
+          "criterionId": "five-provider-functions-deployed",
+          "source": "deployment",
+          "target": "supabase:fjnpzjjyhnpmunfoycrp",
+          "observedAt": "2026-08-06T05:53:51.891Z",
+          "verifier": "scripts/deploy-supabase.mjs",
+          "detail": "Remote inventory confirms five audited functions ACTIVE: ai-action-plan, parse-bet-slip, promo-advisor, promo-chat, stack-builder."
+        },
+        {
+          "criterionId": "authenticated-quota-exhaustion-smoke-returns-a-hard-429",
+          "source": "automated-smoke",
+          "target": "supabase:fjnpzjjyhnpmunfoycrp",
+          "observedAt": "2026-08-06T05:53:55.616Z",
+          "verifier": "scripts/smoke-ai-quota.mjs",
+          "detail": "Confirmed disposable user received HTTP 429 with remaining 0 and lifetime quota; provider egress avoided; user removed."
+        }
+      ],
       "target": "supabase:fjnpzjjyhnpmunfoycrp",
       "criteria": [
         {
@@ -246,11 +271,12 @@ export const LAUNCH_PROOFS = {
           "label": "authenticated quota exhaustion smoke returns a hard 429",
           "required": true
         }
-      ]
+      ],
+      "lastEvaluatedAt": "2026-08-06T05:53:55.617Z"
     },
     "captureConfig": {
       "label": "Production capture public-key configuration",
-      "status": "pending",
+      "status": "complete",
       "blocking": true,
       "requiredFor": [
         "soft-launch",
@@ -268,6 +294,22 @@ export const LAUNCH_PROOFS = {
           "observedAt": "2026-07-26T18:31:23.976Z",
           "verifier": "scripts/check-launch-capabilities.mjs",
           "detail": "Production capture page returned browser-safe non-placeholder configuration after S119 Pages deployment"
+        },
+        {
+          "criterionId": "capture-submission-succeeds",
+          "source": "automated-smoke",
+          "target": "https://promogrind.bet/the-grind/",
+          "observedAt": "2026-08-06T23:51:32.558Z",
+          "verifier": "codex-s129",
+          "detail": "Disposable anonymous lead insert returned HTTP 201; receipt artifacts/capture-smoke/2026-08-06T23-43-45-259Z.json"
+        },
+        {
+          "criterionId": "lead-row-is-observable-without-exposing-private-credentials",
+          "source": "automated-smoke",
+          "target": "https://promogrind.bet/the-grind/",
+          "observedAt": "2026-08-07T00:24:14.614Z",
+          "verifier": "codex-s129",
+          "detail": "Privileged readback observed the disposable lead and cleanup returned HTTP 204; the receipt persists only an email hash and public-safe authority provenance"
         }
       ],
       "target": "https://promogrind.bet/the-grind/",
@@ -288,7 +330,7 @@ export const LAUNCH_PROOFS = {
           "required": true
         }
       ],
-      "lastEvaluatedAt": "2026-07-26T18:31:23.977Z"
+      "lastEvaluatedAt": "2026-08-07T00:24:14.616Z"
     },
     "stagingAndHeaders": {
       "label": "Stable staging and delivered edge hardening",
@@ -301,7 +343,24 @@ export const LAUNCH_PROOFS = {
       ],
       "details": "Local artifact attestation is green; a stable HTTPS staging origin and six production response headers remain unproved.",
       "nextStep": "Provision stable staging, prove config parity and health, then verify all six headers on the delivered response.",
-      "receipts": [],
+      "receipts": [
+        {
+          "criterionId": "stable-https-staging-health-is-green",
+          "source": "deployment",
+          "target": "https://promogrind.bet",
+          "observedAt": "2026-08-07T00:35:04.353Z",
+          "verifier": "codex-s129",
+          "detail": "https://staging.promogrind.bet returned HTTP 200 for root, _health, dashboard, arb-scanner, and pricing; deployment receipt artifacts/cloudflare-pages/staging-2026-08-07T00-28-19-177Z.json"
+        },
+        {
+          "criterionId": "six-required-security-headers-are-delivered",
+          "source": "automated-smoke",
+          "target": "https://promogrind.bet",
+          "observedAt": "2026-08-07T08:24:55.345Z",
+          "verifier": "codex-s129",
+          "detail": "Stable staging delivered CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy on the verified release artifact"
+        }
+      ],
       "target": "https://promogrind.bet",
       "criteria": [
         {
@@ -319,7 +378,8 @@ export const LAUNCH_PROOFS = {
           "label": "all six required security headers are delivered",
           "required": true
         }
-      ]
+      ],
+      "lastEvaluatedAt": "2026-08-07T08:24:55.347Z"
     },
     "obeliskDelegation": {
       "label": "Live Obelisk identity delegation",

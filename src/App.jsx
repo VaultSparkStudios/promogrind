@@ -218,14 +218,14 @@ export default function App() {
   if (pathname.startsWith("/land/")) {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
-        <LandingRoute />
+        <LandingRoute darkMode={darkMode} toggleTheme={toggleTheme} />
       </Suspense>
     );
   }
   if (pathname === "/") {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
-        <LandingRoute />
+        <LandingRoute darkMode={darkMode} toggleTheme={toggleTheme} />
       </Suspense>
     );
   }

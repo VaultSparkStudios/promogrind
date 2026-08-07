@@ -20,7 +20,8 @@ const requiredHeaders = [
   ["x-frame-options", "X-Frame-Options"],
   ["permissions-policy", "Permissions-Policy"],
 ];
-const requiredFiles = ["/.well-known/security.txt", "/favicon.ico", "/robots.txt", "/sitemap.xml", "/agents.json", "/.well-known/llms.txt"];
+const requiredFiles = ["/_health", "/.well-known/security.txt", "/favicon.ico", "/robots.txt", "/sitemap.xml", "/agents.json", "/.well-known/llms.txt"];
+const requiredRoutes = ["/dashboard", "/arb-scanner", "/pricing"];
 const rootResponse = await fetch(origin, { redirect: "follow" });
 const headers = requiredHeaders.map(([name, label]) => ({ name: label, present: Boolean(rootResponse.headers.get(name)) }));
 const files = [];
@@ -32,17 +33,29 @@ for (const pathname of requiredFiles) {
     files.push({ path: pathname, ok: false, status: null, error: error.message });
   }
 }
+const routes = [];
+for (const pathname of requiredRoutes) {
+  try {
+    const response = await fetch(new URL(pathname, origin), { redirect: "follow" });
+    routes.push({ path: pathname, ok: response.status === 200, status: response.status });
+  } catch (error) {
+    routes.push({ path: pathname, ok: false, status: null, error: error.message });
+  }
+}
 const missingHeaders = headers.filter((item) => !item.present).map((item) => item.name);
 const missingFiles = files.filter((item) => !item.ok).map((item) => item.path);
+const failingRoutes = routes.filter((item) => !item.ok).map((item) => item.path);
 const result = {
-  ok: rootResponse.ok && missingHeaders.length === 0 && missingFiles.length === 0,
+  ok: rootResponse.ok && missingHeaders.length === 0 && missingFiles.length === 0 && failingRoutes.length === 0,
   origin,
   rootStatus: rootResponse.status,
   headers,
   files,
+  routes,
   externalBlockers: [
     ...(missingHeaders.length ? [{ type: "edge-header-delivery", missing: missingHeaders, owner: "hosting-edge" }] : []),
     ...(missingFiles.length ? [{ type: "deployed-standard-files", missing: missingFiles, owner: "site-deploy" }] : []),
+    ...(failingRoutes.length ? [{ type: "spa-route-status", failing: failingRoutes, owner: "site-deploy" }] : []),
   ],
 };
 console.log(JSON.stringify(result, null, 2));

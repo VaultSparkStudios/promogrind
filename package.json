@@ -8,6 +8,7 @@
     "prebuild": "node scripts/generate-launch-proof-mirror.mjs && node scripts/generate-project-status-mirror.mjs && node scripts/generate-public-capabilities.mjs && node scripts/optimize-images.mjs",
     "build": "vite build",
     "build:pages": "vite build && node scripts/postbuild-pages.mjs",
+    "build:release": "node scripts/build-release-artifact.mjs",
     "optimize:images": "node scripts/optimize-images.mjs",
     "package:trust": "node scripts/package-trust.mjs",
     "reconcile:runtime-overlays": "node scripts/reconcile-runtime-overrides.mjs --apply",

@@ -2,6 +2,8 @@ import React from "react";
 import { K, S } from "../lib/shared.js";
 import { APP_CHROME_COPY } from "./appText.js";
 
+const footerLinkStyle = { color: K.mt, textDecoration: "none", minWidth: 44, minHeight: 44, display: "inline-flex", alignItems: "center", justifyContent: "center" };
+
 export const TrustStrip = () => (
   <div style={{ background: `${K.gn}08`, borderBottom: `1px solid ${K.bd}`, padding: "10px clamp(14px, 2vw, 20px)" }}>
     <div style={{ maxWidth: 1120, margin: "0 auto", display: "flex", gap: 10, flexWrap: "wrap", fontSize: 10, color: K.dm, letterSpacing: "0.3px", lineHeight: 1.5 }}>
@@ -30,22 +32,22 @@ export const AppFooter = () => (
         {APP_CHROME_COPY.footerDisclaimer.replace("1-800-GAMBLER", "")}
         <span style={{ color: K.rd, fontWeight: 600 }}>1-800-GAMBLER</span>.
       </p>
-      <p style={{ fontSize: 10, color: K.bd2, marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", lineHeight: 1.8 }}>
-        <span>© 2026 <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ color: "inherit", textDecoration: "none" }}>VaultSpark Studios LLC</a>. All rights reserved.</span>
-        <a href="/" style={{ color: K.mt, textDecoration: "none" }}>Home</a>
-        <a href="/#/knowledge-base" style={{ color: K.mt, textDecoration: "none" }}>Learn</a>
-        <a href="/#/upgrade" style={{ color: K.mt, textDecoration: "none" }}>Pricing</a>
-        <a href="/dashboard" style={{ color: K.mt, textDecoration: "none" }}>Open App</a>
-        <a href="/privacy/" style={{ color: K.mt, textDecoration: "none" }}>Privacy</a>
-        <a href="/terms/" style={{ color: K.mt, textDecoration: "none" }}>Terms</a>
-        <a href="/responsible-gambling/" style={{ color: K.mt, textDecoration: "none" }}>Responsible Gambling</a>
-        <a href="/affiliate-disclosure/" style={{ color: K.mt, textDecoration: "none" }}>Affiliate Disclosure</a>
-        <a href="/disclaimer/" style={{ color: K.mt, textDecoration: "none" }}>Disclaimer</a>
-        <a href="/dmca/" style={{ color: K.mt, textDecoration: "none" }}>DMCA / IP</a>
-        <a href="/data-policy/" style={{ color: K.mt, textDecoration: "none" }}>Data Policy</a>
-        <a href="/about/" style={{ color: K.mt, textDecoration: "none" }}>About</a>
-        <a href="/compliance/" style={{ color: K.mt, textDecoration: "none" }}>Compliance</a>
-        <a href="/contact/" style={{ color: K.mt, textDecoration: "none" }}>Contact</a>
+      <p style={{ fontSize: 10, color: K.mt, marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", lineHeight: 1.8 }}>
+        <span>© 2026 <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ ...footerLinkStyle, color: "inherit" }}>VaultSpark Studios LLC</a>. All rights reserved.</span>
+        <a href="/" style={footerLinkStyle}>Home</a>
+        <a href="/#/knowledge-base" style={footerLinkStyle}>Learn</a>
+        <a href="/#/upgrade" style={footerLinkStyle}>Pricing</a>
+        <a href="/dashboard" style={footerLinkStyle}>Open App</a>
+        <a href="/privacy/" style={footerLinkStyle}>Privacy</a>
+        <a href="/terms/" style={footerLinkStyle}>Terms</a>
+        <a href="/responsible-gambling/" style={footerLinkStyle}>Responsible Gambling</a>
+        <a href="/affiliate-disclosure/" style={footerLinkStyle}>Affiliate Disclosure</a>
+        <a href="/disclaimer/" style={footerLinkStyle}>Disclaimer</a>
+        <a href="/dmca/" style={footerLinkStyle}>DMCA / IP</a>
+        <a href="/data-policy/" style={footerLinkStyle}>Data Policy</a>
+        <a href="/about/" style={footerLinkStyle}>About</a>
+        <a href="/compliance/" style={footerLinkStyle}>Compliance</a>
+        <a href="/contact/" style={footerLinkStyle}>Contact</a>
       </p>
     </div>
   </div>

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "environment": "staging",
+  "project": "promogrind-staging",
+  "domain": "staging.promogrind.bet",
+  "pagesOrigin": "https://promogrind-staging.pages.dev",
+  "artifactDigest": "aedc3d7b8a5f39eb12c8441a7a60ee2a30f2b053f8bd17d21a22c2058959360b",
+  "commit": "working-tree",
+  "deployedAt": "2026-08-07T00:28:19.177Z",
+  "dnsReceipt": {
+    "changed": false,
+    "desiredContent": "promogrind-staging.pages.dev",
+    "rollbackPath": "artifacts/cloudflare-pages/staging-dns-before-2026-08-07T00-28-19-073Z.json"
+  },
+  "verification": {
+    "origin": "https://staging.promogrind.bet",
+    "ok": true,
+    "status": 200,
+    "missingHeaders": []
+  },
+  "rollbackOrigin": "https://vaultsparkstudios.github.io/promogrind/"
+}

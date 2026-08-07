@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-06T05:00:00.000Z",
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched",
+    "session": 129
+  },
+  "rubric": "public-app product rubric with doubled UX and feature-depth weight, 1.5x speed and token-efficiency weight, plus the app-release gate and CANON-007/011/029/041/045/047/048/051/053 release lens",
+  "sample": {
+    "picked": 20,
+    "scanned": 834,
+    "tokens": 30000,
+    "method": "Manual public-shim fallback because sample-codebase.mjs is absent: startup and release evidence, live origin contract, Cloudflare/Supabase/Stripe/capture authorization probes, release workflow and rollback review, launch-proof graph, current task/decision patterns, and focused deployment-script inspection."
+  },
+  "premiseLedger": {
+    "candidatesGenerated": 27,
+    "premisesVerified": 14,
+    "newItemsSelected": 4,
+    "rejectedOrMerged": 23,
+    "baseline": "origin/main and HEAD began 0/0 with a clean tree. The S128 product surface is saturated at 103/103 test files and 705/705 assertions; the only live Genius item is the release gate.",
+    "releaseLens": "The production origin returns 200 and all six standard files, but none of the six mandatory security headers. Release architecture is forge-declared-not-ready because stable staging and live Obelisk delegation are absent. Four of five target capability probes are authorized: PromoGrind Supabase, live Stripe, Brevo domain authentication, and production capture configuration.",
+    "liveContradictions": [
+      "public/_headers declares the correct policy, but GitHub Pages does not deliver it and the live origin returns zero of six required headers.",
+      "context and the launch ledger call PromoGrind Supabase deployment unavailable, while the secrets gateway has a management token and target-bound admin URL that independently authorize the exact project; the deploy script cannot compose those authorities.",
+      "The release workflow calls a local artifact 'staging', but CANON-007 requires a stable isolated HTTPS staging origin and PROJECT_STATUS declares none.",
+      "Production capture configuration is authorized live, yet the canonical proof remains pending because no submission and observable lead-row receipt has been executed.",
+      "The founder explicitly requested full deployment, but Zoho API authority, Obelisk relying-party authority, historical credential rotation, and an independent friend-facing tester still require evidence that cannot be synthesized from repository state."
+    ]
+  },
+  "candidateMatrix": {
+    "featureDepth": ["target-bound provider deployment (selected)", "new operator feature (rejected: saturated product surface)", "enable all flags (rejected: provider evidence must precede activation)"],
+    "innovation": ["dual-origin release plane (selected)", "edge Worker proxy (merged into Cloudflare deployment ladder)", "new AI surface (rejected: launch depth outranks novelty)"],
+    "ux": ["stable preview for real journey QA (selected)", "new navigation polish (rejected: no live defect)", "copy refresh (rejected: no premise evidence)"],
+    "feedbackLoop": ["machine-recorded production journey receipts (selected)", "friend beta (retained as human evidence boundary)", "new in-app survey (rejected: cannot clear launch proof)"],
+    "engagement": ["independent friend-facing pass (human boundary)", "additional gamification (rejected: violates disciplined-execution SOUL)", "launch cohort urgency (rejected: dopamine/pressure anti-goal)"],
+    "aiIntegration": ["deploy five pinned AI functions (selected)", "broaden AI flags immediately (rejected: capability ceiling)", "new provider integration (rejected: no need)"],
+    "security": ["delivered edge headers (selected)", "target-verified Supabase deployment authority (selected)", "claim current-tree scan clears history (rejected: authority mismatch)"],
+    "speedOrganization": ["Cloudflare static edge plus deterministic deploy receipts (selected)", "large-file decomposition (rejected: innovation pack reports none)", "new dependency (rejected: internal/global tools suffice)"],
+    "tokenApiReduction": ["one deployment/proof orchestrator receipt (selected)", "replace proof runners with prose (rejected: weakens authority)", "new paid service (rejected: internal-first and CANON-029)" ]
+  },
+  "items": [
+    {
+      "id": "S129-1",
+      "rank": 2,
+      "slug": "cloudflare-dual-origin-release-plane",
+      "title": "Establish an isolated Cloudflare staging origin, then promote the same attested static artifact to production with delivered security headers",
+      "tier": "🔥",
+      "axis": "security / speed / release architecture / UX",
+      "axisWeight": 2,
+      "effortHours": 8,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 54.2,
+      "status": "unblocked",
+      "why": "The checked-in header policy is inert on GitHub Pages, all six live headers are absent, and local-only staging cannot satisfy the stable-origin gate.",
+      "evidence": [
+        "npm run verify:web-live -- --url https://promogrind.bet returned rootStatus 200 with CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy all absent.",
+        "check-release-architecture reports stableStaging=false and stagingUrlDeclared=false.",
+        "Cloudflare Pages Direct Upload supports branch deployments and applies static _headers; global Wrangler 4.80.0 is already installed, avoiding a dependency change."
+      ],
+      "ladder": {
+        "L1": {"effortHours": 3, "recipe": "Build once, direct-upload a staging branch, verify status/headers/standard files, and retain GitHub Pages as rollback."},
+        "L2": {"effortHours": 8, "recipe": "Add a secrets-gateway deployment wrapper, deterministic artifact/commit receipt, stable staging project/domain, Cloudflare production promotion, header and SPA-route verification, and documented forward rollback."},
+        "L3": {"effortHours": 12, "recipe": "Add staging/production parity compilation, custom-domain health, GitHub workflow promotion, immutable artifact reuse, and automatic post-deploy receipt ingestion without exposing provider credentials."}
+      }
+    },
+    {
+      "id": "S129-2",
+      "rank": 1,
+      "slug": "target-verified-supabase-deployment-authority",
+      "title": "Compose existing management and target-admin authorities into a fail-closed PromoGrind Supabase deploy path",
+      "tier": "🔥",
+      "axis": "AI integration / feature depth / security / organization",
+      "axisWeight": 2,
+      "effortHours": 5,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 57.0,
+      "status": "unblocked",
+      "why": "The generic management credential and exact target admin URL are both ready, but the absent synthetic capability alias prevents the pinned migration and five provider functions from deploying.",
+      "evidence": [
+        "check-launch-capabilities authorized fjnpzjjyhnpmunfoycrp through its REST surface.",
+        "check-secrets reports supabase.management and supabase.admin READY while promogrind.supabase.deploy is undeclared/missing.",
+        "deploy-supabase.mjs already pins every command to fjnpzjjyhnpmunfoycrp but resolves only the absent alias."
+      ],
+      "ladder": {
+        "L1": {"effortHours": 2, "recipe": "Allow an explicitly checked management-token plus target-admin URL fallback and preserve the pinned project-ref refusal."},
+        "L2": {"effortHours": 5, "recipe": "Add a target-authorization preflight against the Supabase management API, focused adversarial tests, deploy the pending migration and five AI functions, and emit redacted content-addressed receipts."},
+        "L3": {"effortHours": 8, "recipe": "Also verify remote migration/function inventories after apply and bind launch-proof completion to exact remote receipts rather than command exit alone."}
+      }
+    },
+    {
+      "id": "S129-3",
+      "rank": 3,
+      "slug": "machine-executable-production-proof-closure",
+      "title": "Execute every machine-verifiable production proof and bind each result to the live target",
+      "tier": "🔥",
+      "axis": "feedback loop / commerce / identity / observability",
+      "axisWeight": 2,
+      "effortHours": 8,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 37.9,
+      "status": "unblocked",
+      "why": "Stripe, capture, auth, deployment, and production smoke authorities are available or probeable, but stale pending rows still block promotion.",
+      "evidence": [
+        "Live Stripe, target Supabase, Brevo domain, and production capture configuration probes are authorized.",
+        "LAUNCH_PROOFS still has empty receipts for auth email, Stripe lifecycle, capture submission/lead observation, and provider deployment.",
+        "The launch workflow already emits post-deploy artifacts but the local launch-status aggregate exceeded the audit's 120-second probe window, so final execution needs the full bounded gate."
+      ],
+      "ladder": {
+        "L1": {"effortHours": 3, "recipe": "Run live web, production dashboard, capture, and proof-list runners; record only verified redacted results."},
+        "L2": {"effortHours": 8, "recipe": "Complete disposable production auth lifecycle, capture submission plus lead-row observation, Stripe lifecycle where a safe bounded payment path exists, and ingest fresh GitHub deployment evidence."},
+        "L3": {"effortHours": 12, "recipe": "Add idempotent cleanup, receipt quorum, target/commit binding, and automatic contradiction detection between remote state and the canonical ledger."}
+      }
+    },
+    {
+      "id": "S129-4",
+      "rank": 4,
+      "slug": "human-boundary-release-court",
+      "title": "Preflight and precisely classify the remaining human-only launch evidence without phantom blockers",
+      "tier": "⚡",
+      "axis": "identity / security / engagement / process quality",
+      "axisWeight": 1.5,
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 27.9,
+      "status": "unblocked",
+      "why": "Zoho alias administration, live Obelisk relying-party enrollment, historical credential rotation, and an independent friend tester must each be tried through available admin paths before any owner-only classification.",
+      "evidence": [
+        "zoho.mail.admin and Obelisk relying-party declarations are missing while generic Obelisk runtime access exists.",
+        "Five historical findings are redacted and current-tree clean, but provider rotation/revocation and an approved history strategy are unproved.",
+        "No repository or agent-run smoke can truthfully substitute for independent friend-facing feedback."
+      ],
+      "ladder": {
+        "L1": {"effortHours": 1, "recipe": "Run secrets discovery and elevated/admin probes for each boundary; classify exact remaining authority."},
+        "L2": {"effortHours": 4, "recipe": "Execute every available admin path, record founder deploy authorization from this session, ship any Studio-owned capability gaps through signed Ark, and retain only hardware/signup/billing/independent-tester boundaries as human-blocked."},
+        "L3": {"effortHours": 7, "recipe": "Add durable evidence contracts and expiry/renewal checks for mailbox identity, Obelisk delegation, rotation receipts, tester completion, and founder approval."}
+      }
+    }
+  ],
+  "executionLog": [],
+  "rejected": [
+    {"candidate": "Build more product features", "reason": "Rejected on live verification: the repo-owned innovation pack contains only the external launch-proof ledger."},
+    {"candidate": "Treat checked-in _headers as production hardening", "reason": "Rejected: the live origin delivers none of the required headers."},
+    {"candidate": "Treat generic credential presence as Supabase deployment proof", "reason": "Rejected: apply and remote inventory receipts are required."},
+    {"candidate": "Mark auth, payment, mailbox, Obelisk, tester, or rotation complete from local tests", "reason": "Rejected: those authorities require observed external outcomes."},
+    {"candidate": "Install a new deployment dependency", "reason": "Rejected: Wrangler is already globally available and Cloudflare REST/CLI paths are sufficient."}
+  ]
+}

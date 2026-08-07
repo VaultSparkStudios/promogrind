@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-04T21:58:25.672Z",
+  "generatedAt": "2026-08-07T08:40:12.386Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "19aeda55215b5820b3006e41e818235239f17dd9bcc4fcc2907f77cae9179a3f",
+  "briefSha256": "1b02fa5a3086a06e4073f4fe2322cea1dd08851c73ee05d04e5f983ceb74757a",
   "rendererVersion": "3.2",
-  "targetSession": 128,
-  "sourceSession": 127,
+  "targetSession": 129,
+  "sourceSession": 128,
   "sources": {
     "projectProfile": {
       "medium": "app",
@@ -22,11 +22,11 @@
     },
     "revenue": {
       "source": "docs/REVENUE_SIGNALS.md",
-      "ageDays": 3
+      "ageDays": 6
     },
     "context": {
       "confidence": "measured",
-      "recommendation": "CONTINUE",
+      "recommendation": "WARN_COMPACT_SOON",
       "measured": true
     },
     "tests": {

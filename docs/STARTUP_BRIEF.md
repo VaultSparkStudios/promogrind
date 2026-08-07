@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.2 -->
-<!-- generated-at: 2026-08-04 (Session 127 closeout) -->
+<!-- generated-at: 2026-08-07 (Session 128 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 127 closeout · 2026-08-04.
+> **Fast-boot brief** — generated at Session 128 closeout · 2026-08-07.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,14 +14,14 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 128 · 2026-08-04 · FOUNDER MODE                         ║
+║  Session 129 · 2026-08-07 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S127) - WHAT SHIPPED ══════════════════════════╗
-║  S127 recovery verified and completed five L3 product/data cont  ║
-║  Tests  97/97 files · 679/679 assertions                         ║
-║  Deploy S126 repair commit d3d611b reached origin/main. CI 3088  ║
+╔══ LAST SESSION (S128) - WHAT SHIPPED ══════════════════════════╗
+║  S128 shipped five L3 decision-truth contracts and three repo-o  ║
+║  Tests  103/103 files · 705/705 assertions                       ║
+║  Deploy S128 commit 8e38efb reached origin/main. CI 30969391522  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
@@ -40,8 +40,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    998/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 7↑                       ║
-║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 8↑                       ║
+║    Last active: 0d  ·  Last closeout: 3d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -50,7 +50,7 @@
 ║    Alignment       100    ██████████  ████████ →                 ║
 ║    Momentum        100    ██████████  ████████ →                 ║
 ║    Engagement      100    ██████████  ████████ →                 ║
-║    Process Qual     99    ██████████  ███████▇ →                 ║
+║    Process Qual     99    ██████████  ██████▇▇ →                 ║
 ║    Coherence       100    ██████████  ········ →                 ║
 ║    Security        100    ██████████  ········ →                 ║
 ║    Ecosystem       100    ██████████  ········ →                 ║
@@ -59,24 +59,24 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 127 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 128 ═══════════════════════════╗
 ║ Shipped:  see LATEST_HANDOFF.md                                ║
-║ Tests:    97/97 passing  ·  Deploy: S126 repair commit…        ║
+║ Tests:    103/103 passing  ·  Deploy: S128 commit 8e38efb…     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  █████░░░░░░░░░░░░░░░░░░░   20% used                         ║
-║    52,468 / 258,400 tok  ·  codex/codex-272k  ·  measured      ║
-║    ~26,234 tok/turn  ·  cache 50%  ·  7 turns to compact       ║
-║    Verdict: CONTINUE                                           ║
+║ ✓  ███████████░░░░░░░░░░░░░   48% used                         ║
+║    123,266 / 258,400 tok  ·  codex/codex-272k  ·  measured     ║
+║    ~61,633 tok/turn  ·  cache 50%  ·  1 turns to compact       ║
+║    Verdict: WARN_COMPACT_SOON  ← act now                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║ ✓  Tests         97/97 files · 679/679 assertions (2026-08-04) ║
-║ ✓  Velocity      7 ↑  ·  Debt: →                               ║
+║ ✓  Tests         103/103 files · 705/705 assertions…           ║
+║ ✓  Velocity      8 ↑  ·  Debt: →                               ║
 ║ ⚠  Runway        ~2 sessions                                   ║
-║ ✓  Context age   0d                                            ║
-║ ✓  IGNIS         44911 FORGE  ·  3d old                        ║
+║ ✓  Context age   3d                                            ║
+║ ✓  IGNIS         44911 FORGE  ·  6d old                        ║
 ║ ✓  Truth         green-repo-owned-with-history-and-external-p… ║
 ║ ⚠  Compliance   not-tracked: no non-zero compliance run…       ║
 ║ ✓  Genome dims   all stable  (24/25)                           ║
@@ -84,9 +84,9 @@
 ║ ✓  CDR           no gap detected                               ║
 ║ ✓  Patterns      no recurring pressure detected                ║
 ║ ✓  Templates     v3.3 aligned                                  ║
-║ ✓  Revenue sig.  3d old (2026-08-01)                           ║
+║ ✓  Revenue sig.  6d old (2026-08-01)                           ║
 ║ ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                ║
-║ ✓  Doctor        12/12 (100%)  ·  2026-08-04  ✓                ║
+║ ✓  Doctor        12/12 (100%)  ·  2026-08-07  ✓                ║
 ║ ✓  Codex trust   trusted project active                        ║
 ║ ⚠  Canon adopt.  44/52 pending review                          ║
 ║ ✓  Cost          flat-rate Max Plan · ledger telemetry is…     ║
@@ -96,7 +96,7 @@
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
 ║  Snapshot: 0m old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 35 drained · 14h old · sig failures 0                      ║
+║  Ark: 0 drained · 28h old · sig failures 0                       ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -107,19 +107,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   █▆▄▄▄  7↑  (last 5 sessions)                        ║
+║  Velocity:   █▆▄▄▄  8↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  995/1000  (↓3 vs current 998)                       ║
+║  Projected:  997/1000  (↓1 vs current 998)                       ║
 ║  All categories forecast stable or rising.                       ║
-║  Calibration: MAE 1 over last 5 forecasts                        ║
+║  Calibration: MAE 1.3 over last 6 forecasts                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 127                               ║
+║  GENIUS HIT LIST  ·  Session 128                               ║
 ║  Project: PromoGrind · ranked by impact                        ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -132,5 +132,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 127 closeout · 2026-08-04*
+*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 128 closeout · 2026-08-07*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

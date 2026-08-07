@@ -1,5 +1,9 @@
 # PromoGrind Handoff — Session 128
 
+## Session Intent
+
+Run the complete project-aware `/arc`, then the full `/closeout`, commit and push the verified result directly to `main`, fully deploy PromoGrind through its staging-first release path, and verify the live production outcome.
+
 ## Where We Left Off
 
 - Status: S127 recovery and the complete S128 mission are saturated, locally verified, and published to the direct-main closeout boundary.

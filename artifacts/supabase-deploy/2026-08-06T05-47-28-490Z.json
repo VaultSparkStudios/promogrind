@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0",
+  "receiptId": "c90fbc9d-cca1-48b4-9cc4-c6fd89471ab4",
+  "target": "fjnpzjjyhnpmunfoycrp",
+  "capability": "promogrind.supabase.deploy",
+  "authorityMode": "composed-target-verified",
+  "managementReceipt": {
+    "authorized": true,
+    "httpStatus": 200,
+    "target": "fjnpzjjyhnpmunfoycrp"
+  },
+  "completedAt": "2026-08-06T05:47:28.490Z",
+  "planDigest": "3f35c109fb05192005057903140cf56d809f91ec2ed2a537a66cdee21a345852",
+  "results": [
+    {
+      "kind": "migration-management-api",
+      "name": "ai_quota_claim",
+      "version": "20260723021000",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T05:47:11.028Z",
+      "exitCode": 0,
+      "httpStatus": 201
+    },
+    {
+      "kind": "migration-management-api",
+      "name": "advisor_confidence_receipts",
+      "version": "20260804081500",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T05:47:11.537Z",
+      "exitCode": 0,
+      "httpStatus": 201
+    },
+    {
+      "kind": "function",
+      "name": "ai-action-plan",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T05:47:11.835Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "parse-bet-slip",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T05:47:15.196Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "promo-advisor",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T05:47:19.639Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "promo-chat",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T05:47:22.220Z",
+      "exitCode": 0
+    },
+    {
+      "kind": "function",
+      "name": "stack-builder",
+      "target": "fjnpzjjyhnpmunfoycrp",
+      "startedAt": "2026-08-06T05:47:25.388Z",
+      "exitCode": 0
+    }
+  ]
+}

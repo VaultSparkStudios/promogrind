@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0",
+  "target": "fjnpzjjyhnpmunfoycrp",
+  "startedAt": "2026-08-06T05:53:26.117Z",
+  "completedAt": "2026-08-06T05:53:37.428Z",
+  "disposableUserRemoved": true,
+  "status": 429,
+  "remaining": 0,
+  "quotaWindow": "lifetime",
+  "providerEgressAvoided": true
+}

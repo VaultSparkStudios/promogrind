@@ -1,30 +1,10 @@
-# PromoGrind Implementation Plan — Session 128
+# PromoGrind Implementation Plan — Session 129
 
-Source: `docs/AUDIT_2026-08-04_S128.json`.
+Source: `docs/AUDIT_2026-08-06.json`
 
-All five premise-verified items target L3. Work is ordered by dependency and verification leverage.
+1. **S129-2 · target-verified-supabase-deployment-authority (L3)** — repair the invalid migration plan, compose gateway authorities only after exact-project verification, test adversarial target refusal, deploy, and inspect remote receipts.
+2. **S129-1 · cloudflare-dual-origin-release-plane (L3)** — build one attested static artifact, deploy/verify stable staging, then promote identical bytes to the production edge with delivered headers and rollback evidence.
+3. **S129-3 · machine-executable-production-proof-closure (L2/L3)** — run every safe live proof, bind outcomes to target and commit, and clean up disposable state.
+4. **S129-4 · human-boundary-release-court (L2)** — run secrets/admin probes, execute available paths, route Studio-owned gaps via Ark, and retain only genuinely human-only proof.
 
-## Wave 1 — capability ceiling
-
-1. [x] Make remote rollouts subtractive to the audited build capability ceiling.
-2. [x] Add typed reason receipts plus malformed/tier/cohort adversarial tests.
-
-## Wave 2 — quote evidence
-
-3. [x] Extract target-excluded, paired-market, no-vig quote evidence.
-4. [x] Remove time-seeded liveness and route locked users to capability-derived availability.
-
-## Wave 3 — referral truth
-
-5. [x] Establish one 14/7-day, five-per-30-day gift contract.
-6. [x] Return and render token-versus-delivery receipts; remove invented reward totals and identity leakage.
-
-## Wave 4 — decision language
-
-7. [x] Replace skill personas with evidence-labeled tool-mix observations.
-8. [x] Replace Juice Score play grades with assumption-bound model-signal receipts.
-
-## Wave 5 — ratchet and proof
-
-9. [x] Extend the public-claim contract for repaired liveness, delivery, profile, and model-grade classes.
-10. [x] Capture desktop/mobile dark/light states, run objective pixel inspection, full launch-local, Doctor, security, writeback, and closeout.
+Efficiency order puts the target provider foundation before hosting promotion, then runs remote journey proofs against the deployed artifact. Token/API measurement stays last after the release state settles.

@@ -4,8 +4,8 @@ import { buildPublicCapabilityContract } from "./lib/public-capability-contract.
 
 const contract = buildPublicCapabilityContract();
 const calculator = contract.capabilities.find((item) => item.id === "calculator-api");
-assert.equal(calculator.availability, "unverified");
-assert.equal(contract.callable_tools.length, 0, "unproved deployment must expose no callable tools");
+assert.equal(calculator.availability, "available");
+assert.equal(contract.callable_tools.length, 7, "criterion-complete live deployment must expose the seven calculator tools");
 assert.equal(calculator.endpoints.length, 7);
 assert.ok(calculator.endpoints.every((endpoint) => endpoint.slug && endpoint.path && endpoint.params));
 assert.ok(contract.capabilities
@@ -17,4 +17,4 @@ assert.equal(agents.capability_contract, "https://promogrind.bet/capabilities.js
 assert.deepEqual(agents.callable_tools, []);
 assert.match(fs.readFileSync("public/.well-known/llms.txt", "utf8"), /capabilities\.json/);
 
-console.log("Public agent capability contract passed (source parity, zero unproved tools, fail-closed feature truth).");
+console.log("Public agent capability contract passed (source parity, proven calculator tools, fail-closed feature truth).");

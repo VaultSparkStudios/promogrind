@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-07-26",
+  "as_of": "2026-08-07",
   "product": "PromoGrind",
   "canonical_url": "https://promogrind.bet/",
   "truth_basis": {
@@ -11,7 +11,7 @@
       "context/LAUNCH_PROOFS.json",
       "src/launchState.js"
     ],
-    "source_digest": "7086d24a3eb2018244efac68af9e8dfd8b2d087822fbec929ffe0b730117b9a8"
+    "source_digest": "a9a08f9f4760e918349b61a8ab53dc5e8ae4e54cb9d47f1582db1e49ceff5512"
   },
   "agent_policy": {
     "autonomous_betting": false,
@@ -19,13 +19,86 @@
     "educational_calculation": true,
     "independent_verification_required": true
   },
-  "callable_tools": [],
+  "callable_tools": [
+    {
+      "id": "calculator.bonus-bet",
+      "method": "POST",
+      "url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api/bonus-bet",
+      "input": {
+        "bonusBetSize": "number",
+        "bonusOdds": "odds",
+        "hedgeOdds": "odds"
+      }
+    },
+    {
+      "id": "calculator.arb-2way",
+      "method": "POST",
+      "url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api/arb-2way",
+      "input": {
+        "odds1": "odds",
+        "odds2": "odds",
+        "totalStake": "number"
+      }
+    },
+    {
+      "id": "calculator.arb",
+      "method": "POST",
+      "url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api/arb",
+      "input": {
+        "odds1": "odds",
+        "odds2": "odds",
+        "totalStake": "number"
+      }
+    },
+    {
+      "id": "calculator.ev",
+      "method": "POST",
+      "url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api/ev",
+      "input": {
+        "yourOdds": "odds",
+        "fairOdds": "odds",
+        "stake": "number"
+      }
+    },
+    {
+      "id": "calculator.profit-boost",
+      "method": "POST",
+      "url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api/profit-boost",
+      "input": {
+        "stake": "number",
+        "odds": "odds",
+        "boostPct": "number",
+        "maxExtra": "number",
+        "hedgeOdds": "odds"
+      }
+    },
+    {
+      "id": "calculator.no-vig",
+      "method": "POST",
+      "url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api/no-vig",
+      "input": {
+        "odds1": "odds",
+        "odds2": "odds"
+      }
+    },
+    {
+      "id": "calculator.kelly",
+      "method": "POST",
+      "url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api/kelly",
+      "input": {
+        "winProb": "percentage",
+        "odds": "odds",
+        "bankroll": "number",
+        "fraction": "number_optional"
+      }
+    }
+  ],
   "capabilities": [
     {
       "id": "calculator-api",
-      "availability": "unverified",
+      "availability": "available",
       "candidate_base_url": "https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/calc-api",
-      "reason": "Implementation exists, but no complete criterion-addressed production deployment receipt exists.",
+      "reason": "All required deployment criteria have addressed receipts.",
       "endpoints": [
         {
           "slug": "bonus-bet",
@@ -99,32 +172,32 @@
     {
       "id": "aiScan",
       "availability": "unavailable",
-      "reason": "No complete, criterion-addressed production deployment receipt exists."
+      "reason": "The production-default feature flag is disabled."
     },
     {
       "id": "promoAdvisor",
       "availability": "unavailable",
-      "reason": "No complete, criterion-addressed production deployment receipt exists."
+      "reason": "The production-default feature flag is disabled."
     },
     {
       "id": "promoChat",
       "availability": "unavailable",
-      "reason": "No complete, criterion-addressed production deployment receipt exists."
+      "reason": "The production-default feature flag is disabled."
     },
     {
       "id": "liveScanner",
       "availability": "unavailable",
-      "reason": "No complete, criterion-addressed production deployment receipt exists."
+      "reason": "The production-default feature flag is disabled."
     },
     {
       "id": "stackBuilder",
       "availability": "unavailable",
-      "reason": "No complete, criterion-addressed production deployment receipt exists."
+      "reason": "The production-default feature flag is disabled."
     },
     {
       "id": "aiActionPlan",
       "availability": "unavailable",
-      "reason": "No complete, criterion-addressed production deployment receipt exists."
+      "reason": "The production-default feature flag is disabled."
     }
   ]
 }

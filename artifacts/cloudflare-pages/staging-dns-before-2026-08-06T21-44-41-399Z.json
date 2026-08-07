@@ -1,0 +1,14 @@
+{
+  "environment": "staging",
+  "domain": "staging.promogrind.bet",
+  "records": [
+    {
+      "id": "e2e52c15a47fe18974c66201c0650a30",
+      "type": "CNAME",
+      "name": "staging.promogrind.bet",
+      "content": "promogrind-staging.pages.dev",
+      "proxied": true,
+      "ttl": 1
+    }
+  ]
+}
