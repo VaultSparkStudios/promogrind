@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-07T08:29:59.443Z",
+  "generatedAt": "2026-08-07T19:21:27.454Z",
   "source": "check-release-gate.mjs",
   "sourceMode": "public-shim-self-profile",
   "evaluatedProjectCount": 1,
@@ -59,9 +59,9 @@
           "severity": "required"
         },
         {
-          "ok": false,
+          "ok": true,
           "label": "Stable staging path available",
-          "detail": "stagingType=local · no stable URL",
+          "detail": "stagingType=stable-remote-cloudflare-pages · https://staging.promogrind.bet",
           "severity": "required"
         },
         {
@@ -78,7 +78,6 @@
         }
       ],
       "summary": [
-        "Stable staging path available",
         "Blocking launch proofs complete"
       ]
     }

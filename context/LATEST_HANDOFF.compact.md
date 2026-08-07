@@ -1,46 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 0db126900394 -->
-<!-- generated-at: 2026-08-06T04:45:03.106Z -->
+<!-- source-hash: de4c9606db18 -->
+<!-- generated-at: 2026-08-07T19:08:03.433Z -->
 
 # LATEST_HANDOFF (compact)
 
-# PromoGrind Handoff Summary — Session 128
+PromoGrind Handoff Summary — Session 129
 
-Status
-- S127 recovery and full S128 mission saturated, locally verified, published to direct-main closeout boundary.
-- Release: FORGE HOLD. Stable staging and ten typed external production proofs incomplete.
+Session
+- S129: /arc + /closeout complete; integrated tree passes full launch verifier.
 
-Shipped (S128)
-- Five premise-verified L3 product-truth contracts plus three repo-owned second-order refinements.
-- Subtractive feature-flag authority with typed reasons and protected-consumer bypass guards.
-- Fresh, target-excluded, no-vig Scanner consensus requiring distinct bookmaker identities.
-- Referral/gift contract (attribution, token issuance, acceptance, inbox certainty, sender-credit).
-- Basis/assumption-bound calculator signals replacing authoritative grades.
-- Thirty-rule public-claim ratchet over 334 files; duplicate-source and swallowed-persistence repairs.
-- 24-state rendered-proof harness and hash-bound release parity.
+Shipped
+- Target-verified Supabase composition: 2 migrations, 5 ACTIVE provider functions, quota 429 proof.
+- Newsletter capture: insert-only RLS, anonymous insert/readback/cleanup smoke, hash-only receipts.
+- Cloudflare staging/prod control plane: deterministic digests, stable domains, 6 headers, SPA routing, health, DNS rollback records.
+- Root landing theme toggle, shared footer, 44x44 targets across modes.
+- Four Chromium captures, passing CANON-053 receipt; React Router advisory guard.
 
-Verification (all green)
-- npm test: exit 0; 103/103 files, 705/705 assertions.
-- verify:edge: 52/52 tests, 15/15 entrypoints.
-- Doctor: 12/12, overallPass true, blockingFailing 0.
-- verify:launch-local: exit 0.
-- Visual: 24 hash-bound captures, both themes, both viewport classes.
-- Remote 8e38efb: CI and brief-format passed; deploy run deployed artifact, passed production launch, disposable-user auth/checkout/cleanup, dashboard smoke.
+Verification
+- verify:launch-local exit 0 (2026-08-07); Vitest 103/103 files, 705/705 assertions.
+- 15 Edge entrypoints, 52/52 runtime checks pass; secrets/sanitizer zero findings.
+- Staging GREEN at staging.promogrind.bet; digest aedc3d7b…9360b passed independent release gate.
+- Capture: 201 insert, 200 observe, 204 cleanup.
 
-Current intent
-- Repo-owned Genius List empty. Preserve fail-closed decision contracts; obtain only real external evidence for launch promotion.
+Current Intent
+- Commit/push S129 to main, rebuild artifact bound to commit SHA, promote to Cloudflare production with --allow-dns-cutover, then verify and record parity.
 
-Now bucket (top 3)
-1. Stable staging and six delivered response headers.
-2. Exact target-bound Supabase deploy authority; pending migration/function receipts.
-3. External proofs: Zoho, Obelisk, auth-email, Stripe, friend, capture, credential-remediation, founder-approval.
+Now Bucket (top 3)
+1. Autopilot commit/push S129 to origin/main.
+2. Rebuild release artifact on resulting commit; promote to production with DNS cutover/rollback receipt.
+3. Run live contract, capture-safe config, digest-parity checks; append production proof receipts in follow-up commit.
 
 Blockers (top 3)
-- Six missing response headers preserved in terminal red state.
-- Nonblocking affiliate-coverage advisory.
-- Windows DPAPI blocks semantic image return; semantic AI viewing not claimed.
+1. scripts/lib/skill-profile.mjs absent in public repo; used documented manual fallback.
+2. Package Trust blocked Playwright CLI install; used bounded CDP harness for browser evidence.
+3. Deployment permission cannot fabricate external tester/mailbox/billing/identity/rotation/approval evidence.
 
-Human-blocked / external
-- Studio conformance cannot read boolean pass fields in passIf expression. Owned by Studio Ops, routed via signed Ark receipt 01JV7RIVGHAC08EF1903E27E52. No sibling edited. Age: filed S128.
+Human-Blocked (SPARKED public launch on HOLD)
+- Pending: Zoho, Obelisk, auth-email, Stripe, friend, remediation, cost, and post-proof founder approval. (age: unspecified)
 
-Next session: Chase real external evidence starting with stable staging and the six response headers.
+Next Session
+- Execute commit/push to main, rebuild+promote to production with DNS cutover, then verify live and append proof receipts.

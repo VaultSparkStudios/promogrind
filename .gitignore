@@ -34,6 +34,20 @@ scripts/rotate-render-key.mjs
 scripts/soul-interview.mjs
 supabase/.temp/
 artifacts/launch-verification/
+# Provider/deploy receipts are ephemeral by default. Keep only the exact
+# evidence named by canonical proofs plus production promotion/rollback receipts.
+artifacts/capture-smoke/*
+!artifacts/capture-smoke/2026-08-06T23-43-45-259Z.json
+artifacts/supabase-deploy/*
+!artifacts/supabase-deploy/2026-08-06T05-47-28-490Z.json
+!artifacts/supabase-deploy/2026-08-06T05-53-37-428Z-quota-smoke.json
+!artifacts/supabase-deploy/2026-08-06T22-58-20-090Z.json
+artifacts/cloudflare-pages/*
+!artifacts/cloudflare-pages/staging-2026-08-07T00-28-19-177Z.json
+!artifacts/cloudflare-pages/staging-dns-before-2026-08-07T00-28-19-073Z.json
+!artifacts/cloudflare-pages/production-*.json
+!artifacts/cloudflare-pages/production-dns-before-*.json
+docs/visual-qa/captures/s129-after-*.png
 
 # Private surfaces — never commit (sanitization 2026-06-03)
 ignis/output/

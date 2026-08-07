@@ -713,3 +713,16 @@ Append chronological entries.
 - Release remains FORGE HOLD on stable staging plus ten incomplete typed production proofs; no external fact, secret, dependency, provider enablement, sibling edit, or force operation was introduced.
 - Routed the Studio-owned boolean `passIf` conformance parser defect through signed Ark repo-question `01JV7RIVGHAC08EF1903E27E52`; no cross-repo file mutation occurred.
 - Published implementation/closeout commit `8e38efb` directly to `origin/main` at exact `0/0` parity. CI `30969391522` and brief-format `30969391495` passed. Deploy Pages `30969391523` attested/deployed the artifact and passed production launch, disposable-user auth/checkout/cleanup, dashboard smoke, and standard files; its final red is the honest six-header HOLD plus one affiliate-coverage advisory while five-book monetization coverage passes.
+
+## 2026-08-07 — Session 129 Codex release-plane arc and closeout
+
+- Ran the complete `/start → /audit → /implement → /closeout` mission; integrated remote `main` dependency updates before terminal verification.
+- Deployed quota/newsletter migrations and five provider functions to pinned Supabase project `fjnpzjjyhnpmunfoycrp`; remote inventory, quota 429, and redacted receipts pass.
+- Proved newsletter capture end to end with anonymous 201, privileged readback, and 204 cleanup while preserving insert-only public access and persisting only an email hash.
+- Established stable Cloudflare staging with deterministic artifact digest, custom-domain health, deep-route 200s, all six security headers, and exact DNS rollback receipts; GitHub Pages remains the rollback origin.
+- Repaired landing theme/footer/mobile target parity and false capture-success behavior; four final Chromium states pass CANON-053 and independent release review.
+- Package Trust blocked the optional Playwright CLI; reused the existing bounded CDP harness without a dependency addition.
+- Full `npm run verify:launch-local` exits 0 on the integrated tree: 103/103 Vitest files, 705/705 assertions, all 15 Edge entrypoints, 52 runtime compatibility checks, clean secret/sanitizer gates, build, browser smoke, integrity, proof replay, and bundle budget.
+- React Router's published RSC advisory remains visible, but the app's pinned client-only BrowserRouter architecture is non-reachable and mechanically guarded; global `npm audit` green is not claimed.
+- Technical production promotion is independently GREEN for staging digest `aedc3d7b…9360b`; SPARKED remains HOLD for the unresolved external business, identity, remediation, cost, and post-proof approval criteria.
+- Closeout personalization script was absent under the public-repo shim, so canonical manual write-back was used instead of inventing private ops tooling.

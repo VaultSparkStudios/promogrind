@@ -4,7 +4,7 @@
 
 | Project | Public-facing | Decision | Open gates |
 |---|---|---|---|
-| PromoGrind | yes | HOLD | Stable staging path available, Blocking launch proofs complete |
+| PromoGrind | yes | HOLD | Blocking launch proofs complete |
 
 ## PromoGrind
 
@@ -18,6 +18,6 @@
 - ✓ Public-safe file map intact — Core navigation surfaces preserved.
 - ✓ Rights provenance present — RIGHTS_PROVENANCE.md present.
 - ✓ Branding compliant — VaultSpark branding requirement satisfied.
-- ⛔ Stable staging path available — stagingType=local · no stable URL
+- ✓ Stable staging path available — stagingType=stable-remote-cloudflare-pages · https://staging.promogrind.bet
 - ✓ Sanitization clear — 0 critical · 0 warning
 - ⛔ Blocking launch proofs complete — 8 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, stagingAndHeaders, obeliskDelegation, credentialRemediation, founderApproval

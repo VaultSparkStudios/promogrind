@@ -54,7 +54,7 @@
       "impact": 10,
       "innovation": 9,
       "priority": 54.2,
-      "status": "unblocked",
+      "status": "in-progress-post-closeout-promotion",
       "why": "The checked-in header policy is inert on GitHub Pages, all six live headers are absent, and local-only staging cannot satisfy the stable-origin gate.",
       "evidence": [
         "npm run verify:web-live -- --url https://promogrind.bet returned rootStatus 200 with CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy all absent.",
@@ -79,7 +79,7 @@
       "impact": 10,
       "innovation": 8,
       "priority": 57.0,
-      "status": "unblocked",
+      "status": "completed-l3",
       "why": "The generic management credential and exact target admin URL are both ready, but the absent synthetic capability alias prevents the pinned migration and five provider functions from deploying.",
       "evidence": [
         "check-launch-capabilities authorized fjnpzjjyhnpmunfoycrp through its REST surface.",
@@ -104,7 +104,7 @@
       "impact": 9,
       "innovation": 7,
       "priority": 37.9,
-      "status": "unblocked",
+      "status": "repo-owned-proof-complete-external-criteria-retained",
       "why": "Stripe, capture, auth, deployment, and production smoke authorities are available or probeable, but stale pending rows still block promotion.",
       "evidence": [
         "Live Stripe, target Supabase, Brevo domain, and production capture configuration probes are authorized.",
@@ -129,7 +129,7 @@
       "impact": 8,
       "innovation": 6,
       "priority": 27.9,
-      "status": "unblocked",
+      "status": "completed-l2",
       "why": "Zoho alias administration, live Obelisk relying-party enrollment, historical credential rotation, and an independent friend tester must each be tried through available admin paths before any owner-only classification.",
       "evidence": [
         "zoho.mail.admin and Obelisk relying-party declarations are missing while generic Obelisk runtime access exists.",
@@ -143,7 +143,13 @@
       }
     }
   ],
-  "executionLog": [],
+  "executionLog": [
+    "S129-2 complete: two migrations applied to fjnpzjjyhnpmunfoycrp, five provider functions ACTIVE, quota smoke returned HTTP 429, and redacted target-bound receipts were emitted.",
+    "S129-1 staging complete: stable staging serves content-addressed artifact aedc3d7b...9360b with health, deep-route 200s, all six headers, rollback origin, and exact DNS receipt. Commit-bound production promotion follows closeout.",
+    "S129-3 repo-owned proof complete: capture insert/readback/cleanup returned 201/200/204 and launch proof captureConfig is 3/3. Auth-email, real Stripe, and independent tester criteria remain external.",
+    "S129-4 complete: secrets/admin paths and independent release review distinguish technically green promotion from unresolved human/external SPARKED gates.",
+    "Terminal verification: npm run verify:launch-local direct exit 0; 103/103 Vitest files, 705/705 assertions, 15 Edge entrypoints, 52 runtime checks, strict sanitizer and secret scans green."
+  ],
   "rejected": [
     {"candidate": "Build more product features", "reason": "Rejected on live verification: the repo-owned innovation pack contains only the external launch-proof ledger."},
     {"candidate": "Treat checked-in _headers as production hardening", "reason": "Rejected: the live origin delivers none of the required headers."},

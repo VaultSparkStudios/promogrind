@@ -570,3 +570,13 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Rendered evidence truth: 24 unique Chromium states across six surfaces, two themes, and two viewport classes pass objective pixel/browser-state checks and are hash-bound. Semantic AI image judgment remains unclaimed because Windows DPAPI blocks the viewer.
 - Release truth remains FORGE HOLD on stable staging and ten incomplete typed production proofs; repository correctness is not launch authority.
 - Remote truth at `8e38efb`: CI and brief-format passed; the immutable artifact deployed; production launch, disposable-user auth/checkout/cleanup, dashboard smoke, and standard files passed. The workflow remains red because six response headers are absent and `affiliate_coverage` is advisory; five-book monetization coverage is green. No SPARKED claim follows from deployment success.
+
+## 2026-08-07 — Session 129 Release Authority Truth Update
+
+- Staging truth is now external and observed: `https://staging.promogrind.bet` serves exact digest `aedc3d7b…9360b`; root, health, deep routes, standard files, and all six required headers pass.
+- Supabase truth is target-bound: project `fjnpzjjyhnpmunfoycrp` contains both new migrations and five ACTIVE provider functions; quota exhaustion returns 429.
+- Capture truth is complete without widening public read authority: anonymous insert 201, privileged observation 200, cleanup 204, and the receipt stores only an email hash.
+- Browser-key truth distinguishes gateway rejection from intentional table-policy denial and never selects secret/service candidates.
+- Rendered truth covers final landing dark/light desktop/mobile pixels; mobile has no overflow and all touched controls/footer links meet 44×44.
+- Dependency truth remains qualified: the React Router advisory targets unstable RSC APIs that the client-only source contract forbids; `npm audit` green is not claimed.
+- Release truth separates technical promotion from SPARKED: technical production deployment may proceed after commit binding, while external mailbox, Obelisk, auth-email, Stripe, tester, remediation, cost, and post-proof approval criteria remain HOLD.

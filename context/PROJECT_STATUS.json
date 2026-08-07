@@ -21,35 +21,32 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 128,
-  "currentFocus": "Completed the S128 decision-truth mission: all five L3 items plus claim-ratchet, compound-source/persistence, and rendered-proof refinements shipped across capability authority, quote evidence, referral delivery, tool-mix observation, and model-signal receipts. The actionable repo-owned Genius List is empty.",
-  "nextMilestone": "Establish real staging and a header-capable production edge; rotate/remediate historical credentials; obtain exact PromoGrind Supabase deploy authority; complete Zoho mailbox, auth-email, payment-lifecycle, friend, and capture proof criteria; only then reassess SPARKED.",
+  "currentSession": 129,
+  "currentFocus": "S129 established target-bound Supabase deployment, stable Cloudflare staging with six delivered headers, end-to-end quota and capture proofs, and final rendered landing parity. The exact staging artifact is technically green for commit-bound production promotion.",
+  "nextMilestone": "Promote and verify the S129 commit-addressed artifact on Cloudflare production, record staging/production parity, then complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and post-proof founder criteria before SPARKED.",
   "blockers": [
-    "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
-    "Production edge is missing Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy.",
     "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved.",
     "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
-    "promogrind.supabase.deploy is MISSING; migration 20260723021000_ai_quota_claim.sql and target-pinned functions were not deployed.",
+    "Live Obelisk human account delegation and agent identity exchange remain unproved.",
     "Production auth confirmation/resend/reset/recovery delivery proof is pending.",
     "Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending.",
     "One friend-facing auth/recovery/calculator/pricing pass is pending.",
-    "Capture submission and observable lead-row criteria remain pending.",
     "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
-    "The live Cloudflare target probe lacks response-header-rules authorization (HTTP 403), so the six missing headers cannot be remediated through the current token."
+    "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
   "lastUpdated": "2026-08-07",
-  "silScore": 998,
+  "silScore": 1000,
   "silAvg3": 998.7,
-  "silVelocity": 8,
-  "silDebt": "stable",
-  "silLastSession": 128,
+  "silVelocity": 4,
+  "silDebt": "down",
+  "silLastSession": 129,
   "silMax": 1000,
   "silSparkline": [
     1000,
     1000,
-    1000,
     998,
-    998
+    998,
+    1000
   ],
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
@@ -57,9 +54,9 @@
   "testsPassing": 103,
   "testsTotal": 103,
   "testsLastRun": "2026-08-07",
-  "lastDeployStatus": "S128 commit 8e38efb reached origin/main. CI 30969391522 and brief-format 30969391495 passed. Deploy Pages 30969391523 passed the complete preflight, immutable attestation, artifact deployment, production launch, disposable-user auth/checkout/cleanup, dashboard smoke, and standard files. Its final aggregator correctly stayed red on six absent hosting-edge headers plus one nonblocking affiliate-coverage advisory; five-book monetization coverage passed. SPARKED remains NO-GO.",
+  "lastDeployStatus": "S129 stable staging deployment receipt artifacts/cloudflare-pages/staging-2026-08-07T00-28-19-177Z.json is green at https://staging.promogrind.bet for artifact aedc3d7b...9360b. Root, health, three deep routes, seven standard/health files, six security headers, dark/light, mobile overflow, and 44x44 targets pass. Commit-bound production promotion is the post-closeout action; SPARKED remains HOLD.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-08-04",
+  "truthAuditLastRun": "2026-08-07",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
@@ -90,13 +87,18 @@
       "status": "passing"
     },
     {
+      "type": "staging",
+      "url": "https://staging.promogrind.bet",
+      "status": "green at S129 artifact aedc3d7b...9360b; root, health, deep routes, standard files, all six headers, dark/light, mobile overflow, and 44x44 targets pass"
+    },
+    {
       "type": "production",
       "url": "https://promogrind.bet",
       "status": "live at verified S128 head 8e38efb; production launch, dashboard smoke, and standard files passed in run 30969391523; six required headers remain absent and affiliate_coverage is advisory while five-book monetization coverage passes"
     }
   ],
-  "stagingUrl": null,
-  "stagingType": "local",
+  "stagingUrl": "https://staging.promogrind.bet",
+  "stagingType": "stable-remote-cloudflare-pages",
   "brandingRequired": true,
   "brandingCompliant": true,
   "revenueModel": "affiliate-plus-subscription",
@@ -113,12 +115,12 @@
     "creativeAlignment": 100,
     "momentum": 100,
     "engagement": 100,
-    "processQuality": 99,
+    "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 99
+    "automationCoverage": 100
   },
   "doctorScore": {
     "date": "2026-08-07",
@@ -216,8 +218,8 @@
       }
     ]
   },
-  "entropyScore": 0.016,
-  "entropyLastComputed": "2026-08-04",
+  "entropyScore": 0.03,
+  "entropyLastComputed": "2026-08-07",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
@@ -230,19 +232,19 @@
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
   "sessionShellHygiene": {
-    "session": 128,
+    "session": 129,
     "started": 1,
     "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-08-04T18:00:00-04:00",
-    "evidence": "S128 Chromium fixtures used a hidden repo-local Vite process on 127.0.0.1:4173. Final closeout enumerates and closes only processes whose executable/command path resolves to PromoGrind, then re-probes 4173/4174/4175/5173; unrelated host processes remain untouched."
+    "enumeratedAt": "2026-08-07T18:55:00-04:00",
+    "evidence": "S129 final Chromium capture used one hidden repo-local Vite process on 127.0.0.1:4173. The exact listener and parent were closed, and the port was re-probed with zero repo-owned listeners remaining."
   },
-  "lastSessionSummary": "S128 shipped five L3 decision-truth contracts and three repo-owned second-order refinements. Vitest passes 705/705, Edge 52/52, Doctor 12/12, full launch-local exits 0, and 24 objective rendered states are hash-bound. CI and brief passed; the attested artifact deployed and production smoke passed. Six headers, semantic image return, and typed external launch proofs remain explicit HOLDs.",
+  "lastSessionSummary": "S129 shipped target-bound Supabase deployment, stable Cloudflare staging with six headers, quota and capture proofs, truthful landing capture feedback, and final dark/light desktop/mobile rendered parity. Full launch-local exits 0 and the independent technical gate is green for production promotion; SPARKED remains HOLD on external business, identity, remediation, cost, and post-proof approval criteria.",
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-07T08:33:04.961Z",
-    "commitSha": "4181c348623830ce160b6b02aad0fc7d973fe057",
+    "generatedAt": "2026-08-07T19:23:02.461Z",
+    "commitSha": "72e359c287437d7871fe0274565b7ab57124a7b5",
     "complete": true,
     "partial": false,
     "success": true,
@@ -255,7 +257,7 @@
       "passing": 705,
       "total": 705
     },
-    "reportSha256": "bc304ab09431f574d76a027ce202df5ad2ea2edd0490df2188fe12a6ad315dca"
+    "reportSha256": "9875eaa882feb79ab70569c897ec4f3520ba91faae3c2ed8282aa376faa13b2a"
   },
   "testsAssertionsPassing": 705,
   "testsAssertionsTotal": 705,

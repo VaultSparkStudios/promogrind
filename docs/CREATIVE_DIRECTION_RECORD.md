@@ -367,3 +367,12 @@ Agents MUST NOT modify or remove existing entries.
 - **New required direction:** recovery evidence must distinguish committed truth from merely dirty work, and saturation must complete every live repo-owned premise without manufacturing external readiness or silently downgrading verification.
 - **Application:** S127 replayed the dirty tree before editing, completed five L3 product/infrastructure contracts, repaired the visual verifier itself, and retained semantic-viewer and launch-proof gaps as explicit limits.
 - **Durable rule:** best-in-history recovery is a clean proof boundary: reconstruct, validate, replay, finish, checkpoint, then innovate from current truth.
+
+### 2026-08-06 — Complete the release arc through direct-main deployment without collapsing launch truth (S129)
+
+- **Category:** Assignment / release-quality direction
+- **Human input (close paraphrase):** Run the complete `/arc`, then `/closeout`, commit and push directly to `main`, fully deploy PromoGrind, and verify the outcome.
+- **Area affected:** provider authority / staging-production architecture / rendered UI / closeout and deployment process
+- **New required direction:** eliminate repo-owned deployment blockers autonomously, bind every provider and hosting mutation to the exact target, and carry the verified artifact through staging-first production promotion while preserving the difference between deployed and publicly launched.
+- **Application:** S129 created target-pinned Supabase and Cloudflare release paths, proved quota and capture behavior, repaired rendered landing defects, and retained external SPARKED criteria as explicit HOLDs.
+- **Durable rule:** full deployment means verified, rollback-capable production bytes; it never grants permission to invent mailbox, identity, payment, tester, remediation, or launch-approval evidence.

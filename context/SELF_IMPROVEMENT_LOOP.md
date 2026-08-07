@@ -11,12 +11,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S122:1000 | S123:1000 | S124:1000 | S125:1000 | S126:1000
-Avgs - 3: 1000.0 [N=3] | 5: 1000.0 [N=5] | all: 1000.0 [recent closeout series]
-  └ 3-session (S124/S125/S126): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 100.0
+Sparkline (last 5 totals): S125:1000 | S126:1000 | S127:998 | S128:998 | S129:1000
+Avgs - 3: 998.7 [N=3] | 5: 999.2 [N=5] | all: 999.2 [recent closeout series]
+  └ 3-session (S127/S128/S129): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 99.3 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.3
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
 Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-08-04 | Session 126 | Total: 1000/1000 | Velocity: 8 | protocolVelocity: 8
+Last session: 2026-08-07 | Session 129 | Total: 1000/1000 | Velocity: 4 | protocolVelocity: 4
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1856,3 +1856,36 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 **Committed follow-up(s):**
 - Existing Now item: establish a true staging/header-capable edge and prove all six response headers. `[SIL]`
 - Existing Now item: obtain exact PromoGrind Supabase deploy authority and deploy only to the pinned project ref with a receipt. `[SIL]`
+
+## 2026-08-07 — Session 129 | Total: 1000/1000 | Velocity: 4 | Debt: down
+Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 99.3 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.3
+
+| Category | Score | vs Last | Notes |
+|---|---:|:---:|---|
+| Dev Health | 100 | → | Full launch-local passes 103/103 Vitest files, 705/705 assertions, 15 Edge entrypoints, 52 runtime checks, build/browser smoke, and strict sanitization. |
+| Creative Alignment | 100 | → | Deployment truth remains calm and evidence-first; SPARKED stays less certain than technical promotion until external criteria exist. |
+| Momentum | 100 | → | Four compound release slices moved from audit to verified staging/provider/capture outcomes and a commit-ready production promotion. |
+| Engagement | 100 | → | Landing theme, legal navigation, and capture feedback are more usable without urgency, volume pressure, or fabricated adoption. |
+| Process Quality | 100 | ↑ | The full start/audit/implement/closeout sequence survived remote integration, day-bound mirror expiry, live provider failures, and independent re-review without skipping a gate. |
+| Cross-Repo Coherence | 100 | → | No sibling file was edited; private-tool gaps used public-shim fallbacks and all cross-repo rules remained intact. |
+| Security Posture | 100 | → | Target refusal, public-key filtering, insert-only RLS, redacted receipts, staged secret gates, and DNS rollback constrain every external mutation. |
+| Ecosystem Integration | 100 | → | Launch proofs, public capabilities, Supabase inventories, Cloudflare receipts, visual QA, status, rollback, and release gate now share exact targets and evidence. |
+| Capital Efficiency | 100 | → | No paid API or new dependency was introduced; existing Wrangler and CDP tooling were reused, and Package Trust blocked the optional browser package. |
+| Automation Coverage | 100 | ↑ | Target-bound deployers, remote smokes, digest parity, header/route verification, capture cleanup, visual target assertions, and rollback receipts cover the new release plane. |
+| **Total** | **1000 / 1000** | | |
+
+**Top win:** converted absent staging, inert headers, synthetic deployment authority, and pending capture truth into one target-bound, rollback-capable release plane with observed provider and browser receipts.
+
+**Top gap:** SPARKED still depends on real Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and post-proof founder evidence.
+
+**Intent outcome:** Partial at the closeout boundary. The complete arc and closeout are achieved; production promotion and its receipt commit intentionally follow the closeout commit so the deployed artifact can be bound to an immutable SHA.
+
+**Brainstorm**
+
+1. Add commit-addressed staging promotion so a future CI job can reuse the exact already-reviewed artifact without rebuilding.
+2. Expire external launch receipts by provider-specific half-life and automatically reopen criteria when remote state drifts.
+3. Generalize insert-only relation validation for other public capture surfaces without granting anonymous SELECT.
+
+**Committed follow-up(s):**
+- Promote and verify the commit-bound S129 artifact, then record staging/production parity. `[SIL]`
+- Complete Zoho and Obelisk authority before any SPARKED reassessment. `[SIL]`

@@ -1,35 +1,28 @@
 # Current State — PromoGrind
 
-Last updated: 2026-08-04 (Session 128)
+Last updated: 2026-08-07 (Session 129 closeout boundary)
 
-PromoGrind remains deployed/public-unlaunched in FORGE launch-hardening. S128 completed the full recovered `/start → /audit → /implement → /closeout` arc: all five premise-verified L3 items and all three repo-owned second-order refinements are shipped. The only remaining innovation candidate is real external launch evidence.
+PromoGrind remains deployed/public-unlaunched in FORGE launch-hardening. S129 replaced the largest repo-owned release gaps with target-bound provider deployment, a stable Cloudflare staging plane, delivered security headers, end-to-end capture proof, and commit-ready production promotion. The separate SPARKED/public-launch decision remains HOLD until its external business and identity proofs are real.
 
-Capability authority now fails closed. The reviewed build declares the maximum for all protected features; remote rows may narrow enabled builds by tier or cohort but cannot broaden a disabled provider, billing, push, or Artificial Intelligence capability. Malformed rollout rows return typed denial reasons, and five consumers are mechanically barred from bypassing the policy.
+Stable staging is live at `https://staging.promogrind.bet`. The exact verified artifact digest is `aedc3d7b8a5f39eb12c8441a7a60ee2a30f2b053f8bd17d21a22c2058959360b`; root, `/_health`, `/dashboard`, `/arb-scanner`, and `/pricing` return 200, all seven standard/health files pass, and CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy are delivered. GitHub Pages remains the independent rollback origin and Cloudflare deployment receipts preserve the prior DNS record.
 
-Live Scanner decisions are evidence-bound. A candidate requires a fresh target quote and at least two distinct fresh comparison books, each normalized within its own paired market to remove vig. The target source is excluded, duplicate bookmaker identities cannot inflate the threshold, unsupported candidates stay suppressed, and the locked/default states no longer fabricate market activity or checkout certainty.
+Supabase deployment authority is now fail-closed and pinned to PromoGrind project `fjnpzjjyhnpmunfoycrp`. The quota and newsletter migrations are applied, five provider Edge Functions are ACTIVE, authenticated quota exhaustion returns a hard 429, and receipts contain no credential values. Browser-key discovery accepts only target-valid public keys and ignores service/secret keys.
 
-Referral and gift truth is decomposed into real authorities. Referral links record attribution without inventing free-day rewards. Gift links use one 14-recipient/7-sender/5-per-30-day contract. Token issuance, provider acceptance, inbox uncertainty, and sender-credit persistence are separate receipts; a failed metadata update cannot become credited days, and sender identity is absent from gift email copy.
+Capture truth is complete. An anonymous disposable lead insert returned 201, privileged readback observed the exact row, cleanup returned 204, and only an email hash is persisted in the public-safe receipt. The landing capture UI now reports success only after a successful response and exposes an accessible retry on failure.
 
-Decision language is evidence-labeled. Calculator history yields a local tool-mix observation with sample, distribution, dominance, and limited confidence—not skill, profit, or outcome performance. Three calculators now show model-signal receipts with a named basis, assumption, bounded interpretation, and explicit non-recommendation posture instead of authoritative play grades.
+Rendered UI verification is green. Four real-Chromium captures cover dark/light at 1440×1000 and 390×844; the landing theme control, legal footer, and calculator actions are at least 44×44, mobile has no horizontal overflow, and the hash-bound `docs/visual-qa/LATEST.json` passes CANON-053. The independent release-gate recheck also passed every touched state.
 
-The public-claim ratchet now covers 30 rules across 334 source files, including simulated liveness, collapsed delivery, usage-as-performance, play-grade certainty, and unbounded referral rewards. All fixtures and the full inventory pass.
-
-Rendered verification is hash-bound. Twenty-four unique real-Chromium captures cover Scanner, Referral, Tool Mix, three-way arbitrage, same-game parlay, and teaser states in dark/light at 1440×1000 and 390×844. Required-state, horizontal-overflow, exact dimensions, opacity, nonblankness, tonal range, hash uniqueness, and theme-pair separation all pass. The semantic image viewer remains unavailable because Windows DPAPI initialization fails, so semantic AI image judgment is explicitly unclaimed.
-
-Verification is green: 103/103 Vitest files and 705/705 assertions; 52/52 Edge tests with all 15 entrypoints typechecked; Studio Doctor 12/12 with `blockingFailing: 0`; and the full `npm run verify:launch-local` chain exits 0, including secrets, sanitizer, release controls, integrity, public claims, build/browser smoke, proof replay, and bundle budget.
-
-Release posture remains **NO-GO for SPARKED**. The generated release gate is HOLD because stable staging is absent and ten typed blocking proofs remain incomplete. No local test or mock receipt is used to fabricate staging, response headers, credential remediation, exact Supabase deployment authority, Zoho/Obelisk identity, production auth/payment/friend/capture journeys, or founder approval.
+Verification is green on the integrated dependency tree: 103/103 Vitest files and 705/705 assertions, 52 runtime compatibility checks, all 15 Edge entrypoints, Studio Doctor 12/12 with `blockingFailing: 0`, tracked-secret and strict public sanitizer scans clean, and `npm run verify:launch-local` exits 0. The React Router advisory affects unstable React Server Components APIs; PromoGrind pins 7.18.2, uses client-only BrowserRouter, and mechanically forbids those APIs, so the architecture-specific posture check passes without claiming `npm audit` is globally green.
 
 ## Honest deferrals
 
-- Stable remote staging and all six required hosting-edge response headers.
-- Historical credential rotation/remediation and exact target-bound PromoGrind Supabase deployment authority.
-- Zoho send/receive and reply identity, live Obelisk delegation, production auth email, complete Stripe lifecycle, friend beta, capture observation, and founder approval.
-- Studio-owned boolean `passIf` parser repair, routed through signed Ark cargo.
-- Semantic AI image judgment for S128 captures, pending a working image-return path.
+- Production promotion is the next post-closeout action and must reuse the commit-addressed verified artifact with its DNS rollback receipt.
+- SPARKED remains HOLD for Zoho send/receive/reply identity, live Obelisk delegation, production auth-email lifecycle, complete real Stripe lifecycle, independent friend beta, historical credential rotation/remediation, canonical cost reconciliation, and a distinct post-proof founder launch approval.
+- Technical deployment authorization in S129 is not represented as completion of those business/external proofs.
+- The optional Playwright CLI package was not installed because Package Trust scored it BLOCK; rendered verification reused the repository's bounded Chromium DevTools Protocol harness.
 
 ## Next actions
 
-1. Establish stable staging plus a header-capable edge and prove all six delivered response headers.
-2. Resolve exact PromoGrind Supabase authority and apply only target-pinned migrations/functions with redacted receipts.
-3. Complete each remaining typed Zoho, Obelisk, auth, Stripe, friend, capture, remediation, and founder criterion before reassessing SPARKED.
+1. Commit and push the S129 closeout to `main`, rebuild from that commit, and promote the exact artifact to Cloudflare production with DNS rollback evidence.
+2. Verify production routes, standard files, headers, capture-safe configuration, and staging/production digest parity; record the production receipts in the canonical proof graph.
+3. Complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and post-proof founder criteria before any SPARKED reassessment.

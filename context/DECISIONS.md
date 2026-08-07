@@ -882,3 +882,33 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** calculator-use counts became skill personas and materially different models became authoritative play grades.
 - **Decision:** report tool mix with sample/confidence/distribution and model signals with basis/assumption/non-recommendation receipts.
 - **Consequence:** decision support remains useful without implying expertise, profit, probability, or validated action quality.
+
+## 2026-08-07 — S129 target-bound release authority
+
+### Decision: production promotion reuses one verified static artifact across stable staging and production
+
+- **Status:** accepted
+- **Context:** GitHub Pages served the app but could not deliver the required response headers or provide isolated stable staging.
+- **Decision:** keep GitHub Pages as an independent rollback origin, deploy one content-addressed artifact to stable Cloudflare staging, and allow production DNS cutover only after live staging and closeout gates pass; persist the exact prior DNS record for rollback.
+- **Consequence:** staging and production can be proven byte-for-byte while rollback remains recoverable and public `main` history stays forward-only.
+
+### Decision: public Supabase authority is target-validated and never sourced from a secret/service key
+
+- **Status:** accepted
+- **Context:** the secrets gateway's browser key could be stale while Supabase now exposes both legacy and publishable key families.
+- **Decision:** validate the exact project URL and capture relation, fall back to the official target-pinned Management API, select only anon/publishable candidates, and keep every key in memory without logging or committing it.
+- **Consequence:** release builds receive a current browser-safe authority without widening credential exposure or accepting a key from another project.
+
+### Decision: insert-only capture proof must request no returned representation
+
+- **Status:** accepted
+- **Context:** `Prefer: return=representation` required SELECT and made a safe insert-only Row Level Security policy appear broken.
+- **Decision:** keep anonymous clients insert-only, use `return=minimal`, verify the row through service authority, and delete the disposable record immediately.
+- **Consequence:** the privacy boundary stays strict while the live capture journey gains an honest, reproducible receipt.
+
+### Decision: technical deployment and SPARKED launch approval remain separate states
+
+- **Status:** accepted
+- **Context:** the founder authorized direct push and full deployment, while several launch-proof criteria require later mailbox, identity, payment, tester, remediation, cost, and post-proof approval evidence.
+- **Decision:** promote technically green bytes to the existing public production origin, but retain FORGE/HOLD and refuse any SPARKED/public-launch claim until every blocking criterion is observed.
+- **Consequence:** infrastructure can improve now without converting deployment permission into fabricated launch readiness.

@@ -1,5 +1,47 @@
 # Task Board
 
+## Unified Genius List (S129)
+
+| Tier | Category | Status | Item |
+|---|---|---|---|
+| 🔥 | AI / security / deployment | done | target-verified-supabase-deployment-authority — **DONE L3 S129**: pinned project authority, two migrations, five ACTIVE functions, remote receipts, and quota 429 proof |
+| 🔥 | Release architecture / UX | in progress | cloudflare-dual-origin-release-plane — stable staging, headers, rollback, and exact artifact proof are green; commit-bound production promotion is the post-closeout step |
+| 🔥 | Feedback / observability | partial | machine-executable-production-proof-closure — Supabase and capture criteria complete; auth-email, real Stripe lifecycle, and independent tester criteria remain external |
+| ⚡ | Identity / process | done | human-boundary-release-court — **DONE L2 S129**: admin/secrets paths tried; only genuine external/human criteria retained |
+
+## Wave List (S129 · CANON-044)
+
+- **Wave 1 · complete:** `/start`, fresh audit, premise ledger, four-item implementation plan, and live authority probes.
+- **Wave 2 · complete:** target-pinned Supabase migrations/functions plus quota and capture proof.
+- **Wave 3 · complete:** stable Cloudflare staging, delivered headers, SPA routing, rollback receipts, and final rendered-pixel repair.
+- **Wave 4 · complete:** full merged-tree launch verifier, independent technical release recheck, and canonical closeout write-back.
+- **Wave 5 · post-closeout:** commit-bound production promotion, live verification, parity proof, and follow-up receipt commit.
+
+## Shipped This Session (S129)
+
+- Stable `staging.promogrind.bet` with all six required headers, health, deep-route 200s, and GitHub Pages retained as rollback.
+- Fail-closed Supabase deploy authority pinned to `fjnpzjjyhnpmunfoycrp`; two migrations, five functions, quota 429, and remote inventories proven.
+- Insert-only newsletter capture with anonymous 201, privileged readback, 204 cleanup, and no raw email/key persistence.
+- Landing dark/light control, shared proprietary footer, truthful capture failure state, and 44×44 target parity.
+- Four real-Chromium captures with a hash-bound passing CANON-053 receipt.
+- Full launch-local exit 0 after integrating current `origin/main`; architecture-specific React Router advisory posture is mechanically guarded.
+
+## Saturation result (S129)
+
+- Every repo-owned release prerequisite selected by the audit is implemented or prepared for commit-bound promotion.
+- Technical production promotion is independently GREEN for the exact staging bytes once bound to the closeout commit.
+- SPARKED remains an honest HOLD for external business/identity/remediation proofs; deployment success will not be mislabeled as launch approval.
+
+## Now
+
+- [ ] Promote the commit-bound S129 artifact to Cloudflare production, verify live parity, and append production receipts. `[SIL]`
+- [ ] Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delegation. `[SIL]`
+- [ ] Complete production auth confirmation/resend/recovery and a real Stripe checkout/webhook/subscription/portal lifecycle.
+
+## Next
+
+- [ ] Obtain independent friend beta evidence, historical credential remediation, canonical cost reconciliation, and post-proof founder launch approval.
+
 ## Unified Genius List (S128)
 
 | Tier | Category | Status | Effort | Item |
