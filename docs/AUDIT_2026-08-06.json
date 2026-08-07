@@ -54,7 +54,7 @@
       "impact": 10,
       "innovation": 9,
       "priority": 54.2,
-      "status": "in-progress-post-closeout-promotion",
+      "status": "completed-l3",
       "why": "The checked-in header policy is inert on GitHub Pages, all six live headers are absent, and local-only staging cannot satisfy the stable-origin gate.",
       "evidence": [
         "npm run verify:web-live -- --url https://promogrind.bet returned rootStatus 200 with CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy all absent.",
@@ -145,7 +145,7 @@
   ],
   "executionLog": [
     "S129-2 complete: two migrations applied to fjnpzjjyhnpmunfoycrp, five provider functions ACTIVE, quota smoke returned HTTP 429, and redacted target-bound receipts were emitted.",
-    "S129-1 staging complete: stable staging serves content-addressed artifact aedc3d7b...9360b with health, deep-route 200s, all six headers, rollback origin, and exact DNS receipt. Commit-bound production promotion follows closeout.",
+    "S129-1 complete: commit 7a6a3a2 digest 82f29e7c...18ab serves unchanged on stable staging and production with health, deep-route 200s, all six headers, mail-preserving DNS cutover, and exact rollback receipts.",
     "S129-3 repo-owned proof complete: capture insert/readback/cleanup returned 201/200/204 and launch proof captureConfig is 3/3. Auth-email, real Stripe, and independent tester criteria remain external.",
     "S129-4 complete: secrets/admin paths and independent release review distinguish technically green promotion from unresolved human/external SPARKED gates.",
     "Terminal verification: npm run verify:launch-local direct exit 0; 103/103 Vitest files, 705/705 assertions, 15 Edge entrypoints, 52 runtime checks, strict sanitizer and secret scans green."

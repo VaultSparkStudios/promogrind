@@ -20,4 +20,4 @@
 - ✓ Branding compliant — VaultSpark branding requirement satisfied.
 - ✓ Stable staging path available — stagingType=stable-remote-cloudflare-pages · https://staging.promogrind.bet
 - ✓ Sanitization clear — 0 critical · 0 warning
-- ⛔ Blocking launch proofs complete — 8 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, stagingAndHeaders, obeliskDelegation, credentialRemediation, founderApproval
+- ⛔ Blocking launch proofs complete — 7 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, obeliskDelegation, credentialRemediation, founderApproval

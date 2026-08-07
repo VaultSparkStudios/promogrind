@@ -1,0 +1,54 @@
+{
+  "environment": "production",
+  "domain": "promogrind.bet",
+  "records": [
+    {
+      "id": "67b3d925e14b234b7ebe1a29699fe0b4",
+      "type": "CNAME",
+      "name": "promogrind.bet",
+      "content": "vaultsparkstudios.github.io",
+      "proxied": true,
+      "ttl": 1
+    },
+    {
+      "id": "7d1d9ca5c80bba01149793540483264d",
+      "type": "MX",
+      "name": "promogrind.bet",
+      "content": "route3.mx.cloudflare.net",
+      "proxied": false,
+      "ttl": 1
+    },
+    {
+      "id": "29a5f697244270292ceda626661d1dd7",
+      "type": "MX",
+      "name": "promogrind.bet",
+      "content": "route2.mx.cloudflare.net",
+      "proxied": false,
+      "ttl": 1
+    },
+    {
+      "id": "7c90b60e8502a88e55e1e0f011647f53",
+      "type": "MX",
+      "name": "promogrind.bet",
+      "content": "route1.mx.cloudflare.net",
+      "proxied": false,
+      "ttl": 1
+    },
+    {
+      "id": "a9cb0ebad276eddc67beecd73601f0d9",
+      "type": "TXT",
+      "name": "promogrind.bet",
+      "content": "brevo-code:7d1c6125833af4d6853be191cb3e530c",
+      "proxied": false,
+      "ttl": 3600
+    },
+    {
+      "id": "056d1f46b6236a4e48c0d3bdd09e46ce",
+      "type": "TXT",
+      "name": "promogrind.bet",
+      "content": "\"google-site-verification=BrT3OweJanCubqH8LEbjENF8sS92BoCO09Hkm5b2AP8\"",
+      "proxied": false,
+      "ttl": 3600
+    }
+  ]
+}

@@ -912,3 +912,10 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** the founder authorized direct push and full deployment, while several launch-proof criteria require later mailbox, identity, payment, tester, remediation, cost, and post-proof approval evidence.
 - **Decision:** promote technically green bytes to the existing public production origin, but retain FORGE/HOLD and refuse any SPARKED/public-launch claim until every blocking criterion is observed.
 - **Consequence:** infrastructure can improve now without converting deployment permission into fabricated launch readiness.
+
+### Decision: DNS cutover mutates web records only and preserves mail/control records
+
+- **Status:** accepted
+- **Context:** the first production cutover attempted to reconcile every apex record and Cloudflare correctly refused deletion of Email Routing-managed MX records after the old web CNAME had been removed.
+- **Decision:** partition apex DNS records by purpose; production deployment may replace only A, AAAA, and CNAME web records, while MX, TXT, and every other record type remain untouched and are included in the rollback receipt.
+- **Consequence:** web promotion cannot silently damage mail or verification posture, and the first pre-cutover receipt retains the exact prior GitHub Pages CNAME for recovery.

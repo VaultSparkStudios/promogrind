@@ -55,3 +55,14 @@ export function evaluateReleaseResponse(response) {
   const missingHeaders = REQUIRED_RELEASE_HEADERS.filter((name) => !headers.has(name));
   return { ok: response.ok && missingHeaders.length === 0, status: response.status, missingHeaders };
 }
+
+const WEB_DNS_RECORD_TYPES = new Set(["A", "AAAA", "CNAME"]);
+
+export function partitionWebDnsRecords(records = []) {
+  const web = [];
+  const preserved = [];
+  for (const record of records) {
+    (WEB_DNS_RECORD_TYPES.has(record?.type) ? web : preserved).push(record);
+  }
+  return { web, preserved };
+}

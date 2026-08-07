@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-07T19:21:27.454Z",
+  "generatedAt": "2026-08-07T22:38:56.995Z",
   "source": "check-release-gate.mjs",
   "sourceMode": "public-shim-self-profile",
   "evaluatedProjectCount": 1,
@@ -73,7 +73,7 @@
         {
           "ok": false,
           "label": "Blocking launch proofs complete",
-          "detail": "8 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, stagingAndHeaders, obeliskDelegation, credentialRemediation, founderApproval",
+          "detail": "7 typed blocking proofs remain incomplete: stripeSmoke, friendBeta, authEmailSmoke, brevoDelivery, obeliskDelegation, credentialRemediation, founderApproval",
           "severity": "required"
         }
       ],

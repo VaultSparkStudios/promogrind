@@ -2,10 +2,10 @@
 
 ## Where We Left Off
 
-- Status: the requested `/arc` implementation and canonical pre-push closeout are complete; the integrated tree passes the full launch verifier.
-- Release: stable staging is GREEN at `https://staging.promogrind.bet`; exact digest `aedc3d7b8a5f39eb12c8441a7a60ee2a30f2b053f8bd17d21a22c2058959360b` passed independent release-gate review.
+- Status: the requested `/arc`, canonical closeout, direct push, and production deployment are complete; the integrated tree passes the full launch verifier.
+- Release: stable staging and production are GREEN on exact commit `7a6a3a2` and digest `82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab`.
 - Provider: two migrations and five target-pinned Supabase functions are live; quota 429 and anonymous capture/readback/cleanup proofs pass.
-- Next action: commit/push `main`, rebuild with that commit SHA, promote to Cloudflare production with `--allow-dns-cutover`, then verify and record parity.
+- Production proof: receipt `artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json`; the first DNS snapshot retains the prior `vaultsparkstudios.github.io` CNAME, and the cutover preserves mail MX/TXT records.
 - Launch posture: technical production promotion is GREEN; SPARKED/public launch remains HOLD for unresolved external business, identity, remediation, and post-proof approval criteria.
 
 ## Session Intent
@@ -33,10 +33,10 @@ Run the complete project-aware `/arc`, then `/closeout`, commit and push directl
 
 ## Next
 
-1. Let closeout autopilot commit and push S129 directly to `origin/main`.
-2. Rebuild the release artifact bound to the resulting commit and promote it to Cloudflare production with DNS cutover/rollback receipt.
-3. Run live contract, capture-safe config, and digest-parity checks; append production proof receipts in a small follow-up commit.
-4. Keep SPARKED HOLD until Zoho, Obelisk, auth-email, Stripe, friend, remediation, cost, and post-proof founder approval are complete.
+1. Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human/agent delegation.
+2. Complete production auth-email, real Stripe lifecycle, and independent friend-beta evidence.
+3. Complete credential remediation and canonical cost reconciliation, then obtain a distinct post-proof founder approval.
+4. Keep SPARKED HOLD until those criteria are complete.
 
 ## Known constraints
 

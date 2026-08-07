@@ -22,8 +22,8 @@
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
   "currentSession": 129,
-  "currentFocus": "S129 established target-bound Supabase deployment, stable Cloudflare staging with six delivered headers, end-to-end quota and capture proofs, and final rendered landing parity. The exact staging artifact is technically green for commit-bound production promotion.",
-  "nextMilestone": "Promote and verify the S129 commit-addressed artifact on Cloudflare production, record staging/production parity, then complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and post-proof founder criteria before SPARKED.",
+  "currentFocus": "S129 completed target-bound Supabase deployment and the Cloudflare staging-to-production release plane. Commit 7a6a3a2 digest 82f29e7c...18ab is identical across both origins; routes, health, standard files, capture-safe configuration, and six headers are green.",
+  "nextMilestone": "Complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and distinct post-proof founder criteria before SPARKED.",
   "blockers": [
     "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved.",
     "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
@@ -54,7 +54,7 @@
   "testsPassing": 103,
   "testsTotal": 103,
   "testsLastRun": "2026-08-07",
-  "lastDeployStatus": "S129 stable staging deployment receipt artifacts/cloudflare-pages/staging-2026-08-07T00-28-19-177Z.json is green at https://staging.promogrind.bet for artifact aedc3d7b...9360b. Root, health, three deep routes, seven standard/health files, six security headers, dark/light, mobile overflow, and 44x44 targets pass. Commit-bound production promotion is the post-closeout action; SPARKED remains HOLD.",
+  "lastDeployStatus": "GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab is live unchanged on stable staging and Cloudflare production. Production receipt artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json; root, health, deep routes, seven standard/health files, six security headers, and capture-safe configuration pass. DNS cutover preserved mail MX/TXT records and retained the prior GitHub Pages CNAME snapshot. SPARKED remains HOLD.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-07",
   "truthGenome": "24/25",
@@ -89,12 +89,12 @@
     {
       "type": "staging",
       "url": "https://staging.promogrind.bet",
-      "status": "green at S129 artifact aedc3d7b...9360b; root, health, deep routes, standard files, all six headers, dark/light, mobile overflow, and 44x44 targets pass"
+      "status": "green at commit 7a6a3a2 artifact 82f29e7c...18ab; root, health, deep routes, standard files, all six headers, dark/light, mobile overflow, and 44x44 targets pass"
     },
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "live at verified S128 head 8e38efb; production launch, dashboard smoke, and standard files passed in run 30969391523; six required headers remain absent and affiliate_coverage is advisory while five-book monetization coverage passes"
+      "status": "green on Cloudflare Pages at commit 7a6a3a2 artifact 82f29e7c...18ab; root, health, deep routes, standard files, all six headers, and capture-safe configuration pass"
     }
   ],
   "stagingUrl": "https://staging.promogrind.bet",
@@ -243,8 +243,8 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-07T19:23:02.461Z",
-    "commitSha": "72e359c287437d7871fe0274565b7ab57124a7b5",
+    "generatedAt": "2026-08-07T22:44:02.259Z",
+    "commitSha": "7a6a3a23190270a1333dea2818c41c7bbb1d1c6f",
     "complete": true,
     "partial": false,
     "success": true,
@@ -257,7 +257,7 @@
       "passing": 705,
       "total": 705
     },
-    "reportSha256": "9875eaa882feb79ab70569c897ec4f3520ba91faae3c2ed8282aa376faa13b2a"
+    "reportSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
   },
   "testsAssertionsPassing": 705,
   "testsAssertionsTotal": 705,

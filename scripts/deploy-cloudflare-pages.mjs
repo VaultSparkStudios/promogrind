@@ -12,6 +12,7 @@ import {
   hashArtifactDirectory,
   resolveReleaseTarget,
   evaluateReleaseResponse,
+  partitionWebDnsRecords,
 } from "./lib/cloudflare-pages-release.mjs";
 
 const args = process.argv.slice(2);
@@ -41,8 +42,10 @@ let activeToken = null;
 let project = await cf(`/` + target.project, { allow404: true });
 if (probe) {
   const domains = project ? await cf(`/${target.project}/domains`) : [];
-  const dnsRecords = await readDnsRecords();
-  const zoneMatchesCustomDomain = !domains[0]?.zone_tag || domains[0].zone_tag === authority.CLOUDFLARE_ZONE_ID;
+  const dnsAuthority = await resolveDnsAuthority();
+  const dnsRecords = await readDnsRecords(dnsAuthority);
+  const customDomain = domains.find((entry) => entry.name === target.domain);
+  const zoneMatchesCustomDomain = !customDomain?.zone_tag || customDomain.zone_tag === dnsAuthority.zoneId;
   console.log(redact(JSON.stringify({ environment, target, projectExists: Boolean(project), productionBranch: project?.production_branch || null, domains, dnsRecords, zoneMatchesCustomDomain }, null, 2)));
   process.exit(0);
 }
@@ -159,24 +162,26 @@ async function reconcileDns() {
     return payload.result;
   };
   const current = await request(`?name=${encodeURIComponent(target.domain)}`);
+  const { web: webCurrent, preserved } = partitionWebDnsRecords(current);
   const desiredContent = `${target.project}.pages.dev`;
   const safeCurrent = current.map((entry) => ({ id: entry.id, type: entry.type, name: entry.name, content: entry.content, proxied: entry.proxied, ttl: entry.ttl }));
+  const safePreserved = preserved.map((entry) => ({ id: entry.id, type: entry.type, name: entry.name, content: entry.content, proxied: entry.proxied, ttl: entry.ttl }));
   const rollbackPath = path.join("artifacts", "cloudflare-pages", `${environment}-dns-before-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
   fs.mkdirSync(path.dirname(rollbackPath), { recursive: true });
   fs.writeFileSync(rollbackPath, `${JSON.stringify({ environment, domain: target.domain, records: safeCurrent }, null, 2)}\n`);
-  if (current.length === 1 && current[0].type === "CNAME" && current[0].content === desiredContent && current[0].proxied === true) {
-    return { changed: false, desiredContent, rollbackPath: rollbackPath.replaceAll("\\", "/") };
+  if (webCurrent.length === 1 && webCurrent[0].type === "CNAME" && webCurrent[0].content === desiredContent && webCurrent[0].proxied === true) {
+    return { changed: false, desiredContent, preserved: safePreserved, rollbackPath: rollbackPath.replaceAll("\\", "/") };
   }
   if (environment === "production" && !allowDnsCutover) {
     throw new Error(`Production DNS differs from ${desiredContent}; rerun with --allow-dns-cutover after staging verification`);
   }
-  for (const entry of current) await request(`/${entry.id}`, { method: "DELETE" });
+  for (const entry of webCurrent) await request(`/${entry.id}`, { method: "DELETE" });
   await request("", { method: "POST", body: { type: "CNAME", name: target.domain, content: desiredContent, ttl: 1, proxied: true } });
-  return { changed: true, desiredContent, replaced: safeCurrent, rollbackPath: rollbackPath.replaceAll("\\", "/") };
+  return { changed: true, desiredContent, replaced: webCurrent.map((entry) => safeCurrent.find((safe) => safe.id === entry.id)), preserved: safePreserved, rollbackPath: rollbackPath.replaceAll("\\", "/") };
 }
 
-async function readDnsRecords() {
-  const { zoneId, token } = await resolveDnsAuthority();
+async function readDnsRecords(resolvedAuthority = null) {
+  const { zoneId, token } = resolvedAuthority || await resolveDnsAuthority();
   const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records?name=${encodeURIComponent(target.domain)}`, {
     headers: { Authorization: `Bearer ${token}` },
     signal: AbortSignal.timeout(20_000),

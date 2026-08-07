@@ -334,7 +334,7 @@ export const LAUNCH_PROOFS = {
     },
     "stagingAndHeaders": {
       "label": "Stable staging and delivered edge hardening",
-      "status": "pending",
+      "status": "complete",
       "blocking": true,
       "requiredFor": [
         "soft-launch",
@@ -359,6 +359,14 @@ export const LAUNCH_PROOFS = {
           "observedAt": "2026-08-07T08:24:55.345Z",
           "verifier": "codex-s129",
           "detail": "Stable staging delivered CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy on the verified release artifact"
+        },
+        {
+          "criterionId": "staging-production-config-parity-is-proven",
+          "source": "deployment",
+          "target": "https://promogrind.bet",
+          "observedAt": "2026-08-07T22:31:41.924Z",
+          "verifier": "codex-s129",
+          "detail": "Commit 7a6a3a2 artifact digest 82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab deployed unchanged to stable staging and production; receipts staging-2026-08-07T19-27-43-170Z.json and production-2026-08-07T20-33-30-610Z.json"
         }
       ],
       "target": "https://promogrind.bet",
@@ -379,7 +387,7 @@ export const LAUNCH_PROOFS = {
           "required": true
         }
       ],
-      "lastEvaluatedAt": "2026-08-07T08:24:55.347Z"
+      "lastEvaluatedAt": "2026-08-07T22:31:41.925Z"
     },
     "obeliskDelegation": {
       "label": "Live Obelisk identity delegation",

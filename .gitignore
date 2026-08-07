@@ -45,6 +45,8 @@ artifacts/supabase-deploy/*
 artifacts/cloudflare-pages/*
 !artifacts/cloudflare-pages/staging-2026-08-07T00-28-19-177Z.json
 !artifacts/cloudflare-pages/staging-dns-before-2026-08-07T00-28-19-073Z.json
+!artifacts/cloudflare-pages/staging-2026-08-07T19-27-43-170Z.json
+!artifacts/cloudflare-pages/staging-dns-before-2026-08-07T19-27-43-078Z.json
 !artifacts/cloudflare-pages/production-*.json
 !artifacts/cloudflare-pages/production-dns-before-*.json
 docs/visual-qa/captures/s129-after-*.png

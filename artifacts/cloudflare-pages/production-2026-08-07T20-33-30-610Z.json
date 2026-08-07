@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0",
+  "environment": "production",
+  "project": "promogrind",
+  "domain": "promogrind.bet",
+  "pagesOrigin": "https://promogrind.pages.dev",
+  "artifactDigest": "82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab",
+  "commit": "7a6a3a2",
+  "deployedAt": "2026-08-07T20:33:30.610Z",
+  "dnsReceipt": {
+    "changed": true,
+    "desiredContent": "promogrind.pages.dev",
+    "replaced": [],
+    "preserved": [
+      {
+        "id": "7d1d9ca5c80bba01149793540483264d",
+        "type": "MX",
+        "name": "promogrind.bet",
+        "content": "route3.mx.cloudflare.net",
+        "proxied": false,
+        "ttl": 1
+      },
+      {
+        "id": "29a5f697244270292ceda626661d1dd7",
+        "type": "MX",
+        "name": "promogrind.bet",
+        "content": "route2.mx.cloudflare.net",
+        "proxied": false,
+        "ttl": 1
+      },
+      {
+        "id": "7c90b60e8502a88e55e1e0f011647f53",
+        "type": "MX",
+        "name": "promogrind.bet",
+        "content": "route1.mx.cloudflare.net",
+        "proxied": false,
+        "ttl": 1
+      },
+      {
+        "id": "a9cb0ebad276eddc67beecd73601f0d9",
+        "type": "TXT",
+        "name": "promogrind.bet",
+        "content": "brevo-code:7d1c6125833af4d6853be191cb3e530c",
+        "proxied": false,
+        "ttl": 3600
+      },
+      {
+        "id": "056d1f46b6236a4e48c0d3bdd09e46ce",
+        "type": "TXT",
+        "name": "promogrind.bet",
+        "content": "\"google-site-verification=BrT3OweJanCubqH8LEbjENF8sS92BoCO09Hkm5b2AP8\"",
+        "proxied": false,
+        "ttl": 3600
+      }
+    ],
+    "rollbackPath": "artifacts/cloudflare-pages/production-dns-before-2026-08-07T20-33-09-647Z.json"
+  },
+  "verification": {
+    "origin": "https://promogrind.bet",
+    "ok": true,
+    "status": 200,
+    "missingHeaders": []
+  },
+  "rollbackOrigin": "https://vaultsparkstudios.github.io/promogrind/"
+}
