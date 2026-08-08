@@ -53,3 +53,8 @@ docs/visual-qa/captures/s129-after-*.png
 
 # Private surfaces — never commit (sanitization 2026-06-03)
 ignis/output/
+
+# S271: full private creative-direction ledger stays local-only.
+# The tracked docs/CREATIVE_DIRECTION_RECORD.md is a public-safe summary;
+# the authoritative append-only ledger lives here and must never be committed.
+docs/private/
