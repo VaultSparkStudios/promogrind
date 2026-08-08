@@ -329,7 +329,7 @@ export default function App() {
   }
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh"}}>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}

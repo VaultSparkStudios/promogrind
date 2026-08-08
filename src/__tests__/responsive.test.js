@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BREAKPOINTS, MOBILE_NAV_RESPONSIVE_CSS, getViewportState } from "../app/responsive.js";
+import { BREAKPOINTS, MOBILE_NAV_RESPONSIVE_CSS, MOBILE_VIEWPORT_HEIGHT, getViewportState } from "../app/responsive.js";
 
 describe("responsive launch contract", () => {
   it("keeps the smoke-tested mobile breakpoint marker in the app bundle", () => {
@@ -13,5 +13,9 @@ describe("responsive launch contract", () => {
     expect(getViewportState(390).navMode).toBe("bottom-tabs");
     expect(getViewportState(768).navMode).toBe("hybrid");
     expect(getViewportState(1024).navMode).toBe("top-tabs");
+  });
+
+  it("uses dynamic viewport height (100dvh) to avoid mobile browser chrome overlap", () => {
+    expect(MOBILE_VIEWPORT_HEIGHT).toBe("100dvh");
   });
 });
