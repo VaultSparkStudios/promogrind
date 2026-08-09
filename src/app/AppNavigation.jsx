@@ -68,11 +68,32 @@ const NAV_SHORT_LABELS = {
 
 // Scrollable 100dvh sub-nav sheet — slides up from bottom, lists all items in the active group
 function MobileNavSheet({ open, onClose, groupName, items, currentTi, onSelect }) {
+  const closeRef = useRef(null);
+  const triggerRef = useRef(null);
+
   useEffect(() => {
     if (!open) return;
+    // Save the element that opened the sheet so focus can be restored on close
+    triggerRef.current = document.activeElement;
+    // Move focus into the sheet's close button
+    const frame = requestAnimationFrame(() => { closeRef.current?.focus(); });
     const handler = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("keydown", handler);
+      // Restore focus to the triggering element
+      triggerRef.current?.focus();
+    };
+  }, [open, onClose]);
+
+  // Close the sheet if the viewport grows past the mobile breakpoint
+  useEffect(() => {
+    if (!open) return;
+    const mq = window.matchMedia("(min-width: 769px)");
+    const handler = (e) => { if (e.matches) onClose(); };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, [open, onClose]);
 
   if (!open) return null;
@@ -117,6 +138,7 @@ function MobileNavSheet({ open, onClose, groupName, items, currentTi, onSelect }
               {groupName}
             </div>
             <button
+              ref={closeRef}
               onClick={onClose}
               aria-label="Close navigation"
               style={{
