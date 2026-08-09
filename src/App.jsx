@@ -504,8 +504,8 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
-      <div style={{
+      {/* ── Main nav tabs — hidden on mobile (MobileBottomNav + sheet covers this) ─── */}
+      <div className="pg-group-tabs" style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',
@@ -620,7 +620,7 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
+      <MobileBottomNav gi={gi} ti={ti} goTo={goTo} tabs={TABS} groupItems={g.items}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate} mobile={isMobile}/>
