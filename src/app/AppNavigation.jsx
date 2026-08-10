@@ -3,7 +3,66 @@ import { K, S, font, fontD } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
-const GROUP_ICONS = ["⌂", "⇄", "⊞", "▤", "◉", "≡"];
+// ─── SVG nav icons ─────────────────────────────────────────────────────────
+function NavIconHome({ c }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M3 12L12 3l9 9" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 10v10h5v-6h4v6h5V10" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function NavIconConvert({ c }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M17 4l4 4-4 4" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 8h18" stroke={c} strokeWidth="2" strokeLinecap="round" />
+      <path d="M7 20l-4-4 4-4" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M21 16H3" stroke={c} strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+function NavIconCalc({ c }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="4" y="2" width="16" height="20" rx="2" stroke={c} strokeWidth="2" />
+      <rect x="7" y="5" width="10" height="4" rx="1" fill={c} opacity="0.35" />
+      <circle cx="8.5" cy="14" r="1.1" fill={c} />
+      <circle cx="12" cy="14" r="1.1" fill={c} />
+      <circle cx="15.5" cy="14" r="1.1" fill={c} />
+      <circle cx="8.5" cy="18" r="1.1" fill={c} />
+      <circle cx="12" cy="18" r="1.1" fill={c} />
+      <circle cx="15.5" cy="18" r="1.1" fill={c} />
+    </svg>
+  );
+}
+function NavIconTrack({ c }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function NavIconLive({ c }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="3" fill={c} />
+      <circle cx="12" cy="12" r="6.5" stroke={c} strokeWidth="1.5" opacity="0.55" />
+      <circle cx="12" cy="12" r="10.5" stroke={c} strokeWidth="1.5" opacity="0.22" />
+    </svg>
+  );
+}
+function NavIconLearn({ c }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 3L2 8l10 5 10-5-10-5z" stroke={c} strokeWidth="2" strokeLinejoin="round" />
+      <path d="M2 17l10 5 10-5" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 12l10 5 10-5" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+const SVG_ICONS = [NavIconHome, NavIconConvert, NavIconCalc, NavIconTrack, NavIconLive, NavIconLearn];
 const GROUP_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
 
 export function QuickCalcPanel({ goTo }) {
@@ -170,6 +229,7 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
               <button
                 key={item.slug}
                 onClick={() => handleItemSelect(index)}
+                aria-current={isActive ? "page" : undefined}
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   width: "100%", padding: "14px 16px",
@@ -203,7 +263,7 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
           })}
         </div>
 
-        {/* Drawer bottom — secondary group nav (close-and-switch) */}
+        {/* Drawer bottom — secondary group switcher */}
         <div style={{
           flexShrink: 0,
           borderTop: `1px solid ${K.bd}`,
@@ -211,25 +271,31 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
           display: "flex",
           padding: "6px 0 env(safe-area-inset-bottom,0px)",
         }}>
-          {tabs.map((tab, index) => (
-            <button
-              key={tab.group}
-              onClick={() => { goTo(index, 0); setDrawerOpen(false); }}
-              aria-label={tab.group}
-              style={{
-                flex: 1, padding: "7px 4px",
-                background: "none", border: "none",
-                color: gi === index ? K.gn : K.mt,
-                cursor: "pointer", fontSize: 9,
-                textTransform: "uppercase", letterSpacing: "0.5px",
-                fontFamily: font,
-                display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
-              }}
-            >
-              <span aria-hidden="true" style={{ fontSize: 14, lineHeight: 1 }}>{GROUP_ICONS[index] || tab.group[0]}</span>
-              <span style={{ fontWeight: gi === index ? 700 : 400 }}>{GROUP_LABELS[index] || tab.group}</span>
-            </button>
-          ))}
+          {tabs.map((tab, index) => {
+            const NavIcon = SVG_ICONS[index];
+            const isActive = gi === index;
+            const iconColor = isActive ? K.gn : K.mt;
+            return (
+              <button
+                key={tab.group}
+                onClick={() => { goTo(index, 0); setDrawerOpen(false); }}
+                aria-label={tab.group}
+                aria-current={isActive ? "true" : undefined}
+                style={{
+                  flex: 1, padding: "7px 4px",
+                  background: "none", border: "none",
+                  color: iconColor,
+                  cursor: "pointer", fontSize: 9,
+                  textTransform: "uppercase", letterSpacing: "0.5px",
+                  fontFamily: font,
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+                }}
+              >
+                {NavIcon ? <NavIcon c={iconColor} /> : <span aria-hidden="true" style={{ fontSize: 14, lineHeight: 1 }}>{tab.group[0]}</span>}
+                <span style={{ fontWeight: isActive ? 700 : 400 }}>{GROUP_LABELS[index] || tab.group}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -245,16 +311,19 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
       }}>
         {tabs.map((tab, index) => {
           const isActive = gi === index;
+          const iconColor = isActive ? K.gn : K.mt;
+          const NavIcon = SVG_ICONS[index];
           return (
             <button
               key={tab.group}
               onClick={() => handleTabPress(index)}
-              aria-label={`${tab.group}${isActive ? " — tap to open menu" : ""}`}
+              aria-label={tab.group}
               aria-expanded={isActive ? drawerOpen : undefined}
+              aria-current={isActive ? "true" : undefined}
               style={{
                 flex: 1, padding: "7px 4px",
                 background: "none", border: "none",
-                color: isActive ? K.gn : K.mt,
+                color: iconColor,
                 cursor: "pointer", fontSize: 9,
                 textTransform: "uppercase", letterSpacing: "0.5px",
                 fontFamily: font,
@@ -265,12 +334,13 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
               <span
                 aria-hidden="true"
                 style={{
-                  fontSize: 14, lineHeight: 1, fontWeight: 700,
+                  display: "inline-flex",
                   transform: isActive && drawerOpen ? "scale(1.18)" : "scale(1)",
-                  transition: "transform 0.2s ease, color 0.15s",
-                  display: "inline-block",
+                  transition: "transform 0.2s ease",
                 }}
-              >{GROUP_ICONS[index] || tab.group[0]}</span>
+              >
+                {NavIcon ? <NavIcon c={iconColor} /> : <span style={{ fontSize: 14, lineHeight: 1, fontWeight: 700 }}>{tab.group[0]}</span>}
+              </span>
               <span style={{ fontWeight: isActive ? 700 : 400 }}>{GROUP_LABELS[index] || tab.group}</span>
             </button>
           );
