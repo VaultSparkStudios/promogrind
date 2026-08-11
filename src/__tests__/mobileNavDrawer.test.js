@@ -16,8 +16,8 @@ describe("CANON-041 mobile nav elite upgrade", () => {
     expect(navSource).toContain("export function MobileNavDrawer(");
   });
 
-  it("MobileNavDrawer uses 90dvh height for the full-viewport scrollable panel", () => {
-    expect(navSource).toContain("90dvh");
+  it("MobileNavDrawer uses 100dvh height for the full-viewport scrollable panel", () => {
+    expect(navSource).toContain("100dvh");
   });
 
   it("MobileNavDrawer has a scrollable content region for the nav tree", () => {

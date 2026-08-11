@@ -70,6 +70,8 @@ const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
 
 export function MobileNavDrawer({ open, onClose, tabs, gi, goTo }) {
   const scrollRef = useRef(null);
+  const drawerRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   useEffect(() => {
     if (open) {
@@ -78,9 +80,44 @@ export function MobileNavDrawer({ open, onClose, tabs, gi, goTo }) {
     }
   }, [open]);
 
+  // Save pre-open focus; restore it on close
+  useEffect(() => {
+    if (open) {
+      previousFocusRef.current = document.activeElement;
+      const timer = setTimeout(() => {
+        const focusable = drawerRef.current?.querySelectorAll(
+          'button, [href], input, [tabindex]:not([tabindex="-1"])'
+        );
+        focusable?.[0]?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    } else {
+      previousFocusRef.current?.focus();
+      previousFocusRef.current = null;
+    }
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
-    const handler = (event) => { if (event.key === "Escape") onClose(); };
+    const handler = (event) => {
+      if (event.key === "Escape") { onClose(); return; }
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(
+        drawerRef.current?.querySelectorAll(
+          'button, [href], input, [tabindex]:not([tabindex="-1"])'
+        ) || []
+      ).filter((el) => !el.disabled && el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
@@ -135,6 +172,7 @@ export function MobileNavDrawer({ open, onClose, tabs, gi, goTo }) {
           role="dialog"
           aria-modal="true"
           aria-label="All navigation"
+          ref={drawerRef}
           className="pg-nav-drawer-open"
           style={{
             position: "fixed",
@@ -142,8 +180,8 @@ export function MobileNavDrawer({ open, onClose, tabs, gi, goTo }) {
             left: 0,
             right: 0,
             zIndex: 950,
-            height: "90dvh",
-            maxHeight: "90vh",
+            height: "100dvh",
+            maxHeight: "100vh",
             background: K.s1,
             borderRadius: "20px 20px 0 0",
             display: "flex",
@@ -380,6 +418,13 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
 
 export function MobileBottomNav({ gi, goTo, tabs }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Close drawer automatically when the viewport grows past mobile breakpoint
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth > 768) setDrawerOpen(false); };
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const handleTabPress = (index) => {
     if (gi === index) {
