@@ -504,8 +504,8 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
-      <div style={{
+      {/* ── Main nav tabs (hidden on mobile — bottom nav handles group switching) */}
+      <div className="pg-group-tabs-bar" style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',

@@ -10,6 +10,8 @@ export const BREAKPOINTS = {
 
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
+  /* Hide the redundant top group-tabs bar on mobile — the bottom nav handles group switching */
+  "@media (max-width: 768px) { .pg-group-tabs-bar { display: none !important; } }",
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
 ].join(" ");
 

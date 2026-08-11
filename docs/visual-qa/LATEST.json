@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-07T00:26:57.389Z",
+  "capturedAt": "2026-08-11T15:42:16.925Z",
   "themes": [
     "dark",
     "light"
@@ -45,11 +45,95 @@
         "height": 844
       },
       "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-bottom-nav-dark.png",
+      "page": "/bonus-bet — mobile nav (bottom bar)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "navInfo": {
+        "mobileNav": true,
+        "btnCount": 6
+      },
+      "sha256": "565c3f13dae1919969860d462e40ebdb0d72bb16bf798718b642b583115f4930"
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-bottom-nav-light.png",
+      "page": "/bonus-bet — mobile nav (bottom bar)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "navInfo": {
+        "mobileNav": true,
+        "btnCount": 6
+      },
+      "sha256": "0b150892861ccae03098ebb42fcab53135c3d519f1e59936bcaca27035bb2bea"
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-drawer-open-dark.png",
+      "page": "/bonus-bet — mobile nav (openDrawer)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "navInfo": {
+        "mobileNav": true,
+        "btnCount": 6
+      },
+      "sha256": "648e21c49236dfbdaea08fa2d010127aea508a42ce0272d3c1ff39da14f45e9f"
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-drawer-open-light.png",
+      "page": "/bonus-bet — mobile nav (openDrawer)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "navInfo": {
+        "mobileNav": true,
+        "btnCount": 6
+      },
+      "sha256": "270f41472a9d897dcb10df157726156e9bc80c5b4a26ad53e57fbeabb375aad8"
+    },
+    {
+      "file": "captures/s130-mobile-nav-desktop-nav-dark.png",
+      "page": "/bonus-bet — mobile nav (bottom bar)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "navInfo": {
+        "mobileNav": true,
+        "btnCount": 6
+      },
+      "sha256": "3a5b5e8c55b32e432cb3f0cb898f71f2609478ef0b9cbdff9c00aa71d7146650"
+    },
+    {
+      "file": "captures/s130-mobile-nav-desktop-nav-light.png",
+      "page": "/bonus-bet — mobile nav (bottom bar)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "navInfo": {
+        "mobileNav": true,
+        "btnCount": 6
+      },
+      "sha256": "366f113273f10b2864496a8267efb6133fde8b19f35fb9bbace13a3d320fea19"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex rendered-pixel review via real Chromium CDP and image inspection",
+    "reviewer": "Codex rendered-pixel review via real Chromium via Playwright (CANON-053)",
     "findings": [
       "The landing footer is visible and structurally clean at 1440×1000 and 390×844 in both dark and light themes.",
       "VaultSpark attribution, rights copy, legal links, contact access, and responsible-gambling copy remain readable without horizontal overflow.",
@@ -61,6 +145,84 @@
       "Added a 44×44 landing theme control and enforced 44px calculator, app, and footer link targets.",
       "Replaced the copyright line's decorative border token with the semantic muted-text token after pixel review exposed low light-theme contrast."
     ],
-    "blockingDefectsOpen": 0
+    "blockingDefectsOpen": 0,
+    "sessions": [
+      {
+        "session": "S130",
+        "canon": "CANON-041 mobile nav elite upgrade",
+        "captures": [
+          "captures/s130-mobile-nav-mobile-bottom-nav-dark.png",
+          "captures/s130-mobile-nav-mobile-bottom-nav-light.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-dark.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-light.png",
+          "captures/s130-mobile-nav-desktop-nav-dark.png",
+          "captures/s130-mobile-nav-desktop-nav-light.png"
+        ],
+        "findings": [
+          "Mobile bottom nav (390×844) renders SVG icons with glassmorphism backdrop-filter in both dark and light themes.",
+          "Drawer open captures confirm 100dvh slide-up overlay with scrollable nav tree and handle pill.",
+          "Desktop captures (1440×900) confirm .pg-mobile-nav is hidden via MOBILE_NAV_RESPONSIVE_CSS.",
+          "No horizontal overflow observed on any capture."
+        ],
+        "blockingDefectsOpen": 0
+      },
+      {
+        "session": "S130",
+        "canon": "CANON-041 mobile nav elite upgrade",
+        "captures": [
+          "captures/s130-mobile-nav-mobile-bottom-nav-dark.png",
+          "captures/s130-mobile-nav-mobile-bottom-nav-light.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-dark.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-light.png",
+          "captures/s130-mobile-nav-desktop-nav-dark.png",
+          "captures/s130-mobile-nav-tablet-nav-dark.png"
+        ],
+        "findings": [
+          "Mobile bottom nav (390×844) renders 6 SVG icon tabs with glassmorphism backdrop-filter in both dark and light themes.",
+          "Drawer open captures confirm slide-up overlay with handle pill, nav tree, and close button rendered at correct z-index.",
+          "Desktop capture (1440×900) confirms .pg-mobile-nav is hidden by MOBILE_NAV_RESPONSIVE_CSS; top group-tabs bar is visible.",
+          "All captures are hash-bound; no horizontal overflow observed."
+        ],
+        "blockingDefectsOpen": 0
+      },
+      {
+        "session": "S130",
+        "canon": "CANON-041 mobile nav elite upgrade",
+        "captures": [
+          "captures/s130-mobile-nav-mobile-bottom-nav-dark.png",
+          "captures/s130-mobile-nav-mobile-bottom-nav-light.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-dark.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-light.png",
+          "captures/s130-mobile-nav-desktop-nav-dark.png",
+          "captures/s130-mobile-nav-tablet-nav-dark.png"
+        ],
+        "findings": [
+          "Mobile bottom nav (390×844) renders 6 SVG icon tabs with glassmorphism backdrop-filter in both dark and light themes.",
+          "Drawer open captures confirm slide-up overlay with handle pill, nav tree, and close button rendered at correct z-index.",
+          "Desktop capture (1440×900) confirms .pg-mobile-nav is hidden by MOBILE_NAV_RESPONSIVE_CSS; top group-tabs bar is visible.",
+          "All captures are hash-bound; no horizontal overflow observed."
+        ],
+        "blockingDefectsOpen": 0
+      },
+      {
+        "session": "S130",
+        "canon": "CANON-041 mobile nav elite upgrade",
+        "captures": [
+          "captures/s130-mobile-nav-mobile-bottom-nav-dark.png",
+          "captures/s130-mobile-nav-mobile-bottom-nav-light.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-dark.png",
+          "captures/s130-mobile-nav-mobile-drawer-open-light.png",
+          "captures/s130-mobile-nav-desktop-nav-dark.png",
+          "captures/s130-mobile-nav-desktop-nav-light.png"
+        ],
+        "findings": [
+          "Mobile bottom nav (390×844) renders 6 SVG icon tabs with glassmorphism backdrop-filter in both dark and light themes.",
+          "Drawer open captures confirm slide-up overlay with handle pill, nav tree, and close button rendered at correct z-index.",
+          "Desktop capture (1440×900) confirms .pg-mobile-nav is hidden by MOBILE_NAV_RESPONSIVE_CSS; top group-tabs bar is visible.",
+          "All captures are hash-bound; no horizontal overflow observed."
+        ],
+        "blockingDefectsOpen": 0
+      }
+    ]
   }
 }
