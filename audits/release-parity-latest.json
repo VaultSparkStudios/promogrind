@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-07T00:26:57.389Z",
+  "generatedAt": "2026-08-11T15:42:16.925Z",
   "visual": {
-    "capturedAt": "2026-08-07T00:26:57.389Z",
+    "capturedAt": "2026-08-11T15:42:16.925Z",
     "themes": [
       "dark",
       "light"
@@ -47,6 +47,90 @@
           "height": 844
         },
         "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+      },
+      {
+        "file": "captures/s130-mobile-nav-mobile-bottom-nav-dark.png",
+        "page": "/bonus-bet — mobile nav (bottom bar)",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "navInfo": {
+          "mobileNav": true,
+          "btnCount": 6
+        },
+        "sha256": "565c3f13dae1919969860d462e40ebdb0d72bb16bf798718b642b583115f4930"
+      },
+      {
+        "file": "captures/s130-mobile-nav-mobile-bottom-nav-light.png",
+        "page": "/bonus-bet — mobile nav (bottom bar)",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "navInfo": {
+          "mobileNav": true,
+          "btnCount": 6
+        },
+        "sha256": "0b150892861ccae03098ebb42fcab53135c3d519f1e59936bcaca27035bb2bea"
+      },
+      {
+        "file": "captures/s130-mobile-nav-mobile-drawer-open-dark.png",
+        "page": "/bonus-bet — mobile nav (openDrawer)",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "navInfo": {
+          "mobileNav": true,
+          "btnCount": 6
+        },
+        "sha256": "648e21c49236dfbdaea08fa2d010127aea508a42ce0272d3c1ff39da14f45e9f"
+      },
+      {
+        "file": "captures/s130-mobile-nav-mobile-drawer-open-light.png",
+        "page": "/bonus-bet — mobile nav (openDrawer)",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "navInfo": {
+          "mobileNav": true,
+          "btnCount": 6
+        },
+        "sha256": "270f41472a9d897dcb10df157726156e9bc80c5b4a26ad53e57fbeabb375aad8"
+      },
+      {
+        "file": "captures/s130-mobile-nav-desktop-nav-dark.png",
+        "page": "/bonus-bet — mobile nav (bottom bar)",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "navInfo": {
+          "mobileNav": true,
+          "btnCount": 6
+        },
+        "sha256": "3a5b5e8c55b32e432cb3f0cb898f71f2609478ef0b9cbdff9c00aa71d7146650"
+      },
+      {
+        "file": "captures/s130-mobile-nav-desktop-nav-light.png",
+        "page": "/bonus-bet — mobile nav (bottom bar)",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "navInfo": {
+          "mobileNav": true,
+          "btnCount": 6
+        },
+        "sha256": "366f113273f10b2864496a8267efb6133fde8b19f35fb9bbace13a3d320fea19"
       }
     ],
     "reviewed": true,
@@ -62,7 +146,7 @@
       "passing": 716,
       "total": 716
     },
-    "receiptSha256": "a225f155b18e565f173d165e2b5a91b7ff339c49db0e1e0e9af6070c21048e6d"
+    "receiptSha256": "14e08625f3a3a595fac4da444017543cd3f2c17e8324af7d22c1f9839b0ae032"
   },
   "native": {
     "state": "planned-no-native-projects",
