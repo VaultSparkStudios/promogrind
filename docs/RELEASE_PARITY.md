@@ -14,7 +14,7 @@
 ## Evidence state
 
 - Pixel inspection: **COMPLETE** · blocking defects: 0
-- Tests: **GREEN** · 103/103 files · 705/705 assertions
+- Tests: **GREEN** · 103/103 files · 706/706 assertions
 - Native applicability: **planned-no-native-projects**
 
 Native parity is not claimed from Capacitor configuration alone; an iOS or Android project directory plus rendered evidence is required.

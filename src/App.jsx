@@ -13,6 +13,7 @@ import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
 import { AppProviders, FeatureFlagProviders } from "./app/AppProviders.jsx";
 import { buildAppTabs, buildSlugMap, DEFAULT_SLUG, getAllCalcs, getCalcGroupIndex, SUBCATS } from "./app/appRoutes.js";
+import { DVH_SHELL_CSS } from "./app/responsive.js";
 import { APP_CHROME_COPY, BET_TRACKER_UI, PUSH_UI } from "./app/appText.js";
 import { parseBetSlip } from "./app/parseBetSlip.js";
 import { StarterPackModal, OnboardingChecklist, MemberWelcomeCard } from "./app/AppSubcomponents.jsx";
@@ -329,7 +330,8 @@ export default function App() {
   }
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div className="pg-app-shell" style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg}}>
+      <style>{DVH_SHELL_CSS}</style>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
