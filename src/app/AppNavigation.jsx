@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { K, S, font } from "../lib/shared.js";
+import { K, font, fontD } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
@@ -66,19 +66,265 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+// SVG icon paths for primary nav tabs — semantically distinct marks at small sizes
+const NAV_SVGS = [
+  // Home: house outline
+  <svg key="home" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 9.5L10 3l7 6.5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><path d="M7 18v-5h6v5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>,
+  // Convert: two arrows
+  <svg key="convert" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 6h12M4 6l3-3M4 6l3 3M16 14H4M16 14l-3-3M16 14l-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  // Calc: grid squares
+  <svg key="calc" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="12" y="3" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="3" y="12" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="12" y="12" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/></svg>,
+  // Track: upward trend line
+  <svg key="track" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 14l4.5-5 4 3L17 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 17h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
+  // Live: lightning bolt
+  <svg key="live" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12 2L5 11h6l-3 7 9-9h-6l3-7Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>,
+];
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live"];
+
+export function MobileNavDrawer({ isOpen, onClose, tabs, gi, ti, goTo }) {
+  const [expandedGroup, setExpandedGroup] = useState(gi);
+  const drawerRef = useRef(null);
+
+  useEffect(() => { if (isOpen) setExpandedGroup(gi); }, [isOpen, gi]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
+  // Focus trap: move focus into drawer when opened
+  useEffect(() => {
+    if (isOpen && drawerRef.current) {
+      const first = drawerRef.current.querySelector("button, [tabindex]");
+      first?.focus();
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
 
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,0.62)",
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
+          zIndex: 1900,
+        }}
+        aria-hidden="true"
+      />
+      {/* 100dvh slide-up sheet */}
+      <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Full navigation"
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "100dvh",
+          background: `linear-gradient(180deg, ${K.s1} 0%, ${K.s2} 100%)`,
+          borderRadius: "22px 22px 0 0",
+          zIndex: 2000,
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 -20px 60px rgba(0,0,0,0.45)",
+          overflowY: "hidden",
+        }}
+      >
+        {/* Drag handle */}
+        <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 6px", flexShrink: 0 }}>
+          <div style={{ width: 44, height: 4, borderRadius: 2, background: K.bd2 }} />
+        </div>
+
+        {/* Header row */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "4px 20px 14px", borderBottom: `1px solid ${K.bd}`, flexShrink: 0,
+        }}>
+          <div style={{ fontFamily: fontD, fontSize: 15, fontWeight: 800, color: K.gn, letterSpacing: "-0.3px" }}>
+            All Sections
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close navigation"
+            style={{
+              width: 36, height: 36, borderRadius: 10, cursor: "pointer",
+              background: "transparent", border: `1px solid ${K.bd2}`,
+              color: K.mt, fontSize: 16, lineHeight: 1,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: font,
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Scrollable nav tree */}
+        <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", paddingBottom: "env(safe-area-inset-bottom, 24px)" }}>
+          {tabs.map((tabGroup, groupIndex) => {
+            const isGroupActive = gi === groupIndex;
+            const isExpanded = expandedGroup === groupIndex;
+
+            return (
+              <div key={tabGroup.group}>
+                {/* Section header */}
+                <button
+                  onClick={() => setExpandedGroup(isExpanded ? null : groupIndex)}
+                  aria-expanded={isExpanded}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    width: "100%", padding: "15px 20px",
+                    background: isGroupActive ? `${K.gn}0d` : "transparent",
+                    border: "none",
+                    borderLeft: isGroupActive ? `3px solid ${K.gn}` : "3px solid transparent",
+                    color: isGroupActive ? K.gn : K.tx,
+                    cursor: "pointer", fontFamily: font,
+                    fontSize: 13, fontWeight: isGroupActive ? 700 : 500,
+                    textAlign: "left", textTransform: "uppercase", letterSpacing: "1.1px",
+                  }}
+                >
+                  <span>{tabGroup.group}</span>
+                  <span style={{ fontSize: 10, color: K.mt, display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ opacity: 0.6 }}>{tabGroup.items.length}</span>
+                    <span style={{ fontSize: 8 }}>{isExpanded ? "▲" : "▼"}</span>
+                  </span>
+                </button>
+
+                {/* Items list */}
+                {isExpanded && (
+                  <div style={{ borderBottom: `1px solid ${K.bd}` }}>
+                    {tabGroup.items.map((navItem, itemIndex) => {
+                      const isItemActive = isGroupActive && ti === itemIndex;
+                      return (
+                        <button
+                          key={navItem.slug || navItem.n}
+                          onClick={() => { goTo(groupIndex, itemIndex); onClose(); }}
+                          style={{
+                            display: "flex", alignItems: "center", justifyContent: "space-between",
+                            width: "100%", padding: "12px 20px 12px 32px",
+                            background: isItemActive ? `${K.ac}12` : "transparent",
+                            border: "none",
+                            borderLeft: isItemActive ? `3px solid ${K.ac}` : "3px solid transparent",
+                            color: isItemActive ? K.ac : K.dm,
+                            cursor: "pointer", fontFamily: font,
+                            fontSize: 13, fontWeight: isItemActive ? 600 : 400,
+                            textAlign: "left",
+                          }}
+                        >
+                          <span>{navItem.n}</span>
+                          {navItem.pro && (
+                            <span style={{
+                              fontSize: 9, color: K.pp, textTransform: "uppercase",
+                              letterSpacing: "0.8px", border: `1px solid ${K.pp}40`,
+                              borderRadius: 4, padding: "1px 5px",
+                            }}>
+                              Pro
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function MobileBottomNav({ gi, goTo, tabs, onOpenDrawer }) {
+  // Show up to 5 primary group tabs + "More" to open the full drawer
+  const primaryTabs = tabs.slice(0, 5);
+
+  return (
+    <div
+      className="pg-mobile-nav"
+      style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        background: `linear-gradient(180deg,${K.s1},${K.s2})`,
+        borderTop: `1px solid ${K.bd}`,
+        display: "flex", zIndex: 100,
+        padding: "4px 0 env(safe-area-inset-bottom,0px)",
+        boxShadow: "0 -10px 24px rgba(0,0,0,0.22)",
+      }}
+    >
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+      {primaryTabs.map((tab, index) => {
+        const isActive = gi === index;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => goTo(index, 0)}
+            aria-label={NAV_LABELS[index] || tab.group}
+            aria-current={isActive ? "page" : undefined}
+            style={{
+              flex: 1, padding: "7px 4px 6px",
+              background: "none", border: "none",
+              color: isActive ? K.gn : K.mt,
+              cursor: "pointer", fontFamily: font,
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+              transition: "color 0.15s",
+            }}
+          >
+            {/* SVG icon */}
+            <span style={{ width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {NAV_SVGS[index] || null}
+            </span>
+            <span style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: isActive ? 700 : 400 }}>
+              {NAV_LABELS[index] || tab.group}
+            </span>
+            {isActive && (
+              <span style={{
+                position: "absolute", bottom: "env(safe-area-inset-bottom, 0px)",
+                width: 24, height: 2, borderRadius: 1, background: K.gn,
+              }} aria-hidden="true" />
+            )}
+          </button>
+        );
+      })}
+
+      {/* More / Browse — opens 100dvh drawer */}
+      <button
+        onClick={onOpenDrawer}
+        aria-label="Browse all sections"
+        aria-haspopup="dialog"
+        style={{
+          flex: 1, padding: "7px 4px 6px",
+          background: "none", border: "none",
+          color: gi >= 5 ? K.gn : K.mt,
+          cursor: "pointer", fontFamily: font,
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+          transition: "color 0.15s",
+        }}
+      >
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="5" cy="10" r="1.5" fill="currentColor"/>
+          <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+          <circle cx="15" cy="10" r="1.5" fill="currentColor"/>
+        </svg>
+        <span style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: 400 }}>
+          More
+        </span>
+      </button>
     </div>
   );
 }
