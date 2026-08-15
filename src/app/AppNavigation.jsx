@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { K, font, fontD } from "../lib/shared.js";
+import { K, S, font, fontD } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
@@ -94,20 +94,39 @@ export function MobileNavDrawer({ isOpen, onClose, tabs, gi, ti, goTo }) {
     return () => { document.body.style.overflow = prev; };
   }, [isOpen]);
 
+  // Focus trap + Escape + focus restore
   useEffect(() => {
     if (!isOpen) return;
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
+    const trigger = document.activeElement;
+    const el = drawerRef.current;
+    if (!el) return;
 
-  // Focus trap: move focus into drawer when opened
-  useEffect(() => {
-    if (isOpen && drawerRef.current) {
-      const first = drawerRef.current.querySelector("button, [tabindex]");
-      first?.focus();
-    }
-  }, [isOpen]);
+    const FOCUSABLE = 'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const getFocusable = () => Array.from(el.querySelectorAll(FOCUSABLE));
+
+    // Move focus into the drawer
+    const first = getFocusable()[0];
+    first?.focus();
+
+    const onKey = (e) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+      const focusable = getFocusable();
+      if (!focusable.length) { e.preventDefault(); return; }
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === focusable[0]) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); focusable[0].focus(); }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      // Restore focus to the element that opened the drawer
+      try { trigger?.focus(); } catch {}
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
