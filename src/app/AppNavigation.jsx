@@ -3,6 +3,50 @@ import { K, S, font } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
+// ─── Mobile nav SVG icons (18×18, stroke, currentColor) ─────────────────────
+
+const IconHome = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 9.5L10 3l7 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5 8.5V16a1 1 0 001 1h3v-4h2v4h3a1 1 0 001-1V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconConvert = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 7h11M11 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M17 13H6M9 10l-3 3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconCalc = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <rect x="4" y="3" width="12" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M7 7.5h2M11 7.5h2M7 11h2M11 11h2M7 14.5h2M11 14.5h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconTrack = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 15V10M8 15V6M12 15V9M16 15V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M3 15h15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconLive = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="2.5" fill="currentColor"/>
+    <path d="M6.5 6.5a5 5 0 000 7M13.5 6.5a5 5 0 010 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M4 4a8.5 8.5 0 000 12M16 4a8.5 8.5 0 010 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.35"/>
+  </svg>
+);
+const IconLearn = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 5C8.5 3.5 6 3.5 4 5v10c2-1.5 4.5-1.5 6 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 5c1.5-1.5 4-1.5 6 0v10c-2-1.5-4.5-1.5-6 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 5v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
+const NAV_ICONS = [IconHome, IconConvert, IconCalc, IconTrack, IconLive, IconLearn];
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+
 export function QuickCalcPanel({ goTo }) {
   const [open, setOpen] = useState(false);
   const quickItems = [
@@ -67,18 +111,60 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
 }
 
 export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+    <nav
+      className="pg-mobile-nav"
+      aria-label="Primary navigation"
+      style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        background: `${K.s1}f2`,
+        backdropFilter: "blur(18px) saturate(1.5)",
+        WebkitBackdropFilter: "blur(18px) saturate(1.5)",
+        borderTop: `1px solid ${K.bd}`,
+        display: "flex",
+        zIndex: 100,
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        boxShadow: "0 -1px 0 rgba(0,0,0,0.06), 0 -10px 28px rgba(0,0,0,0.16)",
+      }}
+    >
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
-    </div>
+      {tabs.map((tab, index) => {
+        const isActive = gi === index;
+        const Icon = NAV_ICONS[index];
+        const label = NAV_LABELS[index] || tab.group;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => goTo(index, 0)}
+            aria-label={`Go to ${label}`}
+            aria-current={isActive ? "page" : undefined}
+            style={{
+              flex: 1,
+              padding: "10px 4px 8px",
+              background: "none",
+              border: "none",
+              borderTop: `2px solid ${isActive ? K.gn : "transparent"}`,
+              color: isActive ? K.gn : K.mt,
+              cursor: "pointer",
+              fontSize: 9,
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              fontFamily: font,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 4,
+              minHeight: 54,
+              transition: "color 0.18s, border-color 0.18s",
+              WebkitTapHighlightColor: "transparent",
+            }}
+          >
+            {Icon ? <Icon /> : null}
+            <span style={{ fontWeight: isActive ? 700 : 400, fontSize: 9, lineHeight: 1 }}>{label}</span>
+          </button>
+        );
+      })}
+    </nav>
   );
 }
