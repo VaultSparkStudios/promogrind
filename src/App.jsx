@@ -7,7 +7,7 @@ import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoo
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav, MobileSubNavDrawer, QuickCalcPanel } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -83,6 +83,7 @@ export default function App() {
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [authModalMode, setAuthModalMode] = useState(() => getInitialAuthMode());
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
+  const [showMobileSubNav, setShowMobileSubNav] = useState(false);
   const {
     darkMode,
     toggleTheme,
@@ -215,6 +216,7 @@ export default function App() {
     return () => window.removeEventListener("pg:quick-calc", handler);
   }, [navigate]);
   useEffect(() => { tabMemory.current[gi] = ti; }, [gi, ti]);
+  useEffect(() => { setShowMobileSubNav(false); }, [gi, ti]);
   if (pathname.startsWith("/land/")) {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
@@ -504,8 +506,8 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
-      <div style={{
+      {/* ── Main nav tabs — hidden on mobile (bottom nav handles group switching) */}
+      {!isMobile && <div style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',
@@ -548,7 +550,7 @@ export default function App() {
             </button>
           ))}
         </div>
-      </div>
+      </div>}
       <div style={{position:"relative"}}>
         <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto",flexDirection:"column"}}>
           {gi===CALC_GI&&calcFavorites.length>0&&<div className="pg-scroll-x" style={{maxWidth:shellMaxWidth,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"6px 8px 0",alignItems:"center",overflowX:"auto"}}>
@@ -620,7 +622,15 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
+      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS} onGroupRetap={() => setShowMobileSubNav(true)}/>
+      {showMobileSubNav && isMobile && (
+        <MobileSubNavDrawer
+          group={TABS[gi]}
+          currentTi={ti}
+          onItemSelect={(itemIndex) => goTo(gi, itemIndex)}
+          onClose={() => setShowMobileSubNav(false)}
+        />
+      )}
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate} mobile={isMobile}/>
