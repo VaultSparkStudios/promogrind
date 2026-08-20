@@ -89,7 +89,7 @@ const DRAWER_ANIMATION_CSS = `
   @keyframes pg-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
   .pg-drawer-sheet { animation: pg-drawer-in 0.28s cubic-bezier(0.32, 0.72, 0, 1) both; }
   .pg-drawer-backdrop { animation: pg-backdrop-in 0.22s ease both; }
-  @media (min-width: 769px) { .pg-mobile-nav, .pg-quick-calc { display: none !important; } }
+  @media (min-width: 769px) { .pg-mobile-nav, .pg-quick-calc, .pg-drawer-backdrop { display: none !important; } }
   @media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }
 `;
 
@@ -97,20 +97,106 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
   const LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerRef = useRef(null);
+  const triggerRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
-  // Close drawer on back-gesture / Escape
+  // Close drawer when viewport crosses into desktop range
   useEffect(() => {
-    if (!drawerOpen) return;
-    const onKey = (e) => { if (e.key === "Escape") setDrawerOpen(false); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    if (typeof window === "undefined") return undefined;
+    const mql = window.matchMedia("(min-width: 769px)");
+    const onChange = (event) => {
+      if (event.matches) setDrawerOpen(false);
+    };
+    if (mql.matches && drawerOpen) setDrawerOpen(false);
+    if (mql.addEventListener) mql.addEventListener("change", onChange);
+    else mql.addListener(onChange);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener("change", onChange);
+      else mql.removeListener(onChange);
+    };
   }, [drawerOpen]);
 
-  // Prevent body scroll while drawer is open
+  // Escape closes; also push a history entry on open so Back / swipe dismisses
+  useEffect(() => {
+    if (!drawerOpen) return undefined;
+    const onKey = (e) => { if (e.key === "Escape") setDrawerOpen(false); };
+    window.addEventListener("keydown", onKey);
+
+    // Push a synthetic history entry so browser Back closes the drawer
+    // instead of navigating away. We tag it so popstate only closes on
+    // *our* entry.
+    let pushed = false;
+    try {
+      window.history.pushState({ pgMobileDrawer: true }, "");
+      pushed = true;
+    } catch {}
+    const onPop = () => { setDrawerOpen(false); };
+    window.addEventListener("popstate", onPop);
+
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("popstate", onPop);
+      // If our entry is still on top when we tear down (drawer closed
+      // programmatically rather than via Back), pop it back off.
+      if (pushed && window.history.state && window.history.state.pgMobileDrawer) {
+        try { window.history.back(); } catch {}
+      }
+    };
+  }, [drawerOpen]);
+
+  // Body-scroll lock while open
   useEffect(() => {
     if (drawerOpen) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
     return () => { document.body.style.overflow = ""; };
+  }, [drawerOpen]);
+
+  // Focus management: move focus into the sheet on open, trap Tab within,
+  // restore to the triggering control on close.
+  useEffect(() => {
+    if (!drawerOpen) {
+      const restoreTo = previousFocusRef.current;
+      if (restoreTo && typeof restoreTo.focus === "function") {
+        try { restoreTo.focus(); } catch {}
+      }
+      previousFocusRef.current = null;
+      return undefined;
+    }
+    previousFocusRef.current = document.activeElement;
+    // Defer focus so the drawer is in the DOM.
+    const focusFirst = () => {
+      const sheet = drawerRef.current;
+      if (!sheet) return;
+      const focusable = sheet.querySelector(
+        'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      (focusable || sheet).focus();
+    };
+    const raf = requestAnimationFrame(focusFirst);
+
+    const trap = (event) => {
+      if (event.key !== "Tab") return;
+      const sheet = drawerRef.current;
+      if (!sheet) return;
+      const focusables = sheet.querySelectorAll(
+        'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables.length) { event.preventDefault(); return; }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", trap);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("keydown", trap);
+    };
   }, [drawerOpen]);
 
   const handleTabClick = (index) => {
@@ -149,6 +235,10 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
           <div
             ref={drawerRef}
             className="pg-drawer-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${activeGroup.group} navigation`}
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
             style={{
               position: "absolute", left: 0, right: 0, bottom: 0,
