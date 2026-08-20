@@ -1,52 +1,52 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-07T00:26:57.389Z",
+  "generatedAt": "2026-08-20T15:29:09.363Z",
   "visual": {
-    "capturedAt": "2026-08-07T00:26:57.389Z",
+    "capturedAt": "2026-08-20T15:29:09.363Z",
     "themes": [
       "dark",
       "light"
     ],
     "captures": [
       {
-        "file": "captures/s129-final-landing-desktop-dark.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-drawer-desktop-dark.png",
+        "page": "/bonus-bet — desktop shell (drawer + rail hidden by media query)",
         "theme": "dark",
         "viewport": {
           "width": 1440,
           "height": 1000
         },
-        "sha256": "34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d"
+        "sha256": "0a23e961aef43adcd7d5fa7b0eb49c5209ff14fcd103505db25dbae542d3d542"
       },
       {
-        "file": "captures/s129-final-landing-desktop-light.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-drawer-desktop-light.png",
+        "page": "/bonus-bet — desktop shell (drawer + rail hidden by media query)",
         "theme": "light",
         "viewport": {
           "width": 1440,
           "height": 1000
         },
-        "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
+        "sha256": "56a9ea8da800c721baa099529ddb02f3114dd374bb9081dac8f998e4d0266104"
       },
       {
-        "file": "captures/s129-final-landing-mobile-dark.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-drawer-mobile-dark.png",
+        "page": "/bonus-bet — mobile drawer sub-nav (opened)",
         "theme": "dark",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "6a1cdf879f8ae32655da638c45ed7e0bed978dcc9e84081d6aaa7e82fdc8e7a0"
+        "sha256": "26cfb7b0440f1a7c319b0f048e9a4e9ab1c2e6fe1b95747fc1b42c305f80edd9"
       },
       {
-        "file": "captures/s129-final-landing-mobile-light.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-drawer-mobile-light.png",
+        "page": "/bonus-bet — mobile drawer sub-nav (opened)",
         "theme": "light",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+        "sha256": "7e3f600c4a4d03574311c8db34bda1446a0f8ae16f8dbc502d5f1d0baaf616ec"
       }
     ],
     "reviewed": true,
@@ -62,7 +62,7 @@
       "passing": 705,
       "total": 705
     },
-    "receiptSha256": "12ef0778a97afb9a8249a5f14747c7747a9b26f8dbb3996f4653c2c706ad7243"
+    "receiptSha256": "3efe5fdeffa135609b4b31f5a99a871ba0f5e194e99f13099ca2489804b30d6e"
   },
   "native": {
     "state": "planned-no-native-projects",

@@ -1,15 +1,15 @@
 # Release Parity Evidence
 
-> Generated from typed receipts: 2026-08-07T00:26:57.389Z · visual inspected · defects 0
+> Generated from typed receipts: 2026-08-20T15:29:09.363Z · visual inspected · defects 0
 
 ## Browser matrix
 
 | Viewport | Theme | Artifact | SHA-256 |
 |---|---|---|---|
-| 1440 × 1000 | dark | `captures/s129-final-landing-desktop-dark.png` | `34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d` |
-| 1440 × 1000 | light | `captures/s129-final-landing-desktop-light.png` | `73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab` |
-| 390 × 844 | dark | `captures/s129-final-landing-mobile-dark.png` | `6a1cdf879f8ae32655da638c45ed7e0bed978dcc9e84081d6aaa7e82fdc8e7a0` |
-| 390 × 844 | light | `captures/s129-final-landing-mobile-light.png` | `2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0` |
+| 1440 × 1000 | dark | `captures/s130-mobile-drawer-desktop-dark.png` | `0a23e961aef43adcd7d5fa7b0eb49c5209ff14fcd103505db25dbae542d3d542` |
+| 1440 × 1000 | light | `captures/s130-mobile-drawer-desktop-light.png` | `56a9ea8da800c721baa099529ddb02f3114dd374bb9081dac8f998e4d0266104` |
+| 390 × 844 | dark | `captures/s130-mobile-drawer-mobile-dark.png` | `26cfb7b0440f1a7c319b0f048e9a4e9ab1c2e6fe1b95747fc1b42c305f80edd9` |
+| 390 × 844 | light | `captures/s130-mobile-drawer-mobile-light.png` | `7e3f600c4a4d03574311c8db34bda1446a0f8ae16f8dbc502d5f1d0baaf616ec` |
 
 ## Evidence state
 
