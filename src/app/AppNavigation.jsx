@@ -129,16 +129,46 @@ const GROUP_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
 // Primary tabs shown in the bottom bar (indices into TABS)
 const PRIMARY_TAB_INDICES = [0, 1, 2, 3, 4];
 
-function NavDrawer({ open, onClose, tabs, gi, goTo }) {
-  const panelRef = useRef(null);
+const FOCUSABLE_SELECTORS = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-  // Trap focus and handle Escape key
+function NavDrawer({ open, onClose, tabs, gi, goTo, openerRef }) {
+  const panelRef = useRef(null);
+  const closeRef = useRef(null);
+
+  // Body scroll lock — prevents the page behind the modal from scrolling
   useEffect(() => {
     if (!open) return;
-    const handler = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
+    const saved = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = saved; };
+  }, [open]);
+
+  // Focus management + Escape key + Tab containment
+  useEffect(() => {
+    if (!open) return;
+    // Move focus into drawer on open
+    closeRef.current?.focus();
+    const onKey = (e) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+      const panel = panelRef.current;
+      if (!panel) return;
+      const els = [...panel.querySelectorAll(FOCUSABLE_SELECTORS)];
+      if (!els.length) return;
+      const first = els[0], last = els[els.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      // Restore focus to the opener on close
+      openerRef?.current?.focus?.();
+    };
+  }, [open, onClose, openerRef]);
 
   // Scroll to top when opened
   useEffect(() => {
@@ -153,6 +183,9 @@ function NavDrawer({ open, onClose, tabs, gi, goTo }) {
         .pg-nav-drawer-panel { animation: pg-drawer-slide-in 0.22s cubic-bezier(0.32,0,0,1) forwards; }
         .pg-nav-drawer-backdrop { animation: pg-drawer-fade-in 0.18s ease forwards; }
         .pg-nav-drawer-group-item:active { opacity: 0.65; }
+        @media (prefers-reduced-motion: reduce) {
+          .pg-nav-drawer-panel, .pg-nav-drawer-backdrop { animation: none !important; }
+        }
       `}</style>
       {open && (
         <div
@@ -206,12 +239,13 @@ function NavDrawer({ open, onClose, tabs, gi, goTo }) {
                 </span>
               </div>
               <button
+                ref={closeRef}
                 onClick={onClose}
                 aria-label="Close navigation"
                 style={{
                   background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8,
                   color: K.mt, cursor: "pointer", fontFamily: font,
-                  width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 14, lineHeight: 1,
                 }}
               >
@@ -303,6 +337,7 @@ function NavDrawer({ open, onClose, tabs, gi, goTo }) {
 
 export function MobileBottomNav({ gi, goTo, tabs }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const menuBtnRef = useRef(null);
 
   const openDrawer = () => setDrawerOpen(true);
   const closeDrawer = () => setDrawerOpen(false);
@@ -384,6 +419,7 @@ export function MobileBottomNav({ gi, goTo, tabs }) {
 
         {/* Menu button */}
         <button
+          ref={menuBtnRef}
           className="pg-nav-btn"
           onClick={openDrawer}
           aria-label="Open navigation menu"
@@ -430,6 +466,7 @@ export function MobileBottomNav({ gi, goTo, tabs }) {
         tabs={tabs}
         gi={gi}
         goTo={goTo}
+        openerRef={menuBtnRef}
       />
     </>
   );
