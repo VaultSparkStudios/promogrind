@@ -66,19 +66,100 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_ICONS = {
+  Home: (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2.5L2.5 8.5V17.5H7.5V13H12.5V17.5H17.5V8.5L10 2.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none"/>
+      <path d="M7.5 17.5V13H12.5V17.5" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Convert: (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M4 7H16M16 7L13 4M16 7L13 10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M16 13H4M4 13L7 10M4 13L7 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Calculate: (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <rect x="3.5" y="2.5" width="13" height="15" rx="2" stroke="currentColor" strokeWidth="1.6"/>
+      <path d="M7 6.5H13M7 10H9M11 10H13M7 13.5H9M11 13.5H13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+    </svg>
+  ),
+  Track: (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M3 14L7.5 9L11 12L15.5 6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="15.5" cy="6.5" r="1.5" fill="currentColor"/>
+      <path d="M3 17H17" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" opacity="0.4"/>
+    </svg>
+  ),
+  Live: (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="2.5" fill="currentColor"/>
+      <path d="M6.5 13.5A5 5 0 0 1 6.5 6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+      <path d="M13.5 6.5A5 5 0 0 1 13.5 13.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+      <path d="M4 15.5A8 8 0 0 1 4 4.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" fill="none" opacity="0.5"/>
+      <path d="M16 4.5A8 8 0 0 1 16 15.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" fill="none" opacity="0.5"/>
+    </svg>
+  ),
+  Learn: (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 4L2.5 8L10 12L17.5 8L10 4Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none"/>
+      <path d="M5.5 10.5V14.5C5.5 14.5 7 16.5 10 16.5C13 16.5 14.5 14.5 14.5 14.5V10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M17.5 8V12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+    </svg>
+  ),
+};
 
+const NAV_LABELS = { Home: "Home", Convert: "Convert", Calculate: "Calc", Track: "Track", Live: "Live", Learn: "Learn" };
+
+export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1} 0%,${K.s2} 100%)`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "4px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -8px 32px rgba(0,0,0,0.28)" }}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+      {tabs.map((tab, index) => {
+        const active = gi === index;
+        const icon = NAV_ICONS[tab.group] ?? NAV_ICONS.Home;
+        const label = NAV_LABELS[tab.group] ?? tab.group;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => goTo(index, 0)}
+            aria-label={`Go to ${tab.group}`}
+            aria-current={active ? "page" : undefined}
+            style={{
+              flex: 1,
+              padding: "6px 2px 5px",
+              background: "none",
+              border: "none",
+              color: active ? K.gn : K.mt,
+              cursor: "pointer",
+              fontFamily: font,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+              position: "relative",
+              transition: "color 0.15s",
+              minHeight: 52,
+              justifyContent: "center",
+            }}
+          >
+            {active && (
+              <span style={{
+                position: "absolute",
+                top: 0, left: "20%", right: "20%",
+                height: 2,
+                borderRadius: "0 0 3px 3px",
+                background: K.gn,
+              }} />
+            )}
+            <span style={{ lineHeight: 1, opacity: active ? 1 : 0.7, transition: "opacity 0.15s" }}>{icon}</span>
+            <span style={{ fontSize: 9, fontWeight: active ? 700 : 400, textTransform: "uppercase", letterSpacing: "0.6px", lineHeight: 1 }}>
+              {label}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }

@@ -34,7 +34,7 @@
     "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
-  "lastUpdated": "2026-08-07",
+  "lastUpdated": "2026-08-24",
   "silScore": 1000,
   "silAvg3": 998.7,
   "silVelocity": 4,
@@ -51,9 +51,9 @@
   "ignisScore": 44911,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "testsPassing": 103,
-  "testsTotal": 103,
-  "testsLastRun": "2026-08-07",
+  "testsPassing": 104,
+  "testsTotal": 104,
+  "testsLastRun": "2026-08-24",
   "lastDeployStatus": "GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab is live unchanged on stable staging and Cloudflare production. Production receipt artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json; root, health, deep routes, seven standard/health files, six security headers, and capture-safe configuration pass. DNS cutover preserved mail MX/TXT records and retained the prior GitHub Pages CNAME snapshot. SPARKED remains HOLD.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-07",
@@ -63,7 +63,7 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 705/705 across 103 files in S128 on the exact lock tree"
+      "status": "passing 711/711 across 104 files on the canon-041 nav branch"
     },
     {
       "type": "edge",
@@ -243,24 +243,24 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-07T22:44:02.259Z",
-    "commitSha": "7a6a3a23190270a1333dea2818c41c7bbb1d1c6f",
+    "generatedAt": "2026-08-24T15:14:45.270Z",
+    "commitSha": "3a37813cbccd7ae344d3ae8ef463ca4576f250e2",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 103,
-      "total": 103
+      "passing": 104,
+      "total": 104
     },
     "assertions": {
-      "passing": 705,
-      "total": 705
+      "passing": 711,
+      "total": 711
     },
-    "reportSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
+    "reportSha256": "f3a73f208e6bdf6668f27015a7adf465dab0ee722317dd48794e9b6093abf8dc"
   },
-  "testsAssertionsPassing": 705,
-  "testsAssertionsTotal": 705,
-  "testsAssertionsFiles": 103,
-  "testsAssertionsLastRun": "2026-08-07"
+  "testsAssertionsPassing": 711,
+  "testsAssertionsTotal": 711,
+  "testsAssertionsFiles": 104,
+  "testsAssertionsLastRun": "2026-08-24"
 }
