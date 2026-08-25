@@ -190,7 +190,6 @@ function MobileGroupDrawer({ tab, groupIndex, currentGi, currentTi, goTo, onClos
         position: "fixed", inset: 0, zIndex: 500,
         background: "rgba(0,0,0,0.58)",
         display: "flex", flexDirection: "column", justifyContent: "flex-end",
-        touchAction: "none",
       }}
       aria-modal="true"
       role="dialog"
@@ -198,9 +197,6 @@ function MobileGroupDrawer({ tab, groupIndex, currentGi, currentTi, goTo, onClos
     >
       <div
         ref={sheetRef}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
         style={{
           background: `linear-gradient(180deg, ${K.s1}, ${K.s2})`,
           borderTop: `1px solid ${K.bd2}`,
@@ -222,8 +218,13 @@ function MobileGroupDrawer({ tab, groupIndex, currentGi, currentTi, goTo, onClos
           }
         `}</style>
 
-        {/* Drag handle */}
-        <div style={{ display: "flex", justifyContent: "center", padding: "10px 0 4px" }}>
+        {/* Drag handle — swipe-to-dismiss scoped here so the item list scrolls freely */}
+        <div
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          style={{ display: "flex", justifyContent: "center", padding: "10px 0 4px", touchAction: "none" }}
+        >
           <div style={{ width: 36, height: 4, borderRadius: 99, background: K.bd2 }} />
         </div>
 
@@ -377,7 +378,7 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
                   pointerEvents: "none",
                 }} />
               )}
-              {Icon ? <Icon active={active} /> : (
+              {Icon ? Icon(active) : (
                 <span style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{GROUP_LABELS[index] || tab.group}</span>
               )}
               <span style={{
