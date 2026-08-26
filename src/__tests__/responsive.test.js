@@ -28,6 +28,13 @@ describe("CANON-041 mobile nav contract", () => {
     expect(NAV_SOURCE).toContain("safe-area-inset-bottom");
   });
 
+  it("MobileBottomNav buttons use roving tabIndex (WAI-ARIA tablist pattern)", () => {
+    expect(NAV_SOURCE).toContain("tabIndex={isActive ? 0 : -1}");
+    expect(NAV_SOURCE).toContain("onKeyDown");
+    expect(NAV_SOURCE).toContain("ArrowRight");
+    expect(NAV_SOURCE).toContain("ArrowLeft");
+  });
+
   it("MobileBottomNav icons are distinct from labels (not duplicate text)", () => {
     expect(NAV_SOURCE).toContain("NAV_ICONS");
     expect(NAV_SOURCE).toContain("NAV_LABELS");

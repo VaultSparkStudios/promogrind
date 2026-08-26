@@ -1,52 +1,88 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-07T00:26:57.389Z",
+  "generatedAt": "2026-08-26T15:32:56.046Z",
   "visual": {
-    "capturedAt": "2026-08-07T00:26:57.389Z",
+    "capturedAt": "2026-08-26T15:32:56.046Z",
     "themes": [
       "dark",
       "light"
     ],
     "captures": [
       {
-        "file": "captures/s129-final-landing-desktop-dark.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-nav-desktop-dark.png",
+        "page": "/dashboard",
         "theme": "dark",
         "viewport": {
           "width": 1440,
-          "height": 1000
+          "height": 900
         },
-        "sha256": "34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d"
+        "sha256": "1c0042d207f81632e29c89878d2ac59743a705bda0d409ed20ebc6c3f378a2e1",
+        "navState": {
+          "navBtnCount": 6,
+          "activeLabel": "⊟Home",
+          "navVisible": false,
+          "navHeight": 0,
+          "minBtnHeight": 0,
+          "horizontalOverflow": false,
+          "theme": "dark"
+        }
       },
       {
-        "file": "captures/s129-final-landing-desktop-light.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-nav-desktop-light.png",
+        "page": "/dashboard",
         "theme": "light",
         "viewport": {
           "width": 1440,
-          "height": 1000
+          "height": 900
         },
-        "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
+        "sha256": "546dab9cc83f7239deca08cdf44fa14ee85d0301a1ff781aa768f2f6b4ab4cee",
+        "navState": {
+          "navBtnCount": 6,
+          "activeLabel": "⊟Home",
+          "navVisible": false,
+          "navHeight": 0,
+          "minBtnHeight": 0,
+          "horizontalOverflow": false,
+          "theme": "light"
+        }
       },
       {
-        "file": "captures/s129-final-landing-mobile-dark.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-nav-mobile-dark.png",
+        "page": "/dashboard (mobile nav visible)",
         "theme": "dark",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "6a1cdf879f8ae32655da638c45ed7e0bed978dcc9e84081d6aaa7e82fdc8e7a0"
+        "sha256": "be6139e7490fad93fb096d55cf1a4f4fadfeab48596767cbc0d86ca8b5400549",
+        "navState": {
+          "navBtnCount": 6,
+          "activeLabel": "⊟Home",
+          "navVisible": true,
+          "navHeight": 53,
+          "minBtnHeight": 46,
+          "horizontalOverflow": false,
+          "theme": "dark"
+        }
       },
       {
-        "file": "captures/s129-final-landing-mobile-light.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s130-mobile-nav-mobile-light.png",
+        "page": "/dashboard (mobile nav visible)",
         "theme": "light",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+        "sha256": "88b8c73cf6c31979124cb33963118f8f1fe0f341dbe88b01252028dca8d21639",
+        "navState": {
+          "navBtnCount": 6,
+          "activeLabel": "⊟Home",
+          "navVisible": true,
+          "navHeight": 53,
+          "minBtnHeight": 46,
+          "horizontalOverflow": false,
+          "theme": "light"
+        }
       }
     ],
     "reviewed": true,
@@ -59,10 +95,10 @@
       "total": 103
     },
     "assertions": {
-      "passing": 705,
-      "total": 705
+      "passing": 710,
+      "total": 710
     },
-    "receiptSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
+    "receiptSha256": "f30c2b2b8419e99c3117b1aa4f9a5abee94a565e9919ceb1935ada416d1a0688"
   },
   "native": {
     "state": "planned-no-native-projects",

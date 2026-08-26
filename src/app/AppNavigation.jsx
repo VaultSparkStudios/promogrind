@@ -76,6 +76,22 @@ const MOBILE_NAV_ANIMATION_CSS = `
 `;
 
 export function MobileBottomNav({ gi, goTo, tabs }) {
+  const handleKeyDown = (event, index) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo((index + 1) % tabs.length, 0);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo((index - 1 + tabs.length) % tabs.length, 0);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      goTo(0, 0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      goTo(tabs.length - 1, 0);
+    }
+  };
+
   return (
     <div className="pg-mobile-nav" role="tablist" aria-label="Primary navigation" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS + MOBILE_NAV_ANIMATION_CSS}</style>
@@ -87,7 +103,9 @@ export function MobileBottomNav({ gi, goTo, tabs }) {
             className="pg-mobile-nav-btn"
             role="tab"
             aria-selected={isActive}
+            tabIndex={isActive ? 0 : -1}
             onClick={() => goTo(index, 0)}
+            onKeyDown={(event) => handleKeyDown(event, index)}
             style={{
               flex: 1,
               minHeight: 44,

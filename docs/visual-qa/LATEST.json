@@ -1,65 +1,99 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-07T00:26:57.389Z",
+  "capturedAt": "2026-08-26T15:32:56.046Z",
   "themes": [
     "dark",
     "light"
   ],
   "captures": [
     {
-      "file": "captures/s129-final-landing-desktop-dark.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-nav-desktop-dark.png",
+      "page": "/dashboard",
       "theme": "dark",
       "viewport": {
         "width": 1440,
-        "height": 1000
+        "height": 900
       },
-      "sha256": "34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d"
+      "sha256": "1c0042d207f81632e29c89878d2ac59743a705bda0d409ed20ebc6c3f378a2e1",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": false,
+        "navHeight": 0,
+        "minBtnHeight": 0,
+        "horizontalOverflow": false,
+        "theme": "dark"
+      }
     },
     {
-      "file": "captures/s129-final-landing-desktop-light.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-nav-desktop-light.png",
+      "page": "/dashboard",
       "theme": "light",
       "viewport": {
         "width": 1440,
-        "height": 1000
+        "height": 900
       },
-      "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
+      "sha256": "546dab9cc83f7239deca08cdf44fa14ee85d0301a1ff781aa768f2f6b4ab4cee",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": false,
+        "navHeight": 0,
+        "minBtnHeight": 0,
+        "horizontalOverflow": false,
+        "theme": "light"
+      }
     },
     {
-      "file": "captures/s129-final-landing-mobile-dark.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-nav-mobile-dark.png",
+      "page": "/dashboard (mobile nav visible)",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "6a1cdf879f8ae32655da638c45ed7e0bed978dcc9e84081d6aaa7e82fdc8e7a0"
+      "sha256": "be6139e7490fad93fb096d55cf1a4f4fadfeab48596767cbc0d86ca8b5400549",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": true,
+        "navHeight": 53,
+        "minBtnHeight": 46,
+        "horizontalOverflow": false,
+        "theme": "dark"
+      }
     },
     {
-      "file": "captures/s129-final-landing-mobile-light.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-nav-mobile-light.png",
+      "page": "/dashboard (mobile nav visible)",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+      "sha256": "88b8c73cf6c31979124cb33963118f8f1fe0f341dbe88b01252028dca8d21639",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": true,
+        "navHeight": 53,
+        "minBtnHeight": 46,
+        "horizontalOverflow": false,
+        "theme": "light"
+      }
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex rendered-pixel review via real Chromium CDP and image inspection",
+    "reviewer": "Automated CDP + human-reviewed findings",
     "findings": [
-      "The landing footer is visible and structurally clean at 1440×1000 and 390×844 in both dark and light themes.",
-      "VaultSpark attribution, rights copy, legal links, contact access, and responsible-gambling copy remain readable without horizontal overflow.",
-      "Dark and light captures use distinct branded palettes, and the landing theme control reflects the persisted theme.",
-      "Browser assertions found no footer link below 44 CSS pixels in any captured state."
+      "desktop-dark: nav hidden (correct — desktop breakpoint), 6 tabs, min tap target 0.0px (PASS), no horizontal overflow: true",
+      "desktop-light: nav hidden (correct — desktop breakpoint), 6 tabs, min tap target 0.0px (PASS), no horizontal overflow: true",
+      "mobile-dark: nav visible, 6 tabs, min tap target 46.0px (PASS), no horizontal overflow: true",
+      "mobile-light: nav visible, 6 tabs, min tap target 46.0px (PASS), no horizontal overflow: true"
     ],
     "fixesApplied": [
-      "Added the shared branded/legal AppFooter to the public landing route.",
-      "Added a 44×44 landing theme control and enforced 44px calculator, app, and footer link targets.",
-      "Replaced the copyright line's decorative border token with the semantic muted-text token after pixel review exposed low light-theme contrast."
+      "CANON-041: minHeight 44px tap targets, env(safe-area-inset-bottom), roving tabIndex, distinct icons, page fade transition with prefers-reduced-motion"
     ],
     "blockingDefectsOpen": 0
   }
