@@ -66,19 +66,54 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_ICONS = ["⊟", "⇄", "∑", "◉", "⚡", "◎"];
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const MOBILE_NAV_ANIMATION_CSS = `
+  @keyframes pg-nav-active { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .pg-mobile-nav-btn { -webkit-tap-highlight-color: transparent; transition: color 0.18s ease, opacity 0.18s ease; }
+  .pg-mobile-nav-btn:active { opacity: 0.6; }
+  @media (prefers-reduced-motion: reduce) { .pg-mobile-nav-btn { transition: none; } }
+`;
 
+export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+    <div className="pg-mobile-nav" role="tablist" aria-label="Primary navigation" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+      <style>{MOBILE_NAV_RESPONSIVE_CSS + MOBILE_NAV_ANIMATION_CSS}</style>
+      {tabs.map((tab, index) => {
+        const isActive = gi === index;
+        return (
+          <button
+            key={tab.group}
+            className="pg-mobile-nav-btn"
+            role="tab"
+            aria-selected={isActive}
+            onClick={() => goTo(index, 0)}
+            style={{
+              flex: 1,
+              minHeight: 44,
+              padding: "8px 4px",
+              background: "none",
+              border: "none",
+              borderTop: isActive ? `2px solid ${K.gn}` : "2px solid transparent",
+              color: isActive ? K.gn : K.mt,
+              cursor: "pointer",
+              fontFamily: font,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 3,
+            }}
+          >
+            <span aria-hidden="true" style={{ fontSize: 15, lineHeight: 1 }}>
+              {NAV_ICONS[index] || tab.group[0]}
+            </span>
+            <span style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: isActive ? 700 : 400 }}>
+              {NAV_LABELS[index] || tab.group}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
