@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1, maximum-scale=1">
+  <title>Mobile Nav Fixture — S130</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 390px; min-height: 844px; }
+
+    /* Dark theme (default) — KD tokens */
+    :root {
+      --bg: #0a0e17;
+      --s1: #0f1520;
+      --s2: #161d2a;
+      --bd: #1e293b;
+      --gn: #4ade80;
+      --mt: #7a8fa8;
+      --tx: #e2e8f0;
+      --dm: #94a3b8;
+    }
+
+    body { background: var(--bg); color: var(--tx); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+    /* Light theme override — KL tokens */
+    body.pg-light {
+      --bg: #f8fafc;
+      --s1: #ffffff;
+      --s2: #f1f5f9;
+      --bd: #cbd5e1;
+      --gn: #166534;
+      --mt: #475569;
+      --tx: #0f172a;
+      --dm: #334155;
+    }
+
+    .page-content {
+      padding: 40px 20px 120px;
+      opacity: 0.35;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gn);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .page-sub {
+      font-size: 11px;
+      color: var(--dm);
+      margin-bottom: 4px;
+    }
+
+    .page-badge {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 9px;
+      color: var(--mt);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border: 1px solid var(--bd);
+      border-radius: 999px;
+    }
+
+    /* ── Mobile bottom nav ── */
+    nav.pg-mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, var(--s1) 0%, var(--s2) 100%);
+      border-top: 1px solid var(--bd);
+      display: flex;
+      z-index: 100;
+      padding: 4px 0;
+      box-shadow: 0 -8px 28px rgba(0,0,0,0.26);
+    }
+
+    button.pg-mobile-nav-btn {
+      flex: 1;
+      padding: 6px 4px 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      position: relative;
+      min-height: 52px;
+      justify-content: center;
+      transition: color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      color: var(--mt);
+    }
+
+    button.pg-mobile-nav-btn.pg-active {
+      color: var(--gn);
+    }
+
+    .pg-active-pill {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 2.5px;
+      background: var(--gn);
+      border-radius: 0 0 3px 3px;
+    }
+
+    .pg-icon-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .pg-icon-wrap.pg-icon-active {
+      transform: scale(1.18);
+    }
+
+    .pg-label { line-height: 1.2; }
+    .pg-label.pg-label-active { font-weight: 700; }
+  </style>
+</head>
+<body id="pg-body">
+  <div class="page-content">
+    <div class="page-title">PromoGrind</div>
+    <div class="page-sub">Dashboard — mobile bottom nav visual fixture</div>
+    <div class="page-sub" style="margin-top: 4px; font-size: 10px;">Active tab: Home</div>
+    <span class="page-badge">S130 — SVG icon upgrade</span>
+  </div>
+
+  <nav class="pg-mobile-nav" aria-label="Primary navigation" id="pg-nav"></nav>
+
+  <script>
+    var TABS = [
+      { group: "Home" },
+      { group: "Convert" },
+      { group: "Calculate" },
+      { group: "Track" },
+      { group: "Live" },
+      { group: "Learn" },
+    ];
+
+    var SHORT_LABELS = { Calculate: "Calc" };
+
+    var ICONS = {
+      Home: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      Convert: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/></svg>',
+      Calculate: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="12" x2="11" y2="12"/><line x1="13" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="11" y2="16"/><line x1="13" y1="16" x2="15" y2="16"/></svg>',
+      Track: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+      Live: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+      Learn: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+    };
+
+    function buildNav(activeIndex) {
+      var nav = document.getElementById('pg-nav');
+      nav.innerHTML = '';
+      TABS.forEach(function(tab, i) {
+        var isActive = i === activeIndex;
+        var label = SHORT_LABELS[tab.group] || tab.group;
+        var btn = document.createElement('button');
+        btn.className = 'pg-mobile-nav-btn' + (isActive ? ' pg-active' : '');
+        btn.setAttribute('aria-label', tab.group);
+        if (isActive) btn.setAttribute('aria-current', 'page');
+
+        var pill = isActive ? '<span class="pg-active-pill" aria-hidden="true"></span>' : '';
+        var iconClass = 'pg-icon-wrap' + (isActive ? ' pg-icon-active' : '');
+        var labelClass = 'pg-label' + (isActive ? ' pg-label-active' : '');
+        btn.innerHTML = pill +
+          '<span class="' + iconClass + '">' + (ICONS[tab.group] || '') + '</span>' +
+          '<span class="' + labelClass + '">' + label + '</span>';
+        nav.appendChild(btn);
+      });
+    }
+
+    buildNav(0);
+
+    window.setTheme = function(t) {
+      if (t === 'light') document.getElementById('pg-body').classList.add('pg-light');
+      else document.getElementById('pg-body').classList.remove('pg-light');
+    };
+    window.setActiveTab = function(i) { buildNav(i); };
+    window.pgFixtureReady = true;
+  </script>
+</body>
+</html>
