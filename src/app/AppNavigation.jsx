@@ -66,19 +66,109 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_ICON_SHORT_LABELS = { Calculate: "Calc" };
 
+const NAV_ICONS = {
+  Home: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  ),
+  Convert: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/>
+    </svg>
+  ),
+  Calculate: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="5" y="2" width="14" height="20" rx="2"/>
+      <line x1="9" y1="7" x2="15" y2="7"/>
+      <line x1="9" y1="12" x2="11" y2="12"/>
+      <line x1="13" y1="12" x2="15" y2="12"/>
+      <line x1="9" y1="16" x2="11" y2="16"/>
+      <line x1="13" y1="16" x2="15" y2="16"/>
+    </svg>
+  ),
+  Track: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+  ),
+  Live: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+  ),
+  Learn: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+  ),
+};
+
+export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
-    </div>
+    <nav className="pg-mobile-nav" aria-label="Primary navigation" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1} 0%,${K.s2} 100%)`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: `4px 0 env(safe-area-inset-bottom, 0px)`, boxShadow: "0 -8px 28px rgba(0,0,0,0.26)" }}>
+      <style>{MOBILE_NAV_RESPONSIVE_CSS + " .pg-mobile-nav-btn { -webkit-tap-highlight-color: transparent; }"}</style>
+      {tabs.map((tab, index) => {
+        const isActive = gi === index;
+        const label = NAV_ICON_SHORT_LABELS[tab.group] || tab.group;
+        const icon = NAV_ICONS[tab.group] || null;
+        return (
+          <button
+            key={tab.group}
+            className="pg-mobile-nav-btn"
+            onClick={() => goTo(index, 0)}
+            aria-label={tab.group}
+            aria-current={isActive ? "page" : undefined}
+            style={{
+              flex: 1,
+              padding: "6px 4px 4px",
+              background: "none",
+              border: "none",
+              color: isActive ? K.gn : K.mt,
+              cursor: "pointer",
+              fontSize: 9,
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              fontFamily: font,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+              position: "relative",
+              minHeight: 52,
+              justifyContent: "center",
+              transition: "color 0.15s",
+            }}
+          >
+            {isActive && (
+              <span aria-hidden="true" style={{
+                position: "absolute",
+                top: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: 28,
+                height: 2.5,
+                background: K.gn,
+                borderRadius: "0 0 3px 3px",
+              }} />
+            )}
+            <span style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transform: isActive ? "scale(1.18)" : "scale(1)",
+              transition: "transform 0.18s cubic-bezier(0.34,1.56,0.64,1)",
+            }}>
+              {icon}
+            </span>
+            <span style={{ fontWeight: isActive ? 700 : 400, lineHeight: 1.2 }}>{label}</span>
+          </button>
+        );
+      })}
+    </nav>
   );
 }

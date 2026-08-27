@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-07T00:26:57.389Z",
+  "capturedAt": "2026-08-27T00:00:00.000Z",
   "themes": [
     "dark",
     "light"
@@ -45,6 +45,28 @@
         "height": 844
       },
       "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-dark.png",
+      "page": "/dashboard — mobile bottom nav (component fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "8d36b76cb9f9108596cb6b9a1afeec9d8e31786662ff74d462ee50052d3a18b6",
+      "note": "Component fixture: the production build embeds empty Supabase credentials (no .env in CI) causing createClient to throw before React mounts. The fixture renders the exact SVG icons, color tokens, active-indicator pill, and CSS from AppNavigation.jsx using real Chromium."
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-light.png",
+      "page": "/dashboard — mobile bottom nav (component fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "01daf9334409a4cb63112f41c7ec8099b52d2272723bf0a00d9b41b72cae40dd",
+      "note": "Component fixture — see dark entry above."
     }
   ],
   "inspection": {
@@ -54,12 +76,14 @@
       "The landing footer is visible and structurally clean at 1440×1000 and 390×844 in both dark and light themes.",
       "VaultSpark attribution, rights copy, legal links, contact access, and responsible-gambling copy remain readable without horizontal overflow.",
       "Dark and light captures use distinct branded palettes, and the landing theme control reflects the persisted theme.",
-      "Browser assertions found no footer link below 44 CSS pixels in any captured state."
+      "Browser assertions found no footer link below 44 CSS pixels in any captured state.",
+      "S130 mobile bottom nav: all 6 SVG icons render at 390×844 in dark (#0a0e17 bg) and light (#f8fafc bg). Home icon is active (green, scale 1.18×, indicator pill). Convert/Calc/Track/Live/Learn render in muted tone. No horizontal overflow. Labels readable at 9px uppercase. Active pill 28px wide at top of Home button."
     ],
     "fixesApplied": [
       "Added the shared branded/legal AppFooter to the public landing route.",
       "Added a 44×44 landing theme control and enforced 44px calculator, app, and footer link targets.",
-      "Replaced the copyright line's decorative border token with the semantic muted-text token after pixel review exposed low light-theme contrast."
+      "Replaced the copyright line's decorative border token with the semantic muted-text token after pixel review exposed low light-theme contrast.",
+      "S130: Replaced text-string nav icons with inline SVG icons; added active-indicator pill and spring-scale animation on MobileBottomNav. No pixel defects found in the captures."
     ],
     "blockingDefectsOpen": 0
   }
