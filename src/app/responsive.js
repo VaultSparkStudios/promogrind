@@ -13,6 +13,7 @@ export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
 ].join(" ");
 
+
 export function getViewportState(width = 1280) {
   const w = Number(width || 1280);
   const isPhone = w < BREAKPOINTS.sm;
