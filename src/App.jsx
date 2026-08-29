@@ -7,7 +7,7 @@ import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoo
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav, MobileNavDrawer, QuickCalcPanel } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -118,6 +118,7 @@ export default function App() {
   });
   const [compareMode, setCompareMode] = useState(false);
   const [compareSlug, setCompareSlug] = useState("");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   useEffect(() => {
     try {
       if(!sessionStorage.getItem('pg_session_start')) {
@@ -620,7 +621,27 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
+      <MobileNavDrawer
+        open={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+        tabs={TABS}
+        gi={gi}
+        ti={ti}
+        goTo={(newGi, newTi) => { goTo(newGi, newTi); setMobileNavOpen(false); }}
+      />
+      <MobileBottomNav
+        gi={gi}
+        goTo={goTo}
+        tabs={TABS}
+        onTabTap={(index) => {
+          if (index === gi) {
+            setMobileNavOpen(true);
+          } else {
+            goTo(index, 0);
+            setMobileNavOpen(false);
+          }
+        }}
+      />
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate} mobile={isMobile}/>
