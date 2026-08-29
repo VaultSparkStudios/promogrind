@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BREAKPOINTS, MOBILE_NAV_RESPONSIVE_CSS, MOBILE_NAV_DRAWER_CSS, getViewportState } from "../app/responsive.js";
+import { BREAKPOINTS, MOBILE_NAV_RESPONSIVE_CSS, getViewportState } from "../app/responsive.js";
 
 describe("responsive launch contract", () => {
   it("keeps the smoke-tested mobile breakpoint marker in the app bundle", () => {
@@ -13,12 +13,5 @@ describe("responsive launch contract", () => {
     expect(getViewportState(390).navMode).toBe("bottom-tabs");
     expect(getViewportState(768).navMode).toBe("hybrid");
     expect(getViewportState(1024).navMode).toBe("top-tabs");
-  });
-
-  it("exports mobile nav drawer animation CSS for CANON-041 100dvh scrollable nav", () => {
-    expect(MOBILE_NAV_DRAWER_CSS).toContain("pg-nav-drawer");
-    expect(MOBILE_NAV_DRAWER_CSS).toContain("pg-drawer-in");
-    expect(MOBILE_NAV_DRAWER_CSS).toContain("translateY");
-    expect(MOBILE_NAV_DRAWER_CSS).toContain("pg-nav-drawer-backdrop");
   });
 });

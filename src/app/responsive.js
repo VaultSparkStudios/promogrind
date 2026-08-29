@@ -13,12 +13,6 @@ export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
 ].join(" ");
 
-export const MOBILE_NAV_DRAWER_CSS = [
-  "@keyframes pg-drawer-in { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }",
-  ".pg-nav-drawer { animation: pg-drawer-in 0.26s cubic-bezier(0.32,0.72,0,1) both; }",
-  ".pg-nav-drawer-backdrop { animation: none; }",
-  ".pg-nav-drawer:focus { outline: none; }",
-].join(" ");
 
 export function getViewportState(width = 1280) {
   const w = Number(width || 1280);
