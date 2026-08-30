@@ -7,7 +7,7 @@ import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoo
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav, MobileSubNavSheet, QuickCalcPanel } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -118,6 +118,7 @@ export default function App() {
   });
   const [compareMode, setCompareMode] = useState(false);
   const [compareSlug, setCompareSlug] = useState("");
+  const [showSubNav, setShowSubNav] = useState(false);
   useEffect(() => {
     try {
       if(!sessionStorage.getItem('pg_session_start')) {
@@ -177,6 +178,14 @@ export default function App() {
     tabMemory.current[newGi] = resolvedTi;
     navigate("/" + TABS[newGi].items[resolvedTi].slug);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const handleMobileNavTap = (index) => {
+    if (gi === index) {
+      setShowSubNav(true);
+    } else {
+      setShowSubNav(false);
+      goTo(index, 0);
+    }
   };
   useEffect(() => { window.VaultSDK?.applyGates(); }, [slug, proStatus]);
   useEffect(() => {
@@ -620,7 +629,8 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
+      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS} onNavTap={handleMobileNavTap}/>
+      <MobileSubNavSheet open={showSubNav && isMobile} group={g} gi={gi} ti={ti} goTo={goTo} onClose={() => setShowSubNav(false)}/>
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate} mobile={isMobile}/>
