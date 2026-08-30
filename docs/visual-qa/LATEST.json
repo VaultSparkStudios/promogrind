@@ -1,65 +1,68 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-07T00:26:57.389Z",
+  "capturedAt": "2026-08-20T15:29:09.363Z",
   "themes": [
     "dark",
     "light"
   ],
   "captures": [
     {
-      "file": "captures/s129-final-landing-desktop-dark.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-drawer-desktop-dark.png",
+      "page": "/bonus-bet — desktop shell (drawer + rail hidden by media query)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d"
+      "sha256": "0a23e961aef43adcd7d5fa7b0eb49c5209ff14fcd103505db25dbae542d3d542"
     },
     {
-      "file": "captures/s129-final-landing-desktop-light.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-drawer-desktop-light.png",
+      "page": "/bonus-bet — desktop shell (drawer + rail hidden by media query)",
       "theme": "light",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
+      "sha256": "56a9ea8da800c721baa099529ddb02f3114dd374bb9081dac8f998e4d0266104"
     },
     {
-      "file": "captures/s129-final-landing-mobile-dark.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-drawer-mobile-dark.png",
+      "page": "/bonus-bet — mobile drawer sub-nav (opened)",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "6a1cdf879f8ae32655da638c45ed7e0bed978dcc9e84081d6aaa7e82fdc8e7a0"
+      "sha256": "26cfb7b0440f1a7c319b0f048e9a4e9ab1c2e6fe1b95747fc1b42c305f80edd9"
     },
     {
-      "file": "captures/s129-final-landing-mobile-light.png",
-      "page": "/ — branded landing footer",
+      "file": "captures/s130-mobile-drawer-mobile-light.png",
+      "page": "/bonus-bet — mobile drawer sub-nav (opened)",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+      "sha256": "7e3f600c4a4d03574311c8db34bda1446a0f8ae16f8dbc502d5f1d0baaf616ec"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex rendered-pixel review via real Chromium CDP and image inspection",
+    "reviewer": "Claude rendered-pixel review via local Chromium CDP + image inspection against vite preview at 127.0.0.1:4173",
     "findings": [
-      "The landing footer is visible and structurally clean at 1440×1000 and 390×844 in both dark and light themes.",
-      "VaultSpark attribution, rights copy, legal links, contact access, and responsible-gambling copy remain readable without horizontal overflow.",
-      "Dark and light captures use distinct branded palettes, and the landing theme control reflects the persisted theme.",
-      "Browser assertions found no footer link below 44 CSS pixels in any captured state."
+      "Desktop dark and light captures confirm the mobile bottom rail and drawer overlay are hidden by the (min-width: 769px) media query — the shell, header, and horizontal tab strip render unchanged from prior visual baselines.",
+      "Mobile dark and light captures show the drawer sub-nav opened over the Convert group at 390×844: the drag handle, Convert section header with SVG icon, and the five sub-items (Bonus Bet, Profit Boost, First Bet, Deposit Match, Insurance) render in a scrollable column, with Bonus Bet marked active via the green left border and status dot.",
+      "The fixed bottom rail is visible under the drawer in the mobile captures with all six SVG icons (Home, Convert, Calc, Track, Live, Learn) and the active Convert icon glowing green — matching the CANON-041 spec.",
+      "Dark theme uses the KD palette gradient (deep navy shell, green accent). Light theme uses the KL palette (soft slate shell, deeper green accent) — no black-on-black or light-on-white failures.",
+      "Drawer is a role=dialog with aria-modal, focus is trapped inside the sheet, and browser Back / Escape both dismiss (verified in-browser via the readiness poll and drawer state assertion in the capture script)."
     ],
     "fixesApplied": [
-      "Added the shared branded/legal AppFooter to the public landing route.",
-      "Added a 44×44 landing theme control and enforced 44px calculator, app, and footer link targets.",
-      "Replaced the copyright line's decorative border token with the semantic muted-text token after pixel review exposed low light-theme contrast."
+      "Replaced text-label MobileBottomNav with a real SVG icon set (Home / Convert / Calc / Track / Live / Learn) and an active-tab glow indicator.",
+      "Added a 100dvh scrollable drawer sub-nav that opens on tap-active-tab, listing every sub-item in the group with PRO badges and active-item marker.",
+      "Made the drawer resilient to viewport crossing the mobile breakpoint (matchMedia listener closes on desktop; CSS also hides the backdrop).",
+      "Added a browser-history entry on open so Android/browser Back dismisses the drawer.",
+      "Added focus trap: focus moves into the sheet on open, Tab cycles within, focus restores to the triggering rail button on close."
     ],
     "blockingDefectsOpen": 0
   }
