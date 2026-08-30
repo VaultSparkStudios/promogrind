@@ -3,6 +3,61 @@ import { K, S, font } from "../lib/shared.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
+// Inline SVG icons for each nav tab (stroke-based, 18×18 at 20-unit viewBox)
+function IconHome() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 10.5L10 3.5l7 7V18H13v-4.5H7V18H3V10.5z" />
+    </svg>
+  );
+}
+
+function IconConvert() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 6.5h12M13 3.5l3 3-3 3M16 13.5H4M7 10.5l-3 3 3 3" />
+    </svg>
+  );
+}
+
+function IconCalc() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="4" y="2" width="12" height="16" rx="2" />
+      <path d="M7 7h6M7 11h2M11 11h2M7 15h2M11 15h2" />
+    </svg>
+  );
+}
+
+function IconTrack() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 17.5V11M7.5 17.5V8M12 17.5V5M16.5 17.5V11.5" />
+      <line x1="2" y1="17.5" x2="18" y2="17.5" />
+    </svg>
+  );
+}
+
+function IconLive() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 10.5h3l2-5.5 3 11 2-7 2 3.5h4" />
+    </svg>
+  );
+}
+
+function IconLearn() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10 5.5C7.5 3.5 3 4.5 3 4.5v12s4.5-1 7 1c2.5-2 7-1 7-1v-12s-4.5-1-7 1z" />
+      <line x1="10" y1="5.5" x2="10" y2="17.5" />
+    </svg>
+  );
+}
+
+const NAV_ICONS = [IconHome, IconConvert, IconCalc, IconTrack, IconLive, IconLearn];
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+
 export function QuickCalcPanel({ goTo }) {
   const [open, setOpen] = useState(false);
   const quickItems = [
@@ -67,18 +122,79 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
 }
 
 export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+    <nav
+      aria-label="Main navigation"
+      className="pg-mobile-nav"
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: `linear-gradient(180deg,${K.s1},${K.s2})`,
+        borderTop: `1px solid ${K.bd}`,
+        display: "flex",
+        zIndex: 100,
+        padding: "6px 0 env(safe-area-inset-bottom,0px)",
+        boxShadow: "0 -10px 24px rgba(0,0,0,0.22)",
+      }}
+    >
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
-    </div>
+      {tabs.map((tab, index) => {
+        const isActive = gi === index;
+        const Icon = NAV_ICONS[index];
+        const label = NAV_LABELS[index] || tab.group;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => goTo(index, 0)}
+            aria-current={isActive ? "page" : undefined}
+            aria-label={label}
+            style={{
+              flex: 1,
+              padding: "8px 4px 6px",
+              background: "none",
+              border: "none",
+              color: isActive ? K.gn : K.mt,
+              cursor: "pointer",
+              fontFamily: font,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+              position: "relative",
+              transition: "color 0.15s ease",
+            }}
+          >
+            {Icon ? <Icon /> : null}
+            <span
+              style={{
+                fontSize: 8,
+                fontWeight: isActive ? 700 : 400,
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                lineHeight: 1,
+              }}
+            >
+              {label}
+            </span>
+            {isActive && (
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: "25%",
+                  right: "25%",
+                  height: 2,
+                  borderRadius: 1,
+                  background: K.gn,
+                }}
+                aria-hidden="true"
+              />
+            )}
+          </button>
+        );
+      })}
+    </nav>
   );
 }
