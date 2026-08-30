@@ -8,6 +8,10 @@ export const BREAKPOINTS = {
   xl: 1440,
 };
 
+// 100dvh (dynamic viewport height) gives the true visible height on mobile browsers,
+// avoiding the iOS Safari chrome-overlap bug that 100vh suffers from.
+export const MOBILE_VIEWPORT_HEIGHT = "100dvh";
+
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",

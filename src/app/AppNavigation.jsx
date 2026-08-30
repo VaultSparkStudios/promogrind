@@ -66,19 +66,126 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-
+// Inline SVG tab icons — no external deps, stroke-based for theme compatibility
+function IconHome({ size = 22 }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 10.5L11 3.5L19 10.5V19H15V14H7V19H3V10.5Z" />
+    </svg>
+  );
+}
+
+function IconConvert({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 8H16" />
+      <path d="M12 4.5L16 8L12 11.5" />
+      <path d="M19 14H6" />
+      <path d="M10 10.5L6 14L10 17.5" />
+    </svg>
+  );
+}
+
+function IconCalc({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="4" y="2" width="14" height="18" rx="2.5" />
+      <line x1="4" y1="8.5" x2="18" y2="8.5" />
+      <line x1="10" y1="8.5" x2="10" y2="20" />
+    </svg>
+  );
+}
+
+function IconTrack({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 17L7 11L11 14L16 7L20 9" />
+      <line x1="2" y1="17" x2="20" y2="17" />
+    </svg>
+  );
+}
+
+function IconLive({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="2.5" fill="currentColor" stroke="none" />
+      <path d="M7 15a5.7 5.7 0 0 1 0-8" />
+      <path d="M15 15a5.7 5.7 0 0 0 0-8" />
+      <path d="M4 18a10 10 0 0 1 0-14" />
+      <path d="M18 18a10 10 0 0 0 0-14" />
+    </svg>
+  );
+}
+
+function IconLearn({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M11 4C11 4 6.5 6 3 6V17C6.5 17 11 15 11 15S15.5 17 19 17V6C15.5 6 11 4 11 4Z" />
+      <line x1="11" y1="4" x2="11" y2="15" />
+    </svg>
+  );
+}
+
+const NAV_ICONS = [IconHome, IconConvert, IconCalc, IconTrack, IconLive, IconLearn];
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+
+export function MobileBottomNav({ gi, goTo, tabs }) {
+  return (
+    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: `6px 0 env(safe-area-inset-bottom, 4px)`, boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+      <style>{`
+        ${MOBILE_NAV_RESPONSIVE_CSS}
+        .pg-nav-btn { -webkit-tap-highlight-color: transparent; transition: opacity 0.15s, transform 0.12s; }
+        .pg-nav-btn:active { opacity: 0.65; transform: scale(0.92); }
+      `}</style>
+      {tabs.map((tab, index) => {
+        const active = gi === index;
+        const Icon = NAV_ICONS[index] || NAV_ICONS[0];
+        const label = NAV_LABELS[index] || tab.group;
+        return (
+          <button
+            key={tab.group}
+            className="pg-nav-btn"
+            onClick={() => goTo(index, 0)}
+            aria-label={label}
+            aria-pressed={active}
+            style={{
+              flex: 1,
+              padding: "6px 2px 8px",
+              background: "none",
+              border: "none",
+              color: active ? K.gn : K.mt,
+              cursor: "pointer",
+              fontFamily: font,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+              position: "relative",
+            }}
+          >
+            <Icon size={22} />
+            <span style={{ fontSize: 9, fontWeight: active ? 700 : 400, textTransform: "uppercase", letterSpacing: "0.5px", lineHeight: 1 }}>
+              {label}
+            </span>
+            {/* Active indicator pill */}
+            <span
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: active ? 18 : 0,
+                height: 2.5,
+                borderRadius: 999,
+                background: K.gn,
+                transition: "width 0.22s cubic-bezier(0.22,1,0.36,1)",
+                opacity: active ? 1 : 0,
+              }}
+              aria-hidden="true"
+            />
+          </button>
+        );
+      })}
     </div>
   );
 }
