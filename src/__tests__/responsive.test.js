@@ -9,6 +9,11 @@ describe("responsive launch contract", () => {
     expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-main-content");
   });
 
+  it("hides the nav drawer overlay on desktop (769px+)", () => {
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-mobile-nav-drawer-overlay");
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain("@media (min-width: 769px)");
+  });
+
   it("uses bottom navigation only for phone-width viewports", () => {
     expect(getViewportState(390).navMode).toBe("bottom-tabs");
     expect(getViewportState(768).navMode).toBe("hybrid");
