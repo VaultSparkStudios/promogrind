@@ -12,6 +12,7 @@ describe("App.jsx composition boundary", () => {
     expect(appSource).not.toMatch(/const QuickCalcPanel\s*=/);
     expect(appSource).not.toMatch(/const CalcSearch\s*=/);
     expect(appSource).not.toMatch(/const MobileBottomNav\s*=/);
+    expect(appSource).not.toMatch(/const MobileNavDrawer\s*=/);
     expect(appSource).not.toMatch(/const CSVImportModal\s*=/);
     expect(appSource).not.toMatch(/const StateLegalAlert\s*=/);
     expect(appSource).not.toMatch(/const DailyDashboard\s*=\s*\(\{/);

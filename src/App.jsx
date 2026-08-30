@@ -7,7 +7,7 @@ import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoo
 import SensitivityChip from "./components/SensitivityChip.jsx";
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav, MobileNavDrawer, QuickCalcPanel } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -83,6 +83,7 @@ export default function App() {
   const [ageVerified, setAgeVerified] = useState(() => isAgeVerified());
   const [authModalMode, setAuthModalMode] = useState(() => getInitialAuthMode());
   const [showPromoAdvisor, setShowPromoAdvisor] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
   const {
     darkMode,
     toggleTheme,
@@ -215,6 +216,7 @@ export default function App() {
     return () => window.removeEventListener("pg:quick-calc", handler);
   }, [navigate]);
   useEffect(() => { tabMemory.current[gi] = ti; }, [gi, ti]);
+  useEffect(() => { if (!isMobile && showMobileNav) setShowMobileNav(false); }, [isMobile]);
   if (pathname.startsWith("/land/")) {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>
@@ -422,6 +424,24 @@ export default function App() {
                 Search
               </button>
             )}
+            {/* Hamburger — opens the mobile nav drawer; mobile only */}
+            {isMobile && (
+              <button
+                onClick={() => setShowMobileNav(v => !v)}
+                aria-label="Open navigation menu"
+                aria-expanded={showMobileNav}
+                style={{
+                  width: 36, height: 36, borderRadius: 8, cursor: 'pointer',
+                  background: showMobileNav ? `${K.ac}20` : 'transparent',
+                  border: `1px solid ${showMobileNav ? K.ac : K.bd2}`,
+                  color: showMobileNav ? K.ac : K.dm, fontSize: 17,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                ☰
+              </button>
+            )}
             {/* Theme toggle — always visible as icon */}
             <button
               onClick={toggleTheme}
@@ -504,10 +524,10 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
+      {/* ── Main nav tabs (hidden on mobile — drawer + bottom nav own group switching) ── */}
       <div style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
-        display:'flex', justifyContent:'center',
+        display: isMobile ? 'none' : 'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',
         WebkitOverflowScrolling:'touch',
         position:'sticky', top: stickyTop, zIndex:190,
@@ -620,7 +640,8 @@ export default function App() {
       <EmailCapture/>
       <AppFooter/>
       {isMobile && <div style={{height:82}}/>}
-      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS}/>
+      <MobileNavDrawer open={showMobileNav} onClose={() => setShowMobileNav(false)} tabs={TABS} gi={gi} ti={ti} goTo={goTo} />
+      <MobileBottomNav gi={gi} goTo={goTo} tabs={TABS} onOpenDrawer={() => setShowMobileNav(true)} />
       <Suspense fallback={null}>
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate} mobile={isMobile}/>
