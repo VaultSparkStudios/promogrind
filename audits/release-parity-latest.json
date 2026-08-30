@@ -62,7 +62,7 @@
       "passing": 705,
       "total": 705
     },
-    "receiptSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
+    "receiptSha256": "ecb30dd518f82dc2100d91008571fffce46d191e765728ffd69ebe7b6e99c0f7"
   },
   "native": {
     "state": "planned-no-native-projects",

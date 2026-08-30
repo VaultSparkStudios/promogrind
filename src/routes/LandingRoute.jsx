@@ -102,7 +102,7 @@ export default function LandingRoute({ darkMode, toggleTheme }) {
           radial-gradient(circle at 80% 20%, ${K.ac}14, transparent 28%),
           linear-gradient(180deg, ${K.bg}, ${K.s1})
         `,
-        minHeight: "100vh",
+        minHeight: "100dvh",
       }}
     >
       <div style={{ maxWidth: viewport.contentMaxWidth, margin: "0 auto", padding: surfacePadding }}>
