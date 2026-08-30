@@ -13,6 +13,11 @@ export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
 ].join(" ");
 
+/* 100dvh support: falls back to 100vh on browsers that don't support dvh */
+export const DVH_SHELL_CSS = `
+  .pg-app-shell { min-height: 100vh; min-height: 100dvh; }
+`;
+
 export function getViewportState(width = 1280) {
   const w = Number(width || 1280);
   const isPhone = w < BREAKPOINTS.sm;
