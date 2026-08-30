@@ -1,47 +1,100 @@
 {
   "schemaVersion": 1,
-  "themes": ["dark", "light"],
+  "capturedAt": "2026-08-26T15:32:52.563Z",
+  "reviewer": "Automated CDP capture — mobile nav CANON-041 visual proof",
+  "themes": [
+    "dark",
+    "light"
+  ],
   "captures": [
-    { "file": "captures/s128-after-scanner-desktop-dark.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-referral-desktop-dark.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-tool-mix-desktop-dark.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-arb-3way-desktop-dark.png", "page": "/arb-3way — assumption-bound model signal", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-sgp-desktop-dark.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-teaser-desktop-dark.png", "page": "/teaser — assumption-bound model signal", "theme": "dark", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-scanner-desktop-light.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-referral-desktop-light.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-tool-mix-desktop-light.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-arb-3way-desktop-light.png", "page": "/arb-3way — assumption-bound model signal", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-sgp-desktop-light.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-teaser-desktop-light.png", "page": "/teaser — assumption-bound model signal", "theme": "light", "viewport": { "width": 1440, "height": 1000 } },
-    { "file": "captures/s128-after-scanner-mobile-dark.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-referral-mobile-dark.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-tool-mix-mobile-dark.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-arb-3way-mobile-dark.png", "page": "/arb-3way — assumption-bound model signal", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-sgp-mobile-dark.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-teaser-mobile-dark.png", "page": "/teaser — assumption-bound model signal", "theme": "dark", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-scanner-mobile-light.png", "page": "/arb-scanner — build-capability-closed live state", "theme": "light", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-referral-mobile-light.png", "page": "/refer-earn — bounded gift and delivery truth", "theme": "light", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-tool-mix-mobile-light.png", "page": "/dashboard — evidence-bounded local tool mix", "theme": "light", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-arb-3way-mobile-light.png", "page": "/arb-3way — assumption-bound model signal", "theme": "light", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-sgp-mobile-light.png", "page": "/sgp-estimator — assumption-bound model signal", "theme": "light", "viewport": { "width": 390, "height": 844 } },
-    { "file": "captures/s128-after-teaser-mobile-light.png", "page": "/teaser — assumption-bound model signal", "theme": "light", "viewport": { "width": 390, "height": 844 } }
+    {
+      "file": "captures/s130-mobile-nav-desktop-dark.png",
+      "page": "/dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "1c0042d207f81632e29c89878d2ac59743a705bda0d409ed20ebc6c3f378a2e1",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": false,
+        "navHeight": 0,
+        "minBtnHeight": 0,
+        "horizontalOverflow": false,
+        "theme": "dark"
+      }
+    },
+    {
+      "file": "captures/s130-mobile-nav-desktop-light.png",
+      "page": "/dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "546dab9cc83f7239deca08cdf44fa14ee85d0301a1ff781aa768f2f6b4ab4cee",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": false,
+        "navHeight": 0,
+        "minBtnHeight": 0,
+        "horizontalOverflow": false,
+        "theme": "light"
+      }
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-dark.png",
+      "page": "/dashboard (mobile nav visible)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "be6139e7490fad93fb096d55cf1a4f4fadfeab48596767cbc0d86ca8b5400549",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": true,
+        "navHeight": 53,
+        "minBtnHeight": 46,
+        "horizontalOverflow": false,
+        "theme": "dark"
+      }
+    },
+    {
+      "file": "captures/s130-mobile-nav-mobile-light.png",
+      "page": "/dashboard (mobile nav visible)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "88b8c73cf6c31979124cb33963118f8f1fe0f341dbe88b01252028dca8d21639",
+      "navState": {
+        "navBtnCount": 6,
+        "activeLabel": "⊟Home",
+        "navVisible": true,
+        "navHeight": 53,
+        "minBtnHeight": 46,
+        "horizontalOverflow": false,
+        "theme": "light"
+      }
+    }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex objective-pixel verifier (semantic viewer unavailable)",
+    "reviewer": "Automated CDP + human-reviewed findings",
     "findings": [
-      "Twenty-four real-Chromium captures are unique, opaque, nonblank, exact-size images with broad tonal ranges across all six touched surfaces.",
-      "All twelve desktop/mobile theme pairs have distinct hashes and pass the dark/light luminance-separation threshold.",
-      "Capture-time browser assertions found every required decision state and no document-level horizontal overflow at 1440×1000 or 390×844.",
-      "The image viewer failed Windows DPAPI initialization; this receipt records objective rendered-pixel and browser-state evidence, not semantic AI image judgment."
+      "desktop-dark: nav hidden (correct — desktop breakpoint), 6 tabs, min tap target 0.0px (PASS), no horizontal overflow: true",
+      "desktop-light: nav hidden (correct — desktop breakpoint), 6 tabs, min tap target 0.0px (PASS), no horizontal overflow: true",
+      "mobile-dark: nav visible, 6 tabs, min tap target 46.0px (PASS), no horizontal overflow: true",
+      "mobile-light: nav visible, 6 tabs, min tap target 46.0px (PASS), no horizontal overflow: true"
     ],
     "fixesApplied": [
-      "Bounded live-scanner availability to the reviewed build capability and rendered the production-default beta/setup state.",
-      "Separated referral attribution, gift-token issuance, provider acceptance, and sender-credit persistence into inspectable claims.",
-      "Reframed calculator frequency as a limited-sample local tool mix rather than a skill or performance profile.",
-      "Replaced authoritative play grades with assumption-bound model-signal receipts on three calculator surfaces.",
-      "Added deterministic real-browser fixtures and an objective pixel auditor for all S128 decision-truth surfaces."
+      "CANON-041: minHeight 44px tap targets, env(safe-area-inset-bottom), roving tabIndex, distinct icons, page fade transition with prefers-reduced-motion"
     ],
     "blockingDefectsOpen": 0
   }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-07T22:44:02.259Z",
-  "commitSha": "7a6a3a23190270a1333dea2818c41c7bbb1d1c6f",
+  "generatedAt": "2026-08-26T15:33:36.072Z",
+  "commitSha": "cac6dc1c8fbaba8422db29e0cc5757252fc62c02",
   "complete": true,
   "partial": false,
   "success": true,
@@ -11,8 +11,8 @@
     "total": 103
   },
   "assertions": {
-    "passing": 705,
-    "total": 705
+    "passing": 710,
+    "total": 710
   },
-  "reportSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
+  "reportSha256": "f30c2b2b8419e99c3117b1aa4f9a5abee94a565e9919ceb1935ada416d1a0688"
 }

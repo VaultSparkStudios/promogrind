@@ -134,6 +134,8 @@ export default function App() {
   }, [appData]);
   const prevSlugRef = useRef(null);
   const tabMemory = useRef({});
+  const contentRef = useRef(null);
+  const prevGiRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname, search } = location;
@@ -179,6 +181,15 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   useEffect(() => { window.VaultSDK?.applyGates(); }, [slug, proStatus]);
+  useEffect(() => {
+    if (prevGiRef.current !== null && prevGiRef.current !== gi && contentRef.current) {
+      const el = contentRef.current;
+      el.classList.remove("pg-content-enter");
+      void el.offsetWidth;
+      el.classList.add("pg-content-enter");
+    }
+    prevGiRef.current = gi;
+  }, [gi]);
   useEffect(() => {
     if (!authReady || slug === prevSlugRef.current) return;
     prevSlugRef.current = slug;
@@ -516,6 +527,9 @@ export default function App() {
           .pg-tabs::-webkit-scrollbar { display: none; }
           .pg-tab-btn { -webkit-tap-highlight-color: transparent; }
           .pg-tab-btn:active { opacity: 0.7; }
+          @keyframes pg-content-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+          .pg-content-enter { animation: pg-content-fade 0.2s ease-out both; }
+          @media (prefers-reduced-motion: reduce) { .pg-content-enter { animation: none !important; } }
         `}</style>
         <div className="pg-tabs pg-scroll-x" role="tablist" aria-label="Primary navigation" style={{display:'flex',maxWidth:shellMaxWidth,width:'100%'}}>
           {TABS.map((t,i)=>(
@@ -599,7 +613,7 @@ export default function App() {
         </div>
         {!isDesktop && <div style={{position:"absolute",right:0,top:0,bottom:0,width:42,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>}
       </div>
-      <div className="pg-main-content" style={{maxWidth:shellMaxWidth,margin:"0 auto",padding:`${contentPadding}px`}}>
+      <div ref={contentRef} className="pg-main-content" style={{maxWidth:shellMaxWidth,margin:"0 auto",padding:`${contentPadding}px`}}>
         {!user && <MembershipBanner/>}
         <AppCalculatorRouter
           slug={slug}

@@ -1,20 +1,20 @@
 # Release Parity Evidence
 
-> Generated from typed receipts: 2026-08-07T00:26:57.389Z · visual inspected · defects 0
+> Generated from typed receipts: 2026-08-26T15:32:56.046Z · visual inspected · defects 0
 
 ## Browser matrix
 
 | Viewport | Theme | Artifact | SHA-256 |
 |---|---|---|---|
-| 1440 × 1000 | dark | `captures/s129-final-landing-desktop-dark.png` | `34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d` |
-| 1440 × 1000 | light | `captures/s129-final-landing-desktop-light.png` | `73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab` |
-| 390 × 844 | dark | `captures/s129-final-landing-mobile-dark.png` | `6a1cdf879f8ae32655da638c45ed7e0bed978dcc9e84081d6aaa7e82fdc8e7a0` |
-| 390 × 844 | light | `captures/s129-final-landing-mobile-light.png` | `2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0` |
+| 1440 × 900 | dark | `captures/s130-mobile-nav-desktop-dark.png` | `1c0042d207f81632e29c89878d2ac59743a705bda0d409ed20ebc6c3f378a2e1` |
+| 1440 × 900 | light | `captures/s130-mobile-nav-desktop-light.png` | `546dab9cc83f7239deca08cdf44fa14ee85d0301a1ff781aa768f2f6b4ab4cee` |
+| 390 × 844 | dark | `captures/s130-mobile-nav-mobile-dark.png` | `be6139e7490fad93fb096d55cf1a4f4fadfeab48596767cbc0d86ca8b5400549` |
+| 390 × 844 | light | `captures/s130-mobile-nav-mobile-light.png` | `88b8c73cf6c31979124cb33963118f8f1fe0f341dbe88b01252028dca8d21639` |
 
 ## Evidence state
 
 - Pixel inspection: **COMPLETE** · blocking defects: 0
-- Tests: **GREEN** · 103/103 files · 705/705 assertions
+- Tests: **GREEN** · 103/103 files · 710/710 assertions
 - Native applicability: **planned-no-native-projects**
 
 Native parity is not claimed from Capacitor configuration alone; an iOS or Android project directory plus rendered evidence is required.
