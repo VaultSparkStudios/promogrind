@@ -232,7 +232,7 @@ export default function App() {
   if (pathname === "/feature-flags") {
     return (
       <FeatureFlagProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline}>
-      <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100vh", padding: 16 }}>
+      <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100dvh", padding: 16 }}>
         <Suspense fallback={<div style={{ padding: 32 }}>Loading…</div>}>
           <FeatureFlagAdmin proStatus={proStatus} />
         </Suspense>
@@ -504,8 +504,8 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
-      <div style={{
+      {/* ── Main nav tabs — hidden on mobile; MobileBottomNav owns group nav there ── */}
+      <div className="pg-group-tabs" style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',

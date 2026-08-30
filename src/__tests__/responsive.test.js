@@ -9,6 +9,11 @@ describe("responsive launch contract", () => {
     expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-main-content");
   });
 
+  it("suppresses the top group tab row on mobile so MobileBottomNav is the sole group navigator", () => {
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-group-tabs");
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain("display: none");
+  });
+
   it("uses bottom navigation only for phone-width viewports", () => {
     expect(getViewportState(390).navMode).toBe("bottom-tabs");
     expect(getViewportState(768).navMode).toBe("hybrid");

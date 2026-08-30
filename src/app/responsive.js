@@ -11,6 +11,8 @@ export const BREAKPOINTS = {
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
+  // Suppress the sticky top-level group tab row on mobile; MobileBottomNav owns group navigation there.
+  "@media (max-width: 768px) { .pg-group-tabs { display: none !important; } }",
 ].join(" ");
 
 export function getViewportState(width = 1280) {
