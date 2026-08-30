@@ -10,8 +10,13 @@ export const BREAKPOINTS = {
 
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
+  // CANON-041: 100dvh nav sheet hidden on desktop; main content gets bottom clearance on mobile
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
+  "@media (min-width: 769px) { .pg-nav-sheet { display: none !important; } }",
 ].join(" ");
+
+// CANON-041: dvh unit support for mobile browser chrome-aware viewport height
+export const DVH_SUPPORT_CSS = "height: 100dvh; height: 100vh;";
 
 export function getViewportState(width = 1280) {
   const w = Number(width || 1280);
