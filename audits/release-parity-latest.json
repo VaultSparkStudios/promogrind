@@ -55,14 +55,14 @@
   "tests": {
     "state": "green",
     "files": {
-      "passing": 103,
-      "total": 103
+      "passing": 104,
+      "total": 104
     },
     "assertions": {
-      "passing": 705,
-      "total": 705
+      "passing": 715,
+      "total": 715
     },
-    "receiptSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
+    "receiptSha256": "1eb4472d300ac5b75b46bf8c1e5434189f50197b4636c642bdd55ea4ac72b839"
   },
   "native": {
     "state": "planned-no-native-projects",
