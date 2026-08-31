@@ -329,7 +329,7 @@ export default function App() {
   }
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh"}}>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
@@ -504,8 +504,8 @@ export default function App() {
           </div>
         )}
       </header>
-      {/* ── Main nav tabs ───────────────────────────────────────────────────── */}
-      <div style={{
+      {/* ── Main nav tabs (desktop only; mobile uses MobileBottomNav) ───────── */}
+      <div className="pg-main-tabs" style={{
         background:K.s1, borderBottom:`1px solid ${K.bd}`,
         display:'flex', justifyContent:'center',
         overflowX:'auto', scrollbarWidth:'none',

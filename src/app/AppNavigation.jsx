@@ -66,19 +66,47 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const BOTTOM_NAV_GLYPHS = ["⌂", "⇄", "∑", "◎", "⚡", "◈"];
+const BOTTOM_NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
 
+export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
+    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1} 0%,${K.s2} 100%)`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: `8px 0 env(safe-area-inset-bottom, 6px)`, boxShadow: "0 -12px 32px rgba(0,0,0,0.28)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
       <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+      {tabs.map((tab, index) => {
+        const active = gi === index;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => goTo(index, 0)}
+            aria-label={BOTTOM_NAV_LABELS[index] || tab.group}
+            aria-pressed={active}
+            style={{
+              flex: 1, padding: "6px 2px", background: "none", border: "none",
+              color: active ? K.gn : K.mt, cursor: "pointer",
+              fontSize: 9, textTransform: "uppercase", letterSpacing: "0.6px",
+              fontFamily: font, display: "flex", flexDirection: "column",
+              alignItems: "center", gap: 4, transition: "color 0.15s",
+              minHeight: 44,
+            }}
+          >
+            <span
+              aria-hidden="true"
+              style={{
+                fontSize: active ? 18 : 16, lineHeight: 1,
+                opacity: active ? 1 : 0.55,
+                transition: "font-size 0.15s, opacity 0.15s",
+                display: "block",
+              }}
+            >
+              {BOTTOM_NAV_GLYPHS[index] || "·"}
+            </span>
+            <span style={{ fontWeight: active ? 700 : 400, fontSize: 9 }}>
+              {BOTTOM_NAV_LABELS[index] || tab.group}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
