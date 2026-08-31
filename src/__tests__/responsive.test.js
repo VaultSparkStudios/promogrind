@@ -7,6 +7,8 @@ describe("responsive launch contract", () => {
     expect(MOBILE_NAV_RESPONSIVE_CSS).toContain("@media (max-width: 768px)");
     expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-mobile-nav");
     expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-main-content");
+    // CANON-041: top group-tab row hidden on mobile so bottom nav owns group switching
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-main-tabs");
   });
 
   it("uses bottom navigation only for phone-width viewports", () => {
