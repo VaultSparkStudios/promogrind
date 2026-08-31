@@ -34,7 +34,7 @@
     "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
-  "lastUpdated": "2026-08-07",
+  "lastUpdated": "2026-08-31",
   "silScore": 1000,
   "silAvg3": 998.7,
   "silVelocity": 4,
@@ -53,7 +53,7 @@
   "ignisLastComputed": "2026-08-01",
   "testsPassing": 103,
   "testsTotal": 103,
-  "testsLastRun": "2026-08-07",
+  "testsLastRun": "2026-08-31",
   "lastDeployStatus": "GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab is live unchanged on stable staging and Cloudflare production. Production receipt artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json; root, health, deep routes, seven standard/health files, six security headers, and capture-safe configuration pass. DNS cutover preserved mail MX/TXT records and retained the prior GitHub Pages CNAME snapshot. SPARKED remains HOLD.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-07",
@@ -243,8 +243,8 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-08-07T22:44:02.259Z",
-    "commitSha": "7a6a3a23190270a1333dea2818c41c7bbb1d1c6f",
+    "generatedAt": "2026-08-31T15:05:41.313Z",
+    "commitSha": "5ce261303c6f3c0d57f6396dbf4eb203e49f15ba",
     "complete": true,
     "partial": false,
     "success": true,
@@ -257,10 +257,10 @@
       "passing": 705,
       "total": 705
     },
-    "reportSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
+    "reportSha256": "7665ca993e879cf1fd3d52a00e594dd38ac936120f988456c8b7a92844bca5e5"
   },
   "testsAssertionsPassing": 705,
   "testsAssertionsTotal": 705,
   "testsAssertionsFiles": 103,
-  "testsAssertionsLastRun": "2026-08-07"
+  "testsAssertionsLastRun": "2026-08-31"
 }
