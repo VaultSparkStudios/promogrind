@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { K, S, font } from "../lib/shared.js";
+import { useFocusTrap } from "../lib/focus-trap.js";
 import { MOBILE_NAV_RESPONSIVE_CSS } from "./responsive.js";
 import { SEARCH_UI } from "./appText.js";
 
@@ -114,6 +115,9 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
 export function MobileBottomNav({ gi, ti, goTo, tabs }) {
   const [sheetGi, setSheetGi] = useState(null);
   const sheetOpen = sheetGi !== null;
+  const sheetContainerRef = useRef(null);
+
+  useFocusTrap(sheetOpen, sheetContainerRef);
 
   // Close sheet when the active group changes externally (e.g. router-driven navigation)
   useEffect(() => { setSheetGi(null); }, [gi]);
@@ -124,6 +128,14 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [sheetOpen]);
+
+  // Close sheet when viewport grows past mobile breakpoint (nav bar hides via CSS; sheet must follow)
+  useEffect(() => {
+    const MOBILE_MAX = 768;
+    const onResize = () => { if (window.innerWidth > MOBILE_MAX) setSheetGi(null); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   function handleTabTap(index) {
     if (sheetOpen) {
@@ -157,6 +169,7 @@ export function MobileBottomNav({ gi, ti, goTo, tabs }) {
           }}
         >
           <div
+            ref={sheetContainerRef}
             style={{
               position: "absolute",
               left: 0, right: 0,

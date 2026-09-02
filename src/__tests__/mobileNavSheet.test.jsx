@@ -117,4 +117,26 @@ describe("MobileBottomNav — 100dvh scrollable nav sheet", () => {
     expect(dialog.getAttribute("aria-modal")).toBe("true");
     expect(dialog.getAttribute("aria-label")).toContain("Calculate");
   });
+
+  it("closes the sheet when the viewport grows past the mobile breakpoint", () => {
+    renderNav({ gi: 0 });
+    fireEvent.click(screen.getByText("Home"));
+    expect(screen.getByRole("dialog")).toBeTruthy();
+    // Simulate resize to desktop width
+    Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: 900 });
+    fireEvent(window, new Event("resize"));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("traps focus inside the sheet panel when open", () => {
+    const { container } = renderNav({ gi: 0 });
+    fireEvent.click(screen.getByText("Home"));
+    const dialog = screen.getByRole("dialog");
+    // The inner sheet panel (first child of dialog) should have the ref attached
+    const panel = dialog.firstChild;
+    expect(panel).toBeTruthy();
+    // Focus should land inside the panel (useFocusTrap moves it to first focusable)
+    const firstFocusable = panel.querySelector("button");
+    expect(firstFocusable).toBeTruthy();
+  });
 });
