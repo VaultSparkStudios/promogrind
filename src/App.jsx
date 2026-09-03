@@ -278,7 +278,7 @@ export default function App() {
   const CALC_GI = getCalcGroupIndex(TABS);
   if (!authReady) {
     return (
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
         <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
           <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
@@ -329,7 +329,7 @@ export default function App() {
   }
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100dvh"}}>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
