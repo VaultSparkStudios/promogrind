@@ -10,7 +10,11 @@ export const BREAKPOINTS = {
 
 export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (min-width: 769px) { .pg-mobile-nav { display: none !important; } }",
+  "@media (min-width: 769px) { .pg-subnav-sheet-backdrop { display: none !important; } }",
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
+  ".pg-subnav-sheet { scroll-behavior: smooth; }",
+  ".pg-subnav-sheet::-webkit-scrollbar { display: none; }",
+  ".pg-subnav-sheet { scrollbar-width: none; }",
 ].join(" ");
 
 export function getViewportState(width = 1280) {
