@@ -14,4 +14,14 @@ describe("responsive launch contract", () => {
     expect(getViewportState(768).navMode).toBe("hybrid");
     expect(getViewportState(1024).navMode).toBe("top-tabs");
   });
+
+  it("hides the sub-nav sheet on desktop via the responsive CSS contract", () => {
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-subnav-sheet-backdrop");
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain("@media (min-width: 769px)");
+  });
+
+  it("provides scroll-behavior and scrollbar-hiding for the sub-nav sheet", () => {
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-subnav-sheet");
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain("scrollbar-width: none");
+  });
 });
