@@ -13,6 +13,15 @@ export const MOBILE_NAV_RESPONSIVE_CSS = [
   "@media (max-width: 768px) { .pg-main-content { padding-bottom: 88px !important; } }",
 ].join(" ");
 
+// CANON-041: 100dvh drawer animation — prefers-reduced-motion respected
+export const MOBILE_DRAWER_CSS = [
+  ".pg-nav-drawer-sheet { animation: pgNavDrawerIn 0.22s cubic-bezier(0.4,0,0.2,1) both; }",
+  "@keyframes pgNavDrawerIn { from { transform: translateX(-6%); opacity: 0.6; } to { transform: translateX(0); opacity: 1; } }",
+  "@media (prefers-reduced-motion: reduce) { .pg-nav-drawer-sheet { animation: none !important; } }",
+  // 100dvh fallback for browsers that don't support dvh
+  ".pg-nav-drawer-sheet { height: 100vh; height: 100dvh; }",
+].join(" ");
+
 export function getViewportState(width = 1280) {
   const w = Number(width || 1280);
   const isPhone = w < BREAKPOINTS.sm;
