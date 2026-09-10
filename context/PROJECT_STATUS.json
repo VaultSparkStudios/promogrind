@@ -34,7 +34,7 @@
     "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
-  "lastUpdated": "2026-09-06",
+  "lastUpdated": "2026-09-10",
   "silScore": 1000,
   "silAvg3": 998.7,
   "silVelocity": 4,
@@ -53,7 +53,7 @@
   "ignisLastComputed": "2026-08-01",
   "testsPassing": 103,
   "testsTotal": 103,
-  "testsLastRun": "2026-09-06",
+  "testsLastRun": "2026-09-10",
   "lastDeployStatus": "GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab is live unchanged on stable staging and Cloudflare production. Production receipt artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json; root, health, deep routes, seven standard/health files, six security headers, and capture-safe configuration pass. DNS cutover preserved mail MX/TXT records and retained the prior GitHub Pages CNAME snapshot. SPARKED remains HOLD.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-07",
@@ -243,8 +243,8 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-09-06T15:05:14.430Z",
-    "commitSha": "03d36deb92374e427b9d4d99e889ca94c057cf29",
+    "generatedAt": "2026-09-10T15:08:13.201Z",
+    "commitSha": "4bad5452e0b6409075b10430023392516a5e527d",
     "complete": true,
     "partial": false,
     "success": true,
@@ -254,13 +254,13 @@
       "total": 103
     },
     "assertions": {
-      "passing": 705,
-      "total": 705
+      "passing": 708,
+      "total": 708
     },
-    "reportSha256": "9364bafd364516bf2220dcf127191aee94f4bf4d0263e0de69c8625fbff0a6e5"
+    "reportSha256": "39a737573ae7645fbd20845f8a29fdcec1d4897448f790fb8a56d5db9232f2e6"
   },
-  "testsAssertionsPassing": 705,
-  "testsAssertionsTotal": 705,
+  "testsAssertionsPassing": 708,
+  "testsAssertionsTotal": 708,
   "testsAssertionsFiles": 103,
-  "testsAssertionsLastRun": "2026-09-06"
+  "testsAssertionsLastRun": "2026-09-10"
 }
