@@ -9,6 +9,11 @@ describe("responsive launch contract", () => {
     expect(MOBILE_NAV_RESPONSIVE_CSS).toContain(".pg-main-content");
   });
 
+  it("uses 100dvh min-height and safe-area-aware padding on mobile", () => {
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain("100dvh");
+    expect(MOBILE_NAV_RESPONSIVE_CSS).toContain("safe-area-inset-bottom");
+  });
+
   it("uses bottom navigation only for phone-width viewports", () => {
     expect(getViewportState(390).navMode).toBe("bottom-tabs");
     expect(getViewportState(768).navMode).toBe("hybrid");
