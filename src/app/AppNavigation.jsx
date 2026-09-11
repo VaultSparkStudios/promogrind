@@ -14,7 +14,7 @@ export function QuickCalcPanel({ goTo }) {
   ];
 
   return (
-    <div className="pg-quick-calc" style={{ position: "fixed", bottom: 84, left: 14, zIndex: 200 }}>
+    <div className="pg-quick-calc" style={{ position: "fixed", bottom: "max(96px, calc(72px + env(safe-area-inset-bottom, 0px)))", left: 14, zIndex: 200 }}>
       <style>{`@media (min-width: 640px) { .pg-quick-calc { display: none !important; } }`}</style>
       {open && (
         <div style={{ background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 14, padding: 10, marginBottom: 8, boxShadow: "0 16px 36px rgba(0,0,0,0.38)", minWidth: 180 }}>
