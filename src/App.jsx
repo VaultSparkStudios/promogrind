@@ -109,6 +109,7 @@ export default function App() {
     dismissOnboarding,
   } = usePromoAppShell({ onboardingKey: ONBOARDING_KEY });
   const { authReady, user, proStatus, weeklyActive } = usePromoAuthSession({ appData });
+  useEffect(() => { if (!isMobile) setShowMobileDrawer(false); }, [isMobile]);
   const shellMaxWidth = viewport.contentMaxWidth;
   const shellPadding = viewport.shellPadding;
   const contentPadding = viewport.contentPadding;
