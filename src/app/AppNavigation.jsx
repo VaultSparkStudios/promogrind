@@ -66,19 +66,134 @@ export function CalcSearch({ allCalcs, onNavigate, onClose }) {
   );
 }
 
-export function MobileBottomNav({ gi, goTo, tabs }) {
-  const icons = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
-  const labels = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+const NAV_ICONS = [
+  // Home — house
+  <svg key="home" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 12L12 3l9 9" /><path d="M9 21V12h6v9" /><path d="M5 21V10" /><path d="M19 21V10" />
+  </svg>,
+  // Convert — exchange arrows
+  <svg key="convert" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 16V4m0 0L3 8m4-4l4 4" /><path d="M17 8v12m0 0l4-4m-4 4l-4-4" />
+  </svg>,
+  // Calc — grid calculator
+  <svg key="calc" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="8" y2="10" strokeWidth="2.5" /><line x1="12" y1="10" x2="12" y2="10" strokeWidth="2.5" /><line x1="16" y1="10" x2="16" y2="10" strokeWidth="2.5" /><line x1="8" y1="14" x2="8" y2="14" strokeWidth="2.5" /><line x1="12" y1="14" x2="12" y2="14" strokeWidth="2.5" /><line x1="8" y1="18" x2="8" y2="18" strokeWidth="2.5" /><line x1="12" y1="18" x2="12" y2="18" strokeWidth="2.5" /><line x1="16" y1="14" x2="16" y2="18" />
+  </svg>,
+  // Track — bar chart
+  <svg key="track" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /><line x1="3" y1="20" x2="21" y2="20" />
+  </svg>,
+  // Live — pulse/radar
+  <svg key="live" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="2" fill="currentColor" /><path d="M8.5 8.5a5 5 0 0 0 0 7" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M5 5a10 10 0 0 0 0 14" /><path d="M19 5a10 10 0 0 1 0 14" />
+  </svg>,
+  // Learn — open book
+  <svg key="learn" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+  </svg>,
+];
 
+const NAV_LABELS = ["Home", "Convert", "Calc", "Track", "Live", "Learn"];
+
+const NAV_ACTIVE_CSS = `
+  @keyframes pgNavPulse {
+    0% { opacity: 0.6; transform: scaleX(0.7); }
+    100% { opacity: 1; transform: scaleX(1); }
+  }
+`;
+
+export function MobileBottomNav({ gi, goTo, tabs }) {
   return (
-    <div className="pg-mobile-nav" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: `linear-gradient(180deg,${K.s1},${K.s2})`, borderTop: `1px solid ${K.bd}`, display: "flex", zIndex: 100, padding: "6px 0 env(safe-area-inset-bottom,0px)", boxShadow: "0 -10px 24px rgba(0,0,0,0.22)" }}>
-      <style>{MOBILE_NAV_RESPONSIVE_CSS}</style>
-      {tabs.map((tab, index) => (
-        <button key={tab.group} onClick={() => goTo(index, 0)} style={{ flex: 1, padding: "7px 4px", background: "none", border: "none", color: gi === index ? K.gn : K.mt, cursor: "pointer", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: font, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <span aria-hidden="true" style={{ fontSize: 10, lineHeight: 1, fontWeight: 700 }}>{icons[index] || tab.group}</span>
-          <span style={{ fontWeight: gi === index ? 700 : 400 }}>{labels[index] || tab.group}</span>
-        </button>
-      ))}
+    <div
+      className="pg-mobile-nav"
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: `linear-gradient(180deg,${K.s1}ee,${K.s2}f8)`,
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderTop: `1px solid ${K.bd}`,
+        display: "flex",
+        zIndex: 100,
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        boxShadow: "0 -8px 32px rgba(0,0,0,0.28)",
+      }}
+    >
+      <style>{MOBILE_NAV_RESPONSIVE_CSS}{NAV_ACTIVE_CSS}</style>
+      {tabs.map((tab, index) => {
+        const active = gi === index;
+        const color = active ? K.gn : K.mt;
+        return (
+          <button
+            key={tab.group}
+            onClick={() => goTo(index, 0)}
+            aria-label={NAV_LABELS[index] || tab.group}
+            aria-current={active ? "page" : undefined}
+            style={{
+              flex: 1,
+              padding: "8px 2px 7px",
+              background: "none",
+              border: "none",
+              color,
+              cursor: "pointer",
+              fontFamily: font,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+              position: "relative",
+              transition: "color 0.18s ease",
+              WebkitTapHighlightColor: "transparent",
+            }}
+          >
+            {active && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 28,
+                  height: 2.5,
+                  borderRadius: "0 0 3px 3px",
+                  background: K.gn,
+                  boxShadow: `0 0 8px ${K.gn}88`,
+                  animation: "pgNavPulse 0.22s ease-out both",
+                }}
+              />
+            )}
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 26,
+                height: 26,
+                borderRadius: 8,
+                background: active ? `${K.gn}14` : "transparent",
+                transition: "background 0.18s ease",
+              }}
+            >
+              {NAV_ICONS[index] || (
+                <span style={{ fontSize: 13, fontWeight: 700 }}>{tab.group[0]}</span>
+              )}
+            </span>
+            <span
+              style={{
+                fontSize: 9,
+                textTransform: "uppercase",
+                letterSpacing: "0.6px",
+                fontWeight: active ? 700 : 400,
+                lineHeight: 1,
+              }}
+            >
+              {NAV_LABELS[index] || tab.group}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
