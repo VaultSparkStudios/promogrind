@@ -23,11 +23,24 @@ import { buildMarketingConsent } from './lib/marketingConsent.js';
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// createClient() throws synchronously when its arguments are missing/malformed.
+// That throw happens at module-eval time, which would otherwise take down the
+// entire app bundle — including the browser-local calculators that must keep
+// working without any backend, per this app's stated architecture. Fall back to
+// an inert placeholder so the client always constructs; real calls against it
+// simply fail (already handled by the .catch() guards around every call site).
+const FALLBACK_SUPABASE_URL = 'https://unconfigured.invalid';
+const FALLBACK_SUPABASE_ANON_KEY = 'unconfigured';
+
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.error('[PromoGrindAuth] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env');
+  console.error('[PromoGrindAuth] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env — account features are disabled; browser-local features still work.');
 }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient(
+  SUPABASE_URL || FALLBACK_SUPABASE_URL,
+  SUPABASE_ANON_KEY || FALLBACK_SUPABASE_ANON_KEY,
+);
 
 const SESSION_HASH_TYPES = new Set([
   'vault_access',
