@@ -487,4 +487,25 @@ describe('supabase client bootstrap — missing configuration', () => {
       vi.resetModules();
     }
   });
+
+  it('never pairs a real URL with the placeholder key (or vice versa) when only one is set', async () => {
+    // A real project URL combined with the placeholder key would let the disabled
+    // client read an existing real session from localStorage (Supabase keys that
+    // storage by project URL, not by key) and then clear it on a failed refresh —
+    // signing out a returning user. Both fallback values must be used together.
+    vi.resetModules();
+    vi.doUnmock('@supabase/supabase-js');
+    vi.stubEnv('VITE_SUPABASE_URL', 'https://real-project.supabase.co');
+    vi.stubEnv('VITE_SUPABASE_ANON_KEY', '');
+
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const mod = await import('../auth.js');
+      expect(mod.supabase.supabaseUrl).not.toBe('https://real-project.supabase.co');
+    } finally {
+      errorSpy.mockRestore();
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
 });

@@ -30,16 +30,24 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 // working without any backend, per this app's stated architecture. Fall back to
 // an inert placeholder so the client always constructs; real calls against it
 // simply fail (already handled by the .catch() guards around every call site).
+//
+// The two fallback values are used as an all-or-nothing pair, never mixed with
+// a real URL or key: Supabase namespaces its persisted auth session in
+// localStorage by project URL, not by key. Pairing a real project URL with the
+// placeholder key would let the disabled client pick up an existing real
+// session from storage and then clear it once a token refresh fails against
+// the bogus key, unexpectedly signing out a returning user.
 const FALLBACK_SUPABASE_URL = 'https://unconfigured.invalid';
 const FALLBACK_SUPABASE_ANON_KEY = 'unconfigured';
+const isSupabaseConfigured = Boolean(SUPABASE_URL) && Boolean(SUPABASE_ANON_KEY);
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+if (!isSupabaseConfigured) {
   console.error('[PromoGrindAuth] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env — account features are disabled; browser-local features still work.');
 }
 
 export const supabase = createClient(
-  SUPABASE_URL || FALLBACK_SUPABASE_URL,
-  SUPABASE_ANON_KEY || FALLBACK_SUPABASE_ANON_KEY,
+  isSupabaseConfigured ? SUPABASE_URL : FALLBACK_SUPABASE_URL,
+  isSupabaseConfigured ? SUPABASE_ANON_KEY : FALLBACK_SUPABASE_ANON_KEY,
 );
 
 const SESSION_HASH_TYPES = new Set([
