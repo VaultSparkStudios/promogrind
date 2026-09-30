@@ -8,29 +8,15 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { inspectModelRouterSource } from './lib/model-router-adherence.mjs';
 
 const ROOT = process.cwd();
 const args = new Set(process.argv.slice(2));
 const asJson = args.has('--json');
 const scriptsDir = path.join(ROOT, 'scripts');
 const allowed = path.normalize(path.join(scriptsDir, 'lib', 'model-router.mjs'));
-const patterns = [
-  { id: 'anthropic-api-host', regex: /api\.anthropic\.com/ },
-  { id: 'anthropic-sdk', regex: /@anthropic-ai\/sdk/ },
-  { id: 'hardcoded-claude-model', regex: /claude-(?:opus|sonnet|haiku|3|4)[A-Za-z0-9._-]*/ },
-];
 const skipDirs = new Set(['.git', 'node_modules', '.cache', 'dist', 'build']);
 const findings = [];
-
-function safeMatch(regex, line) {
-  try {
-    return regex.test(line);
-  } catch {
-    return false;
-  } finally {
-    regex.lastIndex = 0;
-  }
-}
 
 function safeRead(file) {
   try {
@@ -43,19 +29,7 @@ function safeRead(file) {
 function scanFile(file) {
   const text = safeRead(file);
   if (text == null) return;
-  const lines = text.split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    for (const pattern of patterns) {
-      if (safeMatch(pattern.regex, lines[i])) {
-        findings.push({
-          file: path.relative(ROOT, file).replace(/\\/g, '/'),
-          line: i + 1,
-          pattern: pattern.id,
-          excerpt: lines[i].trim().slice(0, 180),
-        });
-      }
-    }
-  }
+  findings.push(...inspectModelRouterSource(text, path.relative(ROOT, file).replace(/\\/g, '/')));
 }
 
 function walk(dir) {
@@ -97,7 +71,7 @@ if (asJson) {
 } else {
   console.error(`✗ model-router adherence · ${findings.length} direct Anthropic reference(s) outside ${report.allowedFile}`);
   for (const f of findings) {
-    console.error(`  ${f.file}:${f.line} [${f.pattern}] ${f.excerpt}`);
+    console.error(`  ${f.file}:${f.line} [${f.pattern}]`);
   }
 }
 
