@@ -11,10 +11,10 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S126:1000 | S127:998 | S128:998 | S129:1000 | S131:860
-Avgs - 3: 952.7 | 5: 971.2 | 10: 985.6 | 25: 994.1 | all: 937.4 (normalized /1000; calibration sessions excluded)
-Velocity: 7 selected outcomes | Debt: down | Intent: achieved for selected technical scope
-Last session: 2026-09-30 | Session 131 | Total: 860/1000 | Velocity: 7
+Sparkline (last 5 totals): S127:998 | S128:998 | S129:1000 | S131:860 | S132:869
+Avgs - 3: 909.7 | 5: 945 | 10: 972.5 | 25: 988.9 | all: 936.2 (normalized /1000; calibration sessions excluded)
+Velocity: 1 selected outcome | Debt: down | Intent: achieved for selected technical scope
+Last session: 2026-09-30 | Session 132 | Total: 869/1000 | Velocity: 1
 <!-- rolling-status-end -->
 
 ---
@@ -1916,3 +1916,31 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 ### 2026-09-30 — Session 131 addendum | Score retained: 860
 
 Closeout verification found an old test that demanded a live forecast of at least 900. A product score is evidence, not a pass threshold: valid low and zero complete forecasts now have explicit regression checks, while incomplete input still returns null. Full frontend verification passes 104 files and 716 assertions. No historical score was raised to pass a test.
+
+## 2026-09-30 — Session 132 | Total: 869/1000 | Velocity: 1 | Debt: down
+
+| Category | Score | vs Last | Notes |
+|---|---:|:---:|---|
+| Dev Health | 96 | 0 | Full app/Edge/local/remote gates pass; broader product debt remains. |
+| Creative Alignment | 96 | 0 | Activity is reported with coverage, privacy and timestamp limits; no betting-performance claims. |
+| Momentum | 94 | -2 | One selected complete feature reached production; recurring execution is not yet observed. |
+| Engagement | 68 | 3 | New public feedback surface; adoption and independent customer value remain unmeasured. |
+| Process Quality | 92 | 2 | Review corrected date semantics and discovered a real credential mismatch; closeout reconciles stale S131 state. |
+| Cross-Repo Coherence | 89 | 1 | Uses the shared feed format and Ark transport; broader canon/identity gaps remain. |
+| Security Posture | 76 | 1 | Aggregate-only source, exact authority, suppression and remote access denial verified; historical remediation remains open. |
+| Ecosystem Integration | 83 | 3 | Human and agent discovery share a real published artifact; Obelisk/mailbox/cost alignment remains open. |
+| Capital Efficiency | 80 | 0 | Existing infrastructure and browser tooling reused; no new dependencies or paid APIs, no fabricated cost measurement. |
+| Automation Coverage | 95 | 1 | Scheduled publisher and release pipeline configured and initially verified; first recurring run remains unobserved. |
+| **Total** | **869 / 1000** | +9 | Engineering progress; external evidence gaps retained. |
+
+**Top win:** real aggregate statistics now reach both public surfaces through an authenticated producer, readable privacy/freshness states and an approved daily schedule.
+
+**Top gap:** the first recurring execution and independent adoption/customer value are not yet measured. Existing public-launch proofs remain open.
+
+**Intent outcome:** Achieved for the selected feature and technical deployment. Explicit closeout reconciles records and promotes its final committed artifact.
+
+**Tool-profile lens:** time to first value and single-task speed are unmeasured; report zeros are not an adoption census; polish is supported by 48 inspected desktop/mobile dark/light captures.
+
+**Brainstorm:** reuse read-only credential-match probes and report timestamp trust labels where similar integrations need them; no extra implementation authorized.
+
+**Committed follow-up(s):** observe actual daily stats recurrence [SIL:1]; complete Zoho/Obelisk and remaining launch evidence [SIL:1].

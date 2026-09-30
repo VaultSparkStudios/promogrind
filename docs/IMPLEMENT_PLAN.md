@@ -15,3 +15,8 @@ Completed seven selected L3 outcomes from AUDIT_2026-09-30.json.
 Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.
 
 Three waves complete; no selected work remains in progress. CANON-054 and existing public-launch criteria remain explicit separate follow-ups.
+
+## S132 continuation completed
+
+Public aggregate stats supersede the S131 stats deferral above. One selected outcome and three waves are complete. 105/105 app test files, 722/722 assertions; 16 Edge entrypoints and 69/69 tests across 10 files; full verify:launch-local exit 0; 40 inspected implementation captures plus 8 inspected production captures without feed fixtures; CI and exact staging/production artifact checks passed. Initial daily publication/schedule are verified; recurrence and separate launch proofs remain follow-ups.
+

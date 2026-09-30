@@ -61,6 +61,6 @@ Audience: public-unlaunched · Live ACTIVE canons: 54 · Pending review: 43
 | CANON-051 | Web Hardening: every public surface meets the edge-security  | review |  |
 | CANON-052 | Project Lifecycle Ladder: FORGE/SPARKED/VAULTED with sub-sta | review |  |
 | CANON-053 | Rendered-Pixel UI Discipline: look at the real interface whi | adopted | `docs/visual-qa/LATEST.json` binds 4 reviewed production-build captures across light/dark and desktop/mobile; authoritative checker PASS |
-| CANON-054 | Public Stats Surface: every website reports and analyzes its | review |  |
+| CANON-054 | Public Stats Surface: every website reports and analyzes its | review | S132 feed and both surfaces deployed; initial publisher and schedule verified. First recurring execution and full conformance review remain open; see stats release receipts. |
 | CANON-055 | Surface Follow-Through: every project change reaches the thi | review |  |
 

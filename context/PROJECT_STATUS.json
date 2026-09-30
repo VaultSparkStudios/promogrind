@@ -21,8 +21,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 131,
-  "currentFocus": "S131 completed seven release correctness outcomes: exact Cloudflare staging/production identity, scheduled auth, safe authority sync, navigation freshness, dependency/runtime isolation and pricing readability.",
+  "currentSession": 132,
+  "currentFocus": "S132 public aggregate statistics delivered: shared homepage/detail feed, privacy and freshness states, authenticated publisher and approved daily schedule.",
   "nextMilestone": "Complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and distinct post-proof founder criteria before SPARKED.",
   "blockers": [
     "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved.",
@@ -35,18 +35,18 @@
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
   "lastUpdated": "2026-09-30",
-  "silScore": 860,
-  "silAvg3": 952.7,
-  "silVelocity": 7,
+  "silScore": 869,
+  "silAvg3": 909.7,
+  "silVelocity": 1,
   "silDebt": "down",
-  "silLastSession": 131,
+  "silLastSession": 132,
   "silMax": 1000,
   "silSparkline": [
-    1000,
     998,
     998,
     1000,
-    860
+    860,
+    869
   ],
   "ignisScore": 43385,
   "ignisGrade": "FORGE",
@@ -54,7 +54,7 @@
   "testsPassing": 105,
   "testsTotal": 105,
   "testsLastRun": "2026-09-30",
-  "lastDeployStatus": "Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.",
+  "lastDeployStatus": "Application commit d9f5385469fbe2015c0628c7c37d15a2618411b1 is verified at stable staging and production with content digest fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c. Release workflow: https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140142. The authorized closeout commit will pass through the same deployment pipeline; its final receipt is checked after push.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-09-30",
   "truthGenome": "24/25",
@@ -63,17 +63,17 @@
     {
       "type": "tests",
       "command": "npm test",
-      "status": "S131 pass:104 files,716 assertions"
+      "status": "S132 pass:105 files,722 assertions"
     },
     {
       "type": "edge",
       "command": "npm run verify:edge",
-      "status": "S131 pass:15 entries,56 tests,8 files"
+      "status": "S132 pass:16 entries,69 tests,10 files"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "S131 full launch-local direct exit0"
+      "status": "S132 full launch-local direct exit0"
     },
     {
       "type": "ux-integrity",
@@ -84,17 +84,17 @@
       "type": "local",
       "command": "npm run dev",
       "url": "http://localhost:5173",
-      "status": "passing"
+      "status": "Verified; session-owned dev server stopped"
     },
     {
       "type": "staging",
       "url": "https://staging.promogrind.bet",
-      "status": "Verified be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8; content 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93"
+      "status": "Verified d9f5385469fbe2015c0628c7c37d15a2618411b1; content fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c"
     },
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "Verified be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8; content 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93"
+      "status": "Verified d9f5385469fbe2015c0628c7c37d15a2618411b1; content fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c"
     }
   ],
   "stagingUrl": "https://staging.promogrind.bet",
@@ -113,14 +113,14 @@
   "silCategoriesV3": {
     "devHealth": 96,
     "creativeAlignment": 96,
-    "momentum": 96,
-    "engagement": 65,
-    "processQuality": 90,
-    "crossRepoCoherence": 88,
-    "securityPosture": 75,
-    "ecosystemIntegration": 80,
+    "momentum": 94,
+    "engagement": 68,
+    "processQuality": 92,
+    "crossRepoCoherence": 89,
+    "securityPosture": 76,
+    "ecosystemIntegration": 83,
     "capitalEfficiency": 80,
-    "automationCoverage": 94
+    "automationCoverage": 95
   },
   "doctorScore": {
     "date": "2026-09-30",
@@ -218,7 +218,7 @@
       }
     ]
   },
-  "entropyScore": 0.002,
+  "entropyScore": 0.057,
   "entropyLastComputed": "2026-09-30",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
@@ -232,19 +232,19 @@
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
   "sessionShellHygiene": {
-    "session": 129,
-    "started": 1,
-    "closed": 1,
+    "session": 132,
+    "started": 26,
+    "closed": 26,
     "running": 0,
-    "enumeratedAt": "2026-08-07T18:55:00-04:00",
-    "evidence": "S129 final Chromium capture used one hidden repo-local Vite process on 127.0.0.1:4173. The exact listener and parent were closed, and the port was re-probed with zero repo-owned listeners remaining."
+    "enumeratedAt": "2026-09-30T16:17:37.654Z",
+    "evidence": "Root execution ledger reconciled with exit results and live-session probes; no repo-owned Vite/capture processes found. Counts are the pre-autopilot checkpoint; final automation/deploy monitor jobs are re-enumerated after completion."
   },
-  "lastSessionSummary": "S131 shipped all seven selected technical outcomes. 104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected. FORGE/public-launch HOLD retained.",
+  "lastSessionSummary": "S132 selected outcome complete. 105/105 app test files, 722/722 assertions; 16 Edge entrypoints and 69/69 tests across 10 files; full verify:launch-local exit 0; 40 inspected implementation captures plus 8 inspected production captures without feed fixtures; CI and exact staging/production artifact checks passed. First recurring publication remains unobserved. FORGE retained.",
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-09-30T15:23:19.646Z",
-    "commitSha": "b34dc97f8eee74cbf15543a6cfe6e2207f9ca318",
+    "generatedAt": "2026-09-30T16:05:18.147Z",
+    "commitSha": "848532699dd8149ae7b63c6bf5b24c77b15e3f2a",
     "complete": true,
     "partial": false,
     "success": true,
@@ -257,11 +257,20 @@
       "passing": 722,
       "total": 722
     },
-    "reportSha256": "c0fc889cba2d8949f8536a736e0add2dea914e0a735d7395ecd9b3a40899aac4"
+    "reportSha256": "09a440bf4d45a1284586fa8ad4880473b08d915033501cb58a17c5cd22461a06"
   },
   "testsAssertionsPassing": 722,
   "testsAssertionsTotal": 722,
   "testsAssertionsFiles": 105,
   "testsAssertionsLastRun": "2026-09-30",
-  "lastSession": 131
+  "lastSession": 132,
+  "publicStats": {
+    "url": "https://promogrind.bet/stats",
+    "feedUrl": "https://promogrind.bet/stats.json",
+    "scheduleUtc": "17 6 * * *",
+    "initialPublicationVerified": true,
+    "recurringExecutionObserved": false,
+    "backendReceipt": "audits/public-stats-s132.json",
+    "siteReceipt": "audits/site-release-s132.json"
+  }
 }

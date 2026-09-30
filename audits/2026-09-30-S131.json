@@ -1,0 +1,197 @@
+{
+  "schemaVersion": "1.3",
+  "session": 131,
+  "date": "2026-09-30",
+  "project": "promogrind",
+  "intentOutcome": "achieved",
+  "headline": "Seven release correctness outcomes are verified and deployed; exact stable staging and production identity now gates promotion.",
+  "items": [
+    {
+      "id": "S131-1",
+      "title": "Reject unauthorized scheduled dispatch before any database or notification work",
+      "projectImpact": 10,
+      "ecosystemImpact": 7,
+      "insight": "All 15 functions ACTIVE; 12/12 missing/forged scheduler requests HTTP401; audits/supabase-release-s131.json.",
+      "evidence": "All 15 functions ACTIVE; 12/12 missing/forged scheduler requests HTTP401; audits/supabase-release-s131.json."
+    },
+    {
+      "id": "S131-2",
+      "title": "Require the owned domain to serve the exact staged commit and artifact before production succeeds",
+      "projectImpact": 10,
+      "ecosystemImpact": 7,
+      "insight": "Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.",
+      "evidence": "Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501."
+    },
+    {
+      "id": "S131-3",
+      "title": "Use Cloudflare for automated staging and production with gateway-only credential synchronization",
+      "projectImpact": 9,
+      "ecosystemImpact": 7,
+      "insight": "Remote Cloudflare promotion https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501; repository secret sync verified allowlist/gateway/stdin; old GitHub Pages workflow replaced.",
+      "evidence": "Remote Cloudflare promotion https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501; repository secret sync verified allowlist/gateway/stdin; old GitHub Pages workflow replaced."
+    },
+    {
+      "id": "S131-4",
+      "title": "Fetch fresh HTML for same-origin extensionless navigation while preserving offline fallback",
+      "projectImpact": 9,
+      "ecosystemImpact": 7,
+      "insight": "11 service-worker behavior tests pass; exact origin, network-first navigation, offline fallback and asset behavior verified; 40 rendered before/after captures inspected.",
+      "evidence": "11 service-worker behavior tests pass; exact origin, network-first navigation, offline fallback and asset behavior verified; 40 rendered before/after captures inspected."
+    },
+    {
+      "id": "S131-5",
+      "title": "Reconcile incoming runtime exports without losing local evidence and process safety",
+      "projectImpact": 8,
+      "ecosystemImpact": 9,
+      "insight": "101/101 runtime compatibility; canonical exports and local safeguards preserved; LF/CRLF FAQ regression passes; full launch gate passed.",
+      "evidence": "101/101 runtime compatibility; canonical exports and local safeguards preserved; LF/CRLF FAQ regression passes; full launch gate passed."
+    },
+    {
+      "id": "S131-6",
+      "title": "Patch the vulnerable nanoid resolution and validate the updated dependency tree",
+      "projectImpact": 8,
+      "ecosystemImpact": 7,
+      "insight": "nanoid3.3.18 pinned; trusted registry integrity; lifecycle scripts disabled; npm audit zero vulnerabilities; Deno dependency isolation fixture passes.",
+      "evidence": "nanoid3.3.18 pinned; trusted registry integrity; lifecycle scripts disabled; npm audit zero vulnerabilities; Deno dependency isolation fixture passes."
+    },
+    {
+      "id": "S131-7",
+      "title": "Restore readable pricing tier labels and amounts in the light theme",
+      "projectImpact": 8,
+      "ecosystemImpact": 7,
+      "insight": "40 actual captures inspected; dark contrast5.08–10.12:1, light6.12–6.92:1; CANON-053 source/image hash receipt passes.",
+      "evidence": "40 actual captures inspected; dark contrast5.08–10.12:1, light6.12–6.92:1; CANON-053 source/image hash receipt passes."
+    }
+  ],
+  "verification": {
+    "launchLocal": "pass",
+    "vitest": {
+      "filesPassing": 104,
+      "filesTotal": 104,
+      "assertionsPassing": 716,
+      "assertionsTotal": 716
+    },
+    "edge": {
+      "entries": 15,
+      "tests": 56,
+      "files": 8
+    },
+    "runtime": {
+      "changedSurfaceBeforeCommit": {
+        "passing": 101,
+        "total": 101
+      },
+      "afterCommit": {
+        "passing": 54,
+        "total": 54
+      }
+    },
+    "visualQa": {
+      "captures": 40,
+      "inspected": 40,
+      "pass": true
+    },
+    "backend": {
+      "active": 15,
+      "unauthorizedRejected": 12
+    },
+    "release": {
+      "schemaVersion": "1.0",
+      "session": 131,
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "ok": true,
+      "commit": "be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8",
+      "contentDigest": "69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93",
+      "indexSha256": "e14285b6db1bac2c2608bf8b041522a522802452961dc847a72a9084cd529d5a",
+      "staging": {
+        "origin": "https://staging.promogrind.bet",
+        "ok": true,
+        "status": 200,
+        "missingHeaders": [],
+        "releaseVerified": true,
+        "commit": "be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8",
+        "contentDigest": "69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93",
+        "indexSha256": "e14285b6db1bac2c2608bf8b041522a522802452961dc847a72a9084cd529d5a"
+      },
+      "production": {
+        "origin": "https://promogrind.bet",
+        "ok": true,
+        "status": 200,
+        "missingHeaders": [],
+        "releaseVerified": true,
+        "commit": "be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8",
+        "contentDigest": "69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93",
+        "indexSha256": "e14285b6db1bac2c2608bf8b041522a522802452961dc847a72a9084cd529d5a"
+      },
+      "releaseRunUrl": "https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501"
+    },
+    "doctor": {
+      "passing": 11,
+      "total": 12,
+      "blockingFailing": 0,
+      "advisory": "Revenue source is60daysold"
+    },
+    "ci": {
+      "run": 36668970523,
+      "conclusion": "success"
+    },
+    "releaseWorkflow": {
+      "run": 36668970501,
+      "conclusion": "success"
+    }
+  },
+  "honestyLedger": [
+    {
+      "title": "FORGE retained",
+      "why": "Zoho mailbox delivery/reply identity, live Obelisk delegation, auth-email, real Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation, and distinct post-proof founder launch approval remain unproved."
+    },
+    {
+      "title": "CANON-054 deferred",
+      "why": "Requires real aggregate feed and refresh producer."
+    },
+    {
+      "title": "Score recalibrated",
+      "why": "Unmeasured product/security/ecosystem/cost evidence no longer inherits a perfect score."
+    },
+    {
+      "title": "Public shim",
+      "why": "Missing private automation uses documented manual or explicit sibling fallback."
+    },
+    {
+      "title": "Pre-push and CI false positives repaired",
+      "why": "Batched Node hook preserved checks after Windows fork exhaustion; strict public anon-key classifier retains privileged-key rejection and redacts every match."
+    }
+  ],
+  "followUps": [
+    "Real public stats producer.",
+    "Zoho/Obelisk and remaining launch proofs.",
+    "Refresh revenue evidence from actual sources."
+  ],
+  "blockers": [],
+  "silDelta": {
+    "kind": "evidence-calibration",
+    "from": 1000,
+    "to": 860
+  },
+  "writeback": {
+    "currentState": true,
+    "taskBoard": true,
+    "handoff": true,
+    "workLog": true,
+    "decisions": true,
+    "sil": true,
+    "creativeDirection": true,
+    "truthAudit": true,
+    "projectStatus": true,
+    "agentMemory": true
+  },
+  "missingLocalAutomation": [
+    "render-closeout-checklist.mjs",
+    "render-audit-md.mjs",
+    "check-audit-premises.mjs",
+    "start-canon-sync.mjs",
+    "run-maintenance.mjs",
+    "check-maintenance-lane-ran.mjs",
+    "ark.mjs"
+  ]
+}

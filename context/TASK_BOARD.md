@@ -1,12 +1,13 @@
 # Task Board
 
-## Selected continuation (S132)
+## Selected continuation (S132 · complete)
 
-- Completed selected outcome: public statistics — one scheduled aggregate feed, homepage showcase, detailed `/stats`, privacy/freshness checks, and rendered desktop/mobile evidence in both themes. First recurring execution remains a follow-up observation.
+- **DONE S132** selected outcome: public statistics — one scheduled aggregate feed, homepage showcase, detailed `/stats`, privacy/freshness checks, and rendered desktop/mobile evidence in both themes. First recurring execution remains a follow-up observation.
 - Wave 1 complete: live source schema and aggregate query verified; bounded producer and privacy tests implemented.
 - Wave 2 complete: both public surfaces and machine discovery use the same artifact; four-week history and definitions added.
 - Wave 3 complete: full local gate and CI pass; migration/publisher deployed; initial publication and active 06:17 UTC schedule verified; exact artifact promoted through staging to production. Eight additional live browser captures pass without fixture injection. Evidence: `audits/site-release-s132.json`, `audits/public-stats-s132.json`. Recurring execution is not yet observed.
 - Scope: this outcome only; separate identity, payment, beta and launch proofs retain their existing status.
+- Scaffold: 3 waves complete; 1 selected outcome complete; 0 in progress; 0 open within the selected scope. Closeout reconciles all records and deploys its committed metadata.
 
 ## Wave List (S131 · complete)
 
@@ -60,15 +61,21 @@ Scaffold: 3 waves · 3 done · 0 in progress · 0 open. Selected outcomes: 7/7 c
 
 ## Now
 
-- [x] Delivered S132: privacy-preserving public stats feed, homepage tile and deeper stats page with verified initial publication and daily schedule. Observe the first recurring run before claiming recurring-run evidence.
+- [ ] Observe the first daily 06:17 UTC stats run and record its actual publication/result; initial publication and schedule are already verified. `[SIL:1]`
 
-- [ ] Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delegation. `[SIL]`
+- [ ] Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delegation. `[SIL:1]`
 - [ ] Complete production auth confirmation/resend/recovery and a real Stripe checkout/webhook/subscription/portal lifecycle.
 - [ ] Obtain independent friend-beta evidence and complete historical credential rotation/remediation.
 
 ## Next
 
+- [ ] Refresh revenue evidence from actual source records; do not renew old zero-revenue observations by changing dates.
+
 - [ ] Reconcile canonical Studio cost truth through Ark and obtain distinct post-proof founder launch approval after every other blocking criterion passes.
+
+## Blocked
+
+No selected S132 closeout task is blocked. The separate public-launch proof gaps remain recorded in PROJECT_STATUS.json and the active queue above.
 
 ## Unified Genius List (S128)
 
@@ -234,7 +241,7 @@ Scaffold: 3 waves · 3 done · 0 in progress · 0 open. Selected outcomes: 7/7 c
 - Typed startup signals for truth, compliance, profile freshness, revenue, and test remediation.
 - Recovery root fixes: canonical SIL forecast export/completeness and public revenue fallback.
 
-## Now
+## Historical Now — superseded by the active queue above
 
 - [SIL] configure a true staging/header-capable edge for `promogrind.bet`, add Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy, then rerun `npm run verify:web-live -- --url https://promogrind.bet`
 - rotate and remediate the fully redacted historical credential findings isolated at commit `b1205ce`; the current tracked tree is clean, but history remains red until the Studio secrets owner confirms rotation and the approved history strategy
@@ -242,7 +249,7 @@ Scaffold: 3 waves · 3 done · 0 in progress · 0 open. Selected outcomes: 7/7 c
 - configure and prove the `contact@promogrind.bet` Zoho mailbox/alias: MX, Sender Policy Framework (SPF), DomainKeys Identified Mail (DKIM), Domain-based Message Authentication, Reporting and Conformance (DMARC), delivery to the founder mailbox, and reply-as-alias identity; Brevo remains transactional/app email only
 - record real production auth-email, complete Stripe checkout/webhook/subscription/portal lifecycle, friend-beta, and capture-submission/lead-row receipts in the canonical proof ledger
 
-## Next
+## Historical Next — superseded by the active queue above
 
 - monitor for a stable React Router release that resolves GHSA-qwww-vcr4-c8h2; retain the executable client-only non-reachability guard until then
 - reconcile the Studio cost registry and sitemap checker through Ark so source-derived trial ceilings and directory-index routes are represented accurately
@@ -538,7 +545,7 @@ Primary and live second-order work is exhausted. The final generator refresh con
 
 - cross-repo IGNIS consumption and founder-queue presentation improvements owned by Studio Ops / IGNIS repos
 
-## Blocked
+## Historical Blocked — superseded by current project status
 
 - Production deploy-health blocker — **DONE S95 follow-up**: live Supabase `create-checkout` was stale and rejected `scout_monthly`; resolved by extracting the Studio Supabase PAT from `vaultspark-studio-ops/secrets`, explicitly deploying to PromoGrind project ref `fjnpzjjyhnpmunfoycrp` with `npm run deploy:function:checkout`, verifying `node scripts\verify-production-launch.mjs` returns `create-checkout` 200 and 0 blocking failures, and manually rerunning Deploy Pages as green run `27791869430`.
 - no local architecture blocker remains; unresolved launch-proof blockers are external/manual evidence gates: missing real approved affiliate tracking links for `BetMGM`, `bet365`, and `BetRivers`, one real Stripe smoke purchase, and one production friend-beta pass with auth recovery visibility

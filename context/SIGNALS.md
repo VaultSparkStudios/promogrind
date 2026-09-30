@@ -1,13 +1,13 @@
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║ ✓  Tests         104/104 files · 716/716 assertions…           ║
-║ ✓  Velocity      7   ·  Debt: →                                ║
+║ ✓  Tests         105/105 files · 722/722 assertions…           ║
+║ ⚠  Velocity      1   ·  Debt: →                                ║
 ║ ✓  Runway        unknown                                       ║
 ║ ✓  Context age   0d                                            ║
 ║ ✓  IGNIS         43385 FORGE  ·  0d old                        ║
 ║ ✓  Truth         green-repo-owned-with-history-and-external-p… ║
 ║ ⚠  Compliance   not-tracked: no non-zero compliance run…       ║
 ║ ✓  Genome dims   all stable  (24/25)                           ║
-║ ✓  Entropy       0.002  (healthy)                              ║
+║ ✓  Entropy       0.057  (healthy)                              ║
 ║ ✓  CDR           no gap detected                               ║
 ║ ✓  Patterns      no recurring pressure detected                ║
 ║ ✓  Templates     v3.3 aligned                                  ║

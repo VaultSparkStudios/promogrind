@@ -1,25 +1,25 @@
 # Current State — PromoGrind
 
-Last updated: 2026-09-30 (Session 131)
+Last updated: 2026-09-30 (Session 132)
 
-PromoGrind is deployed/public-unlaunched in FORGE launch-hardening. All seven selected release-correctness outcomes are implemented and verified.
+PromoGrind is deployed/public-unlaunched in FORGE launch-hardening. S132 delivered the selected public-statistics outcome.
 
-Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.
+Application commit d9f5385469fbe2015c0628c7c37d15a2618411b1 is verified at stable staging and production with content digest fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c. Release workflow: https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140142. The authorized closeout commit will pass through the same deployment pipeline; its final receipt is checked after push.
 
-The release workflow now builds once and promotes identical bytes through stable Cloudflare staging to production. Production refuses a missing or mismatched staging receipt and rechecks the live staging origin. Rollback uses a reviewed forward revert through the same path. GitHub Pages is a historical fallback, not the release authority.
+The homepage tile, /stats page and /stats.json share one precomputed aggregate report: three saved-workflow metrics across four complete UTC weeks. Guest/local-only activity is excluded. Each nonzero metric requires ten contributing accounts; publishable counts are ranges of ten. Zero, privacy suppression, unavailable sources and stale reports remain distinct.
 
-Four scheduled dispatchers reject missing or forged authority before database/notification work. All 15 functions are ACTIVE on the pinned PromoGrind project; migration application was a verified no-op. No authorized live notification job was triggered for testing.
+The SQL source is inaccessible to browser roles. The publisher requires exact configured service authority before any source/upload effects. The approved daily 06:17 UTC job and encrypted credential storage are active; initial publication is verified. First recurring execution remains unobserved.
 
-Same-origin HTML navigation now fetches the current release first and preserves offline fallback. Pricing text uses semantic colors: inspected contrast is 5.08–10.12:1 dark and 6.12–6.92:1 light. Deno verification uses an isolated frozen Edge lock and leaves the frontend dependency tree unchanged. The locked nanoid patch clears the registry audit.
+Workflow creation dates are app-supplied; history timestamps are normally database-assigned but owner-editable. Neither is represented as an independently verified server-receipt date. Failed refreshes preserve the last dated report.
 
-Verification: 104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected.
+Verification: 105/105 app test files, 722/722 assertions; 16 Edge entrypoints and 69/69 tests across 10 files; full verify:launch-local exit 0; 40 inspected implementation captures plus 8 inspected production captures without feed fixtures; CI and exact staging/production artifact checks passed.
 
 ## Remaining work
 
-- SPARKED/public launch remains HOLD. Zoho mailbox delivery/reply identity, live Obelisk delegation, auth-email, real Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation, and distinct post-proof founder launch approval remain unproved.
-- CANON-054 public stats is deferred until a real privacy-preserving aggregate feed and sustainable refresh producer exist; no invented counts were published.
-- The old revenue-evidence date remains stale; it was not advanced to manufacture green status.
+- Observe the first recurring publisher execution; do not equate job configuration with successful recurrence.
+- SPARKED/public launch remains HOLD. Zoho alias delivery/reply identity, live Obelisk delegation, auth-email, real Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct post-proof public-launch approval remain unproved.
+- Revenue evidence remains stale; its date was not advanced without source data.
 
 ## Continuity
 
-S131 recovers the written record of S129 follow-up deployment/DNS/CDR commits and S130 dependency/generated-artifact commits after the latest complete SIL entry. S130 is an already-used session number; no retrospective SIL score was invented. See WORK_LOG and TRUTH_AUDIT for recovery and current evidence.
+S131's seven release-correctness outcomes remain complete. S132 source and evidence commits are d9f5385 and 8485326. The next unused session is S133 unless intervening work advances it.

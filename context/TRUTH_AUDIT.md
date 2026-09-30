@@ -1,9 +1,9 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-09-30 (S131)
+Last reviewed: 2026-09-30 (S132)
 Overall status: green-repo-owned-with-history-and-external-proof-follow-ups
-Next action: verified aggregate stats producer; complete mailbox, identity, auth, payment, independent tester, historical remediation, cost and launch evidence.
+Next action: observe actual stats recurrence; complete mailbox, identity, auth, payment, independent tester, historical remediation, cost and launch evidence.
 Production deploy host: **Cloudflare Pages**. The active workflow verifies stable staging and production at exact owned origins; GitHub Pages is a historical fallback. Rollback is a forward revert through staging.
 
 ---
@@ -21,10 +21,10 @@ Production deploy host: **Cloudflare Pages**. The active workflow verifies stabl
 
 | Dimension | Score | Notes |
 |---|---|---|
-| Schema alignment | 5 | Canonical S126 status, handoff, task, audit, generated mirrors, typed proofs, and work-log surfaces agree on shipped repo work and explicit external evidence gates. |
+| Schema alignment | 5 | S132 current state, task board, handoff, status and public deployment receipts agree on the selected outcome. |
 | Prompt/template alignment | 4 | Canonical templates are aligned; the public/private repo shim tension is documented instead of treated as product truth drift. |
-| Derived-view freshness | 5 | Task board, status mirror, handoff, current state, SIL, audit, receipts, and release parity describe the same S126 posture after final regeneration. |
-| Handoff continuity | 5 | Session 126 handoff records five primary items, three second-order innovations, exact local proof, and remaining external gates. |
+| Derived-view freshness | 5 | S132 derived mirrors are regenerated from current source; no unmeasured external proof is promoted. |
+| Handoff continuity | 5 | S132 handoff records the selected delivered feature, evidence and remaining follow-ups. |
 | Contradiction density | 5 | No current product-truth contradiction is known; the main gaps are explicit external evidence gates. |
 | **Total** | **24 / 25** | Green: canonical truth surfaces are coherent; remaining yellow posture is due to external launch proofs and public/private ops shim tension, not contradictory product claims. |
 
@@ -592,3 +592,12 @@ Production deploy host: **Cloudflare Pages**. The active workflow verifies stabl
 - Latest test receipts retain their actual recorded source commit/time; remote workflow receipts separately identify the deployed commit.
 - Technical deployment is complete; SPARKED remains HOLD. CANON-054 and old revenue evidence are explicit gaps, not fabricated green checks.
 - Self-assessment 860/1000 is an evidence-calibrated product score, not a measured customer outcome or backwards revision of S129.
+
+## 2026-09-30 — S132 closeout reconciliation
+
+- Application commit d9f5385469fbe2015c0628c7c37d15a2618411b1 is verified at stable staging and production with content digest fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c. Release workflow: https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140142. The authorized closeout commit will pass through the same deployment pipeline; its final receipt is checked after push.
+- 105/105 app test files, 722/722 assertions; 16 Edge entrypoints and 69/69 tests across 10 files; full verify:launch-local exit 0; 40 inspected implementation captures plus 8 inspected production captures without feed fixtures; CI and exact staging/production artifact checks passed.
+- Backend receipt proves browser RPC denial, no applicable stats write policy, three rejected unauthorized publisher requests, public read and active daily schedule.
+- Initial publication is verified; recurringExecutionObserved remains false. Record timestamps are owner-editable, not trusted receipt timestamps.
+- Current S131 references and duplicate active task headings were reconciled. Historical records are retained; the prior same-day audit is archived.
+- 869/1000 is self-assessment, not measured adoption. FORGE and external launch proofs remain unchanged.

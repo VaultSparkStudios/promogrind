@@ -1,68 +1,16 @@
-<!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-05 (Session 128 closeout) -->
+╔══ SESSION CLOSEOUT · PromoGrind S132 · pre-push checkpoint ══╗
+║ WHAT SHIPPED: public stats; three waves / one outcome done   ║
+║ SCORES: SIL 869/1000 · 3-session average 909.7              ║
+║ WRITE-BACK STATUS: 10/10 · 3 private memory files touched   ║
+║ GIT STATUS: main · verified source 8485326 + this write-back ║
+║ DEPLOYMENT: app d9f5385 verified at staging + production    ║
+║ Closeout commit: promotion follows push; CI is authoritative ║
+║ POST-SESSION SIGNALS: 722 app + 69 Edge tests; gate passed  ║
+║ Doctor 11/12 · 0 blocking · stale revenue advisory retained ║
+║ SCAFFOLD: 3 done / 0 open · shells 26 closed / 0 running       ║
+║ NEXT SESSION: observe recurrence; remaining launch proofs  ║
+╚════════════════════════════════════════════════════════════╝
 
-# Closeout Status Board — PromoGrind
+This committed checkpoint precedes its own Git commit. The final GitHub Actions run and owned-domain _release.json identify the deployed closeout commit. Runtime board and final verification receipt are emitted after deployment, avoiding a self-referential commit loop.
 
-```
-╔══ SESSION CLOSEOUT · PromoGrind · S128 ════════════════════════╗
-║  Date: 2026-08-05  ·  SIL: 998/1000  ·  Velocity: 8 stable       ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Status: S127 recovery and the complete S128 mission are satu  ║
-║  ✓ Shipped: five premise-verified L3 product-truth contracts pl  ║
-║  ✓ Verification: 103/103 test files, 705/705 assertions, 52/52   ║
-║  ✓ Visual: 24 unique real-Chromium captures across six surfaces  ║
-║  ✓ Release: FORGE HOLD; stable staging and ten typed external p  ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
-║    Dev Health         100  ██████████                            ║
-║    Alignment          100  ██████████                            ║
-║    Momentum           100  ██████████                            ║
-║    Engagement         100  ██████████                            ║
-║    Process Qual       99   ██████████                            ║
-║    Coherence          100  ██████████                            ║
-║    Security           100  ██████████                            ║
-║    Ecosystem          100  ██████████                            ║
-║    Capital            100  ██████████                            ║
-║    Automation         99   ██████████                            ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
-║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 7 files  ·  M:7 A:0 D:0 ?:0                            ║
-║  Ahead: 0  ·  Behind: 0                                          ║
-║  Branch: main                                                    ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  not configured  ·  type: local                        ║
-║  Live:     N/A — pre-deploy (FORGE)                              ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        12/12                                            ║
-║  Compliance:    —                                                ║
-║  Tests:         103/103                                          ║
-║  Validation:    full-fresh                                       ║
-║  IGNIS:         4d ago                                           ║
-║  Truth:         green-repo-owned-with-history-and-external-proo  ║
-║  Sanitization:  —                                                ║
-║  shells:        1 started · 1 closed · 0 running                 ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  #1: 1 public-facing repo(s) blocked by release gates            ║
-║      promogrind is held on Stable staging path available, Block  ║
-║      ↳ node scripts/ops.mjs release-gate                         ║
-╚════════════════════════════════════════════════════════════════╝
-```
-
-*Generated by `scripts/render-closeout-board.mjs v1.1`*
+The local checklist generator, memory compactor and Ark CLI are absent. Manual ordered reconciliation, compact private memory and signed sibling Ark transport are the documented fallbacks. The per-touch IGNIS scorer explicitly skipped; no fresh score was invented.

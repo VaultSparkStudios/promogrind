@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-06T04:51:00.687Z",
+  "generatedAt": "2026-09-30T16:08:35.652Z",
   "project": "PromoGrind",
-  "session": 129,
+  "session": 133,
   "sourceSignals": {
     "geniusListEmpty": false,
-    "taskBoardBytes": 90160,
+    "taskBoardBytes": 96490,
     "windowsHideShellViolations": 0,
     "directChildProcessImports": 0,
     "todoSignals": 0,
@@ -13,7 +13,7 @@
     "aiEgressMissing": 0,
     "cdpHarnessCopies": 0,
     "largeFiles": 0,
-    "launchDeferrals": 6,
+    "launchDeferrals": 5,
     "secondOrderShipped": 0
   },
   "ranked": [
@@ -27,7 +27,7 @@
       "axis": "truth / launch-readiness",
       "impact": 10,
       "innovation": 1,
-      "evidence": "6 real-world proof gates remain in PROJECT_STATUS.blockers.",
+      "evidence": "5 real-world proof gates remain in PROJECT_STATUS.blockers.",
       "recipe": "Do not fabricate proof. Keep these as explicit launch blockers until real email, Stripe, tester, Brevo, Supabase capability, or deploy-config evidence exists."
     }
   ],
@@ -37,12 +37,11 @@
     "todoSignals": [],
     "largeFiles": [],
     "launchDeferrals": [
-      "No true remote staging environment is configured; production promotion cannot satisfy CANON-007 staging proof.",
       "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
       "Production auth confirmation/resend/reset/recovery delivery proof is pending.",
       "Real Stripe checkout/webhook/subscription/portal lifecycle proof is pending.",
       "One friend-facing auth/recovery/calculator/pricing pass is pending.",
-      "Capture submission and observable lead-row criteria remain pending."
+      "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
     ]
   }
 }

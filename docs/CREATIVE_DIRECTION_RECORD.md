@@ -77,3 +77,11 @@ is regenerated from that ledger; it is never the source of truth.
 - Preserve the distinction between technical release completion and proof-based public-launch approval.
 
 Private direction details travel through the approved private ledger transport. This is a public-safe summary.
+
+### 2026-09-30 — S132 statistics and closeout
+
+- Complete the public statistics delivery with the approved daily refresh.
+- Reconcile memory, context, creative-direction and task records before direct-main deployment.
+
+CDR reviewed across the resumed session; no new brand, visual-style or licensing direction was inferred from operational approval.
+

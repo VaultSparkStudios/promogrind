@@ -1,6 +1,6 @@
 # Genius Hit List — PromoGrind
 
-> Generated: 2026-09-30 | Scope: project:promogrind | Pattern detectors: 6 signals evaluated | Top 12 shown
+> Generated: 2026-09-30 | Scope: project:promogrind | Pattern detectors: 4 signals evaluated | Top 12 shown
 
 ---
 
@@ -10,7 +10,7 @@
 
 promogrind is held on Blocking launch proofs complete.
 
-*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=3827(+3)
+*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=3824(+3)
 
 ```bash
 node scripts/ops.mjs release-gate
@@ -18,21 +18,7 @@ node scripts/ops.mjs release-gate
 
 ---
 
-## 🔥 #2  IGNIS re-score overdue (60d stale)
-
-**Tier:** 🔥 CRITICAL · **Category:** intelligence · **Pattern:** 142 · **IGNIS:** 90 (fire) · **Final:** 187
-
-Portfolio intelligence scores degrade with age. Re-score before CI auto-flags it.
-
-*IGNIS rank:* cat:INTELLIGENCE(+24) · pillar:cognition=2557(+6)
-
-```bash
-node scripts/ops.mjs rescore --stale
-```
-
----
-
-## 🔥 #3  Complete Zoho alias/DNS/delivery/reply proof and live O
+## 🔥 #2  Observe the first daily 06:17 UTC stats run and record 
 
 **Tier:** 🔥 CRITICAL · **Category:** sil · **Pattern:** 135 · **IGNIS:** 84 (fire) · **Final:** 177
 
@@ -46,7 +32,7 @@ node scripts/ops.mjs preload
 
 ---
 
-## 🔥 #4  Complete production auth confirmation/resend/recovery a
+## 🔥 #3  Complete Zoho alias/DNS/delivery/reply proof and live O
 
 **Tier:** 🔥 CRITICAL · **Category:** sil · **Pattern:** 135 · **IGNIS:** 84 (fire) · **Final:** 177
 
@@ -56,30 +42,16 @@ Second-priority unblocked item — complete both for session velocity.
 
 ---
 
-## 💡 #5  Refresh REVENUE_SIGNALS.md (60d stale)
+## 💡 #4  Refresh REVENUE_SIGNALS.md (60d stale)
 
 **Tier:** 💡 MEDIUM · **Category:** intelligence · **Pattern:** 77 · **IGNIS:** 90 (fire) · **Final:** 122
 
 Revenue intelligence is time-sensitive. Regenerate to surface current opportunities.
 
-*IGNIS rank:* cat:INTELLIGENCE(+24) · pillar:cognition=2557(+6)
+*IGNIS rank:* cat:INTELLIGENCE(+24) · pillar:cognition=2559(+6)
 
 ```bash
 node scripts/ops.mjs revenue-signals
-```
-
----
-
-## 🔧 #6  Protocol Oracle FAQ source contract stale
-
-**Tier:** 🔧 LOW · **Category:** protocol · **Pattern:** 45 · **IGNIS:** 84 (fire) · **Final:** 87
-
-Re-render the 10 reviewed Q&A pairs because protocol or FAQ definitions changed.
-
-*IGNIS rank:* cat:PROTOCOL(+20) · pillar:execution=3317(+4)
-
-```bash
-node scripts/render-protocol-faq.mjs
 ```
 
 ---

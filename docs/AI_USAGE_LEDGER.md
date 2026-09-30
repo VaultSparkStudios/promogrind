@@ -1,9 +1,9 @@
 <!-- generated-by: scripts/render-ai-usage-ledger.mjs -->
-<!-- generated-at: 2026-09-30T15:23:52.691Z -->
+<!-- generated-at: 2026-09-30T16:05:28.205Z -->
 
 # AI Usage Ledger
 
-Source: Supabase vault_events since 2026-09-16T15:23:40.761Z
+Source: Supabase vault_events since 2026-09-16T16:05:27.900Z
 
 - Window: 14 days
 - Total AI feature events: 0

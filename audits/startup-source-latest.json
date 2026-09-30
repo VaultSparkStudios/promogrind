@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-09-30T04:41:37.296Z",
+  "generatedAt": "2026-09-30T16:18:20.401Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "91d721b095c7d0a701e7dbc4941ed1c11b911c8ebfc8502dea2bd230958ce40e",
+  "briefSha256": "367546ae4f61e19bfad3b3e0d8420dd53817af89471a9604b4590f243d0f041e",
   "rendererVersion": "3.2",
-  "targetSession": 132,
-  "sourceSession": 131,
+  "targetSession": 133,
+  "sourceSession": 132,
   "sources": {
     "projectProfile": {
       "medium": "app",
@@ -37,7 +37,7 @@
   "claims": [
     {
       "id": "sil-avg3",
-      "rendered": "Avg3: 952.7"
+      "rendered": "Avg3: 909.7"
     },
     {
       "id": "notional-cost",

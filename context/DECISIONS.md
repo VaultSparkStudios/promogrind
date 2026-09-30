@@ -935,3 +935,11 @@ Impact: Future closeouts can call the expected script names without failing on m
 Use three meaningful saved-workflow metrics with four non-overlapping weekly periods, definitions and privacy bands. Do not add vanity counters solely to satisfy a metric-count heuristic. The stats surface remains pending deployment and recurring-job evidence; identity and release-surface conformance gaps do not become passes from local implementation. Existing launch holds remain in force.
 
 The daily 06:17 UTC publisher and encrypted credential storage were explicitly approved and activated. Initial publication is verified separately from future recurring runs. Match the existing project service key to the deployed exact-match guard; never infer that the legacy JWT is the current runtime credential. Workflow dates are app-supplied and history dates remain owner-editable; report them as record timestamps rather than trusted server receipt times.
+
+## 2026-09-30 — S132 closeout truth
+
+- Preserve the difference between configured schedule, initial publication and observed recurring execution. The first two are verified; the third is an explicit follow-up.
+- Reconcile the current state to S132, archive the existing same-day S131 audit before replacing the daily view, and retain all historical SIL/CDR entries.
+- Use the canonical 10-category /1000 rubric. The legacy five-category paragraph in SESSION_PROTOCOL does not override SIL v3/CANON-009. Score 869/1000 reflects measured engineering progress and unmeasured adoption/time/cost outcomes.
+- The requested closeout/main push/deployment is authorized; existing public-launch holds remain separate.
+
