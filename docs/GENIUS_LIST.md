@@ -18,7 +18,7 @@ node scripts/ops.mjs release-gate
 
 ---
 
-## 🔥 #2  Observe the first daily 06:17 UTC stats run and record 
+## 🔥 #2  Observe the first daily 06:17 UTC stats run and record
 
 **Tier:** 🔥 CRITICAL · **Category:** sil · **Pattern:** 135 · **IGNIS:** 84 (fire) · **Final:** 177
 

@@ -84,4 +84,3 @@ Private direction details travel through the approved private ledger transport. 
 - Reconcile memory, context, creative-direction and task records before direct-main deployment.
 
 CDR reviewed across the resumed session; no new brand, visual-style or licensing direction was inferred from operational approval.
-

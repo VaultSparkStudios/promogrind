@@ -942,4 +942,3 @@ The daily 06:17 UTC publisher and encrypted credential storage were explicitly a
 - Reconcile the current state to S132, archive the existing same-day S131 audit before replacing the daily view, and retain all historical SIL/CDR entries.
 - Use the canonical 10-category /1000 rubric. The legacy five-category paragraph in SESSION_PROTOCOL does not override SIL v3/CANON-009. Score 869/1000 reflects measured engineering progress and unmeasured adoption/time/cost outcomes.
 - The requested closeout/main push/deployment is authorized; existing public-launch holds remain separate.
-
