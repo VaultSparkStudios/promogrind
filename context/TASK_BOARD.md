@@ -2,10 +2,10 @@
 
 ## Selected continuation (S132)
 
-- In progress: CANON-054 public statistics — one scheduled aggregate feed, homepage showcase, detailed `/stats`, privacy/freshness checks, and rendered desktop/mobile evidence in both themes.
+- Completed selected outcome: public statistics — one scheduled aggregate feed, homepage showcase, detailed `/stats`, privacy/freshness checks, and rendered desktop/mobile evidence in both themes. First recurring execution remains a follow-up observation.
 - Wave 1 complete: live source schema and aggregate query verified; bounded producer and privacy tests implemented.
 - Wave 2 complete: both public surfaces and machine discovery use the same artifact; four-week history and definitions added.
-- Wave 3 in progress: source/auth/failure tests, build and 40 inspected rendered captures pass. Migration/publisher deployed, initial public report verified, and approved 06:17 UTC job active. Commit-bound site promotion and real-browser live checks remain; recurring execution is not yet observed.
+- Wave 3 complete: full local gate and CI pass; migration/publisher deployed; initial publication and active 06:17 UTC schedule verified; exact artifact promoted through staging to production. Eight additional live browser captures pass without fixture injection. Evidence: `audits/site-release-s132.json`, `audits/public-stats-s132.json`. Recurring execution is not yet observed.
 - Scope: this outcome only; separate identity, payment, beta and launch proofs retain their existing status.
 
 ## Wave List (S131 · complete)
@@ -60,7 +60,7 @@ Scaffold: 3 waves · 3 done · 0 in progress · 0 open. Selected outcomes: 7/7 c
 
 ## Now
 
-- [ ] Implement privacy-preserving public stats feed, homepage tile and deeper stats page with a verified refresh producer (CANON-054; deliberately deferred in S131).
+- [x] Delivered S132: privacy-preserving public stats feed, homepage tile and deeper stats page with verified initial publication and daily schedule. Observe the first recurring run before claiming recurring-run evidence.
 
 - [ ] Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delegation. `[SIL]`
 - [ ] Complete production auth confirmation/resend/recovery and a real Stripe checkout/webhook/subscription/portal lifecycle.

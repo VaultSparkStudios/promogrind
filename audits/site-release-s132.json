@@ -1,0 +1,124 @@
+{
+  "ok": true,
+  "session": "S132",
+  "verifiedAt": "2026-09-30T15:36:20.990Z",
+  "commit": "d9f5385469fbe2015c0628c7c37d15a2618411b1",
+  "contentDigest": "fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c",
+  "origins": [
+    {
+      "origin": "https://staging.promogrind.bet",
+      "release": {
+        "origin": "https://staging.promogrind.bet",
+        "ok": true,
+        "status": 200,
+        "missingHeaders": [],
+        "releaseVerified": true,
+        "commit": "d9f5385469fbe2015c0628c7c37d15a2618411b1",
+        "contentDigest": "fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c",
+        "indexSha256": "0d4baefddfa7894658e96ea9953f642717666afe75de30cc98bad73758522db6"
+      },
+      "generatedAt": "2026-09-30T15:12:33.954Z",
+      "metrics": 3,
+      "completeWeeks": 4
+    },
+    {
+      "origin": "https://promogrind.bet",
+      "release": {
+        "origin": "https://promogrind.bet",
+        "ok": true,
+        "status": 200,
+        "missingHeaders": [],
+        "releaseVerified": true,
+        "commit": "d9f5385469fbe2015c0628c7c37d15a2618411b1",
+        "contentDigest": "fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c",
+        "indexSha256": "0d4baefddfa7894658e96ea9953f642717666afe75de30cc98bad73758522db6"
+      },
+      "generatedAt": "2026-09-30T15:12:33.954Z",
+      "metrics": 3,
+      "completeWeeks": 4
+    }
+  ],
+  "captures": [
+    {
+      "route": "/",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "file": "docs/visual-qa/s132-live/home-dark-1440.png",
+      "liveFeedVerified": true,
+      "sha256": "050f9bb9a1937e2c114d93ebc4fc6a6fc549eec96356b08ac77f1b82327acd2b"
+    },
+    {
+      "route": "/stats",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "file": "docs/visual-qa/s132-live/stats-dark-1440.png",
+      "liveFeedVerified": true,
+      "sha256": "7011313c12d43c2c4bed3051987c7f08374685062418b9d7019619d4b882695a"
+    },
+    {
+      "route": "/",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "file": "docs/visual-qa/s132-live/home-dark-390.png",
+      "liveFeedVerified": true,
+      "sha256": "6a315a72404dfc2a77aa424c70d250f09374df6e8da809cb63ea2c150f951307"
+    },
+    {
+      "route": "/stats",
+      "theme": "dark",
+      "width": 390,
+      "height": 844,
+      "file": "docs/visual-qa/s132-live/stats-dark-390.png",
+      "liveFeedVerified": true,
+      "sha256": "32292e9592642a7ab43135d722b22f6662472b04d2af44ac352f523d0bf57919"
+    },
+    {
+      "route": "/",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "file": "docs/visual-qa/s132-live/home-light-1440.png",
+      "liveFeedVerified": true,
+      "sha256": "149a8f2c91b0970def9f5305d2369297287259727a9b0fd865eaa8717518373d"
+    },
+    {
+      "route": "/stats",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "file": "docs/visual-qa/s132-live/stats-light-1440.png",
+      "liveFeedVerified": true,
+      "sha256": "3e064f811cf22af79a44c2e042bb0124abbf20eb13a6c1292cd45028df487867"
+    },
+    {
+      "route": "/",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "file": "docs/visual-qa/s132-live/home-light-390.png",
+      "liveFeedVerified": true,
+      "sha256": "0858ad06034121d580279a7815e17f8a98ad6facb2039d3aec1fcc6ab361858f"
+    },
+    {
+      "route": "/stats",
+      "theme": "light",
+      "width": 390,
+      "height": 844,
+      "file": "docs/visual-qa/s132-live/stats-light-390.png",
+      "liveFeedVerified": true,
+      "sha256": "e99871b753a03051651c04e85f8f1e9decf08c975dcb0e77541e23102a8d4f30"
+    }
+  ],
+  "fixturesInjected": false,
+  "renderedPixelsReviewed": true,
+  "blockingVisualDefects": 0,
+  "releaseRunUrl": "https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140142",
+  "ciRunUrl": "https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140491",
+  "releaseConclusion": "success",
+  "ciConclusion": "success",
+  "lifecycle": "FORGE",
+  "recurringExecutionObserved": false
+}

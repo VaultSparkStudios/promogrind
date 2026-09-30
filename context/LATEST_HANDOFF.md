@@ -1,12 +1,12 @@
 # Latest Handoff
 
-## S132 continuation — statistics release candidate
+## S132 continuation — statistics deployed
 
 - Selected outcome: public aggregate statistics only. Homepage and `/stats` use one feed with dated weekly counts, contributor suppression, and four-week context.
 - Implemented: restricted SQL source, authenticated publisher, storage artifact redirect, daily activation command, UI, agent discovery, sitemap and service-worker freshness bypass.
 - Verified: full `verify:launch-local` exit 0; 105 app test files / 722 assertions; 16 Edge entrypoints / 69 assertions; production build and 40 visually inspected before/after captures. Live backend access/publication proof: `audits/public-stats-s132.json`.
-- Release state at commit preparation: migration and publisher deployed; first public report verified; approved 06:17 UTC job active with its existing service credential in encrypted Vault. Site promotion awaits the commit-bound release workflow.
-- Next: commit/push, verify exact staging/production bytes and real-browser stats delivery. The first recurring execution is still unobserved; a configured schedule is not recurring-run evidence.
+- Release: d9f5385469fbe2015c0628c7c37d15a2618411b1 verified at stable staging and production with matching content digest fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c. CI and release workflow passed. Migration/publisher, initial public report and approved 06:17 UTC job are verified. Eight additional live captures use the real feed. Evidence: audits/site-release-s132.json.
+- Selected outcome complete. Follow-up observation: the first recurring execution is still unobserved; a configured schedule is not recurring-run evidence. Separate identity/business launch proofs remain open.
 - Startup: canon reconciliation passed; overlay reconciliation preserved two previously changed safety files; frontier evidence was current. Local maintenance scripts absent; no private tooling fabricated. Existing identity/business launch gaps remain separate.
 
 ## Where We Left Off
