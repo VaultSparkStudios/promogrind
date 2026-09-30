@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isPinnedPublicAnonJwt } from "./lib/supabase-client-authority.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -20,7 +21,14 @@ const RULES = [
     id: "jwt_like",
     severity: "critical",
     description: "JWT-like browser bundle token",
-    regex: /\beyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\b/g,
+    regex: /\beyJ[A-Za-z0-9_+\/=-]*(?:\.[A-Za-z0-9_+\/=-]*){2,}/g,
+    allowedMatch: isPinnedPublicAnonJwt,
+  },
+  {
+    id: "supabase_secret_key",
+    severity: "critical",
+    description: "Supabase secret API key",
+    regex: /\bsb_secret_[A-Za-z0-9_-]+/g,
   },
   {
     id: "env_filename",
@@ -88,14 +96,20 @@ export function scanDistDirectory(distDir = DEFAULT_DIST) {
     if (!isTextAsset(file, stat)) continue;
     const content = fs.readFileSync(file, "utf8");
     for (const rule of RULES) {
-      const matches = [...content.matchAll(rule.regex)].slice(0, 3);
-      for (const match of matches) {
+      let count = 0;
+      for (const match of content.matchAll(rule.regex)) {
+        if (rule.allowedMatch?.(match[0])) continue;
+        const prefixLines = content.slice(0, match.index).split(/\r?\n/);
         findings.push({
           severity: rule.severity,
           rule: rule.id,
           file: relToPosix(file),
-          detail: `${rule.description}: ${String(match[0]).slice(0, 90)}`,
+          line: prefixLines.length,
+          column: prefixLines.at(-1).length + 1,
+          detail: `${rule.description}: <redacted>`,
         });
+        count += 1;
+        if (count === 3) break;
       }
     }
   }

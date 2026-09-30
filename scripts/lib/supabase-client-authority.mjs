@@ -1,5 +1,29 @@
 import { PROMOGRIND_PROJECT_REF, assertTarget, assertTargetAdminUrl } from "./supabase-deploy-plan.mjs";
 
+/** Classifies legacy public API-key claims; it does not authenticate or verify a JWT signature. */
+export function isPinnedPublicAnonJwt(value) {
+  try {
+    const parts = String(value).split(".");
+    if (parts.length !== 3 || parts.some((part) => !/^[A-Za-z0-9_-]+$/.test(part))) return false;
+    const bytes = parts.map((part) => Buffer.from(part, "base64url"));
+    if (bytes.some((part, index) => part.toString("base64url") !== parts[index])) return false;
+    if (bytes[2].length !== 32) return false;
+    const decoder = new TextDecoder("utf-8", { fatal: true });
+    const header = JSON.parse(decoder.decode(bytes[0]));
+    const payload = JSON.parse(decoder.decode(bytes[1]));
+    if (!header || Array.isArray(header) || header.alg !== "HS256" || header.typ !== "JWT") return false;
+    if (Object.keys(header).some((key) => !["alg", "typ"].includes(key))) return false;
+    if (!payload || Array.isArray(payload)) return false;
+    const publicClaims = new Set(["iss", "ref", "role", "iat", "exp"]);
+    return Object.keys(payload).every((key) => publicClaims.has(key))
+      && payload.iss === "supabase"
+      && payload.ref === PROMOGRIND_PROJECT_REF
+      && payload.role === "anon"
+      && Number.isSafeInteger(payload.iat) && payload.iat > 0
+      && Number.isSafeInteger(payload.exp) && payload.exp > payload.iat;
+  } catch { return false; }
+}
+
 export function browserKeyIsPrivileged(value) {
   if (/^sb_secret_/i.test(value)) return true;
   try {
