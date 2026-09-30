@@ -1,28 +1,25 @@
 # Current State — PromoGrind
 
-Last updated: 2026-08-07 (Session 129 closeout boundary)
+Last updated: 2026-09-30 (Session 131)
 
-PromoGrind remains deployed/public-unlaunched in FORGE launch-hardening. S129 replaced the largest repo-owned release gaps with target-bound provider deployment and completed the Cloudflare staging-to-production promotion. The separate SPARKED/public-launch decision remains HOLD until its external business and identity proofs are real.
+PromoGrind is deployed/public-unlaunched in FORGE launch-hardening. All seven selected release-correctness outcomes are implemented and verified.
 
-Stable staging at `https://staging.promogrind.bet` and production at `https://promogrind.bet` serve the exact commit-bound artifact digest `82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab` from commit `7a6a3a2`. Root, `/_health`, `/dashboard`, `/arb-scanner`, and `/pricing` return 200, all seven standard/health files pass, and CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options, and Permissions-Policy are delivered. GitHub Pages remains the independent rollback origin. The production cutover preserved Cloudflare Email Routing MX/TXT records, and the pre-cutover GitHub Pages CNAME snapshot is retained for exact rollback.
+Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.
 
-Supabase deployment authority is now fail-closed and pinned to PromoGrind project `fjnpzjjyhnpmunfoycrp`. The quota and newsletter migrations are applied, five provider Edge Functions are ACTIVE, authenticated quota exhaustion returns a hard 429, and receipts contain no credential values. Browser-key discovery accepts only target-valid public keys and ignores service/secret keys.
+The release workflow now builds once and promotes identical bytes through stable Cloudflare staging to production. Production refuses a missing or mismatched staging receipt and rechecks the live staging origin. Rollback uses a reviewed forward revert through the same path. GitHub Pages is a historical fallback, not the release authority.
 
-Capture truth is complete. An anonymous disposable lead insert returned 201, privileged readback observed the exact row, cleanup returned 204, and only an email hash is persisted in the public-safe receipt. The landing capture UI now reports success only after a successful response and exposes an accessible retry on failure.
+Four scheduled dispatchers reject missing or forged authority before database/notification work. All 15 functions are ACTIVE on the pinned PromoGrind project; migration application was a verified no-op. No authorized live notification job was triggered for testing.
 
-Rendered UI verification is green. Four real-Chromium captures cover dark/light at 1440×1000 and 390×844; the landing theme control, legal footer, and calculator actions are at least 44×44, mobile has no horizontal overflow, and the hash-bound `docs/visual-qa/LATEST.json` passes CANON-053. The independent release-gate recheck also passed every touched state.
+Same-origin HTML navigation now fetches the current release first and preserves offline fallback. Pricing text uses semantic colors: inspected contrast is 5.08–10.12:1 dark and 6.12–6.92:1 light. Deno verification uses an isolated frozen Edge lock and leaves the frontend dependency tree unchanged. The locked nanoid patch clears the registry audit.
 
-Verification is green on the integrated dependency tree: 103/103 Vitest files and 705/705 assertions, 52 runtime compatibility checks, all 15 Edge entrypoints, Studio Doctor 12/12 with `blockingFailing: 0`, tracked-secret and strict public sanitizer scans clean, and `npm run verify:launch-local` exits 0. The React Router advisory affects unstable React Server Components APIs; PromoGrind pins 7.18.2, uses client-only BrowserRouter, and mechanically forbids those APIs, so the architecture-specific posture check passes without claiming `npm audit` is globally green.
+Verification: 104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected.
 
-## Honest deferrals
+## Remaining work
 
-- Production deployment is complete; this does not satisfy or waive the remaining SPARKED criteria.
-- SPARKED remains HOLD for Zoho send/receive/reply identity, live Obelisk delegation, production auth-email lifecycle, complete real Stripe lifecycle, independent friend beta, historical credential rotation/remediation, canonical cost reconciliation, and a distinct post-proof founder launch approval.
-- Technical deployment authorization in S129 is not represented as completion of those business/external proofs.
-- The optional Playwright CLI package was not installed because Package Trust scored it BLOCK; rendered verification reused the repository's bounded Chromium DevTools Protocol harness.
+- SPARKED/public launch remains HOLD. Zoho mailbox delivery/reply identity, live Obelisk delegation, auth-email, real Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation, and distinct post-proof founder launch approval remain unproved.
+- CANON-054 public stats is deferred until a real privacy-preserving aggregate feed and sustainable refresh producer exist; no invented counts were published.
+- The old revenue-evidence date remains stale; it was not advanced to manufacture green status.
 
-## Next actions
+## Continuity
 
-1. Complete the remaining Zoho alias/DNS/delivery/reply and live Obelisk delegation proofs.
-2. Complete production auth-email, real Stripe lifecycle, and independent friend-beta proofs.
-3. Complete historical credential remediation, canonical cost reconciliation, and a distinct post-proof founder approval before any SPARKED reassessment.
+S131 recovers the written record of S129 follow-up deployment/DNS/CDR commits and S130 dependency/generated-artifact commits after the latest complete SIL entry. S130 is an already-used session number; no retrospective SIL score was invented. See WORK_LOG and TRUTH_AUDIT for recovery and current evidence.

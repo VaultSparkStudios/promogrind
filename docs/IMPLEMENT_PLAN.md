@@ -1,12 +1,17 @@
 # Release correctness implementation — S131
 
-Source: AUDIT_2026-09-30.json. Six verified findings, no speculative feature expansion.
+Completed seven selected L3 outcomes from AUDIT_2026-09-30.json.
 
-1. Reconcile incoming runtime exports and safety overlays; verify startup and compatibility.
-2. Reject unauthenticated scheduler requests before effects; typecheck and test every handler.
-3. Require exact owned-domain release binding and live staging proof for promotion.
-4. Replace wrong-provider automation with one-build Cloudflare promotion and safe credential synchronization.
-5. Repair navigation freshness and apply the reviewed dependency patch.
-6. Run full local gates, stage, deploy functions, promote production, verify remote commit/artifact and complete write-back.
+- [x] Reject unauthorized scheduled dispatch before any database or notification work
+- [x] Require the owned domain to serve the exact staged commit and artifact before production succeeds
+- [x] Use Cloudflare for automated staging and production with gateway-only credential synchronization
+- [x] Fetch fresh HTML for same-origin extensionless navigation while preserving offline fallback
+- [x] Reconcile incoming runtime exports without losing local evidence and process safety
+- [x] Patch the vulnerable nanoid resolution and validate the updated dependency tree
+- [x] Restore readable pricing tier labels and amounts in the light theme
 
-All six are selected at L3 where deployment proof applies. A failed check remains unresolved; historical green records are not reused as current evidence.
+104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected.
+
+Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.
+
+Three waves complete; no selected work remains in progress. CANON-054 and existing public-launch criteria remain explicit separate follow-ups.

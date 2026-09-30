@@ -1,16 +1,16 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-09-30T03:15:17.315Z",
+  "generatedAt": "2026-09-30T04:34:19.965Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "18d2b95ee6faf6821f3a1669fd05b64497034547d86abb0f1ddf0571f4a0f80c",
+  "briefSha256": "c889508661389023edd1e6973d9035d63669a07e50d2a6a6d157ae58b3ccb2d7",
   "rendererVersion": "3.2",
-  "targetSession": 130,
-  "sourceSession": 129,
+  "targetSession": 132,
+  "sourceSession": 131,
   "sources": {
     "projectProfile": {
       "medium": "app",
       "stage": "launch-hardening",
-      "source": "canonical-status+fresh-cache"
+      "source": "canonical-status"
     },
     "truth": {
       "status": "green-repo-owned-with-history-and-external-proof-follow-ups",
@@ -26,7 +26,7 @@
     },
     "context": {
       "confidence": "measured",
-      "recommendation": "CONTINUE",
+      "recommendation": "WARN_COMPACT_SOON",
       "measured": true
     },
     "tests": {
@@ -37,7 +37,7 @@
   "claims": [
     {
       "id": "sil-avg3",
-      "rendered": "Avg3: 998.7"
+      "rendered": "Avg3: 952.7"
     },
     {
       "id": "notional-cost",

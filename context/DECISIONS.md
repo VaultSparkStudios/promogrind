@@ -919,3 +919,13 @@ Impact: Future closeouts can call the expected script names without failing on m
 - **Context:** the first production cutover attempted to reconcile every apex record and Cloudflare correctly refused deletion of Email Routing-managed MX records after the old web CNAME had been removed.
 - **Decision:** partition apex DNS records by purpose; production deployment may replace only A, AAAA, and CNAME web records, while MX, TXT, and every other record type remain untouched and are included in the rollback receipt.
 - **Consequence:** web promotion cannot silently damage mail or verification posture, and the first pre-cutover receipt retains the exact prior GitHub Pages CNAME for recovery.
+
+## 2026-09-30 — S131 release authority and evidence
+
+- Cloudflare staging and production are the active release plane. A successful alternate pages.dev origin cannot satisfy an owned-domain failure. Production requires a receipt for the exact commit/artifact plus a fresh staging verification.
+- Scheduled jobs require a configured, exact scheduler credential on POST before effects. Public requests fail closed; live tests never trigger authorized sends.
+- Browser configuration is resolved only for the pinned PromoGrind project; generic credentials for another project cannot establish authority. Repository secret updates use gateway-only resolution and stdin.
+- The Edge verifier uses a frozen isolated lock. Text source fingerprints normalize CRLF but preserve substantive whitespace/content differences.
+- CANON-054 STRONG deferral: a public stats surface requires verified aggregates and a maintained refresh producer; do not fabricate usage metrics merely to clear adoption. Remain FORGE and retain the explicit task.
+- Technical deployment authorization does not satisfy SPARKED/public-launch approval or incomplete external proofs. Existing launch holds remain.
+- S130 was committed previously without a complete SIL closeout. S131 recovers continuity; it does not backfill an invented score.

@@ -70,3 +70,10 @@ assignment, brand or tone guidance, or a canon-affecting decision. This summary
 is regenerated from that ledger; it is never the source of truth.
 
 *Public-safe summary established 2026-08-07 (S271). Full ledger preserved off-repo.*
+
+### 2026-09-30 — Release completion
+
+- Complete the selected arc through verified direct-main deployment.
+- Preserve the distinction between technical release completion and proof-based public-launch approval.
+
+Private direction details travel through the approved private ledger transport. This is a public-safe summary.

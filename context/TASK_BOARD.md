@@ -1,18 +1,22 @@
 # Task Board
 
-## Wave List (S131 · release correctness)
+## Wave List (S131 · complete)
 
-- Wave 1 · complete: integrated remote main, reconciled canonical updates and local safeguards, verified release premises; recovered S129/S130 record debt for closeout.
-- Wave 2 · in progress: exact release verification, Cloudflare automation, scheduled authorization, navigation freshness, runtime compatibility, and dependency patch.
-- Wave 3 · open: complete local gates, stable staging, production/function release, remote verification, and canonical write-back.
+- Wave 1 · complete: remote integration, premise checks, canonical reconciliation and interrupted-record recovery.
+- Wave 2 · complete: seven release, authorization, freshness, dependency, runtime and contrast repairs.
+- Wave 3 · complete: local gates, stable staging, production/functions, remote checks and canonical write-back.
 
 ## Unified Genius List (S131)
 
-See docs/AUDIT_2026-09-30.json for six selected outcomes and their acceptance checks.
+- [x] **DONE S131** scheduled-dispatch-auth — L3 acceptance verified; see docs/AUDIT_2026-09-30.json.
+- [x] **DONE S131** exact-origin-release-proof — L3 acceptance verified; see docs/AUDIT_2026-09-30.json.
+- [x] **DONE S131** cloudflare-workflow-authority — L3 acceptance verified; see docs/AUDIT_2026-09-30.json.
+- [x] **DONE S131** navigation-release-freshness — L3 acceptance verified; see docs/AUDIT_2026-09-30.json.
+- [x] **DONE S131** runtime-overlay-compatibility — L3 acceptance verified; see docs/AUDIT_2026-09-30.json.
+- [x] **DONE S131** locked-dependency-security — L3 acceptance verified; see docs/AUDIT_2026-09-30.json.
+- [x] **DONE S131** pricing-light-theme-readability — L3 acceptance verified; see docs/AUDIT_2026-09-30.json.
 
-- [ ] S131: close all six verified release findings and deploy the same artifact through stable staging and production.
-- [ ] Add privacy-preserving public stats feed, homepage tile and deeper stats page with an actual bounded refresh producer (CANON-054).
-
+Scaffold: 3 waves · 3 done · 0 in progress · 0 open. Selected outcomes: 7/7 complete. Deferred work below remains outside the completed selection.
 
 ## Unified Genius List (S129)
 
@@ -47,6 +51,8 @@ See docs/AUDIT_2026-09-30.json for six selected outcomes and their acceptance ch
 - SPARKED remains an honest HOLD for external business/identity/remediation proofs; deployment success will not be mislabeled as launch approval.
 
 ## Now
+
+- [ ] Implement privacy-preserving public stats feed, homepage tile and deeper stats page with a verified refresh producer (CANON-054; deliberately deferred in S131).
 
 - [ ] Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delegation. `[SIL]`
 - [ ] Complete production auth confirmation/resend/recovery and a real Stripe checkout/webhook/subscription/portal lifecycle.

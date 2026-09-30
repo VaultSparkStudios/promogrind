@@ -1,10 +1,10 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
-Last reviewed: 2026-08-04 (S126)
+Last reviewed: 2026-09-30 (S131)
 Overall status: green-repo-owned-with-history-and-external-proof-follow-ups
-Next action: establish true staging and a header-capable edge; rotate/remediate the redacted historical credentials; obtain the exact PromoGrind deploy capability; then complete criterion-addressed mailbox, auth, payment, friend, capture, and pixel proofs.
-Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id` header + Fastly via Varnish + `public/CNAME`). Cloudflare is DNS-only proxy. SPA fallback handled via `scripts/postbuild-pages.mjs` copying `dist/index.html → dist/404.html`. `_redirects` and `wrangler.toml` are NOT used by the live deploy chain.
+Next action: verified aggregate stats producer; complete mailbox, identity, auth, payment, independent tester, historical remediation, cost and launch evidence.
+Production deploy host: **Cloudflare Pages**. The active workflow verifies stable staging and production at exact owned origins; GitHub Pages is a historical fallback. Rollback is a forward revert through staging.
 
 ---
 
@@ -583,3 +583,12 @@ Production deploy host: **GitHub Pages** (verified S83 via `x-github-request-id`
 - Production truth is now externally observed: `https://promogrind.bet` and stable staging serve commit `7a6a3a2`, exact digest `82f29e7c…18ab`; root, health, three deep routes, seven standard/health files, and all six headers pass.
 - DNS truth is purpose-scoped: the final cutover replaced only the web record, preserved all Cloudflare Email Routing MX and TXT records, and retained the original `vaultsparkstudios.github.io` CNAME in `production-dns-before-2026-08-07T20-28-15-936Z.json` for exact rollback.
 - Proof truth: `stagingAndHeaders` is complete 3/3 from deployment receipts and automated smoke. Deployment completion still does not satisfy Zoho, Obelisk, auth-email, real Stripe lifecycle, friend-beta, historical remediation, cost reconciliation, or post-proof founder approval.
+
+## 2026-09-30 — S131 source reconciliation
+
+- Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.
+- 104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected.
+- The stale S83 GitHub Pages header was corrected to Cloudflare, and S129/S130 follow-up state was reconciled. Historical entries are preserved.
+- Latest test receipts retain their actual recorded source commit/time; remote workflow receipts separately identify the deployed commit.
+- Technical deployment is complete; SPARKED remains HOLD. CANON-054 and old revenue evidence are explicit gaps, not fabricated green checks.
+- Self-assessment 860/1000 is an evidence-calibrated product score, not a measured customer outcome or backwards revision of S129.

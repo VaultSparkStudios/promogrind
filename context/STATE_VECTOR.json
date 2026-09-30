@@ -1,23 +1,23 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-09-30",
-  "generatedAtMs": 1790739406558,
-  "session": 129,
-  "vectorHash": "7bc05827bc5b59fb",
-  "silTotal": 1000,
+  "generatedAtMs": 1790742664665,
+  "session": 131,
+  "vectorHash": "d5ccbc7379c5c5d7",
+  "silTotal": 860,
   "silMax": 1000,
-  "silAvg3": 998.7,
-  "velocity": 4,
+  "silAvg3": 952.7,
+  "velocity": 7,
   "debt": "down",
-  "runway": "~2 sessions",
-  "intentRate": "100% achieved (last 5)",
-  "openNow": 3,
+  "runway": "unknown",
+  "intentRate": "unknown",
+  "openNow": 4,
   "openNext": 1,
   "openBlocked": 3,
   "topNow": [
+    "Implement privacy-preserving public stats feed, homepage tile and deeper stats p",
     "Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delega",
-    "Complete production auth confirmation/resend/recovery and a real Stripe checkout",
-    "Obtain independent friend-beta evidence and complete historical credential rotat"
+    "Complete production auth confirmation/resend/recovery and a real Stripe checkout"
   ],
   "topNext": [
     "Reconcile canonical Studio cost truth through Ark and obtain distinct post-proof"
@@ -33,7 +33,7 @@
   "type": "app",
   "lifecycle": "deployed",
   "nextMilestone": "Complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and distinct post-proof founder criteria before SPARKED.",
-  "currentFocus": "S129 completed target-bound Supabase deployment and the Cloudflare staging-to-production release plane. Commit 7a6a3a2 digest 82f29e7c...18ab is identical across both origins; routes, health, standard files, capture-safe configuration, and six headers are green.",
+  "currentFocus": "S131 completed seven release correctness outcomes: exact Cloudflare staging/production identity, scheduled auth, safe authority sync, navigation freshness, dependency/runtime isolation and pricing readability.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved.",

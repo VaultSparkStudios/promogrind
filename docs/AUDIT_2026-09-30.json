@@ -30,7 +30,7 @@
     ],
     "ux": [
       "Extensionless navigation freshness selected",
-      "Cosmetic redesign rejected: no visual defect established"
+      "Live pricing contrast defect established by rendered inspection and repaired."
     ],
     "feedbackLoop": [
       "Wrong-host deployment success selected",
@@ -71,7 +71,7 @@
       "impact": 10,
       "innovation": 4,
       "priority": 20,
-      "status": "in-progress",
+      "status": "done",
       "evidence": [
         "send-daily-brief ignored the request and --all uses --no-verify-jwt",
         "Other scheduled handlers accepted weak cron/bearer predicates"
@@ -89,7 +89,8 @@
           "effortHours": 3,
           "recipe": "Typecheck every function, deploy all target-pinned functions, and verify remote inventory and unauthorized rejection without sending notifications."
         }
-      }
+      },
+      "depth": "L3"
     },
     {
       "id": "S131-2",
@@ -102,7 +103,7 @@
       "impact": 10,
       "innovation": 7,
       "priority": 30.1,
-      "status": "in-progress",
+      "status": "done",
       "evidence": [
         "waitForOrigin could return successful pages.dev fallback after owned-domain failure",
         "Header presence alone accepted an older release",
@@ -121,7 +122,8 @@
           "effortHours": 4,
           "recipe": "Verify exact same immutable artifact on staging and production with receipts and rollback instructions."
         }
-      }
+      },
+      "depth": "L3"
     },
     {
       "id": "S131-3",
@@ -134,7 +136,7 @@
       "impact": 9,
       "innovation": 5,
       "priority": 19.4,
-      "status": "in-progress",
+      "status": "done",
       "evidence": [
         "deploy-pages.yml deployed to GitHub Pages but verified promogrind.bet served by Cloudflare",
         "sync-github-secrets read .env.admin directly and passed values in process arguments"
@@ -152,7 +154,8 @@
           "effortHours": 5,
           "recipe": "Configure repository deployment authority and observe successful main-commit CI plus real two-origin promotion."
         }
-      }
+      },
+      "depth": "L3"
     },
     {
       "id": "S131-4",
@@ -165,7 +168,7 @@
       "impact": 9,
       "innovation": 4,
       "priority": 22.7,
-      "status": "in-progress",
+      "status": "done",
       "evidence": [
         "Service worker returned cached HTML immediately for /dashboard, /pricing, and /arb-scanner",
         "A VM behavioral reproduction observed the old response on four route forms"
@@ -183,7 +186,8 @@
           "effortHours": 2,
           "recipe": "Inspect deployed desktop/mobile dark/light routes and verify service worker behavior from the shipped bytes."
         }
-      }
+      },
+      "depth": "L3"
     },
     {
       "id": "S131-5",
@@ -196,7 +200,7 @@
       "impact": 8,
       "innovation": 4,
       "priority": 16,
-      "status": "in-progress",
+      "status": "done",
       "evidence": [
         "Startup failed importing TERMINAL_TASK_STATUS after canonical propagation",
         "Merged validator removed local source receipt checks",
@@ -215,7 +219,8 @@
           "effortHours": 3,
           "recipe": "Verify full integrated launch gate and recover truthful session closeout evidence."
         }
-      }
+      },
+      "depth": "L3"
     },
     {
       "id": "S131-6",
@@ -228,7 +233,7 @@
       "impact": 8,
       "innovation": 2,
       "priority": 12.1,
-      "status": "in-progress",
+      "status": "done",
       "evidence": [
         "npm audit identified GHSA-2v37-7h3g-55p8 in locked nanoid <3.3.18",
         "All direct lock entries matched official registry integrity and were older than cooldown"
@@ -246,7 +251,8 @@
           "effortHours": 1,
           "recipe": "Verify patched lock in remote CI and deployed artifact."
         }
-      }
+      },
+      "depth": "L3"
     },
     {
       "id": "S131-7",
@@ -259,7 +265,7 @@
       "impact": 8,
       "innovation": 3,
       "priority": 15.1,
-      "status": "in-progress",
+      "status": "done",
       "evidence": [
         "Production BEFORE Chromium captures showed small-label contrast ratios of 4.34, 2.22, 1.96, 2.08 and 3.61; three large prices were below 3.0."
       ],
@@ -276,7 +282,8 @@
           "effortHours": 2,
           "recipe": "Inspect actual desktop/mobile dark/light staging pixels, repair defects, and bind the visual receipt to exact source and image hashes."
         }
-      }
+      },
+      "depth": "L3"
     }
   ],
   "deferred": [
@@ -289,5 +296,55 @@
       "reason": "Retain existing Obelisk, mail, Stripe, friend-test, credential-remediation, cost and distinct launch-approval criteria. Deployment authority does not establish these independent proofs."
     }
   ],
-  "executionLog": []
+  "executionLog": [
+    {
+      "id": "S131-1",
+      "depth": "L3",
+      "status": "done",
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "evidence": "All 15 functions ACTIVE; 12/12 missing/forged scheduler requests HTTP401; audits/supabase-release-s131.json."
+    },
+    {
+      "id": "S131-2",
+      "depth": "L3",
+      "status": "done",
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "evidence": "Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501."
+    },
+    {
+      "id": "S131-3",
+      "depth": "L3",
+      "status": "done",
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "evidence": "Remote Cloudflare promotion https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501; repository secret sync verified allowlist/gateway/stdin; old GitHub Pages workflow replaced."
+    },
+    {
+      "id": "S131-4",
+      "depth": "L3",
+      "status": "done",
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "evidence": "11 service-worker behavior tests pass; exact origin, network-first navigation, offline fallback and asset behavior verified; 40 rendered before/after captures inspected."
+    },
+    {
+      "id": "S131-5",
+      "depth": "L3",
+      "status": "done",
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "evidence": "101/101 runtime compatibility; canonical exports and local safeguards preserved; LF/CRLF FAQ regression passes; full launch gate passed."
+    },
+    {
+      "id": "S131-6",
+      "depth": "L3",
+      "status": "done",
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "evidence": "nanoid3.3.18 pinned; trusted registry integrity; lifecycle scripts disabled; npm audit zero vulnerabilities; Deno dependency isolation fixture passes."
+    },
+    {
+      "id": "S131-7",
+      "depth": "L3",
+      "status": "done",
+      "verifiedAt": "2026-09-30T04:29:55.914Z",
+      "evidence": "40 actual captures inspected; dark contrast5.08–10.12:1, light6.12–6.92:1; CANON-053 source/image hash receipt passes."
+    }
+  ]
 }

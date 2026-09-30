@@ -21,8 +21,8 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 129,
-  "currentFocus": "S129 completed target-bound Supabase deployment and the Cloudflare staging-to-production release plane. Commit 7a6a3a2 digest 82f29e7c...18ab is identical across both origins; routes, health, standard files, capture-safe configuration, and six headers are green.",
+  "currentSession": 131,
+  "currentFocus": "S131 completed seven release correctness outcomes: exact Cloudflare staging/production identity, scheduled auth, safe authority sync, navigation freshness, dependency/runtime isolation and pricing readability.",
   "nextMilestone": "Complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and distinct post-proof founder criteria before SPARKED.",
   "blockers": [
     "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved.",
@@ -35,45 +35,45 @@
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
   "lastUpdated": "2026-09-30",
-  "silScore": 1000,
-  "silAvg3": 998.7,
-  "silVelocity": 4,
+  "silScore": 860,
+  "silAvg3": 952.7,
+  "silVelocity": 7,
   "silDebt": "down",
-  "silLastSession": 129,
+  "silLastSession": 131,
   "silMax": 1000,
   "silSparkline": [
     1000,
+    998,
+    998,
     1000,
-    998,
-    998,
-    1000
+    860
   ],
-  "ignisScore": 42104,
+  "ignisScore": 43385,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-09-30",
   "testsPassing": 104,
   "testsTotal": 104,
   "testsLastRun": "2026-09-30",
-  "lastDeployStatus": "GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab is live unchanged on stable staging and Cloudflare production. Production receipt artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json; root, health, deep routes, seven standard/health files, six security headers, and capture-safe configuration pass. DNS cutover preserved mail MX/TXT records and retained the prior GitHub Pages CNAME snapshot. SPARKED remains HOLD.",
+  "lastDeployStatus": "Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-08-07",
+  "truthAuditLastRun": "2026-09-30",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "passing 705/705 across 103 files in S128 on the exact lock tree"
+      "status": "S131 pass:104 files,716 assertions"
     },
     {
       "type": "edge",
       "command": "npm run verify:edge",
-      "status": "passing: all 15 entrypoints typecheck and 52/52 tests across all 7 discovered files"
+      "status": "S131 pass:15 entries,56 tests,8 files"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "passing end to end in S128 with direct exit 0"
+      "status": "S131 full launch-local direct exit0"
     },
     {
       "type": "ux-integrity",
@@ -89,12 +89,12 @@
     {
       "type": "staging",
       "url": "https://staging.promogrind.bet",
-      "status": "green at commit 7a6a3a2 artifact 82f29e7c...18ab; root, health, deep routes, standard files, all six headers, dark/light, mobile overflow, and 44x44 targets pass"
+      "status": "Verified be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8; content 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93"
     },
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "green on Cloudflare Pages at commit 7a6a3a2 artifact 82f29e7c...18ab; root, health, deep routes, standard files, all six headers, and capture-safe configuration pass"
+      "status": "Verified be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8; content 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93"
     }
   ],
   "stagingUrl": "https://staging.promogrind.bet",
@@ -111,26 +111,26 @@
   "stripeProductionPriceIds": [],
   "silRubricVersion": "3.0",
   "silCategoriesV3": {
-    "devHealth": 100,
-    "creativeAlignment": 100,
-    "momentum": 100,
-    "engagement": 100,
-    "processQuality": 100,
-    "crossRepoCoherence": 100,
-    "securityPosture": 100,
-    "ecosystemIntegration": 100,
-    "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "devHealth": 96,
+    "creativeAlignment": 96,
+    "momentum": 96,
+    "engagement": 65,
+    "processQuality": 90,
+    "crossRepoCoherence": 88,
+    "securityPosture": 75,
+    "ecosystemIntegration": 80,
+    "capitalEfficiency": 80,
+    "automationCoverage": 94
   },
   "doctorScore": {
     "date": "2026-09-30",
-    "passing": 10,
+    "passing": 11,
     "warning": 0,
-    "failing": 2,
+    "failing": 1,
     "blockingFailing": 0,
-    "advisoryFailing": 2,
+    "advisoryFailing": 1,
     "total": 12,
-    "score": 83,
+    "score": 92,
     "checks": [
       {
         "id": "manifest",
@@ -197,7 +197,7 @@
       },
       {
         "id": "ignis",
-        "pass": false,
+        "pass": true,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
@@ -218,8 +218,8 @@
       }
     ]
   },
-  "entropyScore": 0.03,
-  "entropyLastComputed": "2026-08-07",
+  "entropyScore": 0.002,
+  "entropyLastComputed": "2026-09-30",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
@@ -239,7 +239,7 @@
     "enumeratedAt": "2026-08-07T18:55:00-04:00",
     "evidence": "S129 final Chromium capture used one hidden repo-local Vite process on 127.0.0.1:4173. The exact listener and parent were closed, and the port was re-probed with zero repo-owned listeners remaining."
   },
-  "lastSessionSummary": "S129 shipped target-bound Supabase deployment, stable Cloudflare staging with six headers, quota and capture proofs, truthful landing capture feedback, and final dark/light desktop/mobile rendered parity. Full launch-local exits 0 and the independent technical gate is green for production promotion; SPARKED remains HOLD on external business, identity, remediation, cost, and post-proof approval criteria.",
+  "lastSessionSummary": "S131 shipped all seven selected technical outcomes. 104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected. FORGE/public-launch HOLD retained.",
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
@@ -262,5 +262,6 @@
   "testsAssertionsPassing": 716,
   "testsAssertionsTotal": 716,
   "testsAssertionsFiles": 104,
-  "testsAssertionsLastRun": "2026-09-30"
+  "testsAssertionsLastRun": "2026-09-30",
+  "lastSession": 131
 }

@@ -1,61 +1,31 @@
-# PromoGrind Handoff — Session 131
+# Latest Handoff
 
 ## Where We Left Off
 
-The release correctness arc is in progress. Six current findings are tracked in docs/AUDIT_2026-09-30.json. Remote main was fast-forwarded to 1c31cb3. No new production deployment is claimed yet.
+- Session: S131 · 2026-09-30
+- Intent: complete the requested arc, commit/push main, and deploy the selected work.
+- Outcome: seven selected outcomes verified; final closeout commit refreshes metadata through the same automated release path.
+- Deploy: deployed to stable staging and production; be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8; content 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93.
+- Evidence: audits/site-release-s131.json; audits/supabase-release-s131.json; docs/visual-qa/LATEST.json.
 
-## Session Intent
+## S131 shipped
 
-Complete /arc, commit and push directly to main, deploy stable staging and production, and verify the live outcome. Preserve FORGE until independent launch criteria pass.
-
-## Recovery record
-
-S129 production/DNS follow-up commits and S130 generated/dependency updates were committed without a later SIL closeout. The existing release receipts remain historical evidence, and the complete current record will be reconciled in S131.
-
-## Previous handoff (historical)
-
-# PromoGrind Handoff — Session 129
-
-## Where We Left Off
-
-- Status: the requested `/arc`, canonical closeout, direct push, and production deployment are complete; the integrated tree passes the full launch verifier.
-- Release: stable staging and production are GREEN on exact commit `7a6a3a2` and digest `82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab`.
-- Provider: two migrations and five target-pinned Supabase functions are live; quota 429 and anonymous capture/readback/cleanup proofs pass.
-- Production proof: receipt `artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json`; the first DNS snapshot retains the prior `vaultsparkstudios.github.io` CNAME, and the cutover preserves mail MX/TXT records.
-- Launch posture: technical production promotion is GREEN; SPARKED/public launch remains HOLD for unresolved external business, identity, remediation, and post-proof approval criteria.
-
-## Session Intent
-
-Run the complete project-aware `/arc`, then `/closeout`, commit and push directly to `main`, fully deploy through stable staging and production, and verify the live outcome.
-
-## Shipped in S129
-
-- Target-verified Supabase management/admin composition, adversarial target refusal, redacted receipts, remote inventory verification, quota migration, and five ACTIVE provider functions.
-- Newsletter capture migration with insert-only Row Level Security, target-bound browser-key selection, anonymous insert/readback/cleanup smoke, and truthful retry UI.
-- Cloudflare staging/production deployment control plane with deterministic artifact digests, stable custom domains, all six headers, SPA routing, health, active-zone discovery, and exact DNS rollback records.
-- Root landing theme toggle plus shared proprietary footer and 44×44 interaction targets across dark/light and desktop/mobile.
-- Four hash-bound real-Chromium captures and a passing CANON-053 receipt.
-- Architecture-specific React Router advisory guard after integrating remote dependency updates from `main`.
+- Exact owned-domain commit, artifact and HTML verification; receipt-gated staging-to-production automation.
+- Strict scheduler authorization across four handlers; all 15 pinned functions deployed.
+- Gateway-only repository secret synchronization and exact project browser authority.
+- Fresh HTML navigation with offline fallback; readable pricing in dark/light desktop/mobile.
+- Patched dependency lock; isolated Deno verification; reconciled canonical runtime with local safeguards.
 
 ## Verification
 
-- `npm run verify:launch-local`: direct exit 0 on 2026-08-07.
-- Vitest: 103/103 files, 705/705 assertions.
-- Edge/runtime: all 15 Edge entrypoints and 52/52 runtime compatibility checks pass.
-- Secrets/sanitization: tracked scan and strict public-repo sanitizer pass with zero findings.
-- Staging live web contract: root, health, three SPA routes, seven standard/health files, and six headers all green.
-- Capture: HTTP 201 insert, 200 privileged observation, 204 cleanup; receipt stores only a hash.
-- Independent technical release gate: GREEN for digest `aedc3d7b…9360b`; no overflow and all controls/footer links at least 44×44.
+104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected.
 
-## Next
+CI/release: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501. Public/release lifecycle remains FORGE. Zoho mailbox delivery/reply identity, live Obelisk delegation, auth-email, real Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation, and distinct post-proof founder launch approval remain unproved.
 
-1. Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human/agent delegation.
-2. Complete production auth-email, real Stripe lifecycle, and independent friend-beta evidence.
-3. Complete credential remediation and canonical cost reconciliation, then obtain a distinct post-proof founder approval.
-4. Keep SPARKED HOLD until those criteria are complete.
+## Recovery and next session
 
-## Known constraints
+The latest prior full SIL was S129; S129 follow-up and committed S130 work were reconciled without inventing an S130 score. Next work: actual CANON-054 stats producer, Zoho/Obelisk proof, then auth/payment/tester/remediation/cost/launch criteria. Revenue evidence remains stale, not silently renewed.
 
-- `scripts/lib/skill-profile.mjs` is absent in this public repo; closeout used the documented manual fallback.
-- Package Trust blocked installing the optional Playwright CLI, so the existing bounded CDP harness supplied rendered-browser evidence.
-- Deployment permission is explicit, but it does not fabricate independent tester, mailbox, billing, identity-enrollment, credential-rotation, or post-proof launch-approval evidence.
+## Public-repo fallback
+
+Missing local audit renderer, premise checker, canonical startup/maintenance scripts and Ark CLI used the documented manual or explicit sibling fallback. No private placeholder tooling was added. Agent memory is stored outside the public repo; CDR here is public-safe summary only.

@@ -730,3 +730,15 @@ Append chronological entries.
 - Rebuilt the release from `7a6a3a2` and deployed exact digest `82f29e7c…18ab` unchanged to stable staging and production. Production root, health, deep routes, seven standard/health files, all six headers, and capture-safe configuration pass.
 - The first DNS attempt exposed an unsafe all-record reconciliation scope after the prior GitHub Pages CNAME was removed and Cloudflare protected Email Routing MX records. The deployer now mutates only A/AAAA/CNAME records, preserves MX/TXT, and has an explicit regression test. The retry completed with mail records intact.
 - Canonical `stagingAndHeaders` proof is now complete 3/3. Production receipt: `artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json`; original rollback snapshot: `artifacts/cloudflare-pages/production-dns-before-2026-08-07T20-28-15-936Z.json`.
+
+## 2026-09-30 — Session 131 release correctness arc
+
+- Recovered post-S129 write-back debt: follow-up deployment/DNS/public CDR and committed S130 dependency/artifact changes. Preserved history and assigned S131 monotonically.
+- Completed seven evidence-backed findings: scheduler auth, exact-origin release identity, Cloudflare automation, navigation freshness, runtime compatibility, locked dependency patch, pricing readability.
+- 104/104 Vitest files and 716/716 assertions; all 15 Edge entrypoints and 56/56 tests across 8 files; 101/101 runtime checks on the pre-commit changed surface and 54/54 after commit (coverage is diff-derived); full verify:launch-local exit 0; 40 inspected before/after captures; 15 ACTIVE deployed functions and 12/12 unauthorized scheduled requests rejected.
+- Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.
+- All 15 target-pinned functions deployed; migration management path returned no-op; live scheduler rejection proved without sending notifications.
+- Repository deployment/browser authority synchronized through the gateway; public and staged secret scans clean. No new paid API or service subscription.
+- Deno isolation and LF/CRLF FAQ verification repairs prevent checks from mutating dependencies or disagreeing across CI.
+- Public-shim fallbacks used for absent private tooling. SPARKED remains HOLD; CANON-054 and stale revenue evidence remain explicit follow-ups.
+- Closeout scoring recalibrates previously perfect assertions against measured product, security, cost and ecosystem evidence; old scores are unchanged.

@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.2 -->
-<!-- generated-at: 2026-09-30 (Session 129 closeout) -->
+<!-- generated-at: 2026-09-30 (Session 131 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 129 closeout · 2026-09-30.
+> **Fast-boot brief** — generated at Session 131 closeout · 2026-09-30.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,14 +14,14 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 130 · 2026-09-30 · FOUNDER MODE                         ║
+║  Session 132 · 2026-09-30 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S129) - WHAT SHIPPED ══════════════════════════╗
-║  S129 shipped target-bound Supabase deployment, stable Cloudfla  ║
-║  Tests  103/103 files · 705/705 assertions                       ║
-║  Deploy GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d45  ║
+╔══ LAST SESSION (S131) - WHAT SHIPPED ══════════════════════════╗
+║  S131 shipped all seven selected technical outcomes. 104/104 Vi  ║
+║  Tests  104/104 files · 716/716 assertions                       ║
+║  Deploy Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is veri  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
@@ -40,54 +40,54 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 4↑                      ║
-║    Last active: 24d  ·  Last closeout: 54d  ·  (active = newest  ║
-║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
+║    860/1000   ████████████████████░░░░   86%                     ║
+║    SIL v3.0  ·  Avg3: 952.7  ·  Velocity 7→                      ║
+║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
+║    Trend  █▆▄▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health      100    ██████████  ████████ →                 ║
-║    Alignment       100    ██████████  ████████ →                 ║
-║    Momentum        100    ██████████  ████████ →                 ║
-║    Engagement      100    ██████████  ████████ →                 ║
-║    Process Qual    100    ██████████  █████▇▇█ →                 ║
-║    Coherence       100    ██████████  ········ →                 ║
-║    Security        100    ██████████  ········ →                 ║
-║    Ecosystem       100    ██████████  ········ →                 ║
-║    Capital         100    ██████████  ········ →                 ║
-║    Automation      100    ██████████  ········ →                 ║
+║    Dev Health       96    ██████████  ███████▇ →                 ║
+║    Alignment        96    ██████████  ███████▇ →                 ║
+║    Momentum         96    ██████████  ███████▇ →                 ║
+║    Engagement       65    ███████░░░  ███████▅ →                 ║
+║    Process Qual     90    █████████░  ████▇▇█▇ →                 ║
+║    Coherence        88    █████████░  ········ →                 ║
+║    Security         75    ████████░░  ········ →                 ║
+║    Ecosystem        80    ████████░░  ········ →                 ║
+║    Capital          80    ████████░░  ········ →                 ║
+║    Automation       94    █████████░  ········ →                 ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 129 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 131 ═══════════════════════════╗
 ║ Shipped:  see LATEST_HANDOFF.md                                ║
-║ Tests:    103/103 passing  ·  Deploy: GREEN: commit 7a6a3a2…   ║
+║ Tests:    104/104 passing  ·  Deploy: Commit…                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  ██████░░░░░░░░░░░░░░░░░░   24% used                         ║
-║    62,309 / 258,400 tok  ·  codex/codex-272k  ·  measured      ║
-║    ~31,155 tok/turn  ·  cache 50%  ·  5 turns to compact       ║
-║    Verdict: CONTINUE                                           ║
+║ ✓  █████████████████░░░░░░░   69% used                         ║
+║    179,024 / 258,400 tok  ·  codex/codex-272k  ·  measured     ║
+║    ~89,512 tok/turn  ·  cache 50%  ·  0 turns to compact       ║
+║    Verdict: WARN_COMPACT_SOON  ← act now                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║ ✓  Tests         103/103 files · 705/705 assertions…           ║
-║ ✓  Velocity      4 ↑  ·  Debt: →                               ║
-║ ⚠  Runway        ~2 sessions                                   ║
-║ ⛔  Context age   54d                                           ║
-║ ⛔  IGNIS         44911 FORGE  ·  60d old                       ║
+║ ✓  Tests         104/104 files · 716/716 assertions…           ║
+║ ✓  Velocity      7   ·  Debt: →                                ║
+║ ✓  Runway        unknown                                       ║
+║ ✓  Context age   0d                                            ║
+║ ✓  IGNIS         43385 FORGE  ·  0d old                        ║
 ║ ✓  Truth         green-repo-owned-with-history-and-external-p… ║
 ║ ⚠  Compliance   not-tracked: no non-zero compliance run…       ║
 ║ ✓  Genome dims   all stable  (24/25)                           ║
-║ ✓  Entropy       0.030  (healthy)                              ║
+║ ✓  Entropy       0.002  (healthy)                              ║
 ║ ✓  CDR           no gap detected                               ║
 ║ ✓  Patterns      no recurring pressure detected                ║
 ║ ✓  Templates     v3.3 aligned                                  ║
 ║ ⛔  Revenue sig.  60d old (2026-08-01)  ⚠ stale                 ║
 ║ ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                ║
-║ ⛔  Doctor        9/12 (75%)  ·  3 failing                      ║
+║ ⛔  Doctor        11/12 (92%)  ·  1 failing                     ║
 ║ ✓  Codex trust   trusted project active                        ║
 ║ ⚠  Canon adopt.  43/54 pending review                          ║
 ║ ✓  Cost          flat-rate Max Plan · ledger telemetry is…     ║
@@ -95,9 +95,9 @@
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
-║  Snapshot: 0m old · next n/a                                     ║
+║  Snapshot: 1h old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 298 drained · 6m old · sig failures 0                      ║
+║  Ark: 298 drained · 1h old · sig failures 0                      ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -108,19 +108,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   █▆▄▄▄  4↑  (last 5 sessions)                        ║
-║  Intent:     100% achieved last 5                                ║
-║  Streak:     — (last intent not achieved)                        ║
+║  Velocity:   █▆▄▄▄  7→  (last 5 sessions)                        ║
+║  Intent:     ?% achieved last 5                                  ║
+║  Streak:     ✓ 1 consecutive achieved-intent session             ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  999/1000  (↓1 vs current 1000)                      ║
-║  All categories forecast stable or rising.                       ║
+║  Projected:  776/1000  (↓84 vs current 860)                      ║
+║  At-risk:    Engagement Δ-21 · Security Posture Δ-16 · Ecosyste  ║
 ║  Calibration: MAE 1.6 over last 7 forecasts                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════════════╗
-║  GENIUS HIT LIST  ·  Session 129                               ║
+║  GENIUS HIT LIST  ·  Session 131                               ║
 ║  Project: PromoGrind · ranked by impact                        ║
 ║  Portfolio: 0 open · 0 unblocked · 0 blocked · 0/0 repos       ║
 ║                                                                ║
@@ -128,29 +128,21 @@
 ║        promogrind is held on Blocking launch proofs complete.  ║
 ║        ↳ node scripts/ops.mjs release-gate                     ║
 ║                                                                ║
-║  🔥  2  [IGNIS]  IGNIS re-score overdue (60d stale)            ║
-║        Portfolio intelligence scores degrade with age. Re-sco  ║
-║        ↳ node scripts/ops.mjs rescore --stale                  ║
-║                                                                ║
-║  🔥  3  [SIL]  Complete Zoho alias/DNS/delivery/reply proof a  ║
+║  🔥  2  [SIL]  Implement privacy-preserving public stats feed  ║
 ║        Top unblocked unified-list item — highest priority thi  ║
 ║        ↳ node scripts/ops.mjs preload                          ║
 ║                                                                ║
-║  🔥  4  [SIL]  Complete production auth confirmation/resend/r  ║
+║  🔥  3  [SIL]  Complete Zoho alias/DNS/delivery/reply proof a  ║
 ║        Second-priority unblocked item — complete both for ses  ║
 ║                                                                ║
-║  💡  5  [IGNIS]  Refresh REVENUE_SIGNALS.md (60d stale)        ║
+║  💡  4  [IGNIS]  Refresh REVENUE_SIGNALS.md (60d stale)        ║
 ║        Revenue intelligence is time-sensitive. Regenerate to   ║
 ║        ↳ node scripts/ops.mjs revenue-signals                  ║
-║                                                                ║
-║  🔧  6  [PROTO]  Protocol Oracle FAQ source contract stale     ║
-║        Re-render the 10 reviewed Q&A pairs because protocol o  ║
-║        ↳ node scripts/render-protocol-faq.mjs                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ```
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 129 closeout · 2026-09-30*
+*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 131 closeout · 2026-09-30*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

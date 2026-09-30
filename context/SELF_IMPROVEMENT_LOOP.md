@@ -11,13 +11,10 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): S125:1000 | S126:1000 | S127:998 | S128:998 | S129:1000
-Avgs - 3: 998.7 [N=3] | 5: 999.2 [N=5] | all: 999.2 [recent closeout series]
-  └ 3-session (S127/S128/S129): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 99.3 | Coher 100.0 | Sec 100.0 | Eco 100.0 | Cap 100.0 | Auto 99.3
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: stable
-Momentum runway: ~2 sessions  |  Intent rate: 100% achieved (last 5)
-Last session: 2026-08-07 | Session 129 | Total: 1000/1000 | Velocity: 4 | protocolVelocity: 4
-─────────────────────────────────────────────────────────────────────
+Sparkline (last 5 totals): S126:1000 | S127:998 | S128:998 | S129:1000 | S131:860
+Avgs - 3: 952.7 | 5: 971.2 | 10: 985.6 | 25: 994.1 | all: 937.4 (normalized /1000; calibration sessions excluded)
+Velocity: 7 selected outcomes | Debt: down | Intent: achieved for selected technical scope
+Last session: 2026-09-30 | Session 131 | Total: 860/1000 | Velocity: 7
 <!-- rolling-status-end -->
 
 ---
@@ -1889,3 +1886,29 @@ Rolling avg (last 3): Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | 
 **Committed follow-up(s):**
 - Promote and verify the commit-bound S129 artifact, then record staging/production parity. `[SIL]`
 - Complete Zoho and Obelisk authority before any SPARKED reassessment. `[SIL]`
+
+## 2026-09-30 — Session 131 | Total: 860/1000 | Velocity: 7 | Debt: down
+
+| Category | Score | vs Last | Notes |
+|---|---:|:---:|---|
+| Dev Health | 96 | ↓ | Complete local gate and current remote CI/release are verified; broader debt remains. |
+| Creative Alignment | 96 | ↓ | Measured theme contrast and fresh navigation support the calm evidence-first product. |
+| Momentum | 96 | ↓ | Seven selected outcomes delivered through staging, production and all functions. |
+| Engagement | 65 | ↓ | Feedback and accessibility improved; community and independent friend-beta evidence remain unmeasured. |
+| Process Quality | 90 | ↓ | Recovered skipped write-back; full checks and receipt-bound closeout; missing private automation uses explicit fallbacks. |
+| Cross-Repo Coherence | 88 | ↓ | 101 runtime checks pass; CANON-054 is explicitly deferred and Obelisk remains incomplete. |
+| Security Posture | 75 | ↓ | Scheduler and supply-chain repairs verified; historical remediation and full rotation evidence remain unresolved. |
+| Ecosystem Integration | 80 | ↓ | Deployment and repo mirrors align; canonical cost, mailbox and Obelisk integration remain open. |
+| Capital Efficiency | 80 | ↓ | Reused tooling and one-build promotion; no paid API invoked, but runway/cache/expense evidence is not complete. |
+| Automation Coverage | 94 | ↓ | Automated exact promotion and safe secret sync verified; independent external proofs remain outstanding. |
+| **Total** | **860 / 1000** | | Evidence calibration; no retroactive change to historical scores. |
+
+**Top win:** exact staged-release identity now gates real production promotion, while unauthorized scheduled work fails before side effects.
+
+**Top gap:** external product/identity/payment/remediation/cost proofs and a real public-stats producer remain incomplete.
+
+**Intent outcome:** Achieved for all seven selected outcomes and technical deployment. FORGE/HOLD remains unchanged.
+
+**Brainstorm:** reuse the exact-origin/staging contract across release tooling; keep Edge and frontend verification dependency graphs isolated. These are transportable patterns, not authorization for added implementation.
+
+**Committed follow-up(s):** CANON-054 real stats feed; Zoho/Obelisk proofs; remaining production lifecycle and remediation criteria already on TASK_BOARD.

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "session": 131,
+  "verifiedAt": "2026-09-30T04:29:55.914Z",
+  "ok": true,
+  "commit": "be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8",
+  "contentDigest": "69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93",
+  "indexSha256": "e14285b6db1bac2c2608bf8b041522a522802452961dc847a72a9084cd529d5a",
+  "staging": {
+    "origin": "https://staging.promogrind.bet",
+    "ok": true,
+    "status": 200,
+    "missingHeaders": [],
+    "releaseVerified": true,
+    "commit": "be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8",
+    "contentDigest": "69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93",
+    "indexSha256": "e14285b6db1bac2c2608bf8b041522a522802452961dc847a72a9084cd529d5a"
+  },
+  "production": {
+    "origin": "https://promogrind.bet",
+    "ok": true,
+    "status": 200,
+    "missingHeaders": [],
+    "releaseVerified": true,
+    "commit": "be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8",
+    "contentDigest": "69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93",
+    "indexSha256": "e14285b6db1bac2c2608bf8b041522a522802452961dc847a72a9084cd529d5a"
+  },
+  "releaseRunUrl": "https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501"
+}

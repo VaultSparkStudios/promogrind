@@ -62,6 +62,12 @@
       "forecast": 999,
       "recordedAt": "2026-08-07",
       "actual": null
+    },
+    {
+      "forSession": 132,
+      "forecast": 776,
+      "recordedAt": "2026-09-30",
+      "actual": null
     }
   ]
 }
