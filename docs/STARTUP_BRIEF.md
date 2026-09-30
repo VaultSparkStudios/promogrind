@@ -66,10 +66,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  █████████████████░░░░░░░   69% used                         ║
-║    179,024 / 258,400 tok  ·  codex/codex-272k  ·  measured     ║
-║    ~89,512 tok/turn  ·  cache 50%  ·  0 turns to compact       ║
-║    Verdict: WARN_COMPACT_SOON  ← act now                       ║
+║ ✓  ██████████████░░░░░░░░░░   57% used                         ║
+║    113,919 / 200,000 tok  ·  unknown  ·  heuristic-stale       ║
+║    Verdict: CONTINUE                                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
@@ -97,7 +96,7 @@
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
 ║  Snapshot: 1h old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 298 drained · 1h old · sig failures 0                      ║
+║  Ark: 298 drained · 2h old · sig failures 0                      ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 

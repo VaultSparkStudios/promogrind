@@ -742,3 +742,8 @@ Append chronological entries.
 - Deno isolation and LF/CRLF FAQ verification repairs prevent checks from mutating dependencies or disagreeing across CI.
 - Public-shim fallbacks used for absent private tooling. SPARKED remains HOLD; CANON-054 and stale revenue evidence remain explicit follow-ups.
 - Closeout scoring recalibrates previously perfect assertions against measured product, security, cost and ecosystem evidence; old scores are unchanged.
+
+### S131 closeout verification follow-up
+
+- The closeout commit exposed a forecast test that required every live score prediction to exceed 900. Replaced that unjustified floor with complete-input, bounded-category, aggregate-total, low-score and legitimate-zero checks. The evidence-calibrated SIL score remains 860/1000.
+- Full frontend recheck passes 104/104 files and 716/716 assertions; the final main commit proceeds through the same CI and exact staging-to-production workflow.

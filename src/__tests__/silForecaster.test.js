@@ -28,15 +28,23 @@ ${CATS}
     expect(sessions[0]).toMatchObject({ session: 90, total: 900, complete: true });
   });
 
-  it("uses the newest complete live ledger and never emits a partial zero forecast", () => {
+  it("uses complete ledger evidence without imposing a minimum project score", () => {
     const live = fs.readFileSync(new URL("../../context/SELF_IMPROVEMENT_LOOP.md", import.meta.url), "utf8");
     const sessions = parseSilHistory(live);
     expect(sessions[0].session).toBe(Math.max(...sessions.map((session) => session.session)));
     expect(sessions[0].session).toBeGreaterThanOrEqual(115);
     expect(sessions[0].complete).toBe(true);
     const liveForecast = forecastNext(sessions);
-    expect(liveForecast?.totalPredicted).toBeGreaterThanOrEqual(900);
-    expect(liveForecast?.totalPredicted).toBeLessThanOrEqual(1000);
+    expect(liveForecast).not.toBeNull();
+    expect(Object.keys(liveForecast.categories)).toEqual(CATEGORIES);
+    const predictions = Object.values(liveForecast.categories).map(({ predicted }) => predicted);
+    expect(predictions.every((value) => Number.isInteger(value) && value >= 0 && value <= 100)).toBe(true);
+    expect(liveForecast.totalPredicted).toBe(predictions.reduce((sum, value) => sum + value, 0));
+    expect(liveForecast.basis).toBe(sessions.filter(({ complete }) => complete).length);
+    // Low scores are valid evidence; only an incomplete record must be refused.
+    const complete = (score) => ({ complete: true, categories: Object.fromEntries(CATEGORIES.map((name) => [name, score])) });
+    expect(forecastNext([complete(40)]).totalPredicted).toBe(400);
+    expect(forecastNext([complete(0)])).toMatchObject({ totalPredicted: 0, basis: 1 });
     expect(forecastNext([{ categories: { "Dev Health": 100 }, complete: false }])).toBeNull();
   });
 });
