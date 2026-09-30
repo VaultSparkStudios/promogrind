@@ -35,6 +35,7 @@ export const AppFooter = () => (
       <p style={{ fontSize: 10, color: K.mt, marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", lineHeight: 1.8 }}>
         <span>© 2026 <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ ...footerLinkStyle, color: "inherit" }}>VaultSpark Studios LLC</a>. All rights reserved.</span>
         <a href="/" style={footerLinkStyle}>Home</a>
+        <a href="/stats" style={footerLinkStyle}>Stats</a>
         <a href="/#/knowledge-base" style={footerLinkStyle}>Learn</a>
         <a href="/#/upgrade" style={footerLinkStyle}>Pricing</a>
         <a href="/dashboard" style={footerLinkStyle}>Open App</a>

@@ -747,3 +747,13 @@ Append chronological entries.
 
 - The closeout commit exposed a forecast test that required every live score prediction to exceed 900. Replaced that unjustified floor with complete-input, bounded-category, aggregate-total, low-score and legitimate-zero checks. The evidence-calibrated SIL score remains 860/1000.
 - Full frontend recheck passes 104/104 files and 716/716 assertions; the final main commit proceeds through the same CI and exact staging-to-production workflow.
+
+## S132 — Public statistics continuation (2026-09-30)
+
+Prepared the SQL aggregate source, authenticated publisher, daily activation plan, homepage tile, detailed stats page and agent discovery. Read-only live source verification succeeded. Full app run: 721 assertions; added service-worker regression passed with its 12-test group; Edge: 69 assertions, 16 entrypoints; build, route integrity, public artifact, bundle and changed-code secret checks passed. Forty reviewed captures pass CANON-053 with source hashes. No S132 deployment, Vault write or new schedule was activated. Local skill-brief renderer is absent; manual sprint summary used under the public-repo shim. Broad secret scan had two low-confidence matches in an ignored pre-existing diagnostics path; changed source scans and strict publication scan were clean. Local dev and test jobs closed.
+
+### S132 activation and release verification
+
+After explicit approval, deployed the bounded migration and publisher, verified the initial public artifact and activated the 06:17 UTC daily job with encrypted credential storage. The current runtime uses the modern project secret; exact-match GET/405 discovery resolved a legacy-key 401 without relaxing authorization. Public read succeeds; browser RPC/write access is denied; three forged/missing publisher requests return handler 401. See `audits/public-stats-s132.json`. Recurring execution remains unobserved.
+
+Independent review corrected timestamp claims and updated Edge discovery counts. Recaptured and inspected all 36 changed states; 40 before/after images pass the hash-bound visual gate. Full `verify:launch-local` exits 0: 105 files / 722 app assertions, 16 Edge entrypoints / 69 assertions, browser/build/integrity/privacy/publication checks green. Supply-chain scan has zero blocks and three existing lifecycle-script review entries; no dependencies changed. Commit-bound site promotion and live browser delivery remain the final release checks. FORGE and separate launch-proof holds remain unchanged.

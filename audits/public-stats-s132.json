@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "session": "S132",
+  "verifiedAt": "2026-09-30T15:20:30.964Z",
+  "target": "fjnpzjjyhnpmunfoycrp",
+  "ok": true,
+  "access": {
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": true,
+    "storage_rls": true,
+    "storage_write_policies": 1,
+    "schedule": [
+      {
+        "active": true,
+        "jobname": "promogrind-public-stats-daily",
+        "schedule": "17 6 * * *"
+      }
+    ],
+    "publicStatsBrowserWritesAllowed": false
+  },
+  "rejected": [
+    {
+      "scenario": "missing",
+      "status": 401,
+      "handlerRejected": true
+    },
+    {
+      "scenario": "forged-bearer",
+      "status": 401,
+      "handlerRejected": true
+    },
+    {
+      "scenario": "forged-cron",
+      "status": 401,
+      "handlerRejected": true
+    }
+  ],
+  "artifact": {
+    "publicReadStatus": 200,
+    "generatedAt": "2026-09-30T15:12:33.954Z",
+    "metrics": 3,
+    "completeWeeks": 4
+  },
+  "initialPublicationVerified": true,
+  "recurringExecutionObserved": false
+}

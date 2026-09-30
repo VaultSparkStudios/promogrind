@@ -185,4 +185,5 @@
   <url><loc>https://promogrind.bet/the-grind/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://promogrind.bet/creator-program/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
+  <url><loc>https://promogrind.bet/stats</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

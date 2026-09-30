@@ -929,3 +929,9 @@ Impact: Future closeouts can call the expected script names without failing on m
 - CANON-054 STRONG deferral: a public stats surface requires verified aggregates and a maintained refresh producer; do not fabricate usage metrics merely to clear adoption. Remain FORGE and retain the explicit task.
 - Technical deployment authorization does not satisfy SPARKED/public-launch approval or incomplete external proofs. Existing launch holds remain.
 - S130 was committed previously without a complete SIL closeout. S131 recovers continuity; it does not backfill an invented score.
+
+## S132 — Public statistics release candidate
+
+Use three meaningful saved-workflow metrics with four non-overlapping weekly periods, definitions and privacy bands. Do not add vanity counters solely to satisfy a metric-count heuristic. The stats surface remains pending deployment and recurring-job evidence; identity and release-surface conformance gaps do not become passes from local implementation. Existing launch holds remain in force.
+
+The daily 06:17 UTC publisher and encrypted credential storage were explicitly approved and activated. Initial publication is verified separately from future recurring runs. Match the existing project service key to the deployed exact-match guard; never infer that the legacy JWT is the current runtime credential. Workflow dates are app-supplied and history dates remain owner-editable; report them as record timestamps rather than trusted server receipt times.

@@ -1,24 +1,44 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-30T03:50:02.201Z",
+  "capturedAt": "2026-09-30T15:19:30.709Z",
   "themes": [
     "dark",
     "light"
   ],
   "captures": [
     {
-      "file": "captures/s131-before-production-landing-top-desktop-dark.png",
-      "page": "before-production: / — top",
-      "theme": "dark",
+      "file": "s132/before-landing-mobile-light.png",
+      "page": "/ — before stats implementation (production)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "cd7517132c2f1ea2cfad9d0dad9d6d7bc2d0d5cb4fb3879e9eff4bde81cac8b6"
+    },
+    {
+      "file": "s132/before-landing-desktop-light.png",
+      "page": "/ — before stats implementation (production)",
+      "theme": "light",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "7a0f1cbb0a8d21897402c9b2e7882aafe2e07b813bb5a298c4d4488c2823f43b"
+      "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
     },
     {
-      "file": "captures/s131-before-production-landing-footer-desktop-dark.png",
-      "page": "before-production: / — footer",
+      "file": "s132/before-landing-mobile-dark.png",
+      "page": "/ — before stats implementation (production)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "1dfbcdd2da9c9ce3966fed4ca62246b0f8ca459cd66e62d0664e95692a5c7e90"
+    },
+    {
+      "file": "s132/before-landing-desktop-dark.png",
+      "page": "/ — before stats implementation (production)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
@@ -27,575 +47,416 @@
       "sha256": "34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d"
     },
     {
-      "file": "captures/s131-before-production-pricing-top-desktop-dark.png",
-      "page": "before-production: /pricing — top",
+      "file": "s132/after-home-source-dark-1440-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "31001096dcb777917235e78e8e9e1e5c808b41716272d5a75f4a10f5a0d79266"
+      "sha256": "6000c3395436e9c72df2fe9573f10ccf0a21cb82983bc7354084a59a550ce80e"
     },
     {
-      "file": "captures/s131-before-production-pricing-plans-desktop-dark.png",
-      "page": "before-production: /pricing — plans",
+      "file": "s132/after-home-source-dark-1440-1.png",
+      "page": "/ source footer (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "8f150cf8d153b5126ee7ff5c36bd47c2fbbf00b735c7447ccc6c8b89cdbb66cc"
+      "sha256": "6000c3395436e9c72df2fe9573f10ccf0a21cb82983bc7354084a59a550ce80e"
     },
     {
-      "file": "captures/s131-before-production-pricing-house-desktop-dark.png",
-      "page": "before-production: /pricing — house",
+      "file": "s132/after-stats-source-dark-1440-0.png",
+      "page": "/stats source nav (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "88bedb0db1a4701f5905308542bd1919fbdf66d71274a775eb76f8b4e483f44d"
+      "sha256": "ed52bee805157597bec4512197aaa4dcc5e0e5feffcdd12381895c318a684cb1"
     },
     {
-      "file": "captures/s131-before-production-landing-top-desktop-light.png",
-      "page": "before-production: / — top",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "155618dcb67a64c05289c6302290221bad28c38824f0d9d736f2ac967102d6bd"
-    },
-    {
-      "file": "captures/s131-before-production-landing-footer-desktop-light.png",
-      "page": "before-production: / — footer",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-top-desktop-light.png",
-      "page": "before-production: /pricing — top",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "9e8cc18944a4d1c120e5f984a63ca59115ea0433e57827f8f100356931d1dedb"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-plans-desktop-light.png",
-      "page": "before-production: /pricing — plans",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "8f41b33f96692e71d7879e82bf8df1bc84189f0c01f7d4bd59b1038ad53dc2b8"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-house-desktop-light.png",
-      "page": "before-production: /pricing — house",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "90d61b037898eda3cee43e0c4d59657096945baa4b83c8e22833d932e81704e0"
-    },
-    {
-      "file": "captures/s131-before-production-landing-top-mobile-dark.png",
-      "page": "before-production: / — top",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "599934b577f203617ac1b0fce0a1685b5fe0477a344221b6ef115d120e56af48"
-    },
-    {
-      "file": "captures/s131-before-production-landing-footer-mobile-dark.png",
-      "page": "before-production: / — footer",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "6abd3433e9b00adc5f4b69eeaf0bd0001ef27743d40036421fecfc36a9d7291f"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-top-mobile-dark.png",
-      "page": "before-production: /pricing — top",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "70b6197d6a678779b7a42ccb5fad5a065ce44119af8dfda7a3283a4be608d47a"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-plans-mobile-dark.png",
-      "page": "before-production: /pricing — plans",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "7b3e3ac58d73eb9ef6ba9fa402ef425e42c985ce7ac74d575da486fb56071eae"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-house-mobile-dark.png",
-      "page": "before-production: /pricing — house",
-      "theme": "dark",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "2a51515499676ff5becf1e1c303019e015942df8275c0d91d6ec81959bb8aee4"
-    },
-    {
-      "file": "captures/s131-before-production-landing-top-mobile-light.png",
-      "page": "before-production: / — top",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "eb53bd65acc2fdf588fce58cfb6c3287e48ff7f3dafba35df7b6710f41083817"
-    },
-    {
-      "file": "captures/s131-before-production-landing-footer-mobile-light.png",
-      "page": "before-production: / — footer",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "854173ab25d55611c99e94c809e3ce073a0299caf4c72b5120954d1c7dbf7610"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-top-mobile-light.png",
-      "page": "before-production: /pricing — top",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "5435815099c22406ac8fcb9303cdf659c05724e445225e403c8ab606a8e78d06"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-plans-mobile-light.png",
-      "page": "before-production: /pricing — plans",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "52bbda68be26047975866ce5f160753a52fa8c3cf5d51f0b0ed0051fb4395ffa"
-    },
-    {
-      "file": "captures/s131-before-production-pricing-house-mobile-light.png",
-      "page": "before-production: /pricing — house",
-      "theme": "light",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "sha256": "a03dee1f90055111ad57ef3fd26cf5553827a1d481a689187c4461de41378d21"
-    },
-    {
-      "file": "captures/s131-after-staging-landing-top-desktop-dark.png",
-      "page": "after-staging: / — top",
+      "file": "s132/after-stats-source-dark-1440-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "c9e2f13bc924db0b8d012bcf2512ae87db7af70d81fc1165bb127d2d2e0a753d"
+      "sha256": "91239a2853dfb12b0d5003b62e6010ca886a2e7a1984853a1c2c5635b90672c2"
     },
     {
-      "file": "captures/s131-after-staging-landing-footer-desktop-dark.png",
-      "page": "after-staging: / — footer",
+      "file": "s132/after-stats-source-dark-1440-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "4e051c148291e73535083362ee5737477ce6085bb0f2d92a9ede582f06bf3fe0"
+      "sha256": "e37c1974c7e803e3166ccd787dda51693eee34fd4bb47a46ca6ceeef23e428e4"
     },
     {
-      "file": "captures/s131-after-staging-pricing-top-desktop-dark.png",
-      "page": "after-staging: /pricing — top",
+      "file": "s132/after-stats-source-dark-1440-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "bff26d3cfc3516e5297c845cf5d3052a62b883947d8717acee12465af07a0a0e"
+      "sha256": "9bca030334d0e29e67b43fc43970e5c0e0a547d8d35256589e1f9213407a4797"
     },
     {
-      "file": "captures/s131-after-staging-pricing-plans-desktop-dark.png",
-      "page": "after-staging: /pricing — plans",
+      "file": "s132/after-stats-stale-dark-1440-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "0366023a05747e236a3cf0d85cba6c216304476f6873dfeae9b288529e9663d8"
+      "sha256": "d0c3fb8a3be84eb71e36ecdf8ecf9bca0ff7348c5eeb68016add144292ece67d"
     },
     {
-      "file": "captures/s131-after-staging-pricing-house-desktop-dark.png",
-      "page": "after-staging: /pricing — house",
+      "file": "s132/after-stats-unavailable-dark-1440-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
       "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "d3dfef9974118ef0c1a058a90c5217dbe59e10701a42bf11fee3e1c97187e866"
+      "sha256": "bcbad40e4e7004e71b95ca7aeca0aca0c8f4cd1c9a9618bf39a4b308fccf5d63"
     },
     {
-      "file": "captures/s131-after-staging-landing-top-desktop-light.png",
-      "page": "after-staging: / — top",
-      "theme": "light",
+      "file": "s132/after-stats-privacy-dark-1440-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "sha256": "155618dcb67a64c05289c6302290221bad28c38824f0d9d736f2ac967102d6bd"
+      "sha256": "0c3dbf273a689c6b2b70a7d3cbeb1f3460fa925d4dd2fcd1b5c06632709ddf7b"
     },
     {
-      "file": "captures/s131-after-staging-landing-footer-desktop-light.png",
-      "page": "after-staging: / — footer",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
-    },
-    {
-      "file": "captures/s131-after-staging-pricing-top-desktop-light.png",
-      "page": "after-staging: /pricing — top",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "21daf30acc902ddc71061785d69d6a95d1af2fd6a77ed649f6d658e4bef9c2cf"
-    },
-    {
-      "file": "captures/s131-after-staging-pricing-plans-desktop-light.png",
-      "page": "after-staging: /pricing — plans",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "71c4615b1e756488117acac55da0196835d3acf9529bfc9e75680c691ebdcd2e"
-    },
-    {
-      "file": "captures/s131-after-staging-pricing-house-desktop-light.png",
-      "page": "after-staging: /pricing — house",
-      "theme": "light",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "sha256": "c6a7e0189065dc501754e8391e8749b20db9a8e969b7309becaaa5f6418c5b5b"
-    },
-    {
-      "file": "captures/s131-after-staging-landing-top-mobile-dark.png",
-      "page": "after-staging: / — top",
+      "file": "s132/after-home-source-dark-390-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "599934b577f203617ac1b0fce0a1685b5fe0477a344221b6ef115d120e56af48"
+      "sha256": "1b1a2e16c98283f1421baba5a0e4bf55a982393a58b39ecdc6b309b09ebc06bd"
     },
     {
-      "file": "captures/s131-after-staging-landing-footer-mobile-dark.png",
-      "page": "after-staging: / — footer",
+      "file": "s132/after-home-source-dark-390-1.png",
+      "page": "/ source footer (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "6abd3433e9b00adc5f4b69eeaf0bd0001ef27743d40036421fecfc36a9d7291f"
+      "sha256": "0bad92b3ef5ef257c18455a36aa6a8a64ad6dee2da4b60d68f1aacc3fcfada60"
     },
     {
-      "file": "captures/s131-after-staging-pricing-top-mobile-dark.png",
-      "page": "after-staging: /pricing — top",
+      "file": "s132/after-stats-source-dark-390-0.png",
+      "page": "/stats source nav (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "70b6197d6a678779b7a42ccb5fad5a065ce44119af8dfda7a3283a4be608d47a"
+      "sha256": "fc3890e5bdf3504d8b9116c868c613b9ea8cb4bada8de3618b688c844e17f502"
     },
     {
-      "file": "captures/s131-after-staging-pricing-plans-mobile-dark.png",
-      "page": "after-staging: /pricing — plans",
+      "file": "s132/after-stats-source-dark-390-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "326357886c457baa5e0a18468be69703ecb40476daf7cbf8bddabac97200e861"
+      "sha256": "2ac736e44408680343ac6fef20162e953fc78240f0689b6a4ffc0db4cc5cef14"
     },
     {
-      "file": "captures/s131-after-staging-pricing-house-mobile-dark.png",
-      "page": "after-staging: /pricing — house",
+      "file": "s132/after-stats-source-dark-390-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
       "theme": "dark",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "5be9d1cc6153ec50a021ac7934738c3bc82f82557fda683e2743e046183d0da2"
+      "sha256": "35f66cebaf4b5c86f30fcf3f7a2cfac161610a4871c682ea67961d06dd709dc3"
     },
     {
-      "file": "captures/s131-after-staging-landing-top-mobile-light.png",
-      "page": "after-staging: / — top",
+      "file": "s132/after-stats-source-dark-390-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "946b5e4fb6c8a1d9cd3c66cc27550dca3061eabfc4e955fd42e0abd0e8036808"
+    },
+    {
+      "file": "s132/after-stats-stale-dark-390-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "88da838ded16f3414a56a0185b036183047bd11e65e27c0266571acf67d49468"
+    },
+    {
+      "file": "s132/after-stats-unavailable-dark-390-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "cb0464054d88569292dc11572dc19c3d1fdb8d1ffa248237fb523e61817a6581"
+    },
+    {
+      "file": "s132/after-stats-privacy-dark-390-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "35748542ad8647aefdd89c681c779c585b34ab3170de2d36fe55311e1fa52049"
+    },
+    {
+      "file": "s132/after-home-source-light-1440-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "f253ec660ee90c385e678757c71e9c41e97aad3b4d757f1e4cf119618ffe3920"
+    },
+    {
+      "file": "s132/after-home-source-light-1440-1.png",
+      "page": "/ source footer (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "f253ec660ee90c385e678757c71e9c41e97aad3b4d757f1e4cf119618ffe3920"
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-0.png",
+      "page": "/stats source nav (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "df95127cd2510ed44fea23a51443df4ea5ee37158e85e6600a2ee1b04809b0a2"
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "35e08ca934a099a62f851de813ef38624733d0feb7922abdc4b61ce2ec5fed26"
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "8bd7a2dfa023278642a3fd92a5951bc1fdb94c979aee9759947474d1ca39a6a6"
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "0d9a6826580fc935155bdbd34235ab8a202ac2d9f78ec22fbca600708d4b8166"
+    },
+    {
+      "file": "s132/after-stats-stale-light-1440-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "89ad660bf63f69b2456ca7524b8945e47528384930c8dbdaebfbebcd23e8a106"
+    },
+    {
+      "file": "s132/after-stats-unavailable-light-1440-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "f7918ac6c7c7cd6b366a421c8a0627237cc0093cd75f604a2cb28f81e171958f"
+    },
+    {
+      "file": "s132/after-stats-privacy-light-1440-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "179aea600dfe50926feaf74dd23586d71ccef97b715ca54f8793b642187df8af"
+    },
+    {
+      "file": "s132/after-home-source-light-390-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "eb53bd65acc2fdf588fce58cfb6c3287e48ff7f3dafba35df7b6710f41083817"
+      "sha256": "55fccdd961ae0ede98b5e01062c6f118db6193707bc866d81629078a5188ea96"
     },
     {
-      "file": "captures/s131-after-staging-landing-footer-mobile-light.png",
-      "page": "after-staging: / — footer",
+      "file": "s132/after-home-source-light-390-1.png",
+      "page": "/ source footer (actual aggregate query)",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "854173ab25d55611c99e94c809e3ce073a0299caf4c72b5120954d1c7dbf7610"
+      "sha256": "69e3e268180d0e4048795a45b86cf70d705c275266b67a540365fe9171932150"
     },
     {
-      "file": "captures/s131-after-staging-pricing-top-mobile-light.png",
-      "page": "after-staging: /pricing — top",
+      "file": "s132/after-stats-source-light-390-0.png",
+      "page": "/stats source nav (actual aggregate query)",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "5435815099c22406ac8fcb9303cdf659c05724e445225e403c8ab606a8e78d06"
+      "sha256": "60a5802ef8c57b0044314763e34dd6a80714116fd0480b153bea42ff439066c4"
     },
     {
-      "file": "captures/s131-after-staging-pricing-plans-mobile-light.png",
-      "page": "after-staging: /pricing — plans",
+      "file": "s132/after-stats-source-light-390-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "568eaa5ee598645e9e9c523ddbe9d9cc17a37af9617c314ec0c1cbddccca1e56"
+      "sha256": "0f9dac46c77f288e97bb245033b69e8df4c731b653edc1a26d3c128c7a1120f4"
     },
     {
-      "file": "captures/s131-after-staging-pricing-house-mobile-light.png",
-      "page": "after-staging: /pricing — house",
+      "file": "s132/after-stats-source-light-390-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
       "theme": "light",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "sha256": "07304c6a07bdf38b54fb5db34effa4d5c225e63f1af6ac325bfed89482226598"
+      "sha256": "13cb9ba1d75315b0df40739653b340fb72373296f5063b39accd36cbe98d27f5"
+    },
+    {
+      "file": "s132/after-stats-source-light-390-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "2fcec6758df4e4ddf4d18459e78358fd75fb34a8798f8c48c95549bfcb1f4168"
+    },
+    {
+      "file": "s132/after-stats-stale-light-390-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "67f13e357f8889c726af56625db6c65548d1375ad9a5f749170b1acdc92e9302"
+    },
+    {
+      "file": "s132/after-stats-unavailable-light-390-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "a1d033a386633f97625f43af2cd805d44bae3b4cf6b5e8ae99bfd45cbf22cbfc"
+    },
+    {
+      "file": "s132/after-stats-privacy-light-390-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "8f91d96ae1928951f13e49b62f481d93a76c25df388f47e0faaec5e638702f60"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex via view_image: all 20 production before and all 20 staging after PNG captures",
+    "reviewer": "Codex",
+    "blockingDefectsOpen": 0,
     "findings": [
-      "The staged landing hero and legal footer preserve the production layout in dark and light themes at 1440x1000 and 390x844; captured states show no horizontal document overflow.",
-      "Staged pricing plan names, prices and availability marks are readable in both themes; desktop cards and mobile stacked cards preserve their structure and planned-checkout labels.",
-      "The House contact control uses contrasting ink in both themes and remains visible on desktop and mobile.",
-      "All five plan-title colors measured from staging clear 4.5:1 on their rendered card backgrounds: minimum 5.08:1 in dark and 6.12:1 in light.",
-      "The service worker freshness change is behavior-tested separately; visual captures intentionally bypass service workers to inspect the deployed artifact."
+      "Inspected all 36 after captures in four labelled contact sheets and enlarged representative desktop/mobile images; all four before captures inspected directly.",
+      "Responsive cards stack at 390px and form three columns at 1440px, without horizontal overflow. Navigation, theme button, weekly history, definitions and footer remain readable in both themes.",
+      "Observed-zero report uses a real read-only aggregate query against the pinned database. Stale, unavailable and suppressed states use explicitly isolated browser fixtures, never deployed data.",
+      "Stale and unavailable notices are visible in amber. Unavailable removes numeric cards; privacy suppression displays Private rather than zero. Every displayed numeric cell includes its source timestamp."
     ],
     "fixesApplied": [
-      "Replaced static pricing text accents with the existing semantic theme palette for titles, prices, availability marks and active checkout text; preserved decorative tier badges and borders.",
-      "Changed the House contact button to a semantic accent background and theme-appropriate contrasting ink.",
-      "Made same-origin extensionless navigation network-first with offline cached fallback, preventing previously cached HTML from hiding releases."
+      "Resolve shared palette colors at render time so light theme does not retain dark card or link colors.",
+      "Disable smooth scrolling in capture navigation so intended sections are actually visible."
     ],
-    "blockingDefectsOpen": 0,
-    "coverage": "Landing top/footer and pricing top/plan/House states; not a claim that every application screen was reviewed.",
-    "beforeManifest": "S131-before-production.json",
-    "afterManifest": "S131-after-staging.json",
-    "beforeCapturedAt": "2026-09-30T03:42:11.508Z",
-    "afterCapturedAt": "2026-09-30T03:47:54.116Z",
     "beforeOrigin": "https://promogrind.bet",
-    "afterOrigin": "https://staging.promogrind.bet",
-    "releaseCandidate": "working-tree-s131",
+    "afterOrigin": "http://127.0.0.1:5175",
+    "releaseCandidate": "working-tree-s132",
     "sourceHashes": [
       {
-        "file": "public/sw.js",
-        "sha256": "e854da518821bceba2287a95e2010f0dc983ccf6c311fee90e6d5c1064463ae4"
+        "file": "src/App.jsx",
+        "sha256": "1bd09a1937855bb5fa903e5acfdb3c851291b22f26010aaac30bc1984c2c0463"
       },
       {
-        "file": "src/components/PricingPage.jsx",
-        "sha256": "1ea960b6a5a5339237cc12e8cc7405a08ffe70237b4df3af29fcb42726c43b7b"
-      }
-    ],
-    "contrastEvidence": {
-      "measuredFrom": "Live Chromium getComputedStyle captured in phase manifests; repository contrastRatio function",
-      "titleThreshold": 4.5,
-      "before": {
-        "dark": [
-          {
-            "label": "Free Agent",
-            "foreground": "rgb(100, 116, 139)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 3.5493113411730435
-          },
-          {
-            "label": "Scout",
-            "foreground": "rgb(6, 182, 212)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 6.957015950281667
-          },
-          {
-            "label": "Runner",
-            "foreground": "rgb(245, 158, 11)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 7.864649668978165
-          },
-          {
-            "label": "Closer",
-            "foreground": "rgb(34, 197, 94)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 7.412685614316067
-          },
-          {
-            "label": "The House",
-            "foreground": "rgb(168, 85, 247)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 4.26885842178738
-          }
-        ],
-        "light": [
-          {
-            "label": "Free Agent",
-            "foreground": "rgb(100, 116, 139)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 4.343923406321176
-          },
-          {
-            "label": "Scout",
-            "foreground": "rgb(6, 182, 212)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 2.2161709447595226
-          },
-          {
-            "label": "Runner",
-            "foreground": "rgb(245, 158, 11)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 1.9604098415290256
-          },
-          {
-            "label": "Closer",
-            "foreground": "rgb(34, 197, 94)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 2.0799393652236158
-          },
-          {
-            "label": "The House",
-            "foreground": "rgb(168, 85, 247)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 3.6117235775618126
-          }
-        ]
+        "file": "src/app/AppChrome.jsx",
+        "sha256": "bbef48a5e5b04a023b853338b5cd2cf92a92161517f69e8a6b51abd00081e5e7"
       },
-      "after": {
-        "dark": [
-          {
-            "label": "Free Agent",
-            "foreground": "rgb(122, 143, 168)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 5.084822986423089
-          },
-          {
-            "label": "Scout",
-            "foreground": "rgb(96, 165, 250)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 6.643511642087772
-          },
-          {
-            "label": "Runner",
-            "foreground": "rgb(251, 191, 36)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 10.117994230422076
-          },
-          {
-            "label": "Closer",
-            "foreground": "rgb(74, 222, 128)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 9.693107262446436
-          },
-          {
-            "label": "The House",
-            "foreground": "rgb(192, 132, 252)",
-            "background": "rgb(22, 29, 42)",
-            "fontSize": "11px",
-            "ratio": 6.392256477156749
-          }
-        ],
-        "light": [
-          {
-            "label": "Free Agent",
-            "foreground": "rgb(71, 85, 105)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 6.916973995632248
-          },
-          {
-            "label": "Scout",
-            "foreground": "rgb(29, 78, 216)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 6.117310096538619
-          },
-          {
-            "label": "Runner",
-            "foreground": "rgb(146, 64, 14)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 6.47187312881587
-          },
-          {
-            "label": "Closer",
-            "foreground": "rgb(22, 101, 52)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 6.508624515671688
-          },
-          {
-            "label": "The House",
-            "foreground": "rgb(126, 34, 206)",
-            "background": "rgb(241, 245, 249)",
-            "fontSize": "11px",
-            "ratio": 6.374417346556567
-          }
-        ]
+      {
+        "file": "src/routes/LandingRoute.jsx",
+        "sha256": "1552fd184ac1511b749933c67c577f1e5ce7a6c212e7ce8f76d89076a1b01987"
+      },
+      {
+        "file": "src/routes/StatsRoute.jsx",
+        "sha256": "3b5554bccb07617f788a0ad274ad6000a24171da2ddd64fd65799f07aae7c0d7"
+      },
+      {
+        "file": "src/components/PublicStats.jsx",
+        "sha256": "29732f3a591644cea97aa83f8e4e01d0c4e668934deff99cbe197b04962c460c"
+      },
+      {
+        "file": "src/lib/publicStats.js",
+        "sha256": "89101b5297232093208422dd2ff8765d7b5ccc3f7f0265e00312545bc7371d77"
+      },
+      {
+        "file": "public/sw.js",
+        "sha256": "9f28670c465600b511a6415caeb652938a59c7052d2c76eb3d8c59b461453e8b"
+      },
+      {
+        "file": "supabase/functions/_shared/public-stats.ts",
+        "sha256": "0240fb7f0f3102056c9c9ef683a1a645e742457b1ea3ac0a9a57ed6fcd6e30b7"
       }
-    }
+    ]
   }
 }

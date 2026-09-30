@@ -5,6 +5,7 @@ import { loadData, saveData, readSyncDiagnostics, triggerQueueFlush } from "./sy
 import { flagCalcUsed } from "./lib/missions.js";
 import { toD, toA, toP, toF, f, calcROI, bestOdds, calcBonus, calcFirst, calcBoost, calcArb2, calcArb3, calcNV, calcNV3, calcEV, calcPH, calcMid, calcRO, calcDeposit, calcKelly, calcInsurance, calcTeaser, calcRR, calcParlay, calcSGP, calcHold, sensitivityBonus, sensitivityBoost, sensitivityFirst, KD, KL, K, font, fontD } from "./lib/shared.js";
 import SensitivityChip from "./components/SensitivityChip.jsx";
+const StatsRoute = React.lazy(() => import('./routes/StatsRoute.jsx'));
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
 import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
@@ -215,6 +216,9 @@ export default function App() {
     return () => window.removeEventListener("pg:quick-calc", handler);
   }, [navigate]);
   useEffect(() => { tabMemory.current[gi] = ti; }, [gi, ti]);
+  if (pathname === '/stats' || pathname === '/stats/') {
+    return <Suspense fallback={<div style={{ padding: 32 }}>Loading statistics…</div>}><StatsRoute darkMode={darkMode} toggleTheme={toggleTheme} /></Suspense>;
+  }
   if (pathname.startsWith("/land/")) {
     return (
       <Suspense fallback={<div style={{ padding: 32, textAlign: "center" }}><LoadingState /></div>}>

@@ -1,56 +1,56 @@
 # Release Parity Evidence
 
-> Generated from typed receipts: 2026-09-30T03:50:02.201Z · visual inspected · defects 0
+> Generated from typed receipts: 2026-09-30T15:19:30.709Z · visual inspected · defects 0
 
 ## Browser matrix
 
 | Viewport | Theme | Artifact | SHA-256 |
 |---|---|---|---|
-| 1440 × 1000 | dark | `captures/s131-before-production-landing-top-desktop-dark.png` | `7a0f1cbb0a8d21897402c9b2e7882aafe2e07b813bb5a298c4d4488c2823f43b` |
-| 1440 × 1000 | dark | `captures/s131-before-production-landing-footer-desktop-dark.png` | `34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d` |
-| 1440 × 1000 | dark | `captures/s131-before-production-pricing-top-desktop-dark.png` | `31001096dcb777917235e78e8e9e1e5c808b41716272d5a75f4a10f5a0d79266` |
-| 1440 × 1000 | dark | `captures/s131-before-production-pricing-plans-desktop-dark.png` | `8f150cf8d153b5126ee7ff5c36bd47c2fbbf00b735c7447ccc6c8b89cdbb66cc` |
-| 1440 × 1000 | dark | `captures/s131-before-production-pricing-house-desktop-dark.png` | `88bedb0db1a4701f5905308542bd1919fbdf66d71274a775eb76f8b4e483f44d` |
-| 1440 × 1000 | light | `captures/s131-before-production-landing-top-desktop-light.png` | `155618dcb67a64c05289c6302290221bad28c38824f0d9d736f2ac967102d6bd` |
-| 1440 × 1000 | light | `captures/s131-before-production-landing-footer-desktop-light.png` | `73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab` |
-| 1440 × 1000 | light | `captures/s131-before-production-pricing-top-desktop-light.png` | `9e8cc18944a4d1c120e5f984a63ca59115ea0433e57827f8f100356931d1dedb` |
-| 1440 × 1000 | light | `captures/s131-before-production-pricing-plans-desktop-light.png` | `8f41b33f96692e71d7879e82bf8df1bc84189f0c01f7d4bd59b1038ad53dc2b8` |
-| 1440 × 1000 | light | `captures/s131-before-production-pricing-house-desktop-light.png` | `90d61b037898eda3cee43e0c4d59657096945baa4b83c8e22833d932e81704e0` |
-| 390 × 844 | dark | `captures/s131-before-production-landing-top-mobile-dark.png` | `599934b577f203617ac1b0fce0a1685b5fe0477a344221b6ef115d120e56af48` |
-| 390 × 844 | dark | `captures/s131-before-production-landing-footer-mobile-dark.png` | `6abd3433e9b00adc5f4b69eeaf0bd0001ef27743d40036421fecfc36a9d7291f` |
-| 390 × 844 | dark | `captures/s131-before-production-pricing-top-mobile-dark.png` | `70b6197d6a678779b7a42ccb5fad5a065ce44119af8dfda7a3283a4be608d47a` |
-| 390 × 844 | dark | `captures/s131-before-production-pricing-plans-mobile-dark.png` | `7b3e3ac58d73eb9ef6ba9fa402ef425e42c985ce7ac74d575da486fb56071eae` |
-| 390 × 844 | dark | `captures/s131-before-production-pricing-house-mobile-dark.png` | `2a51515499676ff5becf1e1c303019e015942df8275c0d91d6ec81959bb8aee4` |
-| 390 × 844 | light | `captures/s131-before-production-landing-top-mobile-light.png` | `eb53bd65acc2fdf588fce58cfb6c3287e48ff7f3dafba35df7b6710f41083817` |
-| 390 × 844 | light | `captures/s131-before-production-landing-footer-mobile-light.png` | `854173ab25d55611c99e94c809e3ce073a0299caf4c72b5120954d1c7dbf7610` |
-| 390 × 844 | light | `captures/s131-before-production-pricing-top-mobile-light.png` | `5435815099c22406ac8fcb9303cdf659c05724e445225e403c8ab606a8e78d06` |
-| 390 × 844 | light | `captures/s131-before-production-pricing-plans-mobile-light.png` | `52bbda68be26047975866ce5f160753a52fa8c3cf5d51f0b0ed0051fb4395ffa` |
-| 390 × 844 | light | `captures/s131-before-production-pricing-house-mobile-light.png` | `a03dee1f90055111ad57ef3fd26cf5553827a1d481a689187c4461de41378d21` |
-| 1440 × 1000 | dark | `captures/s131-after-staging-landing-top-desktop-dark.png` | `c9e2f13bc924db0b8d012bcf2512ae87db7af70d81fc1165bb127d2d2e0a753d` |
-| 1440 × 1000 | dark | `captures/s131-after-staging-landing-footer-desktop-dark.png` | `4e051c148291e73535083362ee5737477ce6085bb0f2d92a9ede582f06bf3fe0` |
-| 1440 × 1000 | dark | `captures/s131-after-staging-pricing-top-desktop-dark.png` | `bff26d3cfc3516e5297c845cf5d3052a62b883947d8717acee12465af07a0a0e` |
-| 1440 × 1000 | dark | `captures/s131-after-staging-pricing-plans-desktop-dark.png` | `0366023a05747e236a3cf0d85cba6c216304476f6873dfeae9b288529e9663d8` |
-| 1440 × 1000 | dark | `captures/s131-after-staging-pricing-house-desktop-dark.png` | `d3dfef9974118ef0c1a058a90c5217dbe59e10701a42bf11fee3e1c97187e866` |
-| 1440 × 1000 | light | `captures/s131-after-staging-landing-top-desktop-light.png` | `155618dcb67a64c05289c6302290221bad28c38824f0d9d736f2ac967102d6bd` |
-| 1440 × 1000 | light | `captures/s131-after-staging-landing-footer-desktop-light.png` | `73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab` |
-| 1440 × 1000 | light | `captures/s131-after-staging-pricing-top-desktop-light.png` | `21daf30acc902ddc71061785d69d6a95d1af2fd6a77ed649f6d658e4bef9c2cf` |
-| 1440 × 1000 | light | `captures/s131-after-staging-pricing-plans-desktop-light.png` | `71c4615b1e756488117acac55da0196835d3acf9529bfc9e75680c691ebdcd2e` |
-| 1440 × 1000 | light | `captures/s131-after-staging-pricing-house-desktop-light.png` | `c6a7e0189065dc501754e8391e8749b20db9a8e969b7309becaaa5f6418c5b5b` |
-| 390 × 844 | dark | `captures/s131-after-staging-landing-top-mobile-dark.png` | `599934b577f203617ac1b0fce0a1685b5fe0477a344221b6ef115d120e56af48` |
-| 390 × 844 | dark | `captures/s131-after-staging-landing-footer-mobile-dark.png` | `6abd3433e9b00adc5f4b69eeaf0bd0001ef27743d40036421fecfc36a9d7291f` |
-| 390 × 844 | dark | `captures/s131-after-staging-pricing-top-mobile-dark.png` | `70b6197d6a678779b7a42ccb5fad5a065ce44119af8dfda7a3283a4be608d47a` |
-| 390 × 844 | dark | `captures/s131-after-staging-pricing-plans-mobile-dark.png` | `326357886c457baa5e0a18468be69703ecb40476daf7cbf8bddabac97200e861` |
-| 390 × 844 | dark | `captures/s131-after-staging-pricing-house-mobile-dark.png` | `5be9d1cc6153ec50a021ac7934738c3bc82f82557fda683e2743e046183d0da2` |
-| 390 × 844 | light | `captures/s131-after-staging-landing-top-mobile-light.png` | `eb53bd65acc2fdf588fce58cfb6c3287e48ff7f3dafba35df7b6710f41083817` |
-| 390 × 844 | light | `captures/s131-after-staging-landing-footer-mobile-light.png` | `854173ab25d55611c99e94c809e3ce073a0299caf4c72b5120954d1c7dbf7610` |
-| 390 × 844 | light | `captures/s131-after-staging-pricing-top-mobile-light.png` | `5435815099c22406ac8fcb9303cdf659c05724e445225e403c8ab606a8e78d06` |
-| 390 × 844 | light | `captures/s131-after-staging-pricing-plans-mobile-light.png` | `568eaa5ee598645e9e9c523ddbe9d9cc17a37af9617c314ec0c1cbddccca1e56` |
-| 390 × 844 | light | `captures/s131-after-staging-pricing-house-mobile-light.png` | `07304c6a07bdf38b54fb5db34effa4d5c225e63f1af6ac325bfed89482226598` |
+| 390 × 844 | light | `s132/before-landing-mobile-light.png` | `cd7517132c2f1ea2cfad9d0dad9d6d7bc2d0d5cb4fb3879e9eff4bde81cac8b6` |
+| 1440 × 1000 | light | `s132/before-landing-desktop-light.png` | `73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab` |
+| 390 × 844 | dark | `s132/before-landing-mobile-dark.png` | `1dfbcdd2da9c9ce3966fed4ca62246b0f8ca459cd66e62d0664e95692a5c7e90` |
+| 1440 × 1000 | dark | `s132/before-landing-desktop-dark.png` | `34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d` |
+| 1440 × 1000 | dark | `s132/after-home-source-dark-1440-0.png` | `6000c3395436e9c72df2fe9573f10ccf0a21cb82983bc7354084a59a550ce80e` |
+| 1440 × 1000 | dark | `s132/after-home-source-dark-1440-1.png` | `6000c3395436e9c72df2fe9573f10ccf0a21cb82983bc7354084a59a550ce80e` |
+| 1440 × 1000 | dark | `s132/after-stats-source-dark-1440-0.png` | `ed52bee805157597bec4512197aaa4dcc5e0e5feffcdd12381895c318a684cb1` |
+| 1440 × 1000 | dark | `s132/after-stats-source-dark-1440-1.png` | `91239a2853dfb12b0d5003b62e6010ca886a2e7a1984853a1c2c5635b90672c2` |
+| 1440 × 1000 | dark | `s132/after-stats-source-dark-1440-2.png` | `e37c1974c7e803e3166ccd787dda51693eee34fd4bb47a46ca6ceeef23e428e4` |
+| 1440 × 1000 | dark | `s132/after-stats-source-dark-1440-3.png` | `9bca030334d0e29e67b43fc43970e5c0e0a547d8d35256589e1f9213407a4797` |
+| 1440 × 1000 | dark | `s132/after-stats-stale-dark-1440-0.png` | `d0c3fb8a3be84eb71e36ecdf8ecf9bca0ff7348c5eeb68016add144292ece67d` |
+| 1440 × 1000 | dark | `s132/after-stats-unavailable-dark-1440-0.png` | `bcbad40e4e7004e71b95ca7aeca0aca0c8f4cd1c9a9618bf39a4b308fccf5d63` |
+| 1440 × 1000 | dark | `s132/after-stats-privacy-dark-1440-0.png` | `0c3dbf273a689c6b2b70a7d3cbeb1f3460fa925d4dd2fcd1b5c06632709ddf7b` |
+| 390 × 844 | dark | `s132/after-home-source-dark-390-0.png` | `1b1a2e16c98283f1421baba5a0e4bf55a982393a58b39ecdc6b309b09ebc06bd` |
+| 390 × 844 | dark | `s132/after-home-source-dark-390-1.png` | `0bad92b3ef5ef257c18455a36aa6a8a64ad6dee2da4b60d68f1aacc3fcfada60` |
+| 390 × 844 | dark | `s132/after-stats-source-dark-390-0.png` | `fc3890e5bdf3504d8b9116c868c613b9ea8cb4bada8de3618b688c844e17f502` |
+| 390 × 844 | dark | `s132/after-stats-source-dark-390-1.png` | `2ac736e44408680343ac6fef20162e953fc78240f0689b6a4ffc0db4cc5cef14` |
+| 390 × 844 | dark | `s132/after-stats-source-dark-390-2.png` | `35f66cebaf4b5c86f30fcf3f7a2cfac161610a4871c682ea67961d06dd709dc3` |
+| 390 × 844 | dark | `s132/after-stats-source-dark-390-3.png` | `946b5e4fb6c8a1d9cd3c66cc27550dca3061eabfc4e955fd42e0abd0e8036808` |
+| 390 × 844 | dark | `s132/after-stats-stale-dark-390-0.png` | `88da838ded16f3414a56a0185b036183047bd11e65e27c0266571acf67d49468` |
+| 390 × 844 | dark | `s132/after-stats-unavailable-dark-390-0.png` | `cb0464054d88569292dc11572dc19c3d1fdb8d1ffa248237fb523e61817a6581` |
+| 390 × 844 | dark | `s132/after-stats-privacy-dark-390-0.png` | `35748542ad8647aefdd89c681c779c585b34ab3170de2d36fe55311e1fa52049` |
+| 1440 × 1000 | light | `s132/after-home-source-light-1440-0.png` | `f253ec660ee90c385e678757c71e9c41e97aad3b4d757f1e4cf119618ffe3920` |
+| 1440 × 1000 | light | `s132/after-home-source-light-1440-1.png` | `f253ec660ee90c385e678757c71e9c41e97aad3b4d757f1e4cf119618ffe3920` |
+| 1440 × 1000 | light | `s132/after-stats-source-light-1440-0.png` | `df95127cd2510ed44fea23a51443df4ea5ee37158e85e6600a2ee1b04809b0a2` |
+| 1440 × 1000 | light | `s132/after-stats-source-light-1440-1.png` | `35e08ca934a099a62f851de813ef38624733d0feb7922abdc4b61ce2ec5fed26` |
+| 1440 × 1000 | light | `s132/after-stats-source-light-1440-2.png` | `8bd7a2dfa023278642a3fd92a5951bc1fdb94c979aee9759947474d1ca39a6a6` |
+| 1440 × 1000 | light | `s132/after-stats-source-light-1440-3.png` | `0d9a6826580fc935155bdbd34235ab8a202ac2d9f78ec22fbca600708d4b8166` |
+| 1440 × 1000 | light | `s132/after-stats-stale-light-1440-0.png` | `89ad660bf63f69b2456ca7524b8945e47528384930c8dbdaebfbebcd23e8a106` |
+| 1440 × 1000 | light | `s132/after-stats-unavailable-light-1440-0.png` | `f7918ac6c7c7cd6b366a421c8a0627237cc0093cd75f604a2cb28f81e171958f` |
+| 1440 × 1000 | light | `s132/after-stats-privacy-light-1440-0.png` | `179aea600dfe50926feaf74dd23586d71ccef97b715ca54f8793b642187df8af` |
+| 390 × 844 | light | `s132/after-home-source-light-390-0.png` | `55fccdd961ae0ede98b5e01062c6f118db6193707bc866d81629078a5188ea96` |
+| 390 × 844 | light | `s132/after-home-source-light-390-1.png` | `69e3e268180d0e4048795a45b86cf70d705c275266b67a540365fe9171932150` |
+| 390 × 844 | light | `s132/after-stats-source-light-390-0.png` | `60a5802ef8c57b0044314763e34dd6a80714116fd0480b153bea42ff439066c4` |
+| 390 × 844 | light | `s132/after-stats-source-light-390-1.png` | `0f9dac46c77f288e97bb245033b69e8df4c731b653edc1a26d3c128c7a1120f4` |
+| 390 × 844 | light | `s132/after-stats-source-light-390-2.png` | `13cb9ba1d75315b0df40739653b340fb72373296f5063b39accd36cbe98d27f5` |
+| 390 × 844 | light | `s132/after-stats-source-light-390-3.png` | `2fcec6758df4e4ddf4d18459e78358fd75fb34a8798f8c48c95549bfcb1f4168` |
+| 390 × 844 | light | `s132/after-stats-stale-light-390-0.png` | `67f13e357f8889c726af56625db6c65548d1375ad9a5f749170b1acdc92e9302` |
+| 390 × 844 | light | `s132/after-stats-unavailable-light-390-0.png` | `a1d033a386633f97625f43af2cd805d44bae3b4cf6b5e8ae99bfd45cbf22cbfc` |
+| 390 × 844 | light | `s132/after-stats-privacy-light-390-0.png` | `8f91d96ae1928951f13e49b62f481d93a76c25df388f47e0faaec5e638702f60` |
 
 ## Evidence state
 
 - Pixel inspection: **COMPLETE** · blocking defects: 0
-- Tests: **GREEN** · 104/104 files · 716/716 assertions
+- Tests: **GREEN** · 105/105 files · 722/722 assertions
 - Native applicability: **planned-no-native-projects**
 
 Native parity is not claimed from Capacitor configuration alone; an iOS or Android project directory plus rendered evidence is required.

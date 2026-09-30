@@ -5,6 +5,7 @@ import { APP_DASHBOARD_PATH, getAbsoluteAppUrl, getProjectAuthHref } from "../la
 import { trackEvent } from "../analytics.js";
 import { useViewport } from "../app/responsive.js";
 import { AppFooter } from "../app/AppChrome.jsx";
+import PublicStats from '../components/PublicStats.jsx';
 
 const CALCULATOR_PRESETS = {
   "bonus-bet": { name: "Bonus Bet Converter", slug: "bonus-bet", desc: "Convert bonus bets into modeled cash with the exact hedge amount." },
@@ -235,6 +236,7 @@ export default function LandingRoute({ darkMode, toggleTheme }) {
           </section>
         </div>
 
+        <PublicStats />
         <div style={{ fontSize: 11, color: K.dm, textAlign: "center", lineHeight: 1.8, padding: viewport.isPhone ? "0 6px" : 0 }}>
           <a href={APP_DASHBOARD_PATH} style={{ color: K.gn, textDecoration: "none", fontWeight: 700, minHeight: 44, display: "inline-flex", alignItems: "center" }}>Open the app</a>
           {" "}— free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.

@@ -51,6 +51,8 @@ self.addEventListener('notificationclick', e => {
 
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
+  // Dated statistical reports must revalidate their source, never use the asset cache.
+  if (url.origin === self.location.origin && url.pathname === BASE + '/stats.json') return;
   // Always network for Supabase, Google Fonts, external APIs
   if (url.hostname.includes('supabase.co') ||
       url.hostname.includes('googleapis.com') ||

@@ -14,6 +14,8 @@ PromoGrind helps users evaluate sportsbook promotions, bonus bets, boosts, arbit
 ## Useful Public Pages
 
 - About: https://promogrind.bet/about/
+- Community statistics: https://promogrind.bet/stats
+- Aggregate statistics feed (Analytica Feed v1): https://promogrind.bet/stats.json
 - Compliance: https://promogrind.bet/compliance/
 - Privacy: https://promogrind.bet/privacy/
 - Terms: https://promogrind.bet/terms/
@@ -24,6 +26,8 @@ PromoGrind helps users evaluate sportsbook promotions, bonus bets, boosts, arbit
 - Intellectual property and attribution: https://promogrind.bet/ip/
 
 ## Agent Guidance
+
+Statistics count saved workflow activity, not gambling success or total visitors. Cite each period and computedAt, preserve ranges and privacy suppression, and label reports older than their refreshSeconds as stale. An unavailable metric is not zero.
 
 AI agents may index, summarize, and cite public PromoGrind pages with attribution to PromoGrind and VaultSpark Studios LLC. Do not imply PromoGrind places bets, guarantees outcomes, offers financial advice, or operates sportsbook accounts. Do not fabricate launch proof, payment proof, or account-delivery evidence.
 

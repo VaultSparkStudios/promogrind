@@ -6,8 +6,11 @@ import { spawnSync } from "./lib/safe-spawn.mjs";
 import { discoverEdgeVerification, buildEdgeVerificationCommands, edgeVerificationEnvironment } from "./lib/edge-verification.mjs";
 
 const plan = discoverEdgeVerification();
-assert.equal(plan.entries.length, 15, "all 15 Edge Function entrypoints must be typechecked");
-assert.equal(plan.tests.length, 8, "all eight discovered Edge test files must execute");
+assert.equal(plan.entries.length, 16, "all 16 Edge Function entrypoints must be typechecked");
+assert.equal(plan.tests.length, 10, "all ten discovered Edge test files must execute");
+assert.ok(plan.entries.includes("supabase/functions/publish-public-stats/index.ts"));
+assert.ok(plan.tests.includes("supabase/functions/_shared/public-stats_test.ts"));
+assert.ok(plan.tests.includes("supabase/functions/_shared/stats-publisher_test.ts"));
 assert.ok(plan.tests.includes("supabase/functions/_shared/advisor-privacy_test.ts"));
 assert.ok(plan.tests.includes("supabase/functions/_shared/marketing-consent_test.ts"));
 assert.ok(plan.tests.includes("supabase/functions/_shared/stack-builder-contract_test.ts"));

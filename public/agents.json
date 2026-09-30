@@ -35,6 +35,8 @@
   },
   "primary_surfaces": [
     "https://promogrind.bet/",
+    "https://promogrind.bet/stats",
+    "https://promogrind.bet/stats.json",
     "https://promogrind.bet/about/",
     "https://promogrind.bet/compliance/",
     "https://promogrind.bet/privacy/",
@@ -61,7 +63,13 @@
     "license": "Proprietary - All Rights Reserved, VaultSpark Studios LLC",
     "reuse": "Do not reproduce full pages, private app data, account data, or proprietary calculations beyond ordinary search snippets and citation."
   },
-  "last_updated": "2026-07-26",
+  "statistics": {
+    "page": "https://promogrind.bet/stats",
+    "feed": "https://promogrind.bet/stats.json",
+    "format": "analytica-feed-v1",
+    "guidance": "Cite metric periods and computedAt. Preserve privacy bands and unavailable states. Counts describe saved workflow activity, never gambling performance."
+  },
+  "last_updated": "2026-09-30",
   "capability_contract": "https://promogrind.bet/capabilities.json",
   "callable_tools": [],
   "agent_truth_policy": "Source code is not launch proof. Only capabilities.json entries marked available are callable."

@@ -1,5 +1,14 @@
 # Latest Handoff
 
+## S132 continuation — statistics release candidate
+
+- Selected outcome: public aggregate statistics only. Homepage and `/stats` use one feed with dated weekly counts, contributor suppression, and four-week context.
+- Implemented: restricted SQL source, authenticated publisher, storage artifact redirect, daily activation command, UI, agent discovery, sitemap and service-worker freshness bypass.
+- Verified: full `verify:launch-local` exit 0; 105 app test files / 722 assertions; 16 Edge entrypoints / 69 assertions; production build and 40 visually inspected before/after captures. Live backend access/publication proof: `audits/public-stats-s132.json`.
+- Release state at commit preparation: migration and publisher deployed; first public report verified; approved 06:17 UTC job active with its existing service credential in encrypted Vault. Site promotion awaits the commit-bound release workflow.
+- Next: commit/push, verify exact staging/production bytes and real-browser stats delivery. The first recurring execution is still unobserved; a configured schedule is not recurring-run evidence.
+- Startup: canon reconciliation passed; overlay reconciliation preserved two previously changed safety files; frontier evidence was current. Local maintenance scripts absent; no private tooling fabricated. Existing identity/business launch gaps remain separate.
+
 ## Where We Left Off
 
 - Session: S131 · 2026-09-30

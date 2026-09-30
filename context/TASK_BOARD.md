@@ -1,5 +1,13 @@
 # Task Board
 
+## Selected continuation (S132)
+
+- In progress: CANON-054 public statistics — one scheduled aggregate feed, homepage showcase, detailed `/stats`, privacy/freshness checks, and rendered desktop/mobile evidence in both themes.
+- Wave 1 complete: live source schema and aggregate query verified; bounded producer and privacy tests implemented.
+- Wave 2 complete: both public surfaces and machine discovery use the same artifact; four-week history and definitions added.
+- Wave 3 in progress: source/auth/failure tests, build and 40 inspected rendered captures pass. Migration/publisher deployed, initial public report verified, and approved 06:17 UTC job active. Commit-bound site promotion and real-browser live checks remain; recurring execution is not yet observed.
+- Scope: this outcome only; separate identity, payment, beta and launch proofs retain their existing status.
+
 ## Wave List (S131 · complete)
 
 - Wave 1 · complete: remote integration, premise checks, canonical reconciliation and interrupted-record recovery.

@@ -39,6 +39,11 @@ function createWorker({ cached = {}, network = async () => new Response("fresh r
 }
 
 describe("service worker release freshness", () => {
+  it('never intercepts the dated statistics feed, even when a prior response is cached', () => {
+    const worker = createWorker({ cached: { [`${origin}/stats.json`]: '{"old":true}' } });
+    expect(worker.request('/stats.json', { mode: 'cors' })).toBeUndefined();
+    expect(worker.fetch).not.toHaveBeenCalled();
+  });
   it.each(["/dashboard", "/pricing", "/arb-scanner", "/dashboard?tab=today"])(
     "returns deployed HTML before cached HTML for navigation to %s",
     async (path) => {

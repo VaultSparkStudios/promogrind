@@ -1,0 +1,421 @@
+{
+  "schemaVersion": 1,
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "captures": [
+    {
+      "file": "s132/before-landing-mobile-light.png",
+      "page": "/ — before stats implementation (production)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/before-landing-desktop-light.png",
+      "page": "/ — before stats implementation (production)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/before-landing-mobile-dark.png",
+      "page": "/ — before stats implementation (production)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/before-landing-desktop-dark.png",
+      "page": "/ — before stats implementation (production)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-home-source-dark-1440-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-home-source-dark-1440-1.png",
+      "page": "/ source footer (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-1440-0.png",
+      "page": "/stats source nav (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-1440-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-1440-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-1440-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-stale-dark-1440-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-unavailable-dark-1440-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-privacy-dark-1440-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-home-source-dark-390-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-home-source-dark-390-1.png",
+      "page": "/ source footer (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-390-0.png",
+      "page": "/stats source nav (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-390-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-390-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-dark-390-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-stale-dark-390-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-unavailable-dark-390-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-privacy-dark-390-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-home-source-light-1440-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-home-source-light-1440-1.png",
+      "page": "/ source footer (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-0.png",
+      "page": "/stats source nav (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-1440-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-stale-light-1440-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-unavailable-light-1440-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-stats-privacy-light-1440-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "s132/after-home-source-light-390-0.png",
+      "page": "/ source [data-public-stats] (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-home-source-light-390-1.png",
+      "page": "/ source footer (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-390-0.png",
+      "page": "/stats source nav (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-390-1.png",
+      "page": "/stats source [data-public-stats] (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-390-2.png",
+      "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-source-light-390-3.png",
+      "page": "/stats source main > section:last-of-type (actual aggregate query)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-stale-light-390-0.png",
+      "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-unavailable-light-390-0.png",
+      "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "s132/after-stats-privacy-light-390-0.png",
+      "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex",
+    "blockingDefectsOpen": 0,
+    "findings": [
+      "Inspected all 36 after captures in four labelled contact sheets and enlarged representative desktop/mobile images; all four before captures inspected directly.",
+      "Responsive cards stack at 390px and form three columns at 1440px, without horizontal overflow. Navigation, theme button, weekly history, definitions and footer remain readable in both themes.",
+      "Observed-zero report uses a real read-only aggregate query against the pinned database. Stale, unavailable and suppressed states use explicitly isolated browser fixtures, never deployed data.",
+      "Stale and unavailable notices are visible in amber. Unavailable removes numeric cards; privacy suppression displays Private rather than zero. Every displayed numeric cell includes its source timestamp."
+    ],
+    "fixesApplied": [
+      "Resolve shared palette colors at render time so light theme does not retain dark card or link colors.",
+      "Disable smooth scrolling in capture navigation so intended sections are actually visible."
+    ],
+    "beforeOrigin": "https://promogrind.bet",
+    "afterOrigin": "http://127.0.0.1:5175",
+    "releaseCandidate": "working-tree-s132",
+    "sourceHashes": [
+      {
+        "file": "src/App.jsx",
+        "sha256": "1bd09a1937855bb5fa903e5acfdb3c851291b22f26010aaac30bc1984c2c0463"
+      },
+      {
+        "file": "src/app/AppChrome.jsx",
+        "sha256": "bbef48a5e5b04a023b853338b5cd2cf92a92161517f69e8a6b51abd00081e5e7"
+      },
+      {
+        "file": "src/routes/LandingRoute.jsx",
+        "sha256": "1552fd184ac1511b749933c67c577f1e5ce7a6c212e7ce8f76d89076a1b01987"
+      },
+      {
+        "file": "src/routes/StatsRoute.jsx",
+        "sha256": "3b5554bccb07617f788a0ad274ad6000a24171da2ddd64fd65799f07aae7c0d7"
+      },
+      {
+        "file": "src/components/PublicStats.jsx",
+        "sha256": "29732f3a591644cea97aa83f8e4e01d0c4e668934deff99cbe197b04962c460c"
+      },
+      {
+        "file": "src/lib/publicStats.js",
+        "sha256": "89101b5297232093208422dd2ff8765d7b5ccc3f7f0265e00312545bc7371d77"
+      },
+      {
+        "file": "public/sw.js",
+        "sha256": "9f28670c465600b511a6415caeb652938a59c7052d2c76eb3d8c59b461453e8b"
+      },
+      {
+        "file": "supabase/functions/_shared/public-stats.ts",
+        "sha256": "0240fb7f0f3102056c9c9ef683a1a645e742457b1ea3ac0a9a57ed6fcd6e30b7"
+      }
+    ]
+  }
+}

@@ -51,8 +51,8 @@
   "ignisScore": 43385,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-09-30",
-  "testsPassing": 104,
-  "testsTotal": 104,
+  "testsPassing": 105,
+  "testsTotal": 105,
   "testsLastRun": "2026-09-30",
   "lastDeployStatus": "Commit be2da225f3e0bad3d4e76e9d34ce1a272cdd00a8 is verified at both https://staging.promogrind.bet and https://promogrind.bet with content digest 69e385912e300396bf4e8565ab3f94ad7c60f0d9a04fdc8dc194661ddd3b5d93. Exact owned-origin marker and served HTML hashes agree. Remote workflow evidence: https://github.com/VaultSparkStudios/promogrind/actions/runs/36668970501.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
@@ -243,25 +243,25 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-09-30T04:40:43.240Z",
-    "commitSha": "5f1c4cc00f7dc17404c8f76a6d4a5cda8aa00b58",
+    "generatedAt": "2026-09-30T15:23:19.646Z",
+    "commitSha": "b34dc97f8eee74cbf15543a6cfe6e2207f9ca318",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 104,
-      "total": 104
+      "passing": 105,
+      "total": 105
     },
     "assertions": {
-      "passing": 716,
-      "total": 716
+      "passing": 722,
+      "total": 722
     },
-    "reportSha256": "01ade66b9cecd735bfb1a089c8a5a6e8364d81e38f3405634cfe4c9ae3a2ac35"
+    "reportSha256": "c0fc889cba2d8949f8536a736e0add2dea914e0a735d7395ecd9b3a40899aac4"
   },
-  "testsAssertionsPassing": 716,
-  "testsAssertionsTotal": 716,
-  "testsAssertionsFiles": 104,
+  "testsAssertionsPassing": 722,
+  "testsAssertionsTotal": 722,
+  "testsAssertionsFiles": 105,
   "testsAssertionsLastRun": "2026-09-30",
   "lastSession": 131
 }

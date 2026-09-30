@@ -1,0 +1,326 @@
+[
+  {
+    "file": "s132/after-home-source-dark-1440-0.png",
+    "page": "/ source [data-public-stats] (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-home-source-dark-1440-1.png",
+    "page": "/ source footer (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-1440-0.png",
+    "page": "/stats source nav (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-1440-1.png",
+    "page": "/stats source [data-public-stats] (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-1440-2.png",
+    "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-1440-3.png",
+    "page": "/stats source main > section:last-of-type (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-stale-dark-1440-0.png",
+    "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-unavailable-dark-1440-0.png",
+    "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-privacy-dark-1440-0.png",
+    "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-home-source-dark-390-0.png",
+    "page": "/ source [data-public-stats] (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-home-source-dark-390-1.png",
+    "page": "/ source footer (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-390-0.png",
+    "page": "/stats source nav (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-390-1.png",
+    "page": "/stats source [data-public-stats] (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-390-2.png",
+    "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-dark-390-3.png",
+    "page": "/stats source main > section:last-of-type (actual aggregate query)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-stale-dark-390-0.png",
+    "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-unavailable-dark-390-0.png",
+    "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-privacy-dark-390-0.png",
+    "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-home-source-light-1440-0.png",
+    "page": "/ source [data-public-stats] (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-home-source-light-1440-1.png",
+    "page": "/ source footer (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-1440-0.png",
+    "page": "/stats source nav (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-1440-1.png",
+    "page": "/stats source [data-public-stats] (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-1440-2.png",
+    "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-1440-3.png",
+    "page": "/stats source main > section:last-of-type (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-stale-light-1440-0.png",
+    "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-unavailable-light-1440-0.png",
+    "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-stats-privacy-light-1440-0.png",
+    "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "file": "s132/after-home-source-light-390-0.png",
+    "page": "/ source [data-public-stats] (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-home-source-light-390-1.png",
+    "page": "/ source footer (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-390-0.png",
+    "page": "/stats source nav (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-390-1.png",
+    "page": "/stats source [data-public-stats] (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-390-2.png",
+    "page": "/stats source main > section:nth-of-type(2) (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-source-light-390-3.png",
+    "page": "/stats source main > section:last-of-type (actual aggregate query)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-stale-light-390-0.png",
+    "page": "/stats stale [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-unavailable-light-390-0.png",
+    "page": "/stats unavailable [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "file": "s132/after-stats-privacy-light-390-0.png",
+    "page": "/stats privacy [data-public-stats] (isolated fault/privacy fixture)",
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  }
+]
