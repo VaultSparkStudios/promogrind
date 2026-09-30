@@ -1,0 +1,210 @@
+{
+  "schemaVersion": "1.0",
+  "session": "S131",
+  "verifiedAt": "2026-09-30T03:57:16.884Z",
+  "target": "fjnpzjjyhnpmunfoycrp",
+  "sourceDeploymentReceipt": "artifacts/supabase-deploy/2026-09-30T03-48-43-035Z.json",
+  "sourceReceiptId": "967093a0-6531-4225-a958-912c4201bde1",
+  "deploymentCompletedAt": "2026-09-30T03:48:43.035Z",
+  "projectVerified": true,
+  "expectedFunctionCount": 15,
+  "activeFunctionCount": 15,
+  "functions": [
+    {
+      "name": "ai-action-plan",
+      "status": "ACTIVE",
+      "version": 21,
+      "updatedAt": "2026-09-30T03:47:45.533Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "calc-api",
+      "status": "ACTIVE",
+      "version": 1,
+      "updatedAt": "2026-09-30T03:47:50.265Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "create-checkout",
+      "status": "ACTIVE",
+      "version": 26,
+      "updatedAt": "2026-09-30T03:47:53.197Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "customer-portal",
+      "status": "ACTIVE",
+      "version": 13,
+      "updatedAt": "2026-09-30T03:47:56.989Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "gift-trial",
+      "status": "ACTIVE",
+      "version": 11,
+      "updatedAt": "2026-09-30T03:48:00.664Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "onboarding-drip",
+      "status": "ACTIVE",
+      "version": 10,
+      "updatedAt": "2026-09-30T03:48:06.721Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "parse-bet-slip",
+      "status": "ACTIVE",
+      "version": 20,
+      "updatedAt": "2026-09-30T03:48:14.353Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "promo-advisor",
+      "status": "ACTIVE",
+      "version": 22,
+      "updatedAt": "2026-09-30T03:48:17.778Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "promo-chat",
+      "status": "ACTIVE",
+      "version": 22,
+      "updatedAt": "2026-09-30T03:48:21.771Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "promo-expiry-digest",
+      "status": "ACTIVE",
+      "version": 1,
+      "updatedAt": "2026-09-30T03:48:24.546Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "redeem-beta-code",
+      "status": "ACTIVE",
+      "version": 12,
+      "updatedAt": "2026-09-30T03:48:26.989Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "send-daily-brief",
+      "status": "ACTIVE",
+      "version": 10,
+      "updatedAt": "2026-09-30T03:48:30.356Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "stack-builder",
+      "status": "ACTIVE",
+      "version": 21,
+      "updatedAt": "2026-09-30T03:48:34.153Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "stripe-webhook",
+      "status": "ACTIVE",
+      "version": 29,
+      "updatedAt": "2026-09-30T03:48:36.900Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    },
+    {
+      "name": "weekly-digest",
+      "status": "ACTIVE",
+      "version": 1,
+      "updatedAt": "2026-09-30T03:48:40.236Z",
+      "refreshedForRelease": true,
+      "platformJwtVerification": false
+    }
+  ],
+  "schedulerNegativeProbes": [
+    {
+      "name": "send-daily-brief",
+      "scenario": "missing-credentials",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "send-daily-brief",
+      "scenario": "forged-bearer",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "send-daily-brief",
+      "scenario": "forged-cron-header",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "weekly-digest",
+      "scenario": "missing-credentials",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "weekly-digest",
+      "scenario": "forged-bearer",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "weekly-digest",
+      "scenario": "forged-cron-header",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "promo-expiry-digest",
+      "scenario": "missing-credentials",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "promo-expiry-digest",
+      "scenario": "forged-bearer",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "promo-expiry-digest",
+      "scenario": "forged-cron-header",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "onboarding-drip",
+      "scenario": "missing-credentials",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "onboarding-drip",
+      "scenario": "forged-bearer",
+      "httpStatus": 401,
+      "handlerRejected": true
+    },
+    {
+      "name": "onboarding-drip",
+      "scenario": "forged-cron-header",
+      "httpStatus": 401,
+      "handlerRejected": true
+    }
+  ],
+  "authorizedDispatchesInvoked": false,
+  "ok": true
+}

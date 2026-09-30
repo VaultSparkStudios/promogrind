@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from "./lib/safe-spawn.mjs";
-import { discoverEdgeVerification } from "./lib/edge-verification.mjs";
+import { discoverEdgeVerification, buildEdgeVerificationCommands, edgeVerificationEnvironment } from "./lib/edge-verification.mjs";
 
 const args = new Set(process.argv.slice(2));
 const json = args.has("--json");
@@ -18,6 +18,7 @@ function run(label, commandArgs) {
     encoding: "utf8",
     stdio: json ? "pipe" : "inherit",
     shell: false,
+    env: edgeVerificationEnvironment(),
   });
   return {
     label,
@@ -33,10 +34,8 @@ function run(label, commandArgs) {
   };
 }
 
-const checks = [
-  run("typecheck-all-entrypoints", ["check", "--node-modules-dir=auto", ...plan.entries]),
-  run("test-all-discovered-tests", ["test", "--allow-env", ...plan.tests]),
-];
+const checks = buildEdgeVerificationCommands(plan, { cachedOnly: args.has("--cached-only") })
+  .map((command) => run(command.label, command.args));
 const passed = checks.every((check) => check.status === "passed");
 const receipt = {
   schemaVersion: 1,

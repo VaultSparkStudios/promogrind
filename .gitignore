@@ -58,3 +58,7 @@ ignis/output/
 # The tracked docs/CREATIVE_DIRECTION_RECORD.md is a public-safe summary;
 # the authoritative append-only ledger lives here and must never be committed.
 docs/private/
+
+# Canonical internal operating references may be consumed locally, not published.
+docs/AGENT_ACTION_REFERENCE.md
+docs/EXECUTION_CONTRACT.md

@@ -23,7 +23,9 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { spawnSync } from './lib/safe-spawn.mjs';
-import { resolveTestSignal } from './lib/test-signal.mjs';
+import { formatTruthGenome } from './lib/project-status-contract.mjs';
+import { resolveTestSignal, testSignalSeverity, testSignalMark } from './lib/test-signal.mjs';
+import { receiptSession, receiptSessionNumber, strictSession } from './lib/closeout-receipt.mjs';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -151,19 +153,76 @@ function deploymentRows() {
   return { staging, live };
 }
 
+/**
+ * The newest session's block in an append-at-TOP handoff — everything before the SECOND
+ * session marker. Bounding at the FIRST marker would cut the current session's own body,
+ * which is the mistake this helper exists to make impossible to repeat.
+ * Exported so the contract is testable without executing the renderer.
+ */
+export function newestSessionSegment(body) {
+  const marker = /^\*\*Session \d+\s+·/gm;
+  const offsets = [];
+  for (const m of body.matchAll(marker)) offsets.push(m.index);
+  // 0 markers → the whole body is the only block. 1 marker → still one block.
+  // 2+ → the second marker begins the PREVIOUS session; stop there.
+  return offsets.length >= 2 ? body.slice(0, offsets[1]) : body;
+}
+
 function parseShippedFromHandoff() {
   const body = readText(HANDOFF_PATH);
   if (!body) return [];
-  const match = body.match(/^##\s+Where We Left Off[\s\S]*?(?=^##\s|\Z)/m)
-    || body.match(/^#\s+(?:S\d+\s+|Session\s+\d+\s+).*?\n([\s\S]*?)(?=^#\s|\Z)/m);
-  const segment = match ? match[0] : body.slice(0, 4000);
-  const bullets = segment
+
+  // S313 — LATEST_HANDOFF is append-at-TOP, so the newest session is the first block.
+  // The previous form searched the WHOLE file for `## Where We Left Off` and took the
+  // first hit anywhere; since S312 and S313 do not use that heading, it matched an S311
+  // section at byte 15084 and the founder-facing board published S311's shipped list
+  // under S313. Bound the search to the newest session block first — a selector that can
+  // reach past the current session is not selecting the current session.
+  const newest = newestSessionSegment(body);
+
+  const match = newest.match(/^##\s+Where We Left Off[\s\S]*?(?=\n##\s)/m)
+    || newest.match(/^##\s+Impact Summary[\s\S]*?(?=\n##\s)/m)
+    || newest.match(/^##\s+Impact Summary[\s\S]*$/m);
+  const segment = match ? match[0] : newest.slice(0, 4000);
+
+  // S318 — BOUND TO THE SHIPPED SUB-REGION, NOT THE WHOLE SECTION.
+  //
+  // S313 stopped this selector reaching into a PREVIOUS SESSION. It could still reach
+  // into a different SUB-SECTION of the current one, which is the same defect one level
+  // down. An Impact Summary legitimately contains more than a shipped list — this repo's
+  // convention puts "**What I got wrong and corrected mid-session**" inside it — and the
+  // scan took the first five `-` bullets anywhere in the section, then rendered each with
+  // a `✓`. Live at S318 the board published the author's four self-corrections as the
+  // four things that shipped. A reader that cannot tell two sub-regions apart does not
+  // report uncertainty; it reports the wrong one confidently.
+  //
+  // Bound POSITIVELY on the shipped marker rather than blacklisting the others: a
+  // blacklist has to predict every future sub-heading, and the one it misses is published
+  // under a checkmark. The shipped list also numbers its lines (`1.`, `1a.`) as often as
+  // it bullets them, so both forms are accepted — the previous filter silently skipped
+  // every numbered line, which is precisely why it fell through into the prose below.
+  const SHIPPED_MARKER = /^\*\*What changed, in one line each:?\*\*\s*$/m;
+  const markerAt = segment.search(SHIPPED_MARKER);
+  let scope;
+  if (markerAt >= 0) {
+    const after = segment.slice(markerAt).split('\n').slice(1);
+    const end = after.findIndex((l) => /^\*\*/.test(l.trim()));   // next bold-lead sub-heading
+    scope = (end === -1 ? after : after.slice(0, end)).join('\n');
+  } else {
+    // No marker: keep the old behaviour, but still stop at the first bold-lead line so a
+    // sub-section with opposite meaning can never be reached.
+    const lines = segment.split('\n');
+    const firstBold = lines.findIndex((l, i) => i > 0 && /^\*\*/.test(l.trim()));
+    scope = (firstBold === -1 ? lines : lines.slice(0, firstBold)).join('\n');
+  }
+
+  const BULLET = /^(?:[-*•]|\d+[a-z]?[.)])\s+/;
+  return scope
     .split('\n')
-    .filter((l) => /^[-*•]\s+/.test(l))
-    .map((l) => l.replace(/^[-*•]\s+/, '').trim())
+    .filter((l) => BULLET.test(l.trim()))
+    .map((l) => l.trim().replace(BULLET, '').trim())
     .filter((l) => l.length > 4)
     .slice(0, 5);
-  return bullets;
 }
 
 function parseShippedFromGitLog() {
@@ -338,19 +397,24 @@ function postSessionSignals(status) {
   // S263 — the closeout board is the LAST surface a session sees, so a phantom
   // green here is the most expensive one. Reconcile both test surfaces
   // (D-S263.1); a contradicted signal reports the contradiction, not the count.
+  // S283 — the enumeration named only 'contradicted', so a bounded (budget-
+  // deferred) run printed a bare count on the closeout board as if it were a
+  // full pass. Any non-ok severity now reports itself.
   const testSignal = resolveTestSignal(status || {});
   const tests = testSignal.state === 'contradicted'
     ? `⛔ CONTRADICTED — ${status.testsPassing}/${status.testsTotal} files vs ${status.testsAssertionsPassing}/${status.testsAssertionsTotal} assertions`
-    : status?.testsPassing != null && status?.testsTotal != null
-      ? `${status.testsPassing}/${status.testsTotal}`
-      : '—';
+    : testSignalSeverity(testSignal) !== 'ok'
+      ? `${testSignalMark(testSignal)} ${testSignal.detail}`
+      : status?.testsPassing != null && status?.testsTotal != null
+        ? `${status.testsPassing}/${status.testsTotal}`
+        : '—';
   const shardProof = status?.testsShardProofDir
     ? `${status.testsLastRunMode || 'sharded'} · ${status.testsShardProofDir}/aggregate.json`
     : null;
   const quietHostReceipt = quietHostReceiptBadge();
   const ignisDays = daysSinceISO(status?.ignisLastComputed);
   const ignisLabel = ignisDays == null ? '—' : `${ignisDays}d ago`;
-  const truth = status?.truthAuditStatus || status?.truthGenome?.status || '—';
+  const truth = status?.truthAuditStatus || formatTruthGenome(status?.truthGenome);
   return {
     doctor,
     compliance: status?.complianceScore != null
@@ -397,6 +461,36 @@ function nextSessionHint() {
   };
 }
 
+
+/**
+ * S317 [audit #5] — did THIS session's closeout autopilot run?
+ *
+ * 'proven'  a completed, non-dry receipt exists for this session
+ * 'DRY-ONLY' only dry rows — an investigation, not a closeout
+ * 'BYPASSED' the ledger is readable and has no row for this session at all
+ * 'unknown' the ledger could not be read — not a pass, we just cannot see
+ */
+function autopilotStatus(root, session) {
+  const wanted = strictSession(session);
+  if (wanted === null) return 'unknown — session identity unavailable, NOT checked';
+  const p = path.join(root, 'portfolio', 'CLOSEOUT_AUTOPILOT_RECEIPTS.ndjson');
+  let rows;
+  try {
+    rows = fs.readFileSync(p, 'utf8').split(String.fromCharCode(10)).map((l) => l.trim()).filter(Boolean)
+      .map((l) => { try { return JSON.parse(l); } catch { return null; } })
+      .filter(Boolean);
+  } catch { return `unknown (S${session}) — receipt ledger unreadable, NOT checked`; }
+  const mine = rows.filter((r) => receiptSessionNumber(r) === wanted);
+  if (!mine.length) return `BYPASSED (S${session}) — no receipt; run node scripts/closeout-autopilot.mjs`;
+  const completed = mine.filter((r) => r.outcome === 'completed' && !r.dry);
+  if (completed.length) {
+    const derivedOnly = completed.every((r) => receiptSession(r).provenance === 'derived');
+    return `proven (S${session}${derivedOnly ? ', derived' : ''})`;
+  }
+  if (mine.every((r) => r.dry)) return `DRY-ONLY (S${session}) — a dry run is not a closeout`;
+  return `INCOMPLETE (S${session}) — receipt(s) present but none completed`;
+}
+
 function render() {
   const status = readJson(STATUS_PATH) || {};
   const session = status.currentSession ?? status.lastSession ?? '?';
@@ -425,6 +519,14 @@ function render() {
   const velLabel = vel != null ? `${vel}${status.silDebt ? ' ' + status.silDebt : ''}` : '—';
   lines.push(row(`Date: ${date}  ·  SIL: ${sil}/${silMax}  ·  Velocity: ${velLabel}`));
   lines.push(row(`Mode: ${(status.sessionMode || 'FOUNDER').toUpperCase()}  ·  Agent: ${status.lastAgent || 'claude-code'}`));
+  // S317 [audit #5] — say whether the autopilot actually RAN.
+  //
+  // The board had no field for it, so a hand-closed session rendered a visually
+  // complete board — which is how 11 of 33 sessions bypassed the autopilot without
+  // anything looking wrong. A receipt row is opened BEFORE any work, so its absence
+  // is honest evidence the process never started; an unreadable ledger is UNKNOWN,
+  // never a pass.
+  lines.push(row(`Autopilot: ${autopilotStatus(ROOT, session)}`));
   const live = canonicalLiveUrl();
   if (live) {
     lines.push(row(`Live:  ${live.badge}  →  ${live.url}`));

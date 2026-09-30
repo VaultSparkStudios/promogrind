@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Target-bound Cloudflare Pages deployer for PromoGrind.
- * Direct Upload keeps GitHub Pages intact as the forward-rollback origin while
- * staging and production receive the checked-in static _headers contract.
+ * One commit-bound Direct Upload artifact passes stable staging before production.
+ * Rollbacks use a forward revert through the same staging verification.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -10,8 +10,10 @@ import { spawnSync } from "./lib/safe-spawn.mjs";
 import { envForSpawn, redact } from "./lib/secrets.mjs";
 import {
   hashArtifactDirectory,
+  prepareReleaseBinding,
+  validateStagingReceipt,
   resolveReleaseTarget,
-  evaluateReleaseResponse,
+  waitForReleaseOrigin,
   partitionWebDnsRecords,
 } from "./lib/cloudflare-pages-release.mjs";
 
@@ -23,8 +25,9 @@ const apply = args.includes("--apply");
 const probe = args.includes("--probe");
 const dist = path.resolve(value("--dist") || "dist");
 const allowDnsCutover = args.includes("--allow-dns-cutover");
+const stagingReceiptPath = value("--staging-receipt");
 if (args.includes("--help")) {
-  console.log("Usage: node scripts/deploy-cloudflare-pages.mjs --environment staging|production [--probe|--apply] [--dist dist] [--commit <sha>]");
+  console.log("Usage: node scripts/deploy-cloudflare-pages.mjs --environment staging|production [--probe|--apply] [--dist dist] [--commit <sha>] [--staging-receipt <path>]\nProduction --apply requires a verified staging receipt for the same commit and artifact.");
   process.exit(0);
 }
 if (!probe && !apply) {
@@ -56,12 +59,25 @@ if (args.includes("--dns-only")) {
   process.exit(0);
 }
 if (!fs.existsSync(path.join(dist, "index.html"))) throw new Error(`Build artifact missing: ${path.join(dist, "index.html")}`);
+const commit = value("--commit") || process.env.GITHUB_SHA || "working-tree";
+const releaseBinding = prepareReleaseBinding(dist, commit);
+const artifactDigest = hashArtifactDirectory(dist);
+let stagingReceipt = null;
+if (environment === "production") {
+  if (!stagingReceiptPath) throw new Error("Production promotion requires --staging-receipt <path> from this artifact's verified staging deployment");
+  const staged = JSON.parse(fs.readFileSync(path.resolve(stagingReceiptPath), "utf8"));
+  stagingReceipt = {
+    path: stagingReceiptPath.replaceAll("\\", "/"),
+    ...validateStagingReceipt(staged, { artifactDigest, commit, releaseBinding }),
+  };
+  // Local receipts are action records, not signed attestations. Recheck the staging origin now.
+  const stagingTarget = resolveReleaseTarget("staging");
+  const stagingVerification = await waitForReleaseOrigin(stagingTarget.domain, `https://${stagingTarget.project}.pages.dev`, { expectedRelease: releaseBinding });
+  if (!stagingVerification.ok) throw new Error(`Staging no longer serves the approved release: ${stagingVerification.error || "origin verification failed"}`);
+}
 if (!project) {
   project = await cf("", { method: "POST", body: { name: target.project, production_branch: target.branch } });
 }
-
-const artifactDigest = hashArtifactDirectory(dist);
-const commit = value("--commit") || process.env.GITHUB_SHA || "working-tree";
 const wranglerArgs = [
   "pages", "deploy", dist,
   "--project-name", target.project,
@@ -87,7 +103,7 @@ if (!domains.some((entry) => entry.name === target.domain)) {
 const dnsReceipt = await reconcileDns();
 
 const pagesOrigin = `https://${target.project}.pages.dev`;
-const verification = await waitForOrigin(target.domain, pagesOrigin);
+const verification = await waitForReleaseOrigin(target.domain, pagesOrigin, { expectedRelease: releaseBinding });
 const receipt = {
   schemaVersion: "1.0",
   environment,
@@ -95,11 +111,13 @@ const receipt = {
   domain: target.domain,
   pagesOrigin,
   artifactDigest,
+  releaseBinding,
+  ...(stagingReceipt ? { stagingReceipt } : {}),
   commit,
   deployedAt: new Date().toISOString(),
   dnsReceipt,
   verification,
-  rollbackOrigin: "https://vaultsparkstudios.github.io/promogrind/",
+  rollbackStrategy: "forward-revert-through-staging",
 };
 const out = path.join("artifacts", "cloudflare-pages", `${environment}-${receipt.deployedAt.replace(/[:.]/g, "-")}.json`);
 fs.mkdirSync(path.dirname(out), { recursive: true });
@@ -127,24 +145,6 @@ async function cf(suffix, options = {}) {
     if (![401, 403].includes(response.status)) break;
   }
   throw last;
-}
-
-async function waitForOrigin(domain, fallbackOrigin) {
-  const candidates = [`https://${domain}`, fallbackOrigin];
-  let latest = { ok: false, origin: candidates[0], status: 0, missingHeaders: [] };
-  for (let attempt = 0; attempt < 18; attempt += 1) {
-    for (const origin of candidates) {
-      try {
-        const response = await fetch(origin, { redirect: "follow", signal: AbortSignal.timeout(15_000) });
-        latest = { origin, ...evaluateReleaseResponse(response) };
-        if (latest.ok && origin === candidates[0]) return latest;
-      } catch (error) {
-        latest = { ok: false, origin, status: 0, missingHeaders: [], error: error.message };
-      }
-    }
-    await new Promise((resolve) => setTimeout(resolve, 5_000));
-  }
-  return latest;
 }
 
 async function reconcileDns() {

@@ -1,19 +1,85 @@
 # Genius Hit List — PromoGrind
 
-> Generated: 2026-08-06 | Scope: project:promogrind | Pattern detectors: 1 signals evaluated | Top 12 shown
+> Generated: 2026-09-30 | Scope: project:promogrind | Pattern detectors: 6 signals evaluated | Top 12 shown
 
 ---
 
 ## 🔥 #1  1 public-facing repo(s) blocked by release gates
 
-**Tier:** 🔥 CRITICAL · **Category:** security · **Pattern:** 144 · **IGNIS:** 90 (fire) · **Final:** 189
+**Tier:** 🔥 CRITICAL · **Category:** security · **Pattern:** 144 · **IGNIS:** 91 (fire) · **Final:** 190
 
-promogrind is held on Stable staging path available, Blocking launch proofs complete.
+promogrind is held on Blocking launch proofs complete.
 
-*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=4039(+2)
+*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=3827(+3)
 
 ```bash
 node scripts/ops.mjs release-gate
+```
+
+---
+
+## 🔥 #2  IGNIS re-score overdue (60d stale)
+
+**Tier:** 🔥 CRITICAL · **Category:** intelligence · **Pattern:** 142 · **IGNIS:** 90 (fire) · **Final:** 187
+
+Portfolio intelligence scores degrade with age. Re-score before CI auto-flags it.
+
+*IGNIS rank:* cat:INTELLIGENCE(+24) · pillar:cognition=2557(+6)
+
+```bash
+node scripts/ops.mjs rescore --stale
+```
+
+---
+
+## 🔥 #3  Complete Zoho alias/DNS/delivery/reply proof and live O
+
+**Tier:** 🔥 CRITICAL · **Category:** sil · **Pattern:** 135 · **IGNIS:** 84 (fire) · **Final:** 177
+
+Top unblocked unified-list item — highest priority this session.
+
+*IGNIS rank:* cat:AUTOMATION(+20) · pillar:execution=3317(+4)
+
+```bash
+node scripts/ops.mjs preload
+```
+
+---
+
+## 🔥 #4  Complete production auth confirmation/resend/recovery a
+
+**Tier:** 🔥 CRITICAL · **Category:** sil · **Pattern:** 135 · **IGNIS:** 84 (fire) · **Final:** 177
+
+Second-priority unblocked item — complete both for session velocity.
+
+*IGNIS rank:* cat:AUTOMATION(+20) · pillar:execution=3317(+4)
+
+---
+
+## 💡 #5  Refresh REVENUE_SIGNALS.md (60d stale)
+
+**Tier:** 💡 MEDIUM · **Category:** intelligence · **Pattern:** 77 · **IGNIS:** 90 (fire) · **Final:** 122
+
+Revenue intelligence is time-sensitive. Regenerate to surface current opportunities.
+
+*IGNIS rank:* cat:INTELLIGENCE(+24) · pillar:cognition=2557(+6)
+
+```bash
+node scripts/ops.mjs revenue-signals
+```
+
+---
+
+## 🔧 #6  Protocol Oracle FAQ source contract stale
+
+**Tier:** 🔧 LOW · **Category:** protocol · **Pattern:** 45 · **IGNIS:** 84 (fire) · **Final:** 87
+
+Re-render the 10 reviewed Q&A pairs because protocol or FAQ definitions changed.
+
+*IGNIS rank:* cat:PROTOCOL(+20) · pillar:execution=3317(+4)
+
+```bash
+node scripts/render-protocol-faq.mjs
 ```
 
 ---

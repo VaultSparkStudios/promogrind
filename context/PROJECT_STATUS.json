@@ -34,7 +34,7 @@
     "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
-  "lastUpdated": "2026-09-06",
+  "lastUpdated": "2026-09-30",
   "silScore": 1000,
   "silAvg3": 998.7,
   "silVelocity": 4,
@@ -48,12 +48,12 @@
     998,
     1000
   ],
-  "ignisScore": 44911,
+  "ignisScore": 42104,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-08-01",
-  "testsPassing": 103,
-  "testsTotal": 103,
-  "testsLastRun": "2026-09-06",
+  "ignisLastComputed": "2026-09-30",
+  "testsPassing": 104,
+  "testsTotal": 104,
+  "testsLastRun": "2026-09-30",
   "lastDeployStatus": "GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d4543e3e98b2144cd7798462d05dd7c0b4ebc18ab is live unchanged on stable staging and Cloudflare production. Production receipt artifacts/cloudflare-pages/production-2026-08-07T20-33-30-610Z.json; root, health, deep routes, seven standard/health files, six security headers, and capture-safe configuration pass. DNS cutover preserved mail MX/TXT records and retained the prior GitHub Pages CNAME snapshot. SPARKED remains HOLD.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-08-07",
@@ -123,14 +123,14 @@
     "automationCoverage": 100
   },
   "doctorScore": {
-    "date": "2026-08-07",
-    "passing": 12,
+    "date": "2026-09-30",
+    "passing": 10,
     "warning": 0,
-    "failing": 0,
+    "failing": 2,
     "blockingFailing": 0,
-    "advisoryFailing": 0,
+    "advisoryFailing": 2,
     "total": 12,
-    "score": 100,
+    "score": 83,
     "checks": [
       {
         "id": "manifest",
@@ -190,14 +190,14 @@
       },
       {
         "id": "revenue",
-        "pass": true,
+        "pass": false,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
       },
       {
         "id": "ignis",
-        "pass": true,
+        "pass": false,
         "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
@@ -243,24 +243,24 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-09-06T15:05:14.430Z",
-    "commitSha": "03d36deb92374e427b9d4d99e889ca94c057cf29",
+    "generatedAt": "2026-09-30T03:49:31.858Z",
+    "commitSha": "1c31cb319154de5d398a72db49197d3389c50c13",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 103,
-      "total": 103
+      "passing": 104,
+      "total": 104
     },
     "assertions": {
-      "passing": 705,
-      "total": 705
+      "passing": 716,
+      "total": 716
     },
-    "reportSha256": "9364bafd364516bf2220dcf127191aee94f4bf4d0263e0de69c8625fbff0a6e5"
+    "reportSha256": "4d08c7ad060cc7ca18e2720f4cb10549320109eeac836888393cb0a547eb2db2"
   },
-  "testsAssertionsPassing": 705,
-  "testsAssertionsTotal": 705,
-  "testsAssertionsFiles": 103,
-  "testsAssertionsLastRun": "2026-09-06"
+  "testsAssertionsPassing": 716,
+  "testsAssertionsTotal": 716,
+  "testsAssertionsFiles": 104,
+  "testsAssertionsLastRun": "2026-09-30"
 }

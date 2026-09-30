@@ -1,16 +1,26 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-07T00:26:57.389Z",
+  "generatedAt": "2026-09-30T03:50:02.201Z",
   "visual": {
-    "capturedAt": "2026-08-07T00:26:57.389Z",
+    "capturedAt": "2026-09-30T03:50:02.201Z",
     "themes": [
       "dark",
       "light"
     ],
     "captures": [
       {
-        "file": "captures/s129-final-landing-desktop-dark.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s131-before-production-landing-top-desktop-dark.png",
+        "page": "before-production: / — top",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "7a0f1cbb0a8d21897402c9b2e7882aafe2e07b813bb5a298c4d4488c2823f43b"
+      },
+      {
+        "file": "captures/s131-before-production-landing-footer-desktop-dark.png",
+        "page": "before-production: / — footer",
         "theme": "dark",
         "viewport": {
           "width": 1440,
@@ -19,8 +29,48 @@
         "sha256": "34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d"
       },
       {
-        "file": "captures/s129-final-landing-desktop-light.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s131-before-production-pricing-top-desktop-dark.png",
+        "page": "before-production: /pricing — top",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "31001096dcb777917235e78e8e9e1e5c808b41716272d5a75f4a10f5a0d79266"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-plans-desktop-dark.png",
+        "page": "before-production: /pricing — plans",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "8f150cf8d153b5126ee7ff5c36bd47c2fbbf00b735c7447ccc6c8b89cdbb66cc"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-house-desktop-dark.png",
+        "page": "before-production: /pricing — house",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "88bedb0db1a4701f5905308542bd1919fbdf66d71274a775eb76f8b4e483f44d"
+      },
+      {
+        "file": "captures/s131-before-production-landing-top-desktop-light.png",
+        "page": "before-production: / — top",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "155618dcb67a64c05289c6302290221bad28c38824f0d9d736f2ac967102d6bd"
+      },
+      {
+        "file": "captures/s131-before-production-landing-footer-desktop-light.png",
+        "page": "before-production: / — footer",
         "theme": "light",
         "viewport": {
           "width": 1440,
@@ -29,24 +79,334 @@
         "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
       },
       {
-        "file": "captures/s129-final-landing-mobile-dark.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s131-before-production-pricing-top-desktop-light.png",
+        "page": "before-production: /pricing — top",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "9e8cc18944a4d1c120e5f984a63ca59115ea0433e57827f8f100356931d1dedb"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-plans-desktop-light.png",
+        "page": "before-production: /pricing — plans",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "8f41b33f96692e71d7879e82bf8df1bc84189f0c01f7d4bd59b1038ad53dc2b8"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-house-desktop-light.png",
+        "page": "before-production: /pricing — house",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "90d61b037898eda3cee43e0c4d59657096945baa4b83c8e22833d932e81704e0"
+      },
+      {
+        "file": "captures/s131-before-production-landing-top-mobile-dark.png",
+        "page": "before-production: / — top",
         "theme": "dark",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "6a1cdf879f8ae32655da638c45ed7e0bed978dcc9e84081d6aaa7e82fdc8e7a0"
+        "sha256": "599934b577f203617ac1b0fce0a1685b5fe0477a344221b6ef115d120e56af48"
       },
       {
-        "file": "captures/s129-final-landing-mobile-light.png",
-        "page": "/ — branded landing footer",
+        "file": "captures/s131-before-production-landing-footer-mobile-dark.png",
+        "page": "before-production: / — footer",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "6abd3433e9b00adc5f4b69eeaf0bd0001ef27743d40036421fecfc36a9d7291f"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-top-mobile-dark.png",
+        "page": "before-production: /pricing — top",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "70b6197d6a678779b7a42ccb5fad5a065ce44119af8dfda7a3283a4be608d47a"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-plans-mobile-dark.png",
+        "page": "before-production: /pricing — plans",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "7b3e3ac58d73eb9ef6ba9fa402ef425e42c985ce7ac74d575da486fb56071eae"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-house-mobile-dark.png",
+        "page": "before-production: /pricing — house",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "2a51515499676ff5becf1e1c303019e015942df8275c0d91d6ec81959bb8aee4"
+      },
+      {
+        "file": "captures/s131-before-production-landing-top-mobile-light.png",
+        "page": "before-production: / — top",
         "theme": "light",
         "viewport": {
           "width": 390,
           "height": 844
         },
-        "sha256": "2e5ad23de1e2b2fe428d40ccdfdf96874892faa9ff7b783786a740e9c9238ad0"
+        "sha256": "eb53bd65acc2fdf588fce58cfb6c3287e48ff7f3dafba35df7b6710f41083817"
+      },
+      {
+        "file": "captures/s131-before-production-landing-footer-mobile-light.png",
+        "page": "before-production: / — footer",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "854173ab25d55611c99e94c809e3ce073a0299caf4c72b5120954d1c7dbf7610"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-top-mobile-light.png",
+        "page": "before-production: /pricing — top",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "5435815099c22406ac8fcb9303cdf659c05724e445225e403c8ab606a8e78d06"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-plans-mobile-light.png",
+        "page": "before-production: /pricing — plans",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "52bbda68be26047975866ce5f160753a52fa8c3cf5d51f0b0ed0051fb4395ffa"
+      },
+      {
+        "file": "captures/s131-before-production-pricing-house-mobile-light.png",
+        "page": "before-production: /pricing — house",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "a03dee1f90055111ad57ef3fd26cf5553827a1d481a689187c4461de41378d21"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-top-desktop-dark.png",
+        "page": "after-staging: / — top",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "c9e2f13bc924db0b8d012bcf2512ae87db7af70d81fc1165bb127d2d2e0a753d"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-footer-desktop-dark.png",
+        "page": "after-staging: / — footer",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "4e051c148291e73535083362ee5737477ce6085bb0f2d92a9ede582f06bf3fe0"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-top-desktop-dark.png",
+        "page": "after-staging: /pricing — top",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "bff26d3cfc3516e5297c845cf5d3052a62b883947d8717acee12465af07a0a0e"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-plans-desktop-dark.png",
+        "page": "after-staging: /pricing — plans",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "0366023a05747e236a3cf0d85cba6c216304476f6873dfeae9b288529e9663d8"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-house-desktop-dark.png",
+        "page": "after-staging: /pricing — house",
+        "theme": "dark",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "d3dfef9974118ef0c1a058a90c5217dbe59e10701a42bf11fee3e1c97187e866"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-top-desktop-light.png",
+        "page": "after-staging: / — top",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "155618dcb67a64c05289c6302290221bad28c38824f0d9d736f2ac967102d6bd"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-footer-desktop-light.png",
+        "page": "after-staging: / — footer",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-top-desktop-light.png",
+        "page": "after-staging: /pricing — top",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "21daf30acc902ddc71061785d69d6a95d1af2fd6a77ed649f6d658e4bef9c2cf"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-plans-desktop-light.png",
+        "page": "after-staging: /pricing — plans",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "71c4615b1e756488117acac55da0196835d3acf9529bfc9e75680c691ebdcd2e"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-house-desktop-light.png",
+        "page": "after-staging: /pricing — house",
+        "theme": "light",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "sha256": "c6a7e0189065dc501754e8391e8749b20db9a8e969b7309becaaa5f6418c5b5b"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-top-mobile-dark.png",
+        "page": "after-staging: / — top",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "599934b577f203617ac1b0fce0a1685b5fe0477a344221b6ef115d120e56af48"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-footer-mobile-dark.png",
+        "page": "after-staging: / — footer",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "6abd3433e9b00adc5f4b69eeaf0bd0001ef27743d40036421fecfc36a9d7291f"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-top-mobile-dark.png",
+        "page": "after-staging: /pricing — top",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "70b6197d6a678779b7a42ccb5fad5a065ce44119af8dfda7a3283a4be608d47a"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-plans-mobile-dark.png",
+        "page": "after-staging: /pricing — plans",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "326357886c457baa5e0a18468be69703ecb40476daf7cbf8bddabac97200e861"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-house-mobile-dark.png",
+        "page": "after-staging: /pricing — house",
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "5be9d1cc6153ec50a021ac7934738c3bc82f82557fda683e2743e046183d0da2"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-top-mobile-light.png",
+        "page": "after-staging: / — top",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "eb53bd65acc2fdf588fce58cfb6c3287e48ff7f3dafba35df7b6710f41083817"
+      },
+      {
+        "file": "captures/s131-after-staging-landing-footer-mobile-light.png",
+        "page": "after-staging: / — footer",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "854173ab25d55611c99e94c809e3ce073a0299caf4c72b5120954d1c7dbf7610"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-top-mobile-light.png",
+        "page": "after-staging: /pricing — top",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "5435815099c22406ac8fcb9303cdf659c05724e445225e403c8ab606a8e78d06"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-plans-mobile-light.png",
+        "page": "after-staging: /pricing — plans",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "568eaa5ee598645e9e9c523ddbe9d9cc17a37af9617c314ec0c1cbddccca1e56"
+      },
+      {
+        "file": "captures/s131-after-staging-pricing-house-mobile-light.png",
+        "page": "after-staging: /pricing — house",
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "07304c6a07bdf38b54fb5db34effa4d5c225e63f1af6ac325bfed89482226598"
       }
     ],
     "reviewed": true,
@@ -55,14 +415,14 @@
   "tests": {
     "state": "green",
     "files": {
-      "passing": 103,
-      "total": 103
+      "passing": 104,
+      "total": 104
     },
     "assertions": {
-      "passing": 705,
-      "total": 705
+      "passing": 716,
+      "total": 716
     },
-    "receiptSha256": "f4135b09fe06caf1152946cb4166ac54acffe6156d11e46ce6bb8281261d0a0f"
+    "receiptSha256": "4d08c7ad060cc7ca18e2720f4cb10549320109eeac836888393cb0a547eb2db2"
   },
   "native": {
     "state": "planned-no-native-projects",

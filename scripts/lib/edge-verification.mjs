@@ -28,3 +28,16 @@ export function discoverEdgeVerification(root = "supabase/functions") {
     tests,
   };
 }
+
+export function edgeVerificationEnvironment(environment = process.env) {
+  return { ...environment, DENO_NO_PACKAGE_JSON: "1", DENO_NO_UPDATE_CHECK: "1" };
+}
+
+export function buildEdgeVerificationCommands(plan, { lockFile = "deno.lock", cachedOnly = false } = {}) {
+  const dependencyFlags = ["--no-config", "--node-modules-dir=none", `--lock=${lockFile}`, "--frozen"];
+  if (cachedOnly) dependencyFlags.push("--cached-only");
+  return [
+    { label: "typecheck-all-entrypoints", args: [...(cachedOnly ? ["test", "--no-run"] : ["check"]), ...dependencyFlags, ...plan.entries] },
+    { label: "test-all-discovered-tests", args: ["test", ...dependencyFlags, "--allow-env", ...plan.tests] },
+  ];
+}

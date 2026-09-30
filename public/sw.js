@@ -57,8 +57,11 @@ self.addEventListener('fetch', e => {
       url.hostname.includes('gstatic.com') ||
       e.request.method !== 'GET') return;
 
-  const isSameOrigin = url.hostname === self.location.hostname;
+  const isSameOrigin = url.origin === self.location.origin;
+  const isNavigation = e.request.mode === 'navigate';
+  if (isNavigation && !isSameOrigin) return;
   const isAppAsset = isSameOrigin && (
+    isNavigation ||
     url.pathname.endsWith('.html') ||
     url.pathname.endsWith('.js') ||
     url.pathname.endsWith('.css') ||
@@ -67,7 +70,8 @@ self.addEventListener('fetch', e => {
   );
 
   if (isAppAsset) {
-    // Network-first for HTML/JS/CSS — ensures new deploys take effect immediately
+    // Navigations include extensionless app routes; cached HTML must not hide a deploy.
+    // Network-first for documents/JS/CSS, with the existing offline cache fallback.
     e.respondWith((async () => {
       try {
         const res = await fetch(e.request);

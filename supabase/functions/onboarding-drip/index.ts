@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { hasAffirmativeMarketingConsent } from "../_shared/marketing-consent.ts";
+import { withSchedulerAuthorization } from "../_shared/scheduler-auth.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
@@ -173,12 +174,7 @@ async function processTrialExpiryEmails(
   return sent;
 }
 
-serve(async (req) => {
-  const authHeader = req.headers.get("Authorization");
-  if (!authHeader?.includes("Bearer ")) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
+serve(withSchedulerAuthorization(SUPABASE_SERVICE_ROLE_KEY, async (_req) => {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
   const from = "PromoGrind <hello@vaultsparkstudios.com>";
   const now = new Date();
@@ -239,4 +235,4 @@ serve(async (req) => {
   return new Response(JSON.stringify({ sent, trialSent }), {
     headers: { "Content-Type": "application/json" },
   });
-});
+}));

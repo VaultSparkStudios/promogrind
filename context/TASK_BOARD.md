@@ -1,5 +1,19 @@
 # Task Board
 
+## Wave List (S131 · release correctness)
+
+- Wave 1 · complete: integrated remote main, reconciled canonical updates and local safeguards, verified release premises; recovered S129/S130 record debt for closeout.
+- Wave 2 · in progress: exact release verification, Cloudflare automation, scheduled authorization, navigation freshness, runtime compatibility, and dependency patch.
+- Wave 3 · open: complete local gates, stable staging, production/function release, remote verification, and canonical write-back.
+
+## Unified Genius List (S131)
+
+See docs/AUDIT_2026-09-30.json for six selected outcomes and their acceptance checks.
+
+- [ ] S131: close all six verified release findings and deploy the same artifact through stable staging and production.
+- [ ] Add privacy-preserving public stats feed, homepage tile and deeper stats page with an actual bounded refresh producer (CANON-054).
+
+
 ## Unified Genius List (S129)
 
 | Tier | Category | Status | Item |

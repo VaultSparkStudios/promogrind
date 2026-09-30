@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-07T19:23:57.026Z",
+  "generatedAt": "2026-09-30T03:15:17.315Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "fba140855448f1297490024cd17616a0b1625b3bde5dc2c432bffab4c1b1e42f",
+  "briefSha256": "18d2b95ee6faf6821f3a1669fd05b64497034547d86abb0f1ddf0571f4a0f80c",
   "rendererVersion": "3.2",
   "targetSession": 130,
   "sourceSession": 129,
@@ -10,7 +10,7 @@
     "projectProfile": {
       "medium": "app",
       "stage": "launch-hardening",
-      "source": "canonical-status"
+      "source": "canonical-status+fresh-cache"
     },
     "truth": {
       "status": "green-repo-owned-with-history-and-external-proof-follow-ups",
@@ -22,10 +22,10 @@
     },
     "revenue": {
       "source": "docs/REVENUE_SIGNALS.md",
-      "ageDays": 6
+      "ageDays": 60
     },
     "context": {
-      "confidence": "heuristic-stale",
+      "confidence": "measured",
       "recommendation": "CONTINUE",
       "measured": true
     },

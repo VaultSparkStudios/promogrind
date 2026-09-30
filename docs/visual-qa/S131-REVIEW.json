@@ -1,0 +1,560 @@
+{
+  "schemaVersion": 1,
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "captures": [
+    {
+      "file": "captures/s131-before-production-landing-top-desktop-dark.png",
+      "page": "before-production: / — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-desktop-dark.png",
+      "page": "before-production: / — footer",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-desktop-dark.png",
+      "page": "before-production: /pricing — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-desktop-dark.png",
+      "page": "before-production: /pricing — plans",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-desktop-dark.png",
+      "page": "before-production: /pricing — house",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-top-desktop-light.png",
+      "page": "before-production: / — top",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-desktop-light.png",
+      "page": "before-production: / — footer",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-desktop-light.png",
+      "page": "before-production: /pricing — top",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-desktop-light.png",
+      "page": "before-production: /pricing — plans",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-desktop-light.png",
+      "page": "before-production: /pricing — house",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-top-mobile-dark.png",
+      "page": "before-production: / — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-mobile-dark.png",
+      "page": "before-production: / — footer",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-mobile-dark.png",
+      "page": "before-production: /pricing — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-mobile-dark.png",
+      "page": "before-production: /pricing — plans",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-mobile-dark.png",
+      "page": "before-production: /pricing — house",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-top-mobile-light.png",
+      "page": "before-production: / — top",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-mobile-light.png",
+      "page": "before-production: / — footer",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-mobile-light.png",
+      "page": "before-production: /pricing — top",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-mobile-light.png",
+      "page": "before-production: /pricing — plans",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-mobile-light.png",
+      "page": "before-production: /pricing — house",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-top-desktop-dark.png",
+      "page": "after-staging: / — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-footer-desktop-dark.png",
+      "page": "after-staging: / — footer",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-top-desktop-dark.png",
+      "page": "after-staging: /pricing — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-plans-desktop-dark.png",
+      "page": "after-staging: /pricing — plans",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-house-desktop-dark.png",
+      "page": "after-staging: /pricing — house",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-top-desktop-light.png",
+      "page": "after-staging: / — top",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-footer-desktop-light.png",
+      "page": "after-staging: / — footer",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-top-desktop-light.png",
+      "page": "after-staging: /pricing — top",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-plans-desktop-light.png",
+      "page": "after-staging: /pricing — plans",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-house-desktop-light.png",
+      "page": "after-staging: /pricing — house",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-top-mobile-dark.png",
+      "page": "after-staging: / — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-footer-mobile-dark.png",
+      "page": "after-staging: / — footer",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-top-mobile-dark.png",
+      "page": "after-staging: /pricing — top",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-plans-mobile-dark.png",
+      "page": "after-staging: /pricing — plans",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-house-mobile-dark.png",
+      "page": "after-staging: /pricing — house",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-top-mobile-light.png",
+      "page": "after-staging: / — top",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-landing-footer-mobile-light.png",
+      "page": "after-staging: / — footer",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-top-mobile-light.png",
+      "page": "after-staging: /pricing — top",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-plans-mobile-light.png",
+      "page": "after-staging: /pricing — plans",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "captures/s131-after-staging-pricing-house-mobile-light.png",
+      "page": "after-staging: /pricing — house",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex via view_image: all 20 production before and all 20 staging after PNG captures",
+    "findings": [
+      "The staged landing hero and legal footer preserve the production layout in dark and light themes at 1440x1000 and 390x844; captured states show no horizontal document overflow.",
+      "Staged pricing plan names, prices and availability marks are readable in both themes; desktop cards and mobile stacked cards preserve their structure and planned-checkout labels.",
+      "The House contact control uses contrasting ink in both themes and remains visible on desktop and mobile.",
+      "All five plan-title colors measured from staging clear 4.5:1 on their rendered card backgrounds: minimum 5.08:1 in dark and 6.12:1 in light.",
+      "The service worker freshness change is behavior-tested separately; visual captures intentionally bypass service workers to inspect the deployed artifact."
+    ],
+    "fixesApplied": [
+      "Replaced static pricing text accents with the existing semantic theme palette for titles, prices, availability marks and active checkout text; preserved decorative tier badges and borders.",
+      "Changed the House contact button to a semantic accent background and theme-appropriate contrasting ink.",
+      "Made same-origin extensionless navigation network-first with offline cached fallback, preventing previously cached HTML from hiding releases."
+    ],
+    "blockingDefectsOpen": 0,
+    "coverage": "Landing top/footer and pricing top/plan/House states; not a claim that every application screen was reviewed.",
+    "beforeManifest": "S131-before-production.json",
+    "afterManifest": "S131-after-staging.json",
+    "beforeCapturedAt": "2026-09-30T03:42:11.508Z",
+    "afterCapturedAt": "2026-09-30T03:47:54.116Z",
+    "beforeOrigin": "https://promogrind.bet",
+    "afterOrigin": "https://staging.promogrind.bet",
+    "releaseCandidate": "working-tree-s131",
+    "sourceHashes": [
+      {
+        "file": "public/sw.js",
+        "sha256": "e854da518821bceba2287a95e2010f0dc983ccf6c311fee90e6d5c1064463ae4"
+      },
+      {
+        "file": "src/components/PricingPage.jsx",
+        "sha256": "1ea960b6a5a5339237cc12e8cc7405a08ffe70237b4df3af29fcb42726c43b7b"
+      }
+    ],
+    "contrastEvidence": {
+      "measuredFrom": "Live Chromium getComputedStyle captured in phase manifests; repository contrastRatio function",
+      "titleThreshold": 4.5,
+      "before": {
+        "dark": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 3.5493113411730435
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 6.957015950281667
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 7.864649668978165
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 7.412685614316067
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 4.26885842178738
+          }
+        ],
+        "light": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 4.343923406321176
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 2.2161709447595226
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 1.9604098415290256
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 2.0799393652236158
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 3.6117235775618126
+          }
+        ]
+      },
+      "after": {
+        "dark": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(122, 143, 168)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 5.084822986423089
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(96, 165, 250)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 6.643511642087772
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(251, 191, 36)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 10.117994230422076
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(74, 222, 128)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 9.693107262446436
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(192, 132, 252)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 6.392256477156749
+          }
+        ],
+        "light": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 6.916973995632248
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(29, 78, 216)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 6.117310096538619
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(146, 64, 14)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 6.47187312881587
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(22, 101, 52)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 6.508624515671688
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(126, 34, 206)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 6.374417346556567
+          }
+        ]
+      }
+    }
+  }
+}

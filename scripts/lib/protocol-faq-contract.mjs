@@ -4,8 +4,14 @@ import path from "node:path";
 
 const SOURCE_PATHS = ["AGENTS.md", "docs/SESSION_PROTOCOL.md"];
 
+// Git may convert LF text to CRLF on checkout. Hash content, not that transport
+// difference; retain all other whitespace so substantive edits still invalidate.
+export function normalizeProtocolText(value) {
+  return String(value).replace(/\r\n/g, "\n");
+}
+
 function read(root, relative) {
-  try { return fs.readFileSync(path.join(root, relative), "utf8"); } catch { return ""; }
+  try { return normalizeProtocolText(fs.readFileSync(path.join(root, relative), "utf8")); } catch { return ""; }
 }
 
 export function protocolSourceHash(root) {

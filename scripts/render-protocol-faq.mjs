@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { faqDefinitionHash, inspectProtocolFaq, protocolSourceHash } from "./lib/protocol-faq-contract.mjs";
+import { faqDefinitionHash, inspectProtocolFaq, normalizeProtocolText, protocolSourceHash } from "./lib/protocol-faq-contract.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourcePath = path.join(ROOT, "docs", "PROTOCOL_FAQ_SOURCE.json");
@@ -19,7 +19,7 @@ const rendered = `<!-- generated-by: scripts/render-protocol-faq.mjs -->\n<!-- p
 
 if (process.argv.includes("--check")) {
   const current = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, "utf8") : "";
-  if (current !== rendered) {
+  if (normalizeProtocolText(current) !== normalizeProtocolText(rendered)) {
     console.error("Protocol FAQ contract stale: rendered output does not match current protocol and reviewed definitions.");
     process.exit(1);
   }

@@ -15,7 +15,8 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { latestSilSession as latestLedgerSession } from './lib/sil-ledger.mjs';
+import { latestSilSession as latestLedgerSession, parseSilSessions } from './lib/sil-ledger.mjs';
+import { writeProjectStatus } from './lib/write-project-status.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const JSON_OUT = process.argv.includes('--json');
@@ -65,13 +66,28 @@ export function run(root = ROOT) {
 export function deriveSummaryFromSil(silText = '') {
   const expected = latestSilSession(silText);
   if (!expected) return null;
-  const entryRe = new RegExp(`^##\\s+(\\d{4}-\\d{2}-\\d{2})\\s+—\\s+Session\\s+${expected}\\s*\\|([^\\n]*)`, 'm');
-  const head = silText.match(entryRe);
-  if (!head) return null;
-  const stats = head[2].trim().replace(/\s+/g, ' ');
-  const win = silText.slice(head.index).match(/^\*\*Win:\*\*\s+([^\n]+)/m)?.[1] ?? '';
+  // S276 — this used to copy the header's stat string VERBATIM after re-matching it
+  // locally. That made the summary carry the session's ORIGINAL total even when a later
+  // `Score revised: X → Y` addendum superseded it (S275 read 982, settled 985). The file
+  // already imported the ledger for the session NUMBER, so it looked governed while the
+  // SCORE came from a private match. Both now come from the parsed entry.
+  const entry = parseSilSessions(silText).find((e) => e.session === expected);
+  if (!entry || !entry.date) return null;
+
+  const parts = [];
+  if (entry.total != null) {
+    // When a session was rescored, say so — the ledger header still shows the base
+    // number, and a summary that silently disagrees with it reads as a typo.
+    parts.push(entry.baseTotal != null && entry.total !== entry.baseTotal
+      ? `Total: ${entry.total}/${entry.max ?? 1000} (revised from ${entry.baseTotal})`
+      : `Total: ${entry.total}/${entry.max ?? 1000}`);
+  }
+  if (Number.isFinite(entry.velocity)) parts.push(`Velocity: ${entry.velocity}`);
+  if (parts.length === 0) return null;
+
+  const win = silText.slice(entry.sourceIndex).match(/^\*\*Win:\*\*\s+([^\n]+)/m)?.[1] ?? '';
   const winSnippet = win ? ` Win: ${win.slice(0, 180)}${win.length > 180 ? '…' : ''}` : '';
-  return `S${expected} (${head[1]}, from SIL ledger): ${stats}.${winSnippet}`;
+  return `S${expected} (${entry.date}, from SIL ledger): ${parts.join(' | ')}.${winSnippet}`;
 }
 
 // Self-heal: mirror currentFocus → lastSessionSummary ONLY when currentFocus already
@@ -98,7 +114,7 @@ export function fix(root = ROOT) {
     status.lastSessionSummary = derived;
     healedFrom = 'sil-ledger';
   }
-  fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n', 'utf8');
+  writeProjectStatus(root, status, { touchLastUpdated: false });
   const after = evaluateLastSessionSummary({ status, silText });
   return { ...after, healed: true, reason: `healed from ${healedFrom} → S${after.actual}` };
 }

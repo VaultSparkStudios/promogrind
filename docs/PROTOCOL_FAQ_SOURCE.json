@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-07-31",
+  "reviewedAt": "2026-09-30",
   "reviewedBy": "codex-manual",
   "entries": [
     {
@@ -15,7 +15,7 @@
     },
     {
       "question": "What does `/arc` require?",
-      "answer": "`/arc` is one continuous mission: `/start` → `/audit` → `/implement` → `/closeout`. It does not hand back between phases, implements the full verified list, generates and executes second-order innovations when primary work is exhausted, and gates continuation on the context meter.",
+      "answer": "`/arc` is one continuous mission: `/start` → `/audit` → `/implement` → `/closeout`. It completes the selected, premise-verified outcomes and their acceptance checks, preserves existing authorization, and records unresolved requirements honestly. Spare budget or an empty list does not authorize additional scope.",
       "source": "docs/SESSION_PROTOCOL.md section 2B"
     },
     {

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { withSchedulerAuthorization } from "../_shared/scheduler-auth.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
@@ -13,13 +14,7 @@ const URGENT_PROMOS = [
   { book: "Caesars", promo: "Bonus Bet Wednesday", day: "Wednesday", value: "$10-25" },
 ];
 
-serve(async (req) => {
-  // Verify this is a scheduled invocation (cron or internal)
-  const authHeader = req.headers.get("Authorization");
-  if (!authHeader?.includes("Bearer ")) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
+serve(withSchedulerAuthorization(SUPABASE_SERVICE_ROLE_KEY, async (_req) => {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
   const today = new Date();
@@ -93,4 +88,4 @@ serve(async (req) => {
   return new Response(JSON.stringify({ sent, promos: todayPromos.length }), {
     headers: { "Content-Type": "application/json" },
   });
-});
+}));

@@ -57,6 +57,8 @@ export function rewireToSafeSpawn(scriptsDir, { apply = false } = {}) {
   for (const file of files) {
     if (skip.has(file)) continue;
     const src = readFileSync(file, 'utf8');
+    IMPORT_RE.lastIndex = 0;
+    DYNAMIC_IMPORT_RE.lastIndex = 0;
     if (!IMPORT_RE.test(src) && !DYNAMIC_IMPORT_RE.test(src)) continue;
     IMPORT_RE.lastIndex = 0;
     DYNAMIC_IMPORT_RE.lastIndex = 0;

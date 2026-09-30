@@ -4,18 +4,20 @@ import { spawnSync } from "./lib/safe-spawn.mjs";
 import { resolveCommandSpec } from "./lib/command-spec.mjs";
 import { envForSpawn } from "./lib/secrets.mjs";
 import { prepareCloudflareArtifact } from "./lib/cloudflare-pages-release.mjs";
-import { resolveTargetBrowserKey } from "./lib/supabase-client-authority.mjs";
+import { resolvePinnedBrowserAuthority } from "./lib/supabase-client-authority.mjs";
 
-const env = envForSpawn("supabase.client", ["VAPID_PUBLIC_KEY"]);
+const env = envForSpawn("supabase.client", ["VAPID_PUBLIC_KEY", "SUPABASE_PROJECT_REF", "VITE_SUPABASE_PROJECT_REF"]);
 const managementEnv = envForSpawn("supabase.management");
-if (!env.SUPABASE_URL || !env.SUPABASE_ANON_KEY) {
-  console.error("build-release-artifact: supabase.client is not READY through the secrets gateway");
+let browserAuthority;
+try {
+  browserAuthority = await resolvePinnedBrowserAuthority({ clientEnv: env, managementEnv });
+} catch {
+  console.error("build-release-artifact: pinned PromoGrind browser authority could not be verified through the secrets gateway");
   process.exit(2);
 }
-const browserAuthority = await resolveTargetBrowserKey({ clientEnv: env, managementEnv });
 const buildEnv = {
   ...env,
-  VITE_SUPABASE_URL: env.SUPABASE_URL,
+  VITE_SUPABASE_URL: browserAuthority.url,
   VITE_SUPABASE_ANON_KEY: browserAuthority.key,
   VITE_VAPID_PUBLIC_KEY: env.VAPID_PUBLIC_KEY || "",
 };

@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { hasAffirmativeMarketingConsent } from '../_shared/marketing-consent.ts';
+import { withSchedulerAuthorization } from '../_shared/scheduler-auth.ts';
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') ?? '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
@@ -11,12 +12,7 @@ type ServiceClient = ReturnType<typeof createClient<any, 'public', any>>;
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
 
-Deno.serve(async (req) => {
-  const authHeader = req.headers.get('Authorization');
-  if (!authHeader?.includes(SUPABASE_SERVICE_ROLE_KEY) && !req.headers.get('x-cron-key')) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
+Deno.serve(withSchedulerAuthorization(SUPABASE_SERVICE_ROLE_KEY, async (req) => {
   // freq param lets cron callers specify which cadence to send today
   // e.g. POST body { "freq": "weekly" } or { "freq": "daily" }
   let targetFreq = 'weekly';
@@ -64,7 +60,7 @@ Deno.serve(async (req) => {
   return new Response(JSON.stringify({ sent, failed, total: subscribers.length, freq: targetFreq }), {
     headers: { 'Content-Type': 'application/json' },
   });
-});
+}));
 
 interface WeekStats {
   weeklyPnl: number | null;

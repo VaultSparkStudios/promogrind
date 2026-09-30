@@ -31,6 +31,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { verifyStartupSourceReceipt } from './lib/startup-source-receipt.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -41,6 +42,7 @@ const JSON_MODE = args.includes('--json');
 const STDIN_MODE = args.includes('--stdin');
 const positional = args.filter((a) => !a.startsWith('--'));
 const targetPath = positional[0] || path.join(ROOT, 'docs', 'STARTUP_BRIEF.md');
+const STARTUP_BRIEF_VERSION = '3.2';
 
 // ── Canonical blocks that MUST appear ───────────────────────────────────────
 // Each entry: { label, pattern, severity }
@@ -293,6 +295,14 @@ if (IS_DIRECT_RUN) {
 
   const result = validateStartupBrief(body);
   let fail = !result.ok;
+  let sourceReceipt = null;
+  const canonicalTarget = !STDIN_MODE && path.resolve(targetPath) === path.join(ROOT, 'docs', 'STARTUP_BRIEF.md');
+  if (canonicalTarget) {
+    let receipt = null;
+    try { receipt = JSON.parse(fs.readFileSync(path.join(ROOT, 'audits', 'startup-source-latest.json'), 'utf8')); } catch {}
+    sourceReceipt = verifyStartupSourceReceipt({ body, receipt, rendererVersion: STARTUP_BRIEF_VERSION });
+    if (!sourceReceipt.ok) fail = true;
+  }
 
   // S124 #8 — Token-budget enforcer. Brief is the only canonical /start
   // surface — bloat = re-introducing the 100KB pre-v4 tax. Persist size to
@@ -360,6 +370,7 @@ if (IS_DIRECT_RUN) {
       forbiddenHits: result.forbiddenHits,
       bodyShape: result.bodyShape,
       staleBrief: result.staleBrief,
+      sourceReceipt,
       budget: {
         sizeBytes,
         warnBytes: BUDGET_WARN,
@@ -374,6 +385,9 @@ if (IS_DIRECT_RUN) {
     console.log('─'.repeat(Math.min(72, header.length + 8)));
     if (result.staleBrief) {
       console.log(`  ⛔  STALE BRIEF: ${result.staleBrief}`);
+    }
+    if (sourceReceipt && !sourceReceipt.ok) {
+      console.log(`  ⛔  startup source receipt: ${sourceReceipt.failures.join('; ')}`);
     }
     if (result.bodyShape) {
       console.log(`  ⛔  ${result.bodyShape}`);

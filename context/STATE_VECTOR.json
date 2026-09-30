@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-08-07",
-  "generatedAtMs": 1786130614372,
+  "generatedAt": "2026-09-30",
+  "generatedAtMs": 1790739406558,
   "session": 129,
-  "vectorHash": "3238138ef17158ef",
+  "vectorHash": "7bc05827bc5b59fb",
   "silTotal": 1000,
   "silMax": 1000,
   "silAvg3": 998.7,
@@ -15,25 +15,25 @@
   "openNext": 1,
   "openBlocked": 3,
   "topNow": [
-    "Promote the commit-bound S129 artifact to Cloudflare production, verify live par",
     "Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delega",
-    "Complete production auth confirmation/resend/recovery and a real Stripe checkout"
+    "Complete production auth confirmation/resend/recovery and a real Stripe checkout",
+    "Obtain independent friend-beta evidence and complete historical credential rotat"
   ],
   "topNext": [
-    "Obtain independent friend beta evidence, historical credential remediation, cano"
+    "Reconcile canonical Studio cost truth through Ark and obtain distinct post-proof"
   ],
   "health": "green",
   "truthStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "genome": "24/25",
-  "ignisScore": 44911,
+  "ignisScore": 42104,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 6,
+  "ignisAgeDays": 0,
   "name": "PromoGrind",
   "slug": "promogrind",
   "type": "app",
   "lifecycle": "deployed",
-  "nextMilestone": "Promote and verify the S129 commit-addressed artifact on Cloudflare production, record staging/production parity, then complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and post-proof founder criteria before SPARKED.",
-  "currentFocus": "S129 established target-bound Supabase deployment, stable Cloudflare staging with six delivered headers, end-to-end quota and capture proofs, and final rendered landing parity. The exact staging artifact is technically green for commit-bound production promotion.",
+  "nextMilestone": "Complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and distinct post-proof founder criteria before SPARKED.",
+  "currentFocus": "S129 completed target-bound Supabase deployment and the Cloudflare staging-to-production release plane. Commit 7a6a3a2 digest 82f29e7c...18ab is identical across both origins; routes, health, standard files, capture-safe configuration, and six headers are green.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved.",

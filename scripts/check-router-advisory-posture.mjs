@@ -2,7 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-const EXPECTED_VERSION = "7.18.2";
+const EXPECTED_VERSION = "7.18.4";
 const RSC_API_PATTERN = /\b(?:unstable_RSCStaticRouter|unstable_matchRSCServerRequest|unstable_getRSCStream|RSCRouteConfigEntry|createCallServer|decodeReply|decodeAction)\b/;
 
 async function sourceFiles(directory) {

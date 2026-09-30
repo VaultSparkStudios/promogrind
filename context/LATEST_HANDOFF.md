@@ -1,3 +1,19 @@
+# PromoGrind Handoff — Session 131
+
+## Where We Left Off
+
+The release correctness arc is in progress. Six current findings are tracked in docs/AUDIT_2026-09-30.json. Remote main was fast-forwarded to 1c31cb3. No new production deployment is claimed yet.
+
+## Session Intent
+
+Complete /arc, commit and push directly to main, deploy stable staging and production, and verify the live outcome. Preserve FORGE until independent launch criteria pass.
+
+## Recovery record
+
+S129 production/DNS follow-up commits and S130 generated/dependency updates were committed without a later SIL closeout. The existing release receipts remain historical evidence, and the complete current record will be reconciled in S131.
+
+## Previous handoff (historical)
+
 # PromoGrind Handoff — Session 129
 
 ## Where We Left Off

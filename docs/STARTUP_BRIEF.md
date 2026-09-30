@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.2 -->
-<!-- generated-at: 2026-08-07 (Session 129 closeout) -->
+<!-- generated-at: 2026-09-30 (Session 129 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 129 closeout · 2026-08-07.
+> **Fast-boot brief** — generated at Session 129 closeout · 2026-09-30.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,14 +14,14 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 130 · 2026-08-07 · FOUNDER MODE                         ║
+║  Session 130 · 2026-09-30 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S129) - WHAT SHIPPED ══════════════════════════╗
 ║  S129 shipped target-bound Supabase deployment, stable Cloudfla  ║
 ║  Tests  103/103 files · 705/705 assertions                       ║
-║  Deploy S129 stable staging deployment receipt artifacts/cloudf  ║
+║  Deploy GREEN: commit 7a6a3a2 digest 82f29e7c535ed5c9a548bd5d45  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · PromoGrind ══════════════════════════════════╗
@@ -42,7 +42,7 @@
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
 ║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 4↑                      ║
-║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
+║    Last active: 24d  ·  Last closeout: 54d  ·  (active = newest  ║
 ║    Trend  █▆▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -62,12 +62,13 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 129 ═══════════════════════════╗
 ║ Shipped:  see LATEST_HANDOFF.md                                ║
-║ Tests:    103/103 passing  ·  Deploy: S129 stable staging…     ║
+║ Tests:    103/103 passing  ·  Deploy: GREEN: commit 7a6a3a2…   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  ██████████████░░░░░░░░░░   57% used                         ║
-║    114,422 / 200,000 tok  ·  unknown  ·  heuristic-stale       ║
+║ ✓  ██████░░░░░░░░░░░░░░░░░░   24% used                         ║
+║    62,309 / 258,400 tok  ·  codex/codex-272k  ·  measured      ║
+║    ~31,155 tok/turn  ·  cache 50%  ·  5 turns to compact       ║
 ║    Verdict: CONTINUE                                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -75,8 +76,8 @@
 ║ ✓  Tests         103/103 files · 705/705 assertions…           ║
 ║ ✓  Velocity      4 ↑  ·  Debt: →                               ║
 ║ ⚠  Runway        ~2 sessions                                   ║
-║ ✓  Context age   0d                                            ║
-║ ✓  IGNIS         44911 FORGE  ·  6d old                        ║
+║ ⛔  Context age   54d                                           ║
+║ ⛔  IGNIS         44911 FORGE  ·  60d old                       ║
 ║ ✓  Truth         green-repo-owned-with-history-and-external-p… ║
 ║ ⚠  Compliance   not-tracked: no non-zero compliance run…       ║
 ║ ✓  Genome dims   all stable  (24/25)                           ║
@@ -84,11 +85,11 @@
 ║ ✓  CDR           no gap detected                               ║
 ║ ✓  Patterns      no recurring pressure detected                ║
 ║ ✓  Templates     v3.3 aligned                                  ║
-║ ✓  Revenue sig.  6d old (2026-08-01)                           ║
+║ ⛔  Revenue sig.  60d old (2026-08-01)  ⚠ stale                 ║
 ║ ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                ║
-║ ✓  Doctor        12/12 (100%)  ·  2026-08-07  ✓                ║
+║ ⛔  Doctor        9/12 (75%)  ·  3 failing                      ║
 ║ ✓  Codex trust   trusted project active                        ║
-║ ⚠  Canon adopt.  44/52 pending review                          ║
+║ ⚠  Canon adopt.  43/54 pending review                          ║
 ║ ✓  Cost          flat-rate Max Plan · ledger telemetry is…     ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -96,7 +97,7 @@
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
 ║  Snapshot: 0m old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 0 drained · 39h old · sig failures 0                       ║
+║  Ark: 298 drained · 6m old · sig failures 0                      ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -127,17 +128,29 @@
 ║        promogrind is held on Blocking launch proofs complete.  ║
 ║        ↳ node scripts/ops.mjs release-gate                     ║
 ║                                                                ║
-║  🔥  2  [SIL]  Promote the commit-bound S129 artifact to Clou  ║
+║  🔥  2  [IGNIS]  IGNIS re-score overdue (60d stale)            ║
+║        Portfolio intelligence scores degrade with age. Re-sco  ║
+║        ↳ node scripts/ops.mjs rescore --stale                  ║
+║                                                                ║
+║  🔥  3  [SIL]  Complete Zoho alias/DNS/delivery/reply proof a  ║
 ║        Top unblocked unified-list item — highest priority thi  ║
 ║        ↳ node scripts/ops.mjs preload                          ║
 ║                                                                ║
-║  🔥  3  [SIL]  Complete Zoho alias/DNS/delivery/reply proof a  ║
+║  🔥  4  [SIL]  Complete production auth confirmation/resend/r  ║
 ║        Second-priority unblocked item — complete both for ses  ║
+║                                                                ║
+║  💡  5  [IGNIS]  Refresh REVENUE_SIGNALS.md (60d stale)        ║
+║        Revenue intelligence is time-sensitive. Regenerate to   ║
+║        ↳ node scripts/ops.mjs revenue-signals                  ║
+║                                                                ║
+║  🔧  6  [PROTO]  Protocol Oracle FAQ source contract stale     ║
+║        Re-render the 10 reviewed Q&A pairs because protocol o  ║
+║        ↳ node scripts/render-protocol-faq.mjs                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ```
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 129 closeout · 2026-08-07*
+*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 129 closeout · 2026-09-30*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

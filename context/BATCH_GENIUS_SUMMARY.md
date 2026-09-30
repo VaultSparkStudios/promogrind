@@ -1,11 +1,11 @@
 # IGNIS Batch Genius Summary — PromoGrind
-Generated: 2026-07-23T03:08:09.237Z
+Generated: 2026-09-20T18:43:03.775Z
 
-**Summary:** PromoGrind is feature-complete and fully green internally (549/549 tests, launch-local gate passing), with launch-ready status held at PARTIAL purely by six external real-world proof gates that no amount of additional code can substitute for.
+**Summary:** PromoGrind's technical deployment is fully green with commit-bound Cloudflare production live, but SPARKED launch remains an honest HOLD pending external identity, payment, and beta proofs.
 
 ## Top 5 Items
-1. **Execute production auth email smoke test** — Fully scripted (`npm run smoke:auth-email`) and zero-risk, this is the cheapest remaining external proof to close — create a real account, verify confirmation/resend/forgot-password/recovery-link/new-password flows, and record evidence to unblock one of six launch gates immediately.
-2. **Run the real Stripe smoke purchase** — `npm run smoke:stripe` is built and waiting; a single real transaction with `--record` closes the monetization-critical proof gate and is a prerequisite for confidently taking payments at launch.
-3. **Complete the friend-facing beta pass** — `npm run beta:check` walks a real tester through account/auth/calculator/pricing/trust in one session — this is the only gate that validates the full user journey end-to-end from a fresh human perspective, catching UX issues no test suite can.
-4. **Resolve Brevo forwarding and Studio Ops Supabase capability gates** — These are administrative/config-only blockers (email forwarding setup, capability mapping already requested via Ark cargo S97) — likely quick to close and should be chased in parallel with the smoke tests since they don't require engineering time, just confirmation.
-5. **Obtain production capture public-key proof** — The last external gate; once captured, all six launch-blocking proofs are satisfied and `launch-ready` can honestly flip from PARTIAL to full GO — this is the finish line for the entire launch-hardening arc that's spanned dozens of sessions.
+1. **Close Zoho email identity and live Obelisk delegation proof** — Business email send/receive/reply and human+agent delegation are the longest-standing external blockers; without them no legitimate launch communication channel exists.
+2. **Execute real Stripe checkout/webhook/subscription/portal lifecycle end-to-end** — Revenue capability is unproven in production; this is the highest-impact commerce gap standing between deployment and a monetizable launch.
+3. **Validate production auth-email lifecycle (confirm/resend/recovery)** — User account recovery and confirmation are core trust primitives; an unverified auth-email path risks locking out real users at first contact.
+4. **Obtain independent friend-beta evidence and complete historical credential rotation/remediation** — Real external usage evidence and closing any legacy credential exposure are non-negotiable pre-launch integrity gates that no internal test can substitute for.
+5. **Reconcile canonical Studio cost truth and secure distinct post-proof founder launch approval** — Once all other criteria clear, a clean-cost accounting and an explicit, separate founder sign-off are the final gate preventing premature SPARKED reassessment.

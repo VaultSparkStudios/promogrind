@@ -5,6 +5,8 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { resolveProjectIdentity } from './lib/write-admission.mjs';
+import { loadStartupBriefSources } from './lib/startup-source-loader.mjs';
+import { verifyStartupSourceReceipt } from './lib/startup-source-receipt.mjs';
 import {
   DOCUMENTED_LOCAL_OVERRIDES,
   composeRuntimeCompatibilitySurface,
@@ -144,7 +146,20 @@ const brief = fs.existsSync(path.join(ROOT, 'docs', 'STARTUP_BRIEF.md'))
   : '';
 checks.push(result('brief-qualified-truth', /✓\s+Truth\s+green-repo-owned/.test(brief), 'qualified green truth renders green'));
 checks.push(result('brief-zero-compliance', /⚠\s+Compliance\s+not-tracked:/.test(brief), '0\/0 history renders not-tracked'));
-checks.push(result('brief-public-revenue', /✓\s+Revenue sig\.\s+\d+d old/.test(brief), 'repo-local revenue evidence rendered'));
+const startupSources = await loadStartupBriefSources(ROOT);
+const revenueDate = startupSources.fileCache.revSig.match(/Generated:\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+let sourceReceipt = null;
+try { sourceReceipt = JSON.parse(fs.readFileSync(path.join(ROOT, 'audits', 'startup-source-latest.json'), 'utf8')); } catch {}
+const receiptRevenue = sourceReceipt?.sources?.revenue;
+checks.push(result(
+  'brief-public-revenue',
+  verifyStartupSourceReceipt({ body: brief, receipt: sourceReceipt, rendererVersion: '3.2' }).ok
+    && receiptRevenue?.source === path.relative(ROOT, startupSources.revenueSignalsPath).replace(/\\/g, '/')
+    && Boolean(revenueDate)
+    && Number.isFinite(receiptRevenue?.ageDays)
+    && brief.includes(`Revenue sig.  ${receiptRevenue.ageDays}d old (${revenueDate})`),
+  'repo-local revenue evidence rendered with its actual age; stale evidence need not be green'
+));
 checks.push(result('brief-canonical-profile', /Profile · app · launch-hardening/.test(brief), 'expired cache cannot override canonical type/stage'));
 
 const identity = resolveProjectIdentity({ root: ROOT });

@@ -6,6 +6,7 @@ export const DOCUMENTED_LOCAL_OVERRIDES = Object.freeze([
   'scripts/check-secrets.mjs',
   'scripts/check-windows-hide.mjs',
   'scripts/check-scheduled-write-admission.mjs',
+  'scripts/codemod-safe-spawn.mjs',
   'scripts/context-meter.mjs',
   'scripts/lib/brief-blocks.mjs',
   'scripts/lib/context-verdicts.mjs',

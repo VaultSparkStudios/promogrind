@@ -1,0 +1,1095 @@
+{
+  "schemaVersion": 1,
+  "phase": "before-production",
+  "origin": "https://promogrind.bet",
+  "capturedAt": "2026-09-30T03:42:11.508Z",
+  "serviceWorkerBypassed": true,
+  "returningVisitorState": [
+    "age verified",
+    "onboarding complete"
+  ],
+  "captures": [
+    {
+      "file": "captures/s131-before-production-landing-top-desktop-dark.png",
+      "page": "/",
+      "state": "top",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "7a0f1cbb0a8d21897402c9b2e7882aafe2e07b813bb5a298c4d4488c2823f43b",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "☀\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-desktop-dark.png",
+      "page": "/",
+      "state": "footer",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "34606b02de8e463309b1885633f913ab5bd7e8a7ca380447b0a8f64ce394549d",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "☀\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-desktop-dark.png",
+      "page": "/pricing",
+      "state": "top",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "31001096dcb777917235e78e8e9e1e5c808b41716272d5a75f4a10f5a0d79266",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\nFREE SPORTSBOOK PROMO CONVERSION TOOLS\n29\nCALCULATORS\nFree\nFOREVER\nExplicit\nLAUNCH-STATE LABELS\nAdvisor\nSearch\n☀\nSign In\nCreate Free Account →\nFree educational tool | Not gambling advice | 21+ only | Gamble responsibly | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENC",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-desktop-dark.png",
+      "page": "/pricing",
+      "state": "plans",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "8f150cf8d153b5126ee7ff5c36bd47c2fbbf00b735c7447ccc6c8b89cdbb66cc",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\nFREE SPORTSBOOK PROMO CONVERSION TOOLS\n29\nCALCULATORS\nFree\nFOREVER\nExplicit\nLAUNCH-STATE LABELS\nAdvisor\nSearch\n☀\nSign In\nCreate Free Account →\nFree educational tool | Not gambling advice | 21+ only | Gamble responsibly | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENC",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-desktop-dark.png",
+      "page": "/pricing",
+      "state": "house",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "88bedb0db1a4701f5905308542bd1919fbdf66d71274a775eb76f8b4e483f44d",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\nFREE SPORTSBOOK PROMO CONVERSION TOOLS\n29\nCALCULATORS\nFree\nFOREVER\nExplicit\nLAUNCH-STATE LABELS\nAdvisor\nSearch\n☀\nSign In\nCreate Free Account →\nFree educational tool | Not gambling advice | 21+ only | Gamble responsibly | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENC",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-top-desktop-light.png",
+      "page": "/",
+      "state": "top",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "155618dcb67a64c05289c6302290221bad28c38824f0d9d736f2ac967102d6bd",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "☾\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-desktop-light.png",
+      "page": "/",
+      "state": "footer",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "73221741ab690349f71ad81df0263226600df109fbe2e978ee9e319715e919ab",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "☾\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-desktop-light.png",
+      "page": "/pricing",
+      "state": "top",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "9e8cc18944a4d1c120e5f984a63ca59115ea0433e57827f8f100356931d1dedb",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\nFREE SPORTSBOOK PROMO CONVERSION TOOLS\n29\nCALCULATORS\nFree\nFOREVER\nExplicit\nLAUNCH-STATE LABELS\nAdvisor\nSearch\n☾\nSign In\nCreate Free Account →\nFree educational tool | Not gambling advice | 21+ only | Gamble responsibly | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENC",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-desktop-light.png",
+      "page": "/pricing",
+      "state": "plans",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "8f41b33f96692e71d7879e82bf8df1bc84189f0c01f7d4bd59b1038ad53dc2b8",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\nFREE SPORTSBOOK PROMO CONVERSION TOOLS\n29\nCALCULATORS\nFree\nFOREVER\nExplicit\nLAUNCH-STATE LABELS\nAdvisor\nSearch\n☾\nSign In\nCreate Free Account →\nFree educational tool | Not gambling advice | 21+ only | Gamble responsibly | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENC",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-desktop-light.png",
+      "page": "/pricing",
+      "state": "house",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "90d61b037898eda3cee43e0c4d59657096945baa4b83c8e22833d932e81704e0",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\nFREE SPORTSBOOK PROMO CONVERSION TOOLS\n29\nCALCULATORS\nFree\nFOREVER\nExplicit\nLAUNCH-STATE LABELS\nAdvisor\nSearch\n☾\nSign In\nCreate Free Account →\nFree educational tool | Not gambling advice | 21+ only | Gamble responsibly | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENC",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-top-mobile-dark.png",
+      "page": "/",
+      "state": "top",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "599934b577f203617ac1b0fce0a1685b5fe0477a344221b6ef115d120e56af48",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "☀\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-mobile-dark.png",
+      "page": "/",
+      "state": "footer",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "6abd3433e9b00adc5f4b69eeaf0bd0001ef27743d40036421fecfc36a9d7291f",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "☀\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-mobile-dark.png",
+      "page": "/pricing",
+      "state": "top",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "70b6197d6a678779b7a42ccb5fad5a065ce44119af8dfda7a3283a4be608d47a",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\n☀\nSign In\nJoin Free\nSearch\nAdvisor\nFree tool | Not gambling advice | 21+ | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENCE YOU CAN INSPECT\n\nThese are repository facts, not customer earnings, simulated activity, or comparisons to another provider's changeable pricing.",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-mobile-dark.png",
+      "page": "/pricing",
+      "state": "plans",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "7b3e3ac58d73eb9ef6ba9fa402ef425e42c985ce7ac74d575da486fb56071eae",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\n☀\nSign In\nJoin Free\nSearch\nAdvisor\nFree tool | Not gambling advice | 21+ | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENCE YOU CAN INSPECT\n\nThese are repository facts, not customer earnings, simulated activity, or comparisons to another provider's changeable pricing.",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-mobile-dark.png",
+      "page": "/pricing",
+      "state": "house",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "2a51515499676ff5becf1e1c303019e015942df8275c0d91d6ec81959bb8aee4",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(10, 14, 23)",
+        "overflowX": false,
+        "theme": "dark",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\n☀\nSign In\nJoin Free\nSearch\nAdvisor\nFree tool | Not gambling advice | 21+ | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENCE YOU CAN INSPECT\n\nThese are repository facts, not customer earnings, simulated activity, or comparisons to another provider's changeable pricing.",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-top-mobile-light.png",
+      "page": "/",
+      "state": "top",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "eb53bd65acc2fdf588fce58cfb6c3287e48ff7f3dafba35df7b6710f41083817",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "☾\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-landing-footer-mobile-light.png",
+      "page": "/",
+      "state": "footer",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "854173ab25d55611c99e94c809e3ce073a0299caf4c72b5120954d1c7dbf7610",
+      "observations": {
+        "url": "https://promogrind.bet/",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "☾\n16+ FREE CALCULATORS\nTRACK REAL P/L\nWORKS ON EVERY DEVICE\nFREE ACCOUNT FOR SYNC\nPROMOGRIND\nFREE SPORTSBOOK PROMO OPERATING SYSTEM\nReferred by\nPromo\nConvert sportsbook promos into clearer, faster profit decisions.\n\nPromoGrind gives you the calculator stack, tracking surface, and operator-style dashboard to work through bonus bets, boosts, arbitrage, EV, and bankroll decisions without a bloated subscription wall. Create a free PromoGrind account if you want sync across devices. No credit card required.\n\nOpen PromoGrind App →\nStart with Bonus Bet →\nCreate free account for sync →\nFree\nCORE ACCESS\n53+\nTOTAL SURFACES\n21+\nAGE REQUIRED\nLive\nON PROMOGRIND.BET\nWHAT YOU GET\n🧮\nCalculator stack\nBonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more.\n📈\nOperator dashboard\nLog real outcomes, review weekly progress, and stop guessing where your edge is coming from.\n⚡\nFast first action\nReferral pages can drop friends into the exact calculator that matches the promo they just found.\n🛡\nTrust-first framing\nClear legal, age, and educational positioning without pushing people straight into a confusing tool wall.\nJUMP TO A CALCULATOR\nBonus Bet Converter\nProfit Boost Calculator\nFirst Bet Safety Net\nArbitrage Calculator\nKelly Criterion Sizer\n+EV Calculator\nOpen the app — free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.\n\nAffiliate Disclosure: Some links on this page are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you. This does not influence our calculator results or editorial content.\n\nAccess: PromoGrind accounts are separate from Studio membership and are used here for login and sync.\n\nMust be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational math tool, not gambling advice. If you or someone you know has a gambling problem, call .1-800-GAMBLER.\n\n© 2026 VaultSpark Studios LLC. All rights reserved.\nHome\nLearn\nPricing\nOpen App\nPrivacy\nTerms\nResponsible Gambling\nAffiliate Disclosure\nDisclaimer\nDMCA / IP\nData Policy\nAbout\nCompliance\nContact",
+        "footer": true,
+        "headings": [
+          "Convert sportsbook promos into clearer, faster profit decisions."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": []
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-top-mobile-light.png",
+      "page": "/pricing",
+      "state": "top",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "5435815099c22406ac8fcb9303cdf659c05724e445225e403c8ab606a8e78d06",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\n☾\nSign In\nJoin Free\nSearch\nAdvisor\nFree tool | Not gambling advice | 21+ | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENCE YOU CAN INSPECT\n\nThese are repository facts, not customer earnings, simulated activity, or comparisons to another provider's changeable pricing.",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-plans-mobile-light.png",
+      "page": "/pricing",
+      "state": "plans",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "52bbda68be26047975866ce5f160753a52fa8c3cf5d51f0b0ed0051fb4395ffa",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\n☾\nSign In\nJoin Free\nSearch\nAdvisor\nFree tool | Not gambling advice | 21+ | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENCE YOU CAN INSPECT\n\nThese are repository facts, not customer earnings, simulated activity, or comparisons to another provider's changeable pricing.",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    },
+    {
+      "file": "captures/s131-before-production-pricing-house-mobile-light.png",
+      "page": "/pricing",
+      "state": "house",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "a03dee1f90055111ad57ef3fd26cf5553827a1d481a689187c4461de41378d21",
+      "observations": {
+        "url": "https://promogrind.bet/pricing",
+        "title": "PromoGrind — Free Sportsbook Bonus Converter & Profit Boost Calculator",
+        "bodyBackground": "rgb(248, 250, 252)",
+        "overflowX": false,
+        "theme": "light",
+        "text": "Free PromoGrind account unlocks sync and access across all devices.\nEducational math only.\n21+ where legal.\nNot betting or financial advice.\nGamble responsibly: 1-800-GAMBLER.\nPROMOGRIND\n☾\nSign In\nJoin Free\nSearch\nAdvisor\nFree tool | Not gambling advice | 21+ | 1-800-GAMBLER\nHOME\nCONVERT\nCALCULATE\nTRACK\nLIVE\nLEARN\nDashboard\nPromo Intake\nDaily Brief\nGet Started\nWhat's New\nPricing\nAbout\nPromoGrind is free to use. Create a free account to unlock cloud sync, referrals, and access across devices.\nPRICING & AVAILABILITY\nSee what works now—and what is still planned.\n\nThe calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.\n\nMonthly\nAnnual\nPlanned pricing — checkout is not live. No subscription can be purchased from this build.\nFREE AGENT\n\nCalculate and track locally. No account required.\n\nFree\n✓\n53 calculator routes\nMath tools stay available without paid checkout\n✓\nPromo Calendar\nReview operator offers and verify terms at the source\n✓\nKnowledge Base\nEducational workflow guides\n✓\nLocal tracking\nLedger data stored on this device\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nPromoChat\nRequires an enabled AI provider path\nOpen the free workspace →\nSCOUT\n\nA planned cloud workspace for multi-device review.\n\n$6.58\n/mo\n79/year · planned price\n✓\nEverything in Free Agent\n✓\nCloud sync\nAvailable to signed-in workspace users\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nData export\nCSV and JSON exports from your ledger\n○\nPush notifications · not live\nRequires an enabled browser push path\nStart workspace trial\nCheckout not live\nPLANNED\nRUNNER\n\nA planned guided workflow for recurring promo review.\n\n$12.42\n/mo\n149/year · planned price\n✓\nEverything in Scout\n✓\nPromoChat\nRequires an enabled AI provider path\n✓\nPromo Advisor\nRequires an enabled AI provider path\n✓\nAI Action Plan\nRequires an enabled AI provider path\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nPLANNED\nCLOSER\n\nPlanned live-data workflows, gated until their feeds are proven.\n\n$20.75\n/mo\n249/year · planned price\n✓\nEverything in Runner\n○\nLive Arb Scanner · not live\nRequires enabled and verified live-odds infrastructure\n○\nLive +EV Scanner · not live\nRequires enabled and verified live-odds infrastructure\n✓\nStack Builder\nRequires an enabled AI provider path\nStart workspace trial\nCheckout not live\nDISCOVERY\nTHE HOUSE\n\nA future business integration surface; contact us to discuss fit.\n\nScoped with you\n✓\nCalculator-suite integration\nScope and availability are confirmed during discovery\n✓\nBrand and domain options\nSubject to a written implementation scope\n✓\nAPI access\nNot generally available; architecture review required\nDiscuss an integration →\nEVIDENCE YOU CAN INSPECT\n\nThese are repository facts, not customer earnings, simulated activity, or comparisons to another provider's changeable pricing.",
+        "footer": false,
+        "headings": [
+          "See what works now—and what is still planned."
+        ],
+        "scripts": [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "https://promogrind.bet/assets/index-B7iV2DMr.js"
+        ],
+        "css": [
+          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap"
+        ],
+        "planColors": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px"
+          }
+        ]
+      }
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex via view_image on all 20 final baseline PNG captures",
+    "findings": [
+      "Landing hero and legal footer remain readable in dark and light themes at desktop and mobile widths.",
+      "Pricing renders planned-price and checkout-disabled labels without document horizontal overflow; tier cards stack on mobile.",
+      "Verified baseline contrast failure in pricing plan text: all five light-theme titles and the dark-theme Free Agent and House titles miss 4.5; Scout, Runner and Closer light-theme prices also miss their large-text threshold."
+    ],
+    "contrastEvidence": {
+      "measuredFrom": "Live Chromium getComputedStyle captured in this manifest; repository contrastRatio function",
+      "requiredTitleRatio": 4.5,
+      "ratios": {
+        "dark": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 3.5493113411730435
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 6.957015950281667
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 7.864649668978165
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 7.412685614316067
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(22, 29, 42)",
+            "fontSize": "11px",
+            "ratio": 4.26885842178738
+          }
+        ],
+        "light": [
+          {
+            "label": "Free Agent",
+            "foreground": "rgb(100, 116, 139)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 4.343923406321176
+          },
+          {
+            "label": "Scout",
+            "foreground": "rgb(6, 182, 212)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 2.2161709447595226
+          },
+          {
+            "label": "Runner",
+            "foreground": "rgb(245, 158, 11)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 1.9604098415290256
+          },
+          {
+            "label": "Closer",
+            "foreground": "rgb(34, 197, 94)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 2.0799393652236158
+          },
+          {
+            "label": "The House",
+            "foreground": "rgb(168, 85, 247)",
+            "background": "rgb(241, 245, 249)",
+            "fontSize": "11px",
+            "ratio": 3.6117235775618126
+          }
+        ]
+      }
+    },
+    "blockingDefectsOpen": 1
+  }
+}

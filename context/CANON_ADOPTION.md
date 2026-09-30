@@ -5,7 +5,7 @@
 > Suggest: `node ../vaultspark-studio-ops/scripts/check-canon-adoption.mjs --project . --suggest` uses conformance evidence to pre-fill safe suggestions.
 > Mark each: **adopted** · **pending** · **review** · **exempt (reason)**. This file is maintained, not auto-trusted.
 
-Audience: public-unlaunched · Live ACTIVE canons: 52 · Pending review: 44
+Audience: public-unlaunched · Live ACTIVE canons: 54 · Pending review: 43
 
 | Canon | Title | Status | Evidence / note |
 |---|---|---|---|
@@ -18,8 +18,8 @@ Audience: public-unlaunched · Live ACTIVE canons: 52 · Pending review: 44
 | CANON-007 | Every project must have a staging environment before deployi | review |  |
 | CANON-008 | All VaultSpark IP is proprietary by default; open-source lic | review |  |
 | CANON-009 | SIL rubric is 10 × 100 = 1000 (v3.0) | adopted (suggested) | Conformance checker passed: 1000-pt v3.0 · 10 cats · Σ==silScore(1000) |
-| CANON-010 | Claude Code and Codex must have strict skills + hooks + MCP  | review |  |
-| CANON-011 | Every public-facing project must follow the universal sitema | review |  |
+| CANON-010 | Claude Code and Codex must have strict skills + hooks + MCP  | adopted (suggested) | Conformance checker passed: } |
+| CANON-011 | Every public-facing project must follow the universal sitema | adopted (suggested) | Conformance checker passed: ] |
 | CANON-012 | Every studio agent resolves credentials via the secrets gate | review |  |
 | CANON-013 | Every project picks one of 3 canonical low-cost archetypes a | review |  |
 | CANON-015 | Claude Max Plan first; API requires founder approval + cost  | review |  |
@@ -55,10 +55,12 @@ Audience: public-unlaunched · Live ACTIVE canons: 52 · Pending review: 44
 | CANON-045 | Obelisk is the unified studio identity + auth plane (one stu | review |  |
 | CANON-046 | Canon weighting: tiers + autonomy-first conflict resolution  | adopted (suggested) | Conformance checker passed: matrix integrity ok — no orphan rows, all tiers valid |
 | CANON-047 | Theme system + AI-verified human readability (no unreadable  | review |  |
-| CANON-048 | Dual-audience ecosystem: every surface built for Humans AND  | review |  |
+| CANON-048 | Dual-audience ecosystem: every surface built for Humans AND  | adopted (suggested) | Conformance checker passed: } |
 | CANON-049 | Continuous evolution: the studio + every project is never st | review |  |
 | CANON-050 | Atlas: the foundation that carries the ecosystem — and the s | review |  |
 | CANON-051 | Web Hardening: every public surface meets the edge-security  | review |  |
 | CANON-052 | Project Lifecycle Ladder: FORGE/SPARKED/VAULTED with sub-sta | review |  |
 | CANON-053 | Rendered-Pixel UI Discipline: look at the real interface whi | adopted | `docs/visual-qa/LATEST.json` binds 4 reviewed production-build captures across light/dark and desktop/mobile; authoritative checker PASS |
+| CANON-054 | Public Stats Surface: every website reports and analyzes its | review |  |
+| CANON-055 | Surface Follow-Through: every project change reaches the thi | review |  |
 

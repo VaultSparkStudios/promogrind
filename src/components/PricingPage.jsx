@@ -13,6 +13,7 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
   const perMonth = billing === 'annual' && tier.annual ? (tier.annual / 12).toFixed(2) : null;
   const selectedPlan = tier.planIds?.[billing] ?? tier.planIds?.monthly;
   const canSubscribe = COMMERCE_CATALOG.checkout.enabled && Boolean(selectedPlan);
+  const textAccent = { free: K.mt, scout: K.ac, runner: K.yl, closer: K.gn, house: K.pp }[tier.id] || K.tx;
 
   return (
     <section aria-labelledby={`plan-${tier.id}`} style={{
@@ -21,17 +22,17 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
       borderRadius: 14, position: 'relative', boxShadow: tier.badge ? `0 0 28px ${tier.color}16` : 'none',
     }}>
       {tier.badge && <div style={{ position: 'absolute', top: -11, left: 18, padding: '3px 10px', borderRadius: 30, background: tier.color, color: '#081018', fontSize: 9, fontWeight: 900, letterSpacing: '1.2px' }}>{tier.badge}</div>}
-      <div id={`plan-${tier.id}`} style={{ marginTop: tier.badge ? 6 : 0, color: tier.color, fontSize: 11, fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase' }}>{tier.name}</div>
+      <div id={`plan-${tier.id}`} style={{ marginTop: tier.badge ? 6 : 0, color: textAccent, fontSize: 11, fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase' }}>{tier.name}</div>
       <p style={{ minHeight: 44, margin: '7px 0 16px', color: K.mt, fontSize: 12, lineHeight: 1.55 }}>{tier.tagline}</p>
 
       {isFree ? (
         <div style={{ fontFamily: fontD, color: K.tx, fontSize: 30, fontWeight: 800 }}>Free</div>
       ) : tier.contact ? (
-        <div style={{ fontFamily: fontD, color: tier.color, fontSize: 26, fontWeight: 800 }}>Scoped with you</div>
+        <div style={{ fontFamily: fontD, color: textAccent, fontSize: 26, fontWeight: 800 }}>Scoped with you</div>
       ) : (
         <div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-            <span style={{ fontFamily: fontD, color: tier.color, fontSize: 30, fontWeight: 800 }}>${perMonth ?? price}</span>
+            <span style={{ fontFamily: fontD, color: textAccent, fontSize: 30, fontWeight: 800 }}>${perMonth ?? price}</span>
             <span style={{ color: K.mt, fontSize: 12 }}>/mo</span>
           </div>
           <div style={{ minHeight: 18, color: K.mt, fontSize: 10 }}>
@@ -44,7 +45,7 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 20 }}>
         {tier.features.map((item) => (
           <div key={`${tier.id}-${item.label}`} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-            <span aria-hidden="true" style={{ color: item.available ? tier.color : K.mt, fontWeight: 800 }}>{item.available ? '✓' : '○'}</span>
+            <span aria-hidden="true" style={{ color: item.available ? textAccent : K.mt, fontWeight: 800 }}>{item.available ? '✓' : '○'}</span>
             <div>
               <div style={{ color: item.available ? K.tx : K.mt, fontSize: 11, fontWeight: 700 }}>{item.label}{!item.available ? ' · not live' : ''}</div>
               {item.note && <div style={{ marginTop: 2, color: K.dm, fontSize: 10, lineHeight: 1.45 }}>{item.note}</div>}
@@ -56,7 +57,7 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
       {isFree ? (
         <a href="#/dashboard" style={{ padding: 11, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, textAlign: 'center', textDecoration: 'none', fontSize: 12, fontWeight: 800 }}>Open the free workspace →</a>
       ) : tier.contact ? (
-        <a href="mailto:contact@promogrind.bet?subject=PromoGrind business integration" style={{ padding: 11, borderRadius: 8, background: tier.color, color: '#fff', textAlign: 'center', textDecoration: 'none', fontSize: 12, fontWeight: 800 }}>Discuss an integration →</a>
+        <a href="mailto:contact@promogrind.bet?subject=PromoGrind business integration" style={{ padding: 11, borderRadius: 8, background: textAccent, color: K.ink, textAlign: 'center', textDecoration: 'none', fontSize: 12, fontWeight: 800 }}>Discuss an integration →</a>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {tier.trial && (
@@ -64,7 +65,7 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
               {trialStarted ? '✓ Workspace trial active' : trialStarting ? 'Starting…' : 'Start workspace trial'}
             </button>
           )}
-          <button onClick={() => onUpgrade(selectedPlan)} disabled={upgrading || !canSubscribe} style={{ padding: 9, border: `1px solid ${tier.color}`, borderRadius: 8, background: 'transparent', color: canSubscribe ? tier.color : K.mt, fontFamily: font, fontWeight: 700, cursor: canSubscribe ? 'pointer' : 'not-allowed', opacity: canSubscribe ? 1 : 0.7 }}>
+          <button onClick={() => onUpgrade(selectedPlan)} disabled={upgrading || !canSubscribe} style={{ padding: 9, border: `1px solid ${tier.color}`, borderRadius: 8, background: 'transparent', color: canSubscribe ? textAccent : K.mt, fontFamily: font, fontWeight: 700, cursor: canSubscribe ? 'pointer' : 'not-allowed', opacity: canSubscribe ? 1 : 0.7 }}>
             {!canSubscribe ? 'Checkout not live' : upgrading ? 'Processing…' : 'Continue to checkout'}
           </button>
         </div>

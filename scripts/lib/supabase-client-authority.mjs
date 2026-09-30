@@ -1,8 +1,35 @@
-import { PROMOGRIND_PROJECT_REF, assertTargetAdminUrl } from "./supabase-deploy-plan.mjs";
+import { PROMOGRIND_PROJECT_REF, assertTarget, assertTargetAdminUrl } from "./supabase-deploy-plan.mjs";
+
+export function browserKeyIsPrivileged(value) {
+  if (/^sb_secret_/i.test(value)) return true;
+  try {
+    const payload = JSON.parse(Buffer.from(value.split(".")[1], "base64url").toString("utf8"));
+    return typeof payload.role === "string" && payload.role !== "anon";
+  } catch { return false; }
+}
+
+/** A generic Studio credential may describe another app; it is never project authority. */
+export async function resolvePinnedBrowserAuthority({ clientEnv = {}, managementEnv = {}, fetchImpl = fetch, target = PROMOGRIND_PROJECT_REF }) {
+  assertTarget(target);
+  if (clientEnv.SUPABASE_PROJECT_REF) assertTarget(clientEnv.SUPABASE_PROJECT_REF);
+  if (clientEnv.VITE_SUPABASE_PROJECT_REF) assertTarget(clientEnv.VITE_SUPABASE_PROJECT_REF);
+  const url = `https://${target}.supabase.co`;
+  const configuredTargetMatch = clientEnv.SUPABASE_URL === url || clientEnv.SUPABASE_URL === `${url}/`;
+  // Discard a generic key together with its mismatched URL. The only fallback is
+  // management discovery at this exact pinned project's API-key endpoint.
+  const authority = await resolveTargetBrowserKey({
+    clientEnv: { SUPABASE_URL: url, SUPABASE_ANON_KEY: configuredTargetMatch ? clientEnv.SUPABASE_ANON_KEY : null },
+    managementEnv,
+    fetchImpl,
+    target,
+  });
+  return { ...authority, url, configuredTargetMatch };
+}
 
 export async function resolveTargetBrowserKey({ clientEnv, managementEnv, fetchImpl = fetch, target = PROMOGRIND_PROJECT_REF }) {
   assertTargetAdminUrl(clientEnv?.SUPABASE_URL, target);
   const url = clientEnv.SUPABASE_URL;
+  if (clientEnv.SUPABASE_ANON_KEY && browserKeyIsPrivileged(clientEnv.SUPABASE_ANON_KEY)) throw new Error("Refusing a privileged browser key");
   if (clientEnv.SUPABASE_ANON_KEY && (await probeTarget(fetchImpl, url, clientEnv.SUPABASE_ANON_KEY)).ok) {
     return { key: clientEnv.SUPABASE_ANON_KEY, source: "secrets-gateway", target };
   }
@@ -15,6 +42,8 @@ export async function resolveTargetBrowserKey({ clientEnv, managementEnv, fetchI
   if (!response.ok || !Array.isArray(keys)) throw new Error(`Supabase API-key discovery returned HTTP ${response.status}`);
   const candidates = keys.filter((entry) =>
     typeof entry?.api_key === "string"
+    && entry.type !== "secret"
+    && !browserKeyIsPrivileged(entry.api_key)
     && (entry.type === "publishable" || entry.name === "anon" || entry.prefix?.startsWith("sb_publishable_"))
   );
   const candidateProbes = [];

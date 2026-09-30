@@ -18,6 +18,13 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const plan = buildSupabaseDeployPlan({ root, includeMigration: true });
 assert.equal(plan.target, PROMOGRIND_PROJECT_REF);
 assert.deepEqual(plan.selected, AI_PROVIDER_FUNCTIONS);
+const fullPlan = buildSupabaseDeployPlan({ root, scope: "all", includeMigration: true });
+assert.deepEqual(fullPlan.selected, fullPlan.available, "full deployment must cover every discovered entrypoint");
+for (const name of ["send-daily-brief", "weekly-digest", "promo-expiry-digest", "onboarding-drip"]) {
+  const command = fullPlan.commands.find((entry) => entry.kind === "function" && entry.name === name);
+  assert.ok(command, `full deployment must include scheduler authorization fix for ${name}`);
+  assert.equal(command.target, PROMOGRIND_PROJECT_REF);
+}
 assert.equal(plan.commands[0].kind, "link");
 assert.equal(plan.commands[1].kind, "migration");
 assert.ok(plan.commands.filter((entry) => entry.kind !== "migration").every((entry) => {

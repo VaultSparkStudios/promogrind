@@ -55,17 +55,20 @@ if (!apply) {
 
 const directCapability = resolveCapability(PROMOGRIND_DEPLOY_CAPABILITY);
 const managementCapability = resolveCapability("supabase.management");
-const adminCapability = resolveCapability("supabase.admin");
 let authorityMode;
 let env;
 if (directCapability.ok) {
   authorityMode = "project-capability";
   env = envForSpawn(PROMOGRIND_DEPLOY_CAPABILITY, ["SUPABASE_ACCESS_TOKEN", "SUPABASE_URL", "POSTGRES_PASSWORD"]);
-} else if (managementCapability.ok && adminCapability.ok) {
+} else if (managementCapability.ok) {
   authorityMode = "composed-target-verified";
-  env = envForSpawn("supabase.management", ["SUPABASE_URL", "POSTGRES_PASSWORD"]);
+  // A studio-wide admin URL can belong to another product. The management
+  // token is authorized against this exact project below before any mutation;
+  // no unrelated project's URL, database password or admin key is needed.
+  env = envForSpawn("supabase.management");
+  env.SUPABASE_URL = `https://${target}.supabase.co`;
 } else {
-  console.error(`deploy-supabase: neither ${PROMOGRIND_DEPLOY_CAPABILITY} nor the supabase.management + supabase.admin authority pair is READY`);
+  console.error(`deploy-supabase: neither ${PROMOGRIND_DEPLOY_CAPABILITY} nor supabase.management is READY`);
   process.exit(2);
 }
 
@@ -79,7 +82,7 @@ if (!env.SUPABASE_ACCESS_TOKEN) {
   console.error("deploy-supabase: the selected gateway authority did not yield SUPABASE_ACCESS_TOKEN");
   process.exit(2);
 }
-if (includeMigration && !env.POSTGRES_PASSWORD) {
+if (includeMigration && authorityMode === "project-capability" && !env.POSTGRES_PASSWORD) {
   console.error("deploy-supabase: migration apply requires POSTGRES_PASSWORD through the secrets gateway");
   process.exit(2);
 }

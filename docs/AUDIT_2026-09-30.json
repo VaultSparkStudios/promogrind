@@ -1,0 +1,293 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-09-30T03:38:16.601Z",
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app",
+    "audience": "public-unlaunched",
+    "session": 131
+  },
+  "rubric": "Product: feature depth and UX weighted 2; speed and efficiency weighted 1.5. Technical release and public-launch readiness are evaluated separately.",
+  "sample": {
+    "picked": 20,
+    "method": "Bounded review of release deployers/workflow, worker caching, scheduled handlers, capability policy, decision feedback, advisor privacy, cache, and build dependencies; live staging account/DNS probe; exact-lock registry and vulnerability checks."
+  },
+  "premiseLedger": {
+    "baseline": "Local 4d2871f fast-forwarded to remote 1c31cb3. Previous complete SIL record is S129; remote generated-artifact commit explicitly used S130. S131 is the next unused session number.",
+    "verification": "The local check-audit-premises.mjs is absent. Findings were verified by reading affected source and reproducing failures before repair. No machine premise-gate pass is claimed.",
+    "recovery": "The release/DNS follow-up and public-safe CDR commits after S129, plus S130 dependency/artifact updates, lack complete closeout write-back. This arc recovers their recorded state without claiming new proof for old external criteria."
+  },
+  "candidateMatrix": {
+    "featureDepth": [
+      "Exact deployed-release identity selected",
+      "Missing decision integration rejected: dashboard already combines evidence, exposure, and outcomes"
+    ],
+    "innovation": [
+      "Exact-origin release binding selected",
+      "New parallel provenance system rejected: ResultFeedbackCard already records decision evidence",
+      "Release receipt replay selected over new external infrastructure"
+    ],
+    "ux": [
+      "Extensionless navigation freshness selected",
+      "Cosmetic redesign rejected: no visual defect established"
+    ],
+    "feedbackLoop": [
+      "Wrong-host deployment success selected",
+      "Missing result feedback rejected: placed/skipped/settled and failure feedback already exist"
+    ],
+    "engagement": [
+      "Returning-user release freshness selected",
+      "Profit/volume gamification rejected: disciplined review and reasoned skips are the existing contract"
+    ],
+    "aiIntegration": [
+      "Complete target-pinned function release selected",
+      "New AI privacy wrapper rejected: advisorPrivacy already redacts/bounds inputs and requires opt-in"
+    ],
+    "security": [
+      "Unauthenticated scheduled dispatch selected",
+      "Locked nanoid vulnerability selected",
+      "Broader feature enablement rejected: capability ceiling deliberately limits provider readiness"
+    ],
+    "speedOrganization": [
+      "Shared runtime import compatibility selected",
+      "Duplicate deployment plane removed",
+      "New dependencies rejected except existing transitive security patch"
+    ],
+    "tokenApiReduction": [
+      "Reuse one immutable build across origins selected",
+      "Duplicate prompt cache rejected: expiry and hit/miss accounting already exist; no savings fabricated"
+    ]
+  },
+  "items": [
+    {
+      "id": "S131-1",
+      "slug": "scheduled-dispatch-auth",
+      "title": "Reject unauthorized scheduled dispatch before any database or notification work",
+      "tier": "🔥",
+      "axis": "security",
+      "rank": 1,
+      "effortHours": 2,
+      "impact": 10,
+      "innovation": 4,
+      "priority": 20,
+      "status": "in-progress",
+      "evidence": [
+        "send-daily-brief ignored the request and --all uses --no-verify-jwt",
+        "Other scheduled handlers accepted weak cron/bearer predicates"
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Protect daily brief with exact configured scheduler authority."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Share a fail-closed POST/auth wrapper across all four scheduled handlers; prove unauthorized requests never dispatch."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Typecheck every function, deploy all target-pinned functions, and verify remote inventory and unauthorized rejection without sending notifications."
+        }
+      }
+    },
+    {
+      "id": "S131-2",
+      "slug": "exact-origin-release-proof",
+      "title": "Require the owned domain to serve the exact staged commit and artifact before production succeeds",
+      "tier": "🔥",
+      "axis": "security / feedback",
+      "rank": 2,
+      "effortHours": 3,
+      "impact": 10,
+      "innovation": 7,
+      "priority": 30.1,
+      "status": "in-progress",
+      "evidence": [
+        "waitForOrigin could return successful pages.dev fallback after owned-domain failure",
+        "Header presence alone accepted an older release",
+        "Production upload previously required no staging receipt"
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Fail unless the custom domain passes."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Bind marker and index hash to the upload; require matching staging receipt and live recheck."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Verify exact same immutable artifact on staging and production with receipts and rollback instructions."
+        }
+      }
+    },
+    {
+      "id": "S131-3",
+      "slug": "cloudflare-workflow-authority",
+      "title": "Use Cloudflare for automated staging and production with gateway-only credential synchronization",
+      "tier": "🔥",
+      "axis": "speed / security",
+      "rank": 3,
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 5,
+      "priority": 19.4,
+      "status": "in-progress",
+      "evidence": [
+        "deploy-pages.yml deployed to GitHub Pages but verified promogrind.bet served by Cloudflare",
+        "sync-github-secrets read .env.admin directly and passed values in process arguments"
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Remove misleading wrong-host verification."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Build once, deploy/verify Cloudflare staging, promote exact bytes; use pinned, allowlisted gateway secret sync over stdin."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Configure repository deployment authority and observe successful main-commit CI plus real two-origin promotion."
+        }
+      }
+    },
+    {
+      "id": "S131-4",
+      "slug": "navigation-release-freshness",
+      "title": "Fetch fresh HTML for same-origin extensionless navigation while preserving offline fallback",
+      "tier": "⚡",
+      "axis": "ux",
+      "rank": 4,
+      "effortHours": 1,
+      "impact": 9,
+      "innovation": 4,
+      "priority": 22.7,
+      "status": "in-progress",
+      "evidence": [
+        "Service worker returned cached HTML immediately for /dashboard, /pricing, and /arb-scanner",
+        "A VM behavioral reproduction observed the old response on four route forms"
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Classify same-origin navigate requests as network-first."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Test fresh network, offline fallback, uncached failure, cross-origin/port exclusion and unaffected asset policy."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Inspect deployed desktop/mobile dark/light routes and verify service worker behavior from the shipped bytes."
+        }
+      }
+    },
+    {
+      "id": "S131-5",
+      "slug": "runtime-overlay-compatibility",
+      "title": "Reconcile incoming runtime exports without losing local evidence and process safety",
+      "tier": "⚡",
+      "axis": "speed / organization",
+      "rank": 5,
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 4,
+      "priority": 16,
+      "status": "in-progress",
+      "evidence": [
+        "Startup failed importing TERMINAL_TASK_STATUS after canonical propagation",
+        "Merged validator removed local source receipt checks",
+        "Canonical status writer requires a schema absent in this public checkout"
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Resolve missing exports."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Preserve local source/intent/spawn safety while adopting runtime additions and schema; pass compatibility and regression checks."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Verify full integrated launch gate and recover truthful session closeout evidence."
+        }
+      }
+    },
+    {
+      "id": "S131-6",
+      "slug": "locked-dependency-security",
+      "title": "Patch the vulnerable nanoid resolution and validate the updated dependency tree",
+      "tier": "🔥",
+      "axis": "security",
+      "rank": 6,
+      "effortHours": 0.5,
+      "impact": 8,
+      "innovation": 2,
+      "priority": 12.1,
+      "status": "in-progress",
+      "evidence": [
+        "npm audit identified GHSA-2v37-7h3g-55p8 in locked nanoid <3.3.18",
+        "All direct lock entries matched official registry integrity and were older than cooldown"
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Pin patched compatible transitive version."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "Install without lifecycle scripts; require zero audit vulnerabilities and complete build/tests."
+        },
+        "L3": {
+          "effortHours": 1,
+          "recipe": "Verify patched lock in remote CI and deployed artifact."
+        }
+      }
+    },
+    {
+      "id": "S131-7",
+      "slug": "pricing-light-theme-readability",
+      "title": "Restore readable pricing tier labels and amounts in the light theme",
+      "tier": "⚡",
+      "axis": "ux",
+      "rank": 7,
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 3,
+      "priority": 15.1,
+      "status": "in-progress",
+      "evidence": [
+        "Production BEFORE Chromium captures showed small-label contrast ratios of 4.34, 2.22, 1.96, 2.08 and 3.61; three large prices were below 3.0."
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Use readable semantic colors for pricing text."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Preserve decorative tier accents and measure text contrast across both themes."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Inspect actual desktop/mobile dark/light staging pixels, repair defects, and bind the visual receipt to exact source and image hashes."
+        }
+      }
+    }
+  ],
+  "deferred": [
+    {
+      "slug": "public-stats-feed",
+      "reason": "CANON-054 STRONG gap: no verified aggregate feed or sustained refresh producer. Add a separately specified privacy-preserving stats feed/tile/page; do not fabricate counts to clear a release check. FORGE remains unchanged."
+    },
+    {
+      "slug": "public-launch-proofs",
+      "reason": "Retain existing Obelisk, mail, Stripe, friend-test, credential-remediation, cost and distinct launch-approval criteria. Deployment authority does not establish these independent proofs."
+    }
+  ],
+  "executionLog": []
+}
