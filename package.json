@@ -61,7 +61,7 @@
     "nanoid": "3.3.18"
   },
   "dependencies": {
-    "@sentry/react": "^10.75.0",
+    "@sentry/react": "^11.0.0",
     "@supabase/supabase-js": "^2.117.2",
     "posthog-js": "^1.434.17",
     "react": "^18.3.1",
