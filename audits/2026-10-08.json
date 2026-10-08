@@ -515,6 +515,18 @@
       "measure-ecosystem-scorecard.mjs missing; no unmeasured score fabricated",
       "ignis-rescore-touched.mjs explicit public-repo skip; current project export refreshed by available Genius/IGNIS generation",
       "Local autopilot lacks execution receipts; canonical receipt wrapper observes actual exit"
-    ]
+    ],
+    "autopilot": {
+      "exitCode": 0,
+      "outcome": "completed",
+      "finishedAt": "2026-10-08T04:39:39.136Z",
+      "receipt": "portfolio/CLOSEOUT_AUTOPILOT_RECEIPTS.ndjson"
+    },
+    "integration": {
+      "remoteCommits": 8,
+      "dependencyGraph": "Every incoming dependency bump is equal to or superseded by the already reviewed graph; incoming minimum ranges retained",
+      "applicationSourcesUnchanged": 426,
+      "mergedCommit": "33726d96f5d178f4989e0afe150489e4237589f6"
+    }
   }
 }
