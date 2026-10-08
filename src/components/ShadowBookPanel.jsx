@@ -42,7 +42,7 @@ export default function ShadowBookPanel({ compact = false }) {
         <div style={{ fontSize: compact ? 14 : 16, fontWeight: 700, fontFamily: fontD, letterSpacing: "-0.3px" }}>
           Shadow book mode
         </div>
-        <div style={{ fontSize: 11, color: K.mt, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5 }}>
           Cash you'd unlock by opening these accounts. Estimates use a 70% bonus conversion rate and
           conservative per-book recurring EV.
         </div>
@@ -90,16 +90,16 @@ export default function ShadowBookPanel({ compact = false }) {
                 }}
               />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: K.tx }}>{row.name}</div>
-                <div style={{ fontSize: 11, color: K.mt, lineHeight: 1.5 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{row.name}</div>
+                <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5 }}>
                   ~${row.welcomeOneTime} welcome + ~${row.weeklyRecurring}/wk recurring
                 </div>
               </div>
               <div style={{ textAlign: "right", flexShrink: 0 }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: K.gn }}>
+                <div style={{ fontSize: 14, fontWeight: 800, color: K.gn }}>
                   +${row.firstMonthTotal.toLocaleString()}
                 </div>
-                <div style={{ fontSize: 10, color: K.mt }}>first month</div>
+                <div style={{ fontSize: 12, color: K.mt }}>first month</div>
               </div>
               {href && (
                 <a
@@ -114,7 +114,7 @@ export default function ShadowBookPanel({ compact = false }) {
                     borderRadius: 8,
                     background: K.gn,
                     color: "#081018",
-                    fontSize: 11,
+                    fontSize: 12,
                     fontWeight: 800,
                     textDecoration: "none",
                     fontFamily: font,
@@ -128,7 +128,7 @@ export default function ShadowBookPanel({ compact = false }) {
         })}
       </ul>
 
-      <div style={{ marginTop: 10, fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
+      <div style={{ marginTop: 10, fontSize: 12, color: K.mt, lineHeight: 1.6 }}>
         21+. Gambling can be addictive. Only open accounts you'll actually use — this projection
         assumes consistent promo hunting. Mark books in the Sportsbooks tab once opened to refine
         the estimate.
@@ -147,7 +147,7 @@ function Summary({ label, value, tone }) {
         background: `${tone}0d`,
       }}
     >
-      <div style={{ fontSize: 10, color: K.mt, letterSpacing: "0.8px", textTransform: "uppercase" }}>{label}</div>
+      <div style={{ fontSize: 12, color: K.mt, letterSpacing: "0.8px", textTransform: "uppercase" }}>{label}</div>
       <div style={{ fontSize: 16, fontWeight: 800, color: tone, fontFamily: fontD }}>{value}</div>
     </div>
   );

@@ -18,12 +18,12 @@ export default function NoVig() {
         {r && (
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
-              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Sportsbook Vig (Juice)" v={`${r.v}%`} c={K.rd} b />
-            <div style={{ marginTop: 8, marginBottom: 2, fontSize: 10, color: K.mt }}>SIDE 1</div>
+            <div style={{ marginTop: 8, marginBottom: 2, fontSize: 12, color: K.mt }}>SIDE 1</div>
             <RR l="Implied Probability (with vig)" v={`${r.ip1}%`} c={K.dm} /><RR l="True Probability (no vig)" v={`${r.fp1}%`} c={K.gn} /><RR l="Fair Odds" v={r.fo1} c={K.pp} b />
-            <div style={{ marginTop: 8, marginBottom: 2, fontSize: 10, color: K.mt }}>SIDE 2</div>
+            <div style={{ marginTop: 8, marginBottom: 2, fontSize: 12, color: K.mt }}>SIDE 2</div>
             <RR l="Implied Probability (with vig)" v={`${r.ip2}%`} c={K.dm} /><RR l="True Probability (no vig)" v={`${r.fp2}%`} c={K.gn} /><RR l="Fair Odds" v={r.fo2} c={K.pp} b />
             <Nt c={K.ac}>If any sportsbook offers BETTER than these fair odds on either side, that bet has positive expected value (+EV).</Nt>
             {showReceipt && (

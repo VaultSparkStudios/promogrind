@@ -73,7 +73,7 @@
     <style>
       /* ── Reset ───────────────────────────────────────────────────────── */
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: #0a0e17; color: #e2e8f0; }
+      body { background: #0a0e17; color: #e2e8f0; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; font-size: 16px; line-height: 1.6; font-variant-numeric: tabular-nums; }
       body.light { background: #f8fafc; color: #1e293b; }
       #root { min-height: 100vh; }
 
@@ -94,7 +94,7 @@
       html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
       /* ── Touch targets ───────────────────────────────────────────────── */
-      button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+      button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; min-height: 44px; line-height: 1.4; }
       a      { -webkit-tap-highlight-color: transparent; }
 
       /* ── Scrollbar: thin on desktop, hidden on mobile overflows ─────── */
@@ -125,6 +125,8 @@
       /* ── Mobile: larger tap targets for nav buttons ──────────────────── */
       @media (max-width: 640px) {
         .pg-tab-btn { min-height: 48px !important; }
+        /* Mobile already shows the same educational/age/help line in the header. */
+        .pg-trust-strip { display: none; }
       }
 
       /* ── Safe area padding for notched phones ────────────────────────── */

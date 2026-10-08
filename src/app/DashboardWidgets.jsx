@@ -21,8 +21,8 @@ export function DailyRoutinePanel({ openBetsCount, expiringCount }) {
 
   return (
     <div style={{ ...S.card, marginBottom: 12 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, marginBottom: 10, fontFamily: fontD }}>Today's Grind</div>
-      {alerts.map((alert, index) => <div key={index} style={{ fontSize: 11, color: K.yl, fontWeight: 600, marginBottom: 6 }}>{alert}</div>)}
+      <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 10, fontFamily: fontD }}>Today's Grind</div>
+      {alerts.map((alert, index) => <div key={index} style={{ fontSize: 12, color: K.yl, fontWeight: 600, marginBottom: 6 }}>{alert}</div>)}
       {tasks.map((task, index) => (
         <div key={index} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
           <AccessibleToggle
@@ -31,7 +31,7 @@ export function DailyRoutinePanel({ openBetsCount, expiringCount }) {
             label={`${task} complete`}
             compact
           />
-          <span style={{ fontSize: 12, color: checks[index] ? K.mt : K.tx, textDecoration: checks[index] ? "line-through" : "none" }}>{index + 1}. {task}</span>
+          <span style={{ fontSize: 14, color: checks[index] ? K.mt : K.tx, textDecoration: checks[index] ? "line-through" : "none" }}>{index + 1}. {task}</span>
         </div>
       ))}
     </div>
@@ -58,18 +58,18 @@ export function ProfitGoalTracker({ totalProfit }) {
   return (
     <div style={{ ...S.card, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, fontFamily: fontD }}>Profit Goal</div>
-        <button onClick={() => setShowInput((value) => !value)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 10, cursor: "pointer", fontFamily: font }}>{showInput ? "Cancel" : "Set Goal"}</button>
+        <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD }}>Profit Goal</div>
+        <button onClick={() => setShowInput((value) => !value)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>{showInput ? "Cancel" : "Set Goal"}</button>
       </div>
       {showInput && (
         <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
           <input style={{ ...S.input, flex: 1 }} value={inputVal} onChange={(event) => setInputVal(event.target.value)} placeholder="Enter goal $" />
-          <button onClick={setGoal} style={{ padding: "6px 14px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, cursor: "pointer", fontFamily: font, fontSize: 11 }}>Save</button>
+          <button onClick={setGoal} style={{ padding: "6px 14px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, cursor: "pointer", fontFamily: font, fontSize: 12 }}>Save</button>
         </div>
       )}
       {goal > 0 && (
         <>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: K.mt, marginBottom: 6 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: K.mt, marginBottom: 6 }}>
             <span>Progress: {f(pct, 1)}% of ${f(goal, 0)} goal</span>
             {pct < 100 && <span>Remaining: ${f(remaining)}</span>}
           </div>
@@ -79,7 +79,7 @@ export function ProfitGoalTracker({ totalProfit }) {
           {pct >= 100 && <div style={{ textAlign: "center", padding: "10px", background: `${K.gn}15`, border: `1px solid ${K.gn}30`, borderRadius: 6, fontSize: 14, fontWeight: 700, color: K.gn }}>Goal reached</div>}
         </>
       )}
-      {!goal && !showInput && <div style={{ fontSize: 11, color: K.mt }}>Set a profit goal to track your progress.</div>}
+      {!goal && !showInput && <div style={{ fontSize: 12, color: K.mt }}>Set a profit goal to track your progress.</div>}
     </div>
   );
 }
@@ -121,7 +121,7 @@ export function DailyBriefingBtn({ openBets, todayPromos }) {
     }
   };
   return (
-    <button onClick={toggle} style={{ padding: "5px 12px", background: enabled ? `${K.gn}15` : "transparent", border: `1px solid ${enabled ? K.gn : K.bd2}`, borderRadius: 6, color: enabled ? K.gn : K.mt, fontSize: 10, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}>
+    <button onClick={toggle} style={{ padding: "5px 12px", background: enabled ? `${K.gn}15` : "transparent", border: `1px solid ${enabled ? K.gn : K.bd2}`, borderRadius: 6, color: enabled ? K.gn : K.mt, fontSize: 12, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}>
       {enabled ? "9am Briefing ON" : "Enable 9am Briefing"}
     </button>
   );
@@ -143,10 +143,10 @@ export function OpenExposurePanel({ bets }) {
 
   return (
     <div style={{ ...S.card, marginBottom: 12 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, marginBottom: 10, fontFamily: fontD }}>Open Exposure</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 10, fontFamily: fontD }}>Open Exposure</div>
       <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
-          <thead><tr>{["Book", "Bets", "At Risk", "Potential Win"].map((header) => <th key={header} style={{ textAlign: "left", padding: "5px 8px", borderBottom: `1px solid ${K.bd2}`, color: K.mt, fontSize: 10, textTransform: "uppercase" }}>{header}</th>)}</tr></thead>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+          <thead><tr>{["Book", "Bets", "At Risk", "Potential Win"].map((header) => <th key={header} style={{ textAlign: "left", padding: "5px 8px", borderBottom: `1px solid ${K.bd2}`, color: K.mt, fontSize: 12, textTransform: "uppercase" }}>{header}</th>)}</tr></thead>
           <tbody>
             {books.map(([book, value]) => (
               <tr key={book}>
@@ -177,12 +177,12 @@ export function TopToolsPanel({ navigate, tabs }) {
   tabs.forEach((group) => group.items.forEach((item) => { nameMap[item.slug] = item.n; }));
   return (
     <div style={{ ...S.card, marginBottom: 12 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 8, fontFamily: fontD }}>Your Top Tools</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 8, fontFamily: fontD }}>Your Top Tools</div>
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
         {top5.map(([slug, count]) => (
-          <button key={slug} onClick={() => navigate(`/${slug}`)} style={{ padding: "5px 12px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 50, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font, display: "flex", alignItems: "center", gap: 6 }}>
+          <button key={slug} onClick={() => navigate(`/${slug}`)} style={{ padding: "5px 12px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 50, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font, display: "flex", alignItems: "center", gap: 6 }}>
             <span>{nameMap[slug] || slug}</span>
-            <span style={{ fontSize: 9, color: K.mt, background: K.s3, padding: "1px 5px", borderRadius: 10 }}>{count}</span>
+            <span style={{ fontSize: 12, color: K.mt, background: K.s3, padding: "1px 5px", borderRadius: 10 }}>{count}</span>
           </button>
         ))}
       </div>

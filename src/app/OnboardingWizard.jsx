@@ -21,8 +21,8 @@ const OnboardingWizard = ({ onDone }) => {
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,maxWidth:380,margin:"0 auto",textAlign:"left"}}>
             {[["Welcome Promos","One-time offer value varies by state, book, and account"],["Profit Boosts","Recurring offers; verify terms, odds, and expected value each time"],["Eligibility Varies","Educational calculator — check local law and sportsbook terms"],["No Sports Knowledge","Decision math matters more than knowing the teams"]].map(([t,d])=>(
               <div key={t} style={{padding:"10px 12px",background:"#161d2a",borderRadius:8,border:"1px solid #1e293b"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#e2e8f0",marginBottom:2}}>{t}</div>
-                <div style={{fontSize:10,color:"#64748b",lineHeight:1.5}}>{d}</div>
+                <div style={{fontSize:12,fontWeight:700,color:"#e2e8f0",marginBottom:2}}>{t}</div>
+                <div style={{fontSize:12,color:"#64748b",lineHeight:1.5}}>{d}</div>
               </div>
             ))}
           </div>
@@ -35,11 +35,11 @@ const OnboardingWizard = ({ onDone }) => {
       content: (
         <div style={{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center"}}>
           {BOOK_OPTIONS.map(b=>(
-            <button key={b} onClick={()=>toggleBook(b)} style={{padding:"8px 16px",background:books.includes(b)?"#4ade8020":"transparent",border:`1px solid ${books.includes(b)?"#4ade80":"#1e293b"}`,borderRadius:6,color:books.includes(b)?"#4ade80":"#64748b",fontSize:12,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace",fontWeight:books.includes(b)?700:400}}>
+            <button key={b} onClick={()=>toggleBook(b)} style={{padding:"8px 16px",background:books.includes(b)?"#4ade8020":"transparent",border:`1px solid ${books.includes(b)?"#4ade80":"#1e293b"}`,borderRadius:6,color:books.includes(b)?"#4ade80":"#64748b",fontSize:14,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace",fontWeight:books.includes(b)?700:400}}>
               {b}
             </button>
           ))}
-          <div style={{width:"100%",textAlign:"center",fontSize:11,color:"#64748b",marginTop:4}}>None yet? No problem — you'll start fresh.</div>
+          <div style={{width:"100%",textAlign:"center",fontSize:12,color:"#64748b",marginTop:4}}>None yet? No problem — you'll start fresh.</div>
         </div>
       )
     },
@@ -48,11 +48,11 @@ const OnboardingWizard = ({ onDone }) => {
       sub: "We'll show only sportsbooks available in your state.",
       content: (
         <div style={{textAlign:"center"}}>
-          <select style={{...S.input,maxWidth:300,padding:"10px 14px",fontSize:13,margin:"0 auto"}} value={userState} onChange={e=>{setUserState(e.target.value);try{localStorage.setItem('pg_user_state',e.target.value);}catch{}}}>
+          <select style={{...S.input,maxWidth:300,padding:"10px 14px",fontSize:14,margin:"0 auto"}} value={userState} onChange={e=>{setUserState(e.target.value);try{localStorage.setItem('pg_user_state',e.target.value);}catch{}}}>
             <option value="">— Select your state —</option>
             {US_STATES.map(s=><option key={s} value={s}>{s}</option>)}
           </select>
-          <div style={{fontSize:11,color:K.mt,marginTop:12}}>
+          <div style={{fontSize:12,color:K.mt,marginTop:12}}>
             Availability, eligibility, and rules change by location. Select yours to review books, then verify current regulator and operator guidance.
           </div>
         </div>
@@ -63,7 +63,7 @@ const OnboardingWizard = ({ onDone }) => {
       sub: books.length > 0 ? `You have ${books.length} book${books.length>1?"s":""} — start converting promos immediately.` : "Open one or more sportsbook apps and grab a welcome promo.",
       content: (
         <div style={{textAlign:"center"}}>
-          <div style={{fontSize:13,color:"#94a3b8",marginBottom:16,lineHeight:1.7}}>Your best first move:</div>
+          <div style={{fontSize:14,color:"#94a3b8",marginBottom:16,lineHeight:1.7}}>Your best first move:</div>
           <div style={{display:"grid",gap:8,maxWidth:380,margin:"0 auto",textAlign:"left"}}>
             {[
               ["1","Get a bonus bet promo","DraftKings, FanDuel, Fanatics, ESPN BET — all offer bonus bets after a small qualifying wager"],
@@ -72,7 +72,7 @@ const OnboardingWizard = ({ onDone }) => {
             ].map(([n,t,d])=>(
               <div key={n} style={{display:"flex",gap:12,padding:"10px 12px",background:"#161d2a",borderRadius:8,border:"1px solid #1e293b"}}>
                 <div style={{fontSize:16,fontWeight:700,color:"#4ade80",minWidth:20}}>{n}</div>
-                <div><div style={{fontSize:12,fontWeight:600,color:"#e2e8f0",marginBottom:2}}>{t}</div><div style={{fontSize:10,color:"#64748b",lineHeight:1.5}}>{d}</div></div>
+                <div><div style={{fontSize:14,fontWeight:600,color:"#e2e8f0",marginBottom:2}}>{t}</div><div style={{fontSize:12,color:"#64748b",lineHeight:1.5}}>{d}</div></div>
               </div>
             ))}
           </div>
@@ -87,15 +87,15 @@ const OnboardingWizard = ({ onDone }) => {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}}>
           <div>
             <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:20,fontWeight:700,color:"#e2e8f0",marginBottom:4}}>{current.title}</div>
-            <div style={{fontSize:12,color:"#64748b"}}>{current.sub}</div>
+            <div style={{fontSize:14,color:"#64748b"}}>{current.sub}</div>
           </div>
-          <div style={{fontSize:10,color:"#334155",fontFamily:"'JetBrains Mono',monospace"}}>{step+1}/{steps.length}</div>
+          <div style={{fontSize:12,color:"#334155",fontFamily:"'JetBrains Mono',monospace"}}>{step+1}/{steps.length}</div>
         </div>
         <div style={{marginBottom:24}}>{current.content}</div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <button onClick={onDone} style={{padding:"6px 14px",background:"transparent",border:"1px solid #1e293b",borderRadius:6,color:"#334155",fontSize:11,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace"}}>Skip</button>
+          <button onClick={onDone} style={{padding:"6px 14px",background:"transparent",border:"1px solid #1e293b",borderRadius:6,color:"#334155",fontSize:12,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace"}}>Skip</button>
           <div style={{display:"flex",gap:6}}>{steps.map((_,i)=><div key={i} style={{width:6,height:6,borderRadius:"50%",background:i===step?"#4ade80":"#1e293b"}}/>)}</div>
-          <button onClick={()=>{ if(step<steps.length-1) setStep(s=>s+1); else onDone(); }} style={{padding:"8px 20px",background:"#4ade80",border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:13,cursor:"pointer",fontFamily:"'Space Grotesk',sans-serif"}}>
+          <button onClick={()=>{ if(step<steps.length-1) setStep(s=>s+1); else onDone(); }} style={{padding:"8px 20px",background:"#4ade80",border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:14,cursor:"pointer",fontFamily:"'Space Grotesk',sans-serif"}}>
             {step<steps.length-1?"Next →":"Let's Go →"}
           </button>
         </div>

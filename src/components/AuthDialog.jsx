@@ -32,7 +32,7 @@ const getInputStyle = () => ({
   background: K.s2,
   color: K.tx,
   fontFamily: font,
-  fontSize: 13,
+  fontSize: 14,
   outline: "none",
   boxSizing: "border-box",
 });
@@ -219,13 +219,13 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
           }}
         >
           <div>
-            <div style={{ fontSize: 10, color: K.gn, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 6 }}>
+            <div style={{ fontSize: 12, color: K.gn, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 6 }}>
               PromoGrind Account
             </div>
             <div id="pg-auth-heading" style={{ fontSize: 24, color: K.tx, fontWeight: 800, fontFamily: fontD, letterSpacing: "-0.5px", marginBottom: 8 }}>
               {heading}
             </div>
-            <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, maxWidth: 340 }}>
+            <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.7, maxWidth: 340 }}>
               {subheading}
             </div>
           </div>
@@ -238,7 +238,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
           </button>
         </div>
 
-        <div role="status" style={{ margin: '16px 20px 0', padding: '10px 12px', borderRadius: 10, border: `1px solid ${K.yl}35`, background: `${K.yl}0d`, color: K.dm, fontSize: 10, lineHeight: 1.55 }}>
+        <div role="status" style={{ margin: '16px 20px 0', padding: '10px 12px', borderRadius: 10, border: `1px solid ${K.yl}35`, background: `${K.yl}0d`, color: K.dm, fontSize: 12, lineHeight: 1.55 }}>
           <strong style={{ color: K.yl }}>Identity architecture · {identityState.declaredArchitecture}</strong><br />
           {identityState.currentLabel}. This form uses the current compatibility authority; it is not represented as unified studio sign-in.
         </div>
@@ -260,7 +260,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   border: `1px solid ${(mode === value || (isReset && value === "signin") || (isUpdatePassword && value === "signin")) ? K.gn : K.bd}`,
                   background: (mode === value || (isReset && value === "signin") || (isUpdatePassword && value === "signin")) ? `${K.gn}18` : K.s2,
                   color: (mode === value || (isReset && value === "signin") || (isUpdatePassword && value === "signin")) ? K.gn : K.dm,
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: 700,
                   cursor: "pointer",
                   fontFamily: font,
@@ -274,7 +274,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
           <div style={{ display: "grid", gap: 12 }}>
             {isSignup && (
               <label style={{ display: "grid", gap: 6 }}>
-                <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
+                <span style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
                   Display name
                 </span>
                 <input
@@ -284,7 +284,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                   maxLength={24}
                   style={getInputStyle()}
                 />
-                <span style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>
+                <span style={{ fontSize: 12, color: K.mt, lineHeight: 1.5 }}>
                   This name appears inside PromoGrind.
                 </span>
               </label>
@@ -292,7 +292,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
 
             {!isUpdatePassword && (
               <label style={{ display: "grid", gap: 6 }}>
-                <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
+                <span style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
                   Email
                 </span>
                 <input
@@ -308,7 +308,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
 
             {!isReset && (
               <label style={{ display: "grid", gap: 6 }}>
-                <span style={{ fontSize: 11, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
+                <span style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>
                   {isUpdatePassword ? "New password" : "Password"}
                 </span>
                 <input
@@ -331,20 +331,20 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                 onChange={(event) => setMarketingOptIn(event.target.checked)}
                 style={{ marginTop: 2 }}
               />
-              <span style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>
+              <span style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>
                 Send me occasional PromoGrind updates, launch notes, and relevant product offers.
               </span>
             </label>
           )}
 
           {error && (
-            <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, border: `1px solid ${K.rd}40`, background: `${K.rd}12`, color: K.rd, fontSize: 11, lineHeight: 1.5 }}>
+            <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, border: `1px solid ${K.rd}40`, background: `${K.rd}12`, color: K.rd, fontSize: 12, lineHeight: 1.5 }}>
               {error}
             </div>
           )}
 
           {info && (
-            <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, border: `1px solid ${K.ac}40`, background: `${K.ac}12`, color: K.ac, fontSize: 11, lineHeight: 1.5 }}>
+            <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, border: `1px solid ${K.ac}40`, background: `${K.ac}12`, color: K.ac, fontSize: 12, lineHeight: 1.5 }}>
               {info}
             </div>
           )}
@@ -360,7 +360,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
               border: "none",
               background: K.gn,
               color: "#081018",
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: 800,
               cursor: submitting ? "default" : "pointer",
               fontFamily: font,
@@ -383,7 +383,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
                 border: `1px solid ${K.bd2}`,
                 background: "transparent",
                 color: K.dm,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: 700,
                 cursor: secondarySubmitting ? "default" : "pointer",
                 fontFamily: font,
@@ -399,14 +399,14 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
               <button
                 type="button"
                 onClick={() => onModeChange?.("reset")}
-                style={{ background: "none", border: "none", padding: 0, color: K.ac, cursor: "pointer", fontSize: 11, fontFamily: font }}
+                style={{ background: "none", border: "none", padding: 0, color: K.ac, cursor: "pointer", fontSize: 12, fontFamily: font }}
               >
                 Forgot your password?
               </button>
             </div>
           )}
 
-          <div style={{ marginTop: 14, fontSize: 11, color: K.mt, lineHeight: 1.7, textAlign: "center" }}>
+          <div style={{ marginTop: 14, fontSize: 12, color: K.mt, lineHeight: 1.7, textAlign: "center" }}>
             {isSignup ? "Already have an account?" : "Need a new PromoGrind account?"}{" "}
             <button
               type="button"
@@ -417,7 +417,7 @@ export default function AuthDialog({ mode = "signup", open, onClose, onModeChang
             </button>
           </div>
 
-          <div style={{ marginTop: 10, fontSize: 10, color: K.mt, lineHeight: 1.6, textAlign: "center" }}>
+          <div style={{ marginTop: 10, fontSize: 12, color: K.mt, lineHeight: 1.6, textAlign: "center" }}>
             This creates a PromoGrind account only. Studio membership is separate and not required.
           </div>
         </form>

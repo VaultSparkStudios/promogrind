@@ -8,46 +8,49 @@
   <link rel="canonical" href="https://promogrind.bet/embed/" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0e17; color: #e2e8f0; min-height: 100vh; }
-    a { color: #4ade80; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--pg-page-bg); color: var(--pg-page-text); min-height: 100vh; }
+    a { color: var(--pg-page-accent); }
     .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 80px; }
-    .logo { font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #4ade80; text-transform: uppercase; text-decoration: none; display: inline-block; margin-bottom: 32px; }
-    h1 { font-size: clamp(22px, 5vw, 30px); font-weight: 800; color: #e2e8f0; margin-bottom: 8px; }
-    .sub { color: #94a3b8; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
-    h2 { font-size: 16px; font-weight: 700; color: #e2e8f0; margin-bottom: 12px; margin-top: 32px; }
-    .card { background: #0f1724; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-    .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-right: 6px; }
-    .badge-free { background: #1e3a2f; color: #4ade80; border: 1px solid #4ade80; }
-    .badge-attr { background: #1a1f2e; color: #64748b; border: 1px solid #334155; }
+    .logo { font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--pg-page-accent); text-transform: uppercase; text-decoration: none; display: inline-block; margin-bottom: 32px; }
+    h1 { font-size: clamp(22px, 5vw, 30px); font-weight: 800; color: var(--pg-page-text); margin-bottom: 8px; }
+    .sub { color: var(--pg-page-muted); font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+    h2 { font-size: 16px; font-weight: 700; color: var(--pg-page-text); margin-bottom: 12px; margin-top: 32px; }
+    .card { background: var(--pg-page-panel); border: 1px solid var(--pg-page-border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 14px; font-weight: 600; margin-right: 6px; }
+    .badge-free { background: var(--pg-page-panel); color: var(--pg-page-accent); border: 1px solid var(--pg-page-accent); }
+    .badge-attr { background: var(--pg-page-panel); color: var(--pg-page-muted); border: 1px solid var(--pg-page-border); }
     .code-block {
-      background: #060a10; border: 1px solid #1e293b; border-radius: 8px;
-      padding: 14px 16px; font-family: 'Courier New', monospace; font-size: 12px;
-      color: #86efac; overflow-x: auto; position: relative; margin-top: 8px;
+      background: var(--pg-page-bg); border: 1px solid var(--pg-page-border); border-radius: 8px;
+      padding: 14px 16px; font-family: 'Courier New', monospace; font-size: 14px;
+      color: var(--pg-page-accent); overflow-x: auto; position: relative; margin-top: 8px;
     }
     .copy-btn {
       position: absolute; top: 8px; right: 8px;
-      padding: 4px 10px; background: #1e293b; border: none; color: #94a3b8;
-      border-radius: 4px; font-size: 11px; cursor: pointer;
+      padding: 4px 10px; background: var(--pg-page-border); border: none; color: var(--pg-page-muted);
+      border-radius: 4px; font-size: 14px; cursor: pointer;
     }
-    .copy-btn:hover { background: #334155; color: #e2e8f0; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { text-align: left; color: #64748b; font-weight: 600; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
-    td { padding: 10px 12px; border-bottom: 1px solid #0f1724; color: #cbd5e1; }
+    .copy-btn:hover { background: var(--pg-page-border); color: var(--pg-page-text); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; color: var(--pg-page-muted); font-weight: 600; padding: 8px 12px; border-bottom: 1px solid var(--pg-page-border); }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--pg-page-panel); color: var(--pg-page-muted); }
     tr:last-child td { border-bottom: none; }
-    td code { background: #0a0e17; padding: 2px 6px; border-radius: 4px; font-size: 11px; color: #86efac; }
+    td code { background: var(--pg-page-bg); padding: 2px 6px; border-radius: 4px; font-size: 14px; color: var(--pg-page-accent); }
     .cta-btn {
-      display: inline-block; padding: 12px 24px; background: #4ade80; color: #0a0e17;
+      display: inline-block; padding: 12px 24px; background: var(--pg-page-accent); color: var(--pg-page-bg);
       font-weight: 800; font-size: 14px; border-radius: 8px; text-decoration: none;
       margin-top: 16px;
     }
-    .cta-btn:hover { opacity: .9; color: #0a0e17; }
-    .preview { border: 2px dashed #1e293b; border-radius: 8px; overflow: hidden; margin-top: 12px; }
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .cta-btn:hover { opacity: .9; color: var(--pg-page-bg); }
+    .preview { border: 2px dashed var(--pg-page-border); border-radius: 8px; overflow: hidden; margin-top: 12px; }
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
 <div class="wrap">
   <a class="logo" href="https://promogrind.bet/">⚡ PromoGrind</a>
 
@@ -60,9 +63,9 @@
   </p>
 
   <div class="card">
-    <strong style="color:#4ade80">How it works:</strong>
-    <p style="color:#94a3b8;font-size:13px;margin-top:8px;line-height:1.7">
-      Add <code style="background:#0a0e17;padding:2px 6px;border-radius:4px;color:#86efac;font-size:12px">?embed=1</code> to any PromoGrind calculator URL and paste it as an iframe on your page.
+    <strong style="color:var(--pg-page-accent)">How it works:</strong>
+    <p style="color:var(--pg-page-muted);font-size:14px;margin-top:8px;line-height:1.7">
+      Add <code style="background:var(--pg-page-bg);padding:2px 6px;border-radius:4px;color:var(--pg-page-accent);font-size:14px">?embed=1</code> to any PromoGrind calculator URL and paste it as an iframe on your page.
       The calculator loads without the PromoGrind navigation — just the tool, with a small "Powered by PromoGrind" watermark.
       Works in all modern browsers. No API key or registration required.
     </p>
@@ -82,27 +85,27 @@
         <tr>
           <td><strong>Bonus Bet Converter</strong></td>
           <td>Signup bonus content</td>
-          <td><code>.../#/bonus-bet?embed=1</code></td>
+          <td><code>.../bonus-bet?embed=1</code></td>
         </tr>
         <tr>
           <td><strong>Profit Boost Calculator</strong></td>
           <td>Odds boost reviews</td>
-          <td><code>.../#/profit-boost?embed=1</code></td>
+          <td><code>.../profit-boost?embed=1</code></td>
         </tr>
         <tr>
           <td><strong>Arb Calculator</strong></td>
           <td>Arbitrage betting guides</td>
-          <td><code>.../#/arb-2way?embed=1</code></td>
+          <td><code>.../arb-2way?embed=1</code></td>
         </tr>
         <tr>
           <td><strong>No-Vig Calculator</strong></td>
           <td>Odds comparison pages</td>
-          <td><code>.../#/no-vig?embed=1</code></td>
+          <td><code>.../no-vig?embed=1</code></td>
         </tr>
         <tr>
           <td><strong>Kelly Criterion</strong></td>
           <td>Bankroll management content</td>
-          <td><code>.../#/kelly?embed=1</code></td>
+          <td><code>.../kelly?embed=1</code></td>
         </tr>
       </tbody>
     </table>
@@ -111,11 +114,11 @@
   <h2>Copy-Paste Embed Codes</h2>
 
   <div class="card">
-    <strong style="color:#e2e8f0">Bonus Bet Converter</strong>
-    <p style="color:#94a3b8;font-size:12px;margin-top:4px">The highest-traffic calculator — converts bonus bets to modeled cash value.</p>
+    <strong style="color:var(--pg-page-text)">Bonus Bet Converter</strong>
+    <p style="color:var(--pg-page-muted);font-size:14px;margin-top:4px">The highest-traffic calculator — converts bonus bets to modeled cash value.</p>
     <div class="code-block" id="code-bb">
       <button class="copy-btn" onclick="copyCode('code-bb', this)">Copy</button>&lt;iframe
-  src="https://promogrind.bet/?embed=1#/bonus-bet"
+  src="https://promogrind.bet/bonus-bet?embed=1"
   width="100%"
   height="520"
   style="border:none;border-radius:8px"
@@ -124,11 +127,11 @@
   </div>
 
   <div class="card">
-    <strong style="color:#e2e8f0">Profit Boost Calculator</strong>
-    <p style="color:#94a3b8;font-size:12px;margin-top:4px">Calculates optimal strategy for odds boosts and profit boost promos.</p>
+    <strong style="color:var(--pg-page-text)">Profit Boost Calculator</strong>
+    <p style="color:var(--pg-page-muted);font-size:14px;margin-top:4px">Calculates optimal strategy for odds boosts and profit boost promos.</p>
     <div class="code-block" id="code-pb">
       <button class="copy-btn" onclick="copyCode('code-pb', this)">Copy</button>&lt;iframe
-  src="https://promogrind.bet/?embed=1#/profit-boost"
+  src="https://promogrind.bet/profit-boost?embed=1"
   width="100%"
   height="520"
   style="border:none;border-radius:8px"
@@ -137,11 +140,11 @@
   </div>
 
   <div class="card">
-    <strong style="color:#e2e8f0">Arbitrage Calculator</strong>
-    <p style="color:#94a3b8;font-size:12px;margin-top:4px">Two-way arb calculator with stake sizing and modeled return display.</p>
+    <strong style="color:var(--pg-page-text)">Arbitrage Calculator</strong>
+    <p style="color:var(--pg-page-muted);font-size:14px;margin-top:4px">Two-way arb calculator with stake sizing and modeled return display.</p>
     <div class="code-block" id="code-arb">
       <button class="copy-btn" onclick="copyCode('code-arb', this)">Copy</button>&lt;iframe
-  src="https://promogrind.bet/?embed=1#/arb-2way"
+  src="https://promogrind.bet/arb-2way?embed=1"
   width="100%"
   height="520"
   style="border:none;border-radius:8px"
@@ -150,11 +153,11 @@
   </div>
 
   <div class="card">
-    <strong style="color:#e2e8f0">No-Vig / Fair Odds Calculator</strong>
-    <p style="color:#94a3b8;font-size:12px;margin-top:4px">Removes the book's margin to show the true fair odds on any market.</p>
+    <strong style="color:var(--pg-page-text)">No-Vig / Fair Odds Calculator</strong>
+    <p style="color:var(--pg-page-muted);font-size:14px;margin-top:4px">Removes the book's margin to show the true fair odds on any market.</p>
     <div class="code-block" id="code-novig">
       <button class="copy-btn" onclick="copyCode('code-novig', this)">Copy</button>&lt;iframe
-  src="https://promogrind.bet/?embed=1#/no-vig"
+  src="https://promogrind.bet/no-vig?embed=1"
   width="100%"
   height="480"
   style="border:none;border-radius:8px"
@@ -164,8 +167,8 @@
 
   <h2>Embeddable Promo Widget</h2>
   <div class="card">
-    <strong style="color:#e2e8f0">Promo Expiry Countdown</strong>
-    <p style="color:#94a3b8;font-size:12px;margin-top:4px">Use this on promo roundup pages to create urgency with a configurable expiry countdown.</p>
+    <strong style="color:var(--pg-page-text)">Promo Expiry Countdown</strong>
+    <p style="color:var(--pg-page-muted);font-size:14px;margin-top:4px">Use this on promo roundup pages to create urgency with a configurable expiry countdown.</p>
     <div class="code-block" id="code-widget">
       <button class="copy-btn" onclick="copyCode('code-widget', this)">Copy</button>&lt;iframe
   src="https://promogrind.bet/promo-expiry-widget/?title=DraftKings%20Boost%20Ends%20Soon&amp;subtitle=Countdown%20to%20the%20next%20promo%20cutoff&amp;expires=2026-04-02T03:59:59Z"
@@ -177,7 +180,7 @@
   </div>
 
   <h2>Terms of Use</h2>
-  <div class="card" style="font-size:13px;color:#94a3b8;line-height:1.8">
+  <div class="card" style="font-size:14px;color:var(--pg-page-muted);line-height:1.8">
     <ul style="padding-left:20px">
       <li>Free to embed on any site with the "Powered by PromoGrind" watermark visible</li>
       <li>Do not remove, hide, or obscure the PromoGrind watermark</li>
@@ -187,12 +190,12 @@
     </ul>
   </div>
 
-  <div style="margin-top:32px;padding:24px;background:#0f1724;border:1px solid #4ade80;border-radius:12px;text-align:center">
-    <div style="font-size:18px;font-weight:700;color:#e2e8f0;margin-bottom:8px">Want the full calculator suite?</div>
-    <div style="color:#94a3b8;font-size:14px;margin-bottom:16px">27 free calculators, cloud sync, P/L tracking, and a live arb scanner — all at PromoGrind.</div>
+  <div style="margin-top:32px;padding:24px;background:var(--pg-page-panel);border:1px solid var(--pg-page-accent);border-radius:12px;text-align:center">
+    <div style="font-size:18px;font-weight:700;color:var(--pg-page-text);margin-bottom:8px">Want the full calculator suite?</div>
+    <div style="color:var(--pg-page-muted);font-size:14px;margin-bottom:16px">29 free calculators, outcome tracking and educational guides. Live scanning is coming soon.</div>
     <a class="cta-btn" href="https://promogrind.bet/">Open PromoGrind Free →</a>
   </div>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
 
 <script>
@@ -205,7 +208,7 @@
     });
   }
 </script>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

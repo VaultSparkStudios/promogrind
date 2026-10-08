@@ -11,30 +11,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.8; padding: 2rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.8; padding: 2rem 1rem; }
     .container { max-width: 760px; margin: 0 auto; }
-    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid #1e293b; }
-    .logo { font-size: 1.25rem; font-weight: 700; color: #4ade80; text-decoration: none; }
-    .back { color: #60a5fa; text-decoration: none; font-size: 0.875rem; }
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--pg-page-border); }
+    .logo { font-size: 1.25rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; }
+    .back { color: var(--pg-page-blue); text-decoration: none; font-size: 0.875rem; }
     h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .updated { color: #64748b; font-size: 0.875rem; margin-bottom: 2rem; }
-    h2 { font-size: 1.125rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
-    p { margin-bottom: 1rem; color: #cbd5e1; }
-    ul { margin: 0.5rem 0 1rem 1.5rem; color: #cbd5e1; }
+    .updated { color: var(--pg-page-muted); font-size: 0.875rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.125rem; font-weight: 700; margin: 2rem 0 0.5rem; color: var(--pg-page-accent); }
+    p { margin-bottom: 1rem; color: var(--pg-page-muted); }
+    ul { margin: 0.5rem 0 1rem 1.5rem; color: var(--pg-page-muted); }
     li { margin-bottom: 0.4rem; }
-    a { color: #60a5fa; }
-    .callout { margin: 1.25rem 0 1.75rem; padding: 1rem 1.25rem; border: 1px solid #f59e0b; border-radius: 10px; background: #1a1200; color: #cbd5e1; }
-    .callout strong { color: #fbbf24; }
-    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1e293b; font-size: 0.75rem; color: #475569; }
-    .footer a { color: #64748b; text-decoration: none; }
+    a { color: var(--pg-page-blue); }
+    .callout { margin: 1.25rem 0 1.75rem; padding: 1rem 1.25rem; border: 1px solid var(--pg-page-warning); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); }
+    .callout strong { color: var(--pg-page-warning); }
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--pg-page-border); font-size: .875rem; color: var(--pg-page-muted); }
+    .footer a { color: var(--pg-page-muted); text-decoration: none; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .footer-links a { color: #64748b; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
+    .footer-links a { color: var(--pg-page-muted); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="container">
     <nav class="nav">
       <a class="logo" href="https://promogrind.bet/">PROMOGRIND</a>
@@ -123,8 +126,8 @@
         <a href="/data-policy/">Data Policy</a>
       </div>
     </div>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

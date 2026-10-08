@@ -31,7 +31,7 @@ const ShareWeekBtn = ({entries}) => {
     try{navigator.clipboard.writeText(card);}catch(e){}
     setWeekCopied(true); setTimeout(()=>setWeekCopied(false),2000);
   };
-  return (<button onClick={shareWeek} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:weekCopied?K.gn:K.ac,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+  return (<button onClick={shareWeek} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:weekCopied?K.gn:K.ac,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>
     {weekCopied?"✓ Copied!":"📅 Share This Week"}
   </button>);
 };
@@ -47,19 +47,19 @@ const ReportCard = ({entries, total}) => {
   const copyReport=()=>{try{navigator.clipboard.writeText(card);}catch(e){} setCopiedReport(true); setTimeout(()=>setCopiedReport(false),2000);};
   return (
     <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>All-Time Report Card</div>
+      <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>All-Time Report Card</div>
       <div style={{display:"flex",gap:20,flexWrap:"wrap",marginBottom:10}}>
-        <div><div style={{fontSize:9,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
-        <div><div style={{fontSize:9,color:K.mt}}>BEST MONTH</div><div style={{...S.big(K.ac),fontSize:18}}>${f(bestMonth)}</div><div style={{fontSize:9,color:K.mt}}>{bestMonthKey}</div></div>
-        <div><div style={{fontSize:9,color:K.mt}}>ENTRIES</div><div style={{...S.big(K.tx),fontSize:18}}>{entries.length}</div></div>
-        <div><div style={{fontSize:9,color:K.mt}}>AVG PER ENTRY</div><div style={{...S.big(K.yl),fontSize:18}}>${f(avgConv)}</div></div>
+        <div><div style={{fontSize:12,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
+        <div><div style={{fontSize:12,color:K.mt}}>BEST MONTH</div><div style={{...S.big(K.ac),fontSize:18}}>${f(bestMonth)}</div><div style={{fontSize:12,color:K.mt}}>{bestMonthKey}</div></div>
+        <div><div style={{fontSize:12,color:K.mt}}>ENTRIES</div><div style={{...S.big(K.tx),fontSize:18}}>{entries.length}</div></div>
+        <div><div style={{fontSize:12,color:K.mt}}>AVG PER ENTRY</div><div style={{...S.big(K.yl),fontSize:18}}>${f(avgConv)}</div></div>
       </div>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-        <button onClick={copyReport} style={{padding:"7px 16px",background:copiedReport?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+        <button onClick={copyReport} style={{padding:"7px 16px",background:copiedReport?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>
           {copiedReport?"✓ Copied!":"📋 Copy Report Card"}
         </button>
         <ShareWeekBtn entries={entries}/>
-        <button onClick={()=>{const year=new Date().getFullYear();const header=`"PromoGrind P&L Export - For Tax Purposes - Gambling winnings are taxable income"`;const colHeaders=["Date","Sportsbook","Type","Bonus Amount","Hedge Amount","Profit","Notes"];const rows=entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);const csv=[header,colHeaders,...rows].map((r,i)=>i<2?r:r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");downloadFile(csv,`promogrind-tax-export-${year}.csv`,"text/csv");}} style={{padding:"7px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:11,cursor:"pointer",fontFamily:font}}>
+        <button onClick={()=>{const year=new Date().getFullYear();const header=`"PromoGrind P&L Export - For Tax Purposes - Gambling winnings are taxable income"`;const colHeaders=["Date","Sportsbook","Type","Bonus Amount","Hedge Amount","Profit","Notes"];const rows=entries.map(e=>[e.date,e.book,e.type,e.bonus||"",e.hedge||"",e.profit,e.notes||""]);const csv=[header,colHeaders,...rows].map((r,i)=>i<2?r:r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");downloadFile(csv,`promogrind-tax-export-${year}.csv`,"text/csv");}} style={{padding:"7px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font}}>
           Export Tax CSV ({entries.length} entries)
         </button>
       </div>
@@ -102,17 +102,17 @@ const BetHeatmap = ({ entries }) => {
   },[dayMap]);
   return (
     <div style={{marginBottom:12}}>
-      <button onClick={()=>setShow(s=>!s)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,marginBottom:show?8:0}}>
+      <button onClick={()=>setShow(s=>!s)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:12,cursor:"pointer",fontFamily:font,marginBottom:show?8:0}}>
         {show?"▲ Hide":"▼ Show"} P/L Heatmap
       </button>
       {show&&<div style={{overflowX:"auto",padding:"8px 0"}}>
         <div style={{display:"flex",gap:4}}>
           <div style={{display:"flex",flexDirection:"column",gap:2,marginTop:14}}>
-            {["M","T","W","T","F","S","S"].map((d,i)=><div key={i} style={{height:14,fontSize:8,color:K.mt,lineHeight:"14px"}}>{d}</div>)}
+            {["M","T","W","T","F","S","S"].map((d,i)=><div key={i} style={{height:14,fontSize:12,color:K.mt,lineHeight:"14px"}}>{d}</div>)}
           </div>
           <div>
             <div style={{display:"flex",gap:2,marginBottom:4}}>
-              {monthLabels.map((l,i)=><div key={i} style={{width:14,fontSize:8,color:K.mt,overflow:"hidden",whiteSpace:"nowrap"}}>{l}</div>)}
+              {monthLabels.map((l,i)=><div key={i} style={{width:14,fontSize:12,color:K.mt,overflow:"hidden",whiteSpace:"nowrap"}}>{l}</div>)}
             </div>
             <div style={{display:"flex",gap:2}}>
               {cells.map((week,wi)=>(
@@ -125,7 +125,7 @@ const BetHeatmap = ({ entries }) => {
             </div>
           </div>
         </div>
-        <div style={{display:"flex",gap:12,marginTop:8,fontSize:9,color:K.mt,alignItems:"center"}}>
+        <div style={{display:"flex",gap:12,marginTop:8,fontSize:12,color:K.mt,alignItems:"center"}}>
           <span>Legend:</span>
           <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.s3,display:"inline-block"}}/> No data</span>
           <span style={{display:"flex",alignItems:"center",gap:4}}><span style={{width:10,height:10,borderRadius:2,background:K.gn,display:"inline-block"}}/> Profit &gt;$50</span>
@@ -148,16 +148,16 @@ const RecordkeepingContext = ({ entries }) => {
   const missingBook = entries.filter((entry) => !entry.book).length;
   return (
     <div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",textAlign:"left",color:K.ac,fontSize:12,fontWeight:700,cursor:"pointer",padding:0,fontFamily:font,display:"flex",justifyContent:"space-between",alignItems:"center",textTransform:"uppercase",letterSpacing:"1.5px"}}>
         Recordkeeping context
-        <span style={{color:K.mt,fontSize:10}}>{open?"▲":"▼"}</span>
+        <span style={{color:K.mt,fontSize:12}}>{open?"▲":"▼"}</span>
       </button>
       {open&&<div style={{marginTop:12}}>
         <RR l="Current-year rows" v={String(yearRows.length)} c={K.ac}/>
         <RR l="Rows missing a date" v={String(missingDate)} c={missingDate ? K.yl : K.gn}/>
         <RR l="Rows missing a book" v={String(missingBook)} c={missingBook ? K.yl : K.gn}/>
         <Nt c={K.yl}>Keep complete source records and export them before filing. PromoGrind does not estimate tax liability or recommend wagering decisions for tax timing.</Nt>
-        <div style={{fontSize:10,color:K.mt,marginTop:8}}>Rules vary by jurisdiction and personal circumstances. Use your records with a qualified tax professional.</div>
+        <div style={{fontSize:12,color:K.mt,marginTop:8}}>Rules vary by jurisdiction and personal circumstances. Use your records with a qualified tax professional.</div>
       </div>}
     </div>
   );
@@ -235,30 +235,30 @@ const Ledger = () => {
     {!user && (
       <div style={{...S.note(K.gn), marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8}}>
         <span>Saving to this device only.</span>
-        <a href={signInHref} style={{color: K.gn, textDecoration: 'none', fontWeight: 700, fontSize: 11, whiteSpace: 'nowrap'}}>Sign in free to sync →</a>
+        <a href={signInHref} style={{color: K.gn, textDecoration: 'none', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap'}}>Sign in free to sync →</a>
       </div>
     )}
     {quarantinedRows.length>0&&(
       <div role="status" style={{...S.note(K.yl),marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",gap:10,flexWrap:"wrap"}}>
         <span>{quarantinedRows.length} synthetic ledger example{quarantinedRows.length===1?" is":"s are"} quarantined and excluded from every total, report, export, and progress signal.</span>
-        <button type="button" onClick={()=>syncAppData({...data,_ledgerQuarantine:[]})} style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.yl}`,borderRadius:6,color:K.yl,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:font}}>Remove quarantined examples</button>
+        <button type="button" onClick={()=>syncAppData({...data,_ledgerQuarantine:[]})} style={{padding:"6px 10px",background:"transparent",border:`1px solid ${K.yl}`,borderRadius:6,color:K.yl,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:font}}>Remove quarantined examples</button>
       </div>
     )}
     {showLedgerTrigger && (
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'linear-gradient(90deg,#1e3a2f,#0f1724)',border:'1px solid #4ade80',borderRadius:8,marginBottom:12,flexWrap:'wrap',gap:8}}>
-        <div style={{fontSize:13,color:'#cbd5e1'}}>☁️ <strong style={{color:'#4ade80'}}>VaultSparked</strong> syncs your ledger across all devices + unlocks the Live Scanner.</div>
+        <div style={{fontSize:14,color:'#cbd5e1'}}>☁️ <strong style={{color:'#4ade80'}}>VaultSparked</strong> syncs your ledger across all devices + unlocks the Live Scanner.</div>
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          <a href="#/upgrade" style={{padding:'5px 12px',background:'#4ade80',color: K.ink,borderRadius:5,fontSize:12,fontWeight:700,textDecoration:'none'}}>Start Free Trial →</a>
+          <a href="/pricing" style={{padding:'5px 12px',background:'#4ade80',color: K.ink,borderRadius:5,fontSize:14,fontWeight:700,textDecoration:'none'}}>Start Free Trial →</a>
           <button onClick={() => dismissTrigger('ledger_upsell', setShowLedgerTrigger)} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:16}}>×</button>
         </div>
       </div>
     )}
     {entries.length>=5&&!upsellLedgerDismissed&&(
       <div style={{...S.note(K.pp),display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,marginBottom:12}}>
-        <span>Get live arb scanner, push alerts + priority support — first 7 days free, then $24.99/mo</span>
+        <span>Review available and planned tools. Live scanning and push alerts marked coming soon are unavailable.</span>
         <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>{ window.location.hash='#/upgrade'; }} style={{padding:"4px 10px",background:K.pp,border:"none",borderRadius:4,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font}}>Try 7 days free</button>
-          <button onClick={()=>{try{localStorage.setItem('pg_upsell_ledger_dismissed','1');}catch{}setUpsellLedgerDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
+          <button onClick={()=>{ window.location.assign('/pricing'); }} style={{padding:"4px 10px",minHeight:44,background:K.pp,border:"none",borderRadius:4,color: K.ink,fontWeight:700,fontSize:14,cursor:"pointer",fontFamily:font}}>View plans</button>
+          <button onClick={()=>{try{localStorage.setItem('pg_upsell_ledger_dismissed','1');}catch{}setUpsellLedgerDismissed(true);}} style={{padding:"4px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:12,cursor:"pointer",fontFamily:font}}>✕</button>
         </div>
       </div>
     )}
@@ -266,12 +266,12 @@ const Ledger = () => {
       const clvEntries=entries.filter(e=>e.myOdds&&e.closingOdds);
       const avgClv=clvEntries.length?clvEntries.reduce((s,e)=>{const my=toD(e.myOdds),cl=toD(e.closingOdds);return s+(my>1&&cl>1?(my/cl-1)*100:0);},0)/clvEntries.length:null;
       return (<div style={{display:"grid",gridTemplateColumns:isCompact?"repeat(2,minmax(0,1fr))":"repeat(auto-fit,minmax(140px,1fr))",gap:14,marginBottom:16,alignItems:"end"}}>
-        <div><div style={{fontSize:10,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
-        <div><div style={{fontSize:10,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
-        {avgClv!==null&&<div><div style={{fontSize:10,color:K.mt}}>AVG CLV</div><div style={S.big(avgClv>=0?K.gn:K.rd)}>{avgClv>=0?"+":""}{f(avgClv,2)}%</div></div>}
-        {(()=>{ const evEntries=entries.filter(e=>e.ev&&parseFloat(e.ev)>0); if(!evEntries.length) return null; const avgEV=evEntries.reduce((s,e)=>s+parseFloat(e.ev),0)/evEntries.length; return <div><div style={{fontSize:10,color:K.mt}}>AVG EV%</div><div style={S.big(K.pp)}>{f(avgEV,1)}%</div><div style={{fontSize:9,color:K.mt}}>{evEntries.length} logged</div></div>; })()}
-        {entries.length>0&&<div><div style={{fontSize:10,color:K.mt}}>CURRENT SEQUENCE</div><div style={{fontSize:18,fontWeight:700,color:streakData.dir?K.gn:K.rd,fontFamily:fontD}}>{streakData.cur>0?(streakData.dir?`W × ${streakData.cur}`:`L × ${streakData.cur}`):'—'}</div><div style={{fontSize:9,color:K.mt}}>Descriptive only · not a reward signal</div></div>}
-        {streakData.last10.length>0&&<div><div style={{fontSize:10,color:K.mt,marginBottom:4}}>LAST 10</div><div style={{display:"flex",gap:3}}>{streakData.last10.map((r,i)=><span key={i} style={{width:10,height:10,borderRadius:"50%",background:r==='W'?K.gn:r==='L'?K.rd:K.yl,display:"inline-block"}}/>)}</div></div>}
+        <div><div style={{fontSize:12,color:K.mt}}>TOTAL PROFIT</div><div style={S.big(total>=0?K.gn:K.rd)}>${f(total)}</div></div>
+        <div><div style={{fontSize:12,color:K.mt}}>ENTRIES</div><div style={S.big(K.ac)}>{entries.length}</div></div>
+        {avgClv!==null&&<div><div style={{fontSize:12,color:K.mt}}>AVG CLV</div><div style={S.big(avgClv>=0?K.gn:K.rd)}>{avgClv>=0?"+":""}{f(avgClv,2)}%</div></div>}
+        {(()=>{ const evEntries=entries.filter(e=>e.ev&&parseFloat(e.ev)>0); if(!evEntries.length) return null; const avgEV=evEntries.reduce((s,e)=>s+parseFloat(e.ev),0)/evEntries.length; return <div><div style={{fontSize:12,color:K.mt}}>AVG EV%</div><div style={S.big(K.pp)}>{f(avgEV,1)}%</div><div style={{fontSize:12,color:K.mt}}>{evEntries.length} logged</div></div>; })()}
+        {entries.length>0&&<div><div style={{fontSize:12,color:K.mt}}>CURRENT SEQUENCE</div><div style={{fontSize:18,fontWeight:700,color:streakData.dir?K.gn:K.rd,fontFamily:fontD}}>{streakData.cur>0?(streakData.dir?`W × ${streakData.cur}`:`L × ${streakData.cur}`):'—'}</div><div style={{fontSize:12,color:K.mt}}>Descriptive only · not a reward signal</div></div>}
+        {streakData.last10.length>0&&<div><div style={{fontSize:12,color:K.mt,marginBottom:4}}>LAST 10</div><div style={{display:"flex",gap:3}}>{streakData.last10.map((r,i)=><span key={i} style={{width:10,height:10,borderRadius:"50%",background:r==='W'?K.gn:r==='L'?K.rd:K.yl,display:"inline-block"}}/>)}</div></div>}
         {(()=>{
           const bbEntries=entries.filter(e=>e.type==="Bonus Conversion"&&e.bonus&&e.profit);
           if(bbEntries.length<3) return null;
@@ -279,18 +279,18 @@ const Ledger = () => {
             const b=parseFloat(e.bonus)||0; const p=parseFloat(e.profit)||0;
             return b>0?s+(p/b*100):s;
           },0)/bbEntries.length;
-          return <div><div style={{fontSize:10,color:K.mt}}>CONV RATE</div><div style={{...S.big(avgConv>=70?K.gn:avgConv>=55?K.yl:K.rd),fontSize:20}}>{f(avgConv,1)}%</div><div style={{fontSize:9,color:K.mt}}>{bbEntries.length} conv.</div></div>;
+          return <div><div style={{fontSize:12,color:K.mt}}>CONV RATE</div><div style={{...S.big(avgConv>=70?K.gn:avgConv>=55?K.yl:K.rd),fontSize:20}}>{f(avgConv,1)}%</div><div style={{fontSize:12,color:K.mt}}>{bbEntries.length} conv.</div></div>;
         })()}
-        {entries.filter(e=>e.date===todayStr).length>0&&<div><div style={{fontSize:10,color:K.mt}}>TODAY</div><div style={{...S.big(todayPL>=0?K.gn:K.rd),fontSize:22}}>{todayPL>=0?"+":""}${f(todayPL)}</div></div>}
+        {entries.filter(e=>e.date===todayStr).length>0&&<div><div style={{fontSize:12,color:K.mt}}>TODAY</div><div style={{...S.big(todayPL>=0?K.gn:K.rd),fontSize:22}}>{todayPL>=0?"+":""}${f(todayPL)}</div></div>}
         {(()=>{
           const cutoff=new Date(Date.now()-7*24*60*60*1000);
           const recent=entries.filter(e=>e.date&&new Date(e.date)>=cutoff);
           const recentPL=recent.reduce((s,e)=>s+(parseFloat(e.profit)||0),0);
           if(!recent.length) return null;
-          return <div><div style={{fontSize:10,color:K.mt}}>LAST 7 DAYS</div><div style={S.big(recentPL>=0?K.gn:K.rd,{fontSize:20})}>{recentPL>=0?"+":""}${f(recentPL)}</div><div style={{fontSize:9,color:K.mt}}>{recent.length} bets</div></div>;
+          return <div><div style={{fontSize:12,color:K.mt}}>LAST 7 DAYS</div><div style={S.big(recentPL>=0?K.gn:K.rd,{fontSize:20})}>{recentPL>=0?"+":""}${f(recentPL)}</div><div style={{fontSize:12,color:K.mt}}>{recent.length} bets</div></div>;
         })()}
         <div style={{display:"flex",gap:8,flexWrap:"wrap",gridColumn:isCompact?"1 / -1":"auto",justifyContent:isCompact?"stretch":"flex-end"}}>
-          {entries.length>0&&<button onClick={exportCSV} style={{flex:isCompact?1:"0 0 auto",padding:"8px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
+          {entries.length>0&&<button onClick={exportCSV} style={{flex:isCompact?1:"0 0 auto",padding:"8px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>↓ Export CSV</button>}
           <button onClick={()=>{
           const cutoff=new Date(Date.now()-7*24*60*60*1000);
           const week=entries.filter(e=>e.date&&new Date(e.date)>=cutoff);
@@ -301,7 +301,7 @@ const Ledger = () => {
 \nFree tools at ${CANONICAL_APP_URL}`;
           try{navigator.clipboard.writeText(card);}catch(e){}
           if(toast) toast('📋 Week card copied!',K.pp);
-        }} style={{flex:isCompact?1:"0 0 auto",padding:"8px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:8,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>📊 Share Week</button>
+        }} style={{flex:isCompact?1:"0 0 auto",padding:"8px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:8,color:K.pp,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>📊 Share Week</button>
         </div>
       </div>);
     })()}
@@ -310,23 +310,23 @@ const Ledger = () => {
       const goalPct = goal>0 ? Math.min(100,monthPL/goal*100) : 0;
       const barColor = goalPct>=80?K.gn:goalPct>=40?K.yl:K.rd;
       return (<div style={{marginBottom:12}}>
-        <button onClick={()=>setShowGoal(g=>!g)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,marginBottom:showGoal||goal>0?8:0}}>
+        <button onClick={()=>setShowGoal(g=>!g)} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:12,cursor:"pointer",fontFamily:font,marginBottom:showGoal||goal>0?8:0}}>
           {showGoal?"▲ Hide Goal":"▼ Monthly Goal"}
         </button>
         {(showGoal||goal>0)&&<div style={{padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
           <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:8}}>
-            <span style={{fontSize:11,color:K.dm}}>Monthly profit goal: $</span>
+            <span style={{fontSize:12,color:K.dm}}>Monthly profit goal: $</span>
             <input style={{...S.input,width:80,padding:"4px 8px"}} value={goalInput} onChange={e=>saveGoal(e.target.value)} placeholder="1000"/>
           </div>
           {goal>0&&(<>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:K.mt,marginBottom:4}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:K.mt,marginBottom:4}}>
               <span>This month: {monthPL>=0?"+":""}${f(monthPL)}</span>
               <span style={{color:barColor,fontWeight:600}}>{f(goalPct,0)}% of ${f(goal,0)} goal</span>
             </div>
             <div style={{height:6,background:K.s3,borderRadius:3}}>
               <div style={{height:6,borderRadius:3,background:barColor,width:`${goalPct}%`,transition:"width 0.4s"}}/>
             </div>
-            {goalPct>=100&&<div style={{fontSize:11,color:K.gn,marginTop:6,fontWeight:600}}>Goal reached!</div>}
+            {goalPct>=100&&<div style={{fontSize:12,color:K.gn,marginTop:6,fontWeight:600}}>Goal reached!</div>}
           </>)}
         </div>}
       </div>);
@@ -343,7 +343,7 @@ const Ledger = () => {
       <In l="EV % (opt)" v={form.ev} set={v=>setForm(f=>({...f,ev:v}))} ph="4.2" pre="%"/>
       <In l="Your Odds (opt)" v={form.myOdds} set={v=>setForm(f=>({...f,myOdds:v}))} ph="+110"/>
       <In l="Closing Odds (opt)" v={form.closingOdds} set={v=>setForm(f=>({...f,closingOdds:v}))} ph="+105"/>
-      <div style={{...S.col,minWidth:80,paddingTop:18}}><button type="button" onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{...S.col,minWidth:80,paddingTop:18}}><button type="button" onClick={add} style={{padding:"8px 16px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:14,width:"100%"}}>+ ADD</button></div>
     </div>
     {entries.length>=2&&(()=>{
       const sorted=[...entries].sort((a,b)=>new Date(a.date)-new Date(b.date));
@@ -360,14 +360,14 @@ const Ledger = () => {
       const color=isPos?K.gn:K.rd;
       return (
         <div style={{...S.card,background:K.s2,padding:"12px 16px",marginBottom:12}}>
-          <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Cumulative P/L</div>
+          <div style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Cumulative P/L</div>
           <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{display:"block",overflow:"visible"}}>
             <line x1={PAD} y1={sy(0)} x2={W-PAD} y2={sy(0)} stroke={K.bd2} strokeWidth="1" strokeDasharray="3,3"/>
             <polyline fill={`${color}15`} stroke="none" points={`${pts} ${areaClose}`}/>
             <polyline fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" points={pts}/>
             {cumulative.map((p,i)=>i===cumulative.length-1?<circle key={i} cx={sx(i)} cy={sy(p.cum)} r="3" fill={color}/>:null)}
           </svg>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:K.mt,marginTop:4}}>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:K.mt,marginTop:4}}>
             <span>{cumulative[0]?.date}</span><span style={{color,fontWeight:700}}>{isPos?"+":""}${f(cumulative[cumulative.length-1]?.cum||0)}</span><span>{cumulative[cumulative.length-1]?.date}</span>
           </div>
         </div>
@@ -376,9 +376,9 @@ const Ledger = () => {
     <BetHeatmap entries={entries}/>
     <Nt c={K.yl}>Wagering activity can have tax consequences. Keep source records year-round, export this ledger for review, and confirm current treatment with a qualified professional.</Nt>
     <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center",flexWrap:"wrap"}}>
-      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>View:</span>
+      <span style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>View:</span>
       {["entries","by-book"].map(v=>(
-        <button key={v} onClick={()=>setLedgerView(v)} style={{padding:"4px 12px",background:ledgerView===v?K.ac:"transparent",border:`1px solid ${ledgerView===v?K.ac:K.bd2}`,borderRadius:4,color:ledgerView===v?K.bg:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,fontWeight:600}}>
+        <button key={v} onClick={()=>setLedgerView(v)} style={{padding:"4px 12px",background:ledgerView===v?K.ac:"transparent",border:`1px solid ${ledgerView===v?K.ac:K.bd2}`,borderRadius:4,color:ledgerView===v?K.bg:K.dm,fontSize:12,cursor:"pointer",fontFamily:font,fontWeight:600}}>
           {v==="entries"?"Entries":"By Book"}
         </button>
       ))}
@@ -394,24 +394,24 @@ const Ledger = () => {
         byBook[b].profit+=parseFloat(e.profit)||0;
       });
       const rows=Object.entries(byBook).sort((a,b)=>b[1].profit-a[1].profit);
-      if(!rows.length) return <div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}><div style={{fontSize:28,marginBottom:8}}>📊</div><div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div><div style={{fontSize:11,color:K.mt}}>Log your first promo conversion in the Ledger tab and it'll appear here sorted by book.</div></div>;
+      if(!rows.length) return <div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}><div style={{fontSize:28,marginBottom:8}}>📊</div><div style={{fontSize:14,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div><div style={{fontSize:12,color:K.mt}}>Log your first promo conversion in the Ledger tab and it'll appear here sorted by book.</div></div>;
       return (<div><div style={isCompact?{display:"grid",gap:10,marginBottom:8}:{overflowX:"auto",marginBottom:8}}>
         {isCompact ? rows.map(([book,d])=>{
           const roi=calcROI(d.profit,d.wagered);
           return <div key={book} style={{padding:12,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:10}}>
             <div style={{display:"flex",justifyContent:"space-between",gap:10,marginBottom:8}}>
-              <div style={{fontSize:13,fontWeight:700,color:K.tx}}>{book}</div>
+              <div style={{fontSize:14,fontWeight:700,color:K.tx}}>{book}</div>
               <div style={{fontSize:14,fontWeight:800,color:d.profit>=0?K.gn:K.rd,fontFamily:fontD}}>{d.profit>=0?"+":""}${f(d.profit)}</div>
             </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,fontSize:10,color:K.mt}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,fontSize:12,color:K.mt}}>
               <div>Entries: <span style={{color:K.tx}}>{d.count}</span></div>
               <div>ROI: <span style={{color:roi===null?K.mt:roi>=0?K.gn:K.rd,fontWeight:700}}>{roi===null?"—":`${roi>=0?"+":""}${f(roi,1)}%`}</span></div>
               <div>Bonus: <span style={{color:K.tx}}>{d.bonus?`$${f(d.bonus)}`:"—"}</span></div>
               <div>Wagered: <span style={{color:K.tx}}>{d.wagered?`$${f(d.wagered)}`:"—"}</span></div>
             </div>
           </div>;
-        }) : <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-          <thead><tr>{["Book","Entries","Total Bonus","Total Wagered","Net Profit","ROI%"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+        }) : <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+          <thead><tr>{["Book","Entries","Total Bonus","Total Wagered","Net Profit","ROI%"].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:12,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
           <tbody>{rows.map(([book,d])=>{
             const roi=calcROI(d.profit,d.wagered);
             return (<tr key={book}>
@@ -429,19 +429,19 @@ const Ledger = () => {
       </div>);
     })()}
     <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12,alignItems:"center"}}>
-      <span style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Filter:</span>
-      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
+      <span style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Filter:</span>
+      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:12}} value={filterBook} onChange={e=>setFilterBook(e.target.value)}>
         <option value="All">All Books</option>
         {[...new Set(entries.map(e=>e.book))].sort().map(b=><option key={b}>{b}</option>)}
       </select>
-      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterType} onChange={e=>setFilterType(e.target.value)}>
+      <select style={{...S.input,width:"auto",padding:"4px 8px",fontSize:12}} value={filterType} onChange={e=>setFilterType(e.target.value)}>
         <option value="All">All Types</option>
         {["Bonus Conversion","Profit Boost","First Bet Hedge","Arbitrage","Middle","+EV Bet","Other"].map(t=><option key={t}>{t}</option>)}
       </select>
-      <input type="date" style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterFrom} onChange={e=>setFilterFrom(e.target.value)} title="From date"/>
-      <input type="date" style={{...S.input,width:"auto",padding:"4px 8px",fontSize:11}} value={filterTo} onChange={e=>setFilterTo(e.target.value)} title="To date"/>
+      <input type="date" style={{...S.input,width:"auto",padding:"4px 8px",fontSize:12}} value={filterFrom} onChange={e=>setFilterFrom(e.target.value)} title="From date"/>
+      <input type="date" style={{...S.input,width:"auto",padding:"4px 8px",fontSize:12}} value={filterTo} onChange={e=>setFilterTo(e.target.value)} title="To date"/>
       {(filterBook!=='All'||filterType!=='All'||filterFrom||filterTo)&&
-        <button onClick={()=>{setFilterBook('All');setFilterType('All');setFilterFrom('');setFilterTo('');}} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕ Clear</button>}
+        <button onClick={()=>{setFilterBook('All');setFilterType('All');setFilterFrom('');setFilterTo('');}} style={{padding:"4px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:12,cursor:"pointer",fontFamily:font}}>✕ Clear</button>}
     </div>
     {(()=>{
       const filteredEntries = entries.filter(e => {
@@ -452,24 +452,24 @@ const Ledger = () => {
         return true;
       });
       if(!filteredEntries.length) return entries.length>0
-        ?<div style={{textAlign:"center",padding:24,color:K.mt,fontSize:12}}>No entries match your filters.</div>
+        ?<div style={{textAlign:"center",padding:24,color:K.mt,fontSize:14}}>No entries match your filters.</div>
         :<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
             <div style={{fontSize:32,marginBottom:8}}>📒</div>
-            <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div>
-            <div style={{fontSize:11,color:K.mt,marginBottom:12}}>Every promo you convert goes here. Start with the Bonus Bet Converter — it auto-logs results.</div>
-            <button type="button" onClick={()=>setShowExample((value)=>!value)} aria-expanded={showExample} style={{padding:"7px 18px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>
+            <div style={{fontSize:14,fontWeight:600,color:K.dm,marginBottom:4}}>No entries yet</div>
+            <div style={{fontSize:12,color:K.mt,marginBottom:12}}>Every promo you convert goes here. Start with the Bonus Bet Converter — it auto-logs results.</div>
+            <button type="button" onClick={()=>setShowExample((value)=>!value)} aria-expanded={showExample} style={{padding:"7px 18px",background:`${K.gn}15`,border:`1px solid ${K.gn}30`,borderRadius:6,color:K.gn,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:font}}>
               {showExample?"Hide example":"Preview an example"}
             </button>
             {showExample&&<div role="note" style={{margin:"12px auto 0",maxWidth:420,padding:12,textAlign:"left",background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
-              <div style={{fontSize:10,color:K.gn,fontWeight:800,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Example only · never saved</div>
-              <div style={{display:"flex",justifyContent:"space-between",gap:12,fontSize:11,color:K.dm}}><span>DraftKings · Bonus Conversion</span><strong style={{color:K.gn}}>+$138.60</strong></div>
-              <div style={{fontSize:10,color:K.mt,marginTop:6}}>A real row appears only after you enter and save your own realized result.</div>
+              <div style={{fontSize:12,color:K.gn,fontWeight:800,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Example only · never saved</div>
+              <div style={{display:"flex",justifyContent:"space-between",gap:12,fontSize:12,color:K.dm}}><span>DraftKings · Bonus Conversion</span><strong style={{color:K.gn}}>+$138.60</strong></div>
+              <div style={{fontSize:12,color:K.mt,marginTop:6}}>A real row appears only after you enter and save your own realized result.</div>
             </div>}
           </div>;
       if (isCompact) return (<div style={{display:"grid",gap:10,marginTop:12}}>
         {filteredEntries.map(e=>{
           const editing = editId === e.id;
-          const iStyle = {...S.input, padding:"7px 8px", fontSize:11};
+          const iStyle = {...S.input, padding:"7px 8px", fontSize:12};
           if(editing) return (
             <div key={e.id} style={{padding:12,background:`${K.ac}08`,border:`1px solid ${K.ac}20`,borderRadius:10}}>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
@@ -483,8 +483,8 @@ const Ledger = () => {
                 <input style={iStyle} value={editForm.closingOdds||''} onChange={ev=>setEditForm(f=>({...f,closingOdds:ev.target.value}))} placeholder="Closing odds"/>
               </div>
               <div style={{display:"flex",gap:8}}>
-                <button onClick={commitEdit} style={{flex:1,padding:"8px 12px",background:K.gn,border:"none",borderRadius:8,color: K.ink,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Save</button>
-                <button onClick={cancelEdit} style={{flex:1,padding:"8px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.mt,fontSize:11,cursor:"pointer",fontFamily:font}}>Cancel</button>
+                <button onClick={commitEdit} style={{flex:1,padding:"8px 12px",background:K.gn,border:"none",borderRadius:8,color: K.ink,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:font}}>Save</button>
+                <button onClick={cancelEdit} style={{flex:1,padding:"8px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.mt,fontSize:12,cursor:"pointer",fontFamily:font}}>Cancel</button>
               </div>
             </div>
           );
@@ -492,8 +492,8 @@ const Ledger = () => {
           return <div key={e.id} style={{padding:12,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:10}}>
             <div style={{display:"flex",justifyContent:"space-between",gap:8,marginBottom:8}}>
               <div>
-                <div style={{fontSize:13,fontWeight:700,color:K.tx}}>{e.book}</div>
-                <div style={{fontSize:10,color:K.mt}}>{e.date}</div>
+                <div style={{fontSize:14,fontWeight:700,color:K.tx}}>{e.book}</div>
+                <div style={{fontSize:12,color:K.mt}}>{e.date}</div>
               </div>
               <div style={{fontSize:15,fontWeight:800,color:parseFloat(e.profit)>=0?K.gn:K.rd,fontFamily:fontD}}>{parseFloat(e.profit)>=0?"+":""}${e.profit}</div>
             </div>
@@ -502,24 +502,24 @@ const Ledger = () => {
               {e.bonus&&<span style={S.tag(K.gn)}>Bonus ${e.bonus}</span>}
               {e.hedge&&<span style={S.tag(K.dm)}>Hedge ${e.hedge}</span>}
             </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,fontSize:10,color:K.mt}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,fontSize:12,color:K.mt}}>
               <div>EV: <span style={{color:K.tx}}>{e.ev?`${e.ev}%`:"—"}</span></div>
               <div>CLV: <span style={{color:clv===null?K.mt:clv>=0?K.gn:K.rd,fontWeight:700}}>{clv===null?"—":`${clv>=0?"+":""}${f(clv,2)}%`}</span></div>
               {e.notes&&<div style={{gridColumn:"1 / -1",lineHeight:1.5}}>Notes: <span style={{color:K.dm}}>{e.notes}</span></div>}
             </div>
             <div style={{display:"flex",gap:8,marginTop:10}}>
-              <button onClick={()=>startEdit(e)} style={{flex:1,padding:"7px 10px",background:"transparent",border:`1px solid ${K.ac}40`,borderRadius:8,color:K.ac,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Edit</button>
-              <button onClick={()=>del(e.id)} style={{flex:1,padding:"7px 10px",background:"transparent",border:`1px solid ${K.rd}30`,borderRadius:8,color:K.rd,fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:font}}>Delete</button>
+              <button onClick={()=>startEdit(e)} style={{flex:1,padding:"7px 10px",background:"transparent",border:`1px solid ${K.ac}40`,borderRadius:8,color:K.ac,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:font}}>Edit</button>
+              <button onClick={()=>del(e.id)} style={{flex:1,padding:"7px 10px",background:"transparent",border:`1px solid ${K.rd}30`,borderRadius:8,color:K.rd,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:font}}>Delete</button>
             </div>
           </div>;
         })}
       </div>);
       return (<div style={{overflowX:"auto",marginTop:12}}>
-      <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Date","Book","Type","Bonus","Hedge","Profit","CLV",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+        <thead><tr>{["Date","Book","Type","Bonus","Hedge","Profit","CLV",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:12,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
         <tbody>{filteredEntries.map(e=>{
           const editing = editId === e.id;
-          const iStyle = {...S.input, padding:"3px 6px", fontSize:11};
+          const iStyle = {...S.input, padding:"3px 6px", fontSize:12};
           if(editing) return (
             <tr key={e.id} style={{background:`${K.ac}08`}}>
               <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:110}} type="date" value={editForm.date||''} onChange={ev=>setEditForm(f=>({...f,date:ev.target.value}))}/></td>
@@ -530,8 +530,8 @@ const Ledger = () => {
               <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.profit||''} onChange={ev=>setEditForm(f=>({...f,profit:ev.target.value}))} placeholder="$"/></td>
               <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`}}><input style={{...iStyle,width:70}} value={editForm.myOdds||''} onChange={ev=>setEditForm(f=>({...f,myOdds:ev.target.value}))} placeholder="my"/></td>
               <td style={{padding:"6px 8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap",display:"flex",gap:4,alignItems:"center"}}>
-                <button onClick={commitEdit} style={{padding:"3px 8px",background:K.gn,border:"none",borderRadius:4,color: K.ink,fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:font}}>✓</button>
-                <button onClick={cancelEdit} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:10,cursor:"pointer",fontFamily:font}}>✕</button>
+                <button onClick={commitEdit} style={{padding:"3px 8px",background:K.gn,border:"none",borderRadius:4,color: K.ink,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:font}}>✓</button>
+                <button onClick={cancelEdit} style={{padding:"3px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:K.mt,fontSize:12,cursor:"pointer",fontFamily:font}}>✕</button>
               </td>
             </tr>
           );
@@ -544,8 +544,8 @@ const Ledger = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:parseFloat(e.profit)>=0?K.gn:K.rd,fontWeight:600}}>{parseFloat(e.profit)>=0?"+":""}${e.profit}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{(()=>{if(!e.myOdds||!e.closingOdds)return<span style={{color:K.mt}}>—</span>;const my=toD(e.myOdds),cl=toD(e.closingOdds);if(my<=1||cl<=1)return<span style={{color:K.mt}}>—</span>;const clv=(my/cl-1)*100;return<span style={{color:clv>=0?K.gn:K.rd,fontWeight:600}}>{clv>=0?"+":""}{f(clv,2)}%</span>;})()}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,whiteSpace:"nowrap"}}>
-              <button type="button" aria-label={`Edit ${e.book} ledger entry`} onClick={()=>startEdit(e)} style={{cursor:"pointer",color:K.ac,fontSize:11,marginRight:4,background:"transparent",border:0,padding:4}} title="Edit">✎</button>
-              <button type="button" aria-label={`Delete ${e.book} ledger entry`} onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10,background:"transparent",border:0,padding:4}} title="Delete">✕</button>
+              <button type="button" aria-label={`Edit ${e.book} ledger entry`} onClick={()=>startEdit(e)} style={{cursor:"pointer",color:K.ac,fontSize:12,marginRight:4,background:"transparent",border:0,padding:4}} title="Edit">✎</button>
+              <button type="button" aria-label={`Delete ${e.book} ledger entry`} onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:12,background:"transparent",border:0,padding:4}} title="Delete">✕</button>
             </td>
           </tr>);
         })}</tbody>
@@ -562,19 +562,19 @@ const Ledger = () => {
       });
       const months=Object.entries(byMonth).sort((a,b)=>b[0].localeCompare(a[0]));
       return (<div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-        <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Monthly Breakdown</div>
+        <div style={{fontSize:12,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Monthly Breakdown</div>
         {months.map(([month,d])=>(
           <div key={month} style={{display:"grid",gridTemplateColumns:isCompact?"1fr auto":"1fr auto auto",gap:8,padding:"8px 0",borderBottom:`1px solid ${K.bd}`,alignItems:"center"}}>
-            <span style={{fontSize:12,color:K.dm}}>{month}</span>
-            <span style={{fontSize:12,color:K.mt,textAlign:isCompact?"left":"right"}}>{d.count} entries</span>
-            <span style={{fontSize:13,fontWeight:600,color:d.profit>=0?K.gn:K.rd,textAlign:"right"}}>{d.profit>=0?"+":""}${f(d.profit)}</span>
+            <span style={{fontSize:14,color:K.dm}}>{month}</span>
+            <span style={{fontSize:14,color:K.mt,textAlign:isCompact?"left":"right"}}>{d.count} entries</span>
+            <span style={{fontSize:14,fontWeight:600,color:d.profit>=0?K.gn:K.rd,textAlign:"right"}}>{d.profit>=0?"+":""}${f(d.profit)}</span>
           </div>
         ))}
       </div>);
     })()}
     {total>0&&<div style={{...S.card,background:K.s2,border:`1px solid ${K.bd}`,marginTop:12}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Federal Tax Estimate</div>
-      <div style={{fontSize:10,color:K.mt,marginBottom:10}}>Gambling winnings are ordinary income. Estimate only — consult a tax professional.</div>
+      <div style={{fontSize:12,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Federal Tax Estimate</div>
+      <div style={{fontSize:12,color:K.mt,marginBottom:10}}>Gambling winnings are ordinary income. Estimate only — consult a tax professional.</div>
       {[[0.22,"22% bracket"],[0.24,"24% bracket"],[0.32,"32% bracket"]].map(([rate,label])=>(
         <RR key={rate} l={label} v={`Owe ~$${f(total*rate)} · Keep $${f(total*(1-rate))}`} c={K.yl}/>
       ))}

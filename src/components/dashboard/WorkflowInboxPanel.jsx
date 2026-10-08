@@ -45,10 +45,10 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
     <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
         <div>
-          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 4 }}>Workflow Inbox</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 4 }}>Workflow Inbox</div>
           <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx }}>{inbox.open.length} live workflow{inbox.open.length === 1 ? "" : "s"}</div>
         </div>
-        <div style={{ fontSize: 11, color: K.mt }}>
+        <div style={{ fontSize: 12, color: K.mt }}>
           Queued: <strong style={{ color: K.tx }}>{inbox.queuedCount}</strong> · Waiting: <strong style={{ color: K.tx }}>{inbox.waitingCount}</strong>
         </div>
       </div>
@@ -57,22 +57,22 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
       {portfolio && portfolio.allocations.length >= 2 && (
         <div style={{ marginBottom: 10, padding: "10px 12px", background: `${K.ac}08`, border: `1px solid ${K.ac}25`, borderRadius: 8 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: K.ac, textTransform: "uppercase", letterSpacing: "1px" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: K.ac, textTransform: "uppercase", letterSpacing: "1px" }}>
               Optimal Allocation
             </div>
-            <div style={{ fontSize: 10, color: K.mt }}>
+            <div style={{ fontSize: 12, color: K.mt }}>
               Est. +${f(portfolio.totalEv)} EV · ${f(portfolio.totalAllocated)} allocated
             </div>
           </div>
           <div style={{ display: "grid", gap: 4 }}>
             {portfolio.allocations.slice(0, 4).map((alloc) => (
               <div key={alloc.workflowId} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
-                <div style={{ fontSize: 10, color: K.tx, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <div style={{ fontSize: 12, color: K.tx, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {alloc.title}
                 </div>
                 <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                  <span style={{ fontSize: 10, color: K.ac, fontWeight: 700 }}>${f(alloc.allocate)}</span>
-                  <span style={{ fontSize: 10, color: K.gn }}>+${f(alloc.ev)}</span>
+                  <span style={{ fontSize: 12, color: K.ac, fontWeight: 700 }}>${f(alloc.allocate)}</span>
+                  <span style={{ fontSize: 12, color: K.gn }}>+${f(alloc.ev)}</span>
                 </div>
               </div>
             ))}
@@ -81,7 +81,7 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
       )}
 
       {inbox.top.length === 0 && (
-        <div style={{ fontSize: 11, color: K.mt, lineHeight: 1.6 }}>
+        <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6 }}>
           Save workflows from Promo Advisor, AI Action Plan, or calculator feedback to build a real inbox instead of a one-off result trail.
         </div>
       )}
@@ -109,25 +109,25 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
                 <div style={{ height: "100%", width: `${urgency.pct * 100}%`, background: urgency.color, transition: "width 0.3s" }} />
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 4 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{workflow.title}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{workflow.title}</div>
                 <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                   {urgency.label && urgency.pct >= 0.55 && (
-                    <span style={{ fontSize: 9, color: urgency.color, fontWeight: 700 }}>{urgency.label}</span>
+                    <span style={{ fontSize: 12, color: urgency.color, fontWeight: 700 }}>{urgency.label}</span>
                   )}
-                  <div style={{ fontSize: 10, color: workflow.score >= 90 ? K.gn : workflow.score >= 75 ? K.ac : K.yl, fontWeight: 700 }}>
+                  <div style={{ fontSize: 12, color: workflow.score >= 90 ? K.gn : workflow.score >= 75 ? K.ac : K.yl, fontWeight: 700 }}>
                     Score {workflow.score}
                   </div>
                 </div>
               </div>
-              <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6, marginBottom: 4 }}>
+              <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6, marginBottom: 4 }}>
                 {workflow.summary || "Workflow saved without summary."}
               </div>
               {workflow.scoreSummary && (
-                <div style={{ fontSize: 10, color: K.ac, lineHeight: 1.6, marginBottom: 6 }}>
+                <div style={{ fontSize: 12, color: K.ac, lineHeight: 1.6, marginBottom: 6 }}>
                   Why now: {workflow.scoreSummary}
                 </div>
               )}
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: 10, color: K.dm }}>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: 12, color: K.dm }}>
                 <span>Status: <strong style={{ color: K.tx }}>{workflow.status}</strong></span>
                 <span>Type: <strong style={{ color: K.tx }}>{formatPromoTypeLabel(workflow.promoType)}</strong></span>
                 {workflow.expectedProfit !== null && <span>Est: <strong style={{ color: K.gn }}>${workflow.expectedProfit.toFixed(2)}</strong></span>}
@@ -135,7 +135,7 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
                 <span>Source: <strong style={{ color: K.tx }}>{workflow.source.replace(/_/g, " ")}</strong></span>
               </div>
               {workflow.nextStep && (
-                <div style={{ marginTop: 6, fontSize: 10, color: K.mt }}>
+                <div style={{ marginTop: 6, fontSize: 12, color: K.mt }}>
                   Next: <strong style={{ color: K.tx }}>{workflow.nextStep}</strong>
                 </div>
               )}
@@ -157,7 +157,7 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
                       borderRadius: 999,
                       border: `1px solid ${K.ac}35`,
                       color: K.ac,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: 700,
                       cursor: "pointer",
                     }}
@@ -177,7 +177,7 @@ export default function WorkflowInboxPanel({ appData = {}, navigate, bankroll = 
                       borderRadius: 999,
                       border: `1px solid ${K.yl}35`,
                       color: K.yl,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: 700,
                       cursor: "pointer",
                     }}

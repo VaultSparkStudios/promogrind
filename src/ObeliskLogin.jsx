@@ -19,20 +19,20 @@ export function ObeliskLogin({ project = "PromoGrind", tier = "T3", returnUrl })
   if (!OBELISK_AUTH_ENABLED) {
     return (
       <div role="status" style={{ maxWidth: 380, margin: '0 auto', padding: 20, borderRadius: 14, border: '1px solid #334155', background: '#0f172a', color: '#cbd5e1', textAlign: 'center' }}>
-        <strong>Obelisk sign-in is not live in this FORGE build.</strong>
-        <div style={{ marginTop: 7, fontSize: 13, opacity: .75 }}>Use the clearly labeled PromoGrind compatibility account path while verification and recovery delegation are completed.</div>
+        <strong>Studio sign-in is not available yet.</strong>
+        <div style={{ marginTop: 7, fontSize: 14, lineHeight: 1.6 }}>Use your PromoGrind account to sign in and sync your saved records.</div>
       </div>
     );
   }
   return (
     <div ref={ref} className="obelisk-passport" style={{ maxWidth: 380, margin: "0 auto", padding: 28, borderRadius: 16, background: "#f8fafc", color: "#0b0f17", textAlign: "center" }}>
-      <div style={{ fontSize: 13, letterSpacing: ".12em", textTransform: "uppercase", opacity: .6 }}>{project}</div>
+      <div style={{ fontSize: 14, letterSpacing: ".12em", textTransform: "uppercase", opacity: .6 }}>{project}</div>
       <h1 style={{ fontSize: 22, margin: "10px 0 6px" }}>Sign in</h1>
       <p style={{ opacity: .7, fontSize: 14, margin: "0 0 22px" }}>Studio identity access delegated to Obelisk.</p>
       <button data-obelisk-signin style={{ width: "100%", padding: 13, border: 0, borderRadius: 10, background: "#2563eb", color: "#001018", fontWeight: 600, fontSize: 15, cursor: "pointer" }}>Sign in</button>
       <button data-obelisk-signup style={{ width: "100%", padding: 12, marginTop: 10, border: "1px solid #0ea5e9", borderRadius: 10, background: "transparent", color: "inherit", fontSize: 14, cursor: "pointer" }}>Create account</button>
-      <button data-obelisk-recover style={{ marginTop: 14, border: 0, background: "none", color: "inherit", opacity: .6, fontSize: 13, textDecoration: "underline", cursor: "pointer" }}>Can't sign in? Recover access</button>
-      <div style={{ marginTop: 14, fontSize: 11, opacity: .45 }}>Secured by Obelisk · passwordless · lost your device? recover with a backup code</div>
+      <button data-obelisk-recover style={{ marginTop: 14, border: 0, background: "none", color: "inherit", opacity: .6, fontSize: 14, textDecoration: "underline", cursor: "pointer" }}>Can't sign in? Recover access</button>
+      <div style={{ marginTop: 14, fontSize: 12, opacity: .45 }}>Secured by Obelisk · passwordless · lost your device? recover with a backup code</div>
     </div>
   );
 }

@@ -1,29 +1,29 @@
-# Latest Handoff
+# Latest handoff — Session 133 in progress
 
-## Where We Left Off (S132)
+## Where We Left Off
 
-- Session Intent: deliver selected public stats, then explicitly requested full closeout, memory/context/CDR reconciliation, main push and deployment.
-- Outcome: selected feature achieved and deployed; closeout record changes are ready for the same release pipeline.
-- Deploy: deployed to stable staging and production at d9f5385469fbe2015c0628c7c37d15a2618411b1; closeout HEAD verification follows push.
-- Evidence: audits/site-release-s132.json; audits/public-stats-s132.json; docs/visual-qa/LATEST.json.
-- Verification: 105/105 app test files, 722/722 assertions; 16 Edge entrypoints and 69/69 tests across 10 files; full verify:launch-local exit 0; 40 inspected implementation captures plus 8 inspected production captures without feed fixtures; CI and exact staging/production artifact checks passed.
-- Schedule: approved 06:17 UTC daily; first publication observed, first recurrence unobserved.
-- Status: FORGE/public-unlaunched; Zoho alias delivery/reply identity, live Obelisk delegation, auth-email, real Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct post-proof public-launch approval remain unproved.
+Outcome: website implementation and local regression repairs complete; current visual consolidation and exact-candidate delivery still pending.
+Deploy: pending — S133 has not been committed or promoted yet. Previous production proof is historical, not this candidate.
+Next: finish current screenshot acceptance, complete launch-local/sanitization gates, then commit and verify required CI, stable staging and identical production bytes.
 
-## Next session
+## Current evidence
 
-1. Observe the first recurring stats publication from actual scheduler/source evidence.
-2. Complete Zoho and Obelisk proofs, then auth/payment/tester/remediation/cost/launch criteria. These are separate from the completed stats scope.
-3. Refresh stale revenue evidence from its source.
+Removed launch/observability controls, private feed alerts and demonstration bankroll panels from customer routes. Shared typography, theme palettes and navigation improve 63 app routes and101 HTML files (51 immediate aliases,50 content pages). Fixed calculator imports, blank Workspace Review, no-data model lanes, tax assumptions and community service failures. Corrected translated model examples and stale commercial/offer claims.
 
-## Durable implementation notes
+Expanded published-policy/commercial approval was explicitly received and applied: Terms, Privacy, Data Policy, DMCA, creator/verified, About/Compliance and team availability. Protected ownership/refund/cancellation/liability/sharing/retention limits remain unchanged. Independent approved-policy source/render review has no open blocker. Do not ask for the same approval again.
 
-- Modern service authority can differ from the legacy JWT. Resolve keys only through the gateway/target-verified management plane and match the deployed exact guard using a read-only GET/405 probe.
-- Record timestamps are app-supplied/owner-editable; preserve the displayed trust caveat.
-- The feed uses suppression and bands, not a formal differential-privacy claim. Browser access remains public-read only.
-- Reuse installed Chromium/CDP; distinguish isolated fault fixtures from real production feed screenshots.
-- S131 repaired release/authority/freshness/runtime/dependency/pricing behavior; its history remains intact. Next session S133 unless intervening work advances it.
+Latest frontend suite:109 files/745 tests pass. Customer save errors retain inputs and distinguish partial success; missing leaderboard choice is not inferred as consent, failed saves retain the previous setting, and the public leaderboard no longer falls back to raw activity. These client repairs do not certify live server privacy enforcement.
 
-## Public-repo fallback
+Source integrity413files, public claims345files/25rules, footer101/101, auth/hook/route smoke pass. Launch smoke uses current available-calculator and coming-soon copy rather than requiring obsolete internal beta vocabulary. Runtime compatibility79/79 across70modules; dependency audit zero known vulnerabilities; supply chain zero blocks/three existing review entries. Node24 project CI/release action commits have verified official provenance; hosted execution is still pending.
 
-Missing local render-closeout-checklist.mjs, compact-memory-index.mjs and ark.mjs use manual checklist/compact private index and signed sibling Ark transport. The local IGNIS per-touch scorer explicitly skips; a skipped rescore is not a fresh score. No private tooling is fabricated in this public repo.
+Canonical reconciliation applied55 live canons and restored16 safety overlays. Judgment/manual/doctor-owned checks are recorded honestly. A signed owner request asks Studio Ops to update its generated Node20 brief-format workflow; sending is not adoption. Missing private local tooling uses the documented public-repository fallback, with no placeholder private system introduced.
+
+## Visual evidence
+
+All61 tab routes and50 independent content pages have desktop/mobile dark/light capture surveys. Independent reviewers inspected complete app/public pages and bounded repair recaptures. Approved policy, contrast, entered-tax, loading-error, team-member/save-error, trial and embed states have additional frozen source snapshots. Previous-session40image receipt is not current acceptance; consolidation remains in progress. Completed broad captures that failed source freezing or navigation are excluded from final acceptance.
+
+## Unchanged external launch holds
+
+Zoho alias delivery/reply identity, live Obelisk delegation, complete auth-email/Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct SPARKED/public-launch approval remain unproved. No new paid service, broader provider access, or public launch is authorized by this implementation.
+
+Live owned development server: local4183. Capture jobs are being completed and will be stopped before clean closeout.

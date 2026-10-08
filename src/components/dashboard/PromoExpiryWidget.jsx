@@ -63,11 +63,11 @@ export default function PromoExpiryWidget() {
   return (
     <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 10, padding: "14px 16px", marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: active.length > 0 || showForm ? 10 : 0 }}>
-        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 700, fontFamily: font }}>
+        <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 700, fontFamily: font }}>
           ⏱ Promo Expirations
-          {active.length > 0 && <span style={{ marginLeft: 8, padding: "1px 7px", background: `${K.rd}18`, color: K.rd, borderRadius: 99, fontSize: 9 }}>{active.filter(x => msUntil(x.expiresAt) < 86400000 && msUntil(x.expiresAt) > 0).length > 0 ? "URGENT" : `${active.length}`}</span>}
+          {active.length > 0 && <span style={{ marginLeft: 8, padding: "1px 7px", background: `${K.rd}18`, color: K.rd, borderRadius: 99, fontSize: 12 }}>{active.filter(x => msUntil(x.expiresAt) < 86400000 && msUntil(x.expiresAt) > 0).length > 0 ? "URGENT" : `${active.length}`}</span>}
         </div>
-        <button onClick={() => setShowForm(f => !f)} style={{ padding: "3px 10px", background: showForm ? `${K.rd}15` : `${K.gn}15`, border: `1px solid ${showForm ? K.rd : K.gn}30`, borderRadius: 4, color: showForm ? K.rd : K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>
+        <button onClick={() => setShowForm(f => !f)} style={{ padding: "3px 10px", background: showForm ? `${K.rd}15` : `${K.gn}15`, border: `1px solid ${showForm ? K.rd : K.gn}30`, borderRadius: 4, color: showForm ? K.rd : K.gn, fontSize: 12, cursor: "pointer", fontFamily: font }}>
           {showForm ? "✕ Cancel" : "+ Add"}
         </button>
       </div>
@@ -75,23 +75,23 @@ export default function PromoExpiryWidget() {
       {showForm && (
         <div style={{ padding: "10px", background: K.s2, borderRadius: 8, marginBottom: 10, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
           <div style={{ flex: 1, minWidth: 100 }}>
-            <div style={{ fontSize: 9, color: K.mt, marginBottom: 3, textTransform: "uppercase", letterSpacing: "1px" }}>Sportsbook</div>
-            <input value={form.book} onChange={e => setForm(f => ({ ...f, book: e.target.value }))} placeholder="DraftKings" style={{ width: "100%", padding: "7px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontSize: 12, fontFamily: font, boxSizing: "border-box" }} />
+            <div style={{ fontSize: 12, color: K.mt, marginBottom: 3, textTransform: "uppercase", letterSpacing: "1px" }}>Sportsbook</div>
+            <input value={form.book} onChange={e => setForm(f => ({ ...f, book: e.target.value }))} placeholder="DraftKings" style={{ width: "100%", padding: "7px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontSize: 14, fontFamily: font, boxSizing: "border-box" }} />
           </div>
           <div style={{ flex: 2, minWidth: 140 }}>
-            <div style={{ fontSize: 9, color: K.mt, marginBottom: 3, textTransform: "uppercase", letterSpacing: "1px" }}>Promo</div>
-            <input value={form.promo} onChange={e => setForm(f => ({ ...f, promo: e.target.value }))} placeholder="$200 first bet safety net" style={{ width: "100%", padding: "7px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontSize: 12, fontFamily: font, boxSizing: "border-box" }} />
+            <div style={{ fontSize: 12, color: K.mt, marginBottom: 3, textTransform: "uppercase", letterSpacing: "1px" }}>Promo</div>
+            <input value={form.promo} onChange={e => setForm(f => ({ ...f, promo: e.target.value }))} placeholder="$200 first bet safety net" style={{ width: "100%", padding: "7px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontSize: 14, fontFamily: font, boxSizing: "border-box" }} />
           </div>
           <div style={{ flex: 1, minWidth: 120 }}>
-            <div style={{ fontSize: 9, color: K.mt, marginBottom: 3, textTransform: "uppercase", letterSpacing: "1px" }}>Expires</div>
-            <input type="datetime-local" value={form.expiresAt} onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))} style={{ width: "100%", padding: "7px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontSize: 12, fontFamily: font, boxSizing: "border-box" }} />
+            <div style={{ fontSize: 12, color: K.mt, marginBottom: 3, textTransform: "uppercase", letterSpacing: "1px" }}>Expires</div>
+            <input type="datetime-local" value={form.expiresAt} onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))} style={{ width: "100%", padding: "7px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontSize: 14, fontFamily: font, boxSizing: "border-box" }} />
           </div>
-          <button onClick={add} disabled={!form.promo || !form.expiresAt} style={{ padding: "8px 14px", background: `${K.gn}20`, border: `1px solid ${K.gn}40`, borderRadius: 6, color: K.gn, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}>Save →</button>
+          <button onClick={add} disabled={!form.promo || !form.expiresAt} style={{ padding: "8px 14px", background: `${K.gn}20`, border: `1px solid ${K.gn}40`, borderRadius: 6, color: K.gn, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}>Save →</button>
         </div>
       )}
 
       {active.length === 0 && !showForm && (
-        <div style={{ fontSize: 11, color: K.mt, padding: "4px 0" }}>No tracked expirations — add one to stay on deadline.</div>
+        <div style={{ fontSize: 12, color: K.mt, padding: "4px 0" }}>No tracked expirations — add one to stay on deadline.</div>
       )}
 
       {active.map(item => {
@@ -101,12 +101,12 @@ export default function PromoExpiryWidget() {
         return (
           <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderTop: `1px solid ${K.bd}` }}>
             <div style={{ minWidth: 52, textAlign: "center" }}>
-              <div style={{ fontFamily: fontD, fontSize: 13, fontWeight: 800, color, lineHeight: 1 }}>{fmtCountdown(ms)}</div>
-              {expired && <div style={{ fontSize: 8, color: K.rd, textTransform: "uppercase", letterSpacing: "1px" }}>expired</div>}
+              <div style={{ fontFamily: fontD, fontSize: 14, fontWeight: 800, color, lineHeight: 1 }}>{fmtCountdown(ms)}</div>
+              {expired && <div style={{ fontSize: 12, color: K.rd, textTransform: "uppercase", letterSpacing: "1px" }}>expired</div>}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11, color: K.tx, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.promo}</div>
-              {item.book && <div style={{ fontSize: 9, color: K.mt }}>{item.book}</div>}
+              <div style={{ fontSize: 12, color: K.tx, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.promo}</div>
+              {item.book && <div style={{ fontSize: 12, color: K.mt }}>{item.book}</div>}
             </div>
             <div style={{ width: 4, height: 28, background: color, borderRadius: 2, flexShrink: 0 }} />
             <button onClick={() => remove(item.id)} style={{ background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 14, padding: "0 2px", lineHeight: 1 }} title="Remove">×</button>

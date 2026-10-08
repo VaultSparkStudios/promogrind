@@ -1,0 +1,655 @@
+{
+  "session": 133,
+  "date": "2026-10-08",
+  "project": {
+    "slug": "promogrind",
+    "name": "PromoGrind",
+    "type": "app"
+  },
+  "lifecycleFocus": {
+    "stage": "F2",
+    "recordedStage": "F2",
+    "display": "FORGE · PREVIEW",
+    "audience": "public-unlaunched",
+    "health": "green",
+    "releaseTarget": null,
+    "mode": "beta-preparation",
+    "readiness": true,
+    "areas": [
+      "core journeys and product correctness",
+      "onboarding and identity/access",
+      "accessibility, mobile parity and every supported theme",
+      "performance and capacity",
+      "security, privacy, data integrity and abuse controls",
+      "backup, recovery and rollback",
+      "email and notifications where used",
+      "observability and actionable analytics",
+      "feedback, support and issue triage",
+      "branding, legal, contact and rights/provenance",
+      "human and agent access where applicable",
+      "staging, release evidence and truthful beta/release communication"
+    ],
+    "stageConflict": null,
+    "statusSource": "project-status",
+    "stageSource": "registry"
+  },
+  "readinessAssessment": [
+    {
+      "area": "core journeys and product correctness",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "onboarding and identity/access",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "context/CURRENT_STATE.md documents unproved live Obelisk delegation",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "accessibility, mobile parity and every supported theme",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Canon conformance identifies two visual evidence defects; before/after review required",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "performance and capacity",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "security, privacy, data integrity and abuse controls",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "backup, recovery and rollback",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "email and notifications where used",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "observability and actionable analytics",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "feedback, support and issue triage",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "branding, legal, contact and rights/provenance",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "human and agent access where applicable",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    },
+    {
+      "area": "staging, release evidence and truthful beta/release communication",
+      "status": "partial",
+      "owner": "promogrind",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+    }
+  ],
+  "axes": {
+    "features-depth": 1.5,
+    "ui-ux-feedback": 2,
+    "gamification-immersion": 1.5,
+    "ai-intelligence": 1.5,
+    "security": 2,
+    "speed-organization-efficiency": 2,
+    "token-cost": 1.5,
+    "observability-honesty": 2,
+    "sil-debt": 1.5
+  },
+  "axisCoverage": {
+    "features-depth": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "new-promo-rehearsal",
+          "premise": "A promo rehearsal is absent",
+          "evidence": "src/components/PromoWalkthrough.jsx and calculators already provide rehearsal; improve clarity before duplicating"
+        },
+        {
+          "slug": "new-decision-memory",
+          "premise": "Decision review is absent",
+          "evidence": "src/lib/decisionJournal.js and WeeklyDecisionReview already implement memory"
+        }
+      ],
+      "candidatesReviewed": 2
+    },
+    "ui-ux-feedback": {
+      "surviving": [
+        "customer-dashboard-boundary",
+        "plain-language-page-copy",
+        "readable-page-system"
+      ],
+      "rejectedOnVerify": [],
+      "candidatesReviewed": 2
+    },
+    "gamification-immersion": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "new-completion-map",
+          "premise": "No progression exists",
+          "evidence": "src/lib/mastery.js and achievements.js plus onboarding already provide progress"
+        },
+        {
+          "slug": "new-streak-game",
+          "premise": "No engagement cadence exists",
+          "evidence": "DailyMissionsPanel and computeStreak already exist; avoid activity incentives in a disciplined betting product"
+        }
+      ],
+      "candidatesReviewed": 2
+    },
+    "ai-intelligence": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "new-advisor-route",
+          "premise": "AI decision support is absent",
+          "evidence": "AIActionPlan, PromoAdvisorPanel and gateway already exist with entitlements"
+        },
+        {
+          "slug": "new-counterfactual-guide",
+          "premise": "Counterfactual decision support is absent",
+          "evidence": "src/lib/counterfactualPnL.js and operatorTwin.js exist; improve explanation and availability"
+        }
+      ],
+      "candidatesReviewed": 2
+    },
+    "security": {
+      "surviving": [
+        "full-stack-delivery-proof"
+      ],
+      "rejectedOnVerify": [],
+      "candidatesReviewed": 2
+    },
+    "speed-organization-efficiency": {
+      "surviving": [
+        "runtime-infra-currency"
+      ],
+      "rejectedOnVerify": [],
+      "candidatesReviewed": 2
+    },
+    "token-cost": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "new-prompt-cache",
+          "premise": "No prompt cache exists",
+          "evidence": "src/ai/promptCache.js implements caching; no measured redundant API cost established"
+        },
+        {
+          "slug": "new-ai-router",
+          "premise": "No shared routing exists",
+          "evidence": "scripts/lib/model-router.mjs and CANON-012 gateway already exist; preserve intentional pins and no paid expansion"
+        }
+      ],
+      "candidatesReviewed": 2
+    },
+    "observability-honesty": {
+      "surviving": [
+        "customer-surface-regression"
+      ],
+      "rejectedOnVerify": [],
+      "candidatesReviewed": 2
+    },
+    "sil-debt": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "new-release-verifier",
+          "premise": "No release verifier exists",
+          "evidence": "package.json has comprehensive verify:launch-local, edge and release suites"
+        },
+        {
+          "slug": "new-overlay-system",
+          "premise": "No overlay protection exists",
+          "evidence": "scripts/reconcile-runtime-overrides.mjs restores exact committed overlays and refuses divergence"
+        }
+      ],
+      "candidatesReviewed": 2
+    }
+  },
+  "scope": "Founder-authorized full Studio Ops/full-stack currency and page-by-page customer clarity; no launch or policy change implied.",
+  "items": [
+    {
+      "id": 1,
+      "slug": "customer-dashboard-boundary",
+      "axis": "ui-ux-feedback",
+      "title": "Remove team-only dashboard panels",
+      "tier": "🔥",
+      "effortHours": 3,
+      "impact": 10,
+      "innovation": 5,
+      "priority": 43.07,
+      "recipe": "Remove the launch panel from the dashboard and the Observability panel from TodayDashboardPanel; retain user workflows, calculations, sync status and personal records. Verify customer rendering contains no deployment, monetization, launch-proof or growth analytics controls.",
+      "status": "pending",
+      "selectedRung": "L2",
+      "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
+      "readinessArea": "core journeys and product correctness",
+      "premises": [
+        {
+          "claim": "Current src/components/dashboard/DailyDashboard.jsx contains the identified surface or implementation needing review",
+          "adapter": "file-content",
+          "target": "src/components/dashboard/DailyDashboard.jsx",
+          "pattern": "<LaunchCommandCenterPanel",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1.5,
+          "recipe": "Correct the demonstrated defect and run focused acceptance checks."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Remove the launch panel from the dashboard and the Observability panel from TodayDashboardPanel; retain user workflows, calculations, sync status and personal records. Verify customer rendering contains no deployment, monetization, launch-proof or growth analytics controls."
+        },
+        "L3": {
+          "effortHours": 4.5,
+          "recipe": "Remove the launch panel from the dashboard and the Observability panel from TodayDashboardPanel; retain user workflows, calculations, sync status and personal records. Verify customer rendering contains no deployment, monetization, launch-proof or growth analytics controls. Extend rendered-state coverage to populated, empty, error and unavailable journeys."
+        }
+      },
+      "acceptance": [
+        "Remove the launch panel from the dashboard and the Observability panel from TodayDashboardPanel; retain user workflows, calculations, sync status and personal records. Verify customer rendering contains no deployment, monetization, launch-proof or growth analytics controls."
+      ],
+      "executionLog": [
+        {
+          "at": "2026-10-08T01:14:11.266Z",
+          "status": "partial",
+          "note": "LaunchCommandCenterPanel and ObservabilityPanel removed from customer dashboard. Independent reviewer approved corrected partial diff; customer-render tests passed. Remaining visual state/source-hash proof."
+        },
+        {
+          "at": "2026-10-08T02:24:46.168Z",
+          "status": "partial",
+          "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        }
+      ],
+      "progress": "partial"
+    },
+    {
+      "id": 2,
+      "slug": "plain-language-page-copy",
+      "axis": "ui-ux-feedback",
+      "title": "Explain every app page in customer language",
+      "tier": "⚡",
+      "effortHours": 8,
+      "impact": 10,
+      "innovation": 6,
+      "priority": 36.12,
+      "recipe": "Inventory every app route and static page. Replace internal launch, sprint, deployment and evidence wording with clear user tasks and availability. Give pages meaningful purpose, inputs and next actions; preserve financial/model limitations and approved legal policies. Correct stale release notes, inflated route counts and hash-based links.",
+      "status": "pending",
+      "selectedRung": "L2",
+      "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
+      "readinessArea": "onboarding and identity/access",
+      "premises": [
+        {
+          "claim": "Current src/routes/HomeRoutes.jsx contains the identified surface or implementation needing review",
+          "adapter": "file-content",
+          "target": "src/routes/HomeRoutes.jsx",
+          "pattern": "Finish the core setup before you send people",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 4,
+          "recipe": "Correct the demonstrated defect and run focused acceptance checks."
+        },
+        "L2": {
+          "effortHours": 8,
+          "recipe": "Inventory every app route and static page. Replace internal launch, sprint, deployment and evidence wording with clear user tasks and availability. Give pages meaningful purpose, inputs and next actions; preserve financial/model limitations and approved legal policies. Correct stale release notes, inflated route counts and hash-based links."
+        },
+        "L3": {
+          "effortHours": 12,
+          "recipe": "Inventory every app route and static page. Replace internal launch, sprint, deployment and evidence wording with clear user tasks and availability. Give pages meaningful purpose, inputs and next actions; preserve financial/model limitations and approved legal policies. Correct stale release notes, inflated route counts and hash-based links. Extend rendered-state coverage to populated, empty, error and unavailable journeys."
+        }
+      },
+      "acceptance": [
+        "Inventory every app route and static page. Replace internal launch, sprint, deployment and evidence wording with clear user tasks and availability. Give pages meaningful purpose, inputs and next actions; preserve financial/model limitations and approved legal policies. Correct stale release notes, inflated route counts and hash-based links."
+      ],
+      "executionLog": [
+        {
+          "at": "2026-10-08T01:14:11.266Z",
+          "status": "partial",
+          "note": "First six-route copy and link pass done; route inventory covers all app and static pages. Updated old release notes to factual recent updates. Whole-site pass remains."
+        },
+        {
+          "at": "2026-10-08T02:24:46.168Z",
+          "status": "partial",
+          "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        }
+      ],
+      "progress": "partial"
+    },
+    {
+      "id": 3,
+      "slug": "readable-page-system",
+      "axis": "ui-ux-feedback",
+      "title": "Improve typography, contrast and layout across pages",
+      "tier": "⚡",
+      "effortHours": 10,
+      "impact": 10,
+      "innovation": 6,
+      "priority": 33.47,
+      "recipe": "Survey desktop/mobile and both themes for every route. Increase small explanatory text and labels, improve line-height and wrapping, fix overflow and controls, simplify dashboard density. Review rendered images per page, fix and recapture; write a source-hash-bound receipt.",
+      "status": "pending",
+      "selectedRung": "L2",
+      "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
+      "readinessArea": "accessibility, mobile parity and every supported theme",
+      "premises": [
+        {
+          "claim": "Current src/components/PricingPage.jsx contains the identified surface or implementation needing review",
+          "adapter": "file-content",
+          "target": "src/components/PricingPage.jsx",
+          "pattern": "fontSize: 10",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 5,
+          "recipe": "Correct the demonstrated defect and run focused acceptance checks."
+        },
+        "L2": {
+          "effortHours": 10,
+          "recipe": "Survey desktop/mobile and both themes for every route. Increase small explanatory text and labels, improve line-height and wrapping, fix overflow and controls, simplify dashboard density. Review rendered images per page, fix and recapture; write a source-hash-bound receipt."
+        },
+        "L3": {
+          "effortHours": 15,
+          "recipe": "Survey desktop/mobile and both themes for every route. Increase small explanatory text and labels, improve line-height and wrapping, fix overflow and controls, simplify dashboard density. Review rendered images per page, fix and recapture; write a source-hash-bound receipt. Extend rendered-state coverage to populated, empty, error and unavailable journeys."
+        }
+      },
+      "acceptance": [
+        "Survey desktop/mobile and both themes for every route. Increase small explanatory text and labels, improve line-height and wrapping, fix overflow and controls, simplify dashboard density. Review rendered images per page, fix and recapture; write a source-hash-bound receipt."
+      ],
+      "executionLog": [
+        {
+          "at": "2026-10-08T02:24:46.168Z",
+          "status": "partial",
+          "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        }
+      ],
+      "progress": "partial"
+    },
+    {
+      "id": 4,
+      "slug": "runtime-infra-currency",
+      "axis": "speed-organization-efficiency",
+      "title": "Reconcile current Studio Ops and infrastructure contracts",
+      "tier": "🔥",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 4,
+      "priority": 18,
+      "recipe": "Apply canonical incoming changes through the existing sync, preserve documented consumer safety overlays, inspect refused divergence. Fix directory handling in runtime compatibility discovery. Review full-stack integration, release, edge, auth, cost and public-surface checks against current Ops recommendations and official provider documentation. Prove relevant checks; keep external gaps distinct from local completion.",
+      "status": "pending",
+      "selectedRung": "L2",
+      "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
+      "readinessArea": "security, privacy, data integrity and abuse controls",
+      "premises": [
+        {
+          "claim": "Current scripts/check-runtime-pack-compatibility.mjs contains the identified surface or implementation needing review",
+          "adapter": "file-content",
+          "target": "scripts/check-runtime-pack-compatibility.mjs",
+          "pattern": "SOURCE_DERIVED_CHANGED_FILES",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Correct the demonstrated defect and run focused acceptance checks."
+        },
+        "L2": {
+          "effortHours": 6,
+          "recipe": "Apply canonical incoming changes through the existing sync, preserve documented consumer safety overlays, inspect refused divergence. Fix directory handling in runtime compatibility discovery. Review full-stack integration, release, edge, auth, cost and public-surface checks against current Ops recommendations and official provider documentation. Prove relevant checks; keep external gaps distinct from local completion."
+        },
+        "L3": {
+          "effortHours": 9,
+          "recipe": "Apply canonical incoming changes through the existing sync, preserve documented consumer safety overlays, inspect refused divergence. Fix directory handling in runtime compatibility discovery. Review full-stack integration, release, edge, auth, cost and public-surface checks against current Ops recommendations and official provider documentation. Prove relevant checks; keep external gaps distinct from local completion. Extend rendered-state coverage to populated, empty, error and unavailable journeys."
+        }
+      },
+      "acceptance": [
+        "Apply canonical incoming changes through the existing sync, preserve documented consumer safety overlays, inspect refused divergence. Fix directory handling in runtime compatibility discovery. Review full-stack integration, release, edge, auth, cost and public-surface checks against current Ops recommendations and official provider documentation. Prove relevant checks; keep external gaps distinct from local completion."
+      ],
+      "executionLog": [
+        {
+          "at": "2026-10-08T01:14:11.266Z",
+          "status": "partial",
+          "note": "55-canon reconciliation and 16 safety overlays restored; lifecycle fallback and directory handling fixed; compatibility 79/79 passed across 70 modules; broader infra/readiness proof remains."
+        },
+        {
+          "at": "2026-10-08T02:24:46.168Z",
+          "status": "partial",
+          "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        }
+      ],
+      "progress": "partial"
+    },
+    {
+      "id": 5,
+      "slug": "customer-surface-regression",
+      "axis": "observability-honesty",
+      "title": "Guard the customer/internal boundary and route health",
+      "tier": "⚡",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 31.34,
+      "recipe": "Add meaningful customer-render regression coverage for internal panels and route links. Produce a per-route review ledger with small-text, overflow, unavailable states and visual evidence. Verify the actual build and customer rendering rather than only source strings.",
+      "status": "pending",
+      "selectedRung": "L2",
+      "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
+      "readinessArea": "observability and actionable analytics",
+      "premises": [
+        {
+          "claim": "Current src/components/dashboard/TodayDashboardPanel.jsx contains the identified surface or implementation needing review",
+          "adapter": "file-content",
+          "target": "src/components/dashboard/TodayDashboardPanel.jsx",
+          "pattern": "<ObservabilityPanel",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Correct the demonstrated defect and run focused acceptance checks."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Add meaningful customer-render regression coverage for internal panels and route links. Produce a per-route review ledger with small-text, overflow, unavailable states and visual evidence. Verify the actual build and customer rendering rather than only source strings."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "Add meaningful customer-render regression coverage for internal panels and route links. Produce a per-route review ledger with small-text, overflow, unavailable states and visual evidence. Verify the actual build and customer rendering rather than only source strings. Extend rendered-state coverage to populated, empty, error and unavailable journeys."
+        }
+      },
+      "acceptance": [
+        "Add meaningful customer-render regression coverage for internal panels and route links. Produce a per-route review ledger with small-text, overflow, unavailable states and visual evidence. Verify the actual build and customer rendering rather than only source strings."
+      ],
+      "executionLog": [
+        {
+          "at": "2026-10-08T01:14:11.266Z",
+          "status": "partial",
+          "note": "Customer dashboard render regression added; focused 3 files/15 tests passed using forks after thread worker startup timeout. All-route review ledger and unavailable/populated/error coverage remain."
+        },
+        {
+          "at": "2026-10-08T02:24:46.168Z",
+          "status": "partial",
+          "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        }
+      ],
+      "progress": "partial"
+    },
+    {
+      "id": 6,
+      "slug": "full-stack-delivery-proof",
+      "axis": "security",
+      "title": "Verify the candidate through staging and closeout",
+      "tier": "⚡",
+      "effortHours": 6,
+      "impact": 10,
+      "innovation": 4,
+      "priority": 20,
+      "recipe": "Run existing app, edge, release, integrity, security and runtime suites. Perform independent review, fix findings, refresh evidence and ordered closeout surfaces. Publish only after sanitization and applicable staging/release gates; verify the exact candidate at user-facing surfaces and record remaining launch dependencies honestly.",
+      "status": "pending",
+      "selectedRung": "L2",
+      "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
+      "readinessArea": "staging, release evidence and truthful beta/release communication",
+      "premises": [
+        {
+          "claim": "Current context/CURRENT_STATE.md contains the identified surface or implementation needing review",
+          "adapter": "file-content",
+          "target": "context/CURRENT_STATE.md",
+          "pattern": "Remaining work",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Correct the demonstrated defect and run focused acceptance checks."
+        },
+        "L2": {
+          "effortHours": 6,
+          "recipe": "Run existing app, edge, release, integrity, security and runtime suites. Perform independent review, fix findings, refresh evidence and ordered closeout surfaces. Publish only after sanitization and applicable staging/release gates; verify the exact candidate at user-facing surfaces and record remaining launch dependencies honestly."
+        },
+        "L3": {
+          "effortHours": 9,
+          "recipe": "Run existing app, edge, release, integrity, security and runtime suites. Perform independent review, fix findings, refresh evidence and ordered closeout surfaces. Publish only after sanitization and applicable staging/release gates; verify the exact candidate at user-facing surfaces and record remaining launch dependencies honestly. Extend rendered-state coverage to populated, empty, error and unavailable journeys."
+        }
+      },
+      "acceptance": [
+        "Run existing app, edge, release, integrity, security and runtime suites. Perform independent review, fix findings, refresh evidence and ordered closeout surfaces. Publish only after sanitization and applicable staging/release gates; verify the exact candidate at user-facing surfaces and record remaining launch dependencies honestly."
+      ],
+      "executionLog": [
+        {
+          "at": "2026-10-08T02:24:46.168Z",
+          "status": "partial",
+          "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        }
+      ],
+      "progress": "partial"
+    }
+  ],
+  "totals": {
+    "count": 6,
+    "priority": 182,
+    "top3": [
+      "customer-dashboard-boundary",
+      "plain-language-page-copy",
+      "readable-page-system"
+    ]
+  },
+  "startupEvidence": {
+    "canon": "55 live canons reconciled; 44 require judgment review; manual and doctor checks are not conformed",
+    "radar": "10/10 sources current; age 67.1h; seven awaiting semantic review",
+    "overlays": "16 restored; model-router-adherence divergence preserved",
+    "missingLocalScripts": [
+      "start-sync",
+      "start-canon-sync",
+      "task-slice",
+      "frontier-capability-radar",
+      "run-maintenance",
+      "check-maintenance-lane-ran",
+      "render-audit-md"
+    ],
+    "contextMeter": "UNMEASURED; no transcript usage available"
+  },
+  "executionLog": [
+    {
+      "at": "2026-10-08T02:24:46.168Z",
+      "session": 133,
+      "status": "partial",
+      "evidence": [
+        "Application: 108 test files / 734 assertions pass after final customer-copy changes.",
+        "Edge: 16 discovered entrypoints / 69 assertions previously pass; unchanged edge source.",
+        "Runtime compatibility: 79/79 checks across 70 modules previously pass.",
+        "Dependency audit: zero known vulnerabilities; supply chain zero blocks / three existing review entries.",
+        "Broad route captures and independent review receipts are local QA artifacts; final visual acceptance is not complete.",
+        "Published-policy approval and commit-bound delivery proof remain pending."
+      ]
+    },
+    {
+      "at": "2026-10-08T04:03:59.158Z",
+      "status": "partial",
+      "note": "All page/default-state local visual and implementation acceptance verified; final bounded repairs recaptured. Current candidate has not yet been committed, CI-checked or deployed; six terminal outcomes remain pending until delivery/closeout."
+    }
+  ],
+  "schemaVersion": "2.1",
+  "generatedAt": "2026-10-08T01:08:43.643Z",
+  "localAcceptance": {
+    "at": "2026-10-08T04:03:59.158Z",
+    "state": "verified local; exact candidate delivery and canonical closeout pending",
+    "frontend": {
+      "files": 109,
+      "assertions": 745
+    },
+    "edge": {
+      "entrypoints": 16,
+      "assertions": 69,
+      "files": 10
+    },
+    "runtime": {
+      "checks": 79,
+      "modules": 70
+    },
+    "sourceIntegrity": {
+      "files": 414
+    },
+    "visual": {
+      "captures": 1000,
+      "before": 476,
+      "after": 524,
+      "receipt": "docs/visual-qa/LATEST.json",
+      "binding": "docs/visual-qa/s133/SOURCE_BINDINGS.json"
+    },
+    "publicInventory": {
+      "appRoutes": 63,
+      "htmlFiles": 101,
+      "contentPages": 51,
+      "aliases": 50
+    },
+    "build": "build:release PASS;611modules",
+    "security": "strict sanitization and dist exposure pass; staged scan still running"
+  }
+}

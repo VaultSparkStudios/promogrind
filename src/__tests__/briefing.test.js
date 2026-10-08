@@ -10,6 +10,11 @@ const makePlaybook = (overrides = {}) => ({
 });
 
 describe("buildTargetedAlertPlan", () => {
+  it("excludes internal release priorities and anomalies from customer alerts", () => {
+    const result = buildTargetedAlertPlan({snapshot:{feeds:{priorities:[{title:'Deploy proof missing',detail:'Release queue'}],anomalies:[{type:'launch',label:'Queue priority anomaly',detail:'CI failure'}]}}});
+    expect(result.queue).toHaveLength(0);
+    expect(JSON.stringify(result)).not.toMatch(/Deploy proof|Release queue|Queue priority anomaly|CI failure|cockpit|launch state/);
+  });
   it("returns a general fallback when no signals are present", () => {
     const result = buildTargetedAlertPlan({});
     expect(result.primary.kind).toBe("general");

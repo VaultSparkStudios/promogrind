@@ -78,10 +78,10 @@ export default function DataControlsSection() {
 
   return (
     <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
         Data Controls
       </div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
         {state.label} · {state.totalBytes} governed bytes on this device
         {state.excludedItems > 0 && <> · {state.excludedItems} transient/authority item{state.excludedItems === 1 ? "" : "s"} never enter exports</>}
       </div>
@@ -93,7 +93,7 @@ export default function DataControlsSection() {
             flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.canExport ? 'pointer' : 'not-allowed',
             background: state.canExport ? `${K.ac}12` : K.s2,
             border: `1px solid ${state.canExport ? K.ac + '40' : K.bd}`,
-            color: state.canExport ? K.ac : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
+            color: state.canExport ? K.ac : K.mt, fontSize: 12, fontWeight: 700, fontFamily: font,
           }}
         >
           Export
@@ -104,7 +104,7 @@ export default function DataControlsSection() {
             flex: 1, padding: '8px 0', borderRadius: 6, cursor: 'pointer',
             background: restoreOpen ? `${K.gn}12` : K.s2,
             border: `1px solid ${restoreOpen ? K.gn + '40' : K.bd}`,
-            color: restoreOpen ? K.gn : K.dm, fontSize: 10, fontWeight: 700, fontFamily: font,
+            color: restoreOpen ? K.gn : K.dm, fontSize: 12, fontWeight: 700, fontFamily: font,
           }}
         >
           Restore
@@ -116,7 +116,7 @@ export default function DataControlsSection() {
             flex: 1, padding: '8px 0', borderRadius: 6, cursor: state.clearableItems ? 'pointer' : 'not-allowed',
             background: state.clearableItems ? `${K.rd}10` : K.s2,
             border: `1px solid ${state.clearableItems ? K.rd + '35' : K.bd}`,
-            color: state.clearableItems ? K.rd : K.mt, fontSize: 10, fontWeight: 700, fontFamily: font,
+            color: state.clearableItems ? K.rd : K.mt, fontSize: 12, fontWeight: 700, fontFamily: font,
           }}
         >
           Clear Local
@@ -132,11 +132,11 @@ export default function DataControlsSection() {
             rows={4}
             style={{
               width: '100%', boxSizing: 'border-box', padding: 8, borderRadius: 6, resize: 'vertical',
-              background: K.s2, border: `1px solid ${K.bd}`, color: K.tx, fontSize: 10, fontFamily: font,
+              background: K.s2, border: `1px solid ${K.bd}`, color: K.tx, fontSize: 12, fontFamily: font,
             }}
           />
           {restorePreview && (
-            <div style={{ fontSize: 9, color: restorePreview.valid ? K.dm : K.rd, lineHeight: 1.6, marginTop: 6 }} role="status">
+            <div style={{ fontSize: 12, color: restorePreview.valid ? K.dm : K.rd, lineHeight: 1.6, marginTop: 6 }} role="status">
               {restorePreview.valid
                 ? `Ready: ${restorePreview.preview.length} item${restorePreview.preview.length === 1 ? "" : "s"} (${restorePreview.preview.filter((p) => p.action === "overwrite").length} overwrite) · schema v${restorePreview.schemaVersion}`
                 : restorePreview.errors[0]}
@@ -149,7 +149,7 @@ export default function DataControlsSection() {
                 style={{
                   flex: 1, padding: '7px 0', borderRadius: 6, cursor: 'pointer',
                   background: `${K.gn}12`, border: `1px solid ${K.gn}40`,
-                  color: K.gn, fontSize: 10, fontWeight: 700, fontFamily: font,
+                  color: K.gn, fontSize: 12, fontWeight: 700, fontFamily: font,
                 }}
               >
                 Merge Into This Device
@@ -159,7 +159,7 @@ export default function DataControlsSection() {
                 style={{
                   flex: 1, padding: '7px 0', borderRadius: 6, cursor: 'pointer',
                   background: `${K.yl}10`, border: `1px solid ${K.yl}35`,
-                  color: K.yl, fontSize: 10, fontWeight: 700, fontFamily: font,
+                  color: K.yl, fontSize: 12, fontWeight: 700, fontFamily: font,
                 }}
               >
                 Replace Everything
@@ -174,13 +174,13 @@ export default function DataControlsSection() {
           style={{
             marginTop: 8, padding: '6px 10px', borderRadius: 6, cursor: 'pointer',
             background: 'transparent', border: `1px dashed ${K.bd2}`,
-            color: K.mt, fontSize: 9, fontWeight: 700, fontFamily: font,
+            color: K.mt, fontSize: 12, fontWeight: 700, fontFamily: font,
           }}
         >
           ⟲ Undo last replace (pre-restore snapshot)
         </button>
       )}
-      {message && <div style={{ fontSize: 9, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
+      {message && <div style={{ fontSize: 12, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
     </div>
   );
 }

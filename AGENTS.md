@@ -108,7 +108,9 @@ Use `docs/INTERNAL_TOOLS.md` before building, `ops.mjs cap "<intent>"` before de
 
 ### Public surfaces, media and releases — implementer/release owner
 
-Load **docs/AGENT_ACTION_REFERENCE.md → Public-facing project requirements** before public UI, identity or release work. All applicable CANON-006/007/008/011/029/030/041/045/047/048/051/053/054/055 gates still apply: branding/legal/contact, free-tier cost, sitemap and agent access, Obelisk identity, staging, themes/mobile/performance, security and surface follow-through. SPARKED requires founder approval. CANON-053 is mandatory during UI work: real before/after images, desktop/mobile, every theme/touched state, inspect/fix/recapture and hash-bound visual receipt. Private media work uses its medium-specific checker; missing footage/rights/export review is nonpassing and proof is not publishing permission. Public pushes load the sanitization protocol; exclude secrets, CDR, private strategy/lore and local paths.
+For a project-specific visual starting point, consult the scaffold `patterns.json` and `website-theme-tokens.css` referenced in **docs/AGENT_ACTION_REFERENCE.md**; adapt them to the project's SOUL.
+
+Load **docs/AGENT_ACTION_REFERENCE.md → Public-facing project requirements** before public UI, identity or release work. All applicable CANON-006/007/008/011/029/030/041/045/047/048/051/053/054/055/056 gates still apply: branding/legal/contact, free-tier cost, sitemap and agent access, Obelisk identity, staging, themes/mobile/performance, security and surface follow-through. SPARKED requires founder approval. CANON-053 is mandatory during UI work: real before/after images, desktop/mobile, every theme/touched state, inspect/fix/recapture and hash-bound visual receipt. Private media work uses its medium-specific checker; missing footage/rights/export review is nonpassing and proof is not publishing permission. Public pushes load the sanitization protocol; exclude secrets, CDR, private strategy/lore and local paths.
 
 ### Closeout — session owner
 
@@ -174,6 +176,7 @@ Use `render-closeout-checklist.mjs` and SESSION_PROTOCOL §3. Preserve ordered w
 - **CANON-053** · Rendered-Pixel UI Discipline: look at the real interface while building it
 - **CANON-054** · Public Stats Surface: every website reports and analyzes its own numbers
 - **CANON-055** · Surface Follow-Through: every project change reaches the thing people actually touch
+- **CANON-056** · AI + SI Hybrid Terminology: keep AI, add Synthetic Intelligence (SI), never claim superintelligence
 
 <!-- canon-index:end -->
 

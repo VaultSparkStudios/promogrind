@@ -11,7 +11,7 @@ import { buildChatPrivacyEnvelope } from "../ai/advisorPrivacy.js";
 
 // Daily message limits per tier
 const LIMITS = { scout: 20, runner: 50, closer: Infinity, house: Infinity };
-const SCOUT_UPGRADE_URL = '#/pricing';
+const SCOUT_UPGRADE_URL = '/pricing';
 
 function getTierLimit(plan) {
   if (!plan) return 0; // no subscription = no access
@@ -164,18 +164,18 @@ const PromoChat = ({ navigate, mobile = false }) => {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 28, textAlign: 'center', gap: 16 }}>
         <div style={{ fontSize: 36 }}>💬</div>
         <div style={{ fontSize: 15, fontWeight: 700, color: K.tx, fontFamily: fontD }}>PromoGrind AI</div>
-        <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.8, maxWidth: 280 }}>
+        <div style={{ fontSize: 14, color: K.mt, lineHeight: 1.8, maxWidth: 280 }}>
           Ask anything about promos, calculators, or matched betting strategy.<br/>
           Requires a <strong style={{ color: K.ac }}>Scout plan</strong> or higher.
         </div>
-        <a href={signInHref} style={{ padding: '10px 24px', background: K.gn, borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 13, textDecoration: 'none', fontFamily: font }}>
+        <a href={signInHref} style={{ padding: '10px 24px', background: K.gn, borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 14, textDecoration: 'none', fontFamily: font }}>
           Sign in →
         </a>
-        <button onClick={() => { setChatOpen(false); navigate(SCOUT_UPGRADE_URL.replace('#/', '')); }}
-          style={{ padding: '8px 20px', background: 'transparent', border: `1px solid ${K.ac}`, borderRadius: 6, color: K.ac, fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: font }}>
+        <button onClick={() => { setChatOpen(false); navigate(SCOUT_UPGRADE_URL); }}
+          style={{ padding: '8px 20px', background: 'transparent', border: `1px solid ${K.ac}`, borderRadius: 6, color: K.ac, fontWeight: 700, fontSize: 14, cursor: 'pointer', fontFamily: font }}>
           View plans →
         </button>
-        <div style={{ fontSize: 10, color: K.mt }}>Scout from $9.99/mo · 7-day free trial</div>
+        <div style={{ fontSize: 12, color: K.mt }}>Scout from $9.99/mo · 7-day free trial</div>
       </div>
     );
 
@@ -183,18 +183,18 @@ const PromoChat = ({ navigate, mobile = false }) => {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 28, textAlign: 'center', gap: 14 }}>
         <div style={{ fontSize: 36 }}>🔒</div>
         <div style={{ fontSize: 15, fontWeight: 700, color: K.tx, fontFamily: fontD }}>Scout plan required</div>
-        <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.8, maxWidth: 280 }}>
+        <div style={{ fontSize: 14, color: K.mt, lineHeight: 1.8, maxWidth: 280 }}>
           PromoGrind AI Chat is available on <strong style={{ color: K.ac }}>Scout</strong> and higher plans.
           Start a free 7-day trial — no credit card needed.
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%', maxWidth: 260 }}>
-          <button onClick={() => { setChatOpen(false); navigate('pricing'); }}
-            style={{ padding: '10px 20px', background: K.ac, border: 'none', borderRadius: 7, color: K.ink, fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: font }}>
+          <button onClick={() => { setChatOpen(false); navigate(SCOUT_UPGRADE_URL); }}
+            style={{ padding: '10px 20px', background: K.ac, border: 'none', borderRadius: 7, color: K.ink, fontWeight: 700, fontSize: 14, cursor: 'pointer', fontFamily: font }}>
             Start free trial →
           </button>
-          <div style={{ fontSize: 10, color: K.mt }}>Scout $9.99/mo · Runner $19.99/mo · Closer $34.99/mo</div>
+          <div style={{ fontSize: 12, color: K.mt }}>Scout $9.99/mo · Runner $19.99/mo · Closer $34.99/mo</div>
         </div>
-        <div style={{ width: '100%', padding: '10px 14px', background: `${K.gn}08`, border: `1px solid ${K.gn}20`, borderRadius: 8, fontSize: 11, color: K.dm, lineHeight: 1.7, textAlign: 'left' }}>
+        <div style={{ width: '100%', padding: '10px 14px', background: `${K.gn}08`, border: `1px solid ${K.gn}20`, borderRadius: 8, fontSize: 12, color: K.dm, lineHeight: 1.7, textAlign: 'left' }}>
           <strong style={{ color: K.gn }}>Scout includes:</strong><br/>
           20 AI messages/day · Cloud sync · Data export · Push alerts
         </div>
@@ -248,7 +248,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
           <div style={{ padding: '14px 16px', borderBottom: `1px solid ${K.bd}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: K.s2 }}>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>💬 PromoGrind AI</div>
-              <div style={{ fontSize: 11, color: K.mt, marginTop: 2 }}>Ask about promos, calculators, or strategy</div>
+              <div style={{ fontSize: 12, color: K.mt, marginTop: 2 }}>Ask about promos, calculators, or strategy</div>
             </div>
             <button aria-label="Close PromoGrind AI Chat" onClick={() => setChatOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: K.mt, fontSize: 18, padding: 4 }}>×</button>
           </div>
@@ -263,7 +263,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
             : (
             <>
               {/* Usage bar */}
-              <div style={{ padding: '6px 16px', background: K.s1, borderBottom: `1px solid ${K.bd}`, fontSize: 11, color: K.mt, textAlign: 'right' }}>
+              <div style={{ padding: '6px 16px', background: K.s1, borderBottom: `1px solid ${K.bd}`, fontSize: 12, color: K.mt, textAlign: 'right' }}>
                 {chatRemaining === Infinity
                   ? <span style={{ color: K.gn }}>Unlimited messages</span>
                   : `${chatRemaining} of ${dailyLimit} messages left today`}
@@ -272,7 +272,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
               {/* Messages */}
               <div style={{ flex: 1, overflow: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {messages.length === 0 && (
-                  <div style={{ color: K.mt, fontSize: 12, textAlign: 'center', marginTop: 32, lineHeight: 1.7 }}>
+                  <div style={{ color: K.mt, fontSize: 14, textAlign: 'center', marginTop: 32, lineHeight: 1.7 }}>
                     <div style={{ fontSize: 24, marginBottom: 8 }}>💬</div>
                     Ask me anything about sportsbook promos, calculators, or betting strategy.
                   </div>
@@ -283,12 +283,12 @@ const PromoChat = ({ navigate, mobile = false }) => {
                       padding: '10px 12px', borderRadius: 8,
                       background: msg.role === 'user' ? `${K.gn}20` : K.s2,
                       border: `1px solid ${msg.role === 'user' ? K.gn + '40' : K.bd}`,
-                      fontSize: 12, color: K.tx, lineHeight: 1.6,
+                      fontSize: 14, color: K.tx, lineHeight: 1.6,
                     }}>
                       {msg.content}
                     </div>
                     {msg.cacheHit && (
-                      <div style={{ marginTop: 4, fontSize: 10, color: K.ac }}>
+                      <div style={{ marginTop: 4, fontSize: 12, color: K.ac }}>
                         Reused cached answer for this exact question.
                       </div>
                     )}
@@ -296,7 +296,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
                         {msg.suggestions.map(slug => (
                           <button key={slug} onClick={() => { setChatOpen(false); navigate('/' + slug); }}
-                            style={{ padding: '3px 10px', background: `${K.ac}15`, border: `1px solid ${K.ac}40`, borderRadius: 50, color: K.ac, fontSize: 10, cursor: 'pointer', fontFamily: font }}>
+                            style={{ padding: '3px 10px', background: `${K.ac}15`, border: `1px solid ${K.ac}40`, borderRadius: 50, color: K.ac, fontSize: 12, cursor: 'pointer', fontFamily: font }}>
                             → {slug}
                           </button>
                         ))}
@@ -305,18 +305,18 @@ const PromoChat = ({ navigate, mobile = false }) => {
                   </div>
                 ))}
                 {chatLoading && (
-                  <div style={{ alignSelf: 'flex-start', padding: '10px 12px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, fontSize: 12, color: K.mt }}>
+                  <div style={{ alignSelf: 'flex-start', padding: '10px 12px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, fontSize: 14, color: K.mt }}>
                     ⏳ Thinking…
                   </div>
                 )}
                 {isLimited && !chatLoading && (
-                  <div style={{ padding: '12px 14px', background: `${K.ac}15`, border: `1px solid ${K.ac}30`, borderRadius: 8, fontSize: 12, color: K.ac, textAlign: 'center' }}>
+                  <div style={{ padding: '12px 14px', background: `${K.ac}15`, border: `1px solid ${K.ac}30`, borderRadius: 8, fontSize: 14, color: K.ac, textAlign: 'center' }}>
                     Daily limit reached.{' '}
                     {['scout','grinder'].includes(subPlan ?? '') && 'Upgrade to Runner for 50/day or Closer for unlimited.'}
                     {['runner','sharp','pro'].includes(subPlan ?? '') && 'Upgrade to Closer for unlimited messages.'}
                     <br/>
-                    <button onClick={() => { setChatOpen(false); navigate('pricing'); }}
-                      style={{ marginTop: 8, padding: '6px 16px', background: K.ac, border: 'none', borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: 'pointer', fontFamily: font }}>
+                    <button onClick={() => { setChatOpen(false); navigate(SCOUT_UPGRADE_URL); }}
+                      style={{ marginTop: 8, padding: '6px 16px', background: K.ac, border: 'none', borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: font }}>
                       View plans →
                     </button>
                   </div>
@@ -325,7 +325,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
               </div>
 
               <div style={{ padding: '9px 16px', borderTop: `1px solid ${K.bd}`, background: K.s1 }}>
-                <label htmlFor="pg-chat-personalize" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, color: K.dm, fontSize: 10, lineHeight: 1.5, cursor: 'pointer' }}>
+                <label htmlFor="pg-chat-personalize" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, color: K.dm, fontSize: 12, lineHeight: 1.5, cursor: 'pointer' }}>
                   <input
                     id="pg-chat-personalize"
                     type="checkbox"
@@ -336,7 +336,7 @@ const PromoChat = ({ navigate, mobile = false }) => {
                   <span>Personalize with my bankroll and active books. Optional: only those named fields leave this browser.</span>
                 </label>
                 {privacyReceipt && (
-                  <div role="status" aria-live="polite" style={{ marginTop: 6, color: privacyReceipt.profileIncluded ? K.ac : K.mt, fontSize: 10, lineHeight: 1.5 }}>
+                  <div role="status" aria-live="polite" style={{ marginTop: 6, color: privacyReceipt.profileIncluded ? K.ac : K.mt, fontSize: 12, lineHeight: 1.5 }}>
                     {privacyReceipt.profileIncluded ? 'Profile consent applied.' : 'Profile kept in this browser.'}
                     {' '}{privacyReceipt.redactionCount > 0 ? `${privacyReceipt.redactionCount} sensitive value(s) redacted.` : 'Message boundary checked.'}
                   </div>
@@ -352,10 +352,10 @@ const PromoChat = ({ navigate, mobile = false }) => {
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
                   placeholder={isLimited ? 'Daily limit reached…' : 'Ask about a promo or calculator…'}
                   disabled={isLimited || chatLoading}
-                  style={{ flex: 1, padding: '8px 10px', background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontFamily: font, fontSize: 12, outline: 'none' }}
+                  style={{ flex: 1, padding: '8px 10px', background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.tx, fontFamily: font, fontSize: 14, outline: 'none' }}
                 />
                 <button onClick={sendMessage} disabled={!chatInput.trim() || chatLoading || isLimited}
-                  style={{ padding: '8px 14px', background: K.gn, border: 'none', borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: font, opacity: (!chatInput.trim() || chatLoading || isLimited) ? 0.5 : 1 }}>
+                  style={{ padding: '8px 14px', background: K.gn, border: 'none', borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 14, cursor: 'pointer', fontFamily: font, opacity: (!chatInput.trim() || chatLoading || isLimited) ? 0.5 : 1 }}>
                   Send
                 </button>
               </div>

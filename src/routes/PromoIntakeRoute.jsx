@@ -1,8 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { K } from "../lib/shared.js";
 import { Tl } from "../ui.jsx";
 import PromoIntakePanel from "../components/PromoIntakePanel.jsx";
-import ShadowBookPanel from "../components/ShadowBookPanel.jsx";
 
 /**
  * First extracted route as part of the long-running `App.jsx` decomposition.
@@ -16,10 +16,11 @@ import ShadowBookPanel from "../components/ShadowBookPanel.jsx";
  * state stays in App.jsx contexts.
  */
 export default function PromoIntakeRoute() {
+  const navigate = useNavigate();
   const openCalculator = (slug) => {
     if (!slug) return;
     try {
-      window.location.hash = `#/${slug}`;
+      navigate(`/${slug}`);
     } catch {}
   };
   return (
@@ -28,7 +29,6 @@ export default function PromoIntakeRoute() {
         <Tl t="Promo Intake" badge="NEW" bc={K.gn} />
         <PromoIntakePanel onOpenCalculator={openCalculator} />
       </div>
-      <ShadowBookPanel />
     </div>
   );
 }

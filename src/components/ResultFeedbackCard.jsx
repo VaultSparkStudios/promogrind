@@ -183,17 +183,17 @@ export default function ResultFeedbackCard({
     <div style={{ marginTop: 10, padding: 14, background: `${K.ac}08`, border: `1px solid ${K.ac}22`, borderRadius: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", flexWrap: "wrap" }}>
         <div>
-          <div style={{ fontSize: 10, color: K.ac, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 4 }}>
+          <div style={{ fontSize: 12, color: K.ac, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 4 }}>
             Result Feedback Loop
           </div>
           <div style={{ fontFamily: fontD, fontSize: 15, fontWeight: 700, color: K.tx, marginBottom: 4 }}>
             What happened next?
           </div>
-          <div style={{ fontSize: 11, color: K.mt, lineHeight: 1.6, maxWidth: 560 }}>
+          <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6, maxWidth: 560 }}>
             Capture whether you placed, skipped, or settled this workflow so Track can compare expected profit against real outcomes.
           </div>
         </div>
-        <div style={{ fontSize: 12, color: K.gn, fontWeight: 700 }}>
+        <div style={{ fontSize: 14, color: K.gn, fontWeight: 700 }}>
           Est. profit: ${roundedExpected.toFixed(2)}
         </div>
       </div>
@@ -214,7 +214,7 @@ export default function ResultFeedbackCard({
               border: `1px solid ${status === value ? K.gn : K.bd2}`,
               borderRadius: 8,
               color: status === value ? K.gn : K.dm,
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 700,
               cursor: "pointer",
               fontFamily: font,
@@ -227,17 +227,17 @@ export default function ResultFeedbackCard({
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10 }}>
         <div>
-          <label htmlFor={`${fieldId}-book`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Sportsbook</label>
+          <label htmlFor={`${fieldId}-book`} style={{ display: "block", fontSize: 12, color: K.mt, marginBottom: 4 }}>Sportsbook</label>
           <input
             id={`${fieldId}-book`}
             value={book}
             onChange={(event) => setBook(event.target.value)}
             placeholder="DraftKings"
-            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14 }}
           />
         </div>
         <div>
-          <label htmlFor={`${fieldId}-profit`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Realized profit or loss</label>
+          <label htmlFor={`${fieldId}-profit`} style={{ display: "block", fontSize: 12, color: K.mt, marginBottom: 4 }}>Realized profit or loss</label>
           <input
             id={`${fieldId}-profit`}
             ref={profitInputRef}
@@ -247,18 +247,18 @@ export default function ResultFeedbackCard({
             aria-invalid={validationError.includes("realized profit")}
             aria-describedby={validationError ? `${fieldId}-error` : undefined}
             placeholder="$12.40"
-            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14 }}
           />
         </div>
         <div>
-          <label htmlFor={`${fieldId}-minutes`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Minutes spent</label>
+          <label htmlFor={`${fieldId}-minutes`} style={{ display: "block", fontSize: 12, color: K.mt, marginBottom: 4 }}>Minutes spent</label>
           <input
             id={`${fieldId}-minutes`}
             inputMode="decimal"
             value={executionMinutes}
             onChange={(event) => setExecutionMinutes(event.target.value.replace(/[^\d.]/g, ""))}
             placeholder="12"
-            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+            style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14 }}
           />
         </div>
       </div>
@@ -272,7 +272,7 @@ export default function ResultFeedbackCard({
         aria-describedby={validationError ? `${fieldId}-error` : undefined}
         style={{ marginTop: 10 }}
       >
-        <div id={`${fieldId}-skip-label`} style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Why skip?</div>
+        <div id={`${fieldId}-skip-label`} style={{ fontSize: 12, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Why skip?</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {skipReasons.map(([value, label]) => (
             <button
@@ -286,7 +286,7 @@ export default function ResultFeedbackCard({
                 border: `1px solid ${skipReason === value ? K.yl : K.bd2}`,
                 borderRadius: 999,
                 color: skipReason === value ? K.yl : K.dm,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: 700,
                 cursor: "pointer",
                 fontFamily: font,
@@ -299,7 +299,7 @@ export default function ResultFeedbackCard({
       </div>
 
       <div role="group" aria-labelledby={`${fieldId}-friction-label`} style={{ marginTop: 10 }}>
-        <div id={`${fieldId}-friction-label`} style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Execution friction</div>
+        <div id={`${fieldId}-friction-label`} style={{ fontSize: 12, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Execution friction</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {frictionReasons.map(([value, label]) => (
             <button
@@ -313,7 +313,7 @@ export default function ResultFeedbackCard({
                 border: `1px solid ${frictionReason === value ? K.ac : K.bd2}`,
                 borderRadius: 999,
                 color: frictionReason === value ? K.ac : K.dm,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: 700,
                 cursor: "pointer",
                 fontFamily: font,
@@ -326,18 +326,18 @@ export default function ResultFeedbackCard({
       </div>
 
       <div style={{ marginTop: 10 }}>
-        <label htmlFor={`${fieldId}-note`} style={{ display: "block", fontSize: 10, color: K.mt, marginBottom: 4 }}>Notes</label>
+        <label htmlFor={`${fieldId}-note`} style={{ display: "block", fontSize: 12, color: K.mt, marginBottom: 4 }}>Notes</label>
         <input
           id={`${fieldId}-note`}
           value={note}
           onChange={(event) => setNote(event.target.value)}
           placeholder="What blocked this or what mattered?"
-          style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }}
+          style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14 }}
         />
       </div>
 
       <div role="group" aria-labelledby={`${fieldId}-repeat-label`} style={{ marginTop: 10 }}>
-        <div id={`${fieldId}-repeat-label`} style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Would you run this again?</div>
+        <div id={`${fieldId}-repeat-label`} style={{ fontSize: 12, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Would you run this again?</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {[
             ["yes", "Yes"],
@@ -355,7 +355,7 @@ export default function ResultFeedbackCard({
                 border: `1px solid ${wouldRepeat === value ? K.gn : K.bd2}`,
                 borderRadius: 999,
                 color: wouldRepeat === value ? K.gn : K.dm,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: 700,
                 cursor: "pointer",
                 fontFamily: font,
@@ -368,7 +368,7 @@ export default function ResultFeedbackCard({
       </div>
 
       <div role="group" aria-labelledby={`${fieldId}-accuracy-label`} style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginTop: 10 }}>
-        <span id={`${fieldId}-accuracy-label`} style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Calculator accurate?</span>
+        <span id={`${fieldId}-accuracy-label`} style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Calculator accurate?</span>
         {[
           ["yes", "Yes"],
           ["close", "Close"],
@@ -385,7 +385,7 @@ export default function ResultFeedbackCard({
               border: `1px solid ${accuracy === value ? K.ac : K.bd2}`,
               borderRadius: 999,
               color: accuracy === value ? K.ac : K.dm,
-              fontSize: 10,
+              fontSize: 12,
               fontWeight: 700,
               cursor: "pointer",
               fontFamily: font,
@@ -405,7 +405,7 @@ export default function ResultFeedbackCard({
             border: "none",
             borderRadius: 8,
             color: K.ink,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: 800,
             cursor: !entryId || !actualProfit.trim() || status === "skipped" ? "not-allowed" : "pointer",
             fontFamily: font,
@@ -416,18 +416,18 @@ export default function ResultFeedbackCard({
       </div>
 
       {validationError && (
-        <div id={`${fieldId}-error`} role="alert" style={{ marginTop: 10, fontSize: 11, color: K.rd }}>
+        <div id={`${fieldId}-error`} role="alert" style={{ marginTop: 10, fontSize: 12, color: K.rd }}>
           {validationError}
         </div>
       )}
 
-      <div role="status" aria-live="polite" aria-atomic="true" style={{ marginTop: 10, fontSize: 10, color: status === "settled" ? K.gn : status === "skipped" ? K.yl : K.mt }}>
+      <div role="status" aria-live="polite" aria-atomic="true" style={{ marginTop: 10, fontSize: 12, color: status === "settled" ? K.gn : status === "skipped" ? K.yl : K.mt }}>
         {status === "settled" && "Settled result saved. It now feeds the Track analytics dashboard."}
         {status === "placed" && "Placed result saved. Settle it now or later in Track → Edge."}
         {status === "skipped" && "Skipped result saved with reason data so PromoGrind can measure opportunity loss and friction."}
         {!status && "Use this after you run the math so the app learns what converted, how long it took, and which workflows you would actually repeat."}
       </div>
-      <div aria-live="polite" style={{ marginTop: 5, fontSize: 9, color: evidenceState === "failed" ? K.rd : K.mt }}>
+      <div aria-live="polite" style={{ marginTop: 5, fontSize: 12, color: evidenceState === "failed" ? K.rd : K.mt }}>
         {evidenceState === "linking" && "Linking this transition to the local decision-evidence chain…"}
         {evidenceState === "linked" && "Linked locally: self-attested checksum continuity (not independent execution proof)."}
         {evidenceState === "failed" && "Outcome saved, but the local evidence link could not be written on this device."}

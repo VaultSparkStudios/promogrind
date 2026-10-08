@@ -12,23 +12,23 @@
   <link rel="alternate" hreflang="x-default" href="https://promogrind.bet/bonus-bet/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
-  <script>window.PG_REDIRECT_URL='https://promogrind.bet/?utm_source=seo&utm_medium=organic&utm_content=bonus-bet#/bonus-bet';window.PG_SOURCE='seo-bonus-bet';</script>
+  <script>window.PG_REDIRECT_URL='https://promogrind.bet/bonus-bet?utm_source=seo&utm_medium=organic&utm_content=bonus-bet';window.PG_SOURCE='seo-bonus-bet';</script>
   <script src="/js/pg-capture.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
     .container { max-width: 800px; margin: 0 auto; }
     h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.25rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
-    p { margin-bottom: 1rem; color: #cbd5e1; }
-    .cta { display: inline-block; margin: 1.5rem 0; padding: 0.75rem 1.5rem; background: #4ade80; color: #0a0e17; font-weight: 700; border-radius: 6px; text-decoration: none; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin: 2rem 0 0.5rem; color: var(--pg-page-accent); }
+    p { margin-bottom: 1rem; color: var(--pg-page-muted); }
+    .cta { display: inline-block; margin: 1.5rem 0; padding: 0.75rem 1.5rem; background: var(--pg-page-accent); color: var(--pg-page-bg); font-weight: 700; border-radius: 6px; text-decoration: none; }
     .cta:hover { opacity: 0.9; }
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #1e293b; font-size: 0.92rem; color: #94a3b8; }
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--pg-page-border); font-size: 0.92rem; color: var(--pg-page-muted); }
     .faq-item { margin-bottom: 1.5rem; }
-    .faq-item dt { font-weight: 700; color: #e2e8f0; margin-bottom: 0.25rem; }
-    .faq-item dd { color: #cbd5e1; }
+    .faq-item dt { font-weight: 700; color: var(--pg-page-text); margin-bottom: 0.25rem; }
+    .faq-item dd { color: var(--pg-page-muted); }
   </style>
   <script type="application/ld+json">
   {
@@ -37,7 +37,7 @@
       {
         "@type": "WebApplication",
         "name": "Bonus Bet Converter",
-        "url": "https://promogrind.bet/#/bonus-bet",
+        "url": "https://promogrind.bet/bonus-bet",
         "description": "Convert sportsbook bonus bets into modeled cash value by calculating the optimal hedge bet.",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Any",
@@ -57,8 +57,8 @@
           {
             "@type": "HowToStep",
             "position": 2,
-            "name": "Find a +250 to +400 underdog",
-            "text": "Look for an underdog priced between +250 and +400 on one sportsbook. This odds range typically yields the best conversion rate of 65–75%."
+            "name": "Compare both current prices",
+            "text": "Enter the current bonus odds and opposite cash odds. Check the offer terms, acceptance limits and settlement rules. No single odds range establishes the best conversion."
           },
           {
             "@type": "HowToStep",
@@ -77,14 +77,17 @@
     ]
   }
   </script>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="container">
     <h1>Bonus Bet Converter</h1>
     <p>Turn your sportsbook bonus bets (free bets) into real, modeled cash value with the PromoGrind Bonus Bet Converter.</p>
     <div class="trust"><strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across devices. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</div>
 
-    <a class="cta" href="https://promogrind.bet/#/bonus-bet">Use the calculator →</a>
+    <a class="cta" href="https://promogrind.bet/bonus-bet">Use the calculator →</a>
 
     <h2>What Is a Bonus Bet?</h2>
     <p>A bonus bet — also called a free bet — is a credit awarded by a sportsbook that lets you place a wager without risking your own money. The key difference from a real cash bet: <strong>if you win, you receive the profit only — your original stake is not returned.</strong> A $100 bonus bet on +300 odds returns $300 in profit, not $400.</p>
@@ -92,8 +95,8 @@
     <h2>Why Hedge a Bonus Bet?</h2>
     <p>Because the stake is not returned on a win, using a bonus bet on a heavy favorite is inefficient — you win very little. The smarter play is to bet the bonus on an underdog and place a smaller cash bet on the opposing side at another book. This locks in a modeled return regardless of which outcome wins, a technique called <strong>bonus bet conversion</strong> or <strong>free bet hedging</strong>.</p>
 
-    <h2>The +250 to +400 Sweet Spot</h2>
-    <p>The underdog's odds determine your conversion rate — the percentage of the bonus bet's face value you keep as modeled return. The +250 to +400 range consistently produces the best conversion rates, typically between <strong>65% and 75%</strong>. At +250, a $100 bonus bet converts to roughly $67 in modeled cash value. At +400, it converts to approximately $73. Going too short (e.g., +130) or too long (e.g., +800) reduces efficiency significantly.</p>
+    <h2>Both prices determine the conversion</h2>
+    <p>The bonus price and opposite cash price both affect conversion. Enter the exact pair in the calculator rather than assuming a typical return. Confirm whether the bonus stake is returned and include qualifying costs, fees and taxes.</p>
 
     <h2>Frequently Asked Questions</h2>
     <dl>
@@ -103,16 +106,16 @@
       </div>
       <div class="faq-item">
         <dt>How do I convert a bonus bet to cash?</dt>
-        <dd>Place the bonus bet on an underdog at +250 to +400 odds, then bet cash on the opposing side at another sportsbook. The calculator determines exactly how much to hedge so you profit on every outcome.</dd>
+        <dd>Enter the bonus amount and both current prices. The calculator compares conditional outcomes, assuming both wagers are accepted at those prices under matching settlement rules. A rejected, limited or voided wager can cause a loss.</dd>
       </div>
       <div class="faq-item">
         <dt>What odds should I use?</dt>
-        <dd>Aim for underdog odds between +250 and +400 for the best conversion rate. Use the PromoGrind calculator to see the exact modeled return for any combination of odds before you place either bet.</dd>
+        <dd>There is no universal best price range. Compare both current prices and the full terms; the calculator models those inputs, not a promised result.</dd>
       </div>
     </dl>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

@@ -33,7 +33,7 @@ class BootErrorBoundary extends React.Component {
 
 function LoadingApp() {
   return (
-    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "#0a0e17", color: "#cbd5e1", fontFamily: "monospace", fontSize: 12 }}>
+    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "#0a0e17", color: "#cbd5e1", fontFamily: "monospace", fontSize: 14 }}>
       Loading PromoGrind…
     </div>
   );

@@ -244,7 +244,7 @@ export function getBookPersonalization(book, options = {}) {
   if (status === "gubbed") score -= 55;
   if (book.referralLink || book.affiliateLink) score += 4;
 
-  let reason = "Available now";
+  let reason = "Verify current availability";
   if (!available && userState) reason = `Not live in ${normalizeStateCode(userState)}`;
   else if (completed) reason = "Already completed";
   else if (status === "pending") reason = "Account started";

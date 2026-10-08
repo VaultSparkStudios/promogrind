@@ -36,26 +36,26 @@ export function StatsSummary({ state, detailed = false }) {
   const { feed, loading, error, stale } = state;
   return <section aria-labelledby={detailed ? 'weekly-heading' : 'community-heading'} data-public-stats style={{ ...box(), fontFamily: font, color: K.tx }}>
     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-      <div><div style={{ color: K.gn, fontSize: 11, fontWeight: 800, letterSpacing: 2 }}>THE COMMUNITY, IN CONTEXT</div>
+      <div><div style={{ color: K.gn, fontSize: 12, fontWeight: 800, letterSpacing: 2 }}>THE COMMUNITY, IN CONTEXT</div>
         <h2 id={detailed ? 'weekly-heading' : 'community-heading'} style={{ fontFamily: fontD, fontSize: 26, margin: '10px 0' }}>Saved work. Recorded outcomes.</h2></div>
       {!detailed && <a href='/stats' style={link()}>Explore the stats →</a>}
     </div>
     <p style={{ color: K.dm, lineHeight: 1.7, margin: '0 0 18px' }}>A weekly view of how people use PromoGrind’s saved workflows. These figures describe activity, not betting performance.</p>
-    <p role='status' style={{ color: error || stale ? K.yl : K.dm, fontSize: 13, lineHeight: 1.6 }}>
+    <p role='status' style={{ color: error || stale ? K.yl : K.dm, fontSize: 14, lineHeight: 1.6 }}>
       {loading ? 'Loading community statistics…' : !feed ? 'Statistics unavailable. The source has not returned a verified report; no counts are shown.' : `${stale ? 'Stale report — the daily refresh is overdue. ' : ''}${error ? 'Refresh failed — showing the last dated report. ' : ''}Computed ${new Date(feed.generatedAt).toLocaleString()} · daily refresh`}
     </p>
     {feed && <>
-      <p style={{ color: K.dm, fontSize: 12 }}>Latest complete week: {feed.metrics[0].period}</p>
+      <p style={{ color: K.dm, fontSize: 14 }}>Latest complete week: {feed.metrics[0].period}</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 12 }}>
         {feed.metrics.map(metric => <article key={metric.id} style={{ padding: 20, borderRadius: 12, background: K.s2, border: `1px solid ${K.bd}` }}>
-          <div style={{ color: K.dm, fontSize: 13 }}>{metric.label}</div>
+          <div style={{ color: K.dm, fontSize: 14 }}>{metric.label}</div>
           <div style={{ color: K.gn, fontFamily: fontD, fontWeight: 800, fontSize: 34, margin: '10px 0' }}>{metricDisplay(metric)}</div>
-          <p style={{ color: K.dm, lineHeight: 1.6, fontSize: 12, margin: 0 }}>{metric.available === false ? metric.unavailableReason : metric.value === 0 ? 'No qualifying records observed.' : 'A range, to protect individual activity.'}</p>
-          <p style={{ color: K.dm, fontSize: 11, marginBottom: 0 }}>As of {new Date(metric.computedAt).toLocaleString()}</p>
+          <p style={{ color: K.dm, lineHeight: 1.6, fontSize: 14, margin: 0 }}>{metric.available === false ? metric.unavailableReason : metric.value === 0 ? 'No qualifying records observed.' : 'A range, to protect individual activity.'}</p>
+          <p style={{ color: K.dm, fontSize: 12, marginBottom: 0 }}>As of {new Date(metric.computedAt).toLocaleString()}</p>
         </article>)}
       </div>
     </>}
-    <p style={{ color: K.dm, fontSize: 12, lineHeight: 1.7, marginBottom: 0 }}>Small groups stay private. Guest calculations and local-only activity are outside this report.</p>
+    <p style={{ color: K.dm, fontSize: 14, lineHeight: 1.7, marginBottom: 0 }}>Small groups stay private. Guest calculations and local-only activity are outside this report.</p>
   </section>;
 }
 export default function PublicStats() {

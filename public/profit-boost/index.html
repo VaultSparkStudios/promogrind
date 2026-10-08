@@ -12,23 +12,23 @@
   <link rel="alternate" hreflang="x-default" href="https://promogrind.bet/profit-boost/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
-  <script>window.PG_REDIRECT_URL='https://promogrind.bet/?utm_source=seo&utm_medium=organic&utm_content=profit-boost#/profit-boost';window.PG_SOURCE='seo-profit-boost';</script>
+  <script>window.PG_REDIRECT_URL='https://promogrind.bet/profit-boost?utm_source=seo&utm_medium=organic&utm_content=profit-boost';window.PG_SOURCE='seo-profit-boost';</script>
   <script src="/js/pg-capture.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
     .container { max-width: 800px; margin: 0 auto; }
     h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.25rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
-    p { margin-bottom: 1rem; color: #cbd5e1; }
-    .cta { display: inline-block; margin: 1.5rem 0; padding: 0.75rem 1.5rem; background: #4ade80; color: #0a0e17; font-weight: 700; border-radius: 6px; text-decoration: none; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin: 2rem 0 0.5rem; color: var(--pg-page-accent); }
+    p { margin-bottom: 1rem; color: var(--pg-page-muted); }
+    .cta { display: inline-block; margin: 1.5rem 0; padding: 0.75rem 1.5rem; background: var(--pg-page-accent); color: var(--pg-page-bg); font-weight: 700; border-radius: 6px; text-decoration: none; }
     .cta:hover { opacity: 0.9; }
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #1e293b; font-size: 0.92rem; color: #94a3b8; }
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--pg-page-border); font-size: 0.92rem; color: var(--pg-page-muted); }
     .faq-item { margin-bottom: 1.5rem; }
-    .faq-item dt { font-weight: 700; color: #e2e8f0; margin-bottom: 0.25rem; }
-    .faq-item dd { color: #cbd5e1; }
+    .faq-item dt { font-weight: 700; color: var(--pg-page-text); margin-bottom: 0.25rem; }
+    .faq-item dd { color: var(--pg-page-muted); }
   </style>
   <script type="application/ld+json">
   {
@@ -37,7 +37,7 @@
       {
         "@type": "WebApplication",
         "name": "Profit Boost Calculator",
-        "url": "https://promogrind.bet/#/profit-boost",
+        "url": "https://promogrind.bet/profit-boost",
         "description": "Calculate boosted odds value and the optimal hedge amount to convert a sportsbook profit boost or odds boost into modeled cash value.",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Any",
@@ -59,7 +59,7 @@
             "name": "How is a profit boost different from a free bet?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The key difference is stake return. With a free bet (bonus bet), you only receive the profit on a win — your stake is not returned. With a profit boost, you place a real cash bet and receive your stake back plus the boosted profit if you win. This makes profit boosts generally more valuable than equivalent-sized free bets."
+              "text": "The key difference is stake return. With a free bet (bonus bet), you only receive the profit on a win — your stake is not returned. With a profit boost, you place a real cash bet and receive your stake back plus the boosted profit if you win. Their values depend on the complete terms, both prices, stake limits and costs."
             }
           },
           {
@@ -67,7 +67,7 @@
             "name": "Should I always hedge a profit boost?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Hedging a profit boost locks in modeled cash value but reduces the maximum possible profit. For boosts of 25% or more on reasonably priced markets, hedging is generally worthwhile. Smaller boosts (under 10–15%) may not be worth the effort of hedging unless applied to large stake amounts. The PromoGrind calculator shows both scenarios."
+              "text": "The percentage alone is insufficient. Compare both prices, caps, accepted stakes, costs and settlement rules before deciding."
             }
           }
         ]
@@ -75,45 +75,48 @@
     ]
   }
   </script>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="container">
     <h1>Profit Boost / Odds Boost Calculator</h1>
     <p>Calculate the exact value of any sportsbook profit boost and find the optimal hedge bet to convert it into modeled cash value with the PromoGrind Profit Boost Calculator.</p>
     <div class="trust"><strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across devices. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</div>
 
-    <a class="cta" href="https://promogrind.bet/#/profit-boost">Use the calculator →</a>
+    <a class="cta" href="https://promogrind.bet/profit-boost">Use the calculator →</a>
 
     <h2>Profit Boost vs Bonus Bet: A Key Difference</h2>
-    <p>Both profit boosts and bonus bets are sportsbook promotions, but they work differently in one critical way: <strong>with a profit boost, your stake is returned on a win.</strong> You place real cash, and if your bet wins you get your money back plus the boosted profit. A bonus bet (free bet), by contrast, returns only the profit — the stake itself is gone regardless of outcome. This makes profit boosts higher EV on a dollar-for-dollar basis.</p>
+    <p>Both profit boosts and bonus bets are sportsbook promotions, but they work differently in one critical way: <strong>with a profit boost, your stake is returned on a win.</strong> You place real cash, and if your bet wins you get your money back plus the boosted profit. A bonus bet (free bet), by contrast, returns only the profit — the stake itself is gone regardless of outcome. The value of either offer depends on the complete terms, stake, prices and costs; the offer type alone does not establish a higher expected value.</p>
 
     <h2>How Boosted Odds Are Calculated</h2>
     <p>A profit boost increases the profit portion of your payout by a fixed percentage. A 50% boost on a +200 bet raises the effective odds to +300: the original +200 profit becomes +300 profit (200 × 1.5). A 25% boost on -110 odds raises the effective odds to approximately -88. The calculator handles all these conversions automatically — just enter the base odds and the boost percentage.</p>
 
     <h2>Why Hedge a Profit Boost?</h2>
-    <p>Hedging a profit boost turns an uncertain enhanced payout into a <strong>modeled locked-in return</strong>. By betting the opposing side at another sportsbook for the calculated hedge amount, you ensure you profit regardless of which team wins. The net modeled return is lower than the boosted win, but it is risk-reduced and immediate.</p>
+    <p>A cash hedge can balance modeled outcomes when both wagers are accepted at the entered prices and settle under matching rules. The model is conditional: rejected or limited wagers, price changes, voids, fees and taxes can change the result.</p>
 
     <h2>When Is a Boost Worth Hedging?</h2>
-    <p>As a general rule, boosts of <strong>25% or more on a reasonably liquid market</strong> are worth hedging. A 25% boost on even-money odds typically produces a 10–12% modeled return on stake. Smaller boosts under 10–15% generate minimal hedge profit relative to the time and account exposure involved, though large stake sizes can still make them worthwhile.</p>
+    <p>Whether a boost is worth considering depends on both prices, accepted stakes, caps, costs and settlement rules. Enter the complete offer in the calculator and compare both modeled outcomes. No boost percentage alone guarantees a positive return.</p>
 
     <h2>Frequently Asked Questions</h2>
     <dl>
       <div class="faq-item">
         <dt>What is a profit boost?</dt>
-        <dd>A profit boost is a sportsbook promotion that enhances the payout on a selected bet by a specified percentage. Your original stake is returned on a win, making it more valuable than a free bet of the same size.</dd>
+        <dd>A profit boost is a sportsbook promotion that enhances the payout on a selected bet by a specified percentage. Your original stake is returned on a win, subject to the offer’s restrictions and caps.</dd>
       </div>
       <div class="faq-item">
         <dt>How is a profit boost different from a free bet?</dt>
-        <dd>With a free bet you only collect the profit on a win — your stake is forfeited. With a profit boost you place your own cash and get it back plus boosted winnings if you win. Profit boosts typically convert to modeled cash value at a higher rate than free bets.</dd>
+        <dd>With a free bet you only collect the profit on a win — your stake is forfeited. With a profit boost you place your own cash and get it back plus boosted winnings if you win. The offer type alone does not determine a conversion rate; compare the full inputs.</dd>
       </div>
       <div class="faq-item">
         <dt>Should I always hedge a profit boost?</dt>
-        <dd>Not always — smaller boosts below 15% may not generate enough hedge profit to be practical. Boosts of 25% or more on good markets are generally worth hedging. Use the PromoGrind calculator to see the exact modeled return before deciding whether to hedge or let the bet ride.</dd>
+        <dd>No. The percentage alone is insufficient. Compare both prices, caps, accepted stakes, costs and settlement rules before deciding.</dd>
       </div>
     </dl>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. AI and live surfaces mentioned elsewhere in PromoGrind remain beta-gated until their services are activated.</p>
+    <p class="footer-note">Use the free calculators without an account. Sign in to save your workspace across devices. AI and live scanning features marked coming soon are currently unavailable.</p>
   </div>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

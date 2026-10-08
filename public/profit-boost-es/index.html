@@ -11,58 +11,61 @@
 <link rel="alternate" hreflang="es" href="https://promogrind.bet/profit-boost-es/" />
 <link rel="alternate" hreflang="x-default" href="https://promogrind.bet/profit-boost/" />
 <script>
-  window.PG_REDIRECT_URL='https://promogrind.bet/?utm_source=seo&utm_medium=organic&utm_content=profit-boost-es#/profit-boost';
+  window.PG_REDIRECT_URL='https://promogrind.bet/profit-boost?utm_source=seo&utm_medium=organic&utm_content=profit-boost-es';
   window.PG_SOURCE='seo-profit-boost-es';
 </script>
 <script src="/js/pg-capture.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0e17;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;padding:2rem 1rem}
+body{background:var(--pg-page-bg);color:var(--pg-page-text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;padding:2rem 1rem}
 .container{max-width:800px;margin:0 auto}
-h1{font-size:2rem;font-weight:700;margin-bottom:.5rem;color:#4ade80}
-h2{font-size:1.2rem;font-weight:700;margin:2rem 0 .5rem;color:#60a5fa}
-p{margin-bottom:1rem;color:#cbd5e1}
-.cta{display:inline-block;margin:1.5rem 0;padding:.75rem 1.5rem;background:#4ade80;color:#0a0e17;font-weight:700;border-radius:6px;text-decoration:none}
+h1{font-size:2rem;font-weight:700;margin-bottom:.5rem;color:var(--pg-page-accent)}
+h2{font-size:1.2rem;font-weight:700;margin:2rem 0 .5rem;color:var(--pg-page-blue)}
+p{margin-bottom:1rem;color:var(--pg-page-muted)}
+.cta{display:inline-block;margin:1.5rem 0;padding:.75rem 1.5rem;background:var(--pg-page-accent);color:var(--pg-page-bg);font-weight:700;border-radius:6px;text-decoration:none}
 .cta:hover{opacity:.9}
 .faq-item{margin-bottom:1.5rem}
-.faq-item dt{font-weight:700;color:#e2e8f0;margin-bottom:.25rem}
-.faq-item dd{color:#cbd5e1}
-.disclaimer{font-size:11px;color:#475569;margin-top:2rem;border-top:1px solid #1e293b;padding-top:1rem}
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+.faq-item dt{font-weight:700;color:var(--pg-page-text);margin-bottom:.25rem}
+.faq-item dd{color:var(--pg-page-muted)}
+.disclaimer{font-size:14px;color:var(--pg-page-muted);margin-top:2rem;border-top:1px solid var(--pg-page-border);padding-top:1rem}
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
 <div class="container">
   <h1>Calculadora de Profit Boost</h1>
-  <p>Aprovecha los profit boost y odds boost de tus sportsbooks para asegurar rendimientos modelados usando una apuesta de cobertura calculada con precisión.</p>
-  <a class="cta" href="https://promogrind.bet/#/profit-boost">Usar la calculadora →</a>
+  <p>Modela cómo un aumento porcentual cambia el pago de una apuesta ganadora. Una cobertura depende también del precio opuesto, los importes aceptados, las reglas y los costes.</p>
+  <a class="cta" href="https://promogrind.bet/profit-boost">Usar la calculadora →</a>
 
   <h2>¿Qué es un profit boost?</h2>
-  <p>Un profit boost (mejora de ganancias) es una promoción que aumenta tus ganancias en un porcentaje determinado. Por ejemplo, un boost del 50% en una apuesta ganadora de $100 a cuotas +200 te da $150 de ganancia en lugar de $100. Los sportsbooks como DraftKings y FanDuel ofrecen estos boosts regularmente.</p>
+  <p>Un profit boost (mejora de ganancias) es una promoción que aumenta tus ganancias en un porcentaje determinado. Por ejemplo, un boost del 50% en una apuesta ganadora de $100 a cuotas +200 te da $300 de ganancia en lugar de $200. Este ejemplo es hipotético y no describe una oferta actual.</p>
 
   <h2>Cómo convertir un profit boost en rendimiento modelado</h2>
-  <p>Al aplicar el boost a las cuotas efectivas, puedes calcular la apuesta de cobertura perfecta para asegurar una ganancia con exposición reducida al resultado. La calculadora ajusta automáticamente las cuotas boosteadas y determina el monto exacto de cobertura.</p>
+  <p>Al aplicar el porcentaje al beneficio de una apuesta ganadora, puedes comparar un pago modelado con el precio opuesto. Comprueba cada resultado y los límites reales; el cálculo no garantiza aceptación ni ganancias.</p>
 
   <h2>Ejemplo</h2>
-  <p>Con un boost del 100% en una apuesta de $50 y cuotas originales de +200, tus cuotas efectivas son +400. Una cobertura bien calculada convierte eso en ~$35–40 de rendimiento modelado, sin importar el resultado.</p>
+  <p>Con un boost del 100% sobre las ganancias de una apuesta de $50 a +200, las ganancias de una apuesta ganadora aumentan de $100 a $200: equivale a +400, si el bono no tiene límites adicionales. El resultado de una cobertura depende también de las cuotas opuestas, el importe aceptado y las reglas. Este ejemplo no establece un beneficio de cobertura.</p>
 
   <h2>Preguntas frecuentes</h2>
   <dl>
     <div class="faq-item">
       <dt>¿Qué sportsbooks ofrecen profit boosts?</dt>
-      <dd>DraftKings, FanDuel, BetMGM y Caesars ofrecen profit boosts regularmente como parte de sus promociones semanales. Generalmente están disponibles en partidos de NFL, NBA y MLB.</dd>
+      <dd>La disponibilidad depende del operador, la cuenta, la jurisdicción y la fecha. Consulta los términos actuales del operador; esta página no verifica ofertas.</dd>
     </div>
     <div class="faq-item">
       <dt>¿Hay un límite en los profit boosts?</dt>
-      <dd>Sí. La mayoría tienen un límite de apuesta (máx. $25–50) y un límite de ganancia. La calculadora considera estos límites para mostrarte la ganancia máxima posible.</dd>
+      <dd>Los límites dependen de la oferta. Comprueba el importe máximo, el tope del aumento y las cuotas elegibles. Un modelo que no incluya un límite real puede sobrestimar el pago.</dd>
     </div>
   </dl>
   <p class="disclaimer">Debes tener 21 años o más. Juega con responsabilidad. 1-800-GAMBLER.</p>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Usa las calculadoras gratuitas sin crear una cuenta. Inicia sesión con una cuenta gratuita de PromoGrind para guardar tu espacio de trabajo entre dispositivos. Las funciones marcadas como próximamente no están disponibles.</p>
   </div>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Los rendimientos modelados no son promesas. La ejecución, las anulaciones, los límites, la elegibilidad y los cambios de cuotas pueden alterar los resultados.</p>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Los rendimientos modelados no son promesas. La ejecución, las anulaciones, los límites, la elegibilidad y los cambios de cuotas pueden alterar los resultados.</p>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

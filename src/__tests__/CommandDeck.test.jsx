@@ -21,8 +21,8 @@ function renderDeck(appData = {}) {
 describe("CommandDeck", () => {
   it("renders the full module list with decision lines", () => {
     renderDeck({});
-    expect(screen.getByText("Operator Command Deck")).toBeTruthy();
-    const list = screen.getByRole("list", { name: /intelligence modules/i });
+    expect(screen.getByText("Workspace review")).toBeTruthy();
+    const list = screen.getByRole("list", { name: /workspace review tools/i });
     expect(list).toBeTruthy();
     expect(screen.getAllByRole("listitem").length).toBeGreaterThanOrEqual(12);
     expect(screen.getByText("Tilt Guard")).toBeTruthy();

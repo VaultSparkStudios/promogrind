@@ -11,28 +11,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.8; padding: 2rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.8; padding: 2rem 1rem; }
     .container { max-width: 760px; margin: 0 auto; }
-    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid #1e293b; }
-    .logo { font-size: 1.25rem; font-weight: 700; color: #4ade80; text-decoration: none; }
-    .back { color: #60a5fa; text-decoration: none; font-size: 0.875rem; }
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--pg-page-border); }
+    .logo { font-size: 1.25rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; }
+    .back { color: var(--pg-page-blue); text-decoration: none; font-size: 0.875rem; }
     h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .updated { color: #64748b; font-size: 0.875rem; margin-bottom: 2rem; }
-    h2 { font-size: 1.125rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
-    p { margin-bottom: 1rem; color: #cbd5e1; }
-    ul { margin: 0.5rem 0 1rem 1.5rem; color: #cbd5e1; }
+    .updated { color: var(--pg-page-muted); font-size: 0.875rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.125rem; font-weight: 700; margin: 2rem 0 0.5rem; color: var(--pg-page-accent); }
+    p { margin-bottom: 1rem; color: var(--pg-page-muted); }
+    ul { margin: 0.5rem 0 1rem 1.5rem; color: var(--pg-page-muted); }
     li { margin-bottom: 0.25rem; }
-    a { color: #60a5fa; }
-    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1e293b; font-size: 0.75rem; color: #475569; }
-    .footer a { color: #64748b; text-decoration: none; }
+    a { color: var(--pg-page-blue); }
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--pg-page-border); font-size: .875rem; color: var(--pg-page-muted); }
+    .footer a { color: var(--pg-page-muted); text-decoration: none; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .footer-links a { color: #64748b; }
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .footer-links a { color: var(--pg-page-muted); }
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="container">
     <nav class="nav">
       <a class="logo" href="https://promogrind.bet/">PROMOGRIND</a>
@@ -40,13 +43,13 @@
     </nav>
 
     <h1>Terms of Service</h1>
-    <p class="updated">Last updated: April 3, 2026</p>
+    <p class="updated">Last updated: October 8, 2026</p>
 
     <p>These Terms of Service ("Terms") govern your use of PromoGrind, operated by VaultSpark Studios ("we", "us", "our"). By accessing or using the service, you agree to these Terms. If you do not agree, do not use the service.</p>
 
     <h2>1. Description of Service</h2>
     <p>PromoGrind is an educational calculator tool that helps users understand and calculate the mathematical conversion value of sportsbook promotional offers. It performs arithmetic on numbers you provide. PromoGrind does not place bets, access sportsbook accounts, or handle money on your behalf. It is analogous to a tax calculator or mortgage calculator — a math tool with educational content.</p>
-    <p><strong>Free tier:</strong> Core calculators (Bonus Bet, Arbitrage, No-Vig, +EV, Profit Boost, etc.) are available to all visitors without creating an account. A free PromoGrind account unlocks cross-device sync, the P/L Ledger, Bet Tracker, and community features. Studio membership is separate and is not required to create or use a PromoGrind account. VaultSparked Pro adds Live Scanner, +EV Scanner, and other advanced tools.</p>
+    <p><strong>Free tier:</strong> Core calculators (Bonus Bet, Arbitrage, No-Vig, +EV, Profit Boost, etc.) are available to all visitors without creating an account. A free PromoGrind account enables cross-device sync and signed-in community features; local ledger and tracker tools are also available without an account. Studio membership is separate and is not required to create or use a PromoGrind account. Paid tools are planned; features marked coming soon remain unavailable.</p>
 
     <h2>2. Eligibility</h2>
     <p>You must be at least 21 years old (18+ in jurisdictions where permitted) to use this service. You must be located in a jurisdiction where online sports betting is legal. It is your responsibility to comply with all applicable local, state, and federal laws regarding sports betting and gambling.</p>
@@ -80,13 +83,7 @@
     <h2>6. Affiliate Disclosure</h2>
     <p>Some links on PromoGrind are affiliate links. If you create a sportsbook account through these links, we may receive a commission at no additional cost to you. This does not influence our calculator results or editorial content. We only link to licensed, legal sportsbooks. See our full <a href="/affiliate-disclosure/">Affiliate Disclosure</a>.</p>
 
-    <h2>7. VaultSparked Pro Subscriptions</h2>
-    <p>VaultSparked Pro is a paid subscription ($24.99/month or $199/year) that unlocks Live Scanner, +EV Scanner, and other advanced features. Subscriptions are processed by Stripe. You may cancel at any time; access continues until the end of the current billing period. We reserve the right to modify subscription pricing with 30 days notice. Refunds are handled case-by-case — contact us within 7 days of a charge if you have concerns.</p>
-
-    <h2>8. Free Trial</h2>
-    <p>New users may be offered a 7-day free trial of VaultSparked Pro features. No credit card is required for the trial. At trial end, Pro features become unavailable unless you purchase a subscription. Trial eligibility is limited to one per user.</p>
-
-    <h2>9. Intellectual Property</h2>
+    <h2>7. Subscriptions</h2><p>Paid checkout is currently unavailable. Planned features are identified on the pricing page; a free account or trial does not unlock a feature marked coming soon. If subscriptions become available, the price and included features will be shown before purchase. You may cancel at any time; access continues until the end of the current billing period. We reserve the right to modify subscription pricing with 30 days notice. Refunds are handled case-by-case — contact us within 7 days of a charge if you have concerns.</p><h2>8. Free Trial</h2><p>Where offered, an eligible user may receive a 7-day trial without a credit card, limited to one per user. The trial includes only features explicitly listed as available for that trial. At trial end, trial-only features become unavailable unless an available subscription is purchased. Features marked coming soon remain unavailable throughout a trial.</p><h2>9. Intellectual Property</h2>
     <p>All content, code, design, and branding on PromoGrind is owned by VaultSpark Studios and protected under applicable intellectual property law. PromoGrind™ and VaultSpark Studios™ are trademarks of VaultSpark Studios. You may not copy, reproduce, or distribute any part of the service without written permission. See our <a href="/dmca/">DMCA &amp; IP Policy</a> for details.</p>
 
     <h2>10. DMCA Policy</h2>
@@ -127,8 +124,8 @@
         <a href="/data-policy/">Data Policy</a>
       </div>
     </div>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

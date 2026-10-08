@@ -61,9 +61,10 @@ describe("DailyDashboard", () => {
   });
 
   it("renders as an owned route chunk without leaked App.jsx symbols", async () => {
-    renderDashboard();
+    const { container } = renderDashboard();
 
     expect(await screen.findByText(/Good /i)).toBeTruthy();
     expect(screen.getAllByText(/Books Done/i).length).toBeGreaterThan(0);
+    expect(container.textContent).not.toMatch(/Launch Command Center|Canonical launch proofs|Queue proof work|Monetization readiness|Observability|growth work/i);
   });
 });

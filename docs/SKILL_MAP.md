@@ -14,7 +14,7 @@ Muscle memory: **`/start` → `/go` or `/goal` → `/closeout`**. Everything els
 | **`/start`** | Begin every session. Detects mode (BUILDER vs FOUNDER), loads context, renders the startup brief with SIGNALS + GENIUS HIT LIST + HUMAN PRESSURE. |
 | **`/go`** | Right after `/start`. Refreshes the Unified Genius List (IGNIS-fueled, 12 items), syncs items into TASK_BOARD, captures memory patterns, executes unblocked items at quality bar with risk gating. Proactively suggests a specialty skill if the project type warrants one. |
 | **`/goal`** | Durable Codex objective for one bounded long-running Studio task. Uses the top unblocked Now/Genius item unless you provide an exact goal, works in checkpoints, and stops only when verified, blocked, or approval-sensitive. |
-| **`/closeout`** | End every session. Write-back in canonical order → score 5 categories → commit + push via autopilot with confirmation. |
+| **`/closeout`** | End every session. Write-back in canonical order → score 10 categories (1000 total) → commit + push via the authorized autopilot workflow. |
 
 ## When you don't know the right command
 
@@ -40,6 +40,7 @@ You rarely need to type these — `/go` proactively suggests them based on proje
 |---|---|---|
 | `/app-release-gate` | Go/no-go checklist before SPARKED or public launch | `app`, `web-app`, `saas` |
 | `/infra-debt-sweep` | Technical debt audit, stale scripts, divergent renderers | `infrastructure`, `internal-ops` |
+| `/studio-market` | Competitive landscape: `docs/market/MARKET.json` + `LANDSCAPE.md` from dated primary sources; feeds table-stake gaps to `/audit` | `website`, `app`, `game` |
 | `/security-check` | One-pass sweep: sanitize settings + scan secrets + audit gateway | any |
 | `/package-trust` | Obelisk gate to rank packages/downloads before install and avoid malicious artifacts | any |
 

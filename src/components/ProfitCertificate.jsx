@@ -85,7 +85,7 @@ export default function ProfitCertificate({ entries: entriesProp } = {}) {
     return (
       <div style={S.card}>
         <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 8 }}>Outcome Review</div>
-        <div style={{ fontSize: 12, color: K.mt }}>Log realized results to create a self-reported review card. Activity alone does not create a badge or rank.</div>
+        <div style={{ fontSize: 14, color: K.mt }}>Log realized results to create a self-reported review card. Activity alone does not create a badge or rank.</div>
       </div>
     );
   }
@@ -95,27 +95,27 @@ export default function ProfitCertificate({ entries: entriesProp } = {}) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
         <div>
           <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD }}>Outcome Review</div>
-          <div style={{ fontSize: 10, color: K.mt, marginTop: 3 }}>A local, self-reported summary—not a certificate, verification, or performance claim.</div>
+          <div style={{ fontSize: 12, color: K.mt, marginTop: 3 }}>A local, self-reported summary—not a certificate, verification, or performance claim.</div>
         </div>
         <div style={{ display: "flex", gap: 4 }}>
           {["week", "month", "year"].map((option) => (
-            <button key={option} onClick={() => setPeriod(option)} style={{ padding: "3px 10px", background: period === option ? K.ac : "transparent", border: `1px solid ${period === option ? K.ac : K.bd2}`, borderRadius: 50, color: period === option ? K.ink : K.dm, fontSize: 9, cursor: "pointer", fontFamily: font, textTransform: "uppercase" }}>{option}</button>
+            <button key={option} onClick={() => setPeriod(option)} style={{ padding: "3px 10px", background: period === option ? K.ac : "transparent", border: `1px solid ${period === option ? K.ac : K.bd2}`, borderRadius: 50, color: period === option ? K.ink : K.dm, fontSize: 12, cursor: "pointer", fontFamily: font, textTransform: "uppercase" }}>{option}</button>
           ))}
         </div>
       </div>
       <div style={{ background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 12, padding: 24, textAlign: "center" }}>
-        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "2px", marginBottom: 12 }}>Self-reported local ledger</div>
+        <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "2px", marginBottom: 12 }}>Self-reported local ledger</div>
         <div style={{ fontFamily: fontD, fontSize: 36, fontWeight: 800, color: total >= 0 ? K.ac : K.rd, lineHeight: 1 }}>{total >= 0 ? "+" : "-"}${f(Math.abs(total))}</div>
-        <div style={{ fontSize: 11, color: K.mt, marginTop: 6 }}>RECORDED REALIZED P/L · {periodLabel}</div>
+        <div style={{ fontSize: 12, color: K.mt, marginTop: 6 }}>RECORDED REALIZED P/L · {periodLabel}</div>
         <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 16 }}>
-          <div><div style={{ fontSize: 18, fontWeight: 700, color: K.ac, fontFamily: fontD }}>{count}</div><div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase" }}>Ledger rows</div></div>
-          <div><div style={{ fontSize: 18, fontWeight: 700, color: K.pp, fontFamily: fontD }}>{books.length}</div><div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase" }}>Book labels</div></div>
+          <div><div style={{ fontSize: 18, fontWeight: 700, color: K.ac, fontFamily: fontD }}>{count}</div><div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase" }}>Ledger rows</div></div>
+          <div><div style={{ fontSize: 18, fontWeight: 700, color: K.pp, fontFamily: fontD }}>{books.length}</div><div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase" }}>Book labels</div></div>
         </div>
-        <div style={{ fontSize: 9, color: K.mt, lineHeight: 1.5, marginTop: 14 }}>PromoGrind did not verify sportsbook execution, deposits, withdrawals, or account identity.</div>
+        <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5, marginTop: 14 }}>PromoGrind did not verify sportsbook execution, deposits, withdrawals, or account identity.</div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 16, flexWrap: "wrap" }}>
-          <button onClick={copy} style={{ padding: "6px 14px", background: copied ? K.gn : K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>{copied ? "Copied" : "Copy review"}</button>
-          <button onClick={shareNative} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>Share self-report</button>
-          <button onClick={addToReviewBoard} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.ac}50`, borderRadius: 6, color: K.ac, fontWeight: 700, fontSize: 10, cursor: "pointer", fontFamily: font }}>Save local review card</button>
+          <button onClick={copy} style={{ padding: "6px 14px", background: copied ? K.gn : K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: font }}>{copied ? "Copied" : "Copy review"}</button>
+          <button onClick={shareNative} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: font }}>Share self-report</button>
+          <button onClick={addToReviewBoard} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.ac}50`, borderRadius: 6, color: K.ac, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: font }}>Save local review card</button>
         </div>
       </div>
     </div>

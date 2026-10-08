@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { signOut, startCheckout, manageBilling, getTierName, redeemBetaCode, saveSharedDisplayName } from '../auth.js';
+import { signOut, manageBilling, getTierName, redeemBetaCode, saveSharedDisplayName } from '../auth.js';
 import { K, font, fontD } from '../lib/shared.js';
 import { FX } from '../contexts.jsx';
 import { getProjectAuthHref } from '../launchState.js';
@@ -29,7 +29,7 @@ const UPGRADE_NEXT = {
   Runner:       { planId: 'closer_monthly', label: 'Upgrade to Closer', price: '$34.99/mo', desc: 'Live Scanner · Stack Builder'      },
 };
 const sectionLabel = {
-  fontSize: 9, fontWeight: 700, color: '#64748b',
+  fontSize: 12, fontWeight: 700, color: '#64748b',
   textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10,
 };
 const prefRow = {
@@ -38,7 +38,7 @@ const prefRow = {
 };
 const pillBtn = (active, color) => ({
   padding: '5px 14px', borderRadius: 6, cursor: 'pointer',
-  fontFamily: font, fontSize: 11, fontWeight: 600,
+  fontFamily: font, fontSize: 12, fontWeight: 600,
   background: active ? `${color}18` : 'transparent',
   border: `1px solid ${active ? color + '60' : K.bd2}`,
   color: active ? color : K.dm,
@@ -244,18 +244,18 @@ export default function UserMenu({
         {/* Name + tier */}
         <div style={{ textAlign: 'left', lineHeight: 1.3, minWidth: 0 }}>
           <div style={{
-            fontSize: 12, fontWeight: 600, color: K.tx,
+            fontSize: 14, fontWeight: 600, color: K.tx,
             maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           }}>
             {derivedName}
           </div>
-          <div style={{ fontSize: 10, color: tc, fontWeight: 700, letterSpacing: '0.3px' }}>
+          <div style={{ fontSize: 12, color: tc, fontWeight: 700, letterSpacing: '0.3px' }}>
             {tierName}{isOnTrial ? ` · ${trialDaysLeft}d trial` : ''}
           </div>
         </div>
         {/* Chevron */}
         <span style={{
-          fontSize: 9, color: K.dm, marginLeft: 2, flexShrink: 0,
+          fontSize: 12, color: K.dm, marginLeft: 2, flexShrink: 0,
           transition: 'transform 0.2s',
           display: 'block',
           transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -276,7 +276,10 @@ export default function UserMenu({
             border: `1px solid ${K.bd}`,
             borderRadius: 16,
             boxShadow: '0 12px 60px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.3)',
-            overflow: 'hidden',
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            maxHeight: `calc(100dvh - ${dropPos.top + 12}px)`,
+            overscrollBehavior: 'contain',
             animation: 'pgDropIn 0.2s cubic-bezier(0.22, 1, 0.36, 1)',
           }}
         >
@@ -307,7 +310,7 @@ export default function UserMenu({
                   position: 'absolute', bottom: 1, right: 1,
                   width: 18, height: 18, borderRadius: '50%',
                   background: K.s1, border: `1px solid ${K.bd2}`,
-                  fontSize: 9, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: K.dm,
                 }}>✎</span>
               </button>
@@ -325,14 +328,14 @@ export default function UserMenu({
                       style={{
                         flex: 1, padding: '5px 9px', background: K.s2,
                         border: `1px solid ${K.ac}`, borderRadius: 7,
-                        color: K.tx, fontFamily: font, fontSize: 12, outline: 'none',
+                        color: K.tx, fontFamily: font, fontSize: 14, outline: 'none',
                       }}
                     />
                     <button
                       onClick={saveName}
                       style={{
                         padding: '5px 10px', background: K.gn, border: 'none',
-                        borderRadius: 7, color: K.ink, fontSize: 11,
+                        borderRadius: 7, color: K.ink, fontSize: 12,
                         fontWeight: 700, cursor: 'pointer', fontFamily: font,
                       }}
                     >✓</button>
@@ -341,7 +344,7 @@ export default function UserMenu({
                       style={{
                         padding: '5px 8px', background: 'transparent',
                         border: `1px solid ${K.bd2}`, borderRadius: 7,
-                        color: K.dm, fontSize: 11, cursor: 'pointer', fontFamily: font,
+                        color: K.dm, fontSize: 12, cursor: 'pointer', fontFamily: font,
                       }}
                     >✕</button>
                   </div>
@@ -356,18 +359,18 @@ export default function UserMenu({
                     }}
                   >
                     <span style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD }}>{derivedName}</span>
-                    <span style={{ fontSize: 9, color: K.dm }}>✎</span>
+                    <span style={{ fontSize: 12, color: K.dm }}>✎</span>
                   </button>
                 )}
                 <div style={{
-                  fontSize: 10, color: K.dm, marginBottom: 7,
+                  fontSize: 12, color: K.dm, marginBottom: 7,
                   overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                 }}>
                   {user.email}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
                   <span style={{
-                    fontSize: 10, fontWeight: 700, color: tc,
+                    fontSize: 12, fontWeight: 700, color: tc,
                     background: `${tc}18`, padding: '2px 10px',
                     borderRadius: 50, letterSpacing: '0.5px',
                     border: `1px solid ${tc}28`,
@@ -375,7 +378,7 @@ export default function UserMenu({
                     {tierName}
                   </span>
                   {isOnTrial && (
-                    <span style={{ fontSize: 10, color: K.yl, fontWeight: 600 }}>
+                    <span style={{ fontSize: 12, color: K.yl, fontWeight: 600 }}>
                       {trialDaysLeft}d trial remaining
                     </span>
                   )}
@@ -386,7 +389,7 @@ export default function UserMenu({
             {avatarPicking && (
               <div style={{
                 marginTop: 14,
-                display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 6,
+                display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(44px, 1fr))', gap: 6,
               }}>
                 {AVATARS.map(({ emoji, label }) => (
                   <button
@@ -394,7 +397,7 @@ export default function UserMenu({
                     onClick={() => saveAvatar(emoji)}
                     title={label}
                     style={{
-                      aspectRatio: '1', borderRadius: 10,
+                      aspectRatio: '1', borderRadius: 10, minWidth: 0, padding: 0,
                       background: avatar === emoji ? `${K.gn}20` : K.s2,
                       border: `1.5px solid ${avatar === emoji ? K.gn + '70' : K.bd}`,
                       fontSize: 20, cursor: 'pointer',
@@ -419,7 +422,7 @@ export default function UserMenu({
                     {emoji}
                   </button>
                 ))}
-                <div style={{ gridColumn: '1 / -1', fontSize: 9, color: K.dm, textAlign: 'center', marginTop: 2 }}>
+                <div style={{ gridColumn: '1 / -1', fontSize: 12, color: K.dm, textAlign: 'center', marginTop: 2 }}>
                   Tap to select your avatar
                 </div>
               </div>
@@ -429,13 +432,13 @@ export default function UserMenu({
           <div style={{ padding: '13px 18px', borderBottom: `1px solid ${K.bd}` }}>
             <div style={sectionLabel}>Subscription</div>
             {renewalDate && (
-              <div style={{ fontSize: 11, color: K.dm, marginBottom: 9 }}>
+              <div style={{ fontSize: 12, color: K.dm, marginBottom: 9 }}>
                 Renews <span style={{ color: K.tx, fontWeight: 600 }}>{renewalDate}</span>
               </div>
             )}
             {upgrade ? (
               <button
-                onClick={() => { setOpen(false); startCheckout(upgrade.planId); }}
+                onClick={() => { setOpen(false); window.location.assign('/pricing'); }}
                 style={{
                   width: '100%', padding: '10px 14px', borderRadius: 9, cursor: 'pointer',
                   fontFamily: font, display: 'flex', alignItems: 'center',
@@ -448,15 +451,15 @@ export default function UserMenu({
                 onMouseLeave={e => { e.currentTarget.style.background = `linear-gradient(135deg, ${K.gn}12, ${K.ac}08)`; e.currentTarget.style.boxShadow = 'none'; }}
               >
                 <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: K.gn }}>↑ {upgrade.label}</div>
-                  <div style={{ fontSize: 10, color: K.dm, marginTop: 2 }}>{upgrade.desc}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: K.gn }}>View planned {upgrade.label.replace('Upgrade to ', '')} plan</div>
+                  <div style={{ fontSize: 12, color: K.dm, marginTop: 2 }}>Paid checkout is unavailable. Coming-soon services remain unavailable.</div>
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: K.gn, flexShrink: 0, marginLeft: 10 }}>
-                  {upgrade.price}
+                <div style={{ fontSize: 14, fontWeight: 700, color: K.gn, flexShrink: 0, marginLeft: 10 }}>
+                  Planned price: {upgrade.price}
                 </div>
               </button>
             ) : (
-              <div style={{ fontSize: 11, color: K.gn }}>✓ Top tier — all features unlocked</div>
+              <div style={{ fontSize: 12, color: K.gn }}>Top account tier. Features marked coming soon remain unavailable.</div>
             )}
             {/* Beta invite code — only shown to Free Agent */}
             {tierName === 'Free Agent' && (
@@ -465,7 +468,7 @@ export default function UserMenu({
                   onClick={() => { setBetaCodeOpen(v => !v); setBetaCodeState(null); setBetaCodeMsg(''); }}
                   style={{
                     background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                    fontSize: 10, color: K.dm, fontFamily: font,
+                    fontSize: 12, color: K.dm, fontFamily: font,
                   }}
                   onMouseEnter={e => e.currentTarget.style.color = K.tx}
                   onMouseLeave={e => e.currentTarget.style.color = K.dm}
@@ -475,7 +478,7 @@ export default function UserMenu({
                 {betaCodeOpen && (
                   <div style={{ marginTop: 8 }}>
                     {betaCodeState === 'success' ? (
-                      <div style={{ fontSize: 11, color: K.gn, fontWeight: 600 }}>✓ {betaCodeMsg}</div>
+                      <div style={{ fontSize: 12, color: K.gn, fontWeight: 600 }}>✓ {betaCodeMsg}</div>
                     ) : (
                       <>
                         <div style={{ display: 'flex', gap: 6 }}>
@@ -486,7 +489,7 @@ export default function UserMenu({
                             placeholder="PGBETA-XXXX"
                             maxLength={16}
                             style={{
-                              flex: 1, padding: '6px 10px', borderRadius: 7, fontSize: 11,
+                              flex: 1, padding: '6px 10px', borderRadius: 7, fontSize: 12,
                               fontFamily: font, background: K.bg2 ?? K.bg,
                               border: `1px solid ${betaCodeState === 'error' ? '#ef4444' : K.bd}`,
                               color: K.tx, outline: 'none',
@@ -497,7 +500,7 @@ export default function UserMenu({
                             disabled={betaCodeState === 'loading' || !betaCodeInput.trim()}
                             style={{
                               padding: '6px 12px', borderRadius: 7, cursor: 'pointer',
-                              fontFamily: font, fontSize: 11, fontWeight: 700,
+                              fontFamily: font, fontSize: 12, fontWeight: 700,
                               background: K.gn + '20', border: `1px solid ${K.gn}50`,
                               color: K.gn, opacity: betaCodeState === 'loading' ? 0.6 : 1,
                             }}
@@ -506,7 +509,7 @@ export default function UserMenu({
                           </button>
                         </div>
                         {betaCodeState === 'error' && (
-                          <div style={{ fontSize: 10, color: '#ef4444', marginTop: 5 }}>{betaCodeMsg}</div>
+                          <div style={{ fontSize: 12, color: '#ef4444', marginTop: 5 }}>{betaCodeMsg}</div>
                         )}
                       </>
                     )}
@@ -517,7 +520,7 @@ export default function UserMenu({
             <button
               onClick={() => { setOpen(false); manageBilling(); }}
               style={{
-                display: 'block', marginTop: 9, fontSize: 10, color: K.ac,
+                display: 'block', marginTop: 9, fontSize: 12, color: K.ac,
                 background: 'none', border: 'none', padding: 0, cursor: 'pointer',
                 fontFamily: font, textAlign: 'left',
               }}
@@ -532,7 +535,7 @@ export default function UserMenu({
             <div style={sectionLabel}>Preferences</div>
             {/* Theme */}
             <div style={prefRow}>
-              <span style={{ fontSize: 12, color: K.tx }}>Theme</span>
+              <span style={{ fontSize: 14, color: K.tx }}>Theme</span>
               <button onClick={toggleTheme} style={pillBtn(true, darkMode ? K.yl : K.ac)}>
                 {darkMode ? '☀ Light' : '🌙 Dark'}
               </button>
@@ -540,8 +543,8 @@ export default function UserMenu({
             {/* Compact */}
             <div style={prefRow}>
               <div>
-                <div style={{ fontSize: 12, color: K.tx }}>Compact Mode</div>
-                <div style={{ fontSize: 10, color: K.dm, marginTop: 1 }}>Hide help & explainers</div>
+                <div style={{ fontSize: 14, color: K.tx }}>Compact Mode</div>
+                <div style={{ fontSize: 12, color: K.dm, marginTop: 1 }}>Hide help & explainers</div>
               </div>
               <button onClick={toggleCompact} style={pillBtn(compactMode, K.ac)}>
                 {compactMode ? 'On' : 'Off'}
@@ -550,8 +553,8 @@ export default function UserMenu({
             {/* Currency */}
             <div style={{ ...prefRow, marginBottom: 0 }}>
               <div>
-                <div style={{ fontSize: 12, color: K.tx }}>Currency</div>
-                <div style={{ fontSize: 10, color: K.dm, marginTop: 1 }}>Display estimates only</div>
+                <div style={{ fontSize: 14, color: K.tx }}>Currency</div>
+                <div style={{ fontSize: 12, color: K.dm, marginTop: 1 }}>Display estimates only</div>
               </div>
               <select
                 value={currency}
@@ -562,7 +565,7 @@ export default function UserMenu({
                 style={{
                   padding: '5px 8px', background: K.s2,
                   border: `1px solid ${K.bd2}`, borderRadius: 6,
-                  color: K.tx, fontFamily: font, fontSize: 11, cursor: 'pointer',
+                  color: K.tx, fontFamily: font, fontSize: 12, cursor: 'pointer',
                 }}
               >
                 {Object.entries(FX).map(([code, { sym }]) => (
@@ -579,7 +582,7 @@ export default function UserMenu({
               style={{
                 width: '100%', padding: '9px 12px', borderRadius: 8,
                 background: 'transparent', border: `1px solid ${K.bd2}`,
-                color: K.dm, fontSize: 11, fontWeight: 600,
+                color: K.dm, fontSize: 12, fontWeight: 600,
                 cursor: 'pointer', fontFamily: font,
                 textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
                 transition: 'background 0.12s',
@@ -596,7 +599,7 @@ export default function UserMenu({
               style={{
                 width: '100%', padding: '9px 0', borderRadius: 8,
                 background: `${K.rd}10`, border: `1px solid ${K.rd}30`,
-                color: K.rd, fontSize: 11, fontWeight: 600,
+                color: K.rd, fontSize: 12, fontWeight: 600,
                 cursor: 'pointer', fontFamily: font, marginBottom: 12,
                 transition: 'background 0.15s',
               }}
@@ -610,7 +613,7 @@ export default function UserMenu({
                 <a
                   key={label}
                   href={href}
-                  style={{ fontSize: 10, color: K.dm, textDecoration: 'none', transition: 'color 0.12s' }}
+                  style={{ fontSize: 12, color: K.dm, textDecoration: 'none', transition: 'color 0.12s' }}
                   onMouseEnter={e => e.currentTarget.style.color = K.ac}
                   onMouseLeave={e => e.currentTarget.style.color = K.dm}
                 >

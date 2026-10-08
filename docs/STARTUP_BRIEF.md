@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.2 -->
-<!-- generated-at: 2026-09-30 (Session 132 closeout) -->
+<!-- generated-at: 2026-10-08 (Session 132 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — PromoGrind
 
-> **Fast-boot brief** — generated at Session 132 closeout · 2026-09-30.
+> **Fast-boot brief** — generated at Session 132 closeout · 2026-10-08.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  📱 PROMOGRIND                                                   ║
 ║  app · deployed/public-unlaunched · FORGE                        ║
-║  Session 133 · 2026-09-30 · FOUNDER MODE                         ║
+║  Session 133 · 2026-10-08 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -42,7 +42,7 @@
 ║                                                                  ║
 ║    869/1000   ████████████████████░░░░   87%                     ║
 ║    SIL v3.0  ·  Avg3: 909.7  ·  Velocity 1→                      ║
-║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
+║    Last active: 3d  ·  Last closeout: 8d  ·  (active = newest o  ║
 ║    Trend  █▆▄▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -66,8 +66,8 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║ ✓  ██████████░░░░░░░░░░░░░░   43% used                         ║
-║    115,607 / 272,000 tok  ·  codex  ·  heuristic-stale         ║
+║ ✓  ██████████████░░░░░░░░░░   58% used                         ║
+║    115,607 / 200,000 tok  ·  unknown  ·  heuristic-stale       ║
 ║    Verdict: CONTINUE                                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -75,8 +75,8 @@
 ║ ✓  Tests         105/105 files · 722/722 assertions…           ║
 ║ ⚠  Velocity      1   ·  Debt: →                                ║
 ║ ✓  Runway        unknown                                       ║
-║ ✓  Context age   0d                                            ║
-║ ✓  IGNIS         43385 FORGE  ·  0d old                        ║
+║ ⚠  Context age   8d                                            ║
+║ ⚠  IGNIS         43385 FORGE  ·  8d old                        ║
 ║ ✓  Truth         green-repo-owned-with-history-and-external-p… ║
 ║ ⚠  Compliance   not-tracked: no non-zero compliance run…       ║
 ║ ✓  Genome dims   all stable  (24/25)                           ║
@@ -84,9 +84,9 @@
 ║ ✓  CDR           no gap detected                               ║
 ║ ✓  Patterns      no recurring pressure detected                ║
 ║ ✓  Templates     v3.3 aligned                                  ║
-║ ⛔  Revenue sig.  60d old (2026-08-01)  ⚠ stale                 ║
+║ ⛔  Revenue sig.  68d old (2026-08-01)  ⚠ stale                 ║
 ║ ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                ║
-║ ⛔  Doctor        11/12 (92%)  ·  1 failing                     ║
+║ ⛔  Doctor        10/12 (83%)  ·  1 failing                     ║
 ║ ✓  Codex trust   trusted project active                        ║
 ║ ⚠  Canon adopt.  43/54 pending review                          ║
 ║ ✓  Cost          flat-rate Max Plan · ledger telemetry is…     ║
@@ -94,9 +94,9 @@
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
 ║  Workers: 0/0 active · 0 stale · 0 conflicts                     ║
-║  Snapshot: 15m old · next n/a                                    ║
+║  Snapshot: 0m old · next n/a                                     ║
 ║  Propagation: unavailable · portfolio queue absent               ║
-║  Ark: 2 drained · 11h old · sig failures 0                       ║
+║  Ark: 2 drained · 188h old · sig failures 0                      ║
 ║  Untracked: unavailable · detector absent                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -134,7 +134,11 @@
 ║  🔥  3  [SIL]  Complete Zoho alias/DNS/delivery/reply proof a  ║
 ║        Second-priority unblocked item — complete both for ses  ║
 ║                                                                ║
-║  💡  4  [IGNIS]  Refresh REVENUE_SIGNALS.md (60d stale)        ║
+║  ⚡  4  [IGNIS]  IGNIS re-score overdue (8d stale)              ║
+║        Portfolio intelligence scores degrade with age. Re-sco  ║
+║        ↳ node scripts/ops.mjs rescore --stale                  ║
+║                                                                ║
+║  💡  5  [IGNIS]  Refresh REVENUE_SIGNALS.md (68d stale)        ║
 ║        Revenue intelligence is time-sensitive. Regenerate to   ║
 ║        ↳ node scripts/ops.mjs revenue-signals                  ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -143,5 +147,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 132 closeout · 2026-09-30*
+*Generated by `scripts/render-startup-brief.mjs v3.2` · Session 132 closeout · 2026-10-08*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

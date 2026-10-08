@@ -15,16 +15,16 @@ function PlayStyleCard({ navigate }) {
     <div style={{ ...S.card, border: `1px solid ${K.pp}30`, background: `${K.pp}06`, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 220 }}>
-          <div style={{ fontSize: 10, color: K.pp, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 4 }}>
+          <div style={{ fontSize: 12, color: K.pp, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 4 }}>
             {profile.icon} Your Tool Mix
           </div>
           <div style={{ fontFamily: fontD, fontSize: 15, fontWeight: 800, color: K.tx, marginBottom: 3 }}>{profile.label}</div>
-          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>{profile.tip}</div>
-          <div style={{ fontSize: 9, color: K.mt, lineHeight: 1.5, marginTop: 4 }}>{profile.evidence.sampleCount} local calculator record{profile.evidence.sampleCount === 1 ? "" : "s"} · {profile.evidence.confidence.replace(/-/g, " ")} · {profile.disclaimer}</div>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>{profile.tip}</div>
+          <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5, marginTop: 4 }}>{profile.evidence.sampleCount} local calculator record{profile.evidence.sampleCount === 1 ? "" : "s"} · {profile.evidence.confidence.replace(/-/g, " ")} · {profile.disclaimer}</div>
         </div>
         <button
           onClick={() => navigate(`/${profile.nextCalc}`)}
-          style={{ padding: "8px 14px", background: `${K.pp}20`, border: `1px solid ${K.pp}40`, borderRadius: 8, color: K.pp, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
+          style={{ padding: "8px 14px", background: `${K.pp}20`, border: `1px solid ${K.pp}40`, borderRadius: 8, color: K.pp, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
         >
           {profile.nextLabel} →
         </button>
@@ -71,22 +71,22 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
           <div style={{ flex: 1, minWidth: 240 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
               <span style={{ fontSize: 16 }} aria-hidden="true">▶</span>
-              <div style={{ fontSize: 10, color: K.gn, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase" }}>Recommended Playbook</div>
+              <div style={{ fontSize: 12, color: K.gn, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase" }}>Recommended Playbook</div>
             </div>
             <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>
               Try: {playbook.name}
             </div>
-            <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 6 }}>{playbook.summary}</div>
+            <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.6, marginBottom: 6 }}>{playbook.summary}</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-              <span style={{ fontSize: 10, color: K.gn, background: `${K.gn}12`, border: `1px solid ${K.gn}30`, borderRadius: 50, padding: "2px 8px" }}>
+              <span style={{ fontSize: 12, color: K.gn, background: `${K.gn}12`, border: `1px solid ${K.gn}30`, borderRadius: 50, padding: "2px 8px" }}>
                 {playbook.steps.length} step{playbook.steps.length === 1 ? "" : "s"}
               </span>
               {fitReason && (
-                <span style={{ fontSize: 10, color: K.ac, background: `${K.ac}10`, border: `1px solid ${K.ac}25`, borderRadius: 50, padding: "2px 8px" }}>
+                <span style={{ fontSize: 12, color: K.ac, background: `${K.ac}10`, border: `1px solid ${K.ac}25`, borderRadius: 50, padding: "2px 8px" }}>
                   {fitReason}
                 </span>
               )}
-              <span style={{ fontSize: 10, color: K.mt }}>fit {fitScore}/100</span>
+              <span style={{ fontSize: 12, color: K.mt }}>fit {fitScore}/100</span>
             </div>
           </div>
           <button
@@ -94,7 +94,7 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
               trackEvent("next_best_action_clicked", { key: action.key, playbookId: playbook.id });
               navigate(normalizeAppRoute(playbook.steps[0]?.calculatorSlug || "dashboard"));
             }}
-            style={{ padding: "9px 14px", background: K.gn, border: "none", borderRadius: 8, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
+            style={{ padding: "9px 14px", background: K.gn, border: "none", borderRadius: 8, color: K.ink, fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
           >
             Run playbook →
           </button>
@@ -108,13 +108,13 @@ export default function ActivationNextAction({ data, totalProfit, openBets, book
       <div style={{ ...S.card, border: `1px solid ${actionColor}40`, background: `${actionColor}08`, marginBottom: 12 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 240 }}>
-            <div style={{ fontSize: 10, color: actionColor, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 5 }}>Next Best Action</div>
+            <div style={{ fontSize: 12, color: actionColor, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 5 }}>Next Best Action</div>
             <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>{action.title}</div>
-            <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>{action.body}</div>
+            <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.6 }}>{action.body}</div>
           </div>
           <button
             onClick={() => { trackEvent("next_best_action_clicked", { key: action.key }); navigate(normalizeAppRoute(action.slug)); }}
-            style={{ padding: "9px 14px", background: actionColor, border: "none", borderRadius: 8, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
+            style={{ padding: "9px 14px", background: actionColor, border: "none", borderRadius: 8, color: K.ink, fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: font, whiteSpace: "nowrap" }}
           >
             {action.cta} →
           </button>

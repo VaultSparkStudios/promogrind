@@ -74,16 +74,16 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
         <div ref={ref}>
           {/* Receipt header */}
           <div style={{ textAlign: "center", borderBottom: "1px dashed #ccc", paddingBottom: 10, marginBottom: 10 }}>
-            <div style={{ fontSize: 9, letterSpacing: "2px", textTransform: "uppercase", color: "#64748b", marginBottom: 2 }}>PromoGrind Calculator</div>
+            <div style={{ fontSize: 12, letterSpacing: "2px", textTransform: "uppercase", color: "#64748b", marginBottom: 2 }}>PromoGrind Calculator</div>
             <div style={{ fontSize: 15, fontWeight: 700 }}>{calcName}</div>
-            <div style={{ fontSize: 9, color: "#64748b", marginTop: 2 }}>{ts}</div>
+            <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>{ts}</div>
           </div>
 
           {/* Inputs */}
           <div style={{ marginBottom: 10 }}>
-            <div style={{ fontSize: 8, letterSpacing: "1.5px", textTransform: "uppercase", color: "#94a3b8", marginBottom: 6 }}>Inputs</div>
+            <div style={{ fontSize: 12, letterSpacing: "1.5px", textTransform: "uppercase", color: "#94a3b8", marginBottom: 6 }}>Inputs</div>
             {inputs.map(({ label, value }, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 2 }}>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 2 }}>
                 <span style={{ color: "#475569" }}>{label}</span>
                 <span style={{ fontWeight: 600 }}>{value}</span>
               </div>
@@ -92,7 +92,7 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
 
           {/* Outputs */}
           <div style={{ borderTop: "1px dashed #ccc", paddingTop: 10, marginBottom: 10 }}>
-            <div style={{ fontSize: 8, letterSpacing: "1.5px", textTransform: "uppercase", color: "#94a3b8", marginBottom: 6 }}>Results</div>
+            <div style={{ fontSize: 12, letterSpacing: "1.5px", textTransform: "uppercase", color: "#94a3b8", marginBottom: 6 }}>Results</div>
             {outputs.map(({ label, value, highlight }, i) => (
               <div key={i} style={{
                 display: "flex", justifyContent: "space-between", fontSize: highlight ? 14 : 11,
@@ -105,7 +105,7 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
           </div>
 
           {/* Disclaimer */}
-          <div style={{ borderTop: "1px dashed #ccc", paddingTop: 8, fontSize: 8, color: "#94a3b8", lineHeight: 1.5, textAlign: "center" }}>
+          <div style={{ borderTop: "1px dashed #ccc", paddingTop: 8, fontSize: 12, color: "#94a3b8", lineHeight: 1.5, textAlign: "center" }}>
             {disclaimer || "Estimates only. Verify all odds before placing bets. Results do not model a return."}
             <br />
             {CANONICAL_APP_URL.replace(/^https?:\/\//, "")} — free sportsbook promo tools
@@ -116,13 +116,13 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
         <div style={{ display: "flex", gap: 8, marginTop: 14, flexWrap: "wrap" }}>
           <button
             onClick={handleCopy}
-            style={{ flex: 1, padding: "8px 0", background: "#1e293b", border: "none", borderRadius: 6, color: "#e2e8f0", fontSize: 11, fontWeight: 600, cursor: "pointer" }}
+            style={{ flex: 1, padding: "8px 0", background: "#1e293b", border: "none", borderRadius: 6, color: "#e2e8f0", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
           >
             📋 Copy
           </button>
           <button
             onClick={handlePrint}
-            style={{ flex: 1, padding: "8px 0", background: "#4ade80", border: "none", borderRadius: 6, color: "#0a0e17", fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+            style={{ flex: 1, padding: "8px 0", background: "#4ade80", border: "none", borderRadius: 6, color: "#0a0e17", fontSize: 12, fontWeight: 700, cursor: "pointer" }}
           >
             🖨 Print / Save PDF
           </button>
@@ -130,7 +130,7 @@ export default function CalculatorReceipt({ calcName, inputs = [], outputs = [],
             <button
               data-testid="receipt-track-play"
               onClick={onTrack}
-              style={{ flex: "1 0 100%", padding: "8px 0", background: "#0ea5e9", border: "none", borderRadius: 6, color: "#0a0e17", fontSize: 11, fontWeight: 700, cursor: "pointer", marginTop: 4 }}
+              style={{ flex: "1 0 100%", padding: "8px 0", background: "#0ea5e9", border: "none", borderRadius: 6, color: "#0a0e17", fontSize: 12, fontWeight: 700, cursor: "pointer", marginTop: 4 }}
             >
               📌 Track this play
             </button>

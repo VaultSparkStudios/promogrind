@@ -11,32 +11,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.8; padding: 2rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.8; padding: 2rem 1rem; }
     .container { max-width: 760px; margin: 0 auto; }
-    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid #1e293b; }
-    .logo { font-size: 1.25rem; font-weight: 700; color: #4ade80; text-decoration: none; }
-    .back { color: #60a5fa; text-decoration: none; font-size: 0.875rem; }
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--pg-page-border); }
+    .logo { font-size: 1.25rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; }
+    .back { color: var(--pg-page-blue); text-decoration: none; font-size: 0.875rem; }
     h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .updated { color: #64748b; font-size: 0.875rem; margin-bottom: 2rem; }
-    h2 { font-size: 1.125rem; font-weight: 700; margin: 2rem 0 0.5rem; color: #4ade80; }
-    h3 { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 0.5rem; color: #94a3b8; }
-    p { margin-bottom: 1rem; color: #cbd5e1; }
-    ul, ol { margin: 0.5rem 0 1rem 1.5rem; color: #cbd5e1; }
+    .updated { color: var(--pg-page-muted); font-size: 0.875rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.125rem; font-weight: 700; margin: 2rem 0 0.5rem; color: var(--pg-page-accent); }
+    h3 { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 0.5rem; color: var(--pg-page-muted); }
+    p { margin-bottom: 1rem; color: var(--pg-page-muted); }
+    ul, ol { margin: 0.5rem 0 1rem 1.5rem; color: var(--pg-page-muted); }
     li { margin-bottom: 0.4rem; }
-    a { color: #60a5fa; }
-    .box { margin: 1.25rem 0; padding: 1rem 1.25rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; }
-    .box strong { color: #e2e8f0; display: block; margin-bottom: 4px; }
-    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1e293b; font-size: 0.75rem; color: #475569; }
-    .footer a { color: #64748b; text-decoration: none; }
+    a { color: var(--pg-page-blue); }
+    .box { margin: 1.25rem 0; padding: 1rem 1.25rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); }
+    .box strong { color: var(--pg-page-text); display: block; margin-bottom: 4px; }
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--pg-page-border); font-size: .875rem; color: var(--pg-page-muted); }
+    .footer a { color: var(--pg-page-muted); text-decoration: none; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .footer-links a { color: #64748b; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    code { font-family: monospace; background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.875rem; }
+    .footer-links a { color: var(--pg-page-muted); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    code { font-family: monospace; background: var(--pg-page-border); padding: 2px 6px; border-radius: 4px; font-size: 0.875rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="container">
     <nav class="nav">
       <a class="logo" href="https://promogrind.bet/">PROMOGRIND</a>
@@ -44,7 +47,7 @@
     </nav>
 
     <h1>DMCA Policy &amp; Intellectual Property</h1>
-    <p class="updated">Last updated: April 3, 2026</p>
+    <p class="updated">Last updated: October 8, 2026</p>
 
     <h2>Copyright Notice</h2>
     <p>Copyright © 2024–2026 VaultSpark Studios. All rights reserved.</p>
@@ -78,7 +81,7 @@
       <li>Share PromoGrind's URL on social media, forums, and communities</li>
       <li>Quote brief excerpts from our educational content with clear attribution and a link back to the source</li>
       <li>Use our embeddable widget code as documented at <a href="/promo-expiry-widget/">/promogrind/promo-expiry-widget/</a></li>
-      <li>Access the Public Calculator API as documented at <a href="/calc-api/">/promogrind/calc-api/</a> within the stated usage limits</li>
+      <li>Public Calculator API access is planned and currently unavailable. Any future permitted API use will be described at <a href="/calc-api/">/calc-api/</a>.</li>
     </ul>
 
     <h2>Prohibited Use</h2>
@@ -155,8 +158,8 @@
         <a href="/data-policy/">Data Policy</a>
       </div>
     </div>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

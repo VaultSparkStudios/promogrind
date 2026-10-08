@@ -72,12 +72,12 @@ function ExplainerDrawer({ promo, terms, deadline, decayCurve, memorySignal }) {
         gridTemplateColumns: "max-content 1fr",
         columnGap: 10,
         rowGap: 4,
-        fontSize: 10,
+        fontSize: 12,
       }}
     >
       {rows.map((r) => (
         <React.Fragment key={r.label}>
-          <div style={{ color: K.mt, textTransform: "uppercase", letterSpacing: "0.5px", fontSize: 9 }}>
+          <div style={{ color: K.mt, textTransform: "uppercase", letterSpacing: "0.5px", fontSize: 12 }}>
             {r.label}
           </div>
           <div style={{ color: r.tone, lineHeight: 1.4 }}>{r.value}</div>
@@ -135,19 +135,19 @@ export default function SmartPromoRecommender({ data }) {
   if (!recs.length && !openBets.length && !limitedBooks.length) return null;
   return (
     <div style={{ ...S.card, border: `1px solid ${K.gn}30`, background: `${K.gn}05`, marginBottom: 12 }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: K.gn, marginBottom: 8, textTransform: "uppercase", letterSpacing: "1.5px" }}>Today&apos;s Action Plan</div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: K.gn, marginBottom: 8, textTransform: "uppercase", letterSpacing: "1.5px" }}>Historical patterns to review</div>
       {snapshot.adaptivePlan?.headline && (
-        <div style={{ marginBottom: 8, padding: "8px 12px", background: `${K.ac}0a`, border: `1px solid ${K.ac}30`, borderRadius: 6, fontSize: 11, color: K.dm, lineHeight: 1.6 }}>
+        <div style={{ marginBottom: 8, padding: "8px 12px", background: `${K.ac}0a`, border: `1px solid ${K.ac}30`, borderRadius: 6, fontSize: 12, color: K.dm, lineHeight: 1.6 }}>
           <strong style={{ color: K.ac }}>{snapshot.adaptivePlan.headline}.</strong> {snapshot.adaptivePlan.detail}
         </div>
       )}
       {openBets.length > 0 && (
-        <div style={{ marginBottom: 8, padding: "7px 12px", background: `${K.yl}0a`, border: `1px solid ${K.yl}30`, borderRadius: 6, fontSize: 11, color: K.yl }}>
+        <div style={{ marginBottom: 8, padding: "7px 12px", background: `${K.yl}0a`, border: `1px solid ${K.yl}30`, borderRadius: 6, fontSize: 12, color: K.yl }}>
           ⚡ You have <strong>{openBets.length}</strong> open bet{openBets.length > 1 ? "s" : ""} — check results before placing new hedges.
         </div>
       )}
       {limitedBooks.length > 0 && (
-        <div style={{ marginBottom: 8, padding: "7px 12px", background: `${K.rd}0a`, border: `1px solid ${K.rd}30`, borderRadius: 6, fontSize: 11, color: K.rd }}>
+        <div style={{ marginBottom: 8, padding: "7px 12px", background: `${K.rd}0a`, border: `1px solid ${K.rd}30`, borderRadius: 6, fontSize: 12, color: K.rd }}>
           ⚠ {limitedBooks.join(", ")} {limitedBooks.length > 1 ? "are" : "is"} limited/gubbed — skip these promos today.
         </div>
       )}
@@ -184,23 +184,23 @@ export default function SmartPromoRecommender({ data }) {
             <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6, padding: "8px 12px", background: K.s2, borderRadius: 6, border: `1px solid ${isUrgent ? K.rd + "60" : K.bd}` }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
               <div style={{ minWidth: 0 }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{p.book}</span>
-                <span style={{ fontSize: 11, color: K.dm, marginLeft: 8 }}>{p.promo}</span>
-                {p.complexity && <span style={{ ...S.tag(p.complexity === "Easy" ? K.gn : p.complexity === "Medium" ? K.yl : K.rd), marginLeft: 6, fontSize: 8 }}>{p.complexity}</span>}
-                {p.timeMin && <span style={{ fontSize: 9, color: K.mt, marginLeft: 6 }}>~{p.timeMin}m</span>}
-                {isUrgent && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 8 }}>EXPIRES SOON</span>}
-                {reasons.includes("hot lane") && <span style={{ ...S.tag(K.gn), marginLeft: 6, fontSize: 8 }}>HOT LANE</span>}
-                {reasons.includes("cold lane") && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>COLD LANE</span>}
-                {reasons.includes("backlog pressure") && <span style={{ ...S.tag(K.ac), marginLeft: 6, fontSize: 8 }}>CLEAR BACKLOG</span>}
-                {reasons.includes("limit risk") && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 8 }}>LIMIT RISK</span>}
-                {terms.status === "drift" && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>TERMS CHANGED</span>}
+                <span style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{p.book}</span>
+                <span style={{ fontSize: 12, color: K.dm, marginLeft: 8 }}>{p.promo}</span>
+                {p.complexity && <span style={{ ...S.tag(p.complexity === "Easy" ? K.gn : p.complexity === "Medium" ? K.yl : K.rd), marginLeft: 6, fontSize: 12 }}>{p.complexity}</span>}
+                {p.timeMin && <span style={{ fontSize: 12, color: K.mt, marginLeft: 6 }}>~{p.timeMin}m</span>}
+                {isUrgent && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 12 }}>EXPIRES SOON</span>}
+                {reasons.includes("hot lane") && <span style={{ ...S.tag(K.gn), marginLeft: 6, fontSize: 12 }}>HOT LANE</span>}
+                {reasons.includes("cold lane") && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 12 }}>COLD LANE</span>}
+                {reasons.includes("backlog pressure") && <span style={{ ...S.tag(K.ac), marginLeft: 6, fontSize: 12 }}>CLEAR BACKLOG</span>}
+                {reasons.includes("limit risk") && <span style={{ ...S.tag(K.rd), marginLeft: 6, fontSize: 12 }}>LIMIT RISK</span>}
+                {terms.status === "drift" && <span style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 12 }}>TERMS CHANGED</span>}
                 {mistakeSummary && (
-                  <span data-testid="mistake-chip" title={mistakeSummary.chipDetail} style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 8 }}>
+                  <span data-testid="mistake-chip" title={mistakeSummary.chipDetail} style={{ ...S.tag(K.yl), marginLeft: 6, fontSize: 12 }}>
                     ⚠ similar prior loss
                   </span>
                 )}
                 {memorySignal && (
-                  <div style={{ fontSize: 9, color: memoryColor, marginTop: 4, lineHeight: 1.35 }}>
+                  <div style={{ fontSize: 12, color: memoryColor, marginTop: 4, lineHeight: 1.35 }}>
                     {memorySignal.label}: {memorySignal.detail}
                   </div>
                 )}
@@ -209,18 +209,18 @@ export default function SmartPromoRecommender({ data }) {
                   const spark = renderSparkline(curve.samples);
                   const tone = curve.expiresMs ? (curve.horizonHours < 24 ? K.rd : K.yl) : K.mt;
                   return (
-                    <div style={{ fontSize: 9, color: tone, marginTop: 4, fontFamily: "monospace", letterSpacing: "1px" }}>
+                    <div style={{ fontSize: 12, color: tone, marginTop: 4, fontFamily: "monospace", letterSpacing: "1px" }}>
                       EV decay {spark} {curve.expiresMs ? `${curve.horizonHours}h left` : "no hard expiry"}
                     </div>
                   );
                 })()}
-                {deadline && !deadline.expired && (
-                  <div style={{ fontSize: 9, color: deadline.hoursRemaining <= 8 ? K.rd : K.yl, marginTop: 4, lineHeight: 1.4 }}>
-                    Execute before edge floor: {Number.isFinite(deadline.hoursRemaining) ? `${deadline.hoursRemaining}h` : "stable"}
+                {deadline && !deadline.expired && p.expires && (
+                  <div style={{ fontSize: 12, color: deadline.hoursRemaining <= 8 ? K.rd : K.yl, marginTop: 4, lineHeight: 1.4 }}>
+                    Illustrative model horizon: {Number.isFinite(deadline.hoursRemaining) ? `${deadline.hoursRemaining}h` : "stable"}
                   </div>
                 )}
                 {Array.isArray(p.whyRanked) && p.whyRanked.length > 0 && (
-                  <div style={{ fontSize: 9, color: K.mt, marginTop: 4, lineHeight: 1.4 }}>
+                  <div style={{ fontSize: 12, color: K.mt, marginTop: 4, lineHeight: 1.4 }}>
                     Why #{p.baselineRank || i + 1}: {p.whyRanked.map((c) => {
                       const sign = c.delta >= 0 ? "+" : "";
                       const shift = c.rankShift ? ` (would drop ${c.rankShift > 0 ? "+" : ""}${c.rankShift})` : "";
@@ -230,8 +230,8 @@ export default function SmartPromoRecommender({ data }) {
                 )}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: K.gn }}>{p.value}</span>
-                {score !== null && <span style={{ fontSize: 9, color: score >= 5 ? K.gn : score >= 3 ? K.ac : K.yl, fontWeight: 800 }}>S{score}</span>}
+                <span style={{ fontSize: 12, fontWeight: 700, color: K.gn }}>{p.value}</span>
+                {score !== null && <span style={{ fontSize: 12, color: score >= 5 ? K.gn : score >= 3 ? K.ac : K.yl, fontWeight: 800 }}>S{score}</span>}
                 <span style={S.tag(p.grade === "A" ? K.gn : p.grade === "B" ? K.ac : K.mt)}>{p.grade}</span>
               </div>
               </div>
@@ -245,7 +245,7 @@ export default function SmartPromoRecommender({ data }) {
                     background: "transparent",
                     border: `1px solid ${K.bd}`,
                     color: K.mt,
-                    fontSize: 9,
+                    fontSize: 12,
                     padding: "2px 8px",
                     borderRadius: 4,
                     cursor: "pointer",
@@ -269,7 +269,7 @@ export default function SmartPromoRecommender({ data }) {
           );
         })}
       </div>
-      {!activeBooks.length && <div style={{ fontSize: 10, color: K.mt, marginTop: 6 }}>Set book statuses in the Sportsbooks tracker to get personalized recommendations.</div>}
+      {!activeBooks.length && <div style={{ fontSize: 12, color: K.mt, marginTop: 6 }}>Set book statuses in the Sportsbooks tracker to get personalized recommendations.</div>}
     </div>
   );
 }

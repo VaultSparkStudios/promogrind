@@ -49,25 +49,25 @@ export default function DepositMatch() {
           <In l="Avg Vig Cost" v={vg} set={setVg} suf="%" ph="4.5" />
         </div>
         <div style={{ marginBottom: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          <button onClick={() => { setDep("500"); setPct("100"); setMx("500"); setRo("1"); setVg("4.5"); }} style={{ padding: "4px 10px", background: `${K.ac}10`, border: `1px solid ${K.ac}30`, borderRadius: 4, color: K.ac, fontSize: 10, cursor: "pointer", fontFamily: font }}>
+          <button onClick={() => { setDep("500"); setPct("100"); setMx("500"); setRo("1"); setVg("4.5"); }} style={{ padding: "4px 10px", background: `${K.ac}10`, border: `1px solid ${K.ac}30`, borderRadius: 4, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
             Show Example
           </button>
-          <span style={{ fontSize: 10, color: K.mt }}>
+          <span style={{ fontSize: 12, color: K.mt }}>
             Example: deposit $500, get a 100% match up to $500, 1x rollover, 4.5% average vig drag
           </span>
         </div>
         {hist.length > 0 && (
           <div style={{ marginBottom: 8, display: "flex", justifyContent: "flex-end" }}>
-            <button onClick={() => setShowHist((h) => !h)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 9, cursor: "pointer", fontFamily: font }}>
+            <button onClick={() => setShowHist((h) => !h)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 12, cursor: "pointer", fontFamily: font }}>
               History ({hist.length})
             </button>
           </div>
         )}
         {showHist && hist.length > 0 && (
           <div style={{ marginBottom: 12, padding: 10, background: K.s2, borderRadius: 6, border: `1px solid ${K.bd}`, maxHeight: 180, overflowY: "auto" }}>
-            <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Last {hist.length} calculations</div>
+            <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Last {hist.length} calculations</div>
             {hist.map((h, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: K.dm, padding: "3px 0", borderBottom: i < hist.length - 1 ? `1px solid ${K.bd}` : "none" }}>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: K.dm, padding: "3px 0", borderBottom: i < hist.length - 1 ? `1px solid ${K.bd}` : "none" }}>
                 <span>${h.dep} at {h.pct}% up to ${h.mx}</span>
                 <span style={{ color: K.gn, fontWeight: 600 }}>${h.net} net</span>
                 <span style={{ color: K.mt }}>{new Date(h.ts).toLocaleDateString()}</span>
@@ -79,7 +79,7 @@ export default function DepositMatch() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.net}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>estimated net bonus value</span>
+              <span style={{ fontSize: 14, color: K.dm }}>estimated net bonus value</span>
             </div>
             <RR l="Bonus Awarded" v={`$${r.bonus}`} c={K.ac} b />
             <RR l="Total Wagering Required" v={`$${r.tw}`} c={K.pp} />

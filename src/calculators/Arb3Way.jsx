@@ -25,7 +25,7 @@ export default function Arb3Way() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? `ARB: +$${r.pr}` : "NO ARB"}</span>
-              {r.ok && <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>}
+              {r.ok && <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>}
             </div>
             {r.ok && <><RR l="Stake Home" v={`$${r.s1}`} c={K.ac} b /><RR l="Stake Draw" v={`$${r.s2}`} c={K.ac} b /><RR l="Stake Away" v={`$${r.s3}`} c={K.ac} b /><RR l="ROI" v={`${r.roi}%`} c={K.gn} /></>}
             {r.ok && <JuiceScore score={juiceFromROI(r.roi)} basis="Quoted three-way return" assumption="All three prices, limits, and settlement rules remain available through execution." />}
@@ -48,7 +48,7 @@ export default function Arb3Way() {
                 onClose={() => setShowReceipt(false)}
               />
             )}
-            {r.ok && !showShareCard && <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #c084fc", color: "#c084fc", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>🎉 Share this arb</button>}
+            {r.ok && !showShareCard && <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: `1px dashed ${K.pp}`, color: K.pp, borderRadius: 6, cursor: "pointer", fontSize: 14 }}>🎉 Share this arb</button>}
             {r.ok && showShareCard && <ShareCard title="3-Way Arbitrage" profit={`+$${r.pr} (${r.roi}% ROI)`} onClose={() => setShowShareCard(false)} />}
           </div>
         )}

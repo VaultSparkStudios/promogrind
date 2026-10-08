@@ -5,7 +5,7 @@ import { trackFeatureGateSeen, trackFeatureGateClick } from "./launchTelemetry.j
 import { CompactCtx } from "./contexts.jsx";
 
 // Extend S with JSX meter (shared.js stays pure JS)
-_S.meter = (pct, c) => (<div style={{marginTop:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:10,color:K.mt}}>QUALITY</span><span style={{fontSize:10,color:c,fontWeight:600}}>{pct>=70?"EXCELLENT":pct>=60?"GOOD":pct>=50?"FAIR":"POOR"} ({pct}%)</span></div><div style={{height:4,borderRadius:2,background:K.s3}}><div style={{height:4,borderRadius:2,background:c,width:`${Math.min(100,pct)}%`,transition:"width 0.4s"}}/></div></div>);
+_S.meter = (pct, c) => (<div style={{marginTop:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:12,color:K.mt}}>QUALITY</span><span style={{fontSize:12,color:c,fontWeight:600}}>{pct>=70?"EXCELLENT":pct>=60?"GOOD":pct>=50?"FAIR":"POOR"} ({pct}%)</span></div><div style={{height:4,borderRadius:2,background:K.s3}}><div style={{height:4,borderRadius:2,background:c,width:`${Math.min(100,pct)}%`,transition:"width 0.4s"}}/></div></div>);
 export const S = _S;
 
 // ═══ UI ATOMS ═══
@@ -20,7 +20,7 @@ export const In = ({l, v, set, ph, pre, err, id: idProp}) => {
     <div style={S.col}>
       <label htmlFor={inputId} style={S.label}>{l}</label>
       <div style={{position:"relative"}}>
-        {pre && <span aria-hidden="true" style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:12}}>{pre}</span>}
+        {pre && <span aria-hidden="true" style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",color:K.mt,fontSize:14}}>{pre}</span>}
         <input
           id={inputId}
           inputMode={isNumeric ? "decimal" : undefined}
@@ -31,12 +31,12 @@ export const In = ({l, v, set, ph, pre, err, id: idProp}) => {
           aria-invalid={displayErr ? "true" : undefined}
           aria-describedby={errorId}
         />
-        {displayErr && <div id={errorId} role="alert" style={{fontSize:10,color:K.rd,marginTop:2}}>{displayErr}</div>}
+        {displayErr && <div id={errorId} role="alert" style={{fontSize:12,color:K.rd,marginTop:2}}>{displayErr}</div>}
       </div>
     </div>
   );
 };
-export const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:13,color:K.dm}}>{l}</span><span style={{fontSize:14,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
+export const RR = ({l,v,c,b}) => (<div style={S.rr}><span style={{fontSize:14,color:K.dm}}>{l}</span><span style={{fontSize:14,fontWeight:b?700:500,color:c||K.tx}}>{v}</span></div>);
 export const Tl = ({t,badge,bc,shareable,getParams}) => {
   const [copied,setCopied]=useState(false);
   const [embedCopied,setEmbedCopied]=useState(false);
@@ -53,15 +53,15 @@ export const Tl = ({t,badge,bc,shareable,getParams}) => {
   };
   const copyEmbed=()=>{
     const slug = window.location.pathname.replace(/^\/+/,'');
-    const iframe = `<iframe src="${CANONICAL_APP_URL}?embed=1#/${slug}" width="480" height="600" frameborder="0"></iframe>`;
+    const iframe = `<iframe src="${new URL(slug + '?embed=1', CANONICAL_APP_URL).href}" width="480" height="600" frameborder="0"></iframe>`;
     try{navigator.clipboard.writeText(iframe);}catch(e){}
     setEmbedCopied(true); setTimeout(()=>setEmbedCopied(false),1500);
   };
   return (<div style={{fontSize:18,fontWeight:600,color:K.tx,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontFamily:fontD,flexWrap:"wrap"}}>
-    <span>{t}</span>
+    <h1 style={{font:'inherit',lineHeight:1.3,margin:0}}>{t}</h1>
     {badge&&<span style={{...S.tag(bc||K.ac)}}>{badge}</span>}
-    {shareable&&<button onClick={copy} aria-label={copied?"Link copied":"Copy share link"} aria-pressed={copied} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{copied?"✓ COPIED":"⎘ SHARE"}</button>}
-    {shareable&&<button onClick={copyEmbed} aria-label={embedCopied?"Embed code copied":"Copy embed code"} aria-pressed={embedCopied} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:embedCopied?K.gn:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{embedCopied?"✓ Copied!":"<> Embed"}</button>}
+    {shareable&&<button onClick={copy} aria-label={copied?"Link copied":"Copy share link"} aria-pressed={copied} style={{marginLeft:"auto",padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:copied?K.gn:K.mt,fontSize:12,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{copied?"✓ COPIED":"⎘ SHARE"}</button>}
+    {shareable&&<button onClick={copyEmbed} aria-label={embedCopied?"Embed code copied":"Copy embed code"} aria-pressed={embedCopied} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:4,color:embedCopied?K.gn:K.mt,fontSize:12,cursor:"pointer",fontFamily:font,letterSpacing:"1px",whiteSpace:"nowrap"}}>{embedCopied?"✓ Copied!":"<> Embed"}</button>}
   </div>);
 };
 export const Nt = ({children,c}) => (<div style={S.note(c)}>{children}</div>);
@@ -127,7 +127,7 @@ export const ErrorState = ({ title = "Something went wrong", body, onRetry, comp
         onClick={onRetry}
         style={{
           alignSelf: "flex-start", marginTop: 4,
-          padding: "6px 12px", fontSize: 11, fontWeight: 600,
+          padding: "6px 12px", fontSize: 12, fontWeight: 600,
           background: "transparent", border: `1px solid ${K.rd}60`,
           borderRadius: 6, color: K.rd, cursor: "pointer", fontFamily: font,
         }}
@@ -141,7 +141,7 @@ export const ErrorState = ({ title = "Something went wrong", body, onRetry, comp
 // ═══ BOOK CTA ═══
 export const BookCTA = () => (
   <div style={{marginTop:14,padding:12,background:`${K.gn}06`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-    <div style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Don't have these books yet? Open accounts to use this promo:</div>
+    <div style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:8}}>Don't have these books yet? Open accounts to use this promo:</div>
     <div style={{display:"flex",gap:6,flexWrap:"wrap"}}></div>
   </div>
 );
@@ -154,22 +154,22 @@ export const FeatureUnavailableCard = ({ featureKey, title, body }) => {
   }, [feature.key]);
   return (
     <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`}}>
-      <Tl t={title || feature.label} badge="BETA / SETUP PENDING" bc={K.yl}/>
-      <div style={{fontSize:12,color:K.dm,lineHeight:1.7,marginBottom:10}}>
-        {body || feature.shortReason}
+      <Tl t={title || feature.label} badge="COMING SOON" bc={K.yl}/>
+      <div style={{fontSize:14,color:K.dm,lineHeight:1.7,marginBottom:10}}>
+        {body || `${feature.label} is not currently available. You can use the free calculators while this tool is being prepared.`}
       </div>
-      <div style={{fontSize:11,color:K.mt,lineHeight:1.6}}>
-        {feature.setup}
+      <div style={{fontSize:12,color:K.mt,lineHeight:1.6}}>
+        A free account or trial does not unlock features marked coming soon.
       </div>
       <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap",alignItems:"center"}}>
         <a
           href={getProjectAuthHref("signup")}
           onClick={() => trackFeatureGateClick(feature.key, "free-membership")}
-          style={{padding:"7px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,textDecoration:"none",fontFamily:font}}
+          style={{padding:"7px 12px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:12,fontWeight:700,textDecoration:"none",fontFamily:font}}
         >
           Free account
         </a>
-        <span style={{fontSize:10,color:K.mt}}>Setup progress appears in the dashboard launch panel.</span>
+        <a href="/bonus-bet" style={{color:K.ac,fontSize:14}}>Use a free calculator →</a>
       </div>
     </div>
   );
@@ -213,5 +213,5 @@ export function dismissTrigger(triggerKey, setter) {
 export const Help = ({entries}) => {
   const compact = React.useContext(CompactCtx);
   if(compact) return null;
-  return (<div style={{...S.card,background:K.s2,borderColor:K.bd,marginTop:12}}><div style={{fontSize:12,fontWeight:600,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>How This Works</div><div style={S.help}>{entries.map((e,i)=><div key={i} style={{marginBottom:10}}><span style={S.helpTerm}>{e[0]}:</span> {e[1]}</div>)}</div></div>);
+  return (<div style={{...S.card,background:K.s2,borderColor:K.bd,marginTop:12}}><div style={{fontSize:14,fontWeight:600,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>How This Works</div><div style={S.help}>{entries.map((e,i)=><div key={i} style={{marginBottom:10}}><span style={S.helpTerm}>{e[0]}:</span> {e[1]}</div>)}</div></div>);
 };

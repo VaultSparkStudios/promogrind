@@ -70,7 +70,12 @@ function changedUpstreamScripts() {
   return String(result.stdout || '')
     .split(/\r?\n/)
     .map((line) => line.slice(3).trim().replace(/\\/g, '/'))
-    .filter((file) => file.startsWith('scripts/') && fs.existsSync(path.join(OPS, file)));
+    .filter((file) => {
+      if (!file.startsWith('scripts/')) return false;
+      // Git reports an untracked directory as one row. It is not a module.
+      // Keep deleted local modules: the loop below must report exists=false.
+      try { return fs.statSync(path.join(OPS, file)).isFile(); } catch { return false; }
+    });
 }
 
 const SOURCE_DERIVED_CHANGED_FILES = changedUpstreamScripts();

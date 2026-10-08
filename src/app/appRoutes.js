@@ -43,11 +43,11 @@ export function buildAppTabs(c) {
       { n: "Promo Return Model", slug: "promo-guarantee", c: c.PromoGuarantee, subcat: "Promo" },
       { n: "Gut Check", slug: "gut-check", c: c.GutCheck, subcat: "Promo" },
       { n: "Promo Stacking", slug: "promo-stacking", c: c.PromoStacking, subcat: "Promo" },
-      { n: "Taxes Estimator", slug: "taxes-estimator", c: c.TaxesEstimatorWrapper, subcat: "Advanced", icon: "tax" },
+      { n: "Tax Worksheet", slug: "taxes-estimator", c: c.TaxesEstimatorWrapper, subcat: "Advanced", icon: "tax" },
     ] },
     { group: "Track", items: [
       { n: "Edge", slug: "edge-dashboard", c: c.TrackInsights },
-      { n: "Command Deck", slug: "command-deck", c: c.CommandDeck },
+      { n: "Workspace Review", slug: "command-deck", c: c.CommandDeck },
       { n: "Sportsbooks", slug: "sportsbooks", c: c.Tracker },
       { n: "Bet Tracker", slug: "bet-tracker", c: c.BetTracker },
       { n: "P/L Ledger", slug: "ledger", c: c.Ledger },

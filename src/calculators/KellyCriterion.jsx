@@ -29,9 +29,9 @@ export default function KellyCriterion() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.bet}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>recommended bet size</span>
-              <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
-              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>recommended bet size</span>
+              <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Full Kelly %" v={`${r.k}%`} c={K.dm} /><RR l={`${frac}% Fractional Kelly`} v={`${r.ak}%`} c={K.ac} b /><RR l="Bet Size" v={`$${r.bet}`} c={r.ok ? K.gn : K.rd} b /><RR l="Expected Value" v={`${r.ok ? "+" : ""}${r.ev}%`} c={r.ok ? K.gn : K.rd} />
             {showReceipt && r.ok && (
@@ -62,14 +62,14 @@ export default function KellyCriterion() {
               const fracBet = f(parseFloat(br) * parseFloat(r.k) / 100 * fracNum / 100);
               return (
                 <div style={{ marginTop: 12, padding: "12px 14px", background: K.s2, borderRadius: 6, border: `1px solid ${K.bd}` }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: K.ac, marginBottom: 8, textTransform: "uppercase", letterSpacing: "1px" }}>Fraction Risk Optimizer</div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: K.mt, marginBottom: 4 }}><span>5%</span><span>100%</span></div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: K.ac, marginBottom: 8, textTransform: "uppercase", letterSpacing: "1px" }}>Fraction Risk Optimizer</div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: K.mt, marginBottom: 4 }}><span>5%</span><span>100%</span></div>
                   <div style={{ position: "relative", height: 8, background: `linear-gradient(to right,${K.gn},${K.yl},${K.rd})`, borderRadius: 4, marginBottom: 8 }}>
                     <div style={{ position: "absolute", left: `calc(${markerPct}% - 4px)`, top: -2, width: 12, height: 12, borderRadius: "50%", background: "white", border: `2px solid ${riskColor}` }} />
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: K.mt, marginBottom: 8 }}><span style={{ color: K.gn }}>Low Ruin Risk</span><span style={{ color: K.rd }}>High Ruin Risk</span></div>
-                  <div style={{ fontSize: 11, color: riskColor, fontWeight: 600, marginBottom: 4 }}>{frac}% Kelly: {riskLabel}</div>
-                  <div style={{ fontSize: 11, color: K.dm }}>Bet at this fraction: ${fracBet}</div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: K.mt, marginBottom: 8 }}><span style={{ color: K.gn }}>Low Ruin Risk</span><span style={{ color: K.rd }}>High Ruin Risk</span></div>
+                  <div style={{ fontSize: 12, color: riskColor, fontWeight: 600, marginBottom: 4 }}>{frac}% Kelly: {riskLabel}</div>
+                  <div style={{ fontSize: 12, color: K.dm }}>Bet at this fraction: ${fracBet}</div>
                 </div>
               );
             })()}

@@ -3,109 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PromoGrind Verified — Partner Badge Program</title>
-<meta name="description" content="Display the PromoGrind Verified badge on your sportsbook or affiliate site. Show promo hunters you offer the offers they're looking for.">
+<title>Partner inquiries | PromoGrind</title>
+
 <link rel="canonical" href="https://promogrind.bet/promogrind-verified/">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0e17;color:#e2e8f0;font-family:'SF Pro Display','Space Grotesk',system-ui,sans-serif;line-height:1.6}
+body{background:var(--pg-page-bg);color:var(--pg-page-text);font-family:'SF Pro Display','Space Grotesk',system-ui,sans-serif;line-height:1.6}
 .wrap{max-width:860px;margin:0 auto;padding:48px 24px}
-.logo{font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:#4ade80;font-weight:700;letter-spacing:-0.5px;margin-bottom:48px}
-h1{font-size:36px;font-weight:800;line-height:1.15;margin-bottom:16px;background:linear-gradient(135deg,#4ade80,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sub{font-size:16px;color:#94a3b8;margin-bottom:48px;max-width:580px}
+.logo{font-family:'SF Mono','Fira Code',monospace;font-size:14px;color:var(--pg-page-accent);font-weight:700;letter-spacing:-0.5px;margin-bottom:48px}
+h1{font-size:36px;font-weight:800;line-height:1.15;margin-bottom:16px;background:linear-gradient(135deg,var(--pg-page-accent),var(--pg-page-blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{font-size:16px;color:var(--pg-page-muted);margin-bottom:48px;max-width:580px}
 .badge-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:48px}
-.badge-box{padding:24px;background:#0f1520;border:1px solid #1e293b;border-radius:12px;text-align:center}
-.badge-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-top:12px}
+.badge-box{padding:24px;background:var(--pg-page-panel);border:1px solid var(--pg-page-border);border-radius:12px;text-align:center}
+.badge-label{font-size:14px;color:var(--pg-page-muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:12px}
 .section{margin-bottom:40px}
-h2{font-size:22px;font-weight:700;color:#e2e8f0;margin-bottom:12px}
+h2{font-size:22px;font-weight:700;color:var(--pg-page-text);margin-bottom:12px}
 .steps{display:flex;flex-direction:column;gap:10px}
-.step{display:flex;gap:14px;padding:16px;background:#0f1520;border:1px solid #1e293b;border-radius:8px;align-items:flex-start}
-.step-n{font-size:20px;font-weight:800;color:#4ade80;min-width:24px;font-family:'SF Mono',monospace;line-height:1.4}
-.step-t{font-size:14px;color:#94a3b8}
-.step-t strong{color:#e2e8f0}
-.step-t a{color:#60a5fa}
+.step{display:flex;gap:14px;padding:16px;background:var(--pg-page-panel);border:1px solid var(--pg-page-border);border-radius:8px;align-items:flex-start}
+.step-n{font-size:20px;font-weight:800;color:var(--pg-page-accent);min-width:24px;font-family:'SF Mono',monospace;line-height:1.4}
+.step-t{font-size:14px;color:var(--pg-page-muted)}
+.step-t strong{color:var(--pg-page-text)}
+.step-t a{color:var(--pg-page-blue)}
 .benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:12px}
-.benefit{padding:14px;background:#0f1520;border:1px solid #1e293b;border-radius:8px}
+.benefit{padding:14px;background:var(--pg-page-panel);border:1px solid var(--pg-page-border);border-radius:8px}
 .benefit-icon{font-size:20px;margin-bottom:6px}
-.benefit-title{font-size:13px;font-weight:700;color:#e2e8f0;margin-bottom:4px}
-.benefit-desc{font-size:11px;color:#64748b}
-.code-block{background:#0a0e17;border:1px solid #1e293b;border-radius:8px;padding:16px;font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:#94a3b8;overflow-x:auto;margin-top:8px;white-space:pre;line-height:1.8}
-.copy-btn{margin-top:8px;padding:6px 14px;background:#1e293b;border:1px solid #334155;border-radius:4px;color:#94a3b8;font-size:11px;cursor:pointer;font-family:inherit;transition:color 0.15s}
-.copy-btn:hover{color:#e2e8f0}
-.cta{padding:24px;background:linear-gradient(135deg,#1e3a2f,#0a0e17);border:1px solid #4ade8030;border-radius:12px;text-align:center;margin-top:40px}
-.cta h3{font-size:18px;font-weight:700;color:#4ade80;margin-bottom:8px}
-.cta p{font-size:13px;color:#94a3b8;margin-bottom:16px}
-.cta a{display:inline-block;padding:12px 28px;background:#4ade80;color:#0a0e17;font-weight:700;border-radius:6px;text-decoration:none;font-size:14px}
-footer{margin-top:64px;padding-top:24px;border-top:1px solid #1e293b;font-size:11px;color:#334155}
-footer a{color:#334155}
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+.benefit-title{font-size:14px;font-weight:700;color:var(--pg-page-text);margin-bottom:4px}
+.benefit-desc{font-size:14px;color:var(--pg-page-muted)}
+.code-block{background:var(--pg-page-bg);border:1px solid var(--pg-page-border);border-radius:8px;padding:16px;font-family:'SF Mono','Fira Code',monospace;font-size:14px;color:var(--pg-page-muted);overflow-x:auto;margin-top:8px;white-space:pre;line-height:1.8}
+.copy-btn{margin-top:8px;padding:6px 14px;background:var(--pg-page-border);border:1px solid var(--pg-page-border);border-radius:4px;color:var(--pg-page-muted);font-size:14px;cursor:pointer;font-family:inherit;transition:color 0.15s}
+.copy-btn:hover{color:var(--pg-page-text)}
+.cta{padding:24px;background:linear-gradient(135deg,var(--pg-page-panel),var(--pg-page-bg));border:1px solid color-mix(in srgb, var(--pg-page-accent) 19%, transparent);border-radius:12px;text-align:center;margin-top:40px}
+.cta h3{font-size:18px;font-weight:700;color:var(--pg-page-accent);margin-bottom:8px}
+.cta p{font-size:14px;color:var(--pg-page-muted);margin-bottom:16px}
+.cta a{display:inline-block;padding:12px 28px;background:var(--pg-page-accent);color:var(--pg-page-bg);font-weight:700;border-radius:6px;text-decoration:none;font-size:14px}
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--pg-page-border);font-size:14px;color:var(--pg-page-muted)}
+footer a{color:var(--pg-page-muted)}
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
-<body>
-<div class="wrap">
-  <div class="logo">⚡ PromoGrind</div>
-  <h1>PromoGrind Verified Partner Badge</h1>
-    <div class="trust"><strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across devices. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</div>
-  <p class="sub">Show promo hunters that your sportsbook's offers are tracked and verified by PromoGrind — the free calculator tool used by thousands of matched bettors.</p>
-
-  <div class="badge-row">
-    <div class="badge-box">
-      <img src="/promogrind-verified/badge.svg" alt="PromoGrind Verified Partner" width="160" height="44">
-      <div class="badge-label">Standard (160×44)</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>Why get verified?</h2>
-    <div class="benefits">
-      <div class="benefit"><div class="benefit-icon">🎯</div><div class="benefit-title">Reach active promo hunters</div><div class="benefit-desc">PromoGrind users actively look for books to sign up at. The badge puts you in front of them at decision time.</div></div>
-      <div class="benefit"><div class="benefit-icon">🔗</div><div class="benefit-title">Free backlink</div><div class="benefit-desc">We link to your promo page from the PromoGrind Sportsbooks directory and relevant calculator pages.</div></div>
-      <div class="benefit"><div class="benefit-icon">✅</div><div class="benefit-title">Trust signal</div><div class="benefit-desc">Users know verified books have promos worth converting — increases sign-up intent and affiliate conversion.</div></div>
-      <div class="benefit"><div class="benefit-icon">📈</div><div class="benefit-title">Growing domain authority</div><div class="benefit-desc">A link from promogrind.com to your promo page adds SEO value as the site grows.</div></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>How to get verified</h2>
-    <div class="steps">
-      <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Email us</strong> at <a href="mailto:partners@promogrind.com">partners@promogrind.com</a> with your sportsbook name and promo page URL.</div></div>
-      <div class="step"><div class="step-n">2</div><div class="step-t"><strong>We review your promos</strong> and confirm they meet minimum value thresholds tracked in the PromoGrind promo calendar (typically $50+ welcome value).</div></div>
-      <div class="step"><div class="step-n">3</div><div class="step-t"><strong>You receive the badge code</strong> and a featured listing in our Sportsbooks directory with your affiliate tracking link included.</div></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>Badge embed code</h2>
-    <p style="font-size:13px;color:#64748b;margin-bottom:8px">After approval, copy this to your promo page:</p>
-    <div class="code-block" id="badge-code">&lt;a href="https://promogrind.bet/?ref=YOURCODE" target="_blank" rel="noopener"&gt;
-  &lt;img src="https://promogrind.bet/promogrind-verified/badge.svg"
-       alt="PromoGrind Verified Partner"
-       width="160" height="44"&gt;
-&lt;/a&gt;</div>
-    <button class="copy-btn" onclick="copyCode()">Copy embed code</button>
-  </div>
-
-  <div class="cta">
-    <h3>Ready to get verified?</h3>
-    <p>Takes less than 24 hours. Currently accepting US and UK licensed sportsbooks.</p>
-    <a href="mailto:partners@promogrind.com?subject=PromoGrind Verified Partner Application">Apply for Verification →</a>
-  </div>
-
-  <footer><span>© 2026 VaultSpark Studios · PromoGrind</span> · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p>
-</footer>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
-  </div>
-<script>
-function copyCode() {
-  var code = document.getElementById('badge-code').textContent;
-  navigator.clipboard.writeText(code).then(function() {
-    var btn = document.querySelector('.copy-btn');
-    btn.textContent = '✓ Copied!';
-    setTimeout(function() { btn.textContent = 'Copy embed code'; }, 2000);
-  });
-}
-</script>
-</body>
+<body><nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav><main style="max-width:860px;margin:auto;padding:32px 24px"><h1>Partner verification is not currently available</h1><p>PromoGrind does not currently certify sportsbook offers or issue verified partner badges through this page. A sample badge is not evidence of approval, licensing, offer value or financial performance.</p><h2>Partner inquiries</h2><p>Email <a href="mailto:support@vaultsparkstudios.com?subject=PromoGrind%20partner%20inquiry">support@vaultsparkstudios.com</a> with your organization and the page you want to discuss. Sending an inquiry does not award verification or guarantee a response deadline.</p><p>Before evaluating an offer, check the operator's current terms and the relevant licensing authority.</p><p><a href="/dashboard">Explore the calculators →</a></p><p>Educational math only. Eligible adults only where permitted. Gamble responsibly: 1-800-GAMBLER.</p></main><footer data-vaultspark-studio-footer-container style="max-width:860px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid var(--pg-page-border)"><p data-vaultspark-studio-footer="2026">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p><p><a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/responsible-gambling/">Responsible gambling</a></p></footer></body>
 </html>

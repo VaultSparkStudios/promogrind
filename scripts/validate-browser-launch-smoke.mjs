@@ -129,10 +129,10 @@ try {
   const previewUrl = started.previewUrl;
   await waitForServer(`${previewUrl}/`);
   await assertPath(previewUrl, "/", [["id=\"root\"", "app root"]]);
-  await assertPath(previewUrl, "/landing/", [["PromoGrind account", "landing access copy"], ["beta rollout", "landing beta rollout copy"]]);
+  await assertPath(previewUrl, "/landing/", [["PromoGrind account", "landing access copy"], ["Features marked coming soon are unavailable", "landing planned-feature availability"]]);
   await assertPath(previewUrl, "/bonus-bet/", [["Free PromoGrind account", "trust strip"], ["1-800-GAMBLER", "responsible gambling notice"]]);
   await assertPath(previewUrl, "/arb-calculator/", [["Free PromoGrind account", "trust strip"]]);
-  await assertPath(previewUrl, "/promogrind-vs-profitduel/", [["beta-gated", "comparison beta language"], ["Start with free PromoGrind account", "updated CTA"]]);
+  await assertPath(previewUrl, "/promogrind-vs-profitduel/", [["Paid checkout is not available", "comparison checkout availability"], ["Open free calculators", "available calculator CTA"]]);
   await assertBuiltBundleMarkers([
     ["PromoGrind is a free sportsbook promo calculator for adults.", "age gate copy"],
     ["Create your PromoGrind account", "project-local auth dialog"],

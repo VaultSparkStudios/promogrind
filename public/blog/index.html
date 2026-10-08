@@ -14,30 +14,30 @@
   <meta property="og:type" content="website">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; }
-    .header { background: #0f1520; border-bottom: 1px solid #1e293b; padding: 1.25rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.7; }
+    .header { background: var(--pg-page-panel); border-bottom: 1px solid var(--pg-page-border); padding: 1.25rem 1rem; }
     .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-    .logo { font-size: 1.3rem; font-weight: 700; color: #4ade80; text-decoration: none; }
-    .nav-link { color: #94a3b8; text-decoration: none; font-size: 0.9rem; }
-    .nav-link:hover { color: #e2e8f0; }
+    .logo { font-size: 1.3rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; }
+    .nav-link { color: var(--pg-page-muted); text-decoration: none; font-size: 0.9rem; }
+    .nav-link:hover { color: var(--pg-page-text); }
     .container { max-width: 900px; margin: 0 auto; padding: 3rem 1rem; }
     h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .subtitle { color: #64748b; font-size: 1.05rem; margin-bottom: 3rem; }
+    .subtitle { color: var(--pg-page-muted); font-size: 1.05rem; margin-bottom: 3rem; }
     .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-    .post-card { background: #0f1520; border: 1px solid #1e293b; border-radius: 10px; overflow: hidden; text-decoration: none; transition: border-color 0.15s, transform 0.15s; display: block; }
-    .post-card:hover { border-color: #334155; transform: translateY(-2px); }
+    .post-card { background: var(--pg-page-panel); border: 1px solid var(--pg-page-border); border-radius: 10px; overflow: hidden; text-decoration: none; transition: border-color 0.15s, transform 0.15s; display: block; }
+    .post-card:hover { border-color: var(--pg-page-border); transform: translateY(-2px); }
     .post-card-body { padding: 1.25rem; }
-    .post-tag { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
-    .post-title { font-size: 1.1rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.5rem; line-height: 1.4; }
-    .post-excerpt { font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1rem; }
-    .post-meta { font-size: 0.8rem; color: #475569; display: flex; gap: 1rem; }
-    .cta-bar { background: #0f1520; border: 1px solid #4ade8025; border-radius: 10px; padding: 1.5rem; margin-top: 3rem; text-align: center; }
+    .post-tag { font-size: .875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+    .post-title { font-size: 1.1rem; font-weight: 700; color: var(--pg-page-text); margin-bottom: 0.5rem; line-height: 1.4; }
+    .post-excerpt { font-size: 0.9rem; color: var(--pg-page-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .post-meta { font-size: .875rem; color: var(--pg-page-muted); display: flex; gap: 1rem; }
+    .cta-bar { background: var(--pg-page-panel); border: 1px solid color-mix(in srgb, var(--pg-page-accent) 15%, transparent); border-radius: 10px; padding: 1.5rem; margin-top: 3rem; text-align: center; }
     .cta-bar h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .cta-bar p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1rem; }
-    .cta-btn { display: inline-block; padding: 0.7rem 1.5rem; background: #4ade80; color: #0a0e17; font-weight: 700; border-radius: 6px; text-decoration: none; font-size: 0.95rem; }
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .cta-bar p { color: var(--pg-page-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .cta-btn { display: inline-block; padding: 0.7rem 1.5rem; background: var(--pg-page-accent); color: var(--pg-page-bg); font-weight: 700; border-radius: 6px; text-decoration: none; font-size: 0.95rem; }
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
   <script type="application/ld+json">
   {
@@ -53,15 +53,18 @@
     }
   }
   </script>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <header class="header">
     <div class="header-inner">
       <a href="https://promogrind.bet/" class="logo">⚡ PromoGrind</a>
       <nav style="display:flex;gap:1.5rem;align-items:center;">
-        <a href="https://promogrind.bet/#/bonus-bet" class="nav-link">Calculators</a>
-        <a href="https://promogrind.bet/#/knowledge-base" class="nav-link">Knowledge Base</a>
-        <a href="https://promogrind.bet/blog/" class="nav-link" style="color:#4ade80;">Blog</a>
+        <a href="https://promogrind.bet/bonus-bet" class="nav-link">Calculators</a>
+        <a href="https://promogrind.bet/knowledge-base" class="nav-link">Knowledge Base</a>
+        <a href="https://promogrind.bet/blog/" class="nav-link" style="color:var(--pg-page-accent);">Blog</a>
       </nav>
     </div>
   </header>
@@ -75,7 +78,7 @@
 
       <a href="https://promogrind.bet/blog/how-matched-betting-works/" class="post-card">
         <div class="post-card-body">
-          <div class="post-tag" style="color:#4ade80;">Guide</div>
+          <div class="post-tag" style="color:var(--pg-page-accent);">Guide</div>
           <div class="post-title">How Matched Betting Works — The Complete 2026 Guide</div>
           <div class="post-excerpt">A step-by-step breakdown of how matched betting converts sportsbook free bet offers into modeled cash value using hedge bets.</div>
           <div class="post-meta">
@@ -87,21 +90,21 @@
 
       <a href="https://promogrind.bet/blog/best-sportsbook-promos-2026/" class="post-card">
         <div class="post-card-body">
-          <div class="post-tag" style="color:#60a5fa;">Promos</div>
-          <div class="post-title">Best Sportsbook Promo Offers — March 2026 Rankings</div>
-          <div class="post-excerpt">Ranked by modeled return potential: which sign-up offers and recurring promos deliver the most value this month.</div>
+          <div class="post-tag" style="color:var(--pg-page-blue);">Promos</div>
+          <div class="post-title">How to Compare Sportsbook Promo Offers</div>
+          <div class="post-excerpt">Check eligibility, qualifying costs, expiry and settlement rules before comparing an offer's modeled value.</div>
           <div class="post-meta">
             <span>6 min read</span>
-            <span>Updated March 2026</span>
+            <span>Reviewed October 2026</span>
           </div>
         </div>
       </a>
 
       <a href="https://promogrind.bet/blog/draftkings-vs-fanduel-promos/" class="post-card">
         <div class="post-card-body">
-          <div class="post-tag" style="color:#c084fc;">Comparison</div>
+          <div class="post-tag" style="color:var(--pg-page-purple);">Comparison</div>
           <div class="post-title">DraftKings vs FanDuel — Which Has Better Promos in 2026?</div>
-          <div class="post-excerpt">A data-driven comparison of ongoing profit boost frequency, values, and conversion rates at the two biggest US sportsbooks.</div>
+          <div class="post-excerpt">A checklist for comparing offer terms, eligibility and modeled results at DraftKings and FanDuel.</div>
           <div class="post-meta">
             <span>7 min read</span>
             <span>US Market</span>
@@ -111,7 +114,7 @@
 
       <a href="https://promogrind.bet/blog/sports-betting-taxes-guide/" class="post-card">
         <div class="post-card-body">
-          <div class="post-tag" style="color:#fbbf24;">Tax Guide</div>
+          <div class="post-tag" style="color:var(--pg-page-warning);">Tax Guide</div>
           <div class="post-title">Sports Betting Taxes in 2026 — What Promo Grinders Need to Know</div>
           <div class="post-excerpt">How the IRS taxes gambling winnings, what counts as a deductible loss, and how to record your promo grinding income correctly.</div>
           <div class="post-meta">
@@ -123,7 +126,7 @@
 
       <a href="https://promogrind.bet/blog/arbitrage-betting-explained/" class="post-card">
         <div class="post-card-body">
-          <div class="post-tag" style="color:#f87171;">Strategy</div>
+          <div class="post-tag" style="color:var(--pg-page-danger);">Strategy</div>
           <div class="post-title">Sports Betting Arbitrage Explained — How to Model Hedged Returns</div>
           <div class="post-excerpt">What arbitrage betting is, how to find arb opportunities between sportsbooks, and the risks to manage for a sustainable edge.</div>
           <div class="post-meta">
@@ -136,13 +139,13 @@
     </div>
 
     <div class="cta-bar">
-      <h2 style="color:#4ade80;">Free Calculator Suite</h2>
-      <p>27 calculators for every promo type — bonus bets, profit boosts, arbitrage, Kelly criterion, and more. No subscription required.</p>
-      <a href="https://promogrind.bet/#/bonus-bet" class="cta-btn">Start Calculating →</a>
+      <h2 style="color:var(--pg-page-accent);">Free Calculator Suite</h2>
+      <p>29 calculators for every promo type — bonus bets, profit boosts, arbitrage, Kelly criterion, and more. No subscription required.</p>
+      <a href="https://promogrind.bet/bonus-bet" class="cta-btn">Start Calculating →</a>
     </div>
-      <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+      <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

@@ -39,11 +39,11 @@ export default function Glossary() {
       </div>
       {filtered.map(([term, def]) => (
         <div key={term} style={{ padding: "10px 0", borderBottom: `1px solid ${K.bd}` }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: K.ac, marginBottom: 3 }}>{term}</div>
-          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>{def}</div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: K.ac, marginBottom: 3 }}>{term}</div>
+          <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.6 }}>{def}</div>
         </div>
       ))}
-      {!filtered.length && <div style={{ textAlign: "center", padding: 24, color: K.mt, fontSize: 12 }}>No terms found.</div>}
+      {!filtered.length && <div style={{ textAlign: "center", padding: 24, color: K.mt, fontSize: 14 }}>No terms found.</div>}
     </div>
   );
 }

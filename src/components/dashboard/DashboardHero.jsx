@@ -33,10 +33,10 @@ function MasteryBar({ label, level, reviewPct, accuracy }) {
   return (
     <div style={{ flex: 1, minWidth: 72 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-        <span style={{ fontSize: 9, color: K.mt }}>{label}</span>
+        <span style={{ fontSize: 12, color: K.mt }}>{label}</span>
         <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-          {accuracy != null && <span style={{ fontSize: 8, color: K.mt, background: `${K.mt}15`, padding: '0 4px', borderRadius: 3 }}>{accuracy}% acc</span>}
-          <span style={{ fontSize: 9, fontWeight: 700, color }}>{level}</span>
+          {accuracy != null && <span style={{ fontSize: 12, color: K.mt, background: `${K.mt}15`, padding: '0 4px', borderRadius: 3 }}>{accuracy}% acc</span>}
+          <span style={{ fontSize: 12, fontWeight: 700, color }}>{level}</span>
         </div>
       </div>
       <div style={{ height: 3, background: K.s3, borderRadius: 2, overflow: 'hidden' }}>
@@ -73,13 +73,13 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
         <div style={{ flex: 1, minWidth: 200 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-            {reviewDepthBand && (
-              <span style={{ fontSize: 10, fontWeight: 700, color: reviewDepthBand.color, background: `${reviewDepthBand.color}18`, border: `1px solid ${reviewDepthBand.color}35`, padding: '2px 10px', borderRadius: 99, fontFamily: font, animation: 'pgFadeIn 0.4s ease' }}>
+            {activeLanes.length > 0 && reviewDepthBand && (
+              <span style={{ fontSize: 12, fontWeight: 700, color: reviewDepthBand.color, background: `${reviewDepthBand.color}18`, border: `1px solid ${reviewDepthBand.color}35`, padding: '2px 10px', borderRadius: 99, fontFamily: font, animation: 'pgFadeIn 0.4s ease' }}>
                 {reviewDepthBand.name}
               </span>
             )}
             {label && (
-              <div style={{ padding: '2px 8px', background: streak >= 3 ? `${K.yl}20` : `${K.mt}15`, border: `1px solid ${streak >= 3 ? K.yl : K.mt}40`, borderRadius: 99, fontSize: 10, fontWeight: 700, color: streak >= 3 ? K.yl : K.mt, whiteSpace: 'nowrap' }}>
+              <div style={{ padding: '2px 8px', background: streak >= 3 ? `${K.yl}20` : `${K.mt}15`, border: `1px solid ${streak >= 3 ? K.yl : K.mt}40`, borderRadius: 99, fontSize: 12, fontWeight: 700, color: streak >= 3 ? K.yl : K.mt, whiteSpace: 'nowrap' }}>
                 {emoji ? `${emoji} ` : ''}{label}
               </div>
             )}
@@ -87,7 +87,7 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
           <div style={{ fontFamily: fontD, fontSize: 26, fontWeight: 800, color: totalProfit >= 0 ? K.gn : K.rd, marginBottom: 4 }}>
             {totalProfit >= 0 ? '+' : '-'}${f(Math.abs(animatedProfit))}
           </div>
-          <div style={{ fontSize: 11, color: K.mt }}>Recorded realized P/L · {booksComplete}/{BOOKS.length} book profiles complete</div>
+          <div style={{ fontSize: 14, color: K.mt }}>Recorded profit or loss · {booksComplete}/{BOOKS.length} sportsbook profiles complete</div>
           <div style={{ height: 4, background: K.s3, borderRadius: 2, marginTop: 8, width: 220 }}>
             <div style={{ height: 4, borderRadius: 2, background: K.gn, width: `${percent}%`, transition: 'width 0.6s cubic-bezier(0.22,1,0.36,1)' }} />
           </div>
@@ -96,55 +96,55 @@ export default function DashboardHero({ totalProfit, openBetsCount, booksComplet
           {openBetsCount > 0 && (
             <div style={{ padding: '10px 16px', background: `${K.yl}10`, border: `1px solid ${K.yl}30`, borderRadius: 8, textAlign: 'center' }}>
               <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.yl }}>{openBetsCount}</div>
-              <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Open Bets</div>
+              <div style={{ fontSize: 12, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Open Bets</div>
             </div>
           )}
           {streak > 0 && (
             <div style={{ padding: '10px 16px', background: streak >= 3 ? `${K.yl}10` : `${K.mt}10`, border: `1px solid ${streak >= 3 ? K.yl : K.mt}30`, borderRadius: 8, textAlign: 'center' }}>
               <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: streak >= 3 ? K.yl : K.mt }}>{streak}</div>
-              <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Review Cadence</div>
+              <div style={{ fontSize: 12, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Review Cadence</div>
             </div>
           )}
-          <div style={{ padding: '10px 16px', background: `${disciplineColor}10`, border: `1px solid ${disciplineColor}30`, borderRadius: 8, textAlign: 'center', maxWidth: 132 }}>
+          {activeLanes.length > 0 && <div style={{ padding: '10px 16px', background: `${disciplineColor}10`, border: `1px solid ${disciplineColor}30`, borderRadius: 8, textAlign: 'center', maxWidth: 132 }}>
             <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: disciplineColor }}>{discipline.score}</div>
-            <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Discipline</div>
-          </div>
-          <button onClick={() => navigate('/ledger')} style={{ padding: '10px 16px', background: `${K.ac}15`, border: `1px solid ${K.ac}30`, borderRadius: 8, color: K.ac, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: font, whiteSpace: 'nowrap' }}>
+            <div style={{ fontSize: 12, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px' }}>Discipline</div>
+          </div>}
+          <button onClick={() => navigate('/ledger')} style={{ padding: '10px 16px', background: `${K.ac}15`, border: `1px solid ${K.ac}30`, borderRadius: 8, color: K.ac, fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: font, whiteSpace: 'nowrap' }}>
             Log Result →
           </button>
         </div>
       </div>
 
-      <div style={{ marginTop: 10, padding: '8px 12px', background: `${disciplineColor}0d`, border: `1px solid ${disciplineColor}25`, borderRadius: 7, display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+      {activeLanes.length > 0 && <div style={{ marginTop: 10, padding: '8px 12px', background: `${disciplineColor}0d`, border: `1px solid ${disciplineColor}25`, borderRadius: 7, display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
         <div>
-          <div style={{ fontSize: 10, color: K.mt, marginBottom: 1 }}>Discipline Score · {discipline.band}</div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: disciplineColor }}>{discipline.next}</div>
+          <div style={{ fontSize: 12, color: K.mt, marginBottom: 1 }}>Discipline Score · {discipline.band}</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: disciplineColor }}>{discipline.next}</div>
         </div>
-        <div style={{ fontSize: 10, color: K.mt }}>
+        <div style={{ fontSize: 12, color: K.mt }}>
           Feedback {discipline.feedbackCoverage}% · {discipline.exposurePct == null ? 'No bankroll anchor' : `${discipline.exposurePct}% exposed`}
         </div>
-      </div>
+      </div>}
 
       {activeLanes.length > 0 && (
         <div style={{ marginTop: 14, borderTop: `1px solid ${K.bd}`, paddingTop: 10 }}>
-          <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 8, fontFamily: font }}>Lane Review Depth</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 8, fontFamily: font }}>Lane Review Depth</div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             {activeLanes.map(([key, d]) => <MasteryBar key={key} label={d.label} level={d.level} reviewPct={d.reviewPct} accuracy={d.accuracy} />)}
           </div>
         </div>
       )}
-      {weakLane && (
+      {activeLanes.length > 0 && weakLane && (
         <button type="button"
-          onClick={() => navigate && navigate('/dashboard')}
+          onClick={() => navigate && navigate('/ledger')}
           style={{ width: '100%', textAlign: 'left', marginTop: 10, padding: '8px 12px', background: `${MASTERY_COLOR[weakLane[1].level] || K.mt}0d`, border: `1px solid ${MASTERY_COLOR[weakLane[1].level] || K.mt}25`, borderRadius: 7, cursor: navigate ? 'pointer' : 'default', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: font }}
         >
           <div>
-            <div style={{ fontSize: 10, color: K.mt, marginBottom: 1 }}>Review Lane · Add evidence →</div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: MASTERY_COLOR[weakLane[1].level] || K.mt }}>
+            <div style={{ fontSize: 12, color: K.mt, marginBottom: 1 }}>Review Lane · Add evidence →</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: MASTERY_COLOR[weakLane[1].level] || K.mt }}>
               {weakLane[1].label} · {weakLane[1].level} · {weakLane[1].nextReviews != null ? `${weakLane[1].nextReviews - weakLane[1].reviews} reviewed decision${weakLane[1].nextReviews - weakLane[1].reviews === 1 ? '' : 's'} to next evidence band` : 'Highest evidence band'}
             </div>
           </div>
-          <span style={{ fontSize: 9, color: K.mt }}>▸</span>
+          <span style={{ fontSize: 12, color: K.mt }}>▸</span>
         </button>
       )}
     </div>

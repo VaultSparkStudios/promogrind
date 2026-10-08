@@ -15,9 +15,9 @@ import { resolveWorkflowPrediction } from "../lib/aiCalibration.js";
 function metricCard(label, value, sub, color = K.tx) {
   return (
     <div style={{ padding: 14, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
-      <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6 }}>{label}</div>
+      <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6 }}>{label}</div>
       <div style={{ fontFamily: fontD, fontSize: 25, fontWeight: 800, color, marginBottom: 4 }}>{value}</div>
-      <div style={{ fontSize: 11, color: K.mt }}>{sub}</div>
+      <div style={{ fontSize: 12, color: K.mt }}>{sub}</div>
     </div>
   );
 }
@@ -28,7 +28,7 @@ function driftBar(row) {
   const positive = (row.averageDrift || 0) >= 0;
   return (
     <div key={row.key} style={{ display: "grid", gap: 4 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 10, fontSize: 10 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 10, fontSize: 12 }}>
         <span style={{ color: K.dm }}>{row.label}</span>
         <span style={{ color: positive ? K.gn : K.rd, fontWeight: 700 }}>
           {positive ? "+" : "-"}${f(Math.abs(row.averageDrift || 0))}
@@ -138,7 +138,7 @@ export default function TrackInsights() {
     <div style={S.card}>
       <Tl t="Track Edge Dashboard" badge="ANALYTICS" bc={K.ac} />
 
-      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.7, marginBottom: 14 }}>
+      <div style={{ fontSize: 14, color: K.mt, lineHeight: 1.7, marginBottom: 14 }}>
         Aggregate realized P/L, promo hit rate, calculator accuracy, and the books actually producing profit.
       </div>
 
@@ -156,9 +156,9 @@ export default function TrackInsights() {
 
       <div style={{ display: "grid", gridTemplateColumns: pairColumns, gap: 12, alignItems: "start", marginBottom: 14 }}>
         <div style={{ padding: 12, background: `${K.ac}06`, border: `1px solid ${K.ac}25`, borderRadius: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.ac, marginBottom: 8 }}>Self-Calibration</div>
-          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 10 }}>{insights.selfCalibration.label}</div>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", fontSize: 10, color: K.mt }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.ac, marginBottom: 8 }}>Self-Calibration</div>
+          <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.7, marginBottom: 10 }}>{insights.selfCalibration.label}</div>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", fontSize: 12, color: K.mt }}>
             <span>Settled: <strong style={{ color: K.tx }}>{insights.selfCalibration.settledCount}</strong></span>
             <span>Expected: <strong style={{ color: K.tx }}>${f(Math.abs(insights.selfCalibration.expectedSettledProfit || 0))}</strong></span>
             <span>Actual: <strong style={{ color: (insights.selfCalibration.actualSettledProfit || 0) >= 0 ? K.gn : K.rd }}>{`${(insights.selfCalibration.actualSettledProfit || 0) >= 0 ? "+" : "-"}$${f(Math.abs(insights.selfCalibration.actualSettledProfit || 0))}`}</strong></span>
@@ -166,7 +166,7 @@ export default function TrackInsights() {
           </div>
           <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
             {insights.selfCalibrationRows.length === 0 && (
-              <div style={{ fontSize: 10, color: K.mt }}>
+              <div style={{ fontSize: 12, color: K.mt }}>
                 Per-promo drift appears once settled workflows have both expected and actual profit captured.
               </div>
             )}
@@ -175,15 +175,15 @@ export default function TrackInsights() {
         </div>
 
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Workflow Provenance</div>
-          {insights.sourceRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Workflow source quality appears once feedback is saved from calculators or AI surfaces.</div>}
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Workflow Provenance</div>
+          {insights.sourceRows.length === 0 && <div style={{ fontSize: 12, color: K.mt }}>Workflow source quality appears once feedback is saved from calculators or AI surfaces.</div>}
           {insights.sourceRows.map((row) => (
             <div key={row.key} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
               <div>
-                <div style={{ fontSize: 11, color: K.tx, fontWeight: 700 }}>{row.label}</div>
-                <div style={{ fontSize: 10, color: K.mt }}>{row.total} workflow entr{row.total === 1 ? "y" : "ies"} · {row.settled} settled</div>
+                <div style={{ fontSize: 12, color: K.tx, fontWeight: 700 }}>{row.label}</div>
+                <div style={{ fontSize: 12, color: K.mt }}>{row.total} workflow entr{row.total === 1 ? "y" : "ies"} · {row.settled} settled</div>
               </div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: row.actualProfit >= 0 ? K.gn : K.rd }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: row.actualProfit >= 0 ? K.gn : K.rd }}>
                 {row.settled ? `${row.actualProfit >= 0 ? "+" : "-"}$${f(Math.abs(row.actualProfit))}` : "—"}
               </div>
             </div>
@@ -193,19 +193,19 @@ export default function TrackInsights() {
 
       <div style={{ display: "grid", gridTemplateColumns: splitColumns, gap: 12, alignItems: "start", marginBottom: 14 }}>
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Hit Rate By Promo Type</div>
-          {insights.promoTypeRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>No result feedback yet. Mark placed or skipped workflows from the conversion calculators.</div>}
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Hit Rate By Promo Type</div>
+          {insights.promoTypeRows.length === 0 && <div style={{ fontSize: 12, color: K.mt }}>No result feedback yet. Mark placed or skipped workflows from the conversion calculators.</div>}
           {insights.promoTypeRows.length > 0 && (
             <div style={{ display: "grid", gap: 8 }}>
               {insights.promoTypeRows.map((row) => (
                 <div key={row.key} style={{ padding: 10, background: K.s3, borderRadius: 8, border: `1px solid ${K.bd}` }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{row.label}</div>
-                    <div style={{ fontSize: 11, color: row.actualProfit >= 0 ? K.gn : K.rd, fontWeight: 700 }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{row.label}</div>
+                    <div style={{ fontSize: 12, color: row.actualProfit >= 0 ? K.gn : K.rd, fontWeight: 700 }}>
                       {row.settled ? `${row.actualProfit >= 0 ? "+" : "-"}$${f(Math.abs(row.actualProfit))}` : `${row.placed} placed`}
                     </div>
                   </div>
-                  <div style={{ display: "flex", gap: 12, flexWrap: "wrap", fontSize: 10, color: K.mt }}>
+                  <div style={{ display: "flex", gap: 12, flexWrap: "wrap", fontSize: 12, color: K.mt }}>
                     <span>Placed: <strong style={{ color: K.tx }}>{row.placed}</strong></span>
                     <span>Skipped: <strong style={{ color: K.tx }}>{row.skipped}</strong></span>
                     <span>Settled: <strong style={{ color: K.tx }}>{row.settled}</strong></span>
@@ -220,18 +220,18 @@ export default function TrackInsights() {
         </div>
 
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Best Books</div>
-          {insights.bookRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>No book-level data yet. Log ledger entries or feedback with sportsbook names.</div>}
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Best Books</div>
+          {insights.bookRows.length === 0 && <div style={{ fontSize: 12, color: K.mt }}>No book-level data yet. Log ledger entries or feedback with sportsbook names.</div>}
           {insights.bookRows.length > 0 && insights.bookRows.slice(0, 6).map((row) => (
             <div key={row.book} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
               <div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{row.book}</div>
-                <div style={{ fontSize: 10, color: K.mt }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{row.book}</div>
+                <div style={{ fontSize: 12, color: K.mt }}>
                   {row.ledgerEntries} ledger entr{row.ledgerEntries === 1 ? "y" : "ies"}
                   {row.hitRate !== null ? ` · ${f(row.hitRate, 0)}% settled hit rate` : ""}
                 </div>
               </div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: row.realizedProfit >= 0 ? K.gn : K.rd }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: row.realizedProfit >= 0 ? K.gn : K.rd }}>
                 {row.realizedProfit >= 0 ? "+" : "-"}${f(Math.abs(row.realizedProfit))}
               </div>
             </div>
@@ -240,8 +240,8 @@ export default function TrackInsights() {
       </div>
 
       <div style={{ padding: 12, background: `${K.yl}06`, border: `1px solid ${K.yl}25`, borderRadius: 10 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: K.yl, marginBottom: 10 }}>Unsettled Workflow Queue</div>
-        {insights.openFeedback.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>No open feedback entries. Once you mark a workflow as placed, it will appear here until you settle it.</div>}
+        <div style={{ fontSize: 12, fontWeight: 700, color: K.yl, marginBottom: 10 }}>Unsettled Workflow Queue</div>
+        {insights.openFeedback.length === 0 && <div style={{ fontSize: 12, color: K.mt }}>No open feedback entries. Once you mark a workflow as placed, it will appear here until you settle it.</div>}
         {insights.openFeedback.length > 0 && (
           <div style={{ display: "grid", gap: 10 }}>
             {insights.openFeedback.map((entry) => {
@@ -250,27 +250,27 @@ export default function TrackInsights() {
                 <div key={entry.id} style={{ padding: 12, background: K.s3, borderRadius: 8, border: `1px solid ${K.bd}` }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 8 }}>
                     <div>
-                      <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{entry.calculatorLabel}</div>
-                      <div style={{ fontSize: 10, color: K.mt }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{entry.calculatorLabel}</div>
+                      <div style={{ fontSize: 12, color: K.mt }}>
                         {formatPromoTypeLabel(entry.promoType)} · expected {entry.expectedProfit === null ? "—" : `$${f(entry.expectedProfit)}`} · {new Date(entry.createdAt).toLocaleDateString()}
                       </div>
                     </div>
-                    <div style={{ fontSize: 11, color: K.yl, fontWeight: 700 }}>Waiting to settle</div>
+                    <div style={{ fontSize: 12, color: K.yl, fontWeight: 700 }}>Waiting to settle</div>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: viewport.isPhone ? "1fr" : "minmax(120px, 1fr) minmax(120px, 1fr) auto", gap: 10, alignItems: "end" }}>
                     <div>
-                      <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Book</div>
-                      <input value={draft.book || ""} onChange={(event) => saveDraft(entry.id, "book", event.target.value)} style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }} />
+                      <div style={{ fontSize: 12, color: K.mt, marginBottom: 4 }}>Book</div>
+                      <input value={draft.book || ""} onChange={(event) => saveDraft(entry.id, "book", event.target.value)} style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14 }} />
                     </div>
                     <div>
-                      <div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Actual profit</div>
-                      <input value={draft.actualProfit || ""} onChange={(event) => saveDraft(entry.id, "actualProfit", event.target.value)} placeholder="$11.25" style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 12 }} />
+                      <div style={{ fontSize: 12, color: K.mt, marginBottom: 4 }}>Actual profit</div>
+                      <input value={draft.actualProfit || ""} onChange={(event) => saveDraft(entry.id, "actualProfit", event.target.value)} placeholder="$11.25" style={{ width: "100%", padding: "8px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14 }} />
                     </div>
-                    <button onClick={() => settle(entry)} style={{ padding: "9px 14px", background: K.ac, border: "none", borderRadius: 8, color: K.ink, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+                    <button onClick={() => settle(entry)} style={{ padding: "9px 14px", background: K.ac, border: "none", borderRadius: 8, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
                       Settle
                     </button>
                   </div>
-                  {settlementErrors[entry.id] && <div role="alert" style={{ marginTop: 8, fontSize: 10, color: K.rd }}>{settlementErrors[entry.id]}</div>}
+                  {settlementErrors[entry.id] && <div role="alert" style={{ marginTop: 8, fontSize: 12, color: K.rd }}>{settlementErrors[entry.id]}</div>}
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
                     {[
                       ["yes", "Accurate"],
@@ -286,7 +286,7 @@ export default function TrackInsights() {
                           border: `1px solid ${(draft.calculatorAccurate || "yes") === value ? K.ac : K.bd2}`,
                           borderRadius: 999,
                           color: (draft.calculatorAccurate || "yes") === value ? K.ac : K.dm,
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 700,
                           cursor: "pointer",
                           fontFamily: font,
@@ -306,45 +306,45 @@ export default function TrackInsights() {
       <div style={{ display: "grid", gridTemplateColumns: pairColumns, gap: 12, alignItems: "start", marginTop: 14 }}>
         {insights.frictionRecovery?.ready && (
           <div role="status" aria-label="Friction recovery plan" style={{ gridColumn: "1 / -1", padding: 13, background: `${K.ac}08`, border: `1px solid ${K.ac}35`, borderRadius: 10 }}>
-            <div style={{ fontSize: 10, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Recovery plan · {insights.frictionRecovery.evidenceCount} receipts</div>
-            <div style={{ fontSize: 13, color: K.tx, fontWeight: 800, marginBottom: 4 }}>{insights.frictionRecovery.title}</div>
-            <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 4 }}>{insights.frictionRecovery.action}</div>
-            <div style={{ fontSize: 10, color: K.mt, marginBottom: 9 }}>{insights.frictionRecovery.whyNow} Ranked by frequency and recency, never profit.</div>
-            <button type="button" onClick={() => openRecovery(insights.frictionRecovery.route)} style={{ padding: "7px 11px", background: "transparent", border: `1px solid ${K.ac}55`, borderRadius: 7, color: K.ac, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+            <div style={{ fontSize: 12, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Recovery plan · {insights.frictionRecovery.evidenceCount} receipts</div>
+            <div style={{ fontSize: 14, color: K.tx, fontWeight: 800, marginBottom: 4 }}>{insights.frictionRecovery.title}</div>
+            <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 4 }}>{insights.frictionRecovery.action}</div>
+            <div style={{ fontSize: 12, color: K.mt, marginBottom: 9 }}>{insights.frictionRecovery.whyNow} Ranked by frequency and recency, never profit.</div>
+            <button type="button" onClick={() => openRecovery(insights.frictionRecovery.route)} style={{ padding: "7px 11px", background: "transparent", border: `1px solid ${K.ac}55`, borderRadius: 7, color: K.ac, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
               {insights.frictionRecovery.cta} →
             </button>
           </div>
         )}
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Skip Reasons</div>
-          {insights.skipReasonRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Skip reasons will appear once users mark why a workflow was passed over.</div>}
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Skip Reasons</div>
+          {insights.skipReasonRows.length === 0 && <div style={{ fontSize: 12, color: K.mt }}>Skip reasons will appear once users mark why a workflow was passed over.</div>}
           {insights.skipReasonRows.map((row) => (
             <div key={row.key} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "8px 0", borderBottom: `1px solid ${K.bd}` }}>
-              <div style={{ fontSize: 11, color: K.dm }}>{row.label}</div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: K.yl }}>{row.count}</div>
+              <div style={{ fontSize: 12, color: K.dm }}>{row.label}</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: K.yl }}>{row.count}</div>
             </div>
           ))}
         </div>
 
         <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Drift Watchlist</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Drift Watchlist</div>
           {!insights.biggestNegativeDrift && !insights.biggestPositiveDrift && (
-            <div style={{ fontSize: 11, color: K.mt }}>Drift signals appear once expected and actual profit are both captured on settled workflows.</div>
+            <div style={{ fontSize: 12, color: K.mt }}>Drift signals appear once expected and actual profit are both captured on settled workflows.</div>
           )}
           {insights.biggestNegativeDrift && (
             <div style={{ padding: 10, background: `${K.rd}08`, border: `1px solid ${K.rd}20`, borderRadius: 8, marginBottom: 8 }}>
-              <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 4 }}>Coldest lane</div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{insights.biggestNegativeDrift.label}</div>
-              <div style={{ fontSize: 11, color: K.rd }}>
+              <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 4 }}>Coldest lane</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{insights.biggestNegativeDrift.label}</div>
+              <div style={{ fontSize: 12, color: K.rd }}>
                 Avg drift {insights.biggestNegativeDrift.averageDrift >= 0 ? "+" : "-"}${f(Math.abs(insights.biggestNegativeDrift.averageDrift || 0))}
               </div>
             </div>
           )}
           {insights.biggestPositiveDrift && (
             <div style={{ padding: 10, background: `${K.gn}08`, border: `1px solid ${K.gn}20`, borderRadius: 8 }}>
-              <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 4 }}>Strongest lane</div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{insights.biggestPositiveDrift.label}</div>
-              <div style={{ fontSize: 11, color: K.gn }}>
+              <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 4 }}>Strongest lane</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{insights.biggestPositiveDrift.label}</div>
+              <div style={{ fontSize: 12, color: K.gn }}>
                 Avg drift {insights.biggestPositiveDrift.averageDrift >= 0 ? "+" : "-"}${f(Math.abs(insights.biggestPositiveDrift.averageDrift || 0))}
               </div>
             </div>
@@ -353,17 +353,17 @@ export default function TrackInsights() {
       </div>
 
       <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10, marginTop: 14 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Workflow Timeline</div>
-        {insights.workflowTimeline.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Timeline populates as workflows are created, updated, and settled.</div>}
+        <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 10 }}>Workflow Timeline</div>
+        {insights.workflowTimeline.length === 0 && <div style={{ fontSize: 12, color: K.mt }}>Timeline populates as workflows are created, updated, and settled.</div>}
         {insights.workflowTimeline.length > 0 && (
           <div style={{ display: "grid", gap: 8 }}>
             {insights.workflowTimeline.map((entry) => (
               <div key={`${entry.id}-${entry.updatedAt || entry.createdAt}`} style={{ padding: 10, background: K.s3, borderRadius: 8, border: `1px solid ${K.bd}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 4 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{entry.title || entry.calculatorLabel}</div>
-                  <div style={{ fontSize: 10, color: K.mt }}>{new Date(entry.updatedAt || entry.createdAt).toLocaleString()}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{entry.title || entry.calculatorLabel}</div>
+                  <div style={{ fontSize: 12, color: K.mt }}>{new Date(entry.updatedAt || entry.createdAt).toLocaleString()}</div>
                 </div>
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: 10, color: K.dm }}>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: 12, color: K.dm }}>
                   <span>Status: <strong style={{ color: K.tx }}>{entry.transitionLabel || entry.status}</strong></span>
                   <span>Source: <strong style={{ color: K.tx }}>{String(entry.source || "result_feedback").replace(/_/g, " ")}</strong></span>
                   <span>Type: <strong style={{ color: K.tx }}>{formatPromoTypeLabel(entry.promoType)}</strong></span>
@@ -377,7 +377,7 @@ export default function TrackInsights() {
 
       <div style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10, marginTop: 14 }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.tx }}>Workflow History Surface</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>Workflow History Surface</div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {[
               ["all", "All"],
@@ -395,7 +395,7 @@ export default function TrackInsights() {
                   border: `1px solid ${historyFilter === value ? K.ac : K.bd2}`,
                   borderRadius: 999,
                   color: historyFilter === value ? K.ac : K.dm,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: 700,
                   cursor: "pointer",
                   fontFamily: font,
@@ -406,22 +406,22 @@ export default function TrackInsights() {
             ))}
           </div>
         </div>
-        {filteredHistoryRows.length === 0 && <div style={{ fontSize: 11, color: K.mt }}>Workflow history groups appear once synced transition history exists.</div>}
+        {filteredHistoryRows.length === 0 && <div style={{ fontSize: 12, color: K.mt }}>Workflow history groups appear once synced transition history exists.</div>}
         {filteredHistoryRows.length > 0 && (
           <div style={{ display: "grid", gap: 8 }}>
             {filteredHistoryRows.map((row) => (
               <div key={row.id} style={{ padding: 10, background: K.s3, borderRadius: 8, border: `1px solid ${K.bd}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 4 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{row.title}</div>
-                  <div style={{ fontSize: 10, color: K.mt }}>{row.latestAt ? new Date(row.latestAt).toLocaleString() : "—"}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{row.title}</div>
+                  <div style={{ fontSize: 12, color: K.mt }}>{row.latestAt ? new Date(row.latestAt).toLocaleString() : "—"}</div>
                 </div>
-                <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.6, marginBottom: 4 }}>
+                <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 4 }}>
                   {String(row.source || "result_feedback").replace(/_/g, " ")} · {formatPromoTypeLabel(row.promoType)}
                   {row.book ? ` · ${row.book}` : ""}
                 </div>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {row.statuses.map((status, index) => (
-                    <span key={`${row.id}-${status}-${index}`} style={{ padding: "4px 8px", background: `${K.ac}12`, border: `1px solid ${K.ac}25`, borderRadius: 999, fontSize: 10, color: K.ac }}>
+                    <span key={`${row.id}-${status}-${index}`} style={{ padding: "4px 8px", background: `${K.ac}12`, border: `1px solid ${K.ac}25`, borderRadius: 999, fontSize: 12, color: K.ac }}>
                       {status}
                     </span>
                   ))}
@@ -434,8 +434,8 @@ export default function TrackInsights() {
 
       {showMicroNps && (
         <div style={{ padding: 12, background: `${K.gn}08`, border: `1px solid ${K.gn}25`, borderRadius: 10, marginTop: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: K.gn, marginBottom: 6 }}>Micro-NPS after {insights.settledCount} settlements</div>
-          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.gn, marginBottom: 6 }}>Micro-NPS after {insights.settledCount} settlements</div>
+          <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
             Was this calc loop worth it so far?
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -453,7 +453,7 @@ export default function TrackInsights() {
                   border: `1px solid ${K.bd2}`,
                   borderRadius: 8,
                   color: K.tx,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: 700,
                   cursor: "pointer",
                   fontFamily: font,

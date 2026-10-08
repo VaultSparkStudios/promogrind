@@ -11,57 +11,60 @@
 <link rel="alternate" hreflang="es" href="https://promogrind.bet/ev-calculator-es/" />
 <link rel="alternate" hreflang="x-default" href="https://promogrind.bet/ev-calculator/" />
 <script>
-  window.PG_REDIRECT_URL='https://promogrind.bet/?utm_source=seo&utm_medium=organic&utm_content=ev-calculator-es#/ev';
+  window.PG_REDIRECT_URL='https://promogrind.bet/ev?utm_source=seo&utm_medium=organic&utm_content=ev-calculator-es';
   window.PG_SOURCE='seo-ev-calculator-es';
 </script>
 <script src="/js/pg-capture.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0e17;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;padding:2rem 1rem}
+body{background:var(--pg-page-bg);color:var(--pg-page-text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;padding:2rem 1rem}
 .container{max-width:800px;margin:0 auto}
-h1{font-size:2rem;font-weight:700;margin-bottom:.5rem;color:#4ade80}
-h2{font-size:1.2rem;font-weight:700;margin:2rem 0 .5rem;color:#60a5fa}
-p{margin-bottom:1rem;color:#cbd5e1}
-.cta{display:inline-block;margin:1.5rem 0;padding:.75rem 1.5rem;background:#4ade80;color:#0a0e17;font-weight:700;border-radius:6px;text-decoration:none}
+h1{font-size:2rem;font-weight:700;margin-bottom:.5rem;color:var(--pg-page-accent)}
+h2{font-size:1.2rem;font-weight:700;margin:2rem 0 .5rem;color:var(--pg-page-blue)}
+p{margin-bottom:1rem;color:var(--pg-page-muted)}
+.cta{display:inline-block;margin:1.5rem 0;padding:.75rem 1.5rem;background:var(--pg-page-accent);color:var(--pg-page-bg);font-weight:700;border-radius:6px;text-decoration:none}
 .cta:hover{opacity:.9}
 .faq-item{margin-bottom:1.5rem}
-.faq-item dt{font-weight:700;color:#e2e8f0;margin-bottom:.25rem}
-.faq-item dd{color:#cbd5e1}
-.disclaimer{font-size:11px;color:#475569;margin-top:2rem;border-top:1px solid #1e293b;padding-top:1rem}
-    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+.faq-item dt{font-weight:700;color:var(--pg-page-text);margin-bottom:.25rem}
+.faq-item dd{color:var(--pg-page-muted)}
+.disclaimer{font-size:14px;color:var(--pg-page-muted);margin-top:2rem;border-top:1px solid var(--pg-page-border);padding-top:1rem}
+    .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
 <div class="container">
   <h1>Calculadora de Valor Esperado (+EV)</h1>
-  <p>Determina si una apuesta tiene valor positivo (+EV) comparando las probabilidades reales del mercado con las cuotas que ofrece el sportsbook. Apuesta solo cuando el mercado está a tu favor.</p>
-  <a class="cta" href="https://promogrind.bet/#/ev">Usar la calculadora →</a>
+  <p>Explora el valor esperado usando una probabilidad que tú estimas y una cuota concreta. La calculadora no conoce la probabilidad real; el resultado sigue siendo incierto.</p>
+  <a class="cta" href="https://promogrind.bet/ev">Usar la calculadora →</a>
 
   <h2>¿Qué es el valor esperado en apuestas?</h2>
-  <p>El valor esperado (EV) mide cuánto ganarás en promedio por cada dólar apostado a largo plazo. Un EV positivo (+EV) significa que la apuesta es rentable con suficiente volumen. Un EV negativo (-EV) significa que estás apostando en contra de las probabilidades reales.</p>
+  <p>El valor esperado (EV) es el promedio matemático de un modelo, si la probabilidad introducida es correcta. Un EV positivo indica una media modelada positiva; no garantiza rentabilidad, ni siquiera con mucho volumen. Las pérdidas y los errores de estimación siguen siendo posibles.</p>
 
   <h2>La clave: las cuotas de referencia</h2>
-  <p>Para calcular el EV, necesitas comparar las cuotas de un sportsbook con las "cuotas de referencia" — generalmente las cuotas sin margen de pinnacle o las líneas de apertura de mercados muy líquidos. Si el sportsbook ofrece mejores cuotas que la referencia, tienes +EV.</p>
+  <p>Las cuotas sin margen de otro mercado pueden servir como referencia, pero no son una medida cierta de la probabilidad real. Compara mercados equivalentes y comprueba sus reglas de liquidación. El modelo solo es tan fiable como sus supuestos.</p>
 
   <h2>+EV vs arbitraje</h2>
-  <p>Las apuestas +EV son rentables a largo plazo pero no garantizan ganancia en cada apuesta. El arbitraje modela ganancia inmediata pero requiere cuentas en múltiples sportsbooks. Ambas estrategias son complementarias en un approach profesional.</p>
+  <p>El EV modela un promedio basado en probabilidades estimadas. Un modelo de arbitraje compara precios de resultados mutuamente excluyentes. La ejecución puede fallar: límites, cambios de cuota, anulaciones, costes y reglas distintas pueden cambiar el resultado.</p>
 
   <h2>Preguntas frecuentes</h2>
   <dl>
     <div class="faq-item">
       <dt>¿Cuántas apuestas necesito para ver resultados con +EV?</dt>
-      <dd>El EV se manifiesta estadísticamente en volumen — generalmente necesitas 500–1,000+ apuestas para ver que los resultados convergen hacia tu EV teórico. A corto plazo, la varianza es alta.</dd>
+      <dd>No hay una cantidad universal. La variabilidad, las cuotas, la independencia entre resultados y la exactitud de la probabilidad afectan la incertidumbre. Un número de apuestas no garantiza recuperar pérdidas ni alcanzar la media modelada.</dd>
     </div>
     <div class="faq-item">
       <dt>¿Qué EV mínimo debo buscar?</dt>
-      <dd>Apuestas con +1% o más de EV ya son rentables. Los mejores cazadores de valor buscan oportunidades de +3% o más para maximizar el ROI ajustado al tiempo.</dd>
+      <dd>No existe un umbral universal. Un pequeño valor positivo puede desaparecer con costes o un error de probabilidad. Usa la cifra para estudiar supuestos, no como una instrucción para apostar.</dd>
     </div>
   </dl>
   <p class="disclaimer">Debes tener 21 años o más. Juega con responsabilidad. 1-800-GAMBLER.</p>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Usa las calculadoras gratuitas sin crear una cuenta. Inicia sesión con una cuenta gratuita de PromoGrind para guardar tu espacio de trabajo entre dispositivos. Las funciones marcadas como próximamente no están disponibles.</p>
   </div>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

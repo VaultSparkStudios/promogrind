@@ -3,6 +3,10 @@
  * (S157 #3). Append-only: one named export per extracted pair. Each entry
  * cites the pair it collapsed so the provenance is greppable.
  */
+// Delivery checks and onboarding sandboxes inherit this exact non-credential set.
+export const ISOLATED_PROCESS_ENV_KEYS = Object.freeze(['PATH','Path','PATHEXT','SystemRoot','WINDIR','TEMP','TMP','HOME','USERPROFILE','APPDATA','LOCALAPPDATA','COMSPEC','LANG']);
+// A complete suite proof cannot carry any of these unresolved result buckets.
+export const NONPASSING_SUITE_BUCKETS = Object.freeze(['flaky','inconclusive','envBlocked','deferred']);
 // extracted from scripts/run-doctor.mjs:124 <-> scripts/validate-studio-manifest.mjs:24 (similarity 1)
 export const STUDIO_MANIFEST_REQUIRED_KEYS = ['identity', 'studioOs', 'listingMetadata', 'surfaces', 'capabilities', 'integrations', 'hosting', 'capacity', 'publicMetadata', 'automation', 'contracts'];
 

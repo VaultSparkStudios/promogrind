@@ -18,7 +18,6 @@ import { BankrollWizard, CopyMySetup, PushEnableBtn, QuickAddBet, WeeklyDecision
 import DashboardHero from "./DashboardHero.jsx";
 import ActivationNextAction from "./ActivationNextAction.jsx";
 import DailyMissionsPanel from "./DailyMissionsPanel.jsx";
-import LaunchCommandCenterPanel from "./LaunchCommandCenterPanel.jsx";
 import CommunityWinsWall from "./CommunityWinsWall.jsx";
 import TodayDashboardPanel from "./TodayDashboardPanel.jsx";
 import SmartPromoRecommender from "./SmartPromoRecommender.jsx";
@@ -137,9 +136,6 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       </Suspense>
       <Suspense fallback={null}><DailyMissionsPanel navigate={navigate} /></Suspense>
       <MemberWelcomeCard navigate={navigate} proStatus={proStatus} />
-      <Suspense fallback={<LoadingState label="Loading launch posture…" />}>
-        <LaunchCommandCenterPanel />
-      </Suspense>
       <Suspense fallback={null}><CommunityWinsWall /></Suspense>
       <OnboardingChecklist appData={data} user={true} isPro={dashIsPro} />
       <Suspense fallback={<LoadingState label="Loading today dashboard…" />}>
@@ -154,7 +150,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       </Suspense>
       {ledger.length===0&&bets.length===0&&booksComplete===0&&(
         <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}06`,marginBottom:12}}>
-          <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
+          <div style={{fontSize:14,fontWeight:700,color:K.gn,marginBottom:10,textTransform:"uppercase",letterSpacing:"1.5px"}}>Getting Started — 3 Steps</div>
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
             {[
               {n:"1",t:"Convert your first bonus bet",d:"Open any sportsbook app, grab a welcome promo, enter it in the Bonus Bet Converter.",slug:"bonus-bet",color:K.gn},
@@ -164,8 +160,8 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
               <button type="button" key={s.n} style={{width:"100%",textAlign:"left",display:"flex",gap:12,alignItems:"flex-start",padding:"10px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`,cursor:"pointer",fontFamily:font}} onClick={()=>navigate("/"+s.slug)}>
                 <div style={{fontSize:15,fontWeight:700,color:s.color,minWidth:20}}>{s.n}</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:12,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} →</div>
-                  <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{s.d}</div>
+                  <div style={{fontSize:14,fontWeight:600,color:K.tx,marginBottom:2}}>{s.t} →</div>
+                  <div style={{fontSize:12,color:K.mt,lineHeight:1.5}}>{s.d}</div>
                 </div>
               </button>
             ))}
@@ -178,12 +174,12 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:2}}>
             Good {today.getHours()<12?"morning":today.getHours()<17?"afternoon":"evening"}
           </div>
-          <div style={{fontSize:11,color:K.mt}}>
+          <div style={{fontSize:12,color:K.mt}}>
             {todayDay}, {monthNames[today.getMonth()]} {today.getDate()} · Here&apos;s your daily promo briefing
           </div>
         </div>
         <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-          <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>▶ Promo Walkthroughs</button>
+          <button onClick={()=>setShowWT(true)} style={{padding:"6px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>▶ Promo Walkthroughs</button>
           <DailyBriefingBtn openBets={openBets} todayPromos={todayPromos}/>
           <PushEnableBtn proStatus={proStatus}/>
         </div>
@@ -193,63 +189,63 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
         proStatus.trial_days_left>3?(
           <div style={{...S.card,border:`1px solid ${K.gn}40`,background:`${K.gn}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
-              <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:2}}>
+              <div style={{fontSize:14,fontWeight:700,color:K.gn,marginBottom:2}}>
                 VaultSparked Pro trial · {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""} remaining
               </div>
-              <div style={{fontSize:11,color:K.dm}}>You have full Pro access including the Live Arb Scanner and +EV Scanner.</div>
+              <div style={{fontSize:14,color:K.dm}}>Review the availability labels for your trial. Features marked coming soon remain unavailable.</div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         ):proStatus.trial_days_left>1?(
           <div style={{...S.card,border:`1px solid ${K.yl}40`,background:`${K.yl}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
-              <div style={{fontSize:12,fontWeight:700,color:K.yl,marginBottom:2}}>
+              <div style={{fontSize:14,fontWeight:700,color:K.yl,marginBottom:2}}>
                 Trial access changes in {proStatus.trial_days_left} day{proStatus.trial_days_left!==1?"s":""}. Review plan details before deciding.
               </div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         ):(
           <div style={{...S.card,border:`1px solid ${K.rd}40`,background:`${K.rd}08`,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
             <div>
-              <div style={{fontSize:12,fontWeight:700,color:K.rd,marginBottom:2}}>
-                Trial access changes tomorrow. Review which Live Scanner and Artificial Intelligence features you want to retain.
+              <div style={{fontSize:14,fontWeight:700,color:K.rd,marginBottom:2}}>
+                Trial access changes tomorrow. Review the available plan features and checkout status.
               </div>
             </div>
-            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
+            <button onClick={()=>navigate('/upgrade')} style={{padding:"5px 14px",background:K.rd,border:"none",borderRadius:6,color: K.ink,fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>Upgrade to keep access →</button>
           </div>
         )
       )}
       <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>THIS MONTH</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:4}}>THIS MONTH</div>
           <div style={S.big(monthProfit>=0?K.gn:K.rd)}>${f(monthProfit)}</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>ALL TIME</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:4}}>ALL TIME</div>
           <div style={S.big(totalProfit>=0?K.gn:K.rd)}>${f(totalProfit)}</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>OPEN BETS</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:4}}>OPEN BETS</div>
           <div style={S.big(openBets.length>0?K.yl:K.dm)}>{openBets.length}</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>BOOKS DONE</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:4}}>BOOKS DONE</div>
           <div style={S.big(K.ac)}>{booksComplete}/{BOOKS.length}</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>REVIEW CADENCE</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:4}}>REVIEW CADENCE</div>
           <div style={S.big(currentStreak>=7?K.gn:currentStreak>=3?K.yl:K.dm)}>{currentStreak}</div>
-          <div style={{fontSize:9,color:K.mt}}>evidenced days</div>
+          <div style={{fontSize:12,color:K.mt}}>days with recorded activity</div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}} title="Share of calendar days with a settled result, reasoned skip, or realized ledger entry">REVIEW COVERAGE ⓘ</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:4}} title="Share of calendar days with a settled result, reasoned skip, or realized ledger entry">REVIEW COVERAGE ⓘ</div>
           <div style={S.big(consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm)}>{consistencyScore}%</div>
           <div style={{height:3,background:K.s3,borderRadius:2,marginTop:4}}><div style={{height:3,borderRadius:2,background:consistencyScore>=70?K.gn:consistencyScore>=40?K.yl:K.dm,width:`${consistencyScore}%`}}/></div>
         </div>
         <div style={{...S.card,flex:1,minWidth:120,marginBottom:0,padding:"12px 16px"}}>
-          <div style={{fontSize:9,color:K.mt,marginBottom:4}}>VALUE LEFT</div>
-          <div style={S.big(K.yl)}>~${f(potentialLeft,0)}</div>
+          <div style={{fontSize:12,color:K.mt,marginBottom:4}}>REFERENCE MODEL</div>
+          <div style={S.big(K.yl)}>~${f(potentialLeft,0)}</div><div style={{fontSize:14,color:K.mt,lineHeight:1.6}}>Illustrative reference inputs; verify current terms and eligibility.</div>
         </div>
       </div>
       <ProfitGoalTracker totalProfit={totalProfit}/>
@@ -261,22 +257,22 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       )}
       {todayPromos.length>0&&(
         <div style={{...S.card,marginBottom:12}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Patterns to Verify — {todayDay}</div>
+          <div style={{fontSize:12,fontWeight:700,color:K.ac,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Patterns to Verify — {todayDay}</div>
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {todayPromos.slice(0,6).map((p,i)=>(
               <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
                 <div>
-                  <span style={{fontSize:12,fontWeight:600,color:K.tx}}>{p.book}</span>
-                  <span style={{fontSize:11,color:K.dm,marginLeft:8}}>{p.promo}</span>
+                  <span style={{fontSize:14,fontWeight:600,color:K.tx}}>{p.book}</span>
+                  <span style={{fontSize:12,color:K.dm,marginLeft:8}}>{p.promo}</span>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
-                  <span style={{fontSize:11,fontWeight:600,color:K.dm}}>Modeled {p.value}</span>
-                  <span style={{fontSize:9,color:p.freshness?.state==="current"?K.gn:K.yl}}>{p.evidenceLabel||"Historical pattern · verify"}</span>
+                  <span style={{fontSize:12,fontWeight:600,color:K.dm}}>Modeled {p.value}</span>
+                  <span style={{fontSize:12,color:p.freshness?.state==="current"?K.gn:K.yl}}>{p.evidenceLabel||"Historical pattern · verify"}</span>
                   <span style={S.tag((p.grade==="A"?K.gn:p.grade==="B"?K.ac:K.mt)||K.ac)}>{p.grade||"B"}</span>
                 </div>
               </div>
             ))}
-            {todayPromos.length>6&&<div style={{fontSize:11,color:K.mt,textAlign:"center"}}>+{todayPromos.length-6} more in Promo Calendar</div>}
+            {todayPromos.length>6&&<div style={{fontSize:12,color:K.mt,textAlign:"center"}}>+{todayPromos.length-6} more in Promo Calendar</div>}
           </div>
         </div>
       )}
@@ -287,7 +283,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
       <BankrollWizard/>
       <CopyMySetup appData={data} syncAppData={syncAppData}/>
       <div style={{...S.card}}>
-        <div style={{fontSize:11,fontWeight:700,color:K.dm,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Quick Actions</div>
+        <div style={{fontSize:12,fontWeight:700,color:K.dm,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>Quick Actions</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
           {[
             {label:"Convert Bonus Bet",slug:"bonus-bet",color:K.gn},
@@ -295,7 +291,7 @@ const DailyDashboard = ({ navigate: navigateProp, proStatus }) => {
             {label:FEATURE_FLAGS.liveScanner?"Check Live Scanner":"View Live Scanner Beta",slug:"arb-scanner",color:K.pp},
             {label:"Update P/L Ledger",slug:"ledger",color:K.ac},
           ].map(a=>(
-            <button key={a.slug} onClick={()=>navigate("/"+a.slug)} style={{padding:"7px 14px",background:`${a.color}10`,border:`1px solid ${a.color}30`,borderRadius:6,color:a.color,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>
+            <button key={a.slug} onClick={()=>navigate("/"+a.slug)} style={{padding:"7px 14px",background:`${a.color}10`,border:`1px solid ${a.color}30`,borderRadius:6,color:a.color,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>
               {a.label} →
             </button>
           ))}

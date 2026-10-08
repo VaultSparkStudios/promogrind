@@ -5,7 +5,7 @@
 > Suggest: `node ../vaultspark-studio-ops/scripts/check-canon-adoption.mjs --project . --suggest` uses conformance evidence to pre-fill safe suggestions.
 > Mark each: **adopted** · **pending** · **review** · **exempt (reason)**. This file is maintained, not auto-trusted.
 
-Audience: public-unlaunched · Live ACTIVE canons: 54 · Pending review: 43
+Audience: public-unlaunched · Live ACTIVE canons: 55 · Pending review: 44
 
 | Canon | Title | Status | Evidence / note |
 |---|---|---|---|
@@ -63,4 +63,5 @@ Audience: public-unlaunched · Live ACTIVE canons: 54 · Pending review: 43
 | CANON-053 | Rendered-Pixel UI Discipline: look at the real interface whi | adopted | `docs/visual-qa/LATEST.json` binds 4 reviewed production-build captures across light/dark and desktop/mobile; authoritative checker PASS |
 | CANON-054 | Public Stats Surface: every website reports and analyzes its | review | S132 feed and both surfaces deployed; initial publisher and schedule verified. First recurring execution and full conformance review remain open; see stats release receipts. |
 | CANON-055 | Surface Follow-Through: every project change reaches the thi | review |  |
+| CANON-056 | AI + SI Hybrid Terminology: keep AI, add Synthetic Intellige | review |  |
 

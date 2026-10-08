@@ -23,14 +23,14 @@ export default function RoundRobinCalc() {
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div id="round-robin-picks-label" style={S.label}>Your Picks (enter odds for each)</div>
-            <button onClick={addPick} style={{ padding: "3px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>+ Pick</button>
+            <button onClick={addPick} style={{ padding: "3px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.gn, fontSize: 12, cursor: "pointer", fontFamily: font }}>+ Pick</button>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {picks.map((p, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ fontSize: 10, color: K.mt }}>#{i + 1}</span>
+                <span style={{ fontSize: 12, color: K.mt }}>#{i + 1}</span>
                 <input aria-label={`Pick ${i + 1} odds`} aria-describedby="round-robin-picks-label" style={{ ...S.input, width: 80 }} value={p.odds} onChange={(e) => updatePick(i, e.target.value)} placeholder="+150" />
-                {picks.length > 2 && <button type="button" aria-label={`Remove round robin pick ${i + 1}`} onClick={() => removePick(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11, background: "transparent", border: 0, padding: 4 }}>✕</button>}
+                {picks.length > 2 && <button type="button" aria-label={`Remove round robin pick ${i + 1}`} onClick={() => removePick(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 12, background: "transparent", border: 0, padding: 4 }}>✕</button>}
               </div>
             ))}
           </div>
@@ -48,8 +48,8 @@ export default function RoundRobinCalc() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>{r.nCombos}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>combinations</span>
-              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>combinations</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Total Stake" v={`$${r.totalStake}`} c={K.rd} b />
             <RR l="Best Case Payout" v={`$${r.maxPayout}`} c={K.gn} />

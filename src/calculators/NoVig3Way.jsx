@@ -19,16 +19,16 @@ export default function NoVig3Way() {
         {r && (
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
-              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Total Vig (Juice)" v={`${r.v}%`} c={K.rd} b />
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 12 }}>
               {[["Home Win", r.ip1, r.fp1, r.fo1], [" Draw", r.ip2, r.fp2, r.fo2], ["Away Win", r.ip3, r.fp3, r.fo3]].map(([label, ip, fp, fo]) => (
                 <div key={label} style={{ padding: "10px", background: K.s3, borderRadius: 6 }}>
-                  <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", marginBottom: 6 }}>{label}</div>
+                  <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", marginBottom: 6 }}>{label}</div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: K.pp, marginBottom: 4 }}>{fo}</div>
-                  <div style={{ fontSize: 10, color: K.gn }}>True: {fp}%</div>
-                  <div style={{ fontSize: 10, color: K.mt }}>Book: {ip}%</div>
+                  <div style={{ fontSize: 12, color: K.gn }}>True: {fp}%</div>
+                  <div style={{ fontSize: 12, color: K.mt }}>Book: {ip}%</div>
                 </div>
               ))}
             </div>

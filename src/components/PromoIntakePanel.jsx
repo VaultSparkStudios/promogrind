@@ -43,12 +43,12 @@ export default function PromoIntakePanel({ onOpenCalculator, initialText = "" })
         <div style={{ fontSize: 16, fontWeight: 700, fontFamily: fontD, letterSpacing: "-0.3px" }}>
           Promo intake
         </div>
-        <div style={{ fontSize: 11, color: K.mt }}>
+        <div style={{ fontSize: 12, color: K.mt }}>
           Paste a promo → we detect the book, promo type, and open the right calculator.
         </div>
       </div>
 
-      <label htmlFor="promo-intake-text" style={{ display: "block", fontSize: 11, color: K.mt, marginBottom: 4 }}>
+      <label htmlFor="promo-intake-text" style={{ display: "block", fontSize: 12, color: K.mt, marginBottom: 4 }}>
         Paste promo text
       </label>
       <textarea
@@ -65,7 +65,7 @@ export default function PromoIntakePanel({ onOpenCalculator, initialText = "" })
           background: K.s2,
           color: K.tx,
           fontFamily: font,
-          fontSize: 13,
+          fontSize: 14,
           boxSizing: "border-box",
           resize: "vertical",
           outline: "none",
@@ -73,7 +73,7 @@ export default function PromoIntakePanel({ onOpenCalculator, initialText = "" })
       />
 
       {!card ? (
-        <div style={{ marginTop: 10, fontSize: 11, color: K.mt, lineHeight: 1.6 }}>
+        <div style={{ marginTop: 10, fontSize: 12, color: K.mt, lineHeight: 1.6 }}>
           Waiting for at least 6 characters of promo text…
         </div>
       ) : (
@@ -92,7 +92,7 @@ export default function PromoIntakePanel({ onOpenCalculator, initialText = "" })
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 8 }}>
             <span
               style={{
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: 800,
                 letterSpacing: "1.2px",
                 textTransform: "uppercase",
@@ -131,7 +131,7 @@ export default function PromoIntakePanel({ onOpenCalculator, initialText = "" })
                 border: "none",
                 background: K.gn,
                 color: "#081018",
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: 800,
                 cursor: "pointer",
                 fontFamily: font,
@@ -140,13 +140,13 @@ export default function PromoIntakePanel({ onOpenCalculator, initialText = "" })
               Open {card.calculator} calculator →
             </button>
           ) : (
-            <div style={{ fontSize: 11, color: K.mt }}>
+            <div style={{ fontSize: 12, color: K.mt }}>
               Couldn't match this to a specific calculator. Try adding the promo type (e.g. "bonus bet", "profit boost").
             </div>
           )}
 
           {card.matches.length > 0 && (
-            <div style={{ marginTop: 8, fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
+            <div style={{ marginTop: 8, fontSize: 12, color: K.mt, lineHeight: 1.6 }}>
               Signals: {card.matches.join(" · ")}
             </div>
           )}
@@ -163,7 +163,7 @@ const tagStyle = {
   borderRadius: 999,
   background: "rgba(96,165,250,0.12)",
   color: "#93c5fd",
-  fontSize: 10,
+  fontSize: 12,
   letterSpacing: "0.6px",
   textTransform: "uppercase",
   fontWeight: 700,

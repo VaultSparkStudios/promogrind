@@ -28,7 +28,7 @@ const OddsConvert = () => {
   return (<div><div style={S.card}><Tl t="Odds Format Converter" badge="UTILITY" bc={K.dm} shareable/>
     <div style={S.row}><div style={S.col}><label htmlFor="odds-input-format" style={S.label}>Input Format</label><select id="odds-input-format" style={S.input} value={mode} onChange={e=>setMode(e.target.value)}><option value="american">American (+/- odds)</option><option value="decimal">Decimal (e.g. 2.10)</option><option value="fractional">Fractional (e.g. 11/10)</option></select></div><In l="Enter Odds" v={v} set={setV}/></div>
     {dec>0&&<div role="status" aria-live="polite" aria-atomic="false" style={{...S.res(true),display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:12,textAlign:"center"}}>
-      {[["American",toA(dec),K.ac],["Decimal",f(dec,3),K.pp],["Fractional",toF(dec),K.yl],["Implied Prob",f(toP(dec),1)+"%",K.gn]].map(([l,vv,c])=>(<div key={l}><div style={{fontSize:10,color:K.mt,marginBottom:4}}>{l}</div><div style={{fontSize:18,fontWeight:700,color:c}}>{vv}</div></div>))}
+      {[["American",toA(dec),K.ac],["Decimal",f(dec,3),K.pp],["Fractional",toF(dec),K.yl],["Implied Prob",f(toP(dec),1)+"%",K.gn]].map(([l,vv,c])=>(<div key={l}><div style={{fontSize:12,color:K.mt,marginBottom:4}}>{l}</div><div style={{fontSize:18,fontWeight:700,color:c}}>{vv}</div></div>))}
     </div>}
   </div>
   <Help entries={[
@@ -81,7 +81,7 @@ const IncomeEstimator = () => {
 
   return (<div><div style={S.card}><Tl t="Annual Income Estimator" badge="PROJECTION" bc={K.gn} shareable/>
     <div style={S.row}>
-      <div style={S.col}><label htmlFor="income-books" style={S.label}>Sportsbooks Available in Your State</label>
+      <div style={S.col}><label htmlFor="income-books" style={S.label}>Number of books in the scenario</label>
         <select id="income-books" style={S.input} value={numBooks} onChange={e=>setNumBooks(e.target.value)}>
           {["2","3","4","5","6","7","8","9","10","11","12"].map(n=><option key={n} value={n}>{n} books</option>)}
         </select>
@@ -93,7 +93,7 @@ const IncomeEstimator = () => {
       </div>
     </div>
     <div style={S.row}>
-      <div style={S.col}><label htmlFor="income-boosts" style={S.label}>Daily Profit Boosts Available</label>
+      <div style={S.col}><label htmlFor="income-boosts" style={S.label}>Boosts per day in the scenario</label>
         <select id="income-boosts" style={S.input} value={boostsPerDay} onChange={e=>setBoostsPerDay(e.target.value)}>
           {[["2","2/day (1-2 books)"],["5","5/day (3-5 books)"],["8","8/day (6-8 books)"],["12","12/day (all books, multiple daily)"]].map(([v,l])=><option key={v} value={v}>{l}</option>)}
         </select>
@@ -112,19 +112,19 @@ const IncomeEstimator = () => {
     <div role="status" aria-live="polite" aria-atomic="false" style={{...S.res(true),marginTop:16}}>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:16,marginBottom:16,textAlign:"center"}}>
         <div>
-          <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:4}}>Welcome Promos</div>
+          <div style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:4}}>Welcome Promos</div>
           <div style={{fontSize:22,fontWeight:700,color:K.yl,fontFamily:"'Space Grotesk',sans-serif"}}>${Math.round(welcomePromos).toLocaleString()}</div>
-          <div style={{fontSize:9,color:K.mt}}>one-time, ~{nb} books</div>
+          <div style={{fontSize:12,color:K.mt}}>one-time, ~{nb} books</div>
         </div>
         <div>
-          <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:4}}>Annual Boosts</div>
+          <div style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:4}}>Annual Boosts</div>
           <div style={{fontSize:22,fontWeight:700,color:K.ac,fontFamily:"'Space Grotesk',sans-serif"}}>${Math.round(annualBoosts).toLocaleString()}</div>
-          <div style={{fontSize:9,color:K.mt}}>${Math.round(monthlyBoosts).toLocaleString()}/month recurring</div>
+          <div style={{fontSize:12,color:K.mt}}>${Math.round(monthlyBoosts).toLocaleString()}/month modeled</div>
         </div>
         <div>
-          <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:4}}>Year 1 Total</div>
+          <div style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:4}}>Year 1 Total</div>
           <div style={{fontSize:22,fontWeight:700,color:K.gn,fontFamily:"'Space Grotesk',sans-serif"}}>${Math.round(annualTotal).toLocaleString()}</div>
-          <div style={{fontSize:9,color:K.mt}}>~${Math.round(hourlyRate)}/hr effective rate</div>
+          <div style={{fontSize:12,color:K.mt}}>~${Math.round(hourlyRate)}/hr effective rate</div>
         </div>
       </div>
       <div style={{height:1,background:K.bd,marginBottom:16}}/>
@@ -132,15 +132,15 @@ const IncomeEstimator = () => {
       <RR l={`Daily boost income (${boostsPerDay} boosts × ~$${boostPerConversion} each × 22 days)`} v={`$${Math.round(monthlyBoosts).toLocaleString()}/month`} c={K.ac}/>
       <RR l="Year 1 estimate (conservative)" v={`$${Math.round(annualTotal * 0.8).toLocaleString()} – $${Math.round(annualTotal * 1.1).toLocaleString()}`} c={K.gn} b/>
       <RR l="Effective hourly rate" v={`~$${Math.round(hourlyRate)}/hr`} c={K.pp}/>
-      <Nt c={K.yl}>These are estimates based on current sportsbook promo values (2026). Welcome promos assume 70% conversion rate. Boost income varies by available lines and sportsbook generosity. Your actual results may be higher or lower.</Nt>
+      <Nt c={K.yl}>These are hypothetical reference amounts, not current sportsbook offers or an income forecast. Welcome credits assume 70% conversion. The model does not verify eligibility, actual prices, availability, losses, limits or costs.</Nt>
       <Nt c={K.ac}>Later-period estimates depend mostly on recurring boosts because welcome promos are one-time. Treat the output as scenario planning, not expected income.</Nt>
     </div>
   </div>
   <Help entries={[
-    ["Welcome promo estimates","Based on current sportsbook offers: DraftKings ~$200 effective, FanDuel ~$200, BetMGM ~$180, Caesars ~$150, bet365 ~$125, ESPN BET ~$100, Fanatics ~$90, BetRivers ~$80. Assumes 70% conversion rate on bonus bets."],
-    ["Boost income","Profit boosts appear daily across most sportsbooks. At 5 boosts per day averaging $9 each, that's $45/day, ~$990/month. More active grinders running all 8 books can see $200+/day on peak event days."],
+    ["Welcome promo estimates","The model uses illustrative per-book reference values and a 70% credit-conversion assumption. They are not current offers or confirmed entitlements. Verify any actual offer separately."],
+    ["Boost income","A hypothetical five conversions per day at $9 each over 22 days gives $990. This arithmetic does not establish that those offers exist, can be executed, or produce those returns."],
     ["Hourly rate","Based on your selected hours per week. Include research, account management, line movement, voids, limits, and settlement time when judging whether the workflow is worthwhile."],
-    ["State matters","More legal sportsbooks in your state = more promos = more income. NJ, PA, CO, MI have the most books. Some states only have 2-3."],
+    ["State matters","Check current jurisdiction rules, operator licensing and offer eligibility separately. A higher book count in this scenario does not prove availability or higher actual income."],
   ]}/></div>);
 };
 

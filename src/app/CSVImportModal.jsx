@@ -66,14 +66,14 @@ export function CSVImportModal({ onImport, onClose }) {
     <div data-backdrop-dismiss onClick={(event) => { if (event.target === event.currentTarget) onClose(); }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <div style={{ background: K.s1, border: `1px solid ${K.bd2}`, borderRadius: 12, padding: 24, width: "100%", maxWidth: 560, maxHeight: "80vh", overflow: "auto", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: K.tx, marginBottom: 4, fontFamily: fontD }}>Import Bets from CSV</div>
-        <div style={{ fontSize: 11, color: K.dm, marginBottom: 16 }}>Paste your DraftKings, FanDuel, or any sportsbook CSV export below. Headers are auto-detected.</div>
-        <textarea value={raw} onChange={(event) => setRaw(event.target.value)} placeholder={"date,book,odds,stake,status\n2026-03-01,DraftKings,+150,50,won"} style={{ ...S.input, height: 120, resize: "vertical", marginBottom: 8, fontFamily: "monospace", fontSize: 11 }} />
-        {error && <div style={{ fontSize: 11, color: K.rd, marginBottom: 8 }}>{error}</div>}
+        <div style={{ fontSize: 12, color: K.dm, marginBottom: 16 }}>Paste your DraftKings, FanDuel, or any sportsbook CSV export below. Headers are auto-detected.</div>
+        <textarea value={raw} onChange={(event) => setRaw(event.target.value)} placeholder={"date,book,odds,stake,status\n2026-03-01,DraftKings,+150,50,won"} style={{ ...S.input, height: 120, resize: "vertical", marginBottom: 8, fontFamily: "monospace", fontSize: 12 }} />
+        {error && <div style={{ fontSize: 12, color: K.rd, marginBottom: 8 }}>{error}</div>}
         {preview.length > 0 && (
           <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1.5px" }}>Preview ({preview.length} of {rowCount} rows)</div>
+            <div style={{ fontSize: 12, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1.5px" }}>Preview ({preview.length} of {rowCount} rows)</div>
             {preview.map((row, index) => (
-              <div key={index} style={{ fontSize: 11, color: K.dm, padding: "4px 0", borderBottom: `1px solid ${K.bd}` }}>{row.date} - {row.book} - {row.odds} - ${row.stake} - <span style={{ color: row.status === "won" ? K.gn : row.status === "lost" ? K.rd : K.yl }}>{row.status}</span></div>
+              <div key={index} style={{ fontSize: 12, color: K.dm, padding: "4px 0", borderBottom: `1px solid ${K.bd}` }}>{row.date} - {row.book} - {row.odds} - ${row.stake} - <span style={{ color: row.status === "won" ? K.gn : row.status === "lost" ? K.rd : K.yl }}>{row.status}</span></div>
             ))}
           </div>
         )}

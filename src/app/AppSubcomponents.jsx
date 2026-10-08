@@ -26,24 +26,24 @@ export function GiftTrialBox() {
   };
   if (status === 'sent') return (
     <div style={{padding:'10px 12px',background:'#1e3a2f',borderRadius:6,border:'1px solid #4ade8040'}}>
-      <div role="status" style={{fontSize:12,color:'#4ade80',fontWeight:700,marginBottom:6}}>✓ {describeGiftReceipt(receipt).title}</div>
-      {giftLink && <div style={{fontSize:10,color:'#64748b',wordBreak:'break-all'}}>Gift link: <span style={{color:'#60a5fa'}}>{giftLink}</span></div>}
-      <div style={{fontSize:11,color:'#94a3b8',marginTop:4}}>{describeGiftReceipt(receipt).detail} The token grants {REFERRAL_PROGRAM.gift.recipientDays} workspace days. {describeSenderBonus(receipt)}</div>
+      <div role="status" style={{fontSize:14,color:'#4ade80',fontWeight:700,marginBottom:6}}>✓ {describeGiftReceipt(receipt).title}</div>
+      {giftLink && <div style={{fontSize:12,color:'#64748b',wordBreak:'break-all'}}>Gift link: <span style={{color:'#60a5fa'}}>{giftLink}</span></div>}
+      <div style={{fontSize:12,color:'#94a3b8',marginTop:4}}>{describeGiftReceipt(receipt).detail} The token grants {REFERRAL_PROGRAM.gift.recipientDays} workspace days. {describeSenderBonus(receipt)}</div>
     </div>
   );
   return (
     <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
       <label htmlFor="gift-trial-email" style={{position:'absolute',width:1,height:1,overflow:'hidden',clip:'rect(0 0 0 0)'}}>Friend email address</label>
       <input id="gift-trial-email" type="email" autoComplete="email" placeholder="friend@email.com" value={email} onChange={e=>setEmail(e.target.value)}
-        style={{flex:1,minWidth:180,padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:6,color:'#e2e8f0',fontFamily:"'JetBrains Mono',monospace",fontSize:13,outline:'none',boxSizing:'border-box'}}
+        style={{flex:1,minWidth:180,padding:'8px 10px',background:'#0a0e17',border:'1px solid #1e293b',borderRadius:6,color:'#e2e8f0',fontFamily:"'JetBrains Mono',monospace",fontSize:14,outline:'none',boxSizing:'border-box'}}
         onKeyDown={e=>e.key==='Enter'&&send()}
       />
       <button onClick={send} disabled={status==='loading'||!email.includes('@')}
-        style={{padding:'8px 16px',background:email.includes('@')?'#4ade80':'#1e293b',border:'none',borderRadius:6,color:email.includes('@')?'#0a0e17':'#475569',fontWeight:700,fontSize:12,cursor:email.includes('@')?'pointer':'not-allowed',whiteSpace:'nowrap',opacity:status==='loading'?0.7:1}}>
+        style={{padding:'8px 16px',background:email.includes('@')?'#4ade80':'#1e293b',border:'none',borderRadius:6,color:email.includes('@')?'#0a0e17':'#475569',fontWeight:700,fontSize:14,cursor:email.includes('@')?'pointer':'not-allowed',whiteSpace:'nowrap',opacity:status==='loading'?0.7:1}}>
         {status==='loading'?'Sending…':'Send Gift →'}
       </button>
-      {status==='error'&&<div style={{fontSize:11,color:'#f87171',width:'100%'}}>Failed — check the email or try again.</div>}
-      <div style={{fontSize:10,color:'#64748b',width:'100%'}}>Limit: {REFERRAL_PROGRAM.gift.limitCount} gift links per rolling {REFERRAL_PROGRAM.gift.limitWindowDays} days. {REFERRAL_PROGRAM.gift.providerScope}</div>
+      {status==='error'&&<div style={{fontSize:12,color:'#f87171',width:'100%'}}>Failed — check the email or try again.</div>}
+      <div style={{fontSize:12,color:'#64748b',width:'100%'}}>Limit: {REFERRAL_PROGRAM.gift.limitCount} gift links per rolling {REFERRAL_PROGRAM.gift.limitWindowDays} days. {REFERRAL_PROGRAM.gift.providerScope}</div>
     </div>
   );
 }
@@ -65,7 +65,7 @@ export function StarterPackModal({ onClose, syncAppData, appData }) {
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',zIndex:3000,display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
       <div style={{background:'#0f1520',border:'1px solid #1e293b',borderRadius:12,padding:24,maxWidth:480,width:'100%',boxShadow:'0 8px 32px rgba(0,0,0,0.6)'}}>
         <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:4}}>How do you want to play it?</div>
-        <div style={{fontSize:12,color:K.mt,marginBottom:20}}>Choose a starter profile — sets your bankroll and profit goal. You can change these anytime.</div>
+        <div style={{fontSize:14,color:K.mt,marginBottom:20}}>Choose a starter profile — sets your bankroll and profit goal. You can change these anytime.</div>
         <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:20}}>
           {PACKS.map(p=>(
             <button type="button" key={p.id} onClick={()=>setSelected(p.id)} aria-pressed={selected===p.id}
@@ -73,19 +73,19 @@ export function StarterPackModal({ onClose, syncAppData, appData }) {
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:4}}>
                 <span style={{fontSize:20}}>{p.icon}</span>
                 <span style={{fontWeight:700,color:K.tx,fontSize:14}}>{p.label}</span>
-                <span style={{marginLeft:'auto',fontSize:10,color:K.ac,fontWeight:600}}>${parseInt(p.bankroll).toLocaleString()} bankroll · ${p.goal.toLocaleString()} goal</span>
+                <span style={{marginLeft:'auto',fontSize:12,color:K.ac,fontWeight:600}}>${parseInt(p.bankroll).toLocaleString()} bankroll · ${p.goal.toLocaleString()} goal</span>
               </div>
-              <div style={{fontSize:11,color:K.mt,marginLeft:30}}>{p.desc} · {p.hrs}</div>
+              <div style={{fontSize:12,color:K.mt,marginLeft:30}}>{p.desc} · {p.hrs}</div>
             </button>
           ))}
         </div>
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>{const p=PACKS.find(x=>x.id===selected);if(p)apply(p);}} disabled={!selected}
-            style={{flex:1,padding:'10px',background:selected?K.gn:K.bd,border:'none',borderRadius:6,color:selected?K.bg:K.mt,fontWeight:700,fontSize:13,cursor:selected?'pointer':'not-allowed',fontFamily:font,transition:'background 0.15s'}}>
+            style={{flex:1,padding:'10px',background:selected?K.gn:K.bd,border:'none',borderRadius:6,color:selected?K.bg:K.mt,fontWeight:700,fontSize:14,cursor:selected?'pointer':'not-allowed',fontFamily:font,transition:'background 0.15s'}}>
             Start with this profile →
           </button>
           <button onClick={()=>{try{localStorage.setItem('pg_starter_pack_done','1');}catch{}onClose();}}
-            style={{padding:'10px 16px',background:'transparent',border:`1px solid ${K.bd}`,borderRadius:6,color:K.mt,cursor:'pointer',fontSize:12,fontFamily:font}}>
+            style={{padding:'10px 16px',background:'transparent',border:`1px solid ${K.bd}`,borderRadius:6,color:K.mt,cursor:'pointer',fontSize:14,fontFamily:font}}>
             Skip
           </button>
         </div>
@@ -137,7 +137,7 @@ export function OnboardingChecklist({ appData, user, isPro }) {
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
         <div>
           <span style={{fontWeight:700,color:'#e2e8f0',fontSize:14}}>Getting Started</span>
-          <span style={{marginLeft:8,color:'#64748b',fontSize:12}}>{doneCount}/{STEPS.length} complete</span>
+          <span style={{marginLeft:8,color:'#64748b',fontSize:14}}>{doneCount}/{STEPS.length} complete</span>
         </div>
         <button onClick={() => { localStorage.setItem('pg_onboarding_done','1'); setDone(true); }} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:18,lineHeight:1}}>×</button>
       </div>
@@ -150,7 +150,7 @@ export function OnboardingChecklist({ appData, user, isPro }) {
           return (
             <div key={s.id} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 10px',background:'#0a0e17',borderRadius:6,opacity: isDone ? 0.5 : 1}}>
               <span style={{fontSize:16}}>{isDone ? '✅' : s.icon}</span>
-              <span style={{fontSize:12,color: isDone ? '#64748b' : '#cbd5e1',textDecoration: isDone ? 'line-through' : 'none'}}>{s.label}</span>
+              <span style={{fontSize:14,color: isDone ? '#64748b' : '#cbd5e1',textDecoration: isDone ? 'line-through' : 'none'}}>{s.label}</span>
             </div>
           );
         })}
@@ -182,9 +182,9 @@ export function MemberWelcomeCard({ navigate, proStatus }) {
     <div style={{...S.card,border:`1px solid ${K.ac}40`,background:`linear-gradient(135deg, ${K.ac}10, ${K.s1})`,marginBottom:12}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12,marginBottom:10}}>
         <div>
-          <div style={{fontSize:11,color:K.ac,fontWeight:700,letterSpacing:'1.4px',textTransform:'uppercase',marginBottom:6}}>Member Welcome</div>
+          <div style={{fontSize:12,color:K.ac,fontWeight:700,letterSpacing:'1.4px',textTransform:'uppercase',marginBottom:6}}>Member Welcome</div>
           <div style={{fontFamily:fontD,fontSize:18,fontWeight:700,color:K.tx,marginBottom:6}}>How access works in PromoGrind</div>
-          <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:760}}>
+          <div style={{fontSize:14,color:K.dm,lineHeight:1.7,maxWidth:760}}>
             A Free PromoGrind account powers sync, referrals, and access across devices. Studio membership is separate and is not required to create or use a PromoGrind account. Pro features unlock in stages as services come online.
           </div>
         </div>
@@ -193,23 +193,23 @@ export function MemberWelcomeCard({ navigate, proStatus }) {
 
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))',gap:10,marginBottom:12}}>
         <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:4}}>Free PromoGrind Account</div>
-          <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>Login, sync, calculators, tracker, ledger, and learning tools.</div>
+          <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:4}}>Free PromoGrind Account</div>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>Login, sync, calculators, tracker, ledger, and learning tools.</div>
         </div>
         <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.pp,marginBottom:4}}>VaultSparked Pro</div>
-          <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>{proLabel}. Paid checkout stays off until the Studio billing rollout is fully live.</div>
+          <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:4}}>VaultSparked Pro</div>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{proLabel}. Paid checkout stays off until the Studio billing rollout is fully live.</div>
         </div>
         <div style={{padding:'10px 12px',background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8}}>
-          <div style={{fontSize:11,fontWeight:700,color:K.yl,marginBottom:4}}>Beta-Gated Features</div>
-          <div style={{fontSize:11,color:K.dm,lineHeight:1.6}}>Live scanner, AI helpers, and push alerts remain beta until their backends are activated.</div>
+          <div style={{fontSize:12,fontWeight:700,color:K.yl,marginBottom:4}}>Beta-Gated Features</div>
+          <div style={{fontSize:14,color:K.dm,lineHeight:1.6}}>Features marked coming soon, including live scanning, AI helpers and push alerts, are unavailable during a trial.</div>
         </div>
       </div>
 
       <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-        <button onClick={() => navigate('/bonus-bet')} style={{padding:'7px 12px',background:K.gn,border:'none',borderRadius:6,color: K.ink,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>Start with free tools →</button>
-        <button onClick={() => navigate('/upgrade')} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}>See Pro status</button>
-        <button onClick={dismiss} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:11,cursor:'pointer',fontFamily:font}}>Dismiss</button>
+        <button onClick={() => navigate('/bonus-bet')} style={{padding:'7px 12px',background:K.gn,border:'none',borderRadius:6,color: K.ink,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font}}>Start with free tools →</button>
+        <button onClick={() => navigate('/upgrade')} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font}}>See Pro status</button>
+        <button onClick={dismiss} style={{padding:'7px 12px',background:'transparent',border:`1px solid ${K.bd2}`,borderRadius:6,color:K.mt,fontSize:12,cursor:'pointer',fontFamily:font}}>Dismiss</button>
       </div>
     </div>
   );

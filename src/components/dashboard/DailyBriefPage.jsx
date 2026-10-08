@@ -41,7 +41,7 @@ export default function DailyBriefPage() {
     } else {
       const reasonMap = {
         unsupported: "This browser does not support push notifications.",
-        missing_vapid: "Push alerts are not configured in this build yet.",
+        missing_vapid: "Push alerts are not available yet.",
         permission_denied: "Notification permission was denied.",
         auth_required: "Sign in to a PromoGrind account before enabling push alerts.",
         subscribe_failed: "The browser subscription failed. Reload and try again.",
@@ -64,51 +64,51 @@ export default function DailyBriefPage() {
     <div style={{ maxWidth: 860, margin: "0 auto", padding: "24px 16px", fontFamily: font }}>
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 24, fontWeight: 700, color: K.tx, fontFamily: fontD, letterSpacing: -0.5, marginBottom: 2 }}>{fullDate}</div>
-        <div style={{ fontSize: 13, color: K.dm, marginBottom: 4 }}>{dayName}</div>
-        <div style={{ fontSize: 13, color: K.mt }}>Your daily PromoGrind briefing</div>
+        <div style={{ fontSize: 14, color: K.dm, marginBottom: 4 }}>{dayName}</div>
+        <div style={{ fontSize: 14, color: K.mt }}>Your daily PromoGrind briefing</div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(340px,1fr))", gap: 14 }}>
         <div style={{ background: `${K.ac}08`, border: `1px solid ${K.ac}25`, borderRadius: 12, padding: "18px 20px" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>Targeted Alert</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>Review next</div>
           <div style={{ fontSize: 16, fontWeight: 700, color: K.ac, marginBottom: 8 }}>{alertPlan.primary.headline}</div>
-          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 12 }}>{alertPlan.primary.body}</div>
-          <button onClick={() => navigate(alertPlan.primary.ctaSlug)} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
+          <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.7, marginBottom: 12 }}>{alertPlan.primary.body}</div>
+          <button onClick={() => navigate(alertPlan.primary.ctaSlug)} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 14, cursor: "pointer", fontFamily: font }}>
             {alertPlan.primary.ctaLabel} →
           </button>
-          <div style={{ fontSize: 10, color: K.mt, marginTop: 10 }}>
-            Queue: {alertPlan.queue.slice(0, 3).map((item) => item.kind).join(" · ")}
-          </div>
+          {alertPlan.queue.length > 0 && <div style={{ fontSize: 14, color: K.mt, marginTop: 10 }}>
+            Also review: {alertPlan.queue.slice(0, 3).map((item) => item.headline).join(" · ")}
+          </div>}
         </div>
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 4 }}>Patterns to verify today</div>
-          <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 12 }}>Historical cadence only. Confirm the offer in your sportsbook before acting.</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 4 }}>Patterns to verify today</div>
+          <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5, marginBottom: 12 }}>Historical cadence only. Confirm the offer in your sportsbook before acting.</div>
           {dashboardSnapshot.todayPromos.length === 0 ? (
-            <div style={{ fontSize: 12, color: K.mt }}>No historical cadence patterns match today.</div>
+            <div style={{ fontSize: 14, color: K.mt }}>No historical cadence patterns match today.</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {dashboardSnapshot.todayPromos.slice(0, 8).map((promo, index) => (
                 <div key={`${promo.book}-${promo.promo}-${index}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: index < Math.min(dashboardSnapshot.todayPromos.length, 8) - 1 ? `1px solid ${K.bd}` : "none" }}>
                   <div>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: K.tx }}>{promo.promo}</span>
-                    <span style={{ fontSize: 11, color: K.dm, marginLeft: 6 }}>{promo.book}</span>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: K.tx }}>{promo.promo}</span>
+                    <span style={{ fontSize: 12, color: K.dm, marginLeft: 6 }}>{promo.book}</span>
                   </div>
-                  <div style={{ textAlign: "right" }}><div style={{ fontSize: 11, color: K.dm, fontFamily: font }}>Modeled {promo.value}</div><div style={{ fontSize: 9, color: promo.freshness?.state === "current" ? K.gn : K.yl }}>{promo.evidenceLabel || "Historical pattern · verify"}</div></div>
+                  <div style={{ textAlign: "right" }}><div style={{ fontSize: 12, color: K.dm, fontFamily: font }}>Modeled {promo.value}</div><div style={{ fontSize: 12, color: promo.freshness?.state === "current" ? K.gn : K.yl }}>{promo.evidenceLabel || "Historical pattern · verify"}</div></div>
                 </div>
               ))}
             </div>
           )}
-          <button onClick={() => navigate("/promo-calendar")} style={{ marginTop: 14, padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
+          <button onClick={() => navigate("/promo-calendar")} style={{ marginTop: 14, padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 14, cursor: "pointer", fontFamily: font }}>
             View full calendar →
           </button>
         </div>
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 12 }}>Quick Actions</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 12 }}>Quick Actions</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             {actions.map((action) => (
-              <button key={action.slug} onClick={() => navigate(action.slug)} style={{ padding: "12px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: font, display: "flex", alignItems: "center", gap: 8, textAlign: "left" }}>
+              <button key={action.slug} onClick={() => navigate(action.slug)} style={{ padding: "12px 10px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: font, display: "flex", alignItems: "center", gap: 8, textAlign: "left" }}>
                 <span style={{ fontSize: 18 }}>{action.icon}</span>
                 <span>{action.label}</span>
               </button>
@@ -117,35 +117,35 @@ export default function DailyBriefPage() {
         </div>
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>9am Briefing</div>
-          <div style={{ fontSize: 12, color: K.mt, marginBottom: 14 }}>
-            Get a state-aware push notification at 9am with the highest-value promo, workflow, or settlement action for today.
+          <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>Daily push briefing</div>
+          <div style={{ fontSize: 14, color: K.mt, marginBottom: 14 }}>
+            When available, a daily notification can remind you to review an offer, saved workflow or unsettled bet.
           </div>
           {!FEATURE_FLAGS.pushAlerts && (
-            <div style={{ fontSize: 11, color: K.yl, marginBottom: 10 }}>
-              Push alerts stay beta-gated until the VAPID key and scheduled Edge Function are enabled in this build.
+            <div style={{ fontSize: 12, color: K.yl, marginBottom: 10 }}>
+              Push alerts are coming soon. You can still review your daily briefing here.
             </div>
           )}
           <button
             onClick={toggleNotif}
-            disabled={notifPending}
-            style={{ padding: "8px 16px", background: notifEnabled ? `${K.gn}15` : "transparent", border: `1px solid ${notifEnabled ? K.gn : K.bd2}`, borderRadius: 6, color: notifEnabled ? K.gn : K.dm, fontSize: 12, fontWeight: 600, cursor: notifPending ? "wait" : "pointer", fontFamily: font }}
+            disabled={notifPending || !FEATURE_FLAGS.pushAlerts}
+            style={{ padding: "8px 16px", background: notifEnabled ? `${K.gn}15` : "transparent", border: `1px solid ${notifEnabled ? K.gn : K.bd2}`, borderRadius: 6, color: notifEnabled ? K.gn : K.dm, fontSize: 14, fontWeight: 600, cursor: notifPending ? "wait" : "pointer", fontFamily: font }}
           >
-            {notifPending ? "Working…" : notifEnabled ? "Push briefing on — tap to disable" : "Enable daily push briefing"}
+            {!FEATURE_FLAGS.pushAlerts ? "Push alerts coming soon" : notifPending ? "Working…" : notifEnabled ? "Push briefing on — tap to disable" : "Enable daily push briefing"}
           </button>
-          {notifMessage && <div style={{ fontSize: 11, color: K.yl, marginTop: 10, lineHeight: 1.5 }}>{notifMessage}</div>}
+          {notifMessage && <div style={{ fontSize: 12, color: K.yl, marginTop: 10, lineHeight: 1.5 }}>{notifMessage}</div>}
         </div>
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>Open Bets</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 6 }}>Open Bets</div>
           {dashboardSnapshot.openBets.length === 0 ? (
-            <div style={{ fontSize: 12, color: K.gn }}>No open bets — you&apos;re clear.</div>
+            <div style={{ fontSize: 14, color: K.gn }}>No open bets — you&apos;re clear.</div>
           ) : (
             <div>
-              <div style={{ fontSize: 12, color: K.tx, marginBottom: 12 }}>
+              <div style={{ fontSize: 14, color: K.tx, marginBottom: 12 }}>
                 <span style={{ fontWeight: 700, color: K.yl }}>{dashboardSnapshot.openBets.length}</span> bet{dashboardSnapshot.openBets.length !== 1 ? "s" : ""} pending
               </div>
-              <button onClick={() => navigate("/bet-tracker")} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
+              <button onClick={() => navigate("/bet-tracker")} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 14, cursor: "pointer", fontFamily: font }}>
                 View tracker →
               </button>
             </div>
@@ -153,16 +153,16 @@ export default function DailyBriefPage() {
         </div>
 
         <div style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 12, padding: "18px 20px" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 8 }}>Workflow Focus</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD, marginBottom: 8 }}>Workflow Focus</div>
           {studioSnapshot.workflows.top.length === 0 ? (
-            <div style={{ fontSize: 12, color: K.mt }}>No active workflows yet. Save one from calculators, Promo Advisor, or AI Action Plan.</div>
+            <div style={{ fontSize: 14, color: K.mt }}>No active workflows yet. Save one from calculators, Promo Advisor, or AI Action Plan.</div>
           ) : (
             <div style={{ display: "grid", gap: 8 }}>
               {studioSnapshot.workflows.top.slice(0, 3).map((workflow) => (
                 <button key={workflow.id} onClick={() => navigate(getWorkflowActionSlug(workflow))} style={{ textAlign: "left", padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, cursor: "pointer", fontFamily: font }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>{workflow.title}</div>
-                  <div style={{ fontSize: 10, color: K.ac, marginBottom: 4 }}>{workflow.scoreSummary || `${workflow.status} workflow scored ${workflow.score}.`}</div>
-                  <div style={{ fontSize: 10, color: K.mt }}>{workflow.status} · {workflow.source.replace(/_/g, " ")}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{workflow.title}</div>
+                  <div style={{ fontSize: 12, color: K.ac, marginBottom: 4 }}>{workflow.scoreSummary || `${workflow.status} workflow scored ${workflow.score}.`}</div>
+                  <div style={{ fontSize: 12, color: K.mt }}>{workflow.status} · {workflow.source.replace(/_/g, " ")}</div>
                 </button>
               ))}
             </div>
@@ -176,21 +176,21 @@ export default function DailyBriefPage() {
             <div style={{ background: `${K.gn}08`, border: `1px solid ${K.gn}25`, borderRadius: 12, padding: "18px 20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                 <span style={{ fontSize: 16 }}>📋</span>
-                <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, fontFamily: fontD }}>Top Matched Playbook</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, fontFamily: fontD }}>Top Matched Playbook</div>
               </div>
               <div style={{ fontSize: 15, fontWeight: 700, color: K.gn, marginBottom: 6 }}>{pb.name}</div>
-              <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 4 }}>{pb.summary}</div>
-              <div style={{ fontSize: 11, color: K.mt, marginBottom: 12 }}>
+              <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.7, marginBottom: 4 }}>{pb.summary}</div>
+              <div style={{ fontSize: 12, color: K.mt, marginBottom: 12 }}>
                 {pb.steps.length} step{pb.steps.length === 1 ? "" : "s"} · {fitLine}
               </div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <button
                   onClick={() => navigate(`/${pb.steps[0]?.calculatorSlug || "bonus-bet"}`)}
-                  style={{ padding: "6px 14px", background: `${K.gn}15`, border: `1px solid ${K.gn}40`, borderRadius: 6, color: K.gn, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: font }}
+                  style={{ padding: "6px 14px", background: `${K.gn}15`, border: `1px solid ${K.gn}40`, borderRadius: 6, color: K.gn, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: font }}
                 >
                   Run playbook →
                 </button>
-                <span style={{ fontSize: 11, color: K.mt, alignSelf: "center" }}>
+                <span style={{ fontSize: 12, color: K.mt, alignSelf: "center" }}>
                   via {pb.steps[0]?.title}
                 </span>
               </div>

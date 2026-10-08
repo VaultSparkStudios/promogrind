@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 
 export const DOCUMENTED_LOCAL_OVERRIDES = Object.freeze([
+  'scripts/arc-profile.mjs',
   'scripts/check-public-repo-sanitization.mjs',
   'scripts/check-release-gate.mjs',
   'scripts/check-model-router-adherence.mjs',

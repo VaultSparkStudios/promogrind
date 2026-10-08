@@ -14,44 +14,44 @@
   <meta property="og:type" content="article">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.8; }
-    .header { background: #0f1520; border-bottom: 1px solid #1e293b; padding: 1.25rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.8; }
+    .header { background: var(--pg-page-panel); border-bottom: 1px solid var(--pg-page-border); padding: 1.25rem 1rem; }
     .header-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-    .logo { font-size: 1.2rem; font-weight: 700; color: #4ade80; text-decoration: none; }
-    .back-link { color: #64748b; text-decoration: none; font-size: 0.9rem; }
-    .back-link:hover { color: #94a3b8; }
+    .logo { font-size: 1.2rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; }
+    .back-link { color: var(--pg-page-muted); text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { color: var(--pg-page-muted); }
     .container { max-width: 800px; margin: 0 auto; padding: 3rem 1rem; }
-    .article-meta { color: #475569; font-size: 0.85rem; margin-bottom: 2rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
-    .tag { background: #4ade8012; border: 1px solid #4ade8030; color: #4ade80; padding: 2px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; }
+    .article-meta { color: var(--pg-page-muted); font-size: .875rem; margin-bottom: 2rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .tag { background: color-mix(in srgb, var(--pg-page-accent) 7%, transparent); border: 1px solid color-mix(in srgb, var(--pg-page-accent) 19%, transparent); color: var(--pg-page-accent); padding: 2px 10px; border-radius: 50px; font-size: .875rem; font-weight: 700; }
     h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.3; }
-    h2 { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 0.75rem; color: #4ade80; }
-    h3 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.5rem; color: #60a5fa; }
-    p { margin-bottom: 1.1rem; color: #cbd5e1; }
-    .intro { font-size: 1.1rem; color: #94a3b8; margin-bottom: 2rem; border-left: 3px solid #4ade80; padding-left: 1.25rem; }
-    .example-box { background: #0f1520; border: 1px solid #1e293b; border-left: 3px solid #4ade80; border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
-    .example-box .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #4ade80; font-weight: 700; margin-bottom: 0.75rem; }
-    .math-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #1e293b; font-size: 0.9rem; }
+    h2 { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 0.75rem; color: var(--pg-page-accent); }
+    h3 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.5rem; color: var(--pg-page-blue); }
+    p { margin-bottom: 1.1rem; color: var(--pg-page-muted); }
+    .intro { font-size: 1.1rem; color: var(--pg-page-muted); margin-bottom: 2rem; border-left: 3px solid var(--pg-page-accent); padding-left: 1.25rem; }
+    .example-box { background: var(--pg-page-panel); border: 1px solid var(--pg-page-border); border-left: 3px solid var(--pg-page-accent); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+    .example-box .label { font-size: .875rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--pg-page-accent); font-weight: 700; margin-bottom: 0.75rem; }
+    .math-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--pg-page-border); font-size: 0.9rem; }
     .math-row:last-child { border-bottom: none; }
-    .math-label { color: #64748b; }
+    .math-label { color: var(--pg-page-muted); }
     .math-val { font-weight: 700; }
     .step-list { counter-reset: steps; }
-    .step-list li { counter-increment: steps; list-style: none; padding-left: 2.5rem; position: relative; margin-bottom: 1.25rem; color: #cbd5e1; }
-    .step-list li::before { content: counter(steps); position: absolute; left: 0; top: 0; width: 1.75rem; height: 1.75rem; background: #4ade8015; border: 1px solid #4ade8040; border-radius: 50%; color: #4ade80; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; line-height: 1; }
-    ul { margin: 0.75rem 0 1.25rem 1.5rem; color: #cbd5e1; }
+    .step-list li { counter-increment: steps; list-style: none; padding-left: 2.5rem; position: relative; margin-bottom: 1.25rem; color: var(--pg-page-muted); }
+    .step-list li::before { content: counter(steps); position: absolute; left: 0; top: 0; width: 1.75rem; height: 1.75rem; background: color-mix(in srgb, var(--pg-page-accent) 8%, transparent); border: 1px solid color-mix(in srgb, var(--pg-page-accent) 25%, transparent); border-radius: 50%; color: var(--pg-page-accent); font-weight: 700; font-size: .875rem; display: flex; align-items: center; justify-content: center; line-height: 1; }
+    ul { margin: 0.75rem 0 1.25rem 1.5rem; color: var(--pg-page-muted); }
     li { margin-bottom: 0.4rem; }
-    .warning { background: #fbbf2408; border: 1px solid #fbbf2430; border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; color: #fbbf24; font-size: 0.95rem; }
-    .cta-box { background: #4ade8010; border: 1px solid #4ade8025; border-radius: 10px; padding: 1.5rem; text-align: center; margin-top: 3rem; }
-    .cta-box h3 { color: #4ade80; margin-top: 0; }
-    .cta-btn { display: inline-block; margin-top: 0.75rem; padding: 0.7rem 1.5rem; background: #4ade80; color: #0a0e17; font-weight: 700; border-radius: 6px; text-decoration: none; }
+    .warning { background: color-mix(in srgb, var(--pg-page-warning) 3%, transparent); border: 1px solid color-mix(in srgb, var(--pg-page-warning) 19%, transparent); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; color: var(--pg-page-warning); font-size: 0.95rem; }
+    .cta-box { background: color-mix(in srgb, var(--pg-page-accent) 6%, transparent); border: 1px solid color-mix(in srgb, var(--pg-page-accent) 15%, transparent); border-radius: 10px; padding: 1.5rem; text-align: center; margin-top: 3rem; }
+    .cta-box h3 { color: var(--pg-page-accent); margin-top: 0; }
+    .cta-btn { display: inline-block; margin-top: 0.75rem; padding: 0.7rem 1.5rem; background: var(--pg-page-accent); color: var(--pg-page-bg); font-weight: 700; border-radius: 6px; text-decoration: none; }
     table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
-    th { text-align: left; padding: 8px 12px; background: #0f1520; border-bottom: 2px solid #1e293b; color: #64748b; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-    td { padding: 9px 12px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    th { text-align: left; padding: 8px 12px; background: var(--pg-page-panel); border-bottom: 2px solid var(--pg-page-border); color: var(--pg-page-muted); font-size: .875rem; text-transform: uppercase; letter-spacing: 1px; }
+    td { padding: 9px 12px; border-bottom: 1px solid var(--pg-page-border); color: var(--pg-page-muted); }
     tr:hover td { background: #0f152080; }
-    .green { color: #4ade80; font-weight: 700; }
-    strong { color: #e2e8f0; }
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .green { color: var(--pg-page-accent); font-weight: 700; }
+    strong { color: var(--pg-page-text); }
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
   <script type="application/ld+json">
   {
@@ -66,8 +66,11 @@
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://promogrind.bet/blog/how-matched-betting-works/" }
   }
   </script>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <header class="header">
     <div class="header-inner">
       <a href="https://promogrind.bet/" class="logo">⚡ PromoGrind</a>
@@ -78,109 +81,35 @@
   <div class="container">
     <div class="article-meta">
       <span class="tag">Guide</span>
-      <span>March 26, 2026</span>
-      <span>8 min read</span>
+      <span>Reviewed October 8, 2026</span>
+      <span>4 min read</span>
       <span>Beginner</span>
     </div>
 
     <h1>How Matched Betting Works — Complete 2026 Guide</h1>
     <div class="trust"><strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across devices. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</div>
 
-    <p class="intro">Matched betting is a mathematical technique that converts sportsbook promotional offers — free bets, bonus bets, and profit boosts — into modeled cash value. It is not gambling. The outcome of the event is irrelevant. You profit either way.</p>
-
-    <h2>The Core Concept</h2>
-    <p>Every sportsbook promo relies on you placing a bet with them and hoping you win (or lose, so you keep playing). Matched betting uses a counter-bet at a second platform to neutralise the outcome risk, leaving only the value of the promo as modeled return.</p>
-
-    <p>There are two types of matched betting:</p>
-    <ul>
-      <li><strong>Bonus Bet Conversion</strong> — Convert free bet / bonus bet credits into cash</li>
-      <li><strong>Profit Boost Extraction</strong> — Lock in the extra profit from a percentage boost token</li>
-    </ul>
-
-    <h2>How Bonus Bet Conversion Works</h2>
-    <p>A bonus bet (also called a free bet in the UK) is a credit from a sportsbook that lets you place a bet without risking your own money. The catch: if you win, you only receive the profit — your stake is NOT returned. A £30 bonus bet on +300 (+3.00 decimal) returns £90 profit, not £120.</p>
-
-    <p>The strategy: place the bonus bet on an underdog with high odds (typically +250 to +400 in American, or 4.0–5.0 decimal). Then place a cash bet on the opposing side at another sportsbook. One side wins, one loses — you collect net profit regardless of outcome.</p>
-
-    <div class="example-box">
-      <div class="label">Worked Example — $200 Bonus Bet</div>
-      <div class="math-row"><span class="math-label">Sportsbook A: Bonus Bet on Warriors +350</span><span class="math-val" style="color:#60a5fa;">+350</span></div>
-      <div class="math-row"><span class="math-label">Sportsbook B: Cash hedge on Lakers -400</span><span class="math-val" style="color:#60a5fa;">-400</span></div>
-      <div class="math-row"><span class="math-label">Bonus Bet Size</span><span class="math-val">$200</span></div>
-      <div class="math-row"><span class="math-label">Hedge Stake (calculated)</span><span class="math-val">$155</span></div>
-      <div style="height:1px;background:#1e293b;margin:10px 0;"></div>
-      <div class="math-row"><span class="math-label">If Warriors win: Profit from Sportsbook A</span><span class="math-val green">+$700 − $155 = +$545... wait</span></div>
-      <div class="math-row"><span class="math-label">If Warriors win: Net (win $700, lose hedge $155 stake + lay)</span><span class="math-val green">+$149</span></div>
-      <div class="math-row"><span class="math-label">If Lakers win: Hedge wins, lose $0 (bonus bet)</span><span class="math-val green">+$149</span></div>
-      <div class="math-row"><span class="math-label"><strong>modeled return either way</strong></span><span class="math-val green"><strong>~$149 (74.5% of $200)</strong></span></div>
-    </div>
-
-    <p>The PromoGrind Bonus Bet Converter calculates the exact hedge stake and modeled return automatically. You never need to do this math by hand.</p>
-
-    <h2>Step-by-Step: Your First Matched Bet</h2>
-
-    <ol class="step-list">
-      <li><strong>Get the bonus bet credit.</strong> Sign up at DraftKings (or any book) and complete the qualifying requirement — usually a first deposit and a bet. Your bonus credit appears in your account (e.g., $200 in bonus bets).</li>
-      <li><strong>Find a game with an underdog at +250 to +400.</strong> Look across your sportsbook apps. You want both the underdog AND the favorite available at two different books so you can hedge. DraftKings and FanDuel are ideal pairs.</li>
-      <li><strong>Enter the numbers into PromoGrind.</strong> Open the Bonus Bet Converter. Enter: bonus bet size, the underdog odds (where you'll place the bonus), and the favorite odds (where you'll hedge with cash). The calculator shows your hedge stake and modeled return instantly.</li>
-      <li><strong>Place both bets immediately.</strong> First place the bonus bet at Sportsbook A. Then immediately place the cash hedge at Sportsbook B for the calculated amount. Speed matters — odds can move.</li>
-      <li><strong>Collect your profit.</strong> One side wins. You collect the winning payout. Subtract the losing stake. The net result is your modeled return — no matter who won the game.</li>
-    </ol>
-
-    <h2>Conversion Rate: How Much of the Bonus Bet Can You Keep?</h2>
-    <p>The conversion rate — the percentage of the bonus bet face value you capture as cash — depends on the underdog odds. Higher odds = higher conversion rate, up to a point.</p>
-
-    <table>
-      <thead>
-        <tr><th>Underdog Odds</th><th>Hedge Odds (approx.)</th><th>Conversion Rate</th><th>$200 Bonus Profit</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>+200</td><td>-250</td><td>~58%</td><td class="green">~$116</td></tr>
-        <tr><td>+250</td><td>-300</td><td>~64%</td><td class="green">~$128</td></tr>
-        <tr><td>+300</td><td>-350</td><td>~68%</td><td class="green">~$136</td></tr>
-        <tr><td>+350</td><td>-400</td><td>~72%</td><td class="green">~$144</td></tr>
-        <tr><td>+400</td><td>-450</td><td>~75%</td><td class="green">~$150</td></tr>
-        <tr><td>+500</td><td>-600</td><td>~75%</td><td class="green">~$150</td></tr>
-        <tr><td>+700</td><td>-850</td><td>~68%</td><td class="green">~$136 (drops due to vig)</td></tr>
-      </tbody>
-    </table>
-
-    <p>The <strong>+300 to +400 range is optimal</strong> — high enough for good conversion, but with enough exchange/second-book liquidity to find a reliable hedge.</p>
-
-    <h2>Profit Boost Conversion</h2>
-    <p>Profit boosts are recurring daily promos — DraftKings, FanDuel, and Caesars all offer 2–5 per day. A 50% profit boost on a -110 moneyline effectively gives you +EV odds. Hedge the boosted side against the opposing side at another book to lock in profit.</p>
-
-    <p>Use the PromoGrind Profit Boost Converter to model both outcomes for each observed offer. Offer frequency, caps, prices, stake acceptance, eligibility, voids, and execution vary, so PromoGrind does not publish a typical monthly-profit promise.</p>
-
-    <h2>Common Mistakes to Avoid</h2>
-    <ul>
-      <li><strong>Not hedging immediately.</strong> Odds move. If you place the bonus bet and wait to hedge, the lines can move against you.</li>
-      <li><strong>Using the bonus bet on a heavy favorite.</strong> Betting your free bet on -200 odds means low payout if it wins — terrible conversion rate. Always use the bonus bet on the underdog side.</li>
-      <li><strong>Ignoring the vig.</strong> The spread between book A and book B creates a small qualifying loss. The calculator accounts for this automatically.</li>
-      <li><strong>Using one book for both legs.</strong> Both bets must be at different sportsbooks. Some books will restrict accounts that show large offset betting patterns.</li>
-    </ul>
-
-    <div class="warning">
-      <strong>Important:</strong> Matched betting involves real money transactions. Always verify the calculator's output before placing bets. Odds can change between when you calculate and when you place — recheck if more than a few minutes have passed.
-    </div>
-
-    <h2>How Much Can You Make?</h2>
-    <p>Realistic estimates for a new US matched bettor in 2026:</p>
-    <ul>
-      <li><strong>Welcome-offer phase:</strong> inventory only offers for which you are eligible and verify every term</li>
-      <li><strong>Recurring phase:</strong> model each observed boost or reload separately; do not extrapolate a promised monthly total</li>
-      <li><strong>Long-run review:</strong> use realized ledger entries and reasoned skips to decide whether the workflow remains worthwhile</li>
-    </ul>
-    <p>Results vary by state (more legal books = more income), time investment, and willingness to track and optimise each promo. The PromoGrind Promo Calendar shows you exactly which promos to run each day.</p>
-
+    <p class="intro">Matched betting uses opposing wagers to model the cash value of an offer. It still involves gambling and real money. A calculation can balance two outcomes under stated assumptions; it cannot guarantee that both wagers will be accepted or settled as modeled.</p>
+    <h2>Start with the offer terms</h2><p>Check eligibility, expiry, minimum odds, qualifying costs, stake limits and settlement rules. Confirm whether a bonus stake is returned with winnings. Different rules produce different results.</p>
+    <h2>Worked example: a bonus stake that is not returned</h2>
+    <p>This is a hypothetical two-outcome market, not a current sportsbook offer. A $200 bonus at +350 (4.50 decimal) pays $700 in winnings if it wins. The opposite cash wager at −400 (1.25 decimal) needs a $560 stake to balance the modeled outcomes.</p>
+    <div class="example-box"><div class="label">Hypothetical $200 bonus</div>
+    <div class="math-row"><span>Bonus wins</span><span>$700 winnings − $560 lost hedge = $140</span></div>
+    <div class="math-row"><span>Hedge wins</span><span>$560 × 0.25 = $140 cash profit</span></div>
+    <div class="math-row"><span>Modeled conversion</span><span>$140 ÷ $200 = 70%</span></div></div>
+    <p>The $560 cash stake must be available. This example excludes qualifying losses, fees, tax, rounding, market changes and settlement differences. A rejected, limited or voided leg can create a loss.</p>
+    <h2>Review before making a decision</h2><ol class="step-list"><li>Read the current operator terms and confirm you are eligible.</li><li>Enter the actual bonus amount and both current odds into the calculator.</li><li>Compare both outcomes, cash required and costs. Do not treat the modeled return as realized profit.</li><li>Check that the wagers cover the same event and all outcomes under matching settlement rules.</li><li>Choose whether to proceed or skip. Record any accepted wagers and their eventual settlement.</li></ol>
+    <h2>Why conversion rates vary</h2><p>Both the bonus odds and opposite cash odds matter. A higher bonus price alone does not guarantee a better conversion. Use the exact pair of odds rather than a typical earnings range.</p>
+    <h2>Profit boosts</h2><p>A profit boost changes the profit portion of a winning wager, subject to the offer's cap and restrictions. Enter the boost, stake and opposite odds in the <a href="/profit-boost">Profit Boost Calculator</a> to compare modeled outcomes. A boost does not automatically create a positive return.</p>
+    <h2>Limits of the model</h2><p>Odds movement, cash requirements, rejected wagers, voids, account restrictions and taxes can change the result. Verify the operator's terms and local rules. PromoGrind does not promise income or identify a universal best price range.</p>
     <div class="cta-box">
       <h3>Ready to Start?</h3>
-      <p style="color:#94a3b8;">Use the free PromoGrind calculator to convert your first bonus bet. Enter the numbers and get the exact hedge stake in seconds.</p>
-      <a href="https://promogrind.bet/#/bonus-bet" class="cta-btn">Open Bonus Bet Converter →</a>
+      <p style="color:var(--pg-page-muted);">Use the free PromoGrind calculator to convert your first bonus bet. Enter the numbers and get the exact hedge stake in seconds.</p>
+      <a href="https://promogrind.bet/bonus-bet" class="cta-btn">Open Bonus Bet Converter →</a>
     </div>
-      <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+      <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

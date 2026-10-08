@@ -11,38 +11,41 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.7; padding: 2rem 1rem; }
     .container { max-width: 720px; margin: 0 auto; }
-    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid #1e293b; }
-    .logo { font-size: 1.25rem; font-weight: 700; color: #4ade80; text-decoration: none; }
-    .back { color: #60a5fa; text-decoration: none; font-size: 0.875rem; }
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--pg-page-border); }
+    .logo { font-size: 1.25rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; }
+    .back { color: var(--pg-page-blue); text-decoration: none; font-size: 0.875rem; }
     h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.6rem; color: #4ade80; }
-    p { margin-bottom: 0.75rem; color: #cbd5e1; }
-    .card { background: #101826; border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
-    .badge.ok { background: #1e3a2f; color: #4ade80; border: 1px solid #4ade8055; }
-    .badge.warn { background: #3a2f1e; color: #facc15; border: 1px solid #facc1555; }
-    .badge.bad { background: #3a1e1e; color: #f87171; border: 1px solid #f8717155; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.6rem; color: var(--pg-page-accent); }
+    p { margin-bottom: 0.75rem; color: var(--pg-page-muted); }
+    .card { background: var(--pg-page-panel); border: 1px solid var(--pg-page-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: .875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .badge.ok { background: var(--pg-page-panel); color: var(--pg-page-accent); border: 1px solid color-mix(in srgb, var(--pg-page-accent) 33%, transparent); }
+    .badge.warn { background: var(--pg-page-panel); color: var(--pg-page-warning); border: 1px solid color-mix(in srgb, var(--pg-page-warning) 33%, transparent); }
+    .badge.bad { background: var(--pg-page-panel); color: var(--pg-page-danger); border: 1px solid color-mix(in srgb, var(--pg-page-danger) 33%, transparent); }
     .score-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
-    .score-row .num { font-size: 3rem; font-weight: 700; color: #4ade80; line-height: 1; font-variant-numeric: tabular-nums; }
-    .score-row .of { font-size: 1rem; color: #64748b; }
+    .score-row .num { font-size: 3rem; font-weight: 700; color: var(--pg-page-accent); line-height: 1; font-variant-numeric: tabular-nums; }
+    .score-row .of { font-size: 1rem; color: var(--pg-page-muted); }
     .lane-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-top: 0.75rem; }
-    .lane { padding: 10px 12px; background: #0a0e17; border: 1px solid #1e293b; border-radius: 8px; }
-    .lane .label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-    .lane .level { font-size: 0.95rem; color: #e2e8f0; font-weight: 700; }
-    .lane .reviews { font-size: 0.75rem; color: #94a3b8; }
-    code { background: #0a0e17; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #94a3b8; }
-    .empty { color: #64748b; font-style: italic; }
-    .footer { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #64748b; }
-    .footer a { color: #60a5fa; text-decoration: none; }
-    .meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 0.8rem; color: #94a3b8; }
-    .ratio-bar { height: 6px; background: #1e293b; border-radius: 999px; overflow: hidden; margin-top: 6px; }
-    .ratio-bar > div { height: 100%; background: #4ade80; }
-    button.cta { display: inline-block; margin-top: 10px; padding: 10px 18px; background: #4ade80; color: #0a0e17; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .lane { padding: 10px 12px; background: var(--pg-page-bg); border: 1px solid var(--pg-page-border); border-radius: 8px; }
+    .lane .label { font-size: .875rem; color: var(--pg-page-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .lane .level { font-size: 0.95rem; color: var(--pg-page-text); font-weight: 700; }
+    .lane .reviews { font-size: .875rem; color: var(--pg-page-muted); }
+    code { background: var(--pg-page-bg); padding: 2px 6px; border-radius: 4px; font-size: .875rem; color: var(--pg-page-muted); }
+    .empty { color: var(--pg-page-muted); font-style: italic; }
+    .footer { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--pg-page-border); font-size: .875rem; color: var(--pg-page-muted); }
+    .footer a { color: var(--pg-page-blue); text-decoration: none; }
+    .meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .875rem; color: var(--pg-page-muted); }
+    .ratio-bar { height: 6px; background: var(--pg-page-border); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+    .ratio-bar > div { height: 100%; background: var(--pg-page-accent); }
+    button.cta { display: inline-block; margin-top: 10px; padding: 10px 18px; background: var(--pg-page-accent); color: var(--pg-page-bg); border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="container">
     <div class="nav">
       <a class="logo" href="/">PromoGrind</a>
@@ -50,7 +53,7 @@
     </div>
 
     <h1>Operator Passport</h1>
-    <p style="color:#94a3b8">Self-attested discipline + decision-review snapshot. Checksum-verified integrity; zero personally identifying information.</p>
+    <p style="color:var(--pg-page-muted)">Self-attested discipline + decision-review snapshot. Checksum-verified integrity; zero personally identifying information.</p>
 
     <div id="status" class="card" style="text-align:center">
       <div class="empty">Loading passport from URL fragment…</div>
@@ -71,7 +74,7 @@
           <span class="of">/ 100</span>
           <span class="badge ok" id="disciplineBand">—</span>
         </div>
-        <div style="font-size:0.85rem; color:#94a3b8">Feedback coverage: <span id="feedbackCoverage">—</span>%</div>
+        <div style="font-size:.875rem; color:var(--pg-page-muted)">Feedback coverage: <span id="feedbackCoverage">—</span>%</div>
       </div>
 
       <div class="card">
@@ -81,14 +84,14 @@
           <span class="of">%</span>
         </div>
         <div class="ratio-bar"><div id="loopBar" style="width:0"></div></div>
-        <div style="font-size:0.85rem; color:#94a3b8; margin-top:8px">
+        <div style="font-size:.875rem; color:var(--pg-page-muted); margin-top:8px">
           <span id="closedCount">0</span> closed of <span id="settledCount">0</span> settled
         </div>
       </div>
 
       <div class="card">
         <h2 style="margin-top:0">Lane review depth</h2>
-        <div style="font-size:0.85rem; color:#94a3b8; margin-bottom:6px">Review-depth band: <strong id="reviewDepthBand">—</strong></div>
+        <div style="font-size:.875rem; color:var(--pg-page-muted); margin-bottom:6px">Review-depth band: <strong id="reviewDepthBand">—</strong></div>
         <div class="lane-grid" id="lanes"></div>
       </div>
 
@@ -180,7 +183,7 @@
     function setStatus(message, tone) {
       const element = document.getElementById("status");
       const wrapper = document.createElement("div");
-      wrapper.style.color = tone === "bad" ? "#f87171" : tone === "warn" ? "#facc15" : "#94a3b8";
+      wrapper.style.color = tone === "bad" ? "var(--pg-page-danger)" : tone === "warn" ? "var(--pg-page-warning)" : "var(--pg-page-muted)";
       wrapper.textContent = message;
       element.replaceChildren(wrapper);
     }
@@ -249,6 +252,6 @@
 
     bootstrap();
   </script>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

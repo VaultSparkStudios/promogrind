@@ -47,9 +47,9 @@ export default function FirstBet() {
         <Tl t="First Bet Safety Net Hedge" badge="CASH BET" bc={K.ac} shareable getParams={() => ({ s, o, ho })} />
         <div style={S.row}><In l="First Bet Stake" v={s} set={setS} pre="$" /><In l="Your Odds" v={o} set={setO} /><In l="Hedge Odds" v={ho} set={setHo} /></div>
         <div style={{ marginBottom: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          <button onClick={() => { setS("1000"); setO("+120"); setHo("-140"); }} style={{ padding: "4px 10px", background: `${K.ac}10`, border: `1px solid ${K.ac}30`, borderRadius: 4, color: K.ac, fontSize: 10, cursor: "pointer", fontFamily: font }}>★ Show Example</button>
-          <button onClick={() => demoMode ? setDemoMode(false) : applyDemo()} style={{ padding: "4px 10px", background: demoMode ? `${K.gn}15` : `${K.gn}08`, border: `1px solid ${demoMode ? K.gn : K.gn + "30"}`, borderRadius: 4, color: K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>▶ Demo</button>
-          <span style={{ fontSize: 10, color: K.mt }}>$1,000 BetMGM safety net at +120, hedge at -140</span>
+          <button onClick={() => { setS("1000"); setO("+120"); setHo("-140"); }} style={{ padding: "4px 10px", background: `${K.ac}10`, border: `1px solid ${K.ac}30`, borderRadius: 4, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>★ Show Example</button>
+          <button onClick={() => demoMode ? setDemoMode(false) : applyDemo()} style={{ padding: "4px 10px", background: demoMode ? `${K.gn}15` : `${K.gn}08`, border: `1px solid ${demoMode ? K.gn : K.gn + "30"}`, borderRadius: 4, color: K.gn, fontSize: 12, cursor: "pointer", fontFamily: font }}>▶ Demo</button>
+          <span style={{ fontSize: 12, color: K.mt }}>$1,000 BetMGM safety net at +120, hedge at -140</span>
         </div>
         {demoMode && (
           <div style={{ ...S.note(K.ac), marginBottom: 12 }}>
@@ -58,15 +58,15 @@ export default function FirstBet() {
             <div>Step 2: Bet $200 on a near-even moneyline.</div>
             <div>Step 3: If it loses, you get $200 in bonus bets.</div>
             <div>Step 4: Convert those for ~${f(parseFloat(s) * 0.7, 0)} modeled.</div>
-            <button onClick={() => setDemoMode(false)} style={{ marginTop: 6, background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 10, padding: 0, textDecoration: "underline" }}>✕ Exit Demo</button>
+            <button onClick={() => setDemoMode(false)} style={{ marginTop: 6, background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 12, padding: 0, textDecoration: "underline" }}>✕ Exit Demo</button>
           </div>
         )}
-        {hist.length > 0 && <div style={{ marginBottom: 8, display: "flex", justifyContent: "flex-end" }}><button onClick={() => setShowHist((h) => !h)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 9, cursor: "pointer", fontFamily: font }}>🕐 History ({hist.length})</button></div>}
+        {hist.length > 0 && <div style={{ marginBottom: 8, display: "flex", justifyContent: "flex-end" }}><button onClick={() => setShowHist((h) => !h)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 12, cursor: "pointer", fontFamily: font }}>🕐 History ({hist.length})</button></div>}
         {showHist && hist.length > 0 && (
           <div style={{ marginBottom: 12, padding: 10, background: K.s2, borderRadius: 6, border: `1px solid ${K.bd}`, maxHeight: 180, overflowY: "auto" }}>
-            <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Last {hist.length} Calculations</div>
+            <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Last {hist.length} Calculations</div>
             {hist.map((h, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: K.dm, padding: "3px 0", borderBottom: i < hist.length - 1 ? `1px solid ${K.bd}` : "none" }}>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: K.dm, padding: "3px 0", borderBottom: i < hist.length - 1 ? `1px solid ${K.bd}` : "none" }}>
                 <span>${h.s} @ {h.o}</span>
                 <span style={{ color: K.ac, fontWeight: 600 }}>hedge ${h.hs}</span>
                 <span style={{ color: K.mt }}>{new Date(h.ts).toLocaleDateString()}</span>
@@ -78,9 +78,9 @@ export default function FirstBet() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>${r.g}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>hedge-only worst case</span>
-              <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
-              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>hedge-only worst case</span>
+              <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Hedge Amount" v={`$${r.hs}`} c={K.ac} b /><RR l="If Original Wins" v={`$${r.pOW}`} c={parseFloat(r.pOW) >= 0 ? K.gn : K.rd} /><RR l="If Hedge Wins" v={`$${r.pHW}`} c={parseFloat(r.pHW) >= 0 ? K.gn : K.rd} />
             <RR l="If Original Loses + Refund Converts" v={`$${totalIfRefund}`} c={parseFloat(totalIfRefund) >= 0 ? K.gn : K.yl} />
@@ -92,7 +92,7 @@ export default function FirstBet() {
             </div>
             <ResultFeedbackCard calculatorKey="first-bet" calculatorLabel="First Bet Safety Net Hedge" promoType="safety_net" expectedProfit={totalIfRefund} />
             {parseFloat(r.g) > 0 && !showShareCard && (
-              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #60a5fa", color: "#60a5fa", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #60a5fa", color: "#60a5fa", borderRadius: 6, cursor: "pointer", fontSize: 14 }}>
                 🎉 Share your hedge
               </button>
             )}
@@ -121,8 +121,8 @@ export default function FirstBet() {
         )}
       </div>
       <Help entries={[
-        ["Safety Net Promo", "Books like BetMGM ($1,500), bet365 ($1,000), and BetRivers ($500) refund your first bet as bonus bets if it loses. This is different from a bonus bet — you're wagering your own real cash."],
-        ["The Strategy", "Place your first bet at Book A. Immediately hedge at Book B. If your bet wins: you profit from the hedge math. If it loses: you get bonus bets back, which you convert using the Bonus Bet Converter tab. Either outcome is profitable."],
+        ["Safety Net Promo", "If an eligible offer refunds a losing first bet as credits, its amount, expiry and terms depend on that offer. Verify current terms. You wager your own cash initially; a credit is not the same as a cash refund."],
+        ["The Strategy", "Enter the qualifying and opposite prices, then compare both displayed outcomes. Either outcome can show a loss. A possible refund is conditional on eligibility and settlement, and its conversion is a separate model with its own prices, costs and risk."],
         ["Why price the hedge immediately?", "A hedge can reduce outcome exposure while quoted prices remain available. If the qualifying bet loses and the refund is issued as advertised, model that bonus credit as a new conversion with its own eligibility, price, limit, void, and execution risk."],
       ]} />
     </div>

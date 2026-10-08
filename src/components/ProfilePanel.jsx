@@ -1,5 +1,5 @@
 import React, { useMemo, useContext } from "react";
-import { signOut, startCheckout, getTierName, updateMarketingConsent } from "../auth.js";
+import { signOut, getTierName, updateMarketingConsent } from "../auth.js";
 import { K, font, fontD } from "../lib/shared.js";
 import { FX, AppDataCtx } from "../contexts.jsx";
 import { ACHIEVEMENTS, loadEarned, ACHIEVEMENT_MAP } from "../lib/achievements.js";
@@ -49,10 +49,10 @@ function PassportExportSection() {
 
   return (
     <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
         Operator Passport
       </div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
         Share a self-attested snapshot of your discipline score, lane mastery, and settled-loop ratio. A checksum catches copy corruption; it does not prove identity. No bet history, stake amounts, or sportsbook account information — ever.
       </div>
       <button
@@ -61,14 +61,14 @@ function PassportExportSection() {
         style={{
           padding: '8px 14px', borderRadius: 6, cursor: busy ? 'wait' : 'pointer',
           background: `${K.gn}15`, border: `1px solid ${K.gn}40`,
-          color: K.gn, fontSize: 11, fontWeight: 700, fontFamily: font,
+          color: K.gn, fontSize: 12, fontWeight: 700, fontFamily: font,
         }}
       >
         {busy ? 'Generating…' : 'Export & copy passport URL'}
       </button>
-      {message && <div style={{ fontSize: 10, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
+      {message && <div style={{ fontSize: 12, color: K.dm, marginTop: 8, lineHeight: 1.5 }}>{message}</div>}
       {shareUrl && (
-        <div style={{ marginTop: 8, padding: '8px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 6, fontSize: 9, color: K.mt, wordBreak: 'break-all', fontFamily: 'monospace' }}>
+        <div style={{ marginTop: 8, padding: '8px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 6, fontSize: 12, color: K.mt, wordBreak: 'break-all', fontFamily: 'monospace' }}>
           {shareUrl}
         </div>
       )}
@@ -82,18 +82,18 @@ function ReplayInsightSection() {
   if (!replay.hasEnoughHistory) return null;
   return (
     <div style={{ padding: '14px 20px', borderTop: `1px solid ${K.bd}` }}>
-      <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8, fontWeight: 800 }}>
+      <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8, fontWeight: 800 }}>
         Replay insights (14-day lag)
       </div>
       {replay.insights.length === 0 && (
-        <div style={{ fontSize: 11, color: K.mt }}>Not enough closed loops in the last 14 days to surface a counterfactual.</div>
+        <div style={{ fontSize: 12, color: K.mt }}>Not enough closed loops in the last 14 days to surface a counterfactual.</div>
       )}
       {replay.insights.map((insight) => {
         const tone = insight.tone === "watch" ? K.yl : K.gn;
         return (
           <div key={insight.key} style={{ marginBottom: 8, padding: "10px 12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 6 }}>
-            <div style={{ fontSize: 11, color: K.tx, fontWeight: 700, marginBottom: 3 }}>{insight.headline}</div>
-            <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{insight.detail}</div>
+            <div style={{ fontSize: 12, color: K.tx, fontWeight: 700, marginBottom: 3 }}>{insight.headline}</div>
+            <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5 }}>{insight.detail}</div>
           </div>
         );
       })}
@@ -141,12 +141,12 @@ function AchievementsSection() {
         aria-expanded={expanded}
         onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setExpanded(e => !e); } }}
       >
-        <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
           Achievements
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 10, color: K.yl, fontWeight: 700 }}>{earnedCount}/{ACHIEVEMENTS.length}</span>
-          <span style={{ fontSize: 10, color: K.mt }}>{expanded ? '▲' : '▼'}</span>
+          <span style={{ fontSize: 12, color: K.yl, fontWeight: 700 }}>{earnedCount}/{ACHIEVEMENTS.length}</span>
+          <span style={{ fontSize: 12, color: K.mt }}>{expanded ? '▲' : '▼'}</span>
         </div>
       </div>
 
@@ -155,7 +155,7 @@ function AchievementsSection() {
           {ACHIEVEMENTS.filter(a => earnedIds.has(a.id)).slice(0, 8).map(a => (
             <span key={a.id} title={a.label} style={{ fontSize: 18, animation: 'pgBadgeIn 0.35s ease backwards' }}>{a.icon}</span>
           ))}
-          {earnedCount === 0 && <span style={{ fontSize: 10, color: K.mt }}>Close review loops to document evidence milestones</span>}
+          {earnedCount === 0 && <span style={{ fontSize: 12, color: K.mt }}>Close review loops to document evidence milestones</span>}
         </div>
       )}
 
@@ -164,7 +164,7 @@ function AchievementsSection() {
         if (catAchievements.length === 0) return null;
         return (
           <div key={cat.key} style={{ marginBottom: 10 }}>
-            <div style={{ fontSize: 9, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 4 }}>{cat.label}</div>
+            <div style={{ fontSize: 12, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 4 }}>{cat.label}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
               {catAchievements.map(a => {
                 const unlocked = earnedIds.has(a.id);
@@ -181,8 +181,8 @@ function AchievementsSection() {
                       animation: unlocked ? 'pgBadgeIn 0.3s ease' : 'none',
                     }}
                   >
-                    <span style={{ fontSize: 13 }}>{a.icon}</span>
-                    <span style={{ fontSize: 9, fontWeight: 600, color: unlocked ? K.tx : K.mt, fontFamily: font }}>{a.label}</span>
+                    <span style={{ fontSize: 14 }}>{a.icon}</span>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: unlocked ? K.tx : K.mt, fontFamily: font }}>{a.label}</span>
                   </div>
                 );
               })}
@@ -204,25 +204,25 @@ function MasterySection() {
 
   return (
     <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
         Decision-review depth
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: reviewDepthBand.color, background: `${reviewDepthBand.color}18`, border: `1px solid ${reviewDepthBand.color}35`, padding: '3px 12px', borderRadius: 99, fontFamily: font }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: reviewDepthBand.color, background: `${reviewDepthBand.color}18`, border: `1px solid ${reviewDepthBand.color}35`, padding: '3px 12px', borderRadius: 99, fontFamily: font }}>
           {reviewDepthBand.name}
         </span>
-        <span style={{ fontSize: 10, color: K.mt }}>{mastery.reviewCount} closed review{mastery.reviewCount === 1 ? "" : "s"} · profit does not affect this band</span>
+        <span style={{ fontSize: 12, color: K.mt }}>{mastery.reviewCount} closed review{mastery.reviewCount === 1 ? "" : "s"} · profit does not affect this band</span>
       </div>
       {activeLanes.length === 0 && (
-        <div style={{ fontSize: 10, color: K.mt }}>Settle with a realized result or save a reasoned skip to build review depth.</div>
+        <div style={{ fontSize: 12, color: K.mt }}>Settle with a realized result or save a reasoned skip to build review depth.</div>
       )}
       {activeLanes.map(([key, d]) => {
         const color = MASTERY_COLOR[d.level] || K.mt;
         return (
           <div key={key} style={{ marginBottom: 8 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
-              <span style={{ fontSize: 10, color: K.tx }}>{d.label}</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color }}>{d.level} · {d.reviews} review{d.reviews === 1 ? "" : "s"}</span>
+              <span style={{ fontSize: 12, color: K.tx }}>{d.label}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color }}>{d.level} · {d.reviews} review{d.reviews === 1 ? "" : "s"}</span>
             </div>
             <div style={{ height: 4, background: K.s3, borderRadius: 2, overflow: 'hidden' }}>
               <div style={{ height: 4, background: color, borderRadius: 2, width: `${d.reviewPct}%`, transition: 'width 0.7s cubic-bezier(0.22,1,0.36,1)' }} />
@@ -249,17 +249,17 @@ function TrustReceiptsSection() {
         aria-expanded={expanded}
         onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setExpanded(e => !e); } }}
       >
-        <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
           Trust Receipts
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 10, color: receipts.length ? K.ac : K.mt, fontWeight: 700 }}>{receipts.length}</span>
-          <span style={{ fontSize: 10, color: K.mt }}>{expanded ? '▲' : '▼'}</span>
+          <span style={{ fontSize: 12, color: receipts.length ? K.ac : K.mt, fontWeight: 700 }}>{receipts.length}</span>
+          <span style={{ fontSize: 12, color: K.mt }}>{expanded ? '▲' : '▼'}</span>
         </div>
       </div>
 
       {recent.length === 0 && (
-        <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
+        <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6 }}>
           Account, billing, AI, push, and sync activity will leave concise receipts here.
         </div>
       )}
@@ -267,11 +267,11 @@ function TrustReceiptsSection() {
       {recent.map((receipt) => (
         <div key={receipt.id} style={{ padding: '9px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, marginBottom: 7 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'baseline', marginBottom: 4 }}>
-            <div style={{ fontSize: 11, color: K.tx, fontWeight: 700 }}>{receipt.title}</div>
-            <span style={{ fontSize: 9, color: K.ac, textTransform: 'uppercase', fontWeight: 800 }}>{receipt.type}</span>
+            <div style={{ fontSize: 12, color: K.tx, fontWeight: 700 }}>{receipt.title}</div>
+            <span style={{ fontSize: 12, color: K.ac, textTransform: 'uppercase', fontWeight: 800 }}>{receipt.type}</span>
           </div>
-          <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{summarizeTrustReceipt(receipt)}</div>
-          <div style={{ fontSize: 9, color: K.mt, marginTop: 5 }}>
+          <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5 }}>{summarizeTrustReceipt(receipt)}</div>
+          <div style={{ fontSize: 12, color: K.mt, marginTop: 5 }}>
             {receipt.createdAt ? new Date(receipt.createdAt).toLocaleString() : ''}
           </div>
         </div>
@@ -305,17 +305,17 @@ function KellySandboxSection() {
   if (!history.length) return null;
   return (
     <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
         Kelly Sandbox
       </div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5, marginBottom: 10 }}>
         Replay settled history against quarter, half, and full Kelly sizing.
       </div>
       {rows.map((row) => (
         <div key={row.kFraction} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '8px 10px', background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 6, marginBottom: 6 }}>
-          <span style={{ fontSize: 11, color: K.tx, fontWeight: 700 }}>{row.kFraction} Kelly</span>
-          <span style={{ fontSize: 10, color: row.netProfit >= 0 ? K.gn : K.rd, fontWeight: 700 }}>{row.netProfit >= 0 ? '+' : '-'}${Math.abs(row.netProfit).toFixed(2)}</span>
-          <span style={{ fontSize: 10, color: K.mt }}>{row.samples} samples · {row.roi.toFixed(1)}% ROI</span>
+          <span style={{ fontSize: 12, color: K.tx, fontWeight: 700 }}>{row.kFraction} Kelly</span>
+          <span style={{ fontSize: 12, color: row.netProfit >= 0 ? K.gn : K.rd, fontWeight: 700 }}>{row.netProfit >= 0 ? '+' : '-'}${Math.abs(row.netProfit).toFixed(2)}</span>
+          <span style={{ fontSize: 12, color: K.mt }}>{row.samples} samples · {row.roi.toFixed(1)}% ROI</span>
         </div>
       ))}
     </div>
@@ -346,13 +346,13 @@ function MarketingConsentSection({ user }) {
 
   return (
     <div style={{ padding: "14px 20px", borderBottom: `1px solid ${K.bd}` }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: 10 }}>
         Communication consent
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
         <div>
-          <div style={{ fontSize: 12, color: K.tx }}>Marketing email</div>
-          <div style={{ fontSize: 10, color: K.dm, marginTop: 3, lineHeight: 1.45 }}>
+          <div style={{ fontSize: 14, color: K.tx }}>Marketing email</div>
+          <div style={{ fontSize: 12, color: K.dm, marginTop: 3, lineHeight: 1.45 }}>
             Optional product news and offers. Off by default; account and security email is separate.
           </div>
         </div>
@@ -364,7 +364,7 @@ function MarketingConsentSection({ user }) {
           accent={K.ac}
         />
       </div>
-      <div aria-live="polite" style={{ minHeight: 14, fontSize: 10, color: message.startsWith("Could not") ? K.rd : K.mt, marginTop: 8, lineHeight: 1.45 }}>
+      <div aria-live="polite" style={{ minHeight: 14, fontSize: 12, color: message.startsWith("Could not") ? K.rd : K.mt, marginTop: 8, lineHeight: 1.45 }}>
         {message}
       </div>
     </div>
@@ -392,14 +392,14 @@ export default function ProfilePanel({
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     marginBottom: 14,
   };
-  const label12 = { fontSize: 12, color: K.tx };
-  const sub10 = { fontSize: 10, color: K.dm, marginTop: 2 };
+  const label12 = { fontSize: 14, color: K.tx };
+  const sub10 = { fontSize: 12, color: K.dm, marginTop: 2 };
   const toggleBtn = (active, activeColor) => ({
     padding: '5px 14px', borderRadius: 6, cursor: 'pointer',
     background: active ? `${activeColor}18` : 'transparent',
     border: `1px solid ${active ? activeColor : K.bd2}`,
     color: active ? activeColor : K.dm,
-    fontSize: 11, fontWeight: 600, fontFamily: font,
+    fontSize: 12, fontWeight: 600, fontFamily: font,
   });
 
   return (
@@ -431,7 +431,7 @@ export default function ProfilePanel({
           background: `linear-gradient(135deg, ${K.s2}, ${K.s3})`,
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-            <span style={{ fontFamily: fontD, fontSize: 11, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '2px' }}>
+            <span style={{ fontFamily: fontD, fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '2px' }}>
               My Account
             </span>
             <button
@@ -455,19 +455,19 @@ export default function ProfilePanel({
               {initials}
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: K.tx, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: K.tx, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {email}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5, flexWrap: 'wrap' }}>
                 <span style={{
-                  fontSize: 10, fontWeight: 700, color: tc,
+                  fontSize: 12, fontWeight: 700, color: tc,
                   background: `${tc}18`, padding: '2px 9px', borderRadius: 50,
                   letterSpacing: '0.5px', border: `1px solid ${tc}30`,
                 }}>
                   {tierName}
                 </span>
                 {isOnTrial && (
-                  <span style={{ fontSize: 10, color: K.yl, fontWeight: 600 }}>
+                  <span style={{ fontSize: 12, color: K.yl, fontWeight: 600 }}>
                     {trialDaysLeft}d trial
                   </span>
                 )}
@@ -478,36 +478,37 @@ export default function ProfilePanel({
 
         {/* ── Subscription ─────────────────────────────────────────── */}
         <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}` }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 10 }}>
             Subscription
           </div>
 
           {isActive && renewalDate && (
-            <div style={{ fontSize: 11, color: K.dm, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, color: K.dm, marginBottom: 10 }}>
               Renews <span style={{ color: K.tx, fontWeight: 600 }}>{renewalDate}</span>
             </div>
           )}
 
           {upgrade ? (
             <button
-              onClick={() => { onClose(); startCheckout(upgrade.planId); }}
+              onClick={() => { onClose(); window.location.assign('/pricing'); }}
               style={{
                 width: '100%', padding: '10px 0', borderRadius: 8,
                 background: `linear-gradient(135deg, ${K.gn}18, ${K.ac}15)`,
                 border: `1px solid ${K.gn}40`, color: K.gn,
-                fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: font,
+                fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: font,
                 textAlign: 'center',
               }}
             >
-              ↑ {upgrade.label} — {upgrade.price}
+              View planned {upgrade.label.replace('Upgrade to ', '')} plan — {upgrade.price}
             </button>
           ) : (
-            <div style={{ fontSize: 11, color: K.gn }}>✓ Top tier — all features unlocked</div>
+            <div style={{ fontSize: 12, color: K.gn }}>Top account tier. Features marked coming soon remain unavailable.</div>
           )}
+          <p style={{fontSize:14,color:K.mt}}>Paid checkout is unavailable. Features marked coming soon remain unavailable.</p>
 
           <a
             href="mailto:support@vaultsparkstudios.com?subject=PromoGrind%20account%20help"
-            style={{ display: 'block', marginTop: 10, fontSize: 10, color: K.ac, textDecoration: 'none' }}
+            style={{ display: 'block', marginTop: 10, fontSize: 12, color: K.ac, textDecoration: 'none' }}
           >
             PromoGrind account help →
           </a>
@@ -515,7 +516,7 @@ export default function ProfilePanel({
 
         {/* ── Preferences ──────────────────────────────────────────── */}
         <div style={{ padding: '14px 20px', borderBottom: `1px solid ${K.bd}`, flex: 1 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
             Preferences
           </div>
 
@@ -549,7 +550,7 @@ export default function ProfilePanel({
               onChange={e => { setCurrency(e.target.value); try { localStorage.setItem('pg_currency', e.target.value); } catch {} }}
               style={{
                 padding: '5px 8px', background: K.s2, border: `1px solid ${K.bd2}`,
-                borderRadius: 6, color: K.tx, fontFamily: font, fontSize: 11, cursor: 'pointer',
+                borderRadius: 6, color: K.tx, fontFamily: font, fontSize: 12, cursor: 'pointer',
               }}
             >
               {Object.entries(FX).map(([code, { sym }]) => (
@@ -590,7 +591,7 @@ export default function ProfilePanel({
             style={{
               width: '100%', padding: '9px 0', borderRadius: 6,
               background: `${K.rd}12`, border: `1px solid ${K.rd}35`,
-              color: K.rd, fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: font,
+              color: K.rd, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: font,
               marginBottom: 12,
             }}
           >
@@ -598,7 +599,7 @@ export default function ProfilePanel({
           </button>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 14 }}>
             {[['Compliance', '/compliance/'], ['About', '/about/'], ['Privacy', '/privacy/']].map(([label, href]) => (
-              <a key={label} href={href} style={{ fontSize: 10, color: K.dm, textDecoration: 'none' }}>{label}</a>
+              <a key={label} href={href} style={{ fontSize: 12, color: K.dm, textDecoration: 'none' }}>{label}</a>
             ))}
           </div>
         </div>

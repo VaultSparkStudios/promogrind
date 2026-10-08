@@ -542,14 +542,14 @@ export function getUnfinishedWork(snapshot) {
     },
     snapshot.booksRemaining > 0 && {
       key: "books-left",
-      title: `${snapshot.booksRemaining} sportsbook${snapshot.booksRemaining === 1 ? "" : "s"} still unclaimed`,
-      detail: `About $${snapshot.potentialLeft.toFixed(0)} of welcome value is still on the table.`,
+      title: `${snapshot.booksRemaining} sportsbook${snapshot.booksRemaining === 1 ? "" : "s"} not marked completed`,
+      detail: "Review your records and verify current offer terms; reference amounts are not confirmed available cash.",
       slug: "sportsbooks",
     },
     snapshot.recommendedBooks?.[0] && {
       key: "recommended-book",
-      title: `${snapshot.recommendedBooks[0].book.name} is the best open book right now`,
-      detail: `${snapshot.recommendedBooks[0].reason} · ${snapshot.recommendedBooks[0].book.value} headline value.`,
+      title: `${snapshot.recommendedBooks[0].book.name} is a reference match to review`,
+      detail: `${snapshot.recommendedBooks[0].reason} · verify current terms and eligibility.`,
       slug: "sportsbooks",
     },
     !snapshot.hasLedger && {

@@ -8,7 +8,7 @@ import SensitivityChip from "./components/SensitivityChip.jsx";
 const StatsRoute = React.lazy(() => import('./routes/StatsRoute.jsx'));
 import { usePromoAppShell } from "./app/usePromoAppShell.js";
 import { AppFooter, MembershipBanner, TrustStrip } from "./app/AppChrome.jsx";
-import { CalcSearch, MobileBottomNav, QuickCalcPanel } from "./app/AppNavigation.jsx";
+import { CalcSearch, MobileBottomNav } from "./app/AppNavigation.jsx";
 import { CSVImportModal } from "./app/CSVImportModal.jsx";
 import { CheckoutListener } from "./app/AppNotifications.jsx";
 import { AppCalculatorRouter } from "./app/AppCalculatorRouter.jsx";
@@ -27,7 +27,7 @@ import { S, In, RR, Tl, Nt, FeatureUnavailableCard, useCalcMemory, shouldShowTri
 import ResultFeedbackCard from "./components/ResultFeedbackCard.jsx";
 import CalculatorTrustBadge from "./components/CalculatorTrustBadge.jsx";
 import {
-  AboutRoute, AIActionPlan, Arb2Way, Arb3Way, BetSizingAdvisor, BonusBet, CommunityPromoBoard,
+  AboutRoute, AIActionPlan, Arb2Way, Arb3Way, BetSizingAdvisor, BonusBet, CommandDeck, CommunityPromoBoard,
   CompetitorComparison, DailyBriefPage, DailyDashboard, DepositMatch, FeatureFlagAdmin, FirstBet,
   GetStartedRoute, HoldCalc, InsurancePromo, KellyCriterion, LandingRoute, Ledger, LineShop,
   LiveScanner, NoVig, NoVig3Way, ParlayBuilder, ParlayHedge, PlusEV, PricingPage, ProfitBoost,
@@ -77,7 +77,7 @@ const TABS = buildAppTabs({
   IncomeEstimator, DepositOptimizer, HedgeValidator, PromoGuarantee, GutCheck, PromoStacking, TaxesEstimatorWrapper,
   TrackInsights, Tracker, BetTracker, Ledger, Leaderboard, FreeBetArbTracker, PromoJournal, OddsComparisonTable,
   ProfitCertificate, LiveScanner, AIActionPlan, StackBuilder, KB, PromoFinder, PromoCalendar, PromoBoard,
-  Glossary, ReferralHub, TeamAccounts, CompetitorComparison, PromoArbFinder,
+  Glossary, ReferralHub, TeamAccounts, CompetitorComparison, PromoArbFinder, CommandDeck,
 });
 const slugMap = buildSlugMap(TABS);
 export default function App() {
@@ -112,7 +112,8 @@ export default function App() {
   const shellMaxWidth = viewport.contentMaxWidth;
   const shellPadding = viewport.shellPadding;
   const contentPadding = viewport.contentPadding;
-  const stickyTop = isMobile ? 74 : isTablet ? 92 : 104;
+  const headerRef = useRef(null);
+  const [stickyTop, setStickyTop] = useState(0);
   const [calcSubcat, setCalcSubcat] = useState("All");
   const [calcFavorites, setCalcFavorites] = useState(() => {
     try { return JSON.parse(localStorage.getItem("pg_calc_favorites")) || []; } catch { return []; }
@@ -138,12 +139,25 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname, search } = location;
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return undefined;
+    const measure = () => setStickyTop(header.getBoundingClientRect().height);
+    measure();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, [pathname, search, isMobile, isTablet]);
   const embedMode = useMemo(() => {
     try {
-      const p = new URLSearchParams(window.location.search);
+      const p = new URLSearchParams(search);
       return p.get('embed') === '1' || p.has('embed');
     } catch { return false; }
-  }, []);
+  }, [search]);
   const isEmbed = embedMode;
   const visitedSlugsRef = useRef(new Set());
   const [showSessionModal, setShowSessionModal] = useState(false);
@@ -236,7 +250,7 @@ export default function App() {
   if (pathname === "/feature-flags") {
     return (
       <FeatureFlagProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline}>
-      <div style={{ fontFamily: font, fontSize: 13, color: K.tx, background: K.bg, minHeight: "100vh", padding: 16 }}>
+      <div style={{ fontFamily: font, fontSize: 14, color: K.tx, background: K.bg, minHeight: "100vh", padding: 16 }}>
         <Suspense fallback={<div style={{ padding: 32 }}>Loading…</div>}>
           <FeatureFlagAdmin proStatus={proStatus} />
         </Suspense>
@@ -282,24 +296,24 @@ export default function App() {
   const CALC_GI = getCalcGroupIndex(TABS);
   if (!authReady) {
     return (
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+      <div style={{fontFamily:font,fontSize:14,color:K.tx,background:K.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
         <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
           <div style={{fontFamily:fontD,fontSize:32,fontWeight:800,color:K.gn,marginBottom:4,letterSpacing:"-1px"}}>PROMOGRIND</div>
-          <div style={{fontSize:12,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
-          <div style={{fontSize:12,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
+          <div style={{fontSize:14,color:K.mt,letterSpacing:"2px",textTransform:"uppercase",marginBottom:12}}>Free Sportsbook Promo Conversion Tools</div>
+          <div style={{fontSize:14,color:K.dm,lineHeight:1.7,maxWidth:430,margin:"0 auto 20px"}}>
             Sign in with your free PromoGrind account to keep your profits synced across devices. Takes 30 seconds and no credit card is required.
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,textAlign:"left"}}>
             {[
-              ["53 Calculator Routes","Bonus bets, profit boosts, arb, Kelly, EV, parlay, and more"],
+              ["29 calculators","Compare bonus bets, profit boosts, arbitrage, expected value, and more."],
               ["Free PromoGrind Account","One free account for calculator sync, tracker history, and ledger backups."],
-              ["Live Arb + EV Scanner","Activation pending production proof. The app will label it available only after verified deployment."],
+              ["Live scanners · coming soon","Live odds scanning is not available yet. You can enter odds yourself in the free calculators."],
             ].map(([title,desc])=>(
               <div key={title} style={{display:"flex",gap:10,padding:"10px 14px",background:K.s1,border:`1px solid ${K.bd}`,borderRadius:8}}>
-                <span style={{color:K.gn,fontWeight:700,marginTop:1}}>✓</span>
+                <span style={{color:title.includes("coming soon")?K.mt:K.gn,fontWeight:700,marginTop:1}}>{title.includes("coming soon")?"○":"✓"}</span>
                 <div>
-                  <div style={{fontSize:12,fontWeight:700,color:K.tx}}>{title}</div>
-                  <div style={{fontSize:11,color:K.mt,marginTop:2}}>{desc}</div>
+                  <div style={{fontSize:14,fontWeight:700,color:K.tx}}>{title}</div>
+                  <div style={{fontSize:12,color:K.mt,marginTop:2}}>{desc}</div>
                 </div>
               </div>
             ))}
@@ -308,11 +322,11 @@ export default function App() {
             <a href={authHref('signup')} style={{display:"block",textAlign:"center",padding:"13px 0",background:K.gn,borderRadius:8,color: K.ink,fontSize:14,fontWeight:700,textDecoration:"none",letterSpacing:"-0.2px"}}>
               Create Free Account →
             </a>
-            <a href={authHref('signin')} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:12,fontWeight:600,textDecoration:"none"}}>
+            <a href={authHref('signin')} style={{display:"block",textAlign:"center",padding:"10px 0",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:8,color:K.dm,fontSize:14,fontWeight:600,textDecoration:"none"}}>
               Already have an account? Sign in →
             </a>
           </div>
-          <div style={{fontSize:10,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your account…</div>
+          <div style={{fontSize:12,color:K.dm,letterSpacing:"1.5px",textTransform:"uppercase"}}>Connecting your account…</div>
         </div>
       </div>
     );
@@ -320,10 +334,10 @@ export default function App() {
   if (embedMode) {
     return (
       <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-      <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
+      <div style={{fontFamily:font,fontSize:14,color:K.tx,background:K.bg,minHeight:"100vh",padding:16}}>
         <AppCalculatorRouter slug={slug} item={item} isLiveTool={isLiveTool} proStatus={proStatus} compareMode={false} calcGroupIndex={CALC_GI} groupIndex={gi} group={g} isDesktop={isDesktop} compareSlug={compareSlug} setCompareSlug={setCompareSlug} DailyDashboard={DailyDashboard} navigate={navigate} />
         {isEmbed && (
-          <div style={{position:'fixed',bottom:8,right:12,fontSize:11,color:'#475569',opacity:0.7,zIndex:9999}}>
+          <div style={{position:'fixed',bottom:8,right:12,fontSize:12,color:'#475569',opacity:0.7,zIndex:9999}}>
             Powered by <a href={CANONICAL_APP_URL} target="_blank" rel="noopener" style={{color:'#4ade80',textDecoration:'none'}}>PromoGrind</a>
           </div>
         )}
@@ -333,7 +347,7 @@ export default function App() {
   }
   return (
     <AppProviders appData={appData} syncAppData={syncAppData} user={user} syncDiagnostics={syncDiagnostics} syncStatus={syncStatus} isOnline={isOnline} compactMode={compactMode} currencyCtxVal={currencyCtxVal}>
-    <div style={{fontFamily:font,fontSize:13,color:K.tx,background:K.bg,minHeight:"100vh"}}>
+    <div style={{fontFamily:font,fontSize:14,color:K.tx,background:K.bg,minHeight:"100vh"}}>
       <CheckoutListener/>
       <AuthDialog
         open={!!authModalMode}
@@ -344,7 +358,7 @@ export default function App() {
       {!ageVerified && <AgeGate onVerified={() => setAgeVerified(true)} />}
       <TrustStrip/>
       {!isOnline && (
-        <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:11,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
+        <div style={{background:`${K.rd}15`,borderBottom:`1px solid ${K.rd}40`,padding:"6px 20px",textAlign:"center",fontSize:12,color:K.rd,fontWeight:600,letterSpacing:"0.5px"}}>
           OFFLINE MODE — Changes will sync when connection is restored
         </div>
       )}
@@ -352,7 +366,7 @@ export default function App() {
       {showOnboarding && <OnboardingWizard onDone={dismissOnboarding}/>}
       {showCalcSearch && <CalcSearch allCalcs={allCalcs} onNavigate={handleCalcNavigate} onClose={()=>setShowCalcSearch(false)}/>}
       {/* ── Site Header ────────────────────────────────────────────────────── */}
-      <header style={{
+      <header ref={headerRef} style={{
         background:`linear-gradient(180deg,${K.s1},${K.s2})`,
         borderBottom:`1px solid ${K.bd}`,
         padding: isMobile ? `10px ${shellPadding}px 10px` : isTablet ? `12px ${shellPadding}px 12px` : `14px ${shellPadding}px 12px`,
@@ -368,7 +382,7 @@ export default function App() {
               PROMOGRIND
             </div>
             {!isMobile && (
-              <div style={{fontSize:9,color:K.mt,letterSpacing:'1.6px',textTransform:'uppercase',marginTop:4}}>
+              <div style={{fontSize:12,color:K.mt,letterSpacing:'1.6px',textTransform:'uppercase',marginTop:4}}>
                 Free Sportsbook Promo Conversion Tools
               </div>
             )}
@@ -377,12 +391,12 @@ export default function App() {
                 {[
                   [String(TABS.filter(g=>g.group==='Convert'||g.group==='Calculate').reduce((n,g)=>n+g.items.length,0)),'Calculators'],
                   ['Free','Forever'],
-                  ['Explicit','Launch-state labels'],
+                  ['Clear','Availability labels'],
                   ...(weeklyActive>0?[[String(weeklyActive),'grinders this week']]:[]),
                 ].map(([val,label])=>(
                   <div key={label} style={{display:'flex',alignItems:'baseline',gap:4}}>
-                    <span style={{fontSize:12,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
-                    <span style={{fontSize:9,color:K.mt,textTransform:'uppercase',letterSpacing:'1px'}}>{label}</span>
+                    <span style={{fontSize:14,fontWeight:700,color:K.gn,fontFamily:fontD}}>{val}</span>
+                    <span style={{fontSize:12,color:K.mt,textTransform:'uppercase',letterSpacing:'1px'}}>{label}</span>
                   </div>
                 ))}
               </div>
@@ -400,7 +414,7 @@ export default function App() {
                 style={{
                   padding:'6px 12px', background:showPromoAdvisor?`${K.pp}20`:'transparent',
                   border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`, borderRadius:8,
-                  color:showPromoAdvisor?K.pp:K.dm, fontSize:11, cursor:'pointer',
+                  color:showPromoAdvisor?K.pp:K.dm, fontSize:12, cursor:'pointer',
                   fontFamily:font, minHeight:36,
                 }}
               >
@@ -417,7 +431,7 @@ export default function App() {
                   border:`1px solid ${K.bd2}`,
                   borderRadius:8,
                   color:K.dm,
-                  fontSize:11,
+                  fontSize:12,
                   cursor:'pointer',
                   fontFamily:font,
                   minHeight:36,
@@ -471,7 +485,7 @@ export default function App() {
                   padding:'5px 10px',
                   fontFamily:font,
                   cursor:'pointer',
-                  fontSize:10,
+                  fontSize:12,
                   background:'transparent',
                   border:`1px solid ${K.bd2}`,
                   borderRadius:999,
@@ -484,7 +498,7 @@ export default function App() {
                 <button
                   onClick={()=>setShowPromoAdvisor(v=>!v)}
                   style={{
-                    padding:'4px 10px', fontFamily:font, cursor:'pointer', fontSize:10,
+                    padding:'4px 10px', fontFamily:font, cursor:'pointer', fontSize:12,
                     background:showPromoAdvisor?`${K.pp}20`:'transparent',
                     border:`1px solid ${showPromoAdvisor?K.pp:K.bd2}`,
                     borderRadius:6, color:showPromoAdvisor?K.pp:K.dm,
@@ -494,7 +508,7 @@ export default function App() {
                 </button>
               )}
             </div>
-            <div style={{fontSize:10,color:K.dm,textAlign:'right',lineHeight:1.5, maxWidth: 140}}>
+            <div style={{fontSize:12,color:K.dm,textAlign:'right',lineHeight:1.5, maxWidth: 140}}>
               {APP_CHROME_COPY.mobileCompliance}
             </div>
           </div>
@@ -502,7 +516,7 @@ export default function App() {
         {/* ── Desktop compliance line ──────────────────────────────── */}
         {!isMobile && (
           <div style={{maxWidth:shellMaxWidth,margin:'4px auto 0',textAlign:'right'}}>
-            <span style={{fontSize:11,color:K.dm}}>
+            <span style={{fontSize:12,color:K.dm}}>
               {APP_CHROME_COPY.desktopCompliance}
             </span>
           </div>
@@ -556,15 +570,15 @@ export default function App() {
       <div style={{position:"relative"}}>
         <div style={{background:K.s2,borderBottom:`1px solid ${K.bd}`,display:"flex",justifyContent:"center",overflowX:"auto",flexDirection:"column"}}>
           {gi===CALC_GI&&calcFavorites.length>0&&<div className="pg-scroll-x" style={{maxWidth:shellMaxWidth,width:"100%",margin:"0 auto",display:"flex",gap:4,padding:"6px 8px 0",alignItems:"center",overflowX:"auto"}}>
-            <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",whiteSpace:"nowrap",marginRight:2}}>Pinned:</span>
+            <span style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",whiteSpace:"nowrap",marginRight:2}}>Pinned:</span>
             {calcFavorites.map(favSlug=>{
               const favItem = g.items.find(it=>it.slug===favSlug) || TABS.flatMap(gr=>gr.items).find(it=>it.slug===favSlug);
               if(!favItem) return null;
               const favGiTi = slugMap[favSlug];
               return (
-                <div key={favSlug} role="group" aria-label={`${favItem.n} pinned calculator`} style={{padding:"2px 6px 2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:11,fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:2}}>
-                  <button type="button" onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }} style={{background:"transparent",border:0,padding:0,color:"inherit",fontSize:11,cursor:"pointer",fontFamily:font}}>★ {favItem.n}</button>
-                  <button type="button" aria-label={`Unpin ${favItem.n}`} onClick={()=>{const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:8,cursor:"pointer",background:"transparent",border:0,padding:"2px 3px"}}>✕</button>
+                <div key={favSlug} role="group" aria-label={`${favItem.n} pinned calculator`} style={{padding:"2px 6px 2px 10px",background:slug===favSlug?`${K.yl}20`:"transparent",border:`1px solid ${slug===favSlug?K.yl:K.bd2}`,borderRadius:50,color:slug===favSlug?K.yl:K.dm,fontSize:12,fontFamily:font,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:2}}>
+                  <button type="button" onClick={()=>{ if(favGiTi) navigate('/'+favSlug); }} style={{background:"transparent",border:0,padding:0,color:"inherit",fontSize:12,cursor:"pointer",fontFamily:font}}>★ {favItem.n}</button>
+                  <button type="button" aria-label={`Unpin ${favItem.n}`} onClick={()=>{const next=calcFavorites.filter(s=>s!==favSlug);setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} style={{color:K.mt,fontSize:12,cursor:"pointer",background:"transparent",border:0,padding:"2px 3px"}}>✕</button>
                 </div>
               );
             })}
@@ -577,12 +591,12 @@ export default function App() {
                   const firstMatch = g.items.findIndex(it=>it.subcat===sc);
                   if(firstMatch>=0) goTo(gi,firstMatch);
                 }
-              }} style={{padding:"3px 10px",background:calcSubcat===sc?K.pp:"transparent",border:`1px solid ${calcSubcat===sc?K.pp:K.bd2}`,borderRadius:50,color:calcSubcat===sc?K.bg:K.dm,fontSize:11,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
+              }} style={{padding:"3px 10px",background:calcSubcat===sc?K.pp:"transparent",border:`1px solid ${calcSubcat===sc?K.pp:K.bd2}`,borderRadius:50,color:calcSubcat===sc?K.bg:K.dm,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
                 {sc}
               </button>
             ))}
             <div style={{flex:1}}/>
-            <button onClick={()=>{setCompareMode(m=>!m);if(!compareMode)setCompareSlug('');}} style={{padding:"3px 10px",background:compareMode?`${K.ac}20`:"transparent",border:`1px solid ${compareMode?K.ac:K.bd2}`,borderRadius:50,color:compareMode?K.ac:K.mt,fontSize:9,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
+            <button onClick={()=>{setCompareMode(m=>!m);if(!compareMode)setCompareSlug('');}} style={{padding:"3px 10px",background:compareMode?`${K.ac}20`:"transparent",border:`1px solid ${compareMode?K.ac:K.bd2}`,borderRadius:50,color:compareMode?K.ac:K.mt,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",letterSpacing:"0.5px"}}>
               {compareMode?"✕ Exit Compare":"⊞ Compare"}
             </button>
           </div>}
@@ -595,10 +609,10 @@ export default function App() {
           >{g.items.map((t,i)=>{
             const highlighted = gi===CALC_GI&&calcSubcat!=="All"&&t.subcat===calcSubcat;
             const isFav = calcFavorites.includes(t.slug);
-            return (<React.Fragment key={t.n}><button onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 10px 9px 14px",fontSize:13,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
+            return (<React.Fragment key={t.n}><button onClick={()=>goTo(gi,i)} onKeyDown={(event)=>handleSubTabKeyDown(event, gi, i)} role="tab" aria-selected={ti===i} tabIndex={ti===i ? 0 : -1} style={{padding:"9px 10px 9px 14px",fontSize:14,fontWeight:ti===i?600:400,color:ti===i?K.ac:highlighted?K.pp:K.dm,background:"transparent",border:"none",borderBottom:ti===i?`2px solid ${K.ac}`:highlighted?"2px solid "+K.pp+"50":"2px solid transparent",cursor:"pointer",fontFamily:font,whiteSpace:"nowrap",position:"relative",display:"flex",alignItems:"center",gap:4}}>
               {t.n}
               {highlighted&&<span style={{position:"absolute",bottom:4,right:4,width:4,height:4,borderRadius:"50%",background:K.pp}}/>}
-            </button>{gi===CALC_GI&&<button type="button" aria-label={`${isFav?"Unpin":"Pin"} ${t.n}`} aria-pressed={isFav} onClick={()=>{const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:9,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s",background:"transparent",border:0,padding:"8px 5px 8px 0"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</button>}</React.Fragment>);
+            </button>{gi===CALC_GI&&<button type="button" aria-label={`${isFav?"Unpin":"Pin"} ${t.n}`} aria-pressed={isFav} onClick={()=>{const next=isFav?calcFavorites.filter(s=>s!==t.slug):[...calcFavorites,t.slug];setCalcFavorites(next);try{localStorage.setItem('pg_calc_favorites',JSON.stringify(next));}catch{};}} title={isFav?"Unpin":"Pin to favorites"} style={{fontSize:12,color:isFav?K.yl:K.bd2,cursor:"pointer",lineHeight:1,opacity:isFav?1:0.4,transition:"opacity 0.15s",background:"transparent",border:0,padding:"8px 5px 8px 0"}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity=isFav?'1':'0.4'}>★</button>}</React.Fragment>);
           })}</div>
         </div>
         {!isDesktop && <div style={{position:"absolute",right:0,top:0,bottom:0,width:42,background:`linear-gradient(to left,${K.s2} 40%,transparent)`,pointerEvents:"none",zIndex:1}}/>}
@@ -629,7 +643,6 @@ export default function App() {
         {showPromoAdvisor && <PromoAdvisorPanel user={user} proStatus={proStatus} onClose={() => setShowPromoAdvisor(false)} />}
         <PromoChat navigate={navigate} mobile={isMobile}/>
       </Suspense>
-      <QuickCalcPanel goTo={goTo}/>
     </div>
     </AppProviders>
   );

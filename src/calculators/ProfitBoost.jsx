@@ -48,9 +48,9 @@ export default function ProfitBoost() {
         <div style={S.row}><In l="Your Stake (cash)" v={s} set={setS} pre="$" ph="50" /><In l="Original Odds" v={o} set={setO} ph="+200" /><In l="Boost Percentage" v={bp} set={setBp} ph="50" /></div>
         <div style={S.row}><In l="Max Extra Winnings" v={mx} set={setMx} pre="$" ph="250" /><In l="Hedge Odds (other book)" v={ho} set={setHo} ph="-220" /></div>
         <div style={{ marginBottom: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          <button onClick={() => { setS("50"); setO("+200"); setBp("50"); setMx("25"); setHo("-220"); }} style={{ padding: "4px 10px", background: `${K.ac}10`, border: `1px solid ${K.ac}30`, borderRadius: 4, color: K.ac, fontSize: 10, cursor: "pointer", fontFamily: font }}>★ Show Example</button>
-          <button onClick={() => demoMode ? setDemoMode(false) : applyDemo()} style={{ padding: "4px 10px", background: demoMode ? `${K.gn}15` : `${K.gn}08`, border: `1px solid ${demoMode ? K.gn : K.gn + "30"}`, borderRadius: 4, color: K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>▶ Demo</button>
-          <span style={{ fontSize: 10, color: K.mt }}>$50 stake, 50% boost capped at $25, hedge at -220</span>
+          <button onClick={() => { setS("50"); setO("+200"); setBp("50"); setMx("25"); setHo("-220"); }} style={{ padding: "4px 10px", background: `${K.ac}10`, border: `1px solid ${K.ac}30`, borderRadius: 4, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>★ Show Example</button>
+          <button onClick={() => demoMode ? setDemoMode(false) : applyDemo()} style={{ padding: "4px 10px", background: demoMode ? `${K.gn}15` : `${K.gn}08`, border: `1px solid ${demoMode ? K.gn : K.gn + "30"}`, borderRadius: 4, color: K.gn, fontSize: 12, cursor: "pointer", fontFamily: font }}>▶ Demo</button>
+          <span style={{ fontSize: 12, color: K.mt }}>$50 stake, 50% boost capped at $25, hedge at -220</span>
         </div>
         {demoMode && (
           <div style={{ ...S.note(K.ac), marginBottom: 12 }}>
@@ -59,15 +59,15 @@ export default function ProfitBoost() {
             <div>Step 2: Bet $50 on Chiefs -110.</div>
             <div>Step 3: Hedge ${r ? r.hs : "~"} on the other side.</div>
             <div>Step 4: Lock in ~${r ? r.g : "~"} profit.</div>
-            <button onClick={() => setDemoMode(false)} style={{ marginTop: 6, background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 10, padding: 0, textDecoration: "underline" }}>✕ Exit Demo</button>
+            <button onClick={() => setDemoMode(false)} style={{ marginTop: 6, background: "transparent", border: "none", color: K.mt, cursor: "pointer", fontSize: 12, padding: 0, textDecoration: "underline" }}>✕ Exit Demo</button>
           </div>
         )}
-        {hist.length > 0 && <div style={{ marginBottom: 8, display: "flex", justifyContent: "flex-end" }}><button onClick={() => setShowHist((h) => !h)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 9, cursor: "pointer", fontFamily: font }}>🕐 History ({hist.length})</button></div>}
+        {hist.length > 0 && <div style={{ marginBottom: 8, display: "flex", justifyContent: "flex-end" }}><button onClick={() => setShowHist((h) => !h)} style={{ padding: "3px 10px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 12, cursor: "pointer", fontFamily: font }}>🕐 History ({hist.length})</button></div>}
         {showHist && hist.length > 0 && (
           <div style={{ marginBottom: 12, padding: 10, background: K.s2, borderRadius: 6, border: `1px solid ${K.bd}`, maxHeight: 180, overflowY: "auto" }}>
-            <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Last {hist.length} Calculations</div>
+            <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Last {hist.length} Calculations</div>
             {hist.map((h, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: K.dm, padding: "3px 0", borderBottom: i < hist.length - 1 ? `1px solid ${K.bd}` : "none" }}>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: K.dm, padding: "3px 0", borderBottom: i < hist.length - 1 ? `1px solid ${K.bd}` : "none" }}>
                 <span>${h.s} @ {h.o} +{h.bp}% boost</span>
                 <span style={{ color: K.gn, fontWeight: 600 }}>+${h.profit}</span>
                 <span style={{ color: K.mt }}>{new Date(h.ts).toLocaleDateString()}</span>
@@ -79,9 +79,9 @@ export default function ProfitBoost() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(parseFloat(r.g) > 0)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(parseFloat(r.g) > 0 ? K.gn : K.rd)}>${r.g}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>modeled profit</span>
-              <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
-              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>modeled profit</span>
+              <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>
+              <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Effective Boosted Odds" v={`${r.eo} (${r.ed2} decimal)`} c={K.pp} b /><RR l="Boost Value Added" v={`+$${r.bv}`} c={K.yl} /><RR l="Total Boosted Payout (if win)" v={`$${r.tp}`} /><RR l="Hedge Amount (real cash)" v={`$${r.hs}`} c={K.ac} b /><RR l="If Boosted Bet Wins" v={`+$${r.pBW}`} c={K.gn} /><RR l="If Hedge Wins" v={`+$${r.pHW}`} c={K.gn} />
             <Nt c={K.yl}>Treat each boost as a new decision. Verify the live odds, cap, eligibility, and hedge before counting any value.</Nt>
@@ -94,7 +94,7 @@ export default function ProfitBoost() {
               <ResultFeedbackCard calculatorKey="profit-boost" calculatorLabel="Profit Boost Converter" promoType="profit_boost" expectedProfit={r.g} />
             )}
             {parseFloat(r.g) > 0 && !showShareCard && (
-              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: `1px dashed ${K.gn}`, color: K.gn, borderRadius: 6, cursor: "pointer", fontSize: 14 }}>
                 🎉 Share your win
               </button>
             )}
@@ -127,10 +127,10 @@ export default function ProfitBoost() {
       </div>
       <Help entries={[
         ["Profit Boost", "A sportsbook promo that adds a percentage to your winnings IF your bet wins. A 50% profit boost on a bet that would win $100 now wins $150 instead. Unlike bonus bets, you're using your OWN money — the boost just sweetens the payout."],
-        ["How the math works", "The boost changes your 'effective odds' — the real payout you'd get. We calculate those effective odds, then figure out the exact hedge amount at another book that locks in profit regardless of outcome."],
+        ["How the math works", "The boost changes the modeled payout if the bet wins. We estimate a hedge stake that balances the two outcomes using your inputs. A positive result depends on the odds, cap, eligibility, accepted stakes, and matching settlement rules."],
         ["Max Extra Winnings", "Most boosts have a cap. A '50% boost, max $250 extra' means even if your normal winnings would be $600, the boost only adds up to $250. Always enter this cap — it affects the hedge calculation."],
         ["Why recurring boosts matter", "Welcome promos are one-time, while boosts can recur. Frequency and value vary by account, book, limits, and market conditions, so track realized outcomes instead of projecting a fixed monthly return."],
-        ["Step-by-Step", "1) Check your sportsbook apps each morning for profit boosts. 2) Find the boost, note the odds, percentage, and max extra winnings. 3) Find the opposing line at another book. 4) Enter everything here. 5) Place the boosted bet at Book A. 6) Place the hedge at Book B for the calculated amount. 7) Profit either way."],
+        ["Step-by-Step", "1) Read the boost terms and eligibility. 2) Enter its odds, percentage, and maximum extra winnings. 3) Enter the opposing price and compare both modeled outcomes. 4) Check accepted stake limits and matching settlement rules. 5) Recheck prices before making any decision. A hedge can still produce a loss."],
       ]} />
     </div>
   );

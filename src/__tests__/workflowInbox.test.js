@@ -199,6 +199,8 @@ describe("workflow inbox", () => {
     expect(snapshot.workflows.openCount).toBe(1);
     expect(snapshot.growth.totalProfit).toBe(10);
     expect(snapshot.launch.validation.tests.lastKnown).toBe(LAUNCH_VALIDATION.tests.lastKnown);
-    expect(snapshot.launch.validation.tests.lastKnown).toMatch(/^\d+\/\d+ passing · verified \d{4}-\d{2}-\d{2}$/);
+    // A snapshot must preserve the recorded verdict, including a failed prior run.
+    // Requiring "passing" here makes one failure poison every subsequent run.
+    expect(snapshot.launch.validation.tests).toMatchObject(LAUNCH_VALIDATION.tests);
   });
 });

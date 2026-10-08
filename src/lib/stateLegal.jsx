@@ -43,15 +43,15 @@ export function StateLegalAlert({ userState }) {
         <div style={{ flex: 1 }}>
           {recent && (
             <>
-              <div style={{ fontSize: 13, fontWeight: 700, color: K.gn, marginBottom: 4 }}>Your state [{userState}] recently launched sports betting.</div>
-              <div style={{ fontSize: 12, color: K.dm, marginBottom: 4 }}>{recent.note}</div>
-              <div style={{ fontSize: 11, color: K.dm }}>DraftKings, FanDuel, BetMGM, and Caesars are all available. Check the Sportsbooks tab to start tracking.</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: K.gn, marginBottom: 4 }}>Your state [{userState}] recently launched sports betting.</div>
+              <div style={{ fontSize: 14, color: K.dm, marginBottom: 4 }}>{recent.note}</div>
+              <div style={{ fontSize: 12, color: K.dm }}>DraftKings, FanDuel, BetMGM, and Caesars are all available. Check the Sportsbooks tab to start tracking.</div>
             </>
           )}
           {comingSoon && !recent && (
             <>
-              <div style={{ fontSize: 13, fontWeight: 700, color: K.yl, marginBottom: 4 }}>Sports betting is not yet available in your state ({userState})</div>
-              <div style={{ fontSize: 11, color: K.dm }}>We'll keep the tools ready for when it launches. Set your state in the Sportsbooks tab to get updates.</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: K.yl, marginBottom: 4 }}>Sports betting is not yet available in your state ({userState})</div>
+              <div style={{ fontSize: 12, color: K.dm }}>We'll keep the tools ready for when it launches. Set your state in the Sportsbooks tab to get updates.</div>
             </>
           )}
         </div>

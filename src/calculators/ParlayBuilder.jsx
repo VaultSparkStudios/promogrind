@@ -24,7 +24,7 @@ export default function ParlayBuilder() {
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div id="parlay-legs-label" style={S.label}>Legs ({legs.length}/8) — enter any odds format</div>
-            <button onClick={addLeg} disabled={legs.length >= 8} style={{ padding: "3px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.gn, fontSize: 10, cursor: "pointer", fontFamily: font }}>+ Leg</button>
+            <button onClick={addLeg} disabled={legs.length >= 8} style={{ padding: "3px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.gn, fontSize: 12, cursor: "pointer", fontFamily: font }}>+ Leg</button>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {legs.map((lg, i) => {
@@ -34,12 +34,12 @@ export default function ParlayBuilder() {
               return (
                 <div key={i} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                    <span style={{ fontSize: 10, color: K.mt }}>Leg {i + 1}</span>
+                    <span style={{ fontSize: 12, color: K.mt }}>Leg {i + 1}</span>
                     <input aria-label={`Leg ${i + 1} odds`} aria-describedby="parlay-legs-label" style={{ ...S.input, width: 90, borderColor: isFav ? `${K.rd}80` : undefined }} value={lg.odds} onChange={(e) => updateLeg(i, e.target.value)} placeholder="+150" />
                     {isFav && <span style={S.tag(K.rd)}>FAV</span>}
-                    {legs.length > 2 && <button type="button" aria-label={`Remove parlay leg ${i + 1}`} onClick={() => removeLeg(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 11, padding: "2px 4px", background: "transparent", border: 0 }}>✕</button>}
+                    {legs.length > 2 && <button type="button" aria-label={`Remove parlay leg ${i + 1}`} onClick={() => removeLeg(i)} style={{ cursor: "pointer", color: K.rd, fontSize: 12, padding: "2px 4px", background: "transparent", border: 0 }}>✕</button>}
                   </div>
-                  {ip && <div style={{ fontSize: 9, color: isFav ? K.rd : K.mt, paddingLeft: 40 }}>{ip}% implied</div>}
+                  {ip && <div style={{ fontSize: 12, color: isFav ? K.rd : K.mt, paddingLeft: 40 }}>{ip}% implied</div>}
                 </div>
               );
             })}
@@ -50,8 +50,8 @@ export default function ParlayBuilder() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>${r.profit}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>profit if hits</span>
-              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>profit if hits</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Combined Odds" v={`${r.combA} (${r.combined}x)`} c={K.pp} b />
             <RR l="Total Payout" v={`$${r.payout}`} c={K.gn} />
@@ -76,7 +76,7 @@ export default function ParlayBuilder() {
               />
             )}
             {r && r.ok && !showShareCard && (
-              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 14 }}>
                 🎉 Share this parlay edge
               </button>
             )}

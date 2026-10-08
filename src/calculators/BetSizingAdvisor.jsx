@@ -43,8 +43,8 @@ export default function BetSizingAdvisor() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(parseFloat(riskPct) < 30)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.ac)}>${f(current)}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>per bet ({style})</span>
-              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>per bet ({style})</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Flat 1% of bankroll" v={`$${f(br * 0.01)}`} c={K.dm} />
             <RR l="Quarter Kelly (recommended)" v={`$${f(qkAmt)}`} c={K.gn} />

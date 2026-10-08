@@ -89,13 +89,19 @@ if (errors.length === 0) {
   ];
 
   for (const relPath of comparisonPages) {
-    assertIncludes(relPath, "beta-gated", "beta gating explanation", errors);
-    assertIncludes(relPath, "Start with free PromoGrind account", "updated CTA", errors);
+    const text = read(relPath);
+    if (!/(?:Paid checkout is not available|checkout.*(?:off|unavailable|not currently available))/i.test(text)
+      || !/(?:coming soon.*unavailable|beta-gated)/i.test(text)) {
+      errors.push(`${relPath}: missing checkout and planned-feature availability explanation`);
+    }
+    if (!/(?:Open free calculators|Start with free PromoGrind account)/.test(text)) {
+      errors.push(`${relPath}: missing available calculator CTA`);
+    }
     assertNotIncludes(relPath, "Start for free — no credit card", "old CTA copy", errors);
     assertNotIncludes(relPath, "✅ Pro</span>", "overstated Pro-live badge", errors);
   }
 
-  assertIncludes("public/landing/index.html", "beta rollout", "landing beta rollout messaging", errors);
+  assertIncludes("public/landing/index.html", "Features marked coming soon are unavailable", "landing planned-feature availability", errors);
   assertIncludes("public/landing/index.html", "PromoGrind account", "landing access model copy", errors);
   assertIncludes("docs/SEO_TRUST_STRIP_TEMPLATE.md", "Free PromoGrind account", "trust strip template copy", errors);
   assertIncludes("public/js/pg-capture.js", "PG_SUPABASE_ANON_KEY", "browser-provided capture key lookup", errors);

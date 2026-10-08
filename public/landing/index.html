@@ -15,70 +15,73 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.7; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.7; }
     .container { max-width: 900px; margin: 0 auto; padding: 0 1.25rem; }
     /* Nav */
-    nav { padding: 1.25rem 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
-    .logo { font-size: 1.5rem; font-weight: 700; color: #4ade80; text-decoration: none; letter-spacing: -0.5px; }
+    nav { padding: 1.25rem 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--pg-page-border); }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; letter-spacing: -0.5px; }
     .nav-links { display: flex; gap: 1rem; align-items: center; }
-    .nav-links a { color: #94a3b8; text-decoration: none; font-size: 0.875rem; }
+    .nav-links a { color: var(--pg-page-muted); text-decoration: none; font-size: 0.875rem; }
     .btn { display: inline-block; padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 700; text-decoration: none; font-size: 0.875rem; cursor: pointer; transition: opacity 0.15s; }
     .btn:hover { opacity: 0.88; }
-    .btn-primary { background: #4ade80; color: #0a0e17; }
-    .btn-outline { border: 1px solid #334155; color: #94a3b8; }
+    .btn-primary { background: var(--pg-page-accent); color: var(--pg-page-bg); }
+    .btn-outline { border: 1px solid var(--pg-page-border); color: var(--pg-page-muted); }
     /* Hero */
     .hero { padding: 4rem 0 3rem; text-align: center; }
     .hero h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700; line-height: 1.15; margin-bottom: 1rem; letter-spacing: -1px; }
-    .hero h1 span { color: #4ade80; }
-    .hero p { font-size: 1.125rem; color: #94a3b8; max-width: 600px; margin: 0 auto 2rem; }
+    .hero h1 span { color: var(--pg-page-accent); }
+    .hero p { font-size: 1.125rem; color: var(--pg-page-muted); max-width: 600px; margin: 0 auto 2rem; }
     .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
     .hero-ctas .btn { padding: 0.85rem 2rem; font-size: 1rem; }
     /* Stats bar */
-    .stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding: 1.75rem; background: #0f1520; border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b; margin-bottom: 3.5rem; }
+    .stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding: 1.75rem; background: var(--pg-page-panel); border-top: 1px solid var(--pg-page-border); border-bottom: 1px solid var(--pg-page-border); margin-bottom: 3.5rem; }
     .stat { text-align: center; }
-    .stat-val { font-size: 1.75rem; font-weight: 700; color: #4ade80; display: block; }
-    .stat-lbl { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+    .stat-val { font-size: 1.75rem; font-weight: 700; color: var(--pg-page-accent); display: block; }
+    .stat-lbl { font-size: .875rem; color: var(--pg-page-muted); text-transform: uppercase; letter-spacing: 1px; }
     /* Features */
     .section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .section-sub { color: #64748b; margin-bottom: 2rem; }
+    .section-sub { color: var(--pg-page-muted); margin-bottom: 2rem; }
     .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 4rem; }
-    .feature-card { background: #0f1520; border: 1px solid #1e293b; border-radius: 10px; padding: 1.5rem; }
+    .feature-card { background: var(--pg-page-panel); border: 1px solid var(--pg-page-border); border-radius: 10px; padding: 1.5rem; }
     .feature-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
-    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: #e2e8f0; }
-    .feature-card p { font-size: 0.875rem; color: #64748b; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--pg-page-text); }
+    .feature-card p { font-size: 0.875rem; color: var(--pg-page-muted); }
     /* Calculator grid */
     .calcs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 4rem; }
-    .calc-tag { background: #161d2a; border: 1px solid #1e293b; border-radius: 50px; padding: 0.3rem 0.85rem; font-size: 0.8rem; color: #94a3b8; }
+    .calc-tag { background: var(--pg-page-panel); border: 1px solid var(--pg-page-border); border-radius: 50px; padding: 0.3rem 0.85rem; font-size: .875rem; color: var(--pg-page-muted); }
     /* Pricing */
     .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 4rem; }
-    .pricing-card { background: #0f1520; border: 2px solid #1e293b; border-radius: 10px; padding: 1.75rem; position: relative; }
-    .pricing-card.highlight { border-color: #c084fc; }
-    .price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #c084fc; color: #0a0e17; font-size: 0.7rem; font-weight: 700; padding: 2px 14px; border-radius: 50px; letter-spacing: 1px; white-space: nowrap; }
+    .pricing-card { background: var(--pg-page-panel); border: 2px solid var(--pg-page-border); border-radius: 10px; padding: 1.75rem; position: relative; }
+    .pricing-card.highlight { border-color: var(--pg-page-purple); }
+    .price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--pg-page-purple); color: var(--pg-page-bg); font-size: .875rem; font-weight: 700; padding: 2px 14px; border-radius: 50px; letter-spacing: 1px; white-space: nowrap; }
     .pricing-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
     .pricing-price { font-size: 2.25rem; font-weight: 700; margin: 0.5rem 0; }
-    .pricing-price span { font-size: 1rem; font-weight: 400; color: #64748b; }
-    .pricing-savings { color: #4ade80; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; }
+    .pricing-price span { font-size: 1rem; font-weight: 400; color: var(--pg-page-muted); }
+    .pricing-savings { color: var(--pg-page-accent); font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; }
     .pricing-features { list-style: none; margin-bottom: 1.5rem; }
-    .pricing-features li { font-size: 0.875rem; color: #94a3b8; padding: 0.3rem 0; display: flex; gap: 0.5rem; }
-    .pricing-features li::before { content: "✓"; color: #4ade80; font-weight: 700; }
+    .pricing-features li { font-size: 0.875rem; color: var(--pg-page-muted); padding: 0.3rem 0; display: flex; gap: 0.5rem; }
+    .pricing-features li::before { content: "✓"; color: var(--pg-page-accent); font-weight: 700; }
     /* Footer */
-    footer { border-top: 1px solid #1e293b; padding: 2rem 0; }
+    footer { border-top: 1px solid var(--pg-page-border); padding: 2rem 0; }
     .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .footer-links a { color: #475569; text-decoration: none; font-size: 0.8125rem; }
-    .footer-links a:hover { color: #94a3b8; }
-    .footer-legal { font-size: 0.75rem; color: #334155; line-height: 1.7; }
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .footer-links a { color: var(--pg-page-muted); text-decoration: none; font-size: .875rem; }
+    .footer-links a:hover { color: var(--pg-page-muted); }
+    .footer-legal { font-size: .875rem; color:var(--pg-page-muted); line-height: 1.7; }
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="container">
     <nav>
       <a class="logo" href="https://promogrind.bet/">PROMOGRIND</a>
       <div class="nav-links">
-        <a href="https://promogrind.bet/#/knowledge-base">Learn</a>
-        <a href="https://promogrind.bet/#/upgrade">Pricing</a>
+        <a href="https://promogrind.bet/knowledge-base">Learn</a>
+        <a href="https://promogrind.bet/pricing">Pricing</a>
         <a class="btn btn-primary" href="https://promogrind.bet/dashboard">Open App →</a>
       </div>
     </nav>
@@ -87,29 +90,29 @@
   <div class="container">
     <section class="hero">
       <h1>Turn Sportsbook Promos Into<br><span>modeled cash value</span></h1>
-      <p>53 calculator routes for bonus bets, arbitrage, sizing, and outcome review. The free workspace requires no paid checkout; account and provider-backed surfaces show their availability in product.</p>
+      <p>29 calculators for bonus bets, arbitrage, sizing, and outcome review. Compare offers, estimate outcomes and track your results. No account is needed for the calculators.</p>
       <div class="hero-ctas">
-        <a class="btn btn-primary" href="https://promogrind.bet/dashboard">Open the App with Free PromoGrind Account →</a>
-        <a class="btn btn-outline" href="https://promogrind.bet/dashboard?auth=signup">Start Free Trial</a>
+        <a class="btn btn-primary" href="https://promogrind.bet/dashboard">Open free calculators →</a>
+        <a class="btn btn-outline" href="https://promogrind.bet/dashboard?auth=signup">Save your workspace</a>
       </div>
     </section>
   </div>
 
   <div class="stats">
-    <div class="stat"><span class="stat-val">53</span><span class="stat-lbl">Calculator Routes</span></div>
+    <div class="stat"><span class="stat-val">29</span><span class="stat-lbl">Calculators</span></div>
     <div class="stat"><span class="stat-val">$0</span><span class="stat-lbl">Cost to Start</span></div>
     <div class="stat"><span class="stat-val">8</span><span class="stat-lbl">Major Sportsbooks</span></div>
-    <div class="stat"><span class="stat-val">65–75%</span><span class="stat-lbl">Avg Conversion Rate</span></div>
+    <div class="stat"><span class="stat-val">Your inputs</span><span class="stat-lbl">Modeled outcomes</span></div>
   </div>
 
   <div class="container">
     <h2 class="section-title">Everything You Need to Grind Promos</h2>
-    <p class="section-sub">From signup bonuses to daily recurring promos — every tool in one place, free forever.</p>
+    <p class="section-sub">Start with an offer, enter its terms and compare the possible outcomes.</p>
     <div class="features">
       <div class="feature-card">
         <div class="feature-icon">🎯</div>
-        <h3>53 Calculator Routes</h3>
-        <p>Bonus bet converter, profit boost, arb, Kelly criterion, EV calculator, parlay builder, hedge validator, and 20 more. Free with a PromoGrind account.</p>
+        <h3>29 Calculators</h3>
+        <p>Calculate bonus bet conversion, profit boosts, arbitrage, expected value and stake sizing.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📊</div>
@@ -119,12 +122,12 @@
       <div class="feature-card">
         <div class="feature-icon">⚡</div>
         <h3>Live Arb + EV Scanner</h3>
-        <p>Real-time arbitrage and +EV opportunities across 40+ sportsbooks. This surface is rolling out in beta as backend activation completes. VaultSparked Pro — try free for 7 days.</p>
+        <p>Coming soon. Live odds scanning is not currently available. You can compare odds manually with the free calculators.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📅</div>
         <h3>Promo Calendar</h3>
-        <p>Every recurring weekly promo across DraftKings, FanDuel, BetMGM, Caesars, and more. Graded A/B/C. Time estimates per promo so you can plan your sessions.</p>
+        <p>Browse promotion examples and recurring offer types. Check current availability, eligibility and terms with the sportsbook.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📚</div>
@@ -138,54 +141,25 @@
       </div>
     </div>
 
-    <h2 class="section-title">27 Calculators</h2>
+    <h2 class="section-title">29 Calculators</h2>
     <p class="section-sub" style="margin-bottom:1rem;">Everything you need across every promo type.</p>
     <div class="calcs">
       <span class="calc-tag">Bonus Bet Converter</span><span class="calc-tag">Profit Boost</span><span class="calc-tag">First Bet Hedge</span><span class="calc-tag">Deposit Match</span><span class="calc-tag">Insurance Promo</span><span class="calc-tag">2-Way Arbitrage</span><span class="calc-tag">3-Way Arbitrage</span><span class="calc-tag">Parlay Hedge</span><span class="calc-tag">Middle Bet</span><span class="calc-tag">No-Vig</span><span class="calc-tag">3-Way No-Vig</span><span class="calc-tag">+EV Calculator</span><span class="calc-tag">Kelly Criterion</span><span class="calc-tag">Parlay Builder</span><span class="calc-tag">SGP Estimator</span><span class="calc-tag">Hold Calculator</span><span class="calc-tag">Bet Sizer</span><span class="calc-tag">Line Shop</span><span class="calc-tag">Rollover Calculator</span><span class="calc-tag">Teaser Calculator</span><span class="calc-tag">Round Robin</span><span class="calc-tag">Deposit Optimizer</span><span class="calc-tag">Hedge Validator</span><span class="calc-tag">Promo Return Model</span><span class="calc-tag">Gut Check</span><span class="calc-tag">Promo Stacking</span><span class="calc-tag">Income Estimator</span>
     </div>
 
-    <h2 class="section-title">Evidence, Not Hype</h2>
-    <p class="section-sub">PromoGrind reports repository-backed route counts and explicit feature state. It does not publish simulated activity or unsupported customer earnings.</p>
+    <h2 class="section-title">Understand your estimate</h2>
+    <p class="section-sub">Results depend on the odds and terms you enter. Check eligibility, changing odds and stake limits before using an estimate.</p>
 
-    <h2 class="section-title">Simple, Honest Pricing</h2>
-    <p class="section-sub">27 calculators are free with a PromoGrind account. Pro unlocks premium live features as they come online.</p>
-    <div class="pricing">
-      <div class="pricing-card">
-        <div class="pricing-name">Free</div>
-        <div class="pricing-price">$0<span>/forever</span></div>
-        <ul class="pricing-features">
-          <li>All 27 calculators</li>
-          <li>P/L Ledger & cloud sync</li>
-          <li>Promo Calendar</li>
-          <li>Knowledge Base</li>
-          <li>Bet Tracker & Leaderboard</li>
-          <li>CSV export</li>
-        </ul>
-        <a class="btn btn-outline" style="width:100%;text-align:center;display:block;" href="https://promogrind.bet/dashboard?auth=signup">Get Started Free</a>
-      </div>
-      <div class="pricing-card highlight">
-        <div class="price-badge">BEST VALUE</div>
-        <div class="pricing-name">VaultSparked Pro</div>
-        <div class="pricing-price">$24.99<span>/mo</span></div>
-        <div class="pricing-savings">Or $199/yr — save $101 (2 months free)</div>
-        <ul class="pricing-features">
-          <li>Everything in Free</li>
-          <li>Live Arb Scanner (beta rollout)</li>
-          <li>Live +EV Scanner (beta rollout)</li>
-          <li>Real-time push alerts (beta rollout)</li>
-          <li>Scan history & analytics</li>
-          <li>Player props scanning</li>
-        </ul>
-        <a class="btn btn-primary" style="width:100%;text-align:center;display:block;" href="https://promogrind.bet/#/upgrade">Start 7-Day Free Trial</a>
-      </div>
-    </div>
+    <h2 class="section-title">Start free</h2>
+<p class="section-sub">Use the calculators and local tracking for free. Paid subscriptions are planned; checkout is not currently available.</p>
+<p><a class="btn btn-primary" href="/pricing">View plans and feature availability →</a></p>
 
     <footer>
       <div class="footer-links">
         <a href="https://promogrind.bet/">Home</a>
         <a href="https://promogrind.bet/dashboard">Open App</a>
-        <a href="https://promogrind.bet/#/knowledge-base">Knowledge Base</a>
-        <a href="https://promogrind.bet/#/upgrade">Pricing</a>
+        <a href="https://promogrind.bet/knowledge-base">Knowledge Base</a>
+        <a href="https://promogrind.bet/pricing">Pricing</a>
         <a href="/privacy/">Privacy Policy</a>
         <a href="/terms/">Terms of Service</a>
         <a href="/responsible-gambling/">Responsible Gambling</a>
@@ -201,11 +175,11 @@
         <strong>Affiliate Disclosure:</strong> Some links are affiliate links. If you sign up at a sportsbook through these links, we may earn a commission at no extra cost to you.<br>
         <strong>Access:</strong> PromoGrind uses free accounts for login and cloud sync across devices.<br>
         Must be 21+ (18+ in some states). Sports betting available only where legal. Gambling winnings are taxable income. This is an educational tool — not gambling advice. 1-800-GAMBLER.<br>
-        <p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p>
+        <p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p>
       </p>
     </footer>
-      <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+      <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
 </body>
 </html>

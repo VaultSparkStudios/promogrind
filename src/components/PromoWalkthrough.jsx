@@ -59,12 +59,12 @@ export default function PromoWalkthrough({ navigate, onClose }) {
         <div style={{ display: "flex", minHeight: 360 }}>
           <div style={{ width: 200, borderRight: `1px solid ${K.bd}`, padding: 12, flexShrink: 0 }}>
             {WALKTHROUGHS.map((w, i) => (
-              <button key={i} onClick={() => { setSelectedWT(i); setWtStep(0); }} style={{ width: "100%", textAlign: "left", padding: "10px 12px", background: selectedWT === i ? `${K.ac}15` : "transparent", border: `1px solid ${selectedWT === i ? K.ac : K.bd}`, borderRadius: 6, color: selectedWT === i ? K.ac : K.dm, fontSize: 11, cursor: "pointer", fontFamily: font, marginBottom: 6, lineHeight: 1.4 }}>{w.title}</button>
+              <button key={i} onClick={() => { setSelectedWT(i); setWtStep(0); }} style={{ width: "100%", textAlign: "left", padding: "10px 12px", background: selectedWT === i ? `${K.ac}15` : "transparent", border: `1px solid ${selectedWT === i ? K.ac : K.bd}`, borderRadius: 6, color: selectedWT === i ? K.ac : K.dm, fontSize: 12, cursor: "pointer", fontFamily: font, marginBottom: 6, lineHeight: 1.4 }}>{w.title}</button>
             ))}
           </div>
           <div style={{ flex: 1, padding: 20 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: K.tx, marginBottom: 4, fontFamily: fontD }}>{wt.title}</div>
-            <div style={{ fontSize: 10, color: K.mt, marginBottom: 16 }}>Step {wtStep + 1} of {wt.steps.length}</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 4, fontFamily: fontD }}>{wt.title}</div>
+            <div style={{ fontSize: 12, color: K.mt, marginBottom: 16 }}>Step {wtStep + 1} of {wt.steps.length}</div>
             <div style={{ display: "flex", gap: 4, marginBottom: 20 }}>
               {wt.steps.map((_, i) => (
                 <div key={i} style={{ height: 4, flex: 1, borderRadius: 2, background: i <= wtStep ? K.ac : K.bd2, transition: "background 0.2s" }} />
@@ -74,13 +74,13 @@ export default function PromoWalkthrough({ navigate, onClose }) {
               <div style={{ width: 32, height: 32, borderRadius: "50%", background: K.ac, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: K.ink, fontSize: 14, flexShrink: 0 }}>{wtStep + 1}</div>
               <div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 6, fontFamily: fontD }}>{step.n}</div>
-                <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7 }}>{step.body}</div>
+                <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.7 }}>{step.body}</div>
               </div>
             </div>
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-              {wtStep > 0 && <button onClick={() => setWtStep((s) => s - 1)} style={{ padding: "7px 16px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontSize: 11, cursor: "pointer", fontFamily: font }}>← Prev</button>}
-              {wtStep < wt.steps.length - 1 && <button onClick={() => setWtStep((s) => s + 1)} style={{ padding: "7px 16px", background: K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Next →</button>}
-              {isCalcStep && <button onClick={() => { navigate(`/${wt.calcSlug}`); onClose(); }} style={{ padding: "7px 16px", background: `${K.gn}15`, border: `1px solid ${K.gn}30`, borderRadius: 6, color: K.gn, fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: font }}>Open Calculator →</button>}
+              {wtStep > 0 && <button onClick={() => setWtStep((s) => s - 1)} style={{ padding: "7px 16px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.dm, fontSize: 12, cursor: "pointer", fontFamily: font }}>← Prev</button>}
+              {wtStep < wt.steps.length - 1 && <button onClick={() => setWtStep((s) => s + 1)} style={{ padding: "7px 16px", background: K.ac, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: font }}>Next →</button>}
+              {isCalcStep && <button onClick={() => { navigate(`/${wt.calcSlug}`); onClose(); }} style={{ padding: "7px 16px", background: `${K.gn}15`, border: `1px solid ${K.gn}30`, borderRadius: 6, color: K.gn, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: font }}>Open Calculator →</button>}
             </div>
           </div>
         </div>

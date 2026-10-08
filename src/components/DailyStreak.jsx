@@ -18,7 +18,7 @@ export default function DailyStreak() {
       title={`${evidenceCount} reviewed outcome${evidenceCount === 1 ? "" : "s"}; losses and reasoned skips count equally.`}
       style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 12px", background: `${K.ac}12`, borderRadius: 50, border: `1px solid ${K.ac}30` }}
     >
-      <span style={{ fontSize: 11, fontWeight: 700, color: K.ac }}>{cadence.current}-day review cadence</span>
+      <span style={{ fontSize: 12, fontWeight: 700, color: K.ac }}>{cadence.current}-day review cadence</span>
     </div>
   );
 }

@@ -13,11 +13,11 @@
       "label": "PromoGrind"
     },
     {
-      "href": "/#/knowledge-base",
+      "href": "/knowledge-base",
       "label": "Learn"
     },
     {
-      "href": "/#/upgrade",
+      "href": "/pricing",
       "label": "Pricing"
     },
     {
@@ -27,8 +27,8 @@
   ],
   "footerLinks": [
     "/",
-    "/#/knowledge-base",
-    "/#/upgrade",
+    "/knowledge-base",
+    "/pricing",
     "/dashboard",
     "/privacy/",
     "/terms/",

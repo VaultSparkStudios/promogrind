@@ -34,7 +34,7 @@
     "The canonical Studio cost gate remains AUDIT-PENDING/COST-BLEEDER while repo truth is trial-ceiling; reconciliation must travel through the authorized control plane.",
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
-  "lastUpdated": "2026-09-30",
+  "lastUpdated": "2026-10-08",
   "silScore": 869,
   "silAvg3": 909.7,
   "silVelocity": 1,
@@ -48,12 +48,12 @@
     860,
     869
   ],
-  "ignisScore": 43385,
+  "ignisScore": 43354,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-09-30",
-  "testsPassing": 105,
-  "testsTotal": 105,
-  "testsLastRun": "2026-09-30",
+  "ignisLastComputed": "2026-10-08",
+  "testsPassing": 109,
+  "testsTotal": 109,
+  "testsLastRun": "2026-10-08",
   "lastDeployStatus": "Application commit d9f5385469fbe2015c0628c7c37d15a2618411b1 is verified at stable staging and production with content digest fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c. Release workflow: https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140142. The authorized closeout commit will pass through the same deployment pipeline; its final receipt is checked after push.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
   "truthAuditLastRun": "2026-09-30",
@@ -123,14 +123,14 @@
     "automationCoverage": 95
   },
   "doctorScore": {
-    "date": "2026-09-30",
-    "passing": 11,
-    "warning": 0,
+    "date": "2026-10-08",
+    "passing": 10,
+    "warning": 1,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "total": 12,
-    "score": 92,
+    "score": 83,
     "checks": [
       {
         "id": "manifest",
@@ -197,8 +197,8 @@
       },
       {
         "id": "ignis",
-        "pass": true,
-        "warn": false,
+        "pass": false,
+        "warn": true,
         "driftClass": "derived-stale",
         "blocking": false
       },
@@ -243,26 +243,26 @@
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
-    "generatedAt": "2026-09-30T16:05:18.147Z",
-    "commitSha": "848532699dd8149ae7b63c6bf5b24c77b15e3f2a",
+    "generatedAt": "2026-10-08T03:12:41.136Z",
+    "commitSha": "1daa0da70e64f7d721710808907d93cc1e33b51d",
     "complete": true,
     "partial": false,
     "success": true,
     "exitCode": 0,
     "files": {
-      "passing": 105,
-      "total": 105
+      "passing": 109,
+      "total": 109
     },
     "assertions": {
-      "passing": 722,
-      "total": 722
+      "passing": 745,
+      "total": 745
     },
-    "reportSha256": "09a440bf4d45a1284586fa8ad4880473b08d915033501cb58a17c5cd22461a06"
+    "reportSha256": "ec7d591301a29070e3e9556ba576a11aa83bd03aae22fc2f40e17d46bdb78a14"
   },
-  "testsAssertionsPassing": 722,
-  "testsAssertionsTotal": 722,
-  "testsAssertionsFiles": 105,
-  "testsAssertionsLastRun": "2026-09-30",
+  "testsAssertionsPassing": 745,
+  "testsAssertionsTotal": 745,
+  "testsAssertionsFiles": 109,
+  "testsAssertionsLastRun": "2026-10-08",
   "lastSession": 132,
   "publicStats": {
     "url": "https://promogrind.bet/stats",

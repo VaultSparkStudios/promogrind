@@ -1,11 +1,11 @@
 # IGNIS Batch Genius Summary — PromoGrind
-Generated: 2026-09-20T18:43:03.775Z
+Generated: 2026-10-08T01:00:59.564Z
 
-**Summary:** PromoGrind's technical deployment is fully green with commit-bound Cloudflare production live, but SPARKED launch remains an honest HOLD pending external identity, payment, and beta proofs.
+**Summary:** S132 public statistics shipped green at exact commit parity across staging and production, but the first recurring 06:17 UTC publisher run is unobserved and SPARKED/public launch stays on HOLD behind unproved external identity, payment, beta, and credential gates.
 
 ## Top 5 Items
-1. **Close Zoho email identity and live Obelisk delegation proof** — Business email send/receive/reply and human+agent delegation are the longest-standing external blockers; without them no legitimate launch communication channel exists.
-2. **Execute real Stripe checkout/webhook/subscription/portal lifecycle end-to-end** — Revenue capability is unproven in production; this is the highest-impact commerce gap standing between deployment and a monetizable launch.
-3. **Validate production auth-email lifecycle (confirm/resend/recovery)** — User account recovery and confirmation are core trust primitives; an unverified auth-email path risks locking out real users at first contact.
-4. **Obtain independent friend-beta evidence and complete historical credential rotation/remediation** — Real external usage evidence and closing any legacy credential exposure are non-negotiable pre-launch integrity gates that no internal test can substitute for.
-5. **Reconcile canonical Studio cost truth and secure distinct post-proof founder launch approval** — Once all other criteria clear, a clean-cost accounting and an explicit, separate founder sign-off are the final gate preventing premature SPARKED reassessment.
+1. **Observe and record the first recurring 06:17 UTC stats publisher run** — Job configuration is not proof of recurrence. Until a scheduled run actually publishes, the public /stats feed can silently go stale, and only the initial manual publication is verified. Capture the run log, the new report's generated-at timestamp, and the freshness-state transition, then write the result back to audits/public-stats.
+2. **Prove a real Stripe checkout, webhook, subscription, and portal lifecycle** — Revenue and trust both depend on payments working end to end, and this is a hard blocker for any public-launch approval. Run one real test-mode-to-live lifecycle with receipts for checkout, webhook delivery, subscription state change, and billing portal access.
+3. **Close production auth confirmation, resend, and recovery proof** — Auth-email is an unproved launch criterion and gates both the Stripe lifecycle and independent beta testers. Verify confirmation, resend, and password recovery against the production origin with delivered-mail evidence.
+4. **Finish Zoho alias, DNS, delivery, and reply identity, plus live Obelisk delegation** — Email identity underpins auth mail deliverability, support replies, and the human+agent delegation story. DNS/alias/reply proof unblocks item 3's delivery evidence, so it should run first or in parallel.
+5. **Run the independent friend beta and complete historical credential rotation** — These are the last human-boundary gates before a distinct founder launch decision. Beta evidence from independent testers validates the saved-workflow metrics now being published, and credential remediation removes a known security debt. Reconcile Ark cost truth and refresh revenue evidence from source records, not by changing dates, to complete the approval package.

@@ -5,7 +5,6 @@ import { buildRiskRadarSummary, getBankrollPosture, getNextBestAction, getUnfini
 import { getOnboardingProgress, getPromoPassportOnboardingPlan } from "../../onboarding.js";
 import { matchPlaybooks, playbookToWorkflows } from "../../playbooks/index.js";
 // matchPlaybooks is called here as a fallback when snapshot.topPlaybook is not pre-computed
-import ObservabilityPanel from "./ObservabilityPanel.jsx";
 import WorkflowInboxPanel from "./WorkflowInboxPanel.jsx";
 import PromoExpiryWidget from "./PromoExpiryWidget.jsx";
 import { appendWorkflows } from "../../workflows/store.js";
@@ -23,11 +22,11 @@ function OperatorTwinCard({ forecast }) {
   const tone = forecast.tone === "elite" ? K.gn : forecast.tone === "watch" ? K.yl : K.ac;
   return (
     <div style={{ padding: "10px 12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
-      <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>
-        Operator Twin · {forecast.recent}% recent / {forecast.baseline}% baseline
+      <div style={{ fontSize: 12, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>
+        Recorded follow-through · {forecast.recent}% recent / {forecast.baseline}% baseline
       </div>
-      <div style={{ fontSize: 12, color: K.tx, fontWeight: 700, marginBottom: 2 }}>{forecast.headline}</div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>{forecast.detail}</div>
+      <div style={{ fontSize: 14, color: K.tx, fontWeight: 700, marginBottom: 2 }}>{forecast.headline}</div>
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6 }}>{forecast.detail}</div>
     </div>
   );
 }
@@ -47,11 +46,11 @@ function RiskRadarCard({ radar, navigate }) {
     <div style={{ padding: "12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 10 }}>
         <div>
-          <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Risk Radar</div>
+          <div style={{ fontSize: 12, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Risk Radar</div>
           <div style={{ fontFamily: fontD, fontSize: 16, fontWeight: 800, color: K.tx }}>{radar.headline}</div>
-          <div style={{ fontSize: 10, color: K.mt, marginTop: 4 }}>{exposureCopy}</div>
+          <div style={{ fontSize: 12, color: K.mt, marginTop: 4 }}>{exposureCopy}</div>
         </div>
-        <button onClick={() => navigate("/bet-tracker")} style={{ padding: "8px 12px", background: "transparent", border: `1px solid ${tone}45`, borderRadius: 8, color: tone, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+        <button onClick={() => navigate("/bet-tracker")} style={{ padding: "8px 12px", background: "transparent", border: `1px solid ${tone}45`, borderRadius: 8, color: tone, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
           Review exposure →
         </button>
       </div>
@@ -62,12 +61,12 @@ function RiskRadarCard({ radar, navigate }) {
         <InsightChip label={cluster ? `${cluster.dimension} concentration` : "Concentration"} value={clusterLabel} tone={radar.concentration?.hasConcentration ? K.yl : K.ac} />
         <InsightChip label="Twin leader" value={leader ? `${leader.name} $${f(Math.abs(leader.pnl))}` : "No sample"} tone={leader?.name === "you" ? K.gn : K.yl} />
       </div>
-      <div style={{ marginTop: 9, fontSize: 9, color: K.mt, lineHeight: 1.55 }}>
+      <div style={{ marginTop: 9, fontSize: 12, color: K.mt, lineHeight: 1.55 }}>
         {radar.concentration?.disclosure}
         {radar.concentration?.unknownEventStake > 0 ? ` $${f(radar.concentration.unknownEventStake)} lacks event metadata.` : ""}
       </div>
       {radar.preMortem?.triggered && (
-        <div style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: `${K.yl}10`, border: `1px solid ${K.yl}35`, fontSize: 10, color: K.dm, lineHeight: 1.6 }}>
+        <div style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: `${K.yl}10`, border: `1px solid ${K.yl}35`, fontSize: 12, color: K.dm, lineHeight: 1.6 }}>
           {radar.preMortem.copy.body} {radar.preMortem.scenarios?.[0]?.detail || "No similar prior loss is recorded yet, so keep the stake intentional."}
         </div>
       )}
@@ -78,10 +77,10 @@ function FrictionRecoveryCard({ plan, navigate }) {
   if (!plan?.ready) return null;
   return (
     <div role="status" aria-label="Friction recovery plan" style={{ padding: "11px 12px", background: `${K.ac}08`, border: `1px solid ${K.ac}32`, borderRadius: 8, marginBottom: 12 }}>
-      <div style={{ fontSize: 10, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Recovery loop · {plan.evidenceCount} receipts</div>
-      <div style={{ fontSize: 12, color: K.tx, fontWeight: 800, marginBottom: 3 }}>{plan.title}</div>
-      <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.6, marginBottom: 8 }}>{plan.action} {plan.whyNow}</div>
-      <button type="button" onClick={() => navigate(plan.route)} style={{ padding: "6px 10px", background: "transparent", border: `1px solid ${K.ac}45`, borderRadius: 7, color: K.ac, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>{plan.cta} →</button>
+      <div style={{ fontSize: 12, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Recovery loop · {plan.evidenceCount} receipts</div>
+      <div style={{ fontSize: 14, color: K.tx, fontWeight: 800, marginBottom: 3 }}>{plan.title}</div>
+      <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 8 }}>{plan.action} {plan.whyNow}</div>
+      <button type="button" onClick={() => navigate(plan.route)} style={{ padding: "6px 10px", background: "transparent", border: `1px solid ${K.ac}45`, borderRadius: 7, color: K.ac, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font }}>{plan.cta} →</button>
     </div>
   );
 }
@@ -89,11 +88,11 @@ function TiltBreakerBanner({ state }) {
   if (!state?.tripped) return null;
   return (
     <div style={{ padding: "10px 12px", background: `${K.yl}10`, border: `1px solid ${K.yl}55`, borderRadius: 8, marginBottom: 12 }}>
-      <div style={{ fontSize: 10, color: K.yl, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>
+      <div style={{ fontSize: 12, color: K.yl, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>
         Tilt circuit breaker · {state.cooldownMinutes}m
       </div>
-      <div style={{ fontSize: 12, color: K.tx, fontWeight: 700, marginBottom: 4 }}>{state.nextAction}</div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>
+      <div style={{ fontSize: 14, color: K.tx, fontWeight: 700, marginBottom: 4 }}>{state.nextAction}</div>
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6 }}>
         {state.signals.map((s) => s.label).join(" · ")}
       </div>
     </div>
@@ -106,8 +105,8 @@ function OperatorCommandRibbon({ counterfactual, journal, onShare }) {
   if (!hasCounterfactual && !hasJournal) {
     return (
       <div style={{ padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, marginBottom: 12 }}>
-        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Operator Briefing</div>
-        <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>Log three settled outcomes to unlock the counterfactual P&L ribbon and yesterday recap.</div>
+        <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Recorded activity review</div>
+        <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>Log at least three settled outcomes to compare recorded decisions with alternative modeled scenarios and review yesterday’s activity.</div>
       </div>
     );
   }
@@ -118,11 +117,11 @@ function OperatorCommandRibbon({ counterfactual, journal, onShare }) {
     <div style={{ padding: "12px", background: `${K.ac}08`, border: `1px solid ${K.ac}30`, borderRadius: 8, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", marginBottom: 8 }}>
         <div>
-          <div style={{ fontSize: 10, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Operator Briefing</div>
-          {hasJournal ? <div style={{ fontSize: 12, color: K.tx, fontWeight: 800 }}>{journal.lines[0]}</div> : null}
-          {hasJournal ? <div style={{ fontSize: 10, color: K.mt, marginTop: 3 }}>{journal.lines[1]}</div> : null}
+          <div style={{ fontSize: 12, color: K.ac, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 4 }}>Recorded activity review</div>
+          {hasJournal ? <div style={{ fontSize: 14, color: K.tx, fontWeight: 800 }}>{journal.lines[0]}</div> : null}
+          {hasJournal ? <div style={{ fontSize: 12, color: K.mt, marginTop: 3 }}>{journal.lines[1]}</div> : null}
         </div>
-        <button onClick={onShare} style={{ padding: "7px 10px", background: `${K.gn}12`, border: `1px solid ${K.gn}40`, borderRadius: 8, color: K.gn, fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
+        <button onClick={onShare} style={{ padding: "7px 10px", background: `${K.gn}12`, border: `1px solid ${K.gn}40`, borderRadius: 8, color: K.gn, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font }}>
           Share briefing
         </button>
       </div>
@@ -149,8 +148,8 @@ const TONE = {
 function InsightChip({ label, value, tone = K.ac }) {
   return (
     <div style={{ padding: "8px 10px", background: `${tone}10`, border: `1px solid ${tone}30`, borderRadius: 999 }}>
-      <span style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.1px", marginRight: 6 }}>{label}</span>
-      <span style={{ fontSize: 11, color: tone, fontWeight: 700 }}>{value}</span>
+      <span style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.1px", marginRight: 6 }}>{label}</span>
+      <span style={{ fontSize: 12, color: tone, fontWeight: 700 }}>{value}</span>
     </div>
   );
 }
@@ -159,10 +158,10 @@ function AdaptiveFocusCard({ title, body, badge, tone = K.ac }) {
   return (
     <div style={{ padding: "12px", background: K.s1, border: `1px solid ${tone}30`, borderRadius: 8 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center", marginBottom: 6 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{title}</div>
-        {badge ? <span style={{ padding: "2px 8px", borderRadius: 999, background: `${tone}18`, color: tone, fontSize: 9, fontWeight: 800, letterSpacing: "0.8px" }}>{badge}</span> : null}
+        <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{title}</div>
+        {badge ? <span style={{ padding: "2px 8px", borderRadius: 999, background: `${tone}18`, color: tone, fontSize: 12, fontWeight: 800, letterSpacing: "0.8px" }}>{badge}</span> : null}
       </div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.7 }}>{body}</div>
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.7 }}>{body}</div>
     </div>
   );
 }
@@ -180,25 +179,25 @@ function OperatorAutopilotCard({ decision, topWorkflow, navigate }) {
     <div style={{ padding: "12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "flex-start" }}>
         <div style={{ maxWidth: 780 }}>
-          <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6, fontWeight: 800 }}>Operator Autopilot</div>
+          <div style={{ fontSize: 12, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6, fontWeight: 800 }}>Operator Autopilot</div>
           <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>
             {hasWorkflow ? topWorkflow.title : decision.title}
           </div>
-          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.7, marginBottom: 8 }}>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, marginBottom: 8 }}>
             {hasWorkflow ? topWorkflow.scoreSummary || topWorkflow.summary || "Your highest-ranked workflow is ready for execution." : decision.body}
           </div>
-          <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>{completionCopy}</div>
+          <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6 }}>{completionCopy}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 180 }}>
           <button
             onClick={() => navigate(targetPath)}
-            style={{ padding: "9px 12px", background: tone, border: "none", borderRadius: 8, color: K.ink, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
+            style={{ padding: "9px 12px", background: tone, border: "none", borderRadius: 8, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font }}
           >
             {hasWorkflow ? "Open workflow →" : `${decision.cta || "Open action"} →`}
           </button>
           <button
             onClick={() => navigate(hasWorkflow ? "/edge-dashboard" : "/dashboard")}
-            style={{ padding: "8px 12px", background: "transparent", border: `1px solid ${tone}35`, borderRadius: 8, color: tone, fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: font }}
+            style={{ padding: "8px 12px", background: "transparent", border: `1px solid ${tone}35`, borderRadius: 8, color: tone, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: font }}
           >
             {hasWorkflow ? "Record outcome →" : "Refresh plan →"}
           </button>
@@ -214,24 +213,24 @@ function PromoPassportOnboardingCard({ plan, discipline, navigate }) {
     <div style={{ padding: "12px", background: `${tone}08`, border: `1px solid ${tone}30`, borderRadius: 8, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "flex-start", marginBottom: 10 }}>
         <div>
-          <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Promo Passport Path</div>
+          <div style={{ fontSize: 12, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", fontWeight: 800, marginBottom: 5 }}>Getting started</div>
           <div style={{ fontFamily: fontD, fontSize: 16, fontWeight: 800, color: K.tx }}>
-            {plan.complete ? "First operating loop complete" : `Next: ${plan.next?.label || "Keep logging clean outcomes"}`}
+            {plan.complete ? "First review complete" : `Next: ${plan.next?.label || "Keep recording outcomes"}`}
           </div>
-          <div style={{ fontSize: 10, color: K.mt, marginTop: 4 }}>
-            Discipline {discipline.score} · {plan.doneCount}/{plan.totalCount} proof steps complete
+          <div style={{ fontSize: 12, color: K.mt, marginTop: 4 }}>
+            {plan.doneCount}/{plan.totalCount} setup steps complete
           </div>
         </div>
         <button
           onClick={() => navigate(plan.next?.slug || "/dashboard")}
-          style={{ padding: "8px 12px", background: tone, border: "none", borderRadius: 8, color: K.ink, fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: font }}
+          style={{ padding: "8px 12px", background: tone, border: "none", borderRadius: 8, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: font }}
         >
           {plan.complete ? "Review dashboard" : "Open next step"} →
         </button>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 6 }}>
         {plan.steps.map((step) => (
-          <div key={step.id} style={{ padding: "7px 8px", borderRadius: 8, background: step.done ? `${K.gn}12` : K.s1, border: `1px solid ${step.done ? K.gn : K.bd}30`, fontSize: 10, color: step.done ? K.gn : K.mt, fontWeight: 700 }}>
+          <div key={step.id} style={{ padding: "7px 8px", borderRadius: 8, background: step.done ? `${K.gn}12` : K.s1, border: `1px solid ${step.done ? K.gn : K.bd}30`, fontSize: 12, color: step.done ? K.gn : K.mt, fontWeight: 700 }}>
             {step.done ? "Done" : "Next"} · {step.label}
           </div>
         ))}
@@ -320,29 +319,29 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
     <div style={{ ...S.card, border: `1px solid ${K.ac}35`, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
         <div>
-          <div style={{ fontSize: 11, color: K.ac, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 5 }}>
+          <div style={{ fontSize: 12, color: K.ac, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: 5 }}>
             Today Dashboard
           </div>
           <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>
             What needs attention right now
           </div>
-          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, maxWidth: 760 }}>
+          <div style={{ fontSize: 14, color: K.dm, lineHeight: 1.6, maxWidth: 760 }}>
             Focus on expiring promos, unfinished work, bankroll posture, and recent settled profit before adding more volume.
           </div>
         </div>
         <div style={{ padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, minWidth: 150 }}>
-          <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Recent Settled Profit</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Recent Settled Profit</div>
           <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: recentTone }}>
             {snapshot.recentSettledProfit >= 0 ? "+" : "-"}${f(Math.abs(snapshot.recentSettledProfit))}
           </div>
-          <div style={{ fontSize: 10, color: K.mt }}>
+          <div style={{ fontSize: 12, color: K.mt }}>
             Last 7 days · {snapshot.recentSettledCount} entr{snapshot.recentSettledCount === 1 ? "y" : "ies"}
           </div>
         </div>
       </div>
 
       <TiltBreakerBanner state={computeTiltState(appData)} />
-      <OperatorTwinCard forecast={buildTwinForecast(appData)} />
+      {(appData.resultFeedback || []).length > 0 && <OperatorTwinCard forecast={buildTwinForecast(appData)} />}
       <FrictionRecoveryCard plan={snapshot.trackInsights?.frictionRecovery} navigate={navigate} />
       <RiskRadarCard radar={riskRadar} navigate={navigate} />
       <OperatorCommandRibbon counterfactual={counterfactual} journal={journal} onShare={shareBriefing} />
@@ -355,53 +354,53 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
         <div style={{ padding: "12px", background: K.s2, border: `1px solid ${onboarding.doneCount === onboarding.totalCount ? K.gn : K.ac}35`, borderRadius: 8 }}>
-          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Onboarding</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Onboarding</div>
           <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: onboarding.doneCount === onboarding.totalCount ? K.gn : K.ac, marginBottom: 6 }}>
             {onboarding.doneCount}/{onboarding.totalCount}
           </div>
           <div style={{ height: 6, background: K.s1, borderRadius: 999, overflow: "hidden", marginBottom: 10 }}>
             <div style={{ width: `${onboarding.pct}%`, height: "100%", background: onboarding.doneCount === onboarding.totalCount ? K.gn : K.ac, borderRadius: 999 }} />
           </div>
-          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
             {onboarding.remaining[0]
               ? `Next: ${onboarding.remaining[0].label}.`
               : "Core launch setup is complete for this account."}
           </div>
-          <button onClick={() => navigate("/get-started")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font }}>
+          <button onClick={() => navigate("/get-started")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
             Open setup guide →
           </button>
         </div>
 
         <div style={{ padding: "12px", background: K.s2, border: `1px solid ${snapshot.expiringBooks.length ? K.yl : K.bd}`, borderRadius: 8 }}>
-          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Expiring Promos</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Expiring Promos</div>
           {snapshot.expiringBooks.length ? (
             <>
               <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: K.yl, marginBottom: 6 }}>{snapshot.expiringBooks.length}</div>
-              <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+              <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
                 {snapshot.expiringBooks.map((book) => `${book.name} (${book.bonus})`).join(", ")}
               </div>
-              <button onClick={() => navigate("/sportsbooks")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font }}>
+              <button onClick={() => navigate("/sportsbooks")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
                 Review books →
               </button>
             </>
           ) : (
-            <div style={{ fontSize: 11, color: K.gn, lineHeight: 1.6 }}>No tracked welcome offers are expiring in the next 72 hours.</div>
+            <div style={{ fontSize: 12, color: K.gn, lineHeight: 1.6 }}>No tracked welcome offers are expiring in the next 72 hours.</div>
           )}
         </div>
 
         <div style={{ padding: "12px", background: K.s2, border: `1px solid ${tone}35`, borderRadius: 8 }}>
-          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Bankroll Posture</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Bankroll Posture</div>
           <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: tone, marginBottom: 6 }}>{posture.title}</div>
-          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6 }}>{posture.body}</div>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6 }}>{posture.body}</div>
         </div>
 
         <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
-          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Patterns to verify today</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Patterns to verify today</div>
           <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: K.gn, marginBottom: 6 }}>{snapshot.todayPromos.length}</div>
-          <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
+          <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 10 }}>
             {snapshot.todayPromos.length ? `${snapshot.adaptivePlan?.evidenceCoverage?.actionable || 0} recently seen · ${snapshot.adaptivePlan?.evidenceCoverage?.verify || snapshot.todayPromos.length} need verification.` : "No historical cadence patterns match today."}
           </div>
-          <button onClick={() => navigate("/promo-calendar")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 11, cursor: "pointer", fontFamily: font }}>
+          <button onClick={() => navigate("/promo-calendar")} style={{ padding: "6px 12px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 6, color: K.ac, fontSize: 12, cursor: "pointer", fontFamily: font }}>
             Open promo calendar →
           </button>
         </div>
@@ -410,22 +409,22 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
       <div style={{ padding: "12px", background: K.s2, border: `1px solid ${tone}35`, borderRadius: 8, marginBottom: 12 }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 10 }}>
           <div>
-            <div style={{ fontSize: 10, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6 }}>
+            <div style={{ fontSize: 12, color: tone, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 6 }}>
               Mission Control
             </div>
             <div style={{ fontFamily: fontD, fontSize: 18, fontWeight: 800, color: K.tx, marginBottom: 4 }}>
               {adaptivePlan.headline || "Build today’s operating edge"}
             </div>
-            <div style={{ fontSize: 11, color: K.dm, lineHeight: 1.7, maxWidth: 760 }}>
+            <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.7, maxWidth: 760 }}>
               {adaptivePlan.detail || "Convert the highest-value promos, settle active workflows, and feed outcomes back into the system."}
             </div>
           </div>
           <div style={{ padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, minWidth: 170 }}>
-            <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Operating Mode</div>
+            <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px" }}>Operating Mode</div>
             <div style={{ fontFamily: fontD, fontSize: 20, fontWeight: 800, color: tone, textTransform: "capitalize" }}>
               {adaptivePlan.mode || "build"}
             </div>
-            <div style={{ fontSize: 10, color: K.mt }}>
+            <div style={{ fontSize: 12, color: K.mt }}>
               Queue pressure {adaptivePlan.workflowBacklog || 0} · feedback coverage {Math.round(adaptivePlan.feedbackCoverage || 0)}%
             </div>
           </div>
@@ -440,7 +439,7 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
       </div>
 
       <div style={{ padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
-        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Unfinished Work</div>
+        <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Unfinished Work</div>
         {unfinished.length ? (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
             {unfinished.map((item) => (
@@ -449,18 +448,18 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
                 onClick={() => navigate(`/${item.slug}`)}
                 style={{ textAlign: "left", padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: "pointer", fontFamily: font }}
               >
-                <div style={{ fontSize: 12, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{item.title}</div>
-                <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6 }}>{item.detail}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginBottom: 4 }}>{item.title}</div>
+                <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6 }}>{item.detail}</div>
               </button>
             ))}
           </div>
         ) : (
-          <div style={{ fontSize: 11, color: K.gn }}>No urgent unfinished work is surfaced from your current tracker and ledger state.</div>
+          <div style={{ fontSize: 12, color: K.gn }}>No urgent unfinished work is surfaced from your current tracker and ledger state.</div>
         )}
       </div>
 
       <div style={{ marginTop: 12, padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
-        <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Adaptive Edge</div>
+        <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Adaptive Edge</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8, marginBottom: adaptivePlan.topPromos?.length ? 10 : 0 }}>
           <AdaptiveFocusCard
             title={adaptivePlan.topLane ? `${adaptivePlan.topLane.label} is converting` : "No strong winning lane yet"}
@@ -496,20 +495,20 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
                 style={{ textAlign: "left", padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8, cursor: "pointer", fontFamily: font }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 4, alignItems: "baseline" }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{promo.book}</div>
-                  <div style={{ fontSize: 10, color: promo.score >= 5 ? K.gn : promo.score >= 3 ? K.ac : K.yl, fontWeight: 800 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{promo.book}</div>
+                  <div style={{ fontSize: 12, color: promo.score >= 5 ? K.gn : promo.score >= 3 ? K.ac : K.yl, fontWeight: 800 }}>
                     score {promo.score}
                   </div>
                 </div>
-                <div style={{ fontSize: 10, color: K.dm, lineHeight: 1.6, marginBottom: 6 }}>{promo.promo}</div>
+                <div style={{ fontSize: 12, color: K.dm, lineHeight: 1.6, marginBottom: 6 }}>{promo.promo}</div>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {promo.reasons.length
                     ? promo.reasons.slice(0, 2).map((reason) => (
-                        <span key={reason} style={{ padding: "2px 8px", borderRadius: 999, background: `${reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn}15`, border: `1px solid ${(reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn)}35`, fontSize: 9, color: reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn, fontWeight: 700 }}>
+                        <span key={reason} style={{ padding: "2px 8px", borderRadius: 999, background: `${reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn}15`, border: `1px solid ${(reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn)}35`, fontSize: 12, color: reason.includes("cold") || reason.includes("limit") ? K.yl : K.gn, fontWeight: 700 }}>
                           {reason}
                         </span>
                       ))
-                    : <span style={{ fontSize: 9, color: K.mt }}>baseline ranked</span>}
+                    : <span style={{ fontSize: 12, color: K.mt }}>baseline ranked</span>}
                 </div>
               </button>
             ))}
@@ -519,20 +518,20 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
 
       {playbookResults.top.length > 0 && (
         <div style={{ marginTop: 12, padding: "12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
-          <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Matching Playbooks</div>
+          <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: 8 }}>Matching Playbooks</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 8 }}>
             {playbookResults.top.map(({ playbook, fitScore, reasons }) => (
               <div key={playbook.id} style={{ padding: "10px 12px", background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{playbook.name}</div>
-                  <div style={{ fontSize: 10, color: K.ac, fontFamily: fontD, fontWeight: 700 }}>{fitScore}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{playbook.name}</div>
+                  <div style={{ fontSize: 12, color: K.ac, fontFamily: fontD, fontWeight: 700 }}>{fitScore}</div>
                 </div>
-                <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.6, marginBottom: 6 }}>{playbook.summary}</div>
-                <div style={{ fontSize: 10, color: K.dm, marginBottom: 8 }}>{reasons.slice(0, 2).map((r) => r.text).join(" · ")}</div>
+                <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6, marginBottom: 6 }}>{playbook.summary}</div>
+                <div style={{ fontSize: 12, color: K.dm, marginBottom: 8 }}>{reasons.slice(0, 2).map((r) => r.text).join(" · ")}</div>
                 <button
                   onClick={() => queuePlaybook(playbook)}
                   disabled={!syncAppData}
-                  style={{ padding: "6px 10px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 11, cursor: syncAppData ? "pointer" : "default", fontFamily: font }}
+                  style={{ padding: "6px 10px", background: K.gn, border: "none", borderRadius: 6, color: K.ink, fontWeight: 700, fontSize: 12, cursor: syncAppData ? "pointer" : "default", fontFamily: font }}
                 >
                   Queue {playbook.steps.length} steps →
                 </button>
@@ -542,7 +541,6 @@ export default function TodayDashboardPanel({ snapshot, navigate, appData = {}, 
         </div>
       )}
 
-      <ObservabilityPanel appData={appData} snapshot={snapshot} syncDiagnostics={syncDiagnostics} usageLog={usageLog} />
 
       <div style={{ marginTop: 12 }}>
         <WorkflowInboxPanel appData={appData} navigate={navigate} bankroll={snapshot.bankroll ?? ""} />

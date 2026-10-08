@@ -21,8 +21,8 @@ export default function PlusEV() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? "+" : ""}${r.ev}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>expected value per bet</span>
-              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>expected value per bet</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="ROI per bet" v={`${r.roi}%`} c={r.ok ? K.gn : K.rd} b /><RR l="True Win Probability" v={`${r.fp}%`} /><RR l="Your Edge" v={`${r.edge}%`} c={r.ok ? K.gn : K.rd} />
             <Nt c={r.ok ? K.gn : K.rd}>{r.ok ? "This bet is +EV. Over hundreds of bets at this edge, you WILL profit mathematically — individual bets can still lose." : "This bet is -EV. The sportsbook has the edge. Skip it."}</Nt>
@@ -49,10 +49,10 @@ export default function PlusEV() {
         {r && r.ok && <CalcNextStep calcKey="ev" />}
       </div>
       <Help entries={[
-        ["Expected Value (EV)", "The average profit or loss per bet if you made this exact bet thousands of times. +EV means profitable long-term. -EV means the house wins long-term. It's the single most important concept in profitable betting."],
+        ["Expected Value (EV)", "The mathematical average profit or loss under the entered probability and payout. The probability is an assumption; positive expected value does not guarantee profit or a correct estimate."],
         ["Example", "Fair odds say a team has a 50% chance to win (fair odds: +100). A sportsbook offers +120 on that team. You're getting paid $120 for a $100 bet on something that's actually a coin flip. Over 100 such bets, you'd expect to win 50 of them at +120 = $6,000 in winnings, while losing 50 × $100 = $5,000. Net: +$1,000. That's +EV."],
-        ["This is NOT modeled per bet", "A +EV bet can absolutely lose TODAY. It's like a casino — the house has an edge, but sometimes the player wins. You're the house now, and your edge plays out over VOLUME. You need 100+ bets for the math to smooth out."],
-        ["Where to get Fair Odds", "Use the No-Vig calculator with odds from a sharp book, or use the market consensus (average of 5+ major books with the vig removed)."],
+        ["A modeled average is not a guaranteed outcome", "An individual result can lose, and repeated results can remain below the modeled average. There is no universal number of bets that guarantees convergence. Costs and a mistaken probability can reverse the conclusion."],
+        ["Where to get Fair Odds", "A no-vig market estimate can be a reference, but it is not a verified true probability. Expected value compares your probability assumption with the actual offered payout and costs."],
       ]} />
     </div>
   );

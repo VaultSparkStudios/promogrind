@@ -9,8 +9,6 @@ export function buildTargetedAlertPlan(input = {}) {
   const alerts = [];
   const driftAlerts = Array.isArray(snapshot?.intelligence?.driftAlerts) ? snapshot.intelligence.driftAlerts : [];
   const topWorkflow = snapshot?.workflows?.top?.[0] || dashboard?.topWorkflow || null;
-  const priorities = Array.isArray(snapshot?.feeds?.priorities) ? snapshot.feeds.priorities : [];
-  const anomalies = Array.isArray(snapshot?.feeds?.anomalies) ? snapshot.feeds.anomalies : [];
   const expiringBooks = Array.isArray(dashboard?.expiringBooks) ? dashboard.expiringBooks : [];
   const openBets = Array.isArray(dashboard?.openBets) ? dashboard.openBets : [];
   const topPlaybook = dashboard?.topPlaybook || null;
@@ -74,30 +72,6 @@ export function buildTargetedAlertPlan(input = {}) {
       ctaLabel: "Open tracker",
       ctaSlug: "/bet-tracker",
       tags: ["settlement", "ledger"],
-    });
-  }
-
-  if (priorities[0]) {
-    alerts.push({
-      kind: "priority",
-      priority: 78,
-      headline: priorities[0].title,
-      body: priorities[0].detail,
-      ctaLabel: "Open cockpit",
-      ctaSlug: "/dashboard",
-      tags: ["operator"],
-    });
-  }
-
-  if (anomalies[0] && anomalies[0].type !== "drift") {
-    alerts.push({
-      kind: "anomaly",
-      priority: 74,
-      headline: anomalies[0].label,
-      body: anomalies[0].detail,
-      ctaLabel: "Review launch state",
-      ctaSlug: "/dashboard",
-      tags: ["anomaly"],
     });
   }
 

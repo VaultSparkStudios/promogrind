@@ -11,33 +11,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e17; color: #e2e8f0; font-family: 'Space Grotesk', sans-serif; line-height: 1.8; }
-    .header { background: #0f1520; border-bottom: 1px solid #1e293b; padding: 1.25rem 1rem; }
+    body { background: var(--pg-page-bg); color: var(--pg-page-text); font-family: 'Space Grotesk', sans-serif; line-height: 1.8; }
+    .header { background: var(--pg-page-panel); border-bottom: 1px solid var(--pg-page-border); padding: 1.25rem 1rem; }
     .header-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-    .logo { font-size: 1.2rem; font-weight: 700; color: #4ade80; text-decoration: none; }
-    .back-link { color: #64748b; text-decoration: none; font-size: 0.9rem; }
+    .logo { font-size: 1.2rem; font-weight: 700; color: var(--pg-page-accent); text-decoration: none; }
+    .back-link { color: var(--pg-page-muted); text-decoration: none; font-size: 0.9rem; }
     .container { max-width: 800px; margin: 0 auto; padding: 3rem 1rem; }
-    .article-meta { color: #475569; font-size: 0.85rem; margin-bottom: 2rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
-    .tag { background: #f8717112; border: 1px solid #f8717130; color: #f87171; padding: 2px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; }
+    .article-meta { color: var(--pg-page-muted); font-size: .875rem; margin-bottom: 2rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .tag { background: color-mix(in srgb, var(--pg-page-danger) 7%, transparent); border: 1px solid color-mix(in srgb, var(--pg-page-danger) 19%, transparent); color: var(--pg-page-danger); padding: 2px 10px; border-radius: 50px; font-size: .875rem; font-weight: 700; }
     h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.3; }
-    h2 { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 0.75rem; color: #4ade80; }
-    h3 { font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: #60a5fa; }
-    p { margin-bottom: 1.1rem; color: #cbd5e1; }
-    .intro { font-size: 1.05rem; color: #94a3b8; border-left: 3px solid #f87171; padding-left: 1.25rem; margin-bottom: 2rem; }
-    .example { background: #0f1520; border: 1px solid #1e293b; border-left: 3px solid #4ade80; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; }
-    .example .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #4ade80; font-weight: 700; margin-bottom: 0.75rem; }
-    .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1e293b; font-size: 0.9rem; }
+    h2 { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 0.75rem; color: var(--pg-page-accent); }
+    h3 { font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--pg-page-blue); }
+    p { margin-bottom: 1.1rem; color: var(--pg-page-muted); }
+    .intro { font-size: 1.05rem; color: var(--pg-page-muted); border-left: 3px solid var(--pg-page-danger); padding-left: 1.25rem; margin-bottom: 2rem; }
+    .example { background: var(--pg-page-panel); border: 1px solid var(--pg-page-border); border-left: 3px solid var(--pg-page-accent); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; }
+    .example .label { font-size: .875rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--pg-page-accent); font-weight: 700; margin-bottom: 0.75rem; }
+    .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--pg-page-border); font-size: 0.9rem; }
     .row:last-child { border-bottom: none; }
-    .rl { color: #64748b; }
-    .warning { background: #fbbf2408; border: 1px solid #fbbf2430; border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; color: #fbbf24; font-size: 0.95rem; }
-    ul, ol { margin: 0.75rem 0 1.25rem 1.5rem; color: #cbd5e1; }
+    .rl { color: var(--pg-page-muted); }
+    .warning { background: color-mix(in srgb, var(--pg-page-warning) 3%, transparent); border: 1px solid color-mix(in srgb, var(--pg-page-warning) 19%, transparent); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; color: var(--pg-page-warning); font-size: 0.95rem; }
+    ul, ol { margin: 0.75rem 0 1.25rem 1.5rem; color: var(--pg-page-muted); }
     li { margin-bottom: 0.4rem; }
-    .cta-box { background: #4ade8010; border: 1px solid #4ade8025; border-radius: 10px; padding: 1.5rem; text-align: center; margin-top: 3rem; }
-    .cta-btn { display: inline-block; margin-top: 0.75rem; padding: 0.7rem 1.5rem; background: #4ade80; color: #0a0e17; font-weight: 700; border-radius: 6px; text-decoration: none; }
-    strong { color: #e2e8f0; }
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .cta-box { background: color-mix(in srgb, var(--pg-page-accent) 6%, transparent); border: 1px solid color-mix(in srgb, var(--pg-page-accent) 15%, transparent); border-radius: 10px; padding: 1.5rem; text-align: center; margin-top: 3rem; }
+    .cta-btn { display: inline-block; margin-top: 0.75rem; padding: 0.7rem 1.5rem; background: var(--pg-page-accent); color: var(--pg-page-bg); font-weight: 700; border-radius: 6px; text-decoration: none; }
+    strong { color: var(--pg-page-text); }
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
   <script type="application/ld+json">
   {
@@ -51,8 +51,11 @@
     "dateModified": "2026-03-26"
   }
   </script>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <header class="header">
     <div class="header-inner">
       <a href="https://promogrind.bet/" class="logo">⚡ PromoGrind</a>
@@ -63,109 +66,28 @@
   <div class="container">
     <div class="article-meta">
       <span class="tag">Strategy</span>
-      <span>March 26, 2026</span>
-      <span>9 min read</span>
+      <span>Reviewed October 8, 2026</span>
+      <span>4 min read</span>
       <span>Intermediate</span>
     </div>
 
     <h1>Sports Betting Arbitrage Explained — How to Model Hedged Returns</h1>
     <div class="trust"><strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across devices. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</div>
-    <p class="intro">Arbitrage betting exploits pricing differences between sportsbooks to model a return regardless of outcome. It requires no promo credits — just cash accounts at multiple books and the ability to spot and execute quickly.</p>
-
-    <h2>What Is Sports Betting Arbitrage?</h2>
-    <p>An arbitrage opportunity (called an "arb") occurs when the combined implied probabilities of all outcomes in a market are less than 100%. In a two-outcome market, if Sportsbook A offers +150 on Team A and Sportsbook B offers +160 on Team B, the combined implied probability is less than 100% — meaning there's a mathematical profit available if you bet both sides in the right ratio.</p>
-    <p>Arbitrage models a return because you are exploiting a pricing inefficiency, not making a prediction. The game's outcome is irrelevant.</p>
-
-    <h2>The Arbitrage Margin Formula</h2>
-    <p>The arbitrage margin (also called the "arb percentage") tells you how much profit is locked in. It is calculated as:</p>
-    <p style="font-family:monospace;background:#0f1520;padding:0.75rem 1rem;border-radius:6px;color:#4ade80;">
-      Margin % = (1 − (1/decimal_odds_A + 1/decimal_odds_B)) × 100
-    </p>
-    <p>If this number is positive, an arb exists. The higher the number, the larger the modeled return.</p>
-
-    <div class="example">
-      <div class="label">Worked Arbitrage Example</div>
-      <div class="row"><span class="rl">Sportsbook A: Chiefs to win</span><span>+160 (2.60 decimal)</span></div>
-      <div class="row"><span class="rl">Sportsbook B: Eagles to win</span><span>+165 (2.65 decimal)</span></div>
-      <div class="row"><span class="rl">Combined implied probability</span><span>1/2.60 + 1/2.65 = 38.5% + 37.7% = 76.2%?</span></div>
-      <div class="row"><span class="rl">Arb margin</span><span style="color:#4ade80;font-weight:700;">+2.4% modeled return</span></div>
-      <div class="row"><span class="rl">Total stake: $1,000</span><span></span></div>
-      <div class="row"><span class="rl">Stake on Chiefs (Sportsbook A)</span><span>$505</span></div>
-      <div class="row"><span class="rl">Stake on Eagles (Sportsbook B)</span><span>$495</span></div>
-      <div class="row"><span class="rl">Payout if Chiefs win</span><span>$505 × 2.60 = $1,313</span></div>
-      <div class="row"><span class="rl">Payout if Eagles win</span><span>$495 × 2.65 = $1,312</span></div>
-      <div class="row"><span class="rl"><strong>Net profit either way</strong></span><span style="color:#4ade80;font-weight:700;"><strong>~$312 on $1,000 staked (3.1%)</strong></span></div>
-    </div>
-
-    <p>The PromoGrind 2-Way Arbitrage Calculator does all this math automatically — enter the two odds values and your total stake, and it outputs the exact split and modeled return.</p>
-
-    <h2>How to Find Arbitrage Opportunities</h2>
-    <h3>Manual Line Shopping</h3>
-    <p>Open 3–4 sportsbook apps simultaneously and compare odds on the same game. Focus on:</p>
-    <ul>
-      <li><strong>Moneylines</strong> — Two-outcome arbs are most common here</li>
-      <li><strong>Same-game opposites</strong> — Team A to win vs Team B to win (not Draw in soccer)</li>
-      <li><strong>Player props</strong> — Over/under on the same stat at two different books</li>
-    </ul>
-
-    <h3>Odds Comparison Tools</h3>
-    <p>The PromoGrind <a href="https://promogrind.bet/#/odds-compare" style="color:#60a5fa;">Odds Compare</a> tool lets you track odds across books manually. The Live Scanner (VaultSparked tier) alerts you to significant line discrepancies in real time.</p>
-
-    <h3>Where Arbs Appear Most Often</h3>
-    <ul>
-      <li>Early in the week when books set their opening lines</li>
-      <li>After injury news before all books have updated</li>
-      <li>On smaller markets (lower-tier leagues) with less efficient pricing</li>
-      <li>Props and specials where books have independent pricing models</li>
-    </ul>
-
-    <h2>Stake Sizing for Arbitrage</h2>
-    <p>The optimal stake split is not 50/50. It depends on the odds. The formula for each side:</p>
-    <p style="font-family:monospace;background:#0f1520;padding:0.75rem 1rem;border-radius:6px;color:#4ade80;">
-      Stake A = Total Stake × (1/odds_A) / (1/odds_A + 1/odds_B)
-    </p>
-    <p>The PromoGrind Arbitrage Calculator handles this automatically. You should always use the calculator — manual rounding errors can turn a 2% arb into a loss.</p>
-
-    <h2>3-Way Arbitrage (Soccer, Hockey)</h2>
-    <p>Three-outcome markets (Win/Draw/Loss in soccer) require covering all three legs across three different books. The PromoGrind 3-Way Arbitrage Calculator handles this. Three-way arbs are rarer but larger when found — typical margins of 2–5%.</p>
-
-    <h2>Risks and Account Sustainability</h2>
-    <div class="warning">
-      <strong>Account restriction is the primary risk in arb betting.</strong> Sportsbooks actively identify and restrict bettors who consistently bet both sides of markets (a clear signal of arbing). They will limit your max stake, refuse bets, or close your account.
-    </div>
-
-    <h3>Strategies to Extend Account Life</h3>
-    <ul>
-      <li><strong>Round stake sizes.</strong> Bet $100, $150, $200 — not $147.32. Sharp stake sizes are a flag.</li>
-      <li><strong>Don't always bet the maximum.</strong> Vary your stake sizes across sessions.</li>
-      <li><strong>Place recreational bets occasionally.</strong> A few small parlays or prop bets make your account look less like a sharp.</li>
-      <li><strong>Prioritize promo grinding over arbing.</strong> Promo grinding is less flagged because bonus bet conversions look like normal bonus activity.</li>
-      <li><strong>Use multiple accounts</strong> (legally — one per household member, separate finances).</li>
-    </ul>
-
-    <h2>Arbitrage vs Matched Betting — Which Is Better?</h2>
-    <p><strong>Matched betting with promotional offers</strong> is generally preferred for beginners and casual grinders:</p>
-    <ul>
-      <li>You only need one book (plus a hedge at another)</li>
-      <li>The edge comes from the promo credit, not line inefficiency</li>
-      <li>Accounts last longer (promotional use looks normal)</li>
-      <li>Requires less speed and monitoring</li>
-    </ul>
-    <p><strong>Arbitrage is better for:</strong></p>
-    <ul>
-      <li>Experienced grinders with established multi-book setups</li>
-      <li>Periods between promos when there's no promotional edge available</li>
-      <li>Large bankrolls where the 2–4% returns on bigger stakes generate meaningful tracked value</li>
-    </ul>
-
+    <p class="intro">Arbitrage is a pricing condition in which covering every outcome can produce a positive modeled return. Actual returns depend on accepting and settling every leg at the prices used in the calculation.</p>
+    <h2>Identify the pricing condition</h2><p>For two mutually exclusive outcomes that cover the whole market, add the inverse of each decimal price. A sum below 1 indicates a positive return in the model.</p><p class="formula">Implied probability sum = 1 / decimal odds A + 1 / decimal odds B</p>
+    <h2>Hypothetical example</h2><div class="example"><div class="label">Two outcomes priced at +105 (2.05 decimal)</div><div class="row"><span>Combined implied probability</span><span>2 ÷ 2.05 = 97.56%</span></div><div class="row"><span>Probability margin</span><span>100% − 97.56% = 2.44%</span></div><div class="row"><span>Total stake</span><span>$1,000: $500 on each outcome</span></div><div class="row"><span>Payout for either modeled outcome</span><span>$500 × 2.05 = $1,025</span></div><div class="row"><span>Net before costs</span><span>$1,025 − $1,000 = $25</span></div><div class="row"><span>Return on total stake</span><span>$25 ÷ $1,000 = 2.50%</span></div></div><p>The probability margin and return on stake are different measures. This illustration assumes exactly two outcomes, identical settlement rules and full acceptance of both $500 stakes. It is not a current offer.</p>
+    <h2>Split unequal prices</h2><p>For unequal decimal prices, use Stake A = Total stake × (1 / price A) ÷ (1 / price A + 1 / price B). Apply the same formula to B. The <a href="/arb-2way">2-Way Arbitrage Calculator</a> shows each stake and modeled payout.</p>
+    <h2>Compare the same market</h2><p>Check event, market, start time, overtime rules and void conditions. A market with a draw needs all three outcomes covered; use the <a href="/arb-3way">3-Way Calculator</a> where appropriate.</p>
+    <h2>Execution risks</h2><ul><li>One leg may be rejected or limited after another is accepted.</li><li>Prices may change before both stakes are placed.</li><li>Settlement and void rules may differ between operators.</li><li>Rounding, fees, tax and cash requirements affect the result.</li></ul><p>A calculator does not remove these risks. Follow operator terms and applicable rules; do not place extra wagers to conceal your activity.</p>
+    <h2>Available tools</h2><p>Use <a href="/odds-compare">Odds Compare</a> to record prices manually. Live scanning is coming soon and is currently unavailable. PromoGrind does not guarantee that an arbitrage opportunity exists.</p>
     <div class="cta-box">
-      <h3 style="color:#4ade80;">Find &amp; Calculate Arbs Instantly</h3>
-      <p style="color:#94a3b8;">The PromoGrind 2-Way and 3-Way Arbitrage Calculators compute exact stakes and modeled return for any arb opportunity.</p>
-      <a href="https://promogrind.bet/#/arb-2way" class="cta-btn">Open Arb Calculator →</a>
+      <h3 style="color:var(--pg-page-accent);">Find &amp; Calculate Arbs Instantly</h3>
+      <p style="color:var(--pg-page-muted);">The PromoGrind 2-Way and 3-Way Arbitrage Calculators compute exact stakes and modeled return for any arb opportunity.</p>
+      <a href="https://promogrind.bet/arb-2way" class="cta-btn">Open Arb Calculator →</a>
     </div>
-      <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+      <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Modeled returns are not promises. Execution, voids, limits, eligibility, and changing odds can alter results.</p>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

@@ -17,9 +17,9 @@ export class ErrorBoundary extends Component {
       return (
         <div style={{ padding: 32, textAlign: "center", color: K.rd }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: K.rd, marginBottom: 8 }}>This calculator hit an error</div>
-          <div style={{ fontSize: 12, color: K.mt, marginBottom: 12 }}>The rest of PromoGrind is still available.</div>
+          <div style={{ fontSize: 14, color: K.mt, marginBottom: 12 }}>The rest of PromoGrind is still available.</div>
           {import.meta.env.DEV && (
-            <div style={{ fontSize: 10, color: "#64748b", marginBottom: 12, textAlign: "left", padding: "8px", background: "#0a0e17", borderRadius: 4, wordBreak: "break-all" }}>
+            <div style={{ fontSize: 12, color: "#64748b", marginBottom: 12, textAlign: "left", padding: "8px", background: "#0a0e17", borderRadius: 4, wordBreak: "break-all" }}>
               {this.state.error.message}
             </div>
           )}
@@ -58,13 +58,13 @@ export function AppCalculatorRouter({
             ? (
               <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "1fr 1fr" : "1fr", gap: 16 }}>
                 <div>
-                  <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 8, fontFamily: font }}>Primary - {item?.n}</div>
+                  <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 8, fontFamily: font }}>Primary - {item?.n}</div>
                   {isLiveTool ? <Comp proStatus={proStatus} mode={slug} /> : <Comp />}
                 </div>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                    <span style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", fontFamily: font }}>Compare -</span>
-                    <select value={compareSlug} onChange={(e) => setCompareSlug(e.target.value)} style={{ ...S.input, width: "auto", padding: "3px 8px", fontSize: 10 }}>
+                    <span style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", fontFamily: font }}>Compare -</span>
+                    <select value={compareSlug} onChange={(e) => setCompareSlug(e.target.value)} style={{ ...S.input, width: "auto", padding: "3px 8px", fontSize: 12 }}>
                       <option value="">Pick a calculator...</option>
                       {group.items.filter((it) => it.slug !== slug).map((it) => <option key={it.slug} value={it.slug}>{it.n}</option>)}
                     </select>
@@ -73,9 +73,9 @@ export function AppCalculatorRouter({
                     ? (() => {
                       const compareItem = group.items.find((it) => it.slug === compareSlug);
                       const CompareComp = compareItem?.c;
-                      return CompareComp ? <Suspense fallback={null}><CompareComp /></Suspense> : <div style={{ color: K.mt, fontSize: 11 }}>Not found.</div>;
+                      return CompareComp ? <Suspense fallback={null}><CompareComp /></Suspense> : <div style={{ color: K.mt, fontSize: 12 }}>Not found.</div>;
                     })()
-                    : <div style={{ ...S.card, color: K.mt, fontSize: 11, textAlign: "center", padding: "32px 16px" }}>Select a calculator above to compare side by side.</div>}
+                    : <div style={{ ...S.card, color: K.mt, fontSize: 12, textAlign: "center", padding: "32px 16px" }}>Select a calculator above to compare side by side.</div>}
                 </div>
               </div>
             )

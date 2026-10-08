@@ -65,16 +65,16 @@ export default function CalcNextStep({ calcKey }) {
 
   return (
     <div style={{ marginTop: 12, padding: "10px 12px", background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8 }}>
-      <div style={{ fontSize: 9, color: K.mt, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: 8, fontFamily: font }}>Next Recommended Step</div>
+      <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: 8, fontFamily: font }}>Next Recommended Step</div>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {suggestions.map(s => (
           <button
             key={s.slug}
             onClick={() => navigate(`/${s.slug}`)}
             title={s.reason}
-            style={{ padding: "6px 12px", background: `${K.ac}10`, border: `1px solid ${K.ac}25`, borderRadius: 6, color: K.ac, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: font, textAlign: "left" }}
+            style={{ padding: "6px 12px", background: `${K.ac}10`, border: `1px solid ${K.ac}25`, borderRadius: 6, color: K.ac, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: font, textAlign: "left" }}
           >
-            {s.label} <span style={{ color: K.mt, fontWeight: 400, fontSize: 10 }}>— {s.reason}</span>
+            {s.label} <span style={{ color: K.mt, fontWeight: 400, fontSize: 12 }}>— {s.reason}</span>
           </button>
         ))}
       </div>

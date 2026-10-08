@@ -51,30 +51,30 @@ const ReferralHub = () => {
     <div style={{marginBottom:16}}>
       <div style={S.label}>Your Referral Link</div>
       <div style={{display:"flex",gap:8,alignItems:"center"}}>
-        <div style={{...S.input,flex:1,color:K.dm,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",cursor:"default"}}>{refLink}</div>
-        <button onClick={copy} style={{padding:"8px 16px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Link"}</button>
+        <div style={{...S.input,flex:1,color:K.dm,fontSize:12,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",cursor:"default"}}>{refLink}</div>
+        <button onClick={copy} style={{padding:"8px 16px",background:copied?K.gn:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,whiteSpace:"nowrap"}}>{copied?"✓ Copied!":"Copy Link"}</button>
       </div>
     </div>
     <div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
-      <div><div style={{fontSize:10,color:K.mt}}>YOUR REFERRALS</div><div style={S.big(K.pp)}>{refCount===null?'…':refCount}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>RECORDED GIFT BONUS DAYS</div><div style={S.big(K.gn)}>{earnedGiftDays}</div></div>
+      <div><div style={{fontSize:12,color:K.mt}}>YOUR REFERRALS</div><div style={S.big(K.pp)}>{refCount===null?'…':refCount}</div></div>
+      <div><div style={{fontSize:12,color:K.mt}}>RECORDED GIFT BONUS DAYS</div><div style={S.big(K.gn)}>{earnedGiftDays}</div></div>
     </div>
     <div style={{marginTop:16,padding:12,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:8}}>Share on</div>
+      <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:8}}>Share on</div>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
         {[
           {label:"Twitter/X",color:"#1DA1F2",msg:`I use PromoGrind to calculate, track, and review sportsbook promo decisions without the usual hype. The core tools are free: ${refLink}`},
           {label:"Discord",color:"#5865F2",msg:`**PromoGrind** — free promo-decision calculators and local tracking. Provider-backed tools show their live availability in the app: ${refLink}`},
           {label:"Reddit",color:"#FF4500",msg:`Has anyone else been using PromoGrind? It's free and has all the calculators you need for promo conversion. Link: ${refLink}`},
         ].map(({label,color,msg})=>(
-          <button key={label} onClick={()=>{try{navigator.clipboard.writeText(msg);}catch(e){} }} style={{padding:"6px 14px",background:`${color}15`,border:`1px solid ${color}40`,borderRadius:6,color,fontSize:11,cursor:"pointer",fontFamily:font}}>Copy {label} Post</button>
+          <button key={label} onClick={()=>{try{navigator.clipboard.writeText(msg);}catch(e){} }} style={{padding:"6px 14px",background:`${color}15`,border:`1px solid ${color}40`,borderRadius:6,color,fontSize:12,cursor:"pointer",fontFamily:font}}>Copy {label} Post</button>
         ))}
       </div>
     </div>
     {rhIsPro() && (
       <div style={{marginTop:24,padding:16,background:'#0f1724',border:'1px solid #1e293b',borderRadius:8}}>
         <div style={{fontWeight:700,color:'#4ade80',marginBottom:12}}>⚡ Creator Mode</div>
-        <p style={{color:'#94a3b8',fontSize:13,marginBottom:16}}>
+        <p style={{color:'#94a3b8',fontSize:14,marginBottom:16}}>
           Create a custom vanity link to share with your audience. Track clicks and signups in real time.
         </p>
         <div style={{display:'flex',gap:8,marginBottom:16}}>
@@ -83,11 +83,11 @@ const ReferralHub = () => {
             placeholder="your-brand (letters/numbers/hyphens)"
             value={influencerCode}
             onChange={e => setInfluencerCode(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,30))}
-            style={{flex:1,padding:'8px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:13}}
+            style={{flex:1,padding:'8px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#e2e8f0',borderRadius:6,fontSize:14}}
           />
           <button
             onClick={saveInfluencerCode}
-            style={{padding:'8px 16px',background:'#4ade80',color: K.ink,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:13}}
+            style={{padding:'8px 16px',background:'#4ade80',color: K.ink,border:'none',borderRadius:6,fontWeight:700,cursor:'pointer',fontSize:14}}
           >Save Code</button>
         </div>
         {savedInfluencerCode && (
@@ -95,26 +95,26 @@ const ReferralHub = () => {
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:16}}>
               <div style={{padding:12,background:'#0a0e17',borderRadius:6,textAlign:'center'}}>
                 <div style={{fontSize:22,fontWeight:700,color:'#4ade80'}}>{influencerStats.clicks}</div>
-                <div style={{fontSize:11,color:'#64748b'}}>CLICKS</div>
+                <div style={{fontSize:12,color:'#64748b'}}>CLICKS</div>
               </div>
               <div style={{padding:12,background:'#0a0e17',borderRadius:6,textAlign:'center'}}>
                 <div style={{fontSize:22,fontWeight:700,color:'#4ade80'}}>{influencerStats.signups}</div>
-                <div style={{fontSize:11,color:'#64748b'}}>SIGNUPS</div>
+                <div style={{fontSize:12,color:'#64748b'}}>SIGNUPS</div>
               </div>
               <div style={{padding:12,background:'#0a0e17',borderRadius:6,textAlign:'center'}}>
                 <div style={{fontSize:22,fontWeight:700,color:'#4ade80'}}>${(influencerStats.signups * 8).toFixed(0)}</div>
-                <div style={{fontSize:11,color:'#64748b'}}>EST. VALUE</div>
+                <div style={{fontSize:12,color:'#64748b'}}>EST. VALUE</div>
               </div>
             </div>
             <div style={{display:'flex',gap:8,alignItems:'center'}}>
               <input
                 readOnly
                 value={`${CANONICAL_APP_URL}?ref=${savedInfluencerCode}`}
-                style={{flex:1,padding:'8px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#94a3b8',borderRadius:6,fontSize:12}}
+                style={{flex:1,padding:'8px 12px',background:'#0a0e17',border:'1px solid #1e293b',color:'#94a3b8',borderRadius:6,fontSize:14}}
               />
               <button
                 onClick={() => { navigator.clipboard.writeText(`${CANONICAL_APP_URL}?ref=${savedInfluencerCode}`); }}
-                style={{padding:'8px 12px',background:'#1e293b',border:'none',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:13}}
+                style={{padding:'8px 12px',background:'#1e293b',border:'none',color:'#e2e8f0',borderRadius:6,cursor:'pointer',fontSize:14}}
               >Copy</button>
             </div>
           </>
@@ -122,8 +122,8 @@ const ReferralHub = () => {
       </div>
     )}
     <div style={{marginTop:20,padding:16,background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-      <div style={{fontSize:11,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>🎁 Gift 14 Days Free</div>
-      <div style={{fontSize:11,color:K.dm,marginBottom:12,lineHeight:1.6}}>Create a link for {REFERRAL_PROGRAM.gift.recipientDays} days of workspace access. The function attempts a {REFERRAL_PROGRAM.gift.senderBonusDays}-day sender bonus at token issuance and returns whether that update persisted, up to {REFERRAL_PROGRAM.gift.limitCount} gifts per rolling {REFERRAL_PROGRAM.gift.limitWindowDays} days. {REFERRAL_PROGRAM.gift.providerScope}</div>
+      <div style={{fontSize:12,fontWeight:700,color:K.gn,marginBottom:8,textTransform:"uppercase",letterSpacing:"1.5px"}}>🎁 Gift 14 Days Free</div>
+      <div style={{fontSize:12,color:K.dm,marginBottom:12,lineHeight:1.6}}>Create a link for {REFERRAL_PROGRAM.gift.recipientDays} days of workspace access. The function attempts a {REFERRAL_PROGRAM.gift.senderBonusDays}-day sender bonus at token issuance and returns whether that update persisted, up to {REFERRAL_PROGRAM.gift.limitCount} gifts per rolling {REFERRAL_PROGRAM.gift.limitWindowDays} days. {REFERRAL_PROGRAM.gift.providerScope}</div>
       <GiftTrialBox/>
     </div>
   </div></div>);

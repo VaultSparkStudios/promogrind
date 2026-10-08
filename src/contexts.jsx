@@ -25,9 +25,9 @@ export const ToastProvider = ({ children }) => {
       {children}
       <div style={{ position: 'fixed', bottom: 80, right: 16, zIndex: 9999, display: 'flex', flexDirection: 'column', gap: 8 }}>
         {toasts.map(t => (
-          <div key={t.id} style={{ padding: '10px 16px', background: K.s1, border: `1px solid ${t.color}40`, borderRadius: 8, color: t.color, fontSize: 12, fontWeight: 600, fontFamily: "'JetBrains Mono','SF Mono',monospace", boxShadow: '0 4px 16px rgba(0,0,0,0.4)', animation: 'fadeIn 0.15s ease', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div key={t.id} style={{ padding: '10px 16px', background: K.s1, border: `1px solid ${t.color}40`, borderRadius: 8, color: t.color, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono','SF Mono',monospace", boxShadow: '0 4px 16px rgba(0,0,0,0.4)', animation: 'fadeIn 0.15s ease', display: 'flex', alignItems: 'center', gap: 10 }}>
             <span>{t.msg}</span>
-            {t.action && <button onClick={() => { t.action.fn(); dismiss(t.id); }} style={{ padding: '2px 8px', background: `${t.color}25`, border: `1px solid ${t.color}60`, borderRadius: 4, color: t.color, fontSize: 10, cursor: 'pointer', fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, letterSpacing: '0.5px' }}>{t.action.label}</button>}
+            {t.action && <button onClick={() => { t.action.fn(); dismiss(t.id); }} style={{ padding: '2px 8px', background: `${t.color}25`, border: `1px solid ${t.color}60`, borderRadius: 4, color: t.color, fontSize: 12, cursor: 'pointer', fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, letterSpacing: '0.5px' }}>{t.action.label}</button>}
           </div>
         ))}
       </div>

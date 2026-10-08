@@ -25,14 +25,14 @@ const VALUE_PILLS = [
 
 const FEATURE_ROWS = [
   { icon: "🧮", title: "Calculator stack", body: "Bonus bets, boosts, arb, EV, Kelly, parlay hedge, no-vig, insurance, rollover, and more." },
-  { icon: "📈", title: "Operator dashboard", body: "Log real outcomes, review weekly progress, and stop guessing where your edge is coming from." },
+  { icon: "📈", title: "Your results, together", body: "Log outcomes, review your weekly results, and see what worked for you." },
   { icon: "⚡", title: "Fast first action", body: "Referral pages can drop friends into the exact calculator that matches the promo they just found." },
-  { icon: "🛡", title: "Trust-first framing", body: "Clear legal, age, and educational positioning without pushing people straight into a confusing tool wall." },
+  { icon: "🛡", title: "Understand the limits", body: "Review the assumptions, eligibility, and risks alongside each calculation." },
 ];
 
 const SOCIAL_PROOF = [
   ["Free", "Core access"],
-  ["53+", "Total surfaces"],
+  ["29", "Calculators"],
   ["21+", "Age required"],
   ["Live", "On promogrind.bet"],
 ];
@@ -49,7 +49,7 @@ function statCard(value, label) {
       }}
     >
       <div style={{ fontFamily: fontD, fontSize: 24, fontWeight: 800, color: K.gn, lineHeight: 1 }}>{value}</div>
-      <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginTop: 6 }}>{label}</div>
+      <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.2px", marginTop: 6 }}>{label}</div>
     </div>
   );
 }
@@ -151,7 +151,7 @@ export default function LandingRoute({ darkMode, toggleTheme }) {
             <div style={{ position: "relative" }}>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
                 {VALUE_PILLS.map((pill) => (
-                  <span key={pill} style={{ padding: "5px 10px", borderRadius: 999, background: `${K.s3}90`, border: `1px solid ${K.bd2}`, color: K.dm, fontSize: 10, letterSpacing: "0.6px", textTransform: "uppercase" }}>
+                  <span key={pill} style={{ padding: "5px 10px", borderRadius: 999, background: `${K.s3}90`, border: `1px solid ${K.bd2}`, color: K.dm, fontSize: 12, letterSpacing: "0.6px", textTransform: "uppercase" }}>
                     {pill}
                   </span>
                 ))}
@@ -159,14 +159,14 @@ export default function LandingRoute({ darkMode, toggleTheme }) {
               <div style={{ fontFamily: fontD, fontSize: viewport.isPhone ? 20 : 24, fontWeight: 800, color: K.gn, letterSpacing: "-0.6px", marginBottom: 6 }}>
                 PROMOGRIND
               </div>
-              <div style={{ fontSize: 11, color: K.mt, letterSpacing: "1.8px", textTransform: "uppercase", marginBottom: 16 }}>
+              <div style={{ fontSize: 12, color: K.mt, letterSpacing: "1.8px", textTransform: "uppercase", marginBottom: 16 }}>
                 Free sportsbook promo operating system
               </div>
 
               <div style={{ marginBottom: 16, padding: "12px 14px", borderRadius: 14, background: `${K.gn}10`, border: `1px solid ${K.gn}30` }}>
-                <div style={{ fontSize: 11, color: K.mt, marginBottom: 4 }}>Referred by</div>
+                <div style={{ fontSize: 12, color: K.mt, marginBottom: 4 }}>Referred by</div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: K.gn }}>{displayName}</div>
-                {preset && <div style={{ fontSize: 11, color: K.dm, marginTop: 6 }}>Recommended entry: <span style={{ color: K.ac, fontWeight: 700 }}>{preset.name}</span></div>}
+                {preset && <div style={{ fontSize: 12, color: K.dm, marginTop: 6 }}>Recommended entry: <span style={{ color: K.ac, fontWeight: 700 }}>{preset.name}</span></div>}
               </div>
 
               <h1 style={{ fontFamily: fontD, fontSize: viewport.isPhone ? 30 : viewport.isTablet ? 40 : 52, lineHeight: 1.02, letterSpacing: "-1.6px", marginBottom: 14, maxWidth: 760 }}>
@@ -205,14 +205,14 @@ export default function LandingRoute({ darkMode, toggleTheme }) {
 
           <section style={{ display: "grid", gap: 12 }}>
             <div style={{ padding: viewport.isPhone ? "16px" : "18px", borderRadius: 20, background: K.s1, border: `1px solid ${K.bd}`, boxShadow: "0 14px 42px rgba(0,0,0,0.18)" }}>
-              <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.3px", marginBottom: 10 }}>What you get</div>
+              <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.3px", marginBottom: 10 }}>What you get</div>
               <div style={{ display: "grid", gap: 10 }}>
                 {FEATURE_ROWS.map((item) => (
                   <div key={item.title} style={{ display: "grid", gridTemplateColumns: "28px 1fr", gap: 12, alignItems: "start", padding: "10px 0", borderBottom: `1px solid ${K.bd}` }}>
                     <div style={{ fontSize: 18, lineHeight: 1.2 }}>{item.icon}</div>
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: 800, color: K.tx, marginBottom: 4 }}>{item.title}</div>
-                      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.65 }}>{item.body}</div>
+                      <div style={{ fontSize: 14, fontWeight: 800, color: K.tx, marginBottom: 4 }}>{item.title}</div>
+                      <div style={{ fontSize: 14, color: K.mt, lineHeight: 1.65 }}>{item.body}</div>
                     </div>
                   </div>
                 ))}
@@ -220,13 +220,13 @@ export default function LandingRoute({ darkMode, toggleTheme }) {
             </div>
 
             <div style={{ padding: viewport.isPhone ? "16px" : "18px", borderRadius: 20, background: `linear-gradient(180deg, ${K.s1}, ${K.s2})`, border: `1px solid ${K.bd}` }}>
-              <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1.3px", marginBottom: 10 }}>Jump to a calculator</div>
+              <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1.3px", marginBottom: 10 }}>Jump to a calculator</div>
               <div style={{ display: "grid", gridTemplateColumns: viewport.isPhone ? "1fr" : "1fr 1fr", gap: 8 }}>
                 {Object.values(CALCULATOR_PRESETS).map(({ name, slug }) => (
                   <button
                     key={slug}
                     onClick={() => navigate(`/${slug}`)}
-                    style={{ minHeight: 44, padding: "12px 14px", background: `${K.s3}88`, border: `1px solid ${K.bd2}`, borderRadius: 12, color: K.tx, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: font, textAlign: "left" }}
+                    style={{ minHeight: 44, padding: "12px 14px", background: `${K.s3}88`, border: `1px solid ${K.bd2}`, borderRadius: 12, color: K.tx, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: font, textAlign: "left" }}
                   >
                     {name}
                   </button>
@@ -237,7 +237,7 @@ export default function LandingRoute({ darkMode, toggleTheme }) {
         </div>
 
         <PublicStats />
-        <div style={{ fontSize: 11, color: K.dm, textAlign: "center", lineHeight: 1.8, padding: viewport.isPhone ? "0 6px" : 0 }}>
+        <div style={{ fontSize: 12, color: K.dm, textAlign: "center", lineHeight: 1.8, padding: viewport.isPhone ? "0 6px" : 0 }}>
           <a href={APP_DASHBOARD_PATH} style={{ color: K.gn, textDecoration: "none", fontWeight: 700, minHeight: 44, display: "inline-flex", alignItems: "center" }}>Open the app</a>
           {" "}— free PromoGrind account unlocks sync across devices. Results are estimates. Verify lines before placing bets. Must be 21+ and in a legal jurisdiction.
         </div>

@@ -52,7 +52,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
   if (!advisorEnabled) {
     return (
       <div style={{position:'fixed',top:80,right:20,width:360,maxWidth:'calc(100vw - 40px)',zIndex:9998}}>
-        <FeatureUnavailableCard featureKey="promoAdvisor" title="Promo Advisor" body="Promo Advisor will appear here once the AI explainer backend is activated." />
+        <FeatureUnavailableCard featureKey="promoAdvisor" title="Promo Advisor" body="Promo Advisor is coming soon. Use Promo Intake to review the terms of an offer." />
       </div>
     );
   }
@@ -227,12 +227,12 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       <div style={{padding:'14px 16px',borderBottom:`1px solid ${K.bd}`,display:'flex',justifyContent:'space-between',alignItems:'center',background:K.s2}}>
         <div>
           <div style={{fontSize:14,fontWeight:700,color:K.tx}}>💡 Promo Advisor</div>
-          <div style={{fontSize:11,color:K.mt,marginTop:2}}>Paste any promo — get an instant plain-English verdict</div>
+          <div style={{fontSize:12,color:K.mt,marginTop:2}}>Paste any promo — get an instant plain-English verdict</div>
           {(() => {
             const b = getBudgetState();
             const tone = b.overBudget ? K.yl : K.mt;
             return (
-              <div style={{fontSize:9,color:tone,marginTop:3,letterSpacing:'0.6px'}}>
+              <div style={{fontSize:12,color:tone,marginTop:3,letterSpacing:'0.6px'}}>
                 AI budget · {b.badge}{b.overBudget ? ' · cached/rule path' : ''}
               </div>
             );
@@ -245,15 +245,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
       {!user && (
         <div style={{margin:16,padding:16,background:`${K.gn}08`,border:`1px solid ${K.gn}25`,borderRadius:10,textAlign:'center'}}>
           <div style={{fontSize:22,marginBottom:8}}>💡</div>
-          <div style={{fontSize:13,fontWeight:700,color:K.tx,marginBottom:6}}>Sign in to use Promo Advisor</div>
-          <div style={{fontSize:11,color:K.dm,lineHeight:1.6,marginBottom:14}}>
+          <div style={{fontSize:14,fontWeight:700,color:K.tx,marginBottom:6}}>Sign in to use Promo Advisor</div>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.6,marginBottom:14}}>
             Free account gets 3 analyses per day. No credit card required.
           </div>
           <a
             href={signUpHref}
             style={{
               display:'block',padding:'10px 0',borderRadius:8,
-              background:K.gn,color: K.ink,fontSize:12,fontWeight:700,
+              background:K.gn,color: K.ink,fontSize:14,fontWeight:700,
               textDecoration:'none',fontFamily:font,
             }}
           >
@@ -262,7 +262,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
           <a
             href={signInHref}
             style={{
-              display:'block',marginTop:8,fontSize:11,color:K.dm,
+              display:'block',marginTop:8,fontSize:12,color:K.dm,
               textDecoration:'none',fontFamily:font,
             }}
           >
@@ -277,14 +277,14 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
           value={promoText}
           onChange={e => setPromoText(e.target.value)}
           placeholder={'Example: "Get a $200 Bonus Bet if your first $5 bet loses. Bonus bet expires in 7 days."\n\nOr paste the full promo T&C text.'}
-          style={{width:'100%',minHeight:130,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,padding:10,color:K.tx,fontSize:12,resize:'vertical',fontFamily:font,boxSizing:'border-box',lineHeight:1.5}}
+          style={{width:'100%',minHeight:130,background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,padding:10,color:K.tx,fontSize:14,resize:'vertical',fontFamily:font,boxSizing:'border-box',lineHeight:1.5}}
         />
 
         <div style={{padding:10,border:`1px solid ${K.bd}`,borderRadius:8,background:K.s2}}>
-          <div style={{fontSize:10,color:K.dm,lineHeight:1.5}}>
+          <div style={{fontSize:12,color:K.dm,lineHeight:1.5}}>
             Privacy preview · {privacyPreview.receipt.redactionCount} sensitive value(s) will be replaced before analysis.
           </div>
-          <label style={{display:'flex',alignItems:'flex-start',gap:8,marginTop:8,fontSize:10,color:K.tx,lineHeight:1.45,cursor:'pointer'}}>
+          <label style={{display:'flex',alignItems:'flex-start',gap:8,marginTop:8,fontSize:12,color:K.tx,lineHeight:1.45,cursor:'pointer'}}>
             <input
               type="checkbox"
               checked={personalize}
@@ -294,7 +294,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             <span>Personalize with my bankroll and active books. Optional: only those named fields leave this browser.</span>
           </label>
           {!personalize && privacyPreview.receipt.estimatedTokensSaved > 0 && (
-            <div style={{fontSize:9,color:K.mt,marginTop:6}}>
+            <div style={{fontSize:12,color:K.mt,marginTop:6}}>
               Profile stays local · about {privacyPreview.receipt.estimatedTokensSaved} request token(s) avoided.
             </div>
           )}
@@ -302,7 +302,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
         {/* Near-limit char count */}
         {promoText.length > 1800 && (
-          <div style={{fontSize:10,color:K.yl,textAlign:'right'}}>{promoText.length}/2000 chars</div>
+          <div style={{fontSize:12,color:K.yl,textAlign:'right'}}>{promoText.length}/2000 chars</div>
         )}
 
         {/* Quota awareness */}
@@ -318,11 +318,11 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
           })();
           return (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6 }}>
-              <div style={{ fontSize: 10, color: quotaColor, fontWeight: remaining === 0 ? 700 : 400 }}>
+              <div style={{ fontSize: 12, color: quotaColor, fontWeight: remaining === 0 ? 700 : 400 }}>
                 {remaining === 0 ? `Quota reset in ${resetTime}` : `${remaining} of ${DAILY_LIMIT} analyses remaining today`}
               </div>
               {remaining <= 1 && (
-                <a href="/pricing" style={{ fontSize: 10, color: K.ac, fontWeight: 700, textDecoration: "none", padding: "2px 6px", border: `1px solid ${K.ac}40`, borderRadius: 4 }}>
+                <a href="/pricing" style={{ fontSize: 12, color: K.ac, fontWeight: 700, textDecoration: "none", padding: "2px 6px", border: `1px solid ${K.ac}40`, borderRadius: 4 }}>
                   Upgrade ↑
                 </a>
               )}
@@ -332,7 +332,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
         {/* Rate limit banner */}
         {isLimited && (
-          <div style={{background:`${K.pp}15`,border:`1px solid ${K.pp}30`,borderRadius:8,padding:10,fontSize:12,color:K.pp,textAlign:'center'}}>
+          <div style={{background:`${K.pp}15`,border:`1px solid ${K.pp}30`,borderRadius:8,padding:10,fontSize:14,color:K.pp,textAlign:'center'}}>
             Daily limit reached. Upgrade to <strong>Runner plan</strong> for unlimited analyses.
           </div>
         )}
@@ -341,7 +341,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         <button
           onClick={analyze}
           disabled={loading || !user || !promoText.trim() || isLimited}
-          style={{padding:'9px',background:isLimited?K.s2:'#7c3aed',border:`1px solid ${isLimited?K.bd:'#7c3aed'}`,borderRadius:8,color:isLimited?K.mt:'#fff',fontWeight:700,fontSize:12,cursor:loading||isLimited?'default':'pointer',fontFamily:font,opacity:loading?0.7:1}}
+          style={{padding:'9px',background:isLimited?K.s2:'#7c3aed',border:`1px solid ${isLimited?K.bd:'#7c3aed'}`,borderRadius:8,color:isLimited?K.mt:'#fff',fontWeight:700,fontSize:14,cursor:loading||isLimited?'default':'pointer',fontFamily:font,opacity:loading?0.7:1}}
         >
           {loading ? '⏳ Analyzing...' : !user ? 'Sign in to analyze promos' : '🔍 Analyze This Promo'}
         </button>
@@ -350,10 +350,10 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         {error && (
           <div style={{background:`${K.rd}10`,border:`1px solid ${K.rd}40`,borderRadius:8,padding:'10px 12px',display:'flex',alignItems:'center',gap:10}}>
             <span style={{fontSize:16,flexShrink:0}}>⚠️</span>
-            <span style={{flex:1,fontSize:12,color:K.rd,lineHeight:1.5}}>{error}</span>
+            <span style={{flex:1,fontSize:14,color:K.rd,lineHeight:1.5}}>{error}</span>
             <button
               onClick={analyze}
-              style={{flexShrink:0,padding:'4px 10px',background:`${K.rd}20`,border:`1px solid ${K.rd}50`,borderRadius:6,color:K.rd,fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:font}}
+              style={{flexShrink:0,padding:'4px 10px',background:`${K.rd}20`,border:`1px solid ${K.rd}50`,borderRadius:6,color:K.rd,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font}}
             >
               Retry
             </button>
@@ -363,16 +363,16 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
         {/* Streaming progress indicator */}
         {loading && streamingText && (
           <div style={{ background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 8, padding: '10px 12px' }}>
-            <div style={{ fontSize: 10, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 6 }}>Analyzing…</div>
-            <div style={{ fontSize: 11, color: K.dm, fontFamily: 'monospace', whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'hidden', opacity: 0.7 }}>{streamingText.slice(-300)}</div>
+            <div style={{ fontSize: 12, color: K.mt, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 6 }}>Analyzing…</div>
+            <div style={{ fontSize: 12, color: K.dm, fontFamily: 'monospace', whiteSpace: 'pre-wrap', maxHeight: 120, overflow: 'hidden', opacity: 0.7 }}>{streamingText.slice(-300)}</div>
           </div>
         )}
 
         {/* Empty state hint */}
         {!result && !error && !loading && (
           <div style={{background:K.s2,border:`1px solid ${K.bd}`,borderRadius:8,padding:'12px 14px'}}>
-            <div style={{fontWeight:700,color:K.dm,marginBottom:6,fontFamily:fontD,fontSize:12}}>💡 Paste any promo T&C text and get:</div>
-            <div style={{fontSize:11,color:K.mt,lineHeight:1.9}}>
+            <div style={{fontWeight:700,color:K.dm,marginBottom:6,fontFamily:fontD,fontSize:14}}>💡 Paste any promo T&C text and get:</div>
+            <div style={{fontSize:12,color:K.mt,lineHeight:1.9}}>
               <div>• Plain-English verdict (excellent / good / poor)</div>
               <div>• Expected value estimate</div>
               <div>• Best action to take</div>
@@ -388,17 +388,17 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
               <div style={{fontSize:15,fontWeight:800,color:ratingColor,flex:1}}>{result.verdict || 'Analysis Complete'}</div>
               {result?.analysisSource === 'rule_engine' && (
-                <span style={{padding:'2px 8px',borderRadius:50,fontSize:9,fontWeight:700,background:`${K.ac}18`,color:K.ac,letterSpacing:'0.8px'}}>
+                <span style={{padding:'2px 8px',borderRadius:50,fontSize:12,fontWeight:700,background:`${K.ac}18`,color:K.ac,letterSpacing:'0.8px'}}>
                   INSTANT
                 </span>
               )}
               {confColor && (
-                <span style={{padding:'2px 8px',borderRadius:50,fontSize:9,fontWeight:700,background:`${confColor}20`,color:confColor,letterSpacing:'0.8px'}}>
+                <span style={{padding:'2px 8px',borderRadius:50,fontSize:12,fontWeight:700,background:`${confColor}20`,color:confColor,letterSpacing:'0.8px'}}>
                   RAW {confKey}
                 </span>
               )}
               {result?.opportunityScore != null && (
-                <span style={{padding:'2px 8px',borderRadius:50,fontSize:9,fontWeight:700,background:`${ratingColor}18`,color:ratingColor,letterSpacing:'0.8px'}}>
+                <span style={{padding:'2px 8px',borderRadius:50,fontSize:12,fontWeight:700,background:`${ratingColor}18`,color:ratingColor,letterSpacing:'0.8px'}}>
                   SCORE {result.opportunityScore}
                 </span>
               )}
@@ -407,15 +407,15 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             <AdvisorConfidenceCard governor={advisorGovernor} />
 
             {result.explanation && (
-              <div style={{fontSize:12,color:K.dm,lineHeight:1.6}}>{result.explanation}</div>
+              <div style={{fontSize:14,color:K.dm,lineHeight:1.6}}>{result.explanation}</div>
             )}
             {result?.analysisSource === 'rule_engine' && (
-              <div style={{fontSize:10,color:K.mt}}>
+              <div style={{fontSize:12,color:K.mt}}>
                 PromoGrind resolved this instantly from recognizable offer terms instead of spending an AI call.
               </div>
             )}
             {result?.cacheHit && (
-              <div style={{fontSize:10,color:K.ac}}>
+              <div style={{fontSize:12,color:K.ac}}>
                 Reused a cached analysis for this exact promo text to avoid another AI call.
               </div>
             )}
@@ -423,29 +423,29 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             {/* EV pill */}
             {evRaw != null && (
               <div style={{display:'flex',alignItems:'center',gap:8}}>
-                <span style={{fontSize:11,color:K.mt,flexShrink:0}}>Expected Value:</span>
-                <span style={{display:'inline-block',padding:'3px 10px',borderRadius:50,background:`${evColor}18`,border:`1px solid ${evColor}40`,fontSize:12,fontWeight:700,color:evColor,letterSpacing:'0.3px'}}>
+                <span style={{fontSize:12,color:K.mt,flexShrink:0}}>Expected Value:</span>
+                <span style={{display:'inline-block',padding:'3px 10px',borderRadius:50,background:`${evColor}18`,border:`1px solid ${evColor}40`,fontSize:14,fontWeight:700,color:evColor,letterSpacing:'0.3px'}}>
                   {String(evRaw)}
                 </span>
               </div>
             )}
 
             {result.action && (
-              <div style={{fontSize:12}}>
+              <div style={{fontSize:14}}>
                 <span style={{color:K.mt}}>{advisorGovernor?.posture === "act" ? "Bounded Action: " : "Unverified Suggestion: "}</span>
                 <span style={{color:K.ac,fontWeight:700}}>{result.action}</span>
               </div>
             )}
 
             {result.nextStep && (
-              <div style={{fontSize:12}}>
+              <div style={{fontSize:14}}>
                 <span style={{color:K.mt}}>Next Step: </span>
                 <span style={{color:K.gn,fontWeight:700}}>{result.nextStep}</span>
               </div>
             )}
 
             {result.hedge && (
-              <div style={{fontSize:12}}>
+              <div style={{fontSize:14}}>
                 <span style={{color:K.mt}}>Hedge Strategy: </span>
                 <span style={{color:K.pp,fontWeight:700}}>{result.hedge}</span>
               </div>
@@ -453,10 +453,10 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
             {Array.isArray(result?.riskFlags) && result.riskFlags.length > 0 && (
               <div>
-                <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1px',marginBottom:6}}>Risk Flags</div>
+                <div style={{fontSize:12,color:K.mt,textTransform:'uppercase',letterSpacing:'1px',marginBottom:6}}>Risk Flags</div>
                 <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                   {result.riskFlags.map((flag) => (
-                    <span key={flag} style={{padding:'4px 8px',borderRadius:999,background:`${K.rd}15`,border:`1px solid ${K.rd}30`,fontSize:10,color:K.rd,fontWeight:700}}>
+                    <span key={flag} style={{padding:'4px 8px',borderRadius:999,background:`${K.rd}15`,border:`1px solid ${K.rd}30`,fontSize:12,color:K.rd,fontWeight:700}}>
                       {flag}
                     </span>
                   ))}
@@ -465,23 +465,23 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             )}
 
             {Array.isArray(result?.opsTags) && result.opsTags.length > 0 && (
-              <div style={{fontSize:10,color:K.mt}}>
+              <div style={{fontSize:12,color:K.mt}}>
                 Ops tags: {result.opsTags.join(" · ")}
               </div>
             )}
 
             {([...(result?.assumptions || []), ...(result?.missingInputs || []), ...(result?.sensitivityTriggers || [])].length > 0) && (
               <details style={{marginTop:4}}>
-                <summary aria-label="Open decision receipt" style={{fontSize:10,color:K.mt,cursor:'pointer',userSelect:'none',listStyle:'none',display:'flex',alignItems:'center',gap:4}}>
+                <summary aria-label="Open decision receipt" style={{fontSize:12,color:K.mt,cursor:'pointer',userSelect:'none',listStyle:'none',display:'flex',alignItems:'center',gap:4}}>
                   <span>▸</span><span style={{textDecoration:'underline',textDecorationStyle:'dotted'}}>Decision Receipt · {result.evidenceGrade || 'estimate'}</span>
                 </summary>
                 <div style={{marginTop:6,paddingLeft:12,borderLeft:`2px solid ${K.bd2}`}}>
-                  {result.assumptions?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginBottom:2}}>Assumptions</div>}
-                  {result.assumptions?.map((item, i) => <div key={`a-${i}`} style={{fontSize:10,color:K.dm,lineHeight:1.6}}>• {item}</div>)}
-                  {result.missingInputs?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>Missing inputs</div>}
-                  {result.missingInputs?.map((item, i) => <div key={`m-${i}`} style={{fontSize:10,color:K.yl,lineHeight:1.6}}>• {item}</div>)}
-                  {result.sensitivityTriggers?.length > 0 && <div style={{fontSize:9,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>What would change this</div>}
-                  {result.sensitivityTriggers?.map((item, i) => <div key={`s-${i}`} style={{fontSize:10,color:K.ac,lineHeight:1.6}}>• {item}</div>)}
+                  {result.assumptions?.length > 0 && <div style={{fontSize:12,color:K.mt,textTransform:'uppercase',marginBottom:2}}>Assumptions</div>}
+                  {result.assumptions?.map((item, i) => <div key={`a-${i}`} style={{fontSize:12,color:K.dm,lineHeight:1.6}}>• {item}</div>)}
+                  {result.missingInputs?.length > 0 && <div style={{fontSize:12,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>Missing inputs</div>}
+                  {result.missingInputs?.map((item, i) => <div key={`m-${i}`} style={{fontSize:12,color:K.yl,lineHeight:1.6}}>• {item}</div>)}
+                  {result.sensitivityTriggers?.length > 0 && <div style={{fontSize:12,color:K.mt,textTransform:'uppercase',marginTop:6,marginBottom:2}}>What would change this</div>}
+                  {result.sensitivityTriggers?.map((item, i) => <div key={`s-${i}`} style={{fontSize:12,color:K.ac,lineHeight:1.6}}>• {item}</div>)}
                 </div>
               </details>
             )}
@@ -489,13 +489,13 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
             {/* Quick Calc CTA */}
             <button
               onClick={openRecommendedCalculator}
-              style={{marginTop:4,padding:'7px 12px',background:`${K.ac}15`,border:`1px solid ${K.ac}40`,borderRadius:7,color:K.ac,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
+              style={{marginTop:4,padding:'7px 12px',background:`${K.ac}15`,border:`1px solid ${K.ac}40`,borderRadius:7,color:K.ac,fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
             >
               {result?.calculatorSlug ? 'Open recommended calculator →' : 'Calculate this promo →'}
             </button>
             <button
               onClick={saveWorkflow}
-              style={{marginTop:4,padding:'7px 12px',background:'transparent',border:`1px solid ${K.gn}35`,borderRadius:7,color:K.gn,fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
+              style={{marginTop:4,padding:'7px 12px',background:'transparent',border:`1px solid ${K.gn}35`,borderRadius:7,color:K.gn,fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:font,textAlign:'left'}}
             >
               {advisorGovernor?.posture === "act" ? "Save bounded workflow →" : "Save as review workflow →"}
             </button>
@@ -504,7 +504,7 @@ export const PromoAdvisorPanel = ({ user, proStatus, onClose }) => {
 
         {/* Upsell footer */}
         {!isPro && (
-          <div style={{marginTop:'auto',padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}20`,borderRadius:8,fontSize:11,color:K.mt,textAlign:'center'}}>
+          <div style={{marginTop:'auto',padding:12,background:`${K.pp}08`,border:`1px solid ${K.pp}20`,borderRadius:8,fontSize:12,color:K.mt,textAlign:'center'}}>
             <strong style={{color:K.pp}}>Runner plan</strong> unlocks unlimited Promo Advisor + AI Action Plan · <strong style={{color:'#22c55e'}}>Closer</strong> adds Live Scanner — from $19.99/mo
           </div>
         )}

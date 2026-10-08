@@ -36,9 +36,9 @@ export default function Arb2Way() {
         <Tl t="2-Way Arbitrage" badge="SUREBET" bc={K.pp} shareable />
         {showArbTrigger && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", background: "linear-gradient(90deg,#1e3a2f,#0f1724)", border: "1px solid #4ade80", borderRadius: 8, marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
-            <div style={{ fontSize: 13, color: "#cbd5e1" }}>⚡ <strong style={{ color: "#4ade80" }}>The Live Scanner</strong> finds these arb opportunities automatically in real time.</div>
+            <div style={{ fontSize: 14, color: "#cbd5e1" }}>⚡ <strong style={{ color: "#4ade80" }}>The Live Scanner</strong> finds these arb opportunities automatically in real time.</div>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <a href="#/upgrade" style={{ padding: "5px 12px", background: "#4ade80", color: K.ink, borderRadius: 5, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Try Free →</a>
+              <a href="/pricing" style={{ padding: "5px 12px", background: "#4ade80", color: K.ink, borderRadius: 5, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Try Free →</a>
               <button onClick={() => dismissTrigger("arb_upsell", setShowArbTrigger)} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 16 }}>×</button>
             </div>
           </div>
@@ -48,12 +48,12 @@ export default function Arb2Way() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? `ARB: +$${r.pr}` : "NO ARB"}</span>
-              {r.ok && <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>}
-              {r.ok && <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>}
+              {r.ok && <button onClick={copyResult} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: rCopied ? K.gn : K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📋 {rCopied ? "Copied!" : "Copy"}</button>}
+              {r.ok && <button onClick={() => setShowReceipt(true)} style={{ padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>}
             </div>
             {r.ok && <><RR l="Stake Side 1" v={`$${r.s1}`} c={K.ac} b /><RR l="Stake Side 2" v={`$${r.s2}`} c={K.ac} b /><RR l="ROI" v={`${r.roi}%`} c={K.gn} /></>}
-            {!r.ok && <Nt c={K.rd}>No arb exists. Both sides need + odds at different books. Typical arb margins are 1-5%. Use OddsJam or BetBurger to scan automatically.</Nt>}
-            {r.ok && !showShareCard && <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #c084fc", color: "#c084fc", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>🎉 Share this arb</button>}
+            {!r.ok && <Nt c={K.rd}>No modeled arbitrage exists for these prices. The implied probabilities across all mutually exclusive outcomes must sum to less than 100%. Check actual accepted prices and matching settlement rules.</Nt>}
+            {r.ok && !showShareCard && <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: `1px dashed ${K.pp}`, color: K.pp, borderRadius: 6, cursor: "pointer", fontSize: 14 }}>🎉 Share this arb</button>}
             {r.ok && showShareCard && <ShareCard title="2-Way Arbitrage" profit={`+$${r.pr} (${r.roi}% ROI)`} onClose={() => setShowShareCard(false)} />}
             {showReceipt && r.ok && (
               <CalculatorReceipt
@@ -77,8 +77,8 @@ export default function Arb2Way() {
         {r && r.ok && <CalcNextStep calcKey="arb-2way" />}
       </div>
       <Help entries={[
-        ["Arbitrage", "Betting both sides of the same event at different sportsbooks where the combined odds model a return. It works because different books set different odds. When the gap is big enough, you can bet both sides and win no matter what."],
-        ["How to spot one", "You need both sides to be + odds (or the implied probabilities to add up to LESS than 100%). Example: Book A has Team 1 at +110, Book B has Team 2 at +105. Each side implies ~48.8% and ~48.8% = 97.6% total. The missing 2.4% is your profit."],
+        ["Arbitrage", "Betting both sides of the same event at different sportsbooks where the combined odds model a return. It works because different books set different odds. A positive model assumes every required wager is accepted at the entered prices and settles under matching rules. Rejections, voids, price changes and costs can cause a loss."],
+        ["How to spot one", "The implied probabilities must sum to less than 100%; both prices do not have to be positive. At +105 on each of two exclusive outcomes, the sum is about 97.56%. Equal $500 stakes model a $1,025 payout and $25 net return on $1,000 total, before costs and execution risk."],
         ["Why it's rare", "Books monitor each other and adjust quickly. Arb opportunities last seconds to minutes. That's why people use scanning tools — humans can't check fast enough."],
       ]} />
     </div>

@@ -332,23 +332,23 @@ export const K = { ...KD };
 
 // ─── Typography ───────────────────────────────────────────────────────────────
 
-export const font = "'JetBrains Mono','SF Mono','Fira Code',monospace";
+export const font = "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";
 export const fontD = "'Space Grotesk','SF Pro Display',sans-serif";
 
 // ─── Style Primitives ─────────────────────────────────────────────────────────
 
 export const S = {
   get card() { return { background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 14, padding: "clamp(14px, 2vw, 20px)", marginBottom: 16, boxShadow: `0 8px 28px ${K.bg}14` }; },
-  get label() { return { display: "block", fontSize: 11, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1.3px", fontWeight: 700 }; },
-  get input() { return { width: "100%", minHeight: 44, padding: "11px 12px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 8, color: K.tx, fontFamily: font, fontSize: 14, outline: "none", boxSizing: "border-box" }; },
+  get label() { return { display: "block", fontSize: 14, lineHeight: 1.5, color: K.dm, marginBottom: 6, fontWeight: 600 }; },
+  get input() { return { width: "100%", minHeight: 44, padding: "11px 12px", background: K.s2, border: `1px solid ${K.bd2}`, borderRadius: 8, color: K.tx, fontFamily: font, fontVariantNumeric: "tabular-nums", fontSize: 16, outline: "none", boxSizing: "border-box" }; },
   row: { display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12, alignItems: "flex-start" },
   col: { flex: 1, minWidth: 140 },
   res: (ok) => ({ background: ok ? `${K.gn}08` : `${K.rd}08`, border: `1px solid ${ok ? K.gn : K.rd}25`, borderRadius: 8, padding: 16, marginTop: 12 }),
   big: (c) => ({ fontSize: "clamp(24px, 4vw, 30px)", fontWeight: 700, color: c || K.gn, fontFamily: fontD, lineHeight: 1 }),
-  tag: (c) => ({ display: "inline-block", padding: "2px 8px", borderRadius: 50, fontSize: 10, fontWeight: 600, background: `${c}15`, color: c }),
+  tag: (c) => ({ display: "inline-block", padding: "3px 8px", borderRadius: 50, fontSize: 12, lineHeight: 1.5, fontWeight: 600, background: `${c}15`, color: c }),
   get rr() { return { display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${K.bd}` }; },
-  note: (c) => ({ marginTop: 10, padding: 10, background: `${c || K.yl}0d`, borderRadius: 6, fontSize: 13, color: c || K.yl, lineHeight: 1.6 }),
-  get help() { return { fontSize: 13, lineHeight: 1.75, color: K.dm, marginTop: 12 }; },
+  note: (c) => ({ marginTop: 10, padding: 12, background: `${c || K.yl}0d`, borderRadius: 6, fontSize: 14, color: c || K.yl, lineHeight: 1.6 }),
+  get help() { return { fontSize: 14, lineHeight: 1.75, color: K.dm, marginTop: 12 }; },
   get helpH() { return { fontSize: 15, fontWeight: 600, color: K.tx, margin: "16px 0 6px", fontFamily: fontD }; },
   get helpTerm() { return { color: K.ac, fontWeight: 600 }; },
   // S.meter renders JSX — use the meterEl() helper below (or keep in App.jsx)

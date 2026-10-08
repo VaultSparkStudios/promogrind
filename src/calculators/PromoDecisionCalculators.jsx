@@ -41,8 +41,8 @@ export const DepositOptimizer = () => {
         </div>
         <div role="status" aria-live="polite" aria-atomic="false" style={{ ...S.res(true), marginBottom: 12 }}>
           <div style={{ display: "flex", gap: 20, marginBottom: 12, flexWrap: "wrap" }}>
-            <div><div style={{ fontSize: 9, color: K.mt }}>BOOKS AVAILABLE</div><div style={S.big(K.ac)}>{ranked.length}</div></div>
-            <div><div style={{ fontSize: 9, color: K.mt }}>TOTAL EXTRACTABLE</div><div style={S.big(K.gn)}>~${Math.round(totalEV).toLocaleString()}</div></div>
+            <div><div style={{ fontSize: 12, color: K.mt }}>REFERENCE BOOKS</div><div style={S.big(K.ac)}>{ranked.length}</div></div>
+            <div><div style={{ fontSize: 12, color: K.mt }}>REFERENCE MODEL TOTAL</div><div style={S.big(K.gn)}>~${Math.round(totalEV).toLocaleString()}</div></div>
           </div>
         </div>
         {ranked.map((book, index) => {
@@ -52,13 +52,13 @@ export const DepositOptimizer = () => {
           return (
             <div key={book.name} style={{ padding: "10px 14px", background: K.s2, borderRadius: 6, marginBottom: 6, border: `1px solid ${canFund ? tone + "40" : K.bd}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
               <div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: K.tx, marginRight: 8 }}>#{index + 1}</span>
-                <span style={{ fontSize: 12, fontWeight: 600, color: tone }}>{book.name}</span>
-                <span style={{ fontSize: 11, color: K.mt, marginLeft: 8 }}>Fund ${book.bonus}+ </span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: K.tx, marginRight: 8 }}>#{index + 1}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: tone }}>{book.name}</span>
+                <span style={{ fontSize: 12, color: K.mt, marginLeft: 8 }}>Fund ${book.bonus}+ </span>
               </div>
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: tone }}>Expected: ~${Math.round(book.ev)}</div>
-                <div style={{ fontSize: 10, color: K.mt }}>70% of ${book.bonus} bonus</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: tone }}>Expected: ~${Math.round(book.ev)}</div>
+                <div style={{ fontSize: 12, color: K.mt }}>70% of ${book.bonus} bonus</div>
               </div>
             </div>
           );
@@ -100,21 +100,21 @@ export const HedgeValidator = () => {
             {bothPos && <div style={{ ...S.note(K.rd), marginBottom: 8 }}>Both sides are favorites. Verify you are betting opposite outcomes.</div>}
             {bothNeg && <div style={{ ...S.note(K.yl), marginBottom: 8 }}>Both sides are underdogs. Verify you are betting opposite outcomes.</div>}
             <div role="status" aria-live="polite" aria-atomic="false" style={{ ...S.res(isValidHedge), marginBottom: 8 }}>
-              <div style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Odds Relationship</div>
-              <div style={{ fontSize: 12, fontWeight: 600, color: ipSum > 100 && ipSum < 110 ? K.gn : ipSum >= 110 && ipSum <= 120 ? K.yl : ipSum < 100 ? K.gn : K.rd }}>
+              <div style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Odds Relationship</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: ipSum > 100 && ipSum < 110 ? K.gn : ipSum >= 110 && ipSum <= 120 ? K.yl : ipSum < 100 ? K.gn : K.rd }}>
                 {ipSum < 100 ? "Possible arb opportunity" : ipSum < 110 ? "Plausible market" : ipSum < 120 ? "High vig market" : "Unusual - double-check these lines"} ({f(ipSum, 1)}% combined implied)
               </div>
-              {gProfit !== null && <div style={{ marginTop: 8 }}><span style={S.big(gProfit >= 0 ? K.gn : K.rd)}>{gProfit >= 0 ? "+" : ""}${f(gProfit)}</span><span style={{ fontSize: 12, color: K.dm, marginLeft: 8 }}>{gProfit >= 0 ? "modeled profit" : "loss if either outcome"}</span></div>}
+              {gProfit !== null && <div style={{ marginTop: 8 }}><span style={S.big(gProfit >= 0 ? K.gn : K.rd)}>{gProfit >= 0 ? "+" : ""}${f(gProfit)}</span><span style={{ fontSize: 14, color: K.dm, marginLeft: 8 }}>{gProfit >= 0 ? "modeled profit" : "loss if either outcome"}</span></div>}
               {pBW !== null && <RR l="If Side A wins" v={`${pBW >= 0 ? "+" : ""}$${f(pBW)}`} c={pBW >= 0 ? K.gn : K.rd} />}
               {pHW !== null && <RR l="If Side B wins" v={`${pHW >= 0 ? "+" : ""}$${f(pHW)}`} c={pHW >= 0 ? K.gn : K.rd} />}
               {gProfit !== null && gProfit < -0.5 && <Nt c={K.rd}>Invalid hedge. Adjust stakes before placing either side.</Nt>}
-              {gProfit !== null && gProfit >= 0 && <Nt c={K.gn}>Valid hedge. Profit is protected across both outcomes.</Nt>}
+              {gProfit !== null && gProfit >= 0 && <Nt c={K.gn}>Both modeled outcomes are nonnegative at these inputs. Verify accepted odds, stakes, and matching settlement rules.</Nt>}
             </div>
           </div>
         )}
       </div>
       <Help entries={[
-        ["What is a hedge", "A bet on the opposite outcome at a different sportsbook to protect profit regardless of who wins."],
+        ["What is a hedge", "A bet on the opposite outcome intended to reduce exposure. The combined result can still be a loss; compare both modeled outcomes and verify settlement rules."],
         ["Common mistake", "Wrong stake amounts turn a good promo into a hidden loss. Leave Side B blank to auto-compute the hedge stake."],
       ]} />
     </div>
@@ -164,12 +164,12 @@ export const PromoGuarantee = () => {
         {size > 0 && (
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(true)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}><span style={S.big(K.gn)}>${f(loEst)} - ${f(hiEst)}</span></div>
-            <div style={{ fontSize: 11, color: K.dm, marginBottom: 8 }}>Estimated modeled profit range</div>
+            <div style={{ fontSize: 12, color: K.dm, marginBottom: 8 }}>Estimated modeled profit range</div>
             <RR l="Conversion rate range" v={`${Math.round(selected.rate[0] * 100)}% - ${Math.round(selected.rate[1] * 100)}%`} c={K.yl} />
             <RR l="Confidence" v={selected.conf || "MEDIUM"} c={confColor[selected.conf || "MEDIUM"]} b />
             <RR l="Steps to convert" v={`${selected.steps} steps`} c={K.ac} />
             <Nt c={K.ac}>Use the {selected.label} calculator to run exact math for your odds.</Nt>
-            {relatedPromos.length > 0 && <div style={{ marginTop: 8 }}><div style={{ fontSize: 10, color: K.mt, marginBottom: 4 }}>Books with this promo type:</div><div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{relatedPromos.map((promo) => <span key={promo.book + promo.promo} style={S.tag(K.ac)}>{promo.book}</span>)}</div></div>}
+            {relatedPromos.length > 0 && <div style={{ marginTop: 8 }}><div style={{ fontSize: 12, color: K.mt, marginBottom: 4 }}>Books with this promo type:</div><div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{relatedPromos.map((promo) => <span key={promo.book + promo.promo} style={S.tag(K.ac)}>{promo.book}</span>)}</div></div>}
           </div>
         )}
       </div>
@@ -198,9 +198,9 @@ export const GutCheck = () => {
         <Tl t="Gut Check Validator" badge="QUICK CHECK" bc={K.ac} shareable />
         <div style={S.row}><In l="Line 1 Odds" v={o1} set={(value) => setMem("o1", value)} ph="+200" /><In l="Line 2 Odds" v={o2} set={(value) => setMem("o2", value)} ph="-220" /></div>
         {isPlausible && <div role="status" aria-live="polite" aria-atomic="false" style={S.res(ipSum < 110)}>
-          <div style={{ marginBottom: 8 }}><span style={{ fontSize: 10, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Odds Relationship: </span><span style={{ fontSize: 12, fontWeight: 700, color: oppositeSides ? K.gn : bothPlus ? K.yl : K.mt }}>{oppositeSides ? GUT_CHECK_UI.valid : bothPlus ? GUT_CHECK_UI.maybe : GUT_CHECK_UI.manual}</span></div>
+          <div style={{ marginBottom: 8 }}><span style={{ fontSize: 12, color: K.mt, textTransform: "uppercase", letterSpacing: "1px" }}>Odds Relationship: </span><span style={{ fontSize: 14, fontWeight: 700, color: oppositeSides ? K.gn : bothPlus ? K.yl : K.mt }}>{oppositeSides ? GUT_CHECK_UI.valid : bothPlus ? GUT_CHECK_UI.maybe : GUT_CHECK_UI.manual}</span></div>
           <RR l="Combined implied probability" v={`${f(ipSum, 1)}%`} c={ipSum < 100 ? K.gn : ipSum < 110 ? K.gn : ipSum < 120 ? K.yl : K.rd} />
-          <div style={{ marginBottom: 8, fontSize: 12, fontWeight: 600, color: ipSum < 100 ? K.gn : ipSum < 110 ? K.gn : ipSum < 120 ? K.yl : K.rd }}>{ipSum < 100 ? "Possible arb opportunity" : ipSum < 110 ? "Plausible market" : ipSum < 120 ? "High vig market" : "Unusual - double-check these lines"}</div>
+          <div style={{ marginBottom: 8, fontSize: 14, fontWeight: 600, color: ipSum < 100 ? K.gn : ipSum < 110 ? K.gn : ipSum < 120 ? K.yl : K.rd }}>{ipSum < 100 ? "Possible arb opportunity" : ipSum < 110 ? "Plausible market" : ipSum < 120 ? "High vig market" : "Unusual - double-check these lines"}</div>
           {arb && <><RR l="Hedge math check ($100 total)" v={arb.ok ? `ARB: +$${arb.pr}` : "No arb"} c={arb.ok ? K.gn : K.rd} b />{arb.ok && <Nt c={K.gn}>These lines contain an arb. Use the 2-Way Arb calculator for exact stakes.</Nt>}{!arb.ok && <Nt c={K.yl}>No arb. Best side to exploit: {toD(o1) > toD(o2) ? `Line 1 (${o1})` : `Line 2 (${o2})`}.</Nt>}</>}
         </div>}
       </div>
@@ -242,12 +242,13 @@ export const PromoArbFinder = () => {
   return (
     <div style={S.card}>
       <Tl t="Promo Arb Finder" badge="CROSS-BOOK" bc={K.pp} />
-      <div style={{ fontSize: 12, color: K.dm, marginBottom: 16, lineHeight: 1.6 }}>Stack a profit boost from Book A with a hedge at Book B on the same event to lock in profit regardless of outcome.</div>
+      <div style={{ fontSize: 14, color: K.dm, marginBottom: 16, lineHeight: 1.6 }}>Compare a profit boost at Book A with an opposing bet at Book B. Both outcomes must be positive at your inputs to show a modeled profit. Verify boost eligibility, caps, accepted stakes, and matching settlement rules.</div>
       <div style={S.row}><In l="Book A Odds (boosted bet)" v={bookAOdds} set={setBookAOdds} ph="+200" /><In l="Book A Boost %" v={boostPct} set={setBoostPct} ph="50" /><In l="Book B Hedge Odds" v={bookBOdds} set={setBookBOdds} ph="-220" /><In l="Stake at Book A" v={stake} set={setStake} pre="$" ph="100" /></div>
-      {result && <div role="status" aria-live="polite" aria-atomic="false" style={S.res(result.ok)}><div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}><span style={S.big(result.ok ? K.gn : K.rd)}>{result.ok ? "+" : ""}${result.bothProfit}</span><span style={{ fontSize: 12, color: K.dm }}>modeled profit</span></div><RR l="Hedge stake at Book B" v={`$${result.hedgeStake}`} c={K.ac} b /><RR l="Net if Book A wins (boosted)" v={`+$${result.netWin}`} c={K.gn} /><RR l="Net if Book B wins (hedge)" v={`${Number.parseFloat(result.netLoseSide2) >= 0 ? "+" : ""}$${result.netLoseSide2}`} c={Number.parseFloat(result.netLoseSide2) >= 0 ? K.gn : K.rd} />{!result.ok && <Nt c={K.yl}>No arb at these odds. Try a higher boost percentage or better hedge odds.</Nt>}</div>}
+      {result && <div role="status" aria-live="polite" aria-atomic="false" style={S.res(result.ok)}><div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}><span style={S.big(result.ok ? K.gn : K.rd)}>{result.ok ? "+" : ""}${result.bothProfit}</span><span style={{ fontSize: 14, color: K.dm }}>modeled profit</span></div><RR l="Hedge stake at Book B" v={`$${result.hedgeStake}`} c={K.ac} b /><RR l="Net if Book A wins (boosted)" v={`+$${result.netWin}`} c={K.gn} /><RR l="Net if Book B wins (hedge)" v={`${Number.parseFloat(result.netLoseSide2) >= 0 ? "+" : ""}$${result.netLoseSide2}`} c={Number.parseFloat(result.netLoseSide2) >= 0 ? K.gn : K.rd} />{!result.ok && <Nt c={K.yl}>No arb at these odds. Try a higher boost percentage or better hedge odds.</Nt>}</div>}
       <div style={{ marginTop: 20 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: K.ac, marginBottom: 10, textTransform: "uppercase", letterSpacing: "1.5px" }}>Known Stackable Combos</div>
-        {KNOWN_STACKABLE.map((combo) => <div key={`${combo.book1}-${combo.book2}`} style={{ ...S.card, background: K.s2, padding: "12px 14px", marginBottom: 8 }}><div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 4, flexWrap: "wrap" }}><span style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{combo.book1}</span><span style={{ fontSize: 10, color: K.mt }}>+</span><span style={{ fontSize: 12, fontWeight: 700, color: K.tx }}>{combo.book2}</span></div><div style={{ fontSize: 11, color: K.dm, marginBottom: 2 }}>{combo.desc}</div><div style={{ fontSize: 10, color: K.pp }}>{combo.value}</div></div>)}
+        <div style={{ fontSize: 14, fontWeight: 700, color: K.ac, marginBottom: 10, textTransform: "uppercase", letterSpacing: "1.5px" }}>Example combinations to research</div>
+        <Nt>These are reference examples, not a live offer list. Check whether each promotion is currently offered to your account and whether its terms permit the combination.</Nt>
+        {KNOWN_STACKABLE.map((combo) => <div key={`${combo.book1}-${combo.book2}`} style={{ ...S.card, background: K.s2, padding: "12px 14px", marginBottom: 8 }}><div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 4, flexWrap: "wrap" }}><span style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{combo.book1}</span><span style={{ fontSize: 12, color: K.mt }}>+</span><span style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>{combo.book2}</span></div><div style={{ fontSize: 12, color: K.dm, marginBottom: 2 }}>{combo.desc}</div><div style={{ fontSize: 12, color: K.pp }}>{combo.value}</div></div>)}
       </div>
     </div>
   );

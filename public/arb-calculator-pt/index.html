@@ -25,80 +25,58 @@
   </script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'JetBrains Mono','SF Mono',monospace;background:#0a0e17;color:#e2e8f0;min-height:100vh}
-    .hero{padding:60px 20px 40px;text-align:center;background:linear-gradient(135deg,#0f1520,#0a0e17);border-bottom:1px solid #1e293b}
-    .badge{display:inline-block;padding:4px 14px;background:#c084fc15;border:1px solid #c084fc30;border-radius:50px;font-size:10px;color:#c084fc;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
-    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,5vw,46px);font-weight:800;color:#fff;margin-bottom:12px}
-    h1 span{color:#c084fc}
-    .sub{font-size:14px;color:#94a3b8;max-width:520px;margin:0 auto 32px;line-height:1.7}
-    .cta-btn{display:inline-block;padding:16px 32px;background:#c084fc;color:#0a0e17;font-family:inherit;font-size:15px;font-weight:700;border-radius:8px;text-decoration:none}
+    body{font-family:'JetBrains Mono','SF Mono',monospace;background:var(--pg-page-bg);color:var(--pg-page-text);min-height:100vh}
+    .hero{padding:60px 20px 40px;text-align:center;background:linear-gradient(135deg,var(--pg-page-panel),var(--pg-page-bg));border-bottom:1px solid var(--pg-page-border)}
+    .badge{display:inline-block;padding:4px 14px;background:color-mix(in srgb, var(--pg-page-purple) 8%, transparent);border:1px solid color-mix(in srgb, var(--pg-page-purple) 19%, transparent);border-radius:50px;font-size:14px;color:var(--pg-page-purple);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,5vw,46px);font-weight:800;color:var(--pg-page-text);margin-bottom:12px}
+    h1 span{color:var(--pg-page-purple)}
+    .sub{font-size:14px;color:var(--pg-page-muted);max-width:520px;margin:0 auto 32px;line-height:1.7}
+    .cta-btn{display:inline-block;padding:16px 32px;background:var(--pg-page-purple);color:var(--pg-page-bg);font-family:inherit;font-size:15px;font-weight:700;border-radius:8px;text-decoration:none}
     .content{max-width:720px;margin:0 auto;padding:60px 20px}
-    h2{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#c084fc;margin-bottom:14px}
-    p{color:#94a3b8;font-size:13px;line-height:1.8;margin-bottom:12px}
-    .box{background:#0f1520;border:1px solid #1e293b;border-radius:10px;padding:24px;margin:20px 0}
-    .example{background:#1a0a2e;border:1px solid #c084fc25;border-radius:8px;padding:20px;margin:20px 0}
-    .example-title{font-size:10px;color:#c084fc;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
-    .calc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:12px}
+    h2{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--pg-page-purple);margin-bottom:14px}
+    p{color:var(--pg-page-muted);font-size:14px;line-height:1.8;margin-bottom:12px}
+    .box{background:var(--pg-page-panel);border:1px solid var(--pg-page-border);border-radius:10px;padding:24px;margin:20px 0}
+    .example{background:var(--pg-page-panel);border:1px solid color-mix(in srgb, var(--pg-page-purple) 15%, transparent);border-radius:8px;padding:20px;margin:20px 0}
+    .example-title{font-size:14px;color:var(--pg-page-purple);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+    .calc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--pg-page-border);font-size:14px}
     .calc-row:last-child{border-bottom:none}
-    .calc-label{color:#64748b}
-    .calc-val{color:#c084fc;font-weight:700}
+    .calc-label{color:var(--pg-page-muted)}
+    .calc-val{color:var(--pg-page-purple);font-weight:700}
     .faq{margin-bottom:20px}
-    .faq-q{font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:6px}
-    .faq-a{font-size:13px;color:#94a3b8;line-height:1.7}
-    footer{padding:40px 20px;text-align:center;border-top:1px solid #1e293b}
-    footer a{color:#60a5fa;text-decoration:none;font-size:13px}
-    footer p{color:#475569;font-size:11px;margin-top:8px}
+    .faq-q{font-size:14px;font-weight:600;color:var(--pg-page-text);margin-bottom:6px}
+    .faq-a{font-size:14px;color:var(--pg-page-muted);line-height:1.7}
+    footer{padding:40px 20px;text-align:center;border-top:1px solid var(--pg-page-border)}
+    footer a{color:var(--pg-page-blue);text-decoration:none;font-size:14px}
+    footer p{color:var(--pg-page-muted);font-size:14px;margin-top:8px}
     .section{margin-bottom:48px}
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
 <div class="hero">
   <div class="badge">Arbitragem Esportiva — Brasil 🇧🇷</div>
   <h1>Calculadora de <span>Arbitragem</span></h1>
-    <div class="trust"><strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across devices. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</div>
+    <div class="trust"><strong>Conta gratuita do PromoGrind</strong> permite salvar seus dados entre dispositivos. Ferramenta de cálculo educacional. Disponível apenas para adultos elegíveis onde permitido. Os ganhos podem estar sujeitos a impostos. Procure apoio local se o jogo estiver causando problemas.</div>
   <p class="sub">Calcule apostas de arbitragem entre casas de apostas. Descubra a distribuição exata de stakes para retorno modelado com exposição reduzida ao resultado, independente do resultado.</p>
   <a href="https://promogrind.bet/?utm_source=seo&utm_medium=organic&utm_content=arb-calculator-pt" class="cta-btn">Usar Calculadora Grátis →</a>
 </div>
 <div class="content">
-  <div class="section">
-    <h2>O que é Arbitragem Esportiva?</h2>
-    <p>Arbitragem (ou "arb") acontece quando diferentes casas de apostas oferecem odds inconsistentes para o mesmo evento. Apostando nos dois lados com a distribuição correta de stakes, você modela lucro independentemente do resultado.</p>
-    <p>A janela de oportunidade é curta — as casas ajustam as odds rapidamente. Por isso, ter a calculadora à mão é essencial.</p>
-    <div class="example">
-      <div class="example-title">Exemplo de Arbitragem 2-Way</div>
-      <div class="calc-row"><span class="calc-label">Casa A — Flamengo vencer</span><span class="calc-val">+115 (2.15)</span></div>
-      <div class="calc-row"><span class="calc-label">Casa B — Palmeiras vencer</span><span class="calc-val">+110 (2.10)</span></div>
-      <div class="calc-row"><span class="calc-label">Margem total</span><span class="calc-val">97.8% (ARB!)</span></div>
-      <div class="calc-row"><span class="calc-label">Stake Casa A (de R$ 1.000 total)</span><span class="calc-val">R$ 494</span></div>
-      <div class="calc-row"><span class="calc-label">Stake Casa B</span><span class="calc-val">R$ 506</span></div>
-      <div class="calc-row"><span class="calc-label">retorno modelado</span><span class="calc-val">+R$ 22 (2.2% ROI)</span></div>
-    </div>
-  </div>
-  <div class="section">
-    <h2>Arbitragem 3-Way (Futebol)</h2>
-    <p>No futebol, há três resultados possíveis: vitória do mandante, empate e vitória do visitante. Com três odds, é mais fácil encontrar ineficiências de preço entre casas.</p>
-    <p>Use a calculadora 3-Way do PromoGrind para distribuir o stake entre os três resultados e modelar lucro em qualquer cenário.</p>
-  </div>
-  <div class="section">
-    <h2>Perguntas Frequentes</h2>
-    <div class="faq"><div class="faq-q">Como identificar uma oportunidade de arb?</div><div class="faq-a">Quando a soma das probabilidades implícitas das odds dos dois lados é menor que 100%, existe arb. Exemplo: odds que implicam 48% + 48% = 96% (4% de margem de lucro).</div></div>
-    <div class="faq"><div class="faq-q">Quanto posso ganhar com arbitragem?</div><div class="faq-a">Margens típicas variam de 1% a 5%. Com R$ 1.000 por operação e 3% de margem, isso representa R$ 30 modelados. O volume é a chave.</div></div>
-    <div class="faq"><div class="faq-q">É permitido pela lei brasileira?</div><div class="faq-a">A prática de apostar em múltiplas casas legalizadas é permitido para usuarios elegibles, sujeto a la jurisdicción y a los términos del operador. O que importa é que as casas onde você aposta sejam licenciadas no Brasil.</div></div>
-  </div>
-  <div style="text-align:center;padding:32px 0">
-    <a href="https://promogrind.bet/?utm_source=seo&utm_medium=organic&utm_content=arb-calculator-pt" class="cta-btn">Calcular Arbitragem Agora →</a>
-  </div>
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+  <div class="section"><h2>O que é arbitragem?</h2><p>Quando a soma das probabilidades implícitas de todos os resultados de um mercado é inferior a 100%, o modelo pode indicar retorno positivo ao cobrir todos os resultados. Isso exige odds aceitas e regras de liquidação correspondentes.</p></div>
+ <div class="section"><h2>Exemplo hipotético com dois resultados</h2><p>Com odds de +105 (2,05 decimal) para cada resultado, a soma é 2 ÷ 2,05 = 97,56%. A margem de probabilidade é 2,44%. Dividindo R$ 1.000 em R$ 500 de cada lado, o pagamento modelado é R$ 1.025 e o lucro antes de custos é R$ 25: retorno de 2,50% sobre o valor total apostado.</p><p>A margem de probabilidade e o retorno sobre o valor apostado são medidas diferentes. O exemplo não é uma oferta atual. Pressupõe exatamente dois resultados e aceitação integral das duas apostas.</p></div>
+ <div class="section"><h2>Confira todos os resultados</h2><p>Um mercado com empate exige cobertura de três resultados. Compare também prorrogação, anulamentos, limites e impostos. Odds alteradas ou uma aposta rejeitada podem causar perdas.</p><p>Consulte as autoridades competentes e os termos da operadora. A calculadora não confirma a legalidade de uma aposta nem sua aceitação.</p><a href="/arb-2way" class="cta-btn">Abrir calculadora de dois resultados →</a></div>
+    <p class="footer-note">Use as calculadoras gratuitas sem cadastro. Entre com uma conta gratuita do PromoGrind para salvar seu espaço de trabalho entre dispositivos. Recursos marcados como em breve estão indisponíveis.</p>
   </div>
 <footer>
   <a href="https://promogrind.bet/">← PromoGrind — Ferramentas Gratuitas</a>
   <p>PromoGrind · Ferramenta educacional · 18+ · Aposte com responsabilidade</p>
-<p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p>
+<p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p>
 </footer>
-<script>setTimeout(()=>{window.location.href='https://promogrind.bet/?utm_source=seo&utm_medium=organic&utm_content=arb-calculator-pt';},8000);</script>
-<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:#94a3b8;font-size:.85rem;line-height:1.6">Retornos modelados não são promessas. Execução, cancelamentos, limites, elegibilidade e mudanças nas odds podem alterar os resultados.</p>
+
+<p class="claims-note" style="max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--pg-page-muted);font-size:.875rem;line-height:1.6">Retornos modelados não são promessas. Execução, cancelamentos, limites, elegibilidade e mudanças nas odds podem alterar os resultados.</p>
 </body>
 </html>

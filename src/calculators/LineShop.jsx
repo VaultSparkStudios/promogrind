@@ -28,8 +28,8 @@ export default function LineShop() {
             const isBest = best?.name === n;
             return (
               <div key={n} style={{ padding: "10px", background: isBest ? `${K.gn}10` : K.s2, border: `1px solid ${isBest ? K.gn : K.bd2}`, borderRadius: 6 }}>
-                <div style={{ fontSize: 10, color: isBest ? K.gn : K.mt, fontWeight: isBest ? 700 : 400, marginBottom: 4, textTransform: "uppercase", letterSpacing: "1px" }}>{n}{isBest && " ★"}</div>
-                <input aria-label={`${n} odds`} inputMode="decimal" style={{ ...S.input, padding: "5px 8px", fontSize: 12 }} value={odds[n]} onChange={(e) => setOdds((o) => ({ ...o, [n]: e.target.value }))} placeholder="e.g. -110" />
+                <div style={{ fontSize: 12, color: isBest ? K.gn : K.mt, fontWeight: isBest ? 700 : 400, marginBottom: 4, textTransform: "uppercase", letterSpacing: "1px" }}>{n}{isBest && " ★"}</div>
+                <input aria-label={`${n} odds`} inputMode="decimal" style={{ ...S.input, padding: "5px 8px", fontSize: 14 }} value={odds[n]} onChange={(e) => setOdds((o) => ({ ...o, [n]: e.target.value }))} placeholder="e.g. -110" />
               </div>
             );
           })}
@@ -39,15 +39,15 @@ export default function LineShop() {
             {best && (
               <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                 <span style={S.big(K.gn)}>{best.odds}</span>
-                <span style={{ fontSize: 12, color: K.dm }}>best odds at {best.name}</span>
-                <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+                <span style={{ fontSize: 14, color: K.dm }}>best odds at {best.name}</span>
+                <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
               </div>
             )}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
               {entries.sort((a, b) => toD(b.odds) - toD(a.odds)).map((e) => (
                 <div key={e.name} style={{ padding: "6px 12px", background: e.name === best?.name ? `${K.gn}15` : K.s3, border: `1px solid ${e.name === best?.name ? K.gn : K.bd2}`, borderRadius: 6 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: e.name === best?.name ? K.gn : K.tx }}>{e.odds}</div>
-                  <div style={{ fontSize: 9, color: K.mt }}>{e.name}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: e.name === best?.name ? K.gn : K.tx }}>{e.odds}</div>
+                  <div style={{ fontSize: 12, color: K.mt }}>{e.name}</div>
                 </div>
               ))}
             </div>

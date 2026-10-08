@@ -36,7 +36,7 @@ export default function ParlayHedge() {
               Enter the total payout returned by the parlay book, the odds for the hedge side, and your original parlay stake. PromoGrind sizes the hedge so both outcomes stay profitable.
             </Nt>
             {result && !showShareCard && parseFloat(result.pHW) > 0 && (
-              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #60a5fa", color: "#60a5fa", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 10, width: "100%", padding: "7px 0", background: "transparent", border: `1px dashed ${K.ac}`, color: K.ac, borderRadius: 6, cursor: "pointer", fontSize: 14 }}>
                 🎉 Share this hedge
               </button>
             )}

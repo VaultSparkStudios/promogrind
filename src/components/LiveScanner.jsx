@@ -188,7 +188,7 @@ const LiveScanner = ({ proStatus, mode }) => {
 
   const handleUpgrade = () => {
     setUpgrading(true);
-    window.location.hash = "/upgrade";
+    window.location.assign("/pricing");
   };
 
   if (!featureEnabled) {
@@ -196,7 +196,7 @@ const LiveScanner = ({ proStatus, mode }) => {
       <FeatureUnavailableCard
         featureKey="liveScanner"
         title="Live Scanner"
-        body="Real-time arb and +EV scanning stays in beta until the live odds backend is activated. The core free calculators, tracker, and learning tools remain available now."
+        body="Live odds scanning is coming soon. Compare odds manually with the free arbitrage and expected-value calculators, or track your results in the ledger."
       />
     );
   }
@@ -210,24 +210,24 @@ const LiveScanner = ({ proStatus, mode }) => {
   if (!isActive) return (
     <div style={S.card}>
       <div style={{marginBottom:16,padding:'12px 14px',background:`${K.gn}08`,border:`1px solid ${K.gn}20`,borderRadius:8}}>
-        <div style={{fontSize:10,color:K.mt,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>Capability-controlled live workspace</div>
+        <div style={{fontSize:12,color:K.mt,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:8}}>Capability-controlled live workspace</div>
         <div style={{display:'flex',gap:20,alignItems:'center',flexWrap:'wrap'}}>
-          <div><div style={{fontSize:22,fontWeight:700,color:K.gn,fontFamily:fontD}}>—</div><div style={{fontSize:10,color:K.mt}}>observed arbs</div></div>
-          <div><div style={{fontSize:22,fontWeight:700,color:K.ac,fontFamily:fontD}}>—</div><div style={{fontSize:10,color:K.mt}}>evidence-backed +EV</div></div>
-          <div style={{fontSize:11,color:K.dm,flex:1,minWidth:140,lineHeight:1.6}}>Counts appear only after an authenticated provider response. PromoGrind does not simulate live market activity.</div>
+          <div><div style={{fontSize:22,fontWeight:700,color:K.gn,fontFamily:fontD}}>—</div><div style={{fontSize:12,color:K.mt}}>observed arbs</div></div>
+          <div><div style={{fontSize:22,fontWeight:700,color:K.ac,fontFamily:fontD}}>—</div><div style={{fontSize:12,color:K.mt}}>evidence-backed +EV</div></div>
+          <div style={{fontSize:12,color:K.dm,flex:1,minWidth:140,lineHeight:1.6}}>Counts appear only after an authenticated provider response. PromoGrind does not simulate live market activity.</div>
         </div>
       </div>
       <div style={{textAlign:"center",padding:"24px 16px"}}>
-        <div style={{...S.tag(K.yl),fontSize:12,marginBottom:16,display:"inline-block"}}>PRO MEMBERS ONLY</div>
+        <div style={{...S.tag(K.yl),fontSize:14,marginBottom:16,display:"inline-block"}}>PRO MEMBERS ONLY</div>
         <div style={{fontFamily:fontD,fontSize:22,fontWeight:700,color:K.tx,marginBottom:8}}>Live Odds Scanner</div>
-        <div style={{fontSize:13,color:K.dm,maxWidth:440,margin:"0 auto 24px",lineHeight:1.7}}>
+        <div style={{fontSize:14,color:K.dm,maxWidth:440,margin:"0 auto 24px",lineHeight:1.7}}>
           A scanner workspace for evaluating arbitrage and positive expected-value opportunities. Live provider coverage and refresh cadence are shown only after the required data capability is configured.
         </div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:8,maxWidth:400,margin:"0 auto 28px",textAlign:"left"}}>
           {[["Arbitrage Review","Compare two-way prices supplied by the configured provider"],["Expected-Value Review","Evaluate supplied prices against a selected fair-value reference"],["Provider Refresh","Cadence is reported from the active provider rather than promised in advance"],["Coverage Receipt","Sportsbooks, markets, and leagues remain explicit capability evidence"]].map(([t,d])=>(
             <div key={t} style={{padding:"10px 12px",background:K.s2,borderRadius:8,border:`1px solid ${K.bd}`}}>
-              <div style={{fontSize:11,fontWeight:700,color:K.tx,marginBottom:2}}>{t}</div>
-              <div style={{fontSize:10,color:K.mt,lineHeight:1.5}}>{d}</div>
+              <div style={{fontSize:12,fontWeight:700,color:K.tx,marginBottom:2}}>{t}</div>
+              <div style={{fontSize:12,color:K.mt,lineHeight:1.5}}>{d}</div>
             </div>
           ))}
         </div>
@@ -236,7 +236,7 @@ const LiveScanner = ({ proStatus, mode }) => {
             {upgrading?"Opening availability…":"Review plans & availability →"}
           </button>
         </div>
-        <div style={{fontSize:11,color:K.mt}}>Workspace trials do not activate provider-gated features unless their verified launch capability is live.</div>
+        <div style={{fontSize:12,color:K.mt}}>Workspace trials do not activate provider-gated features unless their verified launch capability is live.</div>
       </div>
     </div>
   );
@@ -251,20 +251,20 @@ const LiveScanner = ({ proStatus, mode }) => {
         <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
           {SPORTS_LIST.map(s=>{
             const on=sports.includes(s.key);
-            return (<button key={s.key} onClick={()=>setSports(prev=>on?prev.filter(k=>k!==s.key).length?prev.filter(k=>k!==s.key):prev:[...prev,s.key])} style={{padding:"3px 9px",background:on?`${K.ac}20`:"transparent",border:`1px solid ${on?K.ac:K.bd2}`,borderRadius:50,color:on?K.ac:K.dm,fontSize:9,cursor:"pointer",fontFamily:font,fontWeight:on?700:400,whiteSpace:"nowrap"}}>{s.label}</button>);
+            return (<button key={s.key} onClick={()=>setSports(prev=>on?prev.filter(k=>k!==s.key).length?prev.filter(k=>k!==s.key):prev:[...prev,s.key])} style={{padding:"3px 9px",background:on?`${K.ac}20`:"transparent",border:`1px solid ${on?K.ac:K.bd2}`,borderRadius:50,color:on?K.ac:K.dm,fontSize:12,cursor:"pointer",fontFamily:font,fontWeight:on?700:400,whiteSpace:"nowrap"}}>{s.label}</button>);
           })}
         </div>
         <div style={{display:"flex",gap:0,marginLeft:"auto"}}>
           {["arb","+ev"].map(t=>(
-            <button key={t} onClick={()=>setActiveTab(t==="arb"?"arb":"ev")} style={{padding:"5px 12px",fontSize:11,fontWeight:600,border:`1px solid ${K.bd2}`,background:activeTab===(t==="arb"?"arb":"ev")?K.ac:"transparent",color:activeTab===(t==="arb"?"arb":"ev")?K.bg:K.dm,cursor:"pointer",fontFamily:font,borderRadius:t==="arb"?"6px 0 0 6px":"0 6px 6px 0"}}>
+            <button key={t} onClick={()=>setActiveTab(t==="arb"?"arb":"ev")} style={{padding:"5px 12px",fontSize:12,fontWeight:600,border:`1px solid ${K.bd2}`,background:activeTab===(t==="arb"?"arb":"ev")?K.ac:"transparent",color:activeTab===(t==="arb"?"arb":"ev")?K.bg:K.dm,cursor:"pointer",fontFamily:font,borderRadius:t==="arb"?"6px 0 0 6px":"0 6px 6px 0"}}>
               {t==="arb"?"Arb":"+ EV"}
             </button>
           ))}
         </div>
-        <button onClick={fetchOdds} disabled={loading} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,cursor:"pointer",fontFamily:font}}>
+        <button onClick={fetchOdds} disabled={loading} style={{padding:"5px 10px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:12,cursor:"pointer",fontFamily:font}}>
           {loading?"…":"↻"}
         </button>
-        <button onClick={()=>setPropsMode(p=>!p)} style={{padding:"5px 10px",background:propsMode?`${K.pp}20`:"transparent",border:`1px solid ${propsMode?K.pp:K.bd2}`,borderRadius:6,color:propsMode?K.pp:K.dm,fontSize:10,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>
+        <button onClick={()=>setPropsMode(p=>!p)} style={{padding:"5px 10px",background:propsMode?`${K.pp}20`:"transparent",border:`1px solid ${propsMode?K.pp:K.bd2}`,borderRadius:6,color:propsMode?K.pp:K.dm,fontSize:12,cursor:"pointer",fontFamily:font,letterSpacing:"0.5px"}}>
           {propsMode?"PROPS ON":"PROPS"}
         </button>
         <div style={{display:"flex",alignItems:"center",gap:6}}>
@@ -275,25 +275,25 @@ const LiveScanner = ({ proStatus, mode }) => {
                 else if(toast)toast('Notifications blocked in browser settings',K.rd);
               });
             } else {setAlertsEnabled(false);if(toast)toast('Alerts off',K.mt);}
-          }} style={{padding:"6px 12px",background:alertsEnabled?`${K.gn}15`:"transparent",border:`1px solid ${alertsEnabled?K.gn:K.bd2}`,borderRadius:6,color:alertsEnabled?K.gn:K.mt,fontSize:10,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
+          }} style={{padding:"6px 12px",background:alertsEnabled?`${K.gn}15`:"transparent",border:`1px solid ${alertsEnabled?K.gn:K.bd2}`,borderRadius:6,color:alertsEnabled?K.gn:K.mt,fontSize:12,cursor:"pointer",fontFamily:font,whiteSpace:"nowrap"}}>
             {alertsEnabled?"ALERTS ON":"ALERTS"}
           </button>
           {alertsEnabled&&<input style={{...S.input,width:60,padding:"5px 8px"}} value={alertThreshold} onChange={e=>setAlertThreshold(e.target.value)} placeholder="0.5" title="Min ROI % to alert"/>}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
-          <span style={{fontSize:9,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Bankroll</span>
-          <input style={{...S.input,width:80,padding:"4px 8px",fontSize:11}} value={scannerBankroll} onChange={e=>setScannerBankroll(e.target.value)} placeholder="1000"/>
+          <span style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px"}}>Bankroll</span>
+          <input style={{...S.input,width:80,padding:"4px 8px",fontSize:12}} value={scannerBankroll} onChange={e=>setScannerBankroll(e.target.value)} placeholder="1000"/>
         </div>
       </div>
-      {updated&&<div style={{fontSize:10,color:K.mt,marginBottom:8}}>Updated {updated.toLocaleTimeString()} · Auto-refreshes every 2 min</div>}
-      {error&&<div style={{...S.res(false),marginBottom:12,fontSize:12}}>{error}</div>}
-      {loading&&!results.length&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>Scanning live odds…</div>}
-      {!loading&&!error&&results.length===0&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:11}}>No {activeTab==="arb"?"arb opportunities":"+ EV spots"} found right now — try another sport or check back in a few minutes.</div>}
+      {updated&&<div style={{fontSize:12,color:K.mt,marginBottom:8}}>Updated {updated.toLocaleTimeString()} · Auto-refreshes every 2 min</div>}
+      {error&&<div style={{...S.res(false),marginBottom:12,fontSize:14}}>{error}</div>}
+      {loading&&!results.length&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:12}}>Scanning live odds…</div>}
+      {!loading&&!error&&results.length===0&&<div style={{textAlign:"center",padding:32,color:K.mt,fontSize:12}}>No {activeTab==="arb"?"arb opportunities":"+ EV spots"} found right now — try another sport or check back in a few minutes.</div>}
       {watchlist.length>0&&<div style={{marginBottom:12}}>
-        <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Watching</div>
+        <div style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Watching</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
           {watchlist.map(game=>(
-            <div key={game} style={{display:"flex",alignItems:"center",gap:4,padding:"3px 8px",background:`${K.yl}15`,border:`1px solid ${K.yl}40`,borderRadius:50,fontSize:10,color:K.yl}}>
+            <div key={game} style={{display:"flex",alignItems:"center",gap:4,padding:"3px 8px",background:`${K.yl}15`,border:`1px solid ${K.yl}40`,borderRadius:50,fontSize:12,color:K.yl}}>
               <span>{game}</span>
               <button type="button" aria-label={`Remove ${game} from watchlist`} onClick={()=>toggleWatchlist(game)} style={{cursor:"pointer",color:K.rd,fontWeight:700,marginLeft:2,background:"transparent",border:0,padding:3}}>✕</button>
             </div>
@@ -304,65 +304,65 @@ const LiveScanner = ({ proStatus, mode }) => {
         activeTab==="arb"
           ? <div key={i} style={{...S.res(true),marginBottom:8,border:watchlist.includes(r.game)?`1px solid ${K.yl}`:`1px solid ${K.gn}25`}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>{r.market&&r.market!=='Moneyline'&&<span style={S.tag(K.ac)}>{r.market}</span>}</div>
+                <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{fontWeight:700,fontSize:14,color:K.tx}}>{r.game}</div>{r.market&&r.market!=='Moneyline'&&<span style={S.tag(K.ac)}>{r.market}</span>}</div>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
-                  <span style={{...S.tag(K.gn),fontSize:12}}>+{r.roi}% ROI</span>
+                  <span style={{...S.tag(K.gn),fontSize:14}}>+{r.roi}% ROI</span>
                   <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
-                  <button onClick={()=>logOpportunity(r,'arb')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
-                  <button onClick={()=>queueWorkflow(r,'arb')} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.gn}30`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Queue</button>
+                  <button onClick={()=>logOpportunity(r,'arb')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:12,cursor:"pointer",fontFamily:font}}>Log</button>
+                  <button onClick={()=>queueWorkflow(r,'arb')} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.gn}30`,borderRadius:4,color:K.gn,fontSize:12,cursor:"pointer",fontFamily:font}}>Queue</button>
                 </div>
               </div>
-              <div style={{fontSize:11,color:K.mt,marginBottom:10}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
+              <div style={{fontSize:12,color:K.mt,marginBottom:10}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
                 {[[r.n1,r.b1,r.p1,r.s1],[r.n2,r.b2,r.p2,r.s2]].map(([name,book,price,stake])=>(
                   <div key={name} style={{padding:"8px 10px",background:K.s3,borderRadius:6}}>
-                    <div style={{fontSize:10,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:3}}>{name}</div>
-                    <div style={{fontSize:13,fontWeight:700,color:K.ac}}>{price>0?"+":""}{price}</div>
-                    <div style={{fontSize:11,color:K.dm}}>{book}</div>
-                    <div style={{fontSize:11,color:K.gn,fontWeight:600}}>Stake ${stake} of $100</div>
+                    <div style={{fontSize:12,color:K.mt,textTransform:"uppercase",letterSpacing:"1px",marginBottom:3}}>{name}</div>
+                    <div style={{fontSize:14,fontWeight:700,color:K.ac}}>{price>0?"+":""}{price}</div>
+                    <div style={{fontSize:12,color:K.dm}}>{book}</div>
+                    <div style={{fontSize:12,color:K.gn,fontWeight:600}}>Stake ${stake} of $100</div>
                   </div>
                 ))}
               </div>
             </div>
           : <div key={i} style={{...S.res(true),marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,border:watchlist.includes(r.game)?`1px solid ${K.yl}`:`1px solid ${K.gn}25`}}>
               <div>
-                <div style={{fontWeight:700,fontSize:13,color:K.tx}}>{r.game}</div>
-                <div style={{fontSize:11,color:K.dm,marginTop:2}}>{r.outcome} · {r.book} · {r.price>0?"+":""}{r.price}</div>
-                <div style={{fontSize:10,color:K.mt}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
-                {(()=>{const kb=calcKelly(parseFloat(r.fairPct),r.price,parseFloat(scannerBankroll)||1000,0.25);return kb?.ok?<div style={{fontSize:10,color:K.pp}}>Kelly 25%: ${kb.bet} of ${scannerBankroll}</div>:null;})()}
+                <div style={{fontWeight:700,fontSize:14,color:K.tx}}>{r.game}</div>
+                <div style={{fontSize:12,color:K.dm,marginTop:2}}>{r.outcome} · {r.book} · {r.price>0?"+":""}{r.price}</div>
+                <div style={{fontSize:12,color:K.mt}}>{r.sport} · {new Date(r.start).toLocaleDateString()}</div>
+                {(()=>{const kb=calcKelly(parseFloat(r.fairPct),r.price,parseFloat(scannerBankroll)||1000,0.25);return kb?.ok?<div style={{fontSize:12,color:K.pp}}>Kelly 25%: ${kb.bet} of ${scannerBankroll}</div>:null;})()}
               </div>
               <div style={{textAlign:"right",display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6}}>
                 <div style={{...S.big(K.gn),fontSize:20}}>+{r.ev}% EV</div>
-                <div style={{fontSize:10,color:K.mt}}>Consensus: {r.fairPct}% · Quote: {r.bookPct}%</div>
-                <div style={{fontSize:9,color:K.dm}}>{r.evidence.sourceCount} independent books · no-vig · target excluded · {r.evidence.grade} evidence</div>
+                <div style={{fontSize:12,color:K.mt}}>Consensus: {r.fairPct}% · Quote: {r.bookPct}%</div>
+                <div style={{fontSize:12,color:K.dm}}>{r.evidence.sourceCount} independent books · no-vig · target excluded · {r.evidence.grade} evidence</div>
                 <div style={{display:"flex",gap:6}}>
                   <button onClick={()=>toggleWatchlist(r.game)} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:14,color:watchlist.includes(r.game)?K.yl:K.mt}} title="Watch/unwatch">{watchlist.includes(r.game)?"★":"☆"}</button>
-                  <button onClick={()=>logOpportunity(r,'ev')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Log</button>
-                  <button onClick={()=>queueWorkflow(r,'ev')} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.gn}30`,borderRadius:4,color:K.gn,fontSize:9,cursor:"pointer",fontFamily:font}}>Queue</button>
+                  <button onClick={()=>logOpportunity(r,'ev')} style={{padding:"2px 8px",background:`${K.ac}15`,border:`1px solid ${K.ac}30`,borderRadius:4,color:K.ac,fontSize:12,cursor:"pointer",fontFamily:font}}>Log</button>
+                  <button onClick={()=>queueWorkflow(r,'ev')} style={{padding:"2px 8px",background:"transparent",border:`1px solid ${K.gn}30`,borderRadius:4,color:K.gn,fontSize:12,cursor:"pointer",fontFamily:font}}>Queue</button>
                 </div>
               </div>
             </div>
       ))}
       {oppLog.length>0&&<div style={{marginTop:12}}>
-        <button onClick={()=>setShowOppLog(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
+        <button onClick={()=>setShowOppLog(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:12,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
           {showOppLog?"▲ Hide":"▼ Show"} Opportunity History ({oppLog.length})
         </button>
         {showOppLog&&<div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-            <div style={{fontSize:10,color:K.mt}}>{oppLog.filter(e=>e.acted).length} acted on · Missed: {oppLog.filter(e=>!e.acted).length}</div>
-            <button onClick={exportOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:4,color:K.ac,fontSize:9,cursor:"pointer",fontFamily:font}}>Export CSV</button>
-            <button onClick={clearOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.rd}`,borderRadius:4,color:K.rd,fontSize:9,cursor:"pointer",fontFamily:font}}>Clear History</button>
+            <div style={{fontSize:12,color:K.mt}}>{oppLog.filter(e=>e.acted).length} acted on · Missed: {oppLog.filter(e=>!e.acted).length}</div>
+            <button onClick={exportOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:4,color:K.ac,fontSize:12,cursor:"pointer",fontFamily:font}}>Export CSV</button>
+            <button onClick={clearOppLog} style={{padding:"3px 10px",background:"transparent",border:`1px solid ${K.rd}`,borderRadius:4,color:K.rd,fontSize:12,cursor:"pointer",fontFamily:font}}>Clear History</button>
           </div>
           {oppLog.map(e=>(
             <div key={e.id} style={{...S.res(true),marginBottom:6,padding:"8px 12px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:6}}>
               <div>
                 <span style={S.tag(e.type==='arb'?K.gn:K.ac)}>{e.type.toUpperCase()}</span>
-                <span style={{fontSize:11,color:K.tx,marginLeft:6}}>{e.game}</span>
-                <span style={{fontSize:10,color:K.mt,marginLeft:6}}>{e.date}</span>
+                <span style={{fontSize:12,color:K.tx,marginLeft:6}}>{e.game}</span>
+                <span style={{fontSize:12,color:K.mt,marginLeft:6}}>{e.date}</span>
               </div>
               <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span style={{fontSize:12,fontWeight:600,color:K.gn}}>+{e.roi}% {e.type==='arb'?'ROI':'EV'}</span>
-                <label style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:e.acted?K.gn:K.mt,cursor:"pointer"}}>
+                <span style={{fontSize:14,fontWeight:600,color:K.gn}}>+{e.roi}% {e.type==='arb'?'ROI':'EV'}</span>
+                <label style={{display:"flex",alignItems:"center",gap:4,fontSize:12,color:e.acted?K.gn:K.mt,cursor:"pointer"}}>
                   <input type="checkbox" checked={e.acted} onChange={()=>toggleActed(e.id)} style={{accentColor:K.gn}}/>
                   Acted
                 </label>
@@ -372,21 +372,21 @@ const LiveScanner = ({ proStatus, mode }) => {
         </div>}
       </div>}
       {history.length>0&&<div style={{marginTop:16}}>
-        <button onClick={()=>setShowHistory(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
+        <button onClick={()=>setShowHistory(h=>!h)} style={{background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:12,padding:"5px 12px",cursor:"pointer",fontFamily:font,marginBottom:8}}>
           {showHistory?"▲ Hide":"▼ Show"} Scan History ({history.length})
         </button>
         {showHistory&&<div style={{maxHeight:280,overflowY:"auto"}}>
           {history.map((h,i)=>(
             <div key={i} style={{...S.res(true),marginBottom:6,padding:"10px 14px"}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:6}}>
-                <div style={{fontSize:11,color:K.dm}}>{h.ts.toLocaleTimeString()} · {SPORTS_LIST.find(s=>s.key===h.sport)?.label||h.sport}</div>
+                <div style={{fontSize:12,color:K.dm}}>{h.ts.toLocaleTimeString()} · {SPORTS_LIST.find(s=>s.key===h.sport)?.label||h.sport}</div>
                 <div style={{display:"flex",gap:8}}>
                   {h.arbCount>0&&<span style={S.tag(K.gn)}>{h.arbCount} arb{h.arbCount>1?"s":""}</span>}
                   {h.evCount>0&&<span style={S.tag(K.ac)}>{h.evCount} +EV</span>}
                 </div>
               </div>
-              {h.topArb&&<div style={{fontSize:10,color:K.mt,marginTop:4}}>Best arb: {h.topArb.game} · +{h.topArb.roi}% ROI</div>}
-              {h.topEv&&<div style={{fontSize:10,color:K.mt,marginTop:2}}>Best +EV: {h.topEv.game} · +{h.topEv.ev}% EV</div>}
+              {h.topArb&&<div style={{fontSize:12,color:K.mt,marginTop:4}}>Best arb: {h.topArb.game} · +{h.topArb.roi}% ROI</div>}
+              {h.topEv&&<div style={{fontSize:12,color:K.mt,marginTop:2}}>Best +EV: {h.topEv.game} · +{h.topEv.ev}% EV</div>}
             </div>
           ))}
         </div>}

@@ -26,6 +26,7 @@ const SEEDED = {
   ],
   bankroll: "1000",
   bookStatus: { DraftKings: "active" },
+  bookExpiry: { DraftKings: "2026-07-02T12:00:00Z" },
 };
 
 describe("buildCommandDeck", () => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { startCheckout, startTrial } from '../auth.js';
 import { FEATURE_FLAGS } from '../launchState.js';
 import { trackFeatureEnabledUse, trackFeatureGateClick } from '../launchTelemetry.js';
-import { COMMERCE_CATALOG, COMMERCE_PROOF_CARDS } from '../data/commerceCatalog.js';
+import { COMMERCE_CATALOG } from '../data/commerceCatalog.js';
 import { S } from '../ui.jsx';
 import { useToast } from '../contexts.jsx';
 import { K, font, fontD } from '../lib/shared.js';
@@ -21,9 +21,9 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
       padding: '22px 20px 20px', background: K.s2, border: `1px solid ${tier.badge ? tier.color : K.bd}`,
       borderRadius: 14, position: 'relative', boxShadow: tier.badge ? `0 0 28px ${tier.color}16` : 'none',
     }}>
-      {tier.badge && <div style={{ position: 'absolute', top: -11, left: 18, padding: '3px 10px', borderRadius: 30, background: tier.color, color: '#081018', fontSize: 9, fontWeight: 900, letterSpacing: '1.2px' }}>{tier.badge}</div>}
-      <div id={`plan-${tier.id}`} style={{ marginTop: tier.badge ? 6 : 0, color: textAccent, fontSize: 11, fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase' }}>{tier.name}</div>
-      <p style={{ minHeight: 44, margin: '7px 0 16px', color: K.mt, fontSize: 12, lineHeight: 1.55 }}>{tier.tagline}</p>
+      {tier.badge && <div style={{ position: 'absolute', top: -11, left: 18, padding: '3px 10px', borderRadius: 30, background: tier.color, color: '#081018', fontSize: 12, fontWeight: 900, letterSpacing: '1.2px' }}>{tier.badge}</div>}
+      <div id={`plan-${tier.id}`} style={{ marginTop: tier.badge ? 6 : 0, color: textAccent, fontSize: 12, fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase' }}>{tier.name}</div>
+      <p style={{ minHeight: 44, margin: '7px 0 16px', color: K.mt, fontSize: 14, lineHeight: 1.55 }}>{tier.tagline}</p>
 
       {isFree ? (
         <div style={{ fontFamily: fontD, color: K.tx, fontSize: 30, fontWeight: 800 }}>Free</div>
@@ -33,9 +33,9 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
         <div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
             <span style={{ fontFamily: fontD, color: textAccent, fontSize: 30, fontWeight: 800 }}>${perMonth ?? price}</span>
-            <span style={{ color: K.mt, fontSize: 12 }}>/mo</span>
+            <span style={{ color: K.mt, fontSize: 14 }}>/mo</span>
           </div>
-          <div style={{ minHeight: 18, color: K.mt, fontSize: 10 }}>
+          <div style={{ minHeight: 18, color: K.mt, fontSize: 12 }}>
             {billing === 'annual' && tier.annual ? `${tier.annual}/year · planned price` : 'planned price'}
           </div>
         </div>
@@ -47,17 +47,17 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
           <div key={`${tier.id}-${item.label}`} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
             <span aria-hidden="true" style={{ color: item.available ? textAccent : K.mt, fontWeight: 800 }}>{item.available ? '✓' : '○'}</span>
             <div>
-              <div style={{ color: item.available ? K.tx : K.mt, fontSize: 11, fontWeight: 700 }}>{item.label}{!item.available ? ' · not live' : ''}</div>
-              {item.note && <div style={{ marginTop: 2, color: K.dm, fontSize: 10, lineHeight: 1.45 }}>{item.note}</div>}
+              <div style={{ color: item.available ? K.tx : K.mt, fontSize: 12, fontWeight: 700 }}>{item.label}{!item.available ? ' · not live' : ''}</div>
+              {item.note && <div style={{ marginTop: 2, color: K.dm, fontSize: 12, lineHeight: 1.45 }}>{item.note}</div>}
             </div>
           </div>
         ))}
       </div>
 
       {isFree ? (
-        <a href="#/dashboard" style={{ padding: 11, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, textAlign: 'center', textDecoration: 'none', fontSize: 12, fontWeight: 800 }}>Open the free workspace →</a>
+        <a href="/dashboard" style={{ padding: 11, border: `1px solid ${K.bd}`, borderRadius: 8, color: K.tx, textAlign: 'center', textDecoration: 'none', fontSize: 14, fontWeight: 800 }}>Open the free workspace →</a>
       ) : tier.contact ? (
-        <a href="mailto:contact@promogrind.bet?subject=PromoGrind business integration" style={{ padding: 11, borderRadius: 8, background: textAccent, color: K.ink, textAlign: 'center', textDecoration: 'none', fontSize: 12, fontWeight: 800 }}>Discuss an integration →</a>
+        <a href="mailto:contact@promogrind.bet?subject=PromoGrind business integration" style={{ padding: 11, borderRadius: 8, background: textAccent, color: K.ink, textAlign: 'center', textDecoration: 'none', fontSize: 14, fontWeight: 800 }}>Discuss an integration →</a>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {tier.trial && (
@@ -70,24 +70,6 @@ function TierCard({ tier, billing, upgrading, trialStarting, trialStarted, onUpg
           </button>
         </div>
       )}
-    </section>
-  );
-}
-
-function EvidencePanel() {
-  return (
-    <section aria-labelledby="commerce-evidence" style={{ ...S.card }}>
-      <div id="commerce-evidence" style={{ color: K.ac, fontSize: 11, fontWeight: 800, letterSpacing: '1.7px', textTransform: 'uppercase' }}>Evidence you can inspect</div>
-      <p style={{ color: K.dm, fontSize: 12, lineHeight: 1.65, margin: '8px 0 16px' }}>These are repository facts, not customer earnings, simulated activity, or comparisons to another provider's changeable pricing.</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10 }}>
-        {COMMERCE_PROOF_CARDS.map((card) => (
-          <div key={card.label} style={{ padding: 14, border: `1px solid ${K.bd}`, borderRadius: 10, background: K.s1 }}>
-            <div style={{ color: K.gn, fontFamily: fontD, fontSize: 22, fontWeight: 800 }}>{card.value}</div>
-            <div style={{ color: K.tx, fontSize: 11, fontWeight: 800, marginTop: 3 }}>{card.label}</div>
-            <div style={{ color: K.mt, fontSize: 10, lineHeight: 1.5, marginTop: 4 }}>{card.detail}</div>
-          </div>
-        ))}
-      </div>
     </section>
   );
 }
@@ -123,7 +105,7 @@ export const PricingPage = () => {
       if (ok) {
         setTrialStarted(true);
         window.plausible?.('trial_start');
-        toast?.('Workspace trial started. Feature availability still follows the launch controls shown here.', K.gn);
+        toast?.('Workspace trial started. Tools marked coming soon remain unavailable.', K.gn);
       } else {
         toast?.('Could not start the workspace trial. Sign in and try again.', K.rd);
       }
@@ -135,43 +117,41 @@ export const PricingPage = () => {
   return (
     <main data-pricing-surface="capability-derived" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
       <header style={{ textAlign: 'center', paddingTop: 8 }}>
-        <div style={{ color: K.ac, fontSize: 11, fontWeight: 800, letterSpacing: '2.5px', textTransform: 'uppercase' }}>Pricing & availability</div>
+        <div style={{ color: K.ac, fontSize: 12, fontWeight: 800, letterSpacing: '2.5px', textTransform: 'uppercase' }}>Pricing & availability</div>
         <h1 style={{ margin: '9px 0 10px', color: K.tx, fontFamily: fontD, fontSize: 28 }}>See what works now—and what is still planned.</h1>
-        <p style={{ maxWidth: 650, margin: '0 auto 18px', color: K.mt, fontSize: 13, lineHeight: 1.7 }}>The calculator workspace is free. Paid plan prices are a preview while checkout remains disabled, and every provider-backed feature below follows the current launch flags.</p>
+        <p style={{ maxWidth: 650, margin: '0 auto 18px', color: K.mt, fontSize: 15, lineHeight: 1.7 }}>Use the calculators and local tracking for free. {COMMERCE_CATALOG.checkout.enabled ? 'Choose a paid plan for additional workspace features.' : 'Paid plans are planned; you cannot purchase a subscription yet.'} Each tool below shows whether it is available today.</p>
         <div role="group" aria-label="Billing cadence" style={{ display: 'inline-flex', padding: 3, border: `1px solid ${K.bd}`, borderRadius: 50, background: K.s2 }}>
           {['monthly', 'annual'].map((value) => (
-            <button key={value} onClick={() => setBilling(value)} aria-pressed={billing === value} style={{ padding: '7px 20px', border: 0, borderRadius: 50, background: billing === value ? K.ac : 'transparent', color: billing === value ? '#081018' : K.mt, fontFamily: font, fontSize: 11, fontWeight: 800, cursor: 'pointer', textTransform: 'capitalize' }}>{value}</button>
+            <button key={value} onClick={() => setBilling(value)} aria-pressed={billing === value} style={{ padding: '7px 20px', border: 0, borderRadius: 50, background: billing === value ? K.ac : 'transparent', color: billing === value ? '#081018' : K.mt, fontFamily: font, fontSize: 12, fontWeight: 800, cursor: 'pointer', textTransform: 'capitalize' }}>{value}</button>
           ))}
         </div>
       </header>
 
-      {!COMMERCE_CATALOG.checkout.enabled && <div role="status" style={{ ...S.note(K.yl), textAlign: 'center' }}><strong>{COMMERCE_CATALOG.checkout.label}.</strong> No subscription can be purchased from this build.</div>}
+      {!COMMERCE_CATALOG.checkout.enabled && <div role="status" style={{ ...S.note(K.yl), textAlign: 'center' }}><strong>{COMMERCE_CATALOG.checkout.label}.</strong> The listed paid prices are a preview, not an offer you can buy today.</div>}
 
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16 }}>
         {COMMERCE_CATALOG.plans.map((tier) => <TierCard key={tier.id} tier={tier} billing={billing} upgrading={upgrading} trialStarting={trialStarting} trialStarted={trialStarted} onUpgrade={handleUpgrade} onTrial={handleTrial} />)}
       </div>
 
-      <EvidencePanel />
-
       <section aria-labelledby="pricing-faq" style={{ ...S.card }}>
-        <div id="pricing-faq" style={{ color: K.ac, fontSize: 11, fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 14 }}>Important details</div>
+        <div id="pricing-faq" style={{ color: K.ac, fontSize: 12, fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 14 }}>Important details</div>
         {[
           ['What does the trial include?', COMMERCE_CATALOG.trial.scope],
-          ['Can I subscribe today?', COMMERCE_CATALOG.checkout.enabled ? 'Yes. Checkout is enabled in this build.' : 'No. The prices are a product preview and checkout is disabled.'],
+          ['Can I subscribe today?', COMMERCE_CATALOG.checkout.enabled ? 'Yes. Choose a plan to continue to checkout.' : 'No. Paid plans are planned and checkout is unavailable.'],
           ['Does PromoGrind determine whether I may use a sportsbook offer?', 'No. Eligibility, operator terms, and local law vary. Verify them with the operator and an appropriate local authority before acting. PromoGrind supplies educational calculations and workflow tools, not legal advice.'],
           ['What happens to local data?', 'Calculator and locally tracked data remain in your browser unless you clear it. Signed-in synchronization and retention depend on the account workspace state described in the product.'],
         ].map(([question, answer], index) => (
           <div key={question} style={{ padding: '12px 0', borderTop: index ? `1px solid ${K.bd}` : 0 }}>
-            <div style={{ color: K.tx, fontSize: 12, fontWeight: 800 }}>{question}</div>
-            <div style={{ color: K.dm, fontSize: 12, lineHeight: 1.65, marginTop: 5 }}>{answer}</div>
+            <div style={{ color: K.tx, fontSize: 14, fontWeight: 800 }}>{question}</div>
+            <div style={{ color: K.dm, fontSize: 14, lineHeight: 1.65, marginTop: 5 }}>{answer}</div>
           </div>
         ))}
       </section>
 
       <div style={{ padding: '24px', border: `1px solid ${K.bd}`, borderRadius: 14, background: K.s2, textAlign: 'center' }}>
-        <div style={{ color: K.tx, fontFamily: fontD, fontSize: 21, fontWeight: 800 }}>Start with the math, then earn trust in every next layer.</div>
-        <p style={{ color: K.mt, fontSize: 12, lineHeight: 1.65 }}>Open the free calculator workspace now. Provider-backed tools will identify themselves as unavailable until their launch controls and evidence are green.</p>
-        <a href="#/dashboard" style={{ display: 'inline-block', padding: '11px 24px', borderRadius: 8, background: K.gn, color: K.ink, textDecoration: 'none', fontWeight: 900, fontSize: 12 }}>Open free workspace →</a>
+        <div style={{ color: K.tx, fontFamily: fontD, fontSize: 21, fontWeight: 800 }}>Start with the free tools</div>
+        <p style={{ color: K.mt, fontSize: 14, lineHeight: 1.65 }}>Compare an offer, save your calculation, and track the outcome. Tools marked coming soon are not available yet.</p>
+        <a href="/dashboard" style={{ display: 'inline-block', padding: '11px 24px', borderRadius: 8, background: K.gn, color: K.ink, textDecoration: 'none', fontWeight: 900, fontSize: 14 }}>Open free workspace →</a>
       </div>
     </main>
   );

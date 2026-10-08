@@ -23,13 +23,13 @@ export default function InsurancePromo() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(K.gn)}>${r.insVal}</span>
-              <span style={{ fontSize: 12, color: K.dm }}>insurance value (real cash)</span>
-              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>insurance value (real cash)</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Insurance Bonus Amount" v={`$${r.insAmt}`} c={K.pp} b /><RR l="Bonus Value After Conversion" v={`$${r.insVal}`} c={K.gn} b /><RR l="Net Cost if Bet Loses" v={`$${r.netCost}`} c={parseFloat(r.netCost) <= 5 ? K.gn : K.yl} /><RR l="Insurance Effectiveness" v={`${r.effPct}%`} c={parseFloat(r.effPct) >= 60 ? K.gn : K.yl} />
             <Nt c={K.ac}>If your insured bet loses: you get ${r.insAmt} back as a bonus bet. Convert that using the Bonus Bet tab (~{conv}%) = ${r.insVal} real cash. Your net loss is only ${r.netCost}.</Nt>
             {r.ok && !showShareCard && (
-              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #c084fc", color: "#c084fc", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: `1px dashed ${K.pp}`, color: K.pp, borderRadius: 6, cursor: "pointer", fontSize: 14 }}>
                 🎉 Share insurance value
               </button>
             )}

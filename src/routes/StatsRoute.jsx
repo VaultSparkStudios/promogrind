@@ -15,7 +15,7 @@ export default function StatsRoute({ darkMode, toggleTheme }) {
         <button onClick={toggleTheme} aria-label={`Switch stats page to ${darkMode ? 'light' : 'dark'} theme`} style={{ minHeight: 44, padding: '10px 16px', border: `1px solid ${K.bd}`, borderRadius: 10, background: K.s1, color: K.tx, cursor: 'pointer' }}>{darkMode ? 'Light theme' : 'Dark theme'}</button>
       </nav>
       <header style={{ padding: '32px 0 24px', maxWidth: 780 }}>
-        <p style={{ color: K.gn, fontSize: 12, letterSpacing: 2, fontWeight: 800 }}>COMMUNITY REPORT</p>
+        <p style={{ color: K.gn, fontSize: 14, letterSpacing: 2, fontWeight: 800 }}>COMMUNITY REPORT</p>
         <h1 style={{ fontFamily: fontD, fontSize: 'clamp(34px, 5vw, 54px)', letterSpacing: '-1.5px', lineHeight: 1.08, margin: '12px 0 18px' }}>What gets saved.<br />What gets followed through.</h1>
         <p style={{ color: K.dm, lineHeight: 1.8, fontSize: 16 }}>An open look at recorded workflow activity, with the limits beside the numbers. No winnings claims, private account details, or estimates of unmeasured activity.</p>
       </header>
@@ -27,7 +27,7 @@ export default function StatsRoute({ darkMode, toggleTheme }) {
           {[{ metrics: feed.metrics }, ...feed.history].map((week, i) => <article key={week.metrics[0].period} style={{ background: K.s1, border: `1px solid ${K.bd}`, borderRadius: 14, padding: 20 }}>
             <h3 style={{ fontSize: 14, margin: '0 0 16px' }}>{i === 0 ? 'Latest week · ' : ''}{week.metrics[0].period}</h3>
             <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, margin: 0 }}>
-              {week.metrics.map(metric => <div key={metric.id}><dt style={{ color: K.dm, fontSize: 12 }}>{metric.label}</dt><dd style={{ margin: '6px 0', color: K.gn, fontSize: 23, fontWeight: 800 }}>{metricDisplay(metric)}</dd><div style={{ color: K.dm, fontSize: 11, lineHeight: 1.6 }}>{metric.available === false && <div>{metric.unavailableReason}</div>}As of {new Date(metric.computedAt).toLocaleString()}</div></div>)}
+              {week.metrics.map(metric => <div key={metric.id}><dt style={{ color: K.dm, fontSize: 14 }}>{metric.label}</dt><dd style={{ margin: '6px 0', color: K.gn, fontSize: 23, fontWeight: 800 }}>{metricDisplay(metric)}</dd><div style={{ color: K.dm, fontSize: 12, lineHeight: 1.6 }}>{metric.available === false && <div>{metric.unavailableReason}</div>}As of {new Date(metric.computedAt).toLocaleString()}</div></div>)}
             </dl>
           </article>)}
         </div> : <p style={{ color: K.dm }}>History will appear when a verified source report is available.</p>}

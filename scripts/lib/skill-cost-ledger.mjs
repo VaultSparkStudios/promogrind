@@ -56,6 +56,13 @@ export function recordSkillCost(repoRoot, info) {
     slo: slo ? { tokenBudget: slo.tokenBudget, wallClockMaxSec: slo.wallClockMaxSec } : null,
     actual: { tokens: info.actualTokens ?? null, durationSec: info.durationSec ?? null },
     measurement: { tokenSource: info.tokenSource || (info.actualTokens == null ? 'unmeasured' : 'caller-reported'), durationScope: info.durationScope || null },
+    provenance: info.provenance ? {
+      taskClass: info.provenance.taskClass ?? null, experimentId: info.provenance.experimentId ?? null,
+      model: info.provenance.model ?? null, runtime: info.provenance.runtime ?? null,
+      requestIds: info.provenance.requestIds ?? [], inputSha256: info.provenance.inputSha256 ?? null,
+      comparisonSha256: info.provenance.comparisonSha256 ?? null,
+    } : null,
+    billing: {basis:info.billing?.basis || 'unmeasured',billedUSD:info.billing?.basis==='metered-api'&&Number.isFinite(info.billing?.billedUSD)&&info.billing.billedUSD>=0&&info.billing?.invoiceRef?info.billing.billedUSD:null,invoiceRef:info.billing?.invoiceRef||null},
     ...(info.estimatedTokens != null ? { estimate: { tokens: info.estimatedTokens, method: info.estimateMethod || 'unspecified', scope: info.estimateScope || null } } : {}),
     overrun: slo?.tokenBudget && info.actualTokens
       ? { tokens: Math.max(0, info.actualTokens - slo.tokenBudget),
@@ -65,6 +72,7 @@ export function recordSkillCost(repoRoot, info) {
     // S156 #14 — optional §-step decomposition [{id, tokens}] incl. residual
     // "(unattributed)" bucket; sum reconciles with actual.tokens.
     ...(info.steps?.length ? { steps: info.steps } : {}),
+    ...(info.estimatedSteps?.length ? { estimatedSteps: info.estimatedSteps } : {}),
   };
   fs.appendFileSync(ledgerPath, JSON.stringify(entry) + '\n');
   return entry;

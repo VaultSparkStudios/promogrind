@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { homedir } from 'node:os';
 import { getProjectProfile } from './project-profile.mjs';
 import { MEDIA_SKILL_PROFILES, projectMedium } from './media-profile.mjs';
+import { lifecycleSkillOverlay } from './lifecycle-skill-profile.mjs';
 
 const PROFILES_DIR = join(homedir(), '.claude', 'skills', 'PROFILES');
 
@@ -25,16 +26,20 @@ export function getSkillProfile(skill, medium) {
 export function applySkillProfile(skill, baseConfig = {}) {
   const profile = getProjectProfile();
   const overlay = getSkillProfile(skill, profile.medium);
+  const lifecycle = lifecycleSkillOverlay(skill, profile.lifecycleFocus);
+  const axisWeights = { ...(baseConfig.axisWeights || {}), ...overlay.axisWeightDeltas };
+  for (const [axis, weight] of Object.entries(lifecycle.axisWeightDeltas)) axisWeights[axis] = Math.max(axisWeights[axis] || 0, weight);
   return {
     ...baseConfig,
     profile,
     overlay,
-    signals: [...(baseConfig.signals || []), ...overlay.extraSignals],
-    successBar: [...(baseConfig.successBar || []), ...overlay.successBarAdditions],
-    axisWeights: { ...(baseConfig.axisWeights || {}), ...overlay.axisWeightDeltas },
+    signals: [...(baseConfig.signals || []), ...overlay.extraSignals, ...lifecycle.extraSignals],
+    successBar: [...(baseConfig.successBar || []), ...overlay.successBarAdditions, ...lifecycle.successBarAdditions],
+    axisWeights,
     preHooks: [...(baseConfig.preHooks || []), ...overlay.preHooks],
     postHooks: [...(baseConfig.postHooks || []), ...overlay.postHooks],
-    promptOverlay: [baseConfig.promptOverlay, overlay.promptOverlay].filter(Boolean).join(' '),
+    lifecycleFocus: profile.lifecycleFocus,
+    promptOverlay: [baseConfig.promptOverlay, overlay.promptOverlay, lifecycle.promptOverlay].filter(Boolean).join(' '),
   };
 }
 
@@ -49,5 +54,5 @@ const __isMain = (() => {
 if (__isMain) {
   const skill = process.argv[2] || 'start';
   const cfg = applySkillProfile(skill);
-  console.log(JSON.stringify({ skill, medium: cfg.profile.medium, signals: cfg.signals, successBar: cfg.successBar, axisWeights: cfg.axisWeights, promptOverlay: cfg.promptOverlay }, null, 2));
+  console.log(JSON.stringify({ skill, medium: cfg.profile.medium, lifecycleFocus: cfg.lifecycleFocus, signals: cfg.signals, successBar: cfg.successBar, axisWeights: cfg.axisWeights, promptOverlay: cfg.promptOverlay }, null, 2));
 }

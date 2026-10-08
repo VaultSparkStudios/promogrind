@@ -42,11 +42,11 @@ export default function AgeGate({ onVerified }) {
             <h2 style={{ fontSize: 18, fontWeight: 700, color: "#e2e8f0", marginBottom: 12 }}>
               Age Restriction
             </h2>
-            <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.7, marginBottom: 16 }}>
+            <p style={{ fontSize: 14, color: "#94a3b8", lineHeight: 1.7, marginBottom: 16 }}>
               You must be 21 or older to use PromoGrind (18+ in jurisdictions where permitted).
               Sportsbook promotions are only available to adults of legal gambling age.
             </p>
-            <p style={{ fontSize: 12, color: "#64748b", lineHeight: 1.6 }}>
+            <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>
               If gambling is causing problems for you or someone you know, help is available 24/7:{" "}
               <a href="tel:1-800-426-2537" style={{ color: "#ef4444", textDecoration: "none", fontWeight: 600 }}>
                 1-800-GAMBLER
@@ -60,7 +60,7 @@ export default function AgeGate({ onVerified }) {
               background: "#4ade8015",
               border: "1px solid #4ade8030",
               borderRadius: 6, padding: "5px 12px",
-              fontSize: 10, color: "#4ade80",
+              fontSize: 12, color: "#4ade80",
               letterSpacing: "1.5px", textTransform: "uppercase",
               fontWeight: 600, marginBottom: 20,
             }}>
@@ -82,7 +82,7 @@ export default function AgeGate({ onVerified }) {
               PROMOGRIND
             </h1>
 
-            <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.7, marginBottom: 24 }}>
+            <p style={{ fontSize: 14, color: "#94a3b8", lineHeight: 1.7, marginBottom: 24 }}>
               PromoGrind is a free sportsbook promo calculator for adults.
               You must be{" "}
               <strong style={{ color: "#e2e8f0" }}>21 or older</strong>{" "}
@@ -110,14 +110,14 @@ export default function AgeGate({ onVerified }) {
                 padding: "10px 20px",
                 background: "transparent", color: "#64748b",
                 border: "1px solid #1e293b", borderRadius: 8,
-                fontSize: 12, cursor: "pointer",
+                fontSize: 14, cursor: "pointer",
                 fontFamily: "inherit",
               }}
             >
               I am under 21 — Exit
             </button>
 
-            <p style={{ marginTop: 16, fontSize: 11, color: "#475569", lineHeight: 1.6 }}>
+            <p style={{ marginTop: 16, fontSize: 12, color: "#475569", lineHeight: 1.6 }}>
               By entering you confirm you are of legal gambling age in your jurisdiction.
               Sports betting is only legal in states where it is authorized.{" "}
               <a href="/responsible-gambling/" style={{ color: "#64748b", textDecoration: "none" }}>

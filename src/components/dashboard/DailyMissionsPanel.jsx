@@ -46,10 +46,10 @@ export default function DailyMissionsPanel({ navigate }) {
     <div style={{ ...S.card, marginBottom: 12, padding: '14px 18px', border: `1px solid ${season.score >= 85 ? K.gn + '40' : K.bd}` }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
         <div>
-          <div style={{ fontFamily: fontD, fontSize: 11, fontWeight: 700, color: K.ac, textTransform: 'uppercase', letterSpacing: '2px' }}>
-            Operator Season
+          <div style={{ fontFamily: fontD, fontSize: 12, fontWeight: 700, color: K.ac, textTransform: 'uppercase', letterSpacing: '2px' }}>
+            Review progress
           </div>
-          <div style={{ fontSize: 10, color: K.mt, marginTop: 2 }}>Day {season.day}/{season.lengthDays} · {season.band}</div>
+          <div style={{ fontSize: 12, color: K.mt, marginTop: 2 }}>Day {season.day}/{season.lengthDays} · {season.band}</div>
         </div>
         <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 800, color: season.score >= 85 ? K.gn : K.yl }}>
           {season.score}
@@ -71,7 +71,7 @@ export default function DailyMissionsPanel({ navigate }) {
           />
         ))}
       </div>
-      <div style={{ fontSize: 10, color: K.mt, lineHeight: 1.5 }}>{season.next}</div>
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.5 }}>{season.next}</div>
     </div>
   );
 
@@ -82,8 +82,8 @@ export default function DailyMissionsPanel({ navigate }) {
       <div style={{ ...S.card, border: `1px solid ${K.gn}40`, background: `${K.gn}06`, marginBottom: 12, padding: '14px 18px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: K.gn, marginBottom: 2 }}>Daily review complete</div>
-            <div style={{ fontSize: 10, color: K.mt }}>Three actions verified from recorded evidence. Return when there is another decision to review.</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: K.gn, marginBottom: 2 }}>Daily review complete</div>
+            <div style={{ fontSize: 12, color: K.mt }}>Three actions verified from recorded evidence. Return when there is another decision to review.</div>
           </div>
           <div style={{ fontFamily: fontD, fontSize: 22, fontWeight: 800, color: K.gn }}>3/3</div>
         </div>
@@ -98,11 +98,11 @@ export default function DailyMissionsPanel({ navigate }) {
     <div style={{ ...S.card, marginBottom: 12, padding: '14px 18px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontFamily: fontD, fontSize: 11, fontWeight: 700, color: K.ac, textTransform: 'uppercase', letterSpacing: '2px' }}>Daily Review</span>
-          <span style={{ fontSize: 10, color: K.mt }}>{doneCount}/3 evidenced</span>
+          <span style={{ fontFamily: fontD, fontSize: 12, fontWeight: 700, color: K.ac, textTransform: 'uppercase', letterSpacing: '2px' }}>Daily Review</span>
+          <span style={{ fontSize: 12, color: K.mt }}>{doneCount}/3 recorded</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 10, color: K.yl, fontWeight: 600 }}>{Math.round((doneCount / 3) * 100)}% reviewed</span>
+          <span style={{ fontSize: 12, color: K.yl, fontWeight: 600 }}>{Math.round((doneCount / 3) * 100)}% reviewed</span>
           <div style={{ width: 48, height: 4, background: K.s3, borderRadius: 2, overflow: 'hidden' }}>
             <div style={{ height: 4, background: K.yl, borderRadius: 2, width: `${(doneCount / 3) * 100}%`, transition: 'width 0.5s ease' }} />
           </div>
@@ -131,15 +131,15 @@ export default function DailyMissionsPanel({ navigate }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all 0.25s',
             }}>
-              {m.completed && <span style={{ fontSize: 10, color: K.ink, fontWeight: 700 }}>✓</span>}
+              {m.completed && <span style={{ fontSize: 12, color: K.ink, fontWeight: 700 }}>✓</span>}
             </span>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: m.completed ? K.mt : K.tx, textDecoration: m.completed ? 'line-through' : 'none' }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: m.completed ? K.mt : K.tx, textDecoration: m.completed ? 'line-through' : 'none' }}>
                 {m.label}
               </div>
-              <div style={{ fontSize: 10, color: K.mt, marginTop: 1 }}>{m.desc}</div>
+              <div style={{ fontSize: 12, color: K.mt, marginTop: 1 }}>{m.desc}</div>
             </div>
-            <span style={{ fontSize: 10, fontWeight: 700, color: m.completed ? K.gn : K.mt, whiteSpace: 'nowrap' }}>{m.completed ? 'Evidenced' : 'Open'}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: m.completed ? K.gn : K.mt, whiteSpace: 'nowrap' }}>{m.completed ? 'Evidenced' : 'Open'}</span>
           </button>
         ))}
       </div>

@@ -61,13 +61,14 @@ beforeEach(() => {
 });
 
 describe("TodayDashboardPanel", () => {
-  it("renders with a real snapshot without crashing and settles async telemetry", async () => {
+  it("shows personal decision tools without internal growth telemetry", async () => {
     const snapshot = getDashboardSnapshot(APP_DATA, PROMO_SCHED, new Date("2026-07-01T12:00:00Z"), "1000");
     const { container } = wrap(
       <TodayDashboardPanel snapshot={snapshot} navigate={vi.fn()} appData={APP_DATA} />,
     );
     expect(container.textContent.length).toBeGreaterThan(100);
-    await waitFor(() => expect(container.textContent).toMatch(/AI telemetry unavailable/i));
+    expect(container.textContent).toMatch(/workflow/i);
+    expect(container.textContent).not.toMatch(/Observability|AI telemetry unavailable|users are activating|growth work/i);
   });
 });
 

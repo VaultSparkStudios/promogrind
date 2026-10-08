@@ -50,29 +50,29 @@ const BetTracker = () => {
   const statusColor = {open:K.yl,won:K.gn,lost:K.rd,void:K.mt};
   return (<div style={S.card}><Tl t="Pending Bet Tracker" badge="OPEN BETS" bc={K.yl}/>
     <div style={{display:"flex",gap:20,marginBottom:16,flexWrap:"wrap",alignItems:"flex-end"}}>
-      <div><div style={{fontSize:10,color:K.mt}}>OPEN BETS</div><div style={S.big(K.yl)}>{open.length}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>AT RISK</div><div style={S.big(K.rd)}>${f(atRisk)}</div></div>
-      <div><div style={{fontSize:10,color:K.mt}}>TO WIN</div><div style={S.big(K.gn)}>${f(potentialWin)}</div></div>
-      {positiveOutcomeShare!==null&&<div><div style={{fontSize:10,color:K.mt}}>POSITIVE OUTCOME SHARE</div><div style={S.big(K.ac,{fontSize:22})}>{f(positiveOutcomeShare,1)}%</div><div style={{fontSize:9,color:K.mt}}>{settled.length} settled · descriptive, not predictive</div></div>}
+      <div><div style={{fontSize:12,color:K.mt}}>OPEN BETS</div><div style={S.big(K.yl)}>{open.length}</div></div>
+      <div><div style={{fontSize:12,color:K.mt}}>AT RISK</div><div style={S.big(K.rd)}>${f(atRisk)}</div></div>
+      <div><div style={{fontSize:12,color:K.mt}}>TO WIN</div><div style={S.big(K.gn)}>${f(potentialWin)}</div></div>
+      {positiveOutcomeShare!==null&&<div><div style={{fontSize:12,color:K.mt}}>POSITIVE OUTCOME SHARE</div><div style={S.big(K.ac,{fontSize:22})}>{f(positiveOutcomeShare,1)}%</div><div style={{fontSize:12,color:K.mt}}>{settled.length} settled · descriptive, not predictive</div></div>}
       {open.length>0&&(()=>{
         const ev=open.reduce((s,b)=>{
           const d=toD(b.odds); if(d<=1) return s;
           const p=1/d;
           return s+(parseFloat(b.toWin)||0)*p-(parseFloat(b.stake)||0)*(1-p);
         },0);
-        return <div><div style={{fontSize:10,color:K.mt}}>PORTFOLIO EV</div><div style={{...S.big(ev>=0?K.gn:K.rd),fontSize:22}}>{ev>=0?"+":""}${f(ev)}</div><div style={{fontSize:9,color:K.mt}}>book-implied</div></div>;
+        return <div><div style={{fontSize:12,color:K.mt}}>PORTFOLIO EV</div><div style={{...S.big(ev>=0?K.gn:K.rd),fontSize:22}}>{ev>=0?"+":""}${f(ev)}</div><div style={{fontSize:12,color:K.mt}}>book-implied</div></div>;
       })()}
-      <button onClick={()=>setShowPasteSlip(s=>!s)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.pasteSlipButton}</button>
-      <button onClick={()=>setShowImport(true)} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.importCsvButton}</button>
-      {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.exportCsvButton}</button>}
+      <button onClick={()=>setShowPasteSlip(s=>!s)} style={{marginLeft:"auto",padding:"7px 14px",background:"transparent",border:`1px solid ${K.pp}`,borderRadius:6,color:K.pp,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.pasteSlipButton}</button>
+      <button onClick={()=>setShowImport(true)} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.ac}`,borderRadius:6,color:K.ac,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.importCsvButton}</button>
+      {bets.length>0&&<button onClick={exportBets} style={{padding:"7px 14px",background:"transparent",border:`1px solid ${K.bd2}`,borderRadius:6,color:K.dm,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>{BET_TRACKER_UI.exportCsvButton}</button>}
       {showPasteSlip&&<div style={{width:"100%",marginTop:8,padding:"12px 14px",background:K.s2,borderRadius:6,border:`1px solid ${K.bd}`}}>
-        <div style={{fontSize:12,fontWeight:700,color:K.pp,marginBottom:8}}>Paste Bet Slip Text</div>
-        <textarea aria-label="Bet slip text" style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:11}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder={BET_TRACKER_UI.slipPlaceholder}/>
+        <div style={{fontSize:14,fontWeight:700,color:K.pp,marginBottom:8}}>Paste Bet Slip Text</div>
+        <textarea aria-label="Bet slip text" style={{...S.input,height:80,resize:"vertical",marginBottom:8,fontSize:12}} value={slipText} onChange={e=>setSlipText(e.target.value)} placeholder={BET_TRACKER_UI.slipPlaceholder}/>
         <div style={{display:"flex",gap:8}}>
-          <button onClick={()=>{const p=parseBetSlip(slipText);setSlipParsed(p);}} style={{padding:"6px 14px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Parse</button>
-          {slipParsed&&<button onClick={()=>{setForm(prev=>({...prev,...slipParsed,toWin:slipParsed.stake&&slipParsed.odds?f((parseFloat(slipParsed.stake||0))*(toD(slipParsed.odds||"+100")-1)):""}));setShowPasteSlip(false);setSlipParsed(null);setSlipText("");}} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:11}}>Use Parsed Values</button>}
+          <button onClick={()=>{const p=parseBetSlip(slipText);setSlipParsed(p);}} style={{padding:"6px 14px",background:K.pp,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12}}>Parse</button>
+          {slipParsed&&<button onClick={()=>{setForm(prev=>({...prev,...slipParsed,toWin:slipParsed.stake&&slipParsed.odds?f((parseFloat(slipParsed.stake||0))*(toD(slipParsed.odds||"+100")-1)):""}));setShowPasteSlip(false);setSlipParsed(null);setSlipText("");}} style={{padding:"6px 14px",background:K.gn,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12}}>Use Parsed Values</button>}
         </div>
-        {slipParsed&&<div style={{fontSize:10,color:K.gn,marginTop:6}}>Parsed: {Object.entries(slipParsed).map(([k,v])=>`${k}=${v}`).join(", ")}</div>}
+        {slipParsed&&<div style={{fontSize:12,color:K.gn,marginTop:6}}>Parsed: {Object.entries(slipParsed).map(([k,v])=>`${k}=${v}`).join(", ")}</div>}
       </div>}
     </div>
     <div style={{...S.row,alignItems:"flex-end"}}>
@@ -85,16 +85,16 @@ const BetTracker = () => {
       <In l="Odds" v={form.odds} set={v=>{setForm(f=>({...f,odds:v,toWin:calcToWin(v,f.stake)}));}} ph="+110"/>
       <In l="Stake" v={form.stake} set={v=>{setForm(f=>({...f,stake:v,toWin:calcToWin(f.odds,v)}));}} pre="$" ph="100"/>
       <In l="To Win (auto)" v={form.toWin} set={v=>setForm(f=>({...f,toWin:v}))} pre="$" ph="auto"/>
-      <div style={{...S.col,minWidth:80,paddingTop:18}}><button type="button" onClick={add} style={{padding:"8px 16px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:12,width:"100%"}}>+ ADD</button></div>
+      <div style={{...S.col,minWidth:80,paddingTop:18}}><button type="button" onClick={add} style={{padding:"8px 16px",background:K.yl,border:"none",borderRadius:6,color: K.ink,fontWeight:700,cursor:"pointer",fontFamily:font,fontSize:14,width:"100%"}}>+ ADD</button></div>
     </div>
     {bets.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:K.mt}}>
       <div style={{fontSize:18,fontWeight:700,letterSpacing:"1px",marginBottom:8,color:K.mt}}>{BET_TRACKER_UI.noBetsGlyph}</div>
-      <div style={{fontSize:13,fontWeight:600,color:K.dm,marginBottom:4}}>{BET_TRACKER_UI.noBetsTitle}</div>
-      <div style={{fontSize:11,color:K.mt}}>Add your first pending bet above to track your open action.</div>
+      <div style={{fontSize:14,fontWeight:600,color:K.dm,marginBottom:4}}>{BET_TRACKER_UI.noBetsTitle}</div>
+      <div style={{fontSize:12,color:K.mt}}>Add your first pending bet above to track your open action.</div>
     </div>}
     {bets.length>0&&<div style={{overflowX:"auto",marginTop:12}}>
-      <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-        <thead><tr>{["Date","Book","Event","Type","Odds","Stake","To Win","Status","Grade",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:10,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+        <thead><tr>{["Date","Book","Event","Type","Odds","Stake","To Win","Status","Grade",""].map(h=><th key={h} style={{textAlign:"left",padding:"6px 8px",borderBottom:`1px solid ${K.bd2}`,color:K.mt,fontSize:12,textTransform:"uppercase"}}>{h}</th>)}</tr></thead>
         <tbody>{bets.map(e=>{const gr=betGrade(e);return(
           <tr key={e.id} style={{opacity:e.status==="void"?0.4:1}}>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{e.date}</td>
@@ -105,12 +105,12 @@ const BetTracker = () => {
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>${e.stake}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`,color:K.gn,fontWeight:600}}>{e.toWin?`$${e.toWin}`:"-"}</td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>
-              <select aria-label={`Status for ${e.book} ${e.type}`} value={e.status} onChange={ev=>setStatus(e.id,ev.target.value)} style={{...S.input,width:80,padding:"3px 6px",fontSize:10,color:statusColor[e.status]||K.tx}}>
+              <select aria-label={`Status for ${e.book} ${e.type}`} value={e.status} onChange={ev=>setStatus(e.id,ev.target.value)} style={{...S.input,width:80,padding:"3px 6px",fontSize:12,color:statusColor[e.status]||K.tx}}>
                 {["open","won","lost","void"].map(s=><option key={s} value={s}>{s.toUpperCase()}</option>)}
               </select>
             </td>
             <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}>{gr?<span style={S.tag(gr.c)}>{gr.g}</span>:<span style={{color:K.mt}}>-</span>}</td>
-            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><button type="button" aria-label={`Delete ${e.book} ${e.type} bet`} onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:10,background:"transparent",border:0,padding:4}}>x</button></td>
+            <td style={{padding:"8px",borderBottom:`1px solid ${K.bd}`}}><button type="button" aria-label={`Delete ${e.book} ${e.type} bet`} onClick={()=>del(e.id)} style={{cursor:"pointer",color:K.rd,fontSize:12,background:"transparent",border:0,padding:4}}>x</button></td>
           </tr>
         );})}</tbody>
       </table>

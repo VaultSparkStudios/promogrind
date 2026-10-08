@@ -98,3 +98,4 @@ function resolveSessionFromStatus(root) {
   } catch { /* absent or malformed — the session stays unknown */ }
   return null;
 }
+

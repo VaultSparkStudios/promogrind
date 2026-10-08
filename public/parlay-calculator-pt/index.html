@@ -64,56 +64,59 @@
   </script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'JetBrains Mono','SF Mono',monospace;background:#0a0e17;color:#e2e8f0;min-height:100vh}
-    .hero{padding:60px 20px 40px;text-align:center;background:linear-gradient(135deg,#0f1520,#0a0e17);border-bottom:1px solid #1e293b}
-    .badge{display:inline-block;padding:4px 14px;background:#4ade8015;border:1px solid #4ade8030;border-radius:50px;font-size:10px;color:#4ade80;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
-    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;color:#fff;margin-bottom:12px}
-    h1 span{color:#4ade80}
-    .sub{font-size:14px;color:#94a3b8;max-width:520px;margin:0 auto 32px;line-height:1.7}
-    .cta-btn{display:inline-block;padding:16px 32px;background:#4ade80;color:#0a0e17;font-family:inherit;font-size:15px;font-weight:700;border-radius:8px;text-decoration:none;transition:opacity 0.15s}
+    body{font-family:'JetBrains Mono','SF Mono',monospace;background:var(--pg-page-bg);color:var(--pg-page-text);min-height:100vh}
+    .hero{padding:60px 20px 40px;text-align:center;background:linear-gradient(135deg,var(--pg-page-panel),var(--pg-page-bg));border-bottom:1px solid var(--pg-page-border)}
+    .badge{display:inline-block;padding:4px 14px;background:color-mix(in srgb, var(--pg-page-accent) 8%, transparent);border:1px solid color-mix(in srgb, var(--pg-page-accent) 19%, transparent);border-radius:50px;font-size:14px;color:var(--pg-page-accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;color:var(--pg-page-text);margin-bottom:12px}
+    h1 span{color:var(--pg-page-accent)}
+    .sub{font-size:14px;color:var(--pg-page-muted);max-width:520px;margin:0 auto 32px;line-height:1.7}
+    .cta-btn{display:inline-block;padding:16px 32px;background:var(--pg-page-accent);color:var(--pg-page-bg);font-family:inherit;font-size:15px;font-weight:700;border-radius:8px;text-decoration:none;transition:opacity 0.15s}
     .cta-btn:hover{opacity:0.9}
-    .cta-note{font-size:11px;color:#475569;margin-top:10px}
+    .cta-note{font-size:14px;color:var(--pg-page-muted);margin-top:10px}
     .content{max-width:720px;margin:0 auto;padding:60px 20px}
     .section{margin-bottom:48px}
-    h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#4ade80;margin-bottom:16px}
-    h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#e2e8f0;margin:20px 0 8px}
-    p{color:#94a3b8;font-size:13px;line-height:1.8;margin-bottom:12px}
-    .box{background:#0f1520;border:1px solid #1e293b;border-radius:10px;padding:24px;margin:20px 0}
-    .box-title{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+    h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--pg-page-accent);margin-bottom:16px}
+    h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--pg-page-text);margin:20px 0 8px}
+    p{color:var(--pg-page-muted);font-size:14px;line-height:1.8;margin-bottom:12px}
+    .box{background:var(--pg-page-panel);border:1px solid var(--pg-page-border);border-radius:10px;padding:24px;margin:20px 0}
+    .box-title{font-size:14px;color:var(--pg-page-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
     .step{display:flex;gap:16px;margin-bottom:16px;align-items:flex-start}
-    .step-n{width:28px;height:28px;background:#4ade8020;border:1px solid #4ade8040;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#4ade80;flex-shrink:0}
-    .step-text{font-size:13px;color:#94a3b8;line-height:1.6}
-    .step-text strong{color:#e2e8f0}
-    .example{background:#0f2a1e;border:1px solid #4ade8025;border-radius:8px;padding:20px;margin:20px 0}
-    .example-title{font-size:10px;color:#4ade80;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
-    .calc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:12px}
+    .step-n{width:28px;height:28px;background:color-mix(in srgb, var(--pg-page-accent) 13%, transparent);border:1px solid color-mix(in srgb, var(--pg-page-accent) 25%, transparent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--pg-page-accent);flex-shrink:0}
+    .step-text{font-size:14px;color:var(--pg-page-muted);line-height:1.6}
+    .step-text strong{color:var(--pg-page-text)}
+    .example{background:var(--pg-page-panel);border:1px solid color-mix(in srgb, var(--pg-page-accent) 15%, transparent);border-radius:8px;padding:20px;margin:20px 0}
+    .example-title{font-size:14px;color:var(--pg-page-accent);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+    .calc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--pg-page-border);font-size:14px}
     .calc-row:last-child{border-bottom:none}
-    .calc-label{color:#64748b}
-    .calc-val{color:#4ade80;font-weight:700}
+    .calc-label{color:var(--pg-page-muted)}
+    .calc-val{color:var(--pg-page-accent);font-weight:700}
     .faq{margin-bottom:20px}
-    .faq-q{font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:6px}
-    .faq-a{font-size:13px;color:#94a3b8;line-height:1.7}
+    .faq-q{font-size:14px;font-weight:600;color:var(--pg-page-text);margin-bottom:6px}
+    .faq-a{font-size:14px;color:var(--pg-page-muted);line-height:1.7}
     .books-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
-    .book-card{background:#161d2a;border:1px solid #1e293b;border-radius:8px;padding:14px;text-align:center}
-    .book-name{font-size:12px;font-weight:700;color:#60a5fa;margin-bottom:4px}
-    .book-promo{font-size:10px;color:#64748b;line-height:1.4}
-    footer{padding:40px 20px;text-align:center;border-top:1px solid #1e293b}
-    footer a{color:#60a5fa;text-decoration:none;font-size:13px}
-    footer p{color:#475569;font-size:11px;margin-top:8px}
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .book-card{background:var(--pg-page-panel);border:1px solid var(--pg-page-border);border-radius:8px;padding:14px;text-align:center}
+    .book-name{font-size:14px;font-weight:700;color:var(--pg-page-blue);margin-bottom:4px}
+    .book-promo{font-size:14px;color:var(--pg-page-muted);line-height:1.4}
+    footer{padding:40px 20px;text-align:center;border-top:1px solid var(--pg-page-border)}
+    footer a{color:var(--pg-page-blue);text-decoration:none;font-size:14px}
+    footer p{color:var(--pg-page-muted);font-size:14px;margin-top:8px}
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
 
 <div class="hero">
   <div class="badge">Ferramenta Gratuita — Brasil 🇧🇷</div>
   <h1>Calculadora de <span>Parlay</span></h1>
-    <div class="trust"><strong>Free PromoGrind account</strong> gives you access to PromoGrind and sync across devices. Educational math tool only. Must be 21+ where legal. Winnings may be taxable. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</div>
+    <div class="trust"><strong>Conta gratuita do PromoGrind</strong> permite salvar seus dados entre dispositivos. Ferramenta de cálculo educacional. Disponível apenas para adultos elegíveis onde permitido. Os ganhos podem estar sujeitos a impostos. Procure apoio local se o jogo estiver causando problemas.</div>
   <p class="sub">Calcule o retorno potencial de apostas combinadas (parlays). Simule diferentes combinacoes e descubra o pagamento exato — sem cadastro, sem assinatura.</p>
-  <a href="https://promogrind.bet/#/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt" class="cta-btn">Montar Parlay Gratis →</a>
-  <p class="cta-note">100% gratuito · 51 ferramentas · Sem assinatura</p>
+  <a href="https://promogrind.bet/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt" class="cta-btn">Montar Parlay Gratis →</a>
+  <p class="cta-note">100% gratuito · 29 calculadoras · Sem assinatura</p>
 </div>
 
 <div class="content">
@@ -133,11 +136,11 @@
       <div class="step"><div class="step-n">2</div><div class="step-text"><strong>Insira o valor da aposta</strong> em reais (R$)</div></div>
       <div class="step"><div class="step-n">3</div><div class="step-text"><strong>Veja o retorno potencial</strong> calculado automaticamente</div></div>
       <div class="step"><div class="step-n">4</div><div class="step-text"><strong>Compare probabilidades</strong> — entenda o risco real do parlay</div></div>
-      <div class="step"><div class="step-n">5</div><div class="step-text"><strong>Ajuste as pernas</strong> ate encontrar a combinacao ideal</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-text"><strong>Revise as hipóteses</strong> e decida se deseja prosseguir ou omitir a aposta</div></div>
     </div>
 
     <div class="example">
-      <div class="example-title">Exemplo Real — Parlay Brasileirao 3 Pernas</div>
+      <div class="example-title">Exemplo hipotético — três seleções</div>
       <div class="calc-row"><span class="calc-label">Perna 1</span><span class="calc-val">Flamengo ML @ 1.80</span></div>
       <div class="calc-row"><span class="calc-label">Perna 2</span><span class="calc-val">Palmeiras ML @ 1.65</span></div>
       <div class="calc-row"><span class="calc-label">Perna 3</span><span class="calc-val">Corinthians +0.5 @ 1.50</span></div>
@@ -148,19 +151,7 @@
     </div>
   </div>
 
-  <div class="section">
-    <h2>Casas de Apostas com Parlays no Brasil</h2>
-    <p>O mercado de apostas esportivas no Brasil foi regulamentado pela Lei 14.790/2023. Principais casas que oferecem parlays:</p>
-    <div class="books-grid">
-      <div class="book-card"><div class="book-name">Betano</div><div class="book-promo">Parlay boost ate 50% no Brasileirao</div></div>
-      <div class="book-card"><div class="book-name">bet365</div><div class="book-promo">Bet Builder para parlays personalizados</div></div>
-      <div class="book-card"><div class="book-name">Sportingbet</div><div class="book-promo">Combo boost semanal</div></div>
-      <div class="book-card"><div class="book-name">Betfair</div><div class="book-promo">Same Game Multi disponivel</div></div>
-      <div class="book-card"><div class="book-name">Brazino777</div><div class="book-promo">Bonus em parlays de 4+ pernas</div></div>
-      <div class="book-card"><div class="book-name">1xBet</div><div class="book-promo">Acumulador do dia com boost</div></div>
-    </div>
-  </div>
-
+  <div class="section"><h2>Regras e disponibilidade</h2><p>Confira a autorização e os termos atuais da operadora. Esta página não confirma ofertas, bônus ou limites disponíveis. Uma aposta combinada pode perder todo o valor apostado.</p></div>
   <div class="section">
     <h2>Perguntas Frequentes</h2>
     <div class="faq">
@@ -177,28 +168,24 @@
     </div>
     <div class="faq">
       <div class="faq-q">Quantas pernas posso colocar em um parlay?</div>
-      <div class="faq-a">A maioria das casas de apostas brasileiras permite parlays de ate 10-20 pernas. Porem, a probabilidade de acertar diminui drasticamente com cada perna adicionada. Recomendamos parlays de 2-4 pernas para equilibrar risco e retorno.</div>
+      <div class="faq-a">A maioria das casas de apostas brasileiras permite parlays de ate 10-20 pernas. Porem, a probabilidade de acertar diminui drasticamente com cada perna adicionada. Mais seleções aumentam as condições necessárias para vencer. Perdas continuam possíveis com qualquer quantidade de seleções.</div>
     </div>
   </div>
 
   <div style="text-align:center;padding:40px 0">
-    <a href="https://promogrind.bet/#/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt" class="cta-btn">Abrir Calculadora de Parlay Gratuita →</a>
-    <p class="cta-note" style="margin-top:10px">51 ferramentas gratuitas · Sem cadastro</p>
+    <a href="https://promogrind.bet/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt" class="cta-btn">Abrir Calculadora de Parlay Gratuita →</a>
+    <p class="cta-note" style="margin-top:10px">29 calculadoras gratuitas · Sem cadastro</p>
   </div>
 
-    <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <p class="footer-note">Use as calculadoras gratuitas sem cadastro. Entre com uma conta gratuita do PromoGrind para salvar seu espaço de trabalho entre dispositivos. Recursos marcados como em breve estão indisponíveis.</p>
   </div>
 
 <footer>
   <a href="https://promogrind.bet/">← PromoGrind — Ferramentas Gratuitas para Apostas</a>
   <p>PromoGrind · Ferramenta educacional · Nao e conselho de apostas · 18+ · Jogue com responsabilidade</p>
-<p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p>
+<p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p>
 </footer>
 
-<script>
-  setTimeout(() => {
-    window.location.href = 'https://promogrind.bet/#/parlay-builder?utm_source=seo&utm_medium=organic&utm_content=parlay-calculator-pt';
-  }, 8000);
-</script>
+
 </body>
 </html>

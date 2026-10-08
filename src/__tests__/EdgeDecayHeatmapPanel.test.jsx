@@ -19,10 +19,16 @@ describe("buildHeatmapPromoRows", () => {
     expect(rows[0].promoType).toBeTruthy();
   });
 
-  it("falls back to A-grade schedule lanes when no books are active", () => {
+  it("does not invent current lanes from an empty workspace", () => {
     const rows = buildHeatmapPromoRows({});
-    expect(rows.length).toBeGreaterThan(0);
-    expect(rows.every((r) => r.expires === null)).toBe(true);
+    expect(rows).toEqual([]);
+  });
+
+  it.each([null, "", "   ", "not-a-date", 0, false])("does not invent an expiry from %j", (expiry) => {
+    expect(buildHeatmapPromoRows({
+      bookStatus: { DraftKings: "active" },
+      bookExpiry: { DraftKings: expiry },
+    })).toEqual([]);
   });
 });
 
@@ -51,11 +57,10 @@ describe("EdgeDecayHeatmapPanel", () => {
     expect(screen.getByText(/Mark books active in the Sportsbooks tracker/i)).toBeTruthy();
   });
 
-  it("decays lanes without tracker expiry on the default daily window, not critical", () => {
+  it("does not invent deadlines when an active book has no entered expiry", () => {
     render(<EdgeDecayHeatmapPanel appData={{ bookStatus: { DraftKings: "active" } }} now={NOW} />);
-    // Default daily curve → warm tone with a 24h horizon (lib design, S92).
-    const warmCells = screen.getAllByLabelText(/Warm, \d+% edge remaining, 24h left/);
-    expect(warmCells.length).toBeGreaterThan(0);
+    expect(screen.queryByRole('list', { name: /decay grid by sportsbook/i })).toBeNull();
+    expect(screen.getByText(/enter an expiry date/i)).toBeTruthy();
     expect(screen.queryByLabelText(/Critical/)).toBeNull();
   });
 });

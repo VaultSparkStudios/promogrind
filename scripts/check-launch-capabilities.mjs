@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getSecret, redact } from './lib/secrets.mjs';
 import { buildCapabilityReceipt, capabilityResult } from './lib/launch-capabilities.mjs';
+import { probeSupabaseProject } from './lib/supabase-project-probe.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, '.cache', 'launch-capabilities.json');
 const args = new Set(process.argv.slice(2));
@@ -21,8 +22,10 @@ async function brevo() {
   try { const headers = { 'api-key': key, accept: 'application/json' }; const accountRes = await timeoutFetch('https://api.brevo.com/v3/account', { headers }); if (!accountRes.ok) return capabilityResult('brevoDomain', { state: accountRes.status === 401 ? 'present' : 'authenticated', httpStatus: accountRes.status, reason: 'Credential did not authorize the account probe.' }); const domainRes = await timeoutFetch('https://api.brevo.com/v3/senders/domains/promogrind.bet', { headers }); const body = await domainRes.json().catch(() => ({})); const authenticated = body.authenticated === true || body.verified === true || body.dkim === true; return capabilityResult('brevoDomain', { state: domainRes.ok ? 'authorized' : 'authenticated', targetMatch: domainRes.ok, httpStatus: domainRes.status, reason: domainRes.ok ? (authenticated ? 'Target sender domain is authenticated.' : 'Target domain is visible, but authentication is incomplete.') : 'Credential works, but the target sender domain is not readable.' }); } catch (error) { return capabilityResult('brevoDomain', { state: 'present', reason: `Probe unavailable: ${error.name || 'network error'}.` }); }
 }
 async function supabase() {
-  const url = getSecret('SUPABASE_URL', 'supabase.admin'); const key = getSecret('SUPABASE_SERVICE_ROLE_KEY', 'supabase.admin'); if (!url || !key) return capabilityResult('supabaseProject', { state: 'missing', reason: 'Gateway project URL or service credential is missing.' }); const targetMatch = /fjnpzjjyhnpmunfoycrp\.supabase\.co/i.test(url); if (args.has('--offline')) return capabilityResult('supabaseProject', { state: 'present', targetMatch, reason: targetMatch ? 'Target-bound credentials are present; live authorization not probed.' : 'Generic credentials are present but target a different Supabase project.' }); if (!targetMatch) return capabilityResult('supabaseProject', { state: 'present', targetMatch: false, reason: 'Generic Supabase credentials target a different project.' });
-  try { const res = await timeoutFetch(`${url.replace(/\/$/, '')}/rest/v1/`, { headers: { apikey: key, Authorization: `Bearer ${key}` } }); return capabilityResult('supabaseProject', { state: res.ok ? 'authorized' : res.status === 401 || res.status === 403 ? 'present' : 'authenticated', targetMatch: true, httpStatus: res.status, reason: res.ok ? 'Target project REST surface authorized the service credential.' : 'Target-bound credential did not authorize the project REST surface.' }); } catch (error) { return capabilityResult('supabaseProject', { state: 'present', targetMatch: true, reason: `Probe unavailable: ${error.name || 'network error'}.` }); }
+  try {
+    const result = await probeSupabaseProject({ url: getSecret('SUPABASE_URL', 'supabase.admin'), serviceKey: getSecret('SUPABASE_SERVICE_ROLE_KEY', 'supabase.admin'), managementToken: getSecret('SUPABASE_ACCESS_TOKEN', 'supabase.management'), offline: args.has('--offline'), fetchImpl: timeoutFetch });
+    return capabilityResult('supabaseProject', result);
+  } catch (error) { return capabilityResult('supabaseProject', { state: 'present', targetMatch: false, reason: `Probe unavailable: ${error.name || 'network error'}.` }); }
 }
 async function stripe() {
   const key = getSecret('STRIPE_SECRET_KEY', 'stripe.checkout'); if (!key) return capabilityResult('stripeAccount', { state: 'missing', reason: 'No gateway credential is present.' }); if (args.has('--offline')) return capabilityResult('stripeAccount', { state: 'present', reason: 'Credential present; live authorization not probed in offline mode.' });

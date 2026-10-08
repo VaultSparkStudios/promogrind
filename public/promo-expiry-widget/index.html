@@ -8,36 +8,39 @@
   <link rel="canonical" href="https://promogrind.bet/promo-expiry-widget/" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: transparent; color: #e2e8f0; }
-    .widget { width: min(100%, 360px); min-height: 220px; margin: 0 auto; padding: 18px; border-radius: 18px; background: linear-gradient(180deg, #0f1724, #09101a); border: 1px solid #1e293b; box-shadow: 0 8px 30px rgba(0,0,0,0.35); }
-    .eyebrow { color: #4ade80; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: transparent; color: var(--pg-page-text); }
+    .widget { width: min(100%, 360px); min-height: 220px; margin: 0 auto; padding: 18px; border-radius: 18px; background: linear-gradient(180deg, var(--pg-page-panel), var(--pg-page-bg)); border: 1px solid var(--pg-page-border); box-shadow: 0 8px 30px rgba(0,0,0,0.35); }
+    .eyebrow { color: var(--pg-page-accent); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
     h1 { font-size: 24px; margin-bottom: 8px; }
-    p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 14px; }
+    p { color: var(--pg-page-muted); font-size: 14px; line-height: 1.6; margin-bottom: 14px; }
     .timer { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
-    .cell { padding: 12px 8px; border-radius: 12px; background: #0a0f19; border: 1px solid #1e293b; text-align: center; }
-    .num { font-size: 24px; font-weight: 800; color: #4ade80; }
-    .lbl { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1.2px; }
-    a { display: inline-block; padding: 10px 14px; border-radius: 999px; background: #4ade80; color: #0a0e17; text-decoration: none; font-weight: 800; font-size: 12px; }
-    .foot { margin-top: 12px; font-size: 10px; color: #64748b; }
-      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid #1e293b; border-radius: 10px; background: #101826; color: #cbd5e1; font-size: 0.95rem; }
-    .trust strong { color: #4ade80; }
-    .footer-note { margin-top: 1.5rem; color: #94a3b8; font-size: 0.95rem; }
+    .cell { padding: 12px 8px; border-radius: 12px; background: var(--pg-page-bg); border: 1px solid var(--pg-page-border); text-align: center; }
+    .num { font-size: 24px; font-weight: 800; color: var(--pg-page-accent); }
+    .lbl { font-size: 14px; color: var(--pg-page-muted); text-transform: uppercase; letter-spacing: 1.2px; }
+    .widget #cta { display: inline-block; padding: 10px 14px; border-radius: 999px; background: var(--pg-page-accent); color: var(--pg-page-bg); text-decoration: none; font-weight: 800; font-size: 14px; }
+    .foot { margin-top: 12px; font-size: 14px; color: var(--pg-page-muted); }
+      .trust { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1rem; border: 1px solid var(--pg-page-border); border-radius: 10px; background: var(--pg-page-panel); color: var(--pg-page-muted); font-size: 0.95rem; }
+    .trust strong { color: var(--pg-page-accent); }
+    .footer-note { margin-top: 1.5rem; color: var(--pg-page-muted); font-size: 0.95rem; }
   </style>
+  <link rel="stylesheet" href="/page-reader.css">
+  <script src="/page-reader.js"></script>
 </head>
 <body>
+<nav class="pg-page-tools" aria-label="Page navigation"><a href="/dashboard">← PromoGrind tools</a><button type="button" data-pg-theme-toggle>Light theme</button></nav>
   <div class="widget">
     <div class="eyebrow">Promo Countdown</div>
-    <h1 id="title">Offer expires soon</h1>
-    <p id="subtitle">Use this widget on promo roundup pages, state pages, or sportsbook review content.</p>
+    <h1 id="title">Example countdown</h1>
+    <p id="subtitle">This example counts down 24 hours. It does not verify an operator's offer or expiry date.</p>
     <div class="timer">
       <div class="cell"><div class="num" id="days">00</div><div class="lbl">Days</div></div>
       <div class="cell"><div class="num" id="hours">00</div><div class="lbl">Hours</div></div>
       <div class="cell"><div class="num" id="mins">00</div><div class="lbl">Min</div></div>
       <div class="cell"><div class="num" id="secs">00</div><div class="lbl">Sec</div></div>
     </div>
-    <a id="cta" href="https://promogrind.bet/#/promo-calendar">Open Promo Calendar</a>
-    <div class="foot">Powered by PromoGrind. Default expiry is midnight Eastern unless <code>?expires=ISO_DATE</code> is supplied.</div>
-      <p class="footer-note">Core calculators are available now with a free PromoGrind account. Live scanning, AI help, and other backend-dependent surfaces remain in beta until their services are activated.</p>
+    <a id="cta" href="https://promogrind.bet/promo-calendar">Open Promo Calendar</a>
+    <div class="foot">Powered by PromoGrind. A supplied <code>?expires=ISO_DATE</code> sets the countdown date. Check the operator's current terms separately.</div>
+      <p class="footer-note">Use the free calculators without an account. Sign in with a free PromoGrind account to save your workspace across devices. Features marked coming soon are unavailable.</p>
   </div>
   <script>
     const params = new URLSearchParams(window.location.search);
@@ -47,17 +50,13 @@
     const expiresParam = params.get('expires');
     if (title) document.getElementById('title').textContent = title;
     if (subtitle) document.getElementById('subtitle').textContent = subtitle;
-    if (cta) document.getElementById('cta').href = cta;
+    if (cta) { try { const link = new URL(cta, location.origin); if (['https:', 'http:'].includes(link.protocol)) document.getElementById('cta').href = link.href; } catch {} }
 
-    function getMidnightET() {
-      const now = new Date();
-      const eastern = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-      eastern.setHours(24, 0, 0, 0);
-      return eastern;
-    }
-
-    const target = expiresParam ? new Date(expiresParam) : getMidnightET();
+    const target = expiresParam ? new Date(expiresParam) : new Date(Date.now() + 86400000);
+    if (expiresParam && !title) document.getElementById('title').textContent = 'Selected-date countdown';
+    if (expiresParam && !subtitle) document.getElementById('subtitle').textContent = 'Counts down to the supplied date. PromoGrind has not verified that date against an offer.';
     function tick() {
+      if (!Number.isFinite(target.getTime())) { document.getElementById('subtitle').textContent = 'The supplied date is invalid. Use a complete ISO date with a timezone.'; return; }
       const diff = Math.max(0, target.getTime() - Date.now());
       const days = Math.floor(diff / 86400000);
       const hours = Math.floor(diff / 3600000) % 24;
@@ -71,6 +70,6 @@
     tick();
     setInterval(tick, 1000);
   </script>
-<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.8rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
+<footer data-vaultspark-studio-footer-container style="max-width:1100px;margin:2rem auto;padding:1rem 1.25rem;border-top:1px solid currentColor;opacity:.78"><p data-vaultspark-studio-footer="2026" style="margin:.75rem 0 0;color:inherit;font-size:.875rem;opacity:.78">© 2026 <a href="https://vaultsparkstudios.com/" rel="author">VaultSpark Studios LLC</a>. All rights reserved.</p></footer>
 </body>
 </html>

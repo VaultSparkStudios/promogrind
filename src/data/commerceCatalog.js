@@ -7,12 +7,12 @@ export const PLAN_DEFINITIONS = Object.freeze([
     id: 'free', name: 'Free Agent', tagline: 'Calculate and track locally. No account required.', color: '#64748b',
     monthly: 0, annual: 0, badge: null, trial: false,
     features: [
-      feature('53 calculator routes', 'Math tools stay available without paid checkout'),
+      feature('29 calculators', 'Compare offers and model outcomes for free'),
       feature('Promo Calendar', 'Review operator offers and verify terms at the source'),
       feature('Knowledge Base', 'Educational workflow guides'),
       feature('Local tracking', 'Ledger data stored on this device'),
-      feature('Promo Advisor', 'Requires an enabled AI provider path', 'promoAdvisor'),
-      feature('PromoChat', 'Requires an enabled AI provider path', 'promoChat'),
+      feature('Promo Advisor', 'Availability is shown below', 'promoAdvisor'),
+      feature('PromoChat', 'Availability is shown below', 'promoChat'),
     ],
   },
   {
@@ -21,10 +21,10 @@ export const PLAN_DEFINITIONS = Object.freeze([
     features: [
       feature('Everything in Free Agent'),
       feature('Cloud sync', 'Available to signed-in workspace users'),
-      feature('PromoChat', 'Requires an enabled AI provider path', 'promoChat'),
-      feature('Promo Advisor', 'Requires an enabled AI provider path', 'promoAdvisor'),
+      feature('PromoChat', 'Ask questions about an offer', 'promoChat'),
+      feature('Promo Advisor', 'Review an offer before placing a bet', 'promoAdvisor'),
       feature('Data export', 'CSV and JSON exports from your ledger'),
-      feature('Push notifications', 'Requires an enabled browser push path', 'pushAlerts'),
+      feature('Push notifications', 'Daily brief alerts in supported browsers', 'pushAlerts'),
     ],
   },
   {
@@ -32,20 +32,20 @@ export const PLAN_DEFINITIONS = Object.freeze([
     monthly: 19.99, annual: 149, badge: 'PLANNED', planIds: { monthly: 'runner_monthly', annual: 'runner_annual' }, trial: true,
     features: [
       feature('Everything in Scout'),
-      feature('PromoChat', 'Requires an enabled AI provider path', 'promoChat'),
-      feature('Promo Advisor', 'Requires an enabled AI provider path', 'promoAdvisor'),
-      feature('AI Action Plan', 'Requires an enabled AI provider path', 'aiActionPlan'),
-      feature('Stack Builder', 'Requires an enabled AI provider path', 'stackBuilder'),
+      feature('PromoChat', 'Ask questions about an offer', 'promoChat'),
+      feature('Promo Advisor', 'Review an offer before placing a bet', 'promoAdvisor'),
+      feature('AI Action Plan', 'Organize the next steps for an offer', 'aiActionPlan'),
+      feature('Stack Builder', 'Compare compatible promotions', 'stackBuilder'),
     ],
   },
   {
-    id: 'closer', name: 'Closer', tagline: 'Planned live-data workflows, gated until their feeds are proven.', color: '#22c55e',
+    id: 'closer', name: 'Closer', tagline: 'Planned tools for reviewing live odds and offers.', color: '#22c55e',
     monthly: 34.99, annual: 249, badge: 'PLANNED', planIds: { monthly: 'closer_monthly', annual: 'closer_annual' }, trial: true,
     features: [
       feature('Everything in Runner'),
-      feature('Live Arb Scanner', 'Requires enabled and verified live-odds infrastructure', 'liveScanner'),
-      feature('Live +EV Scanner', 'Requires enabled and verified live-odds infrastructure', 'liveScanner'),
-      feature('Stack Builder', 'Requires an enabled AI provider path', 'stackBuilder'),
+      feature('Live Arb Scanner', 'Find differences between sportsbook odds', 'liveScanner'),
+      feature('Live +EV Scanner', 'Compare offered odds with estimated fair odds', 'liveScanner'),
+      feature('Stack Builder', 'Compare compatible promotions', 'stackBuilder'),
     ],
   },
   {
@@ -54,7 +54,7 @@ export const PLAN_DEFINITIONS = Object.freeze([
     features: [
       feature('Calculator-suite integration', 'Scope and availability are confirmed during discovery'),
       feature('Brand and domain options', 'Subject to a written implementation scope'),
-      feature('API access', 'Not generally available; architecture review required'),
+      feature('API access', 'Contact us to discuss availability and your needs'),
     ],
   },
 ]);
@@ -69,7 +69,7 @@ export function buildCommerceCatalog(flags = FEATURE_FLAGS) {
     trial: {
       enabled: true,
       label: '7-day workspace trial',
-      scope: 'The trial unlocks account workspace access; provider-gated features remain unavailable unless their launch flag is enabled.',
+      scope: 'The trial unlocks account workspace access. Tools marked coming soon remain unavailable during a trial.',
     },
     plans: PLAN_DEFINITIONS.map((plan) => ({
       ...plan,

@@ -43,7 +43,7 @@ export default function EdgeDecayHeatmapPanel({ appData, now }) {
       style={{ padding: 12, background: K.s2, border: `1px solid ${K.bd}`, borderRadius: 10, marginBottom: 14 }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 8 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: K.tx }}>Edge Decay Heatmap</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: K.tx }}>Illustrative time-decay model</div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }} aria-hidden="true">
           {TONE_ORDER.map((tone) => {
             const count = heatmap.summary[tone] || 0;
@@ -51,20 +51,20 @@ export default function EdgeDecayHeatmapPanel({ appData, now }) {
             const meta = TONE_META[tone];
             const color = meta.color();
             return (
-              <span key={tone} style={{ padding: "3px 8px", background: `${color}14`, border: `1px solid ${color}30`, borderRadius: 999, fontSize: 10, fontWeight: 700, color }}>
+              <span key={tone} style={{ padding: "3px 8px", background: `${color}14`, border: `1px solid ${color}30`, borderRadius: 999, fontSize: 12, fontWeight: 700, color }}>
                 {count} {meta.label.toLowerCase()}
               </span>
             );
           })}
         </div>
       </div>
-      <div style={{ fontSize: 11, color: K.mt, lineHeight: 1.6, marginBottom: 10 }}>
-        Remaining edge per active book and promo lane. Dates you set in the Sportsbooks tracker sharpen the curve; lanes without a date decay on the default daily window.
+      <div style={{ fontSize: 12, color: K.mt, lineHeight: 1.6, marginBottom: 10 }}>
+        An illustrative curve based on dates you enter for active books. Percentages describe the model, not measured expected value or verified current offers. Check operator terms separately.
       </div>
 
       {heatmap.cells.length === 0 && (
-        <div style={{ fontSize: 11, color: K.mt }}>
-          Mark books active in the Sportsbooks tracker to build your decay grid. A-grade schedule lanes appear until then.
+        <div style={{ fontSize: 12, color: K.mt }}>
+          Mark books active in the Sportsbooks tracker and enter an expiry date to build a model. No current offer or deadline is inferred from an empty workspace.
         </div>
       )}
 
@@ -76,7 +76,7 @@ export default function EdgeDecayHeatmapPanel({ appData, now }) {
               <div
                 key={`mover-${cell.book}-${cell.label}`}
                 aria-label={`Top mover: ${cell.book} ${cell.label}, ${horizonLabel(cell)}`}
-                style={{ padding: "6px 10px", background: `${color}0c`, border: `1px solid ${color}30`, borderRadius: 8, fontSize: 10, fontFamily: font }}
+                style={{ padding: "6px 10px", background: `${color}0c`, border: `1px solid ${color}30`, borderRadius: 8, fontSize: 12, fontFamily: font }}
               >
                 <span style={{ color, fontWeight: 800 }}>{cell.book}</span>
                 <span style={{ color: K.dm }}> · {cell.label} · {horizonLabel(cell)}</span>
@@ -90,7 +90,7 @@ export default function EdgeDecayHeatmapPanel({ appData, now }) {
         <div role="list" aria-label="Decay grid by sportsbook" style={{ display: "grid", gap: 6 }}>
           {grouped.map(([book, cells]) => (
             <div key={book} role="listitem" style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: K.dm, minWidth: 86 }}>{book}</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: K.dm, minWidth: 86 }}>{book}</div>
               {cells.map((cell) => {
                 const color = TONE_META[cell.tone].color();
                 const intensity = cell.expired ? "10" : cell.tone === "critical" ? "2e" : cell.tone === "warm" ? "22" : "16";
@@ -104,7 +104,7 @@ export default function EdgeDecayHeatmapPanel({ appData, now }) {
                       background: `${color}${intensity}`,
                       border: `1px solid ${color}40`,
                       borderRadius: 6,
-                      fontSize: 10,
+                      fontSize: 12,
                       color: cell.expired ? K.mt : K.tx,
                       textDecoration: cell.expired ? "line-through" : "none",
                     }}

@@ -32,13 +32,13 @@ export default function TeaserCalc() {
           <In l="Win % Per Leg" v={wp} set={setWp} ph="72" />
         </div>
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 10, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Quick Presets</div>
+          <div style={{ fontSize: 12, color: K.mt, marginBottom: 6, textTransform: "uppercase", letterSpacing: "1px" }}>Quick Presets</div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {presets.map(([label, odds]) => (
               <button
                 key={label}
                 onClick={() => { const parts = label.split(" "); setLegs(parts[0][0]); setTOdds(odds); }}
-                style={{ padding: "4px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 10, cursor: "pointer", fontFamily: font }}
+                style={{ padding: "4px 10px", background: K.s3, border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.dm, fontSize: 12, cursor: "pointer", fontFamily: font }}
               >{label} ({odds})</button>
             ))}
           </div>
@@ -47,8 +47,8 @@ export default function TeaserCalc() {
           <div role="status" aria-live="polite" aria-atomic="false" style={S.res(r.ok)}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
               <span style={S.big(r.ok ? K.gn : K.rd)}>{r.ok ? "+" : ""}{r.ev}%</span>
-              <span style={{ fontSize: 12, color: K.dm }}>expected value per $100</span>
-              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 9, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
+              <span style={{ fontSize: 14, color: K.dm }}>expected value per $100</span>
+              <button onClick={() => setShowReceipt(true)} style={{ marginLeft: "auto", padding: "2px 8px", background: "transparent", border: `1px solid ${K.bd2}`, borderRadius: 4, color: K.mt, fontSize: 12, cursor: "pointer", fontFamily: font }}>📄 Receipt</button>
             </div>
             <RR l="Legs" v={legs} />
             <RR l="Combined Win Probability" v={`${r.combProb}%`} c={K.ac} />
@@ -76,7 +76,7 @@ export default function TeaserCalc() {
             {!r.ok && <Nt c={K.rd}>At {wp}% per-leg win rate, this teaser is -EV. You need {r.beProb}% per leg to break even. Teasers crossing 3 and 7 in NFL can reach 72-76% per leg — otherwise avoid.</Nt>}
             {r.ok && <JuiceScore score={juiceFromEVPct(parseFloat(r.ev))} basis="User-entered win-rate model" assumption="Leg outcomes are independent and the supplied per-leg win rate is accurate." />}
             {r.ok && !showShareCard && (
-              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>
+              <button onClick={() => setShowShareCard(true)} style={{ marginTop: 8, width: "100%", padding: "7px 0", background: "transparent", border: "1px dashed #4ade80", color: "#4ade80", borderRadius: 6, cursor: "pointer", fontSize: 14 }}>
                 🎉 Share this teaser edge
               </button>
             )}

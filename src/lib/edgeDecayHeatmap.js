@@ -31,7 +31,10 @@ export function buildHeatmapPromoRows(data = {}) {
     .map(([k]) => k);
   const expiry = data.bookExpiry || {};
   return PROMO_SCHED
-    .filter((p) => (activeBooks.length ? activeBooks.includes(p.book) : p.grade === "A"))
+    .filter((p) => activeBooks.includes(p.book)
+      && typeof expiry[p.book] === "string"
+      && expiry[p.book].trim() !== ""
+      && Number.isFinite(new Date(expiry[p.book]).getTime()))
     .map((p) => ({
       book: p.book,
       promo: p.promo,
