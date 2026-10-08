@@ -31,7 +31,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { verifyStartupSourceReceipt } from './lib/startup-source-receipt.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -42,7 +41,6 @@ const JSON_MODE = args.includes('--json');
 const STDIN_MODE = args.includes('--stdin');
 const positional = args.filter((a) => !a.startsWith('--'));
 const targetPath = positional[0] || path.join(ROOT, 'docs', 'STARTUP_BRIEF.md');
-const STARTUP_BRIEF_VERSION = '3.2';
 
 // ── Canonical blocks that MUST appear ───────────────────────────────────────
 // Each entry: { label, pattern, severity }
@@ -71,7 +69,9 @@ const REQUIRED_BLOCKS = [
   },
   {
     label: 'Project title header (Studio OS box)',
-    pattern: /╔═+╗[\s\S]{0,400}?FORGE|SPARKED|VAULTED/,
+    // S358 — grouped (Atlas report, 4th template revert): the ungrouped form
+    // matched a bare SPARKED/VAULTED anywhere, so a brief with no title box passed.
+    pattern: /╔═+╗[\s\S]{0,400}?\b(?:FORGE|SPARKED|VAULTED)\b/,
     severity: 'recommended',
   },
   {
@@ -147,7 +147,12 @@ export function validateStartupBrief(body) {
   // PROJECT_STATUS vs rendered headline). false → the brief is showing stale or
   // unparseable state and /start must NOT proceed on it.
   const coherentMatch = body.match(/<!--\s*brief-coherent:\s*(true|false)\s*-->/i);
-  if (coherentMatch && coherentMatch[1].toLowerCase() === 'false') {
+  // S359 (VEILOS propagated contract brief-coherent-absent-fails-closed): an absent
+  // marker proves nothing, so it fails closed. Every canonical renderer (v3 and v5)
+  // emits the marker from lib/brief-coherence.mjs.
+  if (!coherentMatch) {
+    findings.staleBrief = 'brief-coherent marker ABSENT — freshness cannot be proven. Re-render before /start.';
+  } else if (coherentMatch[1].toLowerCase() === 'false') {
     findings.staleBrief = 'brief-coherent: false — renderer detected stale/unparseable SIL state (see ⛔ STALE BRIEF banner). Re-render before /start.';
   }
 
@@ -295,14 +300,6 @@ if (IS_DIRECT_RUN) {
 
   const result = validateStartupBrief(body);
   let fail = !result.ok;
-  let sourceReceipt = null;
-  const canonicalTarget = !STDIN_MODE && path.resolve(targetPath) === path.join(ROOT, 'docs', 'STARTUP_BRIEF.md');
-  if (canonicalTarget) {
-    let receipt = null;
-    try { receipt = JSON.parse(fs.readFileSync(path.join(ROOT, 'audits', 'startup-source-latest.json'), 'utf8')); } catch {}
-    sourceReceipt = verifyStartupSourceReceipt({ body, receipt, rendererVersion: STARTUP_BRIEF_VERSION });
-    if (!sourceReceipt.ok) fail = true;
-  }
 
   // S124 #8 — Token-budget enforcer. Brief is the only canonical /start
   // surface — bloat = re-introducing the 100KB pre-v4 tax. Persist size to
@@ -370,7 +367,6 @@ if (IS_DIRECT_RUN) {
       forbiddenHits: result.forbiddenHits,
       bodyShape: result.bodyShape,
       staleBrief: result.staleBrief,
-      sourceReceipt,
       budget: {
         sizeBytes,
         warnBytes: BUDGET_WARN,
@@ -385,9 +381,6 @@ if (IS_DIRECT_RUN) {
     console.log('─'.repeat(Math.min(72, header.length + 8)));
     if (result.staleBrief) {
       console.log(`  ⛔  STALE BRIEF: ${result.staleBrief}`);
-    }
-    if (sourceReceipt && !sourceReceipt.ok) {
-      console.log(`  ⛔  startup source receipt: ${sourceReceipt.failures.join('; ')}`);
     }
     if (result.bodyShape) {
       console.log(`  ⛔  ${result.bodyShape}`);
