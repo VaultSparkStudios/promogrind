@@ -1,5 +1,16 @@
 # Task Board
 
+## Selected website/runtime outcomes (S133 · complete)
+
+- [x] **DONE S133** customer-dashboard-boundary: selected acceptance verified; see current audit and site release receipt.
+- [x] **DONE S133** plain-language-page-copy: selected acceptance verified; see current audit and site release receipt.
+- [x] **DONE S133** readable-page-system: selected acceptance verified; see current audit and site release receipt.
+- [x] **DONE S133** runtime-infra-currency: selected acceptance verified; see current audit and site release receipt.
+- [x] **DONE S133** customer-surface-regression: selected acceptance verified; see current audit and site release receipt.
+- [x] **DONE S133** full-stack-delivery-proof: selected acceptance verified; see current audit and site release receipt.
+
+Scaffold:6 phases done ·0 in progress ·0 open. Canonical closeout and exact metadata deployment verification complete the authorized release; external launch proofs retain their scope.
+
 ## Selected continuation (S132 · complete)
 
 - **DONE S132** selected outcome: public statistics — one scheduled aggregate feed, homepage showcase, detailed `/stats`, privacy/freshness checks, and rendered desktop/mobile evidence in both themes. First recurring execution remains a follow-up observation.
@@ -61,13 +72,15 @@ Scaffold: 3 waves · 3 done · 0 in progress · 0 open. Selected outcomes: 7/7 c
 
 ## Now
 
-- [ ] Observe the first daily 06:17 UTC stats run and record its actual publication/result; initial publication and schedule are already verified. `[SIL:1]`
+- [x] **OBSERVED S133** seven succeeded daily stats dispatches October1–7 and October7 published artifact. Dispatch is not proof of every HTTP result; full result history remains unmeasured. `[SIL:2]`
 
 - [ ] Complete Zoho alias/DNS/delivery/reply proof and live Obelisk human+agent delegation. `[SIL:1]`
 - [ ] Complete production auth confirmation/resend/recovery and a real Stripe checkout/webhook/subscription/portal lifecycle.
 - [ ] Obtain independent friend-beta evidence and complete historical credential rotation/remediation.
 
 ## Next
+
+- [ ] Receive and verify Studio Ops owner propagation of the generated Node24 brief-format workflow; signed S133 request sent, adoption not claimed.
 
 - [ ] Refresh revenue evidence from actual source records; do not renew old zero-revenue observations by changing dates.
 

@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-10-08T01:02:34.319Z",
+  "generatedAt": "2026-10-08T04:39:08.383Z",
   "artifact": "docs/STARTUP_BRIEF.md",
-  "briefSha256": "974396c531be10dae676c0f69b7921cb0788a7208fb2f76cc6a969098e9ba4a3",
+  "briefSha256": "c852add826a3d0bc3f2d6fdeb86b863f14db75c5914acc1aa2c17a9f540f99e0",
   "rendererVersion": "3.2",
-  "targetSession": 133,
-  "sourceSession": 132,
+  "targetSession": 134,
+  "sourceSession": 133,
   "sources": {
     "projectProfile": {
       "medium": "app",
@@ -25,8 +25,8 @@
       "ageDays": 68
     },
     "context": {
-      "confidence": "heuristic-stale",
-      "recommendation": "CONTINUE",
+      "confidence": "measured",
+      "recommendation": "WARN_COMPACT_SOON",
       "measured": true
     },
     "tests": {
@@ -37,7 +37,7 @@
   "claims": [
     {
       "id": "sil-avg3",
-      "rendered": "Avg3: 909.7"
+      "rendered": "Avg3: 868.7"
     },
     {
       "id": "notional-cost",

@@ -942,3 +942,13 @@ The daily 06:17 UTC publisher and encrypted credential storage were explicitly a
 - Reconcile the current state to S132, archive the existing same-day S131 audit before replacing the daily view, and retain all historical SIL/CDR entries.
 - Use the canonical 10-category /1000 rubric. The legacy five-category paragraph in SESSION_PROTOCOL does not override SIL v3/CANON-009. Score 869/1000 reflects measured engineering progress and unmeasured adoption/time/cost outcomes.
 - The requested closeout/main push/deployment is authorized; existing public-launch holds remain separate.
+
+## 2026-10-08 — S133 website, infrastructure and evidence boundaries
+
+- Apply the user's expanded policy/commercial approval, preserving13 protected policy sections byte-for-byte. Planned checkout, referrals, certification and team pricing must not be represented as available services.
+- Keep customer surfaces useful and clear: internal launch/observability/private feed state and sample bankrolls are excluded; reference examples and conditional mathematical returns are labelled beside the decision.
+- Preserve explicit dependency pins and lifecycle-script restrictions. Project CI/deploy selects reviewed Node24 action commits; the generated brief-format workflow remains owner-managed. Signed Ark request is delivery, not adoption.
+- CANON054/055 STRONG checker gaps are justified for this candidate by the real three-metric privacy-suppressed feed, seven observed dispatches, current human/agent discovery,1000 source-bound visual captures and exact staging/production receipts. The probe reports gaps despite these concrete surfaces; do not fabricate conformity or five vanity metrics to satisfy a structural heuristic. Manual/doctor/portfolio checks remain owned and distinct.
+- Read-only source observation found seven succeeded daily dispatches October1–7 and a public feed dated October7 at06:17:05 UTC. Scheduler success proves dispatch, not each HTTP publication result; the latest artifact is consistent with the October7 dispatch. No adoption claim is inferred.
+- Current full staged scans must be clean. Compact image names correct path-only false positives without suppressing scanner rules or changing pixels.
+- The bounded closeout/main push/deployment remains authorized; technical delivery does not grant SPARKED/public-launch or new paid services. Zoho alias delivery/reply identity, live Obelisk delegation, full auth-email and Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct SPARKED/public-launch approval remain unproved.

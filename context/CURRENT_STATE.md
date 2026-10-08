@@ -1,25 +1,26 @@
 # Current State — PromoGrind
 
-Last updated: 2026-09-30 (Session 132)
+Last updated: 2026-10-08 (Session133)
 
-PromoGrind is deployed/public-unlaunched in FORGE launch-hardening. S132 delivered the selected public-statistics outcome.
+PromoGrind remains FORGE/public-unlaunched. Six selected website/runtime outcomes are verified through technical production delivery.
 
-Application commit d9f5385469fbe2015c0628c7c37d15a2618411b1 is verified at stable staging and production with content digest fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c. Release workflow: https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140142. The authorized closeout commit will pass through the same deployment pipeline; its final receipt is checked after push.
+Removed internal launch/observability controls, private feed alerts and demonstration bankroll panels. Improved typography, themes, navigation, controls, wrapping and scroll behavior across63 app routes and101 HTML files:51 independent content pages and50 immediate aliases. Clarified conditional calculator math, reference examples, availability and planned pricing. Fixed blank/import failures, entered tax assumptions, community errors, explicit leaderboard consent and failed/partial team saves.
 
-The homepage tile, /stats page and /stats.json share one precomputed aggregate report: three saved-workflow metrics across four complete UTC weeks. Guest/local-only activity is excluded. Each nonzero metric requires ten contributing accounts; publishable counts are ranges of ten. Zero, privacy suppression, unavailable sources and stale reports remain distinct.
+Implementation commit 33726d96f5d178f4989e0afe150489e4237589f6 is verified at stable staging and production with content digest 433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06. Exact CI and release workflows: https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061061; https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061114. This closeout metadata will pass through the same pipeline; its final HEAD is verified after push, without a self-referential commit loop.
 
-The SQL source is inaccessible to browser roles. The publisher requires exact configured service authority before any source/upload effects. The approved daily 06:17 UTC job and encrypted credential storage are active; initial publication is verified. First recurring execution remains unobserved.
+Full launch-local gate passed:109 app test files/745 assertions,16 Edge entrypoints/69 assertions across10 test files; runtime compatibility79/79 across70 modules; source integrity414 files; public claims345 files/25 rules; footer101/101; gateway release build611 modules. Visual receipt:1000 inspected hash-bound captures,476 before/524 after, desktop/mobile and dark/light, with documented capture-source limits.
 
-Workflow creation dates are app-supplied; history timestamps are normally database-assigned but owner-editable. Neither is represented as an independently verified server-receipt date. Failed refreshes preserve the last dated report.
+Expanded policy and commercial corrections were explicitly approved and applied. Thirteen protected ownership, cancellation, refund, liability, retention and sharing sections remain byte-identical to the prior committed policy. Client privacy/save repairs do not certify all live backend enforcement.
 
-Verification: 105/105 app test files, 722/722 assertions; 16 Edge entrypoints and 69/69 tests across 10 files; full verify:launch-local exit 0; 40 inspected implementation captures plus 8 inspected production captures without feed fixtures; CI and exact staging/production artifact checks passed.
+Read-only source observation found seven succeeded daily dispatches October1–7 and a public feed dated October7 at06:17:05 UTC. Scheduler success proves dispatch, not each HTTP publication result; the latest artifact is consistent with the October7 dispatch. No adoption claim is inferred.
 
 ## Remaining work
 
-- Observe the first recurring publisher execution; do not equate job configuration with successful recurrence.
-- SPARKED/public launch remains HOLD. Zoho alias delivery/reply identity, live Obelisk delegation, auth-email, real Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct post-proof public-launch approval remain unproved.
-- Revenue evidence remains stale; its date was not advanced without source data.
+- Zoho alias delivery/reply identity, live Obelisk delegation, full auth-email and Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct SPARKED/public-launch approval remain unproved.
+- The generated brief-format workflow still selects Node20. Signed Ark request is delivered to its Studio Ops owner; recipient application is unproved.
+- Revenue evidence remains stale; no source date was fabricated.
+- Conformance:53 applicable,12 automated conformed,2 STRONG gaps (054/055),0 ABSOLUTE gaps,17 manual,17 doctor-owned,3 portfolio-only,0 unmeasured. Gap justification and real surface evidence are recorded in DECISIONS; manual ownership is not automated conformity.
 
 ## Continuity
 
-S131's seven release-correctness outcomes remain complete. S132 source and evidence commits are d9f5385 and 8485326. The next unused session is S133 unless intervening work advances it.
+Next unused session S134 unless intervening work advances it. Final closeout deployment identity comes from the owned-domain _release.json and exact GitHub workflows after push.

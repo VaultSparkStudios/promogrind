@@ -1,6 +1,6 @@
 # Genius Hit List — PromoGrind
 
-> Generated: 2026-09-30 | Scope: project:promogrind | Pattern detectors: 4 signals evaluated | Top 12 shown
+> Generated: 2026-10-08 | Scope: project:promogrind | Pattern detectors: 4 signals evaluated | Top 12 shown
 
 ---
 
@@ -10,7 +10,7 @@
 
 promogrind is held on Blocking launch proofs complete.
 
-*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=3824(+3)
+*IGNIS rank:* cat:SECURITY(+28) · pillar:vitality=3967(+3)
 
 ```bash
 node scripts/ops.mjs release-gate
@@ -18,7 +18,7 @@ node scripts/ops.mjs release-gate
 
 ---
 
-## 🔥 #2  Observe the first daily 06:17 UTC stats run and record
+## 🔥 #2  Complete Zoho alias/DNS/delivery/reply proof and live O
 
 **Tier:** 🔥 CRITICAL · **Category:** sil · **Pattern:** 135 · **IGNIS:** 84 (fire) · **Final:** 177
 
@@ -32,7 +32,7 @@ node scripts/ops.mjs preload
 
 ---
 
-## 🔥 #3  Complete Zoho alias/DNS/delivery/reply proof and live O
+## 🔥 #3  Complete production auth confirmation/resend/recovery a
 
 **Tier:** 🔥 CRITICAL · **Category:** sil · **Pattern:** 135 · **IGNIS:** 84 (fire) · **Final:** 177
 
@@ -42,13 +42,13 @@ Second-priority unblocked item — complete both for session velocity.
 
 ---
 
-## 💡 #4  Refresh REVENUE_SIGNALS.md (60d stale)
+## 💡 #4  Refresh REVENUE_SIGNALS.md (68d stale)
 
 **Tier:** 💡 MEDIUM · **Category:** intelligence · **Pattern:** 77 · **IGNIS:** 90 (fire) · **Final:** 122
 
 Revenue intelligence is time-sensitive. Regenerate to surface current opportunities.
 
-*IGNIS rank:* cat:INTELLIGENCE(+24) · pillar:cognition=2559(+6)
+*IGNIS rank:* cat:INTELLIGENCE(+24) · pillar:cognition=2561(+6)
 
 ```bash
 node scripts/ops.mjs revenue-signals

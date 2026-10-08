@@ -36,87 +36,87 @@
   "readinessAssessment": [
     {
       "area": "core journeys and product correctness",
-      "status": "partial",
+      "status": "verified-for-selected-scope",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
-      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+      "evidence": "Current local/remote acceptance,1000 inspected pixels and exact staging/production release; exhaustive live customer/beta proof remains outside this selection.",
+      "nextAcceptanceCheck": "Preserve release identity; any future scope requires its own acceptance."
     },
     {
       "area": "onboarding and identity/access",
       "status": "partial",
       "owner": "promogrind",
-      "evidence": "context/CURRENT_STATE.md documents unproved live Obelisk delegation",
+      "evidence": "context/CURRENT_STATE.md documents unproved live Obelisk delegation; S133 relevant local checks/clarity fixes are current, while existing external launch evidence remains explicitly incomplete.",
       "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
     },
     {
       "area": "accessibility, mobile parity and every supported theme",
-      "status": "partial",
+      "status": "verified-for-selected-scope",
       "owner": "promogrind",
-      "evidence": "Canon conformance identifies two visual evidence defects; before/after review required",
-      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+      "evidence": "Current local/remote acceptance,1000 inspected pixels and exact staging/production release; exhaustive live customer/beta proof remains outside this selection.",
+      "nextAcceptanceCheck": "Preserve release identity; any future scope requires its own acceptance."
     },
     {
       "area": "performance and capacity",
-      "status": "partial",
+      "status": "verified-for-selected-scope",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
-      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+      "evidence": "Current local/remote acceptance,1000 inspected pixels and exact staging/production release; exhaustive live customer/beta proof remains outside this selection.",
+      "nextAcceptanceCheck": "Preserve release identity; any future scope requires its own acceptance."
     },
     {
       "area": "security, privacy, data integrity and abuse controls",
       "status": "partial",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified; S133 relevant local checks/clarity fixes are current, while existing external launch evidence remains explicitly incomplete.",
       "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
     },
     {
       "area": "backup, recovery and rollback",
-      "status": "partial",
+      "status": "verified-for-selected-scope",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
-      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+      "evidence": "Current local/remote acceptance,1000 inspected pixels and exact staging/production release; exhaustive live customer/beta proof remains outside this selection.",
+      "nextAcceptanceCheck": "Preserve release identity; any future scope requires its own acceptance."
     },
     {
       "area": "email and notifications where used",
       "status": "partial",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified; S133 relevant local checks/clarity fixes are current, while existing external launch evidence remains explicitly incomplete.",
       "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
     },
     {
       "area": "observability and actionable analytics",
       "status": "partial",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified; S133 relevant local checks/clarity fixes are current, while existing external launch evidence remains explicitly incomplete.",
       "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
     },
     {
       "area": "feedback, support and issue triage",
       "status": "partial",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified; S133 relevant local checks/clarity fixes are current, while existing external launch evidence remains explicitly incomplete.",
       "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
     },
     {
       "area": "branding, legal, contact and rights/provenance",
       "status": "partial",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified; S133 relevant local checks/clarity fixes are current, while existing external launch evidence remains explicitly incomplete.",
       "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
     },
     {
       "area": "human and agent access where applicable",
       "status": "partial",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
+      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified; S133 relevant local checks/clarity fixes are current, while existing external launch evidence remains explicitly incomplete.",
       "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
     },
     {
       "area": "staging, release evidence and truthful beta/release communication",
-      "status": "partial",
+      "status": "verified-for-selected-scope",
       "owner": "promogrind",
-      "evidence": "Existing package.json verification surface and context/CURRENT_STATE.md; current candidate not yet verified",
-      "nextAcceptanceCheck": "Run applicable existing checker against this candidate, inspect live evidence and record exact results; do not treat historical proof as current."
+      "evidence": "Current local/remote acceptance,1000 inspected pixels and exact staging/production release; exhaustive live customer/beta proof remains outside this selection.",
+      "nextAcceptanceCheck": "Preserve release identity; any future scope requires its own acceptance."
     }
   ],
   "axes": {
@@ -255,7 +255,7 @@
       "innovation": 5,
       "priority": 43.07,
       "recipe": "Remove the launch panel from the dashboard and the Observability panel from TodayDashboardPanel; retain user workflows, calculations, sync status and personal records. Verify customer rendering contains no deployment, monetization, launch-proof or growth analytics controls.",
-      "status": "pending",
+      "status": "shipped",
       "selectedRung": "L2",
       "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
       "readinessArea": "core journeys and product correctness",
@@ -296,9 +296,14 @@
           "at": "2026-10-08T02:24:46.168Z",
           "status": "partial",
           "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        },
+        {
+          "at": "2026-10-08T04:36:35.889Z",
+          "status": "shipped",
+          "note": "Selected acceptance verified; 33726d96f5d178f4989e0afe150489e4237589f6 staged/promoted identically; docs/visual-qa/LATEST.json and audits/site-release-s133.json; ordered closeout reconciled."
         }
       ],
-      "progress": "partial"
+      "progress": "Verified selected acceptance, exact staging/production delivery and ordered closeout; final metadata HEAD verification follows authorized push."
     },
     {
       "id": 2,
@@ -311,7 +316,7 @@
       "innovation": 6,
       "priority": 36.12,
       "recipe": "Inventory every app route and static page. Replace internal launch, sprint, deployment and evidence wording with clear user tasks and availability. Give pages meaningful purpose, inputs and next actions; preserve financial/model limitations and approved legal policies. Correct stale release notes, inflated route counts and hash-based links.",
-      "status": "pending",
+      "status": "shipped",
       "selectedRung": "L2",
       "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
       "readinessArea": "onboarding and identity/access",
@@ -352,9 +357,14 @@
           "at": "2026-10-08T02:24:46.168Z",
           "status": "partial",
           "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        },
+        {
+          "at": "2026-10-08T04:36:35.889Z",
+          "status": "shipped",
+          "note": "Selected acceptance verified; 33726d96f5d178f4989e0afe150489e4237589f6 staged/promoted identically; docs/visual-qa/LATEST.json and audits/site-release-s133.json; ordered closeout reconciled."
         }
       ],
-      "progress": "partial"
+      "progress": "Verified selected acceptance, exact staging/production delivery and ordered closeout; final metadata HEAD verification follows authorized push."
     },
     {
       "id": 3,
@@ -367,7 +377,7 @@
       "innovation": 6,
       "priority": 33.47,
       "recipe": "Survey desktop/mobile and both themes for every route. Increase small explanatory text and labels, improve line-height and wrapping, fix overflow and controls, simplify dashboard density. Review rendered images per page, fix and recapture; write a source-hash-bound receipt.",
-      "status": "pending",
+      "status": "shipped",
       "selectedRung": "L2",
       "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
       "readinessArea": "accessibility, mobile parity and every supported theme",
@@ -403,9 +413,14 @@
           "at": "2026-10-08T02:24:46.168Z",
           "status": "partial",
           "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        },
+        {
+          "at": "2026-10-08T04:36:35.889Z",
+          "status": "shipped",
+          "note": "Selected acceptance verified; 33726d96f5d178f4989e0afe150489e4237589f6 staged/promoted identically; docs/visual-qa/LATEST.json and audits/site-release-s133.json; ordered closeout reconciled."
         }
       ],
-      "progress": "partial"
+      "progress": "Verified selected acceptance, exact staging/production delivery and ordered closeout; final metadata HEAD verification follows authorized push."
     },
     {
       "id": 4,
@@ -418,7 +433,7 @@
       "innovation": 4,
       "priority": 18,
       "recipe": "Apply canonical incoming changes through the existing sync, preserve documented consumer safety overlays, inspect refused divergence. Fix directory handling in runtime compatibility discovery. Review full-stack integration, release, edge, auth, cost and public-surface checks against current Ops recommendations and official provider documentation. Prove relevant checks; keep external gaps distinct from local completion.",
-      "status": "pending",
+      "status": "shipped",
       "selectedRung": "L2",
       "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
       "readinessArea": "security, privacy, data integrity and abuse controls",
@@ -459,9 +474,14 @@
           "at": "2026-10-08T02:24:46.168Z",
           "status": "partial",
           "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        },
+        {
+          "at": "2026-10-08T04:36:35.889Z",
+          "status": "shipped",
+          "note": "Selected acceptance verified; 33726d96f5d178f4989e0afe150489e4237589f6 staged/promoted identically; docs/visual-qa/LATEST.json and audits/site-release-s133.json; ordered closeout reconciled."
         }
       ],
-      "progress": "partial"
+      "progress": "Verified selected acceptance, exact staging/production delivery and ordered closeout; final metadata HEAD verification follows authorized push."
     },
     {
       "id": 5,
@@ -474,7 +494,7 @@
       "innovation": 6,
       "priority": 31.34,
       "recipe": "Add meaningful customer-render regression coverage for internal panels and route links. Produce a per-route review ledger with small-text, overflow, unavailable states and visual evidence. Verify the actual build and customer rendering rather than only source strings.",
-      "status": "pending",
+      "status": "shipped",
       "selectedRung": "L2",
       "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
       "readinessArea": "observability and actionable analytics",
@@ -515,9 +535,14 @@
           "at": "2026-10-08T02:24:46.168Z",
           "status": "partial",
           "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        },
+        {
+          "at": "2026-10-08T04:36:35.889Z",
+          "status": "shipped",
+          "note": "Selected acceptance verified; 33726d96f5d178f4989e0afe150489e4237589f6 staged/promoted identically; docs/visual-qa/LATEST.json and audits/site-release-s133.json; ordered closeout reconciled."
         }
       ],
-      "progress": "partial"
+      "progress": "Verified selected acceptance, exact staging/production delivery and ordered closeout; final metadata HEAD verification follows authorized push."
     },
     {
       "id": 6,
@@ -530,7 +555,7 @@
       "innovation": 4,
       "priority": 20,
       "recipe": "Run existing app, edge, release, integrity, security and runtime suites. Perform independent review, fix findings, refresh evidence and ordered closeout surfaces. Publish only after sanitization and applicable staging/release gates; verify the exact candidate at user-facing surfaces and record remaining launch dependencies honestly.",
-      "status": "pending",
+      "status": "shipped",
       "selectedRung": "L2",
       "stageRationale": "F2 preview must be understandable and reliable before beta; founder explicitly requested whole-site clarity and current full-stack integration.",
       "readinessArea": "staging, release evidence and truthful beta/release communication",
@@ -566,9 +591,14 @@
           "at": "2026-10-08T02:24:46.168Z",
           "status": "partial",
           "message": "Implementation and regression checks progressed; full item acceptance and source-bound delivery proof remain unverified."
+        },
+        {
+          "at": "2026-10-08T04:36:35.889Z",
+          "status": "shipped",
+          "note": "Selected acceptance verified; 33726d96f5d178f4989e0afe150489e4237589f6 staged/promoted identically; docs/visual-qa/LATEST.json and audits/site-release-s133.json; ordered closeout reconciled."
         }
       ],
-      "progress": "partial"
+      "progress": "Verified selected acceptance, exact staging/production delivery and ordered closeout; final metadata HEAD verification follows authorized push."
     }
   ],
   "totals": {
@@ -613,13 +643,18 @@
       "at": "2026-10-08T04:03:59.158Z",
       "status": "partial",
       "note": "All page/default-state local visual and implementation acceptance verified; final bounded repairs recaptured. Current candidate has not yet been committed, CI-checked or deployed; six terminal outcomes remain pending until delivery/closeout."
+    },
+    {
+      "at": "2026-10-08T04:36:35.889Z",
+      "status": "shipped",
+      "note": "All six selected outcomes verified and ordered write-back reconciled; current closeout metadata promoted and verified after push."
     }
   ],
   "schemaVersion": "2.1",
   "generatedAt": "2026-10-08T01:08:43.643Z",
   "localAcceptance": {
     "at": "2026-10-08T04:03:59.158Z",
-    "state": "verified local; exact candidate delivery and canonical closeout pending",
+    "state": "Selected technical acceptance verified, delivered and reconciled; final metadata HEAD verification follows push.",
     "frontend": {
       "files": 109,
       "assertions": 745
@@ -650,6 +685,369 @@
       "aliases": 50
     },
     "build": "build:release PASS;611modules",
-    "security": "strict sanitization and dist exposure pass; staged scan still running"
+    "security": "Strict sanitization, staged credential scan, supply chain and dist exposure pass."
+  },
+  "deliveryAcceptance": {
+    "schemaVersion": "1.0",
+    "session": 133,
+    "ok": true,
+    "verifiedAt": "2026-10-08T04:35:58.228Z",
+    "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+    "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+    "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88",
+    "workflows": [
+      {
+        "workflow": "ci.yml",
+        "id": 37728061061,
+        "sha": "33726d96f5d178f4989e0afe150489e4237589f6",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061061",
+        "attempt": 1,
+        "jobs": [
+          {
+            "name": "build",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install dependencies",
+                "conclusion": "success"
+              },
+              {
+                "name": "Test",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check bundle budget",
+                "conclusion": "success"
+              },
+              {
+                "name": "Setup Deno",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify all Edge Functions (typecheck + discovered tests)",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Setup Deno",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "workflow": "deploy-pages.yml",
+        "id": 37728061114,
+        "sha": "33726d96f5d178f4989e0afe150489e4237589f6",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061114",
+        "attempt": 1,
+        "jobs": [
+          {
+            "name": "Verify, stage, and promote identical bytes",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run denoland/setup-deno@v2",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install locked dependencies without lifecycle scripts",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify complete local release gate",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify required CI for this exact candidate",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build release artifact once",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install reviewed deployment CLI",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify deployment account",
+                "conclusion": "success"
+              },
+              {
+                "name": "Deploy and verify stable staging",
+                "conclusion": "success"
+              },
+              {
+                "name": "Promote verified staging artifact",
+                "conclusion": "success"
+              },
+              {
+                "name": "Preserve deployment and rollback receipts",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run denoland/setup-deno@v2",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "staging": {
+      "origin": "https://staging.promogrind.bet",
+      "ok": true,
+      "status": 200,
+      "missingHeaders": [],
+      "releaseVerified": true,
+      "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+      "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+      "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88"
+    },
+    "production": {
+      "origin": "https://promogrind.bet",
+      "ok": true,
+      "status": 200,
+      "missingHeaders": [],
+      "releaseVerified": true,
+      "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+      "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+      "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88"
+    },
+    "webContract": [
+      {
+        "ok": true,
+        "origin": "https://staging.promogrind.bet",
+        "rootStatus": 200,
+        "headers": [
+          {
+            "name": "CSP",
+            "present": true
+          },
+          {
+            "name": "HSTS",
+            "present": true
+          },
+          {
+            "name": "X-Content-Type-Options",
+            "present": true
+          },
+          {
+            "name": "Referrer-Policy",
+            "present": true
+          },
+          {
+            "name": "X-Frame-Options",
+            "present": true
+          },
+          {
+            "name": "Permissions-Policy",
+            "present": true
+          }
+        ],
+        "files": [
+          {
+            "path": "/_health",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/security.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/favicon.ico",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/robots.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/sitemap.xml",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/agents.json",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/llms.txt",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "routes": [
+          {
+            "path": "/dashboard",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/arb-scanner",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/pricing",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "externalBlockers": []
+      },
+      {
+        "ok": true,
+        "origin": "https://promogrind.bet",
+        "rootStatus": 200,
+        "headers": [
+          {
+            "name": "CSP",
+            "present": true
+          },
+          {
+            "name": "HSTS",
+            "present": true
+          },
+          {
+            "name": "X-Content-Type-Options",
+            "present": true
+          },
+          {
+            "name": "Referrer-Policy",
+            "present": true
+          },
+          {
+            "name": "X-Frame-Options",
+            "present": true
+          },
+          {
+            "name": "Permissions-Policy",
+            "present": true
+          }
+        ],
+        "files": [
+          {
+            "path": "/_health",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/security.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/favicon.ico",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/robots.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/sitemap.xml",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/agents.json",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/llms.txt",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "routes": [
+          {
+            "path": "/dashboard",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/arb-scanner",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/pricing",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "externalBlockers": []
+      }
+    ],
+    "limits": [
+      "Technical website deployment; separate live auth-email/payment/identity/customer-beta and SPARKED proofs retained.",
+      "Rendered-pixel review and snapshots are recorded separately; no exhaustive arbitrary-input or server-policy certification."
+    ]
   }
 }

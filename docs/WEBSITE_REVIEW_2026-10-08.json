@@ -1,7 +1,7 @@
 {
   "session": 133,
   "generatedAt": "2026-10-08T04:03:59.158Z",
-  "complete": false,
+  "complete": true,
   "counts": {
     "app": 63,
     "static": 101,
@@ -20,7 +20,7 @@
       "title": "Public statistics",
       "audience": "customer",
       "group": "Public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -28,14 +28,14 @@
         "mobile dark/light",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/",
       "title": "Landing page",
       "audience": "customer",
       "group": "Public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -43,14 +43,14 @@
         "mobile dark/light",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/dashboard",
       "audience": "customer",
       "group": "Home",
       "title": "Dashboard",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -59,14 +59,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-intake",
       "audience": "customer",
       "group": "Home",
       "title": "Promo Intake",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -75,14 +75,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/daily-brief",
       "audience": "customer",
       "group": "Home",
       "title": "Daily Brief",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -91,14 +91,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/get-started",
       "audience": "customer",
       "group": "Home",
       "title": "Get Started",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -107,14 +107,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/whats-new",
       "audience": "customer",
       "group": "Home",
       "title": "What's New",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -123,14 +123,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/pricing",
       "audience": "customer",
       "group": "Home",
       "title": "Pricing",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -139,14 +139,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/about",
       "audience": "customer",
       "group": "Home",
       "title": "About",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -155,14 +155,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bet",
       "audience": "customer",
       "group": "Convert",
       "title": "Bonus Bet",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -171,14 +171,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/profit-boost",
       "audience": "customer",
       "group": "Convert",
       "title": "Profit Boost",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -187,14 +187,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/first-bet",
       "audience": "customer",
       "group": "Convert",
       "title": "First Bet",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -203,14 +203,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/deposit-match",
       "audience": "customer",
       "group": "Convert",
       "title": "Deposit Match",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -219,14 +219,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/insurance",
       "audience": "customer",
       "group": "Convert",
       "title": "Insurance",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -235,14 +235,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/no-vig",
       "audience": "customer",
       "group": "Calculate",
       "title": "No-Vig",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -251,14 +251,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/no-vig-3way",
       "audience": "customer",
       "group": "Calculate",
       "title": "3-Way No-Vig",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -267,14 +267,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/ev",
       "audience": "customer",
       "group": "Calculate",
       "title": "+EV",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -283,14 +283,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/kelly",
       "audience": "customer",
       "group": "Calculate",
       "title": "Kelly",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -299,14 +299,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/arb-2way",
       "audience": "customer",
       "group": "Calculate",
       "title": "2-Way Arb",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -315,14 +315,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/arb-3way",
       "audience": "customer",
       "group": "Calculate",
       "title": "3-Way Arb",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -331,14 +331,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/parlay-hedge",
       "audience": "customer",
       "group": "Calculate",
       "title": "Parlay Hedge",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -347,14 +347,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/middle",
       "audience": "customer",
       "group": "Calculate",
       "title": "Middle",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -363,14 +363,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/odds-convert",
       "audience": "customer",
       "group": "Calculate",
       "title": "Odds Convert",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -379,14 +379,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/line-shop",
       "audience": "customer",
       "group": "Calculate",
       "title": "Line Shop",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -395,14 +395,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/rollover",
       "audience": "customer",
       "group": "Calculate",
       "title": "Rollover",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -411,14 +411,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/teaser",
       "audience": "customer",
       "group": "Calculate",
       "title": "Teaser",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -427,14 +427,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/round-robin",
       "audience": "customer",
       "group": "Calculate",
       "title": "Round Robin",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -443,14 +443,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/parlay-builder",
       "audience": "customer",
       "group": "Calculate",
       "title": "Parlay Builder",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -459,14 +459,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/sgp-estimator",
       "audience": "customer",
       "group": "Calculate",
       "title": "SGP Estimator",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -475,14 +475,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/hold-calc",
       "audience": "customer",
       "group": "Calculate",
       "title": "Hold Calc",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -491,14 +491,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bet-sizer",
       "audience": "customer",
       "group": "Calculate",
       "title": "Bet Sizer",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -507,14 +507,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/income-estimator",
       "audience": "customer",
       "group": "Calculate",
       "title": "Income Est.",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -523,14 +523,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/deposit-optimizer",
       "audience": "customer",
       "group": "Calculate",
       "title": "Deposit Optimizer",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -539,14 +539,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/hedge-validator",
       "audience": "customer",
       "group": "Calculate",
       "title": "Hedge Validator",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -555,14 +555,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-guarantee",
       "audience": "customer",
       "group": "Calculate",
       "title": "Promo Return Model",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -571,14 +571,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/gut-check",
       "audience": "customer",
       "group": "Calculate",
       "title": "Gut Check",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -587,14 +587,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-stacking",
       "audience": "customer",
       "group": "Calculate",
       "title": "Promo Stacking",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -603,14 +603,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/taxes-estimator",
       "audience": "customer",
       "group": "Calculate",
       "title": "Taxes Estimator",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -619,14 +619,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/edge-dashboard",
       "audience": "customer",
       "group": "Track",
       "title": "Edge",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -635,14 +635,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/command-deck",
       "audience": "customer",
       "group": "Track",
       "title": "Command Deck",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -651,14 +651,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/sportsbooks",
       "audience": "customer",
       "group": "Track",
       "title": "Sportsbooks",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -667,14 +667,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bet-tracker",
       "audience": "customer",
       "group": "Track",
       "title": "Bet Tracker",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -683,14 +683,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/ledger",
       "audience": "customer",
       "group": "Track",
       "title": "P/L Ledger",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -699,14 +699,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/leaderboard",
       "audience": "customer",
       "group": "Track",
       "title": "Leaderboard",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -715,14 +715,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/free-bet-arb",
       "audience": "customer",
       "group": "Track",
       "title": "Free Bet Arb",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -731,14 +731,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/trade-journal",
       "audience": "customer",
       "group": "Track",
       "title": "Trade Journal",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -747,14 +747,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/odds-compare",
       "audience": "customer",
       "group": "Track",
       "title": "Odds Compare",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -763,14 +763,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/profit-cert",
       "audience": "customer",
       "group": "Track",
       "title": "Outcome Review",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -779,14 +779,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/arb-scanner",
       "audience": "customer",
       "group": "Live",
       "title": "Arb Scanner",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -795,14 +795,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/ev-scanner",
       "audience": "customer",
       "group": "Live",
       "title": "+EV Scanner",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -811,14 +811,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/action-plan",
       "audience": "customer",
       "group": "Live",
       "title": "Action Plan",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -827,14 +827,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/stack-builder",
       "audience": "customer",
       "group": "Live",
       "title": "Stack Builder",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -843,14 +843,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/knowledge-base",
       "audience": "customer",
       "group": "Learn",
       "title": "Knowledge Base",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -859,14 +859,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-finder",
       "audience": "customer",
       "group": "Learn",
       "title": "Promo Finder",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -875,14 +875,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-calendar",
       "audience": "customer",
       "group": "Learn",
       "title": "Promo Calendar",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -891,14 +891,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-board",
       "audience": "customer",
       "group": "Learn",
       "title": "Promo Board",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -907,14 +907,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/glossary",
       "audience": "customer",
       "group": "Learn",
       "title": "Glossary",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -923,14 +923,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/refer-earn",
       "audience": "customer",
       "group": "Learn",
       "title": "Refer & Earn",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -939,14 +939,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/community-promos",
       "audience": "customer",
       "group": "Learn",
       "title": "Community Promos",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -955,14 +955,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/upgrade",
       "audience": "customer",
       "group": "Learn",
       "title": "Upgrade",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -971,14 +971,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/team-accounts",
       "audience": "customer",
       "group": "Learn",
       "title": "Team Accounts",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -987,14 +987,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/vs-competitors",
       "audience": "customer",
       "group": "Learn",
       "title": "vs Competitors",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -1003,14 +1003,14 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-arb-finder",
       "audience": "customer",
       "group": "Learn",
       "title": "Promo Arb Finder",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "readability",
@@ -1019,13 +1019,13 @@
         "empty and applicable unavailable/error states",
         "working links"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/about/",
       "source": "public/about/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1033,13 +1033,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/affiliate-disclosure/",
       "source": "public/affiliate-disclosure/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1047,13 +1047,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/annual-report/",
       "source": "public/annual-report/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1061,13 +1061,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/arb-calculator/",
       "source": "public/arb-calculator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1075,13 +1075,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/arb-calculator-es/",
       "source": "public/arb-calculator-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1089,13 +1089,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/arb-calculator-pt/",
       "source": "public/arb-calculator-pt/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1103,13 +1103,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/arbitrage-betting/",
       "source": "public/arbitrage-betting/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1117,13 +1117,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/blog/arbitrage-betting-explained/",
       "source": "public/blog/arbitrage-betting-explained/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1131,13 +1131,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/blog/best-sportsbook-promos-2026/",
       "source": "public/blog/best-sportsbook-promos-2026/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1145,13 +1145,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/blog/draftkings-vs-fanduel-promos/",
       "source": "public/blog/draftkings-vs-fanduel-promos/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1159,13 +1159,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/blog/how-matched-betting-works/",
       "source": "public/blog/how-matched-betting-works/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1173,13 +1173,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/blog/",
       "source": "public/blog/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1187,13 +1187,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/blog/sports-betting-taxes-guide/",
       "source": "public/blog/sports-betting-taxes-guide/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1201,13 +1201,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bet/",
       "source": "public/bonus-bet/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1215,13 +1215,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bet-es/",
       "source": "public/bonus-bet-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1229,13 +1229,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bet-pt/",
       "source": "public/bonus-bet-pt/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1243,13 +1243,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-arizona/",
       "source": "public/bonus-bets-arizona/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1257,13 +1257,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-birmingham/",
       "source": "public/bonus-bets-birmingham/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1271,13 +1271,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-colorado/",
       "source": "public/bonus-bets-colorado/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1285,13 +1285,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-connecticut/",
       "source": "public/bonus-bets-connecticut/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1299,13 +1299,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-edinburgh/",
       "source": "public/bonus-bets-edinburgh/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1313,13 +1313,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-glasgow/",
       "source": "public/bonus-bets-glasgow/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1327,13 +1327,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-illinois/",
       "source": "public/bonus-bets-illinois/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1341,13 +1341,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-indiana/",
       "source": "public/bonus-bets-indiana/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1355,13 +1355,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-iowa/",
       "source": "public/bonus-bets-iowa/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1369,13 +1369,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-kansas/",
       "source": "public/bonus-bets-kansas/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1383,13 +1383,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-kentucky/",
       "source": "public/bonus-bets-kentucky/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1397,13 +1397,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-liverpool/",
       "source": "public/bonus-bets-liverpool/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1411,13 +1411,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-london/",
       "source": "public/bonus-bets-london/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1425,13 +1425,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-louisiana/",
       "source": "public/bonus-bets-louisiana/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1439,13 +1439,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-manchester/",
       "source": "public/bonus-bets-manchester/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1453,13 +1453,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-maryland/",
       "source": "public/bonus-bets-maryland/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1467,13 +1467,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-massachusetts/",
       "source": "public/bonus-bets-massachusetts/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1481,13 +1481,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-michigan/",
       "source": "public/bonus-bets-michigan/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1495,13 +1495,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-mississippi/",
       "source": "public/bonus-bets-mississippi/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1509,13 +1509,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-missouri/",
       "source": "public/bonus-bets-missouri/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1523,13 +1523,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-montana/",
       "source": "public/bonus-bets-montana/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1537,13 +1537,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-nevada/",
       "source": "public/bonus-bets-nevada/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1551,13 +1551,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-new-hampshire/",
       "source": "public/bonus-bets-new-hampshire/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1565,13 +1565,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-new-jersey/",
       "source": "public/bonus-bets-new-jersey/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1579,13 +1579,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-new-york/",
       "source": "public/bonus-bets-new-york/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1593,13 +1593,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-north-carolina/",
       "source": "public/bonus-bets-north-carolina/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1607,13 +1607,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-north-dakota/",
       "source": "public/bonus-bets-north-dakota/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1621,13 +1621,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-ohio/",
       "source": "public/bonus-bets-ohio/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1635,13 +1635,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-oregon/",
       "source": "public/bonus-bets-oregon/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1649,13 +1649,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-pennsylvania/",
       "source": "public/bonus-bets-pennsylvania/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1663,13 +1663,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-south-dakota/",
       "source": "public/bonus-bets-south-dakota/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1677,13 +1677,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-tennessee/",
       "source": "public/bonus-bets-tennessee/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1691,13 +1691,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-uk/",
       "source": "public/bonus-bets-uk/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1705,13 +1705,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-vermont/",
       "source": "public/bonus-bets-vermont/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1719,13 +1719,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-virginia/",
       "source": "public/bonus-bets-virginia/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1733,13 +1733,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-west-virginia/",
       "source": "public/bonus-bets-west-virginia/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1747,13 +1747,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/bonus-bets-wyoming/",
       "source": "public/bonus-bets-wyoming/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1761,13 +1761,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/calc-api/",
       "source": "public/calc-api/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1775,13 +1775,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/compliance/",
       "source": "public/compliance/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1789,13 +1789,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/contact/",
       "source": "public/contact/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1803,13 +1803,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/creator-program/",
       "source": "public/creator-program/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1817,13 +1817,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/data-policy/",
       "source": "public/data-policy/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1831,13 +1831,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/deposit-match-calculator/",
       "source": "public/deposit-match-calculator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1845,13 +1845,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/disclaimer/",
       "source": "public/disclaimer/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1859,13 +1859,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/dmca/",
       "source": "public/dmca/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1873,13 +1873,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/embed/",
       "source": "public/embed/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1887,13 +1887,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/ev-calculator/",
       "source": "public/ev-calculator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1901,13 +1901,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/ev-calculator-es/",
       "source": "public/ev-calculator-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1915,13 +1915,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/ev-calculator-pt/",
       "source": "public/ev-calculator-pt/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1929,13 +1929,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/free-bet-calculator/",
       "source": "public/free-bet-calculator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1943,13 +1943,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/hedge-calculator/",
       "source": "public/hedge-calculator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1957,13 +1957,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/hedge-calculator-es/",
       "source": "public/hedge-calculator-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1971,13 +1971,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/income-estimator/",
       "source": "public/income-estimator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1985,13 +1985,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/ip/",
       "source": "public/ip/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -1999,13 +1999,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/kelly-criterion/",
       "source": "public/kelly-criterion/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2013,13 +2013,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/kelly-criterion-es/",
       "source": "public/kelly-criterion-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2027,13 +2027,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/kelly-criterion-pt/",
       "source": "public/kelly-criterion-pt/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2041,13 +2041,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/landing/",
       "source": "public/landing/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2055,13 +2055,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/matched-betting/",
       "source": "public/matched-betting/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2069,13 +2069,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/matched-betting-es/",
       "source": "public/matched-betting-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2083,13 +2083,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/matched-betting-pt/",
       "source": "public/matched-betting-pt/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2097,13 +2097,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/matched-betting-uk/",
       "source": "public/matched-betting-uk/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2111,13 +2111,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/no-vig/",
       "source": "public/no-vig/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2125,13 +2125,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/no-vig-es/",
       "source": "public/no-vig-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2139,13 +2139,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/parlay-calculator/",
       "source": "public/parlay-calculator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2153,13 +2153,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/parlay-calculator-es/",
       "source": "public/parlay-calculator-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2167,13 +2167,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/parlay-calculator-pt/",
       "source": "public/parlay-calculator-pt/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2181,13 +2181,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/passport/",
       "source": "public/passport/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2195,13 +2195,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/privacy/",
       "source": "public/privacy/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2209,13 +2209,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/profit-boost/",
       "source": "public/profit-boost/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2223,13 +2223,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/profit-boost-es/",
       "source": "public/profit-boost-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2237,13 +2237,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-converter/",
       "source": "public/promo-converter/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2251,13 +2251,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promo-expiry-widget/",
       "source": "public/promo-expiry-widget/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2265,13 +2265,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promogrind-verified/",
       "source": "public/promogrind-verified/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2279,13 +2279,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promogrind-vs-betterbet/",
       "source": "public/promogrind-vs-betterbet/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2293,13 +2293,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promogrind-vs-oddsjam/",
       "source": "public/promogrind-vs-oddsjam/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2307,13 +2307,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/promogrind-vs-profitduel/",
       "source": "public/promogrind-vs-profitduel/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2321,13 +2321,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/responsible-gambling/",
       "source": "public/responsible-gambling/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2335,13 +2335,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/rollover-calculator/",
       "source": "public/rollover-calculator/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2349,13 +2349,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/same-game-parlay/",
       "source": "public/same-game-parlay/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2363,13 +2363,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/sports-betting-tools/",
       "source": "public/sports-betting-tools/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2377,13 +2377,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/sportsbook-promo/",
       "source": "public/sportsbook-promo/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2391,13 +2391,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Immediate alias inspected through canonical destination and route smoke; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/sportsbook-promo-es/",
       "source": "public/sportsbook-promo-es/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2405,13 +2405,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/terms/",
       "source": "public/terms/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2419,13 +2419,13 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     },
     {
       "route": "/the-grind/",
       "source": "public/the-grind/index.html",
       "audience": "public",
-      "status": "reviewed-local",
+      "status": "verified",
       "requiredChecks": [
         "customer copy",
         "desktop/mobile",
@@ -2433,7 +2433,371 @@
         "working links",
         "preserve approved legal meaning"
       ],
-      "evidenceStatus": "Current local rendered copy/readability accepted in both themes/viewports; see visual receipt/source bindings; delivery pending"
+      "evidenceStatus": "Local accepted rendered copy/readability, both themes/viewports, current exact release delivered; aliases use destination review and route smoke."
     }
-  ]
+  ],
+  "completedAt": "2026-10-08T04:36:35.889Z",
+  "delivery": {
+    "schemaVersion": "1.0",
+    "session": 133,
+    "ok": true,
+    "verifiedAt": "2026-10-08T04:35:58.228Z",
+    "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+    "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+    "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88",
+    "workflows": [
+      {
+        "workflow": "ci.yml",
+        "id": 37728061061,
+        "sha": "33726d96f5d178f4989e0afe150489e4237589f6",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061061",
+        "attempt": 1,
+        "jobs": [
+          {
+            "name": "build",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install dependencies",
+                "conclusion": "success"
+              },
+              {
+                "name": "Test",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check bundle budget",
+                "conclusion": "success"
+              },
+              {
+                "name": "Setup Deno",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify all Edge Functions (typecheck + discovered tests)",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Setup Deno",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "workflow": "deploy-pages.yml",
+        "id": 37728061114,
+        "sha": "33726d96f5d178f4989e0afe150489e4237589f6",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061114",
+        "attempt": 1,
+        "jobs": [
+          {
+            "name": "Verify, stage, and promote identical bytes",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run denoland/setup-deno@v2",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install locked dependencies without lifecycle scripts",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify complete local release gate",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify required CI for this exact candidate",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build release artifact once",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install reviewed deployment CLI",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify deployment account",
+                "conclusion": "success"
+              },
+              {
+                "name": "Deploy and verify stable staging",
+                "conclusion": "success"
+              },
+              {
+                "name": "Promote verified staging artifact",
+                "conclusion": "success"
+              },
+              {
+                "name": "Preserve deployment and rollback receipts",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run denoland/setup-deno@v2",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "staging": {
+      "origin": "https://staging.promogrind.bet",
+      "ok": true,
+      "status": 200,
+      "missingHeaders": [],
+      "releaseVerified": true,
+      "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+      "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+      "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88"
+    },
+    "production": {
+      "origin": "https://promogrind.bet",
+      "ok": true,
+      "status": 200,
+      "missingHeaders": [],
+      "releaseVerified": true,
+      "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+      "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+      "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88"
+    },
+    "webContract": [
+      {
+        "ok": true,
+        "origin": "https://staging.promogrind.bet",
+        "rootStatus": 200,
+        "headers": [
+          {
+            "name": "CSP",
+            "present": true
+          },
+          {
+            "name": "HSTS",
+            "present": true
+          },
+          {
+            "name": "X-Content-Type-Options",
+            "present": true
+          },
+          {
+            "name": "Referrer-Policy",
+            "present": true
+          },
+          {
+            "name": "X-Frame-Options",
+            "present": true
+          },
+          {
+            "name": "Permissions-Policy",
+            "present": true
+          }
+        ],
+        "files": [
+          {
+            "path": "/_health",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/security.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/favicon.ico",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/robots.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/sitemap.xml",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/agents.json",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/llms.txt",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "routes": [
+          {
+            "path": "/dashboard",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/arb-scanner",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/pricing",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "externalBlockers": []
+      },
+      {
+        "ok": true,
+        "origin": "https://promogrind.bet",
+        "rootStatus": 200,
+        "headers": [
+          {
+            "name": "CSP",
+            "present": true
+          },
+          {
+            "name": "HSTS",
+            "present": true
+          },
+          {
+            "name": "X-Content-Type-Options",
+            "present": true
+          },
+          {
+            "name": "Referrer-Policy",
+            "present": true
+          },
+          {
+            "name": "X-Frame-Options",
+            "present": true
+          },
+          {
+            "name": "Permissions-Policy",
+            "present": true
+          }
+        ],
+        "files": [
+          {
+            "path": "/_health",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/security.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/favicon.ico",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/robots.txt",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/sitemap.xml",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/agents.json",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/.well-known/llms.txt",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "routes": [
+          {
+            "path": "/dashboard",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/arb-scanner",
+            "ok": true,
+            "status": 200
+          },
+          {
+            "path": "/pricing",
+            "ok": true,
+            "status": 200
+          }
+        ],
+        "externalBlockers": []
+      }
+    ],
+    "limits": [
+      "Technical website deployment; separate live auth-email/payment/identity/customer-beta and SPARKED proofs retained.",
+      "Rendered-pixel review and snapshots are recorded separately; no exhaustive arbitrary-input or server-policy certification."
+    ]
+  }
 }

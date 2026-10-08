@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.5",
+  "schemaVersion": "1.7",
   "slug": "promogrind",
   "name": "PromoGrind",
   "type": "app",
@@ -21,9 +21,9 @@
   "liveUrl": "https://promogrind.bet",
   "vaultStatus": "FORGE",
   "developmentPhase": "launch-hardening",
-  "currentSession": 132,
-  "currentFocus": "S132 public aggregate statistics delivered: shared homepage/detail feed, privacy and freshness states, authenticated publisher and approved daily schedule.",
-  "nextMilestone": "Complete the remaining Zoho, Obelisk, auth-email, Stripe, friend, credential-remediation, cost, and distinct post-proof founder criteria before SPARKED.",
+  "currentSession": 133,
+  "currentFocus": "S133 customer website clarity/readability, current project runtime and exact release evidence delivered.",
+  "nextMilestone": "Complete existing launch proofs and verify owner Node24 workflow propagation; do not auto-expand completed scope.",
   "blockers": [
     "Five fully redacted credential findings remain in historical commit b1205ce; current tracked tree is clean, but rotation and approved history remediation are unproved.",
     "The contact@promogrind.bet Zoho send/receive alias, MX/SPF/DKIM/DMARC posture, delivery, and reply-as-alias identity remain unproved; Brevo is transactional/app email only.",
@@ -35,18 +35,18 @@
     "A distinct founder SPARKED/public-launch approval is required after every other blocking proof is complete."
   ],
   "lastUpdated": "2026-10-08",
-  "silScore": 869,
-  "silAvg3": 909.7,
-  "silVelocity": 1,
+  "silScore": 877,
+  "silAvg3": 868.7,
+  "silVelocity": 6,
   "silDebt": "down",
-  "silLastSession": 132,
+  "silLastSession": 133,
   "silMax": 1000,
   "silSparkline": [
     998,
-    998,
     1000,
     860,
-    869
+    869,
+    877
   ],
   "ignisScore": 43354,
   "ignisGrade": "FORGE",
@@ -54,31 +54,31 @@
   "testsPassing": 109,
   "testsTotal": 109,
   "testsLastRun": "2026-10-08",
-  "lastDeployStatus": "Application commit d9f5385469fbe2015c0628c7c37d15a2618411b1 is verified at stable staging and production with content digest fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c. Release workflow: https://github.com/VaultSparkStudios/promogrind/actions/runs/36737140142. The authorized closeout commit will pass through the same deployment pipeline; its final receipt is checked after push.",
+  "lastDeployStatus": "Implementation commit 33726d96f5d178f4989e0afe150489e4237589f6 is verified at stable staging and production with content digest 433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06. Exact CI and release workflows: https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061061; https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061114. This closeout metadata will pass through the same pipeline; its final HEAD is verified after push, without a self-referential commit loop.",
   "truthAuditStatus": "green-repo-owned-with-history-and-external-proof-follow-ups",
-  "truthAuditLastRun": "2026-09-30",
+  "truthAuditLastRun": "2026-10-08",
   "truthGenome": "24/25",
   "runway": "~2 sessions",
   "testingSurfaces": [
     {
       "type": "tests",
       "command": "npm test",
-      "status": "S132 pass:105 files,722 assertions"
+      "status": "S133 pass:109 files,745 assertions"
     },
     {
       "type": "edge",
       "command": "npm run verify:edge",
-      "status": "S132 pass:16 entries,69 tests,10 files"
+      "status": "S133 pass:16 entries,69 assertions,10 files"
     },
     {
       "type": "launch-gate",
       "command": "npm run verify:launch-local",
-      "status": "S132 full launch-local direct exit0"
+      "status": "S133 full launch-local exit0"
     },
     {
       "type": "ux-integrity",
       "command": "npm run smoke:ux",
-      "status": "passing across 61 app routes and 101 public HTML files"
+      "status": "63 app routes and101 public HTML files accepted"
     },
     {
       "type": "local",
@@ -89,12 +89,12 @@
     {
       "type": "staging",
       "url": "https://staging.promogrind.bet",
-      "status": "Verified d9f5385469fbe2015c0628c7c37d15a2618411b1; content fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c"
+      "status": "Verified 33726d96f5d178f4989e0afe150489e4237589f6; content 433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06; closeout HEAD verification follows push"
     },
     {
       "type": "production",
       "url": "https://promogrind.bet",
-      "status": "Verified d9f5385469fbe2015c0628c7c37d15a2618411b1; content fe45b69e7211330f6f94fd77789cd7bdaf1ed8cdcccc2e6e4b6068494ba1a51c"
+      "status": "Verified 33726d96f5d178f4989e0afe150489e4237589f6; content 433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06; closeout HEAD verification follows push"
     }
   ],
   "stagingUrl": "https://staging.promogrind.bet",
@@ -112,25 +112,25 @@
   "silRubricVersion": "3.0",
   "silCategoriesV3": {
     "devHealth": 96,
-    "creativeAlignment": 96,
+    "creativeAlignment": 97,
     "momentum": 94,
     "engagement": 68,
-    "processQuality": 92,
-    "crossRepoCoherence": 89,
-    "securityPosture": 76,
-    "ecosystemIntegration": 83,
+    "processQuality": 93,
+    "crossRepoCoherence": 91,
+    "securityPosture": 78,
+    "ecosystemIntegration": 85,
     "capitalEfficiency": 80,
     "automationCoverage": 95
   },
   "doctorScore": {
     "date": "2026-10-08",
-    "passing": 10,
-    "warning": 1,
+    "passing": 11,
+    "warning": 0,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "total": 12,
-    "score": 83,
+    "score": 92,
     "checks": [
       {
         "id": "manifest",
@@ -197,8 +197,8 @@
       },
       {
         "id": "ignis",
-        "pass": false,
-        "warn": true,
+        "pass": true,
+        "warn": false,
         "driftClass": "derived-stale",
         "blocking": false
       },
@@ -218,8 +218,8 @@
       }
     ]
   },
-  "entropyScore": 0.057,
-  "entropyLastComputed": "2026-09-30",
+  "entropyScore": 0.027,
+  "entropyLastComputed": "2026-10-08",
   "modelTier": "T2_opusplan",
   "modelTierDefault": "opus",
   "modelTierCtxLimit": 200000,
@@ -232,14 +232,14 @@
   "planModeLastActivatedAt": "2026-05-14T01:19:08.85Z",
   "lastAgent": "codex",
   "sessionShellHygiene": {
-    "session": 132,
-    "started": 26,
-    "closed": 26,
+    "session": 133,
+    "started": 113,
+    "closed": 113,
     "running": 0,
-    "enumeratedAt": "2026-09-30T16:17:37.654Z",
-    "evidence": "Root execution ledger reconciled with exit results and live-session probes; no repo-owned Vite/capture processes found. Counts are the pre-autopilot checkpoint; final automation/deploy monitor jobs are re-enumerated after completion."
+    "enumeratedAt": "2026-10-08T04:38:08.872Z",
+    "evidence": "Root execution ledger enumerated113 background sessions; each completed or explicitly re-confirmed absent. Owned development server stopped. Pre-autopilot checkpoint; final automation sessions are re-enumerated afterward."
   },
-  "lastSessionSummary": "S132 selected outcome complete. 105/105 app test files, 722/722 assertions; 16 Edge entrypoints and 69/69 tests across 10 files; full verify:launch-local exit 0; 40 inspected implementation captures plus 8 inspected production captures without feed fixtures; CI and exact staging/production artifact checks passed. First recurring publication remains unobserved. FORGE retained.",
+  "lastSessionSummary": "S133 customer website clarity/readability, current project runtime and exact release evidence delivered.",
   "testsLatestRunState": "green",
   "testEvidence": {
     "schemaVersion": "1.0",
@@ -263,14 +263,25 @@
   "testsAssertionsTotal": 745,
   "testsAssertionsFiles": 109,
   "testsAssertionsLastRun": "2026-10-08",
-  "lastSession": 132,
+  "lastSession": 133,
   "publicStats": {
     "url": "https://promogrind.bet/stats",
     "feedUrl": "https://promogrind.bet/stats.json",
     "scheduleUtc": "17 6 * * *",
     "initialPublicationVerified": true,
-    "recurringExecutionObserved": false,
+    "recurringExecutionObserved": true,
     "backendReceipt": "audits/public-stats-s132.json",
-    "siteReceipt": "audits/site-release-s132.json"
+    "siteReceipt": "audits/site-release-s132.json",
+    "recurringDispatches": 7,
+    "recurringDispatchDates": "2026-10-01 through2026-10-07",
+    "recurringExecutionLimit": "Succeeded cron dispatches only; each HTTP publication result not observed",
+    "latestPublishedAt": "2026-10-07T06:17:05.610Z"
+  },
+  "sessionState": {
+    "version": 1,
+    "durableSession": 133,
+    "currentFocus": "S133 customer website clarity/readability, current project runtime and exact release evidence delivered.",
+    "nextMilestone": "Complete existing launch proofs and verify owner Node24 workflow propagation; do not auto-expand completed scope.",
+    "lastSessionSummary": "S133 customer website clarity/readability, current project runtime and exact release evidence delivered."
   }
 }

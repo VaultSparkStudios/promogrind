@@ -1,29 +1,26 @@
-# Latest handoff — Session 133 in progress
+# Latest Handoff
 
-## Where We Left Off
+## Where We Left Off (S133)
 
-Outcome: website implementation and local regression repairs complete; current visual consolidation and exact-candidate delivery still pending.
-Deploy: pending — S133 has not been committed or promoted yet. Previous production proof is historical, not this candidate.
-Next: finish current screenshot acceptance, complete launch-local/sanitization gates, then commit and verify required CI, stable staging and identical production bytes.
+Outcome: six selected website/runtime outcomes verified through technical production delivery; ordered closeout reconciled.
+Deploy: Implementation commit 33726d96f5d178f4989e0afe150489e4237589f6 is verified at stable staging and production with content digest 433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06. Exact CI and release workflows: https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061061; https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061114. This closeout metadata will pass through the same pipeline; its final HEAD is verified after push, without a self-referential commit loop.
 
-## Current evidence
+Removed internal launch/observability controls, private feed alerts and demonstration bankroll panels. Improved typography, themes, navigation, controls, wrapping and scroll behavior across63 app routes and101 HTML files:51 independent content pages and50 immediate aliases. Clarified conditional calculator math, reference examples, availability and planned pricing. Fixed blank/import failures, entered tax assumptions, community errors, explicit leaderboard consent and failed/partial team saves.
 
-Removed launch/observability controls, private feed alerts and demonstration bankroll panels from customer routes. Shared typography, theme palettes and navigation improve 63 app routes and101 HTML files (51 immediate aliases,50 content pages). Fixed calculator imports, blank Workspace Review, no-data model lanes, tax assumptions and community service failures. Corrected translated model examples and stale commercial/offer claims.
+Full launch-local gate passed:109 app test files/745 assertions,16 Edge entrypoints/69 assertions across10 test files; runtime compatibility79/79 across70 modules; source integrity414 files; public claims345 files/25 rules; footer101/101; gateway release build611 modules. Visual receipt:1000 inspected hash-bound captures,476 before/524 after, desktop/mobile and dark/light, with documented capture-source limits.
 
-Expanded published-policy/commercial approval was explicitly received and applied: Terms, Privacy, Data Policy, DMCA, creator/verified, About/Compliance and team availability. Protected ownership/refund/cancellation/liability/sharing/retention limits remain unchanged. Independent approved-policy source/render review has no open blocker. Do not ask for the same approval again.
+Expanded policy/commercial corrections are approved and applied; do not request the same approval again. Protected policy limits remain unchanged. Actual server privacy, email, payment and Obelisk proofs are separate.
 
-Latest frontend suite:109 files/745 tests pass. Customer save errors retain inputs and distinguish partial success; missing leaderboard choice is not inferred as consent, failed saves retain the previous setting, and the public leaderboard no longer falls back to raw activity. These client repairs do not certify live server privacy enforcement.
+Read-only source observation found seven succeeded daily dispatches October1–7 and a public feed dated October7 at06:17:05 UTC. Scheduler success proves dispatch, not each HTTP publication result; the latest artifact is consistent with the October7 dispatch. No adoption claim is inferred.
 
-Source integrity413files, public claims345files/25rules, footer101/101, auth/hook/route smoke pass. Launch smoke uses current available-calculator and coming-soon copy rather than requiring obsolete internal beta vocabulary. Runtime compatibility79/79 across70modules; dependency audit zero known vulnerabilities; supply chain zero blocks/three existing review entries. Node24 project CI/release action commits have verified official provenance; hosted execution is still pending.
+## Next session
 
-Canonical reconciliation applied55 live canons and restored16 safety overlays. Judgment/manual/doctor-owned checks are recorded honestly. A signed owner request asks Studio Ops to update its generated Node20 brief-format workflow; sending is not adoption. Missing private local tooling uses the documented public-repository fallback, with no placeholder private system introduced.
+- Complete the existing separate launch evidence when authorized: Zoho alias delivery/reply identity, live Obelisk delegation, full auth-email and Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct SPARKED/public-launch approval remain unproved.
+- Verify receipt/application of the owner-managed Node24 brief-format workflow. Sending is not adoption.
+- Refresh revenue from real source data. Next unused session S134.
 
-## Visual evidence
+## Evidence and limits
 
-All61 tab routes and50 independent content pages have desktop/mobile dark/light capture surveys. Independent reviewers inspected complete app/public pages and bounded repair recaptures. Approved policy, contrast, entered-tax, loading-error, team-member/save-error, trial and embed states have additional frozen source snapshots. Previous-session40image receipt is not current acceptance; consolidation remains in progress. Completed broad captures that failed source freezing or navigation are excluded from final acceptance.
+See audits/site-release-s133.json, docs/AUDIT_2026-10-08.json, docs/WEBSITE_REVIEW_2026-10-08.json and docs/visual-qa/LATEST.json. Before pixels are references, some initial copy repairs preceded capture, and four stats before references come from actual S132 deployment; no pristine/full-before claim. Default pages and listed states were reviewed; arbitrary inputs and live customer backend flows are not exhaustively certified.
 
-## Unchanged external launch holds
-
-Zoho alias delivery/reply identity, live Obelisk delegation, complete auth-email/Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct SPARKED/public-launch approval remain unproved. No new paid service, broader provider access, or public launch is authorized by this implementation.
-
-Live owned development server: local4183. Capture jobs are being completed and will be stopped before clean closeout.
+Missing local checklist, review recorder, memory compactor and ecosystem scorecard use manual public-repository fallbacks. IGNIS per-touch scorer explicitly skips. Private procedures stay outside Git.

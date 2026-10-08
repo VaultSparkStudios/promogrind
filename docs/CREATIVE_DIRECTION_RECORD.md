@@ -84,3 +84,11 @@ Private direction details travel through the approved private ledger transport. 
 - Reconcile memory, context, creative-direction and task records before direct-main deployment.
 
 CDR reviewed across the resumed session; no new brand, visual-style or licensing direction was inferred from operational approval.
+
+### 2026-10-08 — S133 customer website clarity
+
+- Current project runtime and infrastructure alignment.
+- Customer-facing content, page clarity and readability.
+- Approved policy and commercial availability corrections.
+
+Public-safe subjects regenerated from the private append-only direction record; no new brand or licensing direction inferred.

@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-10-08T01:02:33.438Z",
-  "iqScore": 31149,
+  "timestamp": "2026-10-08T04:37:11.570Z",
+  "iqScore": 31442,
   "tier": "FLARE",
-  "tierProgress": 61.496149614961496,
-  "baseScore": 30048.8,
+  "tierProgress": 64.42644264426443,
+  "baseScore": 30341.6,
   "adaptiveTotal": 1100,
   "pillars": {
     "perception": {
-      "score": 4591.74,
+      "score": 4609.22,
       "grade": "C",
       "clusters": [
         {
@@ -19,14 +19,14 @@
         },
         {
           "name": "Event Volume",
-          "score": 250.3,
+          "score": 250.77,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Signal Richness",
-          "score": 600.52,
+          "score": 600.62,
           "grade": "B",
           "realFactors": 10,
           "baselineFactors": 0
@@ -40,42 +40,42 @@
         },
         {
           "name": "Temporal Coverage",
-          "score": 586.13,
+          "score": 581.95,
           "grade": "C",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Data Quality",
-          "score": 629,
+          "score": 629.09,
           "grade": "B",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Data Provenance",
-          "score": 677.41,
+          "score": 682.13,
           "grade": "B",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Noise Filtering",
-          "score": 774.37,
+          "score": 774.36,
           "grade": "A",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Coverage Gaps",
-          "score": 152.44,
+          "score": 169.68,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Perception Depth",
-          "score": 279.95,
+          "score": 279.93,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
@@ -159,7 +159,7 @@
       ]
     },
     "execution": {
-      "score": 3317.39,
+      "score": 3317.29,
       "grade": "D",
       "clusters": [
         {
@@ -185,7 +185,7 @@
         },
         {
           "name": "Commit Discipline",
-          "score": 371,
+          "score": 370.9,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
@@ -235,7 +235,7 @@
       ]
     },
     "vitality": {
-      "score": 3774.72,
+      "score": 3966.71,
       "grade": "D",
       "clusters": [
         {
@@ -261,14 +261,14 @@
         },
         {
           "name": "Momentum Vector",
-          "score": 459.04,
+          "score": 505.2,
           "grade": "C",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "File Staleness",
-          "score": 130.86,
+          "score": 173.69,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
@@ -282,7 +282,7 @@
         },
         {
           "name": "Metabolic Rate",
-          "score": 314.67,
+          "score": 378.57,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
@@ -296,14 +296,14 @@
         },
         {
           "name": "Burnout Detection",
-          "score": 665.88,
+          "score": 710.26,
           "grade": "B",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Seasonal Patterns",
-          "score": 304.91,
+          "score": 297.47,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
@@ -311,12 +311,12 @@
       ]
     },
     "synthesis": {
-      "score": 2656.63,
+      "score": 2717.09,
       "grade": "D",
       "clusters": [
         {
           "name": "Portfolio Context",
-          "score": 410.36,
+          "score": 410.64,
           "grade": "C",
           "realFactors": 10,
           "baselineFactors": 0
@@ -358,7 +358,7 @@
         },
         {
           "name": "Knowledge Graph",
-          "score": 496.27,
+          "score": 496.32,
           "grade": "C",
           "realFactors": 10,
           "baselineFactors": 0
@@ -372,14 +372,14 @@
         },
         {
           "name": "Ecosystem Integration",
-          "score": 149.22,
+          "score": 151.04,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Collective Intelligence",
-          "score": 218.52,
+          "score": 276.77,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
@@ -387,7 +387,7 @@
       ]
     },
     "cognition": {
-      "score": 2557.65,
+      "score": 2560.62,
       "grade": "D",
       "clusters": [
         {
@@ -420,14 +420,14 @@
         },
         {
           "name": "Decision Quality",
-          "score": 192.96,
+          "score": 194.47,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Assumption Tracking",
-          "score": 196.82,
+          "score": 196.76,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
@@ -441,7 +441,7 @@
         },
         {
           "name": "Anomaly Detection",
-          "score": 195.97,
+          "score": 197.48,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
@@ -463,7 +463,7 @@
       ]
     },
     "foresight": {
-      "score": 2569.17,
+      "score": 2588.59,
       "grade": "D",
       "clusters": [
         {
@@ -503,14 +503,14 @@
         },
         {
           "name": "Calibration",
-          "score": 446.83,
+          "score": 447.88,
           "grade": "C",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Horizon Coverage",
-          "score": 512.29,
+          "score": 535.45,
           "grade": "C",
           "realFactors": 10,
           "baselineFactors": 0
@@ -524,7 +524,7 @@
         },
         {
           "name": "Predictive Value",
-          "score": 115.73,
+          "score": 115.57,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
@@ -539,7 +539,7 @@
       ]
     },
     "creativity": {
-      "score": 1116.86,
+      "score": 1116.7,
       "grade": "F",
       "clusters": [
         {
@@ -551,7 +551,7 @@
         },
         {
           "name": "Cross-Pollination",
-          "score": 98.16,
+          "score": 98,
           "grade": "F",
           "realFactors": 10,
           "baselineFactors": 0
@@ -615,12 +615,12 @@
       ]
     },
     "expression": {
-      "score": 2797.23,
+      "score": 2799.94,
       "grade": "D",
       "clusters": [
         {
           "name": "Insight Density",
-          "score": 339.56,
+          "score": 339.35,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
@@ -662,14 +662,14 @@
         },
         {
           "name": "Warning Accuracy",
-          "score": 223.23,
+          "score": 224.74,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Evidence Quality",
-          "score": 438.21,
+          "score": 439.67,
           "grade": "C",
           "realFactors": 10,
           "baselineFactors": 0
@@ -691,7 +691,7 @@
       ]
     },
     "potential": {
-      "score": 4334.54,
+      "score": 4333.23,
       "grade": "C",
       "clusters": [
         {
@@ -710,14 +710,14 @@
         },
         {
           "name": "Resource Utilization",
-          "score": 214.32,
+          "score": 214.27,
           "grade": "D",
           "realFactors": 10,
           "baselineFactors": 0
         },
         {
           "name": "Ceiling Distance",
-          "score": 612.78,
+          "score": 611.73,
           "grade": "B",
           "realFactors": 10,
           "baselineFactors": 0
@@ -771,13 +771,13 @@
     "strongestPillar": {
       "id": "perception",
       "name": "PERCEPTION",
-      "score": 4591.74,
+      "score": 4609.22,
       "grade": "C"
     },
     "weakestPillar": {
       "id": "creativity",
       "name": "CREATIVITY",
-      "score": 1116.86,
+      "score": 1116.7,
       "grade": "F"
     },
     "biggestOpportunity": {
@@ -786,10 +786,10 @@
       "potentialGain": 6824,
       "action": "Add sessionType to all audits and track intent outcomes"
     },
-    "estimatedCeiling": 79345,
+    "estimatedCeiling": 79433,
     "nextTier": {
       "tier": "FORGE",
-      "pointsNeeded": 3851
+      "pointsNeeded": 3558
     },
     "recommendations": [
       "Priority: Improve CREATIVITY (grade F, score 1117/10,000)",

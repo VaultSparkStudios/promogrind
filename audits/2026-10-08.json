@@ -1,0 +1,520 @@
+{
+  "schemaVersion": "1.3",
+  "session": 133,
+  "date": "2026-10-08",
+  "project": "promogrind",
+  "agent": "codex",
+  "intentOutcome": "achieved",
+  "headline": "Customer website clarity and current project infrastructure delivered through verified staging and production.",
+  "items": [
+    {
+      "id": 1,
+      "slug": "customer-dashboard-boundary",
+      "title": "Remove team-only dashboard panels",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "insight": "Selected acceptance completed at the recorded depth.",
+      "evidence": "docs/AUDIT_2026-10-08.json; audits/site-release-s133.json; docs/visual-qa/LATEST.json"
+    },
+    {
+      "id": 2,
+      "slug": "plain-language-page-copy",
+      "title": "Explain every app page in customer language",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "insight": "Selected acceptance completed at the recorded depth.",
+      "evidence": "docs/AUDIT_2026-10-08.json; audits/site-release-s133.json; docs/visual-qa/LATEST.json"
+    },
+    {
+      "id": 3,
+      "slug": "readable-page-system",
+      "title": "Improve typography, contrast and layout across pages",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "insight": "Selected acceptance completed at the recorded depth.",
+      "evidence": "docs/AUDIT_2026-10-08.json; audits/site-release-s133.json; docs/visual-qa/LATEST.json"
+    },
+    {
+      "id": 4,
+      "slug": "runtime-infra-currency",
+      "title": "Reconcile current Studio Ops and infrastructure contracts",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "insight": "Selected acceptance completed at the recorded depth.",
+      "evidence": "docs/AUDIT_2026-10-08.json; audits/site-release-s133.json; docs/visual-qa/LATEST.json"
+    },
+    {
+      "id": 5,
+      "slug": "customer-surface-regression",
+      "title": "Guard the customer/internal boundary and route health",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "insight": "Selected acceptance completed at the recorded depth.",
+      "evidence": "docs/AUDIT_2026-10-08.json; audits/site-release-s133.json; docs/visual-qa/LATEST.json"
+    },
+    {
+      "id": 6,
+      "slug": "full-stack-delivery-proof",
+      "title": "Verify the candidate through staging and closeout",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "insight": "Selected acceptance completed at the recorded depth.",
+      "evidence": "docs/AUDIT_2026-10-08.json; audits/site-release-s133.json; docs/visual-qa/LATEST.json"
+    }
+  ],
+  "verification": {
+    "frontend": {
+      "files": 109,
+      "assertions": 745
+    },
+    "edge": {
+      "entries": 16,
+      "files": 10,
+      "assertions": 69
+    },
+    "visual": {
+      "total": 1000,
+      "before": 476,
+      "after": 524
+    },
+    "release": {
+      "schemaVersion": "1.0",
+      "session": 133,
+      "ok": true,
+      "verifiedAt": "2026-10-08T04:35:58.228Z",
+      "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+      "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+      "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88",
+      "workflows": [
+        {
+          "workflow": "ci.yml",
+          "id": 37728061061,
+          "sha": "33726d96f5d178f4989e0afe150489e4237589f6",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061061",
+          "attempt": 1,
+          "jobs": [
+            {
+              "name": "build",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Install dependencies",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Test",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Check bundle budget",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Setup Deno",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify all Edge Functions (typecheck + discovered tests)",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Setup Deno",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "conclusion": "success"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "workflow": "deploy-pages.yml",
+          "id": 37728061114,
+          "sha": "33726d96f5d178f4989e0afe150489e4237589f6",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/VaultSparkStudios/promogrind/actions/runs/37728061114",
+          "attempt": 1,
+          "jobs": [
+            {
+              "name": "Verify, stage, and promote identical bytes",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run denoland/setup-deno@v2",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Install locked dependencies without lifecycle scripts",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify complete local release gate",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify required CI for this exact candidate",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build release artifact once",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Install reviewed deployment CLI",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify deployment account",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Deploy and verify stable staging",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Promote verified staging artifact",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Preserve deployment and rollback receipts",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run denoland/setup-deno@v2",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "conclusion": "success"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "staging": {
+        "origin": "https://staging.promogrind.bet",
+        "ok": true,
+        "status": 200,
+        "missingHeaders": [],
+        "releaseVerified": true,
+        "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+        "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+        "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88"
+      },
+      "production": {
+        "origin": "https://promogrind.bet",
+        "ok": true,
+        "status": 200,
+        "missingHeaders": [],
+        "releaseVerified": true,
+        "commit": "33726d96f5d178f4989e0afe150489e4237589f6",
+        "contentDigest": "433cd071a0b04bee64aaac9e1f58573cfae2c497a692fff8ff9d9cd57a661e06",
+        "indexSha256": "b3c311323ae09446960676da72065b3b259ed53454ef11c9fc2774169e49bb88"
+      },
+      "webContract": [
+        {
+          "ok": true,
+          "origin": "https://staging.promogrind.bet",
+          "rootStatus": 200,
+          "headers": [
+            {
+              "name": "CSP",
+              "present": true
+            },
+            {
+              "name": "HSTS",
+              "present": true
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "present": true
+            },
+            {
+              "name": "Referrer-Policy",
+              "present": true
+            },
+            {
+              "name": "X-Frame-Options",
+              "present": true
+            },
+            {
+              "name": "Permissions-Policy",
+              "present": true
+            }
+          ],
+          "files": [
+            {
+              "path": "/_health",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/.well-known/security.txt",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/favicon.ico",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/robots.txt",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/sitemap.xml",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/agents.json",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/.well-known/llms.txt",
+              "ok": true,
+              "status": 200
+            }
+          ],
+          "routes": [
+            {
+              "path": "/dashboard",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/arb-scanner",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/pricing",
+              "ok": true,
+              "status": 200
+            }
+          ],
+          "externalBlockers": []
+        },
+        {
+          "ok": true,
+          "origin": "https://promogrind.bet",
+          "rootStatus": 200,
+          "headers": [
+            {
+              "name": "CSP",
+              "present": true
+            },
+            {
+              "name": "HSTS",
+              "present": true
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "present": true
+            },
+            {
+              "name": "Referrer-Policy",
+              "present": true
+            },
+            {
+              "name": "X-Frame-Options",
+              "present": true
+            },
+            {
+              "name": "Permissions-Policy",
+              "present": true
+            }
+          ],
+          "files": [
+            {
+              "path": "/_health",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/.well-known/security.txt",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/favicon.ico",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/robots.txt",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/sitemap.xml",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/agents.json",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/.well-known/llms.txt",
+              "ok": true,
+              "status": 200
+            }
+          ],
+          "routes": [
+            {
+              "path": "/dashboard",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/arb-scanner",
+              "ok": true,
+              "status": 200
+            },
+            {
+              "path": "/pricing",
+              "ok": true,
+              "status": 200
+            }
+          ],
+          "externalBlockers": []
+        }
+      ],
+      "limits": [
+        "Technical website deployment; separate live auth-email/payment/identity/customer-beta and SPARKED proofs retained.",
+        "Rendered-pixel review and snapshots are recorded separately; no exhaustive arbitrary-input or server-policy certification."
+      ]
+    },
+    "doctor": {
+      "passing": 11,
+      "total": 12,
+      "blockingFailing": 0,
+      "advisoryFailing": 1
+    }
+  },
+  "honestyLedger": [
+    {
+      "title": "Launch proofs retained",
+      "why": "Zoho alias delivery/reply identity, live Obelisk delegation, full auth-email and Stripe lifecycle, independent friend beta, historical credential remediation, canonical cost reconciliation and distinct SPARKED/public-launch approval remain unproved."
+    },
+    {
+      "title": "Owner workflow request",
+      "why": "Generated Node20 brief-format update sent via signed Ark; adoption not claimed."
+    },
+    {
+      "title": "Evidence limits",
+      "why": "Before/reference/source bounds recorded; live server privacy, adoption/time/cost unmeasured."
+    },
+    {
+      "title": "Public-repository fallback",
+      "why": "Missing checklist/review recorder/memory compactor/scorecard use manual records; per-touch IGNIS stub skips."
+    }
+  ],
+  "followUps": [
+    "Verify owner Node24 workflow propagation.",
+    "Complete existing launch evidence.",
+    "Refresh revenue from source."
+  ],
+  "blockers": [],
+  "silDelta": {
+    "kind": "numeric",
+    "from": 869,
+    "to": 877
+  },
+  "writeback": {
+    "currentState": true,
+    "taskBoard": true,
+    "handoff": true,
+    "workLog": true,
+    "decisions": true,
+    "sil": true,
+    "creativeDirection": true,
+    "truthAudit": true,
+    "projectStatus": true,
+    "agentMemory": true
+  },
+  "closeoutCheckpoint": {
+    "at": "2026-10-08T04:38:58.117Z",
+    "writeback": 10,
+    "privateMemoryFiles": 3,
+    "shells": {
+      "started": 113,
+      "closed": 113,
+      "running": 0
+    },
+    "launchLocalExit": 0,
+    "doctor": {
+      "passing": 11,
+      "total": 12,
+      "blockingFailing": 0,
+      "advisoryFailing": 1
+    },
+    "independentReview": {
+      "rounds": 2,
+      "openBlockingFindings": 0,
+      "recording": "Manual bounded reports; local record-review.mjs missing"
+    },
+    "fallbacks": [
+      "render-closeout-checklist.mjs missing; manual10-step checklist",
+      "compact-memory-index.mjs missing; compact private memory index",
+      "measure-ecosystem-scorecard.mjs missing; no unmeasured score fabricated",
+      "ignis-rescore-touched.mjs explicit public-repo skip; current project export refreshed by available Genius/IGNIS generation",
+      "Local autopilot lacks execution receipts; canonical receipt wrapper observes actual exit"
+    ]
+  }
+}
