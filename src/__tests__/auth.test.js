@@ -460,3 +460,52 @@ describe('getSubscription / isPro — subscription and session scenarios', () =>
     expect(window.location.href).toBe('https://checkout.stripe.test/session_123');
   });
 });
+
+// ── Boot resilience — missing Supabase env vars must not crash the app ────────
+// Uses the real @supabase/supabase-js client (not the mock above) to prove the
+// module-level createClient() call cannot throw when VITE_SUPABASE_URL /
+// VITE_SUPABASE_ANON_KEY are unset, since that throw happens at import time and
+// would otherwise take down the whole app bundle, including the browser-local
+// calculators that must work with no backend configured.
+
+describe('supabase client bootstrap — missing configuration', () => {
+  it('constructs an inert client instead of throwing when env vars are absent', async () => {
+    vi.resetModules();
+    vi.doUnmock('@supabase/supabase-js');
+    vi.stubEnv('VITE_SUPABASE_URL', '');
+    vi.stubEnv('VITE_SUPABASE_ANON_KEY', '');
+
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const mod = await import('../auth.js');
+      expect(mod.supabase).toBeDefined();
+      expect(typeof mod.supabase.auth.getSession).toBe('function');
+      expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Missing VITE_SUPABASE_URL'));
+    } finally {
+      errorSpy.mockRestore();
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
+
+  it('never pairs a real URL with the placeholder key (or vice versa) when only one is set', async () => {
+    // A real project URL combined with the placeholder key would let the disabled
+    // client read an existing real session from localStorage (Supabase keys that
+    // storage by project URL, not by key) and then clear it on a failed refresh —
+    // signing out a returning user. Both fallback values must be used together.
+    vi.resetModules();
+    vi.doUnmock('@supabase/supabase-js');
+    vi.stubEnv('VITE_SUPABASE_URL', 'https://real-project.supabase.co');
+    vi.stubEnv('VITE_SUPABASE_ANON_KEY', '');
+
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const mod = await import('../auth.js');
+      expect(mod.supabase.supabaseUrl).not.toBe('https://real-project.supabase.co');
+    } finally {
+      errorSpy.mockRestore();
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
+});
